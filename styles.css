@@ -1,0 +1,86 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    color: rgb(236, 236, 236);
+    font-family: 'Fira Sans', sans-serif;
+    background-color: rgb(30, 30, 30);
+    --headerbar-color: rgb(40, 40, 40);
+    --hover-color: rgb(226, 228, 119);
+    --default-color: rgb(236, 236, 236);
+}
+
+.headerbar-container {
+    width: 100%;
+    background-color: var(--headerbar-color);
+    margin: 0;
+}
+
+.headerbar {
+    display: flex;
+    background-color: rgb(40, 40, 40);
+    height: 90px;
+    margin: 0;
+    /* padding: 0px; */
+    user-select: none;
+    align-items: center;
+}
+
+.logo {
+    height: 100%;
+}
+.header-logo {
+    display: flex;
+    height: 80%;
+    vertical-align: middle;
+    /* float: left; */
+}
+.header-content {
+    display: flex;
+    float: right;
+    height: 100%;
+    align-items: center;
+}
+
+.header-push {
+    margin-right: auto;
+}
+
+.header-item, .header-item:visited, .header-item:link {
+    font-weight: 600;
+    font-size: 1.4em;
+    margin-left: 15px;
+    color: var(--default-color);
+    font-style: normal;
+    text-decoration: none;
+}
+
+.header-item:active, .header-item:hover {
+    color: var(--hover-color);
+}
+
+.section {
+    display: block;
+    font-size: 1.5em;
+}
+
+.container {
+    min-width: 500px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bevy-description {
+    text-align: center;
+}
+
+.coming-soon {
+    text-align: center;
+    color: rgb(121, 121, 121);
+    font-size: 1.8em;
+}
+
+.fill-image {
+    width: 100%;
+}
