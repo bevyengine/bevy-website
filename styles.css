@@ -10,6 +10,10 @@ html, body {
     --default-color: rgb(236, 236, 236);
 }
 
+a:focus {
+    outline: none;
+}
+
 .headerbar-container {
     width: 100%;
     background-color: var(--headerbar-color);
@@ -21,7 +25,6 @@ html, body {
     background-color: rgb(40, 40, 40);
     height: 90px;
     margin: 0;
-    /* padding: 0px; */
     user-select: none;
     align-items: center;
 }
@@ -33,7 +36,6 @@ html, body {
     display: flex;
     height: 80%;
     vertical-align: middle;
-    /* float: left; */
 }
 .header-content {
     display: flex;
