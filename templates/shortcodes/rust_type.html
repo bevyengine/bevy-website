@@ -6,5 +6,5 @@
 
 {% set path = mod | replace(from="::", to="/") %}
 <a href="{{url}}/{{path}}/{{type}}.{{name}}.html{% if method %}#method.{{method}}{% endif %}" rel="noopener noreferrer"
-    target="_blank"><code>{% if not short %}{{mod}}::{% endif %}{{name}}{% if plural %}s{% endif %}{% if method %}.{{method}}(){% endif %}</code>
+    target="_blank"><code>{% if not short %}{{mod}}::{% endif %}{{name}}{% if plural %}s{% endif %}{% if method %}::{{method}}(){% endif %}</code>
 </a>

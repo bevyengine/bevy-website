@@ -32,20 +32,23 @@ A local server should start and you should be able to access a local version of 
 
 We made an extension to the markdown syntax that makes linking to Rust API docs nicer. It also gives the links special formatting. Here are some examples:
 
-* Full Type Path: {{rust_type(type="struct", mod="std::collections", name="Vec")}}
+* Full Type Path: {{rust_type(type="struct", mod="std::collections", name="HashMap")}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="Vec")}{{curly_close()}}```
-* Short Type: {{rust_type(type="struct", mod="std::collections", name="Vec", short=true)}}
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap")}{{curly_close()}}```
+* Short Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", short=true)}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="Vec", short=true)}{{curly_close()}}```
-* Plural Type: {{rust_type(type="struct", mod="std::collections", name="Vec", short=true, plural=true)}}
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", short=true)}{{curly_close()}}```
+* Plural Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, plural=true)}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="Vec", short=true, plural=true)}{{curly_close()}}```
-* Module Path: {{rust_mod(mod="std::collections")}}
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, plural=true)}{{curly_close()}}```
+* Function: {{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, method="insert")}}
+    
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, method="insert")}{{curly_close()}}```
+* Module: {{rust_mod(mod="std::collections")}}
     
     ```{{curly_open()}}{rust_mod(mod="std::collections")}{{curly_close()}}```
 
-{{rust_mod(mod="std")}} modules will link to <a href="https://doc.rust-lang.org" target="_blank">doc.rust-lang.org</a>. All other modules will link to <a href="https://docs.rs" target="_blank">docs.rs</a> 
+{{rust_mod(mod="std")}} modules will link to <a href="https://doc.rust-lang.org" target="_blank">doc.rust-lang.org</a>. Other modules (like {{rust_mod(mod="bevy")}} ) will link to <a href="https://docs.rs" target="_blank">docs.rs</a> 
 
 ## Rust API Docs
 
