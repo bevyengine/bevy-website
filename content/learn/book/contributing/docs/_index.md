@@ -10,7 +10,7 @@ long_title = "Contributing Docs"
 
 ## The Bevy Book
 
-The Bevy Book (and the rest of this website) is open source. Check out the <a href="https://github.com/bevyengine/bevy-website" target="_blank">Bevy Website repository on GitHub</a>. The Bevy Book content is written in Markdown. 
+The Bevy Book is open source, along with the rest of this website. Check out the <a href="https://github.com/bevyengine/bevy-website" target="_blank">Bevy Website repository on GitHub</a>. The Bevy Book content is written in Markdown. 
 
 ### Building the Website
 
