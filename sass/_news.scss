@@ -17,9 +17,7 @@ $border-radius: 10px;
 
 .news-content {
     img {
-        box-sizing: border-box;
         border-radius: $border-radius;
-        background-color: $syntax-theme-background;
-        width: 100%;
+        max-width: 100%;
     }
 }

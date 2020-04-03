@@ -10,8 +10,13 @@ html, body {
     background-color: rgb(35, 35, 38);
 }
 
+@media screen and (max-width: 500px) {
+    html {
+        font-size: 0.7rem;
+    }
+}
+
 .container {
-    min-width: 500px;
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -28,12 +33,18 @@ a:focus {
 }
 
 .padded-content {
-    padding: 15px;
+    padding: $default-padding;
 }
-
 
 .bevy-description {
     text-align: center;
+}
+
+.the-cube {
+    display: block;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .fill-image {

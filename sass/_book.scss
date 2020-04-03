@@ -1,6 +1,7 @@
 .book-page {
     display: flex;
     width: 100%;
+    min-height: 500px;
 }
 
 .book-page-subtitle {
@@ -44,7 +45,7 @@ $content-padding: 15px;
 
 .book-whats-a-bevy {
     background-color: #00000000 !important;
-    width: 400px !important;
+    height: 2.4rem !important;
     border-radius: unset !important;
 }
 

@@ -5,7 +5,7 @@ $card-hover-background: #2f3033;
     display: block;
     flex-direction: left;
     overflow: hidden;
-    height: 180px;
+    height: 10rem;
     border-radius: $border-radius;
     background-color: $syntax-theme-background;
     margin-bottom: $card-list-gap;
@@ -18,7 +18,9 @@ $card-hover-background: #2f3033;
 }
 
 .card-image {
-    width: 300px;
+    width: 30%;
+    overflow: hidden;
+    object-fit: cover;
     background-color: $default-image-background-color;
     border-top-left-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
@@ -74,7 +76,6 @@ $card-hover-background: #2f3033;
 
 .card-image-default {
     display: flex;
-    width: 270px;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -97,6 +98,8 @@ $card-hover-background: #2f3033;
         padding: 10px;
         font-size: 1.1rem;
         border-radius: $border-radius;
+        word-wrap: break-word;
+        white-space: pre-wrap;
     }
 
     a code, a:active code, a:visited code, a:link code {

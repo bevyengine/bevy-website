@@ -6,9 +6,11 @@ $hover-color: rgb(108, 130, 255);
 $hover-shadow-color: rgb(108, 130, 255);
 $default-color: rgb(236, 236, 236);
 $content-top-margin: 30px;
+$default-padding: 15px;
 $syntax-theme-background: #2b2c2f;
 $syntax-theme-background-hover: #414247;
 $default-image-background-color: rgb(27, 27, 27);
+$media-max-width: 660px;
 
 @import "headerbar";
 @import "community";

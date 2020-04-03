@@ -1,6 +1,6 @@
 $inactive-nav-color: rgb(153, 153, 153);
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: $media-max-width) {
     .book-nav {
         display: none;
     }

@@ -6,6 +6,8 @@
 
 .headerbar {
     display: flex;
+    padding-left: $default-padding;
+    padding-right: $default-padding;
     height: 70px;
     margin: 0;
     user-select: none;
@@ -16,11 +18,17 @@
     height: 100%;
 }
 
-.header-logo {
+.header-logo, .header-logo-mobile {
     display: flex;
     height: 80%;
     vertical-align: middle;
 }
+
+.header-logo-mobile {
+    height: 60%;
+    display: none;
+}
+
 .header-content {
     display: flex;
     float: right;
@@ -34,7 +42,7 @@
 
 .header-item, .header-item:visited, .header-item:link {
     font-weight: 500;
-    font-size: 1.4em;
+    font-size: 1.4rem;
     margin-left: 15px;
     color: $default-color;
     font-style: normal;
@@ -54,11 +62,25 @@
 .header-message {
     text-align: center;
     color: rgb(121, 121, 121);
-    font-size: 1.8em;
+    font-size: 1.8rem;
 }
 
 @media screen and (max-width: 900px) {
     .header-message {
         display: none;
+    }
+}
+
+@media screen and (max-width: $media-max-width) {
+    .header-logo-mobile {
+        display: flex;
+    }
+
+    .header-logo {
+        display: none;
+    }
+
+    .header-item, .header-item:visited, .header-item:link {
+        margin-left: 8px;
     }
 }

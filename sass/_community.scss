@@ -1,12 +1,13 @@
 .community-container {
     margin-top: $content-top-margin;
-    width: 500px;
+    max-width: 500px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
 .community-entry {
-    display: flex;
+    display: block;
     height: 60px;
     width: 100%;
     margin-bottom: 20px;
@@ -18,7 +19,7 @@
 
 .community-icon-container {
     height: 100%;
-    width: 75px;
+    width: 80px;
     display: block;
     float: left;
 }
@@ -36,9 +37,8 @@
 
 .community-description {
     font-size: 1.2rem;
-    display: flex;
+    display: block;
     align-items: center;
-    margin-left: 15px;
 }
 
 $discord-color: #7289da;
