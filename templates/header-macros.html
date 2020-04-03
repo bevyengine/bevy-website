@@ -1,0 +1,11 @@
+{% macro header_item(name, path="", current_path) %}
+{% set lower_current_path = current_path | lower %}
+{% if path == "" %}
+    {% set route = "/"~name %}
+{% else %}
+    {% set route = path %}
+{% endif %}
+<a href="{{route | lower}}" {% if lower_current_path is starting_with(name | lower) %}class="header-item header-item-active" {% else %}class="header-item"{% endif %} >
+    {{name}}
+</a>
+{% endmacro %}

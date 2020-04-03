@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card-list padded-content">
+  <a class="card" href="book/introduction">
+    <img src="/assets/mountains.png" class="card-image" />
+    <div class="card-text">
+      <div class="card-title">
+        The Bevy Book
+      </div>
+      <div class="card-description">
+        Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here.
+      </div>
+    </div>
+  </a>
+  <a class="card" href="https://docs.rs/bevy" rel="noopener noreferrer" target="_blank">
+    <div class="card-image">
+      <img src="/assets/rust-logo-light.svg" class="centered-card-image"/>
+    </div>
+    <div class="card-text">
+      <div class="card-title">
+        Bevy Rust API Docs
+      </div>
+      <div class="card-description">
+        Learn about Bevy's Rust API using the generated Rust documentation.
+      </div>
+    </div>
+  </a>
+</div>
+{% endblock content %}

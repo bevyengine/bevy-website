@@ -1,0 +1,71 @@
+.community-container {
+    margin-top: $content-top-margin;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.community-entry {
+    display: flex;
+    height: 60px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.community-icon {
+    height: 100%;
+}
+
+.community-icon-container {
+    height: 100%;
+    width: 75px;
+    display: block;
+    float: left;
+}
+
+.community-text, .community-text:visited, .community-text:link {
+    display: flex;
+    align-items: center;
+    font-style: normal;
+    height: 100%;
+    font-size: 1.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: $default-color;
+}
+
+.community-description {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+$discord-color: #7289da;
+$twitter-color: #1d9ceb;
+$github-color: #acacac;
+$shadow-pixels: 6px;
+
+.discord {
+    text-shadow: 0 0 $shadow-pixels $discord-color, 0 0 $shadow-pixels $discord-color;
+}
+
+.twitter {
+    text-shadow: 0 0 $shadow-pixels $twitter-color, 0 0 $shadow-pixels $twitter-color;
+}
+
+.github {
+    text-shadow: 0 0 $shadow-pixels $github-color, 0 0 $shadow-pixels $github-color;
+}
+
+.discord:active, .discord:hover {
+    color: $discord-color;
+}
+
+.twitter:active, .twitter:hover {
+    color: $twitter-color;
+}
+
+.github:active, .github:hover {
+    color: $github-color;
+}

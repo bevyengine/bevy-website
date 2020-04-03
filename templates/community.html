@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="community-container container">
+    <div class="community-entry">
+        <a href="https://github.com/bevyengine/bevy" rel="noopener noreferrer" target="_blank" class="community-text github">
+            <div class="community-icon-container">
+                <img src="/assets/github.svg" class="community-icon" />
+            </div>
+            GitHub
+        </a>
+        <div class="community-description">
+            Interact with Bevy's source code, report issues, and suggest changes.
+        </div>
+    </div>
+    <div class="community-entry">
+        <a href="https://twitter.com/BevyEngine" rel="noopener noreferrer" target="_blank" class="community-text twitter">
+            <div class="community-icon-container">
+                <img src="/assets/twitter.svg" class="community-icon" />
+            </div>
+            Twitter
+        </a>
+        <div class="community-description">
+            Quick updates and shared Bevy content from the community
+        </div>
+    </div>
+    <div class="community-entry">
+        <a href="https://discord.gg/BHvVnFq" rel="noopener noreferrer" target="_blank" class="community-text discord">
+            <div class="community-icon-container">
+                <img src="/assets/discord.svg" class="community-icon" />
+            </div>
+            Discord
+        </a>
+        <div class="community-description">
+            A community to discuss Bevy, Rust, and game development
+        </div>
+    </div>
+</div>
+{% endblock content %}

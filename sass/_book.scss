@@ -1,0 +1,121 @@
+.book-page {
+    display: flex;
+    width: 100%;
+}
+
+.book-page-subtitle {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: rgb(153, 153, 153);
+    font-style: italic;
+    vertical-align: middle;
+}
+
+$content-padding: 15px;
+
+.book-content {
+    padding-left: $content-padding;
+    padding-right: $content-padding;
+    position: relative;
+    width: 100%;
+    h1 {
+        margin-top: $content-padding;
+        font-size: 2.4rem;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        font-weight: 500;
+        text-decoration: underline;
+        margin-bottom: 15px;
+    }
+
+    p {
+        margin-top: 5px;
+    }
+}
+
+
+.book-whats-a-bevy {
+    background-color: #00000000 !important;
+    width: 400px !important;
+    border-radius: unset !important;
+}
+
+
+$pager-bar-width: 80px;
+$pager-bar-icon-height: 80px;
+$pager-bar-background-color-out: rgba($syntax-theme-background, 0);
+$pager-bar-background-color-in: rgb(41, 41, 44);
+
+.book-pagers {
+    width: 100%;
+    height: $pager-bar-icon-height;
+}
+
+.book-pager-bar {
+    display: flex;
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: $pager-bar-width;
+    transition: 0.2s;
+}
+
+.book-pager-bar-previous:hover {
+    background-image: linear-gradient(to right, rgba(0,0,0,0), rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
+}
+
+.book-pager-bar-next:hover {
+    background-image: linear-gradient(to left, rgba(0,0,0,0), rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
+}
+
+.book-pager-bar-previous {
+    left: -$pager-bar-width;
+    border-bottom-left-radius: 10px;
+}
+
+.book-pager-bar-next {
+    left: 100%;
+    border-bottom-right-radius: 10px;
+}
+
+.book-pager-image {
+    height: 100%;
+    user-select: none; 
+}
+
+.book-pager-image-left {
+    float: left;
+    margin-left: $content-padding;
+}
+
+.book-pager-image-right {
+    float: right;
+    margin-right: $content-padding;
+}
+
+$pager-bar-icon-width: 200px;
+.book-pager-bar-icon {
+    display: block;
+    width: $pager-bar-icon-width;
+    height: $pager-bar-icon-height;
+    position: absolute;
+    bottom: 0px;
+}
+
+.book-pager-bar-icon-previous {
+    position: absolute;
+    left: $pager-bar-width;
+}
+
+.book-pager-bar-icon-next {
+    position: absolute;
+    left: -$pager-bar-icon-width;
+}

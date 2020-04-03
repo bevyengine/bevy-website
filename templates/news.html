@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-list padded-content">
+  {% for page in section.pages %}
+  <a class="card" href="{{ page.permalink }}">
+    {% if page.extra.image %}
+    {% set image_parent = page.permalink | replace(from="_index.md", to="") %}
+    <img src="{{image_parent}}{{page.extra.image}}" class="card-image" />
+    {% else %}
+    <div class="card-image">
+      <img src="/assets/bevy_logo_dark.svg" class="centered-card-image" style="width: 260px;" />
+    </div>
+    {% endif %}
+    <div class="card-text">
+      <div class="card-title">
+        {{ page.title }}
+      </div>
+      <div class="card-subtitle">
+        Written {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
+      </div>
+      <div class="card-description">
+        {{ page.summary | striptags | truncate(length=180) | safe}}
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock content %}

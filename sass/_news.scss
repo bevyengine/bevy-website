@@ -1,0 +1,25 @@
+$border-radius: 10px;
+
+.news-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.news-subtitle {
+    margin-top: 0px;
+    font-size: 1.2rem;
+    font-weight: 200;
+    font-style: italic;
+    color: rgb(143, 143, 143);
+}
+
+.news-content {
+    img {
+        box-sizing: border-box;
+        border-radius: $border-radius;
+        background-color: $syntax-theme-background;
+        width: 100%;
+    }
+}

@@ -1,0 +1,57 @@
+$inactive-nav-color: rgb(153, 153, 153);
+
+@media screen and (max-width: 900px) {
+    .book-nav {
+        display: none;
+    }
+}
+
+.book-nav {
+    margin-top: $content-padding;
+    min-width: 200px;
+    user-select: none; 
+}
+
+.book-nav-sections {
+    margin: 0;
+    padding: 0;
+}
+
+.book-nav-sections-container {
+    display: block;
+    padding-left: 10px;
+    padding-top: 40px;
+}
+
+.book-nav-section {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.book-nav-sections-indented {
+    margin-left: 15px;
+}
+
+.book-nav-section-title {
+    position: relative;
+    z-index: 1;
+    font-size: 1.3rem;
+    color: $inactive-nav-color;
+    font-style: normal;
+    text-decoration: none;
+}
+
+.book-nav-section-title:hover,
+.book-nav-section-title:active {
+    color: $hover-color;
+    text-shadow: 0 0 0.9px $hover-shadow-color, 0 0 0.9px $hover-shadow-color;
+}
+
+.book-nav-section-title-active {
+    font-size: 1.3rem;
+    color: $default-color;
+    font-style: normal;
+    text-decoration: none;
+    text-shadow: 0 0 0.5px $default-color, 0 0 0.5px $default-color;
+}

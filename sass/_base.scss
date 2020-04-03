@@ -1,0 +1,45 @@
+html {
+    overflow-y: scroll;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    color: $default-color;
+    font-family: 'Fira Sans', sans-serif;
+    background-color: rgb(35, 35, 38);
+}
+
+.container {
+    min-width: 500px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a:focus {
+    outline: none;
+}
+
+.section {
+    display: block;
+    font-size: 1.4rem;
+    overflow-x: hidden;
+}
+
+.padded-content {
+    padding: 15px;
+}
+
+
+.bevy-description {
+    text-align: center;
+}
+
+.fill-image {
+    width: 100%;
+}
+
+.warning {
+    color: rgb(200, 200, 100);
+}

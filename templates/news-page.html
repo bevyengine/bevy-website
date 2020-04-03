@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="padded-content">
+  <h1 class="news-title">
+    {{ page.title }}
+  </h1>
+  <h2 class="news-subtitle">Written on {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}</h2>
+  {% if page.extra.image %}
+  <div class="media-content news-content">
+    <img src="{{page.extra.image}}" />
+  </div>
+  {% endif %}
+  <div class="media-content news-content">{{ page.content | safe }}</div>
+</div>
+{% endblock content %}

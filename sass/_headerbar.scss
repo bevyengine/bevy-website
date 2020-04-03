@@ -1,0 +1,64 @@
+.headerbar-container {
+    width: 100%;
+    background-color: $headerbar-color;
+    margin: 0;
+}
+
+.headerbar {
+    display: flex;
+    height: 70px;
+    margin: 0;
+    user-select: none;
+    align-items: center;
+}
+
+.logo {
+    height: 100%;
+}
+
+.header-logo {
+    display: flex;
+    height: 80%;
+    vertical-align: middle;
+}
+.header-content {
+    display: flex;
+    float: right;
+    height: 100%;
+    align-items: center;
+}
+
+.header-push {
+    margin-right: auto;
+}
+
+.header-item, .header-item:visited, .header-item:link {
+    font-weight: 500;
+    font-size: 1.4em;
+    margin-left: 15px;
+    color: $default-color;
+    font-style: normal;
+    text-decoration: none;
+}
+
+.header-item:active, .header-item:hover {
+    color: $hover-color;
+    text-shadow: 0 0 3px $hover-shadow-color, 0 0 3px $hover-shadow-color;
+}
+
+.header-item-active {
+    color: red;
+    text-shadow: 0 0 3px $hover-shadow-color, 0 0 3px $hover-shadow-color;
+}
+
+.header-message {
+    text-align: center;
+    color: rgb(121, 121, 121);
+    font-size: 1.8em;
+}
+
+@media screen and (max-width: 900px) {
+    .header-message {
+        display: none;
+    }
+}

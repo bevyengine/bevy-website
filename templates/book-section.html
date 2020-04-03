@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% import "book-macros.html" as book_macros %}
+{% block head_extensions %}
+<script src="/optional-helpers.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="book-page">
+    <nav class="book-nav" role="navigation">
+        {% block menu %}
+        {% set index = get_section(path="learn/book/_index.md") %}
+        <ul class="book-nav-sections-container book-nav-sections">
+            {% for s in index.subsections %}
+            {{ book_macros::book_nav_section(section_path=s, section_number=loop.index) }}
+            {% endfor %}
+        </ul>
+        {% endblock menu %}
+    </nav>
+    <div class="book-content">
+        {# this implementation is so gross. i apologize to anyone that has the misfortune of trying to understand it #}
+        {# as far as i know, this is the only way to make paging work with indefinitely nested sections #}
+        {# this is because for some reason the ancestor information is incomplete  #}
+
+            {% set result = book_macros::find_previous_section(current_section_path="learn/book/_index.md", target_section_path=section.path~"_index.md") %}
+            {% set result = result | trim %}
+            {% if result != "true" and result != "false" %}
+                {% set previous_subsection_path = result %}
+            {% endif %}
+
+        {% if previous_subsection_path and previous_subsection_path != "learn/book/_index.md" %}
+            {% set previous_section = get_section(path=previous_subsection_path) %}
+            <a id="book-pager-bar-previous" href="{{previous_section.permalink}}" class="book-pager-bar book-pager-bar-previous">
+                <div class="book-pager-bar-icon book-pager-bar-icon-previous">
+                    <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
+                </div>
+            </a>
+        {% endif %}
+
+        {% set next_subsection_path = section.subsections | first %}
+        {% if not next_subsection_path %}
+            {% set result = book_macros::find_next_section(current_section_path="learn/book/_index.md", target_section_path=section.path~"_index.md") %}
+            {% set result = result | trim %}
+            {% if result != "true" and result != "false" %}
+                {% set next_subsection_path = result %}
+            {% endif %}
+        {% endif %} 
+        {% if next_subsection_path %}
+            {% set next_section = get_section(path=next_subsection_path) %}
+            <a id="book-pager-bar-next" href="{{next_section.permalink}}" class="book-pager-bar book-pager-bar-next">
+                <div class="book-pager-bar-icon book-pager-bar-icon-next">
+                <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
+                </div>
+            </a>
+        {% endif %}
+        <h1>
+            {% if section.extra.long_title %}
+                {{ section.extra.long_title }}
+            {% else %}
+                {{ section.title }}
+            {% endif %}
+            {% if section.extra.subtitle %}
+                <span class="book-page-subtitle">({{section.extra.subtitle}})</span>
+            {% endif %}
+        </h1>
+        <div class="media-content">{{ section.content | safe }}</div>
+        <div class="book-pagers" />
+    </div>
+</div>
+
+{% endblock content %}
