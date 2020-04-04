@@ -44,7 +44,7 @@
 .header-item, .header-item:visited, .header-item:link {
     font-weight: 500;
     font-size: 1.4rem;
-    margin-left: 15px;
+    margin-left: 0.7rem;
     color: $default-color;
     font-style: normal;
     text-decoration: none;
@@ -58,10 +58,10 @@
 .header-message {
     text-align: center;
     color: #797979;
-    font-size: 1.8rem;
+    font-size: 2.0rem;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 870px) {
     .header-message {
         display: none;
     }
@@ -74,9 +74,5 @@
 
     .header-logo {
         display: none;
-    }
-
-    .header-item, .header-item:visited, .header-item:link {
-        margin-left: 8px;
     }
 }

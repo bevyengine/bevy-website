@@ -7,8 +7,10 @@
         <link rel="stylesheet" href="/site.css" />
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,800;1,400&display=swap"
             rel="stylesheet">
-        {% if section %}
+        {% if section and section.title %}
             <title>Bevy - {{section.title}}</title>
+        {% elif page and page.title %}
+            <title>Bevy - {{page.title}}</title>
         {% else %}
             <title>Bevy</title>
         {% endif %}
@@ -30,9 +32,13 @@
                     {% elif page and page.extra.header_message %}
                     {{page.extra.header_message}}
                     {% elif section and section.path is starting_with("learn/book/") %}
-                    <span style="font-size:1.4rem">docs are a work in progress</span>
+                        The Book
+                    {% elif section and section.path is starting_with("news/") %}
+                        News
+                    {% elif page and page.path is starting_with("news/") %}
+                        News
                     {% else %}
-                    coming soon...
+                        coming soon
                     {% endif %}
                 </div>
                 <div class="header-item header-push"></div>
