@@ -50,9 +50,15 @@
     text-decoration: none;
 }
 
-.header-item:active, .header-item:hover {
+.header-item:active, .header-item:hover, .header-item-active {
     color: $hover-color;
     text-shadow: 0 0 1px $hover-shadow-color, 0 0 1px $hover-shadow-color;
+}
+
+$header-active-color: #9fd1ff;
+.header-item-active, .header-item-active:hover {
+    color: $header-active-color !important;
+    text-shadow: 0 0 1px $header-active-color, 0 0 1px $header-active-color;
 }
 
 .header-message {
