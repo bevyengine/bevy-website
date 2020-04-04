@@ -9,7 +9,7 @@ page_template = "book-section.html"
 If you came here because you wanted to learn how to make 2D / 3D games, visualizations, user interfaces, or other graphical applications with Bevy ... you came to the right place! If not, stick around anyway. I promise it will be fun.
 
 <h2>
-    <img src="/assets/whats_a_bevy.svg" class="book-whats-a-bevy" />
+    <img src="/assets/whats_a_bevy.svg" class="book-whats-a-bevy" alt="What's a BEVY?"/>
 </h2>
 
 A bevy is a group of birds!

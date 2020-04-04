@@ -1,44 +1,51 @@
 {% import "header-macros.html" as header_macros %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name='viewport' content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+        <link rel="stylesheet" href="/site.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,800;1,400&display=swap"
+            rel="stylesheet">
+        {% if section %}
+            <title>Bevy - {{section.title}}</title>
+        {% else %}
+            <title>Bevy</title>
+        {% endif %}
+        {% block head_extensions %} {% endblock %}
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name='viewport' content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
-    <link rel="stylesheet" href="/site.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,800;1,400&display=swap" rel="stylesheet"> 
-    {% block head_extensions %} {% endblock %}
-</head>
-
-<body>
-    <div class="headerbar-container">
-        <div class="headerbar container">
-            <a href="/" class="header-logo">
-                <img src="/assets/bevy_logo_dark.svg" class="logo" />
-            </a>
-            <a href="/" class="header-logo-mobile">
-                <img src="/assets/bevy_icon_dark.svg" class="logo" />
-            </a>
-            <div class="header-item header-message">
-                {% if section and section.extra.header_message %}
+    <body>
+        <div class="headerbar-container">
+            <nav class="headerbar container">
+                <a href="/" class="header-logo">
+                    <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
+                </a>
+                <a href="/" class="header-logo-mobile">
+                    <img src="/assets/bevy_icon_dark.svg" class="logo" alt="bevy icon" />
+                </a>
+                <div class="header-item header-message">
+                    {% if section and section.extra.header_message %}
                     {{section.extra.header_message}}
-                {% elif page and page.extra.header_message %}
+                    {% elif page and page.extra.header_message %}
                     {{page.extra.header_message}}
-                {% elif section and section.path is starting_with("learn/book/") %}
+                    {% elif section and section.path is starting_with("learn/book/") %}
                     <span style="font-size:1.4rem">docs are a work in progress</span>
-                {% else %}
+                    {% else %}
                     coming soon...
-                {% endif %}
+                    {% endif %}
+                </div>
+                <div class="header-item header-push"></div>
+                {{header_macros::header_item(name="FEATURES", path="/", current_path=current_path)}}
+                {{header_macros::header_item(name="LEARN", current_path=current_path)}}
+                {{header_macros::header_item(name="NEWS", current_path=current_path)}}
+                {{header_macros::header_item(name="COMMUNITY", current_path=current_path)}}
+            </nav>
+        </div>
+        <section class="section">
+            <div class="container">
+                {% block content %} {% endblock %}
             </div>
-            <div class="header-item header-push"></div>
-            {{header_macros::header_item(name="FEATURES", path="/", current_path=current_path)}}
-            {{header_macros::header_item(name="LEARN", current_path=current_path)}}
-            {{header_macros::header_item(name="NEWS", current_path=current_path)}}
-            {{header_macros::header_item(name="COMMUNITY", current_path=current_path)}}
-        </div>
-    </div>
-    <section class="section">
-        <div class="container">
-            {% block content %} {% endblock %}
-        </div>
-    </section>
-</body>
+        </section>
+    </body>
+</html>
