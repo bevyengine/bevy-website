@@ -9,12 +9,12 @@ html, body {
     font-family: 'Fira Sans', sans-serif;
     background-color: rgb(35, 35, 38);
 }
-
-@media screen and (max-width: 500px) {
-    html {
-        font-size: 1.0rem;
+@media screen and (max-width: 550px) {
+    html, body {
+        font-size: 0.7rem;
     }
 }
+
 
 .container {
     max-width: 1000px;

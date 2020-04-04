@@ -1,39 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="community-container padded-content">
-    <div class="community-entry">
-        <a href="https://github.com/bevyengine/bevy" rel="noopener noreferrer" target="_blank" class="community-text github">
-            <div class="community-icon-container">
-                <img src="/assets/github.svg" class="community-icon" alt="github" />
-            </div>
-            GitHub
-        </a>
-        <div class="community-description">
-            Interact with Bevy's source code, report issues, and suggest changes.
+<div class="card-list padded-content">
+    <a class="card" href="https://github.com/bevyengine/bevy" rel="noopener noreferrer" target="_blank">
+        <div class="card-image">
+            <img src="/assets/github.svg" class="centered-card-image community-icon" />
         </div>
-    </div>
-    <div class="community-entry">
-        <a href="https://twitter.com/BevyEngine" rel="noopener noreferrer" target="_blank" class="community-text twitter">
-            <div class="community-icon-container">
-                <img src="/assets/twitter.svg" class="community-icon" alt="twitter" />
+        <div class="card-text">
+            <div class="card-title">
+                Github
             </div>
-            Twitter
-        </a>
-        <div class="community-description">
-            Quick updates and shared Bevy content from the community
-        </div>
-    </div>
-    <div class="community-entry">
-        <a href="https://discord.gg/BHvVnFq" rel="noopener noreferrer" target="_blank" class="community-text discord">
-            <div class="community-icon-container">
-                <img src="/assets/discord.svg" class="community-icon" alt="discord" />
+            <div class="card-subtitle">
+                github.com/bevyengine
             </div>
-            Discord
-        </a>
-        <div class="community-description">
-            A community to discuss Bevy, Rust, and game development
+            <div class="card-description">
+                Interact with Bevy's source code, report issues, and suggest changes.
+            </div>
         </div>
-    </div>
+    </a>
+    <a class="card" href="https://twitter.com/BevyEngine" rel="noopener noreferrer" target="_blank">
+        <div class="card-image">
+            <img src="/assets/twitter.svg" class="centered-card-image community-icon" />
+        </div>
+        <div class="card-text">
+            <div class="card-title">
+                Twitter
+            </div>
+            <div class="card-subtitle">
+                twitter.com/bevyengine
+            </div>
+            <div class="card-description">
+                Quick updates and shared Bevy content from the community
+            </div>
+        </div>
+    </a>
+    <a class="card" href="https://twitter.com/BevyEngine" rel="noopener noreferrer" target="_blank">
+        <div class="card-image">
+            <img src="/assets/discord.svg" class="centered-card-image community-icon" />
+        </div>
+        <div class="card-text">
+            <div class="card-title">
+                Discord
+            </div>
+            <div class="card-description">
+                A community to discuss Bevy, Rust, and game development
+            </div>
+        </div>
+    </a>
 </div>
 {% endblock content %}
