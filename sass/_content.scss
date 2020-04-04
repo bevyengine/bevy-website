@@ -87,7 +87,7 @@ $card-hover-background: #2f3033;
     font-size: 1.2rem;
     font-weight: 400;
     line-height: 25px;
-    color: rgb(210, 210, 210);
+    color: #d2d2d2;
     font-style: normal;
     text-decoration: none;
     ul, li {
@@ -103,7 +103,7 @@ $card-hover-background: #2f3033;
     }
 
     a code, a:active code, a:visited code, a:link code {
-        color: rgb(228, 193, 81);
+        color: #e4c151;
         font-style: normal;
         text-decoration: none;
     }
@@ -127,7 +127,7 @@ $card-hover-background: #2f3033;
         padding-left: 8px;
         padding-right: 8px;
         font-size: 1.05rem;
-        color: rgb(200, 200, 200);
+        color: #c8c8c8;
         background-color: $syntax-theme-background;
         border-radius: $border-radius;
         text-decoration: none;

@@ -7,7 +7,7 @@
 .book-page-subtitle {
     font-size: 1.3rem;
     font-weight: 800;
-    color: rgb(153, 153, 153);
+    color: #999999;
     font-style: italic;
     vertical-align: middle;
 }
@@ -53,7 +53,7 @@ $content-padding: 15px;
 $pager-bar-width: 80px;
 $pager-bar-icon-height: 80px;
 $pager-bar-background-color-out: rgba($syntax-theme-background, 0);
-$pager-bar-background-color-in: rgb(41, 41, 44);
+$pager-bar-background-color-in: #29292c;
 
 .book-pagers {
     width: 100%;
@@ -70,11 +70,11 @@ $pager-bar-background-color-in: rgb(41, 41, 44);
 }
 
 .book-pager-bar-previous:hover {
-    background-image: linear-gradient(to right, rgba(0,0,0,0), rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
+    background-image: linear-gradient(to right, #00000000, rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
 }
 
 .book-pager-bar-next:hover {
-    background-image: linear-gradient(to left, rgba(0,0,0,0), rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
+    background-image: linear-gradient(to left, #00000000, rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
 }
 
 .book-pager-bar-previous {

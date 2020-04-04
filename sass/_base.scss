@@ -7,7 +7,7 @@ html, body {
     margin: 0 0 0 0;
     color: $default-color;
     font-family: 'Fira Sans', sans-serif;
-    background-color: rgb(35, 35, 38);
+    background-color: #232326;
 }
 @media screen and (max-width: 550px) {
     html, body {
@@ -52,5 +52,5 @@ a:focus {
 }
 
 .warning {
-    color: rgb(200, 200, 100);
+    color: #c8c864;
 }
