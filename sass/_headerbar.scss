@@ -2,6 +2,7 @@
     width: 100%;
     background-color: $headerbar-color;
     margin: 0;
+    box-shadow: 0px 0px 10px #333333;
 }
 
 .headerbar {
@@ -51,7 +52,7 @@
 
 .header-item:active, .header-item:hover {
     color: $hover-color;
-    text-shadow: 0 0 3px $hover-shadow-color, 0 0 3px $hover-shadow-color;
+    text-shadow: 0 0 1px $hover-shadow-color, 0 0 1px $hover-shadow-color;
 }
 
 .header-message {

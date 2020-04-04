@@ -11,10 +11,12 @@ $card-hover-background: #2f3033;
     margin-bottom: $card-list-gap;
     font-style: normal;
     text-decoration: none;
+    box-shadow: 0px 0px 5px #494949;
 }
 
 .card:hover {
     background-color: $card-hover-background;
+    box-shadow: 0px 0px 5px $default-color;
 }
 
 .card-image {
@@ -82,11 +84,12 @@ $card-hover-background: #2f3033;
     align-items: center;
 }
 
+$content-font-size: 1.1rem;
 .media-content {
     width: 100%;
-    font-size: 1.2rem;
+    font-size: $content-font-size;
     font-weight: 400;
-    line-height: 25px;
+    line-height: $content-font-size * 1.43;
     color: #d2d2d2;
     font-style: normal;
     text-decoration: none;
@@ -114,11 +117,11 @@ $card-hover-background: #2f3033;
 
     a {
         text-decoration: none;
-        color: $hover-color;
+        color: $link-color;
     }
 
     a:hover {
-        text-shadow: 0 0 0.9px $hover-shadow-color, 0 0 0.9px $hover-shadow-color;
+        text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
     }
     
     code {
