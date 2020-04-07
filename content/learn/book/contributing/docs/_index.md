@@ -35,15 +35,15 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
 * Full Type Path: {{rust_type(type="struct", mod="std::collections", name="HashMap")}}
     
     ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap")}{{curly_close()}}```
-* Short Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", short=true)}}
+* Short Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true)}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", short=true)}{{curly_close()}}```
-* Plural Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, plural=true)}}
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true)}{{curly_close()}}```
+* Plural Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, plural=true)}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, plural=true)}{{curly_close()}}```
-* Function: {{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, method="insert")}}
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, plural=true)}{{curly_close()}}```
+* Function: {{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, method="insert")}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", short=true, method="insert")}{{curly_close()}}```
+    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, method="insert")}{{curly_close()}}```
 * Module: {{rust_mod(mod="std::collections")}}
     
     ```{{curly_open()}}{rust_mod(mod="std::collections")}{{curly_close()}}```
