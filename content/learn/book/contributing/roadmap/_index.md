@@ -32,6 +32,7 @@ Here is the current list of planned features. All items are sorted in approximat
 
 ## ECS
 
+* Consider using Shipyard ECS
 * Remove as many references to Resources as possible in favor of resolved resource types and/or systems
 * Consider adding Renderer and World to Resources
 
@@ -39,6 +40,11 @@ Here is the current list of planned features. All items are sorted in approximat
 
 * Formalize error handling: should we use a custom error type?
 * Remove as many panics / unwraps as possible
+
+## System Profiling
+
+* Add a switch that automatically profiles all systems and adds the results as Diagnostics
+* Graph system diagnostics
 
 ## Input
 

@@ -19,11 +19,11 @@ But Bevy is also a modular game engine built in Rust, with a focus on developer 
 It has the following design goals:
 * Provide a first class user-experience for both 2D and 3D games
 * Easy for newbies to pick up, but infinitely flexible for power users
-* Fast iterative compile times. Ideally less than 1 second for small to medium sized projects
 * Data-first game development using ECS (Entity Component Systems)
 * Modular design: use only what you need ... replace what you don't like
 * High performance and parallel architecture
 * Use the latest and greatest rendering technologies and techniques
+* Fast iterative compile times. Ideally less than 1 second for small to medium sized projects
 
 Bevy is [built in the open by volunteers](/learn/book/contributing) using the <a href="https://www.rust-lang.org/" target="_blank">Rust programming language</a>. The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
 
