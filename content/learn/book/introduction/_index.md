@@ -17,7 +17,7 @@ A bevy is a group of birds!
 But Bevy is also a modular game engine built in Rust, with a focus on developer productivity and performance.
 
 It has the following design goals:
-* Provide a first class user-experience for both 2D and 3D games
+* Provide a first class developer experience for both 2D and 3D games
 * Easy for newbies to pick up, but infinitely flexible for power users
 * Data-first game development using ECS (Entity Component Systems)
 * Modular design: use only what you need ... replace what you don't like
