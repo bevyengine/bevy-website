@@ -10,7 +10,7 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
 
 ## Cross Platform
 
-* Windows (Vulkan, Direct X12), MacOS (Metal), Linux (Vulkan)
+* Windows (Vulkan, DirectX 12), MacOS (Metal), Linux (Vulkan)
 * More platforms (like the web) coming soon
 
 ## Data Driven and Massively Parallel
