@@ -10,7 +10,7 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
 
 ## Cross Platform
 
-* Windows, MacOS, Linux
+* Windows (Vulkan, Direct X12), MacOS (Metal), Linux (Vulkan)
 * More platforms (like the web) coming soon
 
 ## Data Driven and Massively Parallel
@@ -31,7 +31,7 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
 
 ## Modern Renderer
 
-* Multiple Backends: Vulkan, DirectX 11/12, Metal
+* Multiple Backends: Vulkan, DirectX 12, Metal
 * Modern and flexible low level "Render Graph" api
     * Easy to use high level defaults for beginners 
     * Experts can create their own Render Graphs or modify the defaults
@@ -56,4 +56,4 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
 
 ## Fast Iterative Compile Times
 
-* The examples can generally be recompiled in less than 1 second
+* The examples can generally be iteratively compiled in less than 1 second (when using the LLD linker)
