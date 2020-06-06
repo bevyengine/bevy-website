@@ -16,17 +16,17 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
 ## Data Driven and Massively Parallel
 
 * Built on top of the <a href="https://github.com/TomGillen/legion" target="_blank">Legion</a> Entity Component System (ECS)
-* Simple data processing model
-    * All game logic is broken up into:
-        * Components: just normal structs
-        * Entities: sets of components
-        * Systems: iterate over entities/components and perform logic
+* Simple data processing model:
+    * Components: just normal structs
+    * Entities: sets of components
+    * Resources: global data
+    * Systems: functions that iterate over entities/components and perform logic
 * Cache friendly: Legion is an archetypal ECS. It lays out components in memory to maximize query performance
 * Parallel by default: Legion analyzes system dependencies and automatically executes them in parallel
 
 ## Modular Plugin-Based Design
 
-* All Bevy logic is implemented as [Plugins](/learn/book/apps/plugins). This includes all engine logic _and_ game logic.
+* All Bevy logic is implemented as [Plugins](/learn/book/getting-started/plugins). This includes all engine logic _and_ game logic.
 * Dynamic plugin loading (optional)
 
 ## Modern Renderer
