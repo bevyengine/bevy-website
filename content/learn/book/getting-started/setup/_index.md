@@ -22,7 +22,7 @@ Alternatively you can just run the official ```rustup``` utility from the comman
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-Bevy currently relies on nightly Rust features, so next you will need to use rustup to install nightly Rust. We plan on moving back to stable Rust in the near future, but until then you will need to run the following command to install nightly Rust:
+Bevy can be built using stable Rust, but if you want fast compiles you should use a nightly compiler. Feel free to skip the following steps if you don't mind slower compiles.
 
 ```
 rustup toolchain install nightly
