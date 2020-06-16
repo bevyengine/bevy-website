@@ -10,6 +10,7 @@ $content-font-size: 1.1rem;
 
     pre {
         padding: 10px;
+        padding-left: 15px;
         font-size: 1.1rem;
         border-radius: $border-radius;
         word-wrap: break-word;
@@ -17,6 +18,10 @@ $content-font-size: 1.1rem;
     }
 
     a code, a:active code, a:visited code, a:link code {
+        padding-bottom: 2px;
+        padding-top: 2px;
+        padding-left: 8px;
+        padding-right: 8px;
         color: #e4c151;
         font-style: normal;
         text-decoration: none;
@@ -36,10 +41,6 @@ $content-font-size: 1.1rem;
     }
     
     code {
-        padding-bottom: 2px;
-        padding-top: 2px;
-        padding-left: 8px;
-        padding-right: 8px;
         font-size: 1.05rem;
         color: #c8c8c8;
         background-color: $syntax-theme-background;
