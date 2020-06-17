@@ -11,7 +11,7 @@ Here is the current list of planned features. All items are sorted in approximat
 
 ## UI Framework Additions
 
-* Text
+* Buttons
 * Styling
 
 ## Rendering
@@ -30,12 +30,6 @@ Here is the current list of planned features. All items are sorted in approximat
 * Add docs for specific features
 * "Template" projects for common game types
 
-## ECS
-
-* Consider using Shipyard ECS
-* Remove as many references to Resources as possible in favor of resolved resource types and/or systems
-* Consider adding Renderer and World to Resources
-
 ## Error Handling
 
 * Formalize error handling: should we use a custom error type?
@@ -44,21 +38,15 @@ Here is the current list of planned features. All items are sorted in approximat
 ## System Profiling
 
 * Add a switch that automatically profiles all systems and adds the results as Diagnostics
-* Graph system diagnostics
+* Visual graph of system diagnostics
 
 ## Input
 
-* Mouse events
 * Gamepad events
 
 ## Assets
 
-* Load GLTF files
-
-## Scene
-
-* Define scene format
-* Load scenes from files (likely RON)
+* Improve GLTF support by importing GLTF files as Scenes instead of meshes. This would add support for materials, lights, cameras, animations, etc.
 
 ## Plugins
 
