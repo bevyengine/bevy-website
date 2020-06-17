@@ -12,7 +12,7 @@ All Bevy game logic and engine features are implemented as plugins. This empower
 
 This also means you are free to replace any components you don't like. Think you can build a better {{rust_type(type="struct", mod="bevy::window", name="WindowPlugin", no_mod=true)}}? Go ahead! But consider [contributing it back to Bevy](/learn/book/contributing) so others can benefit from your genius :) 
 
-Of course, most developers won't want to pick and choose which components they use right out of the gate. Bevy has a set of "default plugins" that that provide a "full engine" experience.  
+Of course, most developers won't want to pick and choose which components they use right out of the gate. Bevy has a set of "default plugins" that provide a "full engine" experience.  
 
 ## Bevy's Default Plugins
 
