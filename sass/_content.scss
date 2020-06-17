@@ -18,13 +18,17 @@ $content-font-size: 1.1rem;
     }
 
     a code, a:active code, a:visited code, a:link code {
-        padding-bottom: 2px;
-        padding-top: 2px;
-        padding-left: 8px;
-        padding-right: 8px;
         color: #e4c151;
         font-style: normal;
         text-decoration: none;
+    }
+
+    a code, a:active code, a:visited code, a:link code, p code {
+        font-size: 1.3rem;
+        padding-bottom: 3px;
+        padding-top: 3px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
     a:hover code {
@@ -39,7 +43,7 @@ $content-font-size: 1.1rem;
     a:hover {
         text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
     }
-    
+
     code {
         font-size: 1.05rem;
         color: #c8c8c8;
