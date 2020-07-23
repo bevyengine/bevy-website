@@ -53,4 +53,4 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
 
 ## Fast Iterative Compile Times
 
-* The examples can generally be iteratively compiled in less than 1 second (when using the LLD linker on nightly rust)
+* The examples can generally be iteratively compiled in 1-3 seconds (when using the LLD linker on nightly rust)
