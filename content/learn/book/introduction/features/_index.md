@@ -40,9 +40,6 @@ Before we start learning how to build Bevy apps, lets take a quick look at the f
     * Automatically generates pipelines for shaders using SPIR-V reflection
     * Easily and efficiently bind ECS component data to shader uniforms
     * Use component data to define macros in shaders and automatically recompile them if the shader has changed
-* Batching system
-    * Reduces data binding on the GPU by batching draw calls that use the same data
-    * Batch any set of datatypes. Batches are not hard-coded.
 
 ## Expressive UI System
 
