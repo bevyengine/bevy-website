@@ -176,14 +176,14 @@ fn system(mut query: Query<(&Position, &mut Velocity)>) {
 #### Change Detection
 ```rs
 // Added<T> queries only run when the given component has been added
-fn system(mut query: Query<Changed<Position>>) {
+fn system(mut query: Query<Added<Position>>) {
     for position in &mut query.iter() {
         // do something
     }
 }
 
 // Mutated<T> queries only run when the given component has been mutated
-fn system(mut query: Query<Changed<Position>>) {
+fn system(mut query: Query<Mutated<Position>>) {
     for position in &mut query.iter() {
         // do something
     }
