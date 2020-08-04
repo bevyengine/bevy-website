@@ -10,7 +10,7 @@ youtube = "cartdev"
 
 After operating incognito for months, I am ecstatic to finally announce **Bevy Engine**
 
-![bevy logo](/assets/bevy_logo_dark.svg)
+<img src="/assets/bevy_logo_dark.svg" style="height: 6rem;" />
 
 Bevy is an [open-source](https://github.com/bevyengine/bevy) modular game engine and general purpose app framework built in Rust, with a heavy focus on developer productivity and performance.
 
