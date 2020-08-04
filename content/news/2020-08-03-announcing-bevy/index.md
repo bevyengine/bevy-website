@@ -1045,6 +1045,10 @@ The current scene format is workable, but it isn't yet ideal for manual scene co
 
 To mitigate the cost of compiling and linking plugins and make hot-code-reloading possible, we will provide the option to dynamically load App plugins. Bevy actually already supports this feature, but there is one hangup: Rust's `TypeId`. TypeIds are unstable across binaries, which means `TypeId::of::<T>()` in the host binary will not match `TypeId::of::<T>()` in a dynamically loaded binary. Bevy ECS uses TypeIds, which means dynamically loaded ECS types won't behave correctly. Bevy used to use a custom fork of the Legion ECS (where we fixed the TypeId problem), but since moving to Bevy ECS the problem has resurfaced. The fix is to apply the same approach we used in Legion to Bevy ECS. 
 
+### Physics
+
+Many games require collision detection and physics. I'm planning on building a plug-able physics interface with [nphysics / ncollide](https://nphysics.org/) as the first backend.
+
 ### Polish
 
 There are plenty of areas that need more design work or features. For example, I think the core Render Graph is in a pretty good state, but the mid-level and high level rendering APIs need more time and experimentation. I also want to rethink how materials are composed. If you are curious about all of the improvements on our radar, check out the [Bevy issue tracker on GitHub](https://github.com/bevyengine/bevy/issues).
