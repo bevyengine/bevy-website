@@ -5,6 +5,7 @@
         <meta name='viewport' content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
         <link rel="stylesheet" href="/site.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,800;1,400&display=swap"
             rel="stylesheet">
         {% if section and section.title %}
@@ -38,7 +39,7 @@
                     {% elif page and page.path is starting_with("news/") %}
                         News
                     {% else %}
-                        coming soon
+                        Features
                     {% endif %}
                 </div>
                 <div class="header-item header-push"></div>

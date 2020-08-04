@@ -18,4 +18,23 @@
         border-radius: $border-radius;
         max-width: 100%;
     }
+
+    video {
+        border-radius: $border-radius;
+        max-width: 100%;
+    }
+}
+
+.news-social-links {
+    display: inline-block;
+}
+
+.news-social-icon {
+    height: 1.3rem;
+    vertical-align: middle;
+}
+
+.news-social-link {
+    font-size: 1.1rem;
+    color: $default-color;
 }

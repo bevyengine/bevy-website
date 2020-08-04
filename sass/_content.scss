@@ -8,7 +8,22 @@ $content-font-size: 1.1rem;
     font-style: normal;
     text-decoration: none;
 
+    h2 {
+        font-size: 2.2rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    h4 {
+        margin-bottom: 1rem;
+    }
+
     pre {
+        font-family: 'Fira Code', monospace;
+        font-variant-ligatures: none;
         padding: 10px;
         padding-left: 15px;
         font-size: 1.1rem;
@@ -18,12 +33,16 @@ $content-font-size: 1.1rem;
     }
 
     a code, a:active code, a:visited code, a:link code {
+        font-family: 'Fira Code', monospace;
+        font-variant-ligatures: none;
         color: #e4c151;
         font-style: normal;
         text-decoration: none;
     }
 
     a code, a:active code, a:visited code, a:link code, p code {
+        font-family: 'Fira Code', monospace;
+        font-variant-ligatures: none;
         font-size: 1.05rem;
         padding-bottom: 3px;
         padding-top: 3px;
@@ -45,6 +64,7 @@ $content-font-size: 1.1rem;
     }
 
     code {
+        font-family: 'Fira Code', monospace;
         font-size: 1.05rem;
         color: #c8c8c8;
         background-color: $syntax-theme-background;

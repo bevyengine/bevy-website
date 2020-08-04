@@ -5,7 +5,33 @@
   <h1 class="news-title">
     {{ page.title }}
   </h1>
-  <h2 class="news-subtitle">Written on {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}</h2>
+  <h2 class="news-subtitle">Written on {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
+    {% if page.extra.twitter or page.extra.github %}
+    <span class="news-social-links">
+      (
+      {% if page.extra.github %}
+      <img src="/assets/github_grey.svg" class="news-social-icon" /><span class="media-content">
+        <a class="news-social-link" target="_blank"
+          href="https://www.github.com/{{page.extra.github}}">@{{page.extra.github}}</a></span>
+      {% endif %}
+      {% if page.extra.twitter %}
+      <img src="/assets/twitter_grey.svg" class="news-social-icon" />
+      <span class="media-content">
+        <a class="news-social-link" target="_blank"
+          href="https://www.twitter.com/{{page.extra.twitter}}">@{{page.extra.twitter}}</a>
+      </span>
+      {% endif %}
+      {% if page.extra.youtube %}
+      <img src="/assets/youtube_grey.svg" class="news-social-icon" />
+      <span class="media-content">
+        <a class="news-social-link" target="_blank"
+          href="https://www.youtube.com/{{page.extra.youtube}}">{{page.extra.youtube}}</a>
+      </span>
+      {% endif %}
+      )
+    </span>
+    {% endif %}
+  </h2>
   {% if page.extra.image %}
   <div class="media-content news-content">
     <img src="{{page.extra.image}}" />
