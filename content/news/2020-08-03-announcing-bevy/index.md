@@ -307,7 +307,7 @@ fn system(mut commands: Commands, time: Res<Time>, mut query: Query<&Position>) 
 Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](https://github.com/Ralith/hecs). Hecs is an efficient single-threaded archetypal ECS. It provides the core `World`, `Archetype`, and internal `Query` data structures. Bevy ECS adds the following on top:
 
 * **Function Systems**: Hecs actually has no concept of a "system" at all. You just run queries directly on the World. Bevy adds the ability to define portable, schedulable systems using normal Rust functions.
-* **Resources**: Hecs has no concept of unique/global data. When building games, this is often needed. Bevy adds a `Resource` collection and 
+* **Resources**: Hecs has no concept of unique/global data. When building games, this is often needed. Bevy adds a `Resource` collection and resource queries
 * **Parallel Scheduler**: Hecs is single threaded, but it was designed to allow parallel schedulers to be built on top. Bevy ECS adds a custom dependency-aware scheduler that builds on top of the "Function Systems" mentioned above.
 * **Optimization**: Hecs is already plenty fast, but by modifying some of its internal data access patterns, we were able to improve performance significantly. This moved it from "fast enough" to "the fastest" (see the benchmark above to compare Bevy ECS to vanilla Hecs).
 * **Query Wrappers**: The `Query` Bevy ECS exports is actually a wrapper around Hecs Queries. It provides safe, scoped access to the `World` in a multi-threaded context and improves the ergonomics of iteration.
@@ -599,7 +599,7 @@ Games can consist of multiple levels, and levels can consist of multiple entitie
 
 ### File Format
 
-Scene files are a saved and loaded as flat list of entities and components:
+Scene files are a saved and loaded as a flat list of entities and components:
 
 ```json
 [
@@ -888,7 +888,7 @@ layout(set = 1, binding = 1) uniform MyMaterial_color {
 };
 ``` 
 
-I think the simplicity of the [fully-self contained custom shader example](https://github.com/bevyengine/bevy/blob/master/examples/shader/shader_custom_material.rs) speaks for itself.
+I think the simplicity of the [fully self-contained custom shader example](https://github.com/bevyengine/bevy/blob/master/examples/shader/shader_custom_material.rs) speaks for itself.
 
 ### [Shader Defs](https://github.com/bevyengine/bevy/blob/master/examples/shader/shader_defs.rs)
 
@@ -913,7 +913,7 @@ void main() {
 }
 ```
 
-Any entity with a `MyMaterial` component with `always_blue: true` will be rendered blue. If `always_blue` is false, it will be rendered with `color`.
+Any entity with a `MyMaterial` component and `always_blue: true` will be rendered blue. If `always_blue` is false, it will be rendered with `color`.
 
 We currently use this feature for toggling "shadeless" rendering and optional textures, but I anticipate it to be useful in a variety of contexts.
 
@@ -931,7 +931,7 @@ let pipeline_handle = pipelines.add(PipelineDescriptor::default_config(shader_st
 
 ## Productive Compile Times
 
-One of my primary design goals for Bevy is "productivity". Game development is an extremely iterative and experimental process full of small changes. If each change takes a significant amount of time to test, then development becomes a grind. Here is my personal "acceptability scale":
+One of my primary design goals for Bevy is "productivity". Game development is an extremely iterative and experimental process full of small changes. If each change takes a significant amount of time to test, then development becomes a grind. Here is my personal "acceptability scale" for iterative changes:
 
 * **0-1 seconds**: ideal
 * **1-3 seconds**: fine
@@ -943,12 +943,12 @@ Note that these are "iterative compile times" not "clean compile times". Clean c
 
 One of the most popular Rust engines today takes _over 30 seconds_ to compile a single newline inserted into trivial examples. That is categorically unproductive and makes real game-dev practically impossible.
 
-Currently, with the "fast compiles" configuration, changes to Bevy examples can be compiled in ~0.8-3 seconds, based on your computer specs and OS choice (more on this later). There is of course always room for improvement here, but Bevy currently falls into my "usability sweet spot".
+Currently, with the "fast compiles" configuration, changes to Bevy examples can be compiled in ~0.8-3 seconds, based on your computer specs, configuration, and OS choice (more on this later). There is of course always room for improvement here, but Bevy currently falls into my "usability sweet spot".
 
 The "Rust compiles slow" meme exists largely because many Rust projects aren't thinking enough about the compile time performance implications of certain code patterns. Rust code generally compiles slowly for three reasons:
 * **Generic Monomorphization**: The compile step where generic code gets turned into a non-generic copy. Compile times go up as the volume of monomorphized code goes up. To keep costs low you should either avoid generics entirely or keep generic code "small" and shallow.
 * **Link Time**: How long it takes to link code. Here the important thing is to keep code volume and dependency counts low.
-* **LLVM**: Rust throws a large amounts of IR code at LLVM and expects it to optimize it. This takes time. Additionally LLVM is optimized more for "fast code at runtime" instead of "fast code generation". 
+* **LLVM**: Rust throws a large amounts of IR code at LLVM and expects it to optimize it. This takes time. Additionally LLVM is optimized for "fast code at runtime" more than "fast code generation". 
 
 The LLVM bit is out of our hands (for now). Keeping generic usage low and shallow isn't a particularly hard problem, provided you employ that mindset from the beginning. Link times, on the other hand, are a constant and very real "enemy" of iterative compile times. Linking happens on every iterative compile. Adding any code to your project will increase link times. Adding any dependency to your project will increase link times.
 
@@ -977,7 +977,7 @@ To enable fast compiles, install the nightly rust compiler and LLD. Then just co
 
 ### Current Limitations and Future Improvements
 
-While Bevy is currently "productive" by my criteria, it isn't all sunshine and rainbows yet. First, MacOS doesn't have an up-to-date version of the LLD linker and therefore iterative compiles are _much_ slower on that platform. Additionally, LLD is _slightly_ slower on Windows than it is on Linux. On my machine I get ~1.5-3.0 seconds on Windows vs ~0.6-3.0 seconds on Linux.
+While Bevy is currently "productive" by my criteria, it isn't all sunshine and rainbows yet. First, MacOS doesn't have an up-to-date version of the LLD linker and therefore iterative compiles are _much_ slower on that platform. Additionally, LLD is _slightly_ slower on Windows than it is on Linux. On my machine I get ~1.5-3.0 seconds on Windows vs ~0.8-3.0 seconds on Linux.
 
 #### Dynamic Linking to the Rescue
 
