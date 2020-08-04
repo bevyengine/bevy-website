@@ -13,6 +13,7 @@ $subtitle-color: #8f8f8f;
 $syntax-theme-background: #2b2c2f;
 $syntax-theme-background-hover: #414247;
 $default-image-background-color: #1b1b1b;
+$card-hover-background: #2f3033;
 $media-max-width: 680px;
 $border-radius: 10px;
 
@@ -21,6 +22,8 @@ $border-radius: 10px;
 @import "book";
 @import "book-nav";
 @import "news";
+// @import "features";
+@import "features_cards";
 @import "card";
 @import "content";
 @import "base";
