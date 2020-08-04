@@ -1,0 +1,73 @@
+.bevy-logo-header {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 8rem;
+}
+
+.bevy-description {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.feature-container {
+    // background-color: rgb(100, 100, 100);
+    margin-top: 1.5rem;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feature {
+    display: flex;
+    justify-content: space-between;
+    // background-color: rgb(80, 80, 80);
+    height: 18rem;
+    margin-bottom: 1.5rem;
+}
+
+.feature-title {
+    // font-size: 2.0rem;
+    margin-top: 1.0rem;
+    margin-bottom: 0.3rem;
+}
+
+.feature-description {
+    font-size: 1.3rem;
+}
+
+.feature-text {
+    // background-color: rgb(60, 60, 80);
+    width: 48%;
+    height: 100%;
+}
+
+.feature-image {
+    background-color: #2b2c2f;
+    width: 48%;
+    height: 100%;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-sublist {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature-svg {
+    max-height: 80%;
+    max-width: 80%;
+}
+
+.features-whats-next {
+    text-align: center;
+    font-size: 1.5rem !important;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
