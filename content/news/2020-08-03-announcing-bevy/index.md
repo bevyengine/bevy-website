@@ -25,9 +25,7 @@ It has the following design goals:
 * **Fast**: App logic should run quickly, and when possible, in parallel
 * **Productive**: Changes should compile quickly ... waiting isn't fun
 
-That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability.
-
-Disclaimers aside, Bevy already has tons of great features:
+Bevy already has tons of great features:
 
 * **Cross Platform**: Windows, MacOS, and Linux (with planned support for mobile and web)
 * **Bevy ECS**: A custom tailored, delightfully simple Entity Component System with unrivaled usability and blisteringly-fast performance
@@ -35,7 +33,7 @@ Disclaimers aside, Bevy already has tons of great features:
 * **Render Graph**: Easily build custom render pipelines with Render Graphs. Render Graph nodes are atomic units of render logic that can be rendered in parallel according to their graph dependencies
 * **Multiple Render Backends**: Vulkan, DirectX 12, and Metal (with more on the way thanks to [wgpu](https://github.com/gfx-rs/wgpu-rs))
 * **Data Driven Shaders**: Easily bind ECS components directly to shader uniforms
-* **Bevy UI**: Compose UIs using a familiar "flex box" model. Bevy UI tightly integrates with Bevy ECS, providing an intuitive UI workflow consistent with the rest of Bevy app logic
+* **Bevy UI**: Compose UIs using a "flex box" model. Bevy UI tightly integrates with Bevy ECS, providing an intuitive UI workflow consistent with the rest of Bevy app logic
 * **Sprites**: Render individual images as sprites, render from sprite sheets, and dynamically generate new sprite sheets
 * **3D**: Lights, meshes, textures, MSAA, and GLTF scene loading. Currently very bare bones, but we will be investing heavily in this area
 * **Assets**: An extensible, event driven asset system that loads assets asynchronously in background threads
@@ -46,6 +44,9 @@ Disclaimers aside, Bevy already has tons of great features:
 * **Hierarchical Transforms**: Create parent-child relationships between entities. Parent transforms (translation, rotation, scale) are propagated to their children 
 * **Properties**: Components can derive the "Properties" trait, which enables interacting with a struct's fields using field name strings. This automatically enables component serialization, deserialization, diffs, and patching. This is much like the "reflection" concept found in other languages.
 * **Productive Compile Times**: Changes to the examples can generally compile in ~0.6-2.5 seconds with the "fast compiles" config
+
+That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability.
+
 
 Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. So lets take a deeper look into what Bevy currently is, and then at then end, where we'd like to take it. 
 
@@ -135,11 +136,11 @@ One of the reasons the ECS paradigm is so popular is that it has the potential t
 
 Bevy ECS does both of these things about as well as it can. According to the popular `ecs_bench` benchmark, Bevy ECS is the fastest Rust ECS by a pretty wide margin:
 
-#### System Iteration (in nanoseconds)
+#### System Iteration (in nanoseconds, less is better)
 
 ![ecs iter performance graph](ecs_iter.svg)
 
-#### World Setup (in nanoseconds)
+#### World Setup (in nanoseconds, less is better)
 
 ![ecs iter performance graph](ecs_build.svg)
 
