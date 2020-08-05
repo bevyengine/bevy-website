@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card-list padded-content">
-  {% for page in section.pages %}
+  <!-- {% for page in section.pages %}
   <a class="card" href="{{ page.permalink }}">
     {% if page.extra.image %}
     {% set image_parent = page.permalink | replace(from="_index.md", to="") %}
@@ -23,6 +23,6 @@
       </div>
     </div>
   </a>
-  {% endfor %}
+  {% endfor %} -->
 </div>
 {% endblock content %}
