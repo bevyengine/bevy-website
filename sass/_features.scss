@@ -43,25 +43,25 @@
 
 .feature-text {
     // background-color: rgb(60, 60, 80);
-    height: 18rem;
-    min-width: 28rem;
-    max-width: 28rem;
-    margin-bottom: 1rem;
-    height: 100%;
-    margin-right: 1.2rem;
 }
 
 .feature-image {
     background-color: #2b2c2f;
-    height: 18rem;
-    min-width: 28rem;
-    max-width: 28rem;
-    margin-right: 1.2rem;
     border-radius: 2rem;
-    margin-bottom: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.feature-image, .feature-text {
+    height: 18rem;
+    min-width: 28rem;
+    max-width: 28rem;
+    margin-bottom: 1rem;
+}
+
+.feature-left {
+    margin-right: 1.2rem;
 }
 
 .feature-sublist {
@@ -72,7 +72,7 @@
     font-size: 1.2rem;
 }
 
-.feature-svg {
+.feature-img {
     max-height: 80%;
     max-width: 80%;
 }
