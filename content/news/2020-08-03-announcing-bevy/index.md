@@ -947,7 +947,7 @@ void main() {
 
 Any entity with a `MyMaterial` component and `always_blue: true` will be rendered blue. If `always_blue` is false, it will be rendered with `color`.
 
-We currently use this feature for toggling "shadeless" rendering and optional textures, but I anticipate it to be useful in a variety of contexts.
+We currently use this feature for toggling "shadeless" rendering and optional textures, but I anticipate it being useful in a variety of contexts.
 
 ### [Shader Layout Reflection](https://github.com/bevyengine/bevy/blob/master/examples/shader/shader_custom_material.rs)
 
