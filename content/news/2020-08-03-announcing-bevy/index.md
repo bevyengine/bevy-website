@@ -222,7 +222,9 @@ fn system(mut wall_query: Query<&Wall>, mut player_query: Query<&Player>) {
 ```rs
 fn system(mut entity_query: Query<Entity>, mut player_query: Query<&Player>) {
     for entity in &mut entity_query.iter() {
-       let player = player_query.get::<Player>(entity).unwrap(); 
+       if let Some(player) = player_query.get::<Player>(entity) {
+           // the current entity has a player component
+       }
     }
 }
 ```
@@ -575,6 +577,18 @@ Load GLTF files as Mesh assets
 
 ![boat render](boat.png)
 
+```rs
+.spawn(PbrComponents {
+    // load the model
+    mesh: asset_server.load("boat.gltf").unwrap(),
+    // create a material for the model
+    material: materials.add(asset_server.load("boat.png").into()),
+    ..Default::default()
+})
+```
+
+Note: in the near future we will add support for loading GLTF files as Scenes instead of meshes.
+
 ### <a target="_blank" href="https://github.com/bevyengine/bevy/blob/master/examples/3d/texture.rs">Depth Based Draw Order</a>
 
 Front-to-back drawing for fast "early fragment discarding" of opaque materials, and back-to-front drawing for correct transparent materials
@@ -587,12 +601,29 @@ Parent transforms are propagated to their descendants
 
 <video controls loop><source  src="parenting.mp4" type="video/mp4"/></video>
 
+```rs
+.spawn(PbrComponents {
+    mesh: cube_handle,
+    ..Default::default()
+}).with_children(|parent| {
+    parent.spawn(PbrComponents {
+        mesh: cube_handle,
+        translation: Translation::new(0.0, 2.0, 0.0),
+        ..Default::default()
+    });
+})
+```
+
 ### <a target="_blank" href="https://github.com/bevyengine/bevy/blob/master/examples/3d/msaa.rs">MSAA</a>
 
 Get nice smooth edges by using Multi-Sample Anti-Aliasing
 
 ![msaa_off](msaa_off.png)
 ![msaa_on](msaa_on.png)
+
+```rs
+app.add_resource(Msaa { samples: 8 })
+```
 
 ## Scenes
 
@@ -830,7 +861,7 @@ Adding a new asset type is easy! You just need to implement the {{rust_type(type
 
 Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you just register your new loader like this:
 ```rs
-app.add_asset_loader<MyAsset, MyAssetLoader>();
+app.add_asset_loader::<MyAsset, MyAssetLoader>();
 ```
 
 Then you can access the `Assets<MyAsset>` resource, listen for change events, and call `asset_server.load("something.my_asset")`
@@ -1028,6 +1059,10 @@ Bevy was architected with a visual editor in mind. The Scene and Properties syst
 ### Platform Support: Android, iOS, Web
 
 Under the hood Bevy uses [winit](https://github.com/rust-windowing/winit) (for multi-platform windows and input) and [wgpu](https://github.com/gfx-rs/wgpu-rs) (for multi-platform rendering). Each of these projects has varying degrees of support for the platforms above. And in general Bevy was designed to be platform-agnostic, so supporting the platforms above should be possible with a little bit of work.
+
+### Render Batching and Instancing
+
+Right now Bevy can render plenty fast for most use cases, but when it comes to rendering huge amounts of objects (tens of thousands) it isn't quite there yet. To accomplish that, we need to implement batching / instancing. Concepts can be defined a number of ways, but the general gist is that we will be grouping as much geometry and data into the smallest number of draw calls possible, while also reducing GPU state changes as much as possible. I think Bevy's data driven shader approach will make instancing implementation simple and extensible.
 
 ### Canvas
 
