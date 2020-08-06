@@ -16,15 +16,6 @@ All Bevy app and engine code is written in Rust. This means that before we begin
 
 Install Rust by following the <a href="https://www.rust-lang.org/learn/get-started" target="_blank">Rust Getting Started Guide</a>.
 
-Bevy can be built using stable Rust, but if you want fast compiles you should use a nightly compiler. Feel free to skip the following steps if you don't mind slower compiles.
-
-```
-rustup toolchain install nightly
-rustup default nightly
-```
-
-You can always switch back to stable by running: ```rustup default stable```.
-
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
 ### Code Editor / IDE
@@ -71,6 +62,25 @@ edition = "2018"
 
 [dependencies]
 ```
+
+### Enable Fast Compiles (Optional)
+
+Bevy can be built just fine using default configuration on stable Rust. However for really fast iterative compiles, we recommend the following configuration:
+
+* **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
+    * **Ubuntu**: `sudo apt-get install lld`
+    * **Arch**: `sudo pacman -S lld`
+    * **Windows**: `scoop install llvm` (using [scoop](https://scoop.sh/) package manager)
+    * **MacOS**: Sorry MacOS users ... modern LLD does not support MacOS. They are working on a rewrite, but it will take time. Fortunately Bevy will soon support dynamic linking of App Plugins, which will give massive iterative compile speedups and make LLD less necessary.
+* **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
+    ```
+    rustup toolchain install nightly
+    rustup default nightly
+    ```
+    * You can always switch back to stable by running: ```rustup default stable```.
+* **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
+
+To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config`. For the project in this guide, that would be `my_bevy_game/.cargo/config`.
 
 ### Add Bevy to your project's Cargo.toml
 
