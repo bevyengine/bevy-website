@@ -13,9 +13,8 @@
 }
 
 .feature-container {
-    // background-color: rgb(100, 100, 100);
     margin-top: 1.5rem;
-    width: 80%;
+    min-width: 80%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -26,23 +25,17 @@
 .feature {
     display: flex;
     justify-content: center;
-    // background-color: rgb(80, 80, 80);
     height: 18rem;
     margin-bottom: 1.5rem;
 }
 
 .feature-title {
-    // font-size: 2.0rem;
     margin-top: 1.0rem;
     margin-bottom: 0.3rem;
 }
 
 .feature-description {
     font-size: 1.3rem;
-}
-
-.feature-text {
-    // background-color: rgb(60, 60, 80);
 }
 
 .feature-image {
