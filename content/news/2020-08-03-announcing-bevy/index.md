@@ -8,9 +8,7 @@ github = "cart"
 youtube = "cartdev"
 +++
 
-After operating incognito for months, I am ecstatic to finally announce **Bevy Engine**
-
-<img src="/assets/bevy_logo_dark.svg" style="height: 6rem;" />
+After operating incognito for months, I am ecstatic to finally announce **Bevy Engine**.
 
 Bevy is an [open-source](https://github.com/bevyengine/bevy) modular game engine and general purpose app framework built in Rust, with a heavy focus on developer productivity and performance.
 
@@ -21,31 +19,33 @@ It has the following design goals:
 * **Capable**: Offer a complete 2D and 3D feature set
 * **Simple**: Easy for newbies to pick up, but infinitely flexible for power users
 * **Data Focused**: Data-oriented architecture using the Entity Component System paradigm 
-* **Modular**: Use only what you need ... replace what you don't like
+* **Modular**: Use only what you need. Replace what you don't like
 * **Fast**: App logic should run quickly, and when possible, in parallel
 * **Productive**: Changes should compile quickly ... waiting isn't fun
 
-Bevy already has tons of great features:
+Bevy has a number of features that I think set it apart from other engines:
 
+* **Bevy ECS**: A custom Entity Component System with unrivaled usability and blisteringly-fast performance
+* **Render Graphs**: Easily build your own multi-threaded render pipelines using Render Graph nodes
+* **Bevy UI**: A custom ECS-driven UI framework built specifically for Bevy
+* **Productive Compile Times**: Expect changes to compile in ~0.8-3.0 seconds with the "fast compiles" config
+
+It also has many features most people expect from a modern, general purpose engine:
 * **Cross Platform**: Windows, MacOS, and Linux (with planned support for mobile and web)
-* **Bevy ECS**: A custom tailored, delightfully simple Entity Component System with unrivaled usability and blisteringly-fast performance
+* **3D**: Lights, meshes, textures, MSAA, and GLTF loading
+* **Sprites**: Render individual images as sprites, render from sprite sheets, and dynamically generate new sprite sheets
+* **Assets**: An extensible, event driven asset system that loads assets asynchronously in background threads
+* **Scenes**: Save ECS Worlds to human-readable scene files and load scene files into ECS Worlds
 * **Plugins**: All engine and app features are implemented as modular plugins
-* **Render Graph**: Easily build custom render pipelines with Render Graphs. Render Graph nodes are atomic units of render logic that can be rendered in parallel according to their graph dependencies
+* **Sound**: Load audio files as assets and play them from within systems
 * **Multiple Render Backends**: Vulkan, DirectX 12, and Metal (with more on the way thanks to [wgpu](https://github.com/gfx-rs/wgpu-rs))
 * **Data Driven Shaders**: Easily bind ECS components directly to shader uniforms
-* **Bevy UI**: Compose UIs using a "flex box" model. Bevy UI tightly integrates with Bevy ECS, providing an intuitive UI workflow consistent with the rest of Bevy app logic
-* **Sprites**: Render individual images as sprites, render from sprite sheets, and dynamically generate new sprite sheets
-* **3D**: Lights, meshes, textures, MSAA, and GLTF scene loading. Currently very bare bones, but we will be investing heavily in this area
-* **Assets**: An extensible, event driven asset system that loads assets asynchronously in background threads
-* **Scenes**: A human-readable boilerplate-free scene system that "just works". Save ECS Worlds to scene files and load scene files into Worlds. 
-* **Hot Asset Reloading**: Automatically reload changes to assets at runtime. Currently we support hot reloading scenes, 3d models, and textures
-* **Sound**: Load audio files as assets and play them from within systems
+* **Hot Asset Reloading**: Automatically reload changes to assets at runtime without recompiles or restarts
 * **Events**: Efficiently consume and produce Events from within ECS systems
-* **Hierarchical Transforms**: Create parent-child relationships between entities. Parent transforms (translation, rotation, scale) are propagated to their children 
-* **Properties**: Components can derive the "Properties" trait, which enables interacting with a struct's fields using field name strings. This automatically enables component serialization, deserialization, diffs, and patching. This is much like the "reflection" concept found in other languages.
-* **Productive Compile Times**: Changes to the examples can generally compile in ~0.6-2.5 seconds with the "fast compiles" config
+* **Properties**: Dynamically get and set component fields using a string version of their names
+* **Hierarchical Transforms**: Create parent-child relationships between entities that propagate Transforms down the hierarchy 
 
-That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability.
+That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. <span class="warning">I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability</span>.
 
 
 Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. So lets take a deeper look into what Bevy currently is, and then at then end, where we'd like to take it. 
@@ -93,7 +93,14 @@ And of course you can also create your own plugins. In fact, all engine and game
 
 ## Bevy ECS
 
-All Bevy engine and game logic is built on top of a custom [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system) (or ECS for short). There are already plenty of [great introductions](https://www.youtube.com/watch?v=2rW7ALyHaas) to the ECS paradigm, so I'll skip right to what makes Bevy's ECS so special:
+All Bevy engine and game logic is built on top of a custom [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system) (or ECS for short). Entity Component Systems are a software paradigm that involves breaking data up into Components". Entities are unique ids assigned to groups of Components. For example, one entity might might have a `Position` and `Velocity` component, whereas another entity might have a `Position` and `UI` component. Systems are logic that runs on a specific set of component types. You might have a `movement` system that runs on all entities with a `Position` and `Velocity` component.
+
+In Bevy, we use normal Rust datatypes for all of these concepts:
+* **Components**: normal Rust structs
+* **Systems**: normal Rust functions
+* **Entities**: a type containing a unique integer  
+
+There are already plenty of [great introductions](https://www.youtube.com/watch?v=2rW7ALyHaas) to the ECS paradigm, so I'll skip right to what makes Bevy's ECS so special:
 
 ### Ergonomics
 
@@ -325,7 +332,7 @@ Bevy has a custom, but familiar UI system based on the "flex box" model. Well...
 
 I decided that the only way Bevy could even _hope_ to bring something compelling to the table was to fully embrace the Bevy way of doing things.
 
-Bevy UI directly uses the existing ECS, hierarchy, transform, event, asset, and scene systems at the core of Bevy. Because of this, Bevy UI automatically gets features like hot-reloading of UI scene files, async texture loading, and change detection. A shared architecture means that improvements to any of these systems feed directly into Bevy UI. I am not yet convinced that this approach will produce the best UI framework, but I _am_ convinced that it will produced the best UI framework in the context of a Bevy App.
+Bevy UI directly uses the existing ECS, hierarchy, transform, event, asset, and scene systems at the core of Bevy. Because of this, Bevy UI automatically gets features like hot-reloading of UI scene files, async texture loading, and change detection. A shared architecture means that improvements to any of these systems feed directly into Bevy UI. I am not yet convinced that this approach will produce the best UI framework, but I _am_ convinced that it will produce the best UI framework in the context of a Bevy App.
 
 We are still in the experimental stages and I expect some things to change, but the patterns we've found so far are very promising. Also keep in mind that currently the best way to compose Bevy UIs is with code, but we are in the process of designing a new file format for scenes that should make declarative, file based UI composition much nicer than it currently is.
 
@@ -539,7 +546,7 @@ commands.spawn(SpriteComponents {
 
 ### [Sprite Sheets](https://github.com/bevyengine/bevy/blob/master/examples/2d/sprite_sheet.rs)
 
-Sprite sheets (also known as texture atlases) can be used for animations, tile sets, or just for optimizing sprite rendering.
+Sprite sheets (also known as texture atlases) can be used for animations, tile sets, or just for optimized sprite rendering.
 
 <video controls loop><source  src="sprite_sheet.mp4" type="video/mp4"/></video>
 
@@ -627,7 +634,9 @@ app.add_resource(Msaa { samples: 8 })
 
 ## Scenes
 
-Games can consist of multiple levels, and levels can consist of multiple entities and components. Sometimes dynamically composing the ECS `World` in code is the right choice. For example, the `commands.spawn(COMPONENTS_HERE)` calls in the various code blocks above are an example of "dynamic" `World` creation. But sometimes it makes sense to compose static collections of entities ahead of time, either in a text editor or in a visual "level" editor. This is where Bevy's Scene system comes into play. Scenes are files that contain lists of entities. Each entity then has its own list of components. A Scene can be spawned into any `World` any number of times. 
+Scenes are a way to compose pieces of your game/app ahead of time. In Bevy, Scenes are simply a collection of entities and components. A Scene can be "spawned" into a `World` any number of times. "Spawning" copies the Scene's entities and components into the given `World`.
+
+Scenes can also be saved to and loaded from "scene files". One of the primary goals of the future "Bevy Editor" will be to make it easy to compose scene files visually.
 
 ### File Format
 
@@ -639,7 +648,7 @@ Scene files are a saved and loaded as a flat list of entities and components:
     entity: 328997855,
     components: [
       {
-        "type": "ComponentA",
+        "type": "Position",
         "map": { "x": 3.0, "y": 4.0 },
       },
     ],
@@ -648,19 +657,19 @@ Scene files are a saved and loaded as a flat list of entities and components:
     entity: 404566393,
     components: [
       {
-        "type": "ComponentA",
+        "type": "Position",
         "map": { "x": 1.0, "y": 2.0 },
       },
       {
-        "type": "ComponentB",
-        "map": { "value": "hello" },
+        "type": "Name",
+        "map": { "value": "Carter" },
       },
     ],
   ),
 ]
 ```
 
-The numbers assigned to the `entity` fields are entity's id, which are optional. If no entity id is provided, one will be randomly generated when the scene is loaded. We have [plans to improve this format](https://gist.github.com/cart/3e77d6537e1a0979a69de5c6749b6bcb) in the future to be more ergonomic, indent entity hierarchies, and support nested scenes.
+The numbers assigned to the `entity` fields are entity's id, which are completely optional. If no entity id is provided, one will be randomly generated when the scene is loaded. We have [plans to improve this format](https://gist.github.com/cart/3e77d6537e1a0979a69de5c6749b6bcb) in the future to be more ergonomic, indent entity hierarchies, and support nested scenes.
 
 ### Loading and Instancing
 
@@ -705,45 +714,45 @@ Scenes are built on top of Bevy's Property and Asset systems. Components can be 
 
 ## Properties
 
-It is often useful to get or set a struct's field using a string version of its name, or interact with a struct when you don't have a statically typed reference. Languages generally cover these cases with "reflection" features, but unfortunately Rust does not currently have this type of reflection. I built the `bevy_property` crate to provide a subset of useful "reflection-like" features in Rust. Here is a quick surface-level introduction:
+In a nutshell, Bevy Properties add some dynamism to Rust, which is a notoriously static language. It is often useful to get or set a struct's field using a string version of its name, or interact with a struct when you don't have a statically typed reference. Languages generally cover these cases with "reflection" features, but unfortunately Rust does not currently have this type of reflection. I built the `bevy_property` crate to provide a subset of useful "reflection-like" features in Rust. Here is a quick surface-level introduction:
 
 ```rs
 #[derive(Properties)]
-pub struct Thing {
-    a: u32,
+pub struct Counter {
+    count: u32,
 }
 
-let mut thing = Thing { a: 1 };
+let mut counter = Counter { count: 1 };
 
 // You can set a property value like this. The type must match exactly or this will fail.
-thing.set_prop_val::<u32>("a", 2);
-assert_eq!(thing.a, 2);
-assert_eq!(thing.prop_val::<u32>("a").unwrap(), 2);
+counter.set_prop_val::<u32>("count", 2);
+assert_eq!(counter.count, 2);
+assert_eq!(counter.prop_val::<u32>("count").unwrap(), 2);
 
 // You can also set properties dynamically. set_prop accepts any type that implements the Property trait, but the property type must match the field type or this operation will fail.
-let x: u32 = 3;
-thing.set_prop("a", &x);
-assert_eq!(thing.a, 3);
+let new_count: u32 = 3;
+counter.set_prop("count", &new_count);
+assert_eq!(counter.count, 3);
 
 // DynamicProperties also implements the Properties trait, but it has no restrictions on field names or types
 let mut patch = DynamicProperties::map();
-patch.set_prop_val::<usize>("a", 4);
+patch.set_prop_val::<usize>("count", 4);
 
 // You can "apply" Properties on top of other Properties. This will only set properties with the same name and type. You can use this to "patch" your properties with new values.
-thing.apply(&patch);
-assert_eq!(thing.a, 4);
+counter.apply(&patch);
+assert_eq!(counter.count, 4);
 
 // Types that implement Properties can be converted to DynamicProperties
-let dynamic_thing: DynamicProperties = thing.to_dynamic();
+let dynamic_thing: DynamicProperties = counter.to_dynamic();
 ```
 
-Types that implement Properties can be serialized using serde and `DynamicProperties` can be deserialized using serde. When combined with the `Properties` patching feature, this means any type that derives `Properties` can be round trip serialized and deserialized.  
+Properties are what make Bevy's Scene system so nice to use. I also plan to use them for features in the upcoming Bevy Editor, such as undo/redo, viewing and editing component properties at runtime, and property animation tools.
+
+Types that implement Properties can be serialized using [serde](https://serde.rs/) and `DynamicProperties` can be deserialized using serde. When combined with the `Properties` patching feature, this means any type that derives `Properties` can be round trip serialized and deserialized.  
 
 To derive `Properties` each field in the struct must implement the `Property` trait. This is already implemented for most core Rust and Bevy types, so you should only need to implement `Property` for custom types (and you can derive `Property` too).
 
-Properties are what make Bevy's Scene system so nice to use. I also plan to use them for features in the upcoming Bevy Editor, such as undo/redo, viewing and editing component properties at runtime, and property animation tools.    
-
-I have a feeling that `bevy_property` will be useful in non-Bevy contexts, so I'll be publishing it to crates.io in the near future.
+I have a feeling that the `bevy_property` crate will be useful in non-Bevy contexts, so I'll be publishing it to crates.io in the near future.
 
 ## Events
 
@@ -804,7 +813,7 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 ```
 
 #### Asset Events
-The `Assets<T>` collection is quite simple. It is basically just a map from `Handle<T>` to `T` that records created, modified, and removed `Events`. These events can also be consumed as a system resource, just like any other `Events`:
+The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed `Events`. These events can also be consumed as a system resource, just like any other `Events`:
 ```rs
 fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
     for event in state.reader.iter(&texture_events) {
@@ -857,9 +866,9 @@ This will load new versions of assets whenever their files have changed.
 
 #### Adding New Asset Types
 
-Adding a new asset type is easy! You just need to implement the {{rust_type(type="trait", mod="bevy::asset", name="AssetLoader", no_mod=true)}} trait, which tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
+To add a new asset type, implement the {{rust_type(type="trait", mod="bevy::asset", name="AssetLoader", no_mod=true)}} trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
 
-Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you just register your new loader like this:
+Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you can register your new loader like this:
 ```rs
 app.add_asset_loader::<MyAsset, MyAssetLoader>();
 ```
@@ -989,7 +998,7 @@ The cards are stacked against us for a variety of reasons:
   * Game engines inherently touch a large number of domains (and therefore involve a large number of dependencies)
   * Game engines are "big" ... they require a lot of code
 * **Rust's Design Choices**
-  * Dependencies are statically linked by default, which mean every new dependency adds link times 
+  * Dependencies are statically linked by default, which means every new dependency adds link times 
   * Rust's default linker is quite slow
   * Cargo makes taking dependencies very easy. What appears to be a small, simple crate might actually have a large dependency tree
 
@@ -1005,7 +1014,7 @@ The "fast compiles" configuration is how we achieve usable iterative compile tim
 * **Nightly Rust Compiler**: Gives access to the latest performance improvements and "unstable" optimizations. Note that Bevy can still be compiled on stable Rust if that is a requirement for you.
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
 
-To enable fast compiles, install the nightly rust compiler and LLD. Then just copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_CRATE/.cargo/config`
+To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config`
 
 ### Current Limitations and Future Improvements
 
@@ -1029,7 +1038,7 @@ If you are curious about what actual Bevy game code looks like, check out the [b
 
 There are plenty of fantastic engines out there ... why build another one? Especially when there are already so many in the Rust ecosystem?
 
-First a bit about me: I decided to build Bevy after years of contributing code to other engines (ex: Godot). I spent over four years [building a game in Godot](https://www.youtube.com/c/cartdev) and I also have experience with Unity, Unreal, and a number of other frameworks like SDL and Three.js. I have built multiple custom engines in the past using Rust, Go, HTML5, and Java. I have also closely followed the other major players in the Rust gamedev ecosystem, namely <a href="https://github.com/amethyst/amethyst" target="_blank">Amethyst</a>, <a href="https://github.com/hecrj/coffee" target="_blank">coffee</a>, <a href="https://github.com/not-fl3/macroquad">Macroquad</a>, and <a href="https://github.com/PistonDevelopers/piston" target="_blank">Piston</a>. I recently quit my job as Senior Software Engineer at Microsoft and my experience there deeply affected my opinions of software and what it should be.
+First a bit about me: I decided to build Bevy after years of contributing code to other engines (ex: Godot). I spent over four years [building a game in Godot](https://www.youtube.com/c/cartdev) and I also have experience with Unity, Unreal, and a number of other frameworks like SDL and Three.js. I have built multiple custom engines in the past using Rust, Go, HTML5, and Java. I have also used and/or closely followed most of the current players in the Rust gamedev ecosystem. I recently quit my job as Senior Software Engineer at Microsoft and my experience there deeply affected my opinions of software and what it should be.
 
 These experiences led me to want the following from a game engine:
 
@@ -1062,7 +1071,7 @@ Under the hood Bevy uses [winit](https://github.com/rust-windowing/winit) (for m
 
 ### Render Batching and Instancing
 
-Right now Bevy can render plenty fast for most use cases, but when it comes to rendering huge amounts of objects (tens of thousands) it isn't quite there yet. To accomplish that, we need to implement batching / instancing. Concepts can be defined a number of ways, but the general gist is that we will be grouping as much geometry and data into the smallest number of draw calls possible, while also reducing GPU state changes as much as possible. I think Bevy's data driven shader approach will make instancing implementation simple and extensible.
+Right now Bevy can render plenty fast for most use cases, but when it comes to rendering huge amounts of objects (tens of thousands) it isn't quite there yet. To accomplish that, we need to implement batching / instancing. These concepts can be defined in a number of ways, but the general gist is that we will be grouping as much geometry and data into the smallest number of draw calls possible, while also reducing GPU state changes as much as possible. I'm hoping Bevy's data driven shader approach will make the instancing implementation simple and extensible.
 
 ### Canvas
 
