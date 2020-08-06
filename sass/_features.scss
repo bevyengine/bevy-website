@@ -12,7 +12,7 @@
     font-weight: 500;
 }
 
-.feature-container {
+.feature-list {
     margin-top: 1.5rem;
     min-width: 80%;
     display: flex;
@@ -22,11 +22,15 @@
     margin-right: auto;
 }
 
-.feature {
+.feature-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    height: 18rem;
-    margin-bottom: 1.5rem;
+    min-width: 28rem;
+}
+
+.feature-container-reverse {
+    flex-wrap: wrap-reverse;
 }
 
 .feature-title {
@@ -39,6 +43,7 @@
 }
 
 .feature-image {
+    height: 18rem;
     background-color: #2b2c2f;
     border-radius: 2rem;
     display: flex;
@@ -46,8 +51,11 @@
     justify-content: center;
 }
 
+.feature-text {
+    max-height: 18rem;
+}
+
 .feature-image, .feature-text {
-    height: 18rem;
     min-width: 28rem;
     max-width: 28rem;
     margin-bottom: 1rem;
