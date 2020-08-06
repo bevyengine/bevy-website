@@ -40,15 +40,20 @@ $content-font-size: 1.1rem;
         text-decoration: none;
     }
 
-    a code, a:active code, a:visited code, a:link code, p code {
+    code {
         font-family: 'Fira Code', monospace;
         font-variant-ligatures: none;
         font-size: 1.05rem;
+        color: #c8c8c8;
+        background-color: $syntax-theme-background;
+        border-radius: $border-radius;
         padding-bottom: 3px;
         padding-top: 3px;
         padding-left: 8px;
         padding-right: 8px;
+        text-decoration: none;
     }
+
 
     a:hover code {
         background-color: $syntax-theme-background-hover;
@@ -63,12 +68,10 @@ $content-font-size: 1.1rem;
         text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
     }
 
-    code {
-        font-family: 'Fira Code', monospace;
-        font-size: 1.05rem;
-        color: #c8c8c8;
-        background-color: $syntax-theme-background;
-        border-radius: $border-radius;
-        text-decoration: none;
+    pre code {
+        padding-bottom: 0px;
+        padding-top: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 }
