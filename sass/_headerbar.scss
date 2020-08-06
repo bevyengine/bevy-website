@@ -55,7 +55,7 @@
     text-shadow: 0 0 1px $hover-shadow-color, 0 0 1px $hover-shadow-color;
 }
 
-$header-active-color: #9fd1ff;
+$header-active-color: #b1d9ff;
 .header-item-active, .header-item-active:hover {
     color: $header-active-color !important;
     text-shadow: 0 0 1px $header-active-color, 0 0 1px $header-active-color;
@@ -68,9 +68,18 @@ $header-active-color: #9fd1ff;
 }
 
 .header-button {
-    background-color: rgb(50, 80, 120);
-    padding: 0.5rem;
+    background-color: #799bbb;
+    border-style: solid;
+    border-color: #576f86;
+    border-width: 3px;
+    padding: 0.4rem;
     border-radius: 10px;
+}
+
+@media screen and (max-width: 450px) {
+    .header-button {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 1000px) {
