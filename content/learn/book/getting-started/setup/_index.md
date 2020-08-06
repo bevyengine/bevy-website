@@ -10,39 +10,28 @@ I know you are itching to start making games, but we need to do a _small_ amount
 
 ## Rust Setup
 
-All Bevy app and engine code is written in Rust. This means that before we begin, we need to set up our Rust development environment. Fortunately this is very straightforward!
+All Bevy app and engine code is written in Rust. This means that before we begin, we need to set up our Rust development environment.
 
 ### Installing Rust
 
 Install Rust by following the <a href="https://www.rust-lang.org/learn/get-started" target="_blank">Rust Getting Started Guide</a>.
 
-Alternatively you can just run the official ```rustup``` utility from the command line if you are running unix-like operating systems such as Linux or macOS:
-
-```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
 Bevy can be built using stable Rust, but if you want fast compiles you should use a nightly compiler. Feel free to skip the following steps if you don't mind slower compiles.
 
 ```
 rustup toolchain install nightly
-```
-
-Then make nightly the default by running:
-
-```
 rustup default nightly
 ```
 
 You can always switch back to stable by running: ```rustup default stable```.
 
-Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path. Try running ```cargo version``` and make sure it returns a "nightly" compiler version.
+Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
 ### Code Editor / IDE
 
 You can use any code editor you want, but we highly recommend one that has a <a href="https://github.com/rust-analyzer/rust-analyzer" target="_blank">Rust Analyzer</a> plugin. Rust Analyzer is still in development, but it already provides top-tier autocomplete and code intelligence. <a href="https://code.visualstudio.com/">Visual Studio Code</a> has an officially supported <a href="https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer">Rust Analyzer Extension</a>. 
 
-### Rust learning resources
+### Rust Learning Resources
 
 The goal of this book is to learn Bevy, so it won't serve as a full Rust education. If you would like to learn more about the Rust language, check out the following resources:
 

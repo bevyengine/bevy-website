@@ -48,7 +48,7 @@ It also has many features most people expect from a modern, general purpose engi
 That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. <span class="warning">I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability</span>.
 
 
-Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. So lets take a deeper look into what Bevy currently is, and then at then end, where we'd like to take it. 
+Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
 
 ## Bevy Apps
 
