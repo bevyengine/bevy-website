@@ -50,6 +50,11 @@ That being said, Bevy is still in the very early stages. I consider it to be in 
 
 Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
 
+**Quick note to the reader**: in this article you will find text formatted like this: {{rust_type(type="struct", mod="bevy::render::texture", name="Texture" no_mod=true)}}
+
+This formatting indicates that the text is a Rust type that links to API documentation. I encourage you to click on anything that seems interesting to you!
+ 
+
 ## Bevy Apps
 
 First, lets see what a Bevy App actually looks like. The simplest App looks like this:
@@ -95,12 +100,14 @@ And of course you can also create your own plugins. In fact, all engine and game
 
 All Bevy engine and game logic is built on top of a custom [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system) (or ECS for short). Entity Component Systems are a software paradigm that involves breaking data up into Components". Entities are unique ids assigned to groups of Components. For example, one entity might might have a `Position` and `Velocity` component, whereas another entity might have a `Position` and `UI` component. Systems are logic that runs on a specific set of component types. You might have a `movement` system that runs on all entities with a `Position` and `Velocity` component.
 
-In Bevy, we use normal Rust datatypes for all of these concepts:
+The ECS pattern encourages clean, decoupled designs by forcing you to break up your app data and logic into its core components.
+
+Unlike other Rust ECS implementations, which require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
 * **Components**: normal Rust structs
 * **Systems**: normal Rust functions
 * **Entities**: a type containing a unique integer  
 
-There are already plenty of [great introductions](https://www.youtube.com/watch?v=2rW7ALyHaas) to the ECS paradigm, so I'll skip right to what makes Bevy's ECS so special:
+There are already plenty of [great introductions](https://www.youtube.com/watch?v=2rW7ALyHaas) to the ECS paradigm, so I'll leave "getting up to speed on ECS" as an exercise for the reader and skip right to what makes Bevy's ECS so special:
 
 ### Ergonomics
 
@@ -137,7 +144,7 @@ That is a complete self-contained Bevy app with automatic parallel system schedu
 
 ### Performance
 
-One of the reasons the ECS paradigm is so popular is that it has the potential to make game logic _super_ fast. Primarily for these two reasons:
+One of the reasons the ECS paradigm is so popular is that it has the potential to make game logic _super_ fast, primarily for these two reasons:
 1. **Iteration Speed**: Components are packed tightly together to optimize for cache-locality, which makes iterating over them blazing fast
 2. **Parallelism**: Systems declare read/write dependencies, which enables automatic and efficient lock-free parallel scheduling
 
@@ -794,7 +801,7 @@ Events are used in Bevy for features like window resizing, assets, and input. Th
 
 ## Assets
 
-Bevy {{rust_type(type="struct", mod="bevy::asset", name="Assets", no_mod=true)}} are just resources of a given type that can be referenced using asset {{rust_type(type="struct", mod="bevy::asset", name="Handle", no_mod=true, plural=true)}} . For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. In general asset usage looks like this:
+Bevy {{rust_type(type="struct", mod="bevy::asset", name="Assets", no_mod=true)}} are just typed data that can be referenced using asset {{rust_type(type="struct", mod="bevy::asset", name="Handle", no_mod=true, plural=true)}} . For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
 
 #### Asset Creation
 ```rs
@@ -895,9 +902,9 @@ We plan on extending the audio system with more control and features in the futu
 
 ## Render Graph
 
-All render logic is built on top of Bevy's {{rust_type(type="struct", mod="bevy::render", name="RenderGraph", no_mod=true)}}. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2d pass, ui pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
+All render logic is built on top of Bevy's {{rust_type(type="struct", mod="bevy::render", name="RenderGraph", no_mod=true)}}. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
 
-Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderResourcesNode`, `SharedBuffersNode`, `TextureCopyNode`, `WindowSwapChainNode`, and `WindowTextureNode`. It also provides subgraphs for 2d rendering, 3d rendering, and ui rendering. But you are welcome to create your own nodes, your own graphs, or extend the included graphs!
+Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderResourcesNode`, `SharedBuffersNode`, `TextureCopyNode`, `WindowSwapChainNode`, and `WindowTextureNode`. It also provides subgraphs for 2d rendering, 3d rendering, and UI rendering. But you are welcome to create your own nodes, your own graphs, or extend the included graphs!
 
 ### [Data Driven Shaders](https://github.com/bevyengine/bevy/blob/master/examples/shader/shader_custom_material.rs)
 
