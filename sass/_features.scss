@@ -26,7 +26,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    min-width: 28rem;
 }
 
 .feature-container-reverse {
@@ -43,26 +42,27 @@
 }
 
 .feature-image {
-    height: 18rem;
+    height: 20rem;
     background-color: #2b2c2f;
-    border-radius: 2rem;
+    border-radius: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    background-clip: padding-box;
 }
 
 .feature-text {
     max-height: 18rem;
+    align-self: center;
 }
 
 .feature-image, .feature-text {
-    min-width: 28rem;
-    max-width: 28rem;
-    margin-bottom: 1rem;
-}
-
-.feature-left {
-    margin-right: 1.2rem;
+    min-width: 30rem;
+    max-width: 30rem;
+    border-width: 1.8rem;
+    border-style: solid;
+    border-color: transparent;
 }
 
 .feature-sublist {
