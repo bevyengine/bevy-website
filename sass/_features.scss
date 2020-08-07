@@ -2,7 +2,8 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    height: 8rem;
+    width: 100%;
+    max-width: 35rem;
 }
 
 .bevy-description {
@@ -14,7 +15,6 @@
 
 .feature-list {
     margin-top: 1.5rem;
-    min-width: 80%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
