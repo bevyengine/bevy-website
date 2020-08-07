@@ -22,9 +22,12 @@ $card-list-gap: 15px;
     width: 30%;
     overflow: hidden;
     object-fit: cover;
+    display: flex;
     background-color: $default-image-background-color;
     border-top-left-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
+    align-content: center;
+    justify-content: center;
     float: left;
     height: 100%;
     margin-right: 0px;
@@ -32,10 +35,9 @@ $card-list-gap: 15px;
 
 .centered-card-image {
     display: block;
-    width: 100%;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    align-self: center;
+    height: 85%;
+    max-width: 85%;
 }
 
 .card-text {
