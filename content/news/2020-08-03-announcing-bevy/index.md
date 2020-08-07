@@ -8,7 +8,9 @@ github = "cart"
 youtube = "cartdev"
 +++
 
-After operating incognito for months, I am ecstatic to finally announce **Bevy Engine**.
+<video controls loop><source  src="hot_reloading.mp4" type="video/mp4"/></video>
+
+After operating incognito for months, I am ecstatic to finally announce **Bevy Engine**!
 
 Bevy is an [open-source](https://github.com/bevyengine/bevy) modular game engine and general purpose app framework built in Rust, with a heavy focus on developer productivity and performance.
 
@@ -16,34 +18,34 @@ Bevy is an [open-source](https://github.com/bevyengine/bevy) modular game engine
 
 It has the following design goals:
 
-* **Capable**: Offer a complete 2D and 3D feature set
-* **Simple**: Easy for newbies to pick up, but infinitely flexible for power users
-* **Data Focused**: Data-oriented architecture using the Entity Component System paradigm 
-* **Modular**: Use only what you need. Replace what you don't like
-* **Fast**: App logic should run quickly, and when possible, in parallel
-* **Productive**: Changes should compile quickly ... waiting isn't fun
+* <b class="fun-list">Capable</b>: Offer a complete 2D and 3D feature set
+* <b class="fun-list">Simple</b>: Easy for newbies to pick up, but infinitely flexible for power users
+* <b class="fun-list">Data Focused</b>: Data-oriented architecture using the Entity Component System paradigm 
+* <b class="fun-list">Modular</b>: Use only what you need. Replace what you don't like
+* <b class="fun-list">Fast</b>: App logic should run quickly, and when possible, in parallel
+* <b class="fun-list">Productive</b>: Changes should compile quickly ... waiting isn't fun
 
 Bevy has a number of features that I think set it apart from other engines:
 
-* **Bevy ECS**: A custom Entity Component System with unrivaled usability and blisteringly-fast performance
-* **Render Graphs**: Easily build your own multi-threaded render pipelines using Render Graph nodes
-* **Bevy UI**: A custom ECS-driven UI framework built specifically for Bevy
-* **Productive Compile Times**: Expect changes to compile in ~0.8-3.0 seconds with the "fast compiles" config
+* <b class="fun-list">Bevy ECS</b>: A custom Entity Component System with unrivaled usability and blisteringly-fast performance
+* <b class="fun-list">Render Graphs</b>: Easily build your own multi-threaded render pipelines using Render Graph nodes
+* <b class="fun-list">Bevy UI</b>: A custom ECS-driven UI framework built specifically for Bevy
+* <b class="fun-list">Productive Compile Times</b>: Expect changes to compile in ~0.8-3.0 seconds with the "fast compiles" config
 
 It also has many features most people expect from a modern, general purpose engine:
-* **Cross Platform**: Windows, MacOS, and Linux (with planned support for mobile and web)
-* **3D**: Lights, meshes, textures, MSAA, and GLTF loading
-* **Sprites**: Render individual images as sprites, render from sprite sheets, and dynamically generate new sprite sheets
-* **Assets**: An extensible, event driven asset system that loads assets asynchronously in background threads
-* **Scenes**: Save ECS Worlds to human-readable scene files and load scene files into ECS Worlds
-* **Plugins**: All engine and app features are implemented as modular plugins
-* **Sound**: Load audio files as assets and play them from within systems
-* **Multiple Render Backends**: Vulkan, DirectX 12, and Metal (with more on the way thanks to [wgpu](https://github.com/gfx-rs/wgpu-rs))
-* **Data Driven Shaders**: Easily bind ECS components directly to shader uniforms
-* **Hot Asset Reloading**: Automatically reload changes to assets at runtime without recompiles or restarts
-* **Events**: Efficiently consume and produce Events from within ECS systems
-* **Properties**: Dynamically get and set component fields using a string version of their names
-* **Hierarchical Transforms**: Create parent-child relationships between entities that propagate Transforms down the hierarchy 
+* <b class="fun-list">Cross Platform</b>: Windows, MacOS, and Linux (with planned support for mobile and web)
+* <b class="fun-list">3D</b>: Lights, meshes, textures, MSAA, and GLTF loading
+* <b class="fun-list">Sprites</b>: Render individual images as sprites, render from sprite sheets, and dynamically generate new sprite sheets
+* <b class="fun-list">Assets</b>: An extensible, event driven asset system that loads assets asynchronously in background threads
+* <b class="fun-list">Scenes</b>: Save ECS Worlds to human-readable scene files and load scene files into ECS Worlds
+* <b class="fun-list">Plugins</b>: All engine and app features are implemented as modular plugins
+* <b class="fun-list">Sound</b>: Load audio files as assets and play them from within systems
+* <b class="fun-list">Multiple Render Backends</b>: Vulkan, DirectX 12, and Metal (with more on the way thanks to [wgpu](https://github.com/gfx-rs/wgpu-rs))
+* <b class="fun-list">Data Driven Shaders</b>: Easily bind ECS components directly to shader uniforms
+* <b class="fun-list">Hot Asset Reloading</b>: Automatically reload changes to assets at runtime without recompiles or restarts
+* <b class="fun-list">Events</b>: Efficiently consume and produce Events from within ECS systems
+* <b class="fun-list">Properties</b>: Dynamically get and set component fields using a string version of their names
+* <b class="fun-list">Hierarchical Transforms</b>: Create parent-child relationships between entities that propagate Transforms down the hierarchy 
 
 That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. <span class="warning">I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability</span>.
 
@@ -103,9 +105,9 @@ All Bevy engine and game logic is built on top of a custom [Entity Component Sys
 The ECS pattern encourages clean, decoupled designs by forcing you to break up your app data and logic into its core components.
 
 Unlike other Rust ECS implementations, which require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
-* **Components**: normal Rust structs
-* **Systems**: normal Rust functions
-* **Entities**: a type containing a unique integer  
+* <b class="fun-list">Components</b>: normal Rust structs
+* <b class="fun-list">Systems</b>: normal Rust functions
+* <b class="fun-list">Entities</b>: a type containing a unique integer  
 
 There are already plenty of [great introductions](https://www.youtube.com/watch?v=2rW7ALyHaas) to the ECS paradigm, so I'll leave "getting up to speed on ECS" as an exercise for the reader and skip right to what makes Bevy's ECS so special:
 
@@ -145,8 +147,8 @@ That is a complete self-contained Bevy app with automatic parallel system schedu
 ### Performance
 
 One of the reasons the ECS paradigm is so popular is that it has the potential to make game logic _super_ fast, primarily for these two reasons:
-1. **Iteration Speed**: Components are packed tightly together to optimize for cache-locality, which makes iterating over them blazing fast
-2. **Parallelism**: Systems declare read/write dependencies, which enables automatic and efficient lock-free parallel scheduling
+1. <b class="fun-list">Iteration Speed</b>: Components are packed tightly together to optimize for cache-locality, which makes iterating over them blazing fast
+2. <b class="fun-list">Parallelism</b>: Systems declare read/write dependencies, which enables automatic and efficient lock-free parallel scheduling
 
 Bevy ECS does both of these things about as well as it can. According to the popular `ecs_bench` benchmark, Bevy ECS is the fastest Rust ECS by a pretty wide margin:
 
@@ -319,17 +321,36 @@ fn system(mut commands: Commands, time: Res<Time>, mut query: Query<&Position>) 
 }
 ```
 
+### How Function Systems Work?
+
+Being able to use Rust functions directly as systems might feel like magic, but I promise it's not! You may have noticed that we do this when registering systems in our App:
+
+```rs
+fn some_system() { }
+
+fn main() {
+    App::build()
+        .add_system(some_system.system())
+        .run();
+}
+```
+
+The `.system()` call takes the `some_system` function pointer and converts it to a `Box<dyn System>`. This works because we implement the {{rust_type(type="trait", mod="bevy::ecs", name="IntoSystem", no_mod=true)}} trait for all functions that match a certain set of function signatures.
+
+
 ### Good Bones
 
 Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](https://github.com/Ralith/hecs). Hecs is an efficient single-threaded archetypal ECS. It provides the core `World`, `Archetype`, and internal `Query` data structures. Bevy ECS adds the following on top:
 
-* **Function Systems**: Hecs actually has no concept of a "system" at all. You just run queries directly on the World. Bevy adds the ability to define portable, schedulable systems using normal Rust functions.
-* **Resources**: Hecs has no concept of unique/global data. When building games, this is often needed. Bevy adds a `Resource` collection and resource queries
-* **Parallel Scheduler**: Hecs is single threaded, but it was designed to allow parallel schedulers to be built on top. Bevy ECS adds a custom dependency-aware scheduler that builds on top of the "Function Systems" mentioned above.
-* **Optimization**: Hecs is already plenty fast, but by modifying some of its internal data access patterns, we were able to improve performance significantly. This moved it from "fast enough" to "the fastest" (see the benchmark above to compare Bevy ECS to vanilla Hecs).
-* **Query Wrappers**: The `Query` Bevy ECS exports is actually a wrapper around Hecs Queries. It provides safe, scoped access to the `World` in a multi-threaded context and improves the ergonomics of iteration.
-* **Change Detection**: Automatically (and efficiently) tracks component add/remove/update operations and exposes them in the Query interface.
-* **Stable Entity IDs**: Almost every ECS (including Hecs) uses unstable entity ids that cannot be used for serialization (scenes / save files) or networking. In Bevy ECS, entity ids are globally unique and stable. You can use them in any context!  
+* <b class="fun-list">Function Systems</b>: Hecs actually has no concept of a "system" at all. You just run queries directly on the World. Bevy adds the ability to define portable, schedulable systems using normal Rust functions.
+* <b class="fun-list">Resources</b>: Hecs has no concept of unique/global data. When building games, this is often needed. Bevy adds a `Resource` collection and resource queries
+* <b class="fun-list">Parallel Scheduler</b>: Hecs is single threaded, but it was designed to allow parallel schedulers to be built on top. Bevy ECS adds a custom dependency-aware scheduler that builds on top of the "Function Systems" mentioned above.
+* <b class="fun-list">Optimization</b>: Hecs is already plenty fast, but by modifying some of its internal data access patterns, we were able to improve performance significantly. This moved it from "fast enough" to "the fastest" (see the benchmark above to compare Bevy ECS to vanilla Hecs).
+* <b class="fun-list">Query Wrappers</b>: The `Query` Bevy ECS exports is actually a wrapper around Hecs Queries. It provides safe, scoped access to the `World` in a multi-threaded context and improves the ergonomics of iteration.
+* <b class="fun-list">Change Detection</b>: Automatically (and efficiently) tracks component add/remove/update operations and exposes them in the Query interface.
+* <b class="fun-list">Stable Entity IDs</b>: Almost every ECS (including Hecs) uses unstable entity ids that cannot be used for serialization (scenes / save files) or networking. In Bevy ECS, entity ids are globally unique and stable. You can use them in any context!  
+
+In the near future I will file an issue on the Hecs git repo offering to upstream whatever changes they want from Bevy ECS. I have a feeling they won't want the "high level" stuff like function systems and parallel scheduling, but I guess we'll see! 
 
 ## Bevy UI
 
@@ -981,11 +1002,11 @@ let pipeline_handle = pipelines.add(PipelineDescriptor::default_config(shader_st
 
 One of my primary design goals for Bevy is "productivity". Game development is an extremely iterative and experimental process full of small changes. If each change takes a significant amount of time to test, then development becomes a grind. Here is my personal "acceptability scale" for iterative changes:
 
-* **0-1 seconds**: ideal
-* **1-3 seconds**: fine
-* **3-5 seconds**: annoying
-* **5-10 seconds**: painful but still usable if you are committed
-* **10+ seconds**: completely unusable
+* <b class="fun-list">0-1 seconds</b>: ideal
+* <b class="fun-list">1-3 seconds</b>: fine
+* <b class="fun-list">3-5 seconds</b>: annoying
+* <b class="fun-list">5-10 seconds</b>: painful but still usable if you are committed
+* <b class="fun-list">10+ seconds</b>: completely unusable
 
 Note that these are "iterative compile times" not "clean compile times". Clean compiles only need to happen once, whereas iterative compiles happen constantly. I care a lot less about the "clean compile" metric when it comes to productivity, although it is still important to keep clean compile times down for other reasons.
 
@@ -994,17 +1015,17 @@ One of the most popular Rust engines today takes _over 30 seconds_ to compile a 
 Currently, with the "fast compiles" configuration, changes to Bevy examples can be compiled in ~0.8-3 seconds, based on your computer specs, configuration, and OS choice (more on this later). There is of course always room for improvement here, but Bevy currently falls into my "usability sweet spot".
 
 The "Rust compiles slow" meme exists largely because many Rust projects aren't thinking enough about the compile time performance implications of certain code patterns. Rust code generally compiles slowly for three reasons:
-* **Generic Monomorphization**: The compile step where generic code gets turned into a non-generic copy. Compile times go up as the volume of monomorphized code goes up. To keep costs low you should either avoid generics entirely or keep generic code "small" and shallow.
-* **Link Time**: How long it takes to link code. Here the important thing is to keep code volume and dependency counts low.
-* **LLVM**: Rust throws a large amounts of IR code at LLVM and expects it to optimize it. This takes time. Additionally LLVM is optimized for "fast code at runtime" more than "fast code generation". 
+* <b class="fun-list">Generic Monomorphization</b>: The compile step where generic code gets turned into a non-generic copy. Compile times go up as the volume of monomorphized code goes up. To keep costs low you should either avoid generics entirely or keep generic code "small" and shallow.
+* <b class="fun-list">Link Time</b>: How long it takes to link code. Here the important thing is to keep code volume and dependency counts low.
+* <b class="fun-list">LLVM</b>: Rust throws a large amounts of IR code at LLVM and expects it to optimize it. This takes time. Additionally LLVM is optimized for "fast code at runtime" more than "fast code generation". 
 
 The LLVM bit is out of our hands (for now). Keeping generic usage low and shallow isn't a particularly hard problem, provided you employ that mindset from the beginning. Link times, on the other hand, are a constant and very real "enemy" of iterative compile times. Linking happens on every iterative compile. Adding any code to your project will increase link times. Adding any dependency to your project will increase link times.
 
 The cards are stacked against us for a variety of reasons:
-* **The Game Engine Domain** 
+* <b class="fun-list">The Game Engine Domain</b>
   * Game engines inherently touch a large number of domains (and therefore involve a large number of dependencies)
   * Game engines are "big" ... they require a lot of code
-* **Rust's Design Choices**
+* <b class="fun-list">Rust's Design Choices</b>
   * Dependencies are statically linked by default, which means every new dependency adds link times 
   * Rust's default linker is quite slow
   * Cargo makes taking dependencies very easy. What appears to be a small, simple crate might actually have a large dependency tree
@@ -1017,9 +1038,9 @@ Bevy takes a slightly more pragmatic approach. First, being willing to take depe
 
 The "fast compiles" configuration is how we achieve usable iterative compile times while still taking dependencies. It consists of three parts:
 
-* **LLD linker**: LLD is _much faster_ at linking than the default Rust linker. This is the biggest win.
-* **Nightly Rust Compiler**: Gives access to the latest performance improvements and "unstable" optimizations. Note that Bevy can still be compiled on stable Rust if that is a requirement for you.
-* **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
+* <b class="fun-list">LLD linker</b>: LLD is _much faster_ at linking than the default Rust linker. This is the biggest win.
+* <b class="fun-list">Nightly Rust Compiler</b>: Gives access to the latest performance improvements and "unstable" optimizations. Note that Bevy can still be compiled on stable Rust if that is a requirement for you.
+* <b class="fun-list">Generic Sharing</b>: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config`
 
@@ -1049,12 +1070,12 @@ First a bit about me: I decided to build Bevy after years of contributing code t
 
 These experiences led me to want the following from a game engine:
 
-* **Free and Open Source**: It needs to be free and open source with _no strings attached_. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we (as game developers / engine developers) continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? As a community I believe we can do so much better. This criteria eliminates Unreal and Unity, despite their huge feature sets.
-* **Productive**: It needs to have fast build/run/test loops, which translates to either scripting languages or fast compile times in native languages. But scripting languages introduce runtime overhead, cognitive load, and a barrier between me and the actual engine, so my preference here is a native language with fast compile times. Sadly compile times are a huge problem in the Rust ecosystem and many Rust engines have prohibitively long iterative compiles. Fortunately Rust game engines like Macroquad and coffee prove that productive iterative compile times are possible.
-* **Turtles All The Way Down**: Ideally the engine is written in the same language that games are. Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept. You also don't need to worry about heavy language translation layers or lossy abstractions. If an engine's community builds games in the same language as the engine, they are more likely (and able) to contribute back to the engine.
-* **Simple**: It needs to be easy to use for common tasks, but it also can't hide the details from you. Many engines are either "easy to use but too high level" or "very low level but difficult to do common tasks in". Additionally, many engines in Rust are littered with lifetimes and generics. Both are powerful tools to be sure, but they also introduce cognitive load and reduce ergonomics. Generics can also have a huge impact on compile times if you aren't careful.
-* **Editor**: It needs to have an (optional) graphical editor. Scene creation is a large part of game development and in many cases visual editors beat code. As a bonus, the editor should be built _in the engine_. Godot uses this approach and it is _so smart_. Doing so <a href="https://en.wikipedia.org/wiki/Eating_your_own_dog_food" target="_blank">dogfoods</a> the engine's UI system and creates positive feedback loops. Improvements to the editor are also often improvements to the core engine. It also makes sure your engine is flexible enough to build tooling (and not just games). I personally consider building an engine's editor in another stack to be a missed opportunity (ex: the web, QT, native widgets). 
-* **Data Driven**: It needs to be data-driven/data-oriented/data-first. ECS is a common way of doing this, but it definitely isn't the only way. These paradigms can make your game faster (cache friendly, easier to parallelize), but they also make common tasks like game state serialization and synchronization delightfully straightforward.
+* <b class="fun-list">Free and Open Source</b>: It needs to be free and open source with _no strings attached_. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we (as game developers / engine developers) continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? As a community I believe we can do so much better. This criteria eliminates Unreal and Unity, despite their huge feature sets.
+* <b class="fun-list">Productive</b>: It needs to have fast build/run/test loops, which translates to either scripting languages or fast compile times in native languages. But scripting languages introduce runtime overhead, cognitive load, and a barrier between me and the actual engine, so my preference here is a native language with fast compile times. Sadly compile times are a huge problem in the Rust ecosystem and many Rust engines have prohibitively long iterative compiles. Fortunately Rust game engines like Macroquad and coffee prove that productive iterative compile times are possible.
+* <b class="fun-list">Turtles All The Way Down</b>: Ideally the engine is written in the same language that games are. Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept. You also don't need to worry about heavy language translation layers or lossy abstractions. If an engine's community builds games in the same language as the engine, they are more likely (and able) to contribute back to the engine.
+* <b class="fun-list">Simple</b>: It needs to be easy to use for common tasks, but it also can't hide the details from you. Many engines are either "easy to use but too high level" or "very low level but difficult to do common tasks in". Additionally, many engines in Rust are littered with lifetimes and generics. Both are powerful tools to be sure, but they also introduce cognitive load and reduce ergonomics. Generics can also have a huge impact on compile times if you aren't careful.
+* <b class="fun-list">Editor</b>: It needs to have an (optional) graphical editor. Scene creation is a large part of game development and in many cases visual editors beat code. As a bonus, the editor should be built _in the engine_. Godot uses this approach and it is _so smart_. Doing so <a href="https://en.wikipedia.org/wiki/Eating_your_own_dog_food" target="_blank">dogfoods</a> the engine's UI system and creates positive feedback loops. Improvements to the editor are also often improvements to the core engine. It also makes sure your engine is flexible enough to build tooling (and not just games). I personally consider building an engine's editor in another stack to be a missed opportunity (ex: the web, QT, native widgets). 
+* <b class="fun-list">Data Driven</b>: It needs to be data-driven/data-oriented/data-first. ECS is a common way of doing this, but it definitely isn't the only way. These paradigms can make your game faster (cache friendly, easier to parallelize), but they also make common tasks like game state serialization and synchronization delightfully straightforward.
 
 None of the engines on the market _quite_ line up with what I'm looking for. And the changes required to make them meet my requirements are either massive in scope, impossible (closed source), or unwelcome (the things I want aren't what the developers or customers want). On top of that, making new game engines is fun!
 
@@ -1113,8 +1134,8 @@ Bevy's APIs are still very unstable, so I haven't spent much time documenting an
 
 If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Bevy Book](https://bevyengine.org/learn/book/introduction/), and [join the Bevy community](https://bevyengine.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
 
-* **Software Developer**: check out the [Contributing Code](/learn/book/contributing/code) section of The Bevy Book.
-* **Technical Writer**: check out the [Contributing Docs](/learn/book/contributing/docs) section of The Bevy Book.
+* <b class="fun-list">Software Developer</b>: check out the [Contributing Code](/learn/book/contributing/code) section of The Bevy Book.
+* <b class="fun-list">Technical Writer</b>: check out the [Contributing Docs](/learn/book/contributing/docs) section of The Bevy Book.
 
 I want Bevy to become a vibrant developer community ... thats actually why I chose the name! A Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 
