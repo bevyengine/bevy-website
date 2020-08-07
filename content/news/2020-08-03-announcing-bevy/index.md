@@ -321,7 +321,7 @@ fn system(mut commands: Commands, time: Res<Time>, mut query: Query<&Position>) 
 }
 ```
 
-### How Function Systems Work?
+### How Do Function Systems Work?
 
 Being able to use Rust functions directly as systems might feel like magic, but I promise it's not! You may have noticed that we do this when registering systems in our App:
 
