@@ -30,9 +30,17 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     ```
 
 ### Add Bevy as a Dependency
-Bevy is <a href="https://crates.io/crates/bevy" target="_blank">available as a library on crates.io</a>: [![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy). Add the bevy crate to your project's Cargo.toml like this:
+ 
+Bevy is <a href="https://crates.io/crates/bevy" target="_blank">available as a library on crates.io</a>.
+
+
+Add the bevy crate to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
 bevy = "0.1.0" # make sure this is the latest version
 ```
+
+This is the current `bevy` crate version:
+
+<img src="https://img.shields.io/crates/v/bevy.svg" style="height: 2.0rem; margin-bottom: 2rem"/>
