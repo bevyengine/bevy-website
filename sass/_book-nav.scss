@@ -55,3 +55,10 @@ $inactive-nav-color: #999999;
     text-decoration: none;
     text-shadow: 0 0 0.5px $default-color, 0 0 0.5px $default-color;
 }
+
+.book-nav-section-number {
+    font-family: 'Fira Code', monospace;
+    font-variant-ligatures: none;
+    font-size: 1rem; 
+    margin-right: -0.2rem;
+}
