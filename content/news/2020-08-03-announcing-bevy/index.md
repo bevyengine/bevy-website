@@ -81,7 +81,7 @@ fn main() {
 
 {{rust_type(type="struct", mod="bevy::app", name="AppBuilder", method="add_default_plugins", no_mod=true, no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
-You can also register the default {{rust_type(type="trait" name="AppPlugin" mod="bevy::core" no_mod=true, plural=true)}} manually like this:
+You can also register the default {{rust_type(type="trait" name="Plugin" mod="bevy::core" no_mod=true, plural=true)}} manually like this:
 
 ```rs
 fn main() {

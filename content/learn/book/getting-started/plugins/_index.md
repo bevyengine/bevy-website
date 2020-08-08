@@ -50,12 +50,12 @@ You are free to use whatever approach suits you!
 
 ## Creating your first plugin
 
-For better organization, lets move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="AppPlugin" mod="bevy::core" no_mod=true)}} interface. Add the following code to your `main.rs` file:
+For better organization, lets move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" mod="bevy::core" no_mod=true)}} interface. Add the following code to your `main.rs` file:
 
 ```rs
 pub struct HelloPlugin;
 
-impl AppPlugin for HelloPlugin {
+impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
         // add things to your app here
     }
@@ -78,7 +78,7 @@ fn main() {
 Now all thats left is to move our systems into `HelloPlugin`, which is just a matter of cut and paste. The `app` variable in our plugin's `build()` function is the same builder type we use in our `main()` function:
 
 ```rs
-impl AppPlugin for HelloPlugin {
+impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.add_startup_system(add_people.system())
             .add_system(hello_world.system())

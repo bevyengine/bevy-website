@@ -50,7 +50,7 @@ fn greet_people(
 
 Now all thats left is adding a `GreetTimer` Resource to our `HelloPlugin`:
 ```rs
-impl AppPlugin for HelloPlugin {
+impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.add_resource(GreetTimer(Timer::from_seconds(2.0)))
             .add_startup_system(add_people.system())
