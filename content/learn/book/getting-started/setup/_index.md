@@ -40,6 +40,7 @@ First, navigate to a folder where you want to create your new project. Then, run
 
 ```
 cargo new my_bevy_game --bin
+cd my_bevy_game
 ```
 
 Now run ```cargo run``` to build and run your project. You should see ```Hello, world!``` printed to your terminal. Open the ```my_bevy_game``` folder in your code editor of choice and take some time to look through the files. 

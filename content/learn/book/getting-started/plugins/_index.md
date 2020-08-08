@@ -1,6 +1,6 @@
 +++
 title = "Plugins"
-weight = 3
+weight = 4
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
@@ -18,21 +18,24 @@ Lets make our app more interesting by adding the "default Bevy plugins".
 {{rust_type(type="struct", mod="bevy::app", name="AppBuilder", method="add_default_plugins", no_mod=true, no_struct=true)}} adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input. 
 
 ```rs
-use bevy::prelude::*;
-
 fn main() {
     App::build()
         .add_default_plugins()
+        .add_startup_system(add_people.system())
+        .add_system(hello_world.system())
+        .add_system(greet_people.system())
         .run();
 }
 ```
 
-Once again run ```cargo run```. This time, you should see a window pop up! This is because we now have {{rust_type(type="struct", mod="bevy::window", name="WindowPlugin", no_mod=true)}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct", mod="bevy::winit", name="WinitPlugin", no_mod=true)}} which uses the <a href="https://github.com/rust-windowing/winit" target="_blank">winit library</a> to create a window using your OS's native window api.
+Once again run `cargo run`.
 
-{{rust_type(type="struct", mod="bevy::app", name="AppBuilder", method="add_default_plugins", no_mod=true, no_struct=true)}} is equivalent to the following:
+You should hopefully notice two things:
+* **A window should pop up**. This is because we now have {{rust_type(type="struct", mod="bevy::window", name="WindowPlugin", no_mod=true)}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct", mod="bevy::winit", name="WinitPlugin", no_mod=true)}} which uses the <a href="https://github.com/rust-windowing/winit" target="_blank">winit library</a> to create a window using your OS's native window api.
+* **Your console is now full of "hello" messages**: This is because {{rust_type(type="struct", mod="bevy::app", name="AppBuilder", method="add_default_plugins", no_mod=true, no_struct=true)}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
+
+Note that {{rust_type(type="struct", mod="bevy::app", name="AppBuilder", method="add_default_plugins", no_mod=true, no_struct=true)}} is equivalent to the following:
 ```rs
-use bevy::prelude::*;
-
 fn main() {
     App::build()
         .add_plugin(CorePlugin::default());
@@ -43,11 +46,11 @@ fn main() {
 }
 ```
 
-Feel free to use whatever approach suits you! Hopefully now it is clear what we mean by "modular". You are free to remove whatever plugins you don't want!
+You are free to use whatever approach suits you!
 
 ## Creating your first plugin
 
-To create a plugin we just need to implement the {{rust_type(type="trait" name="AppPlugin" mod="bevy::core" no_mod=true)}} interface. Add the following code to your `main.rs` file:
+For better organization, lets move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="AppPlugin" mod="bevy::core" no_mod=true)}} interface. Add the following code to your `main.rs` file:
 
 ```rs
 pub struct HelloPlugin;
@@ -59,3 +62,36 @@ impl AppPlugin for HelloPlugin {
 }
 ```
 
+Then register the plugin in your App like this:
+```rs
+fn main() {
+    App::build()
+        .add_default_plugins()
+        .add_plugin(HelloPlugin)
+        .add_startup_system(add_people.system())
+        .add_system(hello_world.system())
+        .add_system(greet_people.system())
+        .run();
+}
+```
+
+Now all thats left is to move our systems into `HelloPlugin`, which is just a matter of cut and paste. The `app` variable in our plugin's `build()` function is the same builder type we use in our `main()` function:
+
+```rs
+impl AppPlugin for HelloPlugin {
+    fn build(&self, app: &mut AppBuilder) {
+        app.add_startup_system(add_people.system())
+            .add_system(hello_world.system())
+            .add_system(greet_people.system());
+    }
+}
+
+fn main() {
+    App::build()
+        .add_default_plugins()
+        .add_plugin(HelloPlugin)
+        .run();
+}
+```
+
+Try running the app again. It should do exactly what it did before. In the next section, we'll fix the "hello" spam using Resources. 
