@@ -1,5 +1,5 @@
 +++
-title = "Announcing Bevy"
+title = "Introducing Bevy"
 date = 2020-08-03
 [extra]
 author = "Carter Anderson"
@@ -10,7 +10,7 @@ youtube = "cartdev"
 
 <video controls loop><source  src="hot_reloading.mp4" type="video/mp4"/></video>
 
-After operating incognito for months, I am ecstatic to finally announce **Bevy Engine**!
+After months of work, I am ecstatic to finally announce **Bevy Engine**!
 
 Bevy is an [open-source](https://github.com/bevyengine/bevy) modular game engine and general purpose app framework built in Rust, with a heavy focus on developer productivity and performance.
 
@@ -1116,7 +1116,7 @@ The current scene format is workable, but it isn't yet ideal for manual scene co
 
 ### Dynamic Plugin Loading
 
-To mitigate the cost of compiling and linking plugins and make hot-code-reloading possible, we will provide the option to dynamically load App plugins. Bevy actually already supports this feature, but there is one hangup: Rust's `TypeId`. TypeIds are unstable across binaries, which means `TypeId::of::<T>()` in the host binary will not match `TypeId::of::<T>()` in a dynamically loaded binary. Bevy ECS uses TypeIds, which means dynamically loaded ECS types won't behave correctly. Bevy used to use a custom fork of the Legion ECS (where we fixed the TypeId problem), but since moving to Bevy ECS the problem has resurfaced. The fix is to apply the same approach we used in Legion to Bevy ECS. 
+To mitigate the cost of compiling and linking plugins and make hot-code-reloading possible, we will provide the option to dynamically load App plugins. Bevy actually already supports this feature, but there is one hangup: Rust's `TypeId`. TypeIds are unstable across binaries, which means `TypeId::of::<T>()` in the host binary will not match `TypeId::of::<T>()` in a dynamically loaded binary. Bevy ECS uses TypeIds, which means dynamically loaded ECS types won't behave correctly. In the past, Bevy used a custom fork of the Legion ECS (where we fixed the TypeId problem). But since moving to Bevy ECS the problem has resurfaced. The fix is to apply the same approach we used in Legion to Bevy ECS. 
 
 ### Physics
 
