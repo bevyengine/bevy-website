@@ -6,7 +6,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Bevy programs are referred to as {{rust_type(type="struct", mod="bevy::app", name="App", no_mod=true, plural=true)}}. The simplest Bevy app looks like this:
+Bevy programs are referred to as {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=true)}}. The simplest Bevy app looks like this:
 
 ```rs
 use bevy::prelude::*;

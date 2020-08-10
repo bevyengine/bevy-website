@@ -1,9 +1,20 @@
 
-{% if mod is starting_with("std::") or mod == "std" %}
-    {% set url = "https://doc.rust-lang.org" %}
-{% else %}
-    {% set url = "https://docs.rs" %}
+{% if not crate %}
+{% set crate = "std" %}
 {% endif %}
 
-{% set path = mod | replace(from="::", to="/") %}
-<a href="{{url}}/{{path}}/index.html" rel="noopener noreferrer" target="_blank"><code>{{mod}}</code></a>
+{% if mod %}
+{% set mod_path = "/" ~ mod | replace(from="::", to="/") %}
+{% else %}
+{% set mod_path = "" %}
+{% endif %}
+
+{% if crate == "std" %}
+{% set url = "https://doc.rust-lang.org" %}
+{% set path = "stable/" ~ crate %}
+{% else %}
+{% set url = "https://docs.rs" %}
+{% set path = crate ~ "/latest/" ~ crate %}
+{% endif %}
+
+<a href="{{url}}/{{path}}{{mod_path}}/index.html" rel="noopener noreferrer" target="_blank"><code>{{mod}}</code></a>

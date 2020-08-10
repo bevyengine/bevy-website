@@ -32,23 +32,23 @@ A local server should start and you should be able to access a local version of 
 
 We made an extension to the markdown syntax that makes linking to Rust API docs nicer. It also gives the links special formatting. Here are some examples:
 
-* Full Type Path: {{rust_type(type="struct", mod="std::collections", name="HashMap")}}
+* Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap")}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap")}{{curly_close()}}```
-* Short Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true)}}
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
+* Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap", no_mod=true)}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true)}{{curly_close()}}```
-* Plural Type: {{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, plural=true)}}
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true)}{{curly_close()}}```
+* Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true plural=true)}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, plural=true)}{{curly_close()}}```
-* Function: {{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, method="insert")}}
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true, plural=true)}{{curly_close()}}```
+* Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}}
     
-    ```{{curly_open()}}{rust_type(type="struct", mod="std::collections", name="HashMap", no_mod=true, method="insert")}{{curly_close()}}```
-* Module: {{rust_mod(mod="std::collections")}}
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}{{curly_close()}}```
+* Module: {{rust_mod(crate="std" mod="collections")}}
     
-    ```{{curly_open()}}{rust_mod(mod="std::collections")}{{curly_close()}}```
+    ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```
 
-{{rust_mod(mod="std")}} modules will link to <a href="https://doc.rust-lang.org/std/index.html" target="_blank">doc.rust-lang.org</a>. Other modules (like {{rust_mod(mod="bevy")}} ) will link to <a href="https://docs.rs" target="_blank">docs.rs</a> 
+{{rust_mod(mod="std")}} modules will link to <a href="https://doc.rust-lang.org/std/index.html" target="_blank">doc.rust-lang.org</a>. Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to <a href="https://docs.rs" target="_blank">docs.rs</a> 
 
 ## Rust API Docs
 

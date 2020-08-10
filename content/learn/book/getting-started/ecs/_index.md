@@ -52,9 +52,9 @@ fn main() {
 }
 ```
 
-Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait", mod="bevy::ecs", name="System", no_mod=true)}} type.
+Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" name="System")}} type.
 
-The {{rust_type(type="trait", mod="bevy::ecs", name="IntoSystem", no_mod=true, method="add_system", no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", mod="bevy::ecs", name="Schedule", no_mod=true)}}, but we'll cover that more later.
+The {{rust_type(type="trait" crate="bevy_ecs", name="IntoQuerySystem" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", name="Schedule")}}, but we'll cover that more later.
 
 Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
 
@@ -73,7 +73,7 @@ But what if we want our people to have a name? In a more traditional design, we 
 struct Name(String);
 ```
 
-We can then add `People` to our {{rust_type(type="struct", mod="bevy::ecs", name="World", no_mod=true)}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Lets use {{rust_type(type="struct", mod="bevy::ecs", name="Commands", no_mod=true)}} to spawn some entities into our {{rust_type(type="struct", mod="bevy::ecs", name="World", no_mod=true)}}:
+We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Lets use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
 fn add_people(mut commands: Commands) {
@@ -95,7 +95,7 @@ fn main() {
 }
 ```
 
-We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Lets make a system that properly greets the new citizens of our {{rust_type(type="struct", mod="bevy::ecs", name="World", no_mod=true)}}:
+We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Lets make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
 fn greet_people(person: &Person, name: &Name) {
