@@ -1,6 +1,6 @@
 +++
 title = "Introducing Bevy"
-date = 2020-08-03
+date = 2020-08-10
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"
@@ -12,7 +12,7 @@ youtube = "cartdev"
 
 After months of work, I am ecstatic to finally announce **Bevy Engine**!
 
-Bevy is an [open-source](https://github.com/bevyengine/bevy) modular game engine and general purpose app framework built in Rust, with a heavy focus on developer productivity and performance.
+Bevy is a refreshingly simple data-driven game engine and app framework built in Rust. It is [free and open-source](https://github.com/bevyengine/bevy) forever!
 
 <!-- more -->
 

@@ -14,9 +14,9 @@ If you came here because you wanted to learn how to make 2D / 3D games, visualiz
 
 A bevy is a group of birds!
 
-But Bevy is also a modular game engine built in Rust, with a focus on developer productivity and performance.
+But Bevy is also a refreshingly simple data-driven game engine built in Rust. It is [free and open-source](https://github.com/bevyengine/bevy) forever.
 
-It has the following design goals:
+Bevy has the following design goals:
 * **Capable**: Offer a complete 2D and 3D feature set
 * **Simple**: Easy for newbies to pick up, but infinitely flexible for power users
 * **Data Focused**: Data-oriented architecture using the Entity Component System paradigm 
@@ -25,6 +25,8 @@ It has the following design goals:
 * **Productive**: Changes should compile quickly ... waiting isn't fun
 
 Bevy is [built in the open by volunteers](/learn/book/contributing) using the <a href="https://www.rust-lang.org/" target="_blank">Rust programming language</a>. The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
+
+For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
 
 <h2 class="warning">
     Stability Warning
