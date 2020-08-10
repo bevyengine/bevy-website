@@ -43,4 +43,4 @@ bevy = "0.1.0" # make sure this is the latest version
 
 This is the current `bevy` crate version:
 
-<img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem; margin-bottom: 2rem"/>
+<a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem; margin-bottom: 2rem"/></a>
