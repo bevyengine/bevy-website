@@ -38,9 +38,9 @@ Note that {{rust_type(type="trait" crate="bevy" name="AddDefaultPlugins" method=
 ```rs
 fn main() {
     App::build()
-        .add_plugin(CorePlugin::default());
-        .add_plugin(InputPlugin::default());
-        .add_plugin(WindowPlugin::default());
+        .add_plugin(CorePlugin::default())
+        .add_plugin(InputPlugin::default())
+        .add_plugin(WindowPlugin::default())
         /* more plugins omitted for brevity */
         .run();
 }

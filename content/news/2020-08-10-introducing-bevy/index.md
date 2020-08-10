@@ -86,11 +86,11 @@ You can also register the default {{rust_type(type="trait" name="Plugin" crate="
 ```rs
 fn main() {
     App::build()
-        .add_plugin(CorePlugin::default());
-        .add_plugin(InputPlugin::default());
-        .add_plugin(WindowPlugin::default());
-        .add_plugin(RenderPlugin::default());
-        .add_plugin(UiPlugin::default());
+        .add_plugin(CorePlugin::default())
+        .add_plugin(InputPlugin::default())
+        .add_plugin(WindowPlugin::default())
+        .add_plugin(RenderPlugin::default())
+        .add_plugin(UiPlugin::default())
         /* more plugins here ... omitted for brevity */
         .run();
 }
