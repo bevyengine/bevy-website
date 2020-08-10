@@ -1,17 +1,31 @@
 {% import "header-macros.html" as header_macros %}
+{% if section and section.title %}
+{% set page_title = "Bevy - " ~ section.title %}
+{% elif page and page.title %}
+{% set page_title = "Bevy - " ~ page.title %}
+{% else %}
+{% set page_title = "Bevy"%}
+{% endif %}
+
+{% if section and section.path %}
+{% set path = "/" ~ section.path %}
+{% elif page and page.path %}
+{% set path = "/" ~ page.path %}
+{% else %}
+{% set path = ""%}
+{% endif %}
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name='viewport' content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="{{page_title}}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bevyengine.org{{path}}" />
+        <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
         <link rel="stylesheet" href="/site.css" />
-        {% if section and section.title %}
-            <title>Bevy - {{section.title}}</title>
-        {% elif page and page.title %}
-            <title>Bevy - {{page.title}}</title>
-        {% else %}
-            <title>Bevy</title>
-        {% endif %}
+        <title>{{page_title}}</title>
         {% block head_extensions %} {% endblock %}
     </head>
 
