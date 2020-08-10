@@ -17,6 +17,5 @@
 {% set path = crate ~ "/latest/" ~ crate %}
 {% endif %}
 
-<a href="{{url}}/{{path}}{{mod_path}}/{{type}}.{{name}}.html{% if method %}#method.{{method}}{% endif %}" rel="noopener noreferrer"
-    target="_blank"><code>{% if not no_mod and mod%}{{mod}}::{% endif %}{% if not no_struct %}{{name}}{% if plural %}s{% endif %}{% endif %}{% if method %}{% if not no_struct %}::{% endif %}{{method}}(){% endif %}</code>
+<a href="{{url}}/{{path}}{{mod_path}}/{{type}}.{{name}}.html{% if method %}#method.{{method}}{% endif %}"><code>{% if not no_mod and mod%}{{mod}}::{% endif %}{% if not no_struct %}{{name}}{% if plural %}s{% endif %}{% endif %}{% if method %}{% if not no_struct %}::{% endif %}{{method}}(){% endif %}</code>
 </a>

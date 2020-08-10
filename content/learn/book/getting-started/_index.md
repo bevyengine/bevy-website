@@ -31,7 +31,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
 
 ### Add Bevy as a Dependency
  
-Bevy is <a href="https://crates.io/crates/bevy" target="_blank">available as a library on crates.io</a>.
+Bevy is [available as a library on crates.io](https://crates.io/crates/bevy).
 
 
 Add the bevy crate to your project's Cargo.toml like this:

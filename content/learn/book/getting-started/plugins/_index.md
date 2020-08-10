@@ -31,7 +31,7 @@ fn main() {
 Once again run `cargo run`.
 
 You should hopefully notice two things:
-* **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the <a href="https://github.com/rust-windowing/winit" target="_blank">winit library</a> to create a window using your OS's native window api.
+* **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window api.
 * **Your console is now full of "hello" messages**: This is because {{rust_type(type="trait" crate="bevy" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
 Note that {{rust_type(type="trait" crate="bevy" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} is equivalent to the following:

@@ -8,4 +8,4 @@ page_template = "book-section.html"
 long_title = "Contributing Code"
 +++
 
-We will expand this section in the near future with more information. For now, <a href="https://github.com/bevyengine/bevy" target="_blank">check out the Bevy GitHub repo</a>.
+We will expand this section in the near future with more information. For now, [check out the Bevy GitHub repo](https://github.com/bevyengine/bevy).

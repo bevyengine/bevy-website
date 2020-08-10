@@ -10,11 +10,11 @@ long_title = "Contributing Docs"
 
 ## The Bevy Book
 
-The Bevy Book is open source, along with the rest of this website. Check out the <a href="https://github.com/bevyengine/bevy-website" target="_blank">Bevy Website repository on GitHub</a>. The Bevy Book content is written in Markdown. 
+The Bevy Book is open source, along with the rest of this website. Check out the [Bevy Website repository on GitHub](https://github.com/bevyengine/bevy-website). The Bevy Book content is written in Markdown. 
 
 ### Building the Website
 
-The website is built using the <a href="https://www.getzola.org/" target="_blank">Zola static site generator</a>. Download Zola, then do the following:
+The website is built using the [Zola static site generator](https://www.getzola.org/). Download Zola, then do the following:
 
 1. Clone the Bevy Website git repo and move to that directory: 
     ```
@@ -48,8 +48,8 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
     
     ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```
 
-{{rust_mod(mod="std")}} modules will link to <a href="https://doc.rust-lang.org/std/index.html" target="_blank">doc.rust-lang.org</a>. Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to <a href="https://docs.rs" target="_blank">docs.rs</a> 
+{{rust_mod(mod="std")}} modules will link to [https://doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to [https://docs.rs](https://docs.rs) 
 
 ## Rust API Docs
 
-Bevy's Rust API Docs are automatically generated from the latest Bevy source code. If you add <a href="https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments" target="_blank">Rust documentation comments</a> to the Bevy codebase, the API docs will be automatically updated.
+Bevy's Rust API Docs are automatically generated from the latest Bevy source code. If you add [Rust documentation comments](https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments) to the Bevy codebase, the API docs will be automatically updated.

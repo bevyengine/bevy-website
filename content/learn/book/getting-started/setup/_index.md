@@ -14,20 +14,20 @@ All Bevy app and engine code is written in Rust. This means that before we begin
 
 ### Installing Rust
 
-Install Rust by following the <a href="https://www.rust-lang.org/learn/get-started" target="_blank">Rust Getting Started Guide</a>.
+Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang.org/learn/get-started).
 
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
 ### Code Editor / IDE
 
-You can use any code editor you want, but we highly recommend one that has a <a href="https://github.com/rust-analyzer/rust-analyzer" target="_blank">Rust Analyzer</a> plugin. Rust Analyzer is still in development, but it already provides top-tier autocomplete and code intelligence. <a href="https://code.visualstudio.com/">Visual Studio Code</a> has an officially supported <a href="https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer">Rust Analyzer Extension</a>. 
+You can use any code editor you want, but we highly recommend one that has a [Rust Analyzer](https://github.com/rust-analyzer/rust-analyzer) plugin. Rust Analyzer is still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [Rust Analyzer Extension](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer). 
 
 ### Rust Learning Resources
 
 The goal of this book is to learn Bevy, so it won't serve as a full Rust education. If you would like to learn more about the Rust language, check out the following resources:
 
-* <b><a href="https://doc.rust-lang.org/book/" target="_blank">The Rust Book</a></b>: the best place to learn Rust from scratch
-* <b><a href="https://doc.rust-lang.org/rust-by-example/" target="_blank">Rust by Example</a></b>: learn Rust by working through live coding examples
+* [**The Rust Book**](https://doc.rust-lang.org/book/): the best place to learn Rust from scratch
+* [**Rust by Example**](https://doc.rust-lang.org/rust-by-example/): learn Rust by working through live coding examples
 
 
 ## Create a new Bevy Project
@@ -86,7 +86,7 @@ To enable fast compiles, install the nightly rust compiler and LLD. Then copy [t
 ### Add Bevy to your project's Cargo.toml
 
 
-Bevy is <a href="https://crates.io/crates/bevy" target="_blank">available as a library on crates.io</a>, the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
+Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
 
 ```toml
 [package]
