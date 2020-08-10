@@ -96,7 +96,7 @@ authors = ["You <you@veryrealemail.com>"]
 edition = "2018"
 
 [dependencies]
-bevy = "0.1.0" # make sure this is the latest version
+bevy = "0.1.2" # make sure this is the latest version
 ```
 
 Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
