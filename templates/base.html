@@ -15,7 +15,7 @@
 {% set path = ""%}
 {% endif %}
 
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" >
     <head>
         <meta charset="UTF-8">
         <meta name='viewport' content="width=device-width, initial-scale=1" />
@@ -40,6 +40,7 @@
                     <img src="/assets/bevy_icon_dark.svg" class="logo" alt="bevy icon" />
                 </a>
                 <div class="header-item header-message">
+                    <h1>
                     {% if section and section.extra.header_message %}
                     {{section.extra.header_message}}
                     {% elif page and page.extra.header_message %}
@@ -53,6 +54,7 @@
                     {% else %}
                         Features
                     {% endif %}
+                    </h1>
                 </div>
                 <div class="header-item header-push"></div>
                 {{header_macros::header_item(name="Features", path="/", current_path=current_path)}}

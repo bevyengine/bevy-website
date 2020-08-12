@@ -2,7 +2,7 @@
     width: 100%;
     background-color: $headerbar-color;
     margin: 0;
-    box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #111;
 }
 
 .headerbar {
@@ -37,44 +37,54 @@
     align-items: center;
 }
 
-.header-push {
-    margin-right: auto;
-}
-
 .header-item, .header-item:visited, .header-item:link {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 1.4rem;
-    margin-left: 0.7rem;
+    margin: 0 0.5rem;
     color: $default-color;
     font-style: normal;
     text-decoration: none;
-}
 
-.header-item:active, .header-item:hover, .header-item-active {
-    color: $hover-color;
-    text-shadow: 0 0 1px $hover-shadow-color, 0 0 1px $hover-shadow-color;
-}
+    &.header-push {
+        margin-right: auto;
+    }
 
-$header-active-color: #b1d9ff;
-.header-item-active, .header-item-active:hover {
-    color: $header-active-color !important;
-    text-shadow: 0 0 1px $header-active-color, 0 0 1px $header-active-color;
+    &:active,
+    &:hover {
+        color: $hover-color;
+        text-shadow: 0 0 1px $hover-shadow-color, 0 0 1px $hover-shadow-color;
+    }
+
+    &.header-item-active,
+    &.header-item-active:hover {
+        color: $header-active-color;
+        text-shadow: 0 0 1px $header-active-shadow-color, 0 0 1px $header-active-shadow-color;
+        font-weight: 500;
+    }
 }
 
 .header-message {
     text-align: center;
     color: #797979;
-    font-size: 2.3rem;
+    font-size: 2rem;
+    font-weight: 300;
+    margin: 0 1rem;
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 400;
+    }
 }
 
-.header-button {
-    background-color: #799bbb;
+.header-button, .header-button:visited, .header-button:link {
+    color: $header-button-color;
+    background-color: $header-button-background-color;
     border-style: solid;
-    border-color: #576f86;
+    border-color: $header-button-border-color;
     border-width: 3px;
-    padding: 0.4rem;
     border-radius: 10px;
-    font-size: 1.2rem !important;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
 }
 
 @media screen and (max-width: 450px) {
