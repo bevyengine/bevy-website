@@ -71,13 +71,14 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
     * **Ubuntu**: `sudo apt-get install lld`
     * **Arch**: `sudo pacman -S lld`
-    * **Windows**: `scoop install llvm` (using [scoop](https://scoop.sh/) package manager)
+    * **Windows**: Go to next step, Bevy's cargo config uses the Rust bundled lld
     * **MacOS**: Sorry MacOS users ... modern LLD does not support MacOS. They are working on a rewrite, but it will take time. Fortunately Bevy will soon support dynamic linking of App Plugins, which will give massive iterative compile speedups and make LLD less necessary.
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     ```
     rustup toolchain install nightly
     rustup default nightly
     ```
+    * You can use `cargo +nightly ...` if you don't want to change the default to nightly.
     * You can always switch back to stable by running: ```rustup default stable```.
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
