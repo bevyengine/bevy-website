@@ -129,7 +129,7 @@ fn setup(mut commands: Commands) {
 }
 
 // this system runs on each entity with a Position and Velocity component
-fn movement(position: Mut<Position>, velocity: &Velocity) {
+fn movement(mut position: Mut<Position>, velocity: &Velocity) {
     position.0 += velocity.0;
 }
 
