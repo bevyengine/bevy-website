@@ -18,6 +18,11 @@ Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang
 
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
+### Install OS dependencies
+* [Linux](https://github.com/bevyengine/bevy/blob/master/docs/linux_dependencies.md)
+* Windows: You should be good to go
+* MacOS: No dependencies here
+
 ### Code Editor / IDE
 
 You can use any code editor you want, but we highly recommend one that has a [Rust Analyzer](https://github.com/rust-analyzer/rust-analyzer) plugin. Rust Analyzer is still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [Rust Analyzer Extension](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer). 
