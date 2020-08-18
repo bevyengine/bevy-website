@@ -77,19 +77,32 @@ $header-active-color: #b1d9ff;
     font-size: 1.2rem !important;
 }
 
-@media screen and (max-width: 450px) {
+.header-button-donate {
+    background-color: #bb799c;
+    border-color: #865767;
+}
+
+.header-button-donate-heart {
+    height: 1.1rem;
+    vertical-align: middle;
+    margin-bottom: 0.1rem;
+    margin-left: -0.1rem;
+}
+
+
+@media screen and (max-width: 515px) {
     .header-button {
         display: none;
     }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1100px) {
     .header-message {
         display: none;
     }
 }
 
-@media screen and (max-width: $media-max-width) {
+@media screen and (max-width: 900px) {
     .header-logo-mobile {
         display: flex;
     }
