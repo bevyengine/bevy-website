@@ -32,7 +32,7 @@
     </span>
     {% endif %}
   </h2>
-  {% if page.extra.image %}
+  {% if page.extra.image and page.extra.show_image %}
   <div class="media-content news-content">
     <img src="{{page.extra.image}}" />
   </div>

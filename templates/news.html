@@ -5,7 +5,9 @@
   <a class="card" href="{{ page.permalink }}">
     {% if page.extra.image %}
     {% set image_parent = page.permalink | replace(from="_index.md", to="") %}
-    <img src="{{image_parent}}{{page.extra.image}}" class="card-image" />
+    <div class="card-image">
+      <img src="{{image_parent}}{{page.extra.image}}" class="centered-card-image" />
+    </div>
     {% else %}
     <div class="card-image">
       <img src="/assets/bevy_logo_dark.svg" class="centered-card-image" style="max-width: 15rem;" />
