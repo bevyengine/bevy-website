@@ -44,3 +44,9 @@ bevy = "0.1.2" # make sure this is the latest version
 This is the current `bevy` crate version:
 
 <a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem; margin-bottom: 2rem"/></a>
+
+> **_NOTE:_**  Currently the project is moving really fast. Specifying the git repository instead of a version might help keeping up to date.
+```toml
+[dependencies]
+bevy = { git = "https://github.com/bevyengine/bevy" }
+```
