@@ -42,8 +42,6 @@ fn greet_people(
     // check to see if the timer has finished. if it has, print our message
     if timer.0.finished {
         println!("hello {}!", name.0);
-        // reset the timer. it will start counting from 0
-        timer.0.reset();
     }
 }
 ```
@@ -52,7 +50,7 @@ Now all thats left is adding a `GreetTimer` Resource to our `HelloPlugin`:
 ```rs
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
-        app.add_resource(GreetTimer(Timer::from_seconds(2.0)))
+        app.add_resource(GreetTimer(Timer::from_seconds(2.0, true)))
             .add_startup_system(add_people.system())
             .add_system(greet_people.system());
     }

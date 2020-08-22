@@ -18,7 +18,6 @@ fn greet_people(
     timer.0.tick(time.delta_seconds);
     if timer.0.finished {
         println!("hello {}!", name.0);
-        timer.0.reset();
     }
 }
 ```
@@ -33,7 +32,6 @@ fn greet_people(
         for (_person, name) in &mut query.iter() {
             println!("hello {}!", name.0);
         }
-        timer.0.reset();
     }
 }
 ```
