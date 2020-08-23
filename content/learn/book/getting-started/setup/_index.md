@@ -80,11 +80,14 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     * **MacOS**: Sorry MacOS users ... modern LLD does not support MacOS. They are working on a rewrite, but it will take time. Fortunately Bevy will soon support dynamic linking of App Plugins, which will give massive iterative compile speedups and make LLD less necessary.
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     ```
+    # Install the nightly toolchain
     rustup toolchain install nightly
+    # Configure your current project to use nightly (run this command within the project)
+    rustup override set nightly
+    # OR configure cargo to use nightly for all projects -- switch back with `rustup default stable`
     rustup default nightly
     ```
     * You can use `cargo +nightly ...` if you don't want to change the default to nightly.
-    * You can always switch back to stable by running: ```rustup default stable```.
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config`. For the project in this guide, that would be `my_bevy_game/.cargo/config`.
