@@ -136,6 +136,7 @@ fn movement(mut position: Mut<Position>, velocity: &Velocity) {
 // the app entry point. hopefully you recognize it from the examples above!
 fn main() {
     App::build()
+        .add_default_plugins()
         .add_startup_system(setup.system())
         .add_system(movement.system())
         .run();
