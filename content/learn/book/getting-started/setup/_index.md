@@ -76,7 +76,11 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
     * **Ubuntu**: `sudo apt-get install lld`
     * **Arch**: `sudo pacman -S lld`
-    * **Windows**: Go to next step, Bevy's cargo config uses the Rust bundled lld
+    * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
+        ```
+        cargo install -f cargo-binutils
+        rustup component add llvm-tools-preview
+        ```
     * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     ```
