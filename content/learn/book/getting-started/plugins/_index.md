@@ -6,7 +6,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-One of Bevy's core principals is modularity. All Bevy engine features are implemented as plugins. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the {{rust_type(type="struct" crate="bevy_ui", name="UiPlugin")}}. Want to build a headless server? Don't register the {{rust_type(type="struct" crate="bevy_render" name="RenderPlugin")}}.
+One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the {{rust_type(type="struct" crate="bevy_ui", name="UiPlugin")}}. Want to build a headless server? Don't register the {{rust_type(type="struct" crate="bevy_render" name="RenderPlugin")}}.
 
 This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own {{rust_type(type="struct" crate="bevy_ui" name="UiPlugin")}}, but consider [contributing it back to Bevy](/learn/book/contributing) if you think it would be useful!
 
