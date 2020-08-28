@@ -25,7 +25,7 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
 
 ### Code Editor / IDE
 
-You can use any code editor you want, but we highly recommend one that has a [Rust Analyzer](https://github.com/rust-analyzer/rust-analyzer) plugin. Rust Analyzer is still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [Rust Analyzer Extension](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer). 
+You can use any code editor you want, but we highly recommend one that has a [Rust Analyzer](https://github.com/rust-analyzer/rust-analyzer) plugin. Rust Analyzer is still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [Rust Analyzer Extension](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer).
 
 ### Rust Learning Resources
 
@@ -48,7 +48,7 @@ cargo new my_bevy_game
 cd my_bevy_game
 ```
 
-Now run ```cargo run``` to build and run your project. You should see ```Hello, world!``` printed to your terminal. Open the ```my_bevy_game``` folder in your code editor of choice and take some time to look through the files. 
+Now run ```cargo run``` to build and run your project. You should see ```Hello, world!``` printed to your terminal. Open the ```my_bevy_game``` folder in your code editor of choice and take some time to look through the files.
 
 ```main.rs``` is the entry point of your program:
 ```rs
@@ -77,7 +77,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     * **Ubuntu**: `sudo apt-get install lld`
     * **Arch**: `sudo pacman -S lld`
     * **Windows**: Go to next step, Bevy's cargo config uses the Rust bundled lld
-    * **MacOS**: Sorry MacOS users ... modern LLD does not support MacOS. They are working on a rewrite, but it will take time. Fortunately Bevy will soon support dynamic linking of App Plugins, which will give massive iterative compile speedups and make LLD less necessary.
+    * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     ```
     # Install the nightly toolchain
