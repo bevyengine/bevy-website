@@ -13,6 +13,42 @@
     font-weight: 500;
 }
 
+.bevy-figure-caption {
+    text-align: right;
+}
+
+.bevy-figure-caption:before {
+    content: "Listing ";
+    font-weight: bold;
+}
+
+.bevy-code-filename {
+    text-align: right;
+    color: yellow;
+}
+
+.bevy-code-filename:before {
+    content: "[ ";
+}
+
+.bevy-code-filename:after {
+    content: " ]";
+}
+
+.bevy-link-anchor {
+    width: 25px;
+    -ms-transform: rotate(-90deg); /* IE 9 */
+    transform: rotate(-90deg);
+    float: left;
+}
+
+a.bevy-link-font {
+    font-size: 0.6em;
+    position: relative;
+    right: -0.5em;
+    top: -0.1em;
+}
+
 .feature-list {
     margin-top: 1.5rem;
     display: flex;

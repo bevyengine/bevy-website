@@ -4,6 +4,7 @@ weight = 3
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "left"
 +++
 
 All app logic in Bevy uses the Entity Component System paradigm, which is often shortened to ECS. ECS is a software pattern that involves breaking your program up into **Entities**, **Components**, and **Systems**. **Entities** are unique "things" that are assigned groups of **Components**, which are then processed using **Systems**.
@@ -54,7 +55,7 @@ fn main() {
 
 Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" name="System")}} type.
 
-The {{rust_type(type="trait" crate="bevy_ecs", name="IntoQuerySystem" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", name="Schedule")}}, but we'll cover that more later.
+The {{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="add_system" no_struct=false)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", name="Schedule")}}, but we'll cover that more later.
 
 Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
 

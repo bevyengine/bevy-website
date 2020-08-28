@@ -4,6 +4,7 @@ weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "left"
 +++
 
 Bevy programs are referred to as {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=true)}}. The simplest Bevy app looks like this:

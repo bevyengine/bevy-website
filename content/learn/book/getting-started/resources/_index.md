@@ -4,6 +4,7 @@ weight = 5
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "left"
 +++
 
 **Entities** and **Components** are great for representing complex, query-able groups of data. But most Apps will also require "globally unique" data of some kind. In Bevy ECS, we represent globally unique data using **Resources**.
