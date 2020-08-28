@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: shalzz/zola-deploy-action
+    - name: 'Build'
       uses: shalzz/zola-deploy-action@master
       env:
         PAGES_BRANCH: gh-pages
