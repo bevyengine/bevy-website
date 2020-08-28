@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: 'Build'
+    - name: 'Build website'
       uses: shalzz/zola-deploy-action@master
       env:
         PAGES_BRANCH: gh-pages
@@ -30,7 +30,8 @@ jobs:
     if: github.ref == 'refs/heads/master' # Only on a push to the master branch (like when PR's are merged)
     steps:
     - uses: actions/checkout@master
-    - name: 'Build and deploy'
+
+    - name: 'Build and deploy website'
       uses: shalzz/zola-deploy-action@master
       env:
         PAGES_BRANCH: gh-pages
