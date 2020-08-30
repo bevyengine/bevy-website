@@ -91,7 +91,6 @@ To enable fast compiles, install the nightly rust compiler and LLD. Then copy [t
 
 ### Add Bevy to your project's Cargo.toml
 
-
 Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
 
 ```toml
@@ -103,6 +102,15 @@ edition = "2018"
 
 [dependencies]
 bevy = "0.1.2" # make sure this is the latest version
+```
+
+### Make debug builds faster
+
+Debug Rust builds are notoriously slow, and this becomes an issue when making games. Luckily, you can set up rust so your dependendencies (including Bevy) are compiled with optimizations enabled, giving you faster runtime speeds without sacrificing debuggability or iteration speed with the ```--release``` flag. To enable this, append the following to your Cargo.toml file:
+
+```toml
+[profile.dev.packages."*"]
+opt-level = 3
 ```
 
 Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
