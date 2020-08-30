@@ -12,8 +12,9 @@ insert_anchor_links = "left"
 This tutorial aims to give both an awareness and practical examples of the following:
 * There is a startup scheduler and a normal scheduler ({{rust_type(type="struct", crate="bevy_ecs", name="Schedule", no_mod=true, plural=false)}})
 * Startup systems run only ONCE before normal systems
-* You can ask normal systems to run once, or loop for `k` seconds
-  - where `k ∈ [1, 9223372036854775807_i64]` seconds (i.e. ~292 billion years)
+* You can ask normal systems to run once or in an infinite loop
+* You can slow the infinite loop by specifying an additional `k` second sleep delay between each loop
+  - where `k ∈ [0, 9223372036854775807_i64]` seconds (i.e. ~292 billion years)
 * A **System** results from calling the inline {{rust_type(type="trait" crate="bevy_ecs", name="IntoForEachSystem" method="system" no_struct=false)}} method on a `fn`. It is a {{rust_type(type="struct", crate="bevy_ecs", name="SystemFn", no_mod=true, plural=false)}} struct that implements the {{rust_type(type="trait", crate="bevy_ecs", name="System", no_mod=true, plural=false)}} trait and encapsulates the original function 
 * A **System** is always assigned a **stage** in the scheduler
   - This dictates the group of systems that it runs in parallel with
@@ -40,11 +41,11 @@ If you don't know or remember the current version of Bevy, `cargo` can fetch it 
 $ cargo search bevy
 bevy = "0.1.3"                  # A refreshingly simple data-driven ...
 ```
-<p class="bevy-figure-caption">3.1: Truncated output of cargo search</p>
+{{caption(ref=3.1, desc="Truncated output of cargo search")}}
 
 ## AppBuilder
 
-<p class="bevy-code-filename">src/main.rs</p>
+{{fileref(name="src/main.rs")}}
 
 ```rs
 use bevy::prelude::*;
@@ -70,7 +71,7 @@ The default GameState is:\n\tCurrent Round: {}
           state.current_round, state.total_players, state.winning_player);
 }
 ```
-<p class="bevy-figure-caption">3.2: A simple App</p>
+{{caption(ref=3.2, desc="A simple App")}}
 
 At the risk of stating the obvious.
 ```bash
@@ -82,7 +83,7 @@ The default GameState is:
         Total Players: 0
         Winning Player: None
 ```
-<p class="bevy-figure-caption">3.3: First game output</p>
+{{caption(ref=3.3, desc="First game output")}}
 
 The values of `GameState` come from the derived `Default` implementation.
 
