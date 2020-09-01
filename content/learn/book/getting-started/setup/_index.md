@@ -109,7 +109,7 @@ bevy = "0.1.2" # make sure this is the latest version
 Debug Rust builds are notoriously slow, and this becomes an issue when making games. Luckily, you can set up rust so your dependendencies (including Bevy) are compiled with optimizations enabled, giving you faster runtime speeds without sacrificing debuggability or iteration speed with the ```--release``` flag. To enable this, append the following to your Cargo.toml file:
 
 ```toml
-[profile.dev.packages."*"]
+[profile.dev.package."*"]
 opt-level = 3
 ```
 
