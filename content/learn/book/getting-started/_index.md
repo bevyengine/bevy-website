@@ -43,10 +43,17 @@ bevy = "0.1.2" # make sure this is the latest version
 
 This is the current `bevy` crate version:
 
-<a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem; margin-bottom: 2rem"/></a>
+<a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem;"/></a>
 
-> **_NOTE:_**  Currently the project is moving really fast. Specifying the git repository instead of a version might help keeping up to date.
+**_NOTE:_** Bevy is currently being updated at a rapid pace. Taking a dependency on the git repo instead of the cargo crate will allow you to receive the latest updates as fast as possible.
 ```toml
 [dependencies]
 bevy = { git = "https://github.com/bevyengine/bevy" }
+```
+
+In general its a good idea to lock in to a specific commit hash, which gives you control over when you take updates. You can find the [latest commit hash here](https://github.com/bevyengine/bevy/commits/master) (to the right of each commit).
+
+```toml
+[dependencies]
+bevy = { git = "https://github.com/bevyengine/bevy", rev = "25f62f7250a0d750068dc32533b9433f7985af98" }
 ```
