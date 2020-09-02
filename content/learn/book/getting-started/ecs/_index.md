@@ -98,7 +98,7 @@ fn main() {
 We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Lets make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
-fn greet_people(person: &Person, name: &Name) {
+fn greet_people(_person: &Person, name: &Name) {
     println!("hello {}!", name.0);
 }
 ```

@@ -14,7 +14,7 @@ Up until now, we have been using **For-Each Systems**, which directly reference 
 
 ```rs
 fn greet_people(
-    time: Res<Time>, mut timer: ResMut<GreetTimer>, person: &Person, name: &Name) {
+    time: Res<Time>, mut timer: ResMut<GreetTimer>, _person: &Person, name: &Name) {
     timer.0.tick(time.delta_seconds);
     if timer.0.finished {
         println!("hello {}!", name.0);

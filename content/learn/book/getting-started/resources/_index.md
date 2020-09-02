@@ -22,7 +22,7 @@ For simplicity, remove the `hello_world` system from your App. This way we only 
 Resources are accessed in much the same way that we access components. You can access the `Time` resource in your system like this:
 
 ```rs
-fn greet_people(time: Res<Time>, person: &Person, name: &Name) {
+fn greet_people(time: Res<Time>, _person: &Person, name: &Name) {
     println!("hello {}!", name.0);
 }
 ```
@@ -35,7 +35,7 @@ The `delta_seconds` field on `Time` gives us the time that has passed since the 
 struct GreetTimer(Timer);
 
 fn greet_people(
-    time: Res<Time>, mut timer: ResMut<GreetTimer>, person: &Person, name: &Name) {
+    time: Res<Time>, mut timer: ResMut<GreetTimer>, _person: &Person, name: &Name) {
     // update our timer with the time elapsed since the last update
     timer.0.tick(time.delta_seconds);
 
