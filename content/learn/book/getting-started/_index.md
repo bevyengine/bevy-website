@@ -18,7 +18,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
 
 1. Clone the [Bevy repo](https://github.com/bevyengine/bevy):
     ```
-    git clone https://github.com/bevyengine/bevy    
+    git clone https://github.com/bevyengine/bevy
     ```
 2. Navigate to the new "bevy" folder
     ```
