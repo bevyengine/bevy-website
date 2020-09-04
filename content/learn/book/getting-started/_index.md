@@ -4,7 +4,7 @@ weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-insert_anchor_links = "left"
+insert_anchor_links = "right"
 +++
 
 This section will help you get started on your Bevy journey as quickly as possible. It will walk you through setting up your development environment and writing a simple Bevy app.
@@ -44,7 +44,14 @@ bevy = "0.1.2" # make sure this is the latest version
 
 This is the current `bevy` crate version:
 
-<a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem; margin-bottom: 2rem"/></a>
+<a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem"/></a>
+
+But if going to the browser is too slow for you, `cargo` can also fetch it from the command line.
+```bash
+$ cargo search bevy
+bevy = "0.1.3"                  # A refreshingly simple data-driven ...
+```
+{{caption(ref=3.1, desc="Truncated output of cargo search")}}
 
 > **_NOTE:_**  Currently the project is moving really fast. Specifying the git repository instead of a version might help keeping up to date.
 ```toml

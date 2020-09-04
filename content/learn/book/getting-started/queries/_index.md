@@ -4,7 +4,7 @@ weight = 6
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-insert_anchor_links = "left"
+insert_anchor_links = "right"
 +++
 
 In Bevy ECS, `Queries` give you direct control over entity iteration. They also provide a few extra filtering options, such as `With<Component>` and `Without<Component>` filters.

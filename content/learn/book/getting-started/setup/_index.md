@@ -4,7 +4,7 @@ weight = 1
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-insert_anchor_links = "left"
+insert_anchor_links = "right"
 +++
 
 I know you are itching to start making games, but we need to do a _small_ amount of setup first.

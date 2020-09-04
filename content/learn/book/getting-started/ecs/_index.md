@@ -4,7 +4,7 @@ weight = 3
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-insert_anchor_links = "left"
+insert_anchor_links = "right"
 +++
 
 All app logic in Bevy uses the Entity Component System paradigm, which is often shortened to ECS. ECS is a software pattern that involves breaking your program up into **Entities**, **Components**, and **Systems**. **Entities** are unique "things" that are assigned groups of **Components**, which are then processed using **Systems**.

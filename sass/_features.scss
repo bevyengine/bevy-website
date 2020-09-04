@@ -15,7 +15,7 @@
 
 .bevy-figure-caption {
     text-align: right;
-    scroll-margin-top: 35em;
+    scroll-margin-top: 35rem;
 }
 
 .bevy-figure-caption:before {
@@ -26,6 +26,9 @@
 .bevy-code-filename {
     text-align: right;
     color: yellow;
+    margin-bottom: -3.5rem;
+    padding-right: 1rem;
+    padding-top: 2rem;
 }
 
 .bevy-code-filename:before {
@@ -36,11 +39,35 @@
     content: " ]";
 }
 
-.bevy-link-anchor {
-    width: 25px;
-    -ms-transform: rotate(-90deg); /* IE 9 */
-    transform: rotate(-90deg);
-    float: left;
+h2 a svg.small_hack {
+  display: none;
+}
+h2 a svg.medium_hack {
+  display: none;
+}
+
+h3 a svg.small_hack {
+  display: none;
+}
+h3 a svg.large_hack {
+  display: none;
+}
+
+h4 a svg.medium_hack {
+  display: none;
+}
+h4 a svg.large_hack {
+  display: none;
+}
+
+a svg {
+    fill: $default-color; 
+    vertical-align: top;
+    margin-left: 0.2rem;
+}
+
+a svg:hover {
+    fill: gray; 
 }
 
 a.bevy-link-font {

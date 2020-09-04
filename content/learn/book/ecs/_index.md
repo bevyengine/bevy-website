@@ -1,13 +1,11 @@
 +++
-title = "ecs tutorial"
+title = "ECS Tutorial"
 weight = 3
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-insert_anchor_links = "left"
+insert_anchor_links = "right"
 +++
-
-<div style="text-align:right;"><img src="/assets/bevy_tutor_icon.svg" style="height: 4em;" alt="BEVY"/></div>
 
 This tutorial aims to give both an awareness and practical examples of the following:
 * There is a startup scheduler and a normal scheduler ({{rust_type(type="struct", crate="bevy_ecs", name="Schedule", no_mod=true, plural=false)}})
@@ -36,14 +34,12 @@ This tutorial aims to give both an awareness and practical examples of the follo
 
 First [create](@/learn/book/getting-started/setup/_index.md#create-a-new-rust-executable-project) a new project called `bevy_ecs_tut` and [add](@/learn/book/getting-started/setup/_index.md#add-bevy-to-your-project-s-cargo-toml) <img src="/assets/bevy_logo_dark.svg" style="height: 1em;margin-bottom:-0.1em" alt="BEVY"/> as a dependency.
 
-If you don't know or remember the current version of Bevy, `cargo` can fetch it for you fast.
-```bash
-$ cargo search bevy
-bevy = "0.1.3"                  # A refreshingly simple data-driven ...
-```
-{{caption(ref=3.1, desc="Truncated output of cargo search")}}
 
 ## AppBuilder
+
+Jump right in and create a simple game. We'll add a single, simple resource and a startup system that shows us how the ECS initiated our resource.
+
+At this stage the app doesn't even loop, it will iterate once and terminate.
 
 {{fileref(name="src/main.rs")}}
 
@@ -57,6 +53,7 @@ fn main() {
         .run();
 }
 
+// The struct behind our simple resource
 #[derive(Default)]
 struct GameState {
     current_round: usize,
@@ -64,6 +61,7 @@ struct GameState {
     winning_player: Option<String>,
 }
 
+// The fn that will become the system that displays our simple resource
 fn print_initial_system(state: Res<GameState>) {
     println!("Welcome to the Game!
 The default GameState is:\n\tCurrent Round: {}
@@ -89,7 +87,7 @@ The values of `GameState` come from the derived `Default` implementation.
 
 {{rust_type(type="struct" crate="bevy_app", name="App" method="build" no_struct=false)}} makes an {{rust_type(type="struct", crate="bevy_app", name="AppBuilder", no_mod=true, plural=false)}} for us, on which we can call inline methods to add **Systems**, **Components**, and configuration.
 
-{{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="init_resource" no_struct=false)}} inserts `GameState` into {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=false)}}::resources<{{rust_type(type="struct" crate="bevy_ecs", name="Resources", no_mod=false, plural=false)}}>, making `GameState` a **Component**.
+{{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="init_resource" no_struct=false)}} inserts `GameState` into the {{rust_type(type="struct" crate="bevy_ecs", name="Resources", no_mod=false, plural=false)}} type on {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=false)}}, `App::resources<Resources>`, making `GameState` a **Component**.
 
 It can do this because `GameState` derives `Default` and because we anotate the type for the compiler.
 We could have done this with {{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="add_resource" no_struct=false)}}.
