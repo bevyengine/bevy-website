@@ -35,6 +35,9 @@
   {% if page.extra.image and page.extra.show_image %}
   <div class="media-content news-content">
     <img src="{{page.extra.image}}" />
+    {% if page.extra.image_subtitle %}
+    <div class="news-image-subtitle">{{page.extra.image_subtitle}}</div>
+    {% endif %}
   </div>
   {% endif %}
   <div class="media-content news-content">{{ page.content | safe }}</div>
