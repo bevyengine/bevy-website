@@ -49,7 +49,7 @@ Those limitations haven't stopped @mrk-its from building the first WASM Bevy gam
 
 ![bevy-robbo](bevy-robbo.png)
 
-They use Bevy for game logic and cleverly work around the render limitations by passing ASCII art game state from [this Bevy system](https://github.com/mrk-its/bevy-robbo/blob/master/src/systems/js_render.rs) to [this JavaScript function](https://github.com/mrk-its/bevy-robbo/blob/master/wasm/render.js). 
+They use Bevy for game logic and cleverly work around the render limitations by passing ASCII art game state from [this Bevy system](https://github.com/mrk-its/bevy-robbo/blob/master/src/systems/js_render.rs) to [this JavaScript function](https://github.com/mrk-its/bevy-robbo/blob/master/assets/render.js). 
 
 You can play around with some Bevy WASM examples by [following the instructions here](https://github.com/bevyengine/bevy/tree/master/examples#wasm).
 
