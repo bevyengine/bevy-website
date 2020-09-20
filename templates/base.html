@@ -45,11 +45,11 @@
                     {{section.extra.header_message}}
                     {% elif page and page.extra.header_message %}
                     {{page.extra.header_message}}
-                    {% elif section and section.path is starting_with("learn/book/") %}
+                    {% elif section and section.path is starting_with("/learn/book/") %}
                         The Book
-                    {% elif section and section.path is starting_with("news/") %}
+                    {% elif section and section.path is starting_with("/news/") %}
                         News
-                    {% elif page and page.path is starting_with("news/") %}
+                    {% elif page and page.path is starting_with("/news/") %}
                         News
                     {% else %}
                         Features
