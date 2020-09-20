@@ -9,6 +9,7 @@ youtube = "cartdev"
 image = "matching_squares.png"
 show_image = true
 image_subtitle = "Matching Squares by @TheNeikos"
+image_subtitle_link = "https://github.com/TheNeikos/bevy_squares"
 +++
 
 A month after the initial Bevy release, and thanks to **87** contributors, **174** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.2** release on [crates.io](https://crates.io/crates/bevy)!
