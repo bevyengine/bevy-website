@@ -6,6 +6,7 @@
 
 {% block content %}
 <div class="book-page">
+    <input type="checkbox" style="display: none" id="show-book-nav" />
     <nav class="book-nav" role="navigation">
         {% block menu %}
         {% set index = get_section(path="learn/book/_index.md") %}
@@ -43,7 +44,7 @@
             {% if result != "true" and result != "false" %}
                 {% set next_subsection_path = result %}
             {% endif %}
-        {% endif %} 
+        {% endif %}
         {% if next_subsection_path %}
             {% set next_section = get_section(path=next_subsection_path) %}
             <a id="book-pager-bar-next" href="{{next_section.permalink}}" class="book-pager-bar book-pager-bar-next">
