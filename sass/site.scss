@@ -17,6 +17,7 @@ $card-hover-background: #2f3033;
 $media-max-width: 1000px;
 $border-radius: 10px;
 
+@import "variables";
 @import "headerbar";
 @import "community";
 @import "book";

@@ -37,9 +37,21 @@
                 <a href="/" class="header-logo">
                     <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
                 </a>
-                <a href="/" class="header-logo-mobile">
-                    <img src="/assets/bevy_icon_dark.svg" class="logo" alt="bevy icon" />
-                </a>
+                {% if section and section.path is starting_with("/learn/book/") %}
+                    <label class="toggle-nav-mobile" for=show-book-nav>
+                        <svg alt="nav bars" width="24" height="24">
+                            <g fill="none" stroke="#ececec" stroke-width="2">
+                                <path d="m4 6h16" />
+                                <path d="m4 11h16" />
+                                <path d="m4 16h16" />
+                            </g>
+                        </svg>
+                    </label>
+                {% else %}
+                    <a href="/" class="header-logo-mobile">
+                        <img src="/assets/bevy_icon_dark.svg" class="logo" alt="bevy icon" />
+                    </a>
+                {% endif %}
                 <div class="header-item header-message">
                     {% if section and section.extra.header_message %}
                     {{section.extra.header_message}}
