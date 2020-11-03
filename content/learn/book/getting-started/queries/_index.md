@@ -26,10 +26,10 @@ The solution is to use a **Query System** instead:
 
 ```rs
 fn greet_people(
-    time: Res<Time>, mut timer: ResMut<GreetTimer>, mut query: Query<(&Person, &Name)>) {
+    time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<(&Person, &Name)>) {
     timer.0.tick(time.delta_seconds);
     if timer.0.finished {
-        for (_person, name) in &mut query.iter() {
+        for (_person, name) in query.iter() {
             println!("hello {}!", name.0);
         }
     }
