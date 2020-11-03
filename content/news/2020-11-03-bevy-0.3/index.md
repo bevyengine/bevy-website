@@ -216,7 +216,7 @@ for (a, b) in query.iter() {
 }
 
 // entity lookup
-if let Ok((a,b)) = query.entity(entity) {
+if let Ok((a,b)) = query.get(entity) {
     // boilerplate be gone!
 }
 ```
