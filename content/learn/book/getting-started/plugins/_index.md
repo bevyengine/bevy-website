@@ -15,12 +15,12 @@ However, most developers don't need a custom experience and just want the "full 
 ## Bevy's Default Plugins
 
 Lets make our app more interesting by adding the "default Bevy plugins". 
-{{rust_type(type="trait" crate="bevy" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input. 
+`add_plugins(DefaultPlugins)` adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input. 
 
 ```rs
 fn main() {
     App::build()
-        .add_default_plugins()
+        .add_plugins(DefaultPlugins)
         .add_startup_system(add_people.system())
         .add_system(hello_world.system())
         .add_system(greet_people.system())
@@ -32,9 +32,9 @@ Once again run `cargo run`.
 
 You should hopefully notice two things:
 * **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window api.
-* **Your console is now full of "hello" messages**: This is because {{rust_type(type="trait" crate="bevy" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
+* **Your console is now full of "hello" messages**: This is because {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
-Note that {{rust_type(type="trait" crate="bevy" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} is equivalent to the following:
+Note that `add_plugins(DefaultPlugins)` is equivalent to the following:
 ```rs
 fn main() {
     App::build()
@@ -66,7 +66,7 @@ Then register the plugin in your App like this:
 ```rs
 fn main() {
     App::build()
-        .add_default_plugins()
+        .add_plugins(DefaultPlugins)
         .add_plugin(HelloPlugin)
         .add_startup_system(add_people.system())
         .add_system(hello_world.system())
@@ -88,7 +88,7 @@ impl Plugin for HelloPlugin {
 
 fn main() {
     App::build()
-        .add_default_plugins()
+        .add_plugins(DefaultPlugins)
         .add_plugin(HelloPlugin)
         .run();
 }
