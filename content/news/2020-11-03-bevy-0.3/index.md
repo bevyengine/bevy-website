@@ -278,6 +278,8 @@ Bevy had a number of nice performance improvements this release:
 
 #### Getting an Entity's Component (in milliseconds, smaller is better)
 
+Note: these numbers are for getting a component 100,000 times, not for an individual component lookup
+
 ![getting an entity's component](ecs_get_component.svg)
 
 This is where the big wins were. By removing locks and safety checks from Query systems, we were able to _significantly_ reduce the cost of retrieving a specific entity's component from within a system.
