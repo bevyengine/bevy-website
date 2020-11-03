@@ -537,6 +537,7 @@ The  `bevy` crate documentation search function now returns results for all sub-
 - Despawning an entity multiple times causes a debug-level log message to be emitted instead of a panic: [#649][649], [#651][651]
 - [Migrated to Rodio 0.12][692]
   - New method of playing audio can be found in the examples.
+- Added support for inserting custom initial values for `Local<T>` system resources [#745][745] 
   
 ### Fixed
 
@@ -607,6 +608,7 @@ The  `bevy` crate documentation search function now returns results for all sub-
 [740]: https://github.com/bevyengine/bevy/pull/740
 [741]: https://github.com/bevyengine/bevy/pull/741
 [744]: https://github.com/bevyengine/bevy/pull/744
+[745]: https://github.com/bevyengine/bevy/pull/745
 [752]: https://github.com/bevyengine/bevy/pull/752
 
 
