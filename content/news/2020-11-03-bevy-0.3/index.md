@@ -225,7 +225,7 @@ You might naturally be thinking something like:
 
 *Why did this take so long? Why would removing a single `&mut` be hard?*
 
-Its a long story! In summary:
+It's a long story! In summary:
 
 * The old api looked the way it did for a reason. It was the result of good design choices that protect against unsafe memory access in a parallel environment.
 * `query.iter()` didn't actually return an iterator. It returned a _wrapper_ that held an atomic lock on the component storages. The same was true for the type returned by `query.entity()`
@@ -293,7 +293,7 @@ The test was to lookup (and modify) a specific entity's component 100,000 times 
 * legion (world): Direct `World` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()`
 * legion (system): A system with `SubWorld` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()` 
 
-Its worth noting that using `query.get_component::<T>(entity)` instead of `query.get(entity)` does require safety checks, for the same reason the legion entry api does. We cannot know ahead of time what component type a caller will pass into the method, which means we _must_ check it to make sure it matches the `Query`. 
+It's worth noting that using `query.get_component::<T>(entity)` instead of `query.get(entity)` does require safety checks, for the same reason the legion entry api does. We cannot know ahead of time what component type a caller will pass into the method, which means we _must_ check it to make sure it matches the `Query`. 
 
 Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-gamedev/ecs_bench_suite) results (omitted benchmarks had no significant change):
 
