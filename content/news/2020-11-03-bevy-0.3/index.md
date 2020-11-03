@@ -278,7 +278,7 @@ Bevy had a number of nice performance improvements this release:
 
 #### Getting an Entity's Component (in milliseconds, smaller is better)
 
-Note: these numbers are for running the test 100,000 times, not for an individual component lookup
+Note: these numbers are for getting a component 100,000 times, not for an individual component lookup
 
 ![getting an entity's component](ecs_get_component.svg)
 
