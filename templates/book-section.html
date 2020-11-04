@@ -18,41 +18,46 @@
         {% endblock menu %}
     </nav>
     <div class="book-content">
-        {# this implementation is so gross. i apologize to anyone that has the misfortune of trying to understand it #}
-        {# as far as i know, this is the only way to make paging work with indefinitely nested sections #}
-        {# this is because for some reason the ancestor information is incomplete  #}
+        {% set root_section = get_section(path="learn/book/_index.md") %}
 
-            {% set result = book_macros::find_previous_section(current_section_path="learn/book/_index.md", target_section_path=section.path~"_index.md") %}
-            {% set result = result | trim %}
-            {% if result != "true" and result != "false" %}
-                {% set previous_subsection_path = result %}
+        {% set previous_section = false %}
+        {% set found_current = false %}
+
+        {% set all_sections = [] %}
+        {% for p in root_section.subsections %}
+            {% set section_obj = get_section(path=p) %}
+            {% set_global all_sections = all_sections | concat(with=p) %}
+            {% if section_obj.subsections %}
+                {% set_global all_sections = all_sections | concat(with=section_obj.subsections) %}
+            {% endif %}
+        {% endfor %}
+
+        {% for p in all_sections %}
+            {% set section_obj = get_section(path=p) %}
+            {% if found_current %}
+                <a id="book-pager-bar-next" href="{{section_obj.permalink}}" class="book-pager-bar book-pager-bar-next">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-next">
+                    <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
+                    </div>
+                </a>
+                {% break %}
             {% endif %}
 
-        {% if previous_subsection_path and previous_subsection_path != "learn/book/_index.md" %}
-            {% set previous_section = get_section(path=previous_subsection_path) %}
-            <a id="book-pager-bar-previous" href="{{previous_section.permalink}}" class="book-pager-bar book-pager-bar-previous">
-                <div class="book-pager-bar-icon book-pager-bar-icon-previous">
-                    <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
-                </div>
-            </a>
-        {% endif %}
-
-        {% set next_subsection_path = section.subsections | first %}
-        {% if not next_subsection_path %}
-            {% set result = book_macros::find_next_section(current_section_path="learn/book/_index.md", target_section_path=section.path~"_index.md") %}
-            {% set result = result | trim %}
-            {% if result != "true" and result != "false" %}
-                {% set next_subsection_path = result %}
+            {% if current_path == section_obj.path %}
+             {% set_global found_current = true %}
+             {% if previous_section %}
+                <a id="book-pager-bar-previous" href="{{previous_section.permalink}}" class="book-pager-bar book-pager-bar-previous">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-previous">
+                        <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
+                    </div>
+                </a>
+             {% endif %}
             {% endif %}
-        {% endif %}
-        {% if next_subsection_path %}
-            {% set next_section = get_section(path=next_subsection_path) %}
-            <a id="book-pager-bar-next" href="{{next_section.permalink}}" class="book-pager-bar book-pager-bar-next">
-                <div class="book-pager-bar-icon book-pager-bar-icon-next">
-                <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
-                </div>
-            </a>
-        {% endif %}
+
+            {% set_global previous_section = section_obj %}
+
+        {% endfor %}
+
         <h1>
             {% if section.extra.long_title %}
                 {{ section.extra.long_title }}
