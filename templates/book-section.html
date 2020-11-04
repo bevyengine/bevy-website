@@ -25,11 +25,16 @@
 
         {% set all_sections = [] %}
         {% for p in root_section.subsections %}
-            {% set section_obj = get_section(path=p) %}
             {% set_global all_sections = all_sections | concat(with=p) %}
-            {% if section_obj.subsections %}
-                {% set_global all_sections = all_sections | concat(with=section_obj.subsections) %}
-            {% endif %}
+            {% set section_obj = get_section(path=p) %}
+
+            {% for p2 in section_obj.subsections %}
+                {% set_global all_sections = all_sections | concat(with=p2) %}
+                {% set subsection = get_section(path=p2) %}
+                {% if subsection.subsections %}
+                    {% set_global all_sections = all_sections | concat(with=subsection.subsections) %}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
 
         {% for p in all_sections %}
