@@ -276,7 +276,7 @@ Bevy had a number of nice performance improvements this release:
 * Rewrote `QueryIter` to be simpler (and therefore easier to control optimizations for), which allowed us to remove the iterator wrapper without tanking performance. This also resolved some performance inconsistencies where some system permutations performed optimally and others didn't. Now everything is on the "fast path"!  
 * Ported some performance improvements from upstream hecs, which improved iteration over heavily fragmented archetypes and improved component insertion times
 
-#### Getting an Entity's Component (in milliseconds, smaller is better)
+#### Getting an Entity's Component (per 100k, in milliseconds, smaller is better)
 
 Note: these numbers are for getting a component 100,000 times, not for an individual component lookup
 
