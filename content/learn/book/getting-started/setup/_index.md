@@ -82,6 +82,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
         rustup component add llvm-tools-preview
         ```
     * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
+* **Dynamic linking**: Dynamically linking Bevy makes the "link" step much faster. This can be achieved by adding `bevy_dylib` as dependency and `#[allow(unused_imports)] use bevy_dylib` to `main.rs`. It is recommended to disable the `bevy_dylib` dependency in release mode by adding `#[cfg(debug_assertions)]` to the `use` statement. Otherwise you will have to ship `libstd.so` and `libbevy_dylib.so` with your game.
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     ```
     # Install the nightly toolchain
