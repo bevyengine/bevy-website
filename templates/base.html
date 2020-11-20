@@ -6,6 +6,7 @@
 {%- else -%}
 {%- set page_title = "Bevy - A data-driven game engine built in Rust "-%}
 {% endif -%}
+
 {%- if section and section.path -%}
 {%- set path = "/" ~ section.path -%}
 {%- elif page and page.path -%}
@@ -13,6 +14,7 @@
 {%- else -%}
 {%- set path = ""-%}
 {%- endif -%}
+
 <!doctype html>
 <html lang="en">
     <head>
