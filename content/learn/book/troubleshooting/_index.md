@@ -1,13 +1,12 @@
 +++
 title = "Troubleshooting"
-weight = 7
+weight = 5
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-While all the previous examples should run perfectly, occasionally they 
-may not. Here are some of the more common errors and their solutions.
+Is something in Bevy not working as expected? Maybe one of these will resolve your problem:
 
 ## Unable to find a GPU
 ```

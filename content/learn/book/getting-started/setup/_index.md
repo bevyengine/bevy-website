@@ -114,4 +114,6 @@ bevy = "0.3" # make sure this is the latest version
 
 Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
 
+If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph). 
+
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
