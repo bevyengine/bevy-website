@@ -1,22 +1,23 @@
 $inactive-nav-color: #999999;
+$book-nav-width: 210px;
 
 @media screen and (max-width: 900px) {
     #show-book-nav:not(:checked) + .book-nav {
-        transform: translateX(calc(0px - var(--book-nav-width)));
+        transform: translateX(calc(0px - $book-nav-width));
     }
 
     #show-book-nav:checked + .book-nav + .book-content {
-        transform: translateX(var(--book-nav-width));
+        transform: translateX($book-nav-width);
     }
 
     .book-nav {
-        margin-right: calc(0px - var(--book-nav-width));
+        margin-right: calc(0px - $book-nav-width);
     }
 }
 
 .book-nav {
     margin-top: $content-padding;
-    flex: 0 0 var(--book-nav-width);
+    flex: 0 0 $book-nav-width;
     user-select: none;
     transition: transform 0.3s;
 }
