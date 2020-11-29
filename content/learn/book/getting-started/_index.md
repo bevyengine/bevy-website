@@ -45,7 +45,7 @@ This is the current `bevy` crate version:
 
 <a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem;"/></a>
 
-**_NOTE:_** Bevy is currently being updated at a rapid pace. Taking a dependency on the git repo instead of the cargo crate will allow you to receive the latest updates as fast as possible.
+**_NOTE:_** Bevy is currently being updated at a rapid pace. Taking a dependency on the git repo instead of the cargo crate will allow you to receive the latest updates as fast as possible. *However*, **there are often breaking changes made to APIs and behavior**. This means that it will be important to keep up with the latest developments with bevy. **This is not recommended for people who are just getting started with bevy.**
 ```toml
 [dependencies]
 bevy = { git = "https://github.com/bevyengine/bevy" }
