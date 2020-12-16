@@ -17,4 +17,4 @@
 {% set path = crate ~ "/latest/" ~ crate %}
 {% endif %}
 
-<a href="{{url}}/{{path}}{{mod_path}}/index.html"><code>{{mod}}</code></a>
+<a href="{{url}}/{{path}}{{mod_path}}/index.html"><code>{% if not no_crate and crate%}{{crate}}{% if not no_mod and mod%}::{{mod}}{% endif %}{% elif not no_mod and mod%}{{mod}}{% endif %}</code></a>

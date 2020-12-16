@@ -48,7 +48,7 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
     
     ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```
 
-{{rust_mod(mod="std")}} modules will link to [https://doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to [https://docs.rs](https://docs.rs) 
+Modules from {{rust_mod(crate="std")}} will link to [https://doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to [https://docs.rs](https://docs.rs).
 
 ## Rust API Docs
 
