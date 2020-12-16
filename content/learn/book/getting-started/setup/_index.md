@@ -96,6 +96,11 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
+<h2 class="warning">Warning</h2>
+<div class="warning">
+While being much faster than the standard linker lld tends to produce bigger and slightly slower binaries, whether this tradeoff is worth it or not, it's up to you
+</div>
+
 ### Add Bevy to your project's Cargo.toml
 
 
