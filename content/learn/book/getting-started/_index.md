@@ -38,7 +38,7 @@ Add the bevy crate to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.3" # make sure this is the latest version
+bevy = "0.4" # make sure this is the latest version
 ```
 
 This is the current `bevy` crate version:
