@@ -21,8 +21,10 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     ```
 * **Systems**: normal Rust functions
     ```rs
-    fn print_position_system(position: &Position) {
-        println!("position: {} {}", position.x, position.y);
+    fn print_position_system(query: Query<&Transform>) {
+        for transform in query.iter() {
+            println!("position: {:?}", transform.translation);
+        }
     }
     ```
 * **Entities**: a simple type containing a unique integer  
@@ -76,7 +78,7 @@ struct Name(String);
 We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Lets use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
-fn add_people(mut commands: Commands) {
+fn add_people(commands: &mut Commands) {
     commands
         .spawn((Person, Name("Elaina Proctor".to_string())))
         .spawn((Person, Name("Renzo Hume".to_string())))
@@ -98,12 +100,18 @@ fn main() {
 We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Lets make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
-fn greet_people(_person: &Person, name: &Name) {
-    println!("hello {}!", name.0);
+fn greet_people(query: Query<&Name, With<Person>>) {
+    for name in query.iter() {
+        println!("hello {}!", name.0);
+    }
 }
 ```
 
-And then register it in our App:
+The parameters we pass in to a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
+
+You can interpret the Query above as: "iterate over every Name component for entities that also have a Person component"
+
+Now we just register the system in our App:
 
 ```rs
 fn main() {
@@ -115,9 +123,7 @@ fn main() {
 }
 ```
 
-The parameters we pass in to a "system function" define what entities the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
-
-Now running our app will result in the following output:
+Running our app will result in the following output:
 
 ```
 hello world!
