@@ -132,6 +132,15 @@ fn system(query: Query<(&Transform, &Velocity)>) {
 
 This makes it much easier to tell what a Query is doing at a glance. It also makes for more composable behaviors. For example, you can now filter on `Changed<Velocity>` without actually retrieving the `Velocity` component.
 
+And now that filters are a separate type, you can create type aliases for filters that you want to re-use:
+
+```rust
+type ChangedVelocity = (With<A>, Without<B>, Changed<Velocity>);
+
+fn system(query: Query<(&Transform, &Velocity), ChangedVelocity>) {
+}
+```
+
 ### System Inputs, Outputs, and Chaining
 
 Systems can now have inputs and outputs. This opens up a variety of interesting behaviors, such as system error handling:
