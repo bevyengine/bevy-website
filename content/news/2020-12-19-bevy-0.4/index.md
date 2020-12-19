@@ -332,7 +332,7 @@ For-each systems were nice to look at and sometimes saved some typing. Why remov
 3. There were a number of "gotchas" for newcomers that constantly come up in our support forums and confused newbies:
     * users expect `&mut T` queries to work in foreach systems (ex: `fn system(a: &mut A) {}`). These can't work because we require `Mut<T>` tracking pointers to ensure change tracking always works as expected. The equivalent `Query<&mut A>` works because we can return the tracking pointer when iterating the Query.
     * A "run this for-each system on some criteria" bug that was common enough that we had to cover it in the Bevy Book.
-4. They decreased compile times. Removing for-each systems saved me about ~5 seconds on clean Bevy compiles)
+4. They increased compile times. Removing for-each systems saved me about ~5 seconds on clean Bevy compiles)
 5. Their internal implementation required a complicated macro. This affected maintainability.
 
 ## States
