@@ -758,7 +758,7 @@ fn main() {
 
 
 fn timer_system(time: Res<Time>, my_timer: ResMut<MyTimer>) {
-    if my_timer.timer.tick(time.delta_seconds).just_finished() {
+    if my_timer.timer.tick(time.delta_seconds()).just_finished() {
         println!("five seconds have passed");
     }
 }
