@@ -516,7 +516,7 @@ Bevy now uses wgpu's "mailbox vsync" by default. This reduces input latency on p
 
 <div class="release-feature-authors">authors: @cart</div>
 
-Rust has a pretty big "reflection" gap. For those who aren't aware, "reflection" is a class of language feature that enables you to interact with language constructs at runtime. They add of form of "dynamic-ness" to what are traditionally static language concepts. 
+Rust has a pretty big "reflection" gap. For those who aren't aware, "reflection" is a class of language feature that enables you to interact with language constructs at runtime. They add a form of "dynamic-ness" to what are traditionally static language concepts. 
 
 We have bits and pieces of reflection in Rust, such as {{rust_type(type="struct" crate="std", mod="any", name="TypeId")}} and {{rust_type(type="fn" crate="std", mod="any", name="type_name")}}. But when it comes to interacting with datatypes ... we don't have anything yet. This is unfortunate because some problems are inherently dynamic in nature.
 
