@@ -601,7 +601,7 @@ for (i, value: &Reflect) in foo.iter_fields().enumerate() {
 
 ### Automatically Serialize And Deserialize With Serde
 
-This doesn't require manually Serde impls!
+This doesn't require manual Serde impls!
 
 ```rust
 let mut registry = TypeRegistry::default();
