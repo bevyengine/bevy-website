@@ -684,9 +684,9 @@ The Texture asset now has support for 3D textures. The new `array_texture.rs` ex
 
 <div class="release-feature-authors">authors: @superdump, @cart</div>
 
-Bevy finally has built in logging, which is now enabled by default via the new {{rust_type(type="trait" crate="bevy_log" name="LogPlugin" no_mod=true)}}. We evaluated various logging libraries and eventually landed on the new `tracing` crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
+Bevy finally has built in logging, which is now enabled by default via the new {{rust_type(type="struct" crate="bevy_log" name="LogPlugin" no_mod=true)}}. We evaluated various logging libraries and eventually landed on the new `tracing` crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
 
-The {{rust_type(type="trait" crate="bevy_log" name="LogPlugin" no_mod=true)}} configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
+The {{rust_type(type="struct" crate="bevy_log" name="LogPlugin" no_mod=true)}} configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
 
 
 ### Logging
@@ -712,7 +712,7 @@ These lines result in pretty-printed terminal logs:
 
 We have added the option to add "tracing spans" to all ECS systems by enabling the `trace` feature. We also have built in support for the `tracing-chrome` extension, which causes Bevy to output traces in the "chrome tracing" format.
 
-If you run your app with `cargo run --features trace,trace_chrome` you will get a json file which can be opened in Chrome browsers by visiting the `chrome://tracing` url:
+If you run your app with `cargo run --features bevy/trace,bevy/trace_chrome` you will get a json file which can be opened in Chrome browsers by visiting the `chrome://tracing` url:
 
 ![profiling](profiling.png)
 
