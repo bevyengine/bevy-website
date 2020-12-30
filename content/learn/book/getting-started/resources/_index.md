@@ -15,7 +15,7 @@ Here are some examples of data that could be encoded as **Resources**:
 
 ## Tracking Time with Resources
 
-Lets solve our App's "hello spam" problem by only printing "hello" once every two seconds. We'll do this by using the {{rust_type(type="struct" crate="bevy_core" name="Time")}} resource, which is automatically added to our App via `add_plugins(DefaultPlugins)`.
+Let's solve our App's "hello spam" problem by only printing "hello" once every two seconds. We'll do this by using the {{rust_type(type="struct" crate="bevy_core" name="Time")}} resource, which is automatically added to our App via `add_plugins(DefaultPlugins)`.
 
 For simplicity, remove the `hello_world` system from your App. This way we only need to adapt the `greet_people` system.
 
@@ -31,7 +31,7 @@ fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
 
 `Res` and `ResMut` pointers provide read and write access (respectively) to resources.
 
-The `delta_seconds` field on `Time` gives us the time that has passed since the last update. But in order to run our system once every two seconds, we must track the amount of time that has passed over a series of updates. To make this easier, Bevy provides the `Timer` type. Lets create a new Resource for our system to track elapsed time with a `Timer`:
+The `delta_seconds` field on `Time` gives us the time that has passed since the last update. But in order to run our system once every two seconds, we must track the amount of time that has passed over a series of updates. To make this easier, Bevy provides the `Timer` type. Let's create a new Resource for our system to track elapsed time with a `Timer`:
 
 ```rs
 struct GreetTimer(Timer);
