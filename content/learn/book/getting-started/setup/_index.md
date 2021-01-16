@@ -84,7 +84,7 @@ edition = "2018"
 bevy = "0.4" # make sure this is the latest version
 ```
 
-Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
+Optionally, run ```cargo run``` again. The Bevy dependencies should start building. If you want to enable Fast Compiles you may want to hold off doing this as this will take some time due to that you essentially are building an engine from scratch, and this process will (automatically) be re-done after enabling Fast Compiles. After this, however, you will only need to do a full rebuild once. Every build after this will be fast!
 
 ### Enable Fast Compiles (Optional)
 
