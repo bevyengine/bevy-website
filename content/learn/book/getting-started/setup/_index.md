@@ -69,6 +69,23 @@ edition = "2018"
 [dependencies]
 ```
 
+### Add Bevy to your project's Cargo.toml
+
+Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
+
+```toml
+[package]
+name = "my_bevy_game"
+version = "0.1.0"
+authors = ["You <you@veryrealemail.com>"]
+edition = "2018"
+
+[dependencies]
+bevy = "0.4" # make sure this is the latest version
+```
+
+Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
+
 ### Enable Fast Compiles (Optional)
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
@@ -99,24 +116,6 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
-
-### Add Bevy to your project's Cargo.toml
-
-
-Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
-
-```toml
-[package]
-name = "my_bevy_game"
-version = "0.1.0"
-authors = ["You <you@veryrealemail.com>"]
-edition = "2018"
-
-[dependencies]
-bevy = "0.4" # make sure this is the latest version
-```
-
-Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
 
 If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph). 
 
