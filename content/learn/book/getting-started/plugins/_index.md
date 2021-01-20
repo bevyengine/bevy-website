@@ -14,7 +14,7 @@ However, most developers don't need a custom experience and just want the "full 
 
 ## Bevy's Default Plugins
 
-Lets make our app more interesting by adding the "default Bevy plugins". 
+Let's make our app more interesting by adding the "default Bevy plugins". 
 `add_plugins(DefaultPlugins)` adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input. 
 
 ```rs
@@ -50,7 +50,7 @@ You are free to use whatever approach suits you!
 
 ## Creating your first plugin
 
-For better organization, lets move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app" no_mod=true)}} interface. Add the following code to your `main.rs` file:
+For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app" no_mod=true)}} interface. Add the following code to your `main.rs` file:
 
 ```rs
 pub struct HelloPlugin;
