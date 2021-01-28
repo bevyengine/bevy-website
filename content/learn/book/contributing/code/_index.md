@@ -12,7 +12,7 @@ Would you like to contribute code to Bevy?  Here's how!
 
 # How to Contribute
 
-1. Fork the [`bevyengine/bevy` repository on GitHub](bevy), you'll need to create a GitHub account if you don't have one already.*
+1. Fork the [`bevyengine/bevy` repository on GitHub][bevy], you'll need to create a GitHub account if you don't have one already.*
 2. Make your changes in a local clone of your fork
 4. For a higher chance of CI passing the first time, consider running the `tools/ci` script from the root of the bevy repository. Or you can run the commands manually:
    1. `cargo fmt --all`
