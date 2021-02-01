@@ -19,4 +19,4 @@ jobs:
         # this specific hash was hand-validated by @cart. please validate new action code before updating
         uses: cirrus-actions/rebase@b08442cca46e2ad6c1f3dd24a3320ece8498df75
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CART_PAT }}
