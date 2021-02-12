@@ -1,5 +1,5 @@
 +++
-title = "Introducing Bevy"
+title = "Introducing Bevy 0.1"
 date = 2020-08-10
 [extra]
 author = "Carter Anderson"
