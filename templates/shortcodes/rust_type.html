@@ -2,6 +2,10 @@
 {% set crate = "std" %}
 {% endif %}
 
+{% if not version %}
+{% set version = "std" %}
+{% endif %}
+
 {% if not mod %}
 {% set mod_path = "" %}
 {% set mod = "" %}
@@ -14,7 +18,7 @@
 {% set path = "stable/" ~ crate %}
 {% else %}
 {% set url = "https://docs.rs" %}
-{% set path = crate ~ "/latest/" ~ crate %}
+{% set path = crate ~ "/" ~ version ~ "/" ~ crate %}
 {% endif %}
 
 <a href="{{url}}/{{path}}{{mod_path}}/{{type}}.{{name}}.html{% if method %}#method.{{method}}{% endif %}"><code>{% if not no_crate and crate and not no_mod and mod %}{{crate}}::{% if not no_mod and mod%}{{mod}}::{% endif %}{% elif not no_mod and mod%}{{mod}}::{% endif %}{% if not no_struct %}{{name}}{% if plural %}s{% endif %}{% endif %}{% if method %}{% if not no_struct %}::{% endif %}{{method}}(){% endif %}</code>
