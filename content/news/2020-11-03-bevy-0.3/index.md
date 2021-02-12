@@ -24,7 +24,7 @@ Here are some of the highlights from this release:
 
 <div class="release-feature-authors">authors: @enfipy, @PrototypeNM1, @endragor, @naithar</div>
 
-You can try out the [Bevy Android example](https://github.com/bevyengine/bevy/tree/master/examples/android) by following the [instructions here](https://github.com/bevyengine/bevy/blob/master/examples/README.md#android). While many things work, please note that this is _very hot_ off the presses. Some features will work and others probably won't. Now is a great time to dive in and help us close the gaps!
+You can try out the [Bevy Android example](https://github.com/bevyengine/bevy/tree/v0.3.0/examples/android) by following the [instructions here](https://github.com/bevyengine/bevy/blob/v0.3.0/examples/README.md#android). While many things work, please note that this is _very hot_ off the presses. Some features will work and others probably won't. Now is a great time to dive in and help us close the gaps!
 
 ![android](android.png)
 
@@ -47,7 +47,7 @@ Bevy can now run on iOS!
 
 <img src="ios.png" style="margin-left: -4rem; margin-bottom: -5rem; margin-top: -3rem" />
 
-You can try out the [Bevy iOS example](https://github.com/bevyengine/bevy/tree/master/examples/ios) by following the [instructions here](https://github.com/bevyengine/bevy/tree/master/examples#ios). This one is also hot off the presses: some features will work and others probably won't.
+You can try out the [Bevy iOS example](https://github.com/bevyengine/bevy/tree/v0.3.0/examples/ios) by following the [instructions here](https://github.com/bevyengine/bevy/tree/v0.3.0/examples#ios). This one is also hot off the presses: some features will work and others probably won't.
 
 This was another large group effort that spanned multiple projects:
 
@@ -340,7 +340,7 @@ To allow multiple concurrent reads of Queries (where it is safe), we added separ
 
 Bevy meshes used to require exactly three "vertex attributes": `position`, `normal`, and `uv`. This worked for most things, but there are a number of cases that require other attributes, such as "vertex colors" or "bone weights for animation". **Bevy 0.3** adds support for custom vertex attributes. Meshes can define whatever attributes they want and shaders can consume whatever attributes they want!
 
-[Here is an example](https://github.com/bevyengine/bevy/blob/master/examples/shader/mesh_custom_attribute.rs) that illustrates how to define a custom shader that consumes a mesh with an added "vertex color" attribute.
+[Here is an example](https://github.com/bevyengine/bevy/blob/v0.3.0/examples/shader/mesh_custom_attribute.rs) that illustrates how to define a custom shader that consumes a mesh with an added "vertex color" attribute.
 
 ![custom_vertex_attribute](custom_vertex_attribute.png)
 
