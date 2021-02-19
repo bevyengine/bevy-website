@@ -27,5 +27,5 @@ Remember to follow Bevy's [Code of Conduct][coc], and thanks for contributing!
 
 [bevy]: https://github.com/bevyengine/bevy
 [bevyorg]: https://github.com/bevyengine
-[coc]: https://github.com/bevyengine/bevy/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/bevyengine/bevy/blob/main/CODE_OF_CONDUCT.md
 [pull]: https://github.com/bevyengine/bevy/compare

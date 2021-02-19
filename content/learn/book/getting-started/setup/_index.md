@@ -19,7 +19,7 @@ Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
 ### Install OS dependencies
-* [Linux](https://github.com/bevyengine/bevy/blob/master/docs/linux_dependencies.md)
+* [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)
 * Windows: Make sure to install [VS2019 build tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 * MacOS: No dependencies here
 
@@ -112,7 +112,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     * You can use `cargo +nightly ...` if you don't want to change the default to nightly.
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
-To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
+To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
 If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph). 
 
