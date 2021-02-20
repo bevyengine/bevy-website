@@ -24,7 +24,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     ```
     cd bevy
     ```
-3. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/master/examples)
+3. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/main/examples)
     ```
     cargo run --example breakout
     ```
@@ -51,7 +51,7 @@ This is the current `bevy` crate version:
 bevy = { git = "https://github.com/bevyengine/bevy" }
 ```
 
-In general it's a good idea to lock in to a specific commit hash, which gives you control over when you take updates. You can find the [latest commit hash here](https://github.com/bevyengine/bevy/commits/master) (to the right of each commit).
+In general it's a good idea to lock in to a specific commit hash, which gives you control over when you take updates. You can find the [latest commit hash here](https://github.com/bevyengine/bevy/commits/main) (to the right of each commit).
 
 ```toml
 [dependencies]
