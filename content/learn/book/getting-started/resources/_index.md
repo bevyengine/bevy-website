@@ -55,7 +55,7 @@ Now all thats left is adding a `GreetTimer` Resource to our `HelloPlugin`:
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
         // the reason we call from_seconds with the true flag is to make the timer repeat itself
-        app.add_resource(GreetTimer(Timer::from_seconds(2.0, true)))
+        app.insert_resource(GreetTimer(Timer::from_seconds(2.0, true)))
             .add_startup_system(add_people.system())
             .add_system(greet_people.system());
     }
