@@ -16,7 +16,8 @@ Would you like to contribute code to Bevy?  Here's how!
 2. Make your changes in a local clone of your fork
 4. For a higher chance of CI passing the first time, consider running the `tools/ci` script from the root of the bevy repository. Or you can run the commands manually:
    1. `cargo fmt --all`
-   2. `cargo clippy --all-targets --all-features -- -D warnings -A clippy::type_complexity -A clippy::manual-strip`
+   2. `cargo test --all-targets --workspace`
+   3. `cargo clippy --all-targets --all-features -- -D warnings -A clippy::type_complexity -A clippy::manual-strip`
 5. Push your changes to your fork and open a [Pull Request][pull]
 6. Respond to any CI failures or review feedback.
 
