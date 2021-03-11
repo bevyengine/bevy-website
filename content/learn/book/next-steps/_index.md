@@ -11,3 +11,7 @@ You have reached the end of The Bevy Book! And unfortunately, we haven't even sc
 * **[The Bevy Examples](https://github.com/bevyengine/bevy/tree/main/examples#examples)**: We create an example for every major Bevy feature. This is currently the best way to learn Bevy's features and how to use them.
 * **[Breakout](https://github.com/bevyengine/bevy/blob/main/examples/game/breakout.rs)**: A small "breakout" clone that illustrates what a real Bevy game looks like.
 * **[Bevy API Docs](https://docs.rs/bevy)**: Bevy's Rust API documentation.
+* **[Awesome Bevy](https://github.com/bevyengine/awesome-bevy)**: List of projects by the Bevy community, including:
+  * **[Learning Resources](https://github.com/bevyengine/awesome-bevy#learning)**: Tutorials, documentation, and examples.
+  * **[Plugins](https://github.com/bevyengine/awesome-bevy#plugins-and-crates)**: Extra functionality you can use in your projects.
+  * **[Games](https://github.com/bevyengine/awesome-bevy#games)**: Open-source games in various stages of development.
