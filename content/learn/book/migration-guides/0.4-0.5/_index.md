@@ -67,3 +67,38 @@ Instead of using `commands.insert_one()` for a lone component, it is now possibl
 This means that `commands.insert()` will no longer accept a bundle as an argument. For this, the new API is `commands.insert_bundle()`.
 
 This change helps to clarify the difference between components and bundles, and brings `Commands` into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
+
+## {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} uses `Duration`
+
+```rust
+// 0.4
+if timer.tick(time.delta_seconds()).finished() { /* do stuff */ }
+timer.elapsed() // returns a bool
+
+// 0.5
+if timer.tick(time.delta()).finished() { /* do stuff */ }
+timer.elapsed() // returns a `Duration`
+```
+
+Most of the methods of {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}}
+now use `Duration` instead of `f32`.
+
+This change allows timers to have consistent, high precision. For convenience, there is also an
+`elapsed_secs` method that returns `f32`.  Otherwise, when you need an `f32`, use the
+`as_secs_f32()` method on `Duration` to make the conversion.
+
+## New: {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Stopwatch" no_mod=true)}}
+
+```rust
+// 0.5
+let mut stopwatch = Stopwatch::new();
+stopwatch.tick(Duration::from_secs_f32(1.5));
+stopwatch.pause();
+stopwatch.tick(time.delta()); // does nothing while stopwatch is paused
+assert_eq(stopwatch.elapsed(), Duration::from_secs_f32(1.5));
+stopwatch.reset();
+```
+
+{{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Stopwatch" no_mod=true)}} can be
+used to measure elapsed time.
+
