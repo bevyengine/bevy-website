@@ -12,6 +12,8 @@ long_title = "Migration Guide: 0.4 to 0.5"
 
 ## `commands: &mut Commands` SystemParam is now `mut commands: Commands`
 
+<div class="release-feature-authors">authors: @cart</div>
+
 ```rust
 // 0.4
 fn foo(commands: &mut Commands) {
@@ -24,11 +26,15 @@ fn foo(mut commands: Commands) {
 
 Systems using the old `commands: &mut Commands` syntax in 0.5 will fail to compile when calling `foo.system()`.
 
-This change was made because `Commands` now holds an internal `World` reference to enable safe Entity allocations.
+This change was made because {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}}
+now holds an internal {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="World" no_mod=true)}}
+reference to enable safe entity allocations.
 
-Note: The internal `World` reference requires two lifetime parameters to pass Commands into a non-system function: ```commands: &'a mut Commands<'b>```
+Note: The internal {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="World" no_mod=true)}} reference requires two lifetime parameters to pass Commands into a non-system function: ```commands: &'a mut Commands<'b>```
 
-## Systems allow a maximum of 12 top-level SystemParams, down from 15
+## Systems allow a maximum of 12 top-level `SystemParam`s, down from 15
+
+<div class="release-feature-authors">authors: @cart</div>
 
 ```rust
 // 0.4
@@ -36,20 +42,25 @@ fn foo(r1: Res<Thing1>, r2: Res<Thing2>, r3: Res<Thing3>, r4: Res<Thing4>, ... r
 }
 
 // 0.5
+fn foo(r1: Res<Thing1>, r2: Res<Thing2>, r3: Res<Thing3>, r4: Res<Thing4>, ... r12: Res<Thing12>) {
+// or
 fn foo(r1_thru_3: (Res<Thing1>, Res<Thing2>, Res<Thing3>), r4: Res<Thing4>, ... r15: Res<Thing15>) {
 }
 ```
 
-System functions with more than 12 arguments will no longer compile, as SystemParams rely on Rust's default impl for tuples.
+System functions with more than 12 arguments will no longer compile, as `SystemParam`s rely on Rust's default impl for tuples.
 
 To work around this limitation (and improve function signature readability), systems can use nested tuples, as shown above, or leverage [derived parameters](https://github.com/bevyengine/bevy/blob/main/examples/ecs/system_param.rs).
 
-## Commands insert() API is now used for a single component
+## {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} `insert()` API is now used for a single component
+
+<div class="release-feature-authors">authors: @cart</div>
+
 
 ```rust
 // 0.4
 // component
-commands.insert_one(entiy, MyComponent)
+commands.insert_one(entity, MyComponent)
 commands.insert(entity, (MyComponent,))
 // bundle
 commands.insert(entity, Bundle)
@@ -62,8 +73,8 @@ commands.insert(entity, MyComponent)
 commands.insert_bundle(entity, MyBundle)
 ```
 
-Instead of using `commands.insert_one()` for a lone component, it is now possible to simply call `commands.insert()`.
+Instead of using `commands.insert_one()` for a single component, use `commands.insert()`.
 
-This means that `commands.insert()` will no longer accept a bundle as an argument. For this, the new API is `commands.insert_bundle()`.
+This means that `commands.insert()` will no longer accept a bundle as an argument. For bundles, use `commands.insert_bundle()`.
 
-This change helps to clarify the difference between components and bundles, and brings `Commands` into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
+This change helps to clarify the difference between components and bundles, and brings {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
