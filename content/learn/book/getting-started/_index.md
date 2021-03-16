@@ -18,13 +18,13 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
 
 1. Clone the [Bevy repo](https://github.com/bevyengine/bevy):
     ```
-    git clone https://github.com/bevyengine/bevy
+    git clone https://github.com/bevyengine/bevy --branch latest
     ```
 2. Navigate to the new "bevy" folder
     ```
     cd bevy
     ```
-3. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/main/examples)
+3. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples)
     ```
     cargo run --example breakout
     ```
