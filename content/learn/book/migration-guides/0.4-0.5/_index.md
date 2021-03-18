@@ -12,8 +12,6 @@ long_title = "Migration Guide: 0.4 to 0.5"
 
 ## `commands: &mut Commands` SystemParam is now `mut commands: Commands`
 
-<div class="release-feature-authors">authors: @cart</div>
-
 ```rust
 // 0.4
 fn foo(commands: &mut Commands) {
@@ -34,8 +32,6 @@ Note: The internal {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" na
 
 ## Systems allow a maximum of 12 top-level `SystemParam`s, down from 15
 
-<div class="release-feature-authors">authors: @cart</div>
-
 ```rust
 // 0.4
 fn foo(r1: Res<Thing1>, r2: Res<Thing2>, r3: Res<Thing3>, r4: Res<Thing4>, ... r15: Res<Thing15>) {
@@ -53,9 +49,6 @@ System functions with more than 12 arguments will no longer compile, as `SystemP
 To work around this limitation (and improve function signature readability), systems can use nested tuples, as shown above, or leverage [derived parameters](https://github.com/bevyengine/bevy/blob/main/examples/ecs/system_param.rs).
 
 ## {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} `insert()` API is now used for a single component
-
-<div class="release-feature-authors">authors: @cart</div>
-
 
 ```rust
 // 0.4
