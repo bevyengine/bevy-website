@@ -114,3 +114,37 @@ fn event_writer_system(
 ## `AppBuilder::add_resource` is now called `AppBuilder::insert_resource`
 
 This is a small change to have function names on `AppBuilder` consistent with the `Commands` API.
+
+## TextBundle
+
+This bundle has been reworked to allow multiple differently-styled sections of text within a single bundle. `Text::with_section` was added to simplify the common case where you're only interested in one text section.
+
+```rust
+// 0.4
+TextBundle {
+    text: Text {
+        value: "hello!".to_string(),
+        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+        style: TextStyle {
+            font_size: 60.0,
+            color: Color::WHITE,
+            ..Default::default()
+        },
+    },
+    ..Default::default()
+}
+
+// 0.5
+TextBundle {
+    text: Text::with_section(
+        "hello!",
+        TextStyle {
+            font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+            font_size: 60.0,
+            color: Color::WHITE,
+        },
+        TextAlignment::default()
+    ),
+    ..Default::default()
+}
+```
