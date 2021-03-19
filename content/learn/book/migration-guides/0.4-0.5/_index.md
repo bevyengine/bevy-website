@@ -71,3 +71,46 @@ Instead of using `commands.insert_one()` for a single component, use `commands.i
 This means that `commands.insert()` will no longer accept a bundle as an argument. For bundles, use `commands.insert_bundle()`.
 
 This change helps to clarify the difference between components and bundles, and brings {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
+
+## Simplified Events
+
+```rust
+// 0.4
+fn event_reader_system(
+    mut my_event_reader: Local<EventReader<MyEvent>>,
+    my_events: Res<Events<MyEvent>>,
+) {
+    for my_event in my_event_reader.iter(&my_events) {
+        // do things with your event
+    }
+}
+
+// 0.5
+fn event_reader_system(mut my_event_reader: EventReader<MyEvent>) {
+    for my_event in my_event_reader.iter() {
+        // do things with your event
+    }
+}
+```
+You no longer need two system parameters to read your events. One `EventReader` is sufficient.
+
+Following the above example of using an `EventReader` to read events, you can now use `EventWriter` to create new ones.
+```rust
+// 0.4
+fn event_writer_system(
+    mut my_events: ResMut<Events<MyEvent>>,
+) {
+    my_events.send(MyEvent);
+}
+
+// 0.5
+fn event_writer_system(
+    mut my_events: EventWriter<MyEvent>
+) {
+    my_events.send(MyEvent);
+}
+```
+
+## `AppBuilder::add_resource` is now called `AppBuilder::insert_resource`
+
+This is a small change to have function names on `AppBuilder` consistent with the `Commands` API.
