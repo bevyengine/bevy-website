@@ -508,8 +508,8 @@ fn ball_collision_system(
 The second function, `ball_collision_system` takes four arguments:
  * A reference to the Commands instance. We can use it not only to add but also to remove entities. This will become very handy when we add the bricks in the next step.
  * A commented out instance of our scoreboard. We will need this in the last step of this tutorial.
- * An instance of a Query that references our Ball and its [Transform](https://docs.rs/bevy/0.4.0/bevy/prelude/struct.Transform.html) and `Sprite`.
- * An instance of a Query that references all collidable Entities and its [Transform](https://docs.rs/bevy/0.4.0/bevy/prelude/struct.Transform.html), `Collider` and `Sprite`.
+ * An instance of a Query that references our Ball and its [Transform](https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html) and `Sprite`.
+ * An instance of a Query that references all collidable Entities and its [Transform](https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html), `Collider` and `Sprite`.
  
 I won't copy the complete code of the function body here again, since the code is easy enough to understand.
 Basically the code iterates over all balls (of course the game only has one, but this is the way to get it) and then it iterates over all collidable objects.
