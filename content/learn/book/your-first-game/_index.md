@@ -15,7 +15,7 @@ For those of you who don't know, Breakout is an arcade game developed and publis
 Here is a version of the game compiled to WebGL that you can play right away:  
 [https://mrk.sed.pl/bevy-showcase/breakout.html](https://mrk.sed.pl/bevy-showcase/breakout.html)
 
-You can take a look at the complete [source code of the game](https://github.com/bevyengine/bevy/blob/main/examples/game/breakout.rs), but I suggest to follow along this tutorial first, since it will slowly build up to the example game one step at a time.
+You can take a look at the complete [source code of the game](https://github.com/bevyengine/bevy/blob/latest/examples/game/breakout.rs), but I suggest to follow along this tutorial first, since it will slowly build up to the example game one step at a time.
 
 So what are the elements of the game ?
 
@@ -685,4 +685,3 @@ Let's play a round, shall we?
 
 Execute `cargo run` and have some fun.  
 You earned it!
-
