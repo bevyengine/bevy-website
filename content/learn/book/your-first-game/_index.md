@@ -288,11 +288,11 @@ fn paddle_movement_system(
 }
 ```
 The paddle_movement_system function expects three arguments:  
- * an instance of the default [Time](https://docs.rs/bevy_core/0.4.0/bevy_core/struct.Time.html) resource.
- * an instance of the default [Input](https://docs.rs/bevy_input/0.4.0/bevy_input/struct.Input.html)<KeyCode> resource under the name keyboard_input.
- * an instance of a Query that references our Paddle and its [Transform](https://docs.rs/bevy/0.4.0/bevy/prelude/struct.Transform.html).
+ * an instance of the default [Time](https://docs.rs/bevy_core/latest/bevy_core/struct.Time.html) resource.
+ * an instance of the default [Input](https://docs.rs/bevy_input/latest/bevy_input/struct.Input.html)<KeyCode> resource under the name keyboard_input.
+ * an instance of a Query that references our Paddle and its [Transform](https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html).
 
-The Time struct contains the following helpful [information](https://github.com/bevyengine/bevy/blob/main/crates/bevy_core/src/time/time.rs):
+The Time struct contains the following helpful [information](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_core/src/time/time.rs):
 
 ```rs
 pub struct Time {
