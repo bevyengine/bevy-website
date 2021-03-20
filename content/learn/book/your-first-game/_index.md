@@ -398,8 +398,8 @@ struct Ball {
     velocity: Vec3,
 }
 ```
-[Vec3](https://docs.rs/glam/0.12.0/glam/f32/struct.Vec3.html) is a struct that contains three float fields: x,y and z.  
-It is part of the [glam](https://docs.rs/glam/0.12.0/glam/) Rust crate which is a simple and fast linear algebra library for games and graphics.
+[Vec3](https://docs.rs/glam/latest/glam/f32/struct.Vec3.html) is a struct that contains three float fields: x,y and z.  
+It is part of the [glam](https://docs.rs/glam/latest/glam/) Rust crate which is a simple and fast linear algebra library for games and graphics.
 
 Add the following code to our setup function, just before we add our walls:
 ```rs
