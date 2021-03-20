@@ -87,20 +87,4 @@ This change allows timers to have consistent, high precision. For convenience, t
 `elapsed_secs` method that returns `f32`.  Otherwise, when you need an `f32`, use the
 `as_secs_f32()` method on `Duration` to make the conversion.
 
-## New: {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Stopwatch" no_mod=true)}}
-
-<div class="release-feature-authors">authors: @kokounet</div>
-
-```rust
-// 0.5
-let mut stopwatch = Stopwatch::new();
-stopwatch.tick(Duration::from_secs_f32(1.5));
-stopwatch.pause();
-stopwatch.tick(time.delta()); // does nothing while stopwatch is paused
-assert_eq(stopwatch.elapsed(), Duration::from_secs_f32(1.5));
-stopwatch.reset();
-```
-
-{{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Stopwatch" no_mod=true)}} can be
-used to measure elapsed time.
 
