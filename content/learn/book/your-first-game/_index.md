@@ -674,7 +674,7 @@ Find those two lines and remove the double slashes at the beginning.
 
 Finally we have to copy the two font files from Bevy to our project.
 The two font files are located in bevy/assets/fonts.
-You can also download them from here: [bevy/tree/main/assets/fonts](https://github.com/bevyengine/bevy/tree/main/assets/fonts)
+You can also download them from here: [bevy/tree/main/assets/fonts](https://github.com/bevyengine/bevy/tree/latest/assets/fonts)
 
 Create the folder structure assets/fonts in your my_breakout_game project folder and copy the two font files into my_breakout_game/assets/fonts.
 
