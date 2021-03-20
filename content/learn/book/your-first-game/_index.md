@@ -624,7 +624,7 @@ Add the following lines just before the end to our setup function:
         });
 ```
 This looks different than what we had before, so let's go over it.  
-Here we are spawning a [TextBundle](https://docs.rs/bevy/0.4.0/bevy/ui/entity/struct.TextBundle.html).
+Here we are spawning a [TextBundle](https://docs.rs/bevy/latest/bevy/ui/entity/struct.TextBundle.html).
 
 A TextBundle contains many useful fields:
 
