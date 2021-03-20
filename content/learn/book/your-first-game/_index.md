@@ -111,9 +111,7 @@ Edit Cargo.toml to add a dependency on the Bevy git repo as outline in the [gett
 
 ```toml
 [dependencies]
-bevy={git="https://github.com/bevyengine/bevy", rev="bc4fe9b186db3f32eef38fc4241289df480fa949"}
-```
-(We do this because for the code above Bevy 0.4 is already outdated.)
+bevy = "0.5"
 
 Then copy and paste the large piece of code above into the main.rs file in the my_breakout_game/src folder.
 
