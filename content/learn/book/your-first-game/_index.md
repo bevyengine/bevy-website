@@ -186,7 +186,7 @@ We will cover the paddle_movement_system function code in detail in a moment.
 .run();
 ``` 
 Finally we tell the Bevy game engine to start with a call to run.  
-(If you are really interested in the source code of the run function you can find it here: [app.rs](https://github.com/bevyengine/bevy/blob/main/crates/bevy_app/src/app.rs))
+(If you are really interested in the source code of the run function you can find it here: [app.rs](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_app/src/app.rs))
 
 ## Let's take a look at that setup function.
 
