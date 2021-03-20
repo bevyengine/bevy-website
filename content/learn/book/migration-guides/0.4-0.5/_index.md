@@ -70,8 +70,6 @@ This change helps to clarify the difference between components and bundles, and 
 
 ## {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} uses `Duration`
 
-<div class="release-feature-authors">authors: @kokounet</div>
-
 ```rust
 // 0.4
 if timer.tick(time.delta_seconds()).finished() { /* do stuff */ }
