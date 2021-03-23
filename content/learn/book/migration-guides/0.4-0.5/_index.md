@@ -72,6 +72,25 @@ This means that `commands.insert()` will no longer accept a bundle as an argumen
 
 This change helps to clarify the difference between components and bundles, and brings {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
 
+## {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} uses `Duration`
+
+```rust
+// 0.4
+if timer.tick(time.delta_seconds()).finished() { /* do stuff */ }
+timer.elapsed() // returns a bool
+
+// 0.5
+if timer.tick(time.delta()).finished() { /* do stuff */ }
+timer.elapsed() // returns a `Duration`
+```
+
+Most of the methods of {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}}
+now use `Duration` instead of `f32`.
+
+This change allows timers to have consistent, high precision. For convenience, there is also an
+`elapsed_secs` method that returns `f32`.  Otherwise, when you need an `f32`, use the
+`as_secs_f32()` method on `Duration` to make the conversion.
+
 ## Simplified Events
 
 ```rust
