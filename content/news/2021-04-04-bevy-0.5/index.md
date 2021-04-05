@@ -94,7 +94,7 @@ Read on for the details!
 
 <div class="release-feature-authors">authors: @cart</div>
 
-Up until this point, Bevy used a heavily forked version of [hecs](https://github.com/Ralith/hecs) for our ECS core. Since Bevy's first release, we've learned a lot about Bevy's ECS needs. We've also collaborated with other ECS project leaders, such as [Sander Mertins](https://github.com/SanderMertens) (lead [flecs](https://github.com/SanderMertens/flecs) developer) and [Gijs-Jan Roelofs](https://github.com/gjroelofs) (Xenonauts ECS framework developer). As an "ECS community", we've started to zero in on what the future of ECS could be.
+Up until this point, Bevy used a heavily forked version of [hecs](https://github.com/Ralith/hecs) for our ECS core. Since Bevy's first release, we've learned a lot about Bevy's ECS needs. We've also collaborated with other ECS project leaders, such as [Sander Mertens](https://github.com/SanderMertens) (lead [flecs](https://github.com/SanderMertens/flecs) developer) and [Gijs-Jan Roelofs](https://github.com/gjroelofs) (Xenonauts ECS framework developer). As an "ECS community", we've started to zero in on what the future of ECS could be.
 
 Bevy ECS v2 is our first step into that future. It also means that Bevy ECS is no longer a "hecs fork". We are going out on our own!
 
