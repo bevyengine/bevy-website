@@ -70,20 +70,20 @@ fn system(handle: Res<Handle<Gltf>>, gltfs: Res<Assets<Gltf>>, materials: Res<As
 
 This release marks a huge step forward for Bevy's ECS. It has significant implications for how Bevy Apps are composed and how well they perform:
 
-* **A full rewrite of the ECS core:**
+* **[A full rewrite of the ECS core:](#ecs-core-rewrite)**
     * Massively improved performance across the board
     * "Hybrid" component storage
     * An "Archetype Graph" for faster archetype changes 
     * Stateful queries that cache results across runs
-* **A brand new parallel System executor:**
+* **[A brand new parallel System executor:](#new-parallel-system-executor)**
     * Support for explicit system ordering
     * System Labels
     * System Sets
     * Improved system "run criteria"
     * Increased system parallelism
-* **"Reliable" change detection:**
+* **["Reliable" change detection:](#reliable-change-detection)**
     * Systems will now always detect component changes, even across frames
-* **A rewrite of the State system:** 
+* **[A rewrite of the State system:](#states-v2)** 
     * A much more natural "stack-based state machine" model
     * Direct integration with the new scheduler 
     * Improved "state lifecycle" events
