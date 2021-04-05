@@ -1126,13 +1126,11 @@ We still have a long road ahead of us, but the Bevy developer community is growi
 * "Pipelined" rendering and other renderer optimizations
 * Bevy UI redesign
 * Animation: component animation and 3d skeletal animation
-* ECS: relationships/indexing, async systems
-* 3D Lighting Features: shadows, more light types 
+* ECS: relationships/indexing, async systems, archetype invariants, "stageless" system schedules 
+* 3D Lighting Features: shadows, more light types
 * More Bevy Scene features and usability improvements
 
 We also plan on breaking ground on the Bevy Editor as soon as we converge on a final Bevy UI design.
-
-## Change Log
 
 ## Contributors
 
@@ -1226,3 +1224,5 @@ A huge thanks to the **88 contributors** that made this release (and associated 
 * memoryruins
 * blunted2night
 * RedlineTriad
+
+## Change Log
