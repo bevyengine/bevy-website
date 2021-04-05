@@ -572,7 +572,7 @@ app
 
 Run Criteria are now decoupled from systems and will be re-used when possible. For example, the FixedTimestep criteria in the example above will only be run once per stage run. The executor will re-use the criteria's result for both the `foo` and `bar` system.
 
-Run criteria can now also be labeled and referenced by other systems:
+Run Criteria can now also be labeled and referenced by other systems:
 
 
 ```rust
@@ -590,7 +590,7 @@ app.add_stage(SystemStage::parallel()
    .add_system(foo.system().with_run_criteria("every_other_time"))
 ```
 
-Results from run criteria can also be "piped" into other criteria, which enables interesting composed behaviors:
+Results from Run Criteria can also be "piped" into other criteria, which enables interesting composed behaviors:
 
 ```rust
 fn once_in_a_blue_moon(In(input): In<ShouldRun>, moon: Res<Moon>) -> ShouldRun {
