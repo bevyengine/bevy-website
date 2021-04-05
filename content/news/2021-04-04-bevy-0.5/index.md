@@ -353,7 +353,7 @@ If multiple resources are required, scopes can be nested. We could also consider
 
 ### Query Conflicts Use ComponentId Instead of ArchetypeComponentId
 
-For safety reasons, systems cannot contain queries that conflict with each other without wrapping them in a QuerySet. In **Bevy 0.4**, we used ArchetypeComponentIds to determine conflicts. This was nice because it could take into account filters:
+For safety reasons, systems cannot contain queries that conflict with each other without wrapping them in a `QuerySet`. In **Bevy 0.4**, we used `ArchetypeComponentIds` to determine conflicts. This was nice because it could take into account filters:
 
 ```rust
 // these queries will never conflict due to their filters
