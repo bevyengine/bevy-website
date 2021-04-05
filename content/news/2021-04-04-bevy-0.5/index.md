@@ -535,7 +535,7 @@ app
     .add_system(runs_after_physics.system().after(Physics));
 ```
 
-Bevy plugin authors should export labels like this in their public apis to enable their users to insert systems before/after logic provided by the plugin.
+Bevy plugin authors should export labels like this in their public APIs to enable their users to insert systems before/after logic provided by the plugin.
 
 ### System Sets
 
