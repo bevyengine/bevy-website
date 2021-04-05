@@ -1119,6 +1119,19 @@ Naively, it would also _disallow_ `filter_system`, which would be a significant 
 
 This means `filter_system` is still perfectly valid in **Bevy 0.5**. I consider this a "best of both worlds" situation. We get most of the benefits of the old implementation, but with consistent and predictable rules enforced at app startup. 
 
+## What's Next For Bevy?
+
+We still have a long road ahead of us, but the Bevy developer community is growing at a rapid pace and we already have big plans for the future. Expect to see progress in the following areas soon:
+
+* "Pipelined" rendering and other renderer optimizations
+* Bevy UI redesign
+* Animation: component animation and 3d skeletal animation
+* ECS: relationships/indexing, async systems
+* 3D Lighting Features: shadows, more light types 
+* More Bevy Scene features and usability improvements
+
+We also plan on breaking ground on the Bevy Editor as soon as we converge on a final Bevy UI design.
+
 ## Change Log
 
 ## Contributors
