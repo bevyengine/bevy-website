@@ -898,6 +898,14 @@ It is now possible to convert world coordinates to a given camera's screen coord
 
 <video controls loop><source src="world_to_screen.mp4" type="video/mp4"/></video>
 
+## 3D Orthographic Camera
+
+<div class="release-feature-authors">authors: @jamadazi</div>
+
+Orthographic cameras can now be used in 3D! This is useful for things like CAD applications and isometric games.
+
+![ortho_3d](ortho_3d.png)
+
 ## Orthographic Camera Scaling Modes
 
 <div class="release-feature-authors">authors: @jamadazi</div>
