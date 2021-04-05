@@ -1113,11 +1113,11 @@ fn maybe_conflicts_system(a: Query<(&mut A, &C)>, b: Query<(&mut A, &B)>) {
 
 The system above will panic at runtime if an entity with A, B, and C is spawned. This makes it hard to trust that your game logic will run without crashing.
 
-In **Bevy 0.5**, I switched to using `ComponentId` instead of `ArchetypeComponentId`. This _is_ more constraining. `maybe_conflicts_system` will now always fail, but it will do it consistently at startup.
+In **Bevy 0.5**, we switched to using `ComponentId` instead of `ArchetypeComponentId`. This _is_ more constraining. `maybe_conflicts_system` will now always fail, but it will do it consistently at startup.
 
-Naively, it would also _disallow_ `filter_system`, which would be a significant downgrade in usability. Bevy has a number of internal systems that rely on disjoint queries and I expect it to be a common pattern in userspace. To resolve this, I added a new internal `FilteredAccess<T>` type, which wraps `Access<T>` and adds with/without filters. If two `FilteredAccess` have with/without values that prove they are disjoint, they will no longer conflict.
+Naively, it would also _disallow_ `filter_system`, which would be a significant downgrade in usability. Bevy has a number of internal systems that rely on disjoint queries and we expect it to be a common pattern in userspace. To resolve this, we added a new internal `FilteredAccess<T>` type, which wraps `Access<T>` and adds with/without filters. If two `FilteredAccess` have with/without values that prove they are disjoint, they will no longer conflict.
 
-This means `filter_system` is still perfectly valid in **Bevy 0.5**. I consider this a "best of both worlds" situation. We get most of the benefits of the old implementation, but with consistent and predictable rules enforced at app startup. 
+This means `filter_system` is still perfectly valid in **Bevy 0.5**. We get most of the benefits of the old implementation, but with consistent and predictable rules enforced at app startup. 
 
 ## What's Next For Bevy?
 
