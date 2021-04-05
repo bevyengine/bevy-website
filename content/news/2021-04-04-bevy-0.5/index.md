@@ -378,7 +378,7 @@ This means `filter_system` is still perfectly valid in **Bevy 0.5**. I consider 
 
 ### EntityRef / EntityMut
 
-World entity operations in **Bevy O.4** require that the user passes in an `entity` id to each operation:
+World entity operations in **Bevy 0.4** require that the user passes in an `entity` id to each operation:
 
 ```rust
 let entity = world.spawn((A, )); // create a new entity with A
