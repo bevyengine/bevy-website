@@ -591,7 +591,7 @@ Text is now rendered according to the current monitor's scale factor. This gives
 
 Text can now be spawned into 2D scenes using the new `Text2dBundle`. This makes it easier to do things like "draw names above players".
 
-![2d_text](2d_text.gif)
+<video controls loop><source src="2d_text.mp4" type="video/mp4"/></video>
 
 ## World To Screen Coordinate Conversions
 
