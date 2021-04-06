@@ -78,7 +78,7 @@ struct Name(String);
 We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
-fn add_people(commands: &mut Commands) {
+fn add_people(mut commands: Commands) {
     commands
         .spawn((Person, Name("Elaina Proctor".to_string())))
         .spawn((Person, Name("Renzo Hume".to_string())))
