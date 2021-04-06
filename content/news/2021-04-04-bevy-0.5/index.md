@@ -43,7 +43,7 @@ The new PBR example helps visualize these new material properties:
 
 The GLTF loader now supports normal maps, metallic/roughness, occlusion, and emissive textures. Our "flight helmet" gltf example utilizes the new PBR texture support and looks much nicer as a result:
 
-<video controls loop><source src="flighthelmet.webm" type="video/webm"/></video>
+<video controls loop><source src="flighthelmet.mp4" type="video/mp4"/></video>
 
 ### Top-Level GLTF Asset
 
