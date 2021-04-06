@@ -81,7 +81,7 @@ authors = ["You <you@veryrealemail.com>"]
 edition = "2018"
 
 [dependencies]
-bevy = "0.4" # make sure this is the latest version
+bevy = "0.5" # make sure this is the latest version
 ```
 ### Enable Fast Compiles (Optional)
 
