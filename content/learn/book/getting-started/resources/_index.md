@@ -50,7 +50,7 @@ fn greet_people(
 }
 ```
 
-Now all thats left is adding a `GreetTimer` Resource to our `HelloPlugin`:
+Now all that's left is adding a `GreetTimer` Resource to our `HelloPlugin`:
 ```rs
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
