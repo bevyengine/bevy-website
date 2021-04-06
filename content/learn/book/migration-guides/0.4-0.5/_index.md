@@ -10,7 +10,7 @@ long_title = "Migration Guide: 0.4 to 0.5"
 
 <!-- TODO: link to release blog post here -->
 
-## `commands: &mut Commands` SystemParam is now `mut commands: Commands`
+### "commands: &mut Commands" SystemParam is now "mut commands: Commands"
 
 ```rust
 // 0.4
@@ -30,7 +30,7 @@ reference to enable safe entity allocations.
 
 Note: The internal {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="World" no_mod=true)}} reference requires two lifetime parameters to pass Commands into a non-system function: ```commands: &'a mut Commands<'b>```
 
-## {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} `insert()` API is now used for a single component
+### Commands::insert() API is now used for a single component
 
 ```rust
 // 0.4
@@ -54,7 +54,7 @@ This means that `commands.insert()` will no longer accept a bundle as an argumen
 
 This change helps to clarify the difference between components and bundles, and brings {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
 
-## {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} uses `Duration`
+### Timer now uses Duration
 
 ```rust
 // 0.4
@@ -73,7 +73,7 @@ This change allows timers to have consistent, high precision. For convenience, t
 `elapsed_secs` method that returns `f32`.  Otherwise, when you need an `f32`, use the
 `as_secs_f32()` method on `Duration` to make the conversion.
 
-## Simplified Events
+### Simplified Events
 
 ```rust
 // 0.4
@@ -112,11 +112,11 @@ fn event_writer_system(
 }
 ```
 
-## `AppBuilder::add_resource` is now called `AppBuilder::insert_resource`
+### AppBuilder::add_resource is now called AppBuilder::insert_resource
 
 This is a small change to have function names on `AppBuilder` consistent with the `Commands` API.
 
-## TextBundle
+### TextBundle
 
 This bundle has been reworked to allow multiple differently-styled sections of text within a single bundle. `Text::with_section` was added to simplify the common case where you're only interested in one text section.
 
