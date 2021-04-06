@@ -59,7 +59,7 @@ This change helps to clarify the difference between components and bundles, and 
 ```rust
 // 0.4
 if timer.tick(time.delta_seconds()).finished() { /* do stuff */ }
-timer.elapsed() // returns a bool
+timer.elapsed() // returns an `f32`
 
 // 0.5
 if timer.tick(time.delta()).finished() { /* do stuff */ }
