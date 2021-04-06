@@ -396,6 +396,13 @@ The old executor would have implicitly forced `increment_counter` to run first b
 
 To help detect this class of error, we built an opt-in tool that detects these ambiguities and logs them:
 
+```rust
+// add this resource to your App to enable ambiguity detection
+app.insert_resource(ReportExecutionOrderAmbiguities)
+```
+
+Then when we run our App, we will see the following message printed to our terminal: 
+
 ```
 Execution order ambiguities detected, you might want to add an explicit dependency relation between some of these systems:
  * Parallel systems:
