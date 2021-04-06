@@ -39,13 +39,11 @@ struct GreetTimer(Timer);
 fn greet_people(
     time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
     // update our timer with the time elapsed since the last update
-    // if the timer hasn't finished yet, we return
-    if !timer.0.tick(time.delta_seconds()).just_finished() {
-        return;
-    }
-
-    for name in query.iter() {
-        println!("hello {}!", name.0);
+    // if that caused the timer to finish, we say hello to everyone
+    if timer.tick(time.delta()).just_finished() {
+        for name in query.iter() {
+            println!("hello {}!", name.0);
+        }
     }
 }
 ```
