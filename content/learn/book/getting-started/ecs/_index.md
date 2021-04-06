@@ -134,4 +134,4 @@ hello Zayna Nieves!
 
 Marvelous!
 
-**Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default when they have no shared dependencies.
+**Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
