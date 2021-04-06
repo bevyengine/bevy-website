@@ -108,7 +108,7 @@ Two ECS storage paradigms have gained a lot of traction over the years:
     * Enables super-fast Query iteration due to its cache-friendly data layout
     * Comes at the cost of more expensive add/remove operations for an Entity's components, because all components need to be copied to the new archetype's "table"
     * Parallelism-friendly: entities only exist in one archetype at a time so systems that access the same components but in different archetypes can run in parallel 
-    * Frameworks: Old Bevy ECS, hecs, legion, flecs, Unit DOTS
+    * Frameworks: Old Bevy ECS, hecs, legion, flecs, Unity DOTS
 * **Sparse Set ECS**:
     * Stores components of the same type in densely packed arrays, which are sparsely indexed by densely packed unsigned integers (entity ids)
     * Query iteration is slower than Archetypal ECS (by default) because each entity's component could be at any position in the sparse set. This "random access" pattern isn't cache friendly. Additionally, there is an extra layer of indirection because you must first map the entity id to an index in the component array.
