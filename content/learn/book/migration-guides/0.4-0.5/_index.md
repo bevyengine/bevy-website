@@ -159,3 +159,48 @@ asset_server.load("models/foo.glb");
 // 0.5
 asset_server.load("models/foo.glb#Scene0");
 ```
+
+### State
+
+States are now registered with `AppBuilder::add_state`, which creates
+the `State` resource and registers a "driver" system that takes the
+place of `StateStage`.  States are registered using `SystemSet`.
+
+**IMPORTANT**: if you stop registering the `StateStage` but don't
+register the driver (using `add_state` or `State::get_driver`), Bevy
+0.5 will enter an infinite loop, causing your application to "lock up".
+
+```rust
+// 0.4
+app.insert_resource(State::new(MyState::InitState))
+   .add_stage_after(
+       bevy::app::stage::UPDATE,
+       MY_STATE_STAGE_NAME,
+       bevy::ecs::StateStage::<MyState>::default(),
+   )
+   .on_state_enter(
+       MY_STATE_STAGE_NAME,
+       MyState::InitState,
+       enter_init_state.system())
+   .on_state_update(
+       MY_STATE_STAGE_NAME,
+       MyState::InitState,
+       update_init_state.system())
+   .on_state_exit(
+       MY_STATE_STAGE_NAME,
+       MyState::InitState,
+       exit_init_state.system());
+
+// 0.5
+app.add_state(MyState::InitState)
+   .add_system_set(SystemSet::on_enter(MyState::InitState)
+       .with_system(enter_init_state.system()))
+   .add_system_set(SystemSet::on_update(MyState::InitState)
+       .with_system(update_init_state.system()))
+   .add_system_set(SystemSet::on_exit(MyState::InitState)
+       .with_system(exit_init_state.system()));
+```
+
+It is still possible to register the driver manually using
+`State::get_driver`, but this is not normally required.
+
