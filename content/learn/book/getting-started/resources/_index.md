@@ -40,7 +40,7 @@ fn greet_people(
     time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
     // update our timer with the time elapsed since the last update
     // if that caused the timer to finish, we say hello to everyone
-    if timer.tick(time.delta()).just_finished() {
+    if timer.0.tick(time.delta()).just_finished() {
         for name in query.iter() {
             println!("hello {}!", name.0);
         }
@@ -48,13 +48,22 @@ fn greet_people(
 }
 ```
 
-Now all that's left is adding a `GreetTimer` Resource to our `HelloPlugin`:
+We will need to add our `GreetTimer` resource to the world with a startup system:
+
+```rs
+fn add_timer(mut commands: Commands) {
+    // the reason we call from_seconds with the true flag is to make the timer repeat itself
+    commands.insert_resource(GreetTimer(Timer::from_seconds(2.0, true)))
+}
+```
+
+Now all that's left is adding a the new system to our `HelloPlugin`:
+
 ```rs
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
-        // the reason we call from_seconds with the true flag is to make the timer repeat itself
-        app.add_resource(GreetTimer(Timer::from_seconds(2.0, true)))
-            .add_startup_system(add_people.system())
+        app.add_startup_system(add_people.system())
+            .add_startup_system(add_timer.system())
             .add_system(greet_people.system());
     }
 }
