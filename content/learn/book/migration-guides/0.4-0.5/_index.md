@@ -150,6 +150,16 @@ TextBundle {
 }
 ```
 
+### Scene must now be specified when loading a GLTF scene
+Previously, you were able to load a GLTF scene asset with only a path. Now, you must include a fragment specifying the scene you want to load. If you only have one scene in the file, it's `#Scene0`.
+```rust
+// 0.4
+asset_server.load("models/foo.glb");
+
+// 0.5
+asset_server.load("models/foo.glb#Scene0");
+```
+
 ### State
 
 States are now registered with `AppBuilder::add_state`, which creates
@@ -193,3 +203,4 @@ app.add_state(MyState::InitState)
 
 It is still possible to register the driver manually using
 `State::get_driver`, but this is not normally required.
+
