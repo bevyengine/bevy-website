@@ -23,7 +23,7 @@ Here are some of the highlights from this release:
 
 <!-- more -->
 
-## Physically Based Rendering (PBR)
+{{ heading(text="Physically Based Rendering (PBR)") }}
 
 <div class="release-feature-authors">authors: @StarArawn, @mtsr, @mockersf, @IngmarBitter, @Josh015, @norgate, @cart</div>
 
@@ -35,9 +35,9 @@ The new PBR example helps visualize these new material properties:
 
 ![pbr](pbr.png)
 
-## GLTF Improvements
+{{ heading(text="GLTF Improvements") }}
 
-### PBR Textures
+{{ heading(text="PBR Textures", size=3) }}
 
 <div class="release-feature-authors">authors: @mtsr, @mockersf</div>
 

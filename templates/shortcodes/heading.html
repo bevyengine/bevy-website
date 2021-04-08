@@ -1,0 +1,11 @@
+<a href="#{{text | slugify}}" id="{{text | slugify}}">
+    {% if size %}
+    <h{{size}}>
+        {{text}}
+    </h{{size}}>
+    {% else %}
+    <h2>
+        {{text}}
+    </h2>
+    {% endif %}
+</a>
