@@ -204,3 +204,26 @@ app.add_state(MyState::InitState)
 It is still possible to register the driver manually using
 `State::get_driver`, but this is not normally required.
 
+## ChangedRes removed
+
+This change was made to allow for more flexiblity and more consistent behavior with change detection for components.
+
+```rust
+// 0.4
+fn some_system(
+    res: ChangedRes<SomeResource>
+) {
+    // this system only runs if SomeResource has changed
+}
+
+// 0.5
+fn some_system(
+    res: Res<SomeResource> // or ResMut
+) {
+    // this system always runs
+
+    if !res.changed() { // or .added() or .mutated()
+        return;
+    }
+}
+```
