@@ -54,6 +54,25 @@ This means that `commands.insert()` will no longer accept a bundle as an argumen
 
 This change helps to clarify the difference between components and bundles, and brings {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
 
+### Spawning Entities and Bundles
+`commands.spawn()` no longer accepts any parameters.  To spawn bundles, use `commands.spawn_bundle(bundle)`.
+
+Similarly, rather than using `with(some_component)` to spawn an object with multiple components, you must now use `insert(some_component)`:
+```rust
+// 0.4
+commands.spawn(some_bundle)
+    .with(some_component);
+    
+// 0.5
+commands.spawn_bundle(some_bundle)
+    .insert(some_component);
+    
+// or...
+commands.spawn()
+    .insert_bundle(some_bundle)
+    .insert(some_component);
+```
+
 ### Timer now uses Duration
 
 ```rust
@@ -204,3 +223,46 @@ app.add_state(MyState::InitState)
 It is still possible to register the driver manually using
 `State::get_driver`, but this is not normally required.
 
+### Cameras
+`Camera3dBundle` is now known as `PerspectiveCameraBundle`, and `Camera2dBundle` is now known as `OrthographicCameraBundle`.
+
+`OrthographicCameraBundle` does not implement `Default`, so to change its transform at spawn while keeping everything else the same, consider something like the following:
+```rust
+let mut camera = OrthographicCameraBundle::new_2d();
+camera.transform = Transform::from_translation(Vec3::new(0.0, 0.0, 5.0));
+commands.spawn_bundle(camera);
+```
+
+### Render API changes
+`RasterizationStateDescriptor` no longer exists.  Much of its functionality has been moved to other fields on `PipelineDescriptor`.  `cull_mode`, for example, is now found in the `primitive: PrimitiveState` field.
+
+Buffers of type `Vec<Color>` can no longer be uploaded to the GPU directly due to limitations with `RenderResources` and the new `Byteable` requirement.  Consider using a `Vec<Vec4>` instead, and inserting colors with `.into()` instead:
+```rust
+#[derive(RenderResources, Default, TypeUuid)]
+struct SomeShader {
+    #[render_resources(buffer)]
+    pub colors: Vec<Vec4>
+}
+
+fn add_some_color(shader: SomeShader, color: Color) {
+    shader.colors.push(color.into());
+}
+```
+
+### Shaders should now use `CameraViewProj`
+The `ViewProj` matrix is now set via the name `CameraViewProj` rather than `Camera`.  If you don't update this, bevy will fail silently and you won't be able to see anything!
+
+```glsl
+// 0.4
+layout(set = 0, binding = 0) uniform Camera {
+    mat4 ViewProj;
+}
+
+// 0.5
+layout(set = 0, binding = 0) uniform CameraViewProj {
+    mat4 ViewProj;
+}
+```
+
+### Diagnostics
+`PrintDiagnosticsPlugin` is now `LogDiagnosticsPlugin`.
