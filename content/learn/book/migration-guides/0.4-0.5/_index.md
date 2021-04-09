@@ -236,7 +236,7 @@ commands.spawn_bundle(camera);
 ### Render API changes
 `RasterizationStateDescriptor` no longer exists.  Much of its functionality has been moved to other fields on `PipelineDescriptor`.  `cull_mode`, for example, is now found in the `primitive: PrimitiveState` field.
 
-Buffers of type `Vec<Color>` can no longer be uploaded to the GPU directly due to limitations with `RenderResources` and the new `Byteable` requirement.  Consider using a `Vec<Vec4>` instead, and inserting colors with `.into()` instead:
+Buffers of type `Vec<Color>` can no longer be uploaded to the GPU directly due to limitations with `RenderResources` and the new `Byteable` requirement.  Consider using a `Vec<Vec4>` instead, and inserting colors with `as_rgba_f32()` and `.into()` instead:
 ```rust
 #[derive(RenderResources, Default, TypeUuid)]
 struct SomeShader {
@@ -245,7 +245,7 @@ struct SomeShader {
 }
 
 fn add_some_color(shader: SomeShader, color: Color) {
-    shader.colors.push(color.into());
+    shader.colors.push(color.as_rgba_f32().into());
 }
 ```
 
