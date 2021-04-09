@@ -46,14 +46,14 @@ let entity = commands.spawn(SomeBundle).current_entity().unwrap();
 commands.despawn(entity);
 
 // 0.5
-    commands
-        .spawn()
-        .insert_bundle(SomeBundle)
-        .insert(Component);
+commands
+    .spawn()
+    .insert_bundle(SomeBundle)
+    .insert(Component);
 
-    let entity = commands.spawn().insert_bundle(SomeBundle).id();
+let entity = commands.spawn().insert_bundle(SomeBundle).id();
 
-    commands.entity(entity).despawn();
+commands.entity(entity).despawn();
 ```
 
 ### Timer now uses Duration
