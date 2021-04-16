@@ -24,7 +24,14 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     ```
     cd bevy
     ```
-3. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/main/examples)
+3. Switch to the correct Bevy version (as the default is the git main development branch)
+    ```
+    # use the latest Bevy release
+    git checkout latest
+    # or a specific version
+    git checkout v0.4.0
+    ```
+4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
     ```
     cargo run --example breakout
     ```
