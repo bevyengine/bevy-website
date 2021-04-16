@@ -24,37 +24,38 @@ fn foo(mut commands: Commands) {
 
 Systems using the old `commands: &mut Commands` syntax in 0.5 will fail to compile when calling `foo.system()`.
 
-This change was made because {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}}
-now holds an internal {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="World" no_mod=true)}}
+This change was made because {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Commands" no_mod=true)}}
+now holds an internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}}
 reference to enable safe entity allocations.
 
-Note: The internal {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="World" no_mod=true)}} reference requires two lifetime parameters to pass Commands into a non-system function: ```commands: &'a mut Commands<'b>```
+Note: The internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} reference requires two lifetime parameters to pass Commands into a non-system function: `commands: &'a mut Commands<'b>`
 
-### Commands::insert() API is now used for a single component
+### Commands API
+
+The {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" mod="system" name="Commands" no_mod=true)}} API has been completely reworked for consistency with the {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} API.
 
 ```rust
 // 0.4
-// component
-commands.insert_one(entity, MyComponent)
-commands.insert(entity, (MyComponent,))
-// bundle
-commands.insert(entity, Bundle)
+commands
+    .spawn(SomeBundle)
+    .with(SomeComponent)
+    .spawn(SomeBundle); // this sort of chaining is no longer possible
 
+let entity = commands.spawn(SomeBundle).current_entity().unwrap();
+
+commands.despawn(entity);
 
 // 0.5
-// component
-commands.insert(entity, MyComponent)
-// bundle
-commands.insert_bundle(entity, MyBundle)
+commands
+    .spawn()
+    .insert_bundle(SomeBundle)
+    .insert(Component);
+
+let entity = commands.spawn().insert_bundle(SomeBundle).id();
+
+commands.entity(entity).despawn();
 ```
 
-Instead of using `commands.insert_one()` for a single component, use `commands.insert()`.
-
-This means that `commands.insert()` will no longer accept a bundle as an argument. For bundles, use `commands.insert_bundle()`.
-
-This change helps to clarify the difference between components and bundles, and brings {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" name="Commands" no_mod=true)}} into alignment with other Bevy APIs. It also eliminates the confusion associated with calling `commands.insert()` on a tuple for the single-component case.
-
-### Spawning Entities and Bundles
 `commands.spawn()` no longer accepts any parameters.  To spawn bundles, use `commands.spawn_bundle(bundle)`.
 
 Similarly, rather than using `with(some_component)` to spawn an object with multiple components, you must now use `insert(some_component)`:
@@ -223,6 +224,30 @@ app.add_state(MyState::InitState)
 It is still possible to register the driver manually using
 `State::get_driver`, but this is not normally required.
 
+## ChangedRes removed
+
+This change was made to allow for more flexiblity and more consistent behavior with change detection for components.
+
+```rust
+// 0.4
+fn some_system(
+    res: ChangedRes<SomeResource>
+) {
+    // this system only runs if SomeResource has changed
+}
+
+// 0.5
+fn some_system(
+    res: Res<SomeResource> // or ResMut
+) {
+    // this system always runs
+
+    if !res.changed() { // or .added() or .mutated()
+        return;
+    }
+}
+```
+
 ### Cameras
 `Camera3dBundle` is now known as `PerspectiveCameraBundle`, and `Camera2dBundle` is now known as `OrthographicCameraBundle`.
 
@@ -266,3 +291,4 @@ layout(set = 0, binding = 0) uniform CameraViewProj {
 
 ### Diagnostics
 `PrintDiagnosticsPlugin` is now `LogDiagnosticsPlugin`.
+
