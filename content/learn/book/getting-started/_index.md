@@ -31,7 +31,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     # or a specific version
     git checkout v0.4.0
     ```
-4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples)
+4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
     ```
     cargo run --example breakout
     ```
