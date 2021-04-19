@@ -292,3 +292,7 @@ layout(set = 0, binding = 0) uniform CameraViewProj {
 ### Diagnostics
 `PrintDiagnosticsPlugin` is now `LogDiagnosticsPlugin`.
 
+
+### System Ordering
+
+The parallel system executor has been redesigned. Systems that had implicit orderings might no longer run in the same order. For more detail on the new behavior, see [the release notes](/news/bevy-0-5#new-parallel-system-executor).
