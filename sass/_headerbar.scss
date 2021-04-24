@@ -1,3 +1,5 @@
+@import "_variables";
+
 .headerbar-container {
     width: 100%;
     background-color: $headerbar-color;
@@ -94,20 +96,52 @@ $header-active-color: #b1d9ff;
     margin-left: -0.1rem;
 }
 
-
-@media screen and (max-width: 515px) {
-    .header-button {
-        display: none;
-    }
+.nav-mobile, #hamburger-menu {
+    display: none;
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: $width-micro) {
+    #hamburger-menu {
+        padding: 1rem 0;
+        align-self: flex-end;
+        cursor: pointer;
+        display: block;
+    }
+    #header-menu {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    #header-menu-links {
+        background: $headerbar-color;
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+        flex-grow: 1;
+        position: relative;
+        .header-item {
+            padding: 1.2rem;
+            margin: 0.4rem;
+        }
+    }
+    .headerbar {
+        align-items: flex-start;
+    }
+    .header-logo-mobile {
+        align-self: center;
+    }
+    // States for when the menu is clicked / not clicked
+    #header-menu input:not(checked) ~ #header-menu-links { display: none; }
+    #header-menu input:checked ~ #header-menu-links { display: flex; }
+}
+
+@media screen and (max-width: $width-large) {
     .header-message {
         display: none;
     }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: $width-medium) {
     .header-logo-mobile, .toggle-nav-mobile {
         display: flex;
     }
