@@ -1013,7 +1013,7 @@ Component Bundles previously used the `XComponents` naming convention (ex: `Spri
 
 ```rust
 // you can access these new collections from normal systems, just like any other SystemParam
-fn system(archetypes: Archetypes, components: Components, bundles: Bundles, entities: Entities) {
+fn system(archetypes: &Archetypes, components: &Components, bundles: &Bundles, entities: &Entities) {
 }
 ```
 
