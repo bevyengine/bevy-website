@@ -53,3 +53,7 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
 ## Rust API Docs
 
 Bevy's Rust API Docs are automatically generated from the latest Bevy source code. If you add [Rust documentation comments](https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments) to the Bevy codebase, the API docs will be automatically updated.
+
+## Bevy Markdown Docs
+
+Bevy's CI will check markdown files like Readmes using [markdownlint](https://github.com/DavidAnson/markdownlint). If you contribute to markdown files consider installing [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) to locally lint your changes. Running `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of the Bevy project will apply the same linting rules to your changes as the CI workflow.
