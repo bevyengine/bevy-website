@@ -222,7 +222,7 @@ fn setup(
 `enum Collider` is an enumeration with three fields. We will use it to declare the type of collisions the ball can hit.
 
 Next our setup function expects three arguments:  
- * a reference to a [Commands](https://docs.rs/bevy_ecs/latest/bevy_ecs/struct.Commands.html) struct.
+ * a reference to a [`Commands`](https://docs.rs/bevy_ecs/latest/bevy_ecs/struct.Commands.html) struct.
  * an instance of a collection of ColorMaterials.
  * an instance of AssetServer.
 
