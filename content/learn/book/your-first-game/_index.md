@@ -15,7 +15,7 @@ In [Breakout](https://en.wikipedia.org/wiki/Breakout_(video_game)), a layer of b
 Here is a version of the game compiled to WebGL that you can play right away:  
 [https://mrk.sed.pl/bevy-showcase/breakout.html](https://mrk.sed.pl/bevy-showcase/breakout.html)
 
-You can take a look at the complete [source code of the game](https://github.com/bevyengine/bevy/blob/latest/examples/game/breakout.rs), but I suggest to follow along this tutorial first, since it will slowly build up to the example game one step at a time.
+In this tutorial, we're going to build up our example game one step at a time until it reaches the finished complete [source code of the game](https://github.com/bevyengine/bevy/blob/latest/examples/game/breakout.rs).
 
 So what are the elements of our game?
 
