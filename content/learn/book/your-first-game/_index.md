@@ -135,7 +135,7 @@ use bevy::{
 };
 ```
 This brings the most common Bevy types and plugins into scope (those found in the `prelude` module), along with the `ClearColor` struct that we need.
-ClearColor is a struct that contains the color we will use to clear the game with; effectively becoming the background color of our game.
+`ClearColor` is a struct that contains the color we will use to clear the game's screen; it serves as the background color of our game.
 
 ```rs
 fn main() {
