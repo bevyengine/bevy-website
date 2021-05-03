@@ -134,7 +134,7 @@ use bevy::{
     render::pass::ClearColor,
 };
 ```
-This simply declares a couple of local name bindings to the most common Bevy types and plugins as well as a local name binding to ClearColor.
+This brings the most common Bevy types and plugins into scope (those found in the `prelude` module), along with the `ClearColor` struct that we need.
 ClearColor is a struct that contains the color we will use to clear the game with; effectively becoming the background color of our game.
 
 ```rs
