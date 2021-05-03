@@ -171,7 +171,7 @@ Here we insert a ClearColor resource, set to a light grey (rgb stands for the re
 ``` 
 Here we register our very own `setup` function as a startup system.
 Startup systems are only called once and before any of the normal systems are called.
-We will cover the setup function code in detail in a moment.
+We will cover both of the systems we're adding in detail momentarily.
 
 ```rs
 .add_system(paddle_movement_system.system())
