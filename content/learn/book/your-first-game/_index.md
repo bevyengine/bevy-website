@@ -17,7 +17,7 @@ Here is a version of the game compiled to WebGL that you can play right away:
 
 You can take a look at the complete [source code of the game](https://github.com/bevyengine/bevy/blob/latest/examples/game/breakout.rs), but I suggest to follow along this tutorial first, since it will slowly build up to the example game one step at a time.
 
-So what are the elements of the game ?
+So what are the elements of our game?
 
  * A paddle
  * A ball
