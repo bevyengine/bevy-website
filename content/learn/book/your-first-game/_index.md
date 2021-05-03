@@ -153,7 +153,7 @@ This is the main entry point into our program. This function will be called once
 
 As the other method calls suggest, the AppBuilder allows us to add plugins, (startup) systems and resources to our app.
 Finally a call to run starts the game engine with all of the configured systems, plugins and resources.
-The [getting started guide](/learn/book/getting-started/) covers these types in great detail.
+Check the [Getting Started guide](/learn/book/getting-started/) for a refresher on the basics of these.
 
 ```rs
 add_plugins(DefaultPlugins)
