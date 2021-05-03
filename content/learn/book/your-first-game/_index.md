@@ -240,7 +240,7 @@ Next we spawn a sprite to represent our paddle. A sprite is usually a simple lit
 material: materials.add(Color::rgb(0.5, 0.5, 1.0).into()),
 transform: Transform::from_xyz(0.0, -215.0, 0.0),
 ```
-Here we define this sprite to have a color that is light blue and to sit -215 pixels downwards from the center of the play area.
+First, we give this sprite a light blue color, then we position it so that it sits 215 pixels below the center of our game window.
 
 ```rs
 sprite: Sprite::new(Vec2::new(120.0, 30.0)),
