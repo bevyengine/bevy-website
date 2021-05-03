@@ -553,7 +553,7 @@ Just before our `setup` function ends, add these lines:
     }
 ```
 Not much explanation needed I think, it is all just basic math. Do note however that we give all bricks a `Component` of type Collider::Scorable.
-In other words, we set the bricks to be colliders with the type Scorable from our Collider enum at the top of main.rs.  
+In other words, we set the bricks to be colliders with the type `Scorable` from our `Collider` enum at the top of main.rs.  
 If you rememeber, we use this in the `ball_collision_system` to check if we need to increment the score board.  
 
 Execute the game with `cargo run` and it should look something like this:
