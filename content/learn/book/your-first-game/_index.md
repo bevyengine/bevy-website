@@ -10,7 +10,7 @@ Now that you know the basics of Bevy, let's build a simple game. Specifically, l
 
 ![screenshot1](breakout1.png)
 
-For those of you who don't know, Breakout is an arcade game developed and published by Atari in 1976. In the game a layer of bricks lines the top third of the screen and the goal is to destroy them all. A ball moves straight around the screen, bouncing off the top and two sides of the screen. When a brick is hit, the ball bounces back and the brick is destroyed. The player loses a turn when the ball touches the bottom of the screen; to prevent this from happening, the player has a horizontally movable paddle to bounce the ball upward, keeping it in play. [Source: Wikipedia](https://en.wikipedia.org/wiki/Breakout_(video_game))
+In [Breakout](https://en.wikipedia.org/wiki/Breakout_(video_game)), a layer of bricks lines the top third of the screen and the goal is to destroy them all. A ball moves straight around the screen, bouncing off the top and two sides of the screen. When a brick is hit, the ball bounces back and the brick is destroyed.  The player has a horizontally movable paddle to bounce the ball upward, keeping it in play.
 
 Here is a version of the game compiled to WebGL that you can play right away:  
 [https://mrk.sed.pl/bevy-showcase/breakout.html](https://mrk.sed.pl/bevy-showcase/breakout.html)
