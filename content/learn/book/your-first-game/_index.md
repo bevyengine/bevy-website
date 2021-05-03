@@ -230,7 +230,7 @@ The `Commands` struct can be used to spawn `Bundles` and to add `Components`.
 Material is used to paint 2D or 3D objects on screen and `ColorMaterial` is the simplest Material as it only supports a single color as oposed to, for example, textures.  
 The AssetServer will be used in the last section of this tutorial to load the font we will use to display the game score.
 
-Inside the function (that is only run once, since it is only a startup_system) we then use the commands struct
+Inside the function (that is only run once, since it's a startup system) we then use the `Commands` struct
 to spawn (or in another word, add) a couple of Bundles. Namely we spawn an orthographic and a separate UI camera.
 This is done because it is usually easier to render the UI using a different camera then the one the game objects are using.  
 This becomes especially clear when you think of combining a 3D game using a perspective camera and a UI.  
