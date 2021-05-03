@@ -358,7 +358,7 @@ You should now see walls inside of your game just like this:
 With all that we have learned so far, it should be pretty obvious what the code above does. But let's go over some interesting details.
 You might have noticed that except for the last wall, every other wall has received a clone of the wall_material.
 Why is that necessary?  
-Well two fold: It is usually good practice to give every object in a game its own material. Otherwise it can happen, that you change the color on one object and suddenly you
+Well, the reason is twofold: it is usually good practice to give every object in a game its own material. Otherwise it can happen, that you change the color on one object and suddenly you
 have changed the color on all objects that share the same material. This is usually not what you want. Secondly, Rust's ownership rules want a single material owner per `SpriteBundle` instance.
 So in this case we can solve both requirements with a simple call to ```wall_material.clone()```.
 
