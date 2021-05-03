@@ -304,7 +304,7 @@ pub struct Time {
     startup: Instant,
 }
 ```
-Inside the function, that is called every frame, we iterate over all `Components` in our scene that match the type Paddle.  
+Inside the function, that is called every frame, we iterate over all components that match the `Paddle` type.  
 Then we check if the left or right arrow key is pressed and set the direction variable accordingly.  
 Finally we access the translation (a fancy word for position) field of the `Transform` instance and use it to change the horizontal (`x`) paddle position on the playing field.  
 As done here, it is good practice to scale the amount of work that systems do by `time.delta_seconds()`. This makes sure that the behavior of the paddle is independent of the frame rate.
