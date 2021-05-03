@@ -183,7 +183,7 @@ Unlike startup systems, ordinary systems are automatically run once every frame.
 .run();
 ``` 
 Finally we tell the Bevy game engine to start with a call to run.  
-(If you are really interested in the source code of the run function you can find it here: [app.rs](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_app/src/app.rs))
+If you're curious about the details of how the `run` function works its magic, you can follow the source code trail that begins in [app.rs](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_app/src/app.rs).
 
 ## Let's take a look at that setup function.
 
