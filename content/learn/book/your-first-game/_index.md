@@ -107,7 +107,7 @@ Create a new folder and project on your hard drive using this command:
 cargo new my_breakout_game
 cd my_breakout_game
 ```
-Edit Cargo.toml to add a dependency on the Bevy git repo as outline in the [getting started guide](/learn/book/getting-started/).
+Edit `Cargo.toml` (found in the `my_breakout_game` folder you just created) to add a dependency on the latest version of Bevy as outlined in the [getting started guide](/learn/book/getting-started/).
 
 ```toml
 [dependencies]
