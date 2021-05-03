@@ -655,7 +655,7 @@ Add this right in front of the `ball_collision_system`.
 
 This system function asks the Bevy game engine for the resource of type `Scoreboard` that we added in the setup function.
 It also asks the Bevy game engine for a Query object that is able to iterate over all Text instances in our game.
-We only have one Text instance of course, but it contains our two text sections.
+We only have one entity with a `Text` component of course, but it contains our two text sections.
 Inside the function we then access the second section, the one that represents our score number, and we set it to the current score from our scoreboard instance.
 
 Next we have to uncomment the two lines inside `ball_collision_system` that were temporarily commented out.
