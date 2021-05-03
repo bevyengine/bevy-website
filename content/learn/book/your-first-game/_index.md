@@ -178,7 +178,6 @@ We will cover the setup function code in detail in a moment.
 ``` 
 Here we add our own `paddle_movement_system` function as a system.
 Unlike startup systems, ordinary systems are automatically run once every frame.
-We will cover the paddle_movement_system function code in detail in a moment.
 
 ```rs
 .run();
