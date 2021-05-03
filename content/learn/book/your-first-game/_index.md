@@ -6,7 +6,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Okay, now that you know the basics of Bevy, let's look at an actual game. Specifically let's look at one of the examples that come with Bevy: Breakout.
+Now that you know the basics of Bevy, let's build a simple game. Specifically, let's look at one of the examples that come with Bevy: Breakout.
 
 ![screenshot1](breakout1.png)
 
