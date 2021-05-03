@@ -176,7 +176,7 @@ We will cover the setup function code in detail in a moment.
 ```rs
 .add_system(paddle_movement_system.system())
 ``` 
-Here we add our very own paddle_movement_system function as a system.
+Here we add our own `paddle_movement_system` function as a system.
 Systems are called every frame.
 We will cover the paddle_movement_system function code in detail in a moment.
 
