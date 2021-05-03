@@ -169,7 +169,7 @@ Here we insert a ClearColor resource, set to a light grey (rgb stands for the re
 ```rs
 .add_startup_system(setup.system())
 ``` 
-Here we register our very own setup function as a startup system.
+Here we register our very own `setup` function as a startup system.
 Startup systems are only called once and before any of the normal systems are called.
 We will cover the setup function code in detail in a moment.
 
