@@ -492,7 +492,7 @@ Without this line, the ball could potentially "teleport" outside of our game.
 
 Next we iterate over all instances of type `Ball` in our game using the familiar `Query` pattern
 and we change the translation (position) using the ball's velocity combined with the delta_seconds.  
-Again we are using the delta_seconds in order to make the game independent of its framerate.
+Again we are using `delta_seconds` in order to make the game independent of its framerate.
 
 
 ```rs
