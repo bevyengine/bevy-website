@@ -245,7 +245,8 @@ Here we define this sprite to have a color that is light blue and to sit -215 pi
 ```rs
 sprite: Sprite::new(Vec2::new(120.0, 30.0)),
 ```
-Here we define this sprite to be 120 pixels wide and 30 pixels tall.
+Here we declare that this sprite will be 120 pixels wide and 30 pixels tall.
+Usually, you would set this to the size of the sprite that you're importing, but in this case, we're procedurally generating the texture.
 
 ```rs
 ..Default::default()
