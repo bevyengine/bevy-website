@@ -475,7 +475,7 @@ It should look like this:
 
 ![](breakout4.png)
 
-Okay, so what is happening inside the two functions we just added?
+Okay, so what's happening inside the two functions we just added?
 
 ```rs
 fn ball_movement_system(time: Res<Time>, mut ball_query: Query<(&Ball, &mut Transform)>) {
