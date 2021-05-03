@@ -413,6 +413,7 @@ Add the following code to our setup function, just before we add our walls:
         });
 ```
 This code should look very familiar by now. ;-)
+`normalize()` simply sets the magnitude of the direction vector to 1, allowing us to freely change its direction without worrying about how it will impact our ball's speed.
 
 Add the following two functions to the end of main.rs:
 
