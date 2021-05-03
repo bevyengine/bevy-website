@@ -164,7 +164,7 @@ You can find a complete list of all of the default plugins in the source code on
 ```rs
 .insert_resource(ClearColor(Color::rgb(0.9, 0.9, 0.9)))
 ``` 
-Here we insert a ClearColor resource, set to a light grey. (rgb stands for the red, green and blue parts of the final color.)
+Here we insert a ClearColor resource, set to a light grey (rgb stands for the red, green and blue parts of the final color, and the values range between 0.0 for fully black and 1.0 for fully white).
 
 ```rs
 .add_startup_system(setup.system())
