@@ -307,7 +307,7 @@ Inside the function, that is called every frame, we iterate over all `Components
 Then we check if the left or right cursor key is pressed and we set the direction variable accordingly.  
 Finally we access the translation (a fancy word for position) field of the `Transform` instance and use it to change the horizontal (x) paddle position on the playing field.  
 As done here, it is good practice to factor in time.delta_seconds(). This makes sure that the behavior of the paddle is independent of the frame rate.
-We also have to make sure that the paddle doesn't move off of the screen. So we limit the paddle inside of 380 pixels to the right and left of the center position.
+We also have to make sure that the paddle doesn't move off of the screen. So we limit the center of the paddle to be within 380 pixels to the right and left of the center of the screen.
 
 ## Next let's add some walls.
 
