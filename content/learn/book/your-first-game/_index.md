@@ -251,7 +251,7 @@ Usually, you would set this to the size of the sprite that you're importing, but
 ```rs
 ..Default::default()
 ```
-Then we just tell Rust to give the rest of the SpriteBundle fields their appropriate [default values](https://doc.rust-lang.org/std/default/trait.Default.html).
+Then we just tell Rust to give the rest of the [`SpriteBundle`](https://docs.rs/bevy/latest/bevy/prelude/struct.SpriteBundle.html) fields their appropriate [default values](https://doc.rust-lang.org/std/default/trait.Default.html).
 
 ```rs
 .with(Paddle { speed: 500.0 })
