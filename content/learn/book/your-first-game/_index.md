@@ -219,7 +219,7 @@ fn setup(
 }
 ``` 
 `struct Paddle` is a struct with one float field called speed.  
-`enum Collider` is an enumeration with three fields. We will use it to declare the type of collisions the ball can hit.
+`enum Collider` is an enumeration with three fields. We will use it to differentiate the objects that the ball can hit.
 
 Next our setup function expects three arguments:  
  * a reference to a [`Commands`](https://docs.rs/bevy_ecs/latest/bevy_ecs/struct.Commands.html) struct.
