@@ -257,7 +257,7 @@ Then we just tell Rust to give the rest of the SpriteBundle fields their appropr
 .with(Paddle { speed: 500.0 })
 .with(Collider::Paddle);
 ```
-Next we add a our Paddle as a `Component` that can be used in `Queries`. We will look at a `Query` in the next section.
+Next we add a `Paddle` component that can be stored on our entities, then accessed via queries. We will look at a `Query` in the next section.
 Finally we add a Component of type Collider::Paddle to this entity so the ball can later bounce off of it.
 
 
