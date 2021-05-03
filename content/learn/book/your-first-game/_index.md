@@ -258,7 +258,7 @@ Then we just tell Rust to give the rest of the [`SpriteBundle`](https://docs.rs/
 .with(Collider::Paddle);
 ```
 Next we add a `Paddle` component that can be stored on our entities, then accessed via queries. We will look at a `Query` in the next section.
-Finally we add a Component of type Collider::Paddle to this entity so the ball can later bounce off of it.
+Finally we add a `Collider` component with a `Collider::Paddle` value to this entity so the ball can later bounce off of it.
 
 
 ## Let's take a look at the paddle_movement_system.
