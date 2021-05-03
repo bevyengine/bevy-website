@@ -223,7 +223,7 @@ fn setup(
 
 Next our setup function expects three arguments:  
  * a reference to a [`Commands`](https://docs.rs/bevy_ecs/latest/bevy_ecs/struct.Commands.html) struct.
- * an instance of a collection of ColorMaterials.
+ * a special singleton mutable reference to our `ColorMaterial`, stored within our `Asset` system
  * an instance of AssetServer.
 
 The `Commands` struct can be used to spawn `Bundles` and to add `Components`.  
