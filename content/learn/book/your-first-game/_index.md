@@ -522,7 +522,7 @@ Then we use some basic math to implement the reflection of the ball and finally 
 
 Okay, we are almost done! Only two easy steps remain. The first step that remains is adding the bricks. The last step will be to add the scoreboard. Let's go!
 
-Just before our setup function ends, add these lines:
+Just before our `setup` function ends, add these lines:
 
 ```rs
     let brick_rows = 4;
