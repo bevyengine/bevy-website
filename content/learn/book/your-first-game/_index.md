@@ -159,7 +159,7 @@ Check the [Getting Started guide](/learn/book/getting-started/) for a refresher 
 add_plugins(DefaultPlugins)
 ``` 
 This call simply adds all the default plugins to the app.  
-Follow this link if you are interested in a complete list of all of the default plugins: [default_plugins.rs](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs)
+You can find a complete list of all of the default plugins in the source code on GitHub in the [default_plugins.rs](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) file.
 
 ```rs
 .insert_resource(ClearColor(Color::rgb(0.9, 0.9, 0.9)))
