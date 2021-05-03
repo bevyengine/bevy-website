@@ -151,7 +151,7 @@ This is the main entry point into our program. This function will be called once
 
 [App::build()](https://github.com/bevyengine/bevy/blob/main/crates/bevy_app/src/app.rs) is a very simple function that just returns a new instance of [AppBuilder](https://docs.rs/bevy/0.4.0/bevy/app/struct.AppBuilder.html)
 
-As the other function calls suggest, the AppBuilder allows us to add plugins and (startup) systems and to insert resources.
+As the other method calls suggest, the AppBuilder allows us to add plugins, (startup) systems and resources to our app.
 Finally a call to run starts the game engine with all of the configured systems, plugins and resources.
 The [getting started guide](/learn/book/getting-started/) covers these types in great detail.
 
