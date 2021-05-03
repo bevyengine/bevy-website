@@ -583,7 +583,6 @@ struct Scoreboard {
 [usize](https://doc.rust-lang.org/std/primitive.usize.html) is a basic unsigned Rust type and represents how many bytes it takes to reference a location in memory.
 This type probably is overkill in our usecase, but it doesn't hurt either.
 
-
 Add the following lines just before the end to our setup function:
 
 ```rs
