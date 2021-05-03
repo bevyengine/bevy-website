@@ -676,7 +676,7 @@ You can also download them from here: [bevy/tree/main/assets/fonts](https://gith
 Create the folder structure assets/fonts in your my_breakout_game project folder and copy the two font files into my_breakout_game/assets/fonts.
 
 Done!
-You successfully recreated the breakout game from the Bevy examples.
+You successfully recreated the Breakout game from the Bevy examples.
 
 Let's play a round, shall we?
 
