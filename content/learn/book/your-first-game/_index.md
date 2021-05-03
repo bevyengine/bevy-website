@@ -574,7 +574,7 @@ so it looks like this:
         .add_system(scoreboard_system.system())
         .run();
 ```
-Next add a struct that represents our score right after the Ball struct:
+Next add a struct that represents our score right after the `Ball` struct:
 ```rs
 struct Scoreboard {
     score: usize,
