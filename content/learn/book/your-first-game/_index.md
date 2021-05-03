@@ -490,7 +490,7 @@ The first line makes sure that the delta time can never be more than 0.2 seconds
 This can happen at the beginning of a game, after some potentially slow loading resources are read from disk.
 Without this line, the ball could potentially "teleport" outside of our game.  
 
-Next we iterate over all instances of type Ball in our game using the familiar Query instance
+Next we iterate over all instances of type `Ball` in our game using the familiar `Query` pattern
 and we change the translation (position) using the ball's velocity combined with the delta_seconds.  
 Again we are using the delta_seconds in order to make the game independent of its framerate.
 
