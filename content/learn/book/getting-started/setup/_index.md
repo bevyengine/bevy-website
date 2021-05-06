@@ -87,10 +87,17 @@ bevy = "0.5" # make sure this is the latest version
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the biggest iterative compilation time win and requires no special setup. When you have `bevy` as a dependency you can run your app with dynamic linking like this:
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
     ```bash
     cargo run --features bevy/dynamic
     ```
+    If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
+    ```toml
+    [dependencies]
+    bevy = { version = "0.5.0", features = ["dynamic"] }
+    ```
+    NOTE: Remember to revert this before releasing your game! As it requires `libbevy_dylib` to run.
+
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
     * **Ubuntu**: `sudo apt-get install lld`
     * **Arch**: `sudo pacman -S lld`
@@ -114,7 +121,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
-If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph). 
+If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph).
 
 ### Build Bevy
 
