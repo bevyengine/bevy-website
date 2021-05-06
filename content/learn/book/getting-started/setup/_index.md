@@ -43,7 +43,7 @@ Now we are ready to set up a Bevy project! Bevy is just a normal Rust dependency
 
 First, navigate to a folder where you want to create your new project. Then, run the following command to create a new folder containing our rust executable project:
 
-```
+```sh
 cargo new my_bevy_game
 cd my_bevy_game
 ```
@@ -88,7 +88,7 @@ bevy = "0.5" # make sure this is the latest version
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
 
 * **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
-    ```bash
+    ```sh
     cargo run --features bevy/dynamic
     ```
     If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
@@ -102,13 +102,13 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     * **Ubuntu**: `sudo apt-get install lld`
     * **Arch**: `sudo pacman -S lld`
     * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
-        ```bash
+        ```sh
         cargo install -f cargo-binutils
         rustup component add llvm-tools-preview
         ```
     * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
-    ```bash
+    ```sh
     # Install the nightly toolchain
     rustup toolchain install nightly
     # Configure your current project to use nightly (run this command within the project)
