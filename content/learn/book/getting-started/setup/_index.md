@@ -96,7 +96,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     [dependencies]
     bevy = { version = "0.5.0", features = ["dynamic"] }
     ```
-    NOTE: Remember to revert this before releasing your game! As it requires `libbevy_dylib` to run.
+    NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
     * **Ubuntu**: `sudo apt-get install lld`
