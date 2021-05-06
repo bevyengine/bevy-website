@@ -87,10 +87,17 @@ bevy = "0.5" # make sure this is the latest version
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the biggest iterative compilation time win and requires no special setup. When you have `bevy` as a dependency you can run your app with dynamic linking like this:
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
     ```sh
     cargo run --features bevy/dynamic
     ```
+    If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
+    ```toml
+    [dependencies]
+    bevy = { version = "0.5.0", features = ["dynamic"] }
+    ```
+    NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
+
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
     * **Ubuntu**: `sudo apt-get install lld`
     * **Arch**: `sudo pacman -S lld`
