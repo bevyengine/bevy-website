@@ -7,7 +7,7 @@
     {% set route = path %}
 {% endif %}
 {% set currently_home = path == home and lower_current_path == home %}
-<a href="{{route | lower}}" {% if lower_current_path is starting_with(name | lower) or currently_home %}class="header-item header-item-active" {% else %}class="header-item"{% endif %} >
+<a href="{{route | lower}}" {% if lower_current_path is starting_with("/"~name | lower) or currently_home %}class="header-item header-item-active" {% else %}class="header-item"{% endif %} >
     {{name}}
 </a>
 {% endmacro %}

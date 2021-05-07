@@ -34,4 +34,6 @@ For a more in-depth introduction, check out the [Introducing Bevy](/news/introdu
 
 Bevy aims to be a general purpose game engine capable of handling any 2D or 3D workload. However Bevy is still in its infancy. <span class="warning">We are currently in the <i>prototyping</i> phase: important features are missing and APIs will change constantly.</span> If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out [Godot Engine](https://godotengine.org). It is currently much more feature-complete and stable. And it is also free, open-source, and [scriptable with Rust](https://github.com/GodotNativeTools/godot-rust)!
 
-Phew! If you haven't been scared away yet, lets move on to learning some Bevy!
+This official book is still very incomplete. It will help you get started with the setup and learning the basics, but it does not yet cover most of Bevy's features. See the [Next Steps](/learn/book/next-steps/) page for links to other, more exhaustive, learning resources you can use.
+
+Phew! If you haven't been scared away yet, let's move on to learning some Bevy!

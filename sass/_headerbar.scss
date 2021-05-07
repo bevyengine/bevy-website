@@ -19,15 +19,20 @@
     height: 100%;
 }
 
-.header-logo, .header-logo-mobile {
+.header-logo, .header-logo-mobile, .toggle-nav-mobile {
     display: flex;
     height: 80%;
-    vertical-align: middle;
+    align-items: center;
 }
 
-.header-logo-mobile {
+.header-logo-mobile, .toggle-nav-mobile {
     height: 60%;
+    cursor: pointer;
     display: none;
+}
+
+.toggle-nav-mobile {
+    height: 100%;
 }
 
 .header-content {
@@ -74,7 +79,7 @@ $header-active-color: #b1d9ff;
     border-width: 3px;
     padding: 0.4rem;
     border-radius: 10px;
-    font-size: 1.2rem !important;
+    font-size: 1.22rem !important;
 }
 
 .header-button-donate {
@@ -103,7 +108,7 @@ $header-active-color: #b1d9ff;
 }
 
 @media screen and (max-width: 900px) {
-    .header-logo-mobile {
+    .header-logo-mobile, .toggle-nav-mobile {
         display: flex;
     }
 

@@ -1,15 +1,25 @@
 $inactive-nav-color: #999999;
+$book-nav-width: 210px;
 
 @media screen and (max-width: 900px) {
+    #show-book-nav:not(:checked) + .book-nav {
+        transform: translateX(calc(0px - #{$book-nav-width}));
+    }
+
+    #show-book-nav:checked + .book-nav + .book-content {
+        transform: translateX($book-nav-width);
+    }
+
     .book-nav {
-        display: none;
+        margin-right: calc(0px - #{$book-nav-width});
     }
 }
 
 .book-nav {
     margin-top: $content-padding;
-    min-width: 200px;
-    user-select: none; 
+    flex: 0 0 $book-nav-width;
+    user-select: none;
+    transition: transform 0.3s;
 }
 
 .book-nav-sections {
@@ -36,7 +46,7 @@ $inactive-nav-color: #999999;
 .book-nav-section-title {
     position: relative;
     z-index: 1;
-    font-size: 1.2rem;
+    font-size: 1.22rem;
     color: $inactive-nav-color;
     font-style: normal;
     text-decoration: none;
@@ -49,7 +59,7 @@ $inactive-nav-color: #999999;
 }
 
 .book-nav-section-title-active {
-    font-size: 1.2rem;
+    font-size: 1.22rem;
     color: $default-color;
     font-style: normal;
     text-decoration: none;
@@ -59,6 +69,10 @@ $inactive-nav-color: #999999;
 .book-nav-section-number {
     font-family: 'Fira Code', monospace;
     font-variant-ligatures: none;
-    font-size: 1rem; 
+    font-size: 1rem;
     margin-right: -0.2rem;
+}
+
+.book-content {
+    transition: transform 0.3s;
 }

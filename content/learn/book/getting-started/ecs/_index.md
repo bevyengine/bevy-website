@@ -21,8 +21,10 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     ```
 * **Systems**: normal Rust functions
     ```rs
-    fn print_position_system(position: &Position) {
-        println!("position: {} {}", position.x, position.y);
+    fn print_position_system(query: Query<&Transform>) {
+        for transform in query.iter() {
+            println!("position: {:?}", transform.translation);
+        }
     }
     ```
 * **Entities**: a simple type containing a unique integer  
@@ -30,7 +32,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     struct Entity(u64);
     ```
 
-Now lets see how this works in practice!
+Now let's see how this works in practice!
 
 ## Your First System
 
@@ -60,27 +62,26 @@ Now run your App again using `cargo run`. You should see `hello world!` printed 
 
 ## Your First Components
 
-Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Lets start simple with a `Person` component.
+Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Let's start simple with a `Person` component.
 
 Add this struct to `main.rs`:
 ```rs
 struct Person;
 ```
 
-But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So lets make `Name` its own component:
+But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
 ```rs
 struct Name(String);
 ```
 
-We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Lets use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
+We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
 fn add_people(mut commands: Commands) {
-    commands
-        .spawn((Person, Name("Elaina Proctor".to_string())))
-        .spawn((Person, Name("Renzo Hume".to_string())))
-        .spawn((Person, Name("Zayna Nieves".to_string())));
+    commands.spawn().insert(Person).insert(Name("Elaina Proctor".to_string()));
+    commands.spawn().insert(Person).insert(Name("Renzo Hume".to_string()));
+    commands.spawn().insert(Person).insert(Name("Zayna Nieves".to_string()));
 }
 ```
 
@@ -95,15 +96,21 @@ fn main() {
 }
 ```
 
-We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Lets make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
+We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
 ```rs
-fn greet_people(_person: &Person, name: &Name) {
-    println!("hello {}!", name.0);
+fn greet_people(query: Query<&Name, With<Person>>) {
+    for name in query.iter() {
+        println!("hello {}!", name.0);
+    }
 }
 ```
 
-And then register it in our App:
+The parameters we pass in to a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
+
+You can interpret the Query above as: "iterate over every Name component for entities that also have a Person component"
+
+Now we just register the system in our App:
 
 ```rs
 fn main() {
@@ -115,9 +122,7 @@ fn main() {
 }
 ```
 
-The parameters we pass in to a "system function" define what entities the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
-
-Now running our app will result in the following output:
+Running our app will result in the following output:
 
 ```
 hello world!
@@ -128,4 +133,4 @@ hello Zayna Nieves!
 
 Marvelous!
 
-**Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default when they have no shared dependencies.
+**Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.

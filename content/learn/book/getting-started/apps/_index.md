@@ -18,8 +18,8 @@ fn main() {
 
 Nice and simple right? Copy the code above into your ```main.rs``` file, then run:
 
-```
+```sh
 cargo run
 ```
 
-in your project folder. You will notice that ... nothing happens. This is because we haven't told our app to do anything yet! Apps are just empty shells capable of running our application logic. Lets add some logic to our App using Bevy ECS.
+in your project folder. You will notice that ... nothing happens. This is because we haven't told our app to do anything yet! Apps are just empty shells capable of running our application logic. Let's add some logic to our App using Bevy ECS.

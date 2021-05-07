@@ -1,0 +1,6 @@
+{% if not lang %}
+    {% set lang = "" %}
+{% endif %}
+{% set data = "```" ~ lang ~ "
+" ~ load_data(path=path) ~ "```" %}
+{{data | markdown(inline=true) | safe}}

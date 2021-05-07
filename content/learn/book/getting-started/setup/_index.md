@@ -19,8 +19,8 @@ Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
 ### Install OS dependencies
-* [Linux](https://github.com/bevyengine/bevy/blob/master/docs/linux_dependencies.md)
-* Windows: You should be good to go
+* [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)
+* Windows: Make sure to install [VS2019 build tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 * MacOS: No dependencies here
 
 ### Code Editor / IDE
@@ -43,7 +43,7 @@ Now we are ready to set up a Bevy project! Bevy is just a normal Rust dependency
 
 First, navigate to a folder where you want to create your new project. Then, run the following command to create a new folder containing our rust executable project:
 
-```
+```sh
 cargo new my_bevy_game
 cd my_bevy_game
 ```
@@ -69,31 +69,7 @@ edition = "2018"
 [dependencies]
 ```
 
-### Enable Fast Compiles (Optional)
-
-Bevy can be built just fine using default configuration on stable Rust. However for really fast iterative compiles, we recommend the following configuration:
-
-* **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
-    * **Ubuntu**: `sudo apt-get install lld`
-    * **Arch**: `sudo pacman -S lld`
-    * **Windows**: Go to next step, Bevy's cargo config uses the Rust bundled lld
-    * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
-* **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
-    ```
-    # Install the nightly toolchain
-    rustup toolchain install nightly
-    # Configure your current project to use nightly (run this command within the project)
-    rustup override set nightly
-    # OR configure cargo to use nightly for all projects -- switch back with `rustup default stable`
-    rustup default nightly
-    ```
-    * You can use `cargo +nightly ...` if you don't want to change the default to nightly.
-* **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
-
-To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/master/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config`. For the project in this guide, that would be `my_bevy_game/.cargo/config`.
-
 ### Add Bevy to your project's Cargo.toml
-
 
 Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
 
@@ -105,9 +81,50 @@ authors = ["You <you@veryrealemail.com>"]
 edition = "2018"
 
 [dependencies]
-bevy = "0.1.2" # make sure this is the latest version
+bevy = "0.5" # make sure this is the latest version
 ```
+### Enable Fast Compiles (Optional)
 
-Run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
+Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
+
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
+    ```sh
+    cargo run --features bevy/dynamic
+    ```
+    If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
+    ```toml
+    [dependencies]
+    bevy = { version = "0.5.0", features = ["dynamic"] }
+    ```
+    NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
+
+* **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
+    * **Ubuntu**: `sudo apt-get install lld`
+    * **Arch**: `sudo pacman -S lld`
+    * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
+        ```sh
+        cargo install -f cargo-binutils
+        rustup component add llvm-tools-preview
+        ```
+    * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
+* **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
+    ```sh
+    # Install the nightly toolchain
+    rustup toolchain install nightly
+    # Configure your current project to use nightly (run this command within the project)
+    rustup override set nightly
+    # OR configure cargo to use nightly for all projects -- switch back with `rustup default stable`
+    rustup default nightly
+    ```
+    * You can use `cargo +nightly ...` if you don't want to change the default to nightly.
+* **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
+
+To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
+
+If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph).
+
+### Build Bevy
+
+Now run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
 
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
