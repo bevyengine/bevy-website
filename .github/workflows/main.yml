@@ -25,6 +25,23 @@ jobs:
           BUILD_ONLY: true
           TOKEN: fake-secret
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+          override: true
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      - name: Build & run tests
+        run: cd book-validation && cargo test
+
   build_and_deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' # Only on a push to the master branch (like when PR's are merged)
