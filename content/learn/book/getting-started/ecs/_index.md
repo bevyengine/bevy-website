@@ -16,7 +16,7 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
 * **Components**: normal Rust structs
-    ```rs
+    ```skt-main,rust
     struct Position { x: f32, y: f32 }
     ```
 * **Systems**: normal Rust functions

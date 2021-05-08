@@ -1,0 +1,15 @@
+[package]
+name = "book-validation"
+version = "0.1.0"
+authors = ["François Mockers <mockersf@gmail.com>"]
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+bevy = "0.5"
+
+[build-dependencies]
+skeptic = "0.13"
+
+[dev-dependencies]
+skeptic = "0.13"
