@@ -6,7 +6,7 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-bevy = "0.5"
+bevy = { version = "0.5", default-features = false }
 
 [build-dependencies]
 skeptic = "0.13"
