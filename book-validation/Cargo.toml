@@ -1,7 +1,10 @@
 [package]
 name = "book-validation"
 version = "0.1.0"
-authors = ["François Mockers <mockersf@gmail.com>"]
+authors = [
+    "Bevy Contributors <bevyengine@gmail.com>",
+    "Carter Anderson <mcanders1@gmail.com>",
+]
 edition = "2018"
 build = "build.rs"
 
