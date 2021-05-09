@@ -1,0 +1,18 @@
+[package]
+name = "book-validation"
+version = "0.1.0"
+authors = [
+    "Bevy Contributors <bevyengine@gmail.com>",
+    "Carter Anderson <mcanders1@gmail.com>",
+]
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+bevy = { version = "0.5", default-features = false }
+
+[build-dependencies]
+skeptic = "0.13"
+
+[dev-dependencies]
+skeptic = "0.13"
