@@ -1,4 +1,4 @@
-```rust,skt-main
+```skt-main,rust
 use bevy::prelude::*;
 
 fn main() {{
@@ -6,7 +6,7 @@ fn main() {{
 }}
 ```
 
-```rust,skt-system-print_position_system
+```skt-system-print_position_system,rust
 use bevy::prelude::*;
 
 fn main() {{
@@ -15,7 +15,7 @@ fn main() {{
 }}
 ```
 
-```rust,skt-system-hello_world
+```skt-system-hello_world,rust
 use bevy::prelude::*;
 
 fn main() {{
@@ -24,7 +24,7 @@ fn main() {{
 }}
 ```
 
-```rust,skt-system-add_people
+```skt-system-add_people,rust
 use bevy::prelude::*;
 
 struct Person;
@@ -36,7 +36,7 @@ fn main() {{
 }}
 ```
 
-```rust,skt-system-greet_people
+```skt-system-greet_people,rust
 use bevy::prelude::*;
 
 struct Person;
@@ -48,7 +48,7 @@ fn main() {{
 }}
 ```
 
-```rust,skt-import
+```skt-import,rust
 use bevy::prelude::*;
 
 fn hello_world() {{}}
