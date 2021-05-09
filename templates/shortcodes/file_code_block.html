@@ -1,6 +1,35 @@
 {% if not lang %}
     {% set lang = "" %}
 {% endif %}
+
+{% set code = load_data(path=path) %}
+
+{% if block %}
+
+    {% set code_lines = code | split(pat="\n") %}
+    {% set code = "" %}
+    {% set in_block = false %}
+
+    {% for line in code_lines %}
+
+        {% if line is ending_with("// ANCHOR_END: " ~ block) %}
+            {% set_global in_block = false %}
+        {% endif %}
+
+        {% if in_block %}
+            {% set_global code = code ~ line ~ "
+" %}
+        {% endif %}
+
+        {% if line is ending_with("// ANCHOR: " ~ block) %}
+            {% set_global in_block = true %}
+        {% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
 {% set data = "```" ~ lang ~ "
-" ~ load_data(path=path) ~ "```" %}
+" ~ code ~ "```" %}
+
 {{data | markdown(inline=true) | safe}}
