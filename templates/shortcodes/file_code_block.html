@@ -4,25 +4,25 @@
 
 {% set code = load_data(path=path) %}
 
-{% if block %}
+{% if anchor %}
 
     {% set code_lines = code | split(pat="\n") %}
     {% set code = "" %}
-    {% set in_block = false %}
+    {% set in_anchor = false %}
 
     {% for line in code_lines %}
 
-        {% if line is ending_with("// ANCHOR_END: " ~ block) %}
-            {% set_global in_block = false %}
+        {% if line is ending_with("// ANCHOR_END: " ~ anchor) %}
+            {% set_global in_anchor = false %}
         {% endif %}
 
-        {% if in_block %}
+        {% if in_anchor %}
             {% set_global code = code ~ line ~ "
 " %}
         {% endif %}
 
-        {% if line is ending_with("// ANCHOR: " ~ block) %}
-            {% set_global in_block = true %}
+        {% if line is ending_with("// ANCHOR: " ~ anchor) %}
+            {% set_global in_anchor = true %}
         {% endif %}
 
     {% endfor %}
