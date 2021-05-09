@@ -45,6 +45,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' # Only on a push to the master branch (like when PR's are merged)
+    needs: test
     steps:
       - uses: actions/checkout@master
 
