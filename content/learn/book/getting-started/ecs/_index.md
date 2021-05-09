@@ -16,21 +16,11 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
 * **Components**: normal Rust structs
-    ```rs
-    struct Position { x: f32, y: f32 }
-    ```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="component-normal-struct")}}
 * **Systems**: normal Rust functions
-    ```rs
-    fn print_position_system(query: Query<&Transform>) {
-        for transform in query.iter() {
-            println!("position: {:?}", transform.translation);
-        }
-    }
-    ```
-* **Entities**: a simple type containing a unique integer
-    ```rs
-    struct Entity(u64);
-    ```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="system-normal-function")}}
+* **Entities**: a simple type containing a unique integer  
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="entity-type-integer")}}
 
 Now let's see how this works in practice!
 
@@ -38,21 +28,11 @@ Now let's see how this works in practice!
 
 Paste the following function into your `main.rs` file:
 
-```rs
-fn hello_world() {
-    println!("hello world!");
-}
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="first-system")}}
 
 This will be our first system. The only remaining step is to add it to our App!
 
-```rs
-fn main() {
-    App::build()
-        .add_system(hello_world.system())
-        .run();
-}
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="add-to-app")}}
 
 Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" mod="system" no_mod=true name="System")}} type.
 
@@ -65,47 +45,23 @@ Now run your App again using `cargo run`. You should see `hello world!` printed 
 Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Let's start simple with a `Person` component.
 
 Add this struct to `main.rs`:
-
-```rs
-struct Person;
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="component-person")}}
 
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
-```rs
-struct Name(String);
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="component-name")}}
 
 We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" mod="system" no_mod=true name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
-```rs
-fn add_people(mut commands: Commands) {
-    commands.spawn().insert(Person).insert(Name("Elaina Proctor".to_string()));
-    commands.spawn().insert(Person).insert(Name("Renzo Hume".to_string()));
-    commands.spawn().insert(Person).insert(Name("Zayna Nieves".to_string()));
-}
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="system-add_people")}}
 
 Now register the startup system like this:
 
-```rs
-fn main() {
-    App::build()
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .run();
-}
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="main-app")}}
 
 We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
-```rs
-fn greet_people(query: Query<&Name, With<Person>>) {
-    for name in query.iter() {
-        println!("hello {}!", name.0);
-    }
-}
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="system-greet_people")}}
 
 The parameters we pass in to a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
 
@@ -113,15 +69,8 @@ You can interpret the Query above as: "iterate over every Name component for ent
 
 Now we just register the system in our App:
 
-```rs
-fn main() {
-    App::build()
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .add_system(greet_people.system())
-        .run();
-}
-```
+{{file_code_block(path="book-validation/src/learn/book/getting_started/ecs.rs" lang="rust" block="main-app-2")}}
+
 
 Running our app will result in the following output:
 
