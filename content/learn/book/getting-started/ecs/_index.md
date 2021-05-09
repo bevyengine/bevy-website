@@ -20,7 +20,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     struct Position { x: f32, y: f32 }
     ```
 * **Systems**: normal Rust functions
-    ```rs
+    ```skt-system-print_position_system,rust
     fn print_position_system(query: Query<&Transform>) {
         for transform in query.iter() {
             println!("position: {:?}", transform.translation);
@@ -28,7 +28,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     }
     ```
 * **Entities**: a simple type containing a unique integer  
-    ```rs
+    ```skt-main,rust
     struct Entity(u64);
     ```
 
@@ -38,7 +38,7 @@ Now let's see how this works in practice!
 
 Paste the following function into your `main.rs` file:
 
-```rs
+```skt-system-hello_world,rust
 fn hello_world() {
     println!("hello world!");
 }
@@ -46,7 +46,7 @@ fn hello_world() {
 
 This will be our first system. The only remaining step is to add it to our App!
 
-```rs
+```skt-import,rust
 fn main() {
     App::build()
         .add_system(hello_world.system())
@@ -65,19 +65,19 @@ Now run your App again using `cargo run`. You should see `hello world!` printed 
 Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Let's start simple with a `Person` component.
 
 Add this struct to `main.rs`:
-```rs
+```skt-main,rust
 struct Person;
 ```
 
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
-```rs
+```skt-main,rust
 struct Name(String);
 ```
 
 We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
-```rs
+```skt-system-add_people,rust
 fn add_people(mut commands: Commands) {
     commands.spawn().insert(Person).insert(Name("Elaina Proctor".to_string()));
     commands.spawn().insert(Person).insert(Name("Renzo Hume".to_string()));
@@ -87,7 +87,7 @@ fn add_people(mut commands: Commands) {
 
 Now register the startup system like this:
 
-```rs
+```skt-import,rust
 fn main() {
     App::build()
         .add_startup_system(add_people.system())
@@ -98,7 +98,7 @@ fn main() {
 
 We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
 
-```rs
+```skt-system-greet_people,rust
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in query.iter() {
         println!("hello {}!", name.0);
@@ -112,7 +112,7 @@ You can interpret the Query above as: "iterate over every Name component for ent
 
 Now we just register the system in our App:
 
-```rs
+```skt-import,rust
 fn main() {
     App::build()
         .add_startup_system(add_people.system())
