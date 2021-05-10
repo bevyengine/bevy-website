@@ -27,7 +27,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
         }
     }
     ```
-* **Entities**: a simple type containing a unique integer  
+* **Entities**: a simple type containing a unique integer
     ```rs
     struct Entity(u64);
     ```
@@ -54,9 +54,9 @@ fn main() {
 }
 ```
 
-Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" name="System")}} type.
+Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" mod="system" no_mod=true name="System")}} type.
 
-The {{rust_type(type="trait" crate="bevy_ecs", name="IntoQuerySystem" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", name="Schedule")}}, but we'll cover that more later.
+The {{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
 
 Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
 
@@ -65,6 +65,7 @@ Now run your App again using `cargo run`. You should see `hello world!` printed 
 Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Let's start simple with a `Person` component.
 
 Add this struct to `main.rs`:
+
 ```rs
 struct Person;
 ```
@@ -75,7 +76,7 @@ But what if we want our people to have a name? In a more traditional design, we 
 struct Name(String);
 ```
 
-We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
+We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" mod="system" no_mod=true name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
 ```rs
 fn add_people(mut commands: Commands) {
@@ -96,7 +97,7 @@ fn main() {
 }
 ```
 
-We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" name="World")}}:
+We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
 ```rs
 fn greet_people(query: Query<&Name, With<Person>>) {
