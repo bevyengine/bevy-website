@@ -847,7 +847,7 @@ fn print_scene_entities(
 
 <div class="release-feature-authors">authors: @digital7-code</div>
 
-Windows can now have "resize constaints". Windows cannot be resized past these constraints
+Windows can now have "resize constraints". Windows cannot be resized past these constraints
 
 ```rust
 app
