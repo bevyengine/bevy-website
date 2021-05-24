@@ -1,3 +1,5 @@
+# Writing the Bevy book
+
 So, you want to help write some learning material for the [Bevy website](https://bevyengine.org/)?
 
 As you probably noticed, our introductory learning material is split into two main sections:
@@ -24,7 +26,7 @@ Each of these requires their own complementary learning paths that branch as soo
 
 Once users have completed the introductory learning materials in their path of choice, they can begin creating their own games or move on to our advanced examples to see how everything comes together in a realistic way.
 
-### Bevy Quick Start: the example-first path
+## Bevy Quick Start: the example-first path
 
 Users following the example-first path will tend to take the following route:
 
@@ -58,7 +60,7 @@ This path should prioritize:
 5. Ease of extending the quick-start game with their own tweaks.
 6. Explaining how to get unstuck, through documentation, community help and filing issues.
 
-### The Bevy Book: the definition-first path
+## The Bevy Book: the definition-first path
 
 Users following the definition-first path will tend to take the following route:
 
@@ -96,11 +98,11 @@ This path should prioritize:
    5. Contributing to Bevy itself.
 6. Linking to further reading: official examples, `docs.rs` and (very sparingly) source code links.
 
-### Contributor's style guide
+## Contributor's style guide
 
 When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
 
-#### Writing
+### Writing
 
 1. Use clear, simple language.
 2. Prefer short sentences. Remove extra words.
@@ -117,7 +119,7 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
    2. Be mindful not to overuse in-jokes or cultural references.
    3. Don't drag your jokes out: that's not what the audience is here to read.
 
-#### Organizational
+### Organizational
 
 1. Carefully organize your work into separate pages, headings, paragraphs and code blocks.
 2. Clearly signal when you are explaining a concept in technical depth so it can be skipped.
@@ -129,7 +131,7 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
    3. Use the `latest` tag when linking to Bevy docs and source code so it won't go stale every time the version is updated.
    4. When linking to detailed explanations or discussions, summarize the most important points in addition to providing a link.
 
-#### Technical
+### Technical
 
 1. All examples must be able to be compiled and run.
 2. Prefer game-relevant, descriptive examples and variable names over generic ones like `MyEvent`. Avoid meaningless names like `foo` at all times.
