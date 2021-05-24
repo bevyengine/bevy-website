@@ -1129,7 +1129,7 @@ There are plenty of areas that need more design work or features. For example, I
 
 ### Documentation
 
-Bevy's APIs are still very unstable, so I haven't spent much time documenting anything yet. [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is still small and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
+Bevy's APIs are still quite unstable, so documentation is spotty. [The Bevy Book](https://bevyengine.org/learn/book/welcome/) only covers relatively mature areas of the engine and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
 
 ## Join the Bevy!
 
