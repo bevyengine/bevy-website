@@ -1,8 +1,12 @@
 +++
-title = "The Bevy community"
-weight = 5
+title = "Hello World"
+weight = 3
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-TODO: List places where the community congregates, and differentiate
+TODO: explain basic model of how Bevy apps are structured
+
+TODO: demonstrate `App::new().build().run()`
+
+TODO: make one system that says "Hello, World!"

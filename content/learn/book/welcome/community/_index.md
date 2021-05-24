@@ -1,16 +1,8 @@
 +++
-title = "Modularity through plugins"
-weight = 4
+title = "The Bevy community"
+weight = 5
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-TODO: Explain how plugins work
-
-## `MinimalPlugins`
-
-## `DefaultPlugins`
-
-## Writing your own plugins
-
-## Third-party plugins
+TODO: List places where the community congregates, and differentiate
