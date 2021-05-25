@@ -1,24 +1,37 @@
-.awesome .card-list {
-    display: flex;
-    flex-wrap: wrap;
-}
+.awesome {
 
-.awesome .card {
-    width: 45%;
-    margin-right: 15px;
-    height: initial;
-}
+    .card-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
-.awesome .card-title {
-    font-size: 1.3rem
-}
+    .card {
+        width: 45%;
+        margin-right: $card-list-gap;
+        height: initial;
+    }
 
-.awesome .card-description {
-    font-size: 1rem
-}
+    .card-title {
+        font-size: 1.3rem
+    }
 
-.awesome .card-image > img {
-    display: block;
-    height: auto;
-    max-width: 100%;
+    .card-description {
+        font-size: 1rem
+    }
+
+    .card-image > img {
+        display: block;
+        height: auto;
+        max-width: 100%;
+    }
+
+    .card-description > a {
+        text-decoration: none;
+        color: $link-color;
+    }
+    
+    .card-description > a:hover {
+        text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+    }
+
 }
