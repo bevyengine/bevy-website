@@ -1,0 +1,24 @@
+.awesome .card-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.awesome .card {
+    width: 45%;
+    margin-right: 15px;
+    height: initial;
+}
+
+.awesome .card-title {
+    font-size: 1.3rem
+}
+
+.awesome .card-description {
+    font-size: 1rem
+}
+
+.awesome .card-image > img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
