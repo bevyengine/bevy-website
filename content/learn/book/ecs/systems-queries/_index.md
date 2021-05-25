@@ -12,3 +12,5 @@ TODO: Explain what a query is
 TODO: show how to create your first system
 
 TODO: show how to access entity data through simple queries
+
+TODO: discuss queries for `Entity` and `query.get`
