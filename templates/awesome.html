@@ -6,8 +6,7 @@
     {% set section = get_section(path=subsection) %}
 
     <h1 id="{{ section.title | slugify }}">
-        {{ section.title }}
-        <a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
+        {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
     </h1>
     <div class="card-list padded-content">
         {% for post in section.pages %}
@@ -32,8 +31,7 @@
     {% set section = get_section(path=subsection) %}
 
     <h3 id="{{ section.title | slugify }}">
-        {{ section.title }}
-        <a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
+        {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
     </h3>
     <div class="card-list padded-content">
         {% for post in section.pages %}
