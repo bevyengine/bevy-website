@@ -242,7 +242,7 @@ fn some_system(
 ) {
     // this system always runs
 
-    if !res.changed() { // or .added() or .mutated()
+    if !res.is_changed() { // or .is_added()
         return;
     }
 }
