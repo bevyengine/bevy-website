@@ -30,6 +30,7 @@
         <h1 id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
+        {% if section.pages %}
         <div class="card-list padded-content">
             {% for post in section.pages %}
             <div class="card" id="{{ post.title | slugify }}">
@@ -49,6 +50,8 @@
             </div>
             {% endfor %}
         </div>
+        {% endif %}
+
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
