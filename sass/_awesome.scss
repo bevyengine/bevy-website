@@ -27,13 +27,8 @@
         max-width: 100%;
     }
 
-    .card-description > a {
+    a {
         text-decoration: none;
-        color: $link-color;
-    }
-
-    .card-description > a:hover {
-        text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
     }
 
 }
