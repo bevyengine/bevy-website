@@ -34,19 +34,20 @@
         <div class="card-list padded-content">
             {% for post in section.pages %}
             <div class="card" id="{{ post.title | slugify }}">
-                <a class="card-title" href="{{ post.extra.link }}">
-                    {% if post.extra.image %}
+
+                {% if post.extra.image %}
+                <a href="{{ post.extra.link }}">
                     <div class="card-image card-image-default">
                         <img src="{{ get_url(path=post.extra.image) }}" />
                     </div>
-                    {% endif %}
-                    <div class="card-text">
-                        {{ post.title }}
-                        <div class="card-description">
-                            {{ post.description | markdown(inline=true) | safe }}
-                        </div>
-                    </div>
                 </a>
+                {% endif %}
+                <div class="card-text">
+                    <a class="card-title" href="{{ post.extra.link }}">{{ post.title }}</a>
+                    <div class="card-description">
+                        {{ post.description | markdown(inline=true) | safe }}
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -61,19 +62,19 @@
         <div class="card-list padded-content">
             {% for post in section.pages %}
             <div class="card" id="{{ post.title | slugify }}">
-                <a class="card-title" href="{{ post.extra.link }}">
-                    {% if post.extra.image %}
+                {% if post.extra.image %}
+                <a href="{{ post.extra.link }}">
                     <div class="card-image card-image-default">
                         <img src="{{ get_url(path=post.extra.image) }}" />
                     </div>
-                    {% endif %}
-                    <div class="card-text">
-                        {{ post.title }}
-                        <div class="card-description">
-                            {{ post.description | markdown(inline=true) | safe }}
-                        </div>
-                    </div>
                 </a>
+                {% endif %}
+                <div class="card-text">
+                    <a class="card-title" href="{{ post.extra.link }}">{{ post.title }}</a>
+                    <div class="card-description">
+                        {{ post.description | markdown(inline=true) | safe }}
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
