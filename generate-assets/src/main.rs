@@ -173,7 +173,7 @@ impl AssetNode {
 fn main() -> io::Result<()> {
     let asset_dir = std::env::args().nth(1).unwrap();
     let content_dir = std::env::args().nth(2).unwrap();
-    let _ = fs::create_dir(frontmatter_dir.clone());
+    let _ = fs::create_dir(content_dir.clone());
     let mut asset_root_section = Section {
         name: "Assets".to_string(),
         content: vec![],
