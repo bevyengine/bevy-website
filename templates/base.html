@@ -15,6 +15,13 @@
 {% set path = ""%}
 {% endif %}
 
+{% if section %}
+    {% if section.path is starting_with("/learn/book/") %}
+        {% set show_nav_toggle = true %}
+    {% elif section.path is starting_with("/assets/") %}
+        {% set show_nav_toggle = true %}
+    {% endif %}
+{% endif %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -38,7 +45,7 @@
                 <a href="/" class="header-logo">
                     <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
                 </a>
-                {% if section and section.path is starting_with("/learn/book/") %}
+                {% if show_nav_toggle %}
                     <label class="toggle-nav-mobile" for=show-book-nav>
                         <svg alt="nav bars" width="24" height="24">
                             <g fill="none" stroke="#ececec" stroke-width="2">

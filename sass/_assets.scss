@@ -1,4 +1,5 @@
 .assets {
+    display: flex;
 
     .card-list {
         display: flex;
@@ -31,4 +32,11 @@
         text-decoration: none;
     }
 
+    .book-content {
+        h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+    }
 }

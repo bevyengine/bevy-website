@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="assets">
-    <nav class="book-nav" role="navigation" style="position: fixed; width: 180px;">
+    <input type="checkbox" style="display: none" id="show-book-nav" />
+    <nav class="book-nav" role="navigation">
         <ul class="book-nav-sections-container book-nav-sections">
             {% for subsection in section.subsections %}
             {% set section = get_section(path=subsection) %}
@@ -23,11 +24,11 @@
             {% endfor %}
         </ul>
     </nav>
-    <div style="margin-left: 180px;">
+    <div class="book-content">
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <h1 id="{{ section.title | slugify }}">
+        <h1 id="{{ section.title | slugify }}" class="asset-section">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
         {% if section.pages %}
