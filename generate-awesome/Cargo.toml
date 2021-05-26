@@ -13,3 +13,4 @@ edition = "2018"
 [dependencies]
 toml = "0.5"
 serde = { version = "1", features = [ "derive" ] }
+rand = "0.8"

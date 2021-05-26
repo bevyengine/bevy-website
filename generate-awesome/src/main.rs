@@ -1,3 +1,4 @@
+use rand::{prelude::SliceRandom, thread_rng};
 use serde::{Deserialize, Serialize};
 use std::{
     fs::{self, File},
@@ -122,11 +123,27 @@ impl Section {
             .as_bytes(),
         )?;
 
-        let mut content = self.content.clone();
-        // content.sort_by_key(AwesomeDir::name);
-        content.sort_by(|a, b| a.name().partial_cmp(b.name()).unwrap());
+        let mut sorted_section = vec![];
+        for content in self.content.iter() {
+            if let AwesomeDir::Section(section) = content {
+                sorted_section.push(AwesomeDir::Section(section.clone()));
+            }
+        }
+        sorted_section.sort_by(|a, b| a.name().partial_cmp(b.name()).unwrap());
 
-        for (i, content) in content.iter().enumerate() {
+        let mut randomized_awesome = vec![];
+        for content in self.content.iter() {
+            if let AwesomeDir::Awesome(awesome) = content {
+                randomized_awesome.push(AwesomeDir::Awesome(awesome.clone()));
+            }
+        }
+        randomized_awesome.shuffle(&mut thread_rng());
+
+        for (i, content) in sorted_section
+            .iter()
+            .chain(randomized_awesome.iter())
+            .enumerate()
+        {
             content.write(path.to_str().unwrap(), i)?
         }
         Ok(())
