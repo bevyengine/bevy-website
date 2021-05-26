@@ -8,43 +8,43 @@ use std::{
 };
 
 #[derive(Deserialize, Debug, Clone)]
-struct Awesome {
+struct Asset {
     name: String,
     link: String,
     description: Option<String>,
 }
 
 #[derive(Serialize)]
-struct FrontMatterAwesome {
+struct FrontMatterAsset {
     title: String,
     description: String,
     weight: usize,
-    extra: FrontMatterAwesomeExtra,
+    extra: FrontMatterAssetExtra,
 }
 
 #[derive(Serialize)]
-struct FrontMatterAwesomeExtra {
+struct FrontMatterAssetExtra {
     link: String,
 }
 
-impl From<&Awesome> for FrontMatterAwesome {
-    fn from(awesome: &Awesome) -> Self {
-        FrontMatterAwesome {
-            title: awesome.name.clone(),
-            description: awesome.description.clone().unwrap_or_default(),
+impl From<&Asset> for FrontMatterAsset {
+    fn from(asset: &Asset) -> Self {
+        FrontMatterAsset {
+            title: asset.name.clone(),
+            description: asset.description.clone().unwrap_or_default(),
             weight: 0,
-            extra: FrontMatterAwesomeExtra {
-                link: awesome.link.clone(),
+            extra: FrontMatterAssetExtra {
+                link: asset.link.clone(),
             },
         }
     }
 }
 
-impl Awesome {
+impl Asset {
     fn write(&self, current_path: &str, weight: usize) -> io::Result<()> {
         let path = Path::new(&current_path);
 
-        let mut frontmatter = FrontMatterAwesome::from(self);
+        let mut frontmatter = FrontMatterAsset::from(self);
         frontmatter.weight = weight;
 
         let mut file = File::create(path.join(format!(
@@ -69,7 +69,7 @@ impl Awesome {
 #[derive(Debug, Clone)]
 struct Section {
     name: String,
-    content: Vec<AwesomeDir>,
+    content: Vec<AssetNode>,
     template: Option<String>,
     header: Option<String>,
 }
@@ -125,23 +125,23 @@ impl Section {
 
         let mut sorted_section = vec![];
         for content in self.content.iter() {
-            if let AwesomeDir::Section(section) = content {
-                sorted_section.push(AwesomeDir::Section(section.clone()));
+            if let AssetNode::Section(section) = content {
+                sorted_section.push(AssetNode::Section(section.clone()));
             }
         }
         sorted_section.sort_by(|a, b| a.name().partial_cmp(b.name()).unwrap());
 
-        let mut randomized_awesome = vec![];
+        let mut randomized_assets = vec![];
         for content in self.content.iter() {
-            if let AwesomeDir::Awesome(awesome) = content {
-                randomized_awesome.push(AwesomeDir::Awesome(awesome.clone()));
+            if let AssetNode::Asset(asset) = content {
+                randomized_assets.push(AssetNode::Asset(asset.clone()));
             }
         }
-        randomized_awesome.shuffle(&mut thread_rng());
+        randomized_assets.shuffle(&mut thread_rng());
 
         for (i, content) in sorted_section
             .iter()
-            .chain(randomized_awesome.iter())
+            .chain(randomized_assets.iter())
             .enumerate()
         {
             content.write(path.to_str().unwrap(), i)?
@@ -151,41 +151,41 @@ impl Section {
 }
 
 #[derive(Debug, Clone)]
-enum AwesomeDir {
+enum AssetNode {
     Section(Section),
-    Awesome(Awesome),
+    Asset(Asset),
 }
-impl AwesomeDir {
+impl AssetNode {
     fn write(&self, current_path: &str, weight: usize) -> io::Result<()> {
         match self {
-            AwesomeDir::Section(content) => content.write(current_path, weight),
-            AwesomeDir::Awesome(content) => content.write(current_path, weight),
+            AssetNode::Section(content) => content.write(current_path, weight),
+            AssetNode::Asset(content) => content.write(current_path, weight),
         }
     }
     fn name(&self) -> &str {
         match self {
-            AwesomeDir::Section(content) => &content.name,
-            AwesomeDir::Awesome(content) => &content.name,
+            AssetNode::Section(content) => &content.name,
+            AssetNode::Asset(content) => &content.name,
         }
     }
 }
 
 fn main() -> io::Result<()> {
-    let awesome_dir = std::env::args().nth(1).unwrap();
-    let frontmatter_dir = std::env::args().nth(2).unwrap();
+    let asset_dir = std::env::args().nth(1).unwrap();
+    let content_dir = std::env::args().nth(2).unwrap();
     let _ = fs::create_dir(frontmatter_dir.clone());
-    let mut awesome_section = Section {
-        name: "Awesome".to_string(),
+    let mut asset_root_section = Section {
+        name: "Assets".to_string(),
         content: vec![],
-        template: Some("awesome.html".to_string()),
-        header: Some("Awesome".to_string()),
+        template: Some("assets.html".to_string()),
+        header: Some("Assets".to_string()),
     };
     visit_dirs(
-        PathBuf::from_str(&awesome_dir).unwrap(),
-        &mut awesome_section,
+        PathBuf::from_str(&asset_dir).unwrap(),
+        &mut asset_root_section,
     )?;
 
-    awesome_section.write(&frontmatter_dir, 0)?;
+    asset_root_section.write(&content_dir, 0)?;
     Ok(())
 }
 
@@ -203,11 +203,11 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                     header: None,
                 };
                 visit_dirs(path.clone(), &mut new_section)?;
-                section.content.push(AwesomeDir::Section(new_section));
+                section.content.push(AssetNode::Section(new_section));
             } else {
-                let awesome: Awesome =
+                let asset: Asset =
                     toml::de::from_str(&fs::read_to_string(entry.path()).unwrap()).unwrap();
-                section.content.push(AwesomeDir::Awesome(awesome));
+                section.content.push(AssetNode::Asset(asset));
             }
         }
     }

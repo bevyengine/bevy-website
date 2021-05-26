@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: "Build Awesome Bevy"
-        run: cd generate-awesome && ./generate_awesome.sh
+      - name: "Build Bevy Assets"
+        run: cd generate-assets && ./generate_assets.sh
 
       - name: "Build and deploy website"
         uses: shalzz/zola-deploy-action@master

@@ -1,5 +1,5 @@
 [package]
-name = "generate-awesome"
+name = "generate-assets"
 version = "0.1.0"
 authors = [
   "Bevy Contributors <bevyengine@gmail.com>",
