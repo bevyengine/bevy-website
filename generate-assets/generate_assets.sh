@@ -1,5 +1,5 @@
 #!/bin/sh
 
-git clone --branch migration https://github.com/mockersf/awesome-bevy assets
+git clone --branch bevy-asset https://github.com/bevyengine/awesome-bevy assets
 
 cargo run -- assets ../content
