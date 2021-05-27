@@ -34,13 +34,8 @@
     }
 
     .book-content {
-        h3::before{
-            content: ">";
-
-        }
-
         h3 {
-            font-size: 2rem;
+            font-size: 1.9rem;
             font-weight: 700;
             text-decoration: none;
         }
