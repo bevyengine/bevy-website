@@ -11,7 +11,11 @@
                 <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
                 {% if section.subsections %}
                 <ul class="book-nav-sections book-nav-sections-indented">
-                    {% for subsection in section.subsections %}
+                    {% set subsections = section.subsections %}
+                    {% if section.extra.sort_order_reversed %}
+                    {% set subsections = section.subsections | reverse %}
+                    {% endif %}
+                    {% for subsection in subsections %}
                     {% set section = get_section(path=subsection) %}
                     <li class="book-nav-section">
                         <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
@@ -32,14 +36,22 @@
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
-        {% for subsection in section.subsections %}
+        {% set subsections = section.subsections %}
+        {% if section.extra.sort_order_reversed %}
+        {% set subsections = section.subsections | reverse %}
+        {% endif %}
+        {% for subsection in subsections %}
         {% set section = get_section(path=subsection) %}
 
         <h3 id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
         <div class="card-list padded-content">
-            {% for post in section.pages %}
+            {% set pages = section.pages %}
+            {% if section.extra.sort_order_reversed %}
+            {% set pages = section.pages | reverse %}
+            {% endif %}
+            {% for post in pages %}
             <div class="card" id="{{ post.title | slugify }}">
                 <a href="{{ post.extra.link }}">
                     {% if post.extra.image %}

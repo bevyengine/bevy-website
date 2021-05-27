@@ -76,6 +76,7 @@ struct Section {
     template: Option<String>,
     header: Option<String>,
     order: Option<usize>,
+    sort_order_reversed: bool,
 }
 
 #[derive(Serialize)]
@@ -84,12 +85,22 @@ struct FrontMatterSection {
     sort_by: String,
     template: Option<String>,
     weight: usize,
-    extra: Option<FrontMatterSectionExtra>,
+    extra: FrontMatterSectionExtra,
 }
 
 #[derive(Serialize)]
 struct FrontMatterSectionExtra {
-    header_message: String,
+    header_message: Option<String>,
+    sort_order_reversed: bool,
+}
+
+impl From<&Section> for FrontMatterSectionExtra {
+    fn from(section: &Section) -> Self {
+        FrontMatterSectionExtra {
+            header_message: section.template.clone(),
+            sort_order_reversed: section.sort_order_reversed,
+        }
+    }
 }
 
 impl From<&Section> for FrontMatterSection {
@@ -99,10 +110,7 @@ impl From<&Section> for FrontMatterSection {
             sort_by: "weight".to_string(),
             template: section.template.clone(),
             weight: section.order.unwrap_or(0),
-            extra: section
-                .header
-                .clone()
-                .map(|header_message| FrontMatterSectionExtra { header_message }),
+            extra: section.into(),
         }
     }
 }
@@ -199,6 +207,7 @@ fn main() -> io::Result<()> {
         template: Some("assets.html".to_string()),
         header: Some("Assets".to_string()),
         order: None,
+        sort_order_reversed: false,
     };
     visit_dirs(
         PathBuf::from_str(&asset_dir).unwrap(),
@@ -219,17 +228,23 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
             }
             if path.is_dir() {
                 let folder = path.file_name().unwrap();
-                let order = if path.join("_category.toml").exists() {
+                let (order, sort_order_reversed) = if path.join("_category.toml").exists() {
                     let from_file: toml::Value = toml::de::from_str(
                         &fs::read_to_string(path.join("_category.toml")).unwrap(),
                     )
                     .unwrap();
-                    from_file
-                        .get("order")
-                        .and_then(|v| v.as_integer())
-                        .map(|v| v as usize)
+                    (
+                        from_file
+                            .get("order")
+                            .and_then(|v| v.as_integer())
+                            .map(|v| v as usize),
+                        from_file
+                            .get("sort_order_reversed")
+                            .and_then(|v| v.as_bool())
+                            .unwrap_or(false),
+                    )
                 } else {
-                    None
+                    (None, false)
                 };
                 let mut new_section = Section {
                     name: folder.to_str().unwrap().to_string(),
@@ -237,6 +252,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                     template: None,
                     header: None,
                     order,
+                    sort_order_reversed,
                 };
                 visit_dirs(path.clone(), &mut new_section)?;
                 section.content.push(AssetNode::Section(new_section));
