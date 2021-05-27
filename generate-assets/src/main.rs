@@ -12,6 +12,7 @@ struct Asset {
     name: String,
     link: String,
     description: Option<String>,
+    order: Option<usize>,
 }
 
 #[derive(Serialize)]
@@ -32,7 +33,7 @@ impl From<&Asset> for FrontMatterAsset {
         FrontMatterAsset {
             title: asset.name.clone(),
             description: asset.description.clone().unwrap_or_default(),
-            weight: 0,
+            weight: asset.order.unwrap_or(0),
             extra: FrontMatterAssetExtra {
                 link: asset.link.clone(),
             },
@@ -45,7 +46,9 @@ impl Asset {
         let path = Path::new(&current_path);
 
         let mut frontmatter = FrontMatterAsset::from(self);
-        frontmatter.weight = weight;
+        if self.order.is_none() {
+            frontmatter.weight = weight;
+        }
 
         let mut file = File::create(path.join(format!(
             "{}.md",
@@ -72,6 +75,7 @@ struct Section {
     content: Vec<AssetNode>,
     template: Option<String>,
     header: Option<String>,
+    order: Option<usize>,
 }
 
 #[derive(Serialize)]
@@ -94,7 +98,7 @@ impl From<&Section> for FrontMatterSection {
             title: section.name.clone(),
             sort_by: "weight".to_string(),
             template: section.template.clone(),
-            weight: 0,
+            weight: section.order.unwrap_or(0),
             extra: section
                 .header
                 .clone()
@@ -104,17 +108,14 @@ impl From<&Section> for FrontMatterSection {
 }
 
 impl Section {
-    fn write(
-        &self,
-        current_path: &str,
-        weight: usize,
-        manual_priorities: &[&str],
-    ) -> io::Result<()> {
+    fn write(&self, current_path: &str, weight: usize) -> io::Result<()> {
         let path = Path::new(&current_path).join(self.name.to_ascii_lowercase());
         fs::create_dir(path.clone())?;
 
         let mut frontmatter = FrontMatterSection::from(self);
-        frontmatter.weight = weight;
+        if self.order.is_none() {
+            frontmatter.weight = weight;
+        }
 
         let mut file = File::create(path.join("_index.md"))?;
         file.write_all(
@@ -134,27 +135,25 @@ impl Section {
                 sorted_section.push(AssetNode::Section(section.clone()));
             }
         }
-        sorted_section.sort_by(|a, b| a.name().partial_cmp(b.name()).unwrap());
-        for manual_priority in manual_priorities.iter().rev() {
-            if let Some(index) = sorted_section
-                .iter()
-                .position(|a| a.name() == *manual_priority)
-            {
-                let asset = sorted_section.remove(index);
-                sorted_section.insert(0, asset);
-            }
-        }
+        sorted_section.sort_by_key(|section| format!("{}-{}", section.order(), section.name()));
 
         let mut randomized_assets = vec![];
+        let mut manually_sorted_assets = vec![];
         for content in self.content.iter() {
             if let AssetNode::Asset(asset) = content {
-                randomized_assets.push(AssetNode::Asset(asset.clone()));
+                if asset.order.is_some() {
+                    manually_sorted_assets.push(content.clone());
+                } else {
+                    randomized_assets.push(content.clone());
+                }
             }
         }
+        manually_sorted_assets.sort_by_key(AssetNode::order);
         randomized_assets.shuffle(&mut thread_rng());
 
         for (i, content) in sorted_section
             .iter()
+            .chain(manually_sorted_assets.iter())
             .chain(randomized_assets.iter())
             .enumerate()
         {
@@ -172,14 +171,20 @@ enum AssetNode {
 impl AssetNode {
     fn write(&self, current_path: &str, weight: usize) -> io::Result<()> {
         match self {
-            AssetNode::Section(content) => content.write(current_path, weight, &[]),
+            AssetNode::Section(content) => content.write(current_path, weight),
             AssetNode::Asset(content) => content.write(current_path, weight),
         }
     }
-    fn name(&self) -> &str {
+    fn name(&self) -> String {
         match self {
-            AssetNode::Section(content) => &content.name,
-            AssetNode::Asset(content) => &content.name,
+            AssetNode::Section(content) => content.name.clone(),
+            AssetNode::Asset(content) => content.name.clone(),
+        }
+    }
+    fn order(&self) -> usize {
+        match self {
+            AssetNode::Section(content) => content.order.unwrap_or(99999),
+            AssetNode::Asset(content) => content.order.unwrap_or(99999),
         }
     }
 }
@@ -193,13 +198,14 @@ fn main() -> io::Result<()> {
         content: vec![],
         template: Some("assets.html".to_string()),
         header: Some("Assets".to_string()),
+        order: None,
     };
     visit_dirs(
         PathBuf::from_str(&asset_dir).unwrap(),
         &mut asset_root_section,
     )?;
 
-    asset_root_section.write(&content_dir, 0, &["Learning", "Plugins and Crates"])?;
+    asset_root_section.write(&content_dir, 0)?;
     Ok(())
 }
 
@@ -208,19 +214,39 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
             let path = entry.path();
+            if path.file_name().unwrap() == ".git" {
+                continue;
+            }
             if path.is_dir() {
                 let folder = path.file_name().unwrap();
+                let order = if path.join("_category.toml").exists() {
+                    let from_file: toml::Value = toml::de::from_str(
+                        &fs::read_to_string(path.join("_category.toml")).unwrap(),
+                    )
+                    .unwrap();
+                    from_file
+                        .get("order")
+                        .and_then(|v| v.as_integer())
+                        .map(|v| v as usize)
+                } else {
+                    None
+                };
                 let mut new_section = Section {
                     name: folder.to_str().unwrap().to_string(),
                     content: vec![],
                     template: None,
                     header: None,
+                    order,
                 };
                 visit_dirs(path.clone(), &mut new_section)?;
                 section.content.push(AssetNode::Section(new_section));
             } else {
-                let asset: Asset =
-                    toml::de::from_str(&fs::read_to_string(entry.path()).unwrap()).unwrap();
+                if path.file_name().unwrap() == "_category.toml"
+                    || path.extension().unwrap() != "toml"
+                {
+                    continue;
+                }
+                let asset: Asset = toml::de::from_str(&fs::read_to_string(path).unwrap()).unwrap();
                 section.content.push(AssetNode::Asset(asset));
             }
         }
