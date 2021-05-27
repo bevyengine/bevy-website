@@ -9,7 +9,7 @@
     .card {
         width: 30%;
         margin-right: $card-list-gap;
-        height: initial;
+        height: 8rem;
     }
 
     .card-title {
@@ -19,8 +19,11 @@
 
     .card-description {
         font-size: 1rem;
-        min-height: 4rem;
         height: initial;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
     }
 
     .card-image > img {
