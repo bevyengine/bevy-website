@@ -13,7 +13,8 @@
     }
 
     .card-title {
-        font-size: 1.3rem
+        font-size: 1.3rem;
+        overflow-wrap: break-word;
     }
 
     .card-description {
