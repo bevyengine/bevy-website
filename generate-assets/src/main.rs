@@ -104,7 +104,12 @@ impl From<&Section> for FrontMatterSection {
 }
 
 impl Section {
-    fn write(&self, current_path: &str, weight: usize) -> io::Result<()> {
+    fn write(
+        &self,
+        current_path: &str,
+        weight: usize,
+        manual_priorities: &[&str],
+    ) -> io::Result<()> {
         let path = Path::new(&current_path).join(self.name.to_ascii_lowercase());
         fs::create_dir(path.clone())?;
 
@@ -130,6 +135,15 @@ impl Section {
             }
         }
         sorted_section.sort_by(|a, b| a.name().partial_cmp(b.name()).unwrap());
+        for manual_priority in manual_priorities.iter().rev() {
+            if let Some(index) = sorted_section
+                .iter()
+                .position(|a| a.name() == *manual_priority)
+            {
+                let asset = sorted_section.remove(index);
+                sorted_section.insert(0, asset);
+            }
+        }
 
         let mut randomized_assets = vec![];
         for content in self.content.iter() {
@@ -158,7 +172,7 @@ enum AssetNode {
 impl AssetNode {
     fn write(&self, current_path: &str, weight: usize) -> io::Result<()> {
         match self {
-            AssetNode::Section(content) => content.write(current_path, weight),
+            AssetNode::Section(content) => content.write(current_path, weight, &[]),
             AssetNode::Asset(content) => content.write(current_path, weight),
         }
     }
@@ -185,7 +199,7 @@ fn main() -> io::Result<()> {
         &mut asset_root_section,
     )?;
 
-    asset_root_section.write(&content_dir, 0)?;
+    asset_root_section.write(&content_dir, 0, &["Learning", "Plugins and Crates"])?;
     Ok(())
 }
 
