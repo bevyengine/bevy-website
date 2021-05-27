@@ -31,27 +31,6 @@
         <h1 id="{{ section.title | slugify }}" class="asset-section">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
-        {% if section.pages %}
-        <div class="card-list padded-content">
-            {% for post in section.pages %}
-            <div class="card" id="{{ post.title | slugify }}">
-                <a href="{{ post.extra.link }}">
-                    {% if post.extra.image %}
-                    <div class="card-image card-image-default">
-                        <img src="{{ get_url(path=post.extra.image) }}" />
-                    </div>
-                    {% endif %}
-                    <div class="card-text">
-                        <div class="card-title">{{ post.title }}</div>
-                        <div class="card-description">
-                            {{ post.description }}
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
