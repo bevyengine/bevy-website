@@ -12,16 +12,14 @@
     vertical-align: middle;
 }
 
-$content-padding: 15px;
-
 .book-content {
-    padding-left: $content-padding;
-    padding-right: $content-padding;
+    padding-left: $default-padding;
+    padding-right: $default-padding;
     position: relative;
     width: 100%;
     min-width: 0;
     h1 {
-        margin-top: $content-padding;
+        margin-top: $default-padding;
         font-size: 2.4rem;
         margin-bottom: 15px;
     }
@@ -95,12 +93,12 @@ $pager-bar-background-color-in: #29292c;
 
 .book-pager-image-left {
     float: left;
-    margin-left: $content-padding;
+    margin-left: $default-padding;
 }
 
 .book-pager-image-right {
     float: right;
-    margin-right: $content-padding;
+    margin-right: $default-padding;
 }
 
 $pager-bar-icon-width: 200px;

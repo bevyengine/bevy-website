@@ -95,19 +95,19 @@ $header-active-color: #b1d9ff;
 }
 
 
-@media screen and (max-width: 515px) {
+@media screen and (max-width: 580px) {
     .header-button {
         display: none;
     }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1120px) {
     .header-message {
         display: none;
     }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 965px) {
     .header-logo-mobile, .toggle-nav-mobile {
         display: flex;
     }
