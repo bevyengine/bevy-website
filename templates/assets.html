@@ -62,7 +62,7 @@
                     <div class="card-text">
                         <div class="card-title">{{ post.title }}</div>
                         <div class="card-description">
-                            {{ post.description }}
+                            {{ post.description | striptags | truncate(length=100) | safe }}
                         </div>
                     </div>
                 </a>

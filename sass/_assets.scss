@@ -20,10 +20,6 @@
     .card-description {
         font-size: 1rem;
         height: initial;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
     }
 
     .card-image > img {
