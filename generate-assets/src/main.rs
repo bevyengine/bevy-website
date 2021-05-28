@@ -97,7 +97,7 @@ struct FrontMatterSectionExtra {
 impl From<&Section> for FrontMatterSectionExtra {
     fn from(section: &Section) -> Self {
         FrontMatterSectionExtra {
-            header_message: section.template.clone(),
+            header_message: section.header.clone(),
             sort_order_reversed: section.sort_order_reversed,
         }
     }
