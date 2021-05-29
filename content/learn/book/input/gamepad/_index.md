@@ -1,5 +1,5 @@
 +++
-title = "Mouse"
+title = "Gamepad"
 weight = 5
 sort_by = "weight"
 template = "book-section.html"
