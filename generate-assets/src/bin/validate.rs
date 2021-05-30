@@ -24,6 +24,7 @@ enum AssetError {
     DescriptionMissing,
     DescriptionTooLong,
     DescriptionWithFormatting,
+    ImageInvalidLink,
 }
 
 impl AssetValidator for Section {
@@ -66,6 +67,19 @@ impl AssetValidator for Asset {
         } else {
             valid = false;
             println!("{:50} - {:?}", self.name, AssetError::DescriptionMissing);
+        }
+        if let Some(image) = self.image.as_ref() {
+            if image.starts_with('.')
+                || image.starts_with('/')
+                || image.starts_with("http")
+                || !(image.ends_with(".gif")
+                    || image.ends_with(".jpeg")
+                    || image.ends_with(".jpg")
+                    || image.ends_with(".png"))
+            {
+                valid = false;
+                println!("{:50} - {:?}", self.name, AssetError::ImageInvalidLink);
+            }
         }
 
         return valid;

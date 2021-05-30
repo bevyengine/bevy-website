@@ -8,6 +8,11 @@ pub struct Asset {
     pub link: String,
     pub description: Option<String>,
     pub order: Option<usize>,
+    pub image: Option<String>,
+
+    // this field is not read from the toml file
+    #[serde(skip)]
+    pub original_path: Option<PathBuf>,
 }
 
 #[derive(Debug, Clone)]
@@ -86,6 +91,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 }
                 let mut asset: Asset =
                     toml::de::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
+                asset.original_path = Some(path);
                 section.content.push(AssetNode::Asset(asset));
             }
         }

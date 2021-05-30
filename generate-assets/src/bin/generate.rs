@@ -33,6 +33,7 @@ struct FrontMatterAsset {
 #[derive(Serialize)]
 struct FrontMatterAssetExtra {
     link: String,
+    image: Option<String>,
 }
 
 impl From<&Asset> for FrontMatterAsset {
@@ -43,6 +44,7 @@ impl From<&Asset> for FrontMatterAsset {
             weight: asset.order.unwrap_or(0),
             extra: FrontMatterAssetExtra {
                 link: asset.link.clone(),
+                image: asset.image.clone(),
             },
         }
     }
@@ -55,6 +57,22 @@ impl FrontMatterWriter for Asset {
         let mut frontmatter = FrontMatterAsset::from(self);
         if self.order.is_none() {
             frontmatter.weight = weight;
+        }
+        if let Some(file) = self.image.as_ref() {
+            let image_file_path = path.join(file).to_str().map(|p| p.to_string());
+            let image_file_link = Path::new(current_path)
+                .join(file)
+                .to_str()
+                .map(|p| p.to_string());
+            let original_image = self
+                .original_path
+                .as_ref()
+                .unwrap()
+                .clone()
+                .with_file_name(file);
+
+            frontmatter.extra.image = image_file_link.clone();
+            let _ = fs::copy(original_image, image_file_path.unwrap());
         }
 
         let mut file = File::create(path.join(format!(
