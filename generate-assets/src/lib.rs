@@ -50,7 +50,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
             let path = entry.path();
-            if path.file_name().unwrap() == ".git" {
+            if path.file_name().unwrap() == ".git" || path.file_name().unwrap() == ".github" {
                 continue;
             }
             if path.is_dir() {
