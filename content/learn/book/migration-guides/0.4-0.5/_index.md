@@ -74,6 +74,17 @@ commands.spawn()
     .insert(some_component);
 ```
 
+Removing and adding components on entities has also been changed:
+```rust
+// 0.4
+commands.insert_one(some_entity, SomeComponent);
+commands.remove_one::<SomeComponent>(some_entity);
+
+// 0.5
+commands.entity(some_entity).insert(SomeComponent);
+commands.entity(some_entity).remove::<SomeComponent>();
+```
+
 ### Timer now uses Duration
 
 ```rust
