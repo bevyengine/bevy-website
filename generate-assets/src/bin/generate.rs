@@ -14,12 +14,12 @@ fn main() -> io::Result<()> {
     let _ = fs::create_dir(content_dir.clone());
     let asset_root_section = parse_assets(&asset_dir)?;
 
-    asset_root_section.write(&content_dir, "", 0)?;
+    asset_root_section.write(Path::new(&content_dir), Path::new(""), 0)?;
     Ok(())
 }
 
 trait FrontMatterWriter {
-    fn write(&self, root_path: &str, current_path: &str, weight: usize) -> io::Result<()>;
+    fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()>;
 }
 
 #[derive(Serialize)]
@@ -51,19 +51,16 @@ impl From<&Asset> for FrontMatterAsset {
 }
 
 impl FrontMatterWriter for Asset {
-    fn write(&self, root_path: &str, current_path: &str, weight: usize) -> io::Result<()> {
-        let path = Path::new(root_path).join(&current_path);
+    fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
+        let path = root_path.join(&current_path);
 
         let mut frontmatter = FrontMatterAsset::from(self);
         if self.order.is_none() {
             frontmatter.weight = weight;
         }
         if let Some(file) = self.image.as_ref() {
-            let image_file_path = path.join(file).to_str().map(|p| p.to_string());
-            let image_file_link = Path::new(current_path)
-                .join(file)
-                .to_str()
-                .map(|p| p.to_string());
+            let image_file_path = path.join(file);
+            let image_file_link = current_path.join(file);
             let original_image = self
                 .original_path
                 .as_ref()
@@ -71,8 +68,8 @@ impl FrontMatterWriter for Asset {
                 .clone()
                 .with_file_name(file);
 
-            frontmatter.extra.image = image_file_link.clone();
-            let _ = fs::copy(original_image, image_file_path.unwrap());
+            frontmatter.extra.image = image_file_link.to_str().map(|link| link.to_string());
+            let _ = fs::copy(original_image, image_file_path);
         }
 
         let mut file = File::create(path.join(format!(
@@ -95,7 +92,7 @@ impl FrontMatterWriter for Asset {
 }
 
 impl FrontMatterWriter for AssetNode {
-    fn write(&self, root_path: &str, current_path: &str, weight: usize) -> io::Result<()> {
+    fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
         match self {
             AssetNode::Section(content) => content.write(root_path, current_path, weight),
             AssetNode::Asset(content) => content.write(root_path, current_path, weight),
@@ -140,9 +137,9 @@ impl From<&Section> for FrontMatterSection {
 }
 
 impl FrontMatterWriter for Section {
-    fn write(&self, root_path: &str, current_path: &str, weight: usize) -> io::Result<()> {
-        let section_path = Path::new(&current_path).join(self.name.to_ascii_lowercase());
-        let path = Path::new(&root_path).join(&section_path);
+    fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
+        let section_path = current_path.join(self.name.to_ascii_lowercase());
+        let path = root_path.join(&section_path);
         fs::create_dir(path.clone())?;
 
         let mut frontmatter = FrontMatterSection::from(self);
@@ -190,7 +187,7 @@ impl FrontMatterWriter for Section {
             .chain(randomized_assets.iter())
             .enumerate()
         {
-            content.write(root_path, section_path.to_str().unwrap(), i)?
+            content.write(root_path, &section_path, i)?
         }
         Ok(())
     }
