@@ -1,5 +1,5 @@
 #!/bin/sh
 
-git clone --branch bevy-asset https://github.com/bevyengine/awesome-bevy assets
+git clone https://github.com/bevyengine/bevy-assets assets
 
 cargo run --bin generate -- assets ../content
