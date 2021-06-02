@@ -6,7 +6,7 @@ use std::{fs, io, path::PathBuf, str::FromStr};
 pub struct Asset {
     pub name: String,
     pub link: String,
-    pub description: Option<String>,
+    pub description: String,
     pub order: Option<usize>,
     pub image: Option<String>,
 
