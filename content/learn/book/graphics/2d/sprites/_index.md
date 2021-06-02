@@ -1,7 +1,9 @@
 +++
-title = "Book"
+title = "Sprites"
+weight = 1
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-redirect_to = "learn/book/welcome"
 +++
+
+TODO: Demonstrate how to import and use a sprite
