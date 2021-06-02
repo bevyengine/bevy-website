@@ -21,7 +21,6 @@ trait AssetValidator {
 
 #[derive(Debug)]
 enum AssetError {
-    DescriptionMissing,
     DescriptionTooLong,
     DescriptionWithFormatting,
     ImageInvalidLink,
@@ -51,22 +50,17 @@ impl AssetValidator for AssetNode {
 impl AssetValidator for Asset {
     fn validate(&self) -> bool {
         let mut valid = true;
-        if let Some(description) = self.description.as_ref() {
-            if description.len() > 100 {
-                valid = false;
-                println!("{:50} - {:?}", self.name, AssetError::DescriptionTooLong);
-            }
-            if has_forbidden_formatting(description) {
-                valid = false;
-                println!(
-                    "{:50} - {:?}",
-                    self.name,
-                    AssetError::DescriptionWithFormatting
-                );
-            }
-        } else {
+        if self.description.len() > 100 {
             valid = false;
-            println!("{:50} - {:?}", self.name, AssetError::DescriptionMissing);
+            println!("{:50} - {:?}", self.name, AssetError::DescriptionTooLong);
+        }
+        if has_forbidden_formatting(&self.description) {
+            valid = false;
+            println!(
+                "{:50} - {:?}",
+                self.name,
+                AssetError::DescriptionWithFormatting
+            );
         }
         if let Some(image) = self.image.as_ref() {
             if image.starts_with('.')

@@ -40,7 +40,7 @@ impl From<&Asset> for FrontMatterAsset {
     fn from(asset: &Asset) -> Self {
         FrontMatterAsset {
             title: asset.name.clone(),
-            description: asset.description.clone().unwrap_or_default(),
+            description: asset.description.clone(),
             weight: asset.order.unwrap_or(0),
             extra: FrontMatterAssetExtra {
                 link: asset.link.clone(),
