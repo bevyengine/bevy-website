@@ -1,15 +1,14 @@
 +++
-title = "Next Steps"
-weight = 3
+title = "Next steps"
+weight = 12
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-You have reached the end of The Bevy Book! And unfortunately, we haven't even scratched the surface of Bevy's features! Eventually this book will cover almost every facet of Bevy, but until then we recommend checking out:
+You have reached the end of The Bevy Book! If you're hungry for more learning materials, we recommend checking out:
 
-* **[The Bevy Examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples)**: We create an example for every major Bevy feature. This is currently the best way to learn Bevy's features and how to use them.
-* **[Breakout](https://github.com/bevyengine/bevy/blob/latest/examples/game/breakout.rs)**: A small "breakout" clone that illustrates what a real Bevy game looks like.
+* **[The Bevy Examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples)**: Runnable examples for every major Bevy feature.
 * **[Bevy API Docs](https://docs.rs/bevy)**: Bevy's Rust API documentation.
 * **[Bevy Assets](https://bevyengine.org/assets/)**: List of projects by the Bevy community, including:
   * **[Learning Resources](https://bevyengine.org/assets/#learning)**: Tutorials, documentation, and examples.
