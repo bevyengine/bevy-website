@@ -38,6 +38,7 @@
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
+        {% if section.pages %}
         <div class="card-list padded-content">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
@@ -47,6 +48,7 @@
             {{ macros::card(post=post) }}
             {% endfor %}
         </div>
+        {% endif %}
 
         {% set subsections = section.subsections %}
         {% if section.extra.sort_order_reversed %}
