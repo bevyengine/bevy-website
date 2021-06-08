@@ -1,3 +1,5 @@
+{% import "assets-macros.html" as macros %}
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -36,6 +38,16 @@
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
+        <div class="card-list padded-content">
+            {% set pages = section.pages %}
+            {% if section.extra.sort_order_reversed %}
+            {% set pages = section.pages | reverse %}
+            {% endif %}
+            {% for post in pages %}
+            {{ macros::card(post=post) }}
+            {% endfor %}
+        </div>
+
         {% set subsections = section.subsections %}
         {% if section.extra.sort_order_reversed %}
         {% set subsections = section.subsections | reverse %}
@@ -52,21 +64,7 @@
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            <div class="card" id="{{ post.title | slugify }}">
-                <a href="{{ post.extra.link }}">
-                    {% if post.extra.image %}
-                    <div class="card-image card-image-default">
-                        <img src="{{ get_url(path=post.extra.image) }}" />
-                    </div>
-                    {% endif %}
-                    <div class="card-text">
-                        <div class="card-title">{{ post.title }}</div>
-                        <div class="card-description">
-                            {{ post.description | striptags | truncate(length=100) | safe }}
-                        </div>
-                    </div>
-                </a>
-            </div>
+            {{ macros::card(post=post) }}
             {% endfor %}
         </div>
 
