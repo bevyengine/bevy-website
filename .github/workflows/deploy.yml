@@ -17,6 +17,7 @@ jobs:
         run: cd generate-assets && ./generate_assets.sh
 
       - name: "Build and deploy website"
+        if: github.repository_owner == 'bevyengine'
         uses: shalzz/zola-deploy-action@master
         env:
           PAGES_BRANCH: gh-pages
