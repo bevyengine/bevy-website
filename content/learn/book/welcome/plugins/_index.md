@@ -142,4 +142,9 @@ fn report_score(score: Res<Score>){
 
 Importing 3rd-party plugins is easy; they're just Rust code!
 
-TODO: show how to import another plugin.
+1. Find a Bevy (such as from our [collection of assets](https://bevyengine.org/assets/)).
+2. Add it to your `Cargo.toml` as a crate under `[dependencies]`.
+3. Import the code definitions from the crate.
+4. Add the plugin to your app!
+
+Follow the documentation and examples from the crates you're importing to make sure you have everything configured properly.
