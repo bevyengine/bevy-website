@@ -1,6 +1,6 @@
 +++
 title = "Modularity through plugins"
-weight = 4
+weight = 3
 template = "book-section.html"
 page_template = "book-section.html"
 +++

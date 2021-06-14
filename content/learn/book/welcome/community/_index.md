@@ -1,6 +1,6 @@
 +++
 title = "The Bevy community"
-weight = 5
+weight = 4
 template = "book-section.html"
 page_template = "book-section.html"
 +++
@@ -16,4 +16,3 @@ Here's where you should look:
 3. [Reddit]: Great for sharing links and resources.
 4. [Stack Overflow]: For detailed, concrete questions that will help future users in the future.
 5. [Awesome-Bevy]: Tutorials, plugins, community crates and assets for using Bevy.
-
