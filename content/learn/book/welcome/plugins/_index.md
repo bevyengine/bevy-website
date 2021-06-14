@@ -27,9 +27,7 @@ impl PluginGroup for MinimalPlugins {
 }
 ```
 
-TODO: explain what these do.
-
-The `CorePlugin` controls ??, while the `ScheduleRunnerPlugin` ???.
+The `CorePlugin` handles low-level fundamentals such as updating app time, while the `ScheduleRunnerPlugin` sets up the main game loop to run repeatedly over time.
 
 ## `DefaultPlugins`
 
