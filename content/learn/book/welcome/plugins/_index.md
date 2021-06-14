@@ -82,9 +82,16 @@ impl PluginGroup for DefaultPlugins {
 
 As you can see, there are some added niceties (logging and diagnostics, scenes, input and windowing) as well as a number of plugins controlled by feature flags.
 These are heavier dependencies that you may want to disable for some games (or platforms), and replace with your own alternatives.
-To do so:
+To do so, we can use [cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to disable them in our game.
 
-TODO: explain how to disable plugins.
+In your `Cargo.toml` file, disable default features and opt-in to the [features you want](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md):
+
+```toml
+[dependencies]
+bevy = {"0.5", , default-features = false, features = ["..."]}
+```
+
+As shown in the [plugin_group.rs](https://github.com/bevyengine/bevy/blob/latest/examples/app/plugin_group.rs) example, you can also configure plugin groups from within Bevy itself.
 
 ## Writing your own plugins
 
