@@ -5,7 +5,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-In Bevy, virtually all of the functionality you might want is added via *plugins*, which are added to your app.
+In Bevy, virtually all of the functionality you might want is added via **plugins**, which are added to your app.
 These might provide basic windowing functionality, handle input or sound, calculate physics or provide game-specific logic like a tile map system.
 
 By combining Bevy's first-party plugins with third-party alternatives, you can modularly customize the behaviour of the Bevy game engine, and then add your own plugins to contain your own game-specific code in a well-organized way.
