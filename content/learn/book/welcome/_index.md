@@ -46,4 +46,4 @@ Check out [Godot](https://godotengine.org/) instead!
 Unsurprisingly, Bevy's rapid pace of development means that our APIs will break, repeatedly, in both deep and pervasive ways.
 This allows us to refine the engine now, adding new features and fixing problems fast, rather than being tied to a first attempt.
 
-While we'll do our best to provide [migration guides, updating versions of Bevy is largely an exercise in letting the excellent Rust tooling guide you and chasing the errors until everything compiles again.
+While we'll do our best to provide migration guides, updating versions of Bevy is largely an exercise in letting the excellent Rust tooling guide you and chasing the errors until everything compiles again.
