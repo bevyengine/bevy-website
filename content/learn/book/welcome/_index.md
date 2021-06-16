@@ -15,7 +15,7 @@ Welcome to the Bevy game engine! A bevy may be a group of birds, but our engine 
 - designed for effortless parallelism with a data-oriented design and automatic parallel scheduler
 - built on a high-performance foundation
 
-This book is designed to provide a more thoughtful, explanation-first to the engine's essential features.
+This book is designed for new and experienced users looking for a thoughtful, [explanation-first](https://diataxis.fr/explanation/) guide to the engine's essential features.
 If you just want to try it out hands-on, jump into one of our [quick-start guides](TODO: add link) instead!
 
 ## Stability warning
