@@ -95,39 +95,20 @@ Now run `cargo run` again. The Bevy dependencies should start building. This wil
 
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
 
-### Hello Bevy World
+### Checking that it works
 
-Within `main.rs`, let's create our first app!
-
-```rust
-use bevy::prelude::*;
-
-fn main(){
-  App::build().run();
-}
-```
-
-This won't report anything interesting: it merely creates an empty app with an empty **world**.
-
-Let's add our first system by modifying the file to the following:
+Within `main.rs`, let's create our first app and check that all the dependencies are working correctly!
 
 ```rust
 use bevy::prelude::*;
 
 fn main(){
-  App::build()
-  .add_system(hello.system())
-  .run();
-}
-
-fn hello(){
-    println!("Hello, Bevy!")
+  App::build().add_plugins(DefaultPlugins).run();
 }
 ```
 
-Systems in Bevy are just ordinary Rust functions, which are registered in our app to operate on our world.
-
-Calling `cargo run` will run our schedule once, causing `hello` to print "Hello, Bevy!", allowing us to verify our installation of Bevy.
+Use `cargo run` to test it out.
+This will just show an empty window, and includes all of the standard functionality needed to make Bevy games.
 
 ## Troubleshooting
 
