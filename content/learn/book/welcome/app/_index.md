@@ -12,8 +12,7 @@ Let's take a closer look at that hello world code.
 use bevy::prelude::*;
 
 fn main(){
-  App::new()
-  .build()
+  App::build()
   .add_system(hello.system())
   .run();
 }
@@ -23,7 +22,7 @@ fn hello(){
 }
 ```
 
-So, we first create our [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html), then tell it to [`build`](https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.build), performing initialization steps.
+So, we first create our [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html) by telling it to [`build`](https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.build), performing initialization steps.
 This produces an [`AppBuilder`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html), which we can use to configure the `App`.
 We do so by add a simple system, which prints "Hello, Bevy!" when it is run.
 Finally once all of our work is complete, we call [`AppBuilder::run()`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.run) to actually make our app *do things*.
