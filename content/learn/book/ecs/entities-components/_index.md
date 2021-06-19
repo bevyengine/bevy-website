@@ -8,7 +8,7 @@ page_template = "book-section.html"
 As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
 
 The very first thing we're going to want to do is define the components that we'd like to use.
-To do so, we simply create new Rust structs with descriptive names (ensuring that they are `Send + Sync + 'static` so they can be sent across the threads safely).
+To do so, we simply create Rust types (ensuring that they are `Send + Sync + 'static` so they can be sent across the threads safely) and pick a descriptive name for them.
 On this page, we're going to create a simple little combat system, so lets start by defining some basic components.
 
 ```rust
@@ -130,7 +130,7 @@ fn report_health(query: Query<(&Name, &Life), Changed<Life>>) {
 }
 ```
 
-Finally, let's put this all together into a final app that we can run by adding our systems and resources to our app and sticking it in `main`.
+Finally, let's put this all together into a final app that we can run by adding our systems and resources to our app and sticking it in `main()`.
 
 ```rust
 use bevy::prelude::*;

@@ -33,5 +33,4 @@ Bevy's scheduler is remarkably powerful: it uses the information about data acce
 By default, every system in a stage runs in parallel with every other system in that stage (as long as threads exist to take the work): the only rule is that systems which have the ability to *write* to a particular piece of data (such as a resource) cannot be run at the same time as other systems which read or write to that same data.
 In Rust, this corresponds to mutable access, as declared by the use of `Query<&mut MyComponent>` or `ResMut<MyResource>`.
 
-Let's pull this together by showing off a simple runnable game that uses Bevy's ECS to demonstrate how these parts fit together.
-TODO: add simple cohesive example.
+On the next page, we'll create a simple "game" using the ECS so you can see how this all fits together.
