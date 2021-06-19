@@ -103,7 +103,7 @@ Within `main.rs`, let's create our first app!
 use bevy::prelude::*;
 
 fn main(){
-  App::new().build().run();
+  App::build().run();
 }
 ```
 
@@ -115,8 +115,7 @@ Let's add our first system by modifying the file to the following:
 use bevy::prelude::*;
 
 fn main(){
-  App::new()
-  .build()
+  App::build()
   .add_system(hello.system())
   .run();
 }
