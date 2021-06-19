@@ -10,6 +10,54 @@ These might provide basic windowing functionality, handle input or sound, calcul
 
 By combining Bevy's first-party plugins with third-party alternatives, you can modularly customize the behaviour of the Bevy game engine, and then add your own plugins to contain your own game-specific code in a well-organized way.
 
+## Writing your own plugins
+
+Plugins are collections of code that modify the `AppBuilder` (which controls all of the data and logic of our game) using the builder pattern.
+Any code in a plugin could be directly substituted directly on the base `AppBuilder`.
+There's no magic to be found here; they're just a straightforward tool for code organization.
+
+You can write your own to organize your own code by implementing the `Plugin` trait on a struct of your own creation.
+
+```rust
+use bevy::prelude::*;
+
+fn main(){
+ App::build()
+  // As discussed below, DefaultPlugins provide the standard scaffolding for Bevy games
+   .add_plugins(DefaultPlugins)
+   // Plugins merely organize code: this could just be replaced directly with 
+   // the init_resource and add_system calls from below
+   .add_plugin(ScorePlugin)
+   .run();
+}
+
+struct ScorePlugin;
+
+impl Plugin for ScorePlugin {
+  fn build(&self, app: &mut AppBuilder) {
+     app
+       // The Score struct is addded as a resource (global singleton) to the world, 
+       // beginning at the default value of 0
+       .init_resource::<Score>()
+       // Increments the score by 1 every pass of the game loop
+       .add_system(increment_score.system())
+       // Prints the current value of the score
+       .add_system(report_score.system());
+  }
+}
+
+#[derive(Default, Debug)]
+struct Score(u8);
+
+fn increment_score(score: ResMut<Score>){
+  score.0 += 1;
+}
+
+fn report_score(score: Res<Score>){
+  dbg!(score);
+}
+```
+
 ## `MinimalPlugins`
 
 Unless you're doing something very unusual, you will *always* want to include the plugins provided by Bevy's [`MinimalPlugins`](https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html). We can click through to the source for the `impl PluginGroup for MinimalPlugins` to see what this adds:
@@ -45,53 +93,6 @@ bevy = {"0.5", , default-features = false, features = ["..."]}
 ```
 
 As shown in the [plugin_group.rs](https://github.com/bevyengine/bevy/blob/latest/examples/app/plugin_group.rs) example, you can also configure plugin groups from within Bevy itself.
-
-## Writing your own plugins
-
-Plugins are collections of code that modify the `AppBuilder` (which controls all of the data and logic of our game) using the builder pattern.
-Any code in a plugin could be directly substituted directly on the base `AppBuilder`.
-There's no magic to be found here; they're just a straightforward tool for code organization.
-
-You can write your own to organize your own code by implementing the `Plugin` trait on a struct of your own creation.
-
-```rust
-use bevy::prelude::*;
-
-fn main(){
- App::build()
-   .add_plugins(DefaultPlugins)
-   // Plugins merely organize code: this could just be replaced directly with 
-   // the init_resource and add_system calls from below
-   .add_plugin(ScorePlugin)
-   .run();
-}
-
-struct ScorePlugin;
-
-impl Plugin for ScorePlugin {
-  fn build(&self, app: &mut AppBuilder) {
-     app
-       // The Score struct is addded as a resource (global singleton) to the world, 
-       // beginning at the default value of 0
-       .init_resource::<Score>()
-       // Increments the score by 1 every pass of the game loop
-       .add_system(increment_score.system())
-       // Prints the current value of the score
-       .add_system(report_score.system());
-  }
-}
-
-#[derive(Default, Debug)]
-struct Score(u8);
-
-fn increment_score(score: ResMut<Score>){
-  score.0 += 1;
-}
-
-fn report_score(score: Res<Score>){
-  dbg!(score);
-}
-```
 
 ## Third-party plugins
 
