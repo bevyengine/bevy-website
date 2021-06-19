@@ -1,6 +1,6 @@
 +++
 title = "Installing Rust and Bevy"
-weight = 2
+weight = 1
 template = "book-section.html"
 page_template = "book-section.html"
 +++
@@ -94,6 +94,21 @@ bevy = "0.5" # make sure this is the latest version
 Now run `cargo run` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
 
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
+
+### Checking that it works
+
+Within `main.rs`, let's create our first app and check that all the dependencies are working correctly!
+
+```rust
+use bevy::prelude::*;
+
+fn main(){
+  App::build().add_plugins(DefaultPlugins).run();
+}
+```
+
+Use `cargo run` to test it out.
+This will just show an empty window, and includes all of the standard functionality needed to make Bevy games.
 
 ## Troubleshooting
 
