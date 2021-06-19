@@ -48,7 +48,9 @@ As shown in the [plugin_group.rs](https://github.com/bevyengine/bevy/blob/latest
 
 ## Writing your own plugins
 
-Plugins are simply collections of code that modify the `AppBuilder`.
+Plugins are collections of code that modify the `AppBuilder` (which controls all of the data and logic of our game) using the builder pattern.
+Any code in a plugin could be directly substituted directly on the base `AppBuilder`.
+There's no magic to be found here; they're just a straightforward tool for code organization.
 
 You can write your own to organize your own code by implementing the `Plugin` trait on a struct of your own creation.
 
@@ -59,7 +61,7 @@ fn main(){
  App::build()
    .add_plugins(DefaultPlugins)
    // Plugins merely organize code: this could just be replaced directly with 
-   // the add_system and init_resource calls from below
+   // the init_resource and add_system calls from below
    .add_plugin(ScorePlugin)
    .run();
 }
