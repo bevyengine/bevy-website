@@ -6,7 +6,7 @@ page_template = "book-section.html"
 +++
 
 When you're making a game in Bevy, you will have a single `App`, which stores and handles all of your game logic and data.
-Let's take a closer look at that hello world code.
+Let's make a trivial Hello World app.
 
 ```rust
 use bevy::prelude::*;
