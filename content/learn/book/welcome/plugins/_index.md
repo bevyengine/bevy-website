@@ -58,25 +58,6 @@ fn report_score(score: Res<Score>){
 }
 ```
 
-## `MinimalPlugins`
-
-Unless you're doing something very unusual, you will *always* want to include the plugins provided by Bevy's [`MinimalPlugins`](https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html). We can click through to the source for the `impl PluginGroup for MinimalPlugins` to see what this adds:
-
-```rust
-use bevy_app::{PluginGroup, PluginGroupBuilder};
-
-pub struct MinimalPlugins;
-
-impl PluginGroup for MinimalPlugins {
-    fn build(&mut self, group: &mut PluginGroupBuilder) {
-        group.add(bevy_core::CorePlugin::default());
-        group.add(bevy_app::ScheduleRunnerPlugin::default());
-    }
-}
-```
-
-The `CorePlugin` handles low-level fundamentals such as updating app time, while the `ScheduleRunnerPlugin` sets up the main game loop to run repeatedly over time.
-
 ## `DefaultPlugins`
 
 Bevy's `DefaultPlugins` are intended to get up and running with a "standard game" as quickly as possible. Let's take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) again.
@@ -93,6 +74,15 @@ bevy = {"0.5", , default-features = false, features = ["..."]}
 ```
 
 As shown in the [plugin_group.rs](https://github.com/bevyengine/bevy/blob/latest/examples/app/plugin_group.rs) example, you can also configure plugin groups from within Bevy itself.
+
+## `MinimalPlugins`
+
+If you're looking to structure your Bevy app in an unusual way and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's [`MinimalPlugins`](https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html) instead.
+
+We can click through to the [source]((https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs)) for the `impl PluginGroup for MinimalPlugins` to see that this adds [`CorePlugin`](https://docs.rs/bevy/latest/bevy/core/struct.CorePlugin.html) and [`ScheduleRunnerPlugin`](https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html).
+
+The `CorePlugin` handles low-level fundamentals such as updating app time, while the `ScheduleRunnerPlugin` sets up the main game loop to run repeatedly over time.
+This functionality is essential: starting with these plugins is virtually always going to be a safe bet.
 
 ## Third-party plugins
 
