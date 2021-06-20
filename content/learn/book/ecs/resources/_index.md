@@ -5,12 +5,129 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-TODO: Explain what a resource is
+Not all data is stored in the entity-component data storage.
+**Resources** are the blanket term for data that lives outside of entities and their components, but is still accessible by Bevy apps.
+Each resource has a unique type (you can only have one resource of each type), and can be accessed in systems by adding either `Res` (for immutable read-only access) or `ResMut` (for mutable read-write access) as a system parameter.
 
-TODO: Explain why you might want a resource
+In effect, resources serve as well-behaved **global singletons**.
+They are accessible by any system in the app, and because you can only have one resource of each type, are unique.
+You might want to use resources for:
 
-TODO: Show how to create and access Resources
+- storing events
+- holding configuration data
+- storing simple global game state that you only need a single copy of (like a game's store)
+- interoperating with other libraries
+- providing faster or supplementary look-up data structures for entities (such as indexes or graphs)
+- storing reference-counted handles to assets (so then they're not unloaded when the last entity using it is despawned)
 
-TODO: Show how to modify resources
+## Creating resources
 
-TODO: Compare and contrast with `query.single()`
+Resources need no special implementation: you can use any new or existing Rust type as a resource (if it is not `Send + Sync`, you'll need a `NonSend` resource instead).
+
+As resources are part of the `App`'s `World`, you can add them to the `AppBuilder`.
+Usually this will be done statically, via [`insert_resouce`](https://docs.rs/bevy/0.5.0/bevy/app/struct.AppBuilder.html#method.insert_resource) or [`init_resource`](https://docs.rs/bevy/0.5.0/bevy/app/struct.AppBuilder.html#method.init_resource).
+
+`insert_resource` is used when you want to set the value of a resource manually, while `init_resource` is used when you want to automatically initialize the resources value using the `Default` or `FromWorld` trait.
+
+```rust
+use bevy::prelude::*;
+
+fn main(){
+	// Resources are typically inserted using AppBuilder methods
+	App::build()
+	// Uses the default() value provided by the derived Default trait
+	.init_resource::<Score>()
+	// Uses the default() value provided by the manual impl of the Default trait
+	.init_resource::<PlayerSupplies>()
+	// Uses the specific manual value of Turn::Allied to insert a resource of type Turn
+	.insert_resource(Turn::Allied)
+	// Sets the value of the standard Bevy resource `WindowDescriptor`,
+	// leaving the unspecified fields as their default value
+	.insert_resource(WindowDescriptor {
+		title: "I am a window!".to_string(),
+		width: 500.,
+		height: 300.,
+		vsync: true,
+		..Default::default()
+	})
+	.add_plugins(DefaultPlugins)
+	.run()
+}
+
+// Resources can be tuple structs
+// Default can be derived for many simple resources,
+// with the default value of most numeric types being 0
+#[derive(Default)]
+struct Score(u64);
+
+// Resources can be ordinary structs
+struct PlayerSupplies {
+	gold: u64,
+	wood: u64,
+}
+
+// The Default trait can be manually implemented to control initial values
+impl Default for PlayerSupplies {
+	fn default() -> Self {
+		PlayerSupplies {
+			gold: 400,
+			wood: 200,
+		}
+	}
+}
+
+// Resources can be enums
+enum Turn {
+	Allied,
+	Enemy
+}
+```
+
+In rare cases, you may need to add a resource later, once other parts of the world exist to ensure proper initialization.
+For that, we can use the equivalent methods on [`Commands`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Commands.html).
+You can add, overwrite and even [`remove_resource](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Commands.html#method.remove_resource) dynamically in this way.
+
+Only use `Commands` to add resources where it's needed due to the need to initialize a resource with other data from the world.
+It's less clear, and like all commands, commands that insert resources are delayed and only take effect at the end of the current stage.
+
+## Reading and writing from resources
+
+Once our resources have been added to the app, we can read and write to them by adding systems that refer to them using the `Res` and `ResMut` system parameters.
+Let's take a look at how this works in a cohesive context by building a tiny guessing game.
+
+```rust
+
+```
+
+## Singleton entity or Resource?
+
+As discussed in [**Systems access data through queries**](../systems-queries/_index.md), [`Query::single`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.single) is a convenient way to get access to the data of an entity when you know that exactly one entity will be returned by a query.
+So when should you use a singleton entity, and when should you use a resource?
+
+Let's list the advantage of each, beginning with resources:
+
+- fast and simple access model: no need for queries or unwrapping
+- will not be accidentally broken by later code that modifies your entity's components or creates more matching entities
+- can store data that is not thread-safe using [`NonSend`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.NonSend.html) resources
+- clearly communicates intent
+
+By contrast, singleton entities are useful because they:
+
+- can easily share behavior and data types with other entities through systems that operate on their components
+- can be extended and contracted at run time by adding or removing components
+- have more granular change detection: operating on a per component basis rather than the entire object
+- allows you to fetch only the data you immediately need, rather than the entire resource struct
+
+Overall, resources are a good default for one-off demands: they're clear and very ergonomic to access.
+You should turn to singleton entities when you want to share behavior with other entities (i.e. a singleton entity for the player is almost always going to be superior to a monolithic `Player` resource), or for when you want to be able to extend or modify behavior dynamically during gameplay.
+
+## Complex resource initialization using `FromWorld`
+
+Sometimes you may need to initialize resources in more complex ways, depending on data from the `World` at large.
+For this, we can use the [`FromWorld`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/trait.FromWorld.html) trait, which allows you to create a new copy of the type that it's implemented automatically from the world.
+
+Ordinarily, the `Default` trait is used to handle resource initialization, due to the blanket implementation of `FromWorld` for `T: Default`.
+Note that you cannot manually implement `FromWorld` on a type that has the `Default` trait, as Rust forbids conflicting implementations of the same trait.
+
+`FromWorld` is commonly used in asset loading to automatically create handles for simple assets, and its use in this case is demonstrated in the [section on loading assets](../../assets/loading-assets/_index.md).
+For advice on how to work with the `World` exposed by the `FromWorld::from_world` method, see the section on [exclusive world access](../exclusive-world-access/_index.md).
