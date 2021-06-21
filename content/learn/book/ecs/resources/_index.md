@@ -96,7 +96,97 @@ Once our resources have been added to the app, we can read and write to them by 
 Let's take a look at how this works in a cohesive context by building a tiny guessing game.
 
 ```rust
+use bevy::prelude::*;
 
+fn main() {
+    App::build()
+        .add_plugins(DefaultPlugins)
+        // The default value of any Option fields is always None
+        .init_resource::<Secret>()
+        .insert_resource(InputMode::Recording)
+        .add_system(record_secret.system())
+        .add_system(check_secret.system())
+        .run();
+}
+
+/// Resource to store our secret key
+#[derive(Default)]
+struct Secret {
+    val: Option<KeyCode>,
+}
+
+/// Resource to control the interaction mode of our game
+#[derive(PartialEq, Eq)]
+enum InputMode {
+    /// Stores inputs in the Secret resource
+    Recording,
+    /// Compares inputs to the Secret resource
+    Guessing,
+}
+
+/// Stores the keyboard input in our Secret resource
+fn record_secret(
+    mut input_mode: ResMut<InputMode>,
+    mut secret: ResMut<Secret>,
+    mut input: ResMut<Input<KeyCode>>,
+) {
+    // This system should only do work in the Recording input mode
+    if *input_mode == InputMode::Recording {
+        // Only display the text prompt once, when the input_mode changes
+        // Note that we need to derefence out of the ResMut smart pointer
+        // using * to access the underlying InputMode data
+        if input_mode.is_changed() && *input_mode == InputMode::Recording {
+            println!("Press a key to store a secret to be guessed by a friend!")
+        }
+
+        // Input is stored in resources too!
+        // Here, we only want one key to store as our secret,
+        // so we arbitarily grab the first key in case multiple keys are pressed at once
+        let maybe_keycode = input.get_just_pressed().next();
+
+        // maybe_keycode may be None, if no key was pressed
+        // We only care about handling the case where a key was pressed,
+        // so we use if let to destructure our option
+        if let Some(keycode) = maybe_keycode {
+            // Storing our input in the Secret resource
+            secret.val = Some(*keycode);
+
+            // Now that we've stored a Secret, we should swap to guessing it
+            // Again, we need to derefence our resource to refer to the data rather than the wrapper
+            *input_mode = InputMode::Guessing;
+
+            // Clear the input so that check_secret doesn't spy on this data the same frame that it's stored!
+            *input = Input::<KeyCode>::default();
+        }
+    }
+}
+
+/// Checks if the new input matches the stored secret
+fn check_secret(
+    // We need to use mut + ResMut for input_mode and secret since their value is changed
+    mut input_mode: ResMut<InputMode>,
+    mut secret: ResMut<Secret>,
+    // input only needs a Res, since we're only reading the KeyCodes that were pressed
+    input: Res<Input<KeyCode>>,
+) {
+    if *input_mode == InputMode::Guessing {
+        if input_mode.is_changed() {
+            println!("Press a key to check if it matches the secret! Only one key will be checked per frame.")
+        }
+
+        let maybe_keycode = input.get_just_pressed().next();
+        if let Some(keycode) = maybe_keycode {
+            if Some(*keycode) == secret.val {
+                println!("You've guessed the secret!");
+                // Get a new secret if it was guessed successfully
+                secret.val = None;
+                *input_mode = InputMode::Recording;
+            } else {
+                println!("Nope! Try again.")
+            }
+        }
+    }
+}
 ```
 
 ## Singleton entity or Resource?
