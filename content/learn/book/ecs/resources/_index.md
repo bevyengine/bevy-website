@@ -101,7 +101,6 @@ use bevy::prelude::*;
 fn main() {
     App::build()
         .add_plugins(DefaultPlugins)
-        // The default value of any Option fields is always None
         .init_resource::<Secret>()
         .insert_resource(InputMode::Recording)
         .add_system(record_secret.system())
@@ -112,6 +111,7 @@ fn main() {
 /// Resource to store our secret key
 #[derive(Default)]
 struct Secret {
+	// The default value of Option<T> fields is always None
     val: Option<KeyCode>,
 }
 
@@ -131,11 +131,11 @@ fn record_secret(
     mut input: ResMut<Input<KeyCode>>,
 ) {
     // This system should only do work in the Recording input mode
+	// Note that we need to derefence out of the ResMut smart pointer
+	// using * to access the underlying InputMode data
     if *input_mode == InputMode::Recording {
         // Only display the text prompt once, when the input_mode changes
-        // Note that we need to derefence out of the ResMut smart pointer
-        // using * to access the underlying InputMode data
-        if input_mode.is_changed() && *input_mode == InputMode::Recording {
+        if input_mode.is_changed() {
             println!("Press a key to store a secret to be guessed by a friend!")
         }
 
@@ -146,7 +146,7 @@ fn record_secret(
 
         // maybe_keycode may be None, if no key was pressed
         // We only care about handling the case where a key was pressed,
-        // so we use if let to destructure our option
+        // so we use `if let` to destructure our option
         if let Some(keycode) = maybe_keycode {
             // Storing our input in the Secret resource
             secret.val = Some(*keycode);
@@ -156,6 +156,8 @@ fn record_secret(
             *input_mode = InputMode::Guessing;
 
             // Clear the input so that check_secret doesn't spy on this data the same frame that it's stored!
+			// Note that we could avoid doing this by ensuring that check_secret always runs before record_secret
+			// See the page on system ordering for information on how to do this
             *input = Input::<KeyCode>::default();
         }
     }
