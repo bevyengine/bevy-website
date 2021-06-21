@@ -25,7 +25,7 @@ You might want to use resources for:
 Resources need no special implementation: you can use any new or existing Rust type as a resource (if it is not `Send + Sync`, you'll need a `NonSend` resource instead).
 
 As resources are part of the `App`'s `World`, you can add them to the `AppBuilder`.
-Usually this will be done statically, via [`insert_resouce`](https://docs.rs/bevy/0.5.0/bevy/app/struct.AppBuilder.html#method.insert_resource) or [`init_resource`](https://docs.rs/bevy/0.5.0/bevy/app/struct.AppBuilder.html#method.init_resource).
+Usually this will be done statically, via [`insert_resouce`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.insert_resource) or [`init_resource`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.init_resource).
 
 `insert_resource` is used when you want to set the value of a resource manually, while `init_resource` is used when you want to automatically initialize the resources value using the `Default` or `FromWorld` trait.
 
@@ -84,8 +84,8 @@ enum Turn {
 ```
 
 In rare cases, you may need to add a resource later, once other parts of the world exist to ensure proper initialization.
-For that, we can use the equivalent methods on [`Commands`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Commands.html).
-You can add, overwrite and even [`remove_resource](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Commands.html#method.remove_resource) dynamically in this way.
+For that, we can use the equivalent methods on [`Commands`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html).
+You can add, overwrite and even [`remove_resource](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html#method.remove_resource) dynamically in this way.
 
 Only use `Commands` to add resources where it's needed due to the need to initialize a resource with other data from the world.
 It's less clear, and like all commands, commands that insert resources are delayed and only take effect at the end of the current stage.
@@ -191,14 +191,14 @@ fn check_secret(
 
 ## Singleton entity or Resource?
 
-As discussed in [**Systems access data through queries**](../systems-queries/_index.md), [`Query::single`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.single) is a convenient way to get access to the data of an entity when you know that exactly one entity will be returned by a query.
+As discussed in [**Systems access data through queries**](../systems-queries/_index.md), [`Query::single`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single) is a convenient way to get access to the data of an entity when you know that exactly one entity will be returned by a query.
 So when should you use a singleton entity, and when should you use a resource?
 
 Let's list the advantage of each, beginning with resources:
 
 - fast and simple access model: no need for queries or unwrapping
 - will not be accidentally broken by later code that modifies your entity's components or creates more matching entities
-- can store data that is not thread-safe using [`NonSend`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.NonSend.html) resources
+- can store data that is not thread-safe using [`NonSend`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.NonSend.html) resources
 - clearly communicates intent
 
 By contrast, singleton entities are useful because they:
@@ -214,7 +214,7 @@ You should turn to singleton entities when you want to share behavior with other
 ## Complex resource initialization using `FromWorld`
 
 Sometimes you may need to initialize resources in more complex ways, depending on data from the `World` at large.
-For this, we can use the [`FromWorld`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/trait.FromWorld.html) trait, which allows you to create a new copy of the type that it's implemented automatically from the world.
+For this, we can use the [`FromWorld`](https://docs.rs/bevy/latest/bevy/ecs/world/trait.FromWorld.html) trait, which allows you to create a new copy of the type that it's implemented automatically from the world.
 
 Ordinarily, the `Default` trait is used to handle resource initialization, due to the blanket implementation of `FromWorld` for `T: Default`.
 Note that you cannot manually implement `FromWorld` on a type that has the `Default` trait, as Rust forbids conflicting implementations of the same trait.
