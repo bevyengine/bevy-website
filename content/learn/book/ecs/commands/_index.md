@@ -118,8 +118,6 @@ pub fn spawn_lines(mut commands: Commands, mut materials: ResMut<Assets<ColorMat
 
 Finally, let's examine how we could use `EntityCommands::insert()` and `EntityCommands::remove()` to dynamically add and remove components.
 
-FIXME: this example doesn't behave as expected in practice. The wrong entity is selected, and the color doesn't change reliably
-
 ```rust
 use bevy::prelude::*;
 
@@ -129,7 +127,7 @@ fn main() {
         .init_resource::<WhiteMaterial>()
         .init_resource::<PurpleMaterial>()
         .add_startup_system(spawn_camera.system())
-        .add_startup_system(spawn_buttons.system())
+        .add_startup_system(spawn_button.system())
         .add_system(purplify_on_click.system())
         .add_system(enforce_purple.system())
         .run()
@@ -160,32 +158,22 @@ fn spawn_camera(mut commands: Commands) {
     commands.spawn_bundle(UiCameraBundle::default());
 }
 
-fn spawn_buttons(mut commands: Commands) {
-    let button_transforms = vec![
-        Transform::from_xyz(-300.0, 0.0, 0.0),
-        Transform::from_xyz(0.0, 0.0, 0.0),
-        Transform::from_xyz(300.0, 0.0, 0.0),
-    ];
-
-    commands.spawn_batch(button_transforms.into_iter().map(|transform| ButtonBundle {
-        // Each button has a unique transform, based in via .map
-        transform,
+fn spawn_button(mut commands: Commands) {
+    commands.spawn_bundle(ButtonBundle {
         style: Style {
-            // Set button size
             size: Size::new(Val::Px(150.0), Val::Px(150.0)),
-            // Center button
             margin: Rect::all(Val::Auto),
             ..Default::default()
         },
         ..Default::default()
-    }));
+    });
 }
 
 /// Simple marker component to dictate whether our button should be purple or not
 struct Purple;
 
 fn purplify_on_click(
-    query: Query<(Entity, &Interaction, Option<&Purple>)>,
+    query: Query<(Entity, &Interaction, Option<&Purple>), Changed<Interaction>>,
     mut commands: Commands,
 ) {
     for (entity, interaction, maybe_purple) in query.iter() {
