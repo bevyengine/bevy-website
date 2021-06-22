@@ -80,10 +80,40 @@ fn despawn_on_click(
 }
 ```
 
-When you want to spawn large numbers of entities at once in an efficient way, use `spawn_batch`:
+When you want to spawn large numbers of entities at once in an efficient way, use [`spawn_batch`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html#method.spawn_batch):
 
 ```rust
+use bevy::prelude::*;
 
+fn main() {
+    App::build()
+        .add_plugins(DefaultPlugins)
+        .add_startup_system(spawn_camera.system())
+        .add_startup_system(spawn_lines.system())
+        .run()
+}
+
+fn new_line(i: u8, material_handle: Handle<ColorMaterial>) -> SpriteBundle {
+    SpriteBundle {
+        sprite: Sprite::new(Vec2::new(10.0, 200.0)),
+        transform: Transform::from_xyz(i as f32 * 50.0, 0.0, 1.0),
+        material: material_handle,
+        ..Default::default()
+    }
+}
+
+pub fn spawn_camera(mut commands: Commands) {
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+}
+
+pub fn spawn_lines(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
+    let material_handle = materials.add(Color::PINK.into());
+
+    // spawn_batch accepts any object which can be turned into an iterator
+    // which returns a Bundle in each item
+    // and creates one entity for each item in that iterator
+    commands.spawn_batch((1..9).map(move |i| new_line(i, material_handle.clone())));
+}
 ```
 
 Now, let's take a quick look at modifying the components of entities with commands.
