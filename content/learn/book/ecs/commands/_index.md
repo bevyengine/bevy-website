@@ -29,6 +29,60 @@ Most of the time, you'll be using commands to modify entities.
 Let's take a look at the details of that, beginning with the various ways to spawn and despawn entities.
 
 ```rust
+use bevy::prelude::*;
+
+fn main() {
+    App::build()
+        .add_plugins(DefaultPlugins)
+        .add_startup_system(spawn_camera.system())
+        .add_startup_system(spawn_button.system())
+        .add_system(despawn_on_click.system())
+        .run()
+}
+
+fn spawn_camera(mut commands: Commands) {
+    // spawn_bundle spawns an entity with a particular bundle as its components
+    commands.spawn_bundle(UiCameraBundle::default());
+}
+
+struct ButtonMarker;
+
+fn spawn_button(mut commands: Commands) {
+    // .spawn() creates a new entity with no components
+    // You can chain .insert and .insert_bundle to add additional components to spawned bundles
+    commands
+        .spawn()
+        .insert_bundle(ButtonBundle {
+            style: Style {
+                // Set button size
+                size: Size::new(Val::Px(150.0), Val::Px(65.0)),
+                // Center button
+                margin: Rect::all(Val::Auto),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
+        .insert(ButtonMarker);
+}
+
+fn despawn_on_click(
+    query: Query<(Entity, &Interaction), With<ButtonMarker>>,
+    mut commands: Commands,
+) {
+    for (entity, interaction) in query.iter() {
+        if *interaction == Interaction::Clicked {
+            // When you want to interact with a particular entity using commands,
+            // select the appropriate entity with Commands::entity()
+            // Then, you can call EntityCommands like despawn on that entity
+            commands.entity(entity).despawn();
+        }
+    }
+}
+```
+
+When you want to spawn large numbers of entities at once in an efficient way, use `spawn_batch`:
+
+```rust
 
 ```
 
