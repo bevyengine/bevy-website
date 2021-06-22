@@ -116,8 +116,106 @@ pub fn spawn_lines(mut commands: Commands, mut materials: ResMut<Assets<ColorMat
 }
 ```
 
-Now, let's take a quick look at modifying the components of entities with commands.
+Finally, let's examine how we could use `EntityCommands::insert()` and `EntityCommands::remove()` to dynamically add and remove components.
+
+FIXME: this example doesn't behave as expected in practice. The wrong entity is selected, and the color doesn't change reliably
 
 ```rust
+use bevy::prelude::*;
 
+fn main() {
+    App::build()
+        .add_plugins(DefaultPlugins)
+        .init_resource::<WhiteMaterial>()
+        .init_resource::<PurpleMaterial>()
+        .add_startup_system(spawn_camera.system())
+        .add_startup_system(spawn_buttons.system())
+        .add_system(purplify_on_click.system())
+        .add_system(enforce_purple.system())
+        .run()
+}
+
+// These resources store persistent handles to our white and purple materials
+// See the chapter on Assets for more details on how this works
+struct WhiteMaterial(Handle<ColorMaterial>);
+struct PurpleMaterial(Handle<ColorMaterial>);
+
+impl FromWorld for WhiteMaterial {
+    fn from_world(world: &mut World) -> Self {
+        let mut materials = world.get_resource_mut::<Assets<ColorMaterial>>().unwrap();
+        let handle = materials.add(Color::WHITE.into());
+        WhiteMaterial(handle)
+    }
+}
+
+impl FromWorld for PurpleMaterial {
+    fn from_world(world: &mut World) -> Self {
+        let mut materials = world.get_resource_mut::<Assets<ColorMaterial>>().unwrap();
+        let handle = materials.add(Color::PURPLE.into());
+        PurpleMaterial(handle)
+    }
+}
+
+fn spawn_camera(mut commands: Commands) {
+    commands.spawn_bundle(UiCameraBundle::default());
+}
+
+fn spawn_buttons(mut commands: Commands) {
+    let button_transforms = vec![
+        Transform::from_xyz(-300.0, 0.0, 0.0),
+        Transform::from_xyz(0.0, 0.0, 0.0),
+        Transform::from_xyz(300.0, 0.0, 0.0),
+    ];
+
+    commands.spawn_batch(button_transforms.into_iter().map(|transform| ButtonBundle {
+        // Each button has a unique transform, based in via .map
+        transform,
+        style: Style {
+            // Set button size
+            size: Size::new(Val::Px(150.0), Val::Px(150.0)),
+            // Center button
+            margin: Rect::all(Val::Auto),
+            ..Default::default()
+        },
+        ..Default::default()
+    }));
+}
+
+/// Simple marker component to dictate whether our button should be purple or not
+struct Purple;
+
+fn purplify_on_click(
+    query: Query<(Entity, &Interaction, Option<&Purple>)>,
+    mut commands: Commands,
+) {
+    for (entity, interaction, maybe_purple) in query.iter() {
+        if *interaction == Interaction::Clicked {
+            // Adds or removes the Purple marker component when the entity is clicked
+            match maybe_purple {
+                // Adding components requires a concrete value for the new component
+                None => commands.entity(entity).insert(Purple),
+                // But removing them just requires the type
+                Some(_) => commands.entity(entity).remove::<Purple>(),
+            };
+        }
+    }
+}
+
+// This example is contrived for demonstration purposes:
+// it would be much more efficient to simply set the material directly
+// rather than using a marker component + system
+fn enforce_purple(
+    mut query: Query<(&mut Handle<ColorMaterial>, Option<&Purple>)>,
+    white_material: Res<WhiteMaterial>,
+    purple_material: Res<PurpleMaterial>,
+) {
+    for (mut material, maybe_purple) in query.iter_mut() {
+        *material = match maybe_purple {
+            None => white_material.0.clone(),
+            Some(_) => purple_material.0.clone(),
+        }
+    }
+}
 ```
+
+Note that the equivalent commands exist for bundles, and work in exactly the same way (but are convenient for adding and removing more than one component at once).
