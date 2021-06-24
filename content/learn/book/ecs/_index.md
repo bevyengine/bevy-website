@@ -103,3 +103,38 @@ let my_enemy = EnemyBundle {
 	..Default::default()
 }
 ```
+
+### Type aliases don't play nice
+
+Bey's ECS uses Rust's type system to dispatch data to our systems as requested.
+This is very convenient for safety and ergonomic reasons, but means that only one resource of each Rust type can exist at once, and only one component of each type can be stored on each entity.
+
+"One of each Rust type" has somewhat surprising consequences for new Rust users though: [type aliases](https://doc.rust-lang.org/reference/items/type-aliases.html) will not result in unique types, and should generally not be used to define resource or component types.
+
+```rust
+use std::any::type_name;
+
+// Our first component type
+struct Life(u32);
+
+// An attempt at a second component type, using a type alias
+type Health = Life;
+
+// Unfortunately, these two types share the same name :(
+// Attempting to insert both Life and Health would result in overwritten values,
+// and any query for one would return either
+assert_eq!(type_name(Life(42)), type_name(Health(42));
+```
+
+Instead, you have to define entirely new types for each component or resource you wish to use,
+commonly using the [`newtype` pattern](https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types) to wrap a single value of some common or external type.
+
+```rust
+use std::any::type_name;
+
+struct Life(u32);
+struct Health(u32);
+
+// Our components have different types now!
+assert!(type_name(Life(42)) != type_name(Health(42));
+```
