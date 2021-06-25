@@ -40,7 +40,7 @@ It also has many features most people expect from a modern, general purpose engi
 * <b class="fun-list">Scenes</b>: Save ECS Worlds to human-readable scene files and load scene files into ECS Worlds
 * <b class="fun-list">Plugins</b>: All engine and app features are implemented as modular plugins
 * <b class="fun-list">Sound</b>: Load audio files as assets and play them from within systems
-* <b class="fun-list">Multiple Render Backends</b>: Vulkan, DirectX 12, and Metal (with more on the way thanks to [wgpu](https://github.com/gfx-rs/wgpu-rs))
+* <b class="fun-list">Multiple Render Backends</b>: Vulkan, DirectX 12, and Metal (with more on the way thanks to [wgpu](https://github.com/gfx-rs/wgpu))
 * <b class="fun-list">Data Driven Shaders</b>: Easily bind ECS components directly to shader uniforms
 * <b class="fun-list">Hot Asset Reloading</b>: Automatically reload changes to assets at runtime without recompiles or restarts
 * <b class="fun-list">Events</b>: Efficiently consume and produce Events from within ECS systems
