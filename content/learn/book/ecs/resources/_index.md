@@ -246,6 +246,9 @@ struct Countdown {
     time_remaining: u8,
 }
 
+// `countdown` does not need to be marked as `mut` here,
+// as destructuring (like via `match`) does not require mutation
+// Only the internal data (`validated_countdown`) needs to be marked as `mut`
 fn countdown(
     countdown: Option<ResMut<Countdown>>,
     mut commands: Commands,
