@@ -223,3 +223,46 @@ Note that you cannot manually implement `FromWorld` on a type that has the `Defa
 
 `FromWorld` is commonly used in asset loading to automatically create handles for simple assets, and its use in this case is demonstrated in the [section on loading assets](../../assets/loading-assets/_index.md).
 For advice on how to work with the `World` exposed by the `FromWorld::from_world` method, see the section on [exclusive world access](../exclusive-world-access/_index.md).
+
+## Optional Resources
+
+Sometimes, a resource may not exist by the time a regularly scheduled system is called.
+We can handle both the case where it exists and the case where it doesn't by requesting `Option<Res<T>>` as a system parameter,
+and then branching on the resulting `Option<T>` returned.
+
+Here's a quick runnable example:
+
+```rust
+use bevy::prelude::*;
+
+fn main() {
+    App::build()
+        .add_plugins(DefaultPlugins)
+        .add_system(countdown.system())
+        .run()
+}
+
+struct Countdown {
+    time_remaining: u8,
+}
+
+fn countdown(
+    countdown: Option<ResMut<Countdown>>,
+    mut commands: Commands,
+    mut app_exit: EventWriter<AppExit>,
+) {
+    match countdown {
+        // Resources can be inserted at runtime using commands
+        None => commands.insert_resource(Countdown { time_remaining: 10 }),
+        Some(mut validated_countdown) => {
+            info!("{} ticks remaining!", validated_countdown.time_remaining);
+            if validated_countdown.time_remaining > 1 {
+                validated_countdown.time_remaining -= 1;
+            } else {
+                info!("Ka-BOOM!");
+                app_exit.send(AppExit);
+            }
+        }
+    }
+}
+```
