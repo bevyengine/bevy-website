@@ -48,6 +48,8 @@ Unlike ordinary systems, which can be executed in parallel in arbitrary orders, 
 2. Immediately after the end of a stage, before commands are applied, using `my_exclusive_system().exclusive_system().before_commands()`.
 3. Immediately after the end of a stage, after commands are applied, using `my_exclusive_system().exclusive_system().after_commands()`.
 
+Like other systems, exclusive systems obey `.before` and `.after` ordering constraints, but only with respect to other exclusive systems running at the same time in the same stage.
+
 TODO: add exclusive system example
 ```rust
 
