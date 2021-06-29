@@ -15,7 +15,7 @@ We can think of our **entity-component data storage** as a giant database:
 * each column is a type of **component**, storing data of a particular type (perhaps the sprite, team or life of a player entity) in an efficient way
 * each cell is a component of a particular entity, which has a concrete value we can look up and change
 * we access data from this database using **queries**, which fetch entities with the specified components
-* the primary key of this database is the [`Entity`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html) identifier, which can use to look up specific entities using [`Query::get(my_entity)`](https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Query.html#method.get)
+* the primary key of this database is the [`Entity`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html) identifier, which can be used to look up specific entities using [`Query::get(my_entity)`](https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Query.html#method.get)
 
 Of course, this database is not very well-normalized: not all entities will have every component!
 We can use this to specialize behavior between entities: only performing work on them in our systems if they have the correct combination of components.
