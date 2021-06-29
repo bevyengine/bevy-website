@@ -34,7 +34,8 @@ struct Name(String);
 struct CombatBundle {
 	// Each field of this bundle corresponds to a type of component 
 	// that will be inserted into the final entity
-	// The field names don't matter: only the types are retained in our ECS storage
+	// The field names are only used when instantiating the bundle;
+    // only the types are retained in our ECS storage
     life: Life,
     attack: Attack,
     defense: Defense,
