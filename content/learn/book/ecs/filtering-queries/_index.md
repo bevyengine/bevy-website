@@ -40,7 +40,7 @@ In most cases, simply adding a second query as another system parameter works pe
 But as you use this pattern more, you may encounter an error that looks something like:
 
 ```
-
+   Query<&mut Transform, With<Camera>> in system move_player accesses component(s) &mut Transform in a way that conflicts with a previous system parameter. Allowing this would break Rust's mutability rules. Consider using `Without<T>` to create disjoint Queries or merging conflicting Queries into a `QuerySet`.
 ```
 
 What went wrong? It worked just fine before!
