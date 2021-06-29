@@ -207,3 +207,29 @@ fn enforce_purple(
 ```
 
 Note that the equivalent commands exist for bundles, and work in exactly the same way (but are convenient for adding and removing more than one component at once).
+
+## Manually flushing commands
+
+Ordinarily, commands are only applied at the end of each stage.
+This is because they require exclusive mutable access to the `World`.
+
+However, if you already have exclusive access to the `World`, you can use [`SystemState::<Commands>::apply()`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemState#method.apply) to immediately run and clear any `Commands` that may have accumulated.
+
+```rust
+use bevy::prelude::*;
+use bevy::ecs::system::SystemState;
+
+let world = World::new();
+
+let mut system_state = SystemState::<Commands>::new(&mut world);
+
+// Manually adding a command to the list to verify that this works
+let mut commands = system_state.get_mut();
+commands.spawn();
+
+// Applies all accumulated commands to the world, causing them to take immediate effect
+system_state.apply(&mut world);
+```
+
+Generally speaking, this isn't useful for the average game: you can't get exclusive world access any faster than commands naturally apply.
+However, this technique can be incredibly useful for advanced control flows that are willing to sacrifice some parallelism in order to immediately (or repeatedly) process commands.
