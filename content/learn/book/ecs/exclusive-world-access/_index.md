@@ -44,11 +44,9 @@ TODO: add `WorldCell` example
 Exclusive systems are systems that operate on `&mut World`.
 Unlike ordinary systems, which can be executed in parallel in arbitrary orders, exclusive systems can run either:
 
-1. Immediately before the start of a stage.
-2. Immediately after the end of a stage, before commands are applied.
-3. Immediately after the end of a stage, after commands are applied.
-
-This can be controlled by ??.
+1. Immediately before the start of a stage, using `my_exclusive_system().exclusive_system().at_start()`.
+2. Immediately after the end of a stage, before commands are applied, using `my_exclusive_system().exclusive_system().before_commands()`.
+3. Immediately after the end of a stage, after commands are applied, using `my_exclusive_system().exclusive_system().after_commands()`.
 
 TODO: add exclusive system example
 ```rust
