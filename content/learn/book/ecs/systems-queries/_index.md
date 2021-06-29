@@ -48,8 +48,8 @@ fn read_life(query: Query<&Life>){}
 fn write_life(mut query: Query<&mut Life>){}
 ```
 
-In order to access multiple components at once, we need to use a tuple type as our first type parameter.
-`Query<(&Life, &Attack)>` gives us read access to the `Life` and `Attack` components to all entities that have *both* of those components.
+In order to access multiple components at once, we need to replace our single `&Life` component with a tuple type that bundles many types into one.
+Concretely, `Query<(&Life, &Attack)>` gives us read access to the `Life` and `Attack` components to all entities that have *both* of those components.
 Be mindful of this fact when designing queries: queries operate using "AND" logic (unless you use an `Option<&C>` query parameter): adding more components will always strictly reduce the number of entities returned by your query.
 We can get mutable access to `Life` and `Attack` separately by changing our `&` (reference) to `&mut` (mutable references) on the components that we want mutable access to.
 
@@ -113,7 +113,7 @@ Otherwise, just call `let (component_a, component_b) = query.single().unwrap()` 
 ## Looking up specific entities
 
 Each entity in our ECS data storages has a unique identifier, given by its [`Entity`](https://docs.rs/bevy/0.5.0/bevy/ecs/entity/struct.Entity.html), which defines the entity in terms of a `u32` [`id`](https://docs.rs/bevy/0.5.0/bevy/ecs/entity/struct.Entity.html#method.id) and a `u32` [`generation`](https://docs.rs/bevy/0.5.0/bevy/ecs/entity/struct.Entity.html#method.generation).
-We can fetch the `Entity` of each entity returned by our queries by including it in the first type parameter of `Query`:
+We can fetch the `Entity` of each entity returned by our queries by including it as part of the first type parameter of `Query` as if it were a component (although no `&` is used):
 
 ```rust
 // This system reports the Entity of every entity in your World
