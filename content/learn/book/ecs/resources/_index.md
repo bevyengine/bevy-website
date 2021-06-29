@@ -227,7 +227,7 @@ For advice on how to work with the `World` exposed by the `FromWorld::from_world
 ## Optional Resources
 
 Sometimes, a resource may not exist by the time a regularly scheduled system is called.
-We can handle both the case where it exists and the case where it doesn't by requesting `Option<Res<T>>` as a system parameter,
+We can handle both the case where it exists and the case where it doesn't by requesting `Option<Res<T>>` (or other resource types like `ResMut`, `NonSend` and `NonSendMut`) as a system parameter,
 and then branching on the resulting `Option<T>` returned.
 
 Here's a quick runnable example:
