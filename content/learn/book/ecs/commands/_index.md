@@ -11,7 +11,7 @@ Queue them up, and you can reshape the world in arbitrary ways when they're eval
 Commands are fundamentally designed to perform work that cannot be safely done in parallel, and are used to change the world in ways that touch large amounts of data at once (requiring exclusive access to the archetypes and other metadata of the `World`).
 While you can check out the full list of options by reading the API docs for [`Commands`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Commands.html) and [`EntityCommands`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.EntityCommands.html), commands are commonly used to:
 
-- Spawn and despawn entities with `spawn`, `spawn_bundle` and ``commands.entity(my_entity).despawn`
+- Spawn and despawn entities with `spawn`, `spawn_bundle` and `commands.entity(my_entity).despawn`
 - Add and remove resources dynamically with `init_resource`, `insert_resouce` and `remove_resource`
 - Add and remove components to entities with `commands.entity(my_entity).insert` and `commands.entity(my_entity).remove`
 
