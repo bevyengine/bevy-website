@@ -18,15 +18,16 @@ We can think of our **entity-component data storage** as a giant database:
 * the primary key of this database is the [`Entity`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html) identifier, which can be used to look up specific entities using [`Query::get(my_entity)`](https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Query.html#method.get)
 
 Of course, this database is not very well-normalized: not all entities will have every component!
-We can use this to specialize behavior between entities: only performing work on them in our systems if they have the correct combination of components.
+We can use this fact to specialize behavior between entities: systems only perform work on entities with the correct combination of components.
 You don't want to apply gravity to entities without a position in your world, and you're only interested in using the UI layout algorithm to control the layout of UI entities!
 
 When we want to go beyond this tabular data storage, we can use **resources**: global singletons which store data in monolithic blobs.
 You might use resources to store one-off bits of state like the game's score, use it to interface with other libraries, or store secondary data structures like indexes to augment your use of entity-component data.
-Just like with components on entities, resources are accessed by type and you can only have one resource of each Rust type.
 
-In order to actually perform logic on all of this data, we must use systems, which are automatically run by our scheduler.
-**Systems** are Rust functions which request specific data from the world, as declared in their system parameters (function arguments): generally resources and entities that have a particular combination of components using queries.
+In order to actually manipulate all of this data in interesting ways, we must use systems.
+**Systems** are Rust functions which request specific data from the world, as declared in their system parameters (function parameters): generally resources and entities that have a particular combination of components using queries.
+Systems are Rust functions that request data from the `World` (such as resources or entities with particular components) in order to perform tasks.
+All of the rules and behaviours of our game are governed by systems.
 Once the systems are added to our app the **scheduler** takes in this information and automatically runs our systems: typically once during each pass of the **game loop**.
 
 Bevy's scheduler is remarkably powerful: it uses the information about data access defined in our system parameters to automatically run systems in parallel.
@@ -37,15 +38,17 @@ On the next page, we'll create a simple "game" using the ECS so you can see how 
 
 ## Rust tips and tricks for Bevy's ECS
 
-If you're new to Rust, there are a few standard tricks and idioms that are used by Bevy's ECS that are worth learning about.
+If you're new to Rust, there are a few standard patterns and pitfalls that are particularly relevant to Bevy's ECS.
 Feel free to come back to this section later as you learn more about Bevy!
 
 ### Tuple structs
 
-When working with tuple structs like `struct Score(u64)` or `struct Position(u8, u8)`, `.0`, `.1` and so on are used to access fields, counting up from 0 in the order they were defined.
+Tuple structs, defined like `struct Score(u64);` or `struct Position(u8, u8);`, are structs with unnamed fields, accessed by the order in which they were defined.
+`.0`, `.1` and so on are used to access fields, counting up from 0 in the order they were declared.
 
-`let foo.0 = bar` can seem opaque when you first read it, but in Rust it just means that you're assigning `bar` to the first field of the tuple struct `foo`.
+`my_position.0 = 42` can seem opaque when you first read it, but in Rust it just means that you're assigning `42` to the first field of the tuple struct `my_position` (by convention, the x coordinate).
 Using ordinary structs with named fields rather than tuple structs (even for simple components and resources!) can go a long way to improving the clarity of your code by providing more descriptive field names.
+In this example, `my_position.x = 42` immediately communicates intent, rather than relying on the end user to remember the convention used.
 
 ### Smart pointers
 
@@ -61,48 +64,35 @@ There are a few points to be aware of when working with "smart pointers" like co
 
 Bevy often requires defining complex structs when creating entities with bundles or configuring the app with resources.
 In many cases, we want to use *some* default fields, but not all of them.
-As Rust does not have default arguments, we instead use [struct update syntax](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax) in combination with the [`default()`](https://doc.rust-lang.org/std/default/trait.Default.html) method from the `Default` trait to allow us to quickly set some values while leaving others unchanged.
+As Rust does not have default arguments, we instead use [struct update syntax](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax) in combination with the [`Default::default()`](https://doc.rust-lang.org/std/default/trait.Default.html) method to allow us to quickly set some values while leaving others unchanged.
 
 ```rust
-// We want to quickly generate new enemies from this component bundle
-// By using some default fields
-#[derive(Bundle, Default)]
-struct EnemyBundle {
-	enemy: Enemy,
-	life: Life,
-	attack: Attack,
-	defense: Defense,
+struct CombatStats {
+	attack: u8,
+	defense: u8,
+	speed: u8,
 }
 
-// Dataless unit structs automatically have a default value
-// Since only one possible value exists
-struct Enemy;
-
-struct Life(u32);
-
-// Manually implementing Default for one of our component types
-// allowing us to control the starting value
-impl Default for Life {
+impl Default for CombatStats {
+	// This method is being used to create an initial struct
+	// whose values we copy and then override
 	fn default() -> Self {
-		Life(100)
+		CombatStats {
+			attack: 100,
+			defense: 100,
+			speed: 100,
+		}
 	}
 }
 
-// These components will have a default value of 0, as u32::default() == 0
-#[derive(Default)]
-struct Defense(u32);
-
-#[derive(Default)]
-struct Attack(u32);
-
-let my_enemy = EnemyBundle {
-	attack: 10,
-	defense: 5,
-	// All other fields are initialized from their default value
-	// setting enemy: Enemy and life: Life(100)
+let my_stats = CombatStats {
+	attack: 150,
+	defense: 50,
 	..Default::default()
 }
 ```
+
+This pattern is commonly used when working with bundles: groups of components typically used for entity initialization.
 
 ### Type aliases don't play nice
 
@@ -123,7 +113,7 @@ type Health = Life;
 // Unfortunately, these two types share the same name :(
 // Attempting to insert both Life and Health would result in overwritten values,
 // and any query for one would return either
-assert_eq!(type_name(Life(42)), type_name(Health(42));
+assert_eq!(type_id(Life(42)), type_id(Health(42));
 ```
 
 Instead, you have to define entirely new types for each component or resource you wish to use,
@@ -136,5 +126,5 @@ struct Life(u32);
 struct Health(u32);
 
 // Our components have different types now!
-assert!(type_name(Life(42)) != type_name(Health(42));
+assert_ne!(type_id(Life(42)), type_id(Health(42));
 ```
