@@ -8,7 +8,7 @@ page_template = "book-section.html"
 
 TODO: explain why you might want faster compiles
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking). Note that right now, this doesn't work on Windows.
 
     ```sh
     cargo run --features bevy/dynamic
@@ -36,16 +36,14 @@ TODO: explain why you might want faster compiles
   * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
 
-	```sh
-    # Install the nightly toolchain
-    rustup toolchain install nightly
-    # Configure your current project to use nightly (run this command within the project)
-    rustup override set nightly
-    # OR configure cargo to use nightly for all projects -- switch back with `rustup default stable`
-    rustup default nightly
+    Create a ```rust-toolchain``` file in the root of your project, next to ```Cargo.toml```.
+
+    ```toml
+    [toolchain]
+    channel = "nightly"
     ```
 
-  * You can use `cargo +nightly ...` if you don't want to change the default to nightly.
+    For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
