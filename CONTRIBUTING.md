@@ -136,7 +136,7 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
 1. All examples must be able to be compiled and run.
 2. Prefer game-relevant, descriptive examples and variable names over generic ones like `MyEvent`. Avoid meaningless names like `foo` at all times.
 3. It's good practice to break your code into blocks with comments or explanatory text, but you need to link to a cohesive, copy-able whole at the end.
-4. Examples must pass Bevy's standard `clippy` lints.
+4. Examples must pass Bevy's standard `clippy` lints. [Current Settings](https://github.com/bevyengine/bevy/blob/main/tools/ci/src/main.rs#L16)
 5. The polish level of your examples should correspond to the point you're trying to make.
    1. If you're demonstrating a new feature, show only the most basic syntax as locally as possible.
    2. When trying to explain how a game can be made, organize and polish your code to showcase best practices.
