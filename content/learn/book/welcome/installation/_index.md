@@ -20,7 +20,7 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
 ### Install OS dependencies
 
 * [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)
-* Windows: Make sure to install [VS2019 build tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
+* Windows: If you use the `msvc` toolchain make sure to install [VS2019 build tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 * MacOS: No dependencies here
 
 ### Code Editor / IDE
