@@ -110,7 +110,7 @@ struct Life(u32);
 // An attempt at a second component type, using a type alias
 type Health = Life;
 
-// Unfortunately, these two types share the same name :(
+// Unfortunately, these two types share the same id :(
 // Attempting to insert both Life and Health would result in overwritten values,
 // and any query for one would return either
 assert_eq!(type_id(Life(42)), type_id(Health(42));
