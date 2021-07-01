@@ -96,7 +96,7 @@ This pattern is commonly used when working with bundles: groups of components ty
 
 ### Type aliases don't play nice
 
-Bey's ECS uses Rust's type system to dispatch data to our systems as requested.
+Bevy's ECS uses Rust's type system to dispatch data to our systems as requested.
 This is very convenient for safety and ergonomic reasons, but means that only one resource of each Rust type can exist at once, and only one component of each type can be stored on each entity.
 
 "One of each Rust type" has somewhat surprising consequences for new Rust users though: [type aliases](https://doc.rust-lang.org/reference/items/type-aliases.html) will not result in unique types, and should generally not be used to define resource or component types.
