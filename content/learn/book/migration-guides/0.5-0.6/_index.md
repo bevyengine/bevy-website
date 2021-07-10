@@ -29,7 +29,7 @@ fn main() {
 ```
 
 When adding a system to Bevy it is no longer necessary to call `.system()` beforehand.
-Functions like `.label()` or `.config()` can now also be directly called on a system.
+System Configuration Functions like `.label()` or `.config()` can now also be directly called on a system.
 
 ```rust
 // 0.5
@@ -83,3 +83,55 @@ At the same time the `fov` and `depth` fields were removed from the {{rust_type(
 In addition the {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="DirectionalLight" no_mod=true)}} and {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="DirectionalLightBundle" no_mod=true)}} were introduced with `0.6`.
 
 -->
+
+### New SystemState and rename old SystemState to SystemMeta
+
+To get easier cached access to a {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true)}} outside of a system, a new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} was introduced.
+
+<!-- Directly taken from https://github.com/bevyengine/bevy/pull/2283 -->
+```rust
+#[derive(Eq, PartialEq, Debug)]
+struct A(usize);
+
+#[derive(Eq, PartialEq, Debug)]
+struct B(usize);
+
+let mut world = World::default();
+world.insert_resource(A(42));
+world.spawn().insert(B(7));
+
+// we get nice lifetime elision when declaring the type on the left hand side
+let mut system_state: SystemState<(Res<A>, Query<&B>)> = SystemState::new(&mut world);
+let (a, query) = system_state.get(&world);
+assert_eq!(*a, A(42), "returned resource matches initial value");
+assert_eq!(
+    *query.single().unwrap(),
+    B(7),
+    "returned component matches initial value"
+);
+
+// mutable system params require unique world access
+let mut system_state: SystemState<(ResMut<A>, Query<&mut B>)> = SystemState::new(&mut world);
+let (a, query) = system_state.get_mut(&mut world);
+
+// static lifetimes are required when declaring inside of structs
+struct SomeContainer {
+  state: SystemState<(Res<'static, A>, Res<'static, B>)>
+}
+
+// this can be shortened using type aliases, which will be useful for complex param tuples
+type MyParams<'a> = (Res<'a, A>, Res<'a, B>);
+struct SomeContainer {
+  state: SystemState<MyParams<'static>>
+}
+
+// It is the user's responsibility to call SystemState::apply(world) for parameters that queue up work
+let mut system_state: SystemState<(Commands, Query<&B>)> = SystemState::new(&mut world);
+{
+  let (mut commands, query) = system_state.get(&world);
+  commands.insert_resource(3.14);
+}
+system_state.apply(&mut world);
+```
+
+The preexisting {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} in `0.5` was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
