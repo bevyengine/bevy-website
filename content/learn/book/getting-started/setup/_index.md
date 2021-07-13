@@ -63,7 +63,6 @@ fn main() {
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-authors = ["You <you@example.com>"]
 edition = "2018"
 
 [dependencies]
@@ -77,7 +76,6 @@ Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), th
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-authors = ["You <you@example.com>"]
 edition = "2018"
 
 [dependencies]
