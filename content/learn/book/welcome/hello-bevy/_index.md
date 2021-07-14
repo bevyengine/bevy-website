@@ -1,5 +1,5 @@
 +++
-title = "Hello World"
+title = "Hello, Bevy!"
 weight = 3
 template = "book-section.html"
 page_template = "book-section.html"
