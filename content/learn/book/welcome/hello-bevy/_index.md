@@ -82,7 +82,7 @@ use bevy::prelude::*;
 // Rest of code
 ```
 
-Then, replace the main function with a Bevy App Decleration:
+Then, initialize and run your Bevy app:
 
 ```rust
 fn main() {
