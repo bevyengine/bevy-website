@@ -1,0 +1,698 @@
+
+
+
+
+
+
+
+
+
+    
+        
+    
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name='viewport' content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="Bevy - 0.4 to 0.5" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;0.4-0.5&#x2F;" />
+        <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+        <meta property="og:description" content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+        <link rel="stylesheet" href="/site.css" />
+        <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+        <title>Bevy - 0.4 to 0.5</title>
+        
+<script src="/optional-helpers.js"></script>
+
+    </head>
+
+    <body>
+        <div class="headerbar-container">
+            <nav class="headerbar container">
+                <a href="/" class="header-logo">
+                    <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
+                </a>
+                
+                    <label class="toggle-nav-mobile" for=show-book-nav>
+                        <svg alt="nav bars" width="24" height="24">
+                            <g fill="none" stroke="#ececec" stroke-width="2">
+                                <path d="m4 6h16" />
+                                <path d="m4 11h16" />
+                                <path d="m4 16h16" />
+                            </g>
+                        </svg>
+                    </label>
+                
+                <div class="header-item header-message">
+                    
+                        The Book
+                    
+                </div>
+                <div class="header-item header-push"></div>
+                
+
+
+
+    
+
+
+<a href="&#x2F;" class="header-item" >
+    Features
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;learn" class="header-item header-item-active"  >
+    Learn
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;news" class="header-item" >
+    News
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;community" class="header-item" >
+    Community
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;assets" class="header-item" >
+    Assets
+</a>
+
+                <a class="header-item header-button header-button-donate" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+                <a class="header-item header-button" href="/learn/book/getting-started/">Get Started</a>
+            </nav>
+        </div>
+        <section class="section">
+            <div class="container">
+                
+<div class="book-page">
+    <input type="checkbox" style="display: none" id="show-book-nav" />
+    <nav class="book-nav" role="navigation">
+        
+        
+        <ul class="book-nav-sections-container book-nav-sections">
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;introduction&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">1.</strong>
+        introduction
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.</strong>
+        getting started
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;next-steps&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">3.</strong>
+        next steps
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;contributing&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">4.</strong>
+        contributing
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;troubleshooting&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">5.</strong>
+        troubleshooting
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;faq&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">6.</strong>
+        faq
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">7.</strong>
+        migration guides
+    </a>
+    
+    <ul class="book-nav-sections book-nav-sections-indented">
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;0.4-0.5&#x2F;" class="book-nav-section-title-active book-nav-section-title" >
+        <strong class="book-nav-section-number">7.1.</strong>
+        0.4 to 0.5
+    </a>
+    
+</li>
+
+        
+    </ul>
+    
+</li>
+
+            
+        </ul>
+        
+    </nav>
+    <div class="book-content">
+        
+
+        
+        
+
+        
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+        
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+             
+             
+                <a id="book-pager-bar-previous" href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;" class="book-pager-bar book-pager-bar-previous">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-previous">
+                        <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
+                    </div>
+                </a>
+             
+            
+
+            
+
+        
+
+        <h1>
+            
+                Migration Guide: 0.4 to 0.5
+            
+            
+        </h1>
+        <div class="media-content"><!-- TODO: link to release blog post here -->
+<h3 id="commands-mut-commands-systemparam-is-now-mut-commands-commands">&quot;commands: &amp;mut Commands&quot; SystemParam is now &quot;mut commands: Commands&quot;</h3>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">foo</span><span style="color:#5fb3b3;">(</span><span style="color:#f99157;">commands</span><span style="color:#5fb3b3;">: &amp;</span><span style="color:#c594c5;">mut</span><span style="color:#cccece;"> Commands</span><span style="color:#5fb3b3;">) {
+}
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">foo</span><span style="color:#5fb3b3;">(</span><span style="color:#c594c5;">mut </span><span style="color:#f99157;">commands</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> Commands</span><span style="color:#5fb3b3;">) {
+}
+</span></code></pre>
+<p>Systems using the old <code>commands: &amp;mut Commands</code> syntax in 0.5 will fail to compile when calling <code>foo.system()</code>.</p>
+<p>This change was made because <a href="https:&#x2F;&#x2F;docs.rs/bevy_ecs&#x2F;0.5.0&#x2F;bevy_ecs&#x2F;system/struct.Commands.html"><code>Commands</code>
+</a>
+now holds an internal <a href="https:&#x2F;&#x2F;docs.rs/bevy_ecs&#x2F;0.5.0&#x2F;bevy_ecs&#x2F;world/struct.World.html"><code>World</code>
+</a>
+reference to enable safe entity allocations.</p>
+<p>Note: The internal <a href="https:&#x2F;&#x2F;docs.rs/bevy_ecs&#x2F;0.5.0&#x2F;bevy_ecs&#x2F;world/struct.World.html"><code>World</code>
+</a> reference requires two lifetime parameters to pass Commands into a non-system function: <code>commands: &amp;'a mut Commands&lt;'b&gt;</code></p>
+<h3 id="commands-api">Commands API</h3>
+<p>The <a href="https:&#x2F;&#x2F;docs.rs/bevy_ecs&#x2F;0.5.0&#x2F;bevy_ecs&#x2F;system/struct.Commands.html"><code>Commands</code>
+</a> API has been completely reworked for consistency with the <a href="https:&#x2F;&#x2F;docs.rs/bevy_ecs&#x2F;0.5.0&#x2F;bevy_ecs&#x2F;world/struct.World.html"><code>World</code>
+</a> API.</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#cccece;">commands
+    </span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeBundle</span><span style="color:#5fb3b3;">)
+    .</span><span style="color:#6699cc;">with</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeComponent</span><span style="color:#5fb3b3;">)
+    .</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeBundle</span><span style="color:#5fb3b3;">); </span><span style="color:#5f6364;">// this sort of chaining is no longer possible
+
+</span><span style="color:#c594c5;">let</span><span style="color:#cccece;"> entity </span><span style="color:#5fb3b3;">=</span><span style="color:#cccece;"> commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeBundle</span><span style="color:#5fb3b3;">).</span><span style="color:#6699cc;">current_entity</span><span style="color:#5fb3b3;">().</span><span style="color:#6699cc;">unwrap</span><span style="color:#5fb3b3;">();
+
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">despawn</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">entity</span><span style="color:#5fb3b3;">);
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#cccece;">commands
+    </span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">()
+    .</span><span style="color:#6699cc;">insert_bundle</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeBundle</span><span style="color:#5fb3b3;">)
+    .</span><span style="color:#6699cc;">insert</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">Component</span><span style="color:#5fb3b3;">);
+
+</span><span style="color:#c594c5;">let</span><span style="color:#cccece;"> entity </span><span style="color:#5fb3b3;">=</span><span style="color:#cccece;"> commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">().</span><span style="color:#6699cc;">insert_bundle</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeBundle</span><span style="color:#5fb3b3;">).</span><span style="color:#6699cc;">id</span><span style="color:#5fb3b3;">();
+
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">entity</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">entity</span><span style="color:#5fb3b3;">).</span><span style="color:#6699cc;">despawn</span><span style="color:#5fb3b3;">();
+</span></code></pre>
+<p><code>commands.spawn()</code> no longer accepts any parameters.  To spawn bundles, use <code>commands.spawn_bundle(bundle)</code>.</p>
+<p>Similarly, rather than using <code>with(some_component)</code> to spawn an object with multiple components, you must now use <code>insert(some_component)</code>:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_bundle</span><span style="color:#5fb3b3;">)
+    .</span><span style="color:#6699cc;">with</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_component</span><span style="color:#5fb3b3;">);
+    
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn_bundle</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_bundle</span><span style="color:#5fb3b3;">)
+    .</span><span style="color:#6699cc;">insert</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_component</span><span style="color:#5fb3b3;">);
+    
+</span><span style="color:#5f6364;">// or...
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn</span><span style="color:#5fb3b3;">()
+    .</span><span style="color:#6699cc;">insert_bundle</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_bundle</span><span style="color:#5fb3b3;">)
+    .</span><span style="color:#6699cc;">insert</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_component</span><span style="color:#5fb3b3;">);
+</span></code></pre>
+<p>Removing and adding components on entities has also been changed:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">insert_one</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_entity</span><span style="color:#5fb3b3;">,</span><span style="color:#cccece;"> SomeComponent</span><span style="color:#5fb3b3;">);
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#cccece;">remove_one</span><span style="color:#5fb3b3;">::&lt;</span><span style="color:#cccece;">SomeComponent</span><span style="color:#5fb3b3;">&gt;(</span><span style="color:#cccece;">some_entity</span><span style="color:#5fb3b3;">);
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">entity</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_entity</span><span style="color:#5fb3b3;">).</span><span style="color:#6699cc;">insert</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SomeComponent</span><span style="color:#5fb3b3;">);
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">entity</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">some_entity</span><span style="color:#5fb3b3;">).</span><span style="color:#cccece;">remove</span><span style="color:#5fb3b3;">::&lt;</span><span style="color:#cccece;">SomeComponent</span><span style="color:#5fb3b3;">&gt;();
+</span></code></pre><h3 id="timer-now-uses-duration">Timer now uses Duration</h3>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#c594c5;">if</span><span style="color:#cccece;"> timer</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">tick</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">time</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">delta_seconds</span><span style="color:#5fb3b3;">()).</span><span style="color:#6699cc;">finished</span><span style="color:#5fb3b3;">() { </span><span style="color:#5f6364;">/* do stuff */ </span><span style="color:#5fb3b3;">}
+</span><span style="color:#cccece;">timer</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">elapsed</span><span style="color:#5fb3b3;">() </span><span style="color:#5f6364;">// returns an `f32`
+
+// 0.5
+</span><span style="color:#c594c5;">if</span><span style="color:#cccece;"> timer</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">tick</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">time</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">delta</span><span style="color:#5fb3b3;">()).</span><span style="color:#6699cc;">finished</span><span style="color:#5fb3b3;">() { </span><span style="color:#5f6364;">/* do stuff */ </span><span style="color:#5fb3b3;">}
+</span><span style="color:#cccece;">timer</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">elapsed</span><span style="color:#5fb3b3;">() </span><span style="color:#5f6364;">// returns a `Duration`
+</span></code></pre>
+<p>Most of the methods of <a href="https:&#x2F;&#x2F;docs.rs/bevy_core&#x2F;0.5.0&#x2F;bevy_core/struct.Timer.html"><code>Timer</code>
+</a>
+now use <code>Duration</code> instead of <code>f32</code>.</p>
+<p>This change allows timers to have consistent, high precision. For convenience, there is also an
+<code>elapsed_secs</code> method that returns <code>f32</code>.  Otherwise, when you need an <code>f32</code>, use the
+<code>as_secs_f32()</code> method on <code>Duration</code> to make the conversion.</p>
+<h3 id="simplified-events">Simplified Events</h3>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">event_reader_system</span><span style="color:#5fb3b3;">(
+    </span><span style="color:#c594c5;">mut </span><span style="color:#f99157;">my_event_reader</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">Local</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">EventReader</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">&gt;&gt;</span><span style="color:#cccece;">,
+    </span><span style="color:#f99157;">my_events</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">Res</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">Events</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">&gt;&gt;</span><span style="color:#cccece;">,
+</span><span style="color:#5fb3b3;">) {
+    </span><span style="color:#c594c5;">for</span><span style="color:#cccece;"> my_event </span><span style="color:#5fb3b3;">in</span><span style="color:#cccece;"> my_event_reader</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">iter</span><span style="color:#5fb3b3;">(&amp;</span><span style="color:#cccece;">my_events</span><span style="color:#5fb3b3;">) {
+        </span><span style="color:#5f6364;">// do things with your event
+    </span><span style="color:#5fb3b3;">}
+}
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">event_reader_system</span><span style="color:#5fb3b3;">(</span><span style="color:#c594c5;">mut </span><span style="color:#f99157;">my_event_reader</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">EventReader</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">&gt;) {
+    </span><span style="color:#c594c5;">for</span><span style="color:#cccece;"> my_event </span><span style="color:#5fb3b3;">in</span><span style="color:#cccece;"> my_event_reader</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">iter</span><span style="color:#5fb3b3;">() {
+        </span><span style="color:#5f6364;">// do things with your event
+    </span><span style="color:#5fb3b3;">}
+}
+</span></code></pre>
+<p>You no longer need two system parameters to read your events. One <code>EventReader</code> is sufficient.</p>
+<p>Following the above example of using an <code>EventReader</code> to read events, you can now use <code>EventWriter</code> to create new ones.</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">event_writer_system</span><span style="color:#5fb3b3;">(
+    </span><span style="color:#c594c5;">mut </span><span style="color:#f99157;">my_events</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">ResMut</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">Events</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">&gt;&gt;</span><span style="color:#cccece;">,
+</span><span style="color:#5fb3b3;">) {
+</span><span style="color:#cccece;">    my_events</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">send</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">);
+}
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">event_writer_system</span><span style="color:#5fb3b3;">(
+    </span><span style="color:#c594c5;">mut </span><span style="color:#f99157;">my_events</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">EventWriter</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">&gt;
+) {
+</span><span style="color:#cccece;">    my_events</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">send</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyEvent</span><span style="color:#5fb3b3;">);
+}
+</span></code></pre><h3 id="appbuilder-add-resource-is-now-called-appbuilder-insert-resource">AppBuilder::add_resource is now called AppBuilder::insert_resource</h3>
+<p>This is a small change to have function names on <code>AppBuilder</code> consistent with the <code>Commands</code> API.</p>
+<h3 id="textbundle">TextBundle</h3>
+<p>This bundle has been reworked to allow multiple differently-styled sections of text within a single bundle. <code>Text::with_section</code> was added to simplify the common case where you're only interested in one text section.</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#cccece;">TextBundle </span><span style="color:#5fb3b3;">{
+</span><span style="color:#cccece;">    text</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> Text </span><span style="color:#5fb3b3;">{
+</span><span style="color:#cccece;">        value</span><span style="color:#5fb3b3;">: &quot;</span><span style="color:#99c794;">hello!</span><span style="color:#5fb3b3;">&quot;.</span><span style="color:#6699cc;">to_string</span><span style="color:#5fb3b3;">(),
+</span><span style="color:#cccece;">        font</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> asset_server</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">load</span><span style="color:#5fb3b3;">(&quot;</span><span style="color:#99c794;">fonts/FiraSans-Bold.ttf</span><span style="color:#5fb3b3;">&quot;),
+</span><span style="color:#cccece;">        style</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> TextStyle </span><span style="color:#5fb3b3;">{
+</span><span style="color:#cccece;">            font_size</span><span style="color:#5fb3b3;">: </span><span style="color:#f99157;">60.0</span><span style="color:#5fb3b3;">,
+</span><span style="color:#cccece;">            color</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">Color</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">WHITE</span><span style="color:#5fb3b3;">,
+            ..</span><span style="color:#fac863;">Default</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">()
+        },
+    },
+    ..</span><span style="color:#fac863;">Default</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">()
+}
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#cccece;">TextBundle </span><span style="color:#5fb3b3;">{
+</span><span style="color:#cccece;">    text</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">Text</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">with_section</span><span style="color:#5fb3b3;">(
+        &quot;</span><span style="color:#99c794;">hello!</span><span style="color:#5fb3b3;">&quot;,
+</span><span style="color:#cccece;">        TextStyle </span><span style="color:#5fb3b3;">{
+</span><span style="color:#cccece;">            font</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> asset_server</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">load</span><span style="color:#5fb3b3;">(&quot;</span><span style="color:#99c794;">fonts/FiraSans-Bold.ttf</span><span style="color:#5fb3b3;">&quot;),
+</span><span style="color:#cccece;">            font_size</span><span style="color:#5fb3b3;">: </span><span style="color:#f99157;">60.0</span><span style="color:#5fb3b3;">,
+</span><span style="color:#cccece;">            color</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">Color</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">WHITE</span><span style="color:#5fb3b3;">,
+        },
+        </span><span style="color:#cccece;">TextAlignment</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">()
+    ),
+    ..</span><span style="color:#fac863;">Default</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">()
+}
+</span></code></pre><h3 id="scene-must-now-be-specified-when-loading-a-gltf-scene">Scene must now be specified when loading a GLTF scene</h3>
+<p>Previously, you were able to load a GLTF scene asset with only a path. Now, you must include a fragment specifying the scene you want to load. If you only have one scene in the file, it's <code>#Scene0</code>.</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#cccece;">asset_server</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">load</span><span style="color:#5fb3b3;">(&quot;</span><span style="color:#99c794;">models/foo.glb</span><span style="color:#5fb3b3;">&quot;);
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#cccece;">asset_server</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">load</span><span style="color:#5fb3b3;">(&quot;</span><span style="color:#99c794;">models/foo.glb#Scene0</span><span style="color:#5fb3b3;">&quot;);
+</span></code></pre><h3 id="state">State</h3>
+<p>States are now registered with <code>AppBuilder::add_state</code>, which creates
+the <code>State</code> resource and registers a &quot;driver&quot; system that takes the
+place of <code>StateStage</code>.  States are registered using <code>SystemSet</code>.</p>
+<p><strong>IMPORTANT</strong>: if you stop registering the <code>StateStage</code> but don't
+register the driver (using <code>add_state</code> or <code>State::get_driver</code>), Bevy
+0.5 will enter an infinite loop, causing your application to &quot;lock up&quot;.</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#cccece;">app</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">insert_resource</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">State</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">new</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">))
+   .</span><span style="color:#6699cc;">add_stage_after</span><span style="color:#5fb3b3;">(
+       </span><span style="color:#cccece;">bevy</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">app</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">stage</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">UPDATE</span><span style="color:#5fb3b3;">,
+       </span><span style="color:#cccece;">MY_STATE_STAGE_NAME</span><span style="color:#5fb3b3;">,
+       </span><span style="color:#cccece;">bevy</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">ecs</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">StateStage</span><span style="color:#5fb3b3;">::&lt;</span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">&gt;::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">(),
+   )
+   .</span><span style="color:#6699cc;">on_state_enter</span><span style="color:#5fb3b3;">(
+       </span><span style="color:#cccece;">MY_STATE_STAGE_NAME</span><span style="color:#5fb3b3;">,
+       </span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">,
+</span><span style="color:#cccece;">       enter_init_state</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+   .</span><span style="color:#6699cc;">on_state_update</span><span style="color:#5fb3b3;">(
+       </span><span style="color:#cccece;">MY_STATE_STAGE_NAME</span><span style="color:#5fb3b3;">,
+       </span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">,
+</span><span style="color:#cccece;">       update_init_state</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+   .</span><span style="color:#6699cc;">on_state_exit</span><span style="color:#5fb3b3;">(
+       </span><span style="color:#cccece;">MY_STATE_STAGE_NAME</span><span style="color:#5fb3b3;">,
+       </span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">,
+</span><span style="color:#cccece;">       exit_init_state</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">());
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#cccece;">app</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">add_state</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">)
+   .</span><span style="color:#6699cc;">add_system_set</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SystemSet</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">on_enter</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">)
+       .</span><span style="color:#6699cc;">with_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">enter_init_state</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">()))
+   .</span><span style="color:#6699cc;">add_system_set</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SystemSet</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">on_update</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">)
+       .</span><span style="color:#6699cc;">with_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">update_init_state</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">()))
+   .</span><span style="color:#6699cc;">add_system_set</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">SystemSet</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">on_exit</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">MyState</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">InitState</span><span style="color:#5fb3b3;">)
+       .</span><span style="color:#6699cc;">with_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">exit_init_state</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">()));
+</span></code></pre>
+<p>It is still possible to register the driver manually using
+<code>State::get_driver</code>, but this is not normally required.</p>
+<h2 id="changedres-removed">ChangedRes removed</h2>
+<p>This change was made to allow for more flexiblity and more consistent behavior with change detection for components.</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">some_system</span><span style="color:#5fb3b3;">(
+    </span><span style="color:#f99157;">res</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">ChangedRes</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">SomeResource</span><span style="color:#5fb3b3;">&gt;
+) {
+    </span><span style="color:#5f6364;">// this system only runs if SomeResource has changed
+</span><span style="color:#5fb3b3;">}
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">some_system</span><span style="color:#5fb3b3;">(
+    </span><span style="color:#f99157;">res</span><span style="color:#5fb3b3;">: </span><span style="color:#cccece;">Res</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">SomeResource</span><span style="color:#5fb3b3;">&gt; </span><span style="color:#5f6364;">// or ResMut
+</span><span style="color:#5fb3b3;">) {
+    </span><span style="color:#5f6364;">// this system always runs
+
+    </span><span style="color:#c594c5;">if </span><span style="color:#5fb3b3;">!</span><span style="color:#cccece;">res</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">is_changed</span><span style="color:#5fb3b3;">() { </span><span style="color:#5f6364;">// or .is_added()
+        </span><span style="color:#c594c5;">return</span><span style="color:#5fb3b3;">;
+    }
+}
+</span></code></pre><h3 id="cameras">Cameras</h3>
+<p><code>Camera3dBundle</code> is now known as <code>PerspectiveCameraBundle</code>, and <code>Camera2dBundle</code> is now known as <code>OrthographicCameraBundle</code>.</p>
+<p><code>OrthographicCameraBundle</code> does not implement <code>Default</code>, so to change its transform at spawn while keeping everything else the same, consider something like the following:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#c594c5;">let mut</span><span style="color:#cccece;"> camera </span><span style="color:#5fb3b3;">= </span><span style="color:#cccece;">OrthographicCameraBundle</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">new_2d</span><span style="color:#5fb3b3;">();
+</span><span style="color:#cccece;">camera</span><span style="color:#5fb3b3;">.</span><span style="color:#cccece;">transform </span><span style="color:#5fb3b3;">= </span><span style="color:#cccece;">Transform</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">from_translation</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">Vec3</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">new</span><span style="color:#5fb3b3;">(</span><span style="color:#f99157;">0.0</span><span style="color:#5fb3b3;">, </span><span style="color:#f99157;">0.0</span><span style="color:#5fb3b3;">, </span><span style="color:#f99157;">5.0</span><span style="color:#5fb3b3;">));
+</span><span style="color:#cccece;">commands</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">spawn_bundle</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">camera</span><span style="color:#5fb3b3;">);
+</span></code></pre><h3 id="render-api-changes">Render API changes</h3>
+<p><code>RasterizationStateDescriptor</code> no longer exists.  Much of its functionality has been moved to other fields on <code>PipelineDescriptor</code>.  <code>cull_mode</code>, for example, is now found in the <code>primitive: PrimitiveState</code> field.</p>
+<p>Buffers of type <code>Vec&lt;Color&gt;</code> can no longer be uploaded to the GPU directly due to limitations with <code>RenderResources</code> and the new <code>Byteable</code> requirement.  Consider using a <code>Vec&lt;Vec4&gt;</code> instead, and inserting colors with <code>as_rgba_f32()</code> and <code>.into()</code> instead:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rust" data-lang="rust"><span style="color:#5fb3b3;">#[</span><span style="color:#cccece;">derive</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">RenderResources</span><span style="color:#5fb3b3;">,</span><span style="color:#cccece;"> Default</span><span style="color:#5fb3b3;">,</span><span style="color:#cccece;"> TypeUuid</span><span style="color:#5fb3b3;">)]
+</span><span style="color:#c594c5;">struct </span><span style="color:#cccece;">SomeShader </span><span style="color:#5fb3b3;">{
+    #[</span><span style="color:#cccece;">render_resources</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">buffer</span><span style="color:#5fb3b3;">)]
+    </span><span style="color:#c594c5;">pub </span><span style="color:#cccece;">colors</span><span style="color:#5fb3b3;">: </span><span style="color:#fac863;">Vec</span><span style="color:#5fb3b3;">&lt;</span><span style="color:#cccece;">Vec4</span><span style="color:#5fb3b3;">&gt;
+}
+
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">add_some_color</span><span style="color:#5fb3b3;">(</span><span style="color:#f99157;">shader</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> SomeShader, </span><span style="color:#f99157;">color</span><span style="color:#5fb3b3;">:</span><span style="color:#cccece;"> Color</span><span style="color:#5fb3b3;">) {
+</span><span style="color:#cccece;">    shader</span><span style="color:#5fb3b3;">.</span><span style="color:#cccece;">colors</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">push</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">color</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">as_rgba_f32</span><span style="color:#5fb3b3;">().</span><span style="color:#6699cc;">into</span><span style="color:#5fb3b3;">());
+}
+</span></code></pre><h3 id="shaders-should-now-use-cameraviewproj">Shaders should now use <code>CameraViewProj</code></h3>
+<p>The <code>ViewProj</code> matrix is now set via the name <code>CameraViewProj</code> rather than <code>Camera</code>.  If you don't update this, bevy will fail silently and you won't be able to see anything!</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-glsl" data-lang="glsl"><span style="color:#5f6364;">// 0.4
+</span><span style="color:#c594c5;">layout</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">set </span><span style="color:#5fb3b3;">= </span><span style="color:#f99157;">0</span><span style="color:#5fb3b3;">,</span><span style="color:#cccece;"> binding </span><span style="color:#5fb3b3;">= </span><span style="color:#f99157;">0</span><span style="color:#5fb3b3;">) </span><span style="color:#c594c5;">uniform</span><span style="color:#cccece;"> Camera </span><span style="color:#5fb3b3;">{
+    </span><span style="color:#c594c5;">mat4</span><span style="color:#cccece;"> ViewProj</span><span style="color:#5fb3b3;">;
+}
+
+</span><span style="color:#5f6364;">// 0.5
+</span><span style="color:#c594c5;">layout</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">set </span><span style="color:#5fb3b3;">= </span><span style="color:#f99157;">0</span><span style="color:#5fb3b3;">,</span><span style="color:#cccece;"> binding </span><span style="color:#5fb3b3;">= </span><span style="color:#f99157;">0</span><span style="color:#5fb3b3;">) </span><span style="color:#c594c5;">uniform</span><span style="color:#cccece;"> CameraViewProj </span><span style="color:#5fb3b3;">{
+    </span><span style="color:#c594c5;">mat4</span><span style="color:#cccece;"> ViewProj</span><span style="color:#5fb3b3;">;
+}
+</span></code></pre><h3 id="diagnostics">Diagnostics</h3>
+<p><code>PrintDiagnosticsPlugin</code> is now <code>LogDiagnosticsPlugin</code>.</p>
+<h3 id="system-ordering">System Ordering</h3>
+<p>The parallel system executor has been redesigned. Systems that had implicit orderings might no longer run in the same order. For more detail on the new behavior, see <a href="/news/bevy-0-5#new-parallel-system-executor">the release notes</a>.</p>
+</div>
+        <div class="book-pagers" />
+    </div>
+</div>
+
+
+            </div>
+        </section>
+    </body>
+</html>

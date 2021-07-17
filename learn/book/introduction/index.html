@@ -1,0 +1,340 @@
+
+
+
+
+
+
+
+
+
+    
+        
+    
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name='viewport' content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="Bevy - Introduction" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;book&#x2F;introduction&#x2F;" />
+        <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+        <meta property="og:description" content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+        <link rel="stylesheet" href="/site.css" />
+        <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+        <title>Bevy - Introduction</title>
+        
+<script src="/optional-helpers.js"></script>
+
+    </head>
+
+    <body>
+        <div class="headerbar-container">
+            <nav class="headerbar container">
+                <a href="/" class="header-logo">
+                    <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
+                </a>
+                
+                    <label class="toggle-nav-mobile" for=show-book-nav>
+                        <svg alt="nav bars" width="24" height="24">
+                            <g fill="none" stroke="#ececec" stroke-width="2">
+                                <path d="m4 6h16" />
+                                <path d="m4 11h16" />
+                                <path d="m4 16h16" />
+                            </g>
+                        </svg>
+                    </label>
+                
+                <div class="header-item header-message">
+                    
+                        The Book
+                    
+                </div>
+                <div class="header-item header-push"></div>
+                
+
+
+
+    
+
+
+<a href="&#x2F;" class="header-item" >
+    Features
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;learn" class="header-item header-item-active"  >
+    Learn
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;news" class="header-item" >
+    News
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;community" class="header-item" >
+    Community
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;assets" class="header-item" >
+    Assets
+</a>
+
+                <a class="header-item header-button header-button-donate" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+                <a class="header-item header-button" href="/learn/book/getting-started/">Get Started</a>
+            </nav>
+        </div>
+        <section class="section">
+            <div class="container">
+                
+<div class="book-page">
+    <input type="checkbox" style="display: none" id="show-book-nav" />
+    <nav class="book-nav" role="navigation">
+        
+        
+        <ul class="book-nav-sections-container book-nav-sections">
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;introduction&#x2F;" class="book-nav-section-title-active book-nav-section-title" >
+        <strong class="book-nav-section-number">1.</strong>
+        introduction
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.</strong>
+        getting started
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;next-steps&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">3.</strong>
+        next steps
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;contributing&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">4.</strong>
+        contributing
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;troubleshooting&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">5.</strong>
+        troubleshooting
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;faq&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">6.</strong>
+        faq
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">7.</strong>
+        migration guides
+    </a>
+    
+</li>
+
+            
+        </ul>
+        
+    </nav>
+    <div class="book-content">
+        
+
+        
+        
+
+        
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+        
+
+        
+            
+            
+
+            
+             
+             
+            
+
+            
+
+        
+            
+            
+                <a id="book-pager-bar-next" href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;" class="book-pager-bar book-pager-bar-next">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-next">
+                    <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
+                    </div>
+                </a>
+                
+
+        <h1>
+            
+                Introduction
+            
+            
+        </h1>
+        <div class="media-content"><p>If you came here because you wanted to learn how to make 2D / 3D games, visualizations, user interfaces, or other graphical applications with Bevy ... you came to the right place! If not, stick around anyway. I promise it will be fun.</p>
+<h2>
+    <img src="/assets/whats_a_bevy.svg" class="book-whats-a-bevy" alt="What's a BEVY?"/>
+</h2>
+<p>A bevy is a group of birds!</p>
+<p>But Bevy is also a refreshingly simple data-driven game engine built in Rust. It is <a href="https://github.com/bevyengine/bevy">free and open-source</a> forever.</p>
+<p>Bevy has the following design goals:</p>
+<ul>
+<li><strong>Capable</strong>: Offer a complete 2D and 3D feature set</li>
+<li><strong>Simple</strong>: Easy for newbies to pick up, but infinitely flexible for power users</li>
+<li><strong>Data Focused</strong>: Data-oriented architecture using the Entity Component System paradigm </li>
+<li><strong>Modular</strong>: Use only what you need. Replace what you don't like</li>
+<li><strong>Fast</strong>: App logic should run quickly, and when possible, in parallel</li>
+<li><strong>Productive</strong>: Changes should compile quickly ... waiting isn't fun</li>
+</ul>
+<p>Bevy is <a href="/learn/book/contributing">built in the open by volunteers</a> using the <a href="https://www.rust-lang.org/">Rust programming language</a>. The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing <em>millions</em> of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.</p>
+<p>For a more in-depth introduction, check out the <a href="/news/introducing-bevy/">Introducing Bevy</a> blog post.</p>
+<h2 class="warning">
+    Stability Warning
+</h2>
+<p>Bevy aims to be a general purpose game engine capable of handling any 2D or 3D workload. However Bevy is still in its infancy. <span class="warning">We are currently in the <i>prototyping</i> phase: important features are missing and APIs will change constantly.</span> If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out <a href="https://godotengine.org">Godot Engine</a>. It is currently much more feature-complete and stable. And it is also free, open-source, and <a href="https://github.com/GodotNativeTools/godot-rust">scriptable with Rust</a>!</p>
+<p>This official book is still very incomplete. It will help you get started with the setup and learning the basics, but it does not yet cover most of Bevy's features. See the <a href="/learn/book/next-steps/">Next Steps</a> page for links to other, more exhaustive, learning resources you can use.</p>
+<p>Phew! If you haven't been scared away yet, let's move on to learning some Bevy!</p>
+</div>
+        <div class="book-pagers" />
+    </div>
+</div>
+
+
+            </div>
+        </section>
+    </body>
+</html>

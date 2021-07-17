@@ -1,0 +1,509 @@
+
+
+
+
+
+
+
+
+
+    
+        
+    
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name='viewport' content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="Bevy - Plugins" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;plugins&#x2F;" />
+        <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+        <meta property="og:description" content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+        <link rel="stylesheet" href="/site.css" />
+        <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+        <title>Bevy - Plugins</title>
+        
+<script src="/optional-helpers.js"></script>
+
+    </head>
+
+    <body>
+        <div class="headerbar-container">
+            <nav class="headerbar container">
+                <a href="/" class="header-logo">
+                    <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
+                </a>
+                
+                    <label class="toggle-nav-mobile" for=show-book-nav>
+                        <svg alt="nav bars" width="24" height="24">
+                            <g fill="none" stroke="#ececec" stroke-width="2">
+                                <path d="m4 6h16" />
+                                <path d="m4 11h16" />
+                                <path d="m4 16h16" />
+                            </g>
+                        </svg>
+                    </label>
+                
+                <div class="header-item header-message">
+                    
+                        The Book
+                    
+                </div>
+                <div class="header-item header-push"></div>
+                
+
+
+
+    
+
+
+<a href="&#x2F;" class="header-item" >
+    Features
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;learn" class="header-item header-item-active"  >
+    Learn
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;news" class="header-item" >
+    News
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;community" class="header-item" >
+    Community
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;assets" class="header-item" >
+    Assets
+</a>
+
+                <a class="header-item header-button header-button-donate" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+                <a class="header-item header-button" href="/learn/book/getting-started/">Get Started</a>
+            </nav>
+        </div>
+        <section class="section">
+            <div class="container">
+                
+<div class="book-page">
+    <input type="checkbox" style="display: none" id="show-book-nav" />
+    <nav class="book-nav" role="navigation">
+        
+        
+        <ul class="book-nav-sections-container book-nav-sections">
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;introduction&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">1.</strong>
+        introduction
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.</strong>
+        getting started
+    </a>
+    
+    <ul class="book-nav-sections book-nav-sections-indented">
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;setup&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.1.</strong>
+        setup
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;apps&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.2.</strong>
+        apps
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;ecs&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.3.</strong>
+        ecs
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;plugins&#x2F;" class="book-nav-section-title-active book-nav-section-title" >
+        <strong class="book-nav-section-number">2.4.</strong>
+        plugins
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;resources&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.5.</strong>
+        resources
+    </a>
+    
+</li>
+
+        
+    </ul>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;next-steps&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">3.</strong>
+        next steps
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;contributing&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">4.</strong>
+        contributing
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;troubleshooting&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">5.</strong>
+        troubleshooting
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;faq&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">6.</strong>
+        faq
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">7.</strong>
+        migration guides
+    </a>
+    
+</li>
+
+            
+        </ul>
+        
+    </nav>
+    <div class="book-content">
+        
+
+        
+        
+
+        
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+        
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+             
+             
+                <a id="book-pager-bar-previous" href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;ecs&#x2F;" class="book-pager-bar book-pager-bar-previous">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-previous">
+                        <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
+                    </div>
+                </a>
+             
+            
+
+            
+
+        
+            
+            
+                <a id="book-pager-bar-next" href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;resources&#x2F;" class="book-pager-bar book-pager-bar-next">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-next">
+                    <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
+                    </div>
+                </a>
+                
+
+        <h1>
+            
+                Plugins
+            
+            
+        </h1>
+        <div class="media-content"><p>One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the <a href="https:&#x2F;&#x2F;docs.rs/bevy_ui&#x2F;latest&#x2F;bevy_ui/struct.UiPlugin.html"><code>UiPlugin</code>
+</a>. Want to build a headless server? Don't register the <a href="https:&#x2F;&#x2F;docs.rs/bevy_render&#x2F;latest&#x2F;bevy_render/struct.RenderPlugin.html"><code>RenderPlugin</code>
+</a>.</p>
+<p>This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own <a href="https:&#x2F;&#x2F;docs.rs/bevy_ui&#x2F;latest&#x2F;bevy_ui/struct.UiPlugin.html"><code>UiPlugin</code>
+</a>, but consider <a href="/learn/book/contributing">contributing it back to Bevy</a> if you think it would be useful!</p>
+<p>However, most developers don't need a custom experience and just want the &quot;full engine&quot; experience with no hassle. For this, Bevy provides a set of &quot;default plugins&quot;.</p>
+<h2 id="bevy-s-default-plugins">Bevy's Default Plugins</h2>
+<p>Let's make our app more interesting by adding the &quot;default Bevy plugins&quot;. 
+<code>add_plugins(DefaultPlugins)</code> adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input. </p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rs" data-lang="rs"><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">main</span><span style="color:#5fb3b3;">() {
+    </span><span style="color:#cccece;">App</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">build</span><span style="color:#5fb3b3;">()
+        .</span><span style="color:#6699cc;">add_plugins</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">DefaultPlugins</span><span style="color:#5fb3b3;">)
+        .</span><span style="color:#6699cc;">add_startup_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">add_people</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">add_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">hello_world</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">add_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">greet_people</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">run</span><span style="color:#5fb3b3;">();
+}
+</span></code></pre>
+<p>Once again run <code>cargo run</code>.</p>
+<p>You should hopefully notice two things:</p>
+<ul>
+<li><strong>A window should pop up</strong>. This is because we now have <a href="https:&#x2F;&#x2F;docs.rs/bevy_window&#x2F;latest&#x2F;bevy_window/struct.WindowPlugin.html"><code>WindowPlugin</code>
+</a>, which defines the window interface (but doesn't actually know how to make windows), and <a href="https:&#x2F;&#x2F;docs.rs/bevy_winit&#x2F;latest&#x2F;bevy_winit/struct.WinitPlugin.html"><code>WinitPlugin</code>
+</a> which uses the <a href="https://github.com/rust-windowing/winit">winit library</a> to create a window using your OS's native window api.</li>
+<li><strong>Your console is now full of &quot;hello&quot; messages</strong>: This is because <a href="https:&#x2F;&#x2F;docs.rs/bevy&#x2F;latest&#x2F;bevy/struct.DefaultPlugins.html"><code>DefaultPlugins</code>
+</a> adds an &quot;event loop&quot; to our application. Our App's ECS Schedule now runs in a loop once per &quot;frame&quot;. We will resolve the console spam in a moment.</li>
+</ul>
+<p>Note that <code>add_plugins(DefaultPlugins)</code> is equivalent to the following:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rs" data-lang="rs"><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">main</span><span style="color:#5fb3b3;">() {
+    </span><span style="color:#cccece;">App</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">build</span><span style="color:#5fb3b3;">()
+        .</span><span style="color:#6699cc;">add_plugin</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">CorePlugin</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">add_plugin</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">InputPlugin</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">add_plugin</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">WindowPlugin</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">default</span><span style="color:#5fb3b3;">())
+        </span><span style="color:#5f6364;">/* more plugins omitted for brevity */
+        </span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">run</span><span style="color:#5fb3b3;">();
+}
+</span></code></pre>
+<p>You are free to use whatever approach suits you!</p>
+<h2 id="creating-your-first-plugin">Creating your first plugin</h2>
+<p>For better organization, let's move all of our &quot;hello&quot; logic to a plugin. To create a plugin we just need to implement the <a href="https:&#x2F;&#x2F;docs.rs/bevy_app&#x2F;latest&#x2F;bevy_app/trait.Plugin.html"><code>Plugin</code>
+</a> interface. Add the following code to your <code>main.rs</code> file:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rs" data-lang="rs"><span style="color:#c594c5;">pub struct </span><span style="color:#cccece;">HelloPlugin</span><span style="color:#5fb3b3;">;
+
+</span><span style="color:#c594c5;">impl </span><span style="color:#cccece;">Plugin </span><span style="color:#c594c5;">for </span><span style="color:#cccece;">HelloPlugin </span><span style="color:#5fb3b3;">{
+    </span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">build</span><span style="color:#5fb3b3;">(&amp;</span><span style="color:#f99157;">self</span><span style="color:#cccece;">, </span><span style="color:#f99157;">app</span><span style="color:#5fb3b3;">: &amp;</span><span style="color:#c594c5;">mut</span><span style="color:#cccece;"> AppBuilder</span><span style="color:#5fb3b3;">) {
+        </span><span style="color:#5f6364;">// add things to your app here
+    </span><span style="color:#5fb3b3;">}
+}
+</span></code></pre>
+<p>Then register the plugin in your App like this:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rs" data-lang="rs"><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">main</span><span style="color:#5fb3b3;">() {
+    </span><span style="color:#cccece;">App</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">build</span><span style="color:#5fb3b3;">()
+        .</span><span style="color:#6699cc;">add_plugins</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">DefaultPlugins</span><span style="color:#5fb3b3;">)
+        .</span><span style="color:#6699cc;">add_plugin</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">HelloPlugin</span><span style="color:#5fb3b3;">)
+        .</span><span style="color:#6699cc;">add_startup_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">add_people</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">add_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">hello_world</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">add_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">greet_people</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+        .</span><span style="color:#6699cc;">run</span><span style="color:#5fb3b3;">();
+}
+</span></code></pre>
+<p>Now all thats left is to move our systems into <code>HelloPlugin</code>, which is just a matter of cut and paste. The <code>app</code> variable in our plugin's <code>build()</code> function is the same builder type we use in our <code>main()</code> function:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rs" data-lang="rs"><span style="color:#c594c5;">impl </span><span style="color:#cccece;">Plugin </span><span style="color:#c594c5;">for </span><span style="color:#cccece;">HelloPlugin </span><span style="color:#5fb3b3;">{
+    </span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">build</span><span style="color:#5fb3b3;">(&amp;</span><span style="color:#f99157;">self</span><span style="color:#cccece;">, </span><span style="color:#f99157;">app</span><span style="color:#5fb3b3;">: &amp;</span><span style="color:#c594c5;">mut</span><span style="color:#cccece;"> AppBuilder</span><span style="color:#5fb3b3;">) {
+</span><span style="color:#cccece;">        app</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">add_startup_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">add_people</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+            .</span><span style="color:#6699cc;">add_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">hello_world</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">())
+            .</span><span style="color:#6699cc;">add_system</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">greet_people</span><span style="color:#5fb3b3;">.</span><span style="color:#6699cc;">system</span><span style="color:#5fb3b3;">());
+    }
+}
+
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">main</span><span style="color:#5fb3b3;">() {
+    </span><span style="color:#cccece;">App</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">build</span><span style="color:#5fb3b3;">()
+        .</span><span style="color:#6699cc;">add_plugins</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">DefaultPlugins</span><span style="color:#5fb3b3;">)
+        .</span><span style="color:#6699cc;">add_plugin</span><span style="color:#5fb3b3;">(</span><span style="color:#cccece;">HelloPlugin</span><span style="color:#5fb3b3;">)
+        .</span><span style="color:#6699cc;">run</span><span style="color:#5fb3b3;">();
+}
+</span></code></pre>
+<p>Try running the app again. It should do exactly what it did before. In the next section, we'll fix the &quot;hello&quot; spam using Resources. </p>
+</div>
+        <div class="book-pagers" />
+    </div>
+</div>
+
+
+            </div>
+        </section>
+    </body>
+</html>

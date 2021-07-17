@@ -1,0 +1,425 @@
+
+
+
+
+
+
+
+
+
+    
+        
+    
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name='viewport' content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="Bevy - Apps" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;apps&#x2F;" />
+        <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+        <meta property="og:description" content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+        <link rel="stylesheet" href="/site.css" />
+        <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+        <title>Bevy - Apps</title>
+        
+<script src="/optional-helpers.js"></script>
+
+    </head>
+
+    <body>
+        <div class="headerbar-container">
+            <nav class="headerbar container">
+                <a href="/" class="header-logo">
+                    <img src="/assets/bevy_logo_dark.svg" class="logo" alt="bevy logo" />
+                </a>
+                
+                    <label class="toggle-nav-mobile" for=show-book-nav>
+                        <svg alt="nav bars" width="24" height="24">
+                            <g fill="none" stroke="#ececec" stroke-width="2">
+                                <path d="m4 6h16" />
+                                <path d="m4 11h16" />
+                                <path d="m4 16h16" />
+                            </g>
+                        </svg>
+                    </label>
+                
+                <div class="header-item header-message">
+                    
+                        The Book
+                    
+                </div>
+                <div class="header-item header-push"></div>
+                
+
+
+
+    
+
+
+<a href="&#x2F;" class="header-item" >
+    Features
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;learn" class="header-item header-item-active"  >
+    Learn
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;news" class="header-item" >
+    News
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;community" class="header-item" >
+    Community
+</a>
+
+                
+
+
+
+    
+
+
+<a href="&#x2F;assets" class="header-item" >
+    Assets
+</a>
+
+                <a class="header-item header-button header-button-donate" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+                <a class="header-item header-button" href="/learn/book/getting-started/">Get Started</a>
+            </nav>
+        </div>
+        <section class="section">
+            <div class="container">
+                
+<div class="book-page">
+    <input type="checkbox" style="display: none" id="show-book-nav" />
+    <nav class="book-nav" role="navigation">
+        
+        
+        <ul class="book-nav-sections-container book-nav-sections">
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;introduction&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">1.</strong>
+        introduction
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.</strong>
+        getting started
+    </a>
+    
+    <ul class="book-nav-sections book-nav-sections-indented">
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;setup&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.1.</strong>
+        setup
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;apps&#x2F;" class="book-nav-section-title-active book-nav-section-title" >
+        <strong class="book-nav-section-number">2.2.</strong>
+        apps
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;ecs&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.3.</strong>
+        ecs
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;plugins&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.4.</strong>
+        plugins
+    </a>
+    
+</li>
+
+        
+        
+        
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;resources&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">2.5.</strong>
+        resources
+    </a>
+    
+</li>
+
+        
+    </ul>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;next-steps&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">3.</strong>
+        next steps
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;contributing&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">4.</strong>
+        contributing
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;troubleshooting&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">5.</strong>
+        troubleshooting
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;faq&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">6.</strong>
+        faq
+    </a>
+    
+</li>
+
+            
+            
+
+<li class="book-nav-section">
+    <a href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;migration-guides&#x2F;" class="book-nav-section-title">
+        <strong class="book-nav-section-number">7.</strong>
+        migration guides
+    </a>
+    
+</li>
+
+            
+        </ul>
+        
+    </nav>
+    <div class="book-content">
+        
+
+        
+        
+
+        
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+                
+                
+                
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+        
+            
+            
+
+            
+                
+                
+                
+            
+        
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+
+            
+
+        
+            
+            
+
+            
+             
+             
+                <a id="book-pager-bar-previous" href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;setup&#x2F;" class="book-pager-bar book-pager-bar-previous">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-previous">
+                        <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
+                    </div>
+                </a>
+             
+            
+
+            
+
+        
+            
+            
+                <a id="book-pager-bar-next" href="https:&#x2F;&#x2F;bevyengine.org&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;ecs&#x2F;" class="book-pager-bar book-pager-bar-next">
+                    <div class="book-pager-bar-icon book-pager-bar-icon-next">
+                    <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
+                    </div>
+                </a>
+                
+
+        <h1>
+            
+                Apps
+            
+            
+        </h1>
+        <div class="media-content"><p>Bevy programs are referred to as <a href="https:&#x2F;&#x2F;docs.rs/bevy_app&#x2F;latest&#x2F;bevy_app/struct.App.html"><code>Apps</code>
+</a>. The simplest Bevy app looks like this:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-rs" data-lang="rs"><span style="color:#c594c5;">use </span><span style="color:#cccece;">bevy</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">prelude</span><span style="color:#5fb3b3;">::*;
+
+</span><span style="color:#c594c5;">fn </span><span style="color:#6699cc;">main</span><span style="color:#5fb3b3;">() {
+    </span><span style="color:#cccece;">App</span><span style="color:#5fb3b3;">::</span><span style="color:#cccece;">build</span><span style="color:#5fb3b3;">().</span><span style="color:#6699cc;">run</span><span style="color:#5fb3b3;">();
+}
+</span></code></pre>
+<p>Nice and simple right? Copy the code above into your <code>main.rs</code> file, then run:</p>
+<pre style="background-color:#2b2c2f;">
+<code class="language-sh" data-lang="sh"><span style="color:#6699cc;">cargo run
+</span></code></pre>
+<p>in your project folder. You will notice that ... nothing happens. This is because we haven't told our app to do anything yet! Apps are just empty shells capable of running our application logic. Let's add some logic to our App using Bevy ECS.</p>
+</div>
+        <div class="book-pagers" />
+    </div>
+</div>
+
+
+            </div>
+        </section>
+    </body>
+</html>
