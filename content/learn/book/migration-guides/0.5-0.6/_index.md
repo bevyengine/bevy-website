@@ -60,7 +60,7 @@ commands.spawn_bundle(LightBundle {
         fov: f32::to_radians(60.0),
         intensity: 200.0,
         range: 20.0,
-    }
+    },
     ..Default::default()
 });
 
@@ -70,7 +70,7 @@ commands.spawn_bundle(PointLightBundle {
         color: Color::rgb(1.0, 1.0, 1.0),
         intensity: 200.0,
         range: 20.0,
-    }
+    },
     ..Default::default()
 });
 ```
