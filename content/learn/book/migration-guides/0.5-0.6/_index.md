@@ -84,40 +84,9 @@ In addition the {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0
 
 -->
 
-### New SystemState and rename old SystemState to SystemMeta
+### "SystemState" is now "SystemMeta"
 
-To get easier cached access to a {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true)}} outside of a system, a new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} was introduced.
+The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} struct, which stores the metadata of a System, was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
 
-<!-- Adapted from https://github.com/bevyengine/bevy/pull/2283 -->
-```rust
-#[derive(Eq, PartialEq, Debug)]
-struct A(usize);
-
-#[derive(Eq, PartialEq, Debug)]
-struct B(usize);
-
-let mut world = World::default();
-world.insert_resource(A(42));
-world.spawn().insert(B(7));
-
-// we get nice lifetime elision when declaring the type on the left hand side
-let mut system_state: SystemState<(Commands, Res<A>, Query<&B>)> = SystemState::new(&mut world);
-{
-  let (mut commands, res, query) = system_state.get(&world);
-
-  assert_eq!(*res, A(42), "returned resource matches initial value");
-  assert_eq!(
-      *query.single().unwrap(),
-      B(7),
-      "returned component matches initial value"
-  );
-
-  commands.insert_resource(3.14);
-}
-// It is the user's responsibility to call SystemState::apply(world) for parameters that queue up work
-system_state.apply(&mut world);
-```
-
-See the original [PR](https://github.com/bevyengine/bevy/pull/2283) for a larger usage example.
-
-The preexisting {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} in `0.5` was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
+This was done to accomedate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true plural=true)}} outside of a regular System.
+<!-- TODO: Link to entry for SystemState in the release blog post. -->
