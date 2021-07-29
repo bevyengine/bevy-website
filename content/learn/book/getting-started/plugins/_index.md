@@ -95,3 +95,10 @@ fn main() {
 ```
 
 Try running the app again. It should do exactly what it did before. In the next section, we'll fix the "hello" spam using Resources. 
+
+# Community-made plugins
+
+Because plugins are easy to intergrate into an existing bevy game structure. You can easily pick and choose plugins that have been made by the community.
+Check out [Bevy Assets](https://bevyengine.org/assets/#assets) to see some of the amazing plugins created by the bevy community. 
+
+If you plan on releasing a plugin yourself, please refer to [Bevy's Plugin Guidelines](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md) for guidance.
