@@ -12,7 +12,7 @@ Let's make a trivial Hello World app.
 use bevy::prelude::*;
 
 fn main(){
-  App::build()
+  App::new()
   .add_system(hello.system())
   .run();
 }
@@ -22,10 +22,9 @@ fn hello(){
 }
 ```
 
-So, we first create our [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html) by telling it to [`build`](https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.build), performing initialization steps.
-This produces an [`AppBuilder`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html), which we can use to configure the `App`.
-We do so by add a simple system, which prints "Hello, Bevy!" when it is run.
-Finally once all of our work is complete, we call [`AppBuilder::run()`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.run) to actually make our app *do things*.
+The process is straightforward: we first create a new [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html).
+Then, we add a simple system, which prints "Hello, Bevy!" when it is run.
+Finally once we're done configuring the app, we call [`App::run()`](https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.run) to actually make our app *do things*.
 
 ## What makes an App?
 
@@ -47,7 +46,7 @@ And the `Schedule` contains all of the systems that execute on our data, stored 
 
 Generally, you'll be operating at a higher-level of abstraction than this: thinking about data in terms of specific resources or components, adding systems to the right place rather than manipulating the `Schedule` yourself, and sticking to the default runner.
 
-To do so, you'll use the API defined by `AppBuilder`.
+To do so, you'll use the various methods of the `App`.
 The most fundamental things you'll do here are to initialize resources in the `World`, add systems to our schedule, and import logic in bulk using plugins.
 Let's write a very simple demo that shows how those work.
 
@@ -56,7 +55,7 @@ use bevy::prelude::*;
 
 fn main() {
     App::build()
-        // Plugins are AppBuilder code that was written elsewhere,
+        // Plugins are App code that was written elsewhere,
         // imported as a single unit for organization and clarity
         .add_plugins(DefaultPlugins)
         // Resources are global singleton data stored in the `World`

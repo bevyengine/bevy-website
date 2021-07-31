@@ -12,8 +12,8 @@ By combining Bevy's first-party plugins with third-party alternatives, you can m
 
 ## Writing your own plugins
 
-Plugins are collections of code that modify the `AppBuilder` (which controls all of the data and logic of our game) using the builder pattern.
-Any code in a plugin could be directly substituted directly on the base `AppBuilder`.
+Plugins are collections of code that modify the `App` (which controls all of the data and logic of our game) using the builder pattern.
+Any code in a plugin could be directly substituted directly on the base `App`.
 There's no magic to be found here; they're just a straightforward tool for code organization.
 
 You can write your own to organize your own code by implementing the `Plugin` trait on a struct of your own creation.
@@ -34,7 +34,7 @@ fn main(){
 struct ScorePlugin;
 
 impl Plugin for ScorePlugin {
-  fn build(&self, app: &mut AppBuilder) {
+  fn build(&self, app: &mut App) {
      app
        // The Score struct is addded as a resource (global singleton) to the world, 
        // beginning at the default value of 0
