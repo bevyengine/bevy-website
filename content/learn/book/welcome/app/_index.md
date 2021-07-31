@@ -30,24 +30,17 @@ Finally once we're done configuring the app, we call [`App::run()`](https://docs
 
 So, what sort of data does are `App` really store?
 Turns out: it's fairly simple.
-Looking at the docs for [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html), we find three fields:
+Looking at the docs for [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html), we find three fields: `world`, `runner` and `schedule`.
+You can read more about these by exploring the reference documentation linked just above.
 
-```rust
-struct App {
-  world: World
-  runner: Box<dyn Fn(App) + 'static, Global>
-  schedule: Schedule
-}
-```
+Generally, you'll be operating at a higher-level of abstraction than these basic primitives: thinking about data in terms of specific resources or components, adding systems via convenient methods rather than manually supplying a `Schedule`, and sticking to the default runner which runs your game logic in a loop.
 
-The `World` stores all of our data, both entity-component data and resources.
-The `runner` field contains a function that tells our app how to loop and execute.
-And the `Schedule` contains all of the systems that execute on our data, stored in a way that our scheduler can use to run them at the appropriate time.
+To do so, you'll customize your own `App` using various methods with the builder pattern.
+The most fundamental tools to do so are:
 
-Generally, you'll be operating at a higher-level of abstraction than this: thinking about data in terms of specific resources or components, adding systems to the right place rather than manipulating the `Schedule` yourself, and sticking to the default runner.
-
-To do so, you'll use the various methods of the `App`.
-The most fundamental things you'll do here are to initialize resources in the `World`, add systems to our schedule, and import logic in bulk using plugins.
+  1. Initializing resources in the `World` to store global data.
+  2. Adding systems to our `Schedule` to perform logic in the specified order.
+  3. Importing other blocks of logic and code using plugins.
 Let's write a very simple demo that shows how those work.
 
 ```rust
