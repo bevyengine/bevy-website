@@ -86,11 +86,14 @@ This functionality is essential: starting with these plugins is virtually always
 
 ## Third-party plugins
 
-Importing 3rd-party plugins is easy; they're just Rust code!
+Importing 3rd-party plugins is easy; they're just ordinary Rust code that can be managed with `cargo`.
+Bevy's modular nature tends to result in simple plug-and-play interoperability and easy extensibility, so don't be afraid to try out plugins that seem interesting or useful for your game.
 
 1. Find a Bevy plugin (such as from our [collection of assets](https://bevyengine.org/assets/)).
 2. Add it to your `Cargo.toml` as a crate under `[dependencies]`.
-3. Import the code definitions from the crate.
+3. Import the code definitions from the crate (i.e. `using bevy_third_party::prelude::*`) to add the appropriate items to your workspace.
 4. Add the plugin to your app!
 
 Follow the documentation and examples from the crates you're importing to make sure you have everything configured properly.
+
+If you plan on releasing a plugin yourself, please refer to [Bevy's Plugin Guidelines](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md) for guidance, [release a crate](https://doc.rust-lang.org/cargo/reference/publishing.html), and then [add it to Bevy Assets](https://github.com/bevyengine/bevy-assets/) to share it with the community!
