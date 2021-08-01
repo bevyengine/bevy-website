@@ -5,7 +5,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-When you're making a game in Bevy, you will have a single `App`, which stores and handles all of your game logic and data.
+Bevy programs store and execute all of their game logic and data with a single `App` data structure.
 Let's make a trivial Hello World app.
 
 ```rust
