@@ -54,7 +54,7 @@ fn increment_score(score: ResMut<Score>){
 }
 
 fn report_score(score: Res<Score>){
-  dbg!(score);
+  info!(score);
 }
 ```
 
