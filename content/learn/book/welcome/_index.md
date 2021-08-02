@@ -23,7 +23,7 @@ If you just want to try it out hands-on, jump into one of our [quick-start guide
 
 Bevy aims to be a general-purpose game engine capable of handling arbitrary 2D or 3D games.
 However, Bevy is still in its infancy, and there are very good reasons not to choose it for your next project.
-It is currently completely missing first-party solutions for:
+No mature solutions currently exist for:
 
 - animation
 - networking
@@ -39,9 +39,8 @@ Solid third-party solutions currently exist for:
 - [advanced audio](https://crates.io/crates/bevy_kira_audio)
 - [realistic physics](https://github.com/dimforge/bevy_rapier)
 
-While Bevy's modular architecture makes it relatively easy to integrate your own (or third-party) solutions, be mindful that Bevy does not provide a complete game solution out of the box yet.
-Contributions are extremely welcome, but if you want something fully featured to make your dream game *today*, Bevy is not the right engine for you yet.
-Check out [Godot](https://godotengine.org/) instead!
+While Bevy's modular architecture makes it relatively easy to integrate your own (or third-party) solutions, be mindful that Bevy does not provide a complete game solution out of the box *yet*.
+[Contributions to the engine](https://github.com/bevyengine/bevy/) are extremely welcome, but if you want something fully-featured to make your dream game *today*, check out [Godot](https://godotengine.org/) instead!
 
 Unsurprisingly, Bevy's rapid pace of development means that our APIs will break, repeatedly, in both deep and pervasive ways.
 This allows us to refine the engine now, adding new features and fixing problems fast, rather than being tied to a first attempt.
