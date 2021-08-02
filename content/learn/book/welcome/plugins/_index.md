@@ -60,7 +60,7 @@ fn report_score(score: Res<Score>){
 
 ## `DefaultPlugins`
 
-Bevy's `DefaultPlugins` are intended to get up and running with a "standard game" as quickly as possible. Let's take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) again.
+Bevy's [`DefaultPlugins`](https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html) are intended to get up and running with a "standard game" as quickly as possible. Let's take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) to see what's included.
 
 As you can see, there are some added niceties (logging and diagnostics, scenes, input and windowing) as well as a number of plugins controlled by feature flags.
 These are heavier dependencies that you may want to disable for some games (or platforms), and replace with your own alternatives.
@@ -92,7 +92,7 @@ Bevy's modular nature tends to result in simple plug-and-play interoperability a
 1. Find a Bevy plugin (such as from our [collection of assets](https://bevyengine.org/assets/)).
 2. Add it to your `Cargo.toml` as a crate under `[dependencies]`.
 3. Import the code definitions from the crate (i.e. `using bevy_third_party::prelude::*`) to add the appropriate items to your workspace.
-4. Add the plugin to your app!
+4. Add the plugin to your app (i.e. `app.add_add_plugin(bevy_third_party_plugin)`)!
 
 Follow the documentation and examples from the crates you're importing to make sure you have everything configured properly.
 
