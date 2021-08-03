@@ -1,11 +1,11 @@
 +++
-title = "Reliable change detection"
+title = "Responding to changes"
 weight = 6
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Bevy allows you to respond to the addition of or changes to specific component types using `Added<T>` and `Changed<T>` query filters.
+Bevy allows you to respond to the addition of or changes to specific component types using the `Added<T>` and `Changed<T>` query filters.
 These are incredibly useful, allowing you to:
 
 - automatically complete initialization of components

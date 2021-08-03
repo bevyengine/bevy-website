@@ -1,5 +1,5 @@
 +++
-title = "Manipulating entities with commands"
+title = "Commands queue up work"
 weight = 4
 template = "book-section.html"
 page_template = "book-section.html"
