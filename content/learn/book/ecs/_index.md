@@ -28,10 +28,9 @@ In order to actually manipulate all of this data in interesting ways, we must us
 **Systems** are Rust functions which request specific data from the world, as declared in their system parameters (function parameters): generally resources and entities that have a particular combination of components using queries.
 Systems are Rust functions that request data from the `World` (such as resources or entities with particular components) in order to perform tasks.
 All of the rules and behaviours of our game are governed by systems.
-Once the systems are added to our app the **scheduler** takes in this information and automatically runs our systems: typically once during each pass of the **game loop**.
 
-Bevy's scheduler is remarkably powerful: it uses the information about data access defined in our system parameters to automatically run systems in parallel.
-By default, every system in a stage runs in parallel with every other system in that stage (as long as threads exist to take the work): the only rule is that systems which have the ability to *write* to a particular piece of data (such as a resource) cannot be run at the same time as other systems which read or write to that same data.
-In Rust, this corresponds to mutable access, as declared by the use of `Query<&mut MyComponent>` or `ResMut<MyResource>`.
+Once the systems are added to our app the **runner** takes in this information and automatically runs our systems: typically once during each pass of the **game loop** according to the rules defined in their **schedule**.
+Bevy's default execution strategy runs systems in parallel by default, without the need for any manual setup.
+Because the **function signature** of each of our systems fully define the data it can access, we can ensure that only one system can change a piece of data at once (although any number can read from a piece of data at the same time).
+If no shared mutable access exists, systems within the same **stage** are allowed to run in parallel freely, assigned to a free thread as soon as it is free.
 
-If you'd like to see how this all fits together, check out our [game examples](https://github.com/bevyengine/bevy/tree/latest/examples/game) to see a few simple but working demonstrations of how these ECS features interact in practice.
