@@ -28,7 +28,7 @@ If we wanted to fetch the `Life` component on entities that had either the `A` o
 
 Note that the `Or` type supports ??? number of type arguments and can be nested indefinitely, allowing you to construct very complex logic if needed.
 
-### Multiple queries in a single system
+### Running multiple queries at once
 
 As the logic in your systems become more complex, you may find that you want to access data from two different queries at once.
 In most cases, simply adding a second query as another system parameter works perfectly fine:
@@ -73,3 +73,10 @@ Let's rewrite our broken system again, using a `QuerySet` instead.
 ```rust
 
 ```
+
+#### Query filtering and system parallelism
+
+Bevy's systems automatically run in parallel by default, so long as the scheduler can guarantee that the same data is never accessed in another place while it is being mutated.
+
+As a result, we can use the same query filtering techniques to allow our *systems* to safely run in parallel.
+In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.
