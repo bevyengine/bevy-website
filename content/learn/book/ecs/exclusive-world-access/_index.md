@@ -107,17 +107,3 @@ TODO: add custom commands example
 
 Due to the delayed effect of commands, and their relatively poor performance (they can only be executed one at a time in sequence), you should only use custom commands for tasks that truly need their world-altering powers.
 In many cases, an event plus an event-handling system will be faster, more ergonomic and easier to debug.
-
-### `NonSend` resources
-
-Non-send resources are resources that lack the `Send + Sync` trait bounds: they cannot be sent safely across threads.
-`NonSend` resources will typically be quite advanced: used for things like networking or interfacing with external libraries.
-They are accessed using `NonSend<R>` and `NonSendMut<R>` in a way that is directly analogous to `Res` and `ResMut`.
-The only difference is that they can only be accessed when we have exclusive `World` access, as accessing them can only be done on the main thread.
-
-Here's a simple example showing how to use an exclusive system to modify a `NonSend` resource.
-
-TODO: add `NonSend` example
-```rust
-
-```

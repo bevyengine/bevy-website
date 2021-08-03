@@ -269,3 +269,11 @@ fn countdown(
     }
 }
 ```
+
+## `NonSend` resources
+
+Non-send resources are used to store data that do not meet the `Send + Sync` trait bounds: they cannot be sent safely across threads.
+Their use cases are typically quite advanced and tend to involve interfacing with external libraries for things like audio or networking.
+`NonSend<R>` and `NonSendMut<R>` can be directly substituted for `Res` and `ResMut` in any system.
+The inclusion of one or more non-send resources in your system will force that system to run on the main thread,
+rather than being automatically scheduled to the first available thread.
