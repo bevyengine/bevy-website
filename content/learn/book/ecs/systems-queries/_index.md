@@ -59,11 +59,12 @@ Once we have a query, the most common thing we're likely to want to do with it i
 To do so, we can use straightforward for-loops:
 
 ```rust
-#[derive(Debug)]
+#[derive(Component, Debug)]
 struct Life{
 	val: u8
 }
 
+#[derive(Component)]
 struct IncomingDamge{
 	val: u8
 }
@@ -76,6 +77,7 @@ fn report_life(query: Query<&Life>){
 	}
 }
 
+#[derive(Component)]
 struct Age(u64);
 
 fn increment_age(query: Query<&mut Age>){
@@ -123,6 +125,7 @@ fn all_entities(query: Query<Entity>){
 	}
 }
 
+#[derive(Component)]
 struct Marker;
 struct MyEntities{
 	entities: Vec<Entity>,

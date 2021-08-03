@@ -105,6 +105,7 @@ This is very convenient for safety and ergonomic reasons, but means that only on
 use std::any::type_name;
 
 // Our first component type
+#[derive(Component)]
 struct Life(u32);
 
 // An attempt at a second component type, using a type alias
@@ -122,7 +123,10 @@ commonly using the [`newtype` pattern](https://doc.rust-lang.org/book/ch19-03-ad
 ```rust
 use std::any::type_name;
 
+#[derive(Component)]
 struct Life(u32);
+
+#[derive(Component)]
 struct Health(u32);
 
 // Our components have different types now!

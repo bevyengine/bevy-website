@@ -45,6 +45,7 @@ fn spawn_camera(mut commands: Commands) {
     commands.spawn_bundle(UiCameraBundle::default());
 }
 
+#[derive(Component)]
 struct ButtonMarker;
 
 fn spawn_button(mut commands: Commands) {

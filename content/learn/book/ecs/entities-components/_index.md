@@ -8,22 +8,31 @@ page_template = "book-section.html"
 As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
 
 The very first thing we're going to want to do is define the components that we'd like to use.
-To do so, we simply create Rust types (ensuring that they are `Send + Sync + 'static` so they can be sent across the threads safely) and pick a descriptive name for them.
+To do so, we simply create Rust types with a descriptive name and derive the `Component` trait.
+Any underlying component data must be `Send + Sync + 'static`, ensuring that they can be sent across the threads safely and allowing our [type reflection tools](https://github.com/bevyengine/bevy/tree/main/crates/bevy_reflect) to work correctly.
 On this page, we're going to create a simple little combat system, so lets start by defining some basic components.
 
 ```rust
 // These are dataless "unit structs", which hold no data of their own
 // In Bevy, these are useful for distinguishing similar entities or toggling behavior
 // and are called "marker components"
+#[derive(Component)]
 struct Player;
+#[derive(Component)]
 struct Enemy;
 
 // These simple components wrap an i8 in a tuple struct
+#[derive(Component)]
 struct Life(u8);
+#[derive(Component)]
 struct Attack(u8);
+#[derive(Component)]
 struct Defense(u8);
 
 // We can store arbitrary data in our components, as long as it has a 'static lifetime
+// Types without lifetimes are always 'static,
+// allowing us to safely hold a String, but not a &str
+#[derive(Component)]
 struct Name(String);
 ```
 
