@@ -34,6 +34,9 @@ Bevy's default execution strategy runs systems in parallel by default, without t
 Because the **function signature** of each of our systems fully define the data it can access, we can ensure that only one system can change a piece of data at once (although any number can read from a piece of data at the same time).
 If no shared mutable access exists, systems within the same **stage** are allowed to run in parallel freely, assigned to a free thread as soon as it is free.
 
+When we need to access data in complex, cross-cutting ways that are not cleanly modelled by our systems' function signatures, we can defer the work until we have exclusive access to the entire world's data: executing **commands** generated in earlier systems at the end of each stage or performing complex logic (like saving the entire game) in our own **exclusive systems**.
+You will first encounter this when spawning and despawning entities: we have no way of knowing precisely which other components our entities might have, and so we are forced to wait until we can ensure that we can safely write to *all* component data at once.
+
 ## ECS by example
 
 Before we dive into the details of each of these features, let's take a quick look at a simple game that you can run and play.
