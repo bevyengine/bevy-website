@@ -9,10 +9,10 @@ page_template = "book-section.html"
 Bevy is fundamentally powered by its ECS (Entity Component System): almost all data is stored as components on entities, and all logic is executed by its systems.
 
 As we [mentioned in the last chapter](../welcome/app/_index.md), all of our data is stored in a [`World`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html) on our [`App`](https://docs.rs/bevy/latest/bevy/app/struct.App.html).
-We can think of our **entity-component data storage** as a giant database:
+We can think of our **entity-component data storage** as a giant in-memory database:
 
 * each row is an **entity**, representing an object (perhaps a player, tile, or UI button) in our game
-* each column is a type of **component**, storing data of a particular type (perhaps the sprite, team or life of a player entity) in an efficient way
+* each column is a type of **component**, storing data of a particular type (perhaps the sprite, team or life of a player entity) in an [efficient way](https://github.com/bevyengine/bevy/pull/1525) that keeps data of the same type tightly packed together
 * each cell is a component of a particular entity, which has a concrete value we can look up and change
 * we access data from this database using **queries**, which fetch entities with the specified components
 * the primary key of this database is the [`Entity`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html) identifier, which can be used to look up specific entities using [`Query::get(my_entity)`](https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Query.html#method.get)
