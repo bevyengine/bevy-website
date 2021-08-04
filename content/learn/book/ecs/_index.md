@@ -44,188 +44,108 @@ Unsurprisingly, the different parts of the ECS tend to be closely linked: compon
 The details of each part are more easily grasped if you have a basic sense of the whole.
 
 ```rust
-use bevy::core::FixedTimestep;
+use bevy::app::AppExit;
+use bevy::log::LogPlugin;
 use bevy::prelude::*;
 
-// In this game, two combatants are fighting a duel
-// Dealing damage to each other until one combatant's life total reaches 0
+// This component defines our entity's life total.
+#[derive(Component)]
+struct Life(f32);
+
+// This component is used to mark if our entity is currently airborne.
+#[derive(Component)]
+struct Falling {
+    // The higher the initial height of falling, the higher the damage.
+    height: f32,
+}
+
 fn main() {
     App::new()
-        // Resources store global state
-        .insert_resource(Victory::Undetermined)
-        .add_plugins(DefaultPlugins)
-        // Startup systems run exactly once, before ordinary systems run
-        // and are typically used for initialization
-        .add_startup_system(spawn_combatants)
-        // We only want to run this system every couple seconds
-		// allowing the reader to follow along as the code executes
-        .add_system(
-            combat
-                .label("combat")
-                .with_run_criteria(FixedTimestep::step(2.0)),
-        )
-        // We want to ensure that we report life totals before damage is dealt
-        .add_system(report_life.before("combat"))
-        // We want to ensure that we check victory after damage is dealt
-        .add_system(check_victory.after("combat"))
+        // These plugins create the basic framework
+        .add_plugins(MinimalPlugins)
+        // This allows us to report player health using `info!`
+        .add_plugin(LogPlugin)
+        // Because we've added this system as a startup system,
+        // it runs exactly once before any ordinary system
+        .add_startup_system(spawn_player_system)
+        // Ordinary systems run once per frame (or pass of the game loop).
+        .add_system(gravity_system.label("gravity"))
+        // We need to make sure we report fall damage after gravity
+        // Otherwise it won't have been calculated yet
+        .add_system(fall_damage_system.after("gravity"))
         .run();
 }
 
-// This resource stores who has won our duel
-// We add it to our app with `.insert_resource(Victory::Undetermined)`
-#[derive(PartialEq, Clone, Copy)]
-enum Victory {
-    Undetermined,
-    Concluded(Side),
-    Draw,
-}
+// This system spawns the player at a fairly high elevation.
+fn spawn_player_system(mut commands: Commands) {
+    const INITIAL_HEIGHT: f32 = 15.0;
 
-// This resource stores the Entity id's of our two combatants
-// This was added after app initialization with `commands.insert_resource(CombatantEntities {...});`
-struct CombatantEntities {
-    player_entity: Entity,
-    enemy_entity: Entity,
-}
-
-// These components define the data stored on our entities
-#[derive(Component)]
-struct Life(i8);
-
-#[derive(Component)]
-struct Attack(i8);
-
-#[derive(Component)]
-struct Defense(i8);
-
-// By adding more traits to our list of derives,
-// we can quickly add more functionality to them
-#[derive(Component, PartialEq, Clone, Copy)]
-enum Side {
-    Player,
-    Enemy,
-}
-
-#[derive(Component)]
-struct Name(String);
-
-// Bundles are simple collection of components which
-// allow us to conveniently refer to a set of components as a group.
-// In `spawn_combatants`, we use it to convert tedious 
-// one-at-a-time component insertion to a single `.insert_bundle`
-#[derive(Bundle)]
-struct CombatBundle {
-    // Each field of this bundle corresponds to a type of component
-    // that will be inserted into the final entity.
-    // The field names are used when instantiating the bundle,
-    // but only the types are retained in our ECS storage
-    life: Life,
-    attack: Attack,
-    defense: Defense,
-    side: Side,
-}
-
-// This function is added as a startup system using `App::add_startup_system`
-// As a result, it runs only once, before everything else has occurred
-fn spawn_combatants(mut commands: Commands) {
-    // Spawning the player entity
-    let player_entity = commands
-        // Creating a base entity
+    // Entities must be spawned in a delayed fashion with commands.
+    commands
         .spawn()
-        // Adding a single component to that entity
-        .insert(Name("Gallant".to_string()))
-        // Adding a collection of components to that entity
-        .insert_bundle(CombatBundle {
-            life: Life(10),
-            attack: Attack(5),
-            defense: Defense(2),
-            side: Side::Player,
-        })
-        // .id() just causes the expression to return the Entity id that was just spawned;
-        // if you don't need to store that information you should omit it and use a simple
-		// `commands.spawn().insert(MyComponent{...});` call
-        .id();
+        // We can add components to entities that we are spawning with the .insert()
+        .insert(Life(20.0))
+        // Transform is the standard position component in Bevy,
+        // controlling the translation, rotation and scale of entities
+        .insert(Transform::from_translation(Vec3::new(
+            0.0,
+            INITIAL_HEIGHT,
+            0.0,
+        )))
+        .insert(Falling {
+            height: INITIAL_HEIGHT,
+        });
 
-    // Spawning the enemy entity
-    let enemy_entity = commands
-        .spawn_bundle(CombatBundle {
-            life: Life(8),
-            attack: Attack(6),
-            defense: Defense(1),
-            side: Side::Enemy,
-        })
-        .insert(Name("Goofus".to_string()))
-        .id();
-
-    // We're recording the Entity id's of our combatants
-    // So we can easily access them later
-    commands.insert_resource(CombatantEntities {
-        player_entity,
-        enemy_entity,
-    })
+    // This expression creates a second entity, with a slightly different set of components
+    commands
+        .spawn()
+        // We can customize the starting values of our components
+        // by changing the data stored in the structs we pass in
+        .insert(Life(30.0))
+        // This player begins on the ground
+        // So we're not inserting the Falling component
+        .insert(Transform::from_translation(Vec3::new(0.0, 0.0, 0.0)));
 }
 
-// This is an ordinary system, which runs each frame that its run criteria
-fn combat(
-    mut query: Query<(&mut Life, &Attack, &Defense)>,
-    combatant_entities: Res<CombatantEntities>,
-    victory: Res<Victory>,
+// This system pulls down the entity towards the ground (at y = 0), at a constant velocity,
+// only while it's falling.
+// The With<Falling> filter ensures that only entities with the `Falling` component are affected
+fn gravity_system(mut query: Query<&mut Transform, With<Falling>>) {
+    const FALL_RATE: f32 = 1.0;
+
+    // Performing the same operation on each entity returned by the query
+    // using a loop is a very common pattern
+    for mut transform in query.iter_mut() {
+        transform.translation.y = (transform.translation.y - FALL_RATE).max(0.0);
+    }
+}
+
+// This system deals damage to falling entities based on the height from which it fell
+fn fall_damage_system(
+    mut commands: Commands,
+    // By adding `Entity` to our query, we can extract
+    // the unique identifier of the entity we're iterating over
+    mut query: Query<(Entity, &mut Life, &Falling, &mut Transform)>,
+    mut exit_events: EventWriter<AppExit>,
 ) {
-    // We only want combat to continue if victory has not yet been declared
-    if *victory == Victory::Undetermined {
-        // FIXME: does not compile due to borrow checker not understanding that player_entity != enemy_entity
-		// We can use Query::get and related methods to look up entities (and their components)
-		// by their `Entity` identifier, as if it were a primary key in a database
-        let player = query.get_mut(combatant_entities.player_entity).unwrap();
-        let enemy = query.get_mut(combatant_entities.enemy_entity).unwrap();
+    // Each of the components in our query must be present
+    // on an entity for it to be returned in our query.
+    // This system will loop over the first entity spawned, but not the second.
+    for (entity, mut life, falling, mut transform) in query.iter_mut() {
+        // Our entity has touched the ground
+        if transform.translation.y <= 0.0 {
+            transform.translation.y = 0.0;
+            // We're using the `Entity` information from our query
+            // to ensure we're removing the `Falling` component from the correct entity
+            commands.entity(entity).remove::<Falling>();
 
-        // Pattern matching destructures our (Mut<Life>, &Attack, &Defense) tuple into three new variables
-        let (mut p_life, p_attack, p_defense) = player;
-        let (mut e_life, e_attack, e_defense) = enemy;
-
-        // The attacks are made simultaneously
-        // FIXME: &* is ugly
-        *p_life = damage_calculation(&*p_life, e_attack, p_defense);
-        *e_life = damage_calculation(&*e_life, p_attack, e_defense);
-    }
-}
-
-// This function is *not* a system; instead it's called twice in `combat` to perform a repeated calculation
-fn damage_calculation(life: &Life, attack: &Attack, defense: &Defense) -> Life {
-    // Attacks never deal negative damage
-    let damage_dealt = (attack.0 - defense.0).max(0);
-    // Life totals cannot drop below 0
-    let new_life_total = (life.0 - damage_dealt).max(0);
-    Life(new_life_total)
-}
-
-// While this system runs each pass of our game loop (because it is simply added with App::add_system),
-// the query in this system only returns entities whose life total has changed since it last ran.
-// As a result, `report_life` will have no effect most of the times that the system is called.
-fn report_life(query: Query<(&Name, &Life), Changed<Life>>) {
-    for (name, life) in query.iter() {
-		// .0 refers to the first (and only) field of our tuple structs,
-		// allowing us to access the underlying data
-        println!("{} is at {} life!", name.0, life.0);
-    }
-}
-
-// Query state is cached between system executions,
-// ensuring that change-detecting systems like this
-// have a minimal performance footprint when dormant
-fn check_victory(query: Query<(&Life, &Side), Changed<Life>>, mut victory: ResMut<Victory>) {
-	for (life, &side) in query.iter() {
-        if life.0 <= 0 {
-            *victory = match *victory {
-                Victory::Undetermined => Victory::Concluded(side),
-                Victory::Concluded(old_victor) => {
-                    if old_victor != side {
-                        Victory::Draw
-                    } else {
-                        Victory::Concluded(old_victor)
-                    }
-                }
-                Victory::Draw => Victory::Draw,
-            }
+            // Falling from small heights shouldn't hurt players at all
+            let damage = (falling.height - 3.0).max(0.0);
+            // .0 accesses the first field of our Life(f32) tuple struct
+            life.0 = (life.0 - damage).max(0.0);
+            info!("Damage: {}", damage);
+            // End the game as soon as the first entity has collided with the ground
+            exit_events.send(AppExit);
         }
     }
 }
