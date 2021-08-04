@@ -57,11 +57,12 @@ fn main() {
         // Startup systems run exactly once, before ordinary systems run
         // and are typically used for initialization
         .add_startup_system(spawn_combatants)
-        // We only want to run this system every few seconds to allow the reader to follow along
+        // We only want to run this system every couple seconds
+		// allowing the reader to follow along as the code executes
         .add_system(
             combat
                 .label("combat")
-                .with_run_criteria(FixedTimestep::step(3.0)),
+                .with_run_criteria(FixedTimestep::step(2.0)),
         )
         // We want to ensure that we report life totals before damage is dealt
         .add_system(report_life.before("combat"))
@@ -71,6 +72,7 @@ fn main() {
 }
 
 // This resource stores who has won our duel
+// We add it to our app with `.insert_resource(Victory::Undetermined)`
 #[derive(PartialEq, Clone, Copy)]
 enum Victory {
     Undetermined,
@@ -79,39 +81,51 @@ enum Victory {
 }
 
 // This resource stores the Entity id's of our two combatants
+// This was added after app initialization with `commands.insert_resource(CombatantEntities {...});`
 struct CombatantEntities {
     player_entity: Entity,
     enemy_entity: Entity,
 }
 
 // These components define the data stored on our entities
+#[derive(Component)]
 struct Life(i8);
+
+#[derive(Component)]
 struct Attack(i8);
+
+#[derive(Component)]
 struct Defense(i8);
 
-#[derive(PartialEq, Clone, Copy)]
+// By adding more traits to our list of derives,
+// we can quickly add more functionality to them
+#[derive(Component, PartialEq, Clone, Copy)]
 enum Side {
     Player,
     Enemy,
 }
+
+#[derive(Component)]
 struct Name(String);
 
-// Bundles are used to gather groups of components
-// allowing convenient access
+// Bundles are simple collection of components which
+// allow us to conveniently refer to a set of components as a group.
+// In `spawn_combatants`, we use it to convert tedious 
+// one-at-a-time component insertion to a single `.insert_bundle`
 #[derive(Bundle)]
 struct CombatBundle {
     // Each field of this bundle corresponds to a type of component
-    // that will be inserted into the final entity
-    // The field names are only used when instantiating the bundle;
-    // only the types are retained in our ECS storage
+    // that will be inserted into the final entity.
+    // The field names are used when instantiating the bundle,
+    // but only the types are retained in our ECS storage
     life: Life,
     attack: Attack,
     defense: Defense,
     side: Side,
 }
 
-// This is a startup system that we add to our app
-// It runs only once, before everything else has occurred
+// This function is added as a startup system using `App::add_startup_system`
+// As a result, it runs only once, before everything else has occurred
 fn spawn_combatants(mut commands: Commands) {
     // Spawning the player entity
     let player_entity = commands
@@ -127,7 +141,8 @@ fn spawn_combatants(mut commands: Commands) {
             side: Side::Player,
         })
         // .id() just causes the expression to return the Entity id that was just spawned;
-        // if you don't need to store that information you should omit it.
+        // if you don't need to store that information you should omit it and use a simple
+		// `commands.spawn().insert(MyComponent{...});` call
         .id();
 
     // Spawning the enemy entity
@@ -138,7 +153,7 @@ fn spawn_combatants(mut commands: Commands) {
             defense: Defense(1),
             side: Side::Enemy,
         })
-        .insert(Name("Gallant".to_string()))
+        .insert(Name("Goofus".to_string()))
         .id();
 
     // We're recording the Entity id's of our combatants
@@ -149,14 +164,7 @@ fn spawn_combatants(mut commands: Commands) {
     })
 }
 
-// The query in this system only returns entities whose life total has changed since it last ran
-fn report_life(query: Query<(&Life, &Name), Changed<Life>>) {
-    for (life, name) in query.iter() {
-        // .0 refers to the first (and only) field of our tuple structs
-        println!("{} is at {} life!", life.0, name.0);
-    }
-}
-
+// This is an ordinary system, which runs each frame that its run criteria
 fn combat(
     mut query: Query<(&mut Life, &Attack, &Defense)>,
     combatant_entities: Res<CombatantEntities>,
@@ -165,10 +173,12 @@ fn combat(
     // We only want combat to continue if victory has not yet been declared
     if *victory == Victory::Undetermined {
         // FIXME: does not compile due to borrow checker not understanding that player_entity != enemy_entity
+		// We can use Query::get and related methods to look up entities (and their components)
+		// by their `Entity` identifier, as if it were a primary key in a database
         let player = query.get_mut(combatant_entities.player_entity).unwrap();
         let enemy = query.get_mut(combatant_entities.enemy_entity).unwrap();
 
-        // This pattern matching destructures our (Mut<Life>, &Attack, &Defense) tuple into three new variables
+        // Pattern matching destructures our (Mut<Life>, &Attack, &Defense) tuple into three new variables
         let (mut p_life, p_attack, p_defense) = player;
         let (mut e_life, e_attack, e_defense) = enemy;
 
@@ -179,6 +189,7 @@ fn combat(
     }
 }
 
+// This function is *not* a system; instead it's called twice in `combat` to perform a repeated calculation
 fn damage_calculation(life: &Life, attack: &Attack, defense: &Defense) -> Life {
     // Attacks never deal negative damage
     let damage_dealt = (attack.0 - defense.0).max(0);
@@ -187,9 +198,23 @@ fn damage_calculation(life: &Life, attack: &Attack, defense: &Defense) -> Life {
     Life(new_life_total)
 }
 
+// While this system runs each pass of our game loop (because it is simply added with App::add_system),
+// the query in this system only returns entities whose life total has changed since it last ran.
+// As a result, `report_life` will have no effect most of the times that the system is called.
+fn report_life(query: Query<(&Name, &Life), Changed<Life>>) {
+    for (name, life) in query.iter() {
+		// .0 refers to the first (and only) field of our tuple structs,
+		// allowing us to access the underlying data
+        println!("{} is at {} life!", name.0, life.0);
+    }
+}
+
+// Query state is cached between system executions,
+// ensuring that change-detecting systems like this
+// have a minimal performance footprint when dormant
 fn check_victory(query: Query<(&Life, &Side), Changed<Life>>, mut victory: ResMut<Victory>) {
-    for (life, &side) in query.iter() {
-        if life.0 == 0 {
+	for (life, &side) in query.iter() {
+        if life.0 <= 0 {
             *victory = match *victory {
                 Victory::Undetermined => Victory::Concluded(side),
                 Victory::Concluded(old_victor) => {
