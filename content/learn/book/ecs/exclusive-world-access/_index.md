@@ -1,6 +1,6 @@
 +++
 title = "Exclusive `World` access"
-weight = 8
+weight = 7
 template = "book-section.html"
 page_template = "book-section.html"
 +++

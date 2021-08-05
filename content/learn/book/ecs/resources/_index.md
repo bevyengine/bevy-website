@@ -1,6 +1,6 @@
 +++
 title = "Resources are global singletons"
-weight = 3
+weight = 2
 template = "book-section.html"
 page_template = "book-section.html"
 +++
