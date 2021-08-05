@@ -1,14 +1,12 @@
 +++
 title = "Fetching data with queries"
-weight = 3
+weight = 2
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-As we saw in the example given on the last page, systems are used to run the logic of our game and use queries to access data stored in the ECS.
-Let's break down how the basics of systems and queries in more detail here.
-
-## Query basics
+Once we have data stored on our entities in the form of components, we need to be able to get the data back out in a principled way.
+**Queries** are precisely that tool; allowing us to carefully request sets of entities from the world that meet the criteria we care about and then retrieve the data we need to operate on.
 
 The `[Query](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html)` type is your primary access into the data in your Bevy game: allowing you to carefully access exactly the data you need from the entity-component data storage.
 The `Query` type has two type parameters: the first describes which data should be requested, and the second optional type parameter describes how it should be filtered.
@@ -120,13 +118,15 @@ fn identify_yourself(query: Query<Entity, With<Marker>>, my_entities: ResMut<MyE
 
 ```
 
-Once we have a particular entity in mind, we can grab its data using [`Query::get()`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.get) and the related methods.
+Once we have a particular entity in mind, we can grab its data using [`Query::get()`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.get) and the related methods on `Query`.
 This is fallible, and so it returns a `Result` that you must unwrap or handle.
 
 ## Optional components in queries
 
 If we want a query to include a component's data if it exists, we can use an `Option<&MyComponent>` query parameter in the first type parameter of `Query`.
 This can be a powerful tool for branching logic (use `match` on the `Option` returned), especially when combined with marker components.
+
+## Query filtering
 
 When components are fetched in queries, the data of *every* component in the first type argument passed will be fetched and made available to the system.
 However, this isn't always what you want!
@@ -136,20 +136,64 @@ This is particularly true when working with **marker components**: data-less str
 Fortunately, `Query` has two type parameters: the first describes what data to fetch, while the second describes how the entities that would be returned by the first type parameter are then filtered down.
 The two most important query filter types are `With<C>` and `Without<C>`, which filter based on whether or not an entity has a component of the type `C`.
 
-Let's demonstrate how these filters are used.
+Let's demonstrate how these filters are used by filtering some fruit.
 
-FIXME: add code to this page.
 ```rust
+#[derive(Component)]
+enum Fruit{
+	Apple,
+	Orange,
+	Durian,
+	Kiwi
+}
+
+#[derive(Component)]
+struct Delicious;
+
+#[derive(Component)]
+struct Rotten;
+
+#[derive(Default)]
+struct FruitInventory{
+	map: HashMap<Fruit, u8>
+}
+
+// The second filtering type parameter of Query can be ommitted when no filter is used
+fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: FruitInventory){
+	// Restart the count each time inventory is taken
+	fruit_inventory = FruitInventory::default();
+	for &fruit in fruit_inventory.iter(){
+		let fruit_type_count = fruit_inventory.map.get_mut(fruit);
+		fruit_type_count = match fruit_type_count {
+			None => 1,
+			Some(n) => n + 1,
+		}
+	}
+}
+
+// With restricts your query to only those entities who have all of the data present
+// *and* all of the With filters
+fn clean_inventory_system(rotten_food_query: Query<Entity, With<Rotten>>, mut commands: Commands){
+	for entity in rotten_food_query.iter(){
+		commands.despawn(entity);
+	}
+}
+
+// We can combine query filters by passing them in as tuple
+// Returning entities that meet *all* of the query filters criteria
+fn eat_fruit_system(query: Query<&Fruit, (Without<Rotten>, With<Delicious>)>){
+	// Perform complicated fruit-eating logic here!
+}
 
 ```
 
 ### `Or` Queries
 
-By default, query filters operate on a "and" basis: if you have a filter for `With<A>` and another filter for `With<B>`, only entities with both the `A` and `B` components will be fetched.
+By default, query filters (just like query data requests) operate on a "and" basis: if you have a filter for `With<A>` and another filter for `With<B>`, only entities with both the `A` and `B` components will be fetched.
 We can change this behavior by using the `Or` type, nesting primitive query filters like `With`, `Without` and `Changed` inside of it to return entities that meet any of the criteria inside.
-If we wanted to fetch the `Life` component on entities that had either the `A` or `B` components, we would use `Query<&Life, (Or<With<A>, With<B>>)>` as the type of our query.
+If we wanted to purchase fruits that were either `Delicious` or `Cheap`, we would use `Query<&mut Owner, (Or<With<Deliciou>, With<Cheap>>)>` as the type of our query, allowing us to change the owner of any delicious and cheap fruit that we found.
 
-Note that the `Or` type supports ??? number of type arguments and can be nested indefinitely, allowing you to construct very complex logic if needed.
+Note that the `Or` type (and other query tuples) can be nested indefinitely, allowing you to construct very complex logic if needed.
 
 ### Running multiple queries at once
 
@@ -157,7 +201,9 @@ As the logic in your systems become more complex, you may find that you want to 
 In most cases, simply adding a second query as another system parameter works perfectly fine:
 
 ```rust
-
+fn defense_aura_system(aura_query: Query<&Transform, With<Aura>>, target_query: Query<(&mut Defense, &Transform), With<Creature>>){
+	// Give all allies near an aura-generator a bonus to their defense
+}
 ```
 
 But as you use this pattern more, you may encounter an error that looks something like:
@@ -177,7 +223,11 @@ Which is bad.
 Of course, you already knew that, and have carefully thought about the architecture of your system, designing something like:
 
 ```rust
-
+fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, With<Camera>>){
+	let player_transform = player_query.single().unwrap();
+	let camera_query = camera_query.single_mut.unwrap();
+	// Insert logic here
+}
 ```
 
 You know that there's never going to be an entity that has both `Player` and `Camera` on it, so there's no way that you're ever accessing the same `Transform` component twice.
@@ -185,7 +235,11 @@ Unfortunately, Rust *doesn't* know that.
 We can fix this by making *sure* our queries our disjoint, no matter what bizarre entities might exist, through the judicious application of `Without` queries.
 
 ```rust
-
+fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>){
+	let player_transform = player_query.single().unwrap();
+	let camera_query = camera_query.single_mut.unwrap();
+	// Insert logic here
+}
 ```
 
 The other way to get around this issue is to use a `QuerySet`, which permits multiple conflicting queries to exist in a single system.
@@ -194,12 +248,14 @@ Query sets can be useful when you need to access genuinely conflicting data, suc
 Let's rewrite our broken system again, using a `QuerySet` instead.
 
 ```rust
-
+fn camera_follow_system(queries: QuerySet<Query<&Transform, With<Player>>, Query<&mut Transform, With<Camera>>){
+	let player_transform = queries.0.single().unwrap();
+	let camera_query = queries.1.single_mut.unwrap();
+	// Insert logic here
+}
 ```
-
-#### Query filtering and system parallelism
 
 Bevy's systems automatically run in parallel by default, so long as the scheduler can guarantee that the same data is never accessed in another place while it is being mutated.
 
-As a result, we can use the same query filtering techniques to allow our *systems* to safely run in parallel.
+As a result, we can use the same query filtering techniques described  to allow our *systems* to safely run in parallel.
 In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.
