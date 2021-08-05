@@ -255,3 +255,53 @@ fn spawn_combatants_system(mut commands: Commands) {
         })
         .insert(Name("Goofus".to_string()));}
 ```
+
+### Nested bundles
+
+As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
+One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
+Be mindful; this can lead to overwrought, deeply nested code if overused and bundles are [not currently checked](https://github.com/bevyengine/bevy/issues/2387) for duplicate component types.
+Later instances of the same type will overwrite earlier ones.
+
+With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
+
+```rust
+#[derive(Bundle)]
+struct AttackableBundle{
+    life: Life,
+    attack: Attack,
+    defense: Defense,
+}
+
+#[derive(Bundle)]
+struct CombatantBundle {
+    combatant: Combatant
+    // This attribute macro marks our attackable_bundle field as a bundle,
+    // allowing Bevy to properly flatten it out when building the final entity
+    #[bundle]
+    attackable_bundle: AttackableBundle,
+    position: Position,
+    stats: Stats,
+    allegiance: Allegiance,
+}
+
+impl Default for CombatantBundle {
+    fn default() -> Self {
+        CombatantBundle {
+            combatant: Combatant,
+            attackable_bundle: AttackableBundle {
+                life: Life(10),
+                attack: Attack(5),
+                defense: Defense(1),
+            }
+            position: Position(0, 0),
+            stats: Stats {
+                strength: 10,
+                dexterity: 10,
+                intelligence: 10,
+            }
+            allegiance: Allegiance::Neutral,
+        }
+    }
+}
+```
