@@ -22,11 +22,10 @@ We can use this fact to specialize behavior between entities: systems only perfo
 You don't want to apply gravity to entities without a position in your world, and you're only interested in using the UI layout algorithm to control the layout of UI entities!
 
 When we want to go beyond this tabular data storage, we can use **resources**: global singletons which store data in monolithic blobs.
-You might use resources to store one-off bits of state like the game's score, use it to interface with other libraries, or store secondary data structures like indexes to augment your use of entity-component data.
+You might use resources to interface with other libraries, store unique bits of state like the game's score, or store secondary data structures like indexes to augment your use of entity-component data.
 
-In order to actually manipulate all of this data in interesting ways, we must use systems.
-**Systems** are Rust functions which request specific data from the world, as declared in their system parameters (function parameters): generally resources and entities that have a particular combination of components using queries.
-Systems are Rust functions that request data from the `World` (such as resources or entities with particular components) in order to perform tasks.
+In order to manipulate and act on this data, we must use systems.
+**Systems** are Rust functions that request specific data, such as resources and entities, from the `World`. They define a query in their parameters (arguments) that selects data with a particular combination of components.
 All of the rules and behaviours of our game are governed by systems.
 
 Once the systems are added to our app the **runner** takes in this information and automatically runs our systems: typically once during each pass of the **game loop** according to the rules defined in their **schedule**.
