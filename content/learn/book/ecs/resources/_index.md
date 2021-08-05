@@ -22,15 +22,43 @@ You might want to use resources for:
 
 ## Creating resources
 
-Resources need no special implementation: you can use any new or existing Rust type as a resource (if it is not `Send + Sync`, you'll need a `NonSend` resource instead).
+Unlike components, resources do not need their own trait implementation: you can use any new or existing `'static` Rust type as a resource (if it is not `Send + Sync`, you'll need a `NonSend` resource instead).
 
-As resources are part of the `App`'s `World`, you can add them to the `AppBuilder`.
-Usually this will be done statically, via [`insert_resouce`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.insert_resource) or [`init_resource`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.init_resource).
+Like entities and their component data, resources are stored in your `App`'s `World` struct.
+Resources are typically added statically, via [`insert_resouce`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.insert_resource) or [`init_resource`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.init_resource).
 
 `insert_resource` is used when you want to set the value of a resource manually, while `init_resource` is used when you want to automatically initialize the resources value using the `Default` or `FromWorld` trait.
 
 ```rust
 use bevy::prelude::*;
+
+// Resources can be tuple structs
+// Default can be derived for many simple resources,
+// with the default value of most numeric types being 0
+#[derive(Default)]
+struct Score(u64);
+
+// Resources can be ordinary namedstructs
+struct PlayerSupplies {
+	gold: u64,
+	wood: u64,
+}
+
+// The Default trait can be manually implemented to control initial values
+impl Default for PlayerSupplies {
+	fn default() -> Self {
+		PlayerSupplies {
+			gold: 400,
+			wood: 200,
+		}
+	}
+}
+
+// Resources can be enums
+enum Turn {
+	Allied,
+	Enemy
+}
 
 fn main(){
 	// Resources are typically inserted using AppBuilder methods
@@ -53,34 +81,6 @@ fn main(){
 	.add_plugins(DefaultPlugins)
 	.run()
 }
-
-// Resources can be tuple structs
-// Default can be derived for many simple resources,
-// with the default value of most numeric types being 0
-#[derive(Default)]
-struct Score(u64);
-
-// Resources can be ordinary structs
-struct PlayerSupplies {
-	gold: u64,
-	wood: u64,
-}
-
-// The Default trait can be manually implemented to control initial values
-impl Default for PlayerSupplies {
-	fn default() -> Self {
-		PlayerSupplies {
-			gold: 400,
-			wood: 200,
-		}
-	}
-}
-
-// Resources can be enums
-enum Turn {
-	Allied,
-	Enemy
-}
 ```
 
 In rare cases, you may need to add a resource later, once other parts of the world exist to ensure proper initialization.
@@ -100,7 +100,7 @@ use bevy::prelude::*;
 
 fn main() {
     App::build()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(MinimalPlugins)
         .init_resource::<Secret>()
         .insert_resource(InputMode::Recording)
         .add_system(record_secret.system())
