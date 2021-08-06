@@ -84,14 +84,14 @@ If you find yourself needing to iterate over all pairs (or triples or...) of a q
 ## Queries that return one entity
 
 When we have a query that we *know* will always return a single entity, iterating over the query tends to result in unclear code.
-To get around this, we can use [`Query::single()`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.single) and [`Query::single_mut()`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.single_mut), depending on whether or not we need to mutate the returned data.
+To get around this, we can use [`Query::single()`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single) and [`Query::single_mut()`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single_mut), depending on whether or not we need to mutate the returned data.
 
 Note that these functions return a `Result`: if you expect this could fail in real scenarios (in case the query does not contain exactly one entity), handle the result properly.
 Otherwise, just call `let (component_a, component_b) = query.single().unwrap()` to make use of the data quickly.
 
 ## Looking up specific entities
 
-Each entity in our ECS data storages has a unique identifier, given by its [`Entity`](https://docs.rs/bevy/0.5.0/bevy/ecs/entity/struct.Entity.html), which defines the entity in terms of a `u32` [`id`](https://docs.rs/bevy/0.5.0/bevy/ecs/entity/struct.Entity.html#method.id) and a `u32` [`generation`](https://docs.rs/bevy/0.5.0/bevy/ecs/entity/struct.Entity.html#method.generation).
+Each entity in our ECS data storages has a unique identifier, given by its [`Entity`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html), which defines the entity in terms of a `u32` [`id`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html#method.id) and a `u32` [`generation`](https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html#method.generation).
 We can fetch the `Entity` of each entity returned by our queries by including it as part of the first type parameter of `Query` as if it were a component (although no `&` is used):
 
 ```rust
@@ -118,7 +118,7 @@ fn identify_yourself(query: Query<Entity, With<Marker>>, my_entities: ResMut<MyE
 
 ```
 
-Once we have a particular entity in mind, we can grab its data using [`Query::get()`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.get) and the related methods on `Query`.
+Once we have a particular entity in mind, we can grab its data using [`Query::get()`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get) and the related methods on `Query`.
 This is fallible, and so it returns a `Result` that you must unwrap or handle.
 
 ## Optional components in queries
@@ -258,4 +258,4 @@ fn camera_follow_system(queries: QuerySet<Query<&Transform, With<Player>>, Query
 Bevy's systems automatically run in parallel by default, so long as the scheduler can guarantee that the same data is never accessed in another place while it is being mutated.
 
 As a result, we can use the same query filtering techniques described  to allow our *systems* to safely run in parallel.
-In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.
+In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.

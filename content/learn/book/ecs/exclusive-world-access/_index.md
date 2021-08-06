@@ -21,20 +21,20 @@ You might be working with the `World` if:
 
 ### Basic usage
 
-Generally speaking, the [API](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html) of working with the `World` mirrors those elsewhere that you might be familiar with.
+Generally speaking, the [API](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html) of working with the `World` mirrors those elsewhere that you might be familiar with.
 
 Like with `Commands`, you can call `spawn`, `spawn_batch` and `despawn` to add and remove entities, and `
-Resources are simply accessed with [`get_resource::<R>](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.get_resource) and the mutable equivalent [`get_resource_mut::<R>`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.get_resource)
+Resources are simply accessed with [`get_resource::<R>](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_resource) and the mutable equivalent [`get_resource_mut::<R>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_resource)
 
-Like with queries, you can call [`get::<C>`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.get) and [`get_mut::<C>`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.get_mut) to access component data of a particular sort on a given entity. 
-If you want access to *all* of the data on an entity, use [`get_entity`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.get_entity) and [`get_entity_mut](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.get_entity_mut) (or their faster but riskier siblings [entity](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.entity) and [`entity_mut`]), along with various [`EntityRef`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.EntityRef.html) methods.
+Like with queries, you can call [`get::<C>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get) and [`get_mut::<C>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_mut) to access component data of a particular sort on a given entity. 
+If you want access to *all* of the data on an entity, use [`get_entity`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_entity) and [`get_entity_mut](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_entity_mut) (or their faster but riskier siblings [entity](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.entity) and [`entity_mut`]), along with various [`EntityRef`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.EntityRef.html) methods.
 
-You can create new queries using [`query`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.query) and [`query_filtered`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.query_filtered), using the former when you only have one type parameter and the latter when you want to use the second filtering type parameter of standard queries as well.
+You can create new queries using [`query`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.query) and [`query_filtered`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.query_filtered), using the former when you only have one type parameter and the latter when you want to use the second filtering type parameter of standard queries as well.
 
 ### Accessing multiple parts of the `World` simultaneously
 
 When working with non-trivial exclusive `World` logic, you're likely to run into cases where you need mutable access to more than one part of the `World` at once.
-This tends to make the compiler quite unhappy, but you can use [`World::cell`](https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.bundles) and `World::resource_scope`(https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html#method.resource_scope) to allow for carefully shared mutable access.
+This tends to make the compiler quite unhappy, but you can use [`World::cell`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.bundles) and `World::resource_scope`(https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.resource_scope) to allow for carefully shared mutable access.
 
 TODO: explain how `cell` and `resource_scope` works.
 TODO: add `WorldCell` example
@@ -96,7 +96,7 @@ TODO: add exclusive system example
 ### Custom commands
 
 Commands execute arbitrary logic at the end of the stage, queued up by ordinary systems.
-You can extend the [`Command`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/trait.Command.html) trait to create your own commands, performing tasks with far-reaching consequences without requiring access to that data in your originating systems.
+You can extend the [`Command`](https://docs.rs/bevy/latest/bevy/ecs/system/trait.Command.html) trait to create your own commands, performing tasks with far-reaching consequences without requiring access to that data in your originating systems.
 
 Here's an example of how you might do so:
 
