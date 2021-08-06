@@ -23,7 +23,7 @@ You might be working with the `World` if:
 
 Generally speaking, the [API](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html) of working with the `World` mirrors those elsewhere that you might be familiar with.
 
-Like with `Commands`, you can call `spawn`, `spawn_batch` and `despawn` to add and remove entities, and `
+Like with `Commands`, you can call `spawn`, `spawn_batch` and `despawn` to add and remove entities, adding components to them with `insert` and `insert_bundle`.
 Resources are simply accessed with [`get_resource::<R>](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_resource) and the mutable equivalent [`get_resource_mut::<R>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_resource)
 
 Like with queries, you can call [`get::<C>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get) and [`get_mut::<C>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_mut) to access component data of a particular sort on a given entity. 
@@ -93,7 +93,7 @@ It can also be useful for re-using or organizing logic used in other areas where
 
 ### Exclusive systems
 
-Exclusive systems are systems that operate on `&mut World`.
+Exclusive systems are systems that operate on `&mut World`, and are added to the schedule using `App::add_system(my_exclusive_system.exclusive_system())`.
 Unlike ordinary systems, which can be executed in parallel in arbitrary orders, exclusive systems can run either:
 
 1. Immediately before the start of a stage, using `my_exclusive_system().exclusive_system().at_start()`.
