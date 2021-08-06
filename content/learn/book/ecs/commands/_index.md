@@ -94,12 +94,45 @@ However, this technique can be incredibly useful for advanced control flows that
 
 You can extend the [`Command`](https://docs.rs/bevy/latest/bevy/ecs/system/trait.Command.html) trait to create your own commands, performing tasks with far-reaching consequences without requiring access to that data in your originating systems.
 
-Here's an example of how you might do so:
+Let's walk through the steps needed to create a new custom command:
 
-TODO: add custom commands example
 ```rust
+// First, we need to create a struct that stores any data needed by the command
+struct CountEntities {
+    // This functionality is not very useful,
+    // and is included for teaching purposes
+    message: String,
+}
 
+// Next, we need to implement the `Command` trait for that struct
+// which describes how the command changes the world
+impl Command for CountEntities {
+    fn write(self, world: &mut World) {
+        info!(
+            "The world has {} entities in it. BTW, \"{}\"!",
+            world.entities().len(),
+            self.message.to_string(),
+        );
+    }
+}
+// Then, we create an extension trait, which allows us to add new methods to commands
+trait EntityCounting {
+    fn count_entities(&mut self, message: String);
+}
+
+// Finally, we implement that trait for the `Commands` type,
+// adding our new command type to the command queue
+impl<'a> EntityCounting for Commands<'a> {
+    // We can now call `commands.count_entities(offset)`
+    // on any instance of `Commands` when we have
+    // the `EntityCounting` trait in scope
+    fn count_entities(&mut self, message: String) {
+        self.add(CountEntities { String })
+    }
+}
 ```
 
 Due to the delayed effect of commands, and their relatively poor performance (they can only be executed one at a time in sequence), you should only use custom commands for tasks that truly need their world-altering powers.
 In many cases, an event plus an event-handling system will be faster, more ergonomic and easier to debug.
+
+For more details on how to perform logic in custom commands, see the page on [exclusive world access](../exclusive-world-access/_index.md).
