@@ -17,7 +17,7 @@ use bevy::prelude::*;
 
 fn main(){
   App::new()
-  .add_system(hello.system())
+  .add_system(hello)
   .run();
 }
 
