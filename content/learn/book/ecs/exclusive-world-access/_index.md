@@ -103,9 +103,35 @@ Unlike ordinary systems, which can be executed in parallel in arbitrary orders, 
 `at_start` is the default behavior of exclusive systems and can be omitted.
 Like other systems, exclusive systems obey `.before` and `.after` ordering constraints, but only with respect to other exclusive systems running at the same time in the same stage.
 
-TODO: add exclusive system example
-```rust
+Here's an example of where you might want the far-reaching power of exclusive systems:
 
+```rust
+// In this example, we're using a custom ActionStack to queue up
+// free-form actions to enable complex, flexible logic in a turn-based game
+
+/// Allows components that implement this trait to store arbitrary world-altering logic
+pub trait Action: Send + Sync {
+    fn perform(&mut self, world: &mut World);
+}
+
+/// Stores a vec of actions to be executed in first-in-last-out order
+pub struct ActionStack(Vec<Box<dyn Action>>);
+
+/// Takes the top action from the stack and runs it,
+/// repeating until the action queue is empty
+pub fn perform_next_action(world: &mut World) {
+    loop {
+        // This must be within the loop to satisfy the borrow checker
+        // as our action could modify this resource
+        let mut action_stack = world.get_resource_mut::<ActionStack>().unwrap();
+        match action_stack.0.pop() {
+            Some(mut action) => {
+                action.perform(world);
+            }
+            None => break,
+        }
+    }
+}
 ```
 
 ### Custom commands
