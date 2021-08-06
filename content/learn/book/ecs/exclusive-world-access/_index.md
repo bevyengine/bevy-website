@@ -133,18 +133,3 @@ pub fn perform_next_action(world: &mut World) {
     }
 }
 ```
-
-### Custom commands
-
-Commands execute arbitrary logic at the end of the stage, queued up by ordinary systems.
-You can extend the [`Command`](https://docs.rs/bevy/latest/bevy/ecs/system/trait.Command.html) trait to create your own commands, performing tasks with far-reaching consequences without requiring access to that data in your originating systems.
-
-Here's an example of how you might do so:
-
-TODO: add custom commands example
-```rust
-
-```
-
-Due to the delayed effect of commands, and their relatively poor performance (they can only be executed one at a time in sequence), you should only use custom commands for tasks that truly need their world-altering powers.
-In many cases, an event plus an event-handling system will be faster, more ergonomic and easier to debug.
