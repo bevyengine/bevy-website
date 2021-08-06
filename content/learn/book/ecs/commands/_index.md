@@ -136,3 +136,17 @@ Due to the delayed effect of commands, and their relatively poor performance (th
 In many cases, an event plus an event-handling system will be faster, more ergonomic and easier to debug.
 
 For more details on how to perform logic in custom commands, see the page on [exclusive world access](../exclusive-world-access/_index.md).
+
+## Application order of commands
+
+When combining the effects of multiple commands, it can be important to be aware of the exact order in which your commands are executed can be vitally important.
+If one system is spawning an entity and then passing off its `Entity` identifier to another system, that needs to occur before the second system attempts to add components to it!
+
+Thankfully, while their effect is delayed, their application order follows a few simple rules:
+
+1. Commands are always applied one at a time.
+2. All commands created by a given system are applied sequentially, in the order in which the methods were called on the `Commands` object in that system.
+3. If a system is explicitly specified (using `.before` or `.after`) to occur before another system, its commands will always be applied first.
+4. If two systems do not have an explicit ordering between them (including any transitive ordering from e.g. A before B before C), the order in which their commands are applied is unspecified, and may vary between runs of the app.
+
+For more information on how to control system ordering, please read the [System Ordering](../../game-logic/system-ordering/_index.md) page in the next chapter.
