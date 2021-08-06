@@ -92,7 +92,7 @@ Bevy's modular nature tends to result in simple plug-and-play interoperability a
 1. Find a Bevy plugin (such as from our [collection of assets](https://bevyengine.org/assets/)).
 2. Add it to your `Cargo.toml` as a crate under `[dependencies]`.
 3. Import the code definitions from the crate (i.e. `using bevy_third_party::prelude::*`) to add the appropriate items to your workspace.
-4. Add the plugin to your app (i.e. `app.add_add_plugin(bevy_third_party_plugin)`)!
+4. Add the plugin to your app (i.e. `app.add_plugin(bevy_third_party_plugin)`)!
 
 Follow the documentation and examples from the crates you're importing to make sure you have everything configured properly.
 
