@@ -34,10 +34,13 @@ You can create new queries using [`query`](https://docs.rs/bevy/latest/bevy/ecs/
 ### Accessing multiple parts of the `World` simultaneously
 
 When working with non-trivial exclusive `World` logic, you're likely to run into cases where you need mutable access to more than one part of the `World` at once.
-This tends to make the compiler quite unhappy, but you can use [`World::cell`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.bundles) and [`World::resource_scope`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.resource_scope) to allow for carefully shared mutable access.
+This tends to make the compiler quite unhappy, but by carefully partitioning our data access we can ensure that our code doesn't violate Rust's memory safety rules.
+No `unsafe` needed!
 
-TODO: explain how `cell` and `resource_scope` works.
-TODO: add `WorldCell` example
+Right now, there are two main tools to do so:
+
+1. [`World::cell`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.cell): Like the [concept of the same name from the Rust standard library](https://doc.rust-lang.org/std/cell/), this enables interior mutability by disabling Rust's compile-time checks for aliased mutability and replacing them run-time checks.
+2. [`World::resource_scope`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.resource_scope): temporarily removes the requested resource from the world, returning it at the end of your function (or when the created scope is manually dropped). This allows you to freely have multiple mutable references to distinct resources active at once.
 
 ### Accessing system parameters with `World` access
 
