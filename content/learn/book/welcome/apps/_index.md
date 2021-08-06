@@ -1,5 +1,5 @@
 +++
-title = "Creating Bevy apps"
+title = "Apps"
 weight = 2
 template = "book-section.html"
 page_template = "book-section.html"
@@ -16,9 +16,9 @@ Finally once we're done configuring the app, we call [`App::run()`](https://docs
 use bevy::prelude::*;
 
 fn main(){
-  App::new()
-  .add_system(hello)
-  .run();
+    App::new()
+        .add_system(hello)
+        .run();
 }
 
 fn hello(){
@@ -46,7 +46,7 @@ Let's write a very simple demo that shows how those work.
 use bevy::prelude::*;
 
 fn main() {
-    App::build()
+    App::new()
         // Plugins are App code that was written elsewhere,
         // imported as a single unit for organization and clarity
         .add_plugins(DefaultPlugins)

@@ -1,5 +1,5 @@
 +++
-title = "Installing Rust and Bevy"
+title = "Setup"
 weight = 1
 template = "book-section.html"
 page_template = "book-section.html"

@@ -1,5 +1,5 @@
 +++
-title = "Welcome to Bevy"
+title = "Welcome"
 weight = 1
 sort_by = "weight"
 template = "book-section.html"
