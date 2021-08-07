@@ -36,8 +36,8 @@ use bevy::prelude::*;
 fn main() {
     App::build()
         .add_plugins(DefaultPlugins)
-        .add_startup_system(spawn_camera.system())
-        .add_startup_system(spawn_lines.system())
+        .add_startup_system(spawn_camera)
+        .add_startup_system(spawn_lines)
         .run()
 }
 

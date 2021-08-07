@@ -103,8 +103,8 @@ fn main() {
         .add_plugins(MinimalPlugins)
         .init_resource::<Secret>()
         .insert_resource(InputMode::Recording)
-        .add_system(record_secret.system())
-        .add_system(check_secret.system())
+        .add_system(record_secret)
+        .add_system(check_secret)
         .run();
 }
 
@@ -238,7 +238,7 @@ use bevy::prelude::*;
 fn main() {
     App::build()
         .add_plugins(DefaultPlugins)
-        .add_system(countdown.system())
+        .add_system(countdown)
         .run()
 }
 
