@@ -123,7 +123,7 @@ trait EntityCounting {
 // Finally, we implement that trait for the `Commands` type,
 // adding our new command type to the command queue
 impl<'a> EntityCounting for Commands<'a> {
-    // We can now call `commands.count_entities(offset)`
+    // We can now call `commands.count_entities(message)`
     // on any instance of `Commands` when we have
     // the `EntityCounting` trait in scope
     fn count_entities(&mut self, message: String) {

@@ -13,7 +13,7 @@ You might be working with the `World` if:
 - you're running an exclusive system to access data in unusually broad ways (such as for saving the game or handling networking)
 - you're writing a custom command, to execute logic at the end of the system
 - you're initializing a resource using the `FromWorld` trait
-- you're working with a `NonSend` resource that cannot be sent across threads
+- you're working with `NonSend` values that cannot be sent across threads
 - you're setting up tests to be run in a headless fashion
 - you're using `bevy_ecs` as a standalone crate
 

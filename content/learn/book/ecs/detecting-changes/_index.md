@@ -114,7 +114,7 @@ Change detection in Bevy works via a custom implementation of the `DerefMut` tra
 As a result:
 
 1. Changes won't be flagged when you use [interior mutability](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html). You can (and should!) manually flag the data as having changed using `set_changed()` when you do this.
-2. Changes will be flagged whenever you mutably access a component or resource, even if you don't change its value. Only dereference the data if you know you're going to change it to avoid false positives caused in this way.
+2. Changes will be flagged whenever you mutably access a component or resource, even if you don't change its value. Only mutably dereference the data if you know you're going to change it to avoid false positives caused in this way.
 
 ## Removal detection
 
