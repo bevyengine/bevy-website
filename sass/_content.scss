@@ -55,6 +55,10 @@ $content-font-size: 1.22rem;
         text-decoration: none;
     }
 
+    ol, ul {
+        padding-left: 2.5rem;
+    }
+
 
     a:hover code {
         background-color: $syntax-theme-background-hover;
