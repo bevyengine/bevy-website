@@ -5,7 +5,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Bevy allows you to respond to the addition of or changes to specific component types using the [`Added<C>`](https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html) and [`Changed<C>`](https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html) query filters.
+Bevy allows you to respond to the addition of or changes to specific component types using the {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} query filters.
 These are incredibly useful, allowing you to:
 
 - automatically complete initialization of components
@@ -20,7 +20,7 @@ As you (almost always) need to mutably dereference data out of its wrapper in or
 Change detection works for resources too, using the exact same internal mechanisms!
 Use the `is_changed()`() and `is_added()` methods on any resources (or individual entities) to check if they've been added or changed.
 
-`Added` and `Changed` are query filters, appearing in the second type parameter of our `Query` data types.
+{{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} are query filters, appearing in the second type parameter of our {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}} data types.
 To show you how they work, let's take a look at a few snippets of gameplay code.
 You might use an addition-tracking system to automatically change the difficulty of your game's enemies:
 
@@ -94,7 +94,7 @@ fn difficulty_changed_system(difficulty: Res<Difficulty>, old_difficulty: Res<Ol
 }
 ```
 
-`Changed` can be used with precisely the same syntax, and is incredibly useful for avoiding repeated work.
+{{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} can be used with precisely the same syntax, and is incredibly useful for avoiding repeated work.
 For example, you might use it to efficiently check whether units are in a particular area each frame:
 
 ```rust
@@ -110,7 +110,7 @@ fn enemy_escape_system(query: Query<&Transform, (With<Enemy>, Changed<Transform>
 
 ### The details of change detection
 
-Change detection in Bevy works via a custom implementation of the `DerefMut` trait of `Mut` and `ResMut`, our mutable wrappers for components and resources respectively.
+Change detection in Bevy works via a custom implementation of the {{rust_type(type="trait" crate="std" mod="ops" name="DerefMut")}} trait of {{rust_type(type="struct" crate="bevy_ecs" mod = "world" name="Mut" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="ResMut" no_mod = "true")}}, our mutable wrappers for components and resources respectively.
 As a result:
 
 1. Changes won't be flagged when you use [interior mutability](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html). You can (and should!) manually flag the data as having changed using `set_changed()` when you do this.
@@ -119,12 +119,12 @@ As a result:
 ## Removal detection
 
 We can watch for the removal of components too, although the mechanisms are quite different.
-`RemovedComponents<C>` is a system parameter, returning an iterator of all entity identifiers from whom components of that type were removed during the last frame.
+{{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="RemovedComponents" no_mod = "true")}} is a system parameter, returning an iterator of all entity identifiers from whom components of that type were removed during the last frame.
 This includes entities with that component who were despawned.
 There are three important caveats here:
 
-1. While `Added` and `Changed` operate on the basis of "since the last time this system ran", removal detection only works for the last frame. This distinction is very important if your system does not run every frame due to states or run criteria.
-2. `RemovedComponents` does not return the *value* of the component that was removed, due to performance concerns. If you need this, you will need to include your own change-detecting system to cache the values before they are removed.
-3. `RemovedComponents` is a system parameter, not a query filter. As a result, you will have to manually compare it to the results of a query if you only need to handle some subset of component removal events.
+1. While{{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} operate on the basis of "since the last time this system ran", removal detection only works for the last frame. This distinction is very important if your system does not run every frame due to states or run criteria.
+2. {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="RemovedComponents" no_mod = "true")}} does not return the *value* of the component that was removed, due to performance concerns. If you need this, you will need to include your own change-detecting system to cache the values before they are removed.
+3. {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="RemovedComponents" no_mod = "true")}} is a system parameter, not a query filter. As a result, you will have to manually compare it to the results of a query if you only need to handle some subset of component removal events.
 
 Despite [these caveats](https://github.com/bevyengine/bevy/issues/2148), removal detection can be quite useful for handling complex cleanup and toggling behavior through the addition and removal of components.

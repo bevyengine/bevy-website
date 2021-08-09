@@ -1,41 +1,42 @@
 +++
-title = "Exclusive `World` access"
+title = "Exclusive world access"
 weight = 7
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-In various places, Bevy code works directly with the `World` data, gaining exclusive, blocking access to it and allowing for arbitrary mutations.
+In various places, Bevy code works directly with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} data, gaining exclusive, blocking access to it and allowing for arbitrary mutations.
 This is very flexible, and can be essential for advanced use cases, but prevents any other systems from running simultaneously and can often be harder to reason about and maintain.
-As a result, you should use only exclusive `World` when you have to.
-You might be working with the `World` if:
+As a result, you should use only exclusive {{rust_type(type="struct" crate="bevy_ecs" name="World")}} when you have to.
+You might be working with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} if:
 
 - you're running an exclusive system to access data in unusually broad ways (such as for saving the game or handling networking)
 - you're writing a custom command, to execute logic at the end of the system
-- you're initializing a resource using the `FromWorld` trait
-- you're working with `NonSend` values that cannot be sent across threads
+- you're initializing a resource using the {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="FromWorld" no_mod = "true")}} trait
+- you're working with {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="NonSend" no_mod = "true")}} values that cannot be sent across threads
 - you're setting up tests to be run in a headless fashion
-- you're using `bevy_ecs` as a standalone crate
+- you're using {{rust_mod(crate="bevy" mod="ecs")}} as a standalone crate
 
 ## Basic usage
 
-Generally speaking, the [API](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html) of working with the `World` mirrors those elsewhere that you might be familiar with.
+Generally speaking, the API of working directly with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} mirrors those elsewhere that you might be familiar with.
 
-Like with `Commands`, you can call `spawn`, `spawn_batch` and `despawn` to add and remove entities, adding components to them with `insert` and `insert_bundle`.
-Resources are simply accessed with [`get_resource::<R>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_resource) and the mutable equivalent [`get_resource_mut::<R>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_resource)
+Like with {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}, you can call {rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn")}}, {rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn_batch")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "despawn")}} to add and remove entities, adding components to them with {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert_bundle")}}.
+Resources are simply accessed with {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource")}} and the mutable equivalent {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource_mut")}}.
 
-Like with queries, you can call [`get::<C>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get) and [`get_mut::<C>`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_mut) to access component data of a particular sort on a given entity.
-If you want access to *all* of the data on an entity, use [`get_entity`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_entity) and [`get_entity_mut](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.get_entity_mut) (or their faster but riskier siblings [entity](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.entity) and [`entity_mut`]), along with various [`EntityRef`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.EntityRef.html) methods.
+Like with queries, you can call {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_mut")}} to access component data of a particular sort on a given entity.
+If you want access to *all* of the data on an entity, use {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_entity")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_entity_mut")}}, along with various {rust_type(type="struct" crate="bevy_ecs" name="World" method = "EntityRef)}} methods to operate on the returned object.
 
-You can create new queries using [`query`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.query) and [`query_filtered`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.query_filtered), using the former when you only have one type parameter and the latter when you want to use the second filtering type parameter of standard queries as well.
+You can create new queries using {rust_type(type="struct" crate="bevy_ecs" name="World" method = "query")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "query_filtered")}}.
+Use the former when you only have one type parameter and the latter when you want to use the second filtering type parameter of standard queries as well.
 
 ## Exclusive systems
 
 Exclusive systems can operate on any data at once: no pesky carefully scoped data access needed.
 This comes at a great cost: no other work can be done at the same time.
 
-You *must* use `world: &mut World` as the only parameter in exclusive systems: all other data can be accessed using the methods on `World`.
-Let the schedule know that they're exclusive by using `.exclusive_system()` on the system function, then use `add_system` or any of its relatives like usual.
+You *must* use `world: &mut World` as the only parameter in exclusive systems: all other data can be accessed using the methods on {{rust_type(type="struct" crate="bevy_ecs" name="World")}}.
+Let the schedule know that they're exclusive by using {rust_type(type="trait" crate="bevy_ecs" mod = "system" name="IntoExclusiveSystem" method = "exclusive_system" no_mod = "true")}} on the system function, then use {rust_type(type="struct" crate="bevy_app" name="App" method = "add_system")}} or any of its relatives like usual.
 
 Unlike ordinary systems, which can be executed in parallel in arbitrary orders, exclusive systems can run either:
 
@@ -44,7 +45,7 @@ Unlike ordinary systems, which can be executed in parallel in arbitrary orders, 
 3. Immediately after the end of a stage, after commands are applied, using `my_exclusive_system().exclusive_system().at_end()`.
 
 `at_start` is the default behavior of exclusive systems and can be omitted.
-Like other systems, exclusive systems obey `.before` and `.after` ordering constraints, but only with respect to other exclusive systems running at the same time in the same stage.
+Like other systems, exclusive systems obey standard ordering constraints, but only with respect to other exclusive systems running at the same time in the same stage.
 
 Here's an example of where you might want the far-reaching power of exclusive systems:
 
@@ -77,21 +78,21 @@ pub fn perform_next_action(world: &mut World) {
 }
 ```
 
-## Accessing multiple parts of the `World` simultaneously
+## Accessing multiple parts of the world simultaneously
 
-When working with non-trivial exclusive `World` logic, you're likely to run into cases where you need mutable access to more than one part of the `World` at once.
+When working with non-trivial exclusive world logic, you're likely to run into cases where you need mutable access to more than one part of the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} at once.
 This tends to make the compiler quite unhappy, but by carefully partitioning our data access we can ensure that our code doesn't violate Rust's memory safety rules.
 No `unsafe` needed!
 
 Right now, there are two main tools to do so:
 
-1. [`World::cell`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.cell): Like the [concept of the same name from the Rust standard library](https://doc.rust-lang.org/std/cell/), this enables interior mutability by disabling Rust's compile-time checks for aliased mutability and replacing them run-time checks.
-2. [`World::resource_scope`](https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.resource_scope): temporarily removes the requested resource from the world, returning it at the end of your function (or when the created scope is manually dropped). This allows you to freely have multiple mutable references to distinct resources active at once.
+1. {rust_type(type="struct" crate="bevy_ecs" name="World" method = "cell")}}: Like the [concept of the same name from the Rust standard library](https://doc.rust-lang.org/std/cell/), this enables interior mutability by disabling Rust's compile-time checks for aliased mutability and replacing them run-time checks.
+2. {rust_type(type="struct" crate="bevy_ecs" name="World" method = "resource_scope")}}: temporarily removes the requested resource from the world, returning it at the end of your function (or when the created scope is manually dropped). This allows you to freely have multiple mutable references to distinct resources active at once.
 
-## Accessing system parameters with `World` access
+## Accessing system parameters
 
-Occasionally, you may find yourself reaching for convenient system parameters (like `EventReader` and `EventWriter`) while you have exclusive world access.
-We can call these directly, using the same syntax as we use in systems, using the [`SystemState`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemState) type.
+Occasionally, you may find yourself reaching for convenient system parameters (like {{rust_type(type="struct" crate="bevy_app" name="EventReader")}} and {{rust_type(type="struct" crate="bevy_app" name="EventWriter")}}) while you have exclusive world access.
+We can call these directly, using the same syntax as we use in systems, using the {{rust_type(type="struct" crate="bevy" mod="ecs/system" name="SystemState")}}type.
 
 ```rust
 use bevy::prelude::*;
@@ -113,7 +114,7 @@ app_exit_event_writer.send(AppExit);
 
 ## Manually running systems
 
-If you'd like to use the familiar and expressive system syntax when working with `World`, you can manually run systems to immediately execute them one at a time.
+If you'd like to use the familiar and expressive system syntax when working with {{rust_type(type="struct" crate="bevy_ecs" name="World")}}, you can manually run systems to immediately execute them one at a time.
 
 ```rust
 struct Name(String);

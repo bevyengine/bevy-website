@@ -6,14 +6,14 @@ page_template = "book-section.html"
 +++
 
 In order to make useful, fun or interesting games or apps, you'll need to manipulate the data that you store in components and resources in some way.
-In Bevy, virtually all of your logic will be stored in **systems**, functions that automatically receive data from the `World` from the scheduler according to their **system parameters**, and can mutate that data to change the world.
-Any type which implements the [`SystemParam`](https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html) trait can be used as a function parameter in your system: this trait tells the scheduler how to pass out access to the `World` in a safe and efficient way.
+In Bevy, virtually all of your logic will be stored in **systems**, functions that automatically receive data from the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} from the scheduler according to their **system parameters**, and can mutate that data to change the world.
+Any type which implements the [`SystemParam`](https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html) trait can be used as a function parameter in your system: this trait tells the scheduler how to pass out access to the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} in a safe and efficient way.
 
 Most commonly, you'll be using:
 
 - [`Query`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html), to access entity-component database
 - [`Res`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html) and [`ResMut`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html), to access the global singleton data stored in resources
-- [`Commands`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html), to queue up complex changes to the world like spawning entities
+- [{{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html), to queue up complex changes to the world like spawning entities
 - [`EventWriter`](https://docs.rs/bevy/latest/bevy/app/struct.EventWriter.html) and [`EventReader`](https://docs.rs/bevy/latest/bevy/app/struct.EventReader.html), to work with events in an ergonomic fashion
 
 You can see the full list by checking the [API docs for `SystemParam`](https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html#implementors).

@@ -24,7 +24,7 @@ You might want to use resources for:
 
 Unlike components, resources do not need their own trait implementation: you can use any new or existing `'static` Rust type as a resource (if it is not `Send + Sync`, you'll need a `NonSend` resource instead).
 
-Like entities and their component data, resources are stored in your `App`'s `World` struct.
+Like entities and their component data, resources are stored in your `App`'s {{rust_type(type="struct" crate="bevy_ecs" name="World")}} struct.
 Resources are typically added statically, via [`insert_resouce`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.insert_resource) or [`init_resource`](https://docs.rs/bevy/latest/bevy/app/struct.AppBuilder.html#method.init_resource).
 
 `insert_resource` is used when you want to set the value of a resource manually, while `init_resource` is used when you want to automatically initialize the resources value using the `Default` or `FromWorld` trait.
@@ -84,10 +84,10 @@ fn main(){
 ```
 
 In rare cases, you may need to add a resource later, once other parts of the world exist to ensure proper initialization.
-For that, we can use the equivalent methods on [`Commands`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html).
+For that, we can use the equivalent methods on [{{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html).
 You can add, overwrite and even [`remove_resource](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html#method.remove_resource) dynamically in this way.
 
-Only use `Commands` to add resources where it's needed due to the need to initialize a resource with other data from the world.
+Only use {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} to add resources where it's needed due to the need to initialize a resource with other data from the world.
 It's less clear, and like all commands, commands that insert resources are delayed and only take effect at the end of the current stage.
 
 ## Reading and writing from resources
@@ -213,16 +213,16 @@ By contrast, singleton entities are useful because they:
 Overall, resources are a good default for one-off demands: they're clear and very ergonomic to access.
 You should turn to singleton entities when you want to share behavior with other entities (i.e. a singleton entity for the player is almost always going to be superior to a monolithic `Player` resource), or for when you want to be able to extend or modify behavior dynamically during gameplay.
 
-## Complex resource initialization using `FromWorld`
+## Complex resource initialization from world state
 
-Sometimes you may need to initialize resources in more complex ways, depending on data from the `World` at large.
-For this, we can use the [`FromWorld`](https://docs.rs/bevy/latest/bevy/ecs/world/trait.FromWorld.html) trait, which allows you to create a new copy of the type that it's implemented automatically from the world.
+Sometimes you may need to initialize resources in more complex ways, depending on data from the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} at large.
+For this, we can use the {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="FromWorld" no_mod = "true")}} trait, which allows you to create a new copy of the type that it's implemented automatically from the world.
 
-Ordinarily, the `Default` trait is used to handle resource initialization, due to the blanket implementation of `FromWorld` for `T: Default`.
-Note that you cannot manually implement `FromWorld` on a type that has the `Default` trait, as Rust forbids conflicting implementations of the same trait.
+Ordinarily, the `Default` trait is used to handle resource initialization, due to the blanket implementation of {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="FromWorld" no_mod = "true")}} for `T: Default`.
+Note that you cannot manually implement {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="FromWorld" no_mod = "true")}} on a type that has the `Default` trait, as Rust forbids conflicting implementations of the same trait.
 
-`FromWorld` is commonly used in asset loading to automatically create handles for simple assets, and its use in this case is demonstrated in the [section on loading assets](../../assets/loading-assets/_index.md).
-For advice on how to work with the `World` exposed by the `FromWorld::from_world` method, see the section on [exclusive world access](../exclusive-world-access/_index.md).
+{{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="FromWorld" no_mod = "true")}} is commonly used in asset loading to automatically create handles for simple assets, and its use in this case is demonstrated in the [section on loading assets](../../assets/loading-assets/_index.md).
+For advice on how to work with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} exposed by the {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="FromWorld" method = "from_world" no_mod = "true")}} method, see the section on [exclusive world access](../exclusive-world-access/_index.md).
 
 ## Optional Resources
 
@@ -270,7 +270,7 @@ fn countdown(
 }
 ```
 
-## `NonSend` resources
+## Resources that are not thread-safe
 
 Non-send resources are used to store data that do not meet the `Send + Sync` trait bounds: they cannot be sent safely across threads.
 Their use cases are typically quite advanced and tend to involve interfacing with external libraries for things like audio or networking.

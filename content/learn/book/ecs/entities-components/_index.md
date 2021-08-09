@@ -9,7 +9,7 @@ As we discussed in the introduction to this chapter, **entities** represent obje
 
 ## Spawning and despawning entities
 
-Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's `World`.
+Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's {{rust_type(type="struct" crate="bevy_ecs" name="World")}}.
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
 
 There are two APIs to do so. The first is more direct, allowing you to add and remove entities directly on the world.
@@ -27,7 +27,7 @@ let my_entity = world.spawn().id();
 world.despawn(my_entity);
 ```
 
-If you're using Bevy as a whole (rather than just `bevy_ecs`), you'll tend to find that working with the world directly is rare:
+If you're using Bevy as a whole (rather than just {{rust_mod(crate="bevy" mod="ecs")}}), you'll tend to find that working with the world directly is rare:
 often reserved for [writing tests](https://github.com/bevyengine/bevy/blob/main/tests/how_to_test_systems.rs).
 Instead, almost all of your logic will be contained within systems,
 which don't have the permissions to immediately spawn or despawn new entities (what if someone else was using that?!).
@@ -35,7 +35,7 @@ To work around this, we use **commands**, which have a delayed effect.
 For now, let's take a look at how we can use them to work with entities in simple ways (you can read about all the details [later in this chapter](../commands/_index.md)).
 
 ```rust
-// This system needs to have a mutable argument with the `Commands` type
+// This system needs to have a mutable argument with the {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} type
 // allowing it to queue up commands to be processed at the end of the stage
 fn spawning_system(mut commands: Commands){
     // These commands perform the exact same operations
@@ -49,14 +49,14 @@ fn spawning_system(mut commands: Commands){
 
 ## Working with components
 
-Entities are entirely bare when they're spawned: they contain no data other than their unique `Entity` identifier.
+Entities are entirely bare when they're spawned: they contain no data other than their unique {rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}} identifier.
 This of course is not very useful, so let's discuss how we can add and remove components to them which store data and enable behavior through systems.
 
 ### Defining components
 
-To define a component type, we simply implement the `Component` trait to a Rust type of our choice.
+To define a component type, we simply implement the {rust_type(type="trait" crate="bevy_ecs" mod = "component" name="Component" no_mod = "true")}} trait to a Rust type of our choice.
 You will almost always want to use the `#[derive(Component)]` macro to do this for you; which quickly and reliably generates the correct trait code for the trait.
-Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on `Component`).
+Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on {rust_type(type="trait" crate="bevy_ecs" mod = "component" name="Component" no_mod = "true")}}).
 This ensures that the data can be sent across the threads safely and allows our [type reflection tools](https://github.com/bevyengine/bevy/tree/main/crates/bevy_reflect) to work correctly.
 
 With the theory out of the way, let's define some components!
@@ -181,11 +181,11 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
 To get around this, Bevy abstracts these patterns using **bundles**: named and typed collections of components.
-These are implemented by adding the `Bundle` trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
+These are implemented by adding the {rust_type(type="trait" crate="bevy_ecs" mod = "bundle" name="Bundle" no_mod = "true")}}  trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
 
 Let's try rewriting that code from above.
 
-`Life`, `Attack` and `Defense` will almost always be added to our entities at the same time, so let's create a **bundle** (collection of components) to make them easier to work with.
+`Life`, `Attack` and `Defense` will almost always be added to our entities at the same time, so let's create a bundle to make them easier to work with.
 
 ```rust
 #[derive(Bundle)]
