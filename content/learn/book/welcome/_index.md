@@ -11,13 +11,14 @@ Welcome to the Bevy game engine! A bevy may be a group of birds, but our engine 
 - **Rust-first:** all the safety, tooling and power that come with a modern systems language
 - **Completely free:** [free-of-charge](https://github.com/sponsors/cart), [open source](https://github.com/bevyengine/bevy/blob/main/LICENSE), and hackable with an architecture designed for modularity
 - **Innovative ECS:** powered by an ergonomic, full-native entity-component-system architecture that makes writing clear, performant gameplay and engine logic a joy
-- **Cross-platform:** support Windows, MacOS, Linux, web*, Android* and iOS with a single code base
+- **Cross-platform:** support Windows, MacOS, Linux, web*, Android*, iOS and more** with a single code base
 - **Effortless parallelism:** a data-oriented design and automatic parallel scheduler provide a high-performance foundation for your game
 
 This book is designed for new and experienced users looking for a thoughtful, [explanation-first](https://diataxis.fr/explanation/) guide to the engine's essential features.
 If you just want to try it out hands-on, jump into one of our [quick-start guides](TODO: add link) instead!
 
 *: support for these platforms is still limited; you may encounter some missing features or a more involved setup process
+**: virtual and augmented reality (aka XR) compatability is [in development](https://github.com/bevyengine/bevy/pull/2319)
 
 ## Stability warning
 
