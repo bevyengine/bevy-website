@@ -57,7 +57,7 @@ fn report_score(score: Res<Score>){
 }
 ```
 
-## `DefaultPlugins` and `PluginGroup`
+## Plugin groups
 
 Bevy's {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}} is a {{rust_type(type="trait" crate="bevy_app" name="PluginGroup")}} that adds the "core engine features" like rendering, windowing, and sound that most developers want when building an app.
 
@@ -68,9 +68,6 @@ App::new().add_plugins(DefaultPlugins)
 ```
 
 Take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) to see a full list of what's included.
-
-
-## `MinimalPlugins`
 
 If you're looking to structure your Bevy app in an unusual way and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's [`MinimalPlugins`](https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html) instead.
 
@@ -93,7 +90,7 @@ Follow the documentation and examples from the crates you're importing to make s
 
 If you plan on releasing a plugin yourself, please refer to [Bevy's Plugin Guidelines](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md), [release a crate](https://doc.rust-lang.org/cargo/reference/publishing.html), and then [add it to Bevy Assets](https://github.com/bevyengine/bevy-assets/) to share it with the community!
 
-## Configuring Features in `DefaultPlugins`
+## Pick-and-choose features
 
 Some apps won't need all of the features provided by {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}}. Other features must be opted into. We can use [cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to enable and disable what features are compiled into our game.
 
