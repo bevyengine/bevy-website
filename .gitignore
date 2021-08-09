@@ -2,3 +2,5 @@ public
 **/.DS_Store
 .idea/
 content/assets
+book-validation/target
+book-validation/Cargo.lock

@@ -16,11 +16,13 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
 * **Components**: normal Rust structs
-    ```rs
+    ```rust
     struct Position { x: f32, y: f32 }
     ```
 * **Systems**: normal Rust functions
-    ```rs
+    ```rust
+    use bevy::prelude::*;
+
     fn print_position_system(query: Query<&Transform>) {
         for transform in query.iter() {
             println!("position: {:?}", transform.translation);
@@ -28,7 +30,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     }
     ```
 * **Entities**: a simple type containing a unique integer
-    ```rs
+    ```rust
     struct Entity(u64);
     ```
 
@@ -38,7 +40,10 @@ Now let's see how this works in practice!
 
 Paste the following function into your `main.rs` file:
 
-```rs
+```rust,hide_lines=1-3
+use bevy::prelude::*;
+App::build().add_system(hello_world.system());
+
 fn hello_world() {
     println!("hello world!");
 }
@@ -46,7 +51,10 @@ fn hello_world() {
 
 This will be our first system. The only remaining step is to add it to our App!
 
-```rs
+```rust,hide_lines=1-3
+use bevy::prelude::*;
+fn hello_world() {}
+
 fn main() {
     App::build()
         .add_system(hello_world.system())
@@ -66,19 +74,24 @@ Greeting the whole world is great, but what if we want to greet specific people?
 
 Add this struct to `main.rs`:
 
-```rs
+```rust
 struct Person;
 ```
 
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
-```rs
+```rust
 struct Name(String);
 ```
 
 We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" mod="system" no_mod=true name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
-```rs
+```rust,hide_lines=1-5
+use bevy::prelude::*;
+struct Person;
+struct Name(String);
+App::build().add_system(add_people.system());
+
 fn add_people(mut commands: Commands) {
     commands.spawn().insert(Person).insert(Name("Elaina Proctor".to_string()));
     commands.spawn().insert(Person).insert(Name("Renzo Hume".to_string()));
@@ -88,7 +101,11 @@ fn add_people(mut commands: Commands) {
 
 Now register the startup system like this:
 
-```rs
+```rust,hide_lines=1-4
+use bevy::prelude::*;
+fn add_people() {}
+fn hello_world() {}
+
 fn main() {
     App::build()
         .add_startup_system(add_people.system())
@@ -99,7 +116,12 @@ fn main() {
 
 We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
-```rs
+```rust,hide_lines=1-5
+use bevy::prelude::*;
+struct Person;
+struct Name(String);
+App::build().add_system(greet_people.system());
+
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in query.iter() {
         println!("hello {}!", name.0);
@@ -113,7 +135,12 @@ You can interpret the Query above as: "iterate over every Name component for ent
 
 Now we just register the system in our App:
 
-```rs
+```rust,hide_lines=1-5
+use bevy::prelude::*;
+fn add_people() {}
+fn hello_world() {}
+fn greet_people() {}
+
 fn main() {
     App::build()
         .add_startup_system(add_people.system())
@@ -125,7 +152,7 @@ fn main() {
 
 Running our app will result in the following output:
 
-```
+```ignore
 hello world!
 hello Elaina Proctor!
 hello Renzo Hume!
