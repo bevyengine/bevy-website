@@ -5,14 +5,14 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-One of Bevy's core principles is modularity. In Bevy, all functionality is implemented via {{rust_type(type="trait" crate="bevy_app" name="Plugin" plural=true)}}, which are added to an {{rust_type(type="struct" crate="bevy_app", name="App")}}. Game logic like player movement, core engine logic like rendering and sound, and third party extensions like tile maps are all implemented the same way using {{rust_type(type="trait" crate="bevy_app" name="Plugin" plural=true)}}.
+One of Bevy's core principles is modularity. In Bevy, all functionality is implemented via {{rust_type(type="trait" crate="bevy_app" name="Plugin" plural=true)}}, which are added to an  {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}. Game logic like player movement, core engine logic like rendering and sound, and third party extensions like tile maps are all implemented the same way using {{rust_type(type="trait" crate="bevy_app" name="Plugin" plural=true)}}.
 
 This empowers Bevy developers to modularly "build their own engine" using official, third party, and custom {{rust_type(type="trait" crate="bevy_app" name="Plugin" plural=true)}}. Bevy intentionally blurs the lines between engine developers and app developers.
 
 ## Writing your own plugins
 
-Plugins are collections of code that modify {{rust_type(type="trait" crate="bevy_app" name="App" plural=true)}}.
-Any code in a plugin could be directly substituted directly on the base `App`.
+Plugins are collections of code that modify {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}.
+Any code in a plugin could be directly substituted directly on the base {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}.
 There's no magic to be found here; they're just a straightforward tool for code organization.
 
 Plugins are types that implement the {{rust_type(type="trait" crate="bevy_app" name="Plugin")}} trait:
@@ -69,11 +69,11 @@ App::new().add_plugins(DefaultPlugins)
 
 Take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) to see a full list of what's included.
 
-If you're looking to structure your Bevy app in an unusual way and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's [`MinimalPlugins`](https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html) instead.
+If you're looking to structure your Bevy app in an unusual way and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's {{rust_type(type="struct" crate="bevy" name="MinimalPlugins")}} instead.
 
-We can click through to the [source]((https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs)) for the `impl PluginGroup for MinimalPlugins` to see that this adds [`CorePlugin`](https://docs.rs/bevy/latest/bevy/core/struct.CorePlugin.html) and [`ScheduleRunnerPlugin`](https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html).
+We can click through to the [source]((https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs)) for the `impl PluginGroup for MinimalPlugins` to see that this adds {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} and {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}}.
 
-The `CorePlugin` handles low-level fundamentals such as updating app time, while the `ScheduleRunnerPlugin` sets up the main game loop to run repeatedly over time.
+The {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} handles low-level fundamentals such as updating app time, while the {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}} sets up the main game loop to run repeatedly over time.
 This functionality is essential: starting with these plugins is virtually always going to be a safe bet.
 
 ## Third-party plugins
