@@ -128,7 +128,7 @@ As a result of (1), (2), and Bevy being free and open source, we foster a feelin
 
 ### Bevy ECS
 
-**Content Warning: I'm going boast a lot here and make some hard-to-verify claims, which might offend some peoples' sensibilities :)**
+**Content Warning: I'm going to boast a lot here and make some hard-to-verify claims, which might offend some peoples' sensibilities :)**
 
 Bevy ECS is the interface we use to build both engine features and apps, so it was natural to give it focus last year. I honestly don't think it is controversial to say that Bevy ECS has pushed the envelope of what an ECS can be. Bevy ECS is the "secret sauce" (well ... \*\*cough\*\* ... "open sauce") that I believe uniquely positions us in the engine market. This is a result of meticulous experimentation, benchmarking, collaboration with other experts in the field, and unification of a lot of good ideas in the wider ECS ecosystem.
 
