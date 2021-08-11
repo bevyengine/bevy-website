@@ -30,23 +30,18 @@ A local server should start and you should be able to access a local version of 
 
 ### Rust API Doc Syntax
 
-We made an extension to the markdown syntax that makes linking to Rust API docs nicer. It also gives the links special formatting. Here are some examples:
+We made an extension to the markdown syntax that makes linking to Rust API docs nicer. It also gives the links special formatting.
 
-* Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap", show_mod=true)}}
+You can link to both Rust types and Rust modules with these shortcodes as shown below:
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
-* Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap")}}
+- {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" show_mod=true)}} is produced with the shortcode ???.
+- {{rust_mod(crate="std" mod="collections")}} is produced with the short-code ???.
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
-* Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" plural=true)}}
+There are several options available, toggled by adding the following arguments (separating each argument with a space) within the curly braces:
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap", plural=true)}{{curly_close()}}```
-* Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" method="insert")}}
-
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" method="insert")}{{curly_close()}}```
-* Module: {{rust_mod(crate="std" mod="collections")}}
-
-    ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```
+- `show_crate`: shows the originating crate in the path
+- `show_mod`: shows the originating module in the path
+- `plural`: adds an "s" at the end of the linked type
 
 Modules from {{rust_mod(crate="std")}} will link to [https://doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to [https://docs.rs](https://docs.rs).
 
