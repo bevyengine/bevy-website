@@ -6,9 +6,9 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the {{rust_type(type="struct" crate="bevy_ui", name="UiPlugin")}}. Want to build a headless server? Don't register the {{rust_type(type="struct" crate="bevy_render" name="RenderPlugin")}}.
+One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the {{rust_docs(type="struct" crate="bevy_ui", name="UiPlugin")}}. Want to build a headless server? Don't register the {{rust_docs(type="struct" crate="bevy_render" name="RenderPlugin")}}.
 
-This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own {{rust_type(type="struct" crate="bevy_ui" name="UiPlugin")}}, but consider [contributing it back to Bevy](/learn/book/contributing) if you think it would be useful!
+This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own {{rust_docs(type="struct" crate="bevy_ui" name="UiPlugin")}}, but consider [contributing it back to Bevy](/learn/book/contributing) if you think it would be useful!
 
 However, most developers don't need a custom experience and just want the "full engine" experience with no hassle. For this, Bevy provides a set of "default plugins".  
 
@@ -31,8 +31,8 @@ fn main() {
 Once again run `cargo run`.
 
 You should hopefully notice two things:
-* **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window api.
-* **Your console is now full of "hello" messages**: This is because {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
+* **A window should pop up**. This is because we now have {{rust_docs(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_docs(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window api.
+* **Your console is now full of "hello" messages**: This is because {{rust_docs(type="struct" crate="bevy" name="DefaultPlugins")}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
 Note that `add_plugins(DefaultPlugins)` is equivalent to the following:
 ```rs
@@ -50,7 +50,7 @@ You are free to use whatever approach suits you!
 
 ## Creating your first plugin
 
-For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app")}} interface. Add the following code to your `main.rs` file:
+For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_docs(type="trait" name="Plugin" crate="bevy_app")}} interface. Add the following code to your `main.rs` file:
 
 ```rs
 pub struct HelloPlugin;

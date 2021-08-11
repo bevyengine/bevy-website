@@ -33,11 +33,11 @@ A local server should start and you should be able to access a local version of 
 We made an extension to the markdown syntax that makes linking to Rust API docs easier and prettier.
 Here are some example links and the associated shortcodes:
 
-- {{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}}: ???. This is the standard invocation.
-- {{rust_type(type="struct" crate="bevy" mod="ecs::system" name="Commands" method = "spawn")}}: ???. We can specify which method we're referring to using the `method` argument.
-- {{rust_type(type="trait" crate="bevy_ecs" mod="system" name="Command" method = "write")}}: ???. Change the `type` argument to link to enums, traits or keywords.
-- {{rust_type(type="struct" crate="std" mod="result" name="Result" show_mod=true)}}: ???. By using `show_mod`, we can see the full path.
-- {{rust_type(crate="std" mod="collections")}}: ???. By omitting `type` and `name`, we can link to the crate or module itself.
+- {{rust_docs(type="struct" crate="std" mod="collections" name="HashMap")}}: ???. This is the standard invocation.
+- {{rust_docs(type="struct" crate="bevy" mod="ecs::system" name="Commands" method = "spawn")}}: ???. We can specify which method we're referring to using the `method` argument.
+- {{rust_docs(type="trait" crate="bevy_ecs" mod="system" name="Command" method = "write")}}: ???. Change the `type` argument to link to enums, traits or keywords.
+- {{rust_docs(type="struct" crate="std" mod="result" name="Result" show_mod=true)}}: ???. By using `show_mod`, we can see the full path.
+- {{rust_docs(crate="std" mod="collections")}}: ???. By omitting `type` and `name`, we can link to the crate or module itself.
 
 There are several options available, toggled by adding the following arguments (separating each argument with a space) within the curly braces:
 
@@ -45,7 +45,7 @@ There are several options available, toggled by adding the following arguments (
 - `show_mod`: shows the originating module in the path
 - `plural`: adds an "s" at the end of the linked type
 
-Modules from {{rust_type(crate="std")}} will link to [doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_type(crate="bevy_render" mod="render_graph")}} ) will link to [docs.rs](https://docs.rs).
+Modules from {{rust_docs(crate="std")}} will link to [doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_docs(crate="bevy_render" mod="render_graph")}} ) will link to [docs.rs](https://docs.rs).
 
 ## Rust API Docs
 
