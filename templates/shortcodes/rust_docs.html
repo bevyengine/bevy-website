@@ -53,19 +53,35 @@
 {% endif %}
 
 {% if type and name %}
+	{% set has_sub_element = method or field or variant or impl %}
+
 	{%if show_mod %}
 		{% set link_text = link_text ~ "::" ~ name %}
 	{% else %}
 		{% set link_text = name %}
 	{% endif %}
-	{% if method %}
-		{% set link_text = link_text ~ "::" ~ method %}
-	{% elif field %}
-		{% set link_text = link_text ~ "::" ~ field %}
-	{% elif variant %}
-		{% set link_text = link_text ~ "::" ~ variant %}
-	{% elif impl %}
-		{% set link_text = "impl " ~ impl ~ "for" ~ link_text %}
+
+	{% if has_sub_element %}
+		{% set sub_element = "" %}
+		{% if method %}
+			{% set sub_element = method %}
+		{% elif field %}
+			{% set sub_element = field %}
+		{% elif variant %}
+			{% set sub_element = variant %}
+		{% elif impl %}
+			{% set sub_element = link_text %}
+		{% endif %}
+
+		{% if not no_name %}
+			{% set link_text = link_text ~ "::" ~ sub_element %}
+		{% else %}
+			{% if method %}
+				{% set link_text = "." ~ sub_element %}
+			{% else %}
+				{% set link_text = sub_element %}
+			{% endif %}
+		{% endif %}
 	{% endif %}
 {% endif %}
 
