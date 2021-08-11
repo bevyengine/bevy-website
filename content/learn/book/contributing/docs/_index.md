@@ -32,18 +32,18 @@ A local server should start and you should be able to access a local version of 
 
 We made an extension to the markdown syntax that makes linking to Rust API docs nicer. It also gives the links special formatting. Here are some examples:
 
-* Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap")}}
+* Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap", show_mod=true)}}
 
     ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
-* Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap", no_mod=true)}}
+* Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap")}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true)}{{curly_close()}}```
-* Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true plural=true)}}
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
+* Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" plural=true)}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true, plural=true)}{{curly_close()}}```
-* Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}}
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap", plural=true)}{{curly_close()}}```
+* Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" method="insert")}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}{{curly_close()}}```
+    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" method="insert")}{{curly_close()}}```
 * Module: {{rust_mod(crate="std" mod="collections")}}
 
     ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```

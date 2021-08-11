@@ -165,7 +165,7 @@ fn error_handler_system(In(result): In<Result<()>>, error_handler: Res<MyErrorHa
 }
 ```
 
-The {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="System" no_mod=true)}} trait now looks like this:
+The {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="System")}} trait now looks like this:
 ```rust
 // Has no inputs and no outputs
 System<In = (), Out = ()>
@@ -196,7 +196,7 @@ app.add_system(my_system.system())
 
 #### Stage Trait
 
-Stages are now a trait. You can now implement your own {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="Stage" no_mod=true)}} types!
+Stages are now a trait. You can now implement your own {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="Stage")}} types!
 
 ```rust
 struct MyStage;
@@ -209,7 +209,7 @@ impl Stage for MyStage {
 }
 ```
 
-#### Stage Type: {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="SystemStage" no_mod=true)}}
+#### Stage Type: {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="SystemStage")}}
 
 This is basically a "normal" stage. You can add systems to it and you can decide how those systems will be executed (parallel, serial, or custom logic)
 
@@ -233,9 +233,9 @@ let custom_executor_stage =
         .with_system(b.system());
 ```
 
-#### Stage Type: {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="Schedule" no_mod=true)}}
+#### Stage Type: {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="Schedule")}}
 
-You read that right! {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="Schedule" no_mod=true)}} now implements the {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="Stage" no_mod=true)}} trait, which means you can nest Schedules within other schedules:
+You read that right! {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="Schedule")}} now implements the {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="Stage")}} trait, which means you can nest Schedules within other schedules:
 
 ```rust
 let schedule = Schedule::default()
@@ -252,7 +252,7 @@ let schedule = Schedule::default()
 
 #### Run Criteria
 
-You can add "run criteria" to any {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="SystemStage" no_mod=true)}} or {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="Schedule" no_mod=true)}}.
+You can add "run criteria" to any {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="SystemStage")}} or {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="Schedule")}}.
 
 ```rust
 // A "run criteria" is just a system that returns a `ShouldRun` result
@@ -296,7 +296,7 @@ Check out the excellent ["Fix Your Timestep!"](https://gafferongames.com/post/fi
 
 #### Typed Stage Builders
 
-Now that stages can be any type, we need a way for {{rust_type(type="trait" crate="bevy_app" version="0.4.0" name="Plugin" no_mod=true plural=true)}} to interact with arbitrary stage types:
+Now that stages can be any type, we need a way for {{rust_type(type="trait" crate="bevy_app" version="0.4.0" name="Plugin" plural=true)}} to interact with arbitrary stage types:
 
 ```rust
 app
@@ -368,7 +368,7 @@ You then add them to your app as a resource like this:
 app.add_resource(State::new(AppState::Loading))
 ```
 
-To run systems according to the current state, add a {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="StateStage" no_mod=true)}}:
+To run systems according to the current state, add a {{rust_type(type="struct" crate="bevy_ecs" version="0.4.0" name="StateStage")}}:
 
 ```rust
 app.add_stage_after(stage::UPDATE, STAGE, StateStage::<AppState>::default())
@@ -535,7 +535,7 @@ They got the job done, but they were custom-tailored to Bevy's needs, were full 
 
 In this release we replaced the old `bevy_property` and `bevy_type_registry` crates with a new {{rust_mod(crate="bevy_reflect" version="0.4.0")}} crate. Bevy Reflect is intended to be a "generic" Rust reflection crate. I'm hoping it will be as useful for non-Bevy projects as it is for Bevy. We now use it for our Scene system, but in the future we will use it for animating Component fields and auto-generating Bevy Editor inspector widgets.
 
-Bevy Reflect enables you to dynamically interact with Rust types by deriving the {{rust_type(type="trait" crate="bevy_reflect" version="0.4.0" name="Reflect" no_mod=true)}} trait:
+Bevy Reflect enables you to dynamically interact with Rust types by deriving the {{rust_type(type="trait" crate="bevy_reflect" version="0.4.0" name="Reflect")}} trait:
 
 ```rust
 #[derive(Reflect)]
@@ -684,9 +684,9 @@ The Texture asset now has support for 3D textures. The new `array_texture.rs` ex
 
 <div class="release-feature-authors">authors: @superdump, @cart</div>
 
-Bevy finally has built in logging, which is now enabled by default via the new {{rust_type(type="struct" crate="bevy_log" version="0.4.0" name="LogPlugin" no_mod=true)}}. We evaluated various logging libraries and eventually landed on the new `tracing` crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
+Bevy finally has built in logging, which is now enabled by default via the new {{rust_type(type="struct" crate="bevy_log" version="0.4.0" name="LogPlugin")}}. We evaluated various logging libraries and eventually landed on the new `tracing` crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
 
-The {{rust_type(type="struct" crate="bevy_log" version="0.4.0" name="LogPlugin" no_mod=true)}} configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
+The {{rust_type(type="struct" crate="bevy_log" version="0.4.0" name="LogPlugin")}} configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
 
 
 ### Logging

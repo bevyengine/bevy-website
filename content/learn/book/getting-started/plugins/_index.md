@@ -50,7 +50,7 @@ You are free to use whatever approach suits you!
 
 ## Creating your first plugin
 
-For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app" no_mod=true)}} interface. Add the following code to your `main.rs` file:
+For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app")}} interface. Add the following code to your `main.rs` file:
 
 ```rs
 pub struct HelloPlugin;

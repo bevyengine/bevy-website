@@ -24,15 +24,15 @@ fn foo(mut commands: Commands) {
 
 Systems using the old `commands: &mut Commands` syntax in 0.5 will fail to compile when calling `foo.system()`.
 
-This change was made because {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Commands" no_mod=true)}}
-now holds an internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}}
+This change was made because {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Commands")}}
+now holds an internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World")}}
 reference to enable safe entity allocations.
 
-Note: The internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} reference requires two lifetime parameters to pass Commands into a non-system function: `commands: &'a mut Commands<'b>`
+Note: The internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World")}} reference requires two lifetime parameters to pass Commands into a non-system function: `commands: &'a mut Commands<'b>`
 
 ### Commands API
 
-The {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" mod="system" name="Commands" no_mod=true)}} API has been completely reworked for consistency with the {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} API.
+The {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" mod="system" name="Commands")}} API has been completely reworked for consistency with the {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World")}} API.
 
 ```rust
 // 0.4
@@ -97,7 +97,7 @@ if timer.tick(time.delta()).finished() { /* do stuff */ }
 timer.elapsed() // returns a `Duration`
 ```
 
-Most of the methods of {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}}
+Most of the methods of {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer")}}
 now use `Duration` instead of `f32`.
 
 This change allows timers to have consistent, high precision. For convenience, there is also an

@@ -52,7 +52,7 @@ That being said, Bevy is still in the very early stages. I consider it to be in 
 
 Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
 
-**Quick note to the reader**: in this article you will find text formatted like this: {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="texture" name="Texture" no_mod=true)}}
+**Quick note to the reader**: in this article you will find text formatted like this: {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="texture" name="Texture")}}
 
 This formatting indicates that the text is a Rust type that links to API documentation. I encourage you to click on anything that seems interesting to you!
  
@@ -79,7 +79,7 @@ fn main() {
 }
 ```
 
-{{rust_type(type="trait", crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
+{{rust_type(type="trait", crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
 You can also register the default {{rust_type(type="trait" name="Plugin" crate="bevy_app" version="0.1.0" plural=true)}} manually like this:
 
@@ -96,7 +96,7 @@ fn main() {
 }
 ```
 
-And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to {{rust_type(type="trait" crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} for simplicity, at least initially.
+And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to {{rust_type(type="trait" crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} for simplicity, at least initially.
 
 ## Bevy ECS
 
@@ -367,7 +367,7 @@ We are still in the experimental stages and I expect some things to change, but 
 
 ### Building Blocks
 
-In Bevy, a UI element is just an ECS Entity with a {{rust_type(type="struct" name="Node" crate="bevy_ui" version="0.1.0")}} component. Nodes are rectangles with a width and height, and are positioned using the same {{rust_type(type="struct" name="Transform" crate="bevy_transform" version="0.1.0" mod="components" no_mod=true)}} component used elsewhere in Bevy. The {{rust_type(type="struct" name="Style" crate="bevy_ui" version="0.1.0" no_mod=true)}} component is used to determine how the Node is rendered, sized, and positioned.
+In Bevy, a UI element is just an ECS Entity with a {{rust_type(type="struct" name="Node" crate="bevy_ui" version="0.1.0")}} component. Nodes are rectangles with a width and height, and are positioned using the same {{rust_type(type="struct" name="Transform" crate="bevy_transform" version="0.1.0" mod="components")}} component used elsewhere in Bevy. The {{rust_type(type="struct" name="Style" crate="bevy_ui" version="0.1.0")}} component is used to determine how the Node is rendered, sized, and positioned.
 
 The easiest way to add a new node (with all of the required components) is like this:
 
@@ -375,7 +375,7 @@ The easiest way to add a new node (with all of the required components) is like 
 commands.spawn(NodeComponents::default())
 ```
 
-{{rust_type(type="struct" name="NodeComponents" crate="bevy_ui" version="0.1.0" mod="entity" no_mod=true)}} is a "component bundle", which Bevy uses to make spawning entities of various "types" easier.
+{{rust_type(type="struct" name="NodeComponents" crate="bevy_ui" version="0.1.0" mod="entity")}} is a "component bundle", which Bevy uses to make spawning entities of various "types" easier.
 
 ### Layout
 
@@ -561,7 +561,7 @@ fn system(_button: &Button, interaction: Mutated<Interaction>) {
 
 ### [Sprites](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/2d/sprite.rs)
 
-You can use any {{rust_type(type="struct" name="Texture" crate="bevy_render" version="0.1.0" mod="texture" no_mod=true)}} asset as a sprite directly:
+You can use any {{rust_type(type="struct" name="Texture" crate="bevy_render" version="0.1.0" mod="texture")}} asset as a sprite directly:
 
 ![sprite](sprite.png)
 
@@ -702,7 +702,7 @@ The numbers assigned to the `entity` fields are entity's id, which are completel
 
 ### Loading and Instancing
 
-Scenes can be added to a `World` using the {{rust_type(type="struct" name="SceneSpawner" crate="bevy_scene" version="0.1.0" no_mod=true)}} resource. Spawning can be done with either {{rust_type(type="struct" name="SceneSpawner" method="load" crate="bevy_scene" version="0.1.0" no_mod=true)}} or {{rust_type(type="struct" name="SceneSpawner" method="instance" crate="bevy_scene" version="0.1.0" no_mod=true)}}. "Loading" a Scene preserves the entity IDs in it. This is useful for something like a save file where you want entity ids to be constant and changes to be applied on top of entities already in the world. "Instancing" adds entities to the `World` with brand-new IDs, which allows multiple "instances" of a scene to exist in the same World.
+Scenes can be added to a `World` using the {{rust_type(type="struct" name="SceneSpawner" crate="bevy_scene" version="0.1.0")}} resource. Spawning can be done with either {{rust_type(type="struct" name="SceneSpawner" method="load" crate="bevy_scene" version="0.1.0")}} or {{rust_type(type="struct" name="SceneSpawner" method="instance" crate="bevy_scene" version="0.1.0")}}. "Loading" a Scene preserves the entity IDs in it. This is useful for something like a save file where you want entity ids to be constant and changes to be applied on top of entities already in the world. "Instancing" adds entities to the `World` with brand-new IDs, which allows multiple "instances" of a scene to exist in the same World.
 
 ```rs
 fn load_scene_system(asset_server: Res<AssetServer>, mut scene_spawner: ResMut<SceneSpawner>) {
@@ -855,7 +855,7 @@ fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
 
 #### Asset Server
 
-The ```Assets<T>``` collection doesn't know anything about filesystems or multi-threading. This is the responsibility of the {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="AssetServer" no_mod=true)}} resource:
+The ```Assets<T>``` collection doesn't know anything about filesystems or multi-threading. This is the responsibility of the {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="AssetServer")}} resource:
 
 ```rs
 fn system(mut commands: Commands, asset_server: Res<AssetServer>, mut textures: ResMut<Assets<Texture>>) {
@@ -895,7 +895,7 @@ This will load new versions of assets whenever their files have changed.
 
 #### Adding New Asset Types
 
-To add a new asset type, implement the {{rust_type(type="trait" crate="bevy_asset" version="0.1.0" name="AssetLoader" no_mod=true)}} trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
+To add a new asset type, implement the {{rust_type(type="trait" crate="bevy_asset" version="0.1.0" name="AssetLoader")}} trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
 
 Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you can register your new loader like this:
 ```rs
@@ -924,13 +924,13 @@ We plan on extending the audio system with more control and features in the futu
 
 ## Render Graph
 
-All render logic is built on top of Bevy's {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="render_graph" name="RenderGraph" no_mod=true)}}. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
+All render logic is built on top of Bevy's {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="render_graph" name="RenderGraph")}}. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
 
 Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderResourcesNode`, `SharedBuffersNode`, `TextureCopyNode`, `WindowSwapChainNode`, and `WindowTextureNode`. It also provides subgraphs for 2d rendering, 3d rendering, and UI rendering. But you are welcome to create your own nodes, your own graphs, or extend the included graphs!
 
 ### [Data Driven Shaders](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_custom_material.rs)
 
-Components and Assets can derive the {{rust_type(type="trait" crate="bevy_render" version="0.1.0" mod="renderer" name="RenderResources" no_mod=true)}} trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
+Components and Assets can derive the {{rust_type(type="trait" crate="bevy_render" version="0.1.0" mod="renderer" name="RenderResources")}} trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
 
 Binding uniforms to a custom shader is literally as simple as deriving `RenderResources` on your component or asset: 
 
