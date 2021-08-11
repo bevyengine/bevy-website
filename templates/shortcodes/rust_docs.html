@@ -69,6 +69,14 @@
 	{% endif %}
 {% endif %}
 
+{% if generic %}
+	{% if method %}
+		{% set link_text = link_text ~ "::<" ~ generic ~ ">" %}
+	{% else %}
+		{% set link_text = link_text ~ "<" ~ generic ~ ">" %}
+	{% endif %}
+{% endif %}
+
 {% if plural %}
 	{% set link_text = link_text ~ "s" %}
 {% endif %}
