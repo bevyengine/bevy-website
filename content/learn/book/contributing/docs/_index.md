@@ -34,7 +34,7 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
 Here are some example links and the associated shortcodes:
 
 - {{rust_docs(type="struct" crate="std" mod="collections" name="HashMap")}}: ???. This is the standard invocation.
-- {{rust_docs(type="struct" crate="bevy" mod="ecs::system" name="Commands" method = "spawn")}}: ???. We can specify which method we're referring to using the `method` argument.
+- {{rust_docs(type="struct" crate="bevy" mod="ecs::system" name="Commands" method = "spawn")}}: ???. We can specify which method, field, variant or trait implementation we're referring to using the `method`, `field`,`variant` or `impl` arguments.
 - {{rust_docs(type="trait" crate="bevy_ecs" mod="system" name="Command" method = "write")}}: ???. Change the `type` argument to link to enums, traits or keywords.
 - {{rust_docs(type="struct" crate="std" mod="result" name="Result" show_mod=true)}}: ???. By using `show_mod`, we can see the full path.
 - {{rust_docs(crate="std" mod="collections")}}: ???. By omitting `type` and `name`, we can link to the crate or module itself.

@@ -30,6 +30,12 @@
 		{% set url_body = url_body ~ "#tymethod." ~ method %}
 	{% elif method %}
 		{% set url_body = url_body ~ "#method." ~ method %}
+	{% elif field %}
+		{% set url_body = url_body ~ "#structfield." ~ method %}
+	{% elif variant %}
+		{% set url_body = url_body ~ "#variant." ~ method %}
+	{% elif impl %}
+		{% set url_body = url_body ~ "#impl-" ~ impl %}
 	{% endif %}
 {% else %}
 	{% set url_body = mod_path ~ "/index.html" %}
@@ -54,6 +60,12 @@
 	{% endif %}
 	{% if method %}
 		{% set link_text = link_text ~ "::" ~ method %}
+	{% elif field %}
+		{% set link_text = link_text ~ "::" ~ field %}
+	{% elif variant %}
+		{% set link_text = link_text ~ "::" ~ variant %}
+	{% elif impl %}
+		{% set link_text = "impl " ~ impl ~ "for" ~ link_text %}
 	{% endif %}
 {% endif %}
 
