@@ -45,7 +45,7 @@ There are several options available, toggled by adding the following arguments (
 - `show_mod`: shows the originating module in the path
 - `plural`: adds an "s" at the end of the linked type
 
-Modules from {{rust_mod(crate="std")}} will link to [doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to [docs.rs](https://docs.rs).
+Modules from {{rust_type(crate="std")}} will link to [doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_type(crate="bevy_render" mod="render_graph")}} ) will link to [docs.rs](https://docs.rs).
 
 ## Rust API Docs
 

@@ -533,7 +533,7 @@ When I was first building Bevy, I decided that the engine would benefit from suc
 
 They got the job done, but they were custom-tailored to Bevy's needs, were full of custom jargon (rather than reflecting Rust language constructs directly), didn't handle traits, and had a number of fundamental restrictions on how data could be accessed. 
 
-In this release we replaced the old `bevy_property` and `bevy_type_registry` crates with a new {{rust_mod(crate="bevy_reflect" version="0.4.0")}} crate. Bevy Reflect is intended to be a "generic" Rust reflection crate. I'm hoping it will be as useful for non-Bevy projects as it is for Bevy. We now use it for our Scene system, but in the future we will use it for animating Component fields and auto-generating Bevy Editor inspector widgets.
+In this release we replaced the old `bevy_property` and `bevy_type_registry` crates with a new {{rust_type(crate="bevy_reflect" version="0.4.0")}} crate. Bevy Reflect is intended to be a "generic" Rust reflection crate. I'm hoping it will be as useful for non-Bevy projects as it is for Bevy. We now use it for our Scene system, but in the future we will use it for animating Component fields and auto-generating Bevy Editor inspector widgets.
 
 Bevy Reflect enables you to dynamically interact with Rust types by deriving the {{rust_type(type="trait" crate="bevy_reflect" version="0.4.0" name="Reflect")}} trait:
 
