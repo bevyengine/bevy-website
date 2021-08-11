@@ -1,25 +1,65 @@
+<!--- Handling missing variables -->
 {% if not crate %}
-{% set crate = "std" %}
+	{% set crate = "std" %}
 {% endif %}
 
 {% if not version %}
-{% set version = "latest" %}
+	{% set version = "latest" %}
 {% endif %}
 
 {% if not mod %}
-{% set mod_path = "" %}
-{% set mod = "" %}
+	{% set mod_path = "" %}
+	{% set mod = "" %}
 {% else %}
-{% set mod_path = "/" ~ mod | replace(from="::", to="/") %}
+	{% set mod_path = "/" ~ mod | replace(from="::", to="/") %}
 {% endif %}
 
+<!--- Deciding which website to link to -->
 {% if crate == "std" %}
-{% set url = "https://doc.rust-lang.org" %}
-{% set path = "stable/" ~ crate %}
+	{% set base_url = "https://doc.rust-lang.org" %}
+	{% set crate_url = "/stable/" ~ crate %}
 {% else %}
-{% set url = "https://docs.rs" %}
-{% set path = crate ~ "/" ~ version ~ "/" ~ crate %}
+	{% set base_url = "https://docs.rs" %}
+	{% set crate_url = "/" ~ crate ~ "/" ~ version ~ "/" ~ crate %}
 {% endif %}
 
-<a href="{{url}}/{{path}}{{mod_path}}/{{type}}.{{name}}.html{% if method %}#method.{{method}}{% endif %}"><code>{% if not no_crate and crate and show_mod and mod %}{{crate}}::{% if show_mod and mod%}{{mod}}::{% endif %}{% elif show_mod and mod%}{{mod}}::{% endif %}{% if not no_struct %}{{name}}{% if plural %}s{% endif %}{% endif %}{% if method %}{% if not no_struct %}::{% endif %}{{method}}(){% endif %}</code>
-</a>
+<!--- Building link URL -->
+{% if type %}
+	{% set url_body = mod_path ~ "/"  ~ type ~ "." ~ name ~ ".html" %}
+	{% if method and type == "trait" %}
+		{% set url_body = url_body ~ "#tymethod." ~ method %}
+	{% elif method %}
+		{% set url_body = url_body ~ "#method." ~ method %}
+	{% endif %}
+{% else %}
+	{% set url_body = mod_path ~ "/index.html" %}
+{% endif %}
+
+<!--- Building link text -->
+{% set link_text = "" %}
+{% if not type or show_mod %}
+	{% if not no_crate %}
+		{% set link_text = crate %}
+	{% endif %}
+	{% if mod %}
+		{% set link_text = link_text ~ "::" ~ mod %}
+	{% endif %}
+{% endif %}
+
+{% if type and name %}
+	{%if show_mod %}
+		{% set link_text = link_text ~ "::" ~ name %}
+	{% else %}
+		{% set link_text = name %}
+	{% endif %}
+	{% if method %}
+		{% set link_text = link_text ~ "::" ~ method %}
+	{% endif %}
+{% endif %}
+
+{% if plural %}
+	{% set link_text = link_text ~ "s" %}
+{% endif %}
+
+<!--- Final text -->
+<a href="{{base_url}}{{crate_url}}{{url_body}}">{{link_text}}</a>
