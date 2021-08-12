@@ -85,11 +85,19 @@
 	{% endif %}
 {% endif %}
 
-{% if generic %}
+{% if type_args %}
 	{% if method %}
-		{% set link_text = link_text ~ "::<" ~ generic ~ ">" %}
+		{% set link_text = link_text ~ "::<" ~ type_args ~ ">" %}
 	{% else %}
-		{% set link_text = link_text ~ "<" ~ generic ~ ">" %}
+		{% set link_text = link_text ~ "<" ~ type_args ~ ">" %}
+	{% endif %}
+{% endif %}
+
+{% if method %}
+	{% if args %}
+		{% set link_text = link_text ~ "::(" ~ args ~ ")" %}
+	{% else %}
+		{% set link_text = link_text ~ "()" %}
 	{% endif %}
 {% endif %}
 
