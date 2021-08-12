@@ -171,8 +171,8 @@ fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: FruitInven
 	}
 }
 
-// With restricts your query to only those entities who have all of the data present
-// *and* all of the With filters
+// With restricts your query to only those entities
+// who have components that match all of the data requested *and* all of the With filters
 fn clean_inventory_system(rotten_food_query: Query<Entity, With<Rotten>>, mut commands: Commands){
 	for entity in rotten_food_query.iter(){
 		commands.despawn(entity);
@@ -186,6 +186,12 @@ fn eat_fruit_system(query: Query<&Fruit, (Without<Rotten>, With<Delicious>)>){
 }
 
 ```
+
+You've probably noticed that `Query<(&Fruit, &Delicious)>` will always return the same set of entities as `Query<&Fruit, With<Delicious>>`.
+So what's the difference?
+
+By using `With` filters instead of requesting the data directly, we only check whether a component *has* that value, rather than fetching that component's value.
+As a result, we don't need to unpack our query into `(fruit, _delicious)` when iterating over it, and as a bonus, we can allow other systems to change the value of our components that are only include in our `With` filters in parallel to the systems being run!
 
 ### `Or` Queries
 
