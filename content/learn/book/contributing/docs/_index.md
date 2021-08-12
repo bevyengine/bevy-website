@@ -46,9 +46,10 @@ There are several options available, toggled by adding the following arguments (
 
 - `show_crate`: shows the originating crate in the path
 - `show_mod`: shows the originating module in the path
-- `plural`: adds an "s" at the end of the linked type
 - `args`: adds the string as function arguments, wrapped in parentheses.
 - `type_args`: adds the string as generic type arguments, wrapped in angle brackets
+- `plural`: adds an "s" at the end of the link's name
+- `possesive`: adds an "'s" as the end of the link's name
 
 Modules from {{rust_docs(crate="std")}} will link to [doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_docs(crate="bevy_render" mod="render_graph")}} ) will link to [docs.rs](https://docs.rs).
 

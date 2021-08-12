@@ -105,5 +105,9 @@
 	{% set link_text = link_text ~ "s" %}
 {% endif %}
 
+{% if possessive %}
+	{% set link_text = link_text ~ "'s" %}
+{% endif %}
+
 <!--- Final text -->
 <a href="{{base_url}}{{crate_url}}{{url_body}}">{{link_text}}</a>
