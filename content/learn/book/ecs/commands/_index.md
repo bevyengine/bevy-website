@@ -23,74 +23,13 @@ As a result, **avoid using commands unnecessarily**.
 For example, you *could* use the overwriting behavior of component insertion to mutate components in place.
 However, this is unclear, slow and takes delayed effect, making it strictly worse than just requesting the appropriate data and mutating it in an ordinary fashion.
 
-## Manipulating entities with commands
+## Using Commands
 
-Most of the time, you'll be using commands to modify entities.
-Let's take a look at the details of that, beginning with the various ways to spawn and despawn entities.
+As discussed in [entities have components](../entities-components/_index.md), commands are used by adding a {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}-type argument to your function, than calling various methods to it.
+For a basic overview of how they're used, please refer to that page.
+For more detailed information on the available methods, check {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")} and {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="EntityCommands" no_mod = "true")}.
 
-When you want to spawn large numbers of entities at once in an efficient way, use {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" method = "spawn_batch" no_mod = "true")}}:
-
-```rust
-use bevy::prelude::*;
-
-fn main() {
-    App::build()
-        .add_plugins(DefaultPlugins)
-        .add_startup_system(spawn_camera)
-        .add_startup_system(spawn_lines)
-        .run()
-}
-
-fn new_line(i: u8, material_handle: Handle<ColorMaterial>) -> SpriteBundle {
-    SpriteBundle {
-        sprite: Sprite::new(Vec2::new(10.0, 200.0)),
-        transform: Transform::from_xyz(i as f32 * 50.0, 0.0, 1.0),
-        material: material_handle,
-        ..Default::default()
-    }
-}
-
-pub fn spawn_camera(mut commands: Commands) {
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-}
-
-pub fn spawn_lines(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
-    let material_handle = materials.add(Color::PINK.into());
-
-    // spawn_batch accepts any object which can be turned into an iterator
-    // which returns a Bundle in each item
-    // and creates one entity for each item in that iterator
-    commands.spawn_batch((1..9).map(move |i| new_line(i, material_handle.clone())));
-}
-```
-
-## Manually flushing commands
-
-Ordinarily, commands are only applied at the end of each stage.
-This is because they require exclusive mutable access to the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}.
-
-However, if you already have exclusive access to the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}, you can use [`SystemState::<Commands>::apply()`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemState#method.apply) to immediately run and clear any {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} that may have accumulated.
-
-```rust
-use bevy::prelude::*;
-use bevy::ecs::system::SystemState;
-
-let world = World::new();
-
-let mut system_state = SystemState::<Commands>::new(&mut world);
-
-// Manually adding a command to the list to verify that this works
-let mut commands = system_state.get_mut();
-commands.spawn();
-
-// Applies all accumulated commands to the world, causing them to take immediate effect
-system_state.apply(&mut world);
-```
-
-Generally speaking, this isn't useful for the average game: you can't get exclusive world access any faster than commands naturally apply.
-However, this technique can be incredibly useful for advanced control flows that are willing to sacrifice some parallelism in order to immediately (or repeatedly) process commands.
-
-## Custom commands
+### Custom commands
 
 You can extend the {{rust_type(type="trait" crate="bevy" mod = "ecs/system" name="Command" no_mod = "true")}} trait to create your own commands, performing tasks with far-reaching consequences without requiring access to that data in your originating systems.
 
@@ -137,7 +76,45 @@ In many cases, an event plus an event-handling system will be faster, more ergon
 
 For more details on how to perform logic in custom commands, see the page on [exclusive world access](../exclusive-world-access/_index.md).
 
-## Application order of commands
+### Manually flushing commands
+
+Ordinarily, commands are only applied at the end of each stage.
+This is because they require exclusive mutable access to the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}.
+
+However, if you already have exclusive access to the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}, you can use [`SystemState::<Commands>::apply()`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemState#method.apply) to immediately run and clear any {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} that may have accumulated.
+
+```rust
+use bevy::prelude::*;
+use bevy::ecs::system::SystemState;
+
+let world = World::new();
+
+let mut system_state = SystemState::<Commands>::new(&mut world);
+
+// Manually adding a command to the list to verify that this works
+let mut commands = system_state.get_mut();
+commands.spawn();
+
+// Applies all accumulated commands to the world, causing them to take immediate effect
+system_state.apply(&mut world);
+```
+
+Generally speaking, this isn't useful for the average game: you can't get exclusive world access any faster than commands naturally apply.
+However, this technique can be incredibly useful for advanced control flows that are willing to sacrifice some parallelism in order to immediately (or repeatedly) process commands.
+
+## Mechanisms of commands
+
+Due to their special nature, the internal mechanics of commands are not entirely clear upon inspection.
+This section discusses a few of the details that can matter as an advanced end user.
+
+### System parallelism and commands
+
+Interestingly, more than one system can add {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} at once.
+This is safe to do so due to the append-only nature of the data structure.
+A fresh {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} struct is dispatched to each system and then each instance processed later according to the execution order of the originating systems.
+This is quite useful as it increases system parallelism in important ways ({{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} are quite common), but it standards in stark contrast to Bevy's resources, which use [standard "no aliased mutability" logic](https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html).
+
+### Application order
 
 When combining the effects of multiple commands, it can be important to be aware of the exact order in which your commands are executed can be vitally important.
 If one system is spawning an entity and then passing off its {rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}}` identifier to another system, that needs to occur before the second system attempts to add components to it!

@@ -10,7 +10,7 @@ Feel free to refer back to this section later as you learn more about Bevy!
 
 ### Tuple structs
 
-Tuple structs, defined like `struct Score(u64);` or `struct Position(u8, u8);`, are structs with unnamed fields, accessed by the order in which they were defined.
+[Tuple structs](https://doc.rust-lang.org/1.9.0/book/structs.html), defined like `struct Score(u64);` or `struct Position(u8, u8);`, are structs with unnamed fields, accessed by the order in which they were defined.
 `.0`, `.1` and so on are used to access fields, counting up from 0 in the order they were declared.
 
 `my_position.0 = 42` can seem opaque when you first read it, but in Rust it just means that you're assigning `42` to the first field of the tuple struct `my_position` (by convention, the x coordinate).
@@ -22,16 +22,16 @@ In this example, `my_position.x = 42` immediately communicates intent, rather th
 There are a few points to be aware of when working with "smart pointers" like components and resources:
 
 1. The value returned in a system when you ask for `Res<Score>` is not a plain `Score`, it is a `Res<Score>`. This is a resource that stores the score, similar to an ordinary `&` pointer, but with some special behavior (like change detection).
-2. Because `Res` and other smart pointers implement the `Deref` trait, Rust will attempt to automatically dereference it to match required types when it can.
-   1. This is commonly done when accessing fields and methods: calling `.title` on `Res<WindowDescriptor>` will grab the title field of `WindowDescriptor`, not the wrapping `Res<WindowDescriptor>` as the `Res` type has no field named `title`.
+2. Because {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Res" no_mod = "true")}} and other smart pointers implement the {{rust_type(type="trait" crate="std" mod = "ops" name="Deref" no_mod = "true")}} trait, Rust will attempt to automatically dereference it to match required types when it can.
+   1. This is commonly done when accessing fields and methods: calling `.title` on `Res<WindowDescriptor>` will grab the title field of {{rust_type(type="struct" crate="bevy" mod = "window" name="WindowDescriptor" no_mod = "true")}}, not the wrapping `Res<WindowDescriptor>` as the {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Res" no_mod = "true")}} type has no field named `title`.
 3. When your types cannot be automatically dereferenced, you will need to manually dereference out of the outer smart pointer using `*`.
-   1. This is commonly needed when assigning a value to your data (rather than just one of its fields), or when using `match`.
+   1. This is commonly needed when assigning a value to your data (rather than just one of its fields), or when using {{rust_type(type="keyword" crate="std" name="match" no_mod = "true")}}.
 
 ### Initializing structs with some default values
 
 Bevy often requires defining complex structs when creating entities with bundles or configuring the app with resources.
 In many cases, we want to use *some* default fields, but not all of them.
-As Rust does not have default arguments, we instead use [struct update syntax](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax) in combination with the [`Default::default()`](https://doc.rust-lang.org/std/default/trait.Default.html) method to allow us to quickly set some values while leaving others unchanged.
+As Rust does not have default arguments, we instead use [struct update syntax](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax) in combination with the {{rust_type(type="trait" crate="std" mod = "default" name="Default" method = "default" no_mod = "true")}} method to allow us to quickly set some values while leaving others unchanged.
 
 ```rust
 struct CombatStats {

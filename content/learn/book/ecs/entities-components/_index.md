@@ -5,7 +5,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
+As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of strongly-typed components.
 
 ## Spawning and despawning entities
 
@@ -27,36 +27,34 @@ let my_entity = world.spawn().id();
 world.despawn(my_entity);
 ```
 
-If you're using Bevy as a whole (rather than just {{rust_mod(crate="bevy" mod="ecs")}}), you'll tend to find that working with the world directly is rare:
-often reserved for [writing tests](https://github.com/bevyengine/bevy/blob/main/tests/how_to_test_systems.rs).
-Instead, almost all of your logic will be contained within systems,
-which don't have the permissions to immediately spawn or despawn new entities (what if someone else was using that?!).
-To work around this, we use **commands**, which have a delayed effect.
-For now, let's take a look at how we can use them to work with entities in simple ways (you can read about all the details [later in this chapter](../commands/_index.md)).
+The second approach uses commands: allowing you to spawn entities in a delayed fashion by queueing up **commands** from within systems.
+For now, let's take a look at how we can use them to work with entities in simple ways:
 
 ```rust
-// This system needs to have a mutable argument with the {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} type
-// allowing it to queue up commands to be processed at the end of the stage
+// By modifying the value of our `Commands` system parameter, 
+// we can append instructions to be processed at the end of the stage
 fn spawning_system(mut commands: Commands){
     // These commands perform the exact same operations
     // as the previous code snippet,
-    // but at the end of the stage, rather than immediately
+    // but take effect at the end of the stage
     commands.spawn();
     let my_entity = commands.spawn().id();
     commands.despawn(my_entity);
 }
 ```
 
+You can read about all the details of commands [later in this chapter](../commands/_index.md)).
+
 ## Working with components
 
-Entities are entirely bare when they're spawned: they contain no data other than their unique {rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}} identifier.
+Entities are entirely bare when they're spawned: they contain no data other than their unique {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}} identifier.
 This of course is not very useful, so let's discuss how we can add and remove components to them which store data and enable behavior through systems.
 
 ### Defining components
 
-To define a component type, we simply implement the {rust_type(type="trait" crate="bevy_ecs" mod = "component" name="Component" no_mod = "true")}} trait to a Rust type of our choice.
+To define a component type, we simply implement the {{rust_type(type="trait" crate="bevy_ecs" mod = "component" name="Component" no_mod = "true")}} trait to a Rust type of our choice.
 You will almost always want to use the `#[derive(Component)]` macro to do this for you; which quickly and reliably generates the correct trait code for the trait.
-Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on {rust_type(type="trait" crate="bevy_ecs" mod = "component" name="Component" no_mod = "true")}}).
+Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on {{rust_type(type="trait" crate="bevy_ecs" mod = "component" name="Component" no_mod = "true")}}).
 This ensures that the data can be sent across the threads safely and allows our [type reflection tools](https://github.com/bevyengine/bevy/tree/main/crates/bevy_reflect) to work correctly.
 
 With the theory out of the way, let's define some components!
@@ -106,7 +104,7 @@ struct Name(String);
 
 ### Spawning entities with components
 
-Now that we have some components defined, let's try adding them to our entities.
+Now that we have some components defined, let's try adding them to our entities using {{rust_type(type="trait" crate="bevy_ecs" mod = "system" name="EntityCommands" method = "insert" no_mod = "true")}}.
 
 ```rust
 fn spawn_combatants_system(mut commands: Commands) {
@@ -261,9 +259,10 @@ fn spawn_combatants_system(mut commands: Commands) {
 As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
 One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
 Be mindful; this can lead to overwrought, deeply nested code if overused and bundles are [not currently checked](https://github.com/bevyengine/bevy/issues/2387) for duplicate component types.
-Later instances of the same type will overwrite earlier ones.
+Adding more components of the same type will overwrite earlier ones, including if they're stored within the same bundle.
 
-With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
+With those caveats out of the way, let's take a look at the syntax.
+In this example, we're converting the bundle above to a nested one.
 
 ```rust
 #[derive(Bundle)]
