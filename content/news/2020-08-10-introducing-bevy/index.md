@@ -79,7 +79,7 @@ fn main() {
 }
 ```
 
-{{rust_docs(type="trait", crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
+{{rust_docs(type="trait" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
 You can also register the default {{rust_docs(type="trait" name="Plugin" crate="bevy_app" version="0.1.0" plural=true)}} manually like this:
 
@@ -96,7 +96,7 @@ fn main() {
 }
 ```
 
-And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to {{rust_docs(type="trait" crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} for simplicity, at least initially.
+And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to {{rust_docs(type="trait" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_struct=true)}} for simplicity, at least initially.
 
 ## Bevy ECS
 
