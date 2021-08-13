@@ -1,6 +1,6 @@
 +++
 title = "Rust tips and tricks"
-weight = 1000
+weight = 7
 template = "book-section.html"
 page_template = "book-section.html"
 +++
