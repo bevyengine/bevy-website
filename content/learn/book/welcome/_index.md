@@ -18,7 +18,7 @@ This book is designed for new and experienced users looking for a thoughtful, [e
 If you just want to try it out hands-on, jump into one of our [quick-start guides](TODO: add link) instead!
 
 *: support for these platforms is still limited; you may encounter some missing features or a more involved setup process
-**: virtual and augmented reality (aka XR) compatability is [in development](https://github.com/bevyengine/bevy/pull/2319)
+**: virtual, mixed and augmented reality (aka XR) compatibility is [in development](https://github.com/bevyengine/bevy/pull/2319)
 
 ## Stability warning
 
@@ -40,7 +40,7 @@ Solid third-party solutions currently exist for:
 - [advanced audio](https://crates.io/crates/bevy_kira_audio)
 - [realistic physics](https://github.com/dimforge/bevy_rapier)
 
-While Bevy's modular architecture makes it relatively easy to integrate your own (or third-party) solutions, be mindful that Bevy does not provide a complete game solution out of the box *yet*.
+While Bevy's [modular architecture](plugins/_index.md) makes it relatively easy to integrate your own (or third-party) solutions, be mindful that Bevy does not provide a complete game solution out of the box *yet*.
 [Contributions to the engine](https://github.com/bevyengine/bevy/) are extremely welcome, but if you want something fully-featured to make your dream game *today*, check out [Godot](https://godotengine.org/) instead!
 
 Unsurprisingly, Bevy's rapid pace of development means that our APIs will break, repeatedly, in both deep and pervasive ways.
