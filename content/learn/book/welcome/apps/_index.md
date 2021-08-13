@@ -49,33 +49,22 @@ fn main() {
     App::new()
         // Plugins are App code that was written elsewhere,
         // imported as a single unit for organization and clarity
-        .add_plugins(DefaultPlugins)
+        .add_plugins(MinimalPlugins)
         // Resources are global singleton data stored in the `World`
-        .insert_resource(Fibonacci { a: 1, b: 1 })
+        .insert_resource(Message {string: "Welcome to Bevy!"})
         // Systems run every pass of the game loop and perform logic
-        .add_system(fibonacci_sum.system())
-        .add_system(report_fibonacci.system())
+        .add_system(print_message_system.system())
         .run();
 }
 
-// A simple data structure to store the two current fibonacci numbers
-struct Fibonacci {
-    a: u64,
-    b: u64,
+// This resource can store a string
+struct Message {
+    string: String,
 }
 
-// This system requires mutable access to our Fibonacci resource,
-// so we add `ResMut` to its function parameters
-fn fibonacci_sum(mut fibonacci: ResMut<Fibonacci>) {
-    // This crashes fairly quickly, as we overflow our u64 data storage
-    let new_sum = fibonacci.a + fibonacci.b;
-    fibonacci.a = fibonacci.b;
-    fibonacci.b = new_sum;
-}
-
-// This system only reads the value of our Fibonacci resource,
-// so we only need `Res`
-fn report_fibonacci(fibonacci: Res<Fibonacci>) {
-    info!(fibonacci.a, fibonacci.b);
+// This system reads our Message resource,
+// so we add `Res<Message>` to its function parameters
+fn (mut message: Res<Message>) {
+    println!(message.string);
 }
 ```
