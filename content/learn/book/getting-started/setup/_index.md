@@ -107,7 +107,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     
-    Create a ```rust-toolchain``` file in the root of your project, next to ```Cargo.toml```.
+    Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
     ```toml
     [toolchain]
     channel = "nightly"
