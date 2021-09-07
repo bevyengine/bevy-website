@@ -5,7 +5,7 @@
         <strong class="book-nav-section-number">{{ section_number }}.</strong>
         {{ section.title | lower }}
     </a>
-    {% if section.subsections %}
+    {% if section.subsections and section.path in current_path %}
     <ul class="book-nav-sections book-nav-sections-indented">
         {% for s in section.subsections %}
         {% set subsection_number = section_number ~ "." ~ loop.index %}

@@ -16,7 +16,7 @@ $book-nav-width: 210px;
 }
 
 .book-nav {
-    margin-top: $content-padding;
+    margin-top: $default-padding;
     flex: 0 0 $book-nav-width;
     user-select: none;
     transition: transform 0.3s;

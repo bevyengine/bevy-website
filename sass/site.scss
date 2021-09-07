@@ -15,9 +15,12 @@ $default-image-background-color: #1b1b1b;
 $card-hover-background: #2f3033;
 $media-max-width: 1000px;
 $border-radius: 10px;
+$card-list-gap: 15px;
 
+@import "syntax-theme";
 @import "headerbar";
 @import "community";
+@import "assets";
 @import "book";
 @import "book-nav";
 @import "news";
