@@ -45,6 +45,8 @@ impl Plugin for SomePlugin {
 
 ### Calling ".system()" on a system is now optional
 
+When adding a system to Bevy it is no longer necessary to call `.system()` beforehand.
+
 ```rust
 // 0.5
 fn main() {
@@ -63,8 +65,7 @@ fn main() {
 }
 ```
 
-When adding a system to Bevy it is no longer necessary to call `.system()` beforehand.
-System Configuration Functions like `.label()` or `.config()` can now also be directly called on a system.
+System configuration Functions like `.label()` or `.config()` can now also be directly called on a system.
 
 ```rust
 // 0.5
@@ -148,5 +149,5 @@ In addition the {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0
 
 The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} struct, which stores the metadata of a System, was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
 
-This was done to accomedate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true plural=true)}} outside of a regular System.
+This was done to accommodate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true plural=true)}} outside of a regular System.
 <!-- TODO: Link to entry for SystemState in the release blog post. -->
