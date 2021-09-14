@@ -8,6 +8,41 @@ page_template = "book-section.html"
 long_title = "Migration Guide: 0.5 to 0.6"
 +++
 
+### "AppBuilder" was merged into "App"
+
+All functions of {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="AppBuilder" no_mod=true)}} were merged into {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}}.
+
+In practice this means that you start constructing an {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}} by calling {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true method="new")}} instead of {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="App" no_mod=true method="build")}} and {{rust_type(type="trait" crate="bevy_app" mod="" version="0.5.0" name="Plugin" no_mod=true method="build")}} takes a {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}} instead of a {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="AppBuilder" no_mod=true)}}
+
+```rs
+// 0.5
+fn main() {
+    App::build()
+        .add_plugin(SomePlugin)
+        .run();
+}
+
+impl Plugin for SomePlugin {
+    fn build(&self, app: &mut AppBuilder) {
+
+    }
+}
+
+// 0.6
+fn main() {
+    App::new()
+        .add_plugin(SomePlugin)
+        .run();
+}
+
+impl Plugin for SomePlugin {
+    fn build(&self, app: &mut App) {
+
+    }
+}
+
+```
+
 ### Calling ".system()" on a system is now optional
 
 ```rust
@@ -21,7 +56,7 @@ fn main() {
 
 // 0.6
 fn main() {
-    App::build()
+    App::new()
         .add_system(first_system)
         .add_system(second_system.system())
         .run();
@@ -42,7 +77,7 @@ fn main() {
 
 // 0.6
 fn main() {
-    App::build()
+    App::new()
         .add_system(first_system.label("FirstSystem"))
         .add_system(second_system.after("FirstSystem"))
         .run();
