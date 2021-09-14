@@ -145,6 +145,49 @@ In addition the {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0
 
 -->
 
+### System Param Lifetime Split
+
+The Lifetime of {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemParam" no_mod=true)}} was split in two separate Lifetimes.
+
+```rust
+// 0.5
+type SystemParamAlias<'a> = (Res<'a, AssetServer>, Query<'a, &'static Transform>, Local<'a, i32>);
+
+#[derive(SystemParam)]
+struct SystemParamDerive<'a> {
+    res: Res<'a, AssetServer>,
+    query: Query<'a, &Transform>,
+    local: Local<'a, i32>,
+}
+
+// 0.6
+type SystemParamAlias<'w, 's> = (Res<'w, AssetServer>, Query<'w, 's, &'static Transform>, Local<'s, i32>);
+
+#[derive(SystemParam)]
+struct SystemParamDerive<'w, 's> {
+    res: Res<'w, AssetServer>,
+    query: Query<'w, 's, &'static Transform>,
+    local: Local<'s, i32>,
+}
+```
+
+### QuerySet declare "QueryState" instead of "Query"
+<!-- Adapt for ParamSet instead, if https://github.com/bevyengine/bevy/pull/2765 is merged -->
+
+Due to the [System Param Lifetime Split](#system-param-lifetime-split), {{rust_type(type="struct" crate="bevy_ecs" mod="system" name="QuerySet" version="0.6.0" no_mod=true plural=true)}} now need to specify their Queries with {{rust_type(type="struct" crate="bevy_ecs" mod="query" version="0.6.0" name="QuerySet" no_mod=true)}} instead of {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true)}}.
+
+```rust
+// 0.5
+fn query_set(mut queries: QuerySet<(Query<&mut Transform>, Query<&Transform>)>) {
+
+}
+
+// 0.6
+fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Transform>)>) {
+
+}
+```
+
 ### "SystemState" is now "SystemMeta"
 
 The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} struct, which stores the metadata of a System, was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
