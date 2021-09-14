@@ -49,6 +49,31 @@ fn main() {
 }
 ```
 
+### ".single()" and ".single_mut()" are now infallible
+
+The functions {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="single")}} and {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="single_mut")}} no longer return a {{rust_type(type="enum", crate="std" mod="result", name="Result", no_mod=true)}} and Panic instead, if not exactly one Entity was found.
+
+If you need the old behavior you can use the fallible {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="get_single")}} and {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="get_single_mut")}} instead.
+
+```rs
+// 0.5
+fn player_system(query: Query<&Transform, With<Player>>) {
+    let player_position = query.single().unwrap();
+    // do something with player_position
+}
+
+// 0.6
+fn player_system_infallible(query: Query<&Transform, With<Player>>) {
+    let player_position = query.single();
+    // do something with player_position
+}
+
+fn player_system_fallible(query: Query<&Transform, With<Player>>) {
+    let player_position = query.get_single().unwrap();
+    // do something with player_position
+}
+```
+
 ### "Light" and "LightBundle" are now "PointLight" and "PointLightBundle"
 
 ```rust
