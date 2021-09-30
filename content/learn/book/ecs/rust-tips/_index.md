@@ -97,5 +97,5 @@ struct Life(u32);
 struct Health(u32);
 
 // Our components have different types now!
-assert_ne!(type_id(Life(42)), type_id(Health(42));
+assert_ne!(type_name::<Life>(), type_name::<Health>());
 ```
