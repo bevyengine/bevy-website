@@ -159,9 +159,9 @@ struct FruitInventory{
 }
 
 // The second filtering type parameter of Query can be ommitted when no filter is used
-fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: FruitInventory){
+fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: ResMut<FruitInventory>){
 	// Restart the count each time inventory is taken
-	fruit_inventory = FruitInventory::default();
+	*fruit_inventory = FruitInventory::default();
 	for &fruit in fruit_inventory.iter(){
 		let fruit_type_count = fruit_inventory.map.get_mut(fruit);
 		fruit_type_count = match fruit_type_count {
