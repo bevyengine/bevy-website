@@ -41,7 +41,7 @@ For the fastest iterative compile times, we recommend the following configuratio
    ```sh
    # Install the nightly toolchain
    rustup toolchain install nightly
-   # EITHER configure your current project to use nightly (run this mmand within the project)
+   # EITHER configure your current project to use nightly (run this command within the project)
    rustup override set nightly
    # OR configure cargo to use nightly for all projects -- switch back with `rustup default stable`
    rustup default nightly
