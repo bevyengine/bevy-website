@@ -69,12 +69,7 @@ App::new().add_plugins(DefaultPlugins)
 
 Take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) to see a full list of what's included.
 
-If you're looking to structure your Bevy app in an unusual way and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's {{rust_type(type="struct" crate="bevy" name="MinimalPlugins")}} instead.
-
-We can click through to the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) for the `impl PluginGroup for MinimalPlugins` to see that this adds {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} and {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}}.
-
-The {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} handles low-level fundamentals such as updating app time, while the {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}} sets up the main game loop to run repeatedly over time.
-This functionality is essential: starting with these plugins is virtually always going to be a safe bet.
+If you're looking to structure your Bevy app in an unusual way (for example, if you want to run it in a [headless fashion](https://github.com/bevyengine/bevy/blob/latest/examples/app/headless.rs)) and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's {{rust_type(type="struct" crate="bevy" name="MinimalPlugins")}} instead.
 
 ## Third-party plugins
 
@@ -101,4 +96,7 @@ In your `Cargo.toml` file, you can disable default features and opt-in to the [f
 bevy = { version = "0.5", default-features = false, features = ["feature_name"] }
 ```
 
-As shown in the [plugin_group.rs](https://github.com/bevyengine/bevy/blob/latest/examples/app/plugin_group.rs) example, you can also configure plugin groups from within Bevy itself.
+As shown in the [`plugin_group.rs`](https://github.com/bevyengine/bevy/blob/latest/examples/app/plugin_group.rs) example, you can also configure plugin groups from within Bevy itself.
+
+Many of Bevy's subcrates can also be used directly on their own and integrated with other engines or your own framework.
+[`bevy_ecs`](https://crates.io/crates/bevy_ecs) is a particularly popular choice for this, allowing you to use our fast, featureful ECS in more unusual projects.
