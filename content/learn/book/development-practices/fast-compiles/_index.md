@@ -47,7 +47,7 @@ For the fastest iterative compile times, we recommend the following configuratio
    rustup default nightly
    ```
 
-   You can use `cargo +nightly ...` if you don't want to change the default to nightly.
+   You can use `cargo +nightly ...` if you don't want to change the default to nightly, but just want to use it once for the current command.
 
 3. **Configure cargo**: With the linker installed and nightly rust activated, all we need to do now is put them to proper use. Copy [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
