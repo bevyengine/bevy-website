@@ -9,7 +9,7 @@ page_template = "book-section.html"
 Welcome to the Bevy game engine! A bevy may be a group of birds, but our engine is:
 
 - **Rust-first:** all the safety, tooling and power that come with a modern systems language
-- **Completely free:** [free-of-charge](https://github.com/sponsors/cart), [open source](https://github.com/bevyengine/bevy/blob/main/LICENSE), and hackable with an architecture designed for modularity
+- **Completely free:** [free-of-charge](https://github.com/sponsors/cart), [open source](https://github.com/bevyengine/bevy/blob/main/LICENSE), and fully customizable with an architecture designed for modularity
 - **Innovative ECS:** powered by an ergonomic, full-native entity-component-system architecture that makes writing clear, performant gameplay and engine logic a joy
 - **Cross-platform:** support Windows, MacOS, Linux, web*, Android*, iOS and more** with a single code base
 - **Effortless parallelism:** a data-oriented design and automatic parallel scheduler provide a high-performance foundation for your game
@@ -23,7 +23,7 @@ If you just want to try it out hands-on, jump into one of our [quick-start guide
 ## Stability warning
 
 Bevy aims to be a general-purpose game engine capable of handling arbitrary 2D or 3D games.
-However, Bevy is still in its infancy, and there are very good reasons not to choose it for your next project.
+However, Bevy is not yet production-ready, and there are very good reasons not to choose it for your next project.
 No mature solutions currently exist for:
 
 - animation

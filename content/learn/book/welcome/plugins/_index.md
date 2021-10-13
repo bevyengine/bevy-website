@@ -12,7 +12,7 @@ This empowers Bevy developers to modularly "build their own engine" using offici
 ## Writing your own plugins
 
 Plugins are collections of code that modify {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}.
-Any code in a plugin could be directly substituted directly on the base {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}.
+Any code in a plugin could be directly applied to the base {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}.
 There's no magic to be found here; they're just a straightforward tool for code organization.
 
 Plugins are types that implement the {{rust_type(type="trait" crate="bevy_app" name="Plugin")}} trait:
@@ -71,7 +71,7 @@ Take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crate
 
 If you're looking to structure your Bevy app in an unusual way and don't want to use most of the functionality provided by the engine, you can choose to use  Bevy's {{rust_type(type="struct" crate="bevy" name="MinimalPlugins")}} instead.
 
-We can click through to the [source]((https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs)) for the `impl PluginGroup for MinimalPlugins` to see that this adds {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} and {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}}.
+We can click through to the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) for the `impl PluginGroup for MinimalPlugins` to see that this adds {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} and {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}}.
 
 The {{rust_type(type="struct" crate="bevy_core" name="CorePlugin")}} handles low-level fundamentals such as updating app time, while the {{rust_type(type="struct" crate="bevy_app" name="ScheduleRunnerPlugin")}} sets up the main game loop to run repeatedly over time.
 This functionality is essential: starting with these plugins is virtually always going to be a safe bet.
