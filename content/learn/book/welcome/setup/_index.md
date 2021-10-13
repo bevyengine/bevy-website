@@ -45,12 +45,14 @@ Now we are ready to set up a Bevy project! Bevy is just a normal Rust dependency
 
 ### Create a new Rust project
 
-First, navigate to a folder where you want to create your new project. Then, run the following command to create a new folder containing our rust executable project:
+First, navigate to a folder where you want to create your new project. Then, run the following command to create (and then navigate to) a new folder containing our rust executable project:
 
 ```sh
 cargo new my_bevy_game
 cd my_bevy_game
 ```
+
+If you already have a folder that you'd like to use, use `cargo init` from within that folder instead.
 
 Now run `cargo run` to build and run your project. You should see `Hello, world!` printed to your terminal. Open the `my_bevy_game` folder in your code editor of choice and take some time to look through the files.
 
