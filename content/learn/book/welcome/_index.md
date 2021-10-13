@@ -6,18 +6,19 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Welcome to the Bevy game engine! A bevy may be a group of birds, but our engine is:
+Welcome to the Bevy game engine! A bevy may be a group of birds, but our engine offers a fresh new experience that's:
 
 - **Rust-first:** all the safety, tooling and power that come with a modern systems language
 - **Completely free:** [free-of-charge](https://github.com/sponsors/cart), [open source](https://github.com/bevyengine/bevy/blob/main/LICENSE), and fully customizable with an architecture designed for modularity
-- **Innovative ECS:** powered by an ergonomic, full-native entity-component-system architecture that makes writing clear, performant gameplay and engine logic a joy
+- **Hardware-aware:** a data-oriented design and automatic parallel scheduler provide a high-performance foundation for your game
+- **Powered by an innovative ECS:** our ergonomic, type-safe, full-native entity-component-system architecture that makes writing clear, scalable gameplay and engine logic a joy
 - **Cross-platform:** support Windows, MacOS, Linux, web*, Android*, iOS and more** with a single code base
-- **Effortless parallelism:** a data-oriented design and automatic parallel scheduler provide a high-performance foundation for your game
 
 This book is designed for new and experienced users looking for a thoughtful, [explanation-first](https://diataxis.fr/explanation/) guide to the engine's essential features.
 If you just want to try it out hands-on, jump into one of our [quick-start guides](TODO: add link) instead!
 
-*: support for these platforms is still limited; you may encounter some missing features or a more involved setup process
+*: support for these platforms is still limited; you may encounter some missing features or a [more involved setup process](https://bevy-cheatbook.github.io/platforms/wasm.html)
+
 **: virtual, mixed and augmented reality (aka XR) compatibility is [in development](https://github.com/bevyengine/bevy/pull/2319)
 
 ## Stability warning
@@ -44,6 +45,6 @@ While Bevy's [modular architecture](plugins/_index.md) makes it relatively easy 
 [Contributions to the engine](https://github.com/bevyengine/bevy/) are extremely welcome, but if you want something fully-featured to make your dream game *today*, check out [Godot](https://godotengine.org/) instead!
 
 Unsurprisingly, Bevy's rapid pace of development means that our APIs will break, repeatedly, in both deep and pervasive ways.
-This allows us to refine the engine now, adding new features and fixing problems fast, rather than being tied to a first attempt.
+This allows us to get user feedback and refine the engine now, adding new features and fixing problems fast, rather than being tied to our first attempt.
 That said, updating versions of Bevy is surprisingly painless; we provide migration guides and Rust's excellent tooling will guide you.
 Chase the errors until everything compiles again and you should be basically done.
