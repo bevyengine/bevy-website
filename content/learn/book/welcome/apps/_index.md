@@ -37,8 +37,8 @@ Generally, you'll be operating at a more granular level than these basic primiti
 To do so, customize your own  {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}} by chaining its methods with the [builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html).
 The most basic tools are:
 
-  1. Initializing resources in the {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="World" no_mod = "true")}} to store global data.
-  2. Adding systems to our {{rust_type(type="struct" crate="bevy" mod = "ecs/schedule" name="Schedule" no_mod = "true")}} to mutate the state of the world based on game logic.
+  1. Initializing resources in the {{rust_type(type="struct" crate="bevy" mod = "ecs/world" name="World" no_mod = "true")}} to store globally available data that we only need a single copy of.
+  2. Adding systems to our {{rust_type(type="struct" crate="bevy" mod = "ecs/schedule" name="Schedule" no_mod = "true")}}, which can read and modify resources and our entities' components, according to our game logic.
   3. Importing other blocks of {{rust_type(type="struct" crate="bevy" mod = "app" name="App" no_mod = "true")}}-modifying code using plugins.
 Let's write a very simple demo that shows how those work.
 
