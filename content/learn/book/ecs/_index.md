@@ -14,7 +14,7 @@ We can think of our **entity-component data storage** as a giant in-memory datab
 * each row is an **entity**, representing an object (perhaps a player, tile, or UI button) in our game
 * each column is a type of **component**, storing data of a particular type (perhaps the sprite, team or life of a player entity) in an [efficient way](https://github.com/bevyengine/bevy/pull/1525) that keeps data of the same type tightly packed together
 * each cell is a component of a particular entity, which has a concrete value we can look up and change
-* we access data from this database using **queries**, which fetch entities with the specified components
+* we access data from this database using **queries**, which fetch component data from entities with the specified components
 * the primary key of this database is the {{rust_type(type="struct" crate="bevy_ecs" name="Entity")}} identifier, which can be used to look up specific entities using {{rust_type(type="struct" crate="bevy_ecs" name="Query" method = "get")}}
 
 Of course, this database is [very ragged](https://www.transdatasolutions.com/what-is-ragged-data/): not all entities will have every component!
