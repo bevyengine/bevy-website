@@ -265,3 +265,19 @@ Bevy's systems automatically run in parallel by default, so long as the schedule
 
 As a result, we can use the same query filtering techniques described  to allow our *systems* to safely run in parallel.
 In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.
+
+## Named queries
+
+In some cases, queries can be complex enough or used by many different systems that it becomes impractical to write the same identical query every time. If that's the case, you can use a type alias to refer to the same query while saving great amounts of written code. In the following example we will see a query fetching the position and the velocity components of an entity to perform displacement.
+
+```rust
+type MoveQuery<'w, 's> = Query<'w, 's, (&'static mut Position, &'static Velocity)>;
+
+fn move_system(mut query: MoveQuery) {
+    for (mut position, velocity) in query.iter_mut() {
+        position.0 += velocity.0 * TIME_STEP_SECONDS;
+    }
+}
+```
+
+Don't worry too much about the `'w` and `'s` lifetimes: they are just needed by `Query` for internal purposes. You just need to add a `'static` lifetime for each reference to a component.
