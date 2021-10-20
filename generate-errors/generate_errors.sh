@@ -1,0 +1,10 @@
+#!/bin/sh
+
+git init errors
+cd errors
+git remote add origin https://github.com/bevyengine/bevy
+git sparse-checkout set "errors"
+git pull --depth=1 origin main
+cd ..
+
+cargo run --bin generate -- errors ../content
