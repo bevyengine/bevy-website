@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="errors">
+    {% for page in section.pages %}
+        <div class="media-content">{{ page.content | safe }}</div>
+    {% endfor %}
+</div>
+{% endblock content %}
