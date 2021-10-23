@@ -9,3 +9,6 @@ license = "MIT"
 edition = "2018"
 
 [dependencies]
+pulldown-cmark = { version = "0.8", default-features = false }
+serde = { version = "1", features = [ "derive" ] }
+toml = "0.5"
