@@ -104,8 +104,6 @@ impl FrontMatterWriter for ErrorCode {
             .as_bytes(),
         )?;
 
-
-
         Ok(())
     }
 }

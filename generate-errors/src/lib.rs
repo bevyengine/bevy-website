@@ -1,7 +1,7 @@
+use pulldown_cmark::{Event, Parser, Tag};
 use serde::Serialize;
-use std::{fs, io, path::PathBuf, str::FromStr};
-use pulldown_cmark::{Parser, Event, Tag};
 use std::fs::read_to_string;
+use std::{fs, io, path::PathBuf, str::FromStr};
 
 #[derive(Debug, Clone)]
 pub struct Section {
@@ -16,7 +16,7 @@ pub struct Section {
 #[derive(Debug, Clone)]
 pub struct ErrorCode {
     pub code: String,
-    pub content: String
+    pub content: String,
 }
 
 #[derive(Serialize)]
@@ -58,15 +58,18 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
             //     println!("{:?}", event);
             // }
 
-            let code= path
+            let code = path
                 .file_name()
                 .unwrap()
                 .to_os_string()
                 .into_string()
                 .unwrap()
-                .trim_end_matches(".md").to_owned();
+                .trim_end_matches(".md")
+                .to_owned();
             section.content.push(ErrorCode {
-                content: error_code.trim_start_matches(&format!("# {}", code.clone())).to_owned(),
+                content: error_code
+                    .trim_start_matches(&format!("# {}", code.clone()))
+                    .to_owned(),
                 code,
             });
         }
