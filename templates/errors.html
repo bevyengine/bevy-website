@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="errors">
+<div class="book-content">
     {% for page in section.pages %}
+        <h1 id="{{ page.title | slugify }}" class="asset-section">
+            {{ page.title }}<a class="anchor-link" href="#{{ page.title | slugify }}">#</a>
+        </h1>
         <div class="media-content">{{ page.content | safe }}</div>
     {% endfor %}
 </div>
