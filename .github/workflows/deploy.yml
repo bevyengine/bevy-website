@@ -16,6 +16,9 @@ jobs:
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh
 
+      - name: "Build Bevy Error Codes"
+        run: cd generate-errors && ./generate_errors.sh
+
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
         uses: shalzz/zola-deploy-action@master
