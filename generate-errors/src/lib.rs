@@ -1,5 +1,7 @@
 use serde::Serialize;
 use std::{fs, io, path::PathBuf, str::FromStr};
+use pulldown_cmark::{Parser, Event, Tag};
+use std::fs::read_to_string;
 
 #[derive(Debug, Clone)]
 pub struct Section {
@@ -13,7 +15,8 @@ pub struct Section {
 
 #[derive(Debug, Clone)]
 pub struct ErrorCode {
-    pub file_name: String,
+    pub code: String,
+    pub content: String
 }
 
 #[derive(Serialize)]
@@ -25,7 +28,7 @@ pub struct FrontMatterErrorCode {
 impl From<&ErrorCode> for FrontMatterErrorCode {
     fn from(asset: &ErrorCode) -> Self {
         FrontMatterErrorCode {
-            title: asset.file_name.clone(),
+            title: asset.code.clone(),
             weight: 0,
         }
     }
@@ -44,13 +47,27 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 continue;
             }
 
+            let error_code = read_to_string(path.clone())?;
+            // let mut parser = Parser::new(&error_code)
+            //     .filter(|event| match event {
+            //         Event::Start(Tag::Heading(0)) => false,
+            //         Event::End(Tag::Heading(0)) => false,
+            //         _ => true,
+            //     });
+            // while let Some(event) = parser.next() {
+            //     println!("{:?}", event);
+            // }
+
+            let code= path
+                .file_name()
+                .unwrap()
+                .to_os_string()
+                .into_string()
+                .unwrap()
+                .trim_end_matches(".md").to_owned();
             section.content.push(ErrorCode {
-                file_name: path
-                    .file_name()
-                    .unwrap()
-                    .to_os_string()
-                    .into_string()
-                    .unwrap(),
+                content: error_code.trim_start_matches(&format!("# {}", code.clone())).to_owned(),
+                code,
             });
         }
     }

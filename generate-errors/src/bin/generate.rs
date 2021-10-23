@@ -91,17 +91,20 @@ impl FrontMatterWriter for ErrorCode {
         let mut frontmatter = FrontMatterErrorCode::from(self);
         frontmatter.weight = weight;
 
-        let mut file = File::create(path.join(format!("{}.md", self.file_name)))?;
+        let mut file = File::create(path.join(format!("{}.md", self.code)))?;
         file.write_all(
             format!(
                 r#"+++
 {}
 +++
-"#,
+{}"#,
                 toml::to_string(&frontmatter).unwrap(),
+                self.content
             )
             .as_bytes(),
         )?;
+
+
 
         Ok(())
     }
