@@ -1,2 +1,2 @@
-target
-errors
+target/
+bevy/
