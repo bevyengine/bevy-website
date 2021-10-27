@@ -75,7 +75,7 @@ fn main() {
 }
 ```
 
-Now all thats left is to move our systems into `HelloPlugin`, which is just a matter of cut and paste. The `app` variable in our plugin's `build()` function is the same builder type we use in our `main()` function:
+Now all that's left is to move our systems into `HelloPlugin`, which is just a matter of cut and paste. The `app` variable in our plugin's `build()` function is the same builder type we use in our `main()` function:
 
 ```rs
 impl Plugin for HelloPlugin {
