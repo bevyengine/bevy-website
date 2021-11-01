@@ -28,7 +28,7 @@ In order to manipulate and act on this data, we must use systems.
 **Systems** are Rust functions that request specific data, such as resources and entities, from the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}. They define a query in their parameters (arguments) that selects data with a particular combination of components.
 All of the rules and behaviours of our game are governed by systems.
 
-Once the systems are added to our app the **runner** takes in this information and automatically runs our systems: typically once during each pass of the **game loop** according to the rules defined in their **schedule**.
+Once the systems are added to our app, the **runner** takes this information and automatically runs our systems, typically once during each pass of the **game loop** according to the rules defined in their **schedule**.
 Bevy's default execution strategy runs systems in parallel by default, without the need for any manual setup.
 Because the **function signature** of each of our systems fully define the data it can access, we can ensure that only one system can change a piece of data at once (although any number can read from a piece of data at the same time).
 Systems within the same **stage** are allowed to run in parallel with each other (as long as their data access does not conflict), and are assigned to a free thread as soon as one is free.

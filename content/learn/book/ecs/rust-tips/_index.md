@@ -24,8 +24,8 @@ There are a few points to be aware of when working with "smart pointers" like co
 1. The value returned in a system when you ask for `Res<Score>` is not a plain `Score`, it is a `Res<Score>`. This is a resource that stores the score, similar to an ordinary `&` pointer, but with some special behavior (like change detection).
 2. Because {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Res" no_mod = "true")}} and other smart pointers implement the {{rust_type(type="trait" crate="std" mod = "ops" name="Deref" no_mod = "true")}} trait, Rust will attempt to automatically dereference it to match required types when it can.
    1. This is commonly done when accessing fields and methods: calling `.title` on `Res<WindowDescriptor>` will grab the title field of {{rust_type(type="struct" crate="bevy" mod = "window" name="WindowDescriptor" no_mod = "true")}}, not the wrapping `Res<WindowDescriptor>` as the {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Res" no_mod = "true")}} type has no field named `title`.
-3. When your types cannot be automatically dereferenced, you will need to manually dereference out of the outer smart pointer using `*`.
-   1. This is commonly needed when assigning a value to your data (rather than just one of its fields), or when using {{rust_type(type="keyword" crate="std" name="match" no_mod = "true")}}.
+3. When your types cannot be automatically dereferenced, you will need to manually dereference out of the outer smart pointer (e.g. `Res`) using `*`.
+   1. This is commonly needed when assigning a value to your data (rather than just one of its fields), or using {{rust_type(type="keyword" crate="std" name="match" no_mod = "true")}}.
 
 ### Initializing structs with some default values
 
@@ -63,10 +63,10 @@ This pattern is commonly used when working with bundles: groups of components ty
 
 ### Type aliases don't play nice
 
-Bevy's ECS uses Rust's type system to dispatch data to our systems as requested.
-This is very convenient for safety and ergonomic reasons, but means that only one resource of each Rust type can exist at once, and only one component of each type can be stored on each entity.
+Bevy's ECS uses Rust's type system to dispatch data to our systems as required.
+This is very convenient for safety and ergonomic reasons but means that no two resources can have the same Rust type, and entities can, at most, only have one instance of each type of component.
 
-"One of each Rust type" has somewhat surprising consequences for new Rust users though: [type aliases](https://doc.rust-lang.org/reference/items/type-aliases.html) will not result in unique types, and should generally not be used to define resource or component types.
+This has somewhat surprising consequences for new Rust users though: [type aliases](https://doc.rust-lang.org/reference/items/type-aliases.html) do not create new types, and as a result should generally not be used to define resource or component types.
 
 ```rust
 use std::any::type_name;
