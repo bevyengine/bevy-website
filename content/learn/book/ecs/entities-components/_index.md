@@ -179,7 +179,7 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
 To get around this, Bevy abstracts these patterns using **bundles**: named and typed collections of components.
-These are implemented by adding the {rust_type(type="trait" crate="bevy_ecs" mod = "bundle" name="Bundle" no_mod = "true")}}  trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
+These are implemented by adding the {{rust_type(type="trait" crate="bevy_ecs" mod = "bundle" name="Bundle" no_mod = "true")}}  trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
 
 Let's try rewriting that code from above.
 

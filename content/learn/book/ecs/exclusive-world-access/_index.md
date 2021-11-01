@@ -21,13 +21,13 @@ You might be working with the {{rust_type(type="struct" crate="bevy_ecs" name="W
 
 Generally speaking, the API of working directly with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} mirrors those elsewhere that you might be familiar with.
 
-Like with {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}, you can call {rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn")}}, {rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn_batch")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "despawn")}} to add and remove entities, adding components to them with {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert_bundle")}}.
-Resources are simply accessed with {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource")}} and the mutable equivalent {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource_mut")}}.
+Like with {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}, you can call {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn")}}, {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn_batch")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "despawn")}} to add and remove entities, adding components to them with {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert_bundle")}}.
+Resources are simply accessed with {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource")}} and the mutable equivalent {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource_mut")}}.
 
-Like with queries, you can call {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_mut")}} to access component data of a particular sort on a given entity.
-If you want access to *all* of the data on an entity, use {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_entity")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_entity_mut")}}, along with various {rust_type(type="struct" crate="bevy_ecs" name="World" method = "EntityRef)}} methods to operate on the returned object.
+Like with queries, you can call {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_mut")}} to access component data of a particular sort on a given entity.
+If you want access to *all* of the data on an entity, use {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_entity")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_entity_mut")}}, along with various {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "EntityRef)}} methods to operate on the returned object.
 
-You can create new queries using {rust_type(type="struct" crate="bevy_ecs" name="World" method = "query")}} and {rust_type(type="struct" crate="bevy_ecs" name="World" method = "query_filtered")}}.
+You can create new queries using {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "query")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "query_filtered")}}.
 Use the former when you only have one type parameter and the latter when you want to use the second filtering type parameter of standard queries as well.
 
 ## Exclusive systems
@@ -36,7 +36,7 @@ Exclusive systems can operate on any data at once: no pesky carefully scoped dat
 This comes at a great cost: no other work can be done at the same time.
 
 You *must* use `world: &mut World` as the only parameter in exclusive systems: all other data can be accessed using the methods on {{rust_type(type="struct" crate="bevy_ecs" name="World")}}.
-Let the schedule know that they're exclusive by using {rust_type(type="trait" crate="bevy_ecs" mod = "system" name="IntoExclusiveSystem" method = "exclusive_system" no_mod = "true")}} on the system function, then use {rust_type(type="struct" crate="bevy_app" name="App" method = "add_system")}} or any of its relatives like usual.
+Let the schedule know that they're exclusive by using {{rust_type(type="trait" crate="bevy_ecs" mod = "system" name="IntoExclusiveSystem" method = "exclusive_system" no_mod = "true")}} on the system function, then use {{rust_type(type="struct" crate="bevy_app" name="App" method = "add_system")}} or any of its relatives like usual.
 
 Unlike ordinary systems, which can be executed in parallel in arbitrary orders, exclusive systems can run either:
 
@@ -86,8 +86,8 @@ No `unsafe` needed!
 
 Right now, there are two main tools to do so:
 
-1. {rust_type(type="struct" crate="bevy_ecs" name="World" method = "cell")}}: Like the [concept of the same name from the Rust standard library](https://doc.rust-lang.org/std/cell/), this enables interior mutability by disabling Rust's compile-time checks for aliased mutability and replacing them run-time checks.
-2. {rust_type(type="struct" crate="bevy_ecs" name="World" method = "resource_scope")}}: temporarily removes the requested resource from the world, returning it at the end of your function (or when the created scope is manually dropped). This allows you to freely have multiple mutable references to distinct resources active at once.
+1. {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "cell")}}: Like the [concept of the same name from the Rust standard library](https://doc.rust-lang.org/std/cell/), this enables interior mutability by disabling Rust's compile-time checks for aliased mutability and replacing them run-time checks.
+2. {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "resource_scope")}}: temporarily removes the requested resource from the world, returning it at the end of your function (or when the created scope is manually dropped). This allows you to freely have multiple mutable references to distinct resources active at once.
 
 ## Accessing system parameters
 

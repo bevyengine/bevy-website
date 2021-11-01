@@ -196,10 +196,10 @@ As a result, we don't need to unpack our query into `(fruit, _delicious)` when i
 ### `Or` Queries
 
 By default, query filters (just like query data requests) operate on a "and" basis: if you have a filter for `With<A>` and another filter for `With<B>`, only entities with both the `A` and `B` components will be fetched.
-We can change this behavior by using the {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Or")}} type, nesting primitive query filters like {rust_type(type="struct" crate="bevy_ecs" mod = "query" name="With")}}, {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Without")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed")}} inside of it to return entities that meet any of the criteria inside.
+We can change this behavior by using the {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Or")}} type, nesting primitive query filters like {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="With")}}, {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Without")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed")}} inside of it to return entities that meet any of the criteria inside.
 If we wanted to purchase fruits that were either `Delicious` or `Cheap`, we would use `Query<&mut Owner, (Or<With<Deliciou>, With<Cheap>>)>` as the type of our query, allowing us to change the owner of any delicious and cheap fruit that we found.
 
-Note that the {rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Or")}} type (and other query tuples) can be nested indefinitely, allowing you to construct very complex logic if needed.
+Note that the {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Or")}} type (and other query tuples) can be nested indefinitely, allowing you to construct very complex logic if needed.
 
 ### Running multiple queries at once
 

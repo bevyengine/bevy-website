@@ -27,7 +27,7 @@ However, this is unclear, slow and takes delayed effect, making it strictly wors
 
 As discussed in [entities have components](../entities-components/_index.md), commands are used by adding a {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}-type argument to your function, than calling various methods to it.
 For a basic overview of how they're used, please refer to that page.
-For more detailed information on the available methods, check {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")} and {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="EntityCommands" no_mod = "true")}.
+For more detailed information on the available methods, check {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="EntityCommands" no_mod = "true")}}.
 
 ### Custom commands
 
@@ -117,7 +117,7 @@ This is quite useful as it increases system parallelism in important ways ({{rus
 ### Application order
 
 When combining the effects of multiple commands, it can be important to be aware of the exact order in which your commands are executed can be vitally important.
-If one system is spawning an entity and then passing off its {rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}}` identifier to another system, that needs to occur before the second system attempts to add components to it!
+If one system is spawning an entity and then passing off its {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}}` identifier to another system, that needs to occur before the second system attempts to add components to it!
 
 Thankfully, while their effect is delayed, their application order follows a few simple rules:
 
