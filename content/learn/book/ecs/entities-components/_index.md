@@ -181,13 +181,14 @@ As you might guess, the one-at-a-time component insertion syntax can be both ted
 To get around this, Bevy abstracts these patterns using **bundles**: named and typed collections of components.
 These are implemented by adding the {{rust_type(type="trait" crate="bevy_ecs" mod = "bundle" name="Bundle" no_mod = "true")}}  trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
 
-Let's try rewriting that code from above.
-
-`Life`, `Attack` and `Defense` will almost always be added to our entities at the same time, so let's create a bundle to make them easier to work with.
+Let's try rewriting that code from above, by grouping commonly associated components together into a bundle.
 
 ```rust
 #[derive(Bundle)]
 struct CombatantBundle {
+    // Adding a field of a given type to our bundle
+    // results in a component of that type with that value
+    // being added to our entity
     combatant: Combatant
     life: Life,
     attack: Attack,

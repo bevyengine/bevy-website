@@ -55,7 +55,7 @@ struct Life(f32);
 #[derive(Component)]
 struct Falling {
     // The higher the initial height of falling, the higher the damage.
-    height: f32,
+    initial_height: f32,
 }
 
 fn main() {

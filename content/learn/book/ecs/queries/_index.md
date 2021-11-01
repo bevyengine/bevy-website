@@ -159,10 +159,10 @@ struct FruitInventory{
 }
 
 // The second filtering type parameter of Query can be ommitted when no filter is used
-fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: FruitInventory){
-	// Restart the count each time inventory is taken
-	fruit_inventory = FruitInventory::default();
-	for &fruit in fruit_inventory.iter(){
+fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: ResMut<FruitInventory>){
+	// Count from zero each time inventory is taken
+	*fruit_inventory = FruitInventory::default();
+	for &fruit in fruit_query.iter(){
 		let fruit_type_count = fruit_inventory.map.get_mut(fruit);
 		fruit_type_count = match fruit_type_count {
 			None => 1,
@@ -238,7 +238,7 @@ fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_qu
 
 You know that there's never going to be an entity that has both `Player` and {{rust_type(type="struct" crate="bevy_render" mod = "camera" name="Camera")}} on it, so there's no way that you're ever accessing the same {{rust_type(type="struct" crate="bevy" mod = "transform/components" name="Transform" no_mod = "true")}} component twice.
 Unfortunately, Rust *doesn't* know that.
-We can fix this by making *sure* our queries our disjoint, no matter what bizarre entities might exist, through the judicious application of `Without` queries.
+We can fix this by making *sure* our queries are disjoint, no matter what bizarre entities might exist, through the judicious application of `Without` queries.
 
 ```rust
 fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>){
