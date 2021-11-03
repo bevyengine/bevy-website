@@ -61,8 +61,10 @@ With the theory out of the way, let's define some components!
 
 ```rust
 // This is a dataless "unit struct", which holds no data of its own.
-// In Bevy, these are useful for distinguishing similar entities or toggling behavior
-// and are called "marker components"
+// See https://doc.rust-lang.org/rust-by-example/custom_types/structs.html for beginner-level docs on structs.
+// In Bevy, unit structs are commonly used as "marker components",
+// which is a behavioral label given to components that toggle on/off certain behavior
+// by allowing us to include or exclude entities with particular marker components from our systems
 #[derive(Component)]
 struct Combatant;
 
