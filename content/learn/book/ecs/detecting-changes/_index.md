@@ -20,8 +20,10 @@ As you ([almost always](https://doc.rust-lang.org/book/ch15-05-interior-mutabili
 Change detection works for resources too, using the exact same internal mechanisms!
 Use the `is_changed()` and `is_added()` methods on resources (or individual components) to check if they've been added or changed since the last time this system ran.
 
-{{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} are query filters, appearing in the second type parameter of our {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}} data types.
-To show you how they work, let's take a look at a few snippets of gameplay code.
+The {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} types are query filters, restricting the list of entities returned.
+They are used in the second type parameter of our {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}} data types.
+
+Let's get familiar with them by examining a few snippets of gameplay code.
 You might use an addition-tracking system to automatically change the difficulty of your game's enemies:
 
 ```rust
@@ -126,6 +128,6 @@ There are three important caveats here:
 
 1. While{{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} operate on the basis of "since the last time this system ran", removal detection only works for the last frame. This distinction is very important if your system does not run every frame due to states or run criteria.
 2. {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="RemovedComponents" no_mod = "true")}} does not return the *value* of the component that was removed, due to performance concerns. If you need this, you will need to include your own change-detecting system to cache the values before they are removed.
-3. {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="RemovedComponents" no_mod = "true")}} is a system parameter, not a query filter. As a result, you will have to manually compare it to the results of a query if you only need to handle some subset of component removal events.
+3. The {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="RemovedComponents" no_mod = "true")}} system parameter is not a query filter. As a result, you will have to manually compare it to the results of a query if you only need to handle some subset of component removal events.
 
 Despite [these caveats](https://github.com/bevyengine/bevy/issues/2148), removal detection can be quite useful for handling complex cleanup and toggling behavior through the addition and removal of components.
