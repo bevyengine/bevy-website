@@ -12,33 +12,18 @@ As we discussed in the introduction to this chapter, **entities** represent obje
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's {{rust_type(type="struct" crate="bevy_ecs" name="World")}}.
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
 
-There are two APIs to do so. The first is more direct, allowing you to add and remove entities directly on the world.
+Generally, you will be adding and removing entities (and modifying which components they have) using [commands](../commands/_index.md).
 
 ```rust
-use bevy::prelude::*;
-
-// Creates a new world
-let mut world = World::new();
-// Spawns an entity with no components
-world.spawn();
-// Spawns a second entity, keeping track of its unique identifier
-let my_entity = world.spawn().id();
-// Uses the second entity's unique identifier to despawn it
-world.despawn(my_entity);
-```
-
-The second approach uses commands: allowing you to spawn entities in a delayed fashion by queueing up **commands** from within systems.
-For now, let's take a look at how we can use them to work with entities in simple ways:
-
-```rust
-// By modifying the value of our `Commands` system parameter, 
-// we can append instructions to be processed at the end of the stage
+// Commands store a queue of actions that modify the World,
+// which are collected and processed at the end of each stage
 fn spawning_system(mut commands: Commands){
-    // These commands perform the exact same operations
-    // as the previous code snippet,
-    // but take effect at the end of the stage
+    // Spawn an entity with no components
     commands.spawn();
+    // Spawn a second entity with no components, but return the `Entity` identifier
     let my_entity = commands.spawn().id();
+
+    // Use the stored identifier to then despawn the second entity
     commands.despawn(my_entity);
 }
 ```
@@ -112,7 +97,7 @@ Now that we have some components defined, let's try adding them to our entities 
 fn spawn_combatants_system(mut commands: Commands) {
     commands
         .spawn()
-        // This inserts a data-less `Combatant` component into the entity we're spawning
+        // This inserts a dataless `Combatant` component into the entity we're spawning
         .insert(Combatant)
         // We configure starting component values by passing in concrete instances of our types
         .insert(Life(10))
@@ -225,8 +210,8 @@ impl Default for CombatantBundle {
 fn spawn_combatants_system(mut commands: Commands) {
     commands
         .spawn()
-        // We're using struct-update syntax to modify 
-        // the instance of `CombatantBundle` returned by its default() method
+        // We're using struct-update syntax to modify the instance
+        // of `CombatantBundle` returned by its default() method
         // See the page on Rust Tips and Tricks at the end of this chapter for more info!
         .insert_bundle(CombatantBundle{
             defense: Defense(2),
@@ -243,7 +228,8 @@ fn spawn_combatants_system(mut commands: Commands) {
         .insert(Name("Gallant".to_string()));
     
     commands
-        // .spawn_bundle is just syntactic sugar for .spawn().insert_bundle
+        // .spawn_bundle(my_bundle) is just syntactic sugar for 
+        // .spawn().insert_bundle(my_bundle)
         .spawn_bundle(CombatantBundle{
             stats: Stats {
                 strength: 17,
@@ -260,9 +246,10 @@ fn spawn_combatants_system(mut commands: Commands) {
 ### Nested bundles
 
 As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
-One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
-Be mindful; this can lead to overwrought, deeply nested code if overused and bundles are [not currently checked](https://github.com/bevyengine/bevy/issues/2387) for duplicate component types.
-Adding more components of the same type will overwrite earlier ones, including if they're stored within the same bundle.
+You can use **nested bundles** to embed one bundle of components within another.
+Be mindful; this can lead to overwrought, deeply nested code if overused.
+Furthermore, bundles are [not currently checked](https://github.com/bevyengine/bevy/issues/2387) for duplicate component types.
+Later components will overwrite new components of the same type.
 
 With those caveats out of the way, let's take a look at the syntax.
 In this example, we're converting the bundle above to a nested one.

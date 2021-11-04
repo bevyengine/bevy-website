@@ -15,16 +15,17 @@ These are incredibly useful, allowing you to:
 
 A component will be marked as "added" on a per-system basis if it has been added to that entity (via component insertion or being spawned on an entity) since the last time that system ran.
 Similarly, a component will be marked as "changed" on a per-system basis if it has been added or mutably dereferenced since the last time that system ran.
-As you (almost always) need to mutably dereference data out of its wrapper in order to mutate it, this gives an accurate (and fast!) indication that the data may have changed.
+As you ([almost always](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html)) need to mutably dereference data out of its wrapper in order to mutate it, this gives an accurate (and fast!) indication that the data may have changed.
 
 Change detection works for resources too, using the exact same internal mechanisms!
-Use the `is_changed()`() and `is_added()` methods on any resources (or individual entities) to check if they've been added or changed.
+Use the `is_changed()` and `is_added()` methods on resources (or individual components) to check if they've been added or changed since the last time this system ran.
 
 {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Added" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Changed" no_mod = "true")}} are query filters, appearing in the second type parameter of our {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}} data types.
 To show you how they work, let's take a look at a few snippets of gameplay code.
 You might use an addition-tracking system to automatically change the difficulty of your game's enemies:
 
 ```rust
+// Enums can be used directly as both resources and components
 enum Difficulty {
 	Easy,
 	Medium,
@@ -46,7 +47,6 @@ impl Difficulty {
 
 #[derive(Component)]
 struct Life(f32);
-
 
 // This will detect all new entities that spawned with the `Life` component, or entities who just had that component added
 fn difficulty_adjusting_system(difficulty: Res<Difficulty>, query: Query<&mut Life, Added<Life>>){
@@ -72,6 +72,7 @@ struct OldDifficulty(Difficulty);
 // We have to be sure that this system runs *after* difficulty_changed_system
 // so then we have the correct cached value of Difficulty when we update enemy stats
 fn old_difficulty_system(difficulty: Res<Difficulty>, mut old_difficulty: ResMut<OldDifficulty>){
+	// Here, we're checking whether the `Difficulty` resource's value has changed
 	// By checking if difficulty has changed, we can avoid constantly rewriting this value
 	if difficulty.is_changed(){
 		old_difficulty.0 = difficulty;
@@ -113,7 +114,7 @@ fn enemy_escape_system(query: Query<&Transform, (With<Enemy>, Changed<Transform>
 Change detection in Bevy works via a custom implementation of the {{rust_type(type="trait" crate="std" mod="ops" name="DerefMut")}} trait of {{rust_type(type="struct" crate="bevy_ecs" mod = "world" name="Mut" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="ResMut" no_mod = "true")}}, our mutable wrappers for components and resources respectively.
 As a result:
 
-1. Changes won't be flagged when you use [interior mutability](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html). You can (and should!) manually flag the data as having changed using `set_changed()` when you do this.
+1. Changes won't be flagged when you use [interior mutability](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html). You should probably manually flag the data as having changed using the `set_changed()` method when you do this to prevent tricky bugs in other consumers of your component.
 2. Changes will be flagged whenever you mutably access a component or resource, even if you don't change its value. Only mutably dereference the data if you know you're going to change it to avoid false positives caused in this way.
 
 ## Removal detection

@@ -5,28 +5,31 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-**Commands** are powerful, unrestricted tools for modifying the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} of your Bevy game.
-Queue them up, and you can reshape the world in arbitrary ways when they're evaluated!
+**Commands** are powerful, unrestricted tools for deferring complex or heavily-blocking work.
+They are commonly used to:
 
-Commands are fundamentally designed to perform work that cannot be safely done in parallel, and are used to change the world in ways that touch large amounts of data at once (requiring exclusive access to the archetypes and other metadata of the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}).
-While you can check out the full list of options by reading the API docs for {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="EntityCommands" no_mod = "true")}}, commands are commonly used to:
+- Spawn and despawn entities
+- Add and remove components to entities
+- Work across entity boundaries in hierarchal ways
+- Add and remove resources dynamically
 
-- Spawn and despawn entities with `spawn`, `spawn_bundle` and `commands.entity(my_entity).despawn`
-- Add and remove resources dynamically with `init_resource`, `insert_resouce` and `remove_resource`
-- Add and remove components to entities with `commands.entity(my_entity).insert` and `commands.entity(my_entity).remove`
+Commands are fundamentally designed to perform work that cannot be safely done in parallel, and are used to change the world in ways that touch large amounts of data at once (requiring exclusive access to the [archetypes](../../game-logic/system-ordering/_index.md) and other metadata of the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}).
+The {{rust_type(type="trait" crate="bevy_ecs" name="Command" no_mod="true")}} trait used by each method on {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} takes in `&mut World` as its only argument, allowing commands to modify the entire world in arbitrary, sequential ways.
 
-Due to the limitations on the parallel execution of the operations performed using commands, **commands do not take effect immediately.**
-This is, by and large, their defining characteristic: they must wait until the next **hard sync point** (where single function have access to the entire world in a sequential fashion) in order to be resolved as they require exclusive mutable access to the world.
+As a result, **commands do not take effect immediately.**
+Instead, they must wait until the next **hard sync point** (where each step executed has  [exclusive access](../exclusive-world-access/_index.md) to the entire world in a sequential fashion) in order to be resolved as they require exclusive mutable access to the world.
 Unless you are already operating in an exclusive way on the {{rust_type(type="struct" crate="bevy_ecs" name="World")}}, commands are typically going to be processed at the end of the current stage.
 
-As a result, **avoid using commands unnecessarily**.
+You should avoid using commands unnecessarily.
 For example, you *could* use the overwriting behavior of component insertion to mutate components in place.
-However, this is unclear, slow and takes delayed effect, making it strictly worse than just requesting the appropriate data and mutating it in an ordinary fashion.
+However, this is unclear, relatively expensive and takes delayed effect: it is strictly worse than just requesting the appropriate data and mutating it.
+If you wish to defer work but do not need to spawn entities, add/remove components or add/remove resources, you likely can (and should) just use [events](../../game-logic/events/_index.md) instead.
 
-## Using Commands
+## Usage
 
-As discussed in [entities have components](../entities-components/_index.md), commands are used by adding a {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}-type argument to your function, than calling various methods to it.
+As discussed in [entities have components](../entities-components/_index.md), commands are used by adding a {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}-type system parameter, then appending various tasks to its end through the provided methods.
 For a basic overview of how they're used, please refer to that page.
+
 For more detailed information on the available methods, check {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} and {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="EntityCommands" no_mod = "true")}}.
 
 ### Custom commands
@@ -36,8 +39,14 @@ You can extend the {{rust_type(type="trait" crate="bevy" mod = "ecs/system" name
 Let's walk through the steps needed to create a new custom command:
 
 ```rust
+// Usually, this setup will be handled automatically
+// by your Bevy app, but you can perform it manually
+let world = World::new();
+let command_queue = CommandQueue::default()
+let commands = Commands::new(command_queue, world);
+
 // First, we need to create a struct that stores any data needed by the command
-struct CountEntities {
+struct StoreMessage {
     // This functionality is not very useful,
     // and is included for teaching purposes
     message: String,
@@ -45,36 +54,44 @@ struct CountEntities {
 
 // Next, we need to implement the `Command` trait for that struct
 // which describes how the command changes the world
-impl Command for CountEntities {
-    fn write(self, world: &mut World) {
-        info!(
-            "The world has {} entities in it. BTW, \"{}\"!",
-            world.entities().len(),
-            self.message.to_string(),
-        );
+impl Command for StoreMessage {
+    // This method allows us to read from and modify
+    // *any* part of the world that we want
+    fn write(self, _world: &mut World) {
+        // Here though, we're simply passing on the message stored
+        info!(self.message);
     }
-}
-// Then, we create an extension trait, which allows us to add new methods to commands
-trait EntityCounting {
-    fn count_entities(&mut self, message: String);
 }
 
-// Finally, we implement that trait for the `Commands` type,
-// adding our new command type to the command queue
+// We can add our new command directly to our Commands struct
+// by inserting an instance of this new type
+commands.add(StoreMessage{message: "Added directly!"});
+
+// For better ergnonomics, we can instead choose to create an extension trait,
+// which allows us to add new methods to commands
+trait EntityCounting {
+    fn store_message(&mut self, message: String);
+}
+
+// We implement our new extension trait for the `Commands` type,
+// giving us access to a new method
 impl<'a> EntityCounting for Commands<'a> {
-    // We can now call `commands.count_entities(message)`
-    // on any instance of `Commands` when we have
-    // the `EntityCounting` trait in scope
-    fn count_entities(&mut self, message: String) {
-        self.add(CountEntities { String })
+    fn store_message(&mut self, message: String) {
+        self.add(StoreMessage { String })
     }
 }
+
+// Now it's just another method!
+commands.store_message("Now with trait extensions!");
+
+// Finally, let's apply all of our commands to verify that this worked as we hoped
+command_queue.apply(world);
 ```
 
-Due to the delayed effect of commands, and their relatively poor performance (they can only be executed one at a time in sequence), you should only use custom commands for tasks that truly need their world-altering powers.
-In many cases, an event plus an event-handling system will be faster, more ergonomic and easier to debug.
+Due to the delayed effect of commands, their excessive power, and their relatively poor performance (they can only be executed one at a time in sequence), you should only use custom commands for tasks that truly need their world-altering powers.
+In many cases, an event-emitting system combined with an event-handling system will be faster, more ergonomic and easier to debug.
 
-For more details on how to perform logic in custom commands, see the page on [exclusive world access](../exclusive-world-access/_index.md).
+For more details on how to work with `&mut World` to perform logic in custom commands, see the page on [exclusive world access](../exclusive-world-access/_index.md).
 
 ### Manually flushing commands
 
@@ -102,28 +119,27 @@ system_state.apply(&mut world);
 Generally speaking, this isn't useful for the average game: you can't get exclusive world access any faster than commands naturally apply.
 However, this technique can be incredibly useful for advanced control flows that are willing to sacrifice some parallelism in order to immediately (or repeatedly) process commands.
 
-## Mechanisms of commands
+## Internal mechanics
 
-Due to their special nature, the internal mechanics of commands are not entirely clear upon inspection.
+Due to some internal special-casing to reduce blocking, it can be challenging to grasp how commands are actually implemented.
 This section discusses a few of the details that can matter as an advanced end user.
 
 ### System parallelism and commands
 
-Interestingly, more than one system can add {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} at once.
-This is safe to do so due to the append-only nature of the data structure.
+Ordinarily, mutable access to data in Bevy requires exclusive access: preventing more than one system that use this data from running at the same time.
+
+However, {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} are special-cased, due to their prevalence in a way that takes advantage of their append-only nature.
+
 A fresh {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} struct is dispatched to each system and then each instance processed later according to the execution order of the originating systems.
-This is quite useful as it increases system parallelism in important ways ({{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} are quite common), but it standards in stark contrast to Bevy's resources, which use [standard "no aliased mutability" logic](https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html).
 
 ### Application order
 
 When combining the effects of multiple commands, it can be important to be aware of the exact order in which your commands are executed can be vitally important.
-If one system is spawning an entity and then passing off its {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}}` identifier to another system, that needs to occur before the second system attempts to add components to it!
+If one system is spawning an entity and then passing off its {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}}` identifier to another system, the entity must be spawned before the second system attempts to add components to it!
 
 Thankfully, while their effect is delayed, their application order follows a few simple rules:
 
 1. Commands are always applied one at a time.
 2. All commands created by a given system are applied sequentially, in the order in which the methods were called on the {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}} object in that system.
 3. If a system is explicitly specified (using `.before` or `.after`) to occur before another system, its commands will always be applied first.
-4. If two systems do not have an explicit ordering between them (including any transitive ordering from e.g. A before B before C), the order in which their commands are applied is unspecified, and may vary between runs of the app.
-
-For more information on how to control system ordering, please read the [System Ordering](../../game-logic/system-ordering/_index.md) page in the next chapter.
+4. If two systems do not have an [explicit ordering](../../game-logic/system-ordering/_index.md) between them (including any transitive ordering from e.g. A before B before C), the order in which their commands are applied is unspecified, and may vary between runs of the app.

@@ -6,9 +6,8 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Bevy is fundamentally powered by its ECS (Entity Component System): almost all data is stored as components on entities, and all logic is executed by its systems.
+Bevy is fundamentally powered by its ECS (a central [paradigm](https://ajmmertens.medium.com/?p=350587cdf216) for organizing and operating on data which stands Entity-Component-System): almost all data is stored as components which belong to entities, and all logic is executed by its systems.
 
-As we [mentioned in the last chapter](../welcome/app/_index.md), all of our data is stored in a {{rust_type(type="struct" crate="bevy_ecs" name="World")}} on our {{rust_type(type="struct" crate="bevy" name="App")}}).
 We can think of our **entity-component data storage** as a giant in-memory database:
 
 * each row is an **entity**, representing an object (perhaps a player, tile, or UI button) in our game
@@ -21,7 +20,7 @@ Of course, this database is [very ragged](https://www.transdatasolutions.com/wha
 We can use this fact to specialize behavior between entities: systems only perform work on entities with the correct combination of components.
 You don't want to apply gravity to entities without a position in your world, and you're only interested in using the UI layout algorithm to control the layout of UI entities!
 
-When we want to go beyond this tabular data storage, we can use **resources**: global singletons which store data in monolithic blobs.
+When we want to go beyond this tabular data storage, we can use **resources**: global singletons which store data, each in their own monolithic blob.
 You might use resources to interface with other libraries, store unique bits of state like the game's score, or store secondary data structures like indexes to augment your use of entity-component data.
 
 In order to manipulate and act on this data, we must use systems.
@@ -29,9 +28,11 @@ In order to manipulate and act on this data, we must use systems.
 All of the rules and behaviours of our game are governed by systems.
 
 Once the systems are added to our app, the **runner** takes this information and automatically runs our systems, typically once during each pass of the **game loop** according to the rules defined in their **schedule**.
+
 Bevy's default execution strategy runs systems in parallel by default, without the need for any manual setup.
 Because the **function signature** of each of our systems fully define the data it can access, we can ensure that only one system can change a piece of data at once (although any number can read from a piece of data at the same time).
-Systems within the same **stage** are allowed to run in parallel with each other (as long as their data access does not conflict), and are assigned to a free thread as soon as one is free.
+
+Systems within the same **stage** are allowed to run in parallel with each other (as long as their data access does not conflict), and are assigned to a thread to perform work as soon as one is free.
 
 When we need to access data in complex, cross-cutting ways that are not cleanly modelled by our systems' function signatures, we can defer the work until we have exclusive access to the entire world's data: executing **commands** generated in earlier systems at the end of each stage or performing complex logic (like saving the entire game) in our own **exclusive systems**.
 You will first encounter this when spawning and despawning entities: we have no way of knowing precisely which other components our entities might have, and so we are forced to wait until we can ensure that we can safely write to *all* component data at once.
@@ -43,18 +44,18 @@ Unsurprisingly, the different parts of the ECS tend to be closely linked: compon
 The details of each part are more easily grasped if you have a basic sense of the whole.
 
 ```rust
+use bevy::prelude::*;
 use bevy::app::AppExit;
 use bevy::log::LogPlugin;
-use bevy::prelude::*;
 
-// This component defines our entity's life total.
+// This component stores our entity's current life
 #[derive(Component)]
 struct Life(f32);
 
-// This component is used to mark if our entity is currently airborne.
+// This component is used to mark if our entity is currently airborne
 #[derive(Component)]
 struct Falling {
-    // The higher the initial height of falling, the higher the damage.
+    // The higher the initial height of falling, the higher the damage
     initial_height: f32,
 }
 
@@ -65,9 +66,9 @@ fn main() {
         // This allows us to report player health using `info!`
         .add_plugin(LogPlugin)
         // Because we've added this system as a startup system,
-        // it runs exactly once before any ordinary system
+        // it will run exactly once before any ordinary system
         .add_startup_system(spawn_player_system)
-        // Ordinary systems run once per frame (or pass of the game loop).
+        // Ordinary systems run once per frame (or pass of the game loop)
         .add_system(gravity_system.label("gravity"))
         // We need to make sure we report fall damage after gravity
         // Otherwise it won't have been calculated yet
@@ -75,11 +76,11 @@ fn main() {
         .run();
 }
 
-// This system spawns the player at a fairly high elevation.
+// This system spawns the player at a fairly high elevation
 fn spawn_player_system(mut commands: Commands) {
     const INITIAL_HEIGHT: f32 = 15.0;
 
-    // Entities must be spawned in a delayed fashion with commands.
+    // Entities must be spawned in a delayed fashion with commands
     commands
         .spawn()
         // We can add components to entities that we are spawning with the .insert()

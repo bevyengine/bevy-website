@@ -5,7 +5,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-At this point, it's common for new Bevy users to have a few questions about how the high-level tools you've been introduced to actually perform their feats of cunning ergonomics.
+By this point, it's common for new Bevy users to have a few questions about how the high-level tools you've been introduced to actually perform their feats of cunning ergonomics.
 You may have wondered:
 
 1. How does Bevy convert a function to a system when we call {{rust_type(type = "struct" crate = "bevy" mod = "app" name = "App" method = "add_system")}}?
@@ -13,8 +13,9 @@ You may have wondered:
 3. How are systems called by the main game loop?
 4. How does each system actually *get* its data?
 
-Let's pull back the curtain, and take a look at the inner mechanisms and low-level APIs of {{rust_mod(crate = "bevy_ecs")}} to answer these questions, one at a time.
 **This page is *completely* optional; if you just want to make cool things, embrace the magic and skip this page!**
+
+Now, let's pull back the curtain, and take a look at the inner mechanisms and low-level APIs of {{rust_mod(crate = "bevy_ecs")}} to answer these questions, one at a time.
 
 ### Adding functions as systems
 

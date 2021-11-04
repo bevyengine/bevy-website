@@ -19,7 +19,7 @@ You might be working with the {{rust_type(type="struct" crate="bevy_ecs" name="W
 
 ## Basic usage
 
-Generally speaking, the API of working directly with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} mirrors those elsewhere that you might be familiar with.
+Generally speaking, the API of working directly with the {{rust_type(type="struct" crate="bevy_ecs" name="World")}} mirrors those used by {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")} that you might be familiar with.
 
 Like with {{rust_type(type="struct" crate="bevy" mod = "ecs/system" name="Commands" no_mod = "true")}}, you can call {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn")}}, {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "spawn_batch")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "despawn")}} to add and remove entities, adding components to them with {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert")}} and {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "insert_bundle")}}.
 Resources are simply accessed with {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource")}} and the mutable equivalent {{rust_type(type="struct" crate="bevy_ecs" name="World" method = "get_resource_mut")}}.

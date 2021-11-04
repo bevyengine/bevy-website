@@ -61,8 +61,8 @@ fn increment_age(query: Query<&mut Age>){
 	// We need to use mut age and .iter_mut() here because we need mutable access
 	for mut age in query.iter_mut(){
 		// age.0 refers to the first (only) field on our tuple type
-		// We could make this more ergonomic by implementing the Add<Age, u64> trait
-		// or the AddAssign<Age> trait on our Age component type
+		// We could make this more ergonomic by implementing the Add<u64>
+		// or the AddAssign<u64> trait on our Age component type
 		age.0 =  age.0 + 1;
 	}
 }
@@ -83,16 +83,13 @@ If you find yourself needing to iterate over all pairs (or triples or...) of a q
 
 ## Queries that return one entity
 
-When we have a query that we *know* will always return a single entity, iterating over the query tends to result in unclear code.
+When working with a query that we *know* should always return a single entity, iterating over that query tends to obscure our intent.
 To get around this, we can use {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" method = "single")}} and {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" method = "single_mut")}}, depending on whether or not we need to mutate the returned data.
-
-Note that these functions return a {{rust_type(type="enum" crate="std" mod="rest" name="Result" no_mod=true)}}: if you expect this could fail in real scenarios (in case the query does not contain exactly one entity), handle the returned value properly.
-Otherwise, just call `let (component_a, component_b) = query.single().unwrap()` to make use of the data quickly.
 
 ## Looking up specific entities
 
 Each entity in our ECS data storages has a unique identifier, given by its {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}}, which defines the entity in terms of a `u32` {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" method = "id" no_mod = "true")}} and a `u32` {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" method = "generation" no_mod = "true")}}.
-We can fetch the {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}} of each entity returned by our queries by including it as part of the first type parameter of {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}} as if it were a component (although no `&` is used):
+We can fetch the {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="Entity" no_mod = "true")}} of each entity returned by our queries by including it as part of the first type parameter of {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}} as if it were a component (although note that no `&` is used):
 
 ```rust
 // This system reports the Entity of every entity in your World
@@ -123,7 +120,7 @@ This is fallible, and so it returns a {{rust_type(type="enum" crate="std" mod="r
 
 ## Optional components in queries
 
-If we want a query to include a component's data if it exists, we can use an `Option<&MyComponent>` query parameter in the first type parameter of {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}}.
+If we want a query to include a component's data if it exists (but still include the entity in our query if it does not), we can use an `Option<&MyComponent>` query parameter in the first type parameter of {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="Query" no_mod = "true")}}.
 This can be a powerful tool for branching logic (use {{rust_type(type="keyword" crate="std" name="match" no_mod=true)}} on the {{rust_type(type="enum" crate="std" mod="option" name="Option" no_mod=true)}} returned), especially when combined with marker components.
 
 ## Query filtering
@@ -201,7 +198,7 @@ If we wanted to purchase fruits that were either `Delicious` or `Cheap`, we woul
 
 Note that the {{rust_type(type="struct" crate="bevy_ecs" mod = "query" name="Or")}} type (and other query tuples) can be nested indefinitely, allowing you to construct very complex logic if needed.
 
-### Running multiple queries at once
+## Dealing with clashing queries
 
 As the logic in your systems become more complex, you may find that you want to access data from two different queries at once.
 In most cases, simply adding a second query as another system parameter works perfectly fine:
@@ -253,6 +250,8 @@ The catch is that you can only access one query at a time.
 Query sets can be useful when you need to access genuinely conflicting data, such as if we truly had an entity with both `Player` and {{rust_type(type="struct" crate="bevy_render" mod = "camera" name="Camera")}} that we wanted to operate on in both loops of our system.
 Let's rewrite our broken system again, using a {{rust_type(type="struct" crate="bevy_ecs" mod = "system" name="QuerySet")}} instead.
 
+**FIXME:** revise before publication to account for [new syntax](https://github.com/bevyengine/bevy/pull/2765).
+
 ```rust
 fn camera_follow_system(queries: QuerySet<Query<&Transform, With<Player>>, Query<&mut Transform, With<Camera>>){
 	let player_transform = queries.0.single().unwrap();
@@ -266,9 +265,10 @@ Bevy's systems automatically run in parallel by default, so long as the schedule
 As a result, we can use the same query filtering techniques described  to allow our *systems* to safely run in parallel.
 In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.
 
-## Named queries
+## Reusing complex queries
 
-In some cases, queries can be complex enough or used by many different systems that it becomes impractical to write the same identical query every time. If that's the case, you can use a type alias to refer to the same query while saving great amounts of written code. In the following example we will see a query fetching the position and the velocity components of an entity to perform displacement.
+Rarely, queries can be complex and common enough that it becomes impractical to write the same identical query every time.
+If that's the case, you can use a type alias to refer to the same query while saving great amounts of written code. In the following example we will see a query fetching the position and the velocity components of an entity to perform displacement.
 
 ```rust
 type MoveQuery<'w, 's> = Query<'w, 's, (&'static mut Position, &'static Velocity)>;
@@ -281,3 +281,8 @@ fn move_system(mut query: MoveQuery) {
 ```
 
 Don't worry too much about the `'w` and `'s` lifetimes: they are just needed by `Query` for internal purposes. You just need to add a `'static` lifetime for each reference to a component.
+
+Additionally, you can `#[derive(SystemParam)]` on a struct, allowing it to be used as a system parameter, and permitting you to access each of its fields, with the appropriate data automatically fetched from the ECS.
+For this to work, each of its fields must themselves implement the {{rust_type(type="trait" crate="bevy_ecs" mod = "system" name="SystemParam" no_mod = "true")}} trait, and cannot conflict with each other.
+
+Try not to rely on large groups of system parameters created in this way: this can quickly restrict parallelism and obscure both intent and the internal mechanisms of your code.

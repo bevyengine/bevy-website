@@ -103,8 +103,10 @@ fn main() {
         .add_plugins(MinimalPlugins)
         .init_resource::<Secret>()
         .insert_resource(InputMode::Recording)
-        .add_system(record_secret)
-        .add_system(check_secret)
+        .add_system(record_secret.label("Record Secret"))
+        // We must check the secret before we record the secret,
+        // otherwise the system can peek!
+        .add_system(check_secret.before("Record Secret"))
         .run();
 }
 
@@ -154,21 +156,16 @@ fn record_secret(
             // Now that we've stored a Secret, we should swap to guessing it
             // Again, we need to derefence our resource to refer to the data rather than the wrapper
             *input_mode = InputMode::Guessing;
-
-            // Clear the input so that check_secret doesn't spy on this data the same frame that it's stored!
-			// Note that we could avoid doing this by ensuring that check_secret always runs before record_secret
-			// See the page on system ordering for information on how to do this
-            *input = Input::<KeyCode>::default();
         }
     }
 }
 
 /// Checks if the new input matches the stored secret
 fn check_secret(
-    // We need to use mut + ResMut for input_mode and secret since their value is changed
+    // We need to use `mut` + `ResMut` for `input_mode` and `secret` since we change their values
     mut input_mode: ResMut<InputMode>,
     mut secret: ResMut<Secret>,
-    // input only needs a Res, since we're only reading the KeyCodes that were pressed
+    // `input` only needs a Res, since we're only reading the KeyCodes that were pressed
     input: Res<Input<KeyCode>>,
 ) {
     if *input_mode == InputMode::Guessing {
