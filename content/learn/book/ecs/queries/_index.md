@@ -38,42 +38,42 @@ To do so, we can use straightforward for-loops:
 ```rust
 #[derive(Component, Debug)]
 struct Life{
-	val: u8
+    val: u8
 }
 
 #[derive(Component)]
 struct IncomingDamge{
-	val: u8
+    val: u8
 }
 
 
 /// Prints the current life total of every entity with the Life component
 fn report_life(query: Query<&Life>){
-	for life in query.iter(){
-		dbg!(life);
-	}
+    for life in query.iter(){
+        dbg!(life);
+    }
 }
 
 #[derive(Component)]
 struct Age(u64);
 
 fn increment_age(query: Query<&mut Age>){
-	// We need to use mut age and .iter_mut() here because we need mutable access
-	for mut age in query.iter_mut(){
-		// age.0 refers to the first (only) field on our tuple type
-		// We could make this more ergonomic by implementing the Add<u64>
-		// or the AddAssign<u64> trait on our Age component type
-		age.0 =  age.0 + 1;
-	}
+    // We need to use mut age and .iter_mut() here because we need mutable access
+    for mut age in query.iter_mut(){
+        // age.0 refers to the first (only) field on our tuple type
+        // We could make this more ergonomic by implementing the Add<u64>
+        // or the AddAssign<u64> trait on our Age component type
+        age.0 =  age.0 + 1;
+    }
 }
 
 fn take_damage(query: Query<(&mut Life, &mut IncomingDamage)>){
-	// Typically you want to unpack this iterator into several variables 
-	// that you can use in your loop
-	for (mut life, mut incoming_damage) in query.iter_mut(){
-		life.val -= incoming_damage.val;
-		incoming_damage.val = 0;
-	}
+    // Typically you want to unpack this iterator into several variables 
+    // that you can use in your loop
+    for (mut life, mut incoming_damage) in query.iter_mut(){
+        life.val -= incoming_damage.val;
+        incoming_damage.val = 0;
+    }
 }
 ```
 
@@ -94,23 +94,23 @@ We can fetch the {{rust_type(type="trait" crate="bevy_ecs" mod = "entity" name="
 ```rust
 // This system reports the Entity of every entity in your World
 fn all_entities(query: Query<Entity>){
-	for entity in query.iter(){
-		dbg!(entity);
-	}
+    for entity in query.iter(){
+        dbg!(entity);
+    }
 }
 
 #[derive(Component)]
 struct Marker;
 struct MyEntities{
-	entities: Vec<Entity>,
+    entities: Vec<Entity>,
 }
 // Typically you'll combine this pattern with query filters 
 // to extract the entities of a relevant subset, 
 // and then store it somewhere where you can access it later
 fn identify_yourself(query: Query<Entity, With<Marker>>, my_entities: ResMut<MyEntities>){
-	for entity in query.iter(){
-		my_entities.push(entity);
-	}
+    for entity in query.iter(){
+        my_entities.push(entity);
+    }
 }
 
 ```
@@ -138,10 +138,10 @@ Let's demonstrate how these filters are used by filtering some fruit.
 ```rust
 #[derive(Component)]
 enum Fruit{
-	Apple,
-	Orange,
-	Durian,
-	Kiwi
+    Apple,
+    Orange,
+    Durian,
+    Kiwi
 }
 
 #[derive(Component)]
@@ -152,34 +152,34 @@ struct Rotten;
 
 #[derive(Default)]
 struct FruitInventory{
-	map: HashMap<Fruit, u8>
+    map: HashMap<Fruit, u8>
 }
 
 // The second filtering type parameter of Query can be ommitted when no filter is used
 fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: ResMut<FruitInventory>){
-	// Count from zero each time inventory is taken
-	*fruit_inventory = FruitInventory::default();
-	for &fruit in fruit_query.iter(){
-		let fruit_type_count = fruit_inventory.map.get_mut(fruit);
-		fruit_type_count = match fruit_type_count {
-			None => 1,
-			Some(n) => n + 1,
-		}
-	}
+    // Count from zero each time inventory is taken
+    *fruit_inventory = FruitInventory::default();
+    for &fruit in fruit_query.iter(){
+        let fruit_type_count = fruit_inventory.map.get_mut(fruit);
+        fruit_type_count = match fruit_type_count {
+            None => 1,
+            Some(n) => n + 1,
+        }
+    }
 }
 
 // With restricts your query to only those entities
 // who have components that match all of the data requested *and* all of the With filters
 fn clean_inventory_system(rotten_food_query: Query<Entity, With<Rotten>>, mut commands: Commands){
-	for entity in rotten_food_query.iter(){
-		commands.despawn(entity);
-	}
+    for entity in rotten_food_query.iter(){
+        commands.despawn(entity);
+    }
 }
 
 // We can combine query filters by passing them in as tuple
 // Returning entities that meet *all* of the query filters criteria
 fn eat_fruit_system(query: Query<&Fruit, (Without<Rotten>, With<Delicious>)>){
-	// Perform complicated fruit-eating logic here!
+    // Perform complicated fruit-eating logic here!
 }
 
 ```
@@ -205,7 +205,7 @@ In most cases, simply adding a second query as another system parameter works pe
 
 ```rust
 fn defense_aura_system(aura_query: Query<&Transform, With<Aura>>, target_query: Query<(&mut Defense, &Transform), With<Creature>>){
-	// Give all allies near an aura-generator a bonus to their defense
+    // Give all allies near an aura-generator a bonus to their defense
 }
 ```
 
@@ -227,9 +227,9 @@ Of course, you already knew that, and have carefully thought about the architect
 
 ```rust
 fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, With<Camera>>){
-	let player_transform = player_query.single().unwrap();
-	let camera_query = camera_query.single_mut.unwrap();
-	// Insert logic here
+    let player_transform = player_query.single().unwrap();
+    let camera_query = camera_query.single_mut.unwrap();
+    // Insert logic here
 }
 ```
 
@@ -239,9 +239,9 @@ We can fix this by making *sure* our queries are disjoint, no matter what bizarr
 
 ```rust
 fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>){
-	let player_transform = player_query.single().unwrap();
-	let camera_query = camera_query.single_mut.unwrap();
-	// Insert logic here
+    let player_transform = player_query.single().unwrap();
+    let camera_query = camera_query.single_mut.unwrap();
+    // Insert logic here
 }
 ```
 
@@ -254,9 +254,9 @@ Let's rewrite our broken system again, using a {{rust_type(type="struct" crate="
 
 ```rust
 fn camera_follow_system(queries: QuerySet<Query<&Transform, With<Player>>, Query<&mut Transform, With<Camera>>){
-	let player_transform = queries.0.single().unwrap();
-	let camera_query = queries.1.single_mut.unwrap();
-	// Insert logic here
+    let player_transform = queries.0.single().unwrap();
+    let camera_query = queries.1.single_mut.unwrap();
+    // Insert logic here
 }
 ```
 

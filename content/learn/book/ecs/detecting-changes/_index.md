@@ -29,22 +29,22 @@ You might use an addition-tracking system to automatically change the difficulty
 ```rust
 // Enums can be used directly as both resources and components
 enum Difficulty {
-	Easy,
-	Medium,
-	Hard
+    Easy,
+    Medium,
+    Hard
 }
 
 impl Difficulty {
-	fn modifier(&self) -> f32 {
-		const EASY_DIFFICULTY_MODIFIER: f32 = 0.5;
-		const HARD_DIFFICULTY_MODIFIER: f32 = 2.0;
+    fn modifier(&self) -> f32 {
+        const EASY_DIFFICULTY_MODIFIER: f32 = 0.5;
+        const HARD_DIFFICULTY_MODIFIER: f32 = 2.0;
 
-		match *self {
-			Difficulty::Easy => EASY_DIFFICULTY_MODIFIER,
-			Difficulty::Normal => 1.0,
-			Difficulty::Hard => HARD_DIFFICULTY_MODIFIER,
-		}
-	}
+        match *self {
+            Difficulty::Easy => EASY_DIFFICULTY_MODIFIER,
+            Difficulty::Normal => 1.0,
+            Difficulty::Hard => HARD_DIFFICULTY_MODIFIER,
+        }
+    }
 }
 
 #[derive(Component)]
@@ -52,15 +52,15 @@ struct Life(f32);
 
 // This will detect all new entities that spawned with the `Life` component, or entities who just had that component added
 fn difficulty_adjusting_system(difficulty: Res<Difficulty>, query: Query<&mut Life, Added<Life>>){
-	let modifier = difficulty.modifier();
+    let modifier = difficulty.modifier();
 
-	// Each relevant entity will always be affected exactly once by this system
-	for life in query.iter_mut(){
-		// We can't just change the values that our entities spawn with,
-		// because the modifier can change at run-time
-		// and we don't want to duplicate this code everywhere
-		life.0 *= modifier;
-	} 
+    // Each relevant entity will always be affected exactly once by this system
+    for life in query.iter_mut(){
+        // We can't just change the values that our entities spawn with,
+        // because the modifier can change at run-time
+        // and we don't want to duplicate this code everywhere
+        life.0 *= modifier;
+    } 
 }
 ```
 
@@ -74,26 +74,26 @@ struct OldDifficulty(Difficulty);
 // We have to be sure that this system runs *after* difficulty_changed_system
 // so then we have the correct cached value of Difficulty when we update enemy stats
 fn old_difficulty_system(difficulty: Res<Difficulty>, mut old_difficulty: ResMut<OldDifficulty>){
-	// Here, we're checking whether the `Difficulty` resource's value has changed
-	// By checking if difficulty has changed, we can avoid constantly rewriting this value
-	if difficulty.is_changed(){
-		old_difficulty.0 = difficulty;
-	}
+    // Here, we're checking whether the `Difficulty` resource's value has changed
+    // By checking if difficulty has changed, we can avoid constantly rewriting this value
+    if difficulty.is_changed(){
+        old_difficulty.0 = difficulty;
+    }
 }
 
 fn difficulty_changed_system(difficulty: Res<Difficulty>, old_difficulty: Res<OldDifficulty> query: Query<&mut Life>){
-	if difficulty.is_changed(){
-		// Reverse the previous difficulty adjustment
-		let old_modifier = old_difficulty.0.modifier();
-		// Apply the new multiplier
-		let new_modifer = difficulty.modifier();
-		let net_modifier = new_modifier / old_modifier;
+    if difficulty.is_changed(){
+        // Reverse the previous difficulty adjustment
+        let old_modifier = old_difficulty.0.modifier();
+        // Apply the new multiplier
+        let new_modifer = difficulty.modifier();
+        let net_modifier = new_modifier / old_modifier;
 
-		// Apply the final change to every entity with `Life`!
-		for life in query.iter_mut(){
-			life.0 *= net_modifier;
-		} 
-	}
+        // Apply the final change to every entity with `Life`!
+        for life in query.iter_mut(){
+            life.0 *= net_modifier;
+        } 
+    }
 }
 ```
 
@@ -103,11 +103,11 @@ For example, you might use it to efficiently check whether units are in a partic
 ```rust
 /// Detects enemies that have reached the entrance in a tower defense game
 fn enemy_escape_system(query: Query<&Transform, (With<Enemy>, Changed<Transform>>>, exit: Res<Exit>, lives: ResMut<Lives>){
-	for enemy_transform in query.iter(){
-		if exit.in_range(transform) {
-			lives.0 -= 1;
-		}
-	}
+    for enemy_transform in query.iter(){
+        if exit.in_range(transform) {
+            lives.0 -= 1;
+        }
+    }
 }
 ```
 
