@@ -35,27 +35,27 @@ As Rust does not have default arguments, we instead use [struct update syntax](h
 
 ```rust
 struct CombatStats {
-	attack: u8,
-	defense: u8,
-	speed: u8,
+    attack: u8,
+    defense: u8,
+    speed: u8,
 }
 
 impl Default for CombatStats {
-	// This method is being used to create an initial struct
-	// whose values we copy and then override
-	fn default() -> Self {
-		CombatStats {
-			attack: 100,
-			defense: 100,
-			speed: 100,
-		}
-	}
+    // This method is being used to create an initial struct
+    // whose values we copy and then override
+    fn default() -> Self {
+        CombatStats {
+            attack: 100,
+            defense: 100,
+            speed: 100,
+        }
+    }
 }
 
 let my_stats = CombatStats {
-	attack: 150,
-	defense: 50,
-	..Default::default()
+    attack: 150,
+    defense: 50,
+    ..Default::default()
 }
 ```
 

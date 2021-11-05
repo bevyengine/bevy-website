@@ -40,46 +40,46 @@ struct Score(u64);
 
 // Resources can be ordinary namedstructs
 struct PlayerSupplies {
-	gold: u64,
-	wood: u64,
+    gold: u64,
+    wood: u64,
 }
 
 // The Default trait can be manually implemented to control initial values
 impl Default for PlayerSupplies {
-	fn default() -> Self {
-		PlayerSupplies {
-			gold: 400,
-			wood: 200,
-		}
-	}
+    fn default() -> Self {
+        PlayerSupplies {
+            gold: 400,
+            wood: 200,
+        }
+    }
 }
 
 // Resources can be enums
 enum Turn {
-	Allied,
-	Enemy
+    Allied,
+    Enemy
 }
 
 fn main(){
-	// Resources are typically inserted using AppBuilder methods
-	App::build()
-	// Uses the default() value provided by the derived Default trait
-	.init_resource::<Score>()
-	// Uses the default() value provided by the manual impl of the Default trait
-	.init_resource::<PlayerSupplies>()
-	// Uses the specific manual value of Turn::Allied to insert a resource of type Turn
-	.insert_resource(Turn::Allied)
-	// Sets the value of the standard Bevy resource `WindowDescriptor`,
-	// leaving the unspecified fields as their default value
-	.insert_resource(WindowDescriptor {
-		title: "I am a window!".to_string(),
-		width: 500.,
-		height: 300.,
-		vsync: true,
-		..Default::default()
-	})
-	.add_plugins(DefaultPlugins)
-	.run()
+    // Resources are typically inserted using AppBuilder methods
+    App::build()
+    // Uses the default() value provided by the derived Default trait
+    .init_resource::<Score>()
+    // Uses the default() value provided by the manual impl of the Default trait
+    .init_resource::<PlayerSupplies>()
+    // Uses the specific manual value of Turn::Allied to insert a resource of type Turn
+    .insert_resource(Turn::Allied)
+    // Sets the value of the standard Bevy resource `WindowDescriptor`,
+    // leaving the unspecified fields as their default value
+    .insert_resource(WindowDescriptor {
+        title: "I am a window!".to_string(),
+        width: 500.,
+        height: 300.,
+        vsync: true,
+        ..Default::default()
+    })
+    .add_plugins(DefaultPlugins)
+    .run()
 }
 ```
 
@@ -113,7 +113,7 @@ fn main() {
 /// Resource to store our secret key
 #[derive(Default)]
 struct Secret {
-	// The default value of Option<T> fields is always None
+    // The default value of Option<T> fields is always None
     val: Option<KeyCode>,
 }
 
@@ -133,8 +133,8 @@ fn record_secret(
     mut input: ResMut<Input<KeyCode>>,
 ) {
     // This system should only do work in the Recording input mode
-	// Note that we need to derefence out of the ResMut smart pointer
-	// using * to access the underlying InputMode data
+    // Note that we need to derefence out of the ResMut smart pointer
+    // using * to access the underlying InputMode data
     if *input_mode == InputMode::Recording {
         // Only display the text prompt once, when the input_mode changes
         if input_mode.is_changed() {
