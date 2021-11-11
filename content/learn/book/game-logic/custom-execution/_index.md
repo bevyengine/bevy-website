@@ -1,6 +1,6 @@
 +++
-title = "Custom execution"
-weight = 7
+title = "Advanced: Custom game loops"
+weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
