@@ -239,7 +239,12 @@ Then, all of these accesses are combined across the entire system in a union-lik
 Resources are simple: each resource is a unique, indivisible (at least from the scheduler's perspective) piece of data.
 If a system is writing to a resource, nothing else can use that resource for any reason.
 But when it comes to entities and their components things get a bit trickier.
+The basic idea is simple: if there *could* exist an entity that conflicts, our data accesses are **hypothetically incompatible.**
+If there *does* exist an entity where these data accesses cause a conflict, they are **factually incompatible.**
+Hypothetical incompatibility is used for determining system parameter conflicts and detecting execution order ambiguities,
+while factual incompatibility is used when scheduling systems.
 
+So how do we determine incompatibility of queries?
 If the scheduler were omniscient, it could allow for perfect interleaving: each atomic piece of entity-component data (a single component for a single entity) could be accessed simultaneously by separate systems.
 However, the scheduler doesn't have access to this information.
 All it can see are the system parameters given, and the list of current entities and components that exist.
@@ -255,59 +260,84 @@ This idea can be formalized by working with the concept of an **archetype.**
 In Bevy, an archetype is a group of entities that share the same set of components.
 
 Conceptually, each query defines a set of possible archetypes that *could* be accessed.
-Suppose we have three components in our world: `A`, `B` and `C`.
-This gives us 2^3 = 8 possible archetypes, given by the [power set](https://en.wikipedia.org/wiki/Power_set) of our components:
+Suppose we have two components in our world: `A` and `B`.
+This gives us 2^2 = 4 possible archetypes, given by the [power set](https://en.wikipedia.org/wiki/Power_set) of our components:
 
 1. `{}`, the naked, component-less entity
 2. `{A}`, the entity with only the component `A`
-3. `{B}`
-4. `{C}`
-5. `{A, B}`
-6. `{A, C}`
-7. `{B, C}`
-8. `{A, B, C}`, the entity which has all of our components.
+3. `{B}`, the entity with only the component `B`
+4. `{A, B}`, the entity with both of our components
 
 Every entity that *could* exist belongs to exactly one of these archetypes, so we can reason about archetypes rather than individual entities.
 
 Let's take a look at a couple of example queries, and see which of these archetypes they can access:
 
-1. `Query<&A>`: archetypes 1, 5 and 8.
-2. `Query<&mut B>`: archetypes 2, 5 and 8.
-3. `Query<(&B, &mut C)>`: archetypes 7 and 8.
-4. `Query<&mut A, Without<B>>`: archetype 1 and 6.
-5. `Query<&mut A, With<B>>`: archetypes 5 and 8.
-6. `Query<&mut B, With<A>>`: archetypes 5 and 8.
-7. `Query<Entity>:` no access! We can't modify the `Entity` identifiers during runtime, so we can always read these freely.
+| #   | Query                       | Accessible Archetypes |
+| --- | --------------------------- | --------------------- |
+| 1   | `Query<&A>`                 | 2, 4                  |
+| 2   | `Query<&mut A>`             | 2, 4                  |
+| 3   | `Query<(), With<A>>`        | 2, 4                  |
+| 4   | `Query<&mut A, Without<B>>` | 2                     |
+| 5   | `Query<&mut A, With<B>>`    | 4                     |
+| 6   | `Query<&mut B, With<A>>`    | 4                     |
+| 7   | `Query<(&A, &B)>`           | 4                     |
+| 8   | `Query<Entity>`             | 1, 2, 3, 4            |
 
-Based on these archetype accesses alone, we can guarantee that query 2 and query 4 are safe to run concurrently: it is impossible for them to touch the same archetypes.
+Based on these archetype accesses alone, we can guarantee that query 4 can safely be run concurrently with queries 5, 6 and 7: it is impossible for them to touch the same archetypes.
 This makes sense: an entity cannot both *have* and *not have* a `B` component.
 
 But what about queries 5 and 6?
-They both touch the same archetypes, but *intuitively*, they're perfectly safe to run together, as they touch different data.
-We see the same thing with queries 1 and 2, which both touch archetype 8!
+They both touch the same archetype, but *intuitively*, they're perfectly safe to run together, as they touch different data.
 
-There's another layer that we're missing: archetype accesses need to be divided by component type as well.
+So there's another layer that we're missing: archetype accesses need to be divided by component type as well.
 These **archetype-components** are the atoms of data access (for entity-component data): they capture all of the information we need, and cannot be broken down further.
 
 Let's redo our analysis, but looking at archetype-components instead (with the component in question denoted by a letter):
 
-1. `Query<&A>`: archetype-components 1A, 5A and 8A.
-2. `Query<&mut B>`: archetype-components 2B, 5B and 8B.
-3. `Query<(&B, &mut C)>`: archetype-components 7B, 7C and 8B and 8C.
-4. `Query<&mut A, Without<B>>`: archetype-components 1A and 6A.
-5. `Query<&mut A, With<B>>`: archetype-components 5A and 8A.
-6. `Query<&mut B, With<A>>`: archetypes 5B and 8B.
+| #   | Query                       | Accessible Archetype-Components |
+| --- | --------------------------- | ------------------------------- |
+| 1   | `Query<&A>`                 | 2A, 4A                          |
+| 2   | `Query<&mut A>`             | 2A, 4A                          |
+| 3   | `Query<(), With<A>>`        | None                            |
+| 4   | `Query<&mut A, Without<B>>` | 2A                              |
+| 5   | `Query<&mut A, With<B>>`    | 4A                              |
+| 6   | `Query<&mut B, With<A>>`    | 4B                              |
+| 7   | `Query<(&A, &B)>`           | 4A, 4B                          |
+| 8   | `Query<Entity>`             | None                            |
 
 Aha!
-Queries 2 and 4 do not share any archetype-component accesses, and neither do queries 5 and 6 or 1 and 2!
-But queries 1 and 5, and queries 2 and 6 *do* conflict, as we intuitively expected.
+Queries 5 and 6 do not share any archetype-component accesses, so while they may modify the same entities, they can't modify the same *data*!
+But queries 1 and 2 still conflict, as we intuitively expected.
+We can see that queries 3 and 8, while they may access several *archetypes*, can't actually access any *archetype-components*, since they can't read or write to any particular component data.
+As a result, they're *never* incompatible.
 
-This was what was meant by "system parameters may not conflict": the scheduler must be able to *prove* that all queries in a given system cannot access the same data in a way that would violate aliased mutability.
-By analyzing the archetype-components accessed, we can prove that *any* possible entity would be safe, avoiding bizarre panics in the middle of our game.
+However, what about queries 1 and 7? They're conflicting on archetype 4A, as they both read the data of a hypothetical entity with both `A` and `B`.
+But that should be fine: we can safely share read-only access freely.
+So the last step in our analysis concerns the **access level** requested: do we need to read (`R`) or write (`W`) to a component?
 
-However, when we're scheduling systems, we don't care about the **hypothetical incompatibility** within the set of all possible archetypes.
-Instead, we only care about the much less restrictive **factual incompatibility** within the set of archetypes that *actually* have entities.
+| #   | Query                       | Archetype-Component Access Levels |
+| --- | --------------------------- | --------------------------------- |
+| 1   | `Query<&A>`                 | 2A-R, 4A-R                        |
+| 2   | `Query<&mut A>`             | 2A-W, 4A-W                        |
+| 3   | `Query<(), With<A>>`        | None                              |
+| 4   | `Query<&mut A, Without<B>>` | 2A-W                              |
+| 5   | `Query<&mut A, With<B>>`    | 4A-W                              |
+| 6   | `Query<&mut B, With<A>>`    | 4B-W                              |
+| 7   | `Query<(&A, &B)>`           | 4A-R, 4B-R                        |
+| 8   | `Query<Entity>`             | None                              |
+
+Two accesses to the same archetype-component data are compatible if and only if they both read the data.
+So we can see that query 1 is compatible with query 7, but not query 2, 4 or 5.
+
+This three-step process (archetypes, archetype-components, archetype-component access-levels) allows us to progressively refine our bounds: allowing both the engine (and end users) to reason about the compatibility of various queries.
+
+When working with parameters in the same system: the scheduler must be able to *prove* that all queries in a given system could never access the same data in a way that would violate aliased mutability.
+They must be compatible for *any* hypothetical entity.
+
+However, when we're scheduling systems, we don't care about the hypothetical incompatibility within the set of all possible archetypes.
+Instead, we only care about the much less restrictive factual incompatibility within the set of archetypes that *actually* have entities.
 If the data accesses are disjoint in practice, it's impossible (from the perspective of the `World`) to tell which system ran first.
+And because we can only add and remove components at hard sync points, this information is guaranteed to be stable throughout the stage.
 
 This lets us arrange the real archetype-components into a two-dimensional array, and then use dense bitset operations to very quickly check if a system is in conflict with any currently running systems.
 As a result, systems that would *theoretically* block each other may not in practice, depending on which components you've added to your archetypes.
