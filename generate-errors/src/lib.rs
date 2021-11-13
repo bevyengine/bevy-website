@@ -1,4 +1,3 @@
-use pulldown_cmark::{Event, Parser, Tag};
 use serde::Serialize;
 use std::fs::read_to_string;
 use std::{fs, io, path::PathBuf, str::FromStr};
@@ -48,15 +47,6 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
             }
 
             let error_code = read_to_string(path.clone())?;
-            // let mut parser = Parser::new(&error_code)
-            //     .filter(|event| match event {
-            //         Event::Start(Tag::Heading(0)) => false,
-            //         Event::End(Tag::Heading(0)) => false,
-            //         _ => true,
-            //     });
-            // while let Some(event) = parser.next() {
-            //     println!("{:?}", event);
-            // }
 
             let code = path
                 .file_name()
@@ -69,7 +59,18 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
             section.content.push(ErrorCode {
                 content: error_code
                     .trim_start_matches(&format!("# {}", code.clone()))
-                    .to_owned(),
+                    .replace("```rust,*", "```rust")
+                    .lines()
+                    .map(|line| {
+                        // throw away `should_panic` and `no_run` to fix code highlighting
+                        if line.starts_with("```rust,") {
+                            "```rust"
+                        } else {
+                            line
+                        }
+                    })
+                    .collect::<Vec<&str>>()
+                    .join("\n"),
                 code,
             });
         }

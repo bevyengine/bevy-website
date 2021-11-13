@@ -6,8 +6,12 @@ use std::path::Path;
 use std::{fs, io};
 
 fn main() -> io::Result<()> {
-    let errors_dir = std::env::args().nth(1).unwrap();
-    let content_dir = std::env::args().nth(2).unwrap();
+    let errors_dir = std::env::args()
+        .nth(1)
+        .expect("First argument should specify the errors directory");
+    let content_dir = std::env::args()
+        .nth(2)
+        .expect("Second argument should specify the content directory");
     let _ = fs::create_dir(content_dir.clone());
     let errors_root_section = parse_errors(&errors_dir)?;
 
