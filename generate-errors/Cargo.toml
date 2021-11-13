@@ -1,0 +1,14 @@
+[package]
+name = "generate-errors"
+version = "0.1.0"
+authors = [
+  "Bevy Contributors <bevyengine@gmail.com>",
+  "Carter Anderson <mcanders1@gmail.com>",
+]
+license = "MIT"
+edition = "2018"
+
+[dependencies]
+pulldown-cmark = { version = "0.8", default-features = false }
+serde = { version = "1", features = [ "derive" ] }
+toml = "0.5"
