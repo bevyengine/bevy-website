@@ -34,6 +34,12 @@ impl From<&ErrorCode> for FrontMatterErrorCode {
 }
 
 fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
+    if !dir.is_dir() {
+        // Todo: after the 0.6 release, remove this if statement
+        // For now we will allow this to be able to point to the `latest` branch (0.5)
+        // which does not yet include error codes
+        return Ok(());
+    }
     assert!(dir.is_dir(), "The path to the errors is not a directory");
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
