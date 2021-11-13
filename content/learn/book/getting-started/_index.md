@@ -29,7 +29,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.4.0
+    git checkout v0.5.0
     ```
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
     ```sh
