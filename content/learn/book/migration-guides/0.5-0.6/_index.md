@@ -40,7 +40,46 @@ impl Plugin for SomePlugin {
 
     }
 }
+```
 
+### The "Component" Trait does now need to be derived
+
+Bevy no longer has a blanket implementation for the {{rust_type(type="trait" crate="bevy_ecs" mod="component" version="0.6.0" name="Component" no_mod=true)}} trait.
+Instead you need to derive (or manualy implement) the trait for every Type that needs it.
+
+```rust
+// 0.5
+struct MyComponent;
+
+// 0.6
+#[derive(Component)]
+struct MyComponent;
+```
+
+In order to use foreign types as components, wrap them using the newtype pattern.
+
+```rust
+#[derive(Component)]
+struct Cooldown(std::time::Duration);
+```
+
+### Setting the Component Storage is now done in "Component" Trait
+
+The change to deriving {{rust_type(type="trait" crate="bevy_ecs" mod="component" version="0.6.0" name="Component" no_mod=true)}}, enabled setting the Component Storage at compiletime instead of runtime.
+
+```rust
+// 0.5
+appbuilder
+    .world
+    .register_component(ComponentDescriptor::new::<MyComponent>(
+        StorageType::SparseSet,
+    ))
+    .unwrap();
+
+// 0.6
+#[derive(Component)]
+#[component(storage = "SparseSet")]
+struct MyComponent;
 ```
 
 ### Calling ".system()" on a system is now optional
