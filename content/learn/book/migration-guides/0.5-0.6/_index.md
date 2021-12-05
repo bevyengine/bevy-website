@@ -227,6 +227,10 @@ fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Tran
 }
 ```
 
+### "Input\<T\>.update()" is renamed to "Input\<T\>.clear()"
+
+The {{rust_type(type="struct" crate="bevy_input" mod="" version="0.5.0" name="Input" no_mod=true method="update")}} function was renamed to {{rust_type(type="struct" crate="bevy_input" mod="" version="0.6.0" name="Input" no_mod=true method="clear")}}.
+
 ### "SystemState" is now "SystemMeta"
 
 The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} struct, which stores the metadata of a System, was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
