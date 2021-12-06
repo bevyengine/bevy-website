@@ -42,7 +42,7 @@ impl Plugin for SomePlugin {
 }
 ```
 
-### The "Component" Trait does now need to be derived
+### The "Component" trait now needs to be derived
 
 Bevy no longer has a blanket implementation for the {{rust_type(type="trait" crate="bevy_ecs" mod="component" version="0.6.0" name="Component" no_mod=true)}} trait.
 Instead you need to derive (or manualy implement) the trait for every Type that needs it.
