@@ -82,9 +82,8 @@ enum Allegiance {
     Hostile
 }
 
-// We can store arbitrary data in our components, as long as it has a 'static lifetime
-// Types without lifetimes are always 'static,
-// allowing us to safely hold a String, but not a &str
+// Owned data types (like `String`) are much easier to use in the ECS
+// than those with references (like `&str`) due to 'static requirements
 #[derive(Component)]
 struct Name(String);
 ```
