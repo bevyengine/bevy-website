@@ -38,6 +38,9 @@ function add_category() {
 title = \"$example\"
 template = \"example.html\"
 weight = $example_weight
+
+[extra]
+header_message = \"Examples\"
 +++" > ../../content/examples/$category_path/$example/index.md
         ((example_weight++))
     done
@@ -56,6 +59,9 @@ echo "+++
 title = \"Bevy Examples in WebGL2\"
 template = \"examples.html\"
 sort_by = \"weight\"
+
+[extra]
+header_message = \"Examples\"
 +++" > ../../content/examples/_index.md
 
 category_weight=0
