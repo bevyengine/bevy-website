@@ -43,7 +43,8 @@ weight = $example_weight
 [extra]
 header_message = \"Examples\"
 +++" > ../../content/examples/$category_path/$example/index.md
-        ((example_weight++))
+
+        example_weight=$((example_weight+1))
     done
 
     echo "+++
@@ -51,7 +52,8 @@ title = \"$category\"
 sort_by = \"weight\"
 weight = $category_weight
 +++" > ../../content/examples/$category_path/_index.md
-    ((category_weight++))
+
+    category_weight=$((category_weight+1))
 }
 
 mkdir ../../content/examples
