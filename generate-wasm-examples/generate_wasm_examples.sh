@@ -26,8 +26,8 @@ add_category()
 
     mkdir ../../content/examples/$category_path
 
-
-    for example in ${@:2}
+    shift
+    for example in $@
     do
         echo "building $category / $example"
         mkdir ../../content/examples/$category_path/$example
