@@ -15,8 +15,13 @@ jobs:
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
 
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
       - name: "Build Bevy Examples"
-        run: cd generate-wasm-examples && ./generate_wasm_examples.sh
+        run: cargo install wasm-bindgen && cd generate-wasm-examples && ./generate_wasm_examples.sh
 
       - name: "Build website"
         uses: shalzz/zola-deploy-action@master
