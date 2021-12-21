@@ -18,7 +18,8 @@ sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_win
 sed -i.bak 's/Msaa { samples: 4 }/Msaa { samples: 1 }/' examples/*/*.rs
 
 
-function add_category {
+add_category()
+{
     category=$1
     category_path=`echo $category | tr '[:upper:]' '[:lower:]'`
     example_weight=0
