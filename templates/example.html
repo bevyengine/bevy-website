@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="book-content">
+    <div class="media-content">
+        <script type="module">
+            import init from './{{ page.title }}.js';
+            init()
+        </script>
+        <div><a href="/examples">Back to examples</a></div>
+        <canvas id="bevy"></canvas>
+    </div>
+</div>
+{% endblock content %}

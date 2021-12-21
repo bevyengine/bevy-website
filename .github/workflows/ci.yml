@@ -15,6 +15,9 @@ jobs:
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
 
+      - name: "Build Bevy Examples"
+        run: cd generate-wasm-examples && ./generate_wasm_examples.sh
+
       - name: "Build website"
         uses: shalzz/zola-deploy-action@master
         env:
