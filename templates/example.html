@@ -9,6 +9,11 @@
         </script>
         <div><a href="/examples">Back to examples</a></div>
         <canvas id="bevy"></canvas>
+        {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
+        {% set data = "```rust
+" ~ code ~ "```" %}
+
+        {{data | markdown(inline=true) | safe}}
     </div>
 </div>
 {% endblock content %}
