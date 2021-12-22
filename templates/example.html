@@ -9,6 +9,11 @@
         </script>
         <div><a href="/examples">Back to examples</a></div>
         <canvas id="bevy"></canvas>
+        <div>
+            <a href="https://github.com/bevyengine/bevy/blob/latest/examples/{{ page.components[1] }}/{{ page.title }}.rs">
+                Example in Bevy github repo
+            </a>
+        </div>
         {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
         {% set data = "```rust
 " ~ code ~ "```" %}
