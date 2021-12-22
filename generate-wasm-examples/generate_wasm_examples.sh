@@ -70,8 +70,8 @@ header_message = \"Examples\"
 
 category_weight=0
 
-add_category 2d sprite text2d
-add_category 3d 3d_scene lighting load_gltf parenting pbr texture
-add_category UI button ui
+add_category 2d rect sprite sprite_flipping sprite_sheet text2d
+add_category 3d 3d_scene lighting load_gltf orthographic parenting pbr texture update_gltf_scene
+add_category UI button text text_debug ui
 add_category Game breakout alien_cake_addict
 add_category Tools bevymark
