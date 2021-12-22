@@ -3,7 +3,7 @@
 git init bevy
 cd bevy
 git remote add origin https://github.com/mockersf/bevy
-git pull --depth=1 origin my-webgl2-2
+git pull --depth=1 origin webgl2-under-feature
 
 # remove markdown files from assets so that they don't get picked up by Zola
 find assets -type f -name '*.md' -exec rm {} +
