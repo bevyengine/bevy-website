@@ -33,8 +33,7 @@ add_category()
         mkdir ../../content/examples/$category_path/$example
         cp -r assets ../../content/examples/$category_path/$example
         cp examples/$category_path/$example.rs ../../content/examples/$category_path/$example/
-        # need to disable default features to not have bevy_audio
-        cargo build --release --target wasm32-unknown-unknown --no-default-features --features "render,bevy_winit,png" --example $example
+        cargo build --release --target wasm32-unknown-unknown --example $example
         wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
         echo "+++
 title = \"$example\"
@@ -73,5 +72,6 @@ category_weight=0
 add_category 2d rect sprite sprite_flipping sprite_sheet text2d
 add_category 3d 3d_scene lighting load_gltf orthographic parenting pbr texture update_gltf_scene
 add_category UI button text text_debug ui
+add_category audio audio
 add_category Game breakout alien_cake_addict
 add_category Tools bevymark
