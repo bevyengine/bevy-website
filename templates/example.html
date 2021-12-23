@@ -8,10 +8,11 @@
             init()
         </script>
         <div><a href="/examples">Back to examples</a></div>
-        <canvas id="bevy"></canvas>
+        <canvas id="bevy" width="1024" height="720"></canvas>
         <div>
+            {{ page.components[1] }} / {{ page.title }} -
             <a href="https://github.com/bevyengine/bevy/blob/latest/examples/{{ page.components[1] }}/{{ page.title }}.rs">
-                Example in Bevy github repo
+                See this example in Bevy github repo
             </a>
         </div>
         {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
