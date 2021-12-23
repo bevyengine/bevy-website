@@ -22,6 +22,11 @@ jobs:
       - name: "Build Bevy Examples"
         run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh
 
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
         uses: shalzz/zola-deploy-action@master
