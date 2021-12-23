@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="book-content">
+    <div class="media-content">
+        <script type="module">
+            import init from './{{ page.title }}.js';
+            init()
+        </script>
+        <div><a href="/examples">Back to examples</a></div>
+        <canvas id="bevy" width="1024" height="720"></canvas>
+        <div>
+            {{ page.components[1] }} / {{ page.title }} -
+            <a href="https://github.com/bevyengine/bevy/blob/latest/examples/{{ page.components[1] }}/{{ page.title }}.rs">
+                See this example in Bevy github repo
+            </a>
+        </div>
+        {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
+        {% set data = "```rust
+" ~ code ~ "```" %}
+
+        {{data | markdown(inline=true) | safe}}
+    </div>
+</div>
+{% endblock content %}
