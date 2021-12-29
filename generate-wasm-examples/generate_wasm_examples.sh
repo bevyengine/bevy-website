@@ -14,9 +14,6 @@ sed -i.bak 's/width: 1280.,/width: 1024.,/' crates/bevy_window/src/window.rs
 # setting a canvas by default to help with integration
 sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_window/src/window.rs
 
-# disable msaa on any example that may set it
-sed -i.bak 's/Msaa { samples: 4 }/Msaa { samples: 1 }/' examples/*/*.rs
-
 
 add_category()
 {
