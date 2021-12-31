@@ -35,6 +35,10 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     ```sh
     cargo run --example breakout
     ```
+    ---
+    **Note**
+    Fedora 35 users will need to install the alsa-lib-devel and rust-libudev-devel packages in order to compile the breakout example.
+    ---
 
 ### Add Bevy as a Dependency
 
