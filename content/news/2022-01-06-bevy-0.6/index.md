@@ -743,7 +743,7 @@ UI now respects the flexbox `Overflow::Hidden` property. This can be used to cut
 
 ![text 2d transforms](text2d_transforms.png)
 
-Note that while `Transform::scale` does have it uses, it is generally still a good idea to adjust text size using the "font size" to ensure it renders "crisply".
+Note that while `Transform::scale` does have its uses, it is generally still a good idea to adjust text size using the "font size" to ensure it renders "crisply".
 
 ## Profiling
 
