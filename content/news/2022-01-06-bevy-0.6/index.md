@@ -851,7 +851,7 @@ Winit's "window transparency" feature is now exposed in Bevy's Window type. This
 
 <div class="release-feature-authors">authors: @Davier</div>
 
-Types can now derive the new `FromReflect` trait, which enables creating "clones" of a type using arbitrary `Reflect` impls. This is currently used to make reflected collection types (like `Vec`) work propely, but it will also be useful for "round trip" conversions to and from `Reflect` types.
+Types can now derive the new `FromReflect` trait, which enables creating "clones" of a type using arbitrary `Reflect` impls. This is currently used to make reflected collection types (like `Vec`) work properly, but it will also be useful for "round trip" conversions to and from `Reflect` types.
 
 ```rust
 #[derive(Reflect, FromReflect)]
