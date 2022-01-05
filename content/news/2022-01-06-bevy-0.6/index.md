@@ -119,7 +119,7 @@ Bevy has always used [WGPU](https://github.com/gfx-rs/wgpu), a native GPU abstra
 The truth of the matter is that WGPU already occupies _exactly_ the space we want it to:
 * Multiple backends, with the goal to support as many platforms as possible
 * A "baseline" feature set that works almost everywhere with a consistent api
-* A "limits" and "features" system that enables opting in to arbitrary (sometimes backend-specific features) and detecting when those features are available. This will be important when we start adding things like raytracing and VR support.
+* A "limits" and "features" system that enables opting-in to arbitrary (sometimes backend-specific features) and detecting when those features are available. This will be important when we start adding things like raytracing and VR support.
 * A modern GPU api, but without the pain and complexity of raw Vulkan. Perfect for user-facing Bevy renderer extensions.
 
 However initially there were a couple of reasons not to make it our "public facing api":
