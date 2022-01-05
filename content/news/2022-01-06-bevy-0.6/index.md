@@ -731,7 +731,7 @@ commands.entity(parent).remove_children(&[child1, child2]);
 
 <div class="release-feature-authors">authors: @Davier</div>
 
-UI now repects the flexbox `Overflow::Hidden` property. This can be used to cut off child content, which is useful when building things like scrollable lists:
+UI now respects the flexbox `Overflow::Hidden` property. This can be used to cut off child content, which is useful when building things like scrollable lists:
 
 ![overflow hidden](overflow.png)
 
