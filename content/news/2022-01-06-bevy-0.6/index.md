@@ -697,7 +697,7 @@ System Commands got a nice performance boost by changing how command buffers are
 
 #### Entity Spawn Benchmark Duration (in microseconds, less is better)
 
-This benchmark spawns entities with a variety of component compositions to ensure we cover a variety of cases. Treat these numbers as realtives, not absolutes.
+This benchmark spawns entities with a variety of component compositions to ensure we cover a variety of cases. Treat these numbers as relatives, not absolutes.
 
 ![commands perf](commands_perf.svg)
 
