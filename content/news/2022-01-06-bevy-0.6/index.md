@@ -73,7 +73,7 @@ For a deeper view into our decision making and development process (including th
 
 Pipelined Rendering is a cornerstone of the new renderer. It accomplishes a number of goals:
 
-* **Increased Parallelism**: We can now start processing the next frame while rendering the current frame. Given that rendering is often a bottleneck, this can be a huge win when there is also a lot of app work to do.
+* **Increased Parallelism**: We can now start running the main app logic for the next frame, while rendering the current frame. Given that rendering is often a bottleneck, this can be a huge win when there is also a lot of app work to do.
 * **Clearer Dataflow and Structure**: Pipelining requires drawing hard lines between "app logic" and "render logic", with a fixed synchronization point (which we call the "extract" step). This makes it easier to reason about dataflow and ownership. Code can be organized along these lines, which improves clarity.
 
 From a high level, traditional "non-pipelined rendering" looks like this:
