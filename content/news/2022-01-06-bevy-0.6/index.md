@@ -142,7 +142,7 @@ The new renderer is what I like to call "ECS driven":
 * As we covered previously, the Render World is populated using data Extracted from the App World.
 * Scenes are rendered from one or more Views, which are just Entities in the Render World with Components relevant to that View. View Entities can be extended with arbitrary Components, which makes it easy to extend the renderer with custom View data and logic.
 * Views can have zero or more generic `RenderPhase<T: PhaseItem>` Components, where T defines the "type and scope" of thing being rendered in the phase (ex: "transparent 3d entities in the main pass"). At its core, a `RenderPhase` is a (potentially sorted) list of Entities to be drawn.
-* Entities in a RenderPhase are drawn using DrawFunctions, which read ECS data from the Render World and produces GPU commands.
+* Entities in a RenderPhase are drawn using DrawFunctions, which read ECS data from the Render World and produce GPU commands.
 * DrawFunctions can (optionally) be composed of modular DrawCommands. These are generally scoped to specific actions like `SetStandardMaterialBindGroup`, `DrawMesh`, `SetItemPipeline`, etc. Bevy provides a number of built in DrawCommands and users can also define their own.
 * Render Graph Nodes convert a specific View's RenderPhases into GPU commands by iterating each RenderPhases' Entities and running the appropriate Draw Functions.
 
