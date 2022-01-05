@@ -419,7 +419,7 @@ Implementors of this trait can then easily and cheaply access specialized pipeli
 
 ### Simpler Shader Stack
 
-Bevy now uses [Naga](https://github.com/gfx-rs/naga) for all of its shader needs. As a result, we were able to remove all of our complicated non-rust shader dependencies: `glsl_to_spriv`, `shaderc`, and `spirv_reflect`. `glsl_to_spriv` was a major producer of platform-specific build dependencies and bugs, so this is a huge win!
+Bevy now uses [Naga](https://github.com/gfx-rs/naga) for all of its shader needs. As a result, we were able to remove all of our complicated non-rust shader dependencies: `glsl_to_spirv`, `shaderc`, and `spirv_reflect`. `glsl_to_spirv` was a major producer of platform-specific build dependencies and bugs, so this is a huge win!
 
 ### Features Ported to the New Renderer
 
