@@ -212,7 +212,7 @@ Directional Lights can now cast "directional shadows", which are "sun-like" shad
 
 ![directional light](directional_light.png)
 
-Note: directional shadows currently require more manual configuration than necessary (ex: manual configuration of the shadow projection). We will soon make this more automatic by generating the projection via a combination of simpler settings and fitting the projection to the scene.
+Note: directional shadows currently require more manual configuration than necessary (ex: manual configuration of the shadow projection). We will soon make this automatic and better quality over a larger range through cascaded shadow maps.
 
 ### Point Light Shadows
 
