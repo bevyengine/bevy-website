@@ -985,7 +985,7 @@ Bevy development continues to pick up steam and we have no intention to slow dow
 
 ### The "Train" Release Schedule
 
-In the last two Bevy releases we made massive, sweeping changes to core systems. **Bevy 0.5** was "the one where we rewrote Bevy ECS". **Bevy 0.6** was "the one where we rewrote Bevy Render". These massive reworks took time, and as a result held back a bunch of other useful features and bug fixes.
+In the last two Bevy releases we made massive, sweeping changes to core systems. **Bevy 0.5** was "the one where we rewrote Bevy ECS". **Bevy 0.6** was "the one where we rewrote Bevy Render". These massive reworks took time, and as a result held back a bunch of other useful features and bug fixes. They also created pressure to "crunch" and finish big features quickly to unblock releases. Crunching is unhealthy and should be avoided at all costs!
 
 [The Bevy Community](https://bevyengine.org/community/) has reached relative consensus that we should have a more regular, more predictable release schedule. One where large features can't gum up the system.
 
