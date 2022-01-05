@@ -20,7 +20,7 @@ To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 
 
 There are a _ton_ of improvements in this release, but here are some of the big ones: 
 
-* A brand new modern renderer that is prettier, faster, and easier to extend
+* A brand new modern renderer that is prettier, faster, and simpler to extend
 * Directional and point light shadows
 * Clustered forward rendering
 * Frustum culling
