@@ -253,7 +253,7 @@ commands.entity(entity).insert(NotShadowReceiver);
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-Bevy's StandardMaterial now has a `alpha_mode` field, which can be set to `AlphaMode::Opaque`, `AlphaMode::Mask(f32)`, or `AlphaMode::Blend`. This field is properly set when loading GLTF scenes.
+Bevy's StandardMaterial now has an `alpha_mode` field, which can be set to `AlphaMode::Opaque`, `AlphaMode::Mask(f32)`, or `AlphaMode::Blend`. This field is properly set when loading GLTF scenes.
 
 ![alpha blend modes](alpha_blend.png)
 
