@@ -187,7 +187,7 @@ impl Material for CustomMaterial {
 }
 ```
 
-There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it!
+There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
 
 We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material" plural=true)}} even better:
 * **Bind Group derives**: this should cut down on the boilerplate of passing materials to the GPU.
