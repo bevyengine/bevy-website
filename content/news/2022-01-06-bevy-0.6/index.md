@@ -129,7 +129,7 @@ However initially there were a couple of reasons not to make it our "public faci
 
 _Almost immediately_ after we voiced these concerns, @kvark kicked off a [relicensing effort](https://github.com/gfx-rs/wgpu/issues/392) that switched wgpu to the Rust-standard dual MIT/Apache-2.0 license. They also removed gfx-hal in favor of a [much simpler and flatter architecture](https://gfx-rs.github.io/2021/08/18/release-0.10.html). Soon after, @zicklag [added a WebGL2 backend](https://github.com/gfx-rs/wgpu/pull/1686). Having resolved all of my remaining hangups, it was clear to me that @kvark's priorities were aligned with mine and that I could trust them to adjust to feedback. And now that wgpu has a flatter architecture, I feel more comfortable forking and maintaining it under the Bevy umbrella if that ever becomes necessary. But I doubt we will ever need to ... wgpu has proven to be a responsive partner and I'm very comfortable letting @kvark own this area, given his expertise.
 
-The New Bevy Renderer tosses out our old intermediate GPU abstraction layer in favor of using wgpu directly. The result is a simpler (and faster) architecture with full and direct access to wgpu. Feedback from Bevy Renderer feature developers so far has been _very positive_.
+The New Bevy Renderer tosses out our old intermediate GPU abstraction layer in favor of using wgpu directly as our "low level" GPU api. The result is a simpler (and faster) architecture with full and direct access to wgpu. Feedback from Bevy Renderer feature developers so far has been _very positive_.
 
 Bevy was also updated to use the latest and greatest wgpu version: [0.12](https://github.com/gfx-rs/wgpu/blob/master/CHANGELOG.md#wgpu-012-2021-12-18).
 
