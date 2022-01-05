@@ -58,7 +58,7 @@ However it also had a number of _significant_ shortcomings:
 
 * **Complex**: The "high level ease of use" came at the cost of significant implementation complexity, performance overhead, and invented jargon. Users were often overwhelmed when trying to operate at any level but "high level". When managing "render resources", it was easy to do something "wrong" and hard to tell "what went wrong".
 * **Often slow**: Features like "sprite rendering" were built on the costly high level abstractions mentioned above. Performance was ... suboptimal when compared to other options in the ecosystem.
-* **Renderer complexity in userspace**: It stored a lot of internal render state on each entity. This took up space, computing the state was expensive, and it gunked up userspace with a bunch of "do not touch" render state. This state (or at least, the component metadata) needed to be written to / read from Scenes, which was also suboptimal and error prone.
+* **User-facing internals**: It stored a lot of internal render state directly on each entity. This took up space, computing the state was expensive, and it gunked up user-facing APIs with a bunch of "do not touch" render Components. This state (or at least, the component metadata) needed to be written to / read from Scenes, which was also suboptimal and error prone.
 * **Repeating render logic was troublesome**: Viewports, rendering to multiple textures / windows, and shadow maps were possible, but they required hard-coding, special casing, and boilerplate. This wasn't aligned with our goals for modularity and clarity.
 
 ### Why now?
