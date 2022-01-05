@@ -471,7 +471,7 @@ The "multiple windows" example has been updated to use the new renderer APIs. Th
 
 ### Crevice
 
-<div class="release-feature-authors">authors: @cart, @mockersf</div>
+<div class="release-feature-authors">authors: @cart, @mockersf, Rob Swain (@superdump)</div>
 
 Bevy's old `Bytes` abstraction has been replaced with a fork of the [crevice](https://github.com/LPGhatguy/crevice) crate (by @LPGhatguy), which makes it possible to write normal Rust types to GPU-friendly data layouts. Namely std140 (uniform buffers default to this layout) and std430 (storage buffers default to this layout). Bevy exports `AsStd140` and `AsStd430` derives:
 
