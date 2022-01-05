@@ -782,6 +782,8 @@ The new renderer now has tracing spans for frames, the render app schedule, and 
 
 We now have built in support for the [tracy](https://github.com/wolfpld/tracy) profiler via the `trace_tracy` Cargo feature.
 
+![tracy](tracy.png)
+
 ## Transforms
 
 ### Friendly Directional Vectors
