@@ -352,7 +352,7 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 
 <div class="release-feature-authors">authors: @cart, Rob Swain (@superdump), @mockersf</div>
 
-Bevy now has its own custom shader preprocessor. It currently supports `# import`, `# ifdef FOO`, `# ifndef FOO`, `# else`, and `# endif`, but we will be expanding it with more features to enable simple, flexible shader code reuse and extension.
+Bevy now has its own custom shader preprocessor. It currently supports `#import`, `#ifdef FOO`, `#ifndef FOO`, `#else`, and `#endif`, but we will be expanding it with more features to enable simple, flexible shader code reuse and extension.
 
 Shader preprocessors are often used to selectively enable shader code:
 
