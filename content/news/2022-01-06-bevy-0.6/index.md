@@ -18,7 +18,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 0.6 Migration Guide](/learn/book/migration-guides/0.5-0.6/).
 
-There are a _ton_ of improvements in this release, but here are some of the big ones: 
+There are a _ton_ of improvements, bug fixes and quality of life tweaks in this release. Here are some of the highlights: 
 
 * A brand new modern renderer that is prettier, faster, and simpler to extend
 * Directional and point light shadows
@@ -37,11 +37,11 @@ Read on for details!
 ## The New Bevy Renderer
 
 **Bevy 0.6** introduces a brand new modern renderer that is:
-* **Faster**: More parallel, less computation per-entity, more efficient CPU->GPU dataflow, and (soon-to-be-enabled) pipelined rendering
+* **Faster**: More parallel, less computation per-entity, more efficient CPU->GPU dataflow, and (with soon-to-be-enabled) pipelined rendering
 * **Simpler**: Fewer layers of abstraction, simpler data flow, improved low-level, mid-level, and high-level interfaces, direct wgpu access 
 * **Modular to its core**: Standardized 2d and 3d core pipelines, extensible Render Phases and Views, composable entity/component-driven draw functions, shader imports, extensible and repeatable render pipelines via "sub graphs"
 * **Prettier**: We're releasing the new renderer alongside a number of graphical improvements, such as directional and point light shadows, clustered forward rendering (so you can draw more lights in a scene), and spherical area lights. We also have a ton of new features in development (cascaded shadow maps, bloom, particles, shadow filters, and more!)
-* **Industry Proven**: It takes inspiration from battle tested renderer architectures, such as [Bungie's pipelined Destiny renderer](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf). We also learned a lot from (and worked closely with) other renderer developers in the Rust space, namely @aclysma ([rafx](https://github.com/aclysma/rafx)) and @cwfitzgerald ([rend3](https://github.com/BVE-Reborn/rend3)). The New Bevy Renderer wouldn't be what it is without them and I highly recommend checking out their projects!
+* **Industry Proven**: We've taken inspiration from battle tested renderer architectures, such as [Bungie's pipelined Destiny renderer](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf). We also learned a lot from (and worked closely with) other renderer developers in the Rust space, namely @aclysma ([rafx](https://github.com/aclysma/rafx)) and @cwfitzgerald ([rend3](https://github.com/BVE-Reborn/rend3)). The New Bevy Renderer wouldn't be what it is without them and I highly recommend checking out their projects!
 
 I promise I'll qualify all of those fluffy buzz words below. I am confident that the New Bevy Renderer will be a rallying point for the Bevy graphics ecosystem and (hopefully) the Rust graphics ecosystem at large. We still have _plenty_ of work to do, but I'm proud of what we have accomplished so far and I'm excited for the future!
 
@@ -125,19 +125,19 @@ The truth of the matter is that WGPU already occupies _exactly_ the space we wan
 However initially there were a couple of reasons not to make it our "public facing api":
 * **Complexity**: WGPU used to be built on top of gfx-hal (an older GPU abstraction layer also built and managed by the WGPU team). These multiple layers of abstraction in multiple repos made contributing to and reasoning about the internals difficult.
 * **Licensing**: WGPU used to be licensed under the "copyleft" MPL license, which created concerns about integration with proprietary graphics apis (such as consoles like the Switch).
-* **WebGL2 Support**: WGPU used to not have a WebGL2 backend. Bevy's old renderer had a custom WebGL2 backend and we weren't willing to give the Web platform up.
+* **WebGL2 Support**: WGPU used to not have a WebGL2 backend. Bevy's old renderer had a custom WebGL2 backend and we weren't willing to give up support for the Web as a platform.
 
 _Almost immediately_ after we voiced these concerns, @kvark kicked off a [relicensing effort](https://github.com/gfx-rs/wgpu/issues/392) that switched WGPU to the Rust-standard dual MIT/Apache-2.0 license. They also removed gfx-hal in favor of a [much simpler and flatter architecture](https://gfx-rs.github.io/2021/08/18/release-0.10.html). Soon after, @zicklag [added a WebGL2 backend](https://github.com/gfx-rs/wgpu/pull/1686). Having resolved all of my remaining hangups, it was clear to me that @kvark's priorities were aligned with mine and that I could trust them to adjust to feedback. And now that WGPU has a flatter architecture, I feel more comfortable forking and maintaining it under the Bevy umbrella if that ever becomes necessary. But I doubt we will ever need to ... WGPU has proven to be a responsive partner and I'm very comfortable letting @kvark own this area, given his expertise.
 
 The New Bevy Renderer tosses out our old intermediate GPU abstraction layer in favor of using WGPU directly. The result is a simpler (and faster) architecture with full and direct access to WGPU. Feedback from Bevy Renderer feature developers so far has been _very positive_.
 
-Bevy was also updated to use the latest and greatest WGPU version: 0.12.
+Bevy was also updated to use the latest and greatest WGPU version: [0.12](https://github.com/gfx-rs/wgpu/blob/master/CHANGELOG.md#wgpu-012-2021-12-18).
 
-### ECS Driven Rendering
+### ECS-Driven Rendering
 
 <div class="release-feature-authors">authors: @cart</div>
 
-The new renderer is what I like to call "ECS driven": 
+The new renderer is what I like to call "ECS-driven": 
 
 * As we covered previously, the Render World is populated using data Extracted from the App World.
 * Scenes are rendered from one or more Views, which are just Entities in the Render World with Components relevant to that View. View Entities can be extended with arbitrary Components, which makes it easy to extend the renderer with custom View data and logic.
@@ -164,7 +164,7 @@ Bevy's built in render features build on top of the Core Pipeline (ex: `bevy_spr
 
 The new renderer structure gives developers fine grained control over how entities are drawn. Developers can manually define Extract, Prepare, and Queue systems to draw entities using arbitrary render commands in custom or built in {{rust_type(type="trait" crate="bevy_core_pipeline" version="0.6.0" name="RenderPhase" plural=true)}}. However this level of control necessitates understanding the render pipeline internals and involve more boilerplate than most users are willing to tolerate. Sometimes all you want to do is slot your custom material shader into the existing pipelines!
 
-The new {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait enables users to ignore nitty gritty details in favor of a simpler interface: just implement the {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait and add a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="MaterialPlugin")}} for your type. The new [shader_material.rs](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/shader_material.rs) example illustrates this.
+The new {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait enables users to ignore nitty gritty details in favor of a simpler interface: just implement the {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait and add a {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="MaterialPlugin")}} for your type. The new [shader_material.rs](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/shader_material.rs) example illustrates this.
 
 ```rust
 // register the plugin for a CustomMaterial
@@ -199,10 +199,10 @@ We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version
 
 [![view frustum](ViewFrustum.svg)](https://en.wikipedia.org/wiki/Viewing_frustum#/media/File:ViewFrustum.svg)
 
-Drawing things is expensive! It requires writing data from the CPU to the GPU, constructing draw calls, and running shaders. We can save a lot of time by _not_ drawing things that the camera can't see. "Frustum culling" is the act of not drawing objects that are outside of the bounds of the camera's view frustum. For large scenes, this can be the difference between a crisp 60 frames per second and chugging to a grinding halt.
+Drawing things is expensive! It requires writing data from the CPU to the GPU, constructing draw calls, and running shaders. We can save a lot of time by _not_ drawing things that the camera can't see. "Frustum culling" is the act of excluding objects that are outside of the bounds of the camera's "view frustum", to avoid wasting work drawing them. For large scenes, this can be the difference between a crisp 60 frames per second and chugging to a grinding halt.
 
 
-**Bevy 0.6** now automatically does frustum culling for 3d objects using their bounding boxes. We might also enable this for 2d objects in future releases, but the wins there will be less pronounced, as drawing sprites is now much cheaper thanks to the new batched rendering.
+**Bevy 0.6** now automatically does frustum culling for 3d objects using their axis-aligned bounding boxes. We might also enable this for 2d objects in future releases, but the wins there will be less pronounced, as drawing sprites is now much cheaper thanks to the new batched rendering.
 
 ### Directional Shadows
 
@@ -271,7 +271,7 @@ Clusters are "3d" slices of the view frustum, but when debugging them in screen 
 
 ![clusters](clusters.png)
 
-Due to WebGL2's lack of storage buffers, in the interest of cross-platform compatibility, the current implementation is limited to at most 256 lights to ensure lights can fit within a uniform buffer. We can support many more lights on other platforms by using storage buffers, which we will add support for in a future release.
+The current implementation is limited to at most 256 lights as we initially prioritized cross-platform compatibility so that everyone could benefit. WebGL2 specifically does not support storage buffers and so the implementation is currently constrained by the maximum uniform buffer size. We can support many more lights on other platforms by using storage buffers, which we will add support for in a future release.
 
 [Click here](https://youtu.be/dElYzzNovEk) for a video that illustrates Bevy's clustered forward rendering.
 
@@ -345,7 +345,7 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 
 <div class="release-feature-authors">authors: @cart, Rob Swain (@superdump), @mockersf</div>
 
-Bevy now has its own custom shader preprocessor. It currently supports `# import`, `# ifdef FOO`, `# ifndef FOO`, `# else`, and `# endif`, but we will expand it with more features as our needs grow.
+Bevy now has its own custom shader preprocessor. It currently supports `# import`, `# ifdef FOO`, `# ifndef FOO`, `# else`, and `# endif`, but we will be expanding it with more features to enable simple, flexible shader code reuse and extension.
 
 Shader preprocessors are often used to selectively enable shader code:
 
@@ -367,7 +367,7 @@ The new preprocessor supports importing other shader files (which pulls in their
 Asset path imports:
 
 ```rust
-# import "shaders/cool_function.wgsl"
+#import "shaders/cool_function.wgsl"
 
 [[stage(fragment)]]
 fn fragment(input: VertexOutput) -> [[location(0)]] vec4<f32> {
@@ -378,7 +378,7 @@ fn fragment(input: VertexOutput) -> [[location(0)]] vec4<f32> {
 Plugin-provided imports, which can be registered by Bevy Plugins with arbitrary paths:
 
 ```rust
-# import bevy_pbr::mesh_view_bind_group
+#import bevy_pbr::mesh_view_bind_group
 
 [[stage(vertex)]]
 fn vertex(vertex: Vertex) -> VertexOutput {
@@ -390,7 +390,7 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 }
 ```
 
-We also plan to experiment with using Naga for "partial imports" of specific, named symbols (ex: import a specific function or struct from a file).
+We also plan to experiment with using Naga for "partial imports" of specific, named symbols (ex: import a specific function or struct from a file). It's a 'far out' idea, but this could also enable using Naga's intermediate shader representation as a way of combining pieces of shader code written in different languages into one shader.
 
 ### Pipeline Specialization
 
@@ -434,7 +434,9 @@ cargo build --target wasm32-unknown-unknown
 wasm-bindgen --out-dir OUTPUT_DIR --target web TARGET_DIR
 ```
 
-The New Bevy Renderer developers had to carefully operate within the limits of WebGL2 (ex: storage buffers and compute shaders aren't supported in WebGL2), but the results were worth it! You can try out Bevy's WASM support in your browser using our new [Bevy Examples](/examples) page.
+The New Bevy Renderer developers prioritized cross-platform compatibility for the initial renderer feature implementation and so had to carefully operate within the limits of WebGL2 (ex: storage buffers and compute shaders aren't supported in WebGL2), but the results were worth it! You can try out Bevy's WASM support in your browser using our new [Bevy Examples](/examples) page.
+
+Over time, features will be implemented that leverage more modern/advanced features such as compute shaders but it is important to us that everyone has access to a solid visual experience for their games and applications regardless of their target platform(s).
 
 [![wasm bevy examples](bevy_examples_wasm.png)](/examples)
 
@@ -512,7 +514,7 @@ The `Mesh` type now has a `compute_flat_normals()` function. Imported GLTF meshe
 
 ### Faster GLTF Loading
 
-<div class="release-feature-authors">authors: @DJMcNab, @mockers</div>
+<div class="release-feature-authors">authors: @DJMcNab, @mockersf</div>
 
 @DJMcNab fixed nasty non-linear loading of GLTF nodes, which made them load much faster. One complicated scene went from 40 seconds to 0.2 seconds. Awesome!
 
@@ -530,7 +532,7 @@ One of our highest priorities for Bevy ECS is "ergonomics". In the past I have m
 // This is a standalone Bevy 0.5 App that adds a simple `gravity` system to the App's schedule
 // and automatically runs it in parallel with other systems
 fn main() {
-    App::new()
+    App::build()
         .add_plugins(DefaultPlugins)
         .add_system(gravity.system())
         .run();
@@ -564,12 +566,12 @@ impl<T: Send + Sync + 'static> Component for T {}
 
 This removed the need for users to manually implement {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} for their types. Early on this seemed like an ergonomics win with no downsides. But Bevy ECS, our understanding of the problem space, and our plans for the future have changed a lot since then:
 
-* **It turns out everything _should not_ be a Component**: Our users _constantly_ accidentally add non-component types as components (newbies accidentally adding Bundles and type constructors as Components are our most common `#help` channel threads on [our Discord](https://discord.gg/bevy)). This class of error is very hard to debug because things just silently "don't work". When everything isn't a Component, rustc can properly yell at you with informative errors when you mess up.
+* **It turns out _not everything_ should be a Component**: Our users _constantly_ accidentally add non-component types as components (newbies accidentally adding Bundles and type constructors as Components are our most common `#help` channel threads on [our Discord](https://discord.gg/bevy)). This class of error is very hard to debug because things just silently "don't work". When not everything is a Component, rustc can properly yell at you with informative errors when you mess up.
 * **Optimizations**: If we implement Component for everything automatically, we can't customize the Component type with associated types. This prevents an entire class of optimization. For example, Bevy ECS now has [multiple Component storage types](/news/bevy-0-5/#hybrid-component-storage-the-solution). By moving the storage type into Component, we enable rustc to optimize checks that would normally need to happen at runtime. @Frizi was able to [significantly improve our Query iterator performance](https://github.com/bevyengine/bevy/pull/2254#issuecomment-857863116) by moving the storage type into Component. I expect us to find more optimizations in this category.
 * **Automatic registration**: Moving more logic into Component also gives us the ability to do fancier things in the future like "automatically registering Reflect impls when deriving Component". Non-blanket Component impls do add a small amount of boilerplate, but they also have the potential to massively reduce the "total boilerplate" of an app.
 * **Documentation**: Deriving Component serves as a form of self-documentation. Its now easy to tell what types are components at a glance.
 * **Decentralized**: In Bevy 0.5 Component-specific configuration like "storage type" had to be registered in a centralized Plugin somewhere. Moving Component configuration into the Component trait decentralizes things and allows users to keep "Component type information" right next to the type itself. 
-* **Event Handlers**: Non-blanket Component impls allow us to add event handlers like `on_insert(world: &mut World)` to the Component trait. Very useful! 
+* **Event Handlers**: Non-blanket Component impls will eventually allow us to add event handlers like `on_insert(world: &mut World)` to the Component trait. Very useful! 
 
 Hopefully by now you're convinced that this is the right move. If not ... I'm sorry ... you still need to implement Component manually in Bevy 0.6. You can either derive Component:
 
@@ -602,7 +604,7 @@ impl Component for Movable {
 
 <div class="release-feature-authors">authors: @Guvante</div>
 
-Mutable queries can now be immutably iterated (which returns immutable references):
+Mutable queries can now be immutably iterated, returning immutable references to components:
 
 ```rust
 fn system(mut players: Query<&mut Player>) {
@@ -646,7 +648,7 @@ let (a, query) = system_state.get(&world);
 
 <div class="release-feature-authors">authors: @cart, @zicklag, @bjorn3</div>
 
-The new Bevy renderer requires strict separation between the "main app" and the "render app". To enable this, we added the concept of "sub apps":
+The new Bevy renderer requires strict separation between the "main app" and the "render app". To enable this, we added the concept of "sub-apps":
 
 ```rust
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, AppLabel)]
@@ -663,7 +665,7 @@ app.sub_app_mut(RenderApp)
     .add_system(some_other_system);
 ```
 
-We plan on exposing more control over scheduling and running sub apps in the future.
+We plan on exposing more control over scheduling, running, and working with sub-apps in the future.
 
 ### Query::iter_combinations
 
@@ -683,7 +685,7 @@ fn system(query: Query<&Player>) {
 }
 ```
 
-This is especially useful for things like "checking for entities for collisions with all other entities". There is also an `iter_combinations_mut` variant. Just be careful ... the time complexity of this grows quickly with large numbers of combinations. With great power comes great responsibility!
+This is especially useful for things like "checking for entities for collisions with all other entities". There is also an `iter_combinations_mut` variant. Just be careful ... the time complexity of this grows quickly (faster than exponentially!) as the number of entities in your combinations increases. With great power comes great responsibility!
 
 The new `iter_combinations.rs` example illustrats how to use this new API to calculate gravity between objects in a "solar system":
 
