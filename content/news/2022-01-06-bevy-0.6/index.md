@@ -612,7 +612,7 @@ impl Component for SomeComponent {
     type Storage = TableStorage;
 }
 
-impl Component for Movable {
+impl Component for SomeComponent {
     type Storage = SparseSetStorage;
 }
 ```
