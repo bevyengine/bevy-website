@@ -261,7 +261,7 @@ Bevy's StandardMaterial now has a `alpha_mode` field, which can be set to `Alpha
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-Modern scenes often have many point lights. But when rendering scenes with hundreds of lights, calculating lighting for each light, for each rendered fragment can be prohibitively expensive. Clustered Forward Rendering is a popular approach that increases the number of lights you can have in a scene by dividing up the view frustum into "clusters". Each cluster is then assigned lights based on whether or not they can affect that cluster. This is a form of "culling" that enables fragments to ignore lights that aren't assigned to their cluster.
+Modern scenes often have many point lights. But when rendering scenes, calculating lighting for each light, for each rendered fragment rapidly becomes prohibitively expensive as the number of lights in the scene increases. Clustered Forward Rendering is a popular approach that increases the number of lights you can have in a scene by dividing up the view frustum into "clusters" (a grid of sub-volumes). Each cluster is then assigned lights based on whether or not they can affect that cluster. This is a form of "culling" that enables fragments to ignore lights that aren't assigned to their cluster.
 
 In practice this can significantly increase the number of lights in the scene:
 
