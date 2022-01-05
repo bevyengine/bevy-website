@@ -49,7 +49,7 @@ I promise I'll qualify all of those fluffy buzzwords below. I am confident that 
 
 ### Why build a new renderer?
 
-Before we cover whats new, its worth discussing why we embarked on such a massive effort. The old Bevy Renderer got a number of things right:
+Before we cover whats new, it's worth discussing why we embarked on such a massive effort. The old Bevy Renderer got a number of things right:
 * **Modular render logic** (via the Render Graph)
 * **Multiple backends** (both first and third party)
 * **High level data-driven API**: this made it easy and ergonomic to write custom per-entity render logic
