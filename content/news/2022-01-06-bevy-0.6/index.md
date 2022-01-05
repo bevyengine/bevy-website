@@ -987,8 +987,11 @@ We will refine this process over time and see what works best.
 
 * **Post Processing Stack / HDR / Bloom**: HDR and bloom [almost made it into Bevy 0.6](https://github.com/bevyengine/bevy/pull/2876), but we decided to hold them back so we can polish them a bit and build a proper "modular post processing stack".
 * **Skeletal Animation**: Ultimately Bevy will have a general purpose, property based animation system (we already have a [working implementation](https://github.com/bevyengine/bevy/pull/1429)). We've been holding off on adding skeletal animation, so we can slot it in to that system, but in retrospect that was a mistake. People need skeletal animation _now_. In the short term we will build a scoped 3d skeletal animation system, just to get the ball rolling. Then later we will port it to the general purpose system (whenever that is ready), 
-* **Global Illumination**: GI will provide a massive boost to the feel of "realism", so it is worth prioritizing at least one form of GI in the short term.
+* **Screen Space Ambient Occlusion (SSAO)**: A popular and straightfoward ambient occlusion approximation that can drastically improve render quality.
+* **Global Illumination**: GI will provide a massive boost to the feel of "realism", so it is worth prioritizing at least one form of GI in the short term. This is a complicated topic and will require experimenation.
+* **Compressed Textures**: This will make scenes load faster and cut down on GPU memory usage.
 * **Shadow Filters and Cascades**: Rob Swain (@superdump) has already done a lot of work in this area, so we will hopefully see that materialize in a Bevy release soon.
+* **PBR Shader Code Reuse**: We will make it easier to define custom PBR shaders by making the PBR shader more modular and making it easier to import specific parts of the PBR shader.
 
 ### UI Refresh
 
