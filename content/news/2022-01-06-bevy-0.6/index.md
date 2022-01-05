@@ -456,7 +456,7 @@ For improved precision in the "useful range", the industry has largely adopted "
 
 ### Compute Shaders
 
-The new renderer makes it possible for users to write compute shaders. Our new ["compute shader game of life" example](https://github.com/bevyengine/bevy/blob/main/examples/shader/compute_shader_game_of_life.rs) (by @jakobhellermann) illustrates how to write compute shaders in Bevy.
+The new renderer makes it possible for users to write compute shaders. Our new ["compute shader game of life" example](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/compute_shader_game_of_life.rs) (by @jakobhellermann) illustrates how to write compute shaders in Bevy.
 
 ![compute game of life](compute.png)
 
@@ -465,7 +465,7 @@ The new renderer makes it possible for users to write compute shaders. Our new [
 
 <div class="release-feature-authors">authors: @DJMcNab</div>
 
-The "multiple windows" example has been updated to use the new renderer APIs. Thanks to the new renderer APIs, this example is now [much nicer to look at](https://github.com/bevyengine/bevy/blob/main/examples/window/multiple_windows.rs) (and will look even nicer when we add high level Render Targets).
+The "multiple windows" example has been updated to use the new renderer APIs. Thanks to the new renderer APIs, this example is now [much nicer to look at](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/window/multiple_windows.rs) (and will look even nicer when we add high level Render Targets).
 
 ![multiple windows](multiple_windows.png)
 
