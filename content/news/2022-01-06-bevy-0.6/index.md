@@ -875,7 +875,7 @@ fn system(gamepads: Res<Gamepads>) {
 
 The new renderer now has tracing spans for frames, the render app schedule, and the Render Graph (with named Sub Graphs spans). The system executor now has finer grained spans, filling in most of the remaining blanks. Applying System Commands also now has spans.
 
-(ignore those weird characters in the spans ... we're investigating that)
+(ignore those weird characters in the spans ... we're [investigating](https://github.com/bevyengine/bevy/issues/3563) that)
 
 ![render app profiling](render_app_profiling.png)
 
