@@ -704,7 +704,7 @@ fn system(query: Query<&Player>) {
 
 This is especially useful for things like "checking for entities for collisions with all other entities". There is also an `iter_combinations_mut` variant. Just be careful ... the time complexity of this grows quickly (faster than exponentially!) as the number of entities in your combinations increases. With great power comes great responsibility!
 
-The new `iter_combinations.rs` example illustrats how to use this new API to calculate gravity between objects in a "solar system":
+The new `iter_combinations.rs` example illustrates how to use this new API to calculate gravity between objects in a "solar system":
 
 ![iter_combinations](iter_combinations.png)
 
