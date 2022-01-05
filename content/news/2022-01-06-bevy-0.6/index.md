@@ -726,6 +726,17 @@ This benchmark spawns entities with a variety of component compositions to ensur
 
 System and Query lifetimes were made more explicit by splitting out the `'system` and `'world`, lifetimes and using them explicitly where possible. This enables Rust to reason about ECS lifetimes more effectively, especially for read-only lifetimes. This was particularly important because it enabled the new Bevy Renderer to convince wgpu that ECS resources actually live for as long as the Render World.
 
+Note that this does make the lifetimes on SystemParam derives slightly more complicated as a result:
+
+```rust
+#[derive(SystemParam)]
+struct CustomParam<'w, 's> {
+    res: Res<'w, AssetServer>,
+    query: Query<'w, 's, Read<Transform>>,
+    local: Local<'s, i32>,
+}
+```
+
 ### Soundness / Correctness Improvements
 
 <div class="release-feature-authors">authors: @BoxyUwU, @TheRawMeatball, @Frizi, @thebluefish, @sapir, @bjorn3, @DJMcNab</div>
