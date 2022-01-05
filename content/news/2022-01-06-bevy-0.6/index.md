@@ -843,6 +843,12 @@ edition = "2021"
 
 Note that "virtual Cargo workspaces" still need to manually define `resolver = "2"`, even in Rust 2021. [Refer to the Rust 2021 documentation](https://doc.rust-lang.org/edition-guide/rust-2021/default-cargo-resolver.html#details) for details. 
 
+```toml
+[workspace]
+resolver = "2" # Important! WGPU/Bevy needs this!
+members = [ "my_crate1", "my_crate2" ]
+```
+
 ## Input
 
 ### Gamepads Resource
