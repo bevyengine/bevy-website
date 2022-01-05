@@ -123,7 +123,7 @@ The truth of the matter is that WGPU already occupies _exactly_ the space we wan
 * A modern GPU api, but without the pain and complexity of raw Vulkan. Perfect for user-facing Bevy renderer extensions.
 
 However initially there were a couple of reasons not to make it our "public facing api":
-* **Complexity**: WGPU used to be built on top of gfx-hal (on older GPU abstraction layer also built and managed by the WGPU team). These multiple layers of abstraction in multiple repos made contributing to and reasoning about the internals difficult.
+* **Complexity**: WGPU used to be built on top of gfx-hal (an older GPU abstraction layer also built and managed by the WGPU team). These multiple layers of abstraction in multiple repos made contributing to and reasoning about the internals difficult.
 * **Licensing**: WGPU used to be licensed under the "copyleft" MPL license, which created concerns about integration with proprietary graphics apis (such as consoles like the Switch).
 * **WebGL2 Support**: WGPU used to not have a WebGL2 backend. Bevy's old renderer had a custom WebGL2 backend and we weren't willing to give the Web platform up.
 
