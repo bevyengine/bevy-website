@@ -775,25 +775,13 @@ UI now respects the flexbox `Overflow::Hidden` property. This can be used to cut
 
 Note that while `Transform::scale` does have its uses, it is generally still a good idea to adjust text size using the "font size" to ensure it renders "crisply".
 
-## Profiling
+### Window Transparency 
 
-### More Spans
+<div class="release-feature-authors">authors: @louisgjohnson</div>
 
-<div class="release-feature-authors">authors: @cart, @mockersf, @hymm</div>
+Winit's "window transparency" feature is now exposed in Bevy's Window type. This allows users to build "widget like" apps without backgrounds or window decorations (on platforms that support it). Here is a Bevy app with a transparent background, rendering a Bevy Logo sprite on top of my Linux desktop background. Seamless! Cool!
 
-The new renderer now has tracing spans for frames, the render app schedule, and the Render Graph (with named Sub Graphs spans). The system executor now has finer grained spans, filling in most of the remaining blanks. Applying System Commands also now has spans.
-
-(ignore those weird characters in the spans ... we're investigating that)
-
-![render app profiling](render_app_profiling.png)
-
-### Tracy Backend
-
-<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
-
-We now have built in support for the [tracy](https://github.com/wolfpld/tracy) profiler via the `trace_tracy` Cargo feature.
-
-![tracy](tracy.png)
+![transparent window](transparent_window.png)
 
 ## Transforms
 
@@ -879,13 +867,25 @@ fn system(gamepads: Res<Gamepads>) {
  }
 ```
 
-### Window Transparency 
+## Profiling
 
-<div class="release-feature-authors">authors: @louisgjohnson</div>
+### More Spans
 
-Winit's "window transparency" feature is now exposed in Bevy's Window type. This allows users to build "widget like" apps without backgrounds or window decorations (on platforms that support it). Here is a Bevy app with a transparent background, rendering a Bevy Logo sprite on top of my Linux desktop background. Seamless! Cool!
+<div class="release-feature-authors">authors: @cart, @mockersf, @hymm</div>
 
-![transparent window](transparent_window.png)
+The new renderer now has tracing spans for frames, the render app schedule, and the Render Graph (with named Sub Graphs spans). The system executor now has finer grained spans, filling in most of the remaining blanks. Applying System Commands also now has spans.
+
+(ignore those weird characters in the spans ... we're investigating that)
+
+![render app profiling](render_app_profiling.png)
+
+### Tracy Backend
+
+<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
+
+We now have built in support for the [tracy](https://github.com/wolfpld/tracy) profiler via the `trace_tracy` Cargo feature.
+
+![tracy](tracy.png)
 
 ### FromReflect Trait and Derive
 
