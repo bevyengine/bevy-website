@@ -172,7 +172,7 @@ app.add_plugin(MaterialPlugin::<CustomMaterial>::default())
 
 impl Material for CustomMaterial {
     // the vertex and fragment shaders are optional
-    // they use a default mesh shader if they are not defined
+    // they use a default "mesh pipeline shader" if they are not defined
     fn fragment_shader(asset_server: &AssetServer) -> Option<Handle<Shader>> {
         Some(asset_server.load("shaders/custom_material.wgsl"))
     }
