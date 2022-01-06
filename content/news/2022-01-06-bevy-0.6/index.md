@@ -78,11 +78,11 @@ Pipelined Rendering is a cornerstone of the new renderer. It accomplishes a numb
 
 From a high level, traditional "non-pipelined rendering" looks like this:
 
-![non-pipelined rendering](unpipelined_rendering.png)
+![non-pipelined rendering](unpipelined_rendering.svg)
 
 Pipelined rendering looks like this:
 
-![pipelined rendering](pipelined_rendering.png)
+![pipelined rendering](pipelined_rendering.svg)
 
 Much better!
 
@@ -94,7 +94,7 @@ Bevy apps are now split into the Main App, which is where app logic occurs, and 
 
 So pipelined rendering actually looks more like this, with the next app update occurring after the extract step:
 
-![pipelined rendering stages](pipelined_rendering_stages.png)
+![pipelined rendering stages](pipelined_rendering_stages.svg)
 
 As a quick callout, pipelined rendering doesn't _actually_ happen in parallel yet. I [have a branch](https://github.com/cart/bevy/tree/actual-pipelining) with parallel pipelining enabled, but running app logic in a separate thread currently breaks "non send" resources (because the main app is moved to a separate thread, breaking non send guarantees). There will be a fix for this soon, I just wanted to get the new renderer in peoples' hands as soon as possible! When we enable parallel pipelining, no user-facing code changes will be required.
 
