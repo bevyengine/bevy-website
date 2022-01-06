@@ -107,8 +107,8 @@ As a quick callout, pipelined rendering doesn't _actually_ happen in parallel ye
 The New Bevy Renderer has a Render Graph, [much like the old Bevy renderer](/news/introducing-bevy/#render-graph). Render Graphs are a way to logically model GPU command construction in a modular way. Graph Nodes pass GPU resources like Textures and Buffers (and sometimes Entities) to each other, forming a directed acyclic graph. When a Graph Node runs, it uses its graph inputs and the Render World to construct GPU command lists.
 
 The biggest change to this API is that we now support Sub Graphs, which are basically "namespaced" Render Graphs that can be run from any Node in the graph with arbitrary inputs. This enables us to define things like a "2d" and "3d" sub graph, which users can insert custom logic into. This opens two doors simultaneously:
-* Ability to repeat render logic, but for different views (split screen, mirrors, rendering to a texture, shadow maps)
-* Ability for users to extend this repeated logic
+* The ability to repeat render logic, but for different views (split screen, mirrors, rendering to a texture, shadow maps).
+* The ability for users to extend this repeated logic.
 
 ### Embracing wgpu
 
