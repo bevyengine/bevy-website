@@ -659,6 +659,8 @@ let mut system_state: SystemState<(Res<A>, Query<&B>)> = SystemState::new(&mut w
 let (a, query) = system_state.get(&world);
 ```
 
+For those who working directly with `World`, this is a game changer. It makes it possible to mutably access multiple disjoint Components and Resources (often eliminating the need for more costly abstractions like `WorldCell`).
+
 {{rust_type(type="struct" crate="bevy_ecs" version="0.6.0" name="SystemState")}} does all of the same caching that a normal Bevy system does, so reusing the same SystemState results in uber-fast World access.
 
 ### Sub Apps
