@@ -442,9 +442,9 @@ cargo build --target wasm32-unknown-unknown
 wasm-bindgen --out-dir OUTPUT_DIR --target web TARGET_DIR
 ```
 
-The New Bevy Renderer developers prioritized cross-platform compatibility for the initial renderer feature implementation and so had to carefully operate within the limits of WebGL2 (ex: storage buffers and compute shaders aren't supported in WebGL2), but the results were worth it! You can try out Bevy's WASM support in your browser using our new [Bevy Examples](/examples) page.
+The New Bevy Renderer developers prioritized cross-platform compatibility for the initial renderer feature implementation and so had to carefully operate within the limits of WebGL2 (ex: storage buffers and compute shaders aren't supported in WebGL2), but the results were worth it! Over time, features will be implemented that leverage more modern/advanced features such as compute shaders. But it is important to us that everyone has access to a solid visual experience for their games and applications regardless of their target platform(s).
 
-Over time, features will be implemented that leverage more modern/advanced features such as compute shaders but it is important to us that everyone has access to a solid visual experience for their games and applications regardless of their target platform(s).
+You can try out Bevy's WASM support in your browser using our new [Bevy Examples](/examples) page:
 
 [![wasm bevy examples](bevy_examples_wasm.png)](/examples)
 
