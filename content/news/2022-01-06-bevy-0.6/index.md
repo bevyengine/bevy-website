@@ -354,7 +354,7 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 
 Bevy now has its own custom shader preprocessor. It currently supports `#import`, `#ifdef FOO`, `#ifndef FOO`, `#else`, and `#endif`, but we will be expanding it with more features to enable simple, flexible shader code reuse and extension.
 
-Shader preprocessors are often used to selectively enable shader code:
+Shader preprocessors are often used to conditionally enable shader code:
 
 ```rust
 #ifdef TEXTURE
