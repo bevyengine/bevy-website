@@ -25,7 +25,7 @@ There are a _ton_ of improvements, bug fixes and quality of life tweaks in this 
 * Clustered forward rendering
 * Frustum culling
 * Significantly faster sprite rendering with less boilerplate
-* Native WebGL2 support
+* Native WebGL2 support. You can test this out by [running the Bevy Examples in your browser!](/examples)
 * High level custom Materials
 * More powerful shaders: preprocessors, imports, WGSL support
 * Bevy ECS ergonomics and performance improvements. No more `.system()`!
