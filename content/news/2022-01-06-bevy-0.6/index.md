@@ -41,7 +41,7 @@ Read on for details!
 * **Prettier**: We're releasing the new renderer alongside a number of graphical improvements, such as directional and point light shadows, clustered forward rendering (so you can draw more lights in a scene), and spherical area lights. We also have a ton of new features in development (cascaded shadow maps, bloom, particles, shadow filters, and more!)
 * **Simpler**: Fewer layers of abstraction, simpler data flow, improved low-level, mid-level, and high-level interfaces, direct wgpu access 
 * **Modular to its core**: Standardized 2d and 3d core pipelines, extensible Render Phases and Views, composable entity/component-driven draw functions, shader imports, extensible and repeatable render pipelines via "sub graphs"
-* **Industry Proven**: We've taken inspiration from battle tested renderer architectures, such as [Bungie's pipelined Destiny renderer](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf). We also learned a lot from (and worked closely with) other renderer developers in the Rust space, namely @aclysma ([rafx](https://github.com/aclysma/rafx)) and @cwfitzgerald ([rend3](https://github.com/BVE-Reborn/rend3)). The New Bevy Renderer wouldn't be what it is without them and I highly recommend checking out their projects!
+* **Industry Proven**: We've taken inspiration from battle tested renderer architectures, such as [Bungie's pipelined Destiny renderer](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf). We also learned a lot from (and worked closely with) other renderer developers in the Rust space, namely @aclysma ([rafx](https://github.com/aclysma/rafx)) and @cwfitzgerald ([rend3](https://github.com/BVE-Reborn/rend3)). The New Bevy Renderer wouldn't be what it is without them, and I highly recommend checking out their projects!
 
 I promise I'll qualify all of those fluffy buzzwords below. I am confident that the New Bevy Renderer will be a rallying point for the Bevy graphics ecosystem and (hopefully) the Rust graphics ecosystem at large. We still have _plenty_ of work to do, but I'm proud of what we have accomplished so far and I'm excited for the future!
 
@@ -49,12 +49,12 @@ I promise I'll qualify all of those fluffy buzzwords below. I am confident that 
 
 ### Why build a new renderer?
 
-Before we cover whats new, it's worth discussing why we embarked on such a massive effort. The old Bevy Renderer got a number of things right:
+Before we cover what's new, it's worth discussing why we embarked on such a massive effort. The old Bevy Renderer got a number of things right:
 * **Modular render logic** (via the Render Graph)
 * **Multiple backends** (both first and third party)
 * **High level data-driven API**: this made it easy and ergonomic to write custom per-entity render logic
 
-However it also had a number of _significant_ shortcomings:
+However, it also had a number of _significant_ shortcomings:
 
 * **Complex**: The "high-level ease of use" came at the cost of significant implementation complexity, performance overhead, and invented jargon. Users were often overwhelmed when trying to operate at any level but "high-level". When managing "render resources", it was easy to do something "wrong" and hard to tell "what went wrong".
 * **Often slow**: Features like "sprite rendering" were built on the costly high-level abstractions mentioned above. Performance was ... suboptimal when compared to other options in the ecosystem.
@@ -63,9 +63,9 @@ However it also had a number of _significant_ shortcomings:
 
 ### Why now?
 
-The shortcomings above were acceptable in Bevy's early days, but were clearly holding us back as Bevy grew from a [one person side project](bevyengine.org/news/introducing-bevy) to the most popular Rust game engine on Github (and one of the most [popular open source game engines ... period](https://github.com/topics/game-engine)). A "passable" renderer no longer cuts it when we have hundreds of contributors, a paid full time developer, thousands of individual users, and a growing number of companies paying people to work on Bevy apps and features. It was time for a change.
+The shortcomings above were acceptable in Bevy's early days, but were clearly holding us back as Bevy grew from a [one person side project](bevyengine.org/news/introducing-bevy) to the most popular Rust game engine on GitHub (and one of the most [popular open source game engines ... period](https://github.com/topics/game-engine)). A "passable" renderer no longer cuts it when we have hundreds of contributors, a paid full-time developer, thousands of individual users, and a growing number of companies paying people to work on Bevy apps and features. It was time for a change.
 
-For a deeper view into our decision making and development process (including the alternatives we considered) check out the [New Renderer Tracking Issue](https://github.com/bevyengine/bevy/issues/2535). 
+For a deeper view into our decision-making and development process (including the alternatives we considered) check out the [New Renderer Tracking Issue](https://github.com/bevyengine/bevy/issues/2535). 
 
 ### Pipelined Rendering: Extract, Prepare, Queue, Render
 
@@ -122,12 +122,12 @@ The truth of the matter is that wgpu already occupies _exactly_ the space we wan
 * A "limits" and "features" system that enables opting-in to arbitrary (sometimes backend-specific features) and detecting when those features are available. This will be important when we start adding things like raytracing and VR support.
 * A modern GPU API, but without the pain and complexity of raw Vulkan. Perfect for user-facing Bevy renderer extensions.
 
-However initially there were a couple of reasons not to make it our "public facing API":
+However, initially there were a couple of reasons not to make it our "public-facing API":
 * **Complexity**: wgpu used to be built on top of gfx-hal (an older GPU abstraction layer also built and managed by the wgpu team). These multiple layers of abstraction in multiple repos made contributing to and reasoning about the internals difficult.
 * **Licensing**: wgpu used to be licensed under the "copyleft" MPL license, which created concerns about integration with proprietary graphics apis (such as consoles like the Switch).
 * **WebGL2 Support**: wgpu used to not have a WebGL2 backend. Bevy's old renderer had a custom WebGL2 backend and we weren't willing to give up support for the Web as a platform.
 
-_Almost immediately_ after we voiced these concerns, @kvark kicked off a [relicensing effort](https://github.com/gfx-rs/wgpu/issues/392) that switched wgpu to the Rust-standard dual MIT/Apache-2.0 license. They also removed gfx-hal in favor of a [much simpler and flatter architecture](https://gfx-rs.github.io/2021/08/18/release-0.10.html). Soon after, @zicklag [added a WebGL2 backend](https://github.com/gfx-rs/wgpu/pull/1686). Having resolved all of my remaining hangups, it was clear to me that @kvark's priorities were aligned with mine and that I could trust them to adjust to feedback. And now that wgpu has a flatter architecture, I feel more comfortable forking and maintaining it under the Bevy umbrella if that ever becomes necessary. But I doubt we will ever need to ... wgpu has proven to be a responsive partner and I'm very comfortable letting @kvark own this area, given their expertise.
+_Almost immediately_ after we voiced these concerns, @kvark kicked off a [relicensing effort](https://github.com/gfx-rs/wgpu/issues/392) that switched wgpu to the Rust-standard dual MIT/Apache-2.0 license. They also removed gfx-hal in favor of a [much simpler and flatter architecture](https://gfx-rs.github.io/2021/08/18/release-0.10.html). Soon after, @zicklag [added a WebGL2 backend](https://github.com/gfx-rs/wgpu/pull/1686). Having resolved all of my remaining hangups, it was clear to me that @kvark's priorities were aligned with mine and that I could trust them to adjust to feedback. Now that wgpu has a flatter architecture, I feel more comfortable forking and maintaining it under the Bevy umbrella if that ever becomes necessary. But I doubt we will ever need to ... wgpu has proven to be a responsive partner and I'm very comfortable letting @kvark own this area, given their expertise.
 
 The New Bevy Renderer tosses out our old intermediate GPU abstraction layer in favor of using wgpu directly as our "low-level" GPU api. The result is a simpler (and faster) architecture with full and direct access to wgpu. Feedback from Bevy Renderer feature developers so far has been _very positive_.
 
@@ -152,9 +152,9 @@ If that seems complicated ... don't worry! These are what I like to call "mid-le
 
 <div class="release-feature-authors">authors: @cart, Rob Swain (@superdump), @KirmesBude, @mockersf</div>
 
-The new renderer is _very_ flexible and unopinionated by default. However _too much_ flexibility isn't always desirable. We want a rich Bevy renderer plugin ecosystem where developers have enough freedom to implement what they want, while still maximizing compatibility across plugins.
+The new renderer is _very_ flexible and unopinionated by default. However, _too much_ flexibility isn't always desirable. We want a rich Bevy renderer plugin ecosystem where developers have enough freedom to implement what they want, while still maximizing compatibility across plugins.
 
-The new `bevy_core_pipeline` crate is our answer to this problem. It defines a "core" set of Views / Cameras (2d and 3d), Sub Graphs (ClearPass, MainPass2d, MainPass3d), and Render Phases (`Transparent2d`, `Opaque3d`, `AlphaMask3d`, `Transparent3d`). This provides a "common ground" for render feature developers to build on while still maintaining compatibility with each other. As long as developers operate within these constraints, they should be compatible with the wider ecosystem. Developers are also free to operate outside of these constraints, but that also increases the likelihood that they will be incompatible.
+The new `bevy_core_pipeline` crate is our answer to this problem. It defines a "core" set of Views / Cameras (2d and 3d), Sub Graphs (ClearPass, MainPass2d, MainPass3d), and Render Phases (`Transparent2d`, `Opaque3d`, `AlphaMask3d`, `Transparent3d`). This provides a "common ground" for render feature developers to build on while still maintaining compatibility with each other. As long as developers operate within these constraints, they should be compatible with the wider ecosystem. Developers are also free to operate outside these constraints, but that also increases the likelihood that they will be incompatible.
 
 Bevy's built-in render features build on top of the Core Pipeline (ex: `bevy_sprite` and `bevy_pbr`). The Core Pipeline will continue to expand with things like a standardized "post-processing" effect stack.
 
@@ -187,7 +187,7 @@ impl Material for CustomMaterial {
 }
 ```
 
-There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
+There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built-in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
 
 We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material" plural=true)}} even better:
 * **Bind Group derives**: this should cut down on the boilerplate of passing materials to the GPU.
@@ -199,7 +199,7 @@ We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version
 
 [![view frustum](ViewFrustum.svg)](https://en.wikipedia.org/wiki/Viewing_frustum#/media/File:ViewFrustum.svg)
 
-Drawing things is expensive! It requires writing data from the CPU to the GPU, constructing draw calls, and running shaders. We can save a lot of time by _not_ drawing things that the camera can't see. "Frustum culling" is the act of excluding objects that are outside of the bounds of the camera's "view frustum", to avoid wasting work drawing them. For large scenes, this can be the difference between a crisp 60 frames per second and chugging to a grinding halt.
+Drawing things is expensive! It requires writing data from the CPU to the GPU, constructing draw calls, and running shaders. We can save a lot of time by _not_ drawing things that the camera can't see. "Frustum culling" is the act of excluding objects that are outside the bounds of the camera's "view frustum", to avoid wasting work drawing them. For large scenes, this can be the difference between a crisp 60 frames per second and chugging to a grinding halt.
 
 
 **Bevy 0.6** now automatically does frustum culling for 3d objects using their axis-aligned bounding boxes. We might also enable this for 2d objects in future releases, but the wins there will be less pronounced, as drawing sprites is now much cheaper thanks to the new batched rendering.
@@ -233,7 +233,7 @@ Mesh entities can opt out of casting shadows by adding the {{rust_type(type="str
 commands.entity(entity).insert(NotShadowCaster);
 ```
 
-Likewise they can opt out of receiving shadows by adding the {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="NotShadowReceiver")}} component.
+Likewise, they can opt out of receiving shadows by adding the {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="NotShadowReceiver")}} component.
 
 ```rust
 commands.entity(entity).insert(NotShadowReceiver);
@@ -261,7 +261,7 @@ Bevy's StandardMaterial now has an `alpha_mode` field, which can be set to `Alph
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-Modern scenes often have many point lights. But when rendering scenes, calculating lighting for each light, for each rendered fragment rapidly becomes prohibitively expensive as the number of lights in the scene increases. [Clustered Forward Rendering](http://www.aortiz.me/2018/12/21/CG.html) is a popular approach that increases the number of lights you can have in a scene by dividing up the view frustum into "clusters" (a 3d grid of sub-volumes). Each cluster is then assigned lights based on whether or not they can affect that cluster. This is a form of "culling" that enables fragments to ignore lights that aren't assigned to their cluster.
+Modern scenes often have many point lights. But when rendering scenes, calculating lighting for each light, for each rendered fragment rapidly becomes prohibitively expensive as the number of lights in the scene increases. [Clustered Forward Rendering](http://www.aortiz.me/2018/12/21/CG.html) is a popular approach that increases the number of lights you can have in a scene by dividing up the view frustum into "clusters" (a 3d grid of sub-volumes). Each cluster is assigned lights based on whether they can affect that cluster. This is a form of "culling" that enables fragments to ignore lights that aren't assigned to their cluster.
 
 In practice this can significantly increase the number of lights in the scene:
 
@@ -452,7 +452,7 @@ You can try out Bevy's WASM support in your browser using our new [Bevy Examples
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-For improved precision in the "useful range", the industry has largely adopted "reverse projections" with an "infinite" far plane. The new Bevy renderer was adapted to use the "right handed infinite reverse z" projection. [This Nvidia article](https://developer.nvidia.com/content/depth-precision-visualized) does a great job of explaining why this is so worthwhile. 
+For improved precision in the "useful range", the industry has largely adopted "reverse projections" with an "infinite" far plane. The new Bevy renderer was adapted to use the "right-handed infinite reverse z" projection. [This Nvidia article](https://developer.nvidia.com/content/depth-precision-visualized) does a great job of explaining why this is so worthwhile. 
 
 ### Compute Shaders
 
@@ -583,7 +583,7 @@ impl<T: Send + Sync + 'static> Component for T {}
 
 This removed the need for users to manually implement {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} for their types. Early on this seemed like an ergonomics win with no downsides. But Bevy ECS, our understanding of the problem space, and our plans for the future have changed a lot since then:
 
-* **It turns out _not everything_ should be a Component**: Our users _constantly_ accidentally add non-component types as components (newbies accidentally adding Bundles and type constructors as Components are our most common `#help` channel threads on [our Discord](https://discord.gg/bevy)). This class of error is very hard to debug because things just silently "don't work". When not everything is a Component, rustc can properly yell at you with informative errors when you mess up.
+* **It turns out _not everything_ should be a Component**: Our users _constantly_ accidentally add non-component types as components. New users accidentally adding Bundles and type constructors as Components are our most common `#help` channel threads on [our Discord](https://discord.gg/bevy). This class of error is very hard to debug because things just silently "don't work". When not everything is a Component, rustc can properly yell at you with informative errors when you mess up.
 * **Optimizations**: If we implement Component for everything automatically, we can't customize the Component type with associated types. This prevents an entire class of optimization. For example, Bevy ECS now has [multiple Component storage types](/news/bevy-0-5/#hybrid-component-storage-the-solution). By moving the storage type into Component, we enable rustc to optimize checks that would normally need to happen at runtime. @Frizi was able to [significantly improve our Query iterator performance](https://github.com/bevyengine/bevy/pull/2254#issuecomment-857863116) by moving the storage type into Component. I expect us to find more optimizations in this category.
 * **Automatic registration**: Moving more logic into Component also gives us the ability to do fancier things in the future like "automatically registering Reflect impls when deriving Component". Non-blanket Component impls do add a small amount of boilerplate, but they also have the potential to massively reduce the "total boilerplate" of an app.
 * **Documentation**: Deriving Component serves as a form of self-documentation. It's now easy to tell what types are components at a glance.
@@ -885,7 +885,7 @@ The new renderer now has tracing spans for frames, the render app schedule, and 
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-We now have built-in support for the [tracy](https://github.com/wolfpld/tracy) profiler via the `trace_tracy` Cargo feature.
+Bevy now supports the [tracy](https://github.com/wolfpld/tracy) profiler via the `trace_tracy` Cargo feature.
 
 ![tracy](tracy.png)
 
@@ -916,7 +916,7 @@ Error codes and their descriptions also have an automatically-generated [page on
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-The curated awesome-bevy Github repo containing a list of Bevy plugins, crates, apps, and learning resources is now reborn as [Bevy Assets](https://github.com/bevyengine/bevy-assets)! 
+The curated awesome-bevy GitHub repo containing a list of Bevy plugins, crates, apps, and learning resources is now reborn as [Bevy Assets](https://github.com/bevyengine/bevy-assets)! 
 
 Bevy Assets introduces:
 
@@ -924,7 +924,7 @@ Bevy Assets introduces:
 * Asset icons
 * [bevy-website integration](/assets)
 
-This is just the beginning! We have plans to integrate with [crates.io](http://crates.io) and github, improve indexing / tagging / searchability, add asset-specific pages, prettier styles, content delivery, and more. Ultimately we want this to grow into something that can enable first class, modern asset-driven workflows.
+This is just the beginning! We have plans to integrate with [crates.io](http://crates.io) and GitHub, improve indexing / tagging / searchability, add asset-specific pages, prettier styles, content delivery, and more. Ultimately we want this to grow into something that can enable first-class, modern asset-driven workflows.
 
 We have automatically migrated existing awesome-bevy entries, but we encourage creators to customize them! If you are working on something Bevy related, you are highly encouraged to [add a Bevy Assets entry](https://github.com/bevyengine/bevy-assets).
 
@@ -941,7 +941,7 @@ I originally chose to license Bevy exclusively under MIT for a variety of reason
 * Many people aren't familiar with the "multiple license options ... choose your favorite" approach. I didn't want to scare people away unnecessarily.
 * Other open source engines like Godot have had a lot of success with MIT-only licensing
 
-However there were a variety of issues that have come up that make dual-licensing Bevy under both MIT and Apache-2.0 compelling:
+However, there were a variety of issues that have come up that make dual-licensing Bevy under both MIT and Apache-2.0 compelling:
 
 * The MIT license (arguably) requires binaries to reproduce countless copies of the same license boilerplate for every MIT library in use. Apache-2.0 allows us to compress the boilerplate into a single instance of the license.
 * The Apache-2.0 license has protections from patent trolls and an explicit contribution licensing clause.
@@ -952,7 +952,7 @@ However there were a variety of issues that have come up that make dual-licensin
 
 ### More pull request mergers!
 
-I've been at my scalability limits for awhile. It has been  * cough * ... challenging  ... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far ... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
+I've been at my scalability limits for a while. It has been  * cough * ... challenging  ... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far ... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
 
 * @mockersf now has merge rights for "uncontroversial changes"
 * @alice-i-cecile now has merge rights for "uncontroversial documentation changes"
@@ -983,7 +983,7 @@ We made a ton of CI improvements this release:
 
 ## What's Next For Bevy?
 
-Bevy development continues to pick up steam and we have no intention to slow down now! In addition to the [many RFCs](https://github.com/bevyengine/rfcs/pulls) we have in the works, we also plan on tackling the following over next few months:
+Bevy development continues to pick up steam, and we have no intention to slow down now! In addition to the [many RFCs](https://github.com/bevyengine/rfcs/pulls) we have in the works, we also plan on tackling the following over the next few months:
 
 ### The "Train" Release Schedule
 
@@ -991,7 +991,7 @@ In the last two Bevy releases we made massive, sweeping changes to core systems.
 
 [The Bevy Community](https://bevyengine.org/community/) has reached relative consensus that we should have a more regular, more predictable release schedule. One where large features can't gum up the system.
 
-From now on, we will cut releases _approximately_ once every three months (as an upper bound ... sometimes we might release early if it makes sense). After the end of a release cycle, we will start preparing to cut a release. If there are small tweaks that need to be made or "life happens" ... we will happily postpone releases. But we won't hold releases back for "big ticket" items any more.
+From now on, we will cut releases _approximately_ once every three months (as an upper bound ... sometimes we might release early if it makes sense). After the end of a release cycle, we will start preparing to cut a release. If there are small tweaks that need to be made or "life happens" ... we will happily postpone releases. But we won't hold releases back for "big ticket" items anymore.
 
 We are balancing a lot of different concerns here:
 * Building trust with Bevy contributors that their changes will land in a timely manner
