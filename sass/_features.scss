@@ -94,7 +94,7 @@
     margin-bottom: 8rem;
 }
 
-.bronze-sponsors {
+.sponsors-section {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -102,5 +102,15 @@
 
 .bronze-sponsor-image {
     height: 3.8rem;
+    margin: 1rem;
+}
+
+.silver-sponsor-image {
+    height: 5.4rem;
+    margin: 1rem;
+}
+
+.platinum-sponsor-image {
+    height: 7.0rem;
     margin: 1rem;
 }
