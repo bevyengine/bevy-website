@@ -50,12 +50,12 @@ This will be our first system. The only remaining step is to add it to our App!
 ```rs
 fn main() {
     App::new()
-        .add_system(hello_world.system())
+        .add_system(hello_world)
         .run();
 }
 ```
 
-Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" mod="system" no_mod=true name="System")}} type.
+Note the `hello_world` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" mod="system" no_mod=true name="System")}} type.
 
 The {{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
 
@@ -94,8 +94,8 @@ Now register the startup system like this:
 ```rs
 fn main() {
     App::new()
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
+        .add_startup_system(add_people)
+        .add_system(hello_world)
         .run();
 }
 ```
@@ -119,9 +119,9 @@ Now we just register the system in our App:
 ```rs
 fn main() {
     App::new()
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .add_system(greet_people.system())
+        .add_startup_system(add_people)
+        .add_system(hello_world)
+        .add_system(greet_people)
         .run();
 }
 ```
