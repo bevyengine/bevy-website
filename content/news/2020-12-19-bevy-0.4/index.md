@@ -43,7 +43,7 @@ On most supported Bevy platforms you can just use normal main functions (ex: Win
 use bevy::prelude::*;
 
 fn main() {
-    App::new().run();
+    App::build().run();
 }
 ```
 
@@ -56,7 +56,7 @@ use bevy::prelude::*;
 
 #[bevy_main]
 fn main() {
-    App::new().run();
+    App::build().run();
 }
 ```
 
@@ -147,7 +147,7 @@ Systems can now have inputs and outputs. This opens up a variety of interesting 
 
 ```rust
 fn main() {
-  App::new()
+  App::build()
     .add_system(result_system.system().chain(error_handler.system()))
     .run();
 }
@@ -747,7 +747,7 @@ struct MyTimer {
 }
 
 fn main() {
-    App::new()
+    App::build()
         .add_resource(MyTimer {
             // a five second non-repeating timer
             timer: Timer::from_seconds(5.0, false),

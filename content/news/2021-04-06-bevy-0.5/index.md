@@ -471,7 +471,7 @@ enum AppState {
 }
 
 fn main() {
-    App::new()
+    App::build()
         .add_state(AppState::Menu)
         .add_system_set(SystemSet::on_enter(AppState::Menu).with_system(setup_menu.system()))
         .add_system_set(SystemSet::on_update(AppState::Menu).with_system(menu_logic.system()))

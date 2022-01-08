@@ -548,7 +548,7 @@ One of our highest priorities for Bevy ECS is "ergonomics". In the past I have m
 // This is a standalone Bevy 0.5 App that adds a simple `gravity` system to the App's schedule
 // and automatically runs it in parallel with other systems
 fn main() {
-    App::new()
+    App::build()
         .add_plugins(DefaultPlugins)
         .add_system(gravity.system())
         .run();

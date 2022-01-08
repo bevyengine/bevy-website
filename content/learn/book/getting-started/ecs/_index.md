@@ -49,7 +49,7 @@ This will be our first system. The only remaining step is to add it to our App!
 
 ```rs
 fn main() {
-    App::new()
+    App::build()
         .add_system(hello_world.system())
         .run();
 }
@@ -93,7 +93,7 @@ Now register the startup system like this:
 
 ```rs
 fn main() {
-    App::new()
+    App::build()
         .add_startup_system(add_people.system())
         .add_system(hello_world.system())
         .run();
@@ -118,7 +118,7 @@ Now we just register the system in our App:
 
 ```rs
 fn main() {
-    App::new()
+    App::build()
         .add_startup_system(add_people.system())
         .add_system(hello_world.system())
         .add_system(greet_people.system())

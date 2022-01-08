@@ -19,7 +19,7 @@ Let's make our app more interesting by adding the "default Bevy plugins".
 
 ```rs
 fn main() {
-    App::new()
+    App::build()
         .add_plugins(DefaultPlugins)
         .add_startup_system(add_people.system())
         .add_system(hello_world.system())
@@ -37,7 +37,7 @@ You should hopefully notice two things:
 Note that `add_plugins(DefaultPlugins)` is equivalent to the following:
 ```rs
 fn main() {
-    App::new()
+    App::build()
         .add_plugin(CorePlugin::default())
         .add_plugin(InputPlugin::default())
         .add_plugin(WindowPlugin::default())
@@ -65,7 +65,7 @@ impl Plugin for HelloPlugin {
 Then register the plugin in your App like this:
 ```rs
 fn main() {
-    App::new()
+    App::build()
         .add_plugins(DefaultPlugins)
         .add_plugin(HelloPlugin)
         .add_startup_system(add_people.system())
@@ -87,7 +87,7 @@ impl Plugin for HelloPlugin {
 }
 
 fn main() {
-    App::new()
+    App::build()
         .add_plugins(DefaultPlugins)
         .add_plugin(HelloPlugin)
         .run();

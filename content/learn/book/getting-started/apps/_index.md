@@ -12,7 +12,7 @@ Bevy programs are referred to as {{rust_type(type="struct", crate="bevy_app", na
 use bevy::prelude::*;
 
 fn main() {
-    App::new().run();
+    App::build().run();
 }
 ```
 
