@@ -743,7 +743,7 @@ struct CustomParam<'w, 's> {
 
 <div class="release-feature-authors">authors: @BoxyUwU, @TheRawMeatball, @Frizi, @thebluefish, @sapir, @bjorn3, @DJMcNab</div>
 
-Bevy ECS received a solid number of soundness and correctness improvements this release, alongside some unsafe code removals. Queries and internal storages like Tables and BlobVecs in particular had a number of improvements in these areas. And we have even more improvements in the works!
+Bevy ECS received a solid number of soundness and correctness bug fixes this release, alongside some unsafe code block removals. Queries and internal storages like Tables and BlobVecs in particular had a number of fixes and improvements in these areas. As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks, because we are modeling parallel data access that Rust literally cannot reason about without our help. But we are committed to removing as much unsafe code as we can (and we have a number of refactors in the works to further improve the situation). 
 
 ### Hierarchy Convenience Functions
 
