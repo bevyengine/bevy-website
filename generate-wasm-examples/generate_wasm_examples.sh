@@ -8,9 +8,6 @@ git pull --depth=1 origin main
 # remove markdown files from assets so that they don't get picked up by Zola
 find assets -type f -name '*.md' -exec rm {} +
 
-# setting the default width of a window to 1024
-sed -i.bak 's/width: 1280.,/width: 1024.,/' crates/bevy_window/src/window.rs
-
 # setting a canvas by default to help with integration
 sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_window/src/window.rs
 
