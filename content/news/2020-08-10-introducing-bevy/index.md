@@ -65,7 +65,7 @@ First, lets see what a Bevy App actually looks like. The simplest App looks like
 use bevy::prelude::*;
 
 fn main() {
-    App::build().run();
+    App::new().run();
 }
 ```
 
@@ -73,7 +73,7 @@ Thats it! This App pulls in no features and literally does nothing. Running the 
 
 ```rs
 fn main() {
-    App::build()
+    App::new()
         .add_default_plugins()
         .run();
 }
@@ -85,7 +85,7 @@ You can also register the default {{rust_type(type="trait" name="Plugin" crate="
 
 ```rs
 fn main() {
-    App::build()
+    App::new()
         .add_plugin(CorePlugin::default())
         .add_plugin(InputPlugin::default())
         .add_plugin(WindowPlugin::default())
@@ -135,7 +135,7 @@ fn movement(mut position: Mut<Position>, velocity: &Velocity) {
 
 // the app entry point. hopefully you recognize it from the examples above!
 fn main() {
-    App::build()
+    App::new()
         .add_default_plugins()
         .add_startup_system(setup.system())
         .add_system(movement.system())
@@ -300,7 +300,7 @@ fn system(world: &mut World, resources: &mut Resources) {
 ```rs
 // the scheduler provides Stages as a way to run sets of systems in order  
 fn main() {
-    App::build()
+    App::new()
         // adds a system to the default stage: "update" 
         .add_system(movement.system())
         // creates a new stage after "update"
@@ -330,7 +330,7 @@ Being able to use Rust functions directly as systems might feel like magic, but 
 fn some_system() { }
 
 fn main() {
-    App::build()
+    App::new()
         .add_system(some_system.system())
         .run();
 }
@@ -789,7 +789,7 @@ Bevy uses a double-buffered event system that enables efficient event production
 
 ```rs
 fn main() {
-    App::build()
+    App::new()
         .add_event::<MyEvent>()
         .add_system(event_producer.system())
         .add_system(event_consumer.system())
