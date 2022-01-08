@@ -252,6 +252,6 @@ let xyz: IVec3 = xyz.as_ivec3();
 ```
 
 ### StandardMaterial's "roughness" is renamed to "perceptual_roughness"
-The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.5.0" name="StandardMaterial" no_mod=true)}} field `roughness` was renamed to `perceptual_roughness`.
+The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="StandardMaterial" no_mod=true)}} field `roughness` was renamed to `perceptual_roughness`.
 
 
