@@ -63,7 +63,7 @@ fn main() {
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 ```
@@ -76,7 +76,7 @@ Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), th
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-edition = "2018"
+edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
 [dependencies]
 bevy = "0.6" # make sure this is the latest version

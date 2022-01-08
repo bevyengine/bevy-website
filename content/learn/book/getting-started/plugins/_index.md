@@ -21,9 +21,9 @@ Let's make our app more interesting by adding the "default Bevy plugins".
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .add_system(greet_people.system())
+        .add_startup_system(add_people)
+        .add_system(hello_world)
+        .add_system(greet_people)
         .run();
 }
 ```
@@ -68,9 +68,9 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(HelloPlugin)
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .add_system(greet_people.system())
+        .add_startup_system(add_people)
+        .add_system(hello_world)
+        .add_system(greet_people)
         .run();
 }
 ```
@@ -80,9 +80,9 @@ Now all that's left is to move our systems into `HelloPlugin`, which is just a m
 ```rs
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut AppBuilder) {
-        app.add_startup_system(add_people.system())
-            .add_system(hello_world.system())
-            .add_system(greet_people.system());
+        app.add_startup_system(add_people)
+            .add_system(hello_world)
+            .add_system(greet_people);
     }
 }
 
