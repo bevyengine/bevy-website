@@ -15,8 +15,9 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 ## Bevy ECS
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
-* **Components**: normal Rust structs
+* **Components**: Rust structs that implement the `Component` trait
     ```rs
+    #[derive(Component)]
     struct Position { x: f32, y: f32 }
     ```
 * **Systems**: normal Rust functions
@@ -67,12 +68,14 @@ Greeting the whole world is great, but what if we want to greet specific people?
 Add this struct to `main.rs`:
 
 ```rs
+#[derive(Component)]
 struct Person;
 ```
 
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
 ```rs
+#[derive(Component)]
 struct Name(String);
 ```
 
