@@ -56,7 +56,7 @@ For better organization, let's move all of our "hello" logic to a plugin. To cre
 pub struct HelloPlugin;
 
 impl Plugin for HelloPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         // add things to your app here
     }
 }
@@ -79,7 +79,7 @@ Now all that's left is to move our systems into `HelloPlugin`, which is just a m
 
 ```rs
 impl Plugin for HelloPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.add_startup_system(add_people)
             .add_system(hello_world)
             .add_system(greet_people);
