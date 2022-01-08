@@ -79,7 +79,7 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
-bevy = "0.5" # make sure this is the latest version
+bevy = "0.6" # make sure this is the latest version
 ```
 ### Enable Fast Compiles (Optional)
 
@@ -92,7 +92,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
     ```toml
     [dependencies]
-    bevy = { version = "0.5.0", features = ["dynamic"] }
+    bevy = { version = "0.6.0", features = ["dynamic"] }
     ```
     NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
 

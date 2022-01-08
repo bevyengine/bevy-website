@@ -89,7 +89,7 @@ When adding a system to Bevy it is no longer necessary to call `.system()` befor
 ```rust
 // 0.5
 fn main() {
-    App::build()
+    App::new()
         .add_system(first_system.system())
         .add_system(second_system.system())
         .run();
@@ -109,7 +109,7 @@ System configuration Functions like `.label()` or `.config()` can now also be di
 ```rust
 // 0.5
 fn main() {
-    App::build()
+    App::new()
         .add_system(first_system.system().label("FirstSystem"))
         .add_system(second_system.system().after("FirstSystem"))
         .run();
