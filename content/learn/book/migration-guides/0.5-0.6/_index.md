@@ -8,6 +8,24 @@ page_template = "book-section.html"
 long_title = "Migration Guide: 0.5 to 0.6"
 +++
 
+### Rust 2021 now required
+
+Bevy has been updated to use Rust 2021. This means we can take advantage of the new Cargo feature resolver by default (which both Bevy and the new wgpu version require). Make sure you update your crates to Rust 2021 or you will need to manually enable the new feature resolver with `resolver = "2" in your Cargo.toml.
+```toml
+[package]
+name = "your_app"
+version = "0.1.0"
+edition = "2021"
+```
+
+Note that "virtual Cargo workspaces" still need to manually define `resolver = "2"`, even in Rust 2021. [Refer to the Rust 2021 documentation](https://doc.rust-lang.org/edition-guide/rust-2021/default-cargo-resolver.html#details) for details. 
+
+```toml
+[workspace]
+resolver = "2" # Important! wgpu/Bevy needs this!
+members = [ "my_crate1", "my_crate2" ]
+```
+
 ### "AppBuilder" was merged into "App"
 
 All functions of {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="AppBuilder" no_mod=true)}} were merged into {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}}.
