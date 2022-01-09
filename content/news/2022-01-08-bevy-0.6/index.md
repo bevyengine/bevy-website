@@ -488,7 +488,7 @@ Coupling an `AsStd140` derive with our new `UniformVec<T>` type makes it easy to
 ```rust
 // WGSL shader
 struct Mesh {
-    model: mat4x4<f32>;
+    transform: mat4x4<f32>;
     inverse_transpose_model: mat4x4<f32>;
 };
 
