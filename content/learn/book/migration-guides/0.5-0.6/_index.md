@@ -276,3 +276,34 @@ let xyz: IVec3 = xyz.as_ivec3();
 ### StandardMaterial's "roughness" is renamed to "perceptual_roughness"
 
 The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="StandardMaterial" no_mod=true)}} field `roughness` was renamed to `perceptual_roughness`.
+
+### SpriteBundle and Sprite
+
+{{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="SpriteBundle" no_mod=true)}} now uses texture handle rather than a material and {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="Sprite" no_mod=true)}} has a `color` for tint. {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="Sprite" no_mod=true)}} had its `resize_mode` field replaced with a `custom_size`. The following example shows how to spawn a tinted sprite at a particular size. For simpler cases, check out the updated [sprite](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/sprite.rs) and [rect](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/rect.rs) examples.
+
+```rust
+// 0.5
+SpriteBundle {
+    sprite: Sprite {
+        size: Vec2::new(256.0, 256.0),
+        resize_mode: SpriteResizeMode::Manual,
+        ..Default::default()
+    },
+    material: materials.add(ColorMaterial {
+        color: Color::RED,
+        texture: Some(asset_server.load("branding/icon.png")),
+    }),
+    ..Default::default()
+}
+
+// 0.6
+SpriteBundle {
+    sprite: Sprite {
+        custom_size: Some(Vec2::new(256.0, 256.0)),
+        color: Color::RED,
+        ..Default::default()
+    },
+    texture: asset_server.load("branding/icon.png"),
+    ..Default::default()
+}
+```
