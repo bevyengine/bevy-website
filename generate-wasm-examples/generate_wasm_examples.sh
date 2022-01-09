@@ -3,7 +3,7 @@
 git init bevy
 cd bevy
 git remote add origin https://github.com/bevyengine/bevy
-git pull --depth=1 origin main
+git pull --depth=1 origin latest
 
 # remove markdown files from assets so that they don't get picked up by Zola
 find assets -type f -name '*.md' -exec rm {} +
