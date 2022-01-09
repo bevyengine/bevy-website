@@ -690,7 +690,7 @@ We plan on exposing more control over scheduling, running, and working with sub-
 
 <div class="release-feature-authors">authors: @Frizi</div>
 
-You can now iterate all permutations of N entities for a given query:
+You can now iterate all combinations of N entities for a given query:
 
 ```rust
 fn system(query: Query<&Player>) {
