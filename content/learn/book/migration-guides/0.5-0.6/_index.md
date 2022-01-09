@@ -255,3 +255,21 @@ The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name
 
 This was done to accommodate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true plural=true)}} outside of a regular System.
 <!-- TODO: Link to entry for SystemState in the release blog post. -->
+
+### Vector casting functions are now named to match return type
+The casting functions for {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="IVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="DVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="UVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec2" no_mod=true)}} have all been changed from being named after their inner elements' cast target to what the entire "Vec" is being casted into. This affects all the different dimensions of the math vectors (i.e., {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec3" no_mod=true)}} and {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec4" no_mod=true)}}).
+
+```rust
+// 0.5
+let xyz: Vec3 = Vec3::new(0.0, 0.0, 0.0);
+let xyz: IVec3 = xyz.as_i32();
+
+// 0.6
+let xyz: Vec3 = Vec3::new(0.0, 0.0, 0.0);
+let xyz: IVec3 = xyz.as_ivec3();
+```
+
+### StandardMaterial's "roughness" is renamed to "perceptual_roughness"
+The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="StandardMaterial" no_mod=true)}} field `roughness` was renamed to `perceptual_roughness`.
+
+
