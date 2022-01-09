@@ -212,7 +212,7 @@ Directional Lights can now cast "directional shadows", which are "sun-like" shad
 
 ![directional light](directional_light.png)
 
-Note: directional shadows currently require more manual configuration than necessary (ex: manual configuration of the shadow projection). We will soon make this automatic and better quality over a larger range through cascaded shadow maps.
+Note: directional shadows currently require more manual configuration than necessary (check out the [`shadow_projection` field in the `DirectionalLight` setup in the shadow_biases.rs example](https://github.com/bevyengine/bevy/blob/main/examples/3d/shadow_biases.rs)). We will soon make this automatic and better quality over a larger range through cascaded shadow maps.
 
 ### Point Light Shadows
 
