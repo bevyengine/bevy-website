@@ -11,6 +11,7 @@ long_title = "Migration Guide: 0.5 to 0.6"
 ### Rust 2021 now required
 
 Bevy has been updated to use Rust 2021. This means we can take advantage of the new Cargo feature resolver by default (which both Bevy and the new wgpu version require). Make sure you update your crates to Rust 2021 or you will need to manually enable the new feature resolver with `resolver = "2" in your Cargo.toml.
+
 ```toml
 [package]
 name = "your_app"
@@ -18,7 +19,7 @@ version = "0.1.0"
 edition = "2021"
 ```
 
-Note that "virtual Cargo workspaces" still need to manually define `resolver = "2"`, even in Rust 2021. [Refer to the Rust 2021 documentation](https://doc.rust-lang.org/edition-guide/rust-2021/default-cargo-resolver.html#details) for details. 
+Note that "virtual Cargo workspaces" still need to manually define `resolver = "2"`, even in Rust 2021. [Refer to the Rust 2021 documentation](https://doc.rust-lang.org/edition-guide/rust-2021/default-cargo-resolver.html#details) for details.
 
 ```toml
 [workspace]
@@ -229,6 +230,7 @@ struct SystemParamDerive<'w, 's> {
 ```
 
 ### QuerySet declare "QueryState" instead of "Query"
+
 <!-- Adapt for ParamSet instead, if https://github.com/bevyengine/bevy/pull/2765 is merged -->
 
 Due to the [System Param Lifetime Split](#system-param-lifetime-split), {{rust_type(type="struct" crate="bevy_ecs" mod="system" name="QuerySet" version="0.6.0" no_mod=true plural=true)}} now need to specify their Queries with {{rust_type(type="struct" crate="bevy_ecs" mod="query" version="0.6.0" name="QueryState" no_mod=true)}} instead of {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true)}}.
@@ -254,9 +256,11 @@ The {{rust_type(type="struct" crate="bevy_input" mod="" version="0.5.0" name="In
 The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} struct, which stores the metadata of a System, was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
 
 This was done to accommodate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true plural=true)}} outside of a regular System.
+
 <!-- TODO: Link to entry for SystemState in the release blog post. -->
 
 ### Vector casting functions are now named to match return type
+
 The casting functions for {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="IVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="DVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="UVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec2" no_mod=true)}} have all been changed from being named after their inner elements' cast target to what the entire "Vec" is being casted into. This affects all the different dimensions of the math vectors (i.e., {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec3" no_mod=true)}} and {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec4" no_mod=true)}}).
 
 ```rust
@@ -270,6 +274,5 @@ let xyz: IVec3 = xyz.as_ivec3();
 ```
 
 ### StandardMaterial's "roughness" is renamed to "perceptual_roughness"
+
 The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="StandardMaterial" no_mod=true)}} field `roughness` was renamed to `perceptual_roughness`.
-
-
