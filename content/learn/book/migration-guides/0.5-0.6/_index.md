@@ -279,7 +279,7 @@ The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="Stan
 
 ### SpriteBundle and Sprite
 
-{{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="SpriteBundle" no_mod=true)}} now uses a texture handle rather than a material and {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="Sprite" no_mod=true)}} has a `color` for tint. {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="Sprite" no_mod=true)}} had its `resize_mode` field replaced with a `custom_size`. The following example shows how to spawn a tinted sprite at a particular size. For simpler cases, check out the updated [sprite](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/sprite.rs) and [rect](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/rect.rs) examples.
+The {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="SpriteBundle" no_mod=true)}} now uses a `texture` handle rather than a `material`. The `color` field of the material is now directly available inside of the {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="Sprite" no_mod=true)}} struct, which also had its `resize_mode` field replaced with a `custom_size`. The following example shows how to spawn a tinted sprite at a particular size. For simpler cases, check out the updated [sprite](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/sprite.rs) and [rect](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/rect.rs) examples.
 
 ```rust
 // 0.5
