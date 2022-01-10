@@ -83,6 +83,7 @@ bevy = "0.6" # make sure this is the latest version
 ```
 
 ### Cargo Workspaces
+
 If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
 
 ```toml
