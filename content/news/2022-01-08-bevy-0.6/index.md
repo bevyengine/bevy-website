@@ -704,7 +704,7 @@ fn system(query: Query<&Player>) {
 }
 ```
 
-This is especially useful for things like "checking for entities for collisions with all other entities". There is also an `iter_combinations_mut` variant. Just be careful ... the time complexity of this grows quickly (faster than exponentially!) as the number of entities in your combinations increases. With great power comes great responsibility!
+This is especially useful for things like "checking for entities for collisions with all other entities". There is also an `iter_combinations_mut` variant. Just be careful ... the time complexity of this grows exponentially as the number of entities in your combinations increases. With great power comes great responsibility!
 
 The new [iter_combinations example](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/ecs/iter_combinations.rs) illustrates how to use this new API to calculate gravity between objects in a "solar system":
 
