@@ -771,7 +771,7 @@ UI now respects the flexbox `Overflow::Hidden` property. This can be used to cut
 
 <div class="release-feature-authors">authors: @nside, @CleanCut</div>
 
-`Text2d` now supports arbitrary transformations using the Transform component:`
+`Text2d` now supports arbitrary transformations using the Transform component:
 
 ![text 2d transforms](text2d_transforms.png)
 
