@@ -162,9 +162,9 @@ Bevy's built-in render features build on top of the Core Pipeline (ex: `bevy_spr
 
 <div class="release-feature-authors">authors: @cart</div>
 
-The new renderer structure gives developers fine-grained control over how entities are drawn. Developers can manually define Extract, Prepare, and Queue systems to draw entities using arbitrary render commands in custom or built-in {{rust_type(type="trait" crate="bevy_core_pipeline" version="0.6.0" name="RenderPhase" plural=true)}}. However this level of control necessitates understanding the render pipeline internals and involve more boilerplate than most users are willing to tolerate. Sometimes all you want to do is slot your custom material shader into the existing pipelines!
+The new renderer structure gives developers fine-grained control over how entities are drawn. Developers can manually define Extract, Prepare, and Queue systems to draw entities using arbitrary render commands in custom or built-in `RenderPhases`. However this level of control necessitates understanding the render pipeline internals and involve more boilerplate than most users are willing to tolerate. Sometimes all you want to do is slot your custom material shader into the existing pipelines!
 
-The new {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait enables users to ignore nitty gritty details in favor of a simpler interface: just implement the {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait and add a {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="MaterialPlugin")}} for your type. The new [shader_material.rs](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/shader_material.rs) example illustrates this.
+The new `Material` trait enables users to ignore nitty gritty details in favor of a simpler interface: just implement the `Material` trait and add a `MaterialPlugin` for your type. The new [shader_material.rs](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/shader_material.rs) example illustrates this.
 
 ```rust
 // register the plugin for a CustomMaterial
@@ -187,9 +187,9 @@ impl Material for CustomMaterial {
 }
 ```
 
-There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built-in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
+There is also a `SpecializedMaterial` variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built-in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
 
-We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material" plural=true)}} even better:
+We also have big plans to make `Material` even better:
 * **Bind Group derives**: this should cut down on the boilerplate of passing materials to the GPU.
 * **Material Instancing**: materials enable us to implement high-level mesh instancing as a simple configuration item for both built in and custom materials.
 
@@ -227,13 +227,13 @@ Point lights can now cast "omnidirectional shadows", which can be enabled by set
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-Mesh entities can opt out of casting shadows by adding the {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="NotShadowCaster")}} component.
+Mesh entities can opt out of casting shadows by adding the `NotShadowCaster` component.
 
 ```rust
 commands.entity(entity).insert(NotShadowCaster);
 ```
 
-Likewise, they can opt out of receiving shadows by adding the {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="NotShadowReceiver")}} component.
+Likewise, they can opt out of receiving shadows by adding the `NotShadowReceiver` component.
 
 ```rust
 commands.entity(entity).insert(NotShadowReceiver);
@@ -298,7 +298,7 @@ fn spawn_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 ```
 
-No need to manage sprite materials! Their texture handle is now a direct component and color can now be set directly on the {{rust_type(type="struct" crate="bevy_sprite" version="0.6.0" name="Sprite")}} component.
+No need to manage sprite materials! Their texture handle is now a direct component and color can now be set directly on the `Sprite` component.
 
 <details>
     <summary>To compare, expand this to see the old Bevy 0.5 code</summary>
@@ -575,13 +575,13 @@ App::new()
 
 <div class="release-feature-authors">authors: @Frizi</div>
 
-In **Bevy 0.6** types no longer implement the {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} trait by default. Before you get angry ... stick with me for a second. I promise this is for the best! In past Bevy versions, we got away with "auto implementing" {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} for types using this "blanket impl":
+In **Bevy 0.6** types no longer implement the `Component` trait by default. Before you get angry ... stick with me for a second. I promise this is for the best! In past Bevy versions, we got away with "auto implementing" `Component` for types using this "blanket impl":
 
 ```rust
 impl<T: Send + Sync + 'static> Component for T {}
 ```
 
-This removed the need for users to manually implement {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} for their types. Early on this seemed like an ergonomics win with no downsides. But Bevy ECS, our understanding of the problem space, and our plans for the future have changed a lot since then:
+This removed the need for users to manually implement `Component` for their types. Early on this seemed like an ergonomics win with no downsides. But Bevy ECS, our understanding of the problem space, and our plans for the future have changed a lot since then:
 
 * **It turns out _not everything_ should be a Component**: Our users _constantly_ accidentally add non-component types as components. New users accidentally adding Bundles and type constructors as Components are our most common `#help` channel threads on [our Discord](https://discord.gg/bevy). This class of error is very hard to debug because things just silently "don't work". When not everything is a Component, rustc can properly yell at you with informative errors when you mess up.
 * **Optimizations**: If we implement Component for everything automatically, we can't customize the Component type with associated types. This prevents an entire class of optimization. For example, Bevy ECS now has [multiple Component storage types](/news/bevy-0-5/#hybrid-component-storage-the-solution). By moving the storage type into Component, we enable rustc to optimize checks that would normally need to happen at runtime. @Frizi was able to [significantly improve our Query iterator performance](https://github.com/bevyengine/bevy/pull/2254#issuecomment-857863116) by moving the storage type into Component. I expect us to find more optimizations in this category.
@@ -652,7 +652,7 @@ fn system(mut players: QuerySet<(QueryState<&Player>, QueryState<&mut Player>)>)
 
 ### SystemState
 
-Have you ever wanted to use "system params" directly with a Bevy World? With {{rust_type(type="struct" crate="bevy_ecs" version="0.6.0" name="SystemState")}}, now you can!
+Have you ever wanted to use "system params" directly with a Bevy World? With `SystemState`, now you can!
 
 ```rust
 let mut system_state: SystemState<(Res<A>, Query<&B>)> = SystemState::new(&mut world);
@@ -661,7 +661,7 @@ let (a, query) = system_state.get(&world);
 
 For those working directly with `World`, this is a game changer. It makes it possible to mutably access multiple disjoint Components and Resources (often eliminating the need for more costly abstractions like `WorldCell`).
 
-{{rust_type(type="struct" crate="bevy_ecs" version="0.6.0" name="SystemState")}} does all of the same caching that a normal Bevy system does, so reusing the same SystemState results in uber-fast World access.
+`SystemState` does all of the same caching that a normal Bevy system does, so reusing the same SystemState results in uber-fast World access.
 
 ### Sub Apps
 
