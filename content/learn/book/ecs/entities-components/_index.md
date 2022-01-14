@@ -147,7 +147,7 @@ struct InCombat;
 // This query returns the `Entity` identifier of all entities
 // that have the `Combatant` component but do not yet have the `InCombat` component
 fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)>, mut commands: Commands) {
-    for entity in query.iter(){
+    for entity in query.iter() {
         // The component will be inserted at the end of the current stage
         commands.entity(entity).insert(InCombat);
     }
@@ -155,7 +155,7 @@ fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)
 
 // Now to undo our hard work
 fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mut commands: Commands) {
-    for entity in query.iter(){
+    for entity in query.iter() {
         // The component will be removed at the end of the current stage
         commands.entity(entity).remove::<InCombat>();
     }
