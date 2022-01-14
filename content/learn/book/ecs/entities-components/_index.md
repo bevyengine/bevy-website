@@ -20,6 +20,7 @@ Generally, you will be adding and removing entities (and modifying which compone
 fn spawning_system(mut commands: Commands){
     // Spawn an entity with no components
     commands.spawn();
+
     // Spawn a second entity with no components, but return the `Entity` identifier
     let my_entity = commands.spawn().id();
 
