@@ -176,7 +176,7 @@ struct CombatantBundle {
     // Adding a field of a given type to our bundle
     // results in a component of that type with that value
     // being added to our entity
-    combatant: Combatant
+    combatant: Combatant,
     life: Life,
     attack: Attack,
     defense: Defense,
