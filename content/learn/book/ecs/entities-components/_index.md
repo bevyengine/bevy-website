@@ -219,7 +219,7 @@ fn spawn_combatants_system(mut commands: Commands) {
                 strength: 15,
                 dexterity: 10,
                 intelligence: 8,
-            }
+            },
             allegiance: Allegiance::Friendly,
             ..Default::default()
         })
