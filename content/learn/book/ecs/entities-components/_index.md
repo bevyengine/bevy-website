@@ -157,7 +157,7 @@ fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)
 fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mut commands: Commands) {
     for entity in query.iter(){
         // The component will be removed at the end of the current stage
-        commands.entity(entity).remove(InCombat);
+        commands.entity(entity).remove::<InCombat>();
     }
 }
 ```
