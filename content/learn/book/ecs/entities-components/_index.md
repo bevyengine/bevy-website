@@ -20,6 +20,7 @@ Generally, you will be adding and removing entities (and modifying which compone
 fn spawning_system(mut commands: Commands){
     // Spawn an entity with no components
     commands.spawn();
+
     // Spawn a second entity with no components, but return the `Entity` identifier
     let my_entity = commands.spawn().id();
 
@@ -28,7 +29,7 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
-You can read about all the details of commands [later in this chapter](../commands/_index.md)).
+You can read about all the details of commands [later in this chapter](../commands/_index.md).
 
 ## Working with components
 
@@ -145,18 +146,18 @@ struct InCombat;
 
 // This query returns the `Entity` identifier of all entities
 // that have the `Combatant` component but do not yet have the `InCombat` component
-fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>>, mut commands: Commands){
-    for entity in query.iter(){
+fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)>, mut commands: Commands) {
+    for entity in query.iter() {
         // The component will be inserted at the end of the current stage
         commands.entity(entity).insert(InCombat);
     }
 }
 
 // Now to undo our hard work
-fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut commands: Commands){
-    for entity in query.iter(){
+fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mut commands: Commands) {
+    for entity in query.iter() {
         // The component will be removed at the end of the current stage
-        commands.entity(entity).remove(InCombat);
+        commands.entity(entity).remove::<InCombat>();
     }
 }
 ```
@@ -165,7 +166,7 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
 To get around this, Bevy abstracts these patterns using **bundles**: named and typed collections of components.
-These are implemented by adding the {{rust_type(type="trait" crate="bevy_ecs" mod = "bundle" name="Bundle" no_mod = "true")}}  trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
+These are implemented by adding the {{rust_type(type="trait" crate="bevy_ecs" mod = "bundle" name="Bundle" no_mod = "true")}} trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
 
 Let's try rewriting that code from above, by grouping commonly associated components together into a bundle.
 
@@ -175,7 +176,7 @@ struct CombatantBundle {
     // Adding a field of a given type to our bundle
     // results in a component of that type with that value
     // being added to our entity
-    combatant: Combatant
+    combatant: Combatant,
     life: Life,
     attack: Attack,
     defense: Defense,
@@ -187,7 +188,7 @@ struct CombatantBundle {
 // We can add new methods to our bundle type that return Self
 // to create principled APIs for entity creation.
 // The Default trait is the standard tool for creating
-// new struct instances without configuration 
+// new struct instances without configuration
 impl Default for CombatantBundle {
     fn default() -> Self {
         CombatantBundle {
@@ -200,7 +201,7 @@ impl Default for CombatantBundle {
                 strength: 10,
                 dexterity: 10,
                 intelligence: 10,
-            }
+            },
             allegiance: Allegiance::Neutral,
         }
     }
@@ -212,22 +213,22 @@ fn spawn_combatants_system(mut commands: Commands) {
         // We're using struct-update syntax to modify the instance
         // of `CombatantBundle` returned by its default() method
         // See the page on Rust Tips and Tricks at the end of this chapter for more info!
-        .insert_bundle(CombatantBundle{
+        .insert_bundle(CombatantBundle {
             defense: Defense(2),
             stats: Stats {
                 strength: 15,
                 dexterity: 10,
                 intelligence: 8,
-            }
+            },
             allegiance: Allegiance::Friendly,
             ..Default::default()
         })
         // We can continue to chain more .insert or .insert_bundle methods
         // to add more components and extend behavior
         .insert(Name("Gallant".to_string()));
-    
+
     commands
-        // .spawn_bundle(my_bundle) is just syntactic sugar for 
+        // .spawn_bundle(my_bundle) is just syntactic sugar for
         // .spawn().insert_bundle(my_bundle)
         .spawn_bundle(CombatantBundle{
             stats: Stats {
