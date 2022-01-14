@@ -213,7 +213,7 @@ fn spawn_combatants_system(mut commands: Commands) {
         // We're using struct-update syntax to modify the instance
         // of `CombatantBundle` returned by its default() method
         // See the page on Rust Tips and Tricks at the end of this chapter for more info!
-        .insert_bundle(CombatantBundle{
+        .insert_bundle(CombatantBundle {
             defense: Defense(2),
             stats: Stats {
                 strength: 15,
