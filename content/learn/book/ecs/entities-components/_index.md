@@ -201,7 +201,7 @@ impl Default for CombatantBundle {
                 strength: 10,
                 dexterity: 10,
                 intelligence: 10,
-            }
+            },
             allegiance: Allegiance::Neutral,
         }
     }
