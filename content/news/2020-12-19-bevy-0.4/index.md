@@ -165,7 +165,7 @@ fn error_handler_system(In(result): In<Result<()>>, error_handler: Res<MyErrorHa
 }
 ```
 
-The `System` trait now looks like this:
+The [`System`] trait now looks like this:
 ```rust
 // Has no inputs and no outputs
 System<In = (), Out = ()>
@@ -175,6 +175,8 @@ System<In = usize, Out = f32>
 ```
 
 We use this feature in our new Schedule implementation.
+
+[`System`]: https://docs.rs/bevy/0.4.0/bevy/prelude/trait.System.html
 
 ### Schedule V2
 
@@ -196,7 +198,7 @@ app.add_system(my_system.system())
 
 #### Stage Trait
 
-Stages are now a trait. You can now implement your own `Stage` types!
+Stages are now a trait. You can now implement your own [`Stage`] types!
 
 ```rust
 struct MyStage;
@@ -208,6 +210,8 @@ impl Stage for MyStage {
     }
 }
 ```
+
+[`Stage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/trait.Stage.html
 
 #### Stage Type: `SystemStage`
 
@@ -235,7 +239,7 @@ let custom_executor_stage =
 
 #### Stage Type: `Schedule`
 
-You read that right! `Schedule` now implements the `Stage` trait, which means you can nest Schedules within other schedules:
+You read that right! [`Schedule`] now implements the [`Stage`] trait, which means you can nest Schedules within other schedules:
 
 ```rust
 let schedule = Schedule::default()
@@ -250,9 +254,11 @@ let schedule = Schedule::default()
     );
 ```
 
+[`Schedule`](https://docs.rs/bevy/0.4.0/bevy/ecs/struct.Schedule.html)
+
 #### Run Criteria
 
-You can add "run criteria" to any `SystemStage` or `Schedule`.
+You can add "run criteria" to any [`SystemStage`] or [`Schedule`].
 
 ```rust
 // A "run criteria" is just a system that returns a `ShouldRun` result
@@ -277,6 +283,8 @@ app
     )
 ```
 
+[`SystemStage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/struct.SystemStage.html
+
 #### Fixed Timestep
 
 You can now run stages on a "fixed timestep".
@@ -296,7 +304,7 @@ Check out the excellent ["Fix Your Timestep!"](https://gafferongames.com/post/fi
 
 #### Typed Stage Builders
 
-Now that stages can be any type, we need a way for `Plugin` to interact with arbitrary stage types:
+Now that stages can be any type, we need a way for [`Plugin`] to interact with arbitrary stage types:
 
 ```rust
 app
@@ -311,6 +319,8 @@ app
         stage.do_custom_thing()
     )
 ```
+
+[`Plugin`]: https://docs.rs/bevy/0.4.0/bevy/app/trait.Plugin.html
 
 ### Deprecated For-Each Systems
 
@@ -368,7 +378,7 @@ You then add them to your app as a resource like this:
 app.add_resource(State::new(AppState::Loading))
 ```
 
-To run systems according to the current state, add a `StateStage`:
+To run systems according to the current state, add a [`StateStage`]:
 
 ```rust
 app.add_stage_after(stage::UPDATE, STAGE, StateStage::<AppState>::default())
@@ -399,7 +409,9 @@ fn system(mut state: ResMut<State<AppState>>) {
 }
 ```
 
-Queued state changes get applied at the end of the StateStage. If you change state within a StateStage, the lifecycle events will occur in the same update/frame. You can do this any number of times (aka it will continue running state lifecycle systems until no more changes are queued). This ensures that multiple state changes can be applied within the same frame.
+Queued state changes get applied at the end of the [`StateStage`]. If you change state within a [`StateStage`], the lifecycle events will occur in the same update/frame. You can do this any number of times (aka it will continue running state lifecycle systems until no more changes are queued). This ensures that multiple state changes can be applied within the same frame.
+
+[`StateStage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/struct.StateStage.html
 
 ## GLTF Improvements
 
@@ -527,15 +539,15 @@ Bevy now uses wgpu's "mailbox vsync" by default. This reduces input latency on p
 
 Rust has a pretty big "reflection" gap. For those who aren't aware, "reflection" is a class of language feature that enables you to interact with language constructs at runtime. They add a form of "dynamic-ness" to what are traditionally static language concepts. 
 
-We have bits and pieces of reflection in Rust, such as `TypeId` and `type_name`. But when it comes to interacting with datatypes ... we don't have anything yet. This is unfortunate because some problems are inherently dynamic in nature.
+We have bits and pieces of reflection in Rust, such as [`TypeId`] and [`type_name`]. But when it comes to interacting with datatypes ... we don't have anything yet. This is unfortunate because some problems are inherently dynamic in nature.
 
 When I was first building Bevy, I decided that the engine would benefit from such features. Reflection is a good foundation for scene systems, Godot-like (or Unity-like) property animation systems, and editor inspection tools. I built the `bevy_property` and `bevy_type_registry` crates to fill these needs.
 
 They got the job done, but they were custom-tailored to Bevy's needs, were full of custom jargon (rather than reflecting Rust language constructs directly), didn't handle traits, and had a number of fundamental restrictions on how data could be accessed. 
 
-In this release we replaced the old `bevy_property` and `bevy_type_registry` crates with a new `bevy_reflect` crate. Bevy Reflect is intended to be a "generic" Rust reflection crate. I'm hoping it will be as useful for non-Bevy projects as it is for Bevy. We now use it for our Scene system, but in the future we will use it for animating Component fields and auto-generating Bevy Editor inspector widgets.
+In this release we replaced the old `bevy_property` and `bevy_type_registry` crates with a new [`bevy_reflect`] crate. Bevy Reflect is intended to be a "generic" Rust reflection crate. I'm hoping it will be as useful for non-Bevy projects as it is for Bevy. We now use it for our Scene system, but in the future we will use it for animating Component fields and auto-generating Bevy Editor inspector widgets.
 
-Bevy Reflect enables you to dynamically interact with Rust types by deriving the `Reflect` trait:
+Bevy Reflect enables you to dynamically interact with Rust types by deriving the [`Reflect`] trait:
 
 ```rust
 #[derive(Reflect)]
@@ -557,6 +569,11 @@ let mut foo = Foo {
     c: vec![1, 2]
 };
 ```
+
+[`TypeId`]: https://doc.rust-lang.org/stable/std/any/struct.TypeId.html
+[`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
+[`bevy_reflect`]: https://docs.rs/bevy/0.4.0/bevy/reflect/index.html
+[`Reflect`]: https://docs.rs/bevy/0.4.0/bevy/reflect/trait.Reflect.html
 
 ### Interact with Fields Using Their Names
 
@@ -684,10 +701,12 @@ The Texture asset now has support for 3D textures. The new `array_texture.rs` ex
 
 <div class="release-feature-authors">authors: @superdump, @cart</div>
 
-Bevy finally has built in logging, which is now enabled by default via the new `LogPlugin`. We evaluated various logging libraries and eventually landed on the new `tracing` crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
+Bevy finally has built in logging, which is now enabled by default via the new [`LogPlugin`]. We evaluated various logging libraries and eventually landed on the new [`tracing`] crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
 
-The `LogPlugin` configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
+The [`LogPlugin`] configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
 
+[`LogPlugin`]: https://docs.rs/bevy/0.4.0/bevy/log/struct.LogPlugin.html
+[`tracing`]: https://docs.rs/tracing/latest/tracing/
 
 ### Logging
 
