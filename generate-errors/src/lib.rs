@@ -1,3 +1,4 @@
+use regex::Regex;
 use serde::Serialize;
 use std::fs::read_to_string;
 use std::{fs, io, path::PathBuf, str::FromStr};
@@ -34,34 +35,25 @@ impl From<&ErrorCode> for FrontMatterErrorCode {
 }
 
 fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
-    if !dir.is_dir() {
-        // Todo: after the 0.6 release, remove this if statement
-        // For now we will allow this to be able to point to the `latest` branch (0.5)
-        // which does not yet include error codes
-        return Ok(());
-    }
     assert!(dir.is_dir(), "The path to the errors is not a directory");
+    let error_code_pattern = Regex::new(r"B[0-9]{4}\.md").unwrap();
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
-        if path.file_name().unwrap() == ".git" || path.file_name().unwrap() == ".github" {
-            continue;
-        }
         if !path.is_dir() {
-            if path.extension().unwrap() != "md" {
+            let file_name = path
+                .file_name()
+                .unwrap()
+                .to_os_string()
+                .into_string()
+                .unwrap();
+            if !error_code_pattern.is_match(&file_name) {
                 continue;
             }
 
             let error_code = read_to_string(path.clone())?;
 
-            let code = path
-                .file_name()
-                .unwrap()
-                .to_os_string()
-                .into_string()
-                .unwrap()
-                .trim_end_matches(".md")
-                .to_owned();
+            let code = file_name.trim_end_matches(".md").to_owned();
             section.content.push(ErrorCode {
                 content: error_code
                     .trim_start_matches(&format!("# {}", code.clone()))
@@ -99,4 +91,22 @@ pub fn parse_errors(errors_dir: &str) -> io::Result<Section> {
         &mut errors_root_section,
     )?;
     Ok(errors_root_section)
+}
+
+#[cfg(test)]
+mod test_regex {
+    use regex::Regex;
+
+    #[test]
+    fn error_code_pattern() {
+        let error_code_pattern = Regex::new(r"B[0-9]{4}\.md").unwrap();
+        assert!(error_code_pattern.is_match("B0000.md"));
+        assert!(error_code_pattern.is_match("B9999.md"));
+
+        assert!(!error_code_pattern.is_match("E0000.md"));
+        assert!(!error_code_pattern.is_match("00000.md"));
+        assert!(!error_code_pattern.is_match("B0000.txt"));
+        assert!(!error_code_pattern.is_match("Cargo.toml"));
+        assert!(!error_code_pattern.is_match("README.md"));
+    }
 }
