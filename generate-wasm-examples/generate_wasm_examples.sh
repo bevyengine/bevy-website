@@ -3,7 +3,7 @@
 git init bevy
 cd bevy
 git remote add origin https://github.com/bevyengine/bevy
-git pull --depth=1 origin main
+git pull --depth=1 origin latest
 
 # remove markdown files from assets so that they don't get picked up by Zola
 find assets -type f -name '*.md' -exec rm {} +
@@ -63,9 +63,11 @@ header_message = \"Examples\"
 
 category_weight=0
 
-add_category 2d rect sprite sprite_flipping sprite_sheet text2d
-add_category 3d 3d_scene lighting load_gltf orthographic parenting pbr texture update_gltf_scene
+add_category 2d rect sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
+add_category 3d 3d_scene lighting load_gltf orthographic parenting pbr spherical_area_lights texture update_gltf_scene
 add_category UI button text text_debug ui
 add_category audio audio
+add_category shader shader_instancing shader_material_glsl shader_material
+add_category ecs iter_combinations
 add_category Game breakout alien_cake_addict
 add_category Tools bevymark
