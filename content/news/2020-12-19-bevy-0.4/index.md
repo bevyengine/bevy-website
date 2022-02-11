@@ -213,7 +213,7 @@ impl Stage for MyStage {
 
 [`Stage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/trait.Stage.html
 
-#### Stage Type: `SystemStage`
+#### Stage Type: [`SystemStage`]
 
 This is basically a "normal" stage. You can add systems to it and you can decide how those systems will be executed (parallel, serial, or custom logic)
 
@@ -237,7 +237,9 @@ let custom_executor_stage =
         .with_system(b.system());
 ```
 
-#### Stage Type: `Schedule`
+[`SystemStage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/struct.SystemStage.html
+
+#### Stage Type: [`Schedule`]
 
 You read that right! [`Schedule`] now implements the [`Stage`] trait, which means you can nest Schedules within other schedules:
 
