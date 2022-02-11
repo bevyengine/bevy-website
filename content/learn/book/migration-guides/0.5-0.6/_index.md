@@ -31,7 +31,7 @@ members = [ "my_crate1", "my_crate2" ]
 
 All functions of [`AppBuilder`] were merged into [`App`].
 
-In practice this means that you start constructing an [`App`] by calling `App::new()` instead of `App::build` and `Plugin::build` takes a [`App`] instead of a [`AppBuilder`].
+In practice this means that you start constructing an [`App`] by calling [`App::new`] instead of [`App::build`] and [`Plugin::build`] takes a [`App`] instead of a [`AppBuilder`].
 
 ```rs
 // 0.5
@@ -62,7 +62,10 @@ impl Plugin for SomePlugin {
 ```
 
 [`AppBuilder`]: https://docs.rs/bevy/0.5.0/bevy/app/struct.AppBuilder.html
-[`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
+[`App`]: https://docs.rs/bevy/0.6.0/bevy/app/struct.App.html
+[`App::new`]: https://docs.rs/bevy/0.6.0/bevy/app/struct.App.html#method.new
+[`App::build`]: https://docs.rs/bevy/0.5.0/bevy/app/struct.App.html#method.build
+[`Plugin::build`]: https://docs.rs/bevy/0.6.0/bevy/app/trait.Plugin.html#tymethod.build
 
 ### The "Component" trait now needs to be derived
 
@@ -85,7 +88,7 @@ In order to use foreign types as components, wrap them using the newtype pattern
 struct Cooldown(std::time::Duration);
 ```
 
-[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
+[`Component`]: https://docs.rs/bevy/0.6.0/bevy/ecs/component/trait.Component.html
 
 ### Setting the Component Storage is now done in "Component" Trait
 
@@ -209,8 +212,8 @@ At the same time the `fov` and `depth` fields were removed from [`PointLight`] a
 
 [`Light`]: https://docs.rs/bevy/0.5.0/bevy/pbr/struct.Light.html
 [`LightBundle`]: https://docs.rs/bevy/0.5.0/bevy/pbr/struct.LightBundle.html
-[`PointLight`]: https://docs.rs/bevy/latest/bevy/pbr/struct.PointLight.html
-[`PointLightBundle`]: https://docs.rs/bevy/latest/bevy/pbr/struct.PointLightBundle.html
+[`PointLight`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.PointLight.html
+[`PointLightBundle`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.PointLightBundle.html
 
 ### System Param Lifetime Split
 
