@@ -163,7 +163,7 @@ You may have noticed that **Bevy 0.5 (Table)** is also _way_ faster than **Bevy 
 3. Incrementally build up state
     * When new archetypes are added, we only process the new archetypes (no need to rebuild state for old archetypes)
 
-As a result, the direct `World` query api now looks like this:
+As a result, the direct [`World`] query api now looks like this:
 
 ```rust
 let mut query = world.query::<(&A, &mut B)>();
@@ -173,7 +173,7 @@ for (a, mut b) in query.iter_mut(&mut world) {
 
 However for systems this is a non-breaking change. Query state management is done internally by the relevant [`SystemParam`].
 
-We have achieved some pretty significant performance wins as a result of the new Query system.
+We have achieved some pretty significant performance wins as a result of the new [`Query`] system.
 
 [`World`]: https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html
 [`SystemParam`]: https://docs.rs/bevy/0.5.0/bevy/ecs/system/derive.SystemParam.html
