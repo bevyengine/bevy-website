@@ -3,3 +3,4 @@ public
 .idea/
 
 generate-assets/target/
+generate-errors/target/
