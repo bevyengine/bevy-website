@@ -55,7 +55,7 @@ fn spawning_system(mut commands: Commands){
 Entities are entirely bare when they're spawned: they contain no data other than their unique [`Entity`] identifier.
 This of course is not very useful, so let's discuss how we can add and remove components to them which store data and enable behavior through systems.
 
-[`Entity`]: https://docs.rs/bevy/0.6.0/bevy/ecs/entity/struct.Entity.html
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 
 ### Defining components
 
@@ -109,7 +109,7 @@ enum Allegiance {
 struct Name(String);
 ```
 
-[`Component`]: https://docs.rs/bevy/0.6.0/bevy/ecs/component/trait.Component.html
+[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 
 ### Spawning entities with components
 
@@ -157,7 +157,7 @@ fn spawn_combatants_system(mut commands: Commands) {
 }
 ```
 
-[`Commands`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Commands.html
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ### Adding and removing components
 
@@ -265,7 +265,7 @@ fn spawn_combatants_system(mut commands: Commands) {
         .insert(Name("Goofus".to_string()));}
 ```
 
-[`Bundle`]: https://docs.rs/bevy/0.6.0/bevy/ecs/bundle/trait.Bundle.html
+[`Bundle`]: https://docs.rs/bevy/latest/bevy/ecs/bundle/trait.Bundle.html
 
 ### Nested bundles
 
