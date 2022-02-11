@@ -721,7 +721,7 @@ The numbers assigned to the `entity` fields are entity's id, which are completel
 
 ### Loading and Instancing
 
-Scenes can be added to a [`World`] using the [`SceneSpawner`] resource. Spawning can be done with either `SceneSpawner::load` or `SceneSpawner::instance`. "Loading" a Scene preserves the entity IDs in it. This is useful for something like a save file where you want entity ids to be constant and changes to be applied on top of entities already in the world. "Instancing" adds entities to the [`World`] with brand-new IDs, which allows multiple "instances" of a scene to exist in the same [`World`].
+Scenes can be added to a [`World`] using the [`SceneSpawner`] resource. Spawning can be done with either [`SceneSpawner::load`] or [`SceneSpawner::instance`]. "Loading" a Scene preserves the entity IDs in it. This is useful for something like a save file where you want entity ids to be constant and changes to be applied on top of entities already in the world. "Instancing" adds entities to the [`World`] with brand-new IDs, which allows multiple "instances" of a scene to exist in the same [`World`].
 
 ```rs
 fn load_scene_system(asset_server: Res<AssetServer>, mut scene_spawner: ResMut<SceneSpawner>) {
@@ -735,6 +735,8 @@ fn load_scene_system(asset_server: Res<AssetServer>, mut scene_spawner: ResMut<S
 ```
 
 [`SceneSpawner`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.SceneSpawner.html
+[`SceneSpawner::load`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.SceneSpawner.html#method.load
+[`SceneSpawner::instance`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.SceneSpawner.html#method.instance
 
 ### Saving ECS Worlds To Scenes
 
@@ -837,16 +839,20 @@ fn event_consumer(mut state: Local<State>, my_events: Res<Events<MyEvent>>) {
 }
 ```
 
-`app.add_event::<MyEvent>()` adds a new [`Events`] resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  `EventReaders` are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
+`app.add_event::<MyEvent>()` adds a new [`Events`] resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  [`EventReaders`] are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
 
 
 Events are used in Bevy for features like window resizing, assets, and input. The tradeoff for being both allocation and cpu efficient is that each system only has one chance to receive an event, otherwise it will be lost on the next update. I believe this is the correct tradeoff for apps that run in a loop (ex: games).
 
 [`Events`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Events.html
+[`EventReaders`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.EventReader.html
 
 ## Assets
 
-Bevy `Assets` are just typed data that can be referenced using asset `Handles`. For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
+Bevy [`Assets`] are just typed data that can be referenced using asset [`Handles`]. For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
+
+[`Assets`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Assets.html
+[`Handles`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Handle.html
 
 #### Asset Creation
 ```rs
@@ -865,7 +871,7 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 ```
 
 #### Asset Events
-The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed `Events`. These events can also be consumed as a system resource, just like any other `Events`:
+The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed [`Events`]. These events can also be consumed as a system resource, just like any other [`Events`]:
 ```rs
 fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
     for event in state.reader.iter(&texture_events) {
