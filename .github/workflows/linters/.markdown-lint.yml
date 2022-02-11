@@ -3,4 +3,5 @@
     "line-length": false,
     "no-inline-html": false,
     "fenced-code-language": false,
+    "no-trailing-punctuation": false,
 }
