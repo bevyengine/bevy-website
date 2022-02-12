@@ -3,6 +3,7 @@ title = "Commands queue up work"
 weight = 5
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 **Commands** are powerful, unrestricted tools for deferring complex or heavily-blocking work.

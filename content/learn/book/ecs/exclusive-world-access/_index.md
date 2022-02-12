@@ -3,6 +3,7 @@ title = "Exclusive world access"
 weight = 7
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 In various places, Bevy code works directly with the [`World`]'s data, gaining exclusive, blocking access to it and allowing for arbitrary mutations.

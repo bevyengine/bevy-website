@@ -3,6 +3,7 @@ title = "Understanding the magic"
 weight = 8
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 By this point, it's common for new Bevy users to have a few questions about how the high-level tools you've been introduced to actually perform their feats of cunning ergonomics.

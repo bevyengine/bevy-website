@@ -3,6 +3,7 @@ title = "Resources are global singletons"
 weight = 3
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Not all data is stored in the entity-component data storage.

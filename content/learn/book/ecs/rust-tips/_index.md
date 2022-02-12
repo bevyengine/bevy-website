@@ -3,6 +3,7 @@ title = "Rust tips and tricks"
 weight = 7
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 There are a few standard Rust patterns and pitfalls that are particularly relevant to Bevy's ECS.

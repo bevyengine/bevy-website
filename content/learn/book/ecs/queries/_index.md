@@ -3,6 +3,7 @@ title = "Fetching data with queries"
 weight = 2
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Once we have data stored on our entities in the form of components, we need to be able to get the data back out in a principled way.
