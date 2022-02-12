@@ -6,7 +6,7 @@ template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-Bevy is fundamentally powered by its ECS (a central [paradigm](https://ajmmertens.medium.com/?p=350587cdf216) for organizing and operating on data which stands Entity-Component-System): almost all data is stored as components which belong to entities, and all logic is executed by its systems.
+Bevy is fundamentally powered by its ECS (a central [paradigm](https://ajmmertens.medium.com/ecs-from-tool-to-paradigm-350587cdf216) for organizing and operating on data which stands Entity-Component-System): almost all data is stored as components which belong to entities, and all logic is executed by its systems.
 
 We can think of our **entity-component data storage** as a giant in-memory database:
 
