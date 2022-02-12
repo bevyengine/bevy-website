@@ -4,6 +4,7 @@ weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Bevy is fundamentally powered by its ECS (a central [paradigm](https://ajmmertens.medium.com/ecs-from-tool-to-paradigm-350587cdf216) for organizing and operating on data which stands Entity-Component-System): almost all data is stored as components which belong to entities, and all logic is executed by its systems.

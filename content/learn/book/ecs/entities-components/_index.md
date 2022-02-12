@@ -3,6 +3,7 @@ title = "Entities have components"
 weight = 1
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.

@@ -3,6 +3,7 @@ title = "Systems do work"
 weight = 4
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 In order to make useful, fun or interesting games or apps, you'll need to manipulate the data that you store in components and resources in some way.

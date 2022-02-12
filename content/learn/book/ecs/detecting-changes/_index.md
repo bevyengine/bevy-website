@@ -3,6 +3,7 @@ title = "Detecting changes"
 weight = 6
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Bevy allows you to respond to the addition of or changes to specific component types using the [`Added`] and [`Changed`] query filters.
