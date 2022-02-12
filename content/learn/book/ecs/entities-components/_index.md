@@ -59,8 +59,8 @@ This of course is not very useful, so let's discuss how we can add and remove co
 
 ### Defining components
 
-To define a component type, we simply implement the [`Component`] trait to a Rust type of our choice.
-You will almost always want to use the `#[derive(Component)]` macro to do this for you; which quickly and reliably generates the correct trait code for the trait.
+To define a component type, we simply implement the [`Component`] trait for a Rust type of our choice.
+You will almost always want to use the `#[derive(Component)]` macro to do this for you; which quickly and reliably generates the correct trait implementation.
 Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on [`Component`]).
 This ensures that the data can be sent across the threads safely and allows our [type reflection tools](https://github.com/bevyengine/bevy/tree/main/crates/bevy_reflect) to work correctly.
 
@@ -83,7 +83,10 @@ struct Defense(u8);
 
 // Here, we use a tuple struct to store 2 ordered pieces of data
 #[derive(Component)]
-struct Position(i32, i32);
+struct Position{
+    x: i32, 
+    y: i32
+}
 
 // Naming your components' fields,
 // makes them easier and safer to refer to
@@ -190,7 +193,7 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
 To get around this, Bevy abstracts these patterns using **bundles**: named and typed collections of components.
-These are implemented by adding the [`Bundle`] trait to a struct; turning each of its fields into a distinct component on your entity when they are inserted.
+These are implemented by implementing the [`Bundle`] trait for a struct; turning each of its fields into a distinct component on your entity when they are inserted.
 
 Let's try rewriting that code from above.
 
