@@ -926,7 +926,7 @@ This will load new versions of assets whenever their files have changed.
 
 #### Adding New Asset Types
 
-To add a new asset type, implement the `AssetLoader` trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
+To add a new asset type, implement the [`AssetLoader`] trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
 
 Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you can register your new loader like this:
 ```rs
@@ -934,6 +934,8 @@ app.add_asset_loader::<MyAsset, MyAssetLoader>();
 ```
 
 Then you can access the `Assets<MyAsset>` resource, listen for change events, and call `asset_server.load("something.my_asset")`
+
+[`AssetLoader`]: https://docs.rs/bevy_asset/0.1.0/bevy_asset/trait.AssetLoader.html
 
 ## Sound
 
@@ -955,15 +957,15 @@ We plan on extending the audio system with more control and features in the futu
 
 ## Render Graph
 
-All render logic is built on top of Bevy's `RenderGraph`. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
+All render logic is built on top of Bevy's [`RenderGraph`]. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
 
 Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderResourcesNode`, `SharedBuffersNode`, `TextureCopyNode`, `WindowSwapChainNode`, and `WindowTextureNode`. It also provides subgraphs for 2d rendering, 3d rendering, and UI rendering. But you are welcome to create your own nodes, your own graphs, or extend the included graphs!
 
 ### [Data Driven Shaders](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_custom_material.rs)
 
-Components and Assets can derive the `RenderResources` trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
+Components and Assets can derive the [`RenderResources`] trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
 
-Binding uniforms to a custom shader is literally as simple as deriving `RenderResources` on your component or asset: 
+Binding uniforms to a custom shader is literally as simple as deriving [`RenderResources`] on your component or asset: 
 
 ```rs
 #[derive(RenderResources, Default)]
@@ -990,6 +992,9 @@ layout(set = 1, binding = 1) uniform MyMaterial_color {
 ``` 
 
 I think the simplicity of the [fully self-contained custom shader example](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_custom_material.rs) speaks for itself.
+
+[`RenderGraph`]: https://docs.rs/bevy_render/0.1.0/bevy_render/render_graph/struct.RenderGraph.html
+[`RenderResources`]: https://docs.rs/bevy_render/0.1.0/bevy_render/renderer/trait.RenderResources.html
 
 ### [Shader Defs](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_defs.rs)
 
