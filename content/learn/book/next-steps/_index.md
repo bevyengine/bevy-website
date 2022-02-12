@@ -4,6 +4,7 @@ weight = 12
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 You have reached the end of The Bevy Book! If you're hungry for more learning materials, we recommend checking out:

@@ -3,6 +3,7 @@ title = "Filtering queries"
 weight = 5
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: explain that queries fetch data of all the components at once

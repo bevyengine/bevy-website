@@ -4,6 +4,7 @@ weight = 4
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: discuss errors in Rust, link to other good resources

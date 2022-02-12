@@ -4,6 +4,7 @@ weight = 3
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: discuss unit testing using the examples framework

@@ -3,6 +3,7 @@ title = "Parallel iteration"
 weight = 2
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: remind users that systems run in parallel automatically, advise to make systems smaller
