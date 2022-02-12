@@ -73,20 +73,15 @@ With the theory out of the way, let's define some components!
 #[derive(Component)]
 struct Combatant;
 
-// These simple components wrap a u8 in a tuple struct
+// This simple components wrap a u8 in a tuple struct
 #[derive(Component)]
 struct Life(u8);
-#[derive(Component)]
-struct Attack(u8);
-#[derive(Component)]
-struct Defense(u8);
 
-// Here, we use a tuple struct to store 2 ordered pieces of data
+// We can store arbitrary data in our components, as long as it has a 'static lifetime
+// Types without lifetimes are always 'static,
+// allowing us to safely hold a String, but not a &str
 #[derive(Component)]
-struct Position{
-    x: i32, 
-    y: i32
-}
+struct Name(String);
 
 // Naming your components' fields,
 // makes them easier and safer to refer to
@@ -104,12 +99,6 @@ enum Allegiance {
     Neutral,
     Hostile
 }
-
-// We can store arbitrary data in our components, as long as it has a 'static lifetime
-// Types without lifetimes are always 'static,
-// allowing us to safely hold a String, but not a &str
-#[derive(Component)]
-struct Name(String);
 ```
 
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
@@ -127,9 +116,7 @@ fn spawn_combatants_system(mut commands: Commands) {
         // We configure starting component values by passing in concrete instances of our types
         .insert(Life(10))
         // By chaining .insert method calls like this, we continue to add more components to our entity
-        .insert(Attack(5))
-        .insert(Defense(2))
-        .insert(Position(0, 0))
+        .insert(Name("Gallant".to_string()))
         // Instances of named structs are constructed with {field_name: value}
         .insert(Stats {
             strength: 15,
@@ -137,8 +124,7 @@ fn spawn_combatants_system(mut commands: Commands) {
             intelligence: 8,
         })
         // Instances of enums are created by picking one of their variants
-        .insert(Allegiance::Friendly)
-        .insert(Name("Gallant".to_string()));
+        .insert(Allegiance::Friendly);
 
     // We've ended our Commands method chain using a ;,
     // and so now we can create a second entity
@@ -147,16 +133,13 @@ fn spawn_combatants_system(mut commands: Commands) {
         .spawn()
         .insert(Combatant)
         .insert(Life(10))
-        .insert(Attack(5))
-        .insert(Defense(1))
-        .insert(Position(0, 5))
+        .insert(Name("Goofus".to_string()))
         .insert(Stats {
             strength: 17,
             dexterity: 8,
             intelligence: 6,
         })
-        .insert(Allegiance::Hostile)
-        .insert(Name("Goofus".to_string()));
+        .insert(Allegiance::Hostile);
 }
 ```
 
@@ -192,21 +175,16 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut
 ## Bundles
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
-To get around this, Bevy abstracts these patterns using **bundles**: named and typed collections of components.
+To get around this, Bevy abstracts these patterns using **component bundles**.
 These are implemented by implementing the [`Bundle`] trait for a struct; turning each of its fields into a distinct component on your entity when they are inserted.
 
 Let's try rewriting that code from above.
-
-`Life`, `Attack` and `Defense` will almost always be added to our entities at the same time, so let's create a **bundle** (collection of components) to make them easier to work with.
 
 ```rust
 #[derive(Bundle)]
 struct CombatantBundle {
     combatant: Combatant
     life: Life,
-    attack: Attack,
-    defense: Defense,
-    position: Position,
     stats: Stats,
     allegiance: Allegiance,
 }
@@ -220,9 +198,6 @@ impl Default for CombatantBundle {
         CombatantBundle {
             combatant: Combatant,
             life: Life(10),
-            attack: Attack(5),
-            defense: Defense(1),
-            position: Position(0, 0),
             stats: Stats {
                 strength: 10,
                 dexterity: 10,
@@ -240,7 +215,6 @@ fn spawn_combatants_system(mut commands: Commands) {
         // the instance of `CombatantBundle` returned by its default() method
         // See the page on Rust Tips and Tricks at the end of this chapter for more info!
         .insert_bundle(CombatantBundle{
-            defense: Defense(2),
             stats: Stats {
                 strength: 15,
                 dexterity: 10,
@@ -261,7 +235,6 @@ fn spawn_combatants_system(mut commands: Commands) {
                 dexterity: 8,
                 intelligence: 6,
             }
-            position: Position(0, 5),
             allegiance: Allegiance::Hostile,
             ..Default::default()
         })
