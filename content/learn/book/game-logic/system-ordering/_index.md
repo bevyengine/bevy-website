@@ -16,4 +16,4 @@ TODO: explain SystemSets in the context of labels
 
 TODO: explain ambiguities
 
-Steal from https://github.com/bevyengine/bevy/blob/main/examples/ecs/ecs_guide.rs#L282
+Steal from [ECS Guide](https://github.com/bevyengine/bevy/blob/main/examples/ecs/ecs_guide.rs#L282)

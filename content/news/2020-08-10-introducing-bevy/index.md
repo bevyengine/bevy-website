@@ -97,7 +97,7 @@ fn main() {
 }
 ```
 
-And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to 
+And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to
 [`AddDefaultPlugins::add_default_plugins`] for simplicity, at least initially.
 
 [`AddDefaultPlugins::add_default_plugins`]: https://docs.rs/bevy/0.1.0/bevy/trait.AddDefaultPlugins.html#tymethod.add_default_plugins
