@@ -283,7 +283,7 @@ This was done to accommodate the new [`SystemState`] which allows easier cached 
 
 ### Vector casting functions are now named to match return type
 
-The casting functions for [`IVec2`], [`DVec2`], [`UVec2`], and [`Vec2`] have all been changed from being named after their inner elements' cast target to what the entire "Vec" is being casted into. This affects all the different dimensions of the math vectors (i.e., [`Vec2`], [`Vec3` ]and [`Vec4`]).
+The casting functions for [`IVec2`], [`DVec2`], [`UVec2`], and [`Vec2`] have all been changed from being named after their inner elements' cast target to what the entire "Vec" is being casted into. This affects all the different dimensions of the math vectors (i.e., [`Vec2`], [`Vec3`] and [`Vec4`]).
 
 ```rust
 // 0.5
@@ -342,7 +342,8 @@ SpriteBundle {
 [`SpriteBundle`]: https://docs.rs/bevy/0.6.0/bevy/sprite/struct.SpriteBundle.html
 [`Sprite`]: https://docs.rs/bevy/0.6.0/bevy/sprite/struct.Sprite.html
 
-### Visible is now Visibility 
+### Visible is now Visibility
+
 The [`Visible`] struct, which is used in a number of components to set visibility, was renamed to [`Visibility`]. Additionally, the field `is_transparent` was removed from the struct. For 3D, transparency can be set using the `alpha_mode` field on a material. Transparency is now automatically enabled for all objects in 2D.
 
 ```rust
