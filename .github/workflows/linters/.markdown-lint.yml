@@ -1,7 +1,11 @@
 
 {
-    "line-length": false,
-    "no-inline-html": false,
-    "fenced-code-language": false,
-    "no-trailing-punctuation": false,
+    # line-length
+    "MD013": false,
+    # no-inline-html
+    "MD033": false,
+    # fenced-code-language
+    "MD040": false,
+    # no-trailing-punctuation
+    "MD026": false,
 }
