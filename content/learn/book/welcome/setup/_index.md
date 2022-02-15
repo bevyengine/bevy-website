@@ -180,7 +180,7 @@ Take a look at these known problems and how to solve them.
 
 ### Unable to find a GPU
 
-```
+```ignore
 thread 'main' panicked at 'Unable to find a GPU! Make sure you have installed required drivers!'
 ```
 
