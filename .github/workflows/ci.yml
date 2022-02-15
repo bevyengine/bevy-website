@@ -59,8 +59,5 @@ jobs:
            components: rustfmt, clippy
            override: true
 
-       - name: Install alsa and udev
-         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-
        - name: Build & run checks
          run: cd code-validation && cargo +nightly fmt --check
