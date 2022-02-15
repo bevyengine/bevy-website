@@ -17,11 +17,11 @@ There's no magic to be found here; they're just a straightforward tool for code 
 
 Plugins are types that implement the [`Plugin`] trait:
 
-```rust
+```rust,no_run
 use bevy::prelude::*;
 
 fn main(){
-  App::build()
+  App::new()
     // Adds the "default" Bevy Engine plugins.
     // We'll cover this in the next section.
     .add_plugins(DefaultPlugins)
@@ -39,21 +39,21 @@ impl Plugin for ScorePlugin {
       // beginning at the default value of 0
       .init_resource::<Score>()
       // Increments the score by 1 every pass of the game loop
-      .add_system(increment_score.system())
+      .add_system(increment_score)
       // Prints the current value of the score
-      .add_system(report_score.system());
+      .add_system(report_score);
   }
 }
 
 #[derive(Default, Debug)]
 struct Score(u8);
 
-fn increment_score(score: ResMut<Score>){
+fn increment_score(mut score: ResMut<Score>) {
   score.0 += 1;
 }
 
-fn report_score(score: Res<Score>){
-  info!(score);
+fn report_score(score: Res<Score>) {
+  info!("{}", score.0);
 }
 ```
 
@@ -68,8 +68,10 @@ Bevy's [`DefaultPlugins`] is a [`PluginGroup`] that adds the "core engine featur
 
 You can add [`DefaultPlugins`] to your app like this:
 
-```rust
-App::new().add_plugins(DefaultPlugins)
+```rust,hide-lines=1-2
+use bevy::prelude::*;
+
+App::new().add_plugins(DefaultPlugins);
 ```
 
 Take a look at the [source](https://github.com/bevyengine/bevy/blob/latest/crates/bevy_internal/src/default_plugins.rs) to see a full list of what's included.
