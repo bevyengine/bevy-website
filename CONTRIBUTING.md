@@ -147,3 +147,4 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
 8. Examples should not use or rely on third-party plugins.
 These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.
+9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is always the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
