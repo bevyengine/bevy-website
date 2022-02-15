@@ -68,7 +68,7 @@ Bevy's [`DefaultPlugins`] is a [`PluginGroup`] that adds the "core engine featur
 
 You can add [`DefaultPlugins`] to your app like this:
 
-```rust,hide-lines=1-2
+```rust,no_run,hide-lines=1-2
 use bevy::prelude::*;
 
 App::new().add_plugins(DefaultPlugins);
