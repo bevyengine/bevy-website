@@ -101,7 +101,7 @@ Now that we have our Bevy project set up, we're ready to start making our first 
 
 Within `main.rs`, let's create our first app and check that all the dependencies are working correctly!
 
-```rust,no_run
+```no_run,rust
 use bevy::prelude::*;
 
 fn main(){

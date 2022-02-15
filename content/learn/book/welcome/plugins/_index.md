@@ -17,7 +17,7 @@ There's no magic to be found here; they're just a straightforward tool for code 
 
 Plugins are types that implement the [`Plugin`] trait:
 
-```rust,no_run
+```no_run,rust
 use bevy::prelude::*;
 
 fn main(){
@@ -68,7 +68,7 @@ Bevy's [`DefaultPlugins`] is a [`PluginGroup`] that adds the "core engine featur
 
 You can add [`DefaultPlugins`] to your app like this:
 
-```rust,no_run,hide-lines=1-2
+```no_run,hide-lines=1-2,rust
 use bevy::prelude::*;
 
 App::new().add_plugins(DefaultPlugins);
