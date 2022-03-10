@@ -47,17 +47,3 @@ jobs:
 
        - name: Build & run tests
          run: cd code-validation && cargo test
-
-  check-code-formatting:
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v2
-
-       - uses: actions-rs/toolchain@v1
-         with:
-           toolchain: nightly
-           components: rustfmt, clippy
-           override: true
-
-       - name: Build & run checks
-         run: cd code-validation && cargo +nightly fmt --check
