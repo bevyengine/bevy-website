@@ -10,7 +10,7 @@ When working with 3d scenes the first thing you will need are basic shapes.
 
 Currently bevy has these builtin shapes:
 
-TODO: Maybe add a screenshot of a 3d scene with each shape???
+<!-- TODO: Maybe add a screenshot of a 3d scene with all shapes? -->
 
 * Box: An axis-aligned box defined by its minimum and maximum point.
 * Cube: A rectangle on the XY plane centered at the origin.
@@ -21,7 +21,8 @@ TODO: Maybe add a screenshot of a 3d scene with each shape???
 * UV sphere: A sphere made of sectors and stacks.
 * Icosphere: A sphere made from a subdivided Icosahedron.
 
-There will eventually be more basic shapes added, but this is what we have access to for now. Don't worry you can easily add more shapes if you need too. In fact, this is exactly what we will do later in this chapter.
+There will eventually be more basic shapes added, but this is what we have access to for now. Don't worry, you can easily add more shapes if you need to. In fact, this is exactly what we will do in the chapter on custom meshes.
+<!-- TODO add link to custom mesh chaper -->
 
 ## PBR Bundle
 
@@ -36,7 +37,7 @@ commands.spawn_bundle(PbrBundle {
 });
 ```
 
-### Mesh property
+### Mesh
 
 There's a few things here, first let's cover the mesh property.
 
@@ -78,11 +79,84 @@ commands.spawn_bundle(PbrBundle {
 });
 ```
 
-### Material property
+### Material
 
-TODO use StandardMaterial::from
-TODO explain that this will be covered in a future chapter
+<!-- TODO add link to chapter on Material and StandardMaterial.  -->
 
-## Custom Shape
+When spawning a `PbrBundle` we need to provide it a StandardMaterial. The easiest way to do that is to create one with a `Color`. We will cover this in more detail in a future chapter. The StandardMaterial let's you configure all the variables related to PBR. For now, we only want to give a color to our mesh.
 
-TODO show how to define a plane with a variable number of vertices
+```rust
+// Create a StandardMaterial from a Color
+let material = StandardMaterial::from(Color::RED);
+// Add it to the StandardMaterial asset collection
+let material_handle = materials.add(material);
+// Then you can use the handle when spawning a cube
+commands.spawn_bundle(PbrBundle {
+    mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
+    material: material,
+    transform: Transform::from_xyz(0.0, 0.5, 0.0),
+    ..default()
+});
+```
+
+The other examples used `materials.add(Color::RED.into())`, this is the exact same thing since the `StandardMaterial` implements the `From<Color>` trait.
+
+Just like the mesh you can also reuse the material on multiple entity by using `clone_weak()`.
+
+### Transform
+
+The transform component is there to control the position and rotation in space for the mesh. In a later chapter we will cover in more details the difference between a local position and a world position and how the transform propagates through a hierarchy of parent/child meshes.
+
+For now, you can simply use `Transform::from_xyz(x, y, z)` to spawn at a specific point.
+
+### Visibility
+
+When spawning a `PbrBundle` there's also a `Visibility` component that is added to the entity. This component let's you control if a mesh is visible or not.
+
+First, we need to modify how we spawn the cube by adding a tag component.
+
+```rust
+// Use a tag component to make it easier to find the cube
+#[derive(Component)]
+struct CubeTag;
+
+// Spawning the cube
+commands
+    .spawn_bundle(PbrBundle {
+        mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
+        material: materials.add(Color::rgb(0.8, 0.7, 0.6).into()),
+        transform: Transform::from_xyz(0.0, 0.5, 0.0),
+        // This is the default value
+        visibility: Visibility { is_visible: true },
+        ..default()
+    })
+    // Make sure to add the tag
+    .insert(CubeTag);
+```
+
+Then, we need to add a new system. It queries all cubes with the `CubeTag` component and toggles the visibility when you press space.
+
+```rust
+fn toggle_visiblity(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut query: Query<&mut Visibility, With<CubeTag>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::Space) {
+        for mut visibility in query.iter_mut() {
+            visibility.is_visible = !visibility.is_visible
+        }
+    }
+}
+```
+
+Don't forget to add the system on the `App`
+
+```rust
+fn main() {
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_startup_system(setup)
+        .add_system(toggle_visiblity)
+        .run();
+}
+```

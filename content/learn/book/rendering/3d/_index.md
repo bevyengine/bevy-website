@@ -1,6 +1,6 @@
 +++
 title = "3d"
-weight = 6
+weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
