@@ -1,6 +1,7 @@
 status = [
     "build",
     "markdownlint",
+    "test-code",
 ]
 
 use_squash_merge = true
