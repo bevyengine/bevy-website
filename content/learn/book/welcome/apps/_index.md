@@ -13,16 +13,16 @@ The process is straightforward: we first create a new [`App`].
 Then, we add a simple system, which prints "Hello, Bevy!" when it is run.
 Finally once we're done configuring the app, we call [`App`] to actually make our app *do things*.
 
-```rust
+```no_run,rust
 use bevy::prelude::*;
 
-fn main(){
+fn main() {
     App::new()
         .add_system(hello)
         .run();
 }
 
-fn hello(){
+fn hello() {
     println!("Hello, Bevy!")
 }
 ```
@@ -43,7 +43,7 @@ The most basic tools are:
   3. Importing other blocks of [`App`]-modifying code using [`Plugins`].
 Let's write a very simple demo that shows how those work.
 
-```rust
+```no_run,rust
 use bevy::prelude::*;
 
 fn main() {
@@ -52,9 +52,9 @@ fn main() {
         // imported as a single unit for organization and clarity
         .add_plugins(MinimalPlugins)
         // Resources are global singleton data stored in the `World`
-        .insert_resource(Message {string: "Welcome to Bevy!"})
+        .insert_resource(Message {string: "Welcome to Bevy!".to_string()})
         // Systems run every pass of the game loop and perform logic
-        .add_system(print_message_system)
+        .add_system(read_message_system)
         .run();
 }
 
@@ -65,8 +65,8 @@ struct Message {
 
 // This system reads our Message resource,
 // so we add `Res<Message>` to its function parameters
-fn read_message(message: Res<Message>) {
-    println!(message.string);
+fn read_message_system(message: Res<Message>) {
+    println!("{}", message.string);
 }
 ```
 
