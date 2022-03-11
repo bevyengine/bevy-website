@@ -43,9 +43,9 @@ There's a few things here, first let's cover the mesh property.
 
 ### Mesh
 
-When you want to render something, you first need a mesh which is in it's most basic form, an array of points in 3d space that represents the points forming that shape. These points are called vertices.
+When you want to render something, you first need a mesh which, in it's most basic form, is an array of points in 3d space that represents the points forming that shape. These points are called vertices.
 
-<!-- TODO insert an image showing a wireframe cube with the vertices highlithed -->
+[![Mesh overview](Mesh_overview.svg)](https://en.wikipedia.org/wiki/Polygon_mesh#/media/File:Mesh_overview.svg)
 
 ```rust
 // First, we define the shape we want. In this case it's just a cube with a size of 1.0.
