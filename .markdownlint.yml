@@ -1,4 +1,4 @@
-# Keep synced with duplicate in project root
+# Keep synced with duplicate in .github/linters folder
 
 {
     "line-length": false,
