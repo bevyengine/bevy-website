@@ -59,7 +59,7 @@ Now run `cargo run` to build and run your project. You should see `Hello, world!
 
 `main.rs` is the entry point of your program:
 
-```rs
+```rust
 fn main() {
     println!("Hello, world!");
 }
@@ -102,11 +102,11 @@ Now that we have our Bevy project set up, we're ready to start making our first 
 
 Within `main.rs`, let's create our first app and check that all the dependencies are working correctly!
 
-```rust
+```no_run,rust
 use bevy::prelude::*;
 
 fn main(){
-  App::build().add_plugins(DefaultPlugins).run();
+  App::new().add_plugins(DefaultPlugins).run();
 }
 ```
 

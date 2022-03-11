@@ -50,3 +50,20 @@ jobs:
           DEFAULT_BRANCH: master
           # Not needed here as only one Linter is used.
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test-code:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v2
+
+       - uses: actions-rs/toolchain@v1
+         with:
+           toolchain: stable
+           components: rustfmt, clippy
+           override: true
+
+       - name: Install alsa and udev
+         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+       - name: Build & run tests
+         run: cd code-validation && cargo test
