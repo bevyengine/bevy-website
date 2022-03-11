@@ -4,6 +4,7 @@ weight = 5
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Is something in Bevy not working as expected? Maybe one of these will resolve your problem:
