@@ -1,14 +1,16 @@
 +++
 title = "Shapes and meshes"
-weight = 6
+weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
 +++
 
-When working with 3d scenes the first thing you will need are basic shapes.
+Once you have a camera, the next thing you are probably going to want is to render some basic shapes on the screen.
 
-Currently bevy has these builtin shapes:
+## Built-in shapes
+
+Currently bevy has these built-in shapes:
 
 <!-- TODO: Maybe add a screenshot of a 3d scene with all shapes? -->
 
@@ -21,12 +23,12 @@ Currently bevy has these builtin shapes:
 * UV sphere: A sphere made of sectors and stacks.
 * Icosphere: A sphere made from a subdivided Icosahedron.
 
-There will eventually be more basic shapes added, but this is what we have access to for now. Don't worry, you can easily add more shapes if you need to. In fact, this is exactly what we will do in the chapter on custom meshes.
+There will eventually be more primitive shapes included with bevy, but this is what we have access to for now. Don't worry, you can easily add more shapes if you need to. In fact, this is exactly what we will do in the chapter on custom meshes.
 <!-- TODO add link to custom mesh chaper -->
 
 ## PBR Bundle
 
-To spawn a shape, we can use the `PbrBundle` that will spawn everything we need to have a shape using all the pbr pipeline. This is how it looked in the example.
+We can use the `PbrBundle` to spawn the mesh of a shape that will be using all the pbr pipeline. This is how it looked in the example.
 
 ```rust
 commands.spawn_bundle(PbrBundle {
@@ -37,9 +39,13 @@ commands.spawn_bundle(PbrBundle {
 });
 ```
 
+There's a few things here, first let's cover the mesh property.
+
 ### Mesh
 
-There's a few things here, first let's cover the mesh property.
+When you want to render something, you first need a mesh which is in it's most basic form, an array of points in 3d space that represents the points forming that shape. These points are called vertices.
+
+<!-- TODO insert an image showing a wireframe cube with the vertices highlithed -->
 
 ```rust
 // First, we define the shape we want. In this case it's just a cube with a size of 1.0.
@@ -160,3 +166,7 @@ fn main() {
         .run();
 }
 ```
+
+## Importing meshes
+
+<!-- TODO -->
