@@ -1,0 +1,7 @@
+# Keep synced with duplicate in .github/linters folder
+
+{
+    "line-length": false,
+    "no-inline-html": false,
+    "no-trailing-punctuation": false,
+}

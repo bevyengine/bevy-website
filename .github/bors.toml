@@ -1,5 +1,6 @@
 status = [
     "build",
+    "markdownlint",
 ]
 
 use_squash_merge = true

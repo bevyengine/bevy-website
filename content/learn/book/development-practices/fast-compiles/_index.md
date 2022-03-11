@@ -29,15 +29,15 @@ TODO: explain why you might want faster compiles
   * **Arch**: `sudo pacman -S lld`
   * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
 
-	```sh
-	cargo install -f cargo-binutils
-	rustup component add llvm-tools-preview
-	```
+ ```sh
+ cargo install -f cargo-binutils
+ rustup component add llvm-tools-preview
+ ```
 
-  * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
+* **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
 
-	```sh
+ ```sh
     # Install the nightly toolchain
     rustup toolchain install nightly
     # Configure your current project to use nightly (run this command within the project)
