@@ -3,6 +3,7 @@ title = "Manipulating entities with commands"
 weight = 4
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: explain what commands are used for

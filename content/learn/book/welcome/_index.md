@@ -4,6 +4,7 @@ weight = 1
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Welcome to the Bevy game engine! A bevy may be a group of birds, but our engine offers a fresh new experience that's:

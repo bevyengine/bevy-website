@@ -4,6 +4,7 @@ weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: explain why you might want faster compiles
