@@ -3,6 +3,7 @@ title = "Setup"
 weight = 1
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 I know you are itching to start making games, but we need to do a _small_ amount of setup first.

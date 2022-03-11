@@ -3,6 +3,7 @@ title = "Indexes"
 weight = 3
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: discuss problem of iterating through every single value

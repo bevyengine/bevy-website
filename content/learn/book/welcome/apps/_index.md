@@ -3,6 +3,7 @@ title = "Apps"
 weight = 2
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 Bevy programs store and execute all of their game logic and data with a single [`App`] data structure.

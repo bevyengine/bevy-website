@@ -3,6 +3,7 @@ title = "Web"
 weight = 1
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: explain that this works via compilation to wasm

@@ -3,6 +3,7 @@ title = "Plugins"
 weight = 3
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 One of Bevy's core principles is modularity. In Bevy, all functionality is implemented via [`Plugins`], which are added to an [`App`]. Game logic like player movement, core engine logic like rendering and sound, and third party extensions like tile maps are all implemented the same way using [`Plugins`].

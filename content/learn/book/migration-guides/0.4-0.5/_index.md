@@ -4,6 +4,7 @@ weight = 1
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 [extra]
 long_title = "Migration Guide: 0.4 to 0.5"
 +++

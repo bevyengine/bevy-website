@@ -3,6 +3,7 @@ title = "Reliable change detection"
 weight = 6
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 TODO: discuss the need to only respond on changed data
