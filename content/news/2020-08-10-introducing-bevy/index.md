@@ -866,7 +866,8 @@ Bevy [`Assets`] are just typed data that can be referenced using asset [`Handles
 [`Assets`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Assets.html
 [`Handles`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Handle.html
 
-#### Asset Creation
+### Asset Creation
+
 ```rs
 fn create_texture_system(mut textures: ResMut<Assets<Texture>>) {
     // creates a new Texture asset and returns a handle, which can then be used to retrieve the actual asset
@@ -884,7 +885,9 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 ```
 
 #### Asset Events
+
 The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed [`Events`]. These events can also be consumed as a system resource, just like any other [`Events`]:
+
 ```rs
 fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
     for event in state.reader.iter(&texture_events) {
@@ -980,7 +983,7 @@ Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderRes
 
 Components and Assets can derive the [`RenderResources`] trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
 
-Binding uniforms to a custom shader is literally as simple as deriving [`RenderResources`] on your component or asset: 
+Binding uniforms to a custom shader is literally as simple as deriving [`RenderResources`] on your component or asset:
 
 ```rs
 #[derive(RenderResources, Default)]

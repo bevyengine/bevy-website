@@ -165,6 +165,7 @@ fn error_handler_system(In(result): In<Result<()>>, error_handler: Res<MyErrorHa
 ```
 
 The [`System`] trait now looks like this:
+
 ```rust
 // Has no inputs and no outputs
 System<In = (), Out = ()>
