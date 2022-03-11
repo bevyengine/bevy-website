@@ -14,7 +14,7 @@ show_image = true
 
 Today is Bevy's first birthday! And what a year it has been! Now seems like as good a time as any to look back on how far we've come, reflect a bit, and start thinking about what the next year of Bevy development will look like.
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/book/getting-started/) and a [Bevy Book](https://bevyengine.org/learn/book/introduction/). You can also check out [Bevy Assets](https://bevyengine.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Bevy Book](https://bevyengine.org/learn/book/); check it out to get started. You can also check out [Bevy Assets](https://bevyengine.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
 
 
 <!-- more -->
