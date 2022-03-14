@@ -6,6 +6,290 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain the basic data model
+As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
 
-TODO: show how to create an entity, add components to it, and query for it in pure `bevy_ecs`
+## Spawning and despawning entities
+
+Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
+Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
+
+There are two APIs to do so. The first is more direct, allowing you to add and remove entities directly on the world.
+
+```rust
+use bevy::prelude::*;
+
+// Creates a new world
+let mut world = World::new();
+// Spawns an entity with no components
+world.spawn();
+// Spawns a second entity, keeping track of its unique identifier
+let my_entity = world.spawn().id();
+// Uses the second entity's unique identifier to despawn it
+world.despawn(my_entity);
+```
+
+If you're using Bevy as a whole (rather than just [`bevy_ecs`]), you'll tend to find that working with the world directly is rare:
+often reserved for [writing tests](https://github.com/bevyengine/bevy/blob/main/tests/how_to_test_systems.rs).
+Instead, almost all of your logic will be contained within systems,
+which don't have the permissions to immediately spawn or despawn new entities (what if someone else was using that?!).
+To work around this, we use **commands**, which have a delayed effect.
+For now, let's take a look at how we can use them to work with entities in simple ways (you can read about all the details [later in this chapter](../commands/_index.md)).
+
+```rust
+// This system needs to have a mutable argument with the `Commands` type
+// allowing it to queue up commands to be processed at the end of the stage
+fn spawning_system(mut commands: Commands){
+    // These commands perform the exact same operations
+    // as the previous code snippet,
+    // but at the end of the stage, rather than immediately
+    commands.spawn();
+    let my_entity = commands.spawn().id();
+    commands.despawn(my_entity);
+}
+```
+
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
+[`bevy_ecs`]: https://crates.io/crates/bevy_ecs
+
+## Working with components
+
+Entities are entirely bare when they're spawned: they contain no data other than their unique [`Entity`] identifier.
+This of course is not very useful, so let's discuss how we can add and remove components to them which store data and enable behavior through systems.
+
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+
+### Defining components
+
+To define a component type, we simply implement the [`Component`] trait for a Rust type of our choice.
+You will almost always want to use the `#[derive(Component)]` macro to do this for you; which quickly and reliably generates the correct trait implementation.
+Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on [`Component`]).
+This ensures that the data can be sent across the threads safely and allows our [type reflection tools](https://github.com/bevyengine/bevy/tree/main/crates/bevy_reflect) to work correctly.
+
+With the theory out of the way, let's define some components!
+
+```rust
+// This is a dataless "unit struct", which holds no data of its own.
+// In Bevy, these are useful for distinguishing similar entities or toggling behavior
+// and are called "marker components"
+#[derive(Component)]
+struct Combatant;
+
+// This simple components wrap a u8 in a tuple struct
+#[derive(Component)]
+struct Life(u8);
+
+// We can store arbitrary data in our components, as long as it has a 'static lifetime
+// Types without lifetimes are always 'static,
+// allowing us to safely hold a String, but not a &str
+#[derive(Component)]
+struct Name(String);
+
+// Naming your components' fields,
+// makes them easier and safer to refer to
+#[derive(Component)]
+struct Stats {
+    strength: u8,
+    dexterity: u8,
+    intelligence: u8,
+}
+
+// Enum components are great for storing mutually exclusive states
+#[derive(Component)]
+enum Allegiance {
+    Friendly,
+    Neutral,
+    Hostile
+}
+```
+
+[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
+
+### Spawning entities with components
+
+Now that we have some components defined, let's try adding them to our entities using [`Commands`].
+
+```rust
+fn spawn_combatants_system(mut commands: Commands) {
+    commands
+        .spawn()
+        // This inserts a data-less `Combatant` component into the entity we're spawning
+        .insert(Combatant)
+        // We configure starting component values by passing in concrete instances of our types
+        .insert(Life(10))
+        // By chaining .insert method calls like this, we continue to add more components to our entity
+        .insert(Name("Gallant".to_string()))
+        // Instances of named structs are constructed with {field_name: value}
+        .insert(Stats {
+            strength: 15,
+            dexterity: 10,
+            intelligence: 8,
+        })
+        // Instances of enums are created by picking one of their variants
+        .insert(Allegiance::Friendly);
+
+    // We've ended our Commands method chain using a ;,
+    // and so now we can create a second entity
+    // by calling .spawn() again
+    commands
+        .spawn()
+        .insert(Combatant)
+        .insert(Life(10))
+        .insert(Name("Goofus".to_string()))
+        .insert(Stats {
+            strength: 17,
+            dexterity: 8,
+            intelligence: 6,
+        })
+        .insert(Allegiance::Hostile);
+}
+```
+
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
+
+### Adding and removing components
+
+Once an entity is spawned, you can use [`Commands`] to add and remove components from them dynamically.
+
+```rust
+
+#[derive(Component)]
+struct InCombat;
+
+// This query returns the `Entity` identifier of all entities
+// that have the `Combatant` component but do not yet have the `InCombat` component
+fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>>, mut commands: Commands){
+    for entity in query.iter(){
+        // The component will be inserted at the end of the current stage
+        commands.entity(entity).insert(InCombat);
+    }
+}
+
+// Now to undo our hard work
+fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut commands: Commands){
+    for entity in query.iter(){
+        // The component will be removed at the end of the current stage
+        commands.entity(entity).remove(InCombat);
+    }
+}
+```
+
+## Bundles
+
+As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
+To get around this, Bevy abstracts these patterns using **component bundles**.
+These are implemented by implementing the [`Bundle`] trait for a struct; turning each of its fields into a distinct component on your entity when they are inserted.
+
+Let's try rewriting that code from above.
+
+```rust
+#[derive(Bundle)]
+struct CombatantBundle {
+    combatant: Combatant
+    life: Life,
+    stats: Stats,
+    allegiance: Allegiance,
+}
+
+// We can add new methods to our bundle type that return Self
+// to create principled APIs for entity creation.
+// The Default trait is the standard tool for creating
+// new struct instances without configuration 
+impl Default for CombatantBundle {
+    fn default() -> Self {
+        CombatantBundle {
+            combatant: Combatant,
+            life: Life(10),
+            stats: Stats {
+                strength: 10,
+                dexterity: 10,
+                intelligence: 10,
+            }
+            allegiance: Allegiance::Neutral,
+        }
+    }
+}
+
+fn spawn_combatants_system(mut commands: Commands) {
+    commands
+        .spawn()
+        // We're using struct-update syntax to modify 
+        // the instance of `CombatantBundle` returned by its default() method
+        // See the page on Rust Tips and Tricks at the end of this chapter for more info!
+        .insert_bundle(CombatantBundle{
+            stats: Stats {
+                strength: 15,
+                dexterity: 10,
+                intelligence: 8,
+            }
+            allegiance: Allegiance::Friendly,
+            ..Default::default()
+        })
+        // We can continue to chain more .insert or .insert_bundle methods
+        // to add more components and extend behavior
+        .insert(Name("Gallant".to_string()));
+    
+    commands
+        // .spawn_bundle is just syntactic sugar for .spawn().insert_bundle
+        .spawn_bundle(CombatantBundle{
+            stats: Stats {
+                strength: 17,
+                dexterity: 8,
+                intelligence: 6,
+            }
+            allegiance: Allegiance::Hostile,
+            ..Default::default()
+        })
+        .insert(Name("Goofus".to_string()));}
+```
+
+[`Bundle`]: https://docs.rs/bevy/latest/bevy/ecs/bundle/trait.Bundle.html
+
+### Nested bundles
+
+As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
+One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
+Be mindful; this can lead to overwrought, deeply nested code if overused and bundles are [not currently checked](https://github.com/bevyengine/bevy/issues/2387) for duplicate component types.
+Later instances of the same type will overwrite earlier ones.
+
+With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
+
+```rust
+#[derive(Bundle)]
+struct AttackableBundle{
+    life: Life,
+    attack: Attack,
+    defense: Defense,
+}
+
+#[derive(Bundle)]
+struct CombatantBundle {
+    combatant: Combatant
+    // This attribute macro marks our attackable_bundle field as a bundle,
+    // allowing Bevy to properly flatten it out when building the final entity
+    #[bundle]
+    attackable_bundle: AttackableBundle,
+    position: Position,
+    stats: Stats,
+    allegiance: Allegiance,
+}
+
+impl Default for CombatantBundle {
+    fn default() -> Self {
+        CombatantBundle {
+            combatant: Combatant,
+            attackable_bundle: AttackableBundle {
+                life: Life(10),
+                attack: Attack(5),
+                defense: Defense(1),
+            }
+            position: Position(0, 0),
+            stats: Stats {
+                strength: 10,
+                dexterity: 10,
+                intelligence: 10,
+            }
+            allegiance: Allegiance::Neutral,
+        }
+    }
+}
+```
