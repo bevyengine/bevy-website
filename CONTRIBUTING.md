@@ -100,7 +100,7 @@ This path should prioritize:
 
 ## Setup
 
-This website is built using [Zola](https://www.getzola.org/): install it and use `zola serve --open` to examine the website as it would appear.
+This website is built using [Zola](https://www.getzola.org/): install it and use `zola serve` to examine the website as it would appear.
 
 We use code validation to ensure that the book's code continues to compile before release.
 Check that this works locally using:
