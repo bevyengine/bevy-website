@@ -98,6 +98,16 @@ This path should prioritize:
    5. Contributing to Bevy itself.
 6. Linking to further reading: official examples, `docs.rs` and (very sparingly) source code links.
 
+## Setup
+
+This website is built using [Zola](https://www.getzola.org/): install it and use `zola serve --open` to examine the website as it would appear.
+
+We use code validation to ensure that the book's code continues to compile before release.
+Check that this works locally using:
+
+1. `cd code-validation`
+2. `cargo build`
+
 ## Contributor's style guide
 
 When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
