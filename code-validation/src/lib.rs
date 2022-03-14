@@ -44,20 +44,20 @@ mod learn {
         mod ecs {
             #[doc = include_str!("../../content/learn/book/ecs/commands/_index.md")]
             mod commands {}
+            #[doc = include_str!("../../content/learn/book/ecs/detecting-changes/_index.md")]
+            mod detecting_changes {}
+            #[doc = include_str!("../../content/learn/book/ecs/ecs-magic/_index.md")]
+            mod ecs_magic {}
             #[doc = include_str!("../../content/learn/book/ecs/entities-components/_index.md")]
             mod entities_components {}
             #[doc = include_str!("../../content/learn/book/ecs/exclusive-world-access/_index.md")]
             mod exclusive_world_access {}
-            #[doc = include_str!("../../content/learn/book/ecs/filtering-queries/_index.md")]
-            mod filtering_queries {}
-            #[doc = include_str!("../../content/learn/book/ecs/generic-systems/_index.md")]
-            mod generic_systems {}
-            #[doc = include_str!("../../content/learn/book/ecs/reliable-change-detection/_index.md")]
-            mod reliable_change_detection {}
+            #[doc = include_str!("../../content/learn/book/ecs/queries/_index.md")]
+            mod queries {}
             #[doc = include_str!("../../content/learn/book/ecs/resources/_index.md")]
             mod resources {}
-            #[doc = include_str!("../../content/learn/book/ecs/systems-queries/_index.md")]
-            mod system_queries {}
+            #[doc = include_str!("../../content/learn/book/ecs/systems/_index.md")]
+            mod systems {}
         }
 
         #[doc = include_str!("../../content/learn/book/game-logic/_index.md")]
