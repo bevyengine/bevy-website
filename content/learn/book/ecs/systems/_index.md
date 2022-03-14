@@ -1,7 +1,8 @@
 +++
-title = "Commands queue up work"
-weight = 5
+title = "Systems do work"
+weight = 4
 template = "book-section.html"
 page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
+

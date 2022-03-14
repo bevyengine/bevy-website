@@ -1,6 +1,6 @@
 +++
-title = "Exclusive `World` access"
-weight = 8
+title = "Exclusive world access"
+weight = 7
 template = "book-section.html"
 page_template = "book-section.html"
 insert_anchor_links = "right"
