@@ -127,7 +127,7 @@ fn main() {
 /// Resource to store our secret key
 #[derive(Default)]
 struct Secret {
- // The default value of Option<T> fields is always None
+   // The default value of Option<T> fields is always None
     val: Option<KeyCode>,
 }
 
@@ -147,8 +147,8 @@ fn record_secret(
     mut input: ResMut<Input<KeyCode>>,
 ) {
     // This system should only do work in the Recording input mode
- // Note that we need to derefence out of the ResMut smart pointer
- // using * to access the underlying InputMode data
+   // Note that we need to derefence out of the ResMut smart pointer
+   // using * to access the underlying InputMode data
     if *input_mode == InputMode::Recording {
         // Only display the text prompt once, when the input_mode changes
         if input_mode.is_changed() {
