@@ -11,6 +11,9 @@ find assets -type f -name '*.md' -exec rm {} +
 # setting a canvas by default to help with integration
 sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_window/src/window.rs
 
+# setting the asset folder root to the root url of this domain
+sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crates/bevy_asset/src/lib.rs
+
 
 add_category()
 {
@@ -25,7 +28,6 @@ add_category()
     do
         echo "building $category / $example"
         mkdir ../../content/examples/$category_path/$example
-        cp -r assets ../../content/examples/$category_path/$example
         cp examples/$category_path/$example.rs ../../content/examples/$category_path/$example/
         cargo build --release --target wasm32-unknown-unknown --example $example
         wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
@@ -51,6 +53,7 @@ weight = $category_weight
 }
 
 mkdir ../../content/examples
+cp -r assets/ ../../static/assets/examples/
 
 echo "+++
 title = \"Bevy Examples in WebGL2\"
