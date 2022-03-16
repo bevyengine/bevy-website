@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 # This should point to `main` when we are preparing for the next release,
 # but should be fixed at the latest release once it is published on crates.io
-# bevy = 0.6
-bevy = {git = "https://github.com/bevyengine/bevy"}
+# bevy = "0.7"
+bevy = { git = "https://github.com/bevyengine/bevy" }
