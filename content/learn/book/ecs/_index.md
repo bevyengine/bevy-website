@@ -48,68 +48,6 @@ fn spawn_player(commands: Commands){
 }
 ```
 
-Generally, components are kept quite small, which increases the flexibility of the design and reduces the amount of unneeded data that is fetched.
-To make this design easier to work with, related components are commonly grouped together in **component bundles** to allow users to easily build entities with complex behavior.
-
-```rust
-use bevy::prelude::*;
-
-#[derive(Component)]
-struct Strength(u8);
-
-#[derive(Component)]
-struct Dexterity(u8);
-
-#[derive(Component)]
-struct Agility(u8);
-
-// This component bundle groups several related components together
-// allowing them to be inserted in a single statement
-#[derive(Bundle)]
-struct AttributeBundle {
-    // Each of the types in the bundle
-    // will be inserted as a seperate component in our entity
-    strength: Strength,
-    dexterity: Dexterity,
-    intelligence: Intelligence,
-}
-
-// In Rust, impl blocks allow you to define methods for types
-impl AttributeBundle {
-    // Defining "builder methods" for bundle types is a common pattern,
-    // and allows you to simplify construction and 
-    fn new(strength: u8, dexterity: u8, intelligence: u8) -> AttributeBundle {
-        AttributeBundle {
-            strength,
-            dexterity,
-            intelligence
-        }
-    }
-}
-
-fn spawn_player_with_attributes(mut commands: Commands){
-    // This starts the same as the previous method
-    commands.spawn()
-        .insert(Life {current: 10, max: 10})
-        .insert(Team::Blue)
-        .insert(Player)
-        // But here, we're inserting several components at once
-        // Our player is much stronger than they are smart!
-        .insert_bundle(AttributeBundle::new(9, 4, 3));
-
-    // We can make a nemesis by spawning another entity!
-    commands.spawn()
-        .insert(Life {current: 10, max: 10})s
-        .insert(Team::Red)
-        .insert(Player)
-        // Inserting the components one at a time leads to exactly the same result
-        // But as you can see, is often more verbose (and error-prone!)
-        .insert(Strength(9))
-        .insert(Dexterity(4))
-        .insert(Intelligence(3));
-}
-```
-
 **Entities** are simply collections of components, and the [`Entity`] type is simply a unique identifier for that particular type: something like a name, URL or row number in a database.
 
 ```rust
