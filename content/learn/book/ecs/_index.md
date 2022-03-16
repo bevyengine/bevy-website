@@ -210,3 +210,8 @@ While there's much more to learn about Bevy's ECS, this basic overview should gi
 Don't worry if some concepts are too abstract or impractical for you at this point:
 this book is intended to be skimmed on the first read.
 Refer back to it later for more detailed explanations as you start building your own awesome projects in Bevy!
+
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
+[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
