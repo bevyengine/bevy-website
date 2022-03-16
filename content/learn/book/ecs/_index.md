@@ -133,9 +133,51 @@ fn spawn_player_in_a_convoluted_way(mut commands: Commands){
 }
 ```
 
-In order to read, manipulate and act on the data we've created, we must use systems.
-**Systems** are Rust functions that request specific data from the [`World`] by defining which data they need in their **system parameters**.
-Most commonly, systems use a [`Query`] to select component data from all entities with a matching collection of components.
+**Systems** can be used to read, manipulate and otherwise act on the data we've created, bringing our game to life.
+In Bevy, all behavior is ultimately powered by systems, and systems are constructed as ordinary Rust functions.
+The data that each system can access is defined by its **system parameters**: function parameters with types that implement the [`SystemParam`] trait.
+[`Commands`], shown in the examples above, is a system parameter, but there are many more, each requesting a different kind of data from the [`World`].
+
+```rust
+#[derive(Component)]
+struct Player;
+
+#[derive(Component, Debug)]
+struct Life {
+    current: u8,
+    max: u8,
+}
+
+#[derive(Component)]
+struct LifeRegen(u8);
+
+// The `Query` system parameter allows us to fetch component data from our entities
+// 
+// The first type parameter defines the data that should be returned,
+// while the second type parameter "filters" the entities that have the matching components
+fn print_player_life(query: Query<&Life, With<Player>>){
+    // Queries return all matching entities
+    // by iterating over them we can perform the same logic on each entity
+    for life in query.iter(){
+        dbg!(life);
+    }
+}
+
+// We can request multiple components in our queries by wrapping them in a (A, B) tuple
+// and mutate the components by requesting &mut A rather than &A
+fn regenerate_life(mut query: Query<(&mut Life, &LifeRegen)>){
+    // We can use "destructuring" to unpack our query items into the corresponding types
+    for (mut life, life_regen) in query.iter_mut(){
+        // .0 means "the first field of a tuple struct"
+        life.current += life_regen.0;
+        
+        // We shouldn't let life regeneration heal our units above full!
+        if life.current > life.max {
+            life.current = life.max;
+        }
+    }
+}
+```
 
 ## The game loop
 
@@ -150,11 +192,12 @@ Systems within the same **stage** are allowed to run in parallel with each other
 fn main(){
     let app = App::new()
         .add_plugins(MinimalPlugins)
-        // Startup systems run exactly once, when our app is first initialized
-        .add_startup_system(todo!())
-        // Regular systems are run each time the system loops
-        .add_system(todo!())
-        .add_system(todo!());
+        // Startup systems run exactly once, when the app is first run
+        .add_startup_system(spawn_damaged_player)
+        // Regular systems are run each time the schedule loops
+        .add_system(regenerate_life)
+        // We can use .before and .after to enforce a consistent ordering of our systems
+        .add_system(print_player_life.after(regenerate_life));
 
     for i in 1..10 {
         // This runs our app's schedule a single time
