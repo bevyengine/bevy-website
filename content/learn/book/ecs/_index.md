@@ -179,8 +179,6 @@ fn regenerate_life(mut query: Query<(&mut Life, &LifeRegen)>){
 }
 ```
 
-## The game loop
-
 Once systems are added to our app, the **runner** takes this information and automatically runs our systems, typically once during each pass of the **game loop** according to the rules defined in the **schedule**.
 
 Bevy's default execution strategy runs systems in parallel.
@@ -192,7 +190,7 @@ Systems within the same **stage** are allowed to run in parallel with each other
 fn main(){
     let app = App::new()
         .add_plugins(MinimalPlugins)
-        // Startup systems run exactly once, when the app is first run
+        // Startup systems run exactly once, when the schedule is first run
         .add_startup_system(spawn_damaged_player)
         // Regular systems are run each time the schedule loops
         .add_system(regenerate_life)
@@ -207,14 +205,3 @@ fn main(){
     }
 }
 ```
-
-## Resources
-
-Some data isn't reasonably stored as components on a particular entity: it may represent a piece of global state or configuration.
-In these cases, we can turn to **resources**: simple, unique global stores of data.
-
-These are accessed from the [`World`] via their type using the [`Res`] (for read-only access) or [`ResMut`] (for read-write access) system parameters.
-
-## Working with the `World`
-
-When we need to access data in complex, cross-cutting ways that are not cleanly modelled by our systems' function signatures, we can defer the work until we have exclusive access to the entire [`World`'s] data: executing **commands** generated in earlier systems at the end of each stage (to do things like spawn entities or insert components) or performing complex logic (like saving the entire game) in our own **exclusive systems**.
