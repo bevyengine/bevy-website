@@ -7,142 +7,63 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
 
-Bevy takes an ECS-first approach to organizing data and orchestrating game logic.
-ECS stands for ["Entity-Component-System"](https://en.wikipedia.org/wiki/Entity_component_system), and is a high-performance, modular [paradigm](https://ajmmertens.medium.com/ecs-from-tool-to-paradigm-350587cdf216) for organizing and manipulating data.
-In a nutshell: data is stored as components which belong to entities, which is extracted and then modified by systems.
+In Bevy, game objects are stored as **entities**, whose data is stored as **components**.
+**Systems** operate on this data, modifying the **world** to carry out the behavior that brings your game to life.
+Together, these these form the basis of Bevy's **ECS**, which unsurprisingly stands for ["Entity-Component-System"](https://en.wikipedia.org/wiki/Entity_component_system).
+Let's go over the most important definitions:
 
-Each **component** store a piece of data for a single entity in a strongly-typed fashion.
-You may have a `Life` component that stores how much life an entity has, a `Team` enum component that defines which team the entity belongs to, or even a dataless `Player` marker component that serves as a hint that this entity represents the player.
-This allows us to build up entities in a composable fashion, sharing data types (and behavior) across different kinds of game objects.
+- **Entities:** Game objects (either abstract, like a camera, or tangible, like a player character), whose data is stored as components.
+  - The [`Entity`] type is just a simple identifier (like a URL address, a unique name, or a row number in a database): any combination of components can be added to each entity.
+- **Components:** Data stored on an entity, that can be manipulated in systems.
+  - Each component has a different Rust type that implements the [`Component`] trait, and only one component of each type can exist for each entity.
+- **World:** A unifying collection of all of the data stored in the ECS.
+- **Systems:** Special functions that read and write data stored in the [`World`].
+  - Any function whose parameters all implement the [`SystemParam`] type can be converted into a [`System`].
 
-```rust
-use bevy::prelude::*;
+Suppose we wanted to make a Breakout game in Bevy.
+Let's think about what entities we might want, what components they might have, and what systems we might create:
 
-// This derive macro automatically implements the `Component` trait for our type
-#[derive(Component)]
-struct Life {
-    current: u8,
-    max: u8,
-}
+- Paddle entities
+  - a dataless `Paddle` **marker component**, to allow us to uniquely identify the paddle
+  - a [`Sprite`] component, which describes how to draw these bundles
+    - in reality, this is a bit more complex, and requires a [`SpriteBundle`] collection of components
+  - a [`Transform`] component, to let us know the translation (position), rotation (orientation) and scale (size) of our paddles
+  - a `Velocity` component, giving us more realistic movement
+  - a `Collidable` component, to let us know that the ball can bounce off of it
+- Ball entity
+  - a `Ball` marker component, so we can uniquely identify our ball
+  - a [`Sprite`] component
+  - a [`Transform`] component
+  - a `Velocity` component, to ensure the ball keeps moving
+- Brick entities
+  - a [`Brick`] marker component
+  - a [`Sprite] component
+  - a [`Transform] component
+  - a `Collidable` component
+- Wall entity
+  - a `Collidable` component, to make sure our ball bounces off the walls
+  - a `Transform` component, so we know where the boundaries are
 
-// Enums can be used as components:
-// each entity with this component belongs to exactly one of the Red, Blue or Green team
-#[derive(Component)]
-enum Team {
-    Red,
-    Blue,
-    Green,
-}
+As you can see, each component implies specific behavior, but does not provide it on its own: they're just data, and cannot act on their own.
+The components are quite small, allowing us to reuse these types and share behavior across entities using systems that operate on all entities.
+For our simple Breakout game, we may have:
 
-// Components don't have to store data
-// Marker components like this are very helpful to toggle behavior
-// when combined with query filters
-#[derive(Component)]
-struct Player;
+- `setup`: a simple **startup system** that runs once when our game is launched, **spawning** our paddles, ball and walls
+- `apply_velocity`: a system that operates on all entities with a `Transform` and `Velocity`, and moves the entity according to its velocity
+- `handle_collisions`: a system that operates on the `Ball` entity, and any entity with both a `Collidable` component and a `Transform` component, to bounce the ball appropriately
+- `destroy_bricks`: a system that **despawns** entities with the `Brick` marker component when they are collided with
 
-// This system that spawns a new player each time it is run
-fn spawn_player(commands: Commands){
-    // Each component is added seperately to the entity;
-    // there's no limitation on which components any given entity can have
-    commands.spawn().insert(Life {current: 10, max: 10}).insert(Team::Blue).insert(Player);
-}
-```
+If you'd like to see what a basic but complete Breakout game looks like in Bevy, check out the [Breakout example]!
 
-**Entities** are simply collections of components, and the [`Entity`] type is simply a unique identifier for that particular type: something like a name, URL or row number in a database.
+In order to start working with Bevy, you should know a few other critical pieces of ECS vocabulary:
 
-```rust
-use bevy::prelude::*;
-
-fn spawn_player_in_a_convoluted_way(mut commands: Commands){
-    // We can store which Entity we're working with
-    let player_entity = commands.spawn()
-        .insert(Life {current: 10, max: 10})
-        .insert(Team::Blue)
-        .insert(Player)
-        // This .id() method grabs the `Entity` identifier
-        // of the entity we're working with
-        .id();
-
-    // Inspect the identifier used
-    dbg!(player_entity);
-
-    // And then operate on a specific entity using the `Commands::entity` method
-    commands.entity(player_entity).insert_bundle(AttributeBundle::new(9, 4, 3));
-}
-```
-
-**Systems** can be used to read, manipulate and otherwise act on the data we've created, bringing our game to life.
-In Bevy, all behavior is ultimately powered by systems, and systems are constructed as ordinary Rust functions.
-The data that each system can access is defined by its **system parameters**: function parameters with types that implement the [`SystemParam`] trait.
-[`Commands`], shown in the examples above, is a system parameter, but there are many more, each requesting a different kind of data from the [`World`].
-
-```rust
-#[derive(Component)]
-struct Player;
-
-#[derive(Component, Debug)]
-struct Life {
-    current: u8,
-    max: u8,
-}
-
-#[derive(Component)]
-struct LifeRegen(u8);
-
-// The `Query` system parameter allows us to fetch component data from our entities
-// 
-// The first type parameter defines the data that should be returned,
-// while the second type parameter "filters" the entities that have the matching components
-fn print_player_life(query: Query<&Life, With<Player>>){
-    // Queries return all matching entities
-    // by iterating over them we can perform the same logic on each entity
-    for life in query.iter(){
-        dbg!(life);
-    }
-}
-
-// We can request multiple components in our queries by wrapping them in a (A, B) tuple
-// and mutate the components by requesting &mut A rather than &A
-fn regenerate_life(mut query: Query<(&mut Life, &LifeRegen)>){
-    // We can use "destructuring" to unpack our query items into the corresponding types
-    for (mut life, life_regen) in query.iter_mut(){
-        // .0 means "the first field of a tuple struct"
-        life.current += life_regen.0;
-        
-        // We shouldn't let life regeneration heal our units above full!
-        if life.current > life.max {
-            life.current = life.max;
-        }
-    }
-}
-```
-
-Once systems are added to our app, the **runner** takes this information and automatically runs our systems, typically once during each pass of the **game loop** according to the rules defined in the **schedule**.
-
-Bevy's default execution strategy runs systems in parallel.
-Because the **function signature** of each of our systems fully define the data it can access, we can ensure that only one system can change a piece of data at once (although any number can read from a piece of data at the same time).
-
-Systems within the same **stage** are allowed to run in parallel with each other (as long as their data access does not conflict), and are assigned to a thread to perform work as soon as one is free.
-
-```rust
-fn main(){
-    let app = App::new()
-        .add_plugins(MinimalPlugins)
-        // Startup systems run exactly once, when the schedule is first run
-        .add_startup_system(spawn_damaged_player)
-        // Regular systems are run each time the schedule loops
-        .add_system(regenerate_life)
-        // We can use .before and .after to enforce a consistent ordering of our systems
-        .add_system(print_player_life.after(regenerate_life));
-
-    for i in 1..10 {
-        // This runs our app's schedule a single time
-        // When writing real games, you'll typically want to use App::run to loop the schedule indefinitely,
-        // but this method is very valuable for testing and teaching purposes!
-        app.update();
-    }
-}
-```
+- **Resources:** Globally unique stores of data that live in the [`World`], but are not associated with a specific entity.
+  - Events, configuration and global game state are all commonly stored as resources, which can be accessed with the [`Res`] system parameter.
+- **Queries:** Requests for specific entity-component data from the [`World`].
+  - The [`Query`] type has two type parameters: the first describes what component data should be fetched, and the second filters down which entities with that data should be returned.
+- **Commands:** Instructions to modify the [`World`] at a later point in time.
+  - Most commonly, this is used to spawn and despawn entities, or insert and removed components.
+  - [`Commands`] require [exclusive world access](./exclusive-world-access/), and so are deferred until there are no other systems running.
 
 While there's much more to learn about Bevy's ECS, this basic overview should give you the vocabulary you need to start exploring the rest of this chapter.
 Don't worry if some concepts are too abstract or impractical for you at this point:
@@ -150,6 +71,12 @@ this book is intended to be skimmed on the first read.
 Refer back to it later for more detailed explanations as you start building your own awesome projects in Bevy!
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
-[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
+[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
+[`System`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.System.html
+[`Sprite`]: https://docs.rs/bevy/latest/bevy/sprite/struct.Sprite.html
+[`SpriteBundle`]: https://docs.rs/bevy/latest/bevy/sprite/struct.SpriteBundle.html
+[`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
+[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
