@@ -205,3 +205,8 @@ fn main(){
     }
 }
 ```
+
+While there's much more to learn about Bevy's ECS, this basic overview should give you the vocabulary you need to start exploring the rest of this chapter.
+Don't worry if some concepts are too abstract or impractical for you at this point:
+this book is intended to be skimmed on the first read.
+Refer back to it later for more detailed explanations as you start building your own awesome projects in Bevy!
