@@ -12,19 +12,22 @@ In Bevy, game objects are stored as **entities**, whose data is stored as **comp
 Together, these these form the basis of Bevy's **ECS**, which unsurprisingly stands for ["Entity-Component-System"](https://en.wikipedia.org/wiki/Entity_component_system).
 Let's go over the most important definitions:
 
+- **World:** A unifying collection of all of the data stored in the ECS.
+  - Access to the [`World`] follows Rust's borrow checker rules: you can read from the same data any number of times, but you must have exclusive access to modify a piece of data.
 - **Entities:** Game objects (either abstract, like a camera, or tangible, like a player character), whose data is stored as components.
-  - The [`Entity`] type is just a simple identifier (like a URL address, a unique name, or a row number in a database): any combination of components can be added to each entity.
+  - The [`Entity`] type is just a simple identifier (like a URL address, a unique name, or a row number in a database).
 - **Components:** Data stored on an entity, that can be manipulated in systems.
   - Each component has a different Rust type that implements the [`Component`] trait, and only one component of each type can exist for each entity.
-- **World:** A unifying collection of all of the data stored in the ECS.
-- **Systems:** Special functions that read and write data stored in the [`World`].
+  - Components without data are called **marker components**, and can be used to efficiently select entities that have a specific property (like being `Poisoned`, or defining a `Player`).
+  - Any combination of components can be added to each entity, allowing us to extend and share behavior through composition.
+- **Systems:** Special functions that operate on data from the [`World`]: most commonly modifying the data stored in components on entities.
   - Any function whose parameters all implement the [`SystemParam`] type can be converted into a [`System`].
 
 Suppose we wanted to make a Breakout game in Bevy.
 Let's think about what entities we might want, what components they might have, and what systems we might create:
 
 - Paddle entities
-  - a dataless `Paddle` **marker component**, to allow us to uniquely identify the paddle
+  - a `Paddle` marker component, to allow us to uniquely identify the paddle
   - a [`Sprite`] component, which describes how to draw these bundles
     - in reality, this is a bit more complex, and requires a [`SpriteBundle`] collection of components
   - a [`Transform`] component, to let us know the translation (position), rotation (orientation) and scale (size) of our paddles
