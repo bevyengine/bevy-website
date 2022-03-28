@@ -14,7 +14,7 @@ They are commonly used to:
 - Work across entity boundaries in hierarchal ways
 - Add and remove resources dynamically
 
-Commands are fundamentally designed to perform work that cannot be safely done in parallel, and are used to change the world in ways that touch large amounts of data at once (requiring exclusive access to the [archetypes](../../game-logic/system-ordering/_index.md) and other metadata of the [`World`].
+Commands are fundamentally designed to perform work that cannot be safely done in parallel, and are used to change the world in ways that touch large amounts of data at once (requiring exclusive access to the [archetypes](../../game-logic/system-ordering/_index.md) and other metadata of the [`World`]).
 The [`Command`] trait used by each method on [`Commands`] takes in `&mut World` as the only argument to its [`write`] method, allowing commands to modify the entire world in arbitrary, sequential ways.
 
 As a result, **commands do not take effect immediately.**
