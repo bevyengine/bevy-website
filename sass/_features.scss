@@ -28,7 +28,7 @@
     justify-content: center;
 }
 
-.feature-container-reverse {
+.feature-container::nth-child(odd) {
     flex-wrap: wrap-reverse;
 }
 
@@ -57,7 +57,8 @@
     align-self: center;
 }
 
-.feature-image, .feature-text {
+.feature-image,
+.feature-text {
     min-width: 28rem;
     max-width: 28rem;
     border-width: 1.8rem;
