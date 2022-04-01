@@ -1,13 +1,22 @@
 {% macro header_item(name, path="", current_path) %}
-{% set lower_current_path = current_path | lower %}
-{% set home = "/" %}
-{% if path == "" %}
-    {% set route = "/"~name %}
-{% else %}
-    {% set route = path %}
-{% endif %}
-{% set currently_home = path == home and lower_current_path == home %}
-<a href="{{route | lower}}" {% if lower_current_path is starting_with("/"~name | lower) or currently_home %}class="header-item header-item-active" {% else %}class="header-item"{% endif %} >
-    {{name}}
-</a>
+    {% set lower_current_path = current_path | lower %}
+    {% set home = "/" %}
+
+    {% if path == "" %}
+        {% set route = "/"~name %}
+    {% else %}
+        {% set route = path %}
+    {% endif %}
+
+    {% set currently_home = path == home and lower_current_path == home %}
+    {% set is_active = lower_current_path is starting_with("/"~name | lower) or currently_home %}
+    {% set class = "main-menu__link" %}
+
+    {% if is_active %}
+        {% set class = class~" main-menu__link--active" %}
+    {% endif %}
+
+    <li class="main-menu__entry">
+        <a href="{{route | lower}}" class="{{ class }}">{{name}}</a>
+    </li>
 {% endmacro %}

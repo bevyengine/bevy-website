@@ -1,0 +1,20 @@
+.docs-menu {
+    &__entry {
+        list-style: none;
+    }
+
+    &__link {
+        padding: 0 8px;
+        height: var(--header-height);
+        font-size: calc-rem(16px);
+        text-decoration: none;
+
+        &, &:visited, &:active {
+            color: $color-white;
+        }
+
+        &:hover {
+            background-color: rgba($color-white, 0.05);
+        }
+    }
+}

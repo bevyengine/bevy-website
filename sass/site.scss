@@ -21,11 +21,19 @@
 // - Repeating visual patterns: buttons, cards, menus…
 // - Components can be composed between them to create new components
 // - These should be self contained and shouldn't affect other styling
-@import "components/syntax-theme";
-@import "components/headerbar";
-@import "components/book-nav";
-@import "components/card";
+@import 'components/book-nav';
+@import 'components/button-square';
+@import 'components/button';
+@import 'components/card';
 @import 'components/container';
+@import 'components/docs-menu';
+@import 'components/header';
+@import 'components/layout';
+@import 'components/logo';
+@import 'components/main-menu-backdrop';
+@import 'components/main-menu';
+@import 'components/menu-switch';
+@import 'components/syntax-theme';
 
 // Pages
 // - Page specific CSS

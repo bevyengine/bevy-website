@@ -38,8 +38,75 @@
         <title>{{page_title}}</title>
         {% block head_extensions %} {% endblock %}
     </head>
-
     <body>
+        <div class="layout">
+            <input id="mobile-menu-state" class="hidden" type="checkbox">
+            <header class="layout__header header" data-mobile-menu-state-container>
+                <div class="header__content">
+                    <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+                    <label class="header__hamburger button-square button-square--header" for="mobile-menu-state">
+                        <img src="/assets/icon-hamburger.svg">
+                    </label>
+                    <a class="header__logo" href="/">
+                        <img class="logo logo--icon" src="/assets/bevy_icon_dark.svg" alt="Bevy Engine">
+                        <img class="logo logo--full" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
+                    </a>
+                    <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
+                    <nav class="header__menu main-menu main-menu--with-docs" role="navigation" data-page-menu-switch-state-container>
+                        <div class="main-menu__header">
+                            <img class="logo" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
+                            <label class="button-square button-square--header" for="mobile-menu-state">
+                                <img src="/assets/icon-times.svg">
+                            </label>
+                        </div>
+                        <div class="main-menu__page-menu-switch">
+                            <label class="menu-switch" for="page-menu-switch-state">
+                                <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
+                                <div class="menu-switch__option menu-switch__option--docs">Docs</div>
+                            </label>
+                        </div>
+                        <div class="main-menu__content">
+                            <ul class="main-menu__page-menu docs-menu">
+                                <li class="docs-menu__entry">
+                                    <a class="docs-menu__link" href="docs.html">Learn</a>
+                                </li>
+                                <li class="docs-menu__entry">
+                                    <a class="docs-menu__link" href="index.html">News</a>
+                                </li>
+                                <li class="docs-menu__entry">
+                                    <a class="docs-menu__link" href="index.html">Community</a>
+                                </li>
+                                <li class="docs-menu__entry">
+                                    <a class="docs-menu__link" href="index.html">Assets</a>
+                                </li>
+                                <li class="docs-menu__entry">
+                                    <a class="docs-menu__link" href="index.html">Merch</a>
+                                </li>
+                            </ul>
+                            <ul class="main-menu__menu">
+                                {{header_macros::header_item(name="Learn", current_path=current_path)}}
+                                {{header_macros::header_item(name="News", current_path=current_path)}}
+                                {{header_macros::header_item(name="Community", current_path=current_path)}}
+                                {{header_macros::header_item(name="Assets", current_path=current_path)}}
+                                <li class="main-menu__entry">
+                                    <a class="main-menu__link" href="https://merch.bevyengine.org">Merch</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="header__cta-container">
+                        <a class="button button--pink header__cta" href="https://github.com/sponsors/cart">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
+                        <a class="button header__cta" href="/learn/book/getting-started/">Get Started</a>
+                    </div>
+                </div>
+            </header>
+            <main class="layout__content">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+        <!--
         <div class="headerbar-container">
             <nav class="headerbar container">
                 <a href="/" class="header-logo">
@@ -90,5 +157,6 @@
                 {% block content %} {% endblock %}
             </div>
         </section>
+        -->
     </body>
 </html>

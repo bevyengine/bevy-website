@@ -17,6 +17,11 @@ $bp-tablet-landscape-up: '(min-width: #{$bp-tablet-landscape})';
 $bp-tablet-landscape-down: '(max-width: #{$bp-desktop - 1})';
 $bp-desktop-up: '(min-width: #{$bp-desktop})';
 
+// Custom breakpoints
+// There might be cases that custom breakpoints are needed AND must be shared between
+// CSS components. In those cases put the breakpoints here:
+$bp-header-desktop-up: '(min-width: 920px)';
+
 // Colors
 $color-black: #000;
 $color-white: #ececec;
@@ -35,10 +40,29 @@ $syntax-theme-background-hover: #414247;
 $default-image-background-color: #1b1b1b;
 $card-hover-background: #2f3033;
 
+// Animation
+$duration-fast: 100ms;
+$duration: 250ms;
+
+// Z-Index
+$z-layout-header: 800;
+$z-main-menu-backdrop: 900;
+$z-main-menu: 1000;
+
 // General
 $max-width: 1200px;
+$mobile-menu-width: 300px;
 $content-top-margin: 30px;
 $default-padding: 15px;
 $media-max-width: 1000px;
 $border-radius: 10px;
 $card-list-gap: 15px;
+
+// CSS Vars
+:root {
+  --header-height: 60px;
+  
+  @media #{$bp-header-desktop-up} {
+    --header-height: 72px;
+  }
+}
