@@ -1,0 +1,26 @@
+@mixin flex-center() {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin text-ellipsis($lines: 1) {
+    overflow: hidden;
+
+    @if ($lines == 1) {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    } @else {
+        // Ellipsis on second line
+        // See: https://css-tricks.com/almanac/properties/l/line-clamp/
+        display: -webkit-box;
+        -webkit-line-clamp: $lines;
+        -webkit-box-orient: vertical;
+    }
+}
+
+@mixin state-checked($id) {
+    ##{$id}-state:checked + [data-#{$id}-state-container] {
+        @content;
+    }
+}
