@@ -15,3 +15,11 @@
     {% endif %}
 </li>
 {% endmacro book_nav_section %}
+
+{% macro book_menu(root) %}
+    <ul class="book-nav-sections">
+        {% for s in root.subsections %}
+            {{ self::book_nav_section(section_path=s, section_number=loop.index) }}
+        {% endfor %}
+    </ul>
+{% endmacro %}

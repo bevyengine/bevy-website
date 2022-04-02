@@ -1,20 +1,6 @@
 $inactive-nav-color: #999999;
 $book-nav-width: 210px;
 
-@media screen and (max-width: 900px) {
-    #show-book-nav:not(:checked) + .book-nav {
-        transform: translateX(calc(0px - #{$book-nav-width}));
-    }
-
-    #show-book-nav:checked + .book-nav + .book-content {
-        transform: translateX($book-nav-width);
-    }
-
-    .book-nav {
-        margin-right: calc(0px - #{$book-nav-width});
-    }
-}
-
 .book-nav {
     margin-top: $default-padding;
     flex: 0 0 $book-nav-width;
@@ -71,8 +57,4 @@ $book-nav-width: 210px;
     font-variant-ligatures: none;
     font-size: 1rem;
     margin-right: -0.2rem;
-}
-
-.book-content {
-    transition: transform 0.3s;
 }
