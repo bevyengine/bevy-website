@@ -1,18 +1,19 @@
-{% import "header-macros.html" as header_macros %}
+{% import "macros/header.html" as header_macros %}
+
 {% if section and section.title %}
-{% set page_title = "Bevy - " ~ section.title %}
+    {% set page_title = "Bevy - " ~ section.title %}
 {% elif page and page.title %}
-{% set page_title = "Bevy - " ~ page.title %}
+    {% set page_title = "Bevy - " ~ page.title %}
 {% else %}
-{% set page_title = "Bevy - A data-driven game engine built in Rust "%}
+    {% set page_title = "Bevy - A data-driven game engine built in Rust "%}
 {% endif %}
 
 {% if section and section.path %}
-{% set path = "/" ~ section.path %}
+    {% set path = "/" ~ section.path %}
 {% elif page and page.path %}
-{% set path = "/" ~ page.path %}
+    {% set path = "/" ~ page.path %}
 {% else %}
-{% set path = ""%}
+    {% set path = ""%}
 {% endif %}
 
 {% if section %}
@@ -22,6 +23,7 @@
         {% set show_nav_toggle = true %}
     {% endif %}
 {% endif %}
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -51,38 +53,19 @@
                         <img class="logo logo--icon" src="/assets/bevy_icon_dark.svg" alt="Bevy Engine">
                         <img class="logo logo--full" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
                     </a>
-                    <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
-                    <nav class="header__menu main-menu main-menu--with-docs" role="navigation" data-page-menu-switch-state-container>
+                    {% block mobile_page_menu_state %}{% endblock %}
+                    <nav class="header__menu main-menu {% block main_menu_extra_class %}{% endblock %}" role="navigation" data-page-menu-switch-state-container>
                         <div class="main-menu__header">
                             <img class="logo" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
                             <label class="button-square button-square--header" for="mobile-menu-state">
                                 <img src="/assets/icon-times.svg">
                             </label>
                         </div>
-                        <div class="main-menu__page-menu-switch">
-                            <label class="menu-switch" for="page-menu-switch-state">
-                                <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
-                                <div class="menu-switch__option menu-switch__option--docs">Docs</div>
-                            </label>
-                        </div>
+                        {% block mobile_page_menu_switch %}{% endblock %}
                         <div class="main-menu__content">
-                            <ul class="main-menu__page-menu docs-menu">
-                                <li class="docs-menu__entry">
-                                    <a class="docs-menu__link" href="docs.html">Learn</a>
-                                </li>
-                                <li class="docs-menu__entry">
-                                    <a class="docs-menu__link" href="index.html">News</a>
-                                </li>
-                                <li class="docs-menu__entry">
-                                    <a class="docs-menu__link" href="index.html">Community</a>
-                                </li>
-                                <li class="docs-menu__entry">
-                                    <a class="docs-menu__link" href="index.html">Assets</a>
-                                </li>
-                                <li class="docs-menu__entry">
-                                    <a class="docs-menu__link" href="index.html">Merch</a>
-                                </li>
-                            </ul>
+                            <div class="main-menu__page-menu">
+                                {% block mobile_page_menu %}{% endblock %}
+                            </div>
                             <ul class="main-menu__menu">
                                 {{header_macros::header_item(name="Learn", current_path=current_path)}}
                                 {{header_macros::header_item(name="News", current_path=current_path)}}
@@ -154,7 +137,7 @@
         </div>
         <section class="section">
             <div class="container">
-                {% block content %} {% endblock %}
+                block content
             </div>
         </section>
         -->
