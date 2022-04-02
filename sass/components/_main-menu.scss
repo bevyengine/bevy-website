@@ -54,7 +54,7 @@
         transition: transform $duration, opacity $duration;
         box-shadow: 0px 0px 16px rgba(#000, 0.3);
 
-        &--with-docs {
+        &--with-page-menu {
             --main-menu-switch-height: 56px;
 
             .main-menu__page-menu-switch {
