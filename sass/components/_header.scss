@@ -2,7 +2,7 @@
     padding-right: 8px;
     width: 100%;
 
-    @media #{$bp-tablet-portrait-up} {
+    @media #{$bp-tablet-landscape-up} {
         padding: 0 16px;
     }
 
@@ -19,7 +19,7 @@
     &__hamburger {
         flex-shrink: 0;
 
-        @media #{$bp-tablet-portrait-up} {
+        @media #{$bp-tablet-landscape-up} {
             display: none;
         }
     }
@@ -32,11 +32,7 @@
 
     &__cta-container {
         display: flex;
-        margin-left: 12px;
-        
-        @media #{$bp-header-desktop-up} {
-            margin-left: 16px;
-        }
+        margin-left: 16px;
     }
 
     &__cta {

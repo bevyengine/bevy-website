@@ -3,7 +3,7 @@
 
     height: 28px;
     
-    @media #{$bp-header-desktop-up} {
+    @media #{$bp-tablet-landscape-up} {
         height: 40px;
     }
 

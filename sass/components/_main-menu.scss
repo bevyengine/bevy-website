@@ -36,7 +36,7 @@
 }
 
 // MODE: Off-Canvas Mobile Menu
-@media #{$bp-phone-landscape-down} {
+@media #{$bp-tablet-portrait-down} {
     .main-menu {
         $padding: 8px;
 
@@ -111,7 +111,7 @@
     }
 }
 
-@media #{$bp-phone-landscape-down} {
+@media #{$bp-tablet-portrait-down} {
     @include state-checked('mobile-menu') {
         .main-menu {
             transform: translateX($mobile-menu-width);
@@ -133,7 +133,7 @@
 }
 
 // MODE: Desktop Menu
-@media #{$bp-tablet-portrait-up} {
+@media #{$bp-tablet-landscape-up} {
     .main-menu {
         &__header,
         &__page-menu-switch,
@@ -144,15 +144,10 @@
         &__link {
             @include flex-center;
 
-            padding: 0 6px;
+            padding: 0 8px;
             height: var(--header-height);
-            font-size: calc-rem(18px);
+            font-size: calc-rem(22px);
             text-decoration: none;
-            
-            @media #{$bp-header-desktop-up} {
-                padding: 0 8px;
-                font-size: calc-rem(22px);
-            }
         }
     }
 }

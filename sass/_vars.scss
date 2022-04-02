@@ -17,11 +17,6 @@ $bp-tablet-landscape-up: '(min-width: #{$bp-tablet-landscape})';
 $bp-tablet-landscape-down: '(max-width: #{$bp-desktop - 1})';
 $bp-desktop-up: '(min-width: #{$bp-desktop})';
 
-// Custom breakpoints
-// There might be cases that custom breakpoints are needed AND must be shared between
-// CSS components. In those cases put the breakpoints here:
-$bp-header-desktop-up: '(min-width: 920px)';
-
 // Colors
 $color-black: #000;
 $color-white: #ececec;
@@ -60,9 +55,9 @@ $card-list-gap: 15px;
 
 // CSS Vars
 :root {
-  --header-height: 60px;
-  
-  @media #{$bp-header-desktop-up} {
-    --header-height: 72px;
-  }
+    --header-height: 60px;
+
+    @media #{$bp-tablet-landscape-up} {
+        --header-height: 72px;
+    }
 }
