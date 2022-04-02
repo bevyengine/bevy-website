@@ -15,3 +15,29 @@
     </a>
 </div>
 {% endmacro card %}
+
+{% macro assets_menu(sections) %}
+    <ul class="book-nav-sections-container book-nav-sections">
+        {% for subsection in section.subsections %}
+            {% set section = get_section(path=subsection) %}
+            <li class="book-nav-section">
+                <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
+                {% if section.subsections %}
+                    <ul class="book-nav-sections book-nav-sections-indented">
+                        {% set subsections = section.subsections %}
+                        {% if section.extra.sort_order_reversed %}
+                            {% set subsections = section.subsections | reverse %}
+                        {% endif %}
+
+                        {% for subsection in subsections %}
+                            {% set section = get_section(path=subsection) %}
+                            <li class="book-nav-section">
+                                <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

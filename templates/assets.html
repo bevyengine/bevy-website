@@ -1,39 +1,23 @@
+{% extends "layouts/page-with-menu.html" %}
 {% import "macros/assets.html" as macros %}
 
-{% extends "layouts/base.html" %}
+{% block page_name %}Assets{% endblock %}
 
-{% block content %}
+{% block mobile_page_menu %}
+    {{macros::assets_menu(sections=section.subsections)}}
+{% endblock %}
+
+{% block page_menu %}
+    {{macros::assets_menu(sections=section.subsections)}}
+{% endblock %}
+
+{% block page_content %}
 <div class="assets">
-    <input type="checkbox" style="display: none" id="show-book-nav" />
-    <nav class="book-nav" role="navigation">
-        <ul class="book-nav-sections-container book-nav-sections">
-            {% for subsection in section.subsections %}
-            {% set section = get_section(path=subsection) %}
-            <li class="book-nav-section">
-                <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
-                {% if section.subsections %}
-                <ul class="book-nav-sections book-nav-sections-indented">
-                    {% set subsections = section.subsections %}
-                    {% if section.extra.sort_order_reversed %}
-                    {% set subsections = section.subsections | reverse %}
-                    {% endif %}
-                    {% for subsection in subsections %}
-                    {% set section = get_section(path=subsection) %}
-                    <li class="book-nav-section">
-                        <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
-                    </li>
-
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </nav>
     <div class="book-content">
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
+        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
         <h1 id="{{ section.title | slugify }}" class="asset-section">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
@@ -57,7 +41,8 @@
         {% for subsection in subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <h3 id="{{ section.title | slugify }}">
+        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
+        <h3>
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
         <div class="card-list padded-content">
@@ -74,4 +59,4 @@
         {% endfor %}
     </div>
 </div>
-{% endblock content %}
+{% endblock %}
