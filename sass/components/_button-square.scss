@@ -20,7 +20,7 @@
     }
 
     &--header {
-        width: var(--header-height);
+        width: calc(var(--header-height) - 8px);
         height: var(--header-height);
     }
 }
