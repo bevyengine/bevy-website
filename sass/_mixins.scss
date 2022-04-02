@@ -24,3 +24,25 @@
         @content;
     }
 }
+
+@mixin scrollbar-v {
+    $track-width: 4px;
+    $thumb-color: rgba($color-white, 0.2);
+
+    scrollbar-width: $track-width;
+    scrollbar-color: $thumb-color transparent;
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  
+    &::-webkit-scrollbar {
+      width: $track-width;
+      background-color: transparent;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: $thumb-color;
+      border-radius: $track-width;
+    }
+  }
