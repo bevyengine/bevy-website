@@ -17,8 +17,10 @@
 
 {% block content %}
     <div class="page-with-menu">
-        <div class="page-with-menu__menu">
-            {% block page_menu %}{% endblock %}
+        <div class="page-with-menu__menu-wrapper">
+            <div class="page-with-menu__menu">
+                {% block page_menu %}{% endblock %}
+            </div>
         </div>
         <div class="page-with-menu__content">
             {% block page_content %}{% endblock %}
