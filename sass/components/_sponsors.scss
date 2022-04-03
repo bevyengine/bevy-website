@@ -36,6 +36,10 @@
         }
     }
 
+    &__logo {
+        object-fit: contain;
+    }
+
     $tiers: (
         ('tier': 'platinum', 'color': $color-white, 'height': 100px),
         ('tier': 'silver', 'color': #bbb, 'height': 80px),
