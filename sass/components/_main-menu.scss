@@ -39,6 +39,7 @@
 @media #{$bp-tablet-portrait-down} {
     .main-menu {
         $padding: 8px;
+        $bottom-buffer: 60px; // Add extra length to compensate for address-bar
 
         --main-menu-switch-height: 0px;
 
@@ -46,7 +47,8 @@
         top: 0px;
         left: -$mobile-menu-width;
         width: $mobile-menu-width;
-        height: 100%;
+        bottom: -$bottom-buffer;
+        padding-bottom: $bottom-buffer;
         background-color: $color-grey-900;
         z-index: $z-main-menu;
         transform: translateX(0);
