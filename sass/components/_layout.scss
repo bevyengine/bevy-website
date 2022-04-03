@@ -6,7 +6,7 @@
     &__header {
         position: fixed;
         top: 0px;
-        width: 100vw;
+        width: 100%;
         height: var(--header-height);
         background-color: $color-grey-900;
         border-bottom: 2px solid lighten-color($color-grey-900);
@@ -14,7 +14,7 @@
     }
 
     &__content {
-        width: 100vw;
+        width: 100%;
         padding-top: var(--header-height);
         padding-bottom: 64px;
         flex-grow: 1;
