@@ -8,12 +8,12 @@
     margin-bottom: $card-list-gap;
     font-style: normal;
     text-decoration: none;
-    box-shadow: 0px 0px 5px #494949;
+    border: 2px solid #383838;
 }
 
 .card:hover {
     background-color: $card-hover-background;
-    box-shadow: 0px 0px 5px $default-color;
+    border: 2px solid #6b6b6b;
 }
 
 .card-image {
