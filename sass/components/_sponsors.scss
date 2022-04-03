@@ -43,7 +43,7 @@
     $tiers: (
         ('tier': 'platinum', 'color': $color-white, 'height': 100px),
         ('tier': 'silver', 'color': #bbb, 'height': 80px),
-        ('tier': 'bronze', 'color': #b79b83, 'height': 60px),
+        ('tier': 'bronze', 'color': #9f7d6c, 'height': 60px),
     );
 
     @each $tier in $tiers {
