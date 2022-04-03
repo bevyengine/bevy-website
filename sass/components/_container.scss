@@ -1,8 +1,12 @@
 .container {
-    $padding: 16px;
+    --container-padding: 8px;
 
     width: 100%;
-    max-width: $max-width + $padding * 2;
+    max-width: calc(#{$max-width} + var(--container-padding) * 2);
     margin: 0 auto;
-    padding: 0 $padding;
+    padding: 0 var(--container-padding);
+
+    @media #{$bp-tablet-landscape-up} {
+        --container-padding: 16px;
+    }
 }

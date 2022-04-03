@@ -13,7 +13,11 @@ a:focus {
 }
 
 .padded-content {
-    padding: $default-padding;
+    padding: 16px 0;
+
+    @media #{$bp-tablet-landscape-up} {
+        padding: 24px 0;
+    }
 }
 
 .warning {
