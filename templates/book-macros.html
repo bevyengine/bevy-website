@@ -1,7 +1,7 @@
 {% macro book_nav_section(section_path, section_number) %}
 {% set section = get_section(path=section_path) %}
 <li class="book-nav-section">
-    <a href="{{ section.permalink }}" {% if current_path == section.path %}class="book-nav-section-title-active book-nav-section-title" {% else %}class="book-nav-section-title"{% endif %}>
+    <a href="{{ section.path }}" {% if current_path == section.path %}class="book-nav-section-title-active book-nav-section-title" {% else %}class="book-nav-section-title"{% endif %}>
         <strong class="book-nav-section-number">{{ section_number }}.</strong>
         {{ section.title | lower }}
     </a>
