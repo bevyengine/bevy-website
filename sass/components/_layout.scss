@@ -6,7 +6,7 @@
     &__header {
         position: fixed;
         top: 0px;
-        width: 100%;
+        width: 100vw;
         height: var(--header-height);
         background-color: $color-grey-900;
         border-bottom: 2px solid lighten-color($color-grey-900);
@@ -14,10 +14,12 @@
     }
 
     &__content {
+        width: 100vw;
         padding-top: var(--header-height);
         padding-bottom: 64px;
         flex-grow: 1;
         background-color: $color-grey-800;
+        overflow-x: auto;
     }
 }
 
