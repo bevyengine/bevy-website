@@ -29,19 +29,17 @@
 
     &__link {
         display: block;
-        margin: 0 24px 24px;
-    }
-
-    &__logo {
-        object-fit: contain;
-        width: 100%;
-        height: 100%;
+        margin: 0 0 16px;
+        
+        @media #{$bp-tablet-landscape-up} {
+            margin: 0 24px 24px;
+        }
     }
 
     $tiers: (
-        ('tier': 'platinum', 'color': $color-white, 'height': 112px),
-        ('tier': 'silver',   'color': #bbb,       'height': 86px),
-        ('tier': 'bronze',   'color': #b79b83,    'height': 60px),
+        ('tier': 'platinum', 'color': $color-white, 'height': 100px),
+        ('tier': 'silver', 'color': #bbb, 'height': 80px),
+        ('tier': 'bronze', 'color': #b79b83, 'height': 60px),
     );
 
     @each $tier in $tiers {
@@ -51,12 +49,9 @@
                     color: map-get($tier, 'color');
                 }
 
-                &__link {
+                &__logo {
+                    width: 100%;
                     max-height: map-get($tier, 'height');
-
-                    @media #{$bp-tablet-landscape-up} {
-                        height: map-get($tier, 'height');
-                    }
                 }
             }
         }
