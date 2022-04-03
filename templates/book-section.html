@@ -40,7 +40,7 @@
         {% for p in all_sections %}
             {% set section_obj = get_section(path=p) %}
             {% if found_current %}
-                <a id="book-pager-bar-next" href="{{section_obj.permalink}}" class="book-pager-bar book-pager-bar-next">
+                <a id="book-pager-bar-next" href="{{section_obj.path}}" class="book-pager-bar book-pager-bar-next">
                     <div class="book-pager-bar-icon book-pager-bar-icon-next">
                     <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
                     </div>
@@ -51,7 +51,7 @@
             {% if current_path == section_obj.path %}
              {% set_global found_current = true %}
              {% if previous_section %}
-                <a id="book-pager-bar-previous" href="{{previous_section.permalink}}" class="book-pager-bar book-pager-bar-previous">
+                <a id="book-pager-bar-previous" href="{{previous_section.path}}" class="book-pager-bar book-pager-bar-previous">
                     <div class="book-pager-bar-icon book-pager-bar-icon-previous">
                         <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
                     </div>
