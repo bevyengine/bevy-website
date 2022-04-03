@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-<div class="card-list padded-content">
+<div class="padded-content">
   {% for page in section.pages %}
   <a class="card" href="{{ page.permalink }}">
     {% if page.extra.image %}
