@@ -7,6 +7,7 @@ $content-font-size: 1.22rem;
     color: #d2d2d2;
     font-style: normal;
     text-decoration: none;
+    word-break: break-word;
 
     h2 {
         margin-top: 3.0rem;
@@ -31,7 +32,6 @@ $content-font-size: 1.22rem;
         border-radius: $border-radius;
         word-wrap: break-word;
         white-space: pre-wrap;
-        word-break: break-word;
     }
 
     a code, a:active code, a:visited code, a:link code {
