@@ -14,6 +14,8 @@ $bp-tablet-landscape-down: '(max-width: #{$bp-desktop - 1})';
 $bp-desktop-up: '(min-width: #{$bp-desktop})';
 
 // Colors
+$color-white: #ececec;
+
 $headerbar-color: #1e1e22;
 $hover-color: #ececec;
 $hover-shadow-color: #d6d6d6;

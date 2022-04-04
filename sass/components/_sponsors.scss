@@ -1,0 +1,63 @@
+.sponsors {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+
+    &:not(:last-child) {
+        margin-bottom: 56px;
+    }
+
+    &__title {
+        font-size: 2.2rem;
+        margin: 0 0 24px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+        
+        @media #{$bp-tablet-landscape-up} {
+            max-width: none;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+
+    &__link {
+        display: block;
+        margin: 0 0 16px;
+        
+        @media #{$bp-tablet-landscape-up} {
+            margin: 0 24px 24px;
+        }
+    }
+
+    &__logo {
+        object-fit: contain;
+    }
+
+    $tiers: (
+        ('tier': 'platinum', 'color': $color-white, 'height': 100px),
+        ('tier': 'silver', 'color': #bbb, 'height': 80px),
+        ('tier': 'bronze', 'color': #9f7d6c, 'height': 60px),
+    );
+
+    @each $tier in $tiers {
+        &--#{map-get($tier, 'tier')} {
+            .sponsors {
+                &__title {
+                    color: map-get($tier, 'color');
+                }
+
+                &__logo {
+                    width: 100%;
+                    max-height: map-get($tier, 'height');
+                }
+            }
+        }
+    }
+}
