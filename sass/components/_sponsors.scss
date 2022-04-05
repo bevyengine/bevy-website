@@ -19,7 +19,7 @@
         align-items: center;
         max-width: 600px;
         margin: 0 auto;
-        
+
         @media #{$bp-tablet-landscape-up} {
             max-width: none;
             flex-direction: row;
@@ -30,7 +30,7 @@
     &__link {
         display: block;
         margin: 0 0 16px;
-        
+
         @media #{$bp-tablet-landscape-up} {
             margin: 0 24px 24px;
         }
@@ -44,6 +44,7 @@
         ('tier': 'platinum', 'color': $color-white, 'height': 100px),
         ('tier': 'silver', 'color': #bbb, 'height': 80px),
         ('tier': 'bronze', 'color': #9f7d6c, 'height': 60px),
+        ('tier': 'infrastructure', 'color': $color-white, 'height': 60px),
     );
 
     @each $tier in $tiers {
