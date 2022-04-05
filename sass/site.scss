@@ -18,10 +18,11 @@
 // - Repeating visual patterns: buttons, cards, menus…
 // - Components can be composed between them to create new components
 // - These should be self contained and shouldn't affect other styling
-@import "components/syntax-theme";
-@import "components/headerbar";
 @import "components/book-nav";
 @import "components/card";
+@import "components/headerbar";
+@import "components/item-grid";
+@import "components/syntax-theme";
 
 // Pages
 // - Page specific CSS
