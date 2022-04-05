@@ -29,8 +29,14 @@ add_category()
         echo "building $category / $example"
         mkdir ../../content/examples/$category_path/$example
         cp examples/$category_path/$example.rs ../../content/examples/$category_path/$example/
-        cargo build --release --target wasm32-unknown-unknown --example $example
-        wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
+
+        if [ -z "${SKIP_WASM}" ]; then
+            cargo build --release --target wasm32-unknown-unknown --example $example
+            wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
+        else
+            echo "SKIP_WASM is set."
+        fi
+
         echo "+++
 title = \"$example\"
 template = \"example.html\"
