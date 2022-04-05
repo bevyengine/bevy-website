@@ -30,7 +30,7 @@ add_category()
         mkdir ../../content/examples/$category_path/$example
         cp examples/$category_path/$example.rs ../../content/examples/$category_path/$example/
 
-        # TODO smarter wasm-enabled builds
+        # TODO: smarter wasm-enabled builds
         if [ -z "${SKIP_WASM}" ]; then
             cargo build --release --target wasm32-unknown-unknown --example $example
             wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
