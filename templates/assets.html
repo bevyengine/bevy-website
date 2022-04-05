@@ -39,7 +39,7 @@
         </h1>
 
         {% if section.pages %}
-        <div class="card-list padded-content">
+        <div class="item-grid">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
@@ -60,7 +60,7 @@
         <h3 id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
-        <div class="card-list padded-content">
+        <div class="item-grid">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
