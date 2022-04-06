@@ -1,14 +1,14 @@
 {% extends "layouts/page-with-menu.html" %}
-{% import "macros/assets.html" as macros %}
+{% import "macros/assets.html" as assets_macros %}
 
 {% block page_name %}Examples{% endblock %}
 
 {% block mobile_page_menu %}
-    {{macros::assets_menu(sections=section.subsections)}}
+    {{assets_macros::assets_menu(sections=section.subsections)}}
 {% endblock %}
 
 {% block page_menu %}
-    {{macros::assets_menu(sections=section.subsections)}}
+    {{assets_macros::assets_menu(sections=section.subsections)}}
 {% endblock %}
 
 {% block page_content %}
@@ -23,7 +23,7 @@
         </h1>
 
         {% if section.pages %}
-        <div class="padded-content">
+        <div class="item-grid">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}

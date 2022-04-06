@@ -1,5 +1,5 @@
 {% extends "layouts/page-with-menu.html" %}
-{% import "macros/assets.html" as macros %}
+{% import "macros/assets.html" as assets_macros %}
 
 {% block page_name %}Assets{% endblock %}
 
@@ -28,7 +28,7 @@
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            {{ macros::card(post=post) }}
+            {{ assets_macros::card(post=post) }}
             {% endfor %}
         </div>
         {% endif %}
@@ -50,7 +50,7 @@
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            {{ macros::card(post=post) }}
+            {{ assets_macros::card(post=post) }}
             {% endfor %}
         </div>
 

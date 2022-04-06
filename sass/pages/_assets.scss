@@ -1,11 +1,11 @@
 .assets {
     .asset-section {
-        font-size: calc-rem(38px);
+        font-size: 2.4rem;
         margin: 0 0 20px;
     }
 
     .asset-subsection {
-        font-size: calc-rem(28px);
+        font-size: 1.9rem;
         margin: 0 0 16px;
     }
 
@@ -39,6 +39,8 @@
     }
 
     .book-content {
+        margin-top: 16px;
+
         h3 {
             font-size: 1.9rem;
             font-weight: 700;
