@@ -108,6 +108,9 @@ Check that this works locally using:
 1. `cd code-validation`
 2. `cargo build`
 
+This website also hosts examples, assets and error codes for the Bevy engine.
+These are created by the scripts in the various `generate-*` folders, which scrape data sources from other repos and are run daily.
+
 ## Contributor's style guide
 
 When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
