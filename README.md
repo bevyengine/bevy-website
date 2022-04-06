@@ -18,4 +18,4 @@ A local server should start and you should be able to access a local version of 
 
 ## Infrastructure Sponsors
 
-We use [Vercel](https://vercel.com?utm_source=[bevy]&utm_campaign=oss) to deploy preview branches to a live website to make development easier.
+We use [Vercel](https://vercel.com?utm_source=bevy&utm_campaign=oss) to deploy preview branches to a live website to make development easier.
