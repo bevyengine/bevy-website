@@ -1,4 +1,5 @@
-{% import "header-macros.html" as header_macros %}
+{% import "macros/header.html" as header_macros %}
+
 {% if section and section.title %}
 {% set page_title = "Bevy - " ~ section.title %}
 {% elif page and page.title %}

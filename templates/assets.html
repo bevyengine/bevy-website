@@ -1,6 +1,5 @@
-{% import "assets-macros.html" as macros %}
-
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
+{% import "macros/assets.html" as assets_macros %}
 
 {% block content %}
 <div class="assets">
@@ -45,7 +44,7 @@
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            {{ macros::card(post=post) }}
+            {{ assets_macros::card(post=post) }}
             {% endfor %}
         </div>
         {% endif %}
@@ -66,7 +65,7 @@
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            {{ macros::card(post=post) }}
+            {{ assets_macros::card(post=post) }}
             {% endfor %}
         </div>
 

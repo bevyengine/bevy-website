@@ -22,9 +22,10 @@ a:focus {
     color: #c8c864;
 }
 
-.anchor-link, .anchor-link:focus, .anchor-link:hover, .anchor-link:active, .anchor-link:hover, .anchor-link:link, .anchor-link:visited {
-    margin-left: 0.3rem;
-    color: #505050;
-    text-shadow: none;
-    font-weight: 500;
+.anchor-link {
+    &, &:focus, &:hover, &:active, &:link, &:visited {
+        color: #505050;
+        text-shadow: none;
+        font-weight: 500;
+    }
 }
