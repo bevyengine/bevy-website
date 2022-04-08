@@ -33,8 +33,10 @@
         display: flex;
         border-radius: $border-radius;
         margin-bottom: 2px;
+        opacity: 0.6;
 
         &:hover {
+            opacity: 1.0;
             background-color: $hover-color;
         }
 
@@ -83,9 +85,10 @@
         // Target just the first label, ignore subsection labels
         > .tree-menu__label {
             background-color: $hover-color;
+            opacity: 1.0;
 
             .tree-menu__link {
-                color: #b1d9ff;
+                color: $color-white;
             }
         }
     }
