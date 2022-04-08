@@ -1,7 +1,7 @@
 $inactive-nav-color: #999999;
 $book-nav-width: 210px;
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 980px) {
     #show-book-nav:not(:checked) + .book-nav {
         transform: translateX(calc(0px - #{$book-nav-width}));
     }
@@ -16,10 +16,12 @@ $book-nav-width: 210px;
 }
 
 .book-nav {
+    box-sizing: border-box;
     margin-top: $default-padding;
     flex: 0 0 $book-nav-width;
     user-select: none;
     transition: transform 0.3s;
+    padding-left: 8px;
 }
 
 .book-nav-sections {

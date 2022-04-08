@@ -9,14 +9,7 @@
 <div class="book-page">
     <input type="checkbox" style="display: none" id="show-book-nav" />
     <nav class="book-nav" role="navigation">
-        {% block menu %}
-        {% set index = get_section(path="learn/book/_index.md") %}
-        <ul class="book-nav-sections-container book-nav-sections">
-            {% for s in index.subsections %}
-            {{ book_macros::book_nav_section(section_path=s, section_number=loop.index) }}
-            {% endfor %}
-        </ul>
-        {% endblock menu %}
+        {{book_macros::book_menu(prefix="page-menu", root=get_section(path="learn/book/_index.md"))}}
     </nav>
     <div class="book-content">
         {% set root_section = get_section(path="learn/book/_index.md") %}

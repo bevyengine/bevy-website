@@ -66,14 +66,15 @@ $pager-bar-background-color-in: #29292c;
     height: 100%;
     width: $pager-bar-width;
     transition: 0.2s;
+    z-index: 1;
 }
 
 .book-pager-bar-previous:hover {
-    background-image: linear-gradient(to right, #00000000, rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
+    background-image: linear-gradient(to right, #00000000, rgba($pager-bar-background-color-in, 0.75));
 }
 
 .book-pager-bar-next:hover {
-    background-image: linear-gradient(to left, #00000000, rgba($pager-bar-background-color-in, 100), rgba($pager-bar-background-color-in, 255));
+    background-image: linear-gradient(to left, #00000000, rgba($pager-bar-background-color-in, 0.75));
 }
 
 .book-pager-bar-previous {
