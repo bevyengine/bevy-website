@@ -16,3 +16,4 @@ You have reached the end of The Bevy Book! And unfortunately, we haven't even sc
   * **[Learning Resources](https://bevyengine.org/assets/#learning)**: Tutorials, documentation, and examples.
   * **[Plugins](https://bevyengine.org/assets/#assets)**: Extra functionality you can use in your projects.
   * **[Games](https://bevyengine.org/assets/#apps)**: Open-source games in various stages of development.
+* **[Bevy Cheatbook](https://bevy-cheatbook.github.io/)**: An in-depth, opinionated, unofficial guide to Bevy's API and ecosystem.
