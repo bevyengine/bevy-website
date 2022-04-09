@@ -1,4 +1,4 @@
-<!-- +++
++++
 title = "0.6 to 0.7"
 weight = 1
 sort_by = "weight"
@@ -7,13 +7,13 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 [extra]
 long_title = "Migration Guide: 0.6 to 0.7"
-+++ -->
++++
 
 ### AliasedMutability
 
 <https://github.com/bevyengine/bevy/pull/4298>
 
-The QueryEntityError enum now has a `AliasedMutability variant, and returns the offending entity
+The QueryEntityError enum now has a `AliasedMutability` variant, and returns the offending entity
 
 ### Remove Margins
 
