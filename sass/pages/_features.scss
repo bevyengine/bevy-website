@@ -17,7 +17,7 @@
     gap: 56px;
     margin: 32px 0 64px;
 
-    @media #{$bp-feature-horizontal} {
+    @media #{$bp-tablet-portrait-up} {
         gap: 56px;
         margin: 56px 0 96px;
     }
