@@ -85,7 +85,7 @@ App::new()
 // 0.7
 App::new()
     .insert_resource(WindowDescriptor {
-        present_mode: PresentMode::Mailbox,
+        present_mode: PresentMode::Immediate,
         ..Default::default()
     })
 ```
@@ -194,4 +194,18 @@ let score = world.get_resource::<Score>().unwrap();
 
 // 0.7
 let score = world.resource::<Score>();
+```
+
+### Events have been moved form bevy_app to bevy_ecs
+
+<https://github.com/bevyengine/bevy/pull/4066>
+
+If you are using the prelude it won't change anything.
+
+```rs
+// 0.6
+use bevy::app::Events;
+
+// 0.7
+use bevy::ecs::event::Events;
 ```
