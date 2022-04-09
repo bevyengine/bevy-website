@@ -111,9 +111,11 @@ TODO
 
 TODO
 
-### Add capability to render to a texture
+### Cameras now point at RenderTarget rather than Window
 
 <https://github.com/bevyengine/bevy/pull/3412>
+
+This change was made to support rendering to textures. Users working with multiple windows may be affected.
 
 ```rs
 // 0.6
@@ -157,7 +159,30 @@ commands.init_resource::<Scoreboard>();
 
 <https://github.com/bevyengine/bevy/pull/2765>
 
-TODO
+```rs
+// 0.6
+fn system(
+    mut transforms: QuerySet<(
+        QueryState<&mut Transform, With<Marker>>,
+        QueryState<&Transform>,
+    )>,
+) {
+    for transform in transforms.q1().iter() {
+        // ...
+    }
+}
+// 0.7
+fn system(
+    mut transforms: ParamSet<(
+        Query<&mut Transform, With<Marker>>,
+        Query<&Transform>
+    )>,
+) {
+    for transform in transforms.p1().iter() {
+        // ...
+    }
+}
+```
 
 ### Infallabile resource getters
 
