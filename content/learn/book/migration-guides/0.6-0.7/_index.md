@@ -9,6 +9,8 @@ insert_anchor_links = "right"
 long_title = "Migration Guide: 0.6 to 0.7"
 +++
 
+<!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-02-01 [Merged by Bors]" -->
+
 ### AliasedMutability
 
 <https://github.com/bevyengine/bevy/pull/4298>
@@ -70,7 +72,7 @@ TODO
 
 https://github.com/bevyengine/bevy/pull/3812
 
-Instead of using a boolean flag for vsync we switched to using a [`PresentMode`](https://github.com/bevyengine/bevy/blob/e8cd2fc7275d0799115d6db57090c2f99d9a99a5/crates/bevy_window/src/window.rs#L24) enum with multiple variants.
+Instead of using a boolean flag for vsync we switched to using a {{rust_type(type="struct" crate="bevy" mod="window" version="0.7.0" name="PresentMode" no_mod=true)}} enum with multiple variants.
 
 ```rs
 // 0.6
