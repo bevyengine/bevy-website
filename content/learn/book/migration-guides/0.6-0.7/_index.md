@@ -72,7 +72,7 @@ TODO
 
 https://github.com/bevyengine/bevy/pull/3812
 
-Instead of using a boolean flag for vsync we switched to using a {{rust_type(type="struct" crate="bevy" mod="window" version="0.7.0" name="PresentMode" no_mod=true)}} enum with multiple variants.
+Instead of using a boolean flag for vsync we switched to using a [`PresentMode`] enum with multiple variants.
 
 ```rs
 // 0.6
@@ -89,6 +89,9 @@ App::new()
         ..Default::default()
     })
 ```
+
+<!-- TODO update to 0.7 link -->
+[`PresentMode`]: http://dev-docs.bevyengine.org/bevy/window/enum.PresentMode.html
 
 ### Fix mul_vec3 tranformation order
 
