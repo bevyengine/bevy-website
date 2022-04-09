@@ -15,21 +15,21 @@ long_title = "Migration Guide: 0.6 to 0.7"
 
 <https://github.com/bevyengine/bevy/pull/4298>
 
-The QueryEntityError enum now has a `AliasedMutability` variant, and returns the offending entity
+The `QueryEntityError` enum now has a `AliasedMutability` variant, and returns the offending entity.
 
 ### Remove margins.rs
 
 <https://github.com/bevyengine/bevy/pull/4284>
 
-The Margins type got removed. To migrate you just have to change every occurrence of Margins to UiRect.
+The `Margins` type was removed. To migrate, replace of `Margins` with `UiRect`.
 
 ### Remove face_toward.rs
 
 <https://github.com/bevyengine/bevy/pull/4277>
 
-The FaceToward trait got removed. To migrate you just have to change every occurrence of Mat4::face_toward to Mat4::look_at_rh.
+The `FaceToward` trait was removed. To migrate, replace every occurrence of `Mat4::face_toward` to `Mat4::look_at_rh`.
 
-### unsafeify World::entities_mut
+### `World::entities_mut` is now unsafe
 
 <https://github.com/bevyengine/bevy/pull/4093>
 
@@ -94,7 +94,7 @@ App::new()
 
 <https://github.com/bevyengine/bevy/pull/3811>
 
-Fixes order of transformations to scale -> rotate -> translate. This doesn't require any code changes, but it means SpriteBundle will behave as expected when rotating.
+Transforms are now consistently applied in the standard scale -> rotate -> translate. This doesn't require any code changes, but it means SpriteBundle will behave as expected when rotating.
 
 ### Use marker components for cameras instead of name strings
 
@@ -155,3 +155,15 @@ commands.init_resource::<Scoreboard>();
 <https://github.com/bevyengine/bevy/pull/2765>
 
 TODO
+
+### Infallabile resource getters
+
+<https://github.com/bevyengine/bevy/pull/4047>
+
+```rs
+// 0.6
+let score = world.get_resource::<Score>().unwrap();
+
+// 0.7
+let score = world.resource::<Score>();
+```
