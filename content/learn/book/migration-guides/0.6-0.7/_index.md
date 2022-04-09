@@ -15,7 +15,7 @@ long_title = "Migration Guide: 0.6 to 0.7"
 
 The QueryEntityError enum now has a `AliasedMutability` variant, and returns the offending entity
 
-### Remove Margins
+### Remove margins.rs
 
 <https://github.com/bevyengine/bevy/pull/4284>
 
@@ -45,7 +45,7 @@ unsafe { world.entities_mut() }
 
 TODO
 
-### Remove the need for '.system' when using run criteria piping
+### Remove the need for 'IntoSystem::into_system()' when using run criteria piping
 
 <https://github.com/bevyengine/bevy/pull/3923>
 
@@ -70,7 +70,7 @@ TODO
 
 https://github.com/bevyengine/bevy/pull/3812
 
-TODO link to PresentMode enum
+Instead of using a boolean flag for vsync we switched to using a [`PresentMode`](https://github.com/bevyengine/bevy/blob/e8cd2fc7275d0799115d6db57090c2f99d9a99a5/crates/bevy_window/src/window.rs#L24) enum with multiple variants.
 
 ```rs
 // 0.6
@@ -83,7 +83,6 @@ App::new()
 // 0.7
 App::new()
     .insert_resource(WindowDescriptor {
-        vsync: false,
         present_mode: PresentMode::Mailbox,
         ..Default::default()
     })
