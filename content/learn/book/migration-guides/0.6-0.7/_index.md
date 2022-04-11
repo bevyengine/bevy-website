@@ -50,7 +50,7 @@ The `QueryEntityError` enum now has a `AliasedMutability` variant, and returns t
 
 <https://github.com/bevyengine/bevy/pull/4284>
 
-The `Margins` type was removed. To migrate, replace of `Margins` with `UiRect`.
+The `Margins` type was removed. To migrate, replace of `Margins` with `Rect`.
 
 ### Remove face_toward.rs
 
