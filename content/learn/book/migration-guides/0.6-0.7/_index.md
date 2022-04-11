@@ -11,6 +11,35 @@ long_title = "Migration Guide: 0.6 to 0.7"
 
 <!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-02-01 [Merged by Bors]" -->
 
+### ParamSet for conflicting SystemParam
+
+<https://github.com/bevyengine/bevy/pull/2765>
+
+```rs
+// 0.6
+fn system(
+    mut transforms: QuerySet<(
+        QueryState<&mut Transform, With<Marker>>,
+        QueryState<&Transform>,
+    )>,
+) {
+    for transform in transforms.q1().iter() {
+        // ...
+    }
+}
+// 0.7
+fn system(
+    mut transforms: ParamSet<(
+        Query<&mut Transform, With<Marker>>,
+        Query<&Transform>
+    )>,
+) {
+    for transform in transforms.p1().iter() {
+        // ...
+    }
+}
+```
+
 ### AliasedMutability
 
 <https://github.com/bevyengine/bevy/pull/4298>
@@ -70,7 +99,7 @@ TODO
 
 ### Replace VSync with PresentMode
 
-https://github.com/bevyengine/bevy/pull/3812
+<https://github.com/bevyengine/bevy/pull/3812>
 
 Instead of using a boolean flag for vsync we switched to using a [`PresentMode`] enum with multiple variants.
 
@@ -149,39 +178,10 @@ struct Scoreboard {
 }
 
 // 0.6
-commands.insert_resource(Scoreboard::Default());
+commands.insert_resource(Scoreboard::default());
 
 // 0.7
 commands.init_resource::<Scoreboard>();
-```
-
-### ParamSet for conflicting SystemParam
-
-<https://github.com/bevyengine/bevy/pull/2765>
-
-```rs
-// 0.6
-fn system(
-    mut transforms: QuerySet<(
-        QueryState<&mut Transform, With<Marker>>,
-        QueryState<&Transform>,
-    )>,
-) {
-    for transform in transforms.q1().iter() {
-        // ...
-    }
-}
-// 0.7
-fn system(
-    mut transforms: ParamSet<(
-        Query<&mut Transform, With<Marker>>,
-        Query<&Transform>
-    )>,
-) {
-    for transform in transforms.p1().iter() {
-        // ...
-    }
-}
 ```
 
 ### Infallabile resource getters
@@ -196,16 +196,16 @@ let score = world.get_resource::<Score>().unwrap();
 let score = world.resource::<Score>();
 ```
 
-### Events have been moved form bevy_app to bevy_ecs
+### Event handling types are no longer re-exported from bevy_app
 
 <https://github.com/bevyengine/bevy/pull/4066>
 
-If you are using the prelude it won't change anything.
+This only affects users who were importing these types directly from `bevy_app` and not through bevy's prelude.
 
 ```rs
 // 0.6
-use bevy::app::Events;
+use bevy::app::{EventId, EventReader, EventWriter, Events, ManualEventReader};
 
 // 0.7
-use bevy::ecs::event::Events;
+use bevy::ecs::event::{EventId, EventReader, EventWriter, Events, ManualEventReader};
 ```
