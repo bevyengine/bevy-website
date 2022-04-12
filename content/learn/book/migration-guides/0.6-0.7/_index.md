@@ -70,11 +70,59 @@ world.entities_mut()
 unsafe { world.entities_mut() }
 ```
 
+### Custom vertex attributes
+
+<https://github.com/bevyengine/bevy/pull/3959>
+
+Custom vertex attributes are now referenced by a `MeshVertexAttribute` rather than a simple string and `set_attribute` has been renamed to `insert_attribute` better reflect its behavior.
+
+```rs
+// 0.6
+mesh.set_attribute("Vertex_Custom", VertexAttributeValues::Sint32x4(vec![]));
+
+// 0.7
+// Generate your own random identifier here.
+// https://play.rust-lang.org/?gist=cc7e824724ba023e9bff25db35ef1f5e
+pub const ATTRIBUTE_CUSTOM: MeshVertexAttribute =
+    MeshVertexAttribute::new("Custom", 17351772347970238659, VertexFormat::Sint32x4);
+mesh.insert_attribute(
+    ATTRIBUTE_CUSTOM,
+    VertexAttributeValues::Sint32x4(vec![]),
+);
+```
+
 ### Mesh vertex buffer layouts
 
 <https://github.com/bevyengine/bevy/pull/3959>
 
-TODO
+Vertex buffers no longer need to be manually laid out with offset and stride values in a `RenderPipelineDescriptor`.
+
+```rs
+// 0.6
+let vertex_buffer_layout = VertexBufferLayout {
+    array_stride: 20,
+    step_mode: VertexStepMode::Vertex,
+    attributes: vec![
+        VertexAttribute {
+            format: VertexFormat::Float32x3,
+            offset: 0,
+            shader_location: 0,
+        },
+        VertexAttribute {
+            format: VertexFormat::Float32x2,
+            offset: 12,
+            shader_location: 1,
+        },
+    ],
+};
+
+// 0.7
+let mut formats = vec![
+    VertexFormat::Float32x3,
+    VertexFormat::Float32x2,
+];
+let vertex_layout = VertexBufferLayout::from_vertex_formats(VertexStepMode::Vertex, formats);
+```
 
 ### Remove the need for 'IntoSystem::into_system()' when using run criteria piping
 
