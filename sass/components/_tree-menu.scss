@@ -7,15 +7,6 @@
     padding: 0;
     position: relative;
 
-    // TODO: REMOVE THIS SNIPPET ONCE THE HEADER IS REFACTORED
-    // vvv
-    z-index: 2;
-
-    * {
-        box-sizing: border-box;
-    }
-    // ^^^
-
     &__state {
         display: none;
     }
