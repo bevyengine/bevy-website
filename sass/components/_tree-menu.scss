@@ -1,0 +1,106 @@
+.tree-menu {
+    $hover-color: rgba($color-white, 0.1);
+    $item-height: 32px;
+    $border-radius: 4px;
+
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+    // TODO: REMOVE THIS SNIPPET ONCE THE HEADER IS REFACTORED
+    // vvv
+    z-index: 2;
+
+    * {
+        box-sizing: border-box;
+    }
+    // ^^^
+
+    &__state {
+        display: none;
+    }
+
+    &__item {
+        list-style: none;
+
+        > .tree-menu {
+            display: none;
+            padding-left: 16px;
+        }
+    }
+
+    &__label {
+        display: flex;
+        border-radius: $border-radius;
+        margin-bottom: 2px;
+        opacity: 0.6;
+
+        &:hover {
+            opacity: 1.0;
+            background-color: $hover-color;
+        }
+
+        &--with-chevron {
+            .tree-menu__link {
+                padding-right: 4px;
+            }
+        }
+    }
+
+    &__link {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        padding: 4px 16px;
+        min-height: $item-height;
+        text-decoration: none;
+        line-height: 1.25;
+        font-size: 1rem;
+
+        &, &:focus, &:active, &:hover, &:link, &:visited {
+            color: $color-white;
+        }
+    }
+
+    &__toggle {
+        @include flex-center;
+
+        flex-shrink: 0;
+        width: 44px;
+        cursor: pointer;
+        border-radius: $border-radius;
+        user-select: none;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+    }
+
+    &__chevron {
+        transition: transform $duration;
+        transform: rotate(-90deg);
+    }
+
+    &__item--active {
+        // Target just the first label, ignore subsection labels
+        > .tree-menu__label {
+            background-color: $hover-color;
+            opacity: 1.0;
+
+            .tree-menu__link {
+                color: $color-white;
+            }
+        }
+    }
+
+    // Sub-menu open state
+    &__state:checked + .tree-menu__item {
+        > .tree-menu__label .tree-menu__chevron {
+            transform: rotate(0deg);
+        }
+
+        > .tree-menu {
+            display: block;
+        }
+    }
+}

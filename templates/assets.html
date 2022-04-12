@@ -4,15 +4,15 @@
 {% block page_name %}Assets{% endblock %}
 
 {% block mobile_page_menu %}
-    {{assets_macros::assets_menu(sections=section.subsections)}}
+    {{assets_macros::assets_menu(prefix="mobile-menu", root=section)}}
 {% endblock %}
 
 {% block page_menu %}
-    {{assets_macros::assets_menu(sections=section.subsections)}}
+    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
 {% endblock %}
 
 {% block page_content %}
-<div class="assets">
+    <div class="assets">
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
@@ -56,5 +56,5 @@
 
         {% endfor %}
         {% endfor %}
-</div>
+    </div>
 {% endblock %}
