@@ -24,12 +24,12 @@
     &__text {
         grid-area: text;
         align-self: center;
-        font-size: calc-rem(20px);
+        font-size: 1.25rem;
         line-height: 1.25;
     }
 
     &__title {
-        font-size: calc-rem(32px);
+        font-size: 2rem;
         margin-top: 0;
         margin-bottom: 4px;
     }

@@ -16,7 +16,7 @@
 
         position: relative;
         height: var(--header-height);
-        font-size: calc-rem(22px);
+        font-size: 1.375rem;
         text-decoration: none;
 
         &, &:visited, &:active {
@@ -158,7 +158,7 @@
 
             padding: 0 8px;
             height: var(--header-height);
-            font-size: calc-rem(22px);
+            font-size: 1.375rem;
             text-decoration: none;
         }
     }
