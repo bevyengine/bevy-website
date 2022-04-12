@@ -72,6 +72,11 @@
             height: var(--header-height);
             background-color: $color-grey-800;
             border-bottom: 2px solid lighten-color($color-grey-800);
+
+            a {
+                display: flex;
+                align-items: center;
+            }
         }
 
         &__page-menu-switch {
