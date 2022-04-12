@@ -71,7 +71,7 @@
             padding-left: $padding;
             height: var(--header-height);
             background-color: $color-grey-800;
-            border-bottom: 2px solid lighten-color($color-grey-800);
+            border-bottom: 2px solid #313131;
 
             a {
                 display: flex;

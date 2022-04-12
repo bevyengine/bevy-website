@@ -9,7 +9,7 @@
         width: 100%;
         height: var(--header-height);
         background-color: $color-grey-900;
-        border-bottom: 2px solid lighten-color($color-grey-900);
+        border-bottom: 2px solid #2c2c2d;
         z-index: $z-layout-header;
     }
 

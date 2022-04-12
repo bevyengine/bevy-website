@@ -1,11 +1,4 @@
+/// Convert px size to rem size
 @function calc-rem($size) {
     @return ($size / $size-body) * 1rem;
-}
-
-@function darken-color($color) {
-    @return darken(saturate($color, 5%), 5%);
-}
-
-@function lighten-color($color) {
-    @return lighten(desaturate($color, 5%), 5%);
 }
