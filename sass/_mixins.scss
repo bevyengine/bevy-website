@@ -29,7 +29,7 @@
     $track-width: 4px;
     $thumb-color: rgba($color-white, 0.2);
 
-    scrollbar-width: $track-width;
+    scrollbar-width: thin;
     scrollbar-color: $thumb-color transparent;
 
     &::-webkit-scrollbar-track {
