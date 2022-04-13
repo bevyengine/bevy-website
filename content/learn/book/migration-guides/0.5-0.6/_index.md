@@ -1,6 +1,6 @@
 +++
 title = "0.5 to 0.6"
-weight = 1
+weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
@@ -309,8 +309,9 @@ SpriteBundle {
 }
 ```
 
-### Visible is now Visibility 
-The {{rust_type(type="struct" crate="bevy" mod="render::draw" version="0.5.0" name="Visible" no_mod=true)}} struct, which is used in a number of components to set visibility, was renamed to {{rust_type(type="struct" crate="bevy" mod="render::view" version="0.6.0" name="Visibility" no_mod=true)}}. Additionally, the field `is_transparent` was removed from the struct. For 3D, transparency can be set using the `alpha_mode` field on a material. Transparency is now automatically enabled for all objects in 2D. 
+### Visible is now Visibility
+
+The {{rust_type(type="struct" crate="bevy" mod="render::draw" version="0.5.0" name="Visible" no_mod=true)}} struct, which is used in a number of components to set visibility, was renamed to {{rust_type(type="struct" crate="bevy" mod="render::view" version="0.6.0" name="Visibility" no_mod=true)}}. Additionally, the field `is_transparent` was removed from the struct. For 3D, transparency can be set using the `alpha_mode` field on a material. Transparency is now automatically enabled for all objects in 2D.
 
 ```rust
 // 0.5
