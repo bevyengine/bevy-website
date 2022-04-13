@@ -123,9 +123,11 @@ let vertex_layout = VertexBufferLayout::from_vertex_formats(VertexStepMode::Vert
 .with_run_criteria(RunCriteria::pipe("is_done_label", inverse))
 ```
 
-### [Obviate the need for RunSystem, and remove it](https://github.com/bevyengine/bevy/pull/3817)
+### [Remove RunSystem](https://github.com/bevyengine/bevy/pull/3817)
 
-TODO
+You probably should not have been using [`RunSystem`] or [`ParamSystem`], but if you were and you really need it, please make sure to let us know by creating a new discussion over at <https://github.com/bevyengine/bevy/discussions>
+
+<!-- TODO add links to RunSystem and ParamSystem maybe? -->
 
 ### [Replace VSync with PresentMode](https://github.com/bevyengine/bevy/pull/3812)
 
