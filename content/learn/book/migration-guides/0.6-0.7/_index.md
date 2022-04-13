@@ -125,9 +125,10 @@ let vertex_layout = VertexBufferLayout::from_vertex_formats(VertexStepMode::Vert
 
 ### [Remove RunSystem](https://github.com/bevyengine/bevy/pull/3817)
 
-You probably should not have been using [`RunSystem`] or [`ParamSystem`], but if you were and you really need it, please make sure to let us know by creating a new discussion over at <https://github.com/bevyengine/bevy/discussions>
+You probably should not have been using [`RunSystem`] or [`ParamSystem`], but if you were and you really need it, please make sure to let us know by [creating a new discussion](https://github.com/bevyengine/bevy/discussions).
 
-<!-- TODO add links to RunSystem and ParamSystem maybe? -->
+[`RunSystem`]: https://docs.rs/bevy/0.6.1/bevy/ecs/system/trait.RunSystem.html
+[`ParamSystem`]: https://docs.rs/bevy/0.6.1/bevy/ecs/system/struct.ParamSystem.html
 
 ### [Replace VSync with PresentMode](https://github.com/bevyengine/bevy/pull/3812)
 
