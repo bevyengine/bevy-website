@@ -50,7 +50,7 @@ The `Margins` type was removed. To migrate, replace every occurrence of `Margins
 
 The `FaceToward` trait was removed. To migrate, replace every occurrence of `Mat4::face_toward` to `Mat4::look_at_rh`.
 
-### [`World::entities_mut` is now unsafe](https://github.com/bevyengine/bevy/pull/4093)
+### [World::entities_mut is now unsafe](https://github.com/bevyengine/bevy/pull/4093)
 
 ```rs
 // 0.6
