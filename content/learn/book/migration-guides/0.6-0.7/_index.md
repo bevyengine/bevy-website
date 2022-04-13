@@ -156,9 +156,50 @@ App::new()
 
 Transforms are now consistently applied in the standard scale -> rotate -> translate. This doesn't require any code changes unless you had something to handle the wrong behaviour, but it means SpriteBundle will now behave as expected when rotating.
 
-### [Use marker components for cameras instead of name strings](https://github.com/bevyengine/bevy/pull/3635https://github.com/bevyengine/bevy/pull/3635)
+### [Use marker components for cameras instead of name strings](https://github.com/bevyengine/bevy/pull/3635)
 
-TODO
+```rs
+// 0.6
+pub const FIRST_PASS_CAMERA: &str = "first_pass_camera";
+fn setup(mut commands: Commands) {
+    commands.spawn_bundle(PerspectiveCameraBundle {
+        camera: Camera {
+            name: Some(FIRST_PASS_CAMERA.to_string()),
+            ..Default::default()
+        },
+        transform: Transform::from_translation(Vec3::new(0.0, 0.0, 15.0))
+            .looking_at(Vec3::default(), Vec3::Y),
+        ..Default::default()
+    });
+}
+
+fn camera_system(cameras: Query<&Camera>) {
+    for camera in cameras.iter() {
+        if camera.name == Some(FIRST_PASS_CAMERA.to_string()) {
+            // Do something with a camera
+        }
+    }
+}
+
+// 0.7
+#[derive(Component, Default)]
+pub struct FirstPassCamera;
+
+fn setup(mut commands: Commands) {
+    commands.spawn_bundle(PerspectiveCameraBundle::<FirstPassCamera> {
+        camera: Camera::default(),
+        transform: Transform::from_translation(Vec3::new(0.0, 0.0, 15.0))
+            .looking_at(Vec3::default(), Vec3::Y),
+        ..PerspectiveCameraBundle::new()
+    });
+}
+
+fn camera_system(cameras: Query<&Camera, With<FirstPassCamera>>) {
+    for camera in cameras.iter() {
+        // Do something with camera
+    }
+}
+```
 
 ### [Remove the config api](https://github.com/bevyengine/bevy/pull/3633)
 
