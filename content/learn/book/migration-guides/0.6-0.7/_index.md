@@ -11,9 +11,7 @@ long_title = "Migration Guide: 0.6 to 0.7"
 
 <!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-02-01 [Merged by Bors]" -->
 
-### ParamSet for conflicting SystemParam
-
-<https://github.com/bevyengine/bevy/pull/2765>
+### [ParamSet for conflicting SystemParam](https://github.com/bevyengine/bevy/pull/2765)
 
 ```rs
 // 0.6
@@ -40,27 +38,19 @@ fn system(
 }
 ```
 
-### AliasedMutability
-
-<https://github.com/bevyengine/bevy/pull/4298>
+### [AliasedMutability](https://github.com/bevyengine/bevy/pull/4298)
 
 The `QueryEntityError` enum now has a `AliasedMutability` variant, and returns the offending entity.
 
-### Remove margins.rs
+### [Remove margins.rs](https://github.com/bevyengine/bevy/pull/4284)
 
-<https://github.com/bevyengine/bevy/pull/4284>
+The `Margins` type was removed. To migrate, replace every occurrence of `Margins` with `Rect`.
 
-The `Margins` type was removed. To migrate, replace of `Margins` with `Rect`.
-
-### Remove face_toward.rs
-
-<https://github.com/bevyengine/bevy/pull/4277>
+### [Remove face_toward.rs](https://github.com/bevyengine/bevy/pull/4277https://github.com/bevyengine/bevy/pull/4277)
 
 The `FaceToward` trait was removed. To migrate, replace every occurrence of `Mat4::face_toward` to `Mat4::look_at_rh`.
 
-### `World::entities_mut` is now unsafe
-
-<https://github.com/bevyengine/bevy/pull/4093>
+### [`World::entities_mut` is now unsafe](https://github.com/bevyengine/bevy/pull/4093)
 
 ```rs
 // 0.6
@@ -70,9 +60,7 @@ world.entities_mut()
 unsafe { world.entities_mut() }
 ```
 
-### Custom vertex attributes
-
-<https://github.com/bevyengine/bevy/pull/3959>
+### [Custom vertex attributes](https://github.com/bevyengine/bevy/pull/3959)
 
 Custom vertex attributes are now referenced by a `MeshVertexAttribute` rather than a simple string and `set_attribute` has been renamed to `insert_attribute` better reflect its behavior.
 
@@ -91,9 +79,7 @@ mesh.insert_attribute(
 );
 ```
 
-### Mesh vertex buffer layouts
-
-<https://github.com/bevyengine/bevy/pull/3959>
+### [Mesh vertex buffer layouts](https://github.com/bevyengine/bevy/pull/3959)
 
 Vertex buffers no longer need to be manually laid out with offset and stride values in a `RenderPipelineDescriptor`.
 
@@ -124,9 +110,7 @@ let mut formats = vec![
 let vertex_layout = VertexBufferLayout::from_vertex_formats(VertexStepMode::Vertex, formats);
 ```
 
-### Remove the need for 'IntoSystem::into_system()' when using run criteria piping
-
-<https://github.com/bevyengine/bevy/pull/3923>
+### [Remove the need for 'IntoSystem::into_system()' when using run criteria piping](https://github.com/bevyengine/bevy/pull/3923)
 
 ```rs
 // 0.6
@@ -139,15 +123,11 @@ let vertex_layout = VertexBufferLayout::from_vertex_formats(VertexStepMode::Vert
 .with_run_criteria(RunCriteria::pipe("is_done_label", inverse))
 ```
 
-### Obviate the need for RunSystem, and remove it
-
-<https://github.com/bevyengine/bevy/pull/3817>
+### [Obviate the need for RunSystem, and remove it](https://github.com/bevyengine/bevy/pull/3817)
 
 TODO
 
-### Replace VSync with PresentMode
-
-<https://github.com/bevyengine/bevy/pull/3812>
+### [Replace VSync with PresentMode](https://github.com/bevyengine/bevy/pull/3812)
 
 Instead of using a boolean flag for vsync we switched to using a [`PresentMode`] enum with multiple variants.
 
@@ -170,27 +150,19 @@ App::new()
 <!-- TODO update to 0.7 link -->
 [`PresentMode`]: http://dev-docs.bevyengine.org/bevy/window/enum.PresentMode.html
 
-### Fix mul_vec3 tranformation order
+### [Fix mul_vec3 tranformation order](https://github.com/bevyengine/bevy/pull/3811)
 
-<https://github.com/bevyengine/bevy/pull/3811>
+Transforms are now consistently applied in the standard scale -> rotate -> translate. This doesn't require any code changes unless you had something to handle the wrong behaviour, but it means SpriteBundle will now behave as expected when rotating.
 
-Transforms are now consistently applied in the standard scale -> rotate -> translate. This doesn't require any code changes, but it means SpriteBundle will behave as expected when rotating.
-
-### Use marker components for cameras instead of name strings
-
-<https://github.com/bevyengine/bevy/pull/3635>
+### [Use marker components for cameras instead of name strings](https://github.com/bevyengine/bevy/pull/3635https://github.com/bevyengine/bevy/pull/3635)
 
 TODO
 
-### Remove the config api
-
-<https://github.com/bevyengine/bevy/pull/3633>
+### [Remove the config api](https://github.com/bevyengine/bevy/pull/3633)
 
 TODO
 
-### Cameras now point at RenderTarget rather than Window
-
-<https://github.com/bevyengine/bevy/pull/3412>
+### [Cameras now point at RenderTarget rather than Window](https://github.com/bevyengine/bevy/pull/3412)
 
 This change was made to support rendering to textures. Users working with multiple windows may be affected.
 
@@ -214,9 +186,7 @@ commands.spawn_bundle(PerspectiveCameraBundle {
 });
 ```
 
-### Implement init_resource for Commands and World
-
-<https://github.com/bevyengine/bevy/pull/3079>
+### [Implement init_resource for Commands and World](https://github.com/bevyengine/bevy/pull/3079)
 
 ```rs
 #[derive(Default)]
@@ -232,9 +202,7 @@ commands.insert_resource(Scoreboard::default());
 commands.init_resource::<Scoreboard>();
 ```
 
-### Infallabile resource getters
-
-<https://github.com/bevyengine/bevy/pull/4047>
+### [Infallabile resource getters](https://github.com/bevyengine/bevy/pull/4047)
 
 ```rs
 // 0.6
@@ -244,9 +212,7 @@ let score = world.get_resource::<Score>().unwrap();
 let score = world.resource::<Score>();
 ```
 
-### Event handling types are no longer re-exported from bevy_app
-
-<https://github.com/bevyengine/bevy/pull/4066>
+### [Event handling types are no longer re-exported from bevy_app](https://github.com/bevyengine/bevy/pull/4066)
 
 This only affects users who were importing these types directly from `bevy_app` and not through bevy's prelude.
 
