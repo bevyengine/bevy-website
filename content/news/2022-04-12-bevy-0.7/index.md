@@ -329,7 +329,7 @@ fn give_sword(mut query: Query<&mut Items>) {
 }
 ```
 
-Astute `std` doc readers might notice that the Rust team [recommends only using Deref/DerefMut for smart pointers, to avoid confusion](https://doc.rust-lang.org/std/ops/trait.Deref.html). Components like `Items` _are not_ smart pointers. We personally don't care. This pattern works, it is already widely used in the Rust ecosystem, and Good UX Comes First.
+Astute `std` doc readers might notice that the Rust team [recommends only using `Deref`/`DerefMut` for smart pointers, to avoid confusion](https://doc.rust-lang.org/std/ops/trait.Deref.html). Components like `Items` _are not_ smart pointers. We choose to ignore this advice, as this pattern works, is already widely used in the Rust ecosystem, and Good UX Comes First.
 
 ## WorldQuery Derives
 
