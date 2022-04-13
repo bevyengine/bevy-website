@@ -162,7 +162,7 @@ app
   .add_system(movement.after(update_velocity))
 ```
 
-The Bevy ECS labeling system is powerful and there are still legitimate use cases for custom labels (such as labeling multiple systems with the same label). But most common use cases can take advantage of the ergonomic auto-labeling functionality.
+The Bevy ECS labeling system is powerful and there are still legitimate use cases for custom labels (such as labeling multiple systems with the same label and exporting a stable public API as a plugin author). But most common use cases can take advantage of the ergonomic auto-labeling functionality.
 
 ## Default Shorthand
 
