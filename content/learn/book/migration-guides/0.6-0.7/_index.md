@@ -219,12 +219,13 @@ fn main() {
 
 // 0.7
 struct Config(u32);
-struct Myu32Wrapper(u32);
 
-fn local_config(local: Config) -> impl FnMut(ResMut<Myu32Wrapper>) {
-    move |mut val| val.0 = local.0;
+fn local_config(local: u32) -> impl FnMut(ResMut<Config>) {
+    move |mut val| {
+        val.0 = local;
 
-    assert_eq!(*local.0, 42);
+        assert_eq!(val.0, 42);
+    }
 }
 
 fn main() {
