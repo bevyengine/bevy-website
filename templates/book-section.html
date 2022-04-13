@@ -70,9 +70,7 @@
                             <div class="book-footer__dir">Next</div>
                             {{next_section.title}}
                         </div>
-                        <div class="book-footer__chevron">
-                            <img src="/assets/icon-chevron-right.svg">
-                        </div>
+                        <i class="book-footer__chevron icon icon--chevron-right"></i>
                     </a>
                 {% endif %}
                 {% if prev_section %}
@@ -81,14 +79,15 @@
                             <div class="book-footer__dir">Previous</div>
                             {{prev_section.title}}
                         </div>
-                        <div class="book-footer__chevron">
-                            <img src="/assets/icon-chevron-left.svg">
-                        </div>
+                        <i class="book-footer__chevron icon icon--chevron-left"></i>
                     </a>
                 {% endif %}
             </nav>
             <div class="book-footer__edit-wrapper">
-                <a class="book-footer__edit" href="https://github.com/bevyengine/bevy-website/edit/master/content/{{ section.relative_path }}">Improve this page</a>
+                <a class="book-footer__edit" href="https://github.com/bevyengine/bevy-website/edit/master/content/{{ section.relative_path }}">
+                    <i class="icon icon--pencil"></i>
+                    Improve this page
+                </a>
             </div>
         </div>
     </div>
