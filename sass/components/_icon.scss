@@ -1,0 +1,30 @@
+.icon {
+    --icon-height: 1.2em;
+
+    display: inline-block;
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+
+    $icons: (
+        // (icon_id, width)
+        ('chevron-down', 15),
+        ('chevron-left', 9),
+        ('chevron-right', 9),
+        ('pencil', 19),
+        ('times', 16),
+    );
+
+    @each $icon in $icons {
+        // Icons always must have 24px height
+        // This is just for icon height consistency
+        $ratio: nth($icon, 2) / 24;
+
+        &--#{nth($icon, 1)} {
+            height: var(--icon-height);
+            width: calc(var(--icon-height) * #{$ratio});
+            mask-image: url('/assets/icon-#{nth($icon, 1)}.svg');
+        }
+    }
+}
