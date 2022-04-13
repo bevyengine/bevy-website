@@ -149,8 +149,8 @@ App::new()
     })
 ```
 
-<!-- TODO update to 0.7 link -->
-[`PresentMode`]: http://dev-docs.bevyengine.org/bevy/window/enum.PresentMode.html
+<!-- TODO make sure this works after release -->
+[`PresentMode`]: https://docs.rs/bevy/0.7/bevy/window/enum.PresentMode.html
 
 ### [Fix mul_vec3 tranformation order](https://github.com/bevyengine/bevy/pull/3811)
 
