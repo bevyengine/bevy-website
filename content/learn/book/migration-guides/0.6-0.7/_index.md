@@ -203,7 +203,36 @@ fn camera_system(cameras: Query<&Camera, With<FirstPassCamera>>) {
 
 ### [Remove the config api](https://github.com/bevyengine/bevy/pull/3633)
 
-TODO
+```rs
+// 0.6
+struct Config(u32);
+
+fn local_config(local: Local<Config>) {
+    assert_eq!(*local.0, 42);
+}
+
+fn main() {
+        App::new()
+        .add_system(local_is_42.config(|params| params.0 = Some(Config(42))))
+        .run();
+}
+
+// 0.7
+struct Config(u32);
+struct Myu32Wrapper(u32);
+
+fn local_config(local: Config) -> impl FnMut(ResMut<Myu32Wrapper>) {
+    move |mut val| val.0 = local.0;
+
+    assert_eq!(*local.0, 42);
+}
+
+fn main() {
+        App::new()
+        .add_system(local_config(Config(42)))
+        .run();
+}
+```
 
 ### [Cameras now point at RenderTarget rather than Window](https://github.com/bevyengine/bevy/pull/3412)
 
