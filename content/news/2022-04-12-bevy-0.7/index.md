@@ -119,8 +119,13 @@ With the upper limit of 256 point lights removed, the only limit on lights is wh
 * **Light Frustum Change Detection**: We now use Bevy ECS's change detection feature to only recalculate the view frustum of lights that have changed.
 * **Cluster Assignment Optimizations**: The cluster assignment data access patterns and data structures received a variety of tweaks that improved performance.
 
-// TODO: Show many lights video here
-// TODO: Add iterative sphere refinement here if it is merged
+Here is a video illustrating a progression from the old limit of 256 point lights to 25,000 point lights at 60fps!
+
+(Note that the 25,000 lights example disables the debug light spheres to ensure that light calculations are the bottleneck)
+
+<video controls loop><source  src="many_lights.mp4" type="video/mp4"/></video>
+
+And we have [even more clustering optimizations](https://github.com/bevyengine/bevy/pull/4345) in the works! 
 
 ## Configurable Light Visibility 
 
