@@ -400,8 +400,7 @@ If this is you: thanks!
 ### Better examples
 
 For many people, the best way to learn a tool is to see it in action.
-We've been steadily polishing our [examples](https://github.com/bevyengine/bevy/tree/latest/examples):
-better explanations, more coverage, and higher code quality.
+We've been steadily polishing our [examples](https://github.com/bevyengine/bevy/tree/latest/examples) with better explanations, more coverage, and higher code quality.
 If you're new to Bevy, check out the much-improved [Breakout example](https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs)!
 
 ## Support Bevy
