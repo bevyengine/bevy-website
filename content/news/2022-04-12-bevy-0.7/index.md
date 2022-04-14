@@ -619,7 +619,7 @@ fn adjust_audio(music: Res<BeautifulMusic>, mut audio_sinks: ResMut<Assets<Audio
 You can also now loop audio playback:
 
 ```rust
-audio.play_in_loop(music);
+audio.play_with_settings(music, PlaybackSettings::LOOP.with_volume(0.75));
 ```
 
 We plan to continue iterating on these APIs with even more functionality and usability improvements!
