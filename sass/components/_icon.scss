@@ -3,8 +3,11 @@
 
     display: inline-block;
     background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
     mask-size: contain;
+    -webkit-mask-position: center;
     mask-position: center;
 
     $icons: (
@@ -24,6 +27,7 @@
         &--#{nth($icon, 1)} {
             height: var(--icon-height);
             width: calc(var(--icon-height) * #{$ratio});
+            -webkit-mask-image: url('/assets/icon-#{nth($icon, 1)}.svg');
             mask-image: url('/assets/icon-#{nth($icon, 1)}.svg');
         }
     }
