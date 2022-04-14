@@ -29,6 +29,7 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 * Render to texture: cameras can now be configured to render to a texture instead of a window
 * Flexible mesh vertex layouts in shaders
 * ECS improvements: Order systems using their names, Query::many_mut, use conflicting parameters in systems via ParamSets, WorldQuery derives
+* Documentation improvements: better examples, more doc tests and more coverage
 * More audio control: pause, volume, speed, and looping
 * Power usage options to enable only updating Bevy Apps when input occurs 
 
@@ -632,6 +633,38 @@ These settings can be configured separately for focused windows and unfocused wi
 This app demos the various modes available. Note that Game mode was configured to lower its tick rate when it loses focus, which is not the default:
 
 <video controls loop><source  src="power_settings.mp4" type="video/mp4"/></video>
+
+## Documentation improvements
+
+<div class="release-feature-authors">authors: @alice-i-cecile and many more</div>
+
+Great docs make learning, using and building Bevy better.
+But as a young engine, they're still a work-in-progress.
+
+### deny-missing-docs
+
+Our docs team (led by `@alice-i-cecile`) has started to [systematically fix that](https://github.com/bevyengine/bevy/issues/3492), with the help of Rust's `#[warn(missing_docs)]` lint.
+Since 0.6, we've fully documented (and prevented doc-regressions for):
+
+* `bevy_tasks` by `@james7132`
+* `bevy_app` by `@dbearden`
+* `bevy_dylib` by `@KDecay`
+* `bevy_internal` by `@sheepyhead`
+
+There have been [many other doc improvements](https://github.com/bevyengine/bevy/pulls?q=is%3Apr+is%3Aclosed+label%3AC-Docs) over this time period as well, including the addition of many helpful [doc tests](https://doc.rust-lang.org/rustdoc/documentation-tests.html), and our bar for docs in new code continues to rise.
+A huge thanks to everyone making Bevy's docs better.
+
+### New contributors
+
+If you're [interested in contributing](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md), the docs team is always ready to help new contributors get their first Bevy PR merged ASAP.
+There have been a _ton_ of new contributors who've helped out with docs, either as a writer or a reviewer.
+If this is you: thanks!
+
+### Better examples
+
+For many people, the best way to learn a tool is to see it in action.
+We've been steadily polishing our [examples](https://github.com/bevyengine/bevy/tree/latest/examples) with better explanations, more coverage, and higher code quality.
+If you're new to Bevy, check out the much-improved [Breakout example](https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs)!
 
 ## Dev Docs
 
