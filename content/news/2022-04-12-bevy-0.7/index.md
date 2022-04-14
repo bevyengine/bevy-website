@@ -206,7 +206,7 @@ fn game_of_life_update([[builtin(global_invocation_id)]] invocation_id: vec3<u32
 
 In **Bevy 0.7**, it is now easy to make shaders support any Mesh vertex layout and arbitrary vertex attributes. Bevy's "shader pipeline specialization" system was extended to support "specializing on mesh vertex layouts".
 
-For most Bevy users, this means that [Materials](/news/bevy-0-6/#materials), including the built in [`StandardMaterial`] and custom shader materials now support arbitrary Meshes automatically, provided those Meshes have the vertex attributes required by the material shaders.
+For most Bevy users, this means that [Materials](/news/bevy-0-6/#materials), including the built in [`StandardMaterial`] and custom shader materials now support arbitrary Meshes automatically, provided those Meshes have the vertex attributes required by the material shaders. It also means that if your Mesh is missing any attribute required by its material, rendering can fail gracefully.
 
 We also made use of this system to implement joint weights and indices for our new [Skeletal Animation](/news/bevy-0-7/#skeletal-animation) implementation.
 
