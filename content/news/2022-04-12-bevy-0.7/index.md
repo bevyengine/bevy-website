@@ -378,6 +378,8 @@ fn despawn_players(mut players: Query<(Entity, PlayerQuery)>) {
 Great docs make learning, using and building Bevy better.
 But as a young engine, they're still a work-in-progress.
 
+### deny-missing-docs
+
 Our docs team (led by `@alice-i-cecile`) has started to [systematically fix that](https://github.com/bevyengine/bevy/issues/3492), with the help of Rust's `#[warn(missing_docs)]` lint.
 Since 0.6, we've fully documented (and prevented doc-regressions for):
 
@@ -386,8 +388,16 @@ Since 0.6, we've fully documented (and prevented doc-regressions for):
 * `bevy_dylib` by `@KDecay`
 * `bevy_internal` by `@sheepyhead`
 
-There have been a huge number of [other doc improvements](https://github.com/bevyengine/bevy/pulls?q=is%3Apr+is%3Aclosed+label%3AC-Docs) over this time period as well, including the addition of many helpful [doc tests](https://doc.rust-lang.org/rustdoc/documentation-tests.html).
-A huge thanks to all of the contributors and reviewers who have helped make Bevy's docs better.
+There have been [many other doc improvements](https://github.com/bevyengine/bevy/pulls?q=is%3Apr+is%3Aclosed+label%3AC-Docs) over this time period as well, including the addition of many helpful [doc tests](https://doc.rust-lang.org/rustdoc/documentation-tests.html), and our bar for docs in new code continues to rise.
+A huge thanks to everyone making Bevy's docs better.
+
+### New contributors
+
+If you're [interested in contributing](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md), the docs team is always ready to help new contributors get their first Bevy PR merged ASAP.
+There have been a _ton_ of new contributors who've helped out with docs, either as a writer or a reviewer.
+If this is you: thanks!
+
+### Better examples
 
 For many people, the best way to learn a tool is to see it in action.
 We've been steadily polishing our [examples](https://github.com/bevyengine/bevy/tree/latest/examples):
