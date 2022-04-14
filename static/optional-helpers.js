@@ -2,20 +2,20 @@
 // core functionality should not be affected.
 
 function navigateBookNext(e) {
-    if (e.keyCode == 37) {
-        var previous = document.getElementById("book-pager-bar-previous");
+    if (e.key == 'ArrowLeft') {
+        var previous = document.querySelector("[data-book-nav-previous]");
         if (previous) {
             previous.click();
         }
 
-    } else if (e.keyCode == 39) {
-        var next = document.getElementById("book-pager-bar-next");
+    } else if (e.key == 'ArrowRight') {
+        var next = document.querySelector("[data-book-nav-next]");
         if (next) {
             next.click();
         }
     }
 }
 
-window.onload = function () {
-    window.onkeydown = navigateBookNext;
-}
+window.addEventListener('load', function () {
+    window.addEventListener('keydown', navigateBookNext);
+});

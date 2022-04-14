@@ -65,7 +65,7 @@
         <div class="book-footer">
             <nav class="book-footer__nav">
                 {% if next_section %}
-                    <a class="book-footer__link book-footer__link--next" href="{{next_section.path}}">
+                    <a class="book-footer__link book-footer__link--next" href="{{next_section.path}}" data-book-nav-next>
                         <div class="book-footer__label">
                             <div class="book-footer__dir">Next</div>
                             {{next_section.title}}
@@ -74,7 +74,7 @@
                     </a>
                 {% endif %}
                 {% if prev_section %}
-                    <a class="book-footer__link book-footer__link--prev" href="{{prev_section.path}}">
+                    <a class="book-footer__link book-footer__link--prev" href="{{prev_section.path}}" data-book-nav-previous>
                         <div class="book-footer__label">
                             <div class="book-footer__dir">Previous</div>
                             {{prev_section.title}}
