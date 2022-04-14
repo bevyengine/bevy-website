@@ -105,7 +105,7 @@ fn play_on_load(
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump), @robtfm</div>
 
-Bevy can now render scenes with arbitrary numbers of point lights on platforms that support storage buffers (which is basically everything but WebGL). In the last Bevy release (0.6) we added [Clustered Forward Rendering](/news/bevy-0-6/#clustered-forward-rendering), which is a rendering technique that optimizes each fragment's light calculation costs by assigning lights to "clusters". However in the interest of platform compatibility (WebGL), we initially limited ourselves to 256 lights because that is what fit in a uniform buffer binding.
+Bevy can now render scenes with arbitrary numbers of point lights on platforms that support storage buffers (which is basically everything but WebGL). In the last Bevy release (0.6) we added [Clustered Forward Rendering](/news/bevy-0-6/#clustered-forward-rendering), which is a rendering technique that optimizes each fragment's light calculation costs by assigning lights to sub-volumes of the visible volume, called "clusters". However in the interest of platform compatibility (WebGL), we initially limited ourselves to 256 lights because that is what fit in a uniform buffer binding.
 
 In **Bevy 0.7**, we added the ability to automatically "upgrade" to using unbounded storage buffers for Clustered Forward Rendering on platforms that support them, enabling unlimited* point lights. There is an asterisk there because in practice this is limited by memory and hardware constraints. 
 
