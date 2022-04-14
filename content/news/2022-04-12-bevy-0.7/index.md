@@ -162,9 +162,9 @@ The benefits don't stop there either - because the textures are compressed and c
 ![bistro compressed](bistro_compressed.png)
 
 
-Another benefit is that mipmaps are supported, which makes for smoother, less noisy textures. Bevy currently doesn't have automatic support for generating mipmaps for "normal" textures, so using compressed textures is a nice way to have mipmaps now, even though we don't support them for standard textures yet!
+Another benefit is that mipmaps are supported, which makes for smoother, less noisy textures. Bevy currently doesn't have support for automatically generating mipmaps for uncompressed textures, so using compressed textures is a nice way to have mipmaps now!
 
-In summary, Bevy now supports loading compressed textures from `.dds`, `.ktx2`, and `.basis` files. This includes support for the standard ASTC, BCn, and ETC2 formats, as well as "universal" formats like ETC1S and UASTC that can be transcoded to formats supported by specific systems at runtime. The GLTF loader was also extended to support loading these formats.
+In summary, Bevy now supports loading compressed textures from `.dds`, `.ktx2`, and `.basis` files. This includes support for the standard ASTC, BCn, and ETC2 formats, as well as 'universal' formats like ETC1S and UASTC that can be transcoded to the standard formats supported by specific systems at runtime. The glTF loader was also extended to support loading these formats.
 
 These features can be enabled using the `dds`, `ktx2`, and `basis-universal` cargo features.
 
