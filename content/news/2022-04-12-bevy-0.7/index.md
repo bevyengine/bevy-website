@@ -23,7 +23,7 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 * Skeletal animation and mesh skinning
 * GLTF animation importing
 * Unlimited* point lights in a scene
-* Improved clustered forward rendering: dynamic/adaptive clustering, faster and more accurate cluster assignment
+* Improved clustered forward rendering: dynamic/adaptive clustering and faster cluster assignment
 * Compressed texture support (KTX2 / DDS / .basis): load more textures in a scene, faster
 * Compute shader / pipeline specialization: Bevy's flexible shader system was ported to compute shaders, enabling hot reloading, shader defs, and shader imports
 * Render to texture: cameras can now be configured to render to a texture instead of a window
@@ -54,7 +54,7 @@ struct Animations {
     dance: Handle<AnimationClip>,
 }
 
-fn system(mut query: Query<(&Animations, &mut AnimationPlayer)>) {
+fn start_dancing(mut query: Query<(&Animations, &mut AnimationPlayer)>) {
     for (animations, mut animation_player) in query.iter_mut() {
         animation_player.play(animations.dance.clone());
     }
@@ -65,7 +65,7 @@ fn system(mut query: Query<(&Animations, &mut AnimationPlayer)>) {
 
 This critical feature has been a long time coming, but we wanted to build it in a way that meshed nicely with the [new Bevy renderer](/news/bevy-0-6/#the-new-bevy-renderer) and didn't just "hack things in". This builds on our new [User-Customizable Mesh Vertex Layouts](LINKME), [Shader Imports](/news/bevy-0-6/#shader-imports), and [Material](/news/bevy-0-6/#materials) systems, which ensures that this logic is flexible and reusable, even with non-standard meshes and custom render pipelines.
 
-And we're just getting started! Multi-track animation blending and higher level animation state management should arrive in the very near future. Now is a great time to start contributing animation features to Bevy. We've smashed through most of the foundational technical hurdles and what remains is largely high level api design choices!
+And we're just getting started! Multi-track animation blending and higher level animation state management should arrive in the very near future. Now is a great time to start contributing animation features to Bevy. We've smashed through most of the foundational technical hurdles and what remains is largely high level api design choices. We already have a couple of draft RFCs open in these areas: [Animation Composition](https://github.com/bevyengine/rfcs/pull/51) and [Animation Primitives](https://github.com/bevyengine/rfcs/pull/49). Feel free to join the conversation!
 
 [`AnimationPlayer`]: https://docs.rs/bevy/0.7.0/bevy/animation/struct.AnimationPlayer.html
 [`AnimationClip`]: https://docs.rs/bevy/0.7.0/bevy/animation/struct.AnimationClip.html
@@ -254,11 +254,11 @@ fn move_3d_camera_system(transforms: Query<&mut Transform, With<Camera3d>>) {
 }
 ```
 
-## Auto-Labeled Systems For Nicer System Ordering
+## Ergonomic System Ordering
 
 <div class="release-feature-authors">authors: @cart, @aevyrie, @alice-i-cecile, @DJMcNab</div>
 
-Bevy uses "labels" to define ordering constraints between its ECS systems when they run in parallel. In previous versions of Bevy, the only option was to define custom labels:
+Bevy uses "labels" to define ordering constraints between its ECS systems when they run in parallel. In previous versions of Bevy, the only way to order systems was to define custom labels:
 
 ```rust
 #[derive(SystemLabel, Clone, Hash, Debug, PartialEq, Eq)]
@@ -269,7 +269,7 @@ app
   .add_system(movement.after(UpdateVelocity))
 ```
 
-In **Bevy 0.7**, systems are now automatically labeled with a `SystemTypeIdLabel` tied to their type. This enables much more ergonomic and clear system ordering:
+In **Bevy 0.7**, manually defining labels is no longer required. You can order systems using functions, just like you do when adding systems!
 
 ```rust
 app
@@ -277,7 +277,12 @@ app
   .add_system(movement.after(update_velocity))
 ```
 
+This is accomplished by "auto-labeling" systems with their [`TypeId`] (the label type is [`SystemTypeIdLabel`]). Internally ordering still uses labels.
+
 The Bevy ECS labeling system is powerful and there are still legitimate use cases for custom labels (such as labeling multiple systems with the same label and exporting a stable public API as a plugin author). But most common use cases can take advantage of the ergonomic auto-labeling functionality.
+
+[`TypeId`]: https://doc.rust-lang.org/std/any/struct.TypeId.html
+[`SystemTypeIdLabel`]: https://docs.rs/bevy/0.7.0/bevy/ecs/system/struct.SystemTypeIdLabel.html
 
 ## Default Shorthand
 
@@ -339,7 +344,7 @@ However, to respect Rust's mutability rules, we need to disallow apis that might
 ```rust
 fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
     let a_transform = query.get_mut(entities.a).unwrap();
-    // This line files to compile because `query` is already mutably borrowed above
+    // This line fails to compile because `query` is already mutably borrowed above
     let b_transform = query.get_mut(entities.b).unwrap();
 }
 ```
@@ -453,37 +458,39 @@ Astute `std` doc readers might notice that the Rust team [recommends only using 
 Sometimes when building Bevy Apps you might find yourself repeating the same sets of components over and over in your queries:
 
 ```rust
-fn move_players(mut players: Query<(&mut Name, &mut Transform, &mut Item)>) {
-    for (name, transform, item) in players.iter_mut() {
+fn move_players(mut players: Query<(&mut Transform, &mut Velocity, &mut PlayerStats)>) {
+    for (transform, velocity, stats) in players.iter_mut() {
     }
 }
 
-fn despawn_players(mut players: Query<(Entity, &mut Name, &mut Transform, &mut Item)>) {
-    for (entity, name, transform, item) in players.iter_mut() {
+fn player_gravity(mut players: Query<(Entity, &mut Transform, &mut Velocity, &mut PlayerStats)>) {
+    for (entity, transform, velocity, stats) in players.iter_mut() {
     }
 }
 ```
 
-Maybe you've gotten tired of typing the same components over and over. In **Bevy 0.7**, you can now easily create your own custom `WorldQuery` trait implementations with the `WorldQuery` derive:
+Maybe you've gotten tired of typing the same components over and over. In **Bevy 0.7**, you can now easily create your own custom [`WorldQuery`] trait implementations with the [`WorldQuery`] derive:
 
 ```rust
 #[derive(WorldQuery)]
-struct PlayerQuery<'w> {
-    name: &'w mut Name,
+struct PlayerMovementQuery<'w> {
     transform: &'w mut Transform,
-    items: &'w mut Items,
+    velocity: &'w mut Velocity,
+    stats: &'w mut PlayerStats,
 }
 
-fn move_players(mut players: Query<PlayerQuery>) {
+fn move_players(mut players: Query<PlayerMovementQuery>) {
     for player in players.iter_mut() {
     }
 }
 
-fn despawn_players(mut players: Query<(Entity, PlayerQuery)>) {
+fn player_gravity(mut players: Query<(Entity, PlayerMovementQuery)>) {
     for (entity, player) in players.iter_mut() {
     }
 }
 ```
+
+[`WorldQuery`]: http://docs.rs/bevy/0.7.0/bevy/ecs/query/trait.WorldQuery.html
 
 ## World::resource
 
