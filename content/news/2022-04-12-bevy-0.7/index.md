@@ -27,11 +27,10 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 * Compressed texture support (KTX2 / DDS / .basis): load more textures in a scene, faster
 * Compute shader / pipeline specialization: Bevy's flexible shader system was ported to compute shaders, enabling hot reloading, shader defs, and shader imports
 * Render to texture: cameras can now be configured to render to a texture instead of a window
-* Flexible user-customizable mesh vertex layouts in shaders
-* ECS improvements: Order systems using their names, Query::get_many, use conflicting parameters in systems via ParamSets, WorldQuery derives
+* Flexible mesh vertex layouts in shaders
+* ECS improvements: Order systems using their names, Query::many_mut, use conflicting parameters in systems via ParamSets, WorldQuery derives
 * Documentation improvements: better examples, more doc tests and more coverage
 * More audio control: pause, volume, speed, and looping
-* Hot reloading for "plugin-provided / built-in assets"
 * Power usage options to enable only updating Bevy Apps when input occurs 
 
 <!-- more -->
@@ -76,7 +75,7 @@ And we're just getting started! Multi-track animation blending and higher level 
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-Bevy's GLTF importer was extended to import GLTF animations into the new [`AnimationPlayer`] system. This supports both "skeletal animation" and arbitrary transform animations.
+Bevy's GLTF importer was extended to import GLTF animations into the new [`AnimationPlayer`] system. This supports both "skeletal animation" and arbitrary transform animations:
 
 <video controls loop><source  src="fox.mp4" type="video/mp4"/></video>
 
@@ -140,6 +139,116 @@ commands.spawn(PointLightBundle {
 
 [`Visibility`]: https://docs.rs/bevy/0.7.0/bevy/render/view/struct.Visibility.html
 
+## Compressed GPU Textures
+
+<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
+
+As scenes grow larger, so do their assets. Compressing these assets is a great way to save space. The Amazon Bistro scene featured below has well over 1GB of compressed textures.
+
+PNG is a popular compressed format, but it must be decompressed before the GPU can use it. This can be a slow process for large scenes. Those textures are then used in their uncompressed form, taking up large quantities of limited memory. Compressed GPU textures can be used directly in their compressed format by the GPU and can be loaded without any additional processing. This reduces load times significantly. As they remain compressed, this also reduces RAM usage significantly.
+
+The Bistro scene took a total of 12.9s to load with PNG textures, but only 1.5s with compressed textures - taking approximately a tenth of the load time! The total RAM usage was ~12GB with uncompressed textures, and 5GB with compressed textures, less than half!
+
+The benefits don't stop there either - because the textures are compressed and can be used by the GPU in that format, reading from them uses less memory bandwidth, which can bring performance benefits. The Bistro scene gains about 10% in frame rate from using compressed textures.
+
+![bistro compressed](bistro_compressed.png)
+
+
+Another benefit is that mipmaps are supported, which makes for smoother, less noisy textures. Bevy currently doesn't have automatic support for generating mipmaps for "normal" textures, so using compressed textures is a nice way to have mipmaps now, even though we don't support them for standard textures yet!
+
+In summary, Bevy now supports loading compressed textures from `.dds`, `.ktx2`, and `.basis` files. This includes support for the standard ASTC, BCn, and ETC2 formats, as well as "universal" formats like ETC1S and UASTC that can be transcoded to formats supported by specific systems at runtime. The GLTF loader was also extended to support loading these formats.
+
+These features can be enabled using the `dds`, `ktx2`, and `basis-universal` cargo features.
+
+## Render To Texture
+
+<div class="release-feature-authors">authors: @HackerFoo</div>
+
+Bevy now has initial support for rendering to texture by configuring the `render_target` field on `Camera`. This enables scenarios such as mirrors, split screen, 2d UI in 3d space, portals, etc.
+
+<video controls loop><source  src="render_to_texture.mp4" type="video/mp4"/></video>
+
+Note that the current implementation is relatively low level. It will generally require interacting with Bevy's Render Graph and defining new camera types. If you would like to use this feature now, the [render_to_texture example](https://github.com/bevyengine/bevy/blob/main/examples/3d/render_to_texture.rs) illustrates the steps required. We have plans for ["high level render targets"](https://github.com/bevyengine/bevy/discussions/4191) that will make rendering to textures possible in just a few lines of code. Stay tuned for details!
+
+## Bevy-Native Compute Shaders
+
+<div class="release-feature-authors">authors: @Ku95</div>
+
+Bevy's flexible asset-driven shader system was ported to compute shaders/pipelines, enabling hot reloading, [shader defs](https://bevyengine.org/news/bevy-0-6/#shader-preprocessor), [shader imports](https://bevyengine.org/news/bevy-0-6/#shader-imports), and [pipeline specialization](https://bevyengine.org/news/bevy-0-6/#pipeline-specialization) based on user-configurable keys:
+
+```rust
+#import "shaders/game_of_life_texture_bind_group.wgsl"
+
+[[stage(compute), workgroup_size(8, 8, 1)]]
+fn game_of_life_update([[builtin(global_invocation_id)]] invocation_id: vec3<u32>) {
+    let location = vec2<i32>(i32(invocation_id.x), i32(invocation_id.y));
+    let alive = is_location_alive(location);
+
+    // shader defs are configurable at runtime, prompting new variants of the shader to be compiled
+#ifdef WRITE_OUTPUT
+    storageBarrier();
+    textureStore(texture, location, vec4<f32>(f32(alive)));
+#endif
+}
+```
+
+## Flexible Mesh Vertex Layouts
+
+<div class="release-feature-authors">authors: @cart, @parasyte</div>
+
+In **Bevy 0.7**, it is now easy to make shaders support any Mesh vertex layout and arbitrary vertex attributes. Bevy's "shader pipeline specialization" system was extended to support "specializing on mesh vertex layouts".
+
+For most Bevy users, this means that [Materials](/news/bevy-0-6/#materials), including the built in [`StandardMaterial`] and custom shader materials now support arbitrary Meshes automatically, provided those Meshes have the vertex attributes required by the material shaders.
+
+We also made use of this system to implement joint weights and indices for our new [Skeletal Animation](/news/bevy-0-7/#skeletal-animation) implementation.
+
+For Bevy users that like to write lower level graphics pipelines, this feature makes it possible to easily and efficiently specialize your pipelines according to Mesh vertex layouts:
+
+```rust
+impl SpecializedMeshPipeline for SomeCustomPipeline {
+    type Key = SomeCustomKey;
+
+    fn specialize(
+        &self,
+        key: Self::Key,
+        layout: &MeshVertexBufferLayout,
+    ) -> Result<RenderPipelineDescriptor, SpecializedMeshPipelineError> {
+        // this is a layout that matches the requirements requested,
+        // but catered to whatever mesh is currently being rendered
+        let vertex_buffer_layout = layout.get_layout(&[
+            Mesh::ATTRIBUTE_POSITION.at_shader_location(0),
+            Mesh::ATTRIBUTE_NORMAL.at_shader_location(1),
+            Mesh::ATTRIBUTE_UV_0.at_shader_location(2),
+        ])?;
+
+        Ok(RenderPipelineDescriptor {
+            vertex: VertexState {
+                buffers: vec![vertex_buffer_layout],
+                /* define the rest of the vertex state here */
+            },
+            /* define the rest of the mesh pipeline here */
+        })
+    }
+```
+
+[`StandardMaterial`]: https://docs.rs/bevy/0.7.0/bevy/pbr/struct.StandardMaterial.html
+
+## Camera Marker Components
+
+<div class="release-feature-authors">authors: @jakobhellermann</div>
+
+In **Bevy 0.7**, Cameras now use the "marker component" pattern to determine the "camera type" (ex: 3D, 2D, UI), rather than using string names.
+
+This means that it is now cheaper and easier to select cameras of a specific type:
+
+```rust
+fn move_3d_camera_system(transforms: Query<&mut Transform, With<Camera3d>>) {
+    for mut camera in transforms.iter_mut() {
+        // move camera here
+    }
+}
+```
+
 ## Auto-Labeled Systems For Nicer System Ordering
 
 <div class="release-feature-authors">authors: @cart, @aevyrie, @alice-i-cecile, @DJMcNab</div>
@@ -163,7 +272,7 @@ app
   .add_system(movement.after(update_velocity))
 ```
 
-The Bevy ECS labeling system is powerful and there are still legitimate use cases for custom labels (such as labeling multiple systems with the same label). But most common use cases can take advantage of the ergonomic auto-labeling functionality.
+The Bevy ECS labeling system is powerful and there are still legitimate use cases for custom labels (such as labeling multiple systems with the same label and exporting a stable public API as a plugin author). But most common use cases can take advantage of the ergonomic auto-labeling functionality.
 
 ## Default Shorthand
 
@@ -203,7 +312,7 @@ commands.spawn_bundle(SpriteBundle {
 
 This is equivalent in functionality to `..Default::default()`, it's just more compressed. And you can still use the longer form if you prefer. The `default()` function is included in Bevy's prelude by default, so you don't need to manually import it. Ergonomics for the win!
 
-## Query::get_many
+## Query::many
 
 <div class="release-feature-authors">authors: @alice-i-cecile</div>
 
@@ -330,7 +439,7 @@ fn give_sword(mut query: Query<&mut Items>) {
 }
 ```
 
-Astute `std` doc readers might notice that the Rust team [recommends only using Deref/DerefMut for smart pointers, to avoid confusion](https://doc.rust-lang.org/std/ops/trait.Deref.html). Components like `Items` _are not_ smart pointers. We personally don't care. This pattern works, it is already widely used in the Rust ecosystem, and Good UX Comes First.
+Astute `std` doc readers might notice that the Rust team [recommends only using `Deref`/`DerefMut` for smart pointers, to avoid confusion](https://doc.rust-lang.org/std/ops/trait.Deref.html). Components like `Items` _are not_ smart pointers. We choose to ignore this advice, as this pattern works, is already widely used in the Rust ecosystem, and Good UX Comes First.
 
 ## WorldQuery Derives
 
@@ -371,6 +480,160 @@ fn despawn_players(mut players: Query<(Entity, PlayerQuery)>) {
 }
 ```
 
+## World::resource
+
+<div class="release-feature-authors">authors: @alice-i-cecile</div>
+
+We've noticed that the majority of direct [`World`] resource access immediately unwraps the results of `get_resource`:
+
+```rust
+let time = world.get_resource::<Time>().unwrap();
+```
+
+In **Bevy 0.7** we added an ergonomic variant that internally panics:
+
+```rust
+let time = world.resource::<Time>();
+```
+
+There is also a mutable variant:
+
+```rust
+let mut time = world.resource_mut::<Time>();
+```
+
+The `get_resource` variants are still available for cases where users still want to manually handle the returned `Option`.
+
+[`World`]: https://docs.rs/bevy/0.7.0/bevy/ecs/world/struct.World.html
+
+## AnyOf Queries
+
+<div class="release-feature-authors">authors: @TheRawMeatball</div>
+
+Bevy ECS Queries now support [`AnyOf`], which will return results for entities that match "any of" the given component queries:
+
+```rust
+fn system(query: Query<AnyOf<(&A, &B)>>) {
+    for (a, b) in query.iter() {
+        // Either A or B is guaranteed to be Some
+        assert!(a.is_some() || b.is_some())
+    }
+}
+```
+
+For the example above [`AnyOf`] will return entities that have A and not B, B and not A, and both A and B.
+
+[`AnyOf`]: http://docs.rs/bevy/0.7.0/bevy/ecs/query/struct.AnyOf.html
+
+## &World System Param
+
+<div class="release-feature-authors">authors: @bilsen</div>
+
+It is now possible for "normal systems" have `&World` system params, which provide full read-only access to the entire [`World`]:
+
+```rust
+fn system(world: &World, transforms: Query<&Transform>) {
+}
+```
+
+Just keep in mind that `&World` will conflict with _any_ mutable Query:
+
+```rust
+fn invalid_system(world: &World, transforms: Query<&mut Transform>) {
+}
+```
+
+In these cases, consider using our new [ParamSets](/news/bevy-0-7/#paramsets) to resolve the conflict:
+
+```rust
+fn valid_system(set: ParamSet<(&World, Query<&mut Transform>)>) {
+}
+```
+
+## ECS Soundness / Correctness Improvements
+
+<div class="release-feature-authors">authors: @BoxyUwU, @TheRawMeatball, @bjorn3</div>
+
+Bevy ECS received a solid number of soundness and correctness bug fixes this release:
+* Removed unsound lifetime annotations on `EntityMut` and `Query`, which could be used to get aliased mutability in some situations.
+* Labeled `World::entities_mut` unsafe (because manually modifying entity metadata can invalidate safety assumptions)
+* Removed unsound `World::components_mut` (which allowed replacing component metadata, invalidating assumptions made elsewhere in World)
+* Fixed a `World::resource_scope` soundness bug
+* Used `ManuallyDrop` in resource id initialization instead of `forget()` to avoid invalidating a data pointer before it is used.
+
+We now also run the [miri](https://github.com/rust-lang/miri) interpreter on Bevy ECS in our CI to help detect and prevent future soundness / correctness issues. 
+
+As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks because we are modeling parallel data access that Rust cannot reason about without our help. But we are committed to removing as much unsafe code as we can and improving the quality and scope of our unsafe code.
+
+## Audio Control
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy's audio system has been in a ... minimalist state since our first release. Until now, it only supported pressing "play" on audio assets. Third party plugins such as [bevy_kira_audio](https://github.com/NiklasEi/bevy_kira_audio) have filled in the gaps with much more flexible audio solutions.
+
+In **Bevy 0.7** we've started expanding what our built in audio plugin can do. It is now possible to pause, adjust volume, and set playback speed using [`AudioSink`] assets.
+
+Playing audio now returns a `Handle<AudioSink>` which can be used to play/pause/set_speed/set_volume:
+
+```rust
+struct BeautifulMusic(Handle<AudioSink>);
+
+fn setup_audio(
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    audio_sinks: Res<Assets<AudioSink>>,
+) {
+    let music = asset_server.load("BeautifulMusic.ogg");
+    // play audio and upgrade to a strong handle
+    let sink_handle = audio_sinks.get_handle(audio.play(music));
+    commands.insert_resource(BeautifulMusic(sink_handle));
+}
+
+// later in another system
+fn adjust_audio(music: Res<BeautifulMusic>, mut audio_sinks: ResMut<Assets<AudioSink>>) {
+    if let Some(sink) = audio_sinks.get(music.0) {
+        // pause playback
+        sink.pause();
+        // start playback again
+        sink.play();
+        // increase the volume
+        sink.set_volume(sink.volume() + 0.1);
+        // slow down playback
+        sink.set_speed(0.5);
+    }
+}
+```
+
+You can also now loop audio playback:
+
+```rust
+audio.play_in_loop(music);
+```
+
+We plan to continue iterating on these APIs with even more functionality and usability improvements!
+
+[`AudioSink`]: http://docs.rs/bevy/0.7.0/bevy/audio/struct.AudioSink.html
+
+## EventLoop Power Saving Modes
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+By default Bevy will run updates "as fast as it can" (limited by the monitors' refresh rate). This is great for most games, but some application types (such as GUI apps) need to prioritize CPU and GPU power usage.
+
+**Bevy 0.7** adds the ability to configure the [`UpdateMode`] in [`WinitConfig`] to configure how Bevy Apps run updates:
+
+* **Continuous**: always update "as soon as possible" (honoring vsync configuration)
+* **Reactive**: only update when there is a window event, a redraw is requested, or a configurable wait time has elapsed 
+* **ReactiveLowPower**: only update when there is user input (mouse movement, keyboard input, etc), a redraw is requested, or a configurable wait time has elapsed
+
+These settings can be configured separately for focused windows and unfocused windows (enabling you to save power when a window loses focus). 
+
+**ReactiveLowPower** can _significantly_ reduce power / resource usage, but it won't be suitable for every app type, as some apps need to assume that they are constantly being updated as quickly as possible. Therefore these settings are opt-in.
+
+This app demos the various modes available. Note that Game mode was configured to lower its tick rate when it loses focus, which is not the default:
+
+<video controls loop><source  src="power_settings.mp4" type="video/mp4"/></video>
+
 ## Documentation improvements
 
 <div class="release-feature-authors">authors: @alice-i-cecile and many more</div>
@@ -402,6 +665,14 @@ If this is you: thanks!
 For many people, the best way to learn a tool is to see it in action.
 We've been steadily polishing our [examples](https://github.com/bevyengine/bevy/tree/latest/examples) with better explanations, more coverage, and higher code quality.
 If you're new to Bevy, check out the much-improved [Breakout example](https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs)!
+
+## Dev Docs
+
+<div class="release-feature-authors">authors: @james7132, @mockersf, @aevyrie</div>
+
+We now automatically deploy Bevy's `main` development branch to [https://dev-docs.bevyengine.org](https://dev-docs.bevyengine.org) whenever a change is merged. This will help Bevy documentation authors easily validate their changes. And "bleeding edge" Bevy users can learn about API changes we're working on.
+
+![dev docs](dev_docs.png)
 
 ## Support Bevy
 
