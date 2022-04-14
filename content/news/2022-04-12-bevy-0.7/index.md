@@ -633,7 +633,7 @@ We plan to continue iterating on these APIs with even more functionality and usa
 
 <div class="release-feature-authors">authors: @aevyrie</div>
 
-By default Bevy will run updates "as fast as it can" (limited by the monitors' refresh rate). This is great for most games, but some application types (such as GUI apps) need to prioritize CPU and GPU power usage.
+By default Bevy will run updates "as fast as it can" (limited by the screen's refresh rate). This is great for most games, but some application types (such as GUI apps) need to prioritize CPU and GPU power usage.
 
 **Bevy 0.7** adds the ability to configure the [`UpdateMode`] in [`WinitConfig`] to configure how Bevy Apps run updates:
 
