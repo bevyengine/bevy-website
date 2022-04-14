@@ -320,7 +320,7 @@ commands.spawn_bundle(SpriteBundle {
 })
 ```
 
-This is equivalent in functionality to `..Default::default()`, it's just more compressed. And you can still use the longer form if you prefer. The `default()` function is included in Bevy's prelude by default, so you don't need to manually import it. Ergonomics for the win!
+This is equivalent in functionality to `..Default::default()`, it's just more compressed. And you can still use the longer form if you prefer. The `default()` function is included in Bevy's prelude, so you don't need to manually import it. Ergonomics for the win!
 
 ## Query::many
 
