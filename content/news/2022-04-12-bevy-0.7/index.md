@@ -115,7 +115,10 @@ In **Bevy 0.7**, we added the ability to automatically "upgrade" to using unboun
 
 With the upper limit of 256 point lights removed, the only limit on lights is what the hardware can support and bottlenecks in our algorithms. To increase the number of lights, we made a number of optimizations to our clustering algorithms.
 
-* **Dynamic Light Clusters**: By default cluster x/y slices are now dynamically configured based on the lights in the scene, which can significantly increase performance in some scenes. The clustering behavior is now also user-configurable as FixedZ (the new default dynamic x/y behavior), custom fixed x/y/z slice values, single-cluster, and "no clustering".
+* **Dynamic Light Clusters**
+  * By default cluster x/y slices are now dynamically configured based on the lights in the scene, which can significantly increase performance in some scenes.
+  * The clustering behavior is now also user-configurable as FixedZ (the new default dynamic x/y behavior, fixing the number of z slices), custom fixed x/y/z slice values, single-cluster, and "no clustering", giving you control when you know a certain cluster configuration will perform even better.
+  * Additionally, in 0.6 the visible volume that is covered by all the clusters basically matched the full visible volume of the view frustum. This meant that if all the point lights were in the foreground, all the clusters beyond the lights were wasted space. In 0.7, it is possible to limit the far bound to be closer than the camera far bound, which means the lights can be spread across more clusters, which can significantly increase rendering performance.
 * **Light Frustum Change Detection**: We now use Bevy ECS's change detection feature to only recalculate the view frustum of lights that have changed.
 * **Cluster Assignment Optimizations**: The cluster assignment data access patterns and data structures received a variety of tweaks that improved performance.
 
