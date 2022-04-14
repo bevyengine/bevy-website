@@ -54,16 +54,16 @@ b7dfe1677 include sources in shader validation error (#3724)
 600ee7eee support all line endings in shader preprocessor (#3603)
 
 ### Compressed Textures
-0529f633f KTX2/DDS/.basis compressed texture support (#3884)
+    0529f633f KTX2/DDS/.basis compressed texture support (#3884)
 
 ### Compute Pipeline Specialization
-9e450f282 Compute Pipeline Specialization (#3979)
+    9e450f282 Compute Pipeline Specialization (#3979)
 
 ### Render To Texture
-81d57e129 Add capability to render to a texture (#3412)
+    81d57e129 Add capability to render to a texture (#3412)
 
 ### Custom Vertex Buffer Layouts
-e369a8ad5 Mesh vertex buffer layouts (#3959)
+    e369a8ad5 Mesh vertex buffer layouts (#3959)
 
 ### Wgpu Feature / Limit Overrides
 803e8cdf8 bevy_render: Support overriding wgpu features and limits (#3912)
@@ -80,7 +80,7 @@ e369a8ad5 Mesh vertex buffer layouts (#3959)
 
 ### Camera Marker Components
 
-bf6de8962 use marker components for cameras instead of name strings (#3635)
+    bf6de8962 use marker components for cameras instead of name strings (#3635)
 
 ### Tracing
 fee7a2613 Tracy spans around main 3D passes (#4182)
@@ -115,7 +115,7 @@ cba9bcc7b improve error messages for render graph runner (#3930)
 
     b6a647cc0 default() shorthand (#4071)
 
-557ab9897 Make get_resource (and friends) infallible (#4047)
+    557ab9897 Make get_resource (and friends) infallible (#4047)
 
 2f11c9dca Add Query::contains (#3090)
 64d217823 Allow iter combinations on queries with filters (#3656)
@@ -123,7 +123,6 @@ cba9bcc7b improve error messages for render graph runner (#3930)
 b1afe2dcc Make `System` responsible for updating its own archetypes (#4115)
 21a875d67 Some small changes related to run criteria piping (#3923)
 032b0f4ba Fix derive(SystemParam) macro (#4400)
-637a14991 unsafeify `World::entities_mut` (#4093)
 1b63d949e Re-add ECS benchmark suite (#4332)
 4c1678c78 Hide docs for concrete impls of Fetch, FetchState, and SystemParamState (#4250)
 6e61fef67 Obviate the need for `RunSystem`, and remove it (#3817)
@@ -133,12 +132,12 @@ c1a4a2f6c Remove the config api (#3633)
 bdbf62634 Implement init_resource for `Commands` and `World` (#3079)
 6615b7bf6 Deprecate `.system` (#3302)
 b3462428c Move the CoreStage::Startup to a seperate StartupSchedule label (#2434)
-760466588 Implement AnyOf queries (#2889)
+    760466588 Implement AnyOf queries (#2889)
 fe4a42a64 Mut to immut impls (#3621)
 f00aec245 Added method to restart the current state (#3328)
 7d712406f Simplify sending empty events (#2935)
 6f111136b Cleanup some things which shouldn't be components (#2982)
-1f99363de Add &World as SystemParam (#2923)
+    1f99363de Add &World as SystemParam (#2923)
 c216738b3 Implement len and is_empty for EventReaders (#2969)
 21ac4bc0a impl Command for <impl FnOnce(&mut World)> (#2996)
 69e9a47d9 SystemParam Derive fixes (#2838)
@@ -156,7 +155,7 @@ b3a1db60f Proper prehashing (#3963)
 
 ## Audio
 
-b21c69c60 Audio control - play, pause, volume, speed, loop (#3948)
+    b21c69c60 Audio control - play, pause, volume, speed, loop (#3948)
 
 ## Assets
 baae97d00 `iter_mut` on Assets: send modified event only when asset is iterated over (#3565)
@@ -170,7 +169,7 @@ e928acb9f bevy_asset: Add AssetServerSettings watch_for_changes member (#3643)
 39d89fe0d Enable drag-and-drop events on windows (#3772)
 3756181e2 (HEAD, origin/staging, origin/main) Change scaling mode to FixedHorizontal (#4055)
 b3aff9a7b Add docs and common helper functions to `Windows` (#4107)
-2d674e7c3 Reduce power usage with configurable event loop (#3974)
+    2d674e7c3 Reduce power usage with configurable event loop (#3974)
 1477765f6 Replace VSync with PresentMode (#3812)
 c16d0c5a3 do not set cursor grab on window creation if not asked for (#3617)
 
@@ -184,11 +183,12 @@ f584e7295 Add Transform::rotate_around method (#3107)
 37a7be56d Make transform builder methods const (#3045)
 
 ## Safety
-dba779001 REMOVE unsound lifetime annotations on `EntityMut` (#4096)
-024d98457 yeet unsound lifetime annotations on `Query` methods (#4243)
-050d2b7f0 yeet `World::components_mut` >:( (#4092)
-142e7f3c5 Backport soundness fix (#3685)
-af22cc1dc Use ManuallyDrop instead of forget in insert_resource_with_id (#2947)
+    dba779001 REMOVE unsound lifetime annotations on `EntityMut` (#4096)
+    024d98457 yeet unsound lifetime annotations on `Query` methods (#4243)
+    637a14991 unsafeify `World::entities_mut` (#4093)
+    050d2b7f0 yeet `World::components_mut` >:( (#4092)
+    142e7f3c5 Backport soundness fix (#3685)
+    af22cc1dc Use ManuallyDrop instead of forget in insert_resource_with_id (#2947)
 
 ## Examples
 
@@ -213,7 +213,7 @@ ac63c491f Simple 2d rotation example (#3065)
 
 ## CI
 
-28ba87e6c (alice-i-cecile/main) CI runs `cargo miri test -p bevy_ecs` (#4310)
+    28ba87e6c (alice-i-cecile/main) CI runs `cargo miri test -p bevy_ecs` (#4310)
 c44f8b2b6 Run tests (including doc tests) in `cargo run -p ci` command (#3849)
 
 ## Profiling
