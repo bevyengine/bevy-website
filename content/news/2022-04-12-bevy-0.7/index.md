@@ -6,13 +6,13 @@ author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
-image = "FIXME.png"
+image = "mushroom.png"
 show_image = true
-image_subtitle = ""
-image_subtitle_link = ""
+image_subtitle = "'Stylized mushrooms' scene by QumoDone rendered in Bevy. This scene is licensed under Creative Commons Attribution."
+image_subtitle_link = "https://sketchfab.com/3d-models/stylized-mushrooms-9d22e02ce2a548959b1c4c4c1d546842"
 +++
 
-Thanks to **X** contributors, **X** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.7** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **123** contributors, **345** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.7** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -630,6 +630,28 @@ We plan to continue iterating on these APIs with even more functionality and usa
 
 [`AudioSink`]: http://docs.rs/bevy/0.7.0/bevy/audio/struct.AudioSink.html
 
+## Sprite Anchors
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+[`Sprite`] components can now define an [`Anchor`] point, which determines the "origin" of the sprite. Sprites still default to a "center" origin, but this is now configurable:
+
+```rust
+commands.spawn_bundle(SpriteBundle {
+    texture: asset_server.load("bevy_logo.png"),
+    sprite: Sprite {
+        anchor: Anchor::TopRight,
+        ..default()
+    },
+    ..default()
+});
+```
+
+<video controls loop><source  src="pivot.mp4" type="video/mp4"/></video>
+
+[`Sprite`]: https://docs.rs/bevy/0.7.0/bevy/sprite/enum.Sprite.html
+[`Anchor`]: https://docs.rs/bevy/0.7.0/bevy/sprite/enum.Anchor.html
+
 ## EventLoop Power Saving Modes
 
 <div class="release-feature-authors">authors: @aevyrie</div>
@@ -690,6 +712,37 @@ We now automatically deploy Bevy's `main` development branch to [https://dev-doc
 
 ![dev docs](dev_docs.png)
 
+## Website Improvements 
+
+<div class="release-feature-authors">authors: @doup</div>
+
+The [Bevy Book](/learn/book) now has a much nicer pager widget that displays previous / next section names:
+
+![pager](pager.png)
+
+We also added an "improve this page" footer link to make it easier for Bevy Book readers to contributed changes. 
+
+The sidebar got an overhaul that improves clarity and makes it possible to open/close sections without clicking on them:
+
+![sidebar](sidebar.png)
+
+The responsiveness of the website has also been improved and some sections layout much better on mobile. 
+
+## Scene Viewer Tool
+
+<div class="release-feature-authors">authors: Rob Swain (@superdump), @mockersf, @IceSentry, @jakobhellermann</div>
+
+Bevy now has a dedicated scene viewer tool that can load arbitrary GLTF scene files. If you check out the main Bevy repo you can try it out by running:
+
+```
+cargo run --release --example scene_viewer /some/path/castle.gltf
+```
+
+It has a built in "fly camera" and has tools to play animations and toggle lights and shadows.
+
+![scene viewer](bevy_scene_viewer.png)
+
+
 ## Support Bevy
 
 Sponsorships help make my full time work on Bevy sustainable. If you believe in Bevy's mission, consider sponsoring me (@cart) ... every bit helps!
@@ -698,6 +751,130 @@ Sponsorships help make my full time work on Bevy sustainable. If you believe in 
 
 ## Contributors
 
-A huge thanks to the **X contributors** that made this release (and associated docs) possible! In random order:
+A huge thanks to the **123 contributors** that made this release (and associated docs) possible! In random order:
+
+* @mfdorst
+* @devjobe
+* @PrototypeNM1
+* @devil-ira
+* @IsseW
+* @SuperSamus
+* @alice-i-cecile
+* @bilsen
+* @CooCooCaCha
+* @lufog
+* @chescock
+* @dbearden
+* @doup
+* @MiniaczQ
+* @C-BJ
+* @TedDriggs
+* @idanarye
+* @plof27
+* @robtfm
+* @ickk
+* @rsk700
+* @dataphract
+* @Looooong
+* @mdickopp
+* @bjorn3
+* @aloucks
+* @EpsilonDelphine
+* @rparrett
+* @CptPotato
+* @horvbalint
+* @jakobhellermann
+* @light4
+* @Lindenk
+* @rib
+* @ItsDoot
+* @KDecay
+* @p3rsik
+* @danieleades
+* @parasyte
+* @Sorck
+* @chenzhekl
+* @jch-13
+* @SecretPocketCat
+* @DJMcNab
+* @jak6jak
+* @ShadowCurse
+* @MrGVSV
+* @NiklasEi
+* @ZainlessBrombie
+* @lwansbrough
+* @ramon-bernardo
+* @aevyrie
+* @OptimisticPeach
+* @bitshifter
+* @glfmn
+* @rezural
+* @joshuataylor
+* @nakedible
+* @GarettCooper
+* @rand0m-cloud
+* @kirusfg
+* @oceantume
+* @l4desu-mizu
+* @fgiordana-netflix
+* @sarkahn
+* @Weasy666
+* @bytemuck
+* @james7132
+* @sseemayer
+* @pubrrr
+* @Sliman4
+* @geckoxx
+* @Bobox214
+* @mirkoRainer
+* @Veykril
+* @Gingeh
+* @pocket7878
+* @cart
+* @infmagic2047
+* @MinerSebas
+* @ramirezmike
+* @cjglo
+* @Sheepyhead
+* @L-french
+* @JoJoJet
+* @Wcubed
+* @Shatur
+* @reinismu
+* @boguscoder
+* @tversteeg
+* @TheRawMeatball
+* @mcobzarenco
+* @ezekg
+* @hlb8122
+* @B-Janson
+* @emersonmx
+* @mvlabat
+* @Nilirad
+* @jamesbeilby
+* @ryo33
+* @cdbfoster
+* @blaind
+* @fgiordana
+* @josh65536
+* @CleanCut
+* @tornewuff
+* @Ku95
+* @kcking
+* @luke-biel
+* @SUPERCILEX
+* @BoxyUwU
+* @TheAndrewJackson
+* @HackerFoo
+* @andresovela
+* @IceSentry
+* @RedlineTriad
+* @killercup
+* @Azorlogh
+* @superdump
+* @nebkor
+* @mockersf
+* @Gordon-F
+* @Jupp56
 
 ## Full Change Log

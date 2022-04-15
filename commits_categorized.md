@@ -31,7 +31,7 @@
 ac8bbafc5 Faster view frustum culling (#4181)
 
 ### Sprites
-8e864fdd1 can specify an anchor for a sprite (#3463)
+    8e864fdd1 can specify an anchor for a sprite (#3463)
 f6bc9a022 Sprites - keep color as 4 f32 (#4361)
 
 ### Gltf
