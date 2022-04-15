@@ -720,7 +720,7 @@ The [Bevy Book](/learn/book) now has a much nicer pager widget that displays pre
 
 ![pager](pager.png)
 
-We also added an "improve this page" footer link to make it easier for Bevy Book readers to contributed changes. 
+We also added an "improve this page" footer link to make it easier for Bevy Book readers to contribute changes. 
 
 The sidebar got an overhaul that improves clarity and makes it possible to open/close sections without clicking on them:
 
