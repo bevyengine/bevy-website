@@ -634,7 +634,7 @@ We plan to continue iterating on these APIs with even more functionality and usa
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-[`Sprite`] components can now define an [`Anchor`] point, which determines the "origin" of the sprite. Sprites still default to a "center" origin, but this is now configurable:
+[`Sprite`] components can now define an [`Anchor`] point (also known as a "pivot" point), which determines the "origin" of the sprite. Sprites still default to a "center" origin, but this is now configurable:
 
 ```rust
 commands.spawn_bundle(SpriteBundle {
