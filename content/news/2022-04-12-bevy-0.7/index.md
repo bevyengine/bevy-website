@@ -23,7 +23,7 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 * Skeletal animation and mesh skinning
 * GLTF animation importing
 * Unlimited* point lights in a scene
-* Improved clustered forward rendering: dynamic/adaptive clustering and faster cluster assignment
+* Improved clustered forward rendering: dynamic/adaptive clustering and faster, more accurate cluster assignment
 * Compressed texture support (KTX2 / DDS / .basis): load more textures in a scene, faster
 * Compute shader / pipeline specialization: Bevy's flexible shader system was ported to compute shaders, enabling hot reloading, shader defs, and shader imports
 * Render to texture: cameras can now be configured to render to a texture instead of a window
@@ -119,6 +119,7 @@ With the upper limit of 256 point lights removed, the only limit on lights is wh
   * By default cluster x/y slices are now dynamically configured based on the lights in the scene, which can significantly increase performance in some scenes.
   * The clustering behavior is now also user-configurable as FixedZ (the new default dynamic x/y behavior, fixing the number of z slices), custom fixed x/y/z slice values, single-cluster, and "no clustering", giving you control when you know a certain cluster configuration will perform even better.
   * Additionally, in 0.6 the visible volume that is covered by all the clusters basically matched the full visible volume of the view frustum. This meant that if all the point lights were in the foreground, all the clusters beyond the lights were wasted space. In 0.7, it is possible to limit the far bound to be closer than the camera far bound, which means the lights can be spread across more clusters, which can significantly increase rendering performance.
+* **Iterative Sphere Refinement**: Bevy now uses the Just Cause 3 iterative sphere refinement approach to cluster assignment, which gives us a ~10% performance increase on some benchmarks and more accurate clustering (which can also improve render performance).
 * **Light Frustum Change Detection**: We now use Bevy ECS's change detection feature to only recalculate the view frustum of lights that have changed.
 * **Cluster Assignment Optimizations**: The cluster assignment data access patterns and data structures received a variety of tweaks that improved performance.
 
