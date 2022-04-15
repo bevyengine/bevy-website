@@ -276,7 +276,7 @@ commands.insert_resource(Scoreboard::default());
 commands.init_resource::<Scoreboard>();
 ```
 
-### [Infallabile resource getters](https://github.com/bevyengine/bevy/pull/4047)
+### [Infallible resource getters](https://github.com/bevyengine/bevy/pull/4047)
 
 ```rs
 // 0.6
