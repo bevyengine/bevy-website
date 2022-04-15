@@ -73,4 +73,4 @@ add_category audio audio
 add_category shader shader_instancing shader_material_glsl shader_material
 add_category ecs iter_combinations
 add_category Game breakout alien_cake_addict
-add_category Tools bevymark
+add_category stress_tests bevymark
