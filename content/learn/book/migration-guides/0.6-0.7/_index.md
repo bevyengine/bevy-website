@@ -267,19 +267,19 @@ commands.spawn_bundle(PerspectiveCameraBundle {
 
 ### [Implement init_resource for Commands and World](https://github.com/bevyengine/bevy/pull/3079)
 
-```rs
-#[derive(Default)]
-struct Scoreboard {
-    current_score: u32,
-    high_score: u32,
-}
+Methods that deal with inserting resources were reworked for consistency between the `Commands` and `Worlds` APIs.
 
+The breaking change is that `World::insert_non_send` was renamed to [`World::insert_non_send_resource`].
+
+```rs
 // 0.6
-commands.insert_resource(Scoreboard::default());
+world.insert_non_send(Score { score: 0 });
 
 // 0.7
-commands.init_resource::<Scoreboard>();
+world.insert_non_send_resource(Score { score: 0 });
 ```
+
+[`World::insert_non_send_resource`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html#method.insert_non_send_resource
 
 ### [Infallible resource getters](https://github.com/bevyengine/bevy/pull/4047)
 
