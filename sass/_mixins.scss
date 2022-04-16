@@ -4,6 +4,13 @@
     justify-content: center;
 }
 
+@mixin override-anchor() {
+    &, &:focus, &:hover, &:active &:link, &:visited {
+        text-decoration: none;
+        @content;
+    }
+}
+
 @mixin text-ellipsis($lines: 1) {
     overflow: hidden;
 
@@ -33,16 +40,16 @@
     scrollbar-color: $thumb-color transparent;
 
     &::-webkit-scrollbar-track {
-      background-color: transparent;
+        background-color: transparent;
     }
   
     &::-webkit-scrollbar {
-      width: $track-width;
-      background-color: transparent;
+        width: $track-width;
+        background-color: transparent;
     }
   
     &::-webkit-scrollbar-thumb {
-      background-color: $thumb-color;
-      border-radius: $track-width;
+        background-color: $thumb-color;
+        border-radius: $track-width;
     }
-  }
+}
