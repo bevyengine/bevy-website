@@ -222,7 +222,7 @@ fn main() {
 struct Config(u32);
 
 fn local_config(local: u32) -> impl FnMut(ResMut<Config>) {
-    move |mut val| {
+    move |mut val: ResMut<Config>| {
         val.0 = local;
 
         assert_eq!(val.0, 42);
@@ -230,9 +230,7 @@ fn local_config(local: u32) -> impl FnMut(ResMut<Config>) {
 }
 
 fn main() {
-        App::new()
-        .add_system(local_config(Config(42)))
-        .run();
+    App::new().add_system(local_config(42)).run();
 }
 ```
 
