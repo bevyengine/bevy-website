@@ -143,6 +143,8 @@ App::new()
     })
 
 // 0.7
+use bevy::window::PresentMode;
+
 App::new()
     .insert_resource(WindowDescriptor {
         present_mode: PresentMode::Immediate,
