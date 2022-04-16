@@ -208,7 +208,7 @@ fn camera_system(cameras: Query<&Camera, With<FirstPassCamera>>) {
 // 0.6
 struct Config(u32);
 
-fn local_config(local: Local<Config>) {
+fn local_is_42(local: Local<Config>) {
     assert_eq!(*local.0, 42);
 }
 
@@ -219,18 +219,15 @@ fn main() {
 }
 
 // 0.7
-struct Config(u32);
-
-fn local_config(local: u32) -> impl FnMut(ResMut<Config>) {
-    move |mut val: ResMut<Config>| {
-        val.0 = local;
-
+fn local_is_42(local: u32) -> impl FnMut() {
+    // This closure will be the system that will be executed
+    move || {
         assert_eq!(val.0, 42);
     }
 }
 
 fn main() {
-    App::new().add_system(local_config(42)).run();
+    App::new().add_system(local_is_42(42)).run();
 }
 ```
 
