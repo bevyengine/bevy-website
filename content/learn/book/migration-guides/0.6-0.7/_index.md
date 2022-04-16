@@ -62,22 +62,25 @@ unsafe { world.entities_mut() }
 
 ### [Custom vertex attributes](https://github.com/bevyengine/bevy/pull/3959)
 
-Custom vertex attributes are now referenced by a `MeshVertexAttribute` rather than a simple string and `set_attribute` has been renamed to `insert_attribute` better reflect its behavior.
+Custom vertex attributes are now referenced by a [`MeshVertexAttribute`] rather than a simple string and `set_attribute` has been renamed to [`insert_attribute`] better reflect its behavior.
 
 ```rs
 // 0.6
 mesh.set_attribute("Vertex_Custom", VertexAttributeValues::Sint32x4(vec![]));
 
 // 0.7
-// Generate your own random identifier here.
-// https://play.rust-lang.org/?gist=cc7e824724ba023e9bff25db35ef1f5e
+// Generate your own "high" random usize identifier here.
+// https://play.rust-lang.org/?gist=f40a801c124befef4a8270f6b011f275
 pub const ATTRIBUTE_CUSTOM: MeshVertexAttribute =
-    MeshVertexAttribute::new("Custom", 17351772347970238659, VertexFormat::Sint32x4);
+    MeshVertexAttribute::new("Custom", 3046527323, VertexFormat::Sint32x4);
 mesh.insert_attribute(
     ATTRIBUTE_CUSTOM,
     VertexAttributeValues::Sint32x4(vec![]),
 );
 ```
+
+[`MeshVertexAttribute`]: https://docs.rs/bevy/0.7.0/bevy/render/mesh/struct.MeshVertexAttribute.html
+[`insert_attribute`]: https://docs.rs/bevy/0.7.0/bevy/render/mesh/struct.Mesh.html#method.insert_attribute
 
 ### [Mesh vertex buffer layouts](https://github.com/bevyengine/bevy/pull/3959)
 
