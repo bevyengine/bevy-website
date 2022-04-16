@@ -222,7 +222,7 @@ fn main() {
 fn local_is_42(local: u32) -> impl FnMut() {
     // This closure will be the system that will be executed
     move || {
-        assert_eq!(val.0, 42);
+        assert_eq!(local, 42);
     }
 }
 
