@@ -12,17 +12,6 @@ body {
     background-color: #232326;
 }
 
-div.incorrect {
-    background-color: #542326;
-    border-left: 10px solid red;
-    border-radius: 10px;
-
-    .z-code,
-    .z-code code {
-        background-color: #542326;
-    }
-}
-
 @media screen and (max-width: 790px) {
 
     html,
