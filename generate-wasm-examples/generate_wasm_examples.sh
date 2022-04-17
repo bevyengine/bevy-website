@@ -18,12 +18,16 @@ sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crat
 add_category()
 {
     category=$1
-    category_path=`echo $category | tr '[:upper:]' '[:lower:]'`
+    category_path=$2
     example_weight=0
 
     mkdir ../../content/examples/$category_path
 
-    shift
+    # Remove first two arguments
+    shift 2
+
+    # Generate a markdown file for each example
+    # These represent each example page
     for example in $@
     do
         echo "building $category / $example"
@@ -43,6 +47,7 @@ header_message = \"Examples\"
         example_weight=$((example_weight+1))
     done
 
+    # Generate category index
     echo "+++
 title = \"$category\"
 sort_by = \"weight\"
@@ -66,11 +71,15 @@ header_message = \"Examples\"
 
 category_weight=0
 
-add_category 2d rect sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
-add_category 3d 3d_scene lighting load_gltf orthographic parenting pbr spherical_area_lights texture update_gltf_scene
-add_category UI button text text_debug ui
-add_category audio audio
-add_category shader shader_instancing shader_material_glsl shader_material
-add_category ecs iter_combinations
-add_category Games breakout alien_cake_addict
-add_category stress_tests bevymark
+# Add categories
+# - first param: the label that will show on the website
+# - second param: `bevy/examples/???` folder name
+# - rest params: space separated list of example files within the folder that want to be used
+add_category 2D 2d rect sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
+add_category 3D 3d 3d_scene lighting load_gltf orthographic parenting pbr spherical_area_lights texture update_gltf_scene
+add_category UI ui button text text_debug ui
+add_category Audio audio audio
+add_category Shader shader shader_instancing shader_material_glsl shader_material
+add_category ECS ecs iter_combinations
+add_category Games games breakout alien_cake_addict
+add_category "Stress Tests" stress_tests bevymark
