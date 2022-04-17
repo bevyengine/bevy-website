@@ -3,6 +3,7 @@
 
     display: inline-block;
     background-color: currentColor;
+    vertical-align: text-bottom;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-size: contain;
@@ -15,6 +16,7 @@
         ('chevron-down', 15),
         ('chevron-left', 9),
         ('chevron-right', 9),
+        ('github', 24),
         ('pencil', 19),
         ('times', 16),
     );
