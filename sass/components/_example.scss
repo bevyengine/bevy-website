@@ -1,0 +1,56 @@
+.example {
+    padding: 0 16px;
+
+    &__header {
+        display: grid;
+        gap: 8px;
+        margin: 16px 0 8px;
+        align-items: baseline;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            'title title'
+            'back  github'
+        ;
+
+        @media #{$bp-tablet-portrait-up} {
+            margin: 24px 0 8px;
+            grid-template-areas: 'back title github';
+            grid-template-columns: 150px 1fr 150px;
+        }
+    }
+
+    &__title {
+        grid-area: title;
+        margin: 0;
+        font-size: 1.75rem;
+        text-align: center;
+    }
+
+    &__back,
+    &__github {
+        font-size: 1rem;
+
+        @include override-anchor {
+            color: #aaa;
+        }
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+    &__back {
+        grid-area: back;
+    }
+
+    &__github {
+        grid-area: github;
+        text-align: right;
+    }
+
+    &__canvas {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: $border-radius;
+    }
+}
