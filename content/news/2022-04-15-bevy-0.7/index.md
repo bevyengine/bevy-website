@@ -554,10 +554,12 @@ fn system(world: &World, transforms: Query<&Transform>) {
 
 Just keep in mind that `&World` will conflict with _any_ mutable Query:
 
+{% incorrect_code_block() %}
 ```rust
 fn invalid_system(world: &World, transforms: Query<&mut Transform>) {
 }
 ```
+{% end %}
 
 In these cases, consider using our new [ParamSets](/news/bevy-0-7/#paramsets) to resolve the conflict:
 
