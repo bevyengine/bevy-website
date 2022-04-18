@@ -45,6 +45,7 @@ weight = $example_weight
 
 [extra]
 code_filename = \"$code_filename\"
+code_path = \"examples/$category_path/$code_filename\"
 header_message = \"Examples\"
 +++" > ../../content/examples/$category_slug/$example_slug/index.md
 
@@ -56,9 +57,6 @@ header_message = \"Examples\"
 title = \"$category\"
 sort_by = \"weight\"
 weight = $category_weight
-
-[extra]
-code_folder = \"$category_path\"
 +++" > ../../content/examples/$category_slug/_index.md
 
     category_weight=$((category_weight+1))
