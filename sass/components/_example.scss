@@ -52,5 +52,24 @@
         width: 100% !important;
         height: auto !important;
         border-radius: $border-radius;
+
+        &--loading {
+            @keyframes loading-animation {
+                0%   { background-position: -1000px 0; }
+                20%  { background-position: -500px 0; }
+                25%  { background-position: -250px 0; }
+                40%  { background-position: -125px 0; }
+                100% { background-position: 0 0; }
+            }
+
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: loading-animation;
+            animation-timing-function: linear;
+            background: #2b2c2f;
+            background: linear-gradient(to right, #2b2c2f 20%, #36383f 40%, #2b2c2f 60%);
+            background-size: 1000px 50px;
+        }
     }
 }

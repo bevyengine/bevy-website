@@ -12,7 +12,7 @@
             <i class="icon icon--github"></i> View in GitHub
         </a>
     </div>
-    <canvas class="example__canvas" id="bevy"></canvas>
+    <canvas class="example__canvas example__canvas--loading" id="bevy"></canvas>
     <div class="example__code media-content">
         {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
         {% set data = "```rust
@@ -23,6 +23,6 @@
 </div>
 <script type="module">
     import init from './{{ page.title }}.js';
-    init();
+    init().then(() => document.getElementById('bevy').classList.remove('example__canvas--loading'));
 </script>
 {% endblock content %}
