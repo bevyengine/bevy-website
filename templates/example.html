@@ -25,8 +25,15 @@
     </div>
 </div>
 <script type="module">
+    import { ReadableStream as PolyfillReadableStream, TransformStream as PolyfillTransformStream } from '/web-streams.es6.mjs';
+    import { createReadableStreamWrapper } from '/web-streams-adapter.mjs';
     import init from './{{ page.title }}.js';
 
+    // Streams API converters (from/to polyfill)
+    const toPolyfillReadable = createReadableStreamWrapper(PolyfillReadableStream);
+    const toNativeReadable = createReadableStreamWrapper(window.ReadableStream);
+
+    // Elements
     const canvasEl = document.getElementById('bevy');
     const progressStatusEl = document.querySelector('[data-progress-status]');
     const originalFetch = window.fetch;
@@ -50,7 +57,7 @@
         progressStatusEl.appendChild(trackEl);
 
         // Pipe download through a `TransformStream`
-        const transform = new TransformStream({
+        const transform = new PolyfillTransformStream({
             start() {
                 progressStatusEl.style.display = 'block';
 
@@ -78,7 +85,10 @@
 
         // Give the caller a new version of the Response where we pass its
         // ReadableStream through the TransformStream.
-        return new Response(response.body.pipeThrough(transform), response);
+        //
+        // Convert to `toPolyfillReadable` to be able to use `pipeThrough` and then
+        // back to `toNativeReadable` (`ReadableStream`) so that everything keeps working
+        return new Response(toNativeReadable(toPolyfillReadable(response.body).pipeThrough(transform)), response);
     };
 
     // Init wasm example
