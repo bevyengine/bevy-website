@@ -37,15 +37,11 @@ add_category()
         wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
 
         # Patch generated JS to allow to inject custom `fetch` with loading feedback.
-        # See `example.html` template for the other half of the implementation.
-        # This is a temporary workaround until Bevy has an in-engine mode for showing loading feeback. See:
-        # https://github.com/bevyengine/bevy-website/pull/355
-        # https://github.com/bevyengine/bevy-website/issues/338
-        # https://github.com/bevyengine/bevy-website/issues/236
+        # See: https://github.com/bevyengine/bevy-website/pull/355
         sed -i.bak \
-          -e 's/function init(input) {/function init(customFetch, input) { customFetch = customFetch || fetch;/' \ # Allow injecting a custom `fetch`, defaults to `fetch` if omitted
-          -e 's/input = fetch(/input = customFetch(/' \ # Use `customFetch` for main `wasm` file loading
-          -e 's/getObject(arg0).fetch(/customFetch(/' \ # Use `customFetch` for assets loading
+          -e 's/function init(input) {/function init(customFetch, input) { customFetch = customFetch || fetch;/' \
+          -e 's/input = fetch(/input = customFetch(/' \
+          -e 's/getObject(arg0).fetch(/customFetch(/' \
           ../../content/examples/$category_path/$example/$example.js
 
         echo "+++
