@@ -43,9 +43,9 @@ add_category()
         # https://github.com/bevyengine/bevy-website/issues/338
         # https://github.com/bevyengine/bevy-website/issues/236
         sed -i.bak \
-          -e 's/function init(input) {/function init(customFetch, input) { customFetch = customFetch || fetch;/' \
-          -e 's/input = fetch(/input = customFetch(/' \
-          -e 's/getObject(arg0).fetch(/customFetch(/' \
+          -e 's/function init(input) {/function init(customFetch, input) { customFetch = customFetch || fetch;/' \ # Allow injecting a custom `fetch`, defaults to `fetch` if omitted
+          -e 's/input = fetch(/input = customFetch(/' \ # Use `customFetch` for main `wasm` file loading
+          -e 's/getObject(arg0).fetch(/customFetch(/' \ # Use `customFetch` for assets loading
           ../../content/examples/$category_path/$example/$example.js
 
         echo "+++
