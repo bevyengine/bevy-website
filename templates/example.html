@@ -12,9 +12,9 @@
             <i class="icon icon--github"></i> View in GitHub
         </a>
     </div>
-    <div class="example__canvas-wrapper">
-        <div class="example__progress-status" data-progress-status></div>
-        <canvas class="example__canvas example__canvas--loading" id="bevy" width="1280" height="720"></canvas>
+    <div class="example__canvas bevy-instance">
+        <div class="bevy-instance__progress-status" data-progress-status></div>
+        <canvas class="bevy-instance__canvas bevy-instance__canvas--loading" id="bevy" width="1280" height="720"></canvas>
     </div>
     <div class="example__code media-content">
         {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
@@ -42,9 +42,9 @@
     async function loadingBarFetch(resource) {
         // Create new progress bar
         const trackEl = document.createElement('div');
-        trackEl.classList.add('example__progress-track');
+        trackEl.classList.add('bevy-instance__progress-track');
         const progressBarEl = document.createElement('div');
-        progressBarEl.classList.add('example__progress-bar');
+        progressBarEl.classList.add('bevy-instance__progress-bar');
 
         // Attach progress bar
         trackEl.appendChild(progressBarEl);
