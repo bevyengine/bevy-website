@@ -477,6 +477,7 @@ Maybe you've gotten tired of typing the same components over and over. In **Bevy
 
 ```rust
 #[derive(WorldQuery)]
+#[world_query(mutable)]
 struct PlayerMovementQuery<'w> {
     transform: &'w mut Transform,
     velocity: &'w mut Velocity,
