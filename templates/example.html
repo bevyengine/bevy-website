@@ -25,23 +25,27 @@
     </div>
 </div>
 <script type="module">
-    import init from './{{ page.title }}.js';
-    {# // Hi curious user!
+    {#
+    // Hi curious user!
     // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
     // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
     // workaround until Bevy has an in-engine mode for showing loading feeback. See:
-    // https://github.com/bevyengine/bevy-website/pull/355 #}
+    // https://github.com/bevyengine/bevy-website/pull/355
+    #}
     import { progressiveFetch } from '/tools.js';
+    import init from './{{ page.title }}.js';
 
     const canvasEl = document.getElementById('bevy');
     const progressStatusEl = document.querySelector('[data-progress-status]');
     let hideProgressTimeoutId;
+
     async function loadingBarFetch(resource) {
         // Create new progress bar
         const trackEl = document.createElement('div');
         trackEl.classList.add('example__progress-track');
         const progressBarEl = document.createElement('div');
         progressBarEl.classList.add('example__progress-bar');
+
         // Attach progress bar
         trackEl.appendChild(progressBarEl);
         progressStatusEl.appendChild(trackEl);
