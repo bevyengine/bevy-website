@@ -25,79 +25,45 @@
     </div>
 </div>
 <script type="module">
-    // Hi curious user!
+    import init from './{{ page.title }}.js';
+    {# // Hi curious user!
     // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
     // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
     // workaround until Bevy has an in-engine mode for showing loading feeback. See:
-    // https://github.com/bevyengine/bevy-website/pull/355
-    // https://github.com/bevyengine/bevy-website/issues/338
-    // https://github.com/bevyengine/bevy-website/issues/236
-    import { ReadableStream as PolyfillReadableStream, TransformStream as PolyfillTransformStream } from '/web-streams.es6.mjs';
-    import { createReadableStreamWrapper } from '/web-streams-adapter.mjs';
-    import init from './{{ page.title }}.js';
+    // https://github.com/bevyengine/bevy-website/pull/355 #}
+    import { progressiveFetch } from '/tools.js';
 
-    // Streams API converters (from/to polyfill)
-    const toPolyfillReadable = createReadableStreamWrapper(PolyfillReadableStream);
-    const toNativeReadable = createReadableStreamWrapper(window.ReadableStream);
-
-    // Elements
     const canvasEl = document.getElementById('bevy');
     const progressStatusEl = document.querySelector('[data-progress-status]');
     let hideProgressTimeoutId;
-
-    // Custom fetch that tracks assets loading progress
-    async function trackLoadingProgressFetch(resource) {
-        const response = await fetch(resource);
-        const lengthBytes = response.headers.get('content-length');
-        let loadedBytes = 0;
-
+    async function loadingBarFetch(resource) {
         // Create new progress bar
         const trackEl = document.createElement('div');
         trackEl.classList.add('example__progress-track');
-
         const progressBarEl = document.createElement('div');
         progressBarEl.classList.add('example__progress-bar');
-
         // Attach progress bar
         trackEl.appendChild(progressBarEl);
         progressStatusEl.appendChild(trackEl);
 
-        // Pipe download through a `TransformStream`
-        const transform = new PolyfillTransformStream({
-            start() {
+        return progressiveFetch(resource, {
+            start: (_) => {
                 progressStatusEl.style.display = 'block';
-
                 if (hideProgressTimeoutId) {
                     clearTimeout(hideProgressTimeoutId);
                 }
             },
-            transform(chunk, controller) {
-                loadedBytes += chunk.byteLength;
-
-                // Update progress bar
-                const percent = loadedBytes / lengthBytes;
-                progressBarEl.style.width = (percent * 100) + '%';
-
-                // Simply pass through the data without touching it.
-                controller.enqueue(chunk);
+            update: (loaded, total) => {
+                progressBarEl.style.width = (100 * loaded/total) + '%';
             },
-            flush() {
-                // Download done, hide progress status element
+            finish: (_) => {
                 hideProgressTimeoutId = setTimeout(() => {
                     progressStatusEl.style.display = 'none';
                 }, 50);
-            },
-        });
+            }
+        })
+    }
 
-        // Give the caller a new version of the Response where we pass its
-        // ReadableStream through the TransformStream.
-        //
-        // Convert to `toPolyfillReadable` to be able to use `pipeThrough` and then
-        // back to `toNativeReadable` (`ReadableStream`) so that everything keeps working
-        return new Response(toNativeReadable(toPolyfillReadable(response.body).pipeThrough(transform)), response);
-    };
-
-    // Init wasm example, pass custom `fetch` implementation
-    init(trackLoadingProgressFetch);
+    init(loadingBarFetch);
 </script>
 {% endblock content %}
