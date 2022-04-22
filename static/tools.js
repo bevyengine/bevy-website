@@ -2,15 +2,15 @@ import { ReadableStream as PolyfillReadableStream, TransformStream as PolyfillTr
 import { createReadableStreamWrapper } from '/web-streams-adapter.mjs';
 
 function getFilename(resource) {
-    const pathname = (typeof resource === 'string')
-        ? resource
-        : (resource instanceof URL)
-            ? resource.pathname
-            : '';
+  const pathname = (typeof resource === 'string')
+    ? resource
+    : (resource instanceof URL)
+      ? resource.pathname
+      : '';
 
-    const parts = pathname.split('/');
+  const parts = pathname.split('/');
 
-    return parts[parts.length - 1];
+  return parts[parts.length - 1];
 }
 
 // `progressiveFetch` is a wrapper over `window.fetch`. It allows you to insert middle-ware that is
