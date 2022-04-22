@@ -38,6 +38,7 @@ async function progressiveFetch(resource, callbacks={}) {
       controller.enqueue(chunk);
     },
     flush() {
+      cb.update(filename, lengthBytes, lengthBytes);
       cb.finish(filename, lengthBytes);
     },
   });
