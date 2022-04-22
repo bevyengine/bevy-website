@@ -23,10 +23,34 @@
         }
     }
 
-    &__logo {
+    &__left-block {
         display: flex;
         align-items: center;
         margin-right: auto;
+    }
+
+    &__logo {
+        display: flex;
+        align-items: center;
+    }
+
+    &__message {
+        display: none;
+        font-size: 1.2rem;
+        color: #797979;
+        margin-left: 12px;
+
+        @media (min-width: 550px) {
+            display: block;
+        }
+
+        @media #{$bp-desktop-up} {
+            font-size: 1.375rem;
+        }
+
+        &:empty {
+            display: none;
+        }
     }
 
     &__cta-container {
