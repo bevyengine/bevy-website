@@ -13,8 +13,7 @@
 
 {% block page_content %}
 <div class="assets">
-    <div class="book-content">
-        {% for subsection in section.subsections %}
+    {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
         <a class="anchor-target" id="{{ section.title | slugify }}"></a>
@@ -46,7 +45,6 @@
         </div>
         {% endif %}
 
-        {% endfor %}
-    </div>
+    {% endfor %}
 </div>
 {% endblock content %}
