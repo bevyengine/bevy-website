@@ -13,7 +13,12 @@
         </a>
     </div>
     <div class="example__canvas bevy-instance">
-        <div class="bevy-instance__progress-status" data-progress-status></div>
+        <div class="bevy-instance__progress-status" data-progress-status>
+            <div class="bevy-instance__progress-file" data-progress-file></div>
+            <div class="bevy-instance__progress-track">
+                <div class="bevy-instance__progress-bar" data-progress-bar></div>
+            </div>
+        </div>
         <canvas class="bevy-instance__canvas bevy-instance__canvas--loading" id="bevy" width="1280" height="720"></canvas>
     </div>
     <div class="example__code media-content">
@@ -37,30 +42,24 @@
 
     const canvasEl = document.getElementById('bevy');
     const progressStatusEl = document.querySelector('[data-progress-status]');
+    const progressFileEl = document.querySelector('[data-progress-file]');
+    const progressBarEl = document.querySelector('[data-progress-bar]');
     let hideProgressTimeoutId;
 
     async function loadingBarFetch(resource) {
-        // Create new progress bar
-        const trackEl = document.createElement('div');
-        trackEl.classList.add('bevy-instance__progress-track');
-        const progressBarEl = document.createElement('div');
-        progressBarEl.classList.add('bevy-instance__progress-bar');
-
-        // Attach progress bar
-        trackEl.appendChild(progressBarEl);
-        progressStatusEl.appendChild(trackEl);
-
         return progressiveFetch(resource, {
-            start: (_) => {
+            start: (filename, _total) => {
                 progressStatusEl.style.display = 'block';
+                progressFileEl.textContent = filename;
+
                 if (hideProgressTimeoutId) {
                     clearTimeout(hideProgressTimeoutId);
                 }
             },
-            update: (loaded, total) => {
+            update: (_filename, loaded, total) => {
                 progressBarEl.style.width = (100 * loaded/total) + '%';
             },
-            finish: (_) => {
+            finish: (_filename, _total) => {
                 hideProgressTimeoutId = setTimeout(() => {
                     progressStatusEl.style.display = 'none';
                 }, 50);

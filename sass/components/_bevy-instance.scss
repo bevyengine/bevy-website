@@ -5,14 +5,22 @@
         display: flex;
         flex-direction: column;
         position: absolute;
-        top: 50%;
+        bottom: 50%;
         left: 50%;
-        width: 200px;
-        transform: translate(-50%, -50%);
+        width: 250px;
+        transform: translateX(-50%);
 
         &:empty {
             display: none;
         }
+    }
+
+    &__progress-file {
+        margin-bottom: 4px;
+        font-weight: normal;
+        text-shadow: 1px 1px 1px #000;
+        font-size: 0.85rem;
+        word-break: break-all;
     }
 
     &__progress-track {
