@@ -60,6 +60,8 @@
                 progressBarEl.style.width = (100 * loaded/total) + '%';
             },
             finish: (_filename, _total) => {
+                // This is a little hack to avoid progress-bar flashing between assets
+                // The cons is that the progress bar shows for a brief moment once the wasm starts
                 hideProgressTimeoutId = setTimeout(() => {
                     progressStatusEl.style.display = 'none';
                 }, 50);
