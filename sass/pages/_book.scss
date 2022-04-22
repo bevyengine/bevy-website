@@ -1,0 +1,49 @@
+.book-page {
+    display: flex;
+    width: 100%;
+    min-height: 500px;
+}
+
+.book-page-subtitle {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #999999;
+    font-style: italic;
+    vertical-align: middle;
+}
+
+.book-content {
+    padding-left: $default-padding;
+    padding-right: $default-padding;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    h1 {
+        margin-top: $default-padding;
+        font-size: 2.4rem;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        font-weight: 500;
+        text-decoration: underline;
+        margin-bottom: 15px;
+    }
+
+    p {
+        margin-top: 5px;
+    }
+}
+
+
+.book-whats-a-bevy {
+    background-color: #00000000 !important;
+    height: 2.4rem !important;
+    border-radius: unset !important;
+}

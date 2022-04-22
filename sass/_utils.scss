@@ -1,0 +1,31 @@
+.container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a:focus {
+    outline: none;
+}
+
+.section {
+    display: block;
+    font-size: 1.4rem;
+    overflow-x: hidden;
+}
+
+.padded-content {
+    padding: $default-padding;
+}
+
+.warning {
+    color: #c8c864;
+}
+
+.anchor-link {
+    &, &:focus, &:hover, &:active, &:link, &:visited {
+        color: #505050;
+        text-shadow: none;
+        font-weight: 500;
+    }
+}

@@ -1,6 +1,6 @@
 +++
 title = "0.5 to 0.6"
-weight = 1
+weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"

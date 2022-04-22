@@ -4,5 +4,6 @@ public
 content/assets
 content/learn/errors
 content/examples
+static/assets/examples
 code-validation/target
 code-validation/Cargo.lock

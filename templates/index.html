@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 {% block head_extensions %}
 <meta name="description" content="A refreshingly simple data-driven game engine built in Rust. Free and Open Source Forever!" />
 {% endblock head_extensions %}
@@ -41,10 +41,10 @@
                 <div class="feature-description">
                     Render real-time 2D graphics for games and apps
                     <ul class="feature-sublist">
-                        <li><b>Features: </b>sprite sheets, dynamic texture atlases, cameras, textures, and materials
+                        <li><b>Features:</b> sprite sheets, dynamic texture atlases, cameras, textures, and materials
                         </li>
-                        <li><b>Extensible: </b>custom shaders, materials, and render pipelines</li>
-                        <li><b>Common Core: </b>builds on top of Bevy's Render Graph</li>
+                        <li><b>Extensible:</b> custom shaders, materials, and render pipelines</li>
+                        <li><b>Common Core:</b> builds on top of Bevy's Render Graph</li>
                     </ul>
                 </div>
             </div>
@@ -54,9 +54,9 @@
                 <h2 class="feature-title">3D Renderer</h2>
                 A modern and flexible 3D renderer
                 <ul class="feature-sublist">
-                    <li><b>Features: </b>lights, shadows, cameras, meshes, textures, materials, gltf loading</li>
-                    <li><b>Extensible: </b>custom shaders, materials, and render pipelines</li>
-                    <li><b>Common Core: </b>built on top of Bevy's Render Graph</li>
+                    <li><b>Features:</b> lights, shadows, cameras, meshes, textures, materials, gltf loading</li>
+                    <li><b>Extensible:</b> custom shaders, materials, and render pipelines</li>
+                    <li><b>Common Core:</b> built on top of Bevy's Render Graph</li>
                 </ul>
             </div>
             <div class="feature-image">
@@ -72,9 +72,9 @@
                 <h2 class="feature-title">Render Graph</h2>
                 Compose custom render pipelines using a graph structure
                 <ul class="feature-sublist">
-                    <li><b>Parallel: </b> Render Graphs are automatically rendered in parallel</li>
-                    <li><b>Modular: </b> Build composable and reusable render logic using Render Graph nodes </li>
-                    <li><b>Backend Agnostic: </b> Not tied to a specific graphics api</li>
+                    <li><b>Parallel:</b> Render Graphs are automatically rendered in parallel</li>
+                    <li><b>Modular:</b> Build composable and reusable render logic using Render Graph nodes </li>
+                    <li><b>Backend Agnostic:</b> Not tied to a specific graphics api</li>
                 </ul>
             </div>
         </div>
@@ -82,7 +82,7 @@
             <div class="feature-text">
                 <h2 class="feature-title">Cross Platform</h2>
                 <div class="feature-description">
-                    Support for all major desktop platforms:
+                    Support for all major platforms:
                     <ul class="feature-sublist">
                         <li>Windows, MacOS, Linux, Web</li>
                     </ul>
@@ -115,9 +115,9 @@
                 <h2 class="feature-title">Scenes</h2>
                 Create, save, and load ECS worlds using Bevy's Scene system
                 <ul class="feature-sublist">
-                    <li><b>Loading</b>: Loading scenes preserves entity IDs (useful for save games)</li>
-                    <li><b>Instancing</b>: Instancing creates linked duplicates of scenes with new entity IDs</li>
-                    <li><b>Hot Reloading</b>: Changes to scene files are automatically applied to running apps</li>
+                    <li><b>Loading:</b> Loading scenes preserves entity IDs (useful for save games)</li>
+                    <li><b>Instancing:</b> Instancing creates linked duplicates of scenes with new entity IDs</li>
+                    <li><b>Hot Reloading:</b> Changes to scene files are automatically applied to running apps</li>
                 </ul>
             </div>
             <div class="feature-image">
@@ -188,20 +188,42 @@
     </div>
     <img src="/assets/bevy_logo_dark.svg" class="bevy-logo-header" alt="Bevy logo" />
     <div class="media-content features-sponsors">
-        <h3>A big thanks to Bevy's generous <a href="https://github.com/sponsors/cart/">Sponsors</a> for making our work
-            sustainable:</h3>
-        <h2>Platinum Sponsors</h2>
-            <a href="https://www.embark-studios.com/"><img src="assets/embark.png" class="platinum-sponsor-image"  alt="Embark Studios logo"/></a>
-            <a href="https://legionlabs.com/"><img src="assets/LegionLabs.png" class="platinum-sponsor-image" style="height: 6.3rem" alt="Legion Labs logo"/></a>
-        <h2>Silver Sponsors</h2>
-        <div class="sponsors-section">
-            <a href="https://agileperception.com/"><img src="assets/agile_perception.png" class="silver-sponsor-image" alt="Agile Perception logo"/></a>
+        <h3>A big thanks to Bevy's generous <a href="https://github.com/sponsors/cart/">Sponsors</a> for making our work sustainable:</h3>
+        <div class="sponsors sponsors--platinum">
+            <h2 class="sponsors__title">Platinum Sponsors</h2>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://www.embark-studios.com">
+                    <img class="sponsors__logo" src="assets/embark.png" alt="Embark Studios logo"/>
+                </a>
+                <a class="sponsors__link" href="https://legionlabs.com">
+                    <img class="sponsors__logo" src="assets/LegionLabs.png" alt="Legion Labs logo"/>
+                </a>
+            </div>
         </div>
-        <h2>Bronze Sponsors</h2>
-        <div class="sponsors-section">
-            <a href="https://vertexstudio.co/"><img src="assets/vertex_studio.png" class="bronze-sponsor-image" alt="Vertex Studio logo"/></a>
-            <a href="https://www.metabuild.io/"><img src="assets/metabuild.png" class="bronze-sponsor-image" alt="Metabuild Logo"/></a>
-            <a href="https://www.foresightmining.com/"><img src="assets/Foresight_Mining_Software_Corporation.png" class="bronze-sponsor-image" alt="Foresight Mining Software Corporation logo"/></a>
+        <div class="sponsors sponsors--silver">
+            <h2 class="sponsors__title">Silver Sponsors</h2>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://agileperception.com">
+                    <img class="sponsors__logo" src="assets/agile_perception.png" alt="Agile Perception logo"/>
+                </a>
+            </div>
+        </div>
+        <div class="sponsors sponsors--bronze">
+            <h2 class="sponsors__title">Bronze Sponsors</h2>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://vertexstudio.co">
+                    <img class="sponsors__logo" src="assets/vertex_studio.png" alt="Vertex Studio logo"/>
+                </a>
+                <a class="sponsors__link" href="https://www.metabuild.io">
+                    <img class="sponsors__logo" src="assets/metabuild.png" alt="Metabuild Logo"/>
+                </a>
+                <a class="sponsors__link" href="https://www.foresightmining.com">
+                    <img class="sponsors__logo" src="assets/Foresight_Mining_Software_Corporation.png" alt="Foresight Mining Software Corporation logo"/>
+                </a>
+                <a class="sponsors__link" href="https://keygen.sh">
+                    <img class="sponsors__logo" src="assets/keygen.png" alt="Keygen logo"/>
+                </a>
+            </div>
         </div>
     </div>
 </div>

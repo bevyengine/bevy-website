@@ -1,0 +1,12 @@
+@mixin flex-center() {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin override-anchor() {
+    &, &:focus, &:hover, &:active &:link, &:visited {
+        text-decoration: none;
+        @content;
+    }
+}
