@@ -20,8 +20,6 @@ Personally I like practical documentation the most. I don’t know about 2D, but
 
 -->
 
-Hello vercel
-
 * overview
   * camera
   * geometry

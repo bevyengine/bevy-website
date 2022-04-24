@@ -8,7 +8,7 @@ page_template = "book-section.html"
 
 This chapter will cover all things related to 3d rendering, from rendering basic shapes to making your own meshes.
 
-Here is a complete example of a simple 3d scene. After this chapter you should be able to understand every part of this example.
+Here is a complete example of a simple 3d scene. After this chapter you should be able to understand every part of this example that relates to 3d rendering.
 
 ![3d_scene](3d_scene.png)
 
