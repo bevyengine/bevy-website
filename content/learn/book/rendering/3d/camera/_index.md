@@ -12,7 +12,6 @@ The first thing you will need if you want to render anything is a camera.
 
 At it's core a camera is simply a 2d projection of the 3d scene. The most common type of projection used for 3d games is a perspective projection. Which is a projection that takes into account the distance between the camera and a vertex.
 
-<!-- TODO we need a lighter background for this image -->
 [![camera projection](Various_projections_of_cube_above_plane.svg)](https://en.wikipedia.org/wiki/3D_projection#/media/File:Various_projections_of_cube_above_plane.svg)
 
 In bevy just like most things in the engine a `Camera` is just a component. To simplify spawning a `Camera` with all the required components we can use a `PerspectiveCameraBundle`. This `Bundle` will spawn the camera and every other components required by bevy to render an image. If you prefer an orthographic projection you can use the `OrthographicCameraBundle`.
