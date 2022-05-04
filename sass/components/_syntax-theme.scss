@@ -1,0 +1,280 @@
+.z-code {
+    color: #c0c5ce;
+    background-color: $syntax-theme-background;
+}
+
+div.incorrect {
+    background-color: #542326;
+    border-left: 10px solid red;
+    border-radius: 10px;
+
+    .z-code,
+    .z-code code {
+        background-color: #542326;
+    }
+}
+
+.z-variable.z-parameter.z-function {
+    color: #c0c5ce;
+}
+
+.z-comment,
+.z-punctuation.z-definition.z-comment {
+    color: #65737e;
+}
+
+.z-punctuation.z-definition.z-string,
+.z-punctuation.z-definition.z-variable,
+.z-punctuation.z-definition.z-string,
+.z-punctuation.z-definition.z-parameters,
+.z-punctuation.z-definition.z-string,
+.z-punctuation.z-definition.z-array {
+    color: #c0c5ce;
+}
+
+.z-none {
+    color: #c0c5ce;
+}
+
+.z-keyword.z-operator {
+    color: #c0c5ce;
+}
+
+.z-keyword {
+    color: #c594c5ff;
+}
+
+.z-variable {
+    color: #c0c5ce;
+}
+
+.z-entity.z-name.z-function,
+.z-meta.z-require,
+.z-support.z-function.z-any-method {
+    color: #6699ccff;
+}
+
+.z-support.z-class,
+.z-entity.z-name.z-class,
+.z-entity.z-name.z-type.z-class {
+    color: #dfc479;
+}
+
+.z-meta.z-class {
+    color: #eff1f5;
+}
+
+.z-keyword.z-other.z-special-method {
+    color: #8fa1b3;
+}
+
+.z-storage {
+    color: #b48ead;
+}
+
+.z-support.z-function {
+    color: #6699ccff;
+}
+
+.z-string,
+.z-constant.z-other.z-symbol,
+.z-entity.z-other.z-inherited-class {
+    color: #9fc37f;
+}
+
+.z-none {
+    color: #e79e6d;
+}
+
+.z-constant {
+    color: #e79e6d;
+}
+
+.z-entity.z-name.z-tag {
+    color: #e05a67;
+}
+
+.z-entity.z-other.z-attribute-name {
+    color: #d08770;
+}
+
+.z-entity.z-other.z-attribute-name.z-id,
+.z-punctuation.z-definition.z-entity {
+    color: #8fa1b3;
+}
+
+.z-meta.z-selector {
+    color: #b48ead;
+}
+
+.z-markup.z-heading .z-punctuation.z-definition.z-heading,
+.z-entity.z-name.z-section {
+    color: #8fa1b3;
+}
+
+.z-keyword.z-other.z-unit {
+    color: #e79e6d;
+}
+
+.z-markup.z-bold,
+.z-punctuation.z-definition.z-bold {
+    color: #dfc479;
+    font-weight: bold;
+}
+
+.z-markup.z-italic,
+.z-punctuation.z-definition.z-italic {
+    color: #b48ead;
+    font-style: italic;
+}
+
+.z-markup.z-raw.z-inline {
+    color: #a3be8c;
+}
+
+.z-string.z-other.z-link {
+    color: #bf616a;
+}
+
+.z-meta.z-link {
+    color: #e79e6d;
+}
+
+.z-markup.z-list {
+    color: #bf616a;
+}
+
+.z-markup.z-quote {
+    color: #e79e6d;
+}
+
+.z-meta.z-separator {
+    color: #c0c5ce;
+    background-color: #4f5b66;
+}
+
+.z-markup.z-inserted,
+.z-markup.z-inserted.z-git_gutter {
+    color: #a3be8c;
+}
+
+.z-markup.z-deleted,
+.z-markup.z-deleted.z-git_gutter {
+    color: #bf616a;
+}
+
+.z-markup.z-changed,
+.z-markup.z-changed.z-git_gutter {
+    color: #b48ead;
+}
+
+.z-markup.z-ignored,
+.z-markup.z-ignored.z-git_gutter {
+    color: #4f5b66;
+}
+
+.z-markup.z-untracked,
+.z-markup.z-untracked.z-git_gutter {
+    color: #4f5b66;
+}
+
+.z-constant.z-other.z-color {
+    color: #96b5b4;
+}
+
+.z-string.z-regexp {
+    color: #96b5b4;
+}
+
+.z-constant.z-character.z-escape {
+    color: #96b5b4;
+}
+
+.z-punctuation.z-section.z-embedded,
+.z-variable.z-interpolation {
+    color: #ab7967;
+}
+
+.z-invalid.z-illegal {
+    color: #2b303b;
+    background-color: #bf616a;
+}
+
+.z-markup.z-deleted.z-git_gutter {
+    color: #f92672;
+}
+
+.z-markup.z-inserted.z-git_gutter {
+    color: #a6e22e;
+}
+
+.z-markup.z-changed.z-git_gutter {
+    color: #967efb;
+}
+
+.z-markup.z-ignored.z-git_gutter {
+    color: #565656;
+}
+
+.z-markup.z-untracked.z-git_gutter {
+    color: #565656;
+}
+
+
+// RUST OVERRIDES
+
+.z-meta.z-generic.z-rust,
+.z-entity.z-name.z-struct.z-rust,
+.z-entity.z-name.z-impl.z-rust {
+    color: #dfc479;
+}
+
+.z-punctuation.z-definition.z-generic.z-rust {
+    color: #c0c5ce;
+}
+
+.z-storage.z-type.z-function,
+.z-keyword.z-operator.z-rust,
+.z-storage.z-type.z-struct.z-rust,
+.z-punctuation.z-accessor.z-rust,
+.z-storage.z-modifier.z-rust {
+    color: #c594c5ff;
+}
+
+.z-support.z-macro.z-rust {
+    color: #6699ccff;
+}
+
+.z-punctuation.z-definition.z-string {
+    color: #9fc37f;
+}
+
+.z-entity.z-name.z-trait.z-rust {
+    color: #56b6c2;
+}
+
+.z-meta.z-annotation.z-rust,
+.z-variable.z-annotation.z-rust {
+    color: #d19a66;
+}
+
+.z-meta.z-annotation.z-parameters.z-rust {
+
+    .z-begin,
+    .z-end,
+    .z-punctuation {
+        color: #d19a66;
+    }
+
+    color: #d1af8f;
+}
+
+// SHELL OVERRIDES
+.z-variable.z-function.z-shell,
+.z-support.z-function.z-shell {
+    color: #6699ccff;
+}
+
+.z-variable.z-parameter.z-option {
+    color: #c594c5ff;
+}

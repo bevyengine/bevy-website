@@ -1,5 +1,6 @@
-{% extends "base.html" %}
-{% import "book-macros.html" as book_macros %}
+{% extends "layouts/base.html" %}
+{% import "macros/book.html" as book_macros %}
+
 {% block head_extensions %}
 <script src="/optional-helpers.js"></script>
 {% endblock %}
@@ -8,22 +9,13 @@
 <div class="book-page">
     <input type="checkbox" style="display: none" id="show-book-nav" />
     <nav class="book-nav" role="navigation">
-        {% block menu %}
-        {% set index = get_section(path="learn/book/_index.md") %}
-        <ul class="book-nav-sections-container book-nav-sections">
-            {% for s in index.subsections %}
-            {{ book_macros::book_nav_section(section_path=s, section_number=loop.index) }}
-            {% endfor %}
-        </ul>
-        {% endblock menu %}
+        {{book_macros::book_menu(prefix="page-menu", root=get_section(path="learn/book/_index.md"))}}
     </nav>
     <div class="book-content">
+        {# Create an array of sections, in reading order #}
         {% set root_section = get_section(path="learn/book/_index.md") %}
-
-        {% set previous_section = false %}
-        {% set found_current = false %}
-
         {% set all_sections = [] %}
+
         {% for p in root_section.subsections %}
             {% set_global all_sections = all_sections | concat(with=p) %}
             {% set section_obj = get_section(path=p) %}
@@ -31,36 +23,32 @@
             {% for p2 in section_obj.subsections %}
                 {% set_global all_sections = all_sections | concat(with=p2) %}
                 {% set subsection = get_section(path=p2) %}
+
                 {% if subsection.subsections %}
                     {% set_global all_sections = all_sections | concat(with=subsection.subsections) %}
                 {% endif %}
             {% endfor %}
         {% endfor %}
 
+        {# Find prev/next sections #}
+        {% set prev_section = false %}
+        {% set next_section = false %}
+        {% set found_current = false %}
+
         {% for p in all_sections %}
             {% set section_obj = get_section(path=p) %}
+
             {% if found_current %}
-                <a id="book-pager-bar-next" href="{{section_obj.permalink}}" class="book-pager-bar book-pager-bar-next">
-                    <div class="book-pager-bar-icon book-pager-bar-icon-next">
-                    <img src="/assets/pager_next.svg" class="book-pager-image book-pager-image-right" />
-                    </div>
-                </a>
+                {% set_global next_section = section_obj %}
                 {% break %}
             {% endif %}
 
             {% if current_path == section_obj.path %}
-             {% set_global found_current = true %}
-             {% if previous_section %}
-                <a id="book-pager-bar-previous" href="{{previous_section.permalink}}" class="book-pager-bar book-pager-bar-previous">
-                    <div class="book-pager-bar-icon book-pager-bar-icon-previous">
-                        <img src="/assets/pager_previous.svg" class="book-pager-image book-pager-image-left" />
-                    </div>
-                </a>
-             {% endif %}
+                {% set_global found_current = true %}
+                {% continue %}
             {% endif %}
 
-            {% set_global previous_section = section_obj %}
-
+            {% set_global prev_section = section_obj %}
         {% endfor %}
 
         <h1>
@@ -74,7 +62,34 @@
             {% endif %}
         </h1>
         <div class="media-content">{{ section.content | safe }}</div>
-        <div class="book-pagers" />
+        <div class="book-footer">
+            <nav class="book-footer__nav">
+                {% if next_section %}
+                    <a class="book-footer__link book-footer__link--next" href="{{next_section.path}}" data-book-nav-next>
+                        <div class="book-footer__label">
+                            <div class="book-footer__dir">Next</div>
+                            {{next_section.title}}
+                        </div>
+                        <i class="book-footer__chevron icon icon--chevron-right"></i>
+                    </a>
+                {% endif %}
+                {% if prev_section %}
+                    <a class="book-footer__link book-footer__link--prev" href="{{prev_section.path}}" data-book-nav-previous>
+                        <div class="book-footer__label">
+                            <div class="book-footer__dir">Previous</div>
+                            {{prev_section.title}}
+                        </div>
+                        <i class="book-footer__chevron icon icon--chevron-left"></i>
+                    </a>
+                {% endif %}
+            </nav>
+            <div class="book-footer__edit-wrapper">
+                <a class="book-footer__edit" href="https://github.com/bevyengine/bevy-website/edit/master/content/{{ section.relative_path }}">
+                    <i class="icon icon--pencil"></i>
+                    Improve this page
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 

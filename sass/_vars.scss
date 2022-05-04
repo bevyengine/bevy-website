@@ -1,0 +1,40 @@
+// Breakpoints
+$bp-phone-landscape: 480px; // Mobile-landscape (and larger)
+$bp-tablet-portrait: 768px; // Tablet-portrait (and larger)
+$bp-tablet-landscape: 992px; // Tablet-landscape (and larger)
+$bp-desktop: 1200px; // Laptops (and langer)
+
+$bp-phone-portrait-only: '(max-width: #{$bp-phone-landscape - 1})';
+$bp-phone-landscape-up: '(min-width: #{$bp-phone-landscape})';
+$bp-phone-landscape-down: '(max-width: #{$bp-tablet-portrait - 1})';
+$bp-tablet-portrait-up: '(min-width: #{$bp-tablet-portrait})';
+$bp-tablet-portrait-down: '(max-width: #{$bp-tablet-landscape - 1})';
+$bp-tablet-landscape-up: '(min-width: #{$bp-tablet-landscape})';
+$bp-tablet-landscape-down: '(max-width: #{$bp-desktop - 1})';
+$bp-desktop-up: '(min-width: #{$bp-desktop})';
+
+// Colors
+$color-white: #ececec;
+
+$headerbar-color: #1e1e22;
+$hover-color: #ececec;
+$hover-shadow-color: #d6d6d6;
+$link-color: #7c90ff;
+$link-hover-shadow-color: #6c82ff;
+$default-color: #ececec;
+$subtitle-color: #8f8f8f;
+$syntax-theme-background: #2b2c2f;
+$syntax-theme-background-hover: #414247;
+$default-image-background-color: #1b1b1b;
+$card-hover-background: #2f3033;
+
+// Animation
+$duration-fast: 100ms;
+$duration: 250ms;
+
+// General
+$content-top-margin: 30px;
+$default-padding: 15px;
+$media-max-width: 1000px;
+$border-radius: 10px;
+$card-list-gap: 15px;

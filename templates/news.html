@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 {% block content %}
 <div class="card-list padded-content">
   {% for page in section.pages %}
-  <a class="card" href="{{ page.permalink }}">
+  <a class="card" href="{{ page.path }}">
     {% if page.extra.image %}
-    {% set image_parent = page.permalink | replace(from="_index.md", to="") %}
+    {% set image_parent = page.path | replace(from="_index.md", to="") %}
     <div class="card-image">
       <img src="{{image_parent}}{{page.extra.image}}" class="centered-card-image" />
     </div>

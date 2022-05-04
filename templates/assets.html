@@ -1,34 +1,11 @@
-{% import "assets-macros.html" as macros %}
-
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
+{% import "macros/assets.html" as assets_macros %}
 
 {% block content %}
 <div class="assets">
     <input type="checkbox" style="display: none" id="show-book-nav" />
     <nav class="book-nav" role="navigation">
-        <ul class="book-nav-sections-container book-nav-sections">
-            {% for subsection in section.subsections %}
-            {% set section = get_section(path=subsection) %}
-            <li class="book-nav-section">
-                <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
-                {% if section.subsections %}
-                <ul class="book-nav-sections book-nav-sections-indented">
-                    {% set subsections = section.subsections %}
-                    {% if section.extra.sort_order_reversed %}
-                    {% set subsections = section.subsections | reverse %}
-                    {% endif %}
-                    {% for subsection in subsections %}
-                    {% set section = get_section(path=subsection) %}
-                    <li class="book-nav-section">
-                        <a href="#{{ section.title | slugify }}" class="book-nav-section-title">{{ section.title }}</a>
-                    </li>
-
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
+        {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
     </nav>
     <div class="book-content">
         {% for subsection in section.subsections %}
@@ -39,13 +16,13 @@
         </h1>
 
         {% if section.pages %}
-        <div class="card-list padded-content">
+        <div class="item-grid">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            {{ macros::card(post=post) }}
+            {{ assets_macros::card(post=post) }}
             {% endfor %}
         </div>
         {% endif %}
@@ -60,13 +37,13 @@
         <h3 id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
-        <div class="card-list padded-content">
+        <div class="item-grid">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
             {% endif %}
             {% for post in pages %}
-            {{ macros::card(post=post) }}
+            {{ assets_macros::card(post=post) }}
             {% endfor %}
         </div>
 

@@ -1,20 +1,19 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="book-content">
-    <div class="media-content">
-        <script type="module">
-            import init from './{{ page.title }}.js';
-            init()
-        </script>
-        <div><a href="/examples">Back to examples</a></div>
-        <canvas id="bevy" width="1024" height="720"></canvas>
-        <div>
-            {{ page.components[1] }} / {{ page.title }} -
-            <a href="https://github.com/bevyengine/bevy/blob/latest/examples/{{ page.components[1] }}/{{ page.title }}.rs">
-                See this example in Bevy github repo
-            </a>
-        </div>
+<div class="example">
+    <div class="example__header">
+        {% set total_ancestors = page.ancestors | length %}
+        {% set parent_idx = total_ancestors - 1 %}
+        {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
+        <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
+        <a class="example__back" href="/examples"><i class="icon icon--chevron-left"></i> Back to examples</a>
+        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/examples/{{ page.components[1] }}/{{ page.title }}.rs">
+            <i class="icon icon--github"></i> View in GitHub
+        </a>
+    </div>
+    <canvas class="example__canvas" id="bevy"></canvas>
+    <div class="example__code media-content">
         {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
         {% set data = "```rust
 " ~ code ~ "```" %}
@@ -22,4 +21,8 @@
         {{data | markdown(inline=true) | safe}}
     </div>
 </div>
+<script type="module">
+    import init from './{{ page.title }}.js';
+    init();
+</script>
 {% endblock content %}
