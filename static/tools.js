@@ -1,5 +1,5 @@
-import { ReadableStream as PolyfillReadableStream, TransformStream as PolyfillTransformStream } from 'https://unpkg.com/web-streams-polyfill@3.2.1/dist/ponyfill.es6.mjs';
-import { createReadableStreamWrapper } from 'https://unpkg.com/@mattiasbuelens/web-streams-adapter@0.1.0/dist/web-streams-adapter.mjs';
+import { ReadableStream as PolyfillReadableStream, TransformStream as PolyfillTransformStream } from '/web-streams-polyfill-3.2.1.mjs';
+import { createReadableStreamWrapper } from '/web-streams-adapter-0.1.0.mjs';
 
 function getFilename(resource) {
     const pathname = (typeof resource === 'string')
