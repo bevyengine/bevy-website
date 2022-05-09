@@ -9,7 +9,7 @@ insert_anchor_links = "right"
 
 ## Quick Start
 
-Assuming that Rust is installed, install dependencies for either [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md) or [Windows](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
+Assuming that [Rust](https://www.rust-lang.org/learn/get-started) is installed, install dependencies for either [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md) or [Windows](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 
 The setup for "fast compiles" is on the next page, with notable less compute time.
 
