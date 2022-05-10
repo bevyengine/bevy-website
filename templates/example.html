@@ -12,7 +12,15 @@
             <i class="icon icon--github"></i> View in GitHub
         </a>
     </div>
-    <canvas class="example__canvas" id="bevy"></canvas>
+    <div class="example__canvas bevy-instance">
+        <div class="bevy-instance__progress-status" data-progress-status>
+            <div class="bevy-instance__progress-file" data-progress-file></div>
+            <div class="bevy-instance__progress-track">
+                <div class="bevy-instance__progress-bar" data-progress-bar></div>
+            </div>
+        </div>
+        <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
+    </div>
     <div class="example__code media-content">
         {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
         {% set data = "```rust
@@ -22,7 +30,50 @@
     </div>
 </div>
 <script type="module">
+    {#
+    // Hi curious user!
+    // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
+    // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
+    // workaround until Bevy has an in-engine mode for showing loading feeback. See:
+    // https://github.com/bevyengine/bevy-website/pull/355
+    #}
+    import { progressiveFetch } from '/tools.js';
     import init from './{{ page.title }}.js';
-    init();
+
+    const canvasEl = document.getElementById('bevy');
+    const progressStatusEl = document.querySelector('[data-progress-status]');
+    const progressFileEl = document.querySelector('[data-progress-file]');
+    const progressBarEl = document.querySelector('[data-progress-bar]');
+    let hideProgressTimeoutId;
+
+    async function loadingBarFetch(resource) {
+        return progressiveFetch(resource, {
+            start: (filename, _total) => {
+                progressStatusEl.style.display = 'block';
+                progressFileEl.textContent = filename;
+
+                if (hideProgressTimeoutId) {
+                    clearTimeout(hideProgressTimeoutId);
+                }
+            },
+            update: (_filename, loaded, total) => {
+                progressBarEl.style.width = (100 * loaded/total) + '%';
+            },
+            finish: (_filename, _total) => {
+                {#
+                // This is a little hack to avoid progress-bar flashing between assets. The thing
+                // is that we don't know how many assets are going to load, so we don't know which
+                // one is the last one. If a new asset starts loading within 50ms, then this timeout
+                // is cleared and the progress element stays visible, avoiding the flashing.
+                // The downside is that the progress bar shows for a brief moment once the wasm starts.
+                #}
+                hideProgressTimeoutId = setTimeout(() => {
+                    progressStatusEl.style.display = 'none';
+                }, 50);
+            }
+        })
+    }
+
+    init(loadingBarFetch);
 </script>
 {% endblock content %}

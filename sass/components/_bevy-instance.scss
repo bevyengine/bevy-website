@@ -1,0 +1,51 @@
+.bevy-instance {
+    position: relative;
+
+    &__progress-status {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        width: 250px;
+        transform: translateX(-50%);
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    &__progress-file {
+        margin-bottom: 4px;
+        font-weight: normal;
+        text-shadow: 1px 1px 1px #000;
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+
+    &__progress-track {
+        width: 100%;
+        height: 4px;
+        border-radius: 4px;
+        background-color: #555;
+
+        &:not(:last-child) {
+            margin-bottom: 2px;
+        }
+    }
+
+    &__progress-bar {
+        height: 4px;
+        min-width: 4px;
+        background-color: #799bbb;
+        border-radius: 4px;
+        width: 0px;
+    }
+
+    &__canvas {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: $border-radius;
+        background: #2b2c2f;
+    }
+}
