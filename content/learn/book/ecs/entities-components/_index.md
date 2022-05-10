@@ -58,23 +58,14 @@ With the theory out of the way, let's define some components!
 
 ```rust
 // This is a "unit struct", which holds no data of its own.
-// In Bevy, these are useful for distinguishing similar entities or toggling behavior
-// and are called "marker components"
 #[derive(Component)]
 struct Combatant;
 
-// This simple components wrap a u8 in a tuple struct
+// This simple component wraps a u8 in a tuple struct
 #[derive(Component)]
 struct Life(u8);
 
-// We can store arbitrary data in our components, as long as it has a 'static lifetime
-// Types without lifetimes are always 'static,
-// allowing us to safely hold a String, but not a &str
-#[derive(Component)]
-struct Name(String);
-
-// Naming your components' fields
-// makes them easier and safer to refer to
+// Naming your components' fields makes them easier to refer to
 #[derive(Component)]
 struct Stats {
     strength: u8,
@@ -86,7 +77,6 @@ struct Stats {
 #[derive(Component)]
 enum Allegiance {
     Friendly,
-    Neutral,
     Hostile
 }
 ```
@@ -106,7 +96,6 @@ fn spawn_combatants_system(mut commands: Commands) {
         // We configure starting component values by passing in concrete instances of our types
         .insert(Life(10))
         // By chaining .insert method calls like this, we continue to add more components to our entity
-        .insert(Name("Gallant".to_string()))
         // Instances of named structs are constructed with {field_name: value}
         .insert(Stats {
             strength: 15,
@@ -123,7 +112,6 @@ fn spawn_combatants_system(mut commands: Commands) {
         .spawn()
         .insert(Combatant)
         .insert(Life(10))
-        .insert(Name("Goofus".to_string()))
         .insert(Stats {
             strength: 17,
             dexterity: 8,
@@ -212,10 +200,7 @@ fn spawn_combatants_system(mut commands: Commands) {
             }
             allegiance: Allegiance::Friendly,
             ..Default::default()
-        })
-        // We can continue to chain more .insert or .insert_bundle methods
-        // to add more components and extend behavior
-        .insert(Name("Gallant".to_string()));
+        });
     
     commands
         // .spawn_bundle is just syntactic sugar for .spawn().insert_bundle
@@ -227,8 +212,8 @@ fn spawn_combatants_system(mut commands: Commands) {
             }
             allegiance: Allegiance::Hostile,
             ..Default::default()
-        })
-        .insert(Name("Goofus".to_string()));}
+        });
+}
 ```
 
 [`Bundle`]: https://docs.rs/bevy/latest/bevy/ecs/bundle/trait.Bundle.html
