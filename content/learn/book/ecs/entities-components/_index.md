@@ -6,7 +6,16 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
 
-As we discussed in the [introduction](../_index.md) to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
+**Entities** are the fundamental objects of your game world, whizzing around, storing cameras, being controlled by the player or tracking the state of a button.
+On its own, the [`Entity`] type is a simple identifer: it has neither behavior nor data.
+Components store this data, and define the overlapping categories that the entity belongs to.
+
+Informally, we use the term "entity" to refer to the conceptual entry in our [`World`]: all of the component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
+If you're an experienced programmer, you can reason about the [`World`] as something like a (very fast) [`HashMap`] from [`Entity`] to a collection of components.
+
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+[`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 
 ## Spawning and despawning entities
 
@@ -29,7 +38,6 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
-[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ## Working with components
