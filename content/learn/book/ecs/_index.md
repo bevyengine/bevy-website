@@ -23,53 +23,51 @@ Let's go over the most important definitions:
 - **Systems:** Special functions that operate on data from the [`World`]: most commonly modifying the data stored in components on entities.
   - Any function whose parameters all implement the [`SystemParam`] type can be converted into a [`System`].
 
-Suppose we wanted to make a Breakout game in Bevy.
+Suppose we wanted to make a [Breakout game](https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs) in Bevy.
 Let's think about what entities we might want, what components they might have, and what systems we might create:
 
-- Paddle entities
+- A paddle entity
   - a `Paddle` marker component, to allow us to uniquely identify the paddle
-  - a [`Sprite`] component, which describes how to draw these bundles
+  - a [`Sprite`] component, which describes how to draw our paddle
     - in reality, this is a bit more complex, and requires a [`SpriteBundle`] collection of components
   - a [`Transform`] component, to let us know the translation (position), rotation (orientation) and scale (size) of our paddles
   - a `Velocity` component, giving us more realistic movement
   - a `Collidable` component, to let us know that the ball can bounce off of it
-- Ball entity
+- A ball entity
   - a `Ball` marker component, so we can uniquely identify our ball
   - a [`Sprite`] component
   - a [`Transform`] component
   - a `Velocity` component, to ensure the ball keeps moving
 - Brick entities
   - a [`Brick`] marker component
-  - a [`Sprite] component
-  - a [`Transform] component
+  - a [`Sprite`] component
+  - a [`Transform`] component
   - a `Collidable` component
-- Wall entity
+- Wall entities
   - a `Collidable` component, to make sure our ball bounces off the walls
   - a `Transform` component, so we know where the boundaries are
 
-As you can see, each component implies specific behavior, but does not provide it on its own: they're just data, and cannot act on their own.
-The components are quite small, allowing us to reuse these types and share behavior across entities using systems that operate on all entities.
+As you can see, each component implies specific behavior, but does not provide it on it. Components are just data (although they often have simple methods), and only act when systems use them.
+Each of our components is quite small, allowing us to reuse these types and share behavior across entities using systems.
 For our simple Breakout game, we may have:
 
-- `setup`: a simple **startup system** that runs once when our game is launched, **spawning** our paddles, ball and walls
+- `setup`: a simple **startup system** that runs a single time when our game is launched, **spawning** our paddles, ball and walls
 - `apply_velocity`: a system that operates on all entities with a `Transform` and `Velocity`, and moves the entity according to its velocity
 - `handle_collisions`: a system that operates on the `Ball` entity, and any entity with both a `Collidable` component and a `Transform` component, to bounce the ball appropriately
 - `destroy_bricks`: a system that **despawns** entities with the `Brick` marker component when they are collided with
-
-If you'd like to see what a basic but complete Breakout game looks like in Bevy, check out the [Breakout example]!
 
 In order to start working with Bevy, you should know a few other critical pieces of ECS vocabulary:
 
 - **Resources:** Globally unique stores of data that live in the [`World`], but are not associated with a specific entity.
   - Events, configuration and global game state are all commonly stored as resources, which can be accessed with the [`Res`] system parameter.
 - **Queries:** Requests for specific entity-component data from the [`World`].
-  - The [`Query`] type has two type parameters: the first describes what component data should be fetched, and the second filters down which entities with that data should be returned.
+  - The [`Query`] type has two type parameters: the first describes what component data should be fetched, and the second filters down which entities with that data should be returned when looping over the query.
 - **Commands:** Instructions to modify the [`World`] at a later point in time.
-  - Most commonly, this is used to spawn and despawn entities, or insert and removed components.
+  - Most commonly, this is used to spawn and despawn entities, or insert and remove components.
   - [`Commands`] require [exclusive world access](./exclusive-world-access/), and so are deferred until there are no other systems running.
 
 While there's much more to learn about Bevy's ECS, this basic overview should give you the vocabulary you need to start exploring the rest of this chapter.
-Don't worry if some concepts are too abstract or impractical for you at this point:
+Don't worry if some concepts are too abstract, advanced or impractical for you at this point:
 this book is intended to be skimmed on the first read.
 Refer back to it later for more detailed explanations as you start building your own awesome projects in Bevy!
 
