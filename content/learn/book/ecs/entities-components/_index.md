@@ -6,7 +6,7 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
 
-As we discussed in the introduction to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
+As we discussed in the [introduction](../_index.md) to this chapter, **entities** represent objects in your game world, whose data is stored in the form of components.
 
 ## Spawning and despawning entities
 
@@ -60,15 +60,15 @@ This of course is not very useful, so let's discuss how we can add and remove co
 
 ### Defining components
 
-To define a component type, we simply implement the [`Component`] trait for a Rust type of our choice.
-You will almost always want to use the `#[derive(Component)]` macro to do this for you; which quickly and reliably generates the correct trait implementation.
+To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
+You will almost always want to use the `#[derive(Component)]` [macro](https://doc.rust-lang.org/reference/attributes/derive.html) to do this for you; which quickly and reliably generates the correct trait implementation.
 Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on [`Component`]).
-This ensures that the data can be sent across the threads safely and allows our [type reflection tools](https://github.com/bevyengine/bevy/tree/main/crates/bevy_reflect) to work correctly.
+This ensures that the data can be [sent across threads safely](https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html).
 
 With the theory out of the way, let's define some components!
 
 ```rust
-// This is a dataless "unit struct", which holds no data of its own.
+// This is a "unit struct", which holds no data of its own.
 // In Bevy, these are useful for distinguishing similar entities or toggling behavior
 // and are called "marker components"
 #[derive(Component)]
@@ -84,7 +84,7 @@ struct Life(u8);
 #[derive(Component)]
 struct Name(String);
 
-// Naming your components' fields,
+// Naming your components' fields
 // makes them easier and safer to refer to
 #[derive(Component)]
 struct Stats {
@@ -157,7 +157,7 @@ struct InCombat;
 
 // This query returns the `Entity` identifier of all entities
 // that have the `Combatant` component but do not yet have the `InCombat` component
-fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>>, mut commands: Commands){
+fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>>), mut commands: Commands){
     for entity in query.iter(){
         // The component will be inserted at the end of the current stage
         commands.entity(entity).insert(InCombat);
@@ -165,7 +165,7 @@ fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>>
 }
 
 // Now to undo our hard work
-fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut commands: Commands){
+fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>), mut commands: Commands){
     for entity in query.iter(){
         // The component will be removed at the end of the current stage
         commands.entity(entity).remove(InCombat);
@@ -176,8 +176,8 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>>, mut
 ## Bundles
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
-To get around this, Bevy abstracts these patterns using **component bundles**.
-These are implemented by implementing the [`Bundle`] trait for a struct; turning each of its fields into a distinct component on your entity when they are inserted.
+To get around this, Bevy allows you to group components into **component bundles**.
+These are defined by deriving the [`Bundle`] trait for a struct; turning each of its fields into a distinct component on your entity when the bundle is inserted.
 
 Let's try rewriting that code from above.
 
@@ -248,7 +248,7 @@ fn spawn_combatants_system(mut commands: Commands) {
 
 As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
 One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
-Be mindful; this can lead to overwrought, deeply nested code if overused and bundles are [not currently checked](https://github.com/bevyengine/bevy/issues/2387) for duplicate component types.
+Try to stick to a single layer of nesting at most; multiple layers of nesting can get quite confusing.
 Later instances of the same type will overwrite earlier ones.
 
 With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
@@ -264,7 +264,7 @@ struct AttackableBundle{
 #[derive(Bundle)]
 struct CombatantBundle {
     combatant: Combatant
-    // This attribute macro marks our attackable_bundle field as a bundle,
+    // This attribute macro marks our attackable_bundle field as a bundle (rather than a component),
     // allowing Bevy to properly flatten it out when building the final entity
     #[bundle]
     attackable_bundle: AttackableBundle,
