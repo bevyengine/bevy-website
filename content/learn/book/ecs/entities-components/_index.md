@@ -249,7 +249,7 @@ fn spawn_combatants_system(mut commands: Commands) {
 As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
 One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
 Try to stick to a single layer of nesting at most; multiple layers of nesting can get quite confusing.
-Later instances of the same type will overwrite earlier ones.
+Including duplicate components in your bundles in this way will cause a panic.
 
 With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
 
