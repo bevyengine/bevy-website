@@ -267,3 +267,46 @@ impl Default for CombatantBundle {
     }
 }
 ```
+
+## Component design
+
+Over time, the Bevy community has converged on a few standard pieces of advice for how to structure and define component data:
+
+- try to keep your components relatively small
+  - combine common functionality into bundles, not large components
+  - small modular systems based on common behavior work well
+  - reducing the amount of data stored improves cache performance and system-parallelism
+  - keep it as a single component if you need to maintain invariants (such as current life is always less than or equal to max life)
+  - keep it as a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)
+- simple methods on components are a good tool for clean, testable code
+  - logic that is inherent to how the component works (like rolling dice or healing life points) is a great fit
+  - logic that will only be repeated once generally belongs in systems
+  - methods make it easier to understand the actual gameplay logic in your systems, and fix bugs in a single place
+- marker components are incredibly valuable for extending your design
+  - it is very common to want to quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`
+  - filtering by component presence/absence is (generally) faster and clearer than looping through a list of boolean values
+  - try to model meaningful groups at several levels of abstraction / along multiple axes: e.g. `Unit`, `Ant`, `Combatant`
+- enum components are very expressive, and help reduce bugs
+  - enums can hold different data in each variant, allowing you to capture information effectively
+  - if you have a fixed number of options for a value, store it as an enum
+- implementing traits like [`Add`] or [`Display`] can provide useful behavior in an idiomatic way
+- use [`Deref`] and [`DerefMut`] for tuple structs with a single item ([newtypes])
+  - this allows you to access the internal data with `*my_component` instead of `my_component.0`
+  - more importantly, this allows you to call methods that belong to the wrapped type directly on your component
+- define builder methods for your [`Bundle`] types that return [`Self`]
+  - this is useful to define a friendly interface for how entities of this sort tend to vary
+  - not as useful as you might hope for upholding invariants; components will be able to be accidentally modified independently later
+- use [struct update syntax] to modify component bundles
+  - [`..default()`] is a particularly common idiom, to modify a struct from its default values
+- consider definining traits for related components
+  - this allows you to ensure a consistent interface
+  - this can be very powerful in combination with generic systems that use trait bounds
+
+[`Add`]: https://doc.rust-lang.org/std/ops/trait.Add.html
+[`Display`]: https://doc.rust-lang.org/std/path/struct.Display.html
+[`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
+[`DerefMut`]: https://doc.rust-lang.org/std/ops/trait.DerefMut.html
+[`Self`]: https://doc.rust-lang.org/reference/paths.html#self-1
+[`..default()`]: https://docs.rs/bevy/latest/bevy/prelude/fn.default.html
+[newtypes]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html
+[struct update syntax]: https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
