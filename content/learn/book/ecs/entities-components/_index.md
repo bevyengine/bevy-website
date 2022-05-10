@@ -13,43 +13,24 @@ As we discussed in the [introduction](../_index.md) to this chapter, **entities*
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
 
-There are two APIs to do so. The first is more direct, allowing you to add and remove entities directly on the world.
+Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system](../exclusive-world-access/_index.md)).
+As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust
-use bevy::prelude::*;
-
-// Creates a new world
-let mut world = World::new();
-// Spawns an entity with no components
-world.spawn();
-// Spawns a second entity, keeping track of its unique identifier
-let my_entity = world.spawn().id();
-// Uses the second entity's unique identifier to despawn it
-world.despawn(my_entity);
-```
-
-If you're using Bevy as a whole (rather than just [`bevy_ecs`]), you'll tend to find that working with the world directly is rare:
-often reserved for [writing tests](https://github.com/bevyengine/bevy/blob/main/tests/how_to_test_systems.rs).
-Instead, almost all of your logic will be contained within systems,
-which don't have the permissions to immediately spawn or despawn new entities (what if someone else was using that?!).
-To work around this, we use **commands**, which have a delayed effect.
-For now, let's take a look at how we can use them to work with entities in simple ways (you can read about all the details [later in this chapter](../commands/_index.md)).
-
-```rust
-// This system needs to have a mutable argument with the `Commands` type
-// allowing it to queue up commands to be processed at the end of the stage
+// The `Commands` system parameter allows us to generate commands
+// which operate on the `World` once all of the current systems have finished running
 fn spawning_system(mut commands: Commands){
-    // These commands perform the exact same operations
-    // as the previous code snippet,
-    // but at the end of the stage, rather than immediately
+    // Spawning a single entity with no components
     commands.spawn();
+    // Getting the `Entity` identifier of a new entity
     let my_entity = commands.spawn().id();
-    commands.despawn(my_entity);
+    // Selecting and then despawning the just-spawned second entity
+    commands.entity(my_entity).despawn();
 }
 ```
 
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
-[`bevy_ecs`]: https://crates.io/crates/bevy_ecs
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ## Working with components
 
