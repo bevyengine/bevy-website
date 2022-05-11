@@ -21,7 +21,7 @@ async function progressiveFetch(resource, callbacks={}) {
     const filename = getFilename(resource);
     const cb = Object.assign({
         start: (filename, length) => {},
-        update: (filename, loaded, length) => {},
+        update: (params) => {},
         finish: (filename, length) => {},
     }, callbacks);
 
@@ -35,7 +35,12 @@ async function progressiveFetch(resource, callbacks={}) {
         },
         transform(chunk, controller) {
             loadedBytes += chunk.byteLength;
-            cb.update(filename, loadedBytes, lengthBytes);
+
+            const loaded = Math.min(1.0, loadedBytes / lengthBytes);
+            const loadedPercent = loaded * 100.0;
+            const isIndeterminate = loadedBytes > lengthBytes; // Some compression is going on, so we can't know the real progress
+
+            cb.update({ filename, isIndeterminate, loaded, loadedPercent, loadedBytes, lengthBytes });
             controller.enqueue(chunk);
         },
         flush() {

@@ -56,8 +56,9 @@
                     clearTimeout(hideProgressTimeoutId);
                 }
             },
-            update: (_filename, loaded, total) => {
-                progressBarEl.style.width = (100 * loaded/total) + '%';
+            update: ({ isIndeterminate, loadedPercent }) => {
+                progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+                progressBarEl.style.width = loadedPercent + '%';
             },
             finish: (_filename, _total) => {
                 {#
