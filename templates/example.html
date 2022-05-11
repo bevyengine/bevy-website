@@ -48,7 +48,7 @@
 
     async function loadingBarFetch(resource) {
         return progressiveFetch(resource, {
-            start: (filename, _total) => {
+            start: ({ filename }) => {
                 progressStatusEl.style.display = 'block';
                 progressFileEl.textContent = filename;
 
@@ -56,10 +56,11 @@
                     clearTimeout(hideProgressTimeoutId);
                 }
             },
-            update: (_filename, loaded, total) => {
-                progressBarEl.style.width = (100 * loaded/total) + '%';
+            update: ({ isIndeterminate, loadedPercent }) => {
+                progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+                progressBarEl.style.width = loadedPercent + '%';
             },
-            finish: (_filename, _total) => {
+            finish: () => {
                 {#
                 // This is a little hack to avoid progress-bar flashing between assets. The thing
                 // is that we don't know how many assets are going to load, so we don't know which

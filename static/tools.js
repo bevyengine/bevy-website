@@ -20,27 +20,35 @@ async function progressiveFetch(resource, callbacks={}) {
     const toNativeReadable = createReadableStreamWrapper(window.ReadableStream);
     const filename = getFilename(resource);
     const cb = Object.assign({
-        start: (filename, length) => {},
-        update: (filename, loaded, length) => {},
-        finish: (filename, length) => {},
+        start: (params) => {},
+        update: (params) => {},
+        finish: (params) => {},
     }, callbacks);
 
     let response = await fetch(resource);
     const lengthBytes = response.headers.get('content-length');
     let loadedBytes = 0;
 
+    function update() {
+        const loaded = Math.min(1.0, loadedBytes / lengthBytes);
+        const loadedPercent = loaded * 100.0;
+        const isIndeterminate = loadedBytes > lengthBytes; // Some compression is going on, so we can't know the real progress
+
+        cb.update({ filename, isIndeterminate, loaded, loadedPercent, loadedBytes, lengthBytes });
+    }
+
     const transform = new PolyfillTransformStream({
         start() {
-            cb.start(filename, lengthBytes);
+            cb.start({ filename, lengthBytes });
         },
         transform(chunk, controller) {
             loadedBytes += chunk.byteLength;
-            cb.update(filename, loadedBytes, lengthBytes);
+            update();
             controller.enqueue(chunk);
         },
         flush() {
-            cb.update(filename, lengthBytes, lengthBytes);
-            cb.finish(filename, lengthBytes);
+            update();
+            cb.finish({ filename, lengthBytes });
         },
     });
 
