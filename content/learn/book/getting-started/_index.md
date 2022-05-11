@@ -7,13 +7,11 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
 
-This section will help you get started on your Bevy journey as quickly as possible. It will walk you through setting up your development environment and writing a simple Bevy app.
-
 ## Quick Start
 
-If you want to dive in immediately and you already have a working Rust setup, feel free to follow this "quick start" guide. Otherwise, move on to the next page.
+Assuming that [Rust](https://www.rust-lang.org/learn/get-started) is installed, install dependencies for either [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md) or [Windows](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 
-Note: the "fast compiles" setup is on the next page, so you might want to read that section first.
+The setup for "fast compiles" is on the next page, with notable less compute time.
 
 ### Try the Examples
 
