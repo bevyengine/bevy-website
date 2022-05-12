@@ -1,4 +1,6 @@
 {% extends "layouts/base.html" %}
+{% import "macros/images.html" as image_macros %}
+
 {% block content %}
 <div class="card-list padded-content">
   {% for page in section.pages %}
@@ -6,7 +8,7 @@
     {% if page.extra.image %}
     {% set image_parent = page.path | replace(from="_index.md", to="") %}
     <div class="card-image">
-      <img src="{{image_parent}}{{page.extra.image}}" class="centered-card-image" />
+      <img src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=580, height=326) }}" class="centered-card-image" />
     </div>
     {% else %}
     <div class="card-image">

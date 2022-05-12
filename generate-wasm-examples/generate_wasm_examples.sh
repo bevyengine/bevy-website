@@ -38,14 +38,23 @@ add_category()
         cp examples/$category_path/$code_filename ../../content/examples/$category_slug/$example_slug/
         cargo build --release --target wasm32-unknown-unknown --example $example
         wasm-bindgen --out-dir ../../content/examples/$category_slug/$example_slug --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
+
+        # Patch generated JS to allow to inject custom `fetch` with loading feedback.
+        # See: https://github.com/bevyengine/bevy-website/pull/355
+        sed -i.bak \
+          -e 's/function init(input) {/function init(customFetch, input) { customFetch = customFetch || fetch;/' \
+          -e 's/input = fetch(/input = customFetch(/' \
+          -e 's/getObject(arg0).fetch(/customFetch(/' \
+          ../../content/examples/$category_slug/$example_slug/$example.js
+
         echo "+++
 title = \"$example\"
 template = \"example.html\"
 weight = $example_weight
 
 [extra]
-code_filename = \"$code_filename\"
-code_path = \"examples/$category_path/$code_filename\"
+code_path = \"content/examples/$category_slug/$example_slug/$code_filename\"
+github_code_path = \"examples/$category_path/$code_filename\"
 header_message = \"Examples\"
 +++" > ../../content/examples/$category_slug/$example_slug/index.md
 
