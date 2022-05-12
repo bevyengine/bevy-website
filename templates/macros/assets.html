@@ -1,9 +1,11 @@
+{% import "macros/images.html" as image_macros %}
+
 {% macro card(post) %}
 <div class="card" id="{{ post.title | slugify }}">
     <a href="{{ post.extra.link }}">
         {% if post.extra.image %}
         <div class="card-image card-image-default">
-            <img src="{{ get_url(path=post.extra.image) }}" />
+            <img src="{{ image_macros::resize_image(path=post.extra.image, width=340, height=340) }}" />
         </div>
         {% endif %}
         <div class="card-text">
