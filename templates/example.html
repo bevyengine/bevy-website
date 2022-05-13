@@ -8,7 +8,7 @@
         {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
         <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
         <a class="example__back" href="/examples"><i class="icon icon--chevron-left"></i> Back to examples</a>
-        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/examples/{{ page.components[1] }}/{{ page.title }}.rs">
+        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
             <i class="icon icon--github"></i> View in GitHub
         </a>
     </div>
@@ -22,11 +22,11 @@
         <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
     </div>
     <div class="example__code media-content">
-        {% set code = load_data(path="content/examples/" ~ page.components[1] ~ "/" ~ page.title ~ "/" ~ page.title ~ ".rs") %}
-        {% set data = "```rust
+        {% set code = load_data(path=page.extra.code_path) %}
+        {% set code_md = "```rust
 " ~ code ~ "```" %}
 
-        {{data | markdown(inline=true) | safe}}
+        {{code_md | markdown(inline=true) | safe}}
     </div>
 </div>
 <script type="module">

@@ -19,9 +19,10 @@ add_category()
 {
     category=$1
     category_path=$2
+    category_slug=`echo $category_path | tr '_' '-'`
     example_weight=0
 
-    mkdir ../../content/examples/$category_path
+    mkdir ../../content/examples/$category_slug
 
     # Remove first two arguments
     shift 2
@@ -31,10 +32,12 @@ add_category()
     for example in $@
     do
         echo "building $category / $example"
-        mkdir ../../content/examples/$category_path/$example
-        cp examples/$category_path/$example.rs ../../content/examples/$category_path/$example/
+        example_slug=`echo $example | tr '_' '-'`
+        code_filename="$example.rs"
+        mkdir ../../content/examples/$category_slug/$example_slug
+        cp examples/$category_path/$code_filename ../../content/examples/$category_slug/$example_slug/
         cargo build --release --target wasm32-unknown-unknown --example $example
-        wasm-bindgen --out-dir ../../content/examples/$category_path/$example --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
+        wasm-bindgen --out-dir ../../content/examples/$category_slug/$example_slug --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
 
         # Patch generated JS to allow to inject custom `fetch` with loading feedback.
         # See: https://github.com/bevyengine/bevy-website/pull/355
@@ -42,7 +45,7 @@ add_category()
           -e 's/function init(input) {/function init(customFetch, input) { customFetch = customFetch || fetch;/' \
           -e 's/input = fetch(/input = customFetch(/' \
           -e 's/getObject(arg0).fetch(/customFetch(/' \
-          ../../content/examples/$category_path/$example/$example.js
+          ../../content/examples/$category_slug/$example_slug/$example.js
 
         echo "+++
 title = \"$example\"
@@ -50,8 +53,10 @@ template = \"example.html\"
 weight = $example_weight
 
 [extra]
+code_path = \"content/examples/$category_slug/$example_slug/$code_filename\"
+github_code_path = \"examples/$category_path/$code_filename\"
 header_message = \"Examples\"
-+++" > ../../content/examples/$category_path/$example/index.md
++++" > ../../content/examples/$category_slug/$example_slug/index.md
 
         example_weight=$((example_weight+1))
     done
@@ -61,7 +66,7 @@ header_message = \"Examples\"
 title = \"$category\"
 sort_by = \"weight\"
 weight = $category_weight
-+++" > ../../content/examples/$category_path/_index.md
++++" > ../../content/examples/$category_slug/_index.md
 
     category_weight=$((category_weight+1))
 }
