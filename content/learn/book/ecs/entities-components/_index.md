@@ -150,6 +150,8 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mu
 }
 ```
 
+Entities can only ever store one component of each type: inserting another component of the same type will instead overwrite the existing data.
+
 ## Bundles
 
 As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
