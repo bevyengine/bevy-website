@@ -51,8 +51,6 @@ This of course is not very useful, so let's discuss how we can add and remove co
 
 To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
 You will almost always want to use the `#[derive(Component)]` [macro](https://doc.rust-lang.org/reference/attributes/derive.html) to do this for you; which quickly and reliably generates the correct trait implementation.
-Any underlying component data must be `Send + Sync + 'static` (enforced by the [trait bounds](https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bound-syntax) on [`Component`]).
-This ensures that the data can be [sent across threads safely](https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html).
 
 With the theory out of the way, let's define some components!
 
