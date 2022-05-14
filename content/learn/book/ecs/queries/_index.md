@@ -6,32 +6,97 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 +++
 
+
+
 Once we have data stored on our entities in the form of components, we need to be able to get the data back out in a principled way.
-**Queries** are precisely that tool; allowing us to carefully request sets of entities from the world that meet the criteria we care about and then retrieve the data we need to operate on.
+**Queries** are system parameters that allow us to carefully request sets of entities from the [`World`] that meet the criteria we care about and then retrieve the data we need to operate on.
 
-The [`Query`] type is your primary access into the data in your Bevy game: allowing you to carefully access exactly the data you need from the entity-component data storage.
-The [`Query`] type has two type parameters: the first describes which data should be requested, and the second optional type parameter describes how it should be filtered.
+The [`Query<Q, F=()>`] type has two type parameters: `Q` describes which data should be requested, while `F` type parameter describes how it should be filtered.
+By default, `F` is set to `()`, the "unit type", indicating that we do not want a filter.
 
-We can request access to a single component (`Life`, in this case), by adding `Query<&Life>` to our system parameters.
-This will request (a reference to) the `Life` component on every entity that has that component.
-This reference is read-only: we cannot mutate the values contained within.
+The simplest case is where we need to access the data of a single component, for example `Query<&Life`>.
+In this case, `Q` is the type `&Life`, and `F` is `()`, because we didn't specify a value for it.
 
-If we want to be able to change these values, we need to use `Query<&mut Life>` instead, and remember to set our `query` function parameter to be mutable as well.
+This will request a shared reference to the `Life` component on every entity that has that component.
+This reference is read-only: we cannot mutate the values returned by our query.
+If we want to be able to change these values, we need to request a mutable reference using `Query<&mut Life>` instead.
 
 ```rust
+# use bevy::ecs::prelude::*;
+# #[derive(Component)]
+# struct Life;
+
 // A system that has read-access to the Life component of each entity
-fn read_life(query: Query<&Life>){}
+fn read_life(query: Query<&Life>) {}
 
 // A system that has write-access to the Life component of each entity
-fn write_life(mut query: Query<&mut Life>){}
+// Remember to set your query argument as mutable
+fn write_life(mut query: Query<&mut Life>) {}
 ```
 
-In order to access multiple components at once, we need to replace our single `&Life` component with a tuple type that bundles many types into one.
-Concretely, `Query<(&Life, &Attack)>` gives us read access to the `Life` and `Attack` components to all entities that have *both* of those components.
-Be mindful of this fact when designing queries: queries operate using "AND" logic (unless you use an `Option<&C>` query parameter): adding more components will always strictly reduce the number of entities returned by your query.
-We can get mutable access to `Life` and `Attack` separately by changing our `&` (reference) to `&mut` (mutable references) on the components that we want mutable access to.
+In order to access multiple components at once, we need to replace our `&Life` type with a tuple type that bundles many types into one.
 
-[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
+```rust
+# use bevy::ecs::prelude::*;
+# #[derive(Component)]
+# struct Life;
+#
+# #derive(Component)
+# struct Defense;
+
+// A system that has write-access to the Life component, and read-access to the Defense component
+// Only entities with both Life and Defense will be included in this Query
+fn life_and_defense(mut query: Query<(&mut Life, &Defense)>) {}
+```
+
+Here, the type of `Q` is `(&mut Life, &Defense)` (and `F` is still `()`).
+
+Queries operate using "AND" logic (unless you use an `Option<&C>` query parameter): adding more components will always strictly reduce the number of entities returned by your query.
+
+[`Query<Q, F=()>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
+
+## Filtering queries
+
+When components are fetched in queries, the data of *every* component in `Q` passed will be fetched and made available to the system.
+However, this isn't always what you want!
+In many cases, you just want to filter the query based on the presence (or absence) of a component, and don't want to deal with unpacking data you're never going to use.
+This is particularly true when working with **marker components**: dataless structs designed to convey the identity or current state of an entity.
+
+The two most important query filter types are [`With<C>`] and [`Without<C>`], which filter based on whether or not an entity has a component of the type `C`.
+
+[`With<C>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.With.html
+[`Without<C>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Without.html
+
+```rust
+# use bevy::ecs::prelude::*;
+# #[derive(Component)]
+# struct Life;
+#
+# #derive(Component)
+# struct Player;
+
+// A system that has write-access to the Life component of entities with the Player component
+// Q is &mut Life, and F is With<Player>
+fn regenerate_player_life(mut query: Query<&mut Life, With<Player>>) {}
+
+// This query requests the Entity identifier of all entities that don't have the Player component,
+// so then they can be passed into our Commands system parameter
+// Q is Entity, and F is Without<Player>
+fn despawn_all_non_player_entities(mut commands: Commands, query: Query<Entity, Without<Player>>) {}
+
+// This systems has two Query system parameters
+// For player_query, Q is (&Position, &mut Targeting) and F is With<Player>
+// For target_query, Q is (Entity, &Position, &TargetPriority) and F is (With<Enemy>, Without<Player>)
+fn select_target(
+    player_query: Query<(&Position, &mut Targeting), With<Player>>,
+    target_query: Query<(Entity, &Position, &TargetPriority), (With<Enemy>, Without<Player>)>
+) {
+}
+```
+
+As with requested data, filters combine in an "and" fashion.
+Only entities with the `Position`, `TargetPriority`, and `Enemy` components which don't have a `Player` component will be returned by `target_query` in the example above.
 
 ## Iterating over queries
 
@@ -40,12 +105,12 @@ To do so, we can use straightforward for-loops:
 
 ```rust
 #[derive(Component, Debug)]
-struct Life{
+struct Life {
  val: u8
 }
 
 #[derive(Component)]
-struct IncomingDamge{
+struct IncomingDamge {
  val: u8
 }
 
@@ -103,7 +168,7 @@ We can fetch the [`Entity`] of each entity returned by our queries by including 
 
 ```rust
 // This system reports the Entity of every entity in your World
-fn all_entities(query: Query<Entity>){
+fn all_entities(query: Query<Entity>) {
  for entity in query.iter(){
   dbg!(entity);
  }
@@ -111,7 +176,7 @@ fn all_entities(query: Query<Entity>){
 
 #[derive(Component)]
 struct Marker;
-struct MyEntities{
+struct MyEntities {
  entities: Vec<Entity>,
 }
 // Typically you'll combine this pattern with query filters 
@@ -139,69 +204,6 @@ This can be a powerful tool for branching logic (use [`match`] on the [`Option`]
 
 [`match`]: https://doc.rust-lang.org/std/keyword.match.html
 [`Option`]: https://doc.rust-lang.org/std/option/enum.Option.html
-
-## Query filtering
-
-When components are fetched in queries, the data of *every* component in the first type argument passed will be fetched and made available to the system.
-However, this isn't always what you want!
-In many cases, you just want to filter the query based on the presence (or absence) of a component, and don't want to deal with unpacking data you're never going to use.
-This is particularly true when working with **marker components**: data-less structs designed to convey the identity or current state of an entity.
-
-Fortunately, [`Query`] has two type parameters: the first describes what data to fetch, while the second describes how the entities that would be returned by the first type parameter are then filtered down.
-The two most important query filter types are [`With<C>`] and [`Without<C>`], which filter based on whether or not an entity has a component of the type `C`.
-
-Let's demonstrate how these filters are used by filtering some fruit.
-
-```rust
-#[derive(Component)]
-enum Fruit{
- Apple,
- Orange,
- Durian,
- Kiwi
-}
-
-#[derive(Component)]
-struct Delicious;
-
-#[derive(Component)]
-struct Rotten;
-
-#[derive(Default)]
-struct FruitInventory{
- map: HashMap<Fruit, u8>
-}
-
-// The second filtering type parameter of Query can be ommitted when no filter is used
-fn take_inventory_system(fruit_query: Query<&Fruit>, fruit_inventory: FruitInventory){
- // Restart the count each time inventory is taken
- fruit_inventory = FruitInventory::default();
- for &fruit in fruit_inventory.iter(){
-  let fruit_type_count = fruit_inventory.map.get_mut(fruit);
-  fruit_type_count = match fruit_type_count {
-   None => 1,
-   Some(n) => n + 1,
-  }
- }
-}
-
-// With restricts your query to only those entities who have all of the data present
-// *and* all of the With filters
-fn clean_inventory_system(rotten_food_query: Query<Entity, With<Rotten>>, mut commands: Commands){
- for entity in rotten_food_query.iter(){
-  commands.despawn(entity);
- }
-}
-
-// We can combine query filters by passing them in as tuple
-// Returning entities that meet *all* of the query filters criteria
-fn eat_fruit_system(query: Query<&Fruit, (Without<Rotten>, With<Delicious>)>){
- // Perform complicated fruit-eating logic here!
-}
-```
-
-[`With<C>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.With.html
-[`Without<C>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Without.html
 
 ### `Or` Queries
 
