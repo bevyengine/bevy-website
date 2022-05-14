@@ -174,38 +174,95 @@ fn report_player_life(query: Query<&Life, With<Player>>) {
 
 ## Looking up specific entities
 
-Each entity in our ECS data storages has a unique, arbitrarily assigned identifier: its [`Entity`], made up of two [`u32`]s.
-We can fetch the [`Entity`] of each entity returned by our queries by including it as part of the first type parameter of [`Query`] as if it were a component (although no `&` is used):
+Each entity in our ECS data storages has a unique, arbitrarily assigned `[Entity`] identifier.
+We can fetch this for each entity returned by our queries by including it in `Q`, the first type parameter of [`Query`]:
 
 ```rust
+# use bevy::prelude::ecs::*;
+
 // This system reports the Entity of every entity in your World
 fn all_entities(query: Query<Entity>) {
- for entity in query.iter(){
-  dbg!(entity);
- }
+    for entity in query.iter() {
+        dbg!(entity);
+    }
 }
+```
+
+Here's a more practical example of how this might be used:
+
+```rust
+# use bevy::ecs::prelude::*;
 
 #[derive(Component)]
-struct Marker;
-struct MyEntities {
- entities: Vec<Entity>,
-}
-// Typically you'll combine this pattern with query filters 
-// to extract the entities of a relevant subset, 
-// and then store it somewhere where you can access it later
-fn identify_yourself(query: Query<Entity, With<Marker>>, my_entities: ResMut<MyEntities>){
- for entity in query.iter(){
-  my_entities.push(entity);
- }
-}
+struct Player;
 
+#[derive(Component)]
+struct Enemy;
+
+#[derive(Component, Debug)]
+struct PowerLevel(u8);
+
+#[derive(Component)]
+struct Target(Option<Entity>);
+
+// Typically you'll combine this pattern with query filters
+// to extract the entities of a relevant subset,
+// and then store it somewhere where you can access it later
+fn target_strongest_enemy(enemy_query: Query<(Entity, &PowerLevel), With<Enemy>>, mut player_query: Query<&mut Target, With<Player>>) {
+    let mut current_strongest = 0;
+    let mut target = player_query.single_mut();
+
+    // If you prefer iterator adaptors, this could be replaced by
+    // target.0 = query.iter().max_by(|(_, power_level)| power_level.0);
+    for (entity, power_level) in enemy_query.iter(){
+        if power_level.0 > current_strongest {
+            target.0 = Some(entity);
+            current_strongest = power_level.0;
+        }
+    }
+}
 ```
 
 Once we have a particular entity in mind, we can grab its data using [`Query::get()`] and the related methods on [`Query`].
-This is fallible, and so it returns a [`Result`] that you must unwrap or handle.
+This is fallible, and so it returns a [`Result`] that you must handle.
+
+```rust
+# use bevy::ecs::prelude::*;
+# 
+# #[derive(Component)]
+# struct Player;
+# 
+# #[derive(Component)]
+# struct Enemy;
+# 
+# #[derive(Component, Debug)]
+# struct PowerLevel(u8);
+# 
+# #[derive(Component)]
+# struct Target(Option<Entity>);
+
+use bevy::log::{info, warn};
+
+fn display_power_level_of_target(player_query: Query<&Target, With<Player>>, target_query: Query<&PowerLevel>){
+    let target = player.single();
+
+    // If we're not targeting anything, we don't need to report the power level
+    if let Some(targeted_entity) = target.0 {
+        
+        // Query::get is fallible, so we must handle the Result
+        // or panic with a `.unwrap` or `.expect` call
+        match query.get(targeted_entity){
+            Ok(power_level) => info!(power_level),
+            Err(e) => warn!("Getting the target failed with error: {:?}", e),
+        };
+    }
+    
+}
+```
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`u32`]: https://doc.rust-lang.org/std/primitive.u32.html
+[`Result`]: https://doc.rust-lang.org/std/result/
 [`Query::get()`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get
 
 ## Optional components in queries
