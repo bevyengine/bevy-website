@@ -147,17 +147,30 @@ If you're more experienced with Rust, you will be unsurprised to discover that y
 
 If you find yourself needing to iterate over all pairs (or triples or...) of a query (perhaps for collision detection), turn to the `iter_combinations` function demonstrated in the [corresponding example](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/iter_combinations.rs) to avoid borrow-checker headaches.
 
-## Queries that return one entity
+## Queries that return exactly one entity
 
 When we have a query that we *know* will always return a single entity, iterating over the query tends to result in unclear code.
 To get around this, we can use [`Query::single()`] and [`Query::single_mut()`], depending on whether or not we need to mutate the returned data.
 
-Note that these functions return a [`Result`]: if you expect this could fail in real scenarios (in case the query does not contain exactly one entity), handle the result properly.
-Otherwise, just call `let (component_a, component_b) = query.single().unwrap()` to make use of the data quickly.
+```rust
+# #[derive(Component, Debug)]
+# struct Life {
+#     val: u8,
+# }
+# 
+# #[derive(Component)]
+# struct Player;
+
+fn report_player_life(query: Query<&Life, With<Player>>) {
+    // This will panic unless exactly one entity matching the query was found
+    // If you want to handle the error yourself, use Query::get_single
+    let life = query.single();
+    dbg!(life);
+}
+```
 
 [`Query::single()`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single
 [`Query::single_mut()`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single_mut
-[`Result`]: https://doc.rust-lang.org/std/result/enum.Result.html
 
 ## Looking up specific entities
 
