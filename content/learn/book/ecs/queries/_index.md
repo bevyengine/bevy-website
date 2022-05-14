@@ -100,52 +100,50 @@ Only entities with the `Position`, `TargetPriority`, and `Enemy` components whic
 
 ## Iterating over queries
 
-Once we have a query, the most common thing we're likely to want to do with it is perform some logic on every entity returned.
+Once we have a query, the most common pattern is perform some logic on every entity returned.
 To do so, we can use straightforward for-loops:
 
 ```rust
 #[derive(Component, Debug)]
 struct Life {
- val: u8
+    val: u8,
 }
 
 #[derive(Component)]
 struct IncomingDamge {
- val: u8
+    val: u8,
 }
 
-
 /// Prints the current life total of every entity with the Life component
-fn report_life(query: Query<&Life>){
- for life in query.iter(){
-  dbg!(life);
- }
+fn report_life(query: Query<&Life>) {
+    for life in query.iter() {
+        dbg!(life);
+    }
 }
 
 #[derive(Component)]
 struct Age(u64);
 
-fn increment_age(query: Query<&mut Age>){
- // We need to use mut age and .iter_mut() here because we need mutable access
- for mut age in query.iter_mut(){
-  // age.0 refers to the first (only) field on our tuple type
-  // We could make this more ergonomic by implementing the Add<Age, u64> trait
-  // or the AddAssign<Age> trait on our Age component type
-  age.0 =  age.0 + 1;
- }
+fn increment_age(mut query: Query<&mut Age>) {
+    // We need to use mut query, &mut Age, mut age, and .iter_mut() here because we need mutable access
+    for mut age in query.iter_mut() {
+        // age.0 refers to the first (only) field on our tuple type
+        // We could make this more ergonomic by implementing the Add<Age, u64> trait
+        // or the AddAssign<Age> trait on our Age component type
+        age.0 = age.0 + 1;
+    }
 }
 
-fn take_damage(query: Query<(&mut Life, &mut IncomingDamage)>){
- // Typically you want to unpack this iterator into several variables 
- // that you can use in your loop
- for (mut life, mut incoming_damage) in query.iter_mut(){
-  life.val -= incoming_damage.val;
-  incoming_damage.val = 0;
- }
+fn take_damage(query: Query<(&mut Life, &mut IncomingDamage)>) {
+    // You can unpack your query iterator into several variables
+    for (mut life, mut incoming_damage) in query.iter_mut() {
+        life.val -= incoming_damage.val;
+        incoming_damage.val = 0;
+    }
 }
 ```
 
-For those more experienced with Rust, you will be unsurprised to discover that you can also use iterator constructs like `.for_each`, `.map`, and `.filter` to work with your queries.
+If you're more experienced with Rust, you will be unsurprised to discover that you can also use common iterator tools like `.for_each`, `.map`, and `.filter` to work with your queries.
 
 If you find yourself needing to iterate over all pairs (or triples or...) of a query (perhaps for collision detection), turn to the `iter_combinations` function demonstrated in the [corresponding example](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/iter_combinations.rs) to avoid borrow-checker headaches.
 
