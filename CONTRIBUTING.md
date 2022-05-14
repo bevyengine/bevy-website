@@ -20,7 +20,7 @@ A local server should start and you should be able to access a local version of 
 
 The code in the book is compiled and tested to make sure that the examples work for readers.
 
-To check your local changes, move into the `code-validation` folder of this project using `cd code-validation`, and then run `cargo test`.
+To check your local changes, move into the `code-validation` folder of this project using `cd code-validation`, and then run `cargo test`. If you write a new section of the book, you have to add it in `code-validation/src/lib.rs` to enable code validation for it.
 
 ## Learning material structure
 
