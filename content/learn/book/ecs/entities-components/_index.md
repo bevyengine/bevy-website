@@ -42,8 +42,10 @@ fn spawning_system(mut commands: Commands){
 
 ## Working with components
 
-Entities are entirely bare when they're spawned: they contain no data other than their unique [`Entity`] identifier.
-This of course is not very useful, so let's discuss how we can add and remove components to them which store data and enable behavior through systems.
+Spawning an entity doesn't add any behavior or create a "physical object" in our game like it might in other engines.
+Instead, all it does is provide us an [`Entity`] identifer for a collection of component data.
+
+In order to make this useful, we need to be able to add, remove and modify component data for each entity.
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 
