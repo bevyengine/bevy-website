@@ -354,21 +354,30 @@ If you need multiple optional components in a single query, consider using the [
 [`match`]: https://doc.rust-lang.org/std/keyword.match.html
 [`Option`]: https://doc.rust-lang.org/std/option/enum.Option.html
 
-### Multiple queries in the same system
+### Conflicting queries
 
 As the logic in your systems become more complex, you may find that you want to access data from two different queries at once.
 In most cases, simply adding a second query as another system parameter works perfectly fine:
 
 ```rust
-fn defense_aura_system(aura_query: Query<&Transform, With<Aura>>, target_query: Query<(&mut Defense, &Transform), With<Creature>>){
- // Give all allies near an aura-generator a bonus to their defense
-}
+# use bevy::prelude::*;
+# 
+# #[derive(Component)]
+# struct Aura;
+#
+# #[derive(Component)]
+# struct Creature;
+
+fn defense_aura_system(
+    aura_query: Query<&Transform, With<Aura>>,
+    target_query: Query<(&mut Defense, &Transform), With<Creature>>) {
+    }
 ```
 
 But as you use this pattern more, you may encounter an error that looks something like:
 
-```
-   Query<&mut Transform, With<Camera>> in system move_player accesses component(s) &mut Transform in a way that conflicts with a previous system parameter. Allowing this would break Rust's mutability rules. Consider using `Without<T>` to create disjoint Queries or merging conflicting Queries into a `QuerySet`.
+```ignore
+   Query<&mut Transform, With<Camera>> in system move_player accesses component(s) &mut Transform in a way that conflicts with a previous system parameter. Consider using `Without<T>` to create disjoint Queries or merging conflicting Queries into a `ParamSet`.
 ```
 
 What went wrong? It worked just fine before!
@@ -379,38 +388,68 @@ if at least one of those accesses is mutable.
 That's a result of its [ownership rules](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html): we could mutate data in the first query while the second query is trying to read the data, resulting in undefined behavior.
 Which is bad.
 
-Of course, you already knew that, and have carefully thought about the architecture of your system, designing something like:
+Of course, you already knew that, and have carefully thought about the architecture of your system, designing your system something like this:
 
 ```rust
-fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, With<Camera>>){
- let player_transform = player_query.single().unwrap();
- let camera_query = camera_query.single_mut.unwrap();
- // Insert logic here
+# use bevy::prelude::*;
+# 
+# #[derive(Component)]
+# struct Player;
+
+fn camera_follow_system(
+    player_query: Query<&Transform, With<Player>>,
+    camera_query: Query<&mut Transform, With<Camera>>,
+) {
+    let player_transform = player_query.single();
+    let camera_query = camera_query.single_mut();
+    todo!()
 }
 ```
 
-You know that there's never going to be an entity that has both `Player` and `Camera` on it, so there's no way that you're ever accessing the same [`Transform`] component twice.
+You know that there's never going to be an entity that has both `Player` and [`Camera`] on it, so there's no way that you're ever accessing the same [`Transform`] component twice.
 Unfortunately, Rust *doesn't* know that.
 We can fix this by making *sure* our queries our disjoint, no matter what bizarre entities might exist, through the judicious application of `Without` queries.
 
 ```rust
-fn camera_follow_system(player_query: Query<&Transform, With<Player>>, camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>){
- let player_transform = player_query.single().unwrap();
- let camera_query = camera_query.single_mut.unwrap();
- // Insert logic here
+# use bevy::prelude::*;
+# 
+# #[derive(Component)]
+# struct Player;
+
+fn camera_follow_system(
+    player_query: Query<&Transform, With<Player>>,
+    camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,
+) {
+    let player_transform = player_query.single();
+    let camera_query = camera_query.single_mut();
+    todo!()
 }
 ```
 
-The other way to get around this issue is to use a [`QuerySet`], which permits multiple conflicting queries to exist in a single system.
-The catch is that you can only access one query at a time.
-Query sets can be useful when you need to access genuinely conflicting data, such as if we truly had an entity with both `Player` and `Camera` that we wanted to operate on in both loops of our system.
-Let's rewrite our broken system again, using a [`QuerySet`] instead.
+The other way to get around this issue is to use a [`ParamSet`], which permits multiple conflicting system parameters to exist in a single system.
+The catch is that you can only access one of the parameters at a time.
+Parameter sets can be useful when you need to access genuinely conflicting data, such as if we truly had an entity with both `Player` and [`Camera`] that we wanted to operate on in both loops of our system.
+Let's try this approach:
 
 ```rust
-fn camera_follow_system(queries: QuerySet<Query<&Transform, With<Player>>, Query<&mut Transform, With<Camera>>){
- let player_transform = queries.0.single().unwrap();
- let camera_query = queries.1.single_mut.unwrap();
- // Insert logic here
+# use bevy::prelude::*;
+# 
+# #[derive(Component)]
+# struct Player;
+
+fn camera_follow_system(
+    queries: ParamSet<(
+        Query<&Transform, With<Player>>, 
+        Query<&mut Transform, With<Camera>>
+    )>
+) {
+    // These references cannot be used at the same time
+    // We must complete our work with the first reference
+    // (including by cloning its data)
+    // before we can access the second parameter in our set
+    let player_transform = queries.p0().single();
+    let camera_transform = camera_query.p1().single_mut();
+    todo!()
 }
 ```
 
@@ -419,5 +458,6 @@ Bevy's systems automatically run in parallel by default, so long as the schedule
 As a result, we can use the same query filtering techniques described  to allow our *systems* to safely run in parallel.
 In addition to improving parallelism, this also reduces the false positives when checking for [system execution order ambiguities](https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.ReportExecutionOrderAmbiguities.html), as we can guarantee that the relative order of two systems that do not share data never changes the final outcome.
 
+[`Camera`]: https://docs.rs/bevy/latest/bevy/render/camera/struct.Camera.html
 [`Transform`]: https://docs.rs/bevy/latest/bevy/transform/components/struct.Transform.html
-[`QuerySet`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.QuerySet.html
+[`ParamSet`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ParamSet.html
