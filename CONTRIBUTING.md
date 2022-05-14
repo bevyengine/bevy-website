@@ -16,7 +16,7 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-## Testing your changes
+## Testing changes to book code snippets
 
 The code in the book is compiled and tested to make sure that the examples work for readers.
 
