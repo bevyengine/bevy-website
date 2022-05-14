@@ -160,7 +160,6 @@ To get around this, we can use [`Query::single()`] and [`Query::single_mut()`], 
 # 
 # #[derive(Component)]
 # struct Player;
-
 fn report_player_life(query: Query<&Life, With<Player>>) {
     // This will panic unless exactly one entity matching the query was found
     // If you want to handle the error yourself, use Query::get_single
@@ -179,7 +178,6 @@ We can fetch this for each entity returned by our queries by including it in `Q`
 
 ```rust
 # use bevy::prelude::ecs::*;
-
 // This system reports the Entity of every entity in your World
 fn all_entities(query: Query<Entity>) {
     for entity in query.iter() {
@@ -192,7 +190,6 @@ Here's a more practical example of how this might be used:
 
 ```rust
 # use bevy::ecs::prelude::*;
-
 #[derive(Component)]
 struct Player;
 
@@ -240,7 +237,6 @@ This is fallible, and so it returns a [`Result`] that you must handle.
 # 
 # #[derive(Component)]
 # struct Target(Option<Entity>);
-
 use bevy::log::{info, warn};
 
 fn display_power_level_of_target(player_query: Query<&Target, With<Player>>, target_query: Query<&PowerLevel>){
@@ -267,26 +263,98 @@ fn display_power_level_of_target(player_query: Query<&Target, With<Player>>, tar
 
 ## Optional components in queries
 
-If we want a query to include a component's data if it exists, we can use an `Option<&MyComponent>` query parameter in the first type parameter of [`Query`].
-This can be a powerful tool for branching logic (use [`match`] on the [`Option`] returned), especially when combined with marker components.
-
-[`match`]: https://doc.rust-lang.org/std/keyword.match.html
-[`Option`]: https://doc.rust-lang.org/std/option/enum.Option.html
-
-### `Or` Queries
-
 By default, query filters (just like query data requests) operate on a "and" basis: if you have a filter for `With<A>` and another filter for `With<B>`, only entities with both the `A` and `B` components will be fetched.
 We can change this behavior by using the [`Or`] type, nesting primitive query filters like [`With`], [`Without`] and [`Changed`] inside of it to return entities that meet any of the criteria inside.
-If we wanted to purchase fruits that were either `Delicious` or `Cheap`, we would use `Query<&mut Owner, (Or<With<Deliciou>, With<Cheap>>)>` as the type of our query, allowing us to change the owner of any delicious and cheap fruit that we found.
+
+```rust
+#[derive(Component)]
+struct Fruit;
+
+#[derive(Component)]
+struct Delicious;
+
+#[derive(Component)]
+struct Cheap;
+
+#[derive(Component)]
+struct ToBuy;
+
+// This query will match any entities with the Fruit component,
+// and either the Delicious or Cheap components
+fn select_fruits_to_buy(query: Query<Entity, (With<Fruit>, Or<With<Delicious>, With<Cheap>>)>, mut commands: Commands){
+    for fruit_entity in query.iter(){
+        commands.entity(fruit_entity).insert(ToBuy);
+    }
+}
+```
+
+If we wanted to purchase fruits that were either `Delicious` or `Cheap`, we would use `Query<&mut Owner, (Or<With<Delicious>, With<Cheap>>)>` as the type of our query, allowing us to change the owner of any delicious and cheap fruit that we found.
 
 Note that the `Or` type (and other query tuples) can be nested indefinitely, allowing you to construct very complex logic if needed.
 
-[`Or`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Or.html
-[`With<C>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.With.html
-[`Without<C>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Without.html
-[`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
+If we want a query to include a component's data if it exists, we can use an `Option<&MyComponent>` query parameter in the first type parameter of [`Query`].
 
-### Running multiple queries at once
+```rust
+#[derive(Component)]
+struct Fruit {
+    cooked: bool,
+    // Other fields omitted for brevity
+}
+
+impl Fruit {
+    fn cook(&mut self) {
+        self.cooked = true;
+    }
+
+    fn prepare(&mut self, step: PreparationStep){
+        todo!()
+    }
+}
+
+
+#[derive(Component)]
+struct SpecialPreparation {
+    steps: Vec<PreparationStep>,
+}
+
+enum PreparationStep {
+    Slice,
+    Peel,
+    Mince,
+    Juice,
+    Deseed,
+}
+
+#[derive(Component)]
+struct NeedsCooking;
+
+fn prepare_fruits(query: Query<(&mut Fruit, Option<&SpecialPreparation>>, Option<&NeedsCooking>)>){
+    for (fruit, maybe_preparation, maybe_needs_cooking) in query.iter() {
+        if let Some(preparation) = maybe_preparation {
+            for step in preparation.steps {
+                fruit.prepare(step);
+            }
+        }
+
+        if maybe_needs_cooking.is_some(){
+            fruit.cook();
+        }
+
+        fruit.serve();
+    }
+}
+
+```
+
+If you need multiple optional components in a single query, consider using the [`AnyOf`] query combinator, which fetches data if at least one of the matching components is found.
+
+[`Or`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Or.html
+[`AnyOf`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.AnyOf.html
+[`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
+[`match`]: https://doc.rust-lang.org/std/keyword.match.html
+[`Option`]: https://doc.rust-lang.org/std/option/enum.Option.html
+
+### Multiple queries in the same system
 
 As the logic in your systems become more complex, you may find that you want to access data from two different queries at once.
 In most cases, simply adding a second query as another system parameter works perfectly fine:
