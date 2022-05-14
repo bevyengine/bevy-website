@@ -26,6 +26,8 @@ Spawning and despawning entities can have far-reaching effects, and so cannot be
 As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust
+# use bevy::ecs::system::Commands;
+
 // The `Commands` system parameter allows us to generate commands
 // which operate on the `World` once all of the current systems have finished running
 fn spawning_system(mut commands: Commands){
@@ -57,6 +59,8 @@ You will almost always want to use the `#[derive(Component)]` [macro](https://do
 With the theory out of the way, let's define some components!
 
 ```rust
+# use bevy::ecs::component::Component;
+
 // This is a "unit struct", which holds no data of its own.
 #[derive(Component)]
 struct Combatant;
@@ -88,6 +92,27 @@ enum Allegiance {
 Now that we have some components defined, let's try adding them to our entities using [`Commands`].
 
 ```rust
+# use bevy::ecs::prelude::*;
+# 
+# #[derive(Component)]
+# struct Combatant;
+# 
+# #[derive(Component)]
+# struct Life(u8);
+# 
+# #[derive(Component)]
+# struct Stats {
+#     strength: u8,
+#     dexterity: u8,
+#     intelligence: u8,
+# }
+# 
+# #[derive(Component)]
+# enum Allegiance {
+#     Friendly,
+#     Hostile
+# }
+
 fn spawn_combatants_system(mut commands: Commands) {
     commands
         .spawn()
@@ -128,6 +153,10 @@ fn spawn_combatants_system(mut commands: Commands) {
 Once an entity is spawned, you can use [`Commands`] to add and remove components from them dynamically.
 
 ```rust
+# use bevy::ecs::prelude::*;
+# 
+# #[derive(Component)]
+# struct Combatant;
 
 #[derive(Component)]
 struct InCombat;
@@ -145,7 +174,9 @@ fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)
 fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mut commands: Commands){
     for entity in query.iter(){
         // The component will be removed at the end of the current stage
-        commands.entity(entity).remove(InCombat);
+        // It is provided as a type parameter,
+        // as we do not need to know a specific value in order to remove a component of the correct type
+        commands.entity(entity).remove::<InCombat>();
     }
 }
 ```
@@ -161,9 +192,30 @@ These are defined by deriving the [`Bundle`] trait for a struct; turning each of
 Let's try rewriting that code from above.
 
 ```rust
+# use bevy::prelude::*;
+#
+# #[derive(Component)]
+# struct Combatant;
+# 
+# #[derive(Component)]
+# struct Life(u8);
+# 
+# #[derive(Component)]
+# struct Stats {
+#     strength: u8,
+#     dexterity: u8,
+#     intelligence: u8,
+# }
+# 
+# #[derive(Component)]
+# enum Allegiance {
+#     Friendly,
+#     Hostile
+# }
+
 #[derive(Bundle)]
 struct CombatantBundle {
-    combatant: Combatant
+    combatant: Combatant,
     life: Life,
     stats: Stats,
     allegiance: Allegiance,
@@ -182,8 +234,8 @@ impl Default for CombatantBundle {
                 strength: 10,
                 dexterity: 10,
                 intelligence: 10,
-            }
-            allegiance: Allegiance::Neutral,
+            },
+            allegiance: Allegiance::Hostile,
         }
     }
 }
@@ -199,9 +251,9 @@ fn spawn_combatants_system(mut commands: Commands) {
                 strength: 15,
                 dexterity: 10,
                 intelligence: 8,
-            }
+            },
             allegiance: Allegiance::Friendly,
-            ..Default::default()
+            ..default()
         });
     
     commands
@@ -211,9 +263,9 @@ fn spawn_combatants_system(mut commands: Commands) {
                 strength: 17,
                 dexterity: 8,
                 intelligence: 6,
-            }
+            },
             allegiance: Allegiance::Hostile,
-            ..Default::default()
+            ..default()
         });
 }
 ```
@@ -230,6 +282,26 @@ Including duplicate components in your bundles in this way will cause a panic.
 With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
 
 ```rust
+# use bevy::prelude::*;
+#
+# #[derive(Component)]
+# struct Combatant;
+# 
+# #[derive(Component)]
+# struct Life(u8);
+#
+# #[derive(Component)]
+# struct Attack(u8);
+#
+# #[derive(Component)]
+# struct Defense(u8);
+#
+# #[derive(Component)]
+# enum Allegiance {
+#     Friendly,
+#     Hostile
+# }
+
 #[derive(Bundle)]
 struct AttackableBundle{
     life: Life,
@@ -239,13 +311,11 @@ struct AttackableBundle{
 
 #[derive(Bundle)]
 struct CombatantBundle {
-    combatant: Combatant
-    // This attribute macro marks our attackable_bundle field as a bundle (rather than a component),
+    combatant: Combatant,
+    // The #[bundle] attribute marks our attackable_bundle field as a bundle (rather than a component),
     // allowing Bevy to properly flatten it out when building the final entity
     #[bundle]
     attackable_bundle: AttackableBundle,
-    position: Position,
-    stats: Stats,
     allegiance: Allegiance,
 }
 
@@ -257,14 +327,8 @@ impl Default for CombatantBundle {
                 life: Life(10),
                 attack: Attack(5),
                 defense: Defense(1),
-            }
-            position: Position(0, 0),
-            stats: Stats {
-                strength: 10,
-                dexterity: 10,
-                intelligence: 10,
-            }
-            allegiance: Allegiance::Neutral,
+            },
+            allegiance: Allegiance::Hostile,
         }
     }
 }
