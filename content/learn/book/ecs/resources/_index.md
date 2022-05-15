@@ -107,8 +107,8 @@ It's harder to find the resources that your code needs, and like all commands, c
 
 ## Reading and writing from resources
 
-Once our resources have been added to the app, we can read and write to them by adding systems that refer to them using the [`Res`] and [`ResMut`] system parameters.
-Let's take a look at how this works in a cohesive context by building a tiny guessing game.
+Once our resources have been added to the app, we can read and write to them from systems using the [`Res`] and [`ResMut`] system parameters.
+Let's take a look at how this works by building a tiny guessing game.
 
 ```rust
 use bevy::prelude::*;
@@ -118,50 +118,54 @@ fn main() {
         .add_plugins(MinimalPlugins)
         .init_resource::<Secret>()
         .insert_resource(InputMode::Recording)
-        .add_system(record_secret.system())
-        .add_system(check_secret.system())
+        .add_system(record_secret)
+        // The system ordering here ensures that we don't spy on the input before it's entered
+        .add_system(check_secret.before(check_secret))
         .run();
 }
 
 /// Resource to store our secret key
 #[derive(Default)]
 struct Secret {
-   // The default value of Option<T> fields is always None
+    // The default value of Option<T> fields is always None
     val: Option<KeyCode>,
 }
 
-/// Resource to control the interaction mode of our game
+/// Resource that controls the effect of player input
 #[derive(PartialEq, Eq)]
 enum InputMode {
-    /// Stores inputs in the Secret resource
+    /// Stores input in the Secret resource
     Recording,
-    /// Compares inputs to the Secret resource
+    /// Compares input to the Secret resource
     Guessing,
 }
 
 /// Stores the keyboard input in our Secret resource
 fn record_secret(
+    // We need to use mut + ResMut for input_mode and secret
+    // because we change their values in this system
     mut input_mode: ResMut<InputMode>,
     mut secret: ResMut<Secret>,
-    mut input: ResMut<Input<KeyCode>>,
+    // input only needs a Res, since we're only reading the KeyCodes that were pressed
+    input: Res<Input<KeyCode>>,
 ) {
     // This system should only do work in the Recording input mode
-   // Note that we need to derefence out of the ResMut smart pointer
-   // using * to access the underlying InputMode data
+    // Note that we need to derefence out of the ResMut smart pointer
+    // using * to access the underlying InputMode data
     if *input_mode == InputMode::Recording {
-        // Only display the text prompt once, when the input_mode changes
+        // Only display the text prompt once, when the InputMode resource changes
         if input_mode.is_changed() {
             println!("Press a key to store a secret to be guessed by a friend!")
         }
 
-        // Input is stored in resources too!
+        // Player input is stored in resources too!
         // Here, we only want one key to store as our secret,
         // so we arbitarily grab the first key in case multiple keys are pressed at once
         let maybe_keycode = input.get_just_pressed().next();
 
         // maybe_keycode may be None, if no key was pressed
         // We only care about handling the case where a key was pressed,
-        // so we use `if let` to destructure our option
+        // so we use `if let` to destructure the Option<&Keycode> returned by .next()
         if let Some(keycode) = maybe_keycode {
             // Storing our input in the Secret resource
             secret.val = Some(*keycode);
@@ -169,21 +173,14 @@ fn record_secret(
             // Now that we've stored a Secret, we should swap to guessing it
             // Again, we need to derefence our resource to refer to the data rather than the wrapper
             *input_mode = InputMode::Guessing;
-
-            // Clear the input so that check_secret doesn't spy on this data the same frame that it's stored!
-   // Note that we could avoid doing this by ensuring that check_secret always runs before record_secret
-   // See the page on system ordering for information on how to do this
-            *input = Input::<KeyCode>::default();
         }
     }
 }
 
 /// Checks if the new input matches the stored secret
 fn check_secret(
-    // We need to use mut + ResMut for input_mode and secret since their value is changed
     mut input_mode: ResMut<InputMode>,
     mut secret: ResMut<Secret>,
-    // input only needs a Res, since we're only reading the KeyCodes that were pressed
     input: Res<Input<KeyCode>>,
 ) {
     if *input_mode == InputMode::Guessing {
@@ -192,15 +189,15 @@ fn check_secret(
         }
 
         let maybe_keycode = input.get_just_pressed().next();
-        if let Some(keycode) = maybe_keycode {
-            if Some(*keycode) == secret.val {
-                println!("You've guessed the secret!");
-                // Get a new secret if it was guessed successfully
-                secret.val = None;
-                *input_mode = InputMode::Recording;
-            } else {
-                println!("Nope! Try again.")
-            }
+        // maybe_keycode can either be Some(keycode) or None
+        // If it is None, it will never equal the value of our secret
+        if maybe_keycode == secret.val {
+            println!("You've guessed the secret!");
+            // Get a new secret if it was guessed successfully
+            secret.val = None;
+            *input_mode = InputMode::Recording;
+        } else {
+            println!("Nope! Try again.")
         }
     }
 }
