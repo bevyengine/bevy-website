@@ -7,19 +7,19 @@ insert_anchor_links = "right"
 +++
 
 Not all data is stored in the entity-component data storage.
-**Resources** are the blanket term for data that lives outside of entities and their components, but is still accessible by Bevy apps.
-Each resource has a unique type (you can only have one resource of each type), and can be accessed in systems by adding either [`Res`] (for immutable read-only access) or [`ResMut`] (for mutable read-write access) as a system parameter.
+**Resources** are not associated with a specific entity.
+In effect, resources serve as well-behaved global [singletons](https://en.wikipedia.org/wiki/Singleton_pattern).
+Each resource has a unique type `R`, and can be accessed in systems by adding either [`Res<R>`] (for immutable read-only access) or [`ResMut<R>`] (for mutable read-write access) as a system parameter.
+As a result, you can only have one resource of each type: inserting a resource of a type that already exists will overwrite the existing value.
 
-In effect, resources serve as well-behaved **global singletons**.
-They are accessible by any system in the app, and because you can only have one resource of each type, are unique.
 You might want to use resources for:
 
 - storing events
-- holding configuration data
-- storing simple global game state that you only need a single copy of (like a game's store)
-- interoperating with other libraries
-- providing faster or supplementary look-up data structures for entities (such as indexes or graphs)
-- storing reference-counted handles to assets (so then they're not unloaded when the last entity using it is despawned)
+- reading input data
+- recording game configuration (such as the current difficulty)
+- storing simple global game state that you only need a single copy of (like the player's current score)
+- interoperating with other non-Bevy Rust libraries
+- storing data structures that help you look up entities by their component values more quickly (such as indexes or graphs)
 
 [`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
@@ -30,69 +30,68 @@ Unlike components, resources do not need their own trait implementation: you can
 
 Like entities and their component data, resources are stored in your [`App`]'s [`World`] struct.
 Resources are typically added statically, via [`insert_resouce`] or [`init_resource`].
-
-[`insert_resource`] is used when you want to set the value of a resource manually, while [`init_resource`] is used when you want to automatically initialize the resources value using the [`Default`] or [`FromWorld`] trait.
+[`insert_resource`] is used when you want to set the value of a resource manually, while [`init_resource`] is used when you want to automatically initialize the resource's value using the [`Default`] or [`FromWorld`] trait.
 
 ```rust
 use bevy::prelude::*;
 
-// Resources can be tuple structs
 // Default can be derived for many simple resources,
 // with the default value of most numeric types being 0
 #[derive(Default)]
 struct Score(u64);
 
-// Resources can be ordinary namedstructs
 struct PlayerSupplies {
- gold: u64,
- wood: u64,
+    gold: u64,
+    wood: u64,
 }
 
 // The Default trait can be manually implemented to control initial values
 impl Default for PlayerSupplies {
- fn default() -> Self {
-  PlayerSupplies {
-   gold: 400,
-   wood: 200,
-  }
- }
+    fn default() -> Self {
+        PlayerSupplies {
+            gold: 400,
+            wood: 200,
+        }
+    }
 }
 
-// Resources can be enums
+// Enum resources are a great way to represent game state in a type-safe way
 enum Turn {
- Allied,
- Enemy
+    Allied,
+    Enemy,
 }
 
-fn main(){
- // Resources are typically inserted using AppBuilder methods
- App::build()
- // Uses the default() value provided by the derived Default trait
- .init_resource::<Score>()
- // Uses the default() value provided by the manual impl of the Default trait
- .init_resource::<PlayerSupplies>()
- // Uses the specific manual value of Turn::Allied to insert a resource of type Turn
- .insert_resource(Turn::Allied)
- // Sets the value of the standard Bevy resource `WindowDescriptor`,
- // leaving the unspecified fields as their default value
- .insert_resource(WindowDescriptor {
-  title: "I am a window!".to_string(),
-  width: 500.,
-  height: 300.,
-  vsync: true,
-  ..Default::default()
- })
- .add_plugins(DefaultPlugins)
- .run()
+fn main() {
+    // Resources are typically inserted using methods on `App`
+    App::build()
+        // Uses the default() value provided by the derived Default trait
+        .init_resource::<Score>()
+        // Uses the default() value provided by the manual impl of the Default trait
+        .init_resource::<PlayerSupplies>()
+        // Uses the specific value supplied (Turn::Allied) to insert a resource of type Turn
+        .insert_resource(Turn::Allied)
+        // Sets the value of the standard Bevy resource `WindowDescriptor`,
+        // leaving the unspecified fields as their default value
+        .insert_resource(WindowDescriptor {
+            title: "I am a window!".to_string(),
+            width: 500.,
+            height: 300.,
+            vsync: true,
+            ..default()
+        })
+        .add_plugins(DefaultPlugins)
+        .run()
 }
 ```
 
-In rare cases, you may need to add a resource later, once other parts of the world exist to ensure proper initialization.
+In rare cases, you may need to add a resource after app startup.
+Generally, this is because other resources or entities must exist to ensure proper initialization.
 For that, we can use the equivalent methods on [`Commands`].
 You can add, overwrite and even [`remove_resource`] dynamically in this way.
+Be careful when removing resources: systems will panic if a resource they are expecting is not found!
 
-Only use [`Commands`] to add resources where it's needed due to the need to initialize a resource with other data from the world.
-It's less clear, and like all commands, commands that insert resources are delayed and only take effect at the end of the current stage.
+Prefer adding resources via the methods on `App` whenever possible.
+It's harder to find the resources that your code needs, and like all commands, commands that insert resources are delayed and only take effect at the end of the current stage.
 
 [`'static`]: https://doc.rust-lang.org/rust-by-example/scope/lifetime/static_lifetime.html
 [`Send + Sync`]: https://doc.rust-lang.org/nomicon/send-and-sync.html
