@@ -203,14 +203,14 @@ fn check_secret(
 }
 ```
 
-## Singleton entity or Resource?
+## Singleton entity or resource?
 
-As discussed in [**Systems access data through queries**](../systems-queries/_index.md), [`Query::single`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single) is a convenient way to get access to the data of an entity when you know that exactly one entity will be returned by a query.
+As discussed in [**Fetching data with queries**](../systems-queries/_index.md), [`Query::single`](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single) is a convenient way to get access to the data of an entity when you know that exactly one entity will be returned by a query.
 So when should you use a singleton entity, and when should you use a resource?
 
-Let's list the advantage of each, beginning with resources:
+Let's list the advantages of each, beginning with resources:
 
-- fast and simple access model: no need for queries or unwrapping
+- fast and simple access model: no need for queries
 - will not be accidentally broken by later code that modifies your entity's components or creates more matching entities
 - can store data that is not thread-safe using [`NonSend`] resources
 - clearly communicates intent
@@ -222,7 +222,7 @@ By contrast, singleton entities are useful because they:
 - have more granular change detection: operating on a per component basis rather than the entire object
 - allows you to fetch only the data you immediately need, rather than the entire resource struct
 
-Overall, resources are a good default for one-off demands: they're clear and very ergonomic to access.
+Overall, resources are a good default for relatively isolated parts of your design: they're clear, robust and very ergonomic to access.
 You should turn to singleton entities when you want to share behavior with other entities (i.e. a singleton entity for the player is almost always going to be superior to a monolithic `Player` resource), or for when you want to be able to extend or modify behavior dynamically during gameplay.
 
 ## Complex resource initialization using `FromWorld`
