@@ -238,9 +238,9 @@ For advice on how to work with the [`World`] exposed by the [`FromWorld::from_wo
 
 [`FromWorld::from_world`]: https://docs.rs/bevy/latest/bevy/ecs/world/trait.FromWorld.html#tymethod.from_world
 
-## Optional Resources
+## Optional resources
 
-Sometimes, a resource may not exist by the time a regularly scheduled system is called.
+Sometimes, you may need to write a system that is robust to whether or not a resource exists.
 We can handle both the case where it exists and the case where it doesn't by requesting `Option<Res<T>>` (or other resource types like [`ResMut`], [`NonSend`] and [`NonSendMut`]) as a system parameter,
 and then branching on the resulting `Option<T>` returned.
 
@@ -266,16 +266,19 @@ struct Countdown {
 fn countdown(
     countdown: Option<ResMut<Countdown>>,
     mut commands: Commands,
+    // Under the hood, this data is stored in a ResMut<Events<AppExit>>
     mut app_exit: EventWriter<AppExit>,
 ) {
     match countdown {
-        // Resources can be inserted at runtime using commands
+        // If no Countdown resource exists, add one
         None => commands.insert_resource(Countdown { time_remaining: 10 }),
+        // If the resource exists, count it down
         Some(mut validated_countdown) => {
             info!("{} ticks remaining!", validated_countdown.time_remaining);
             if validated_countdown.time_remaining > 1 {
                 validated_countdown.time_remaining -= 1;
             } else {
+                // When we reach zero, exit the App
                 info!("Ka-BOOM!");
                 app_exit.send(AppExit);
             }
