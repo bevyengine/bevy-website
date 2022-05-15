@@ -89,7 +89,7 @@ fn despawn_all_non_player_entities(mut commands: Commands, query: Query<Entity, 
 // For player_query, Q is (&Position, &mut Targeting) and F is With<Player>
 // For target_query, Q is (Entity, &Position, &TargetPriority) and F is (With<Enemy>, Without<Player>)
 fn select_target(
-    player_query: Query<(&Position, &mut Targeting), With<Player>>,
+    mut player_query: Query<(&Position, &mut Targeting), With<Player>>,
     target_query: Query<(Entity, &Position, &TargetPriority), (With<Enemy>, Without<Player>)>
 ) {
 }
@@ -134,7 +134,7 @@ fn increment_age(mut query: Query<&mut Age>) {
     }
 }
 
-fn take_damage(query: Query<(&mut Life, &mut IncomingDamage)>) {
+fn take_damage(mut query: Query<(&mut Life, &mut IncomingDamage)>) {
     // You can unpack your query iterator into several variables
     for (mut life, mut incoming_damage) in query.iter_mut() {
         life.val -= incoming_damage.val;
@@ -328,7 +328,7 @@ enum PreparationStep {
 #[derive(Component)]
 struct NeedsCooking;
 
-fn prepare_fruits(query: Query<(&mut Fruit, Option<&SpecialPreparation>>, Option<&NeedsCooking>)>){
+fn prepare_fruits(mut query: Query<(&mut Fruit, Option<&SpecialPreparation>>, Option<&NeedsCooking>)>){
     for (fruit, maybe_preparation, maybe_needs_cooking) in query.iter() {
         if let Some(preparation) = maybe_preparation {
             for step in preparation.steps {
@@ -370,7 +370,7 @@ In most cases, simply adding a second query as another system parameter works pe
 
 fn defense_aura_system(
     aura_query: Query<&Transform, With<Aura>>,
-    target_query: Query<(&mut Defense, &Transform), With<Creature>>) {
+    mut target_query: Query<(&mut Defense, &Transform), With<Creature>>) {
     }
 ```
 
@@ -398,7 +398,7 @@ Of course, you already knew that, and have carefully thought about the architect
 
 fn camera_follow_system(
     player_query: Query<&Transform, With<Player>>,
-    camera_query: Query<&mut Transform, With<Camera>>,
+    mut camera_query: Query<&mut Transform, With<Camera>>,
 ) {
     let player_transform = player_query.single();
     let camera_query = camera_query.single_mut();
@@ -418,7 +418,7 @@ We can fix this by making *sure* our queries our disjoint, no matter what bizarr
 
 fn camera_follow_system(
     player_query: Query<&Transform, With<Player>>,
-    camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,
+    mut camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,
 ) {
     let player_transform = player_query.single();
     let camera_query = camera_query.single_mut();
@@ -438,7 +438,7 @@ Let's try this approach:
 # struct Player;
 
 fn camera_follow_system(
-    queries: ParamSet<(
+    mut queries: ParamSet<(
         Query<&Transform, With<Player>>, 
         Query<&mut Transform, With<Camera>>
     )>
