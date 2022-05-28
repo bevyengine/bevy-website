@@ -1,6 +1,7 @@
 public
 **/.DS_Store
 .idea/
+.vscode/
 content/assets
 content/learn/errors
 content/examples
