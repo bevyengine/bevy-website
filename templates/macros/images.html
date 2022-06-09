@@ -1,6 +1,6 @@
 {% macro resize_image(path, width, height) -%}
     {%- if path is ending_with(".svg") or path is ending_with(".gif") -%}
-        {{- path -}}
+        {{- get_url(path=path) -}}
     {%- else -%}
         {%- set image = resize_image(path=path, width=width, height=height, op="fit") -%}
         {{- image.url -}}
