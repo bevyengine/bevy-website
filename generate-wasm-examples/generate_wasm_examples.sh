@@ -42,7 +42,7 @@ add_category()
         # Patch generated JS to allow to inject custom `fetch` with loading feedback.
         # See: https://github.com/bevyengine/bevy-website/pull/355
         sed -i.bak \
-          -e 's/getObject(arg0).fetch(/window.customFetch(/' \
+          -e 's/getObject(arg0).fetch(/window.loadingBarFetch(/' \
           ../../content/examples/$category_slug/$example_slug/$example.js
 
         echo "+++
