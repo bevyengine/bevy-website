@@ -46,7 +46,7 @@ add_category()
           -e 's/input = fetch(/input = customFetch(/' \
           -e 's/getObject(arg0).fetch(/customFetch(/' \
           -e 's/const imports = getImports();/const imports = getImports(customFetch);/' \
-          -e 's/function getImports() {/function getImports(customFetch) {' \
+          -e 's/function getImports() {/function getImports(customFetch) {/' \
           ../../content/examples/$category_slug/$example_slug/$example.js
 
         echo "+++
