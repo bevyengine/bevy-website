@@ -43,6 +43,7 @@ add_category()
         # See: https://github.com/bevyengine/bevy-website/pull/355
         sed -i.bak \
           -e 's/getObject(arg0).fetch(/window.bevyLoadingBarFetch(/' \
+          -e 's/input = fetch(/input = window.bevyLoadingBarFetch(/' \
           ../../content/examples/$category_slug/$example_slug/$example.js
 
         echo "+++
