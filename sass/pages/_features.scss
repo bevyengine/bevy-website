@@ -57,11 +57,19 @@
 }
 
 .feature-image, .feature-text {
-    min-width: 535px;
+    width: 100%;
     max-width: 535px;
     border-width: 1.8rem;
     border-style: solid;
     border-color: transparent;
+
+    @media #{$bp-tablet-portrait-up} {
+        width: 50%;
+    }
+
+    @media #{$bp-desktop-up} {
+        min-width: 535px;
+    }
 }
 
 .feature-sublist {
