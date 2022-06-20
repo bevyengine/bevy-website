@@ -36,7 +36,8 @@
 
     &__message {
         display: none;
-        font-size: 1.2rem;
+        font-size: 1.4rem;
+        font-weight: 500;
         color: #797979;
         margin-left: 12px;
 
@@ -45,7 +46,7 @@
         }
 
         @media #{$bp-desktop-up} {
-            font-size: 1.375rem;
+            font-size: 1.625rem;
         }
 
         &:empty {
