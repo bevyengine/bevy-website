@@ -2,11 +2,13 @@
     $color-blue: #799bbb;
     $color-pink: #bb799c;
 
+    display: inline-flex;
+    align-items: center;
     background-color: $color-blue;
     border: 3px solid #576f86;
     padding: 6px 8px;
     border-radius: $border-radius;
-    font-size: 1.125rem;
+    font-size: 1.2rem;
     font-weight: 500;
     transition: transform $duration-fast;
 
@@ -26,8 +28,8 @@
     &__icon {
         height: 1.1em;
         vertical-align: middle;
-        margin-bottom: 0.1em;
-        margin-left: -0.1em;
+        margin-left: 0.2em;
+        font-size: 0.9em;
     }
 
     &--pink {
