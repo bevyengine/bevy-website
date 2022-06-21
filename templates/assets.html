@@ -1,16 +1,22 @@
-{% extends "layouts/base.html" %}
+{% extends "layouts/page-with-menu.html" %}
 {% import "macros/assets.html" as assets_macros %}
 
-{% block content %}
-<div class="assets">
-    <input type="checkbox" style="display: none" id="show-book-nav" />
-    <nav class="book-nav" role="navigation">
-        {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
-    </nav>
-    <div class="book-content">
+{% block page_name %}Assets{% endblock %}
+
+{% block mobile_page_menu %}
+    {{assets_macros::assets_menu(prefix="mobile-menu", root=section)}}
+{% endblock %}
+
+{% block page_menu %}
+    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
+{% endblock %}
+
+{% block page_content %}
+    <div class="assets">
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
+        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
         <h1 id="{{ section.title | slugify }}" class="asset-section">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
@@ -34,7 +40,8 @@
         {% for subsection in subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <h3 id="{{ section.title | slugify }}">
+        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
+        <h3 class="asset-subsection">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
         <div class="item-grid">
@@ -50,5 +57,4 @@
         {% endfor %}
         {% endfor %}
     </div>
-</div>
-{% endblock content %}
+{% endblock %}
