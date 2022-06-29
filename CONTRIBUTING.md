@@ -1,6 +1,28 @@
-# Writing the Bevy book
+# Contributing
 
-So, you want to help write some learning material for the [Bevy website](https://bevyengine.org/)?
+So, you want to help with the [Bevy website](https://bevyengine.org/)?
+
+## Building the website
+
+The Bevy website is built using the Zola static site engine. In our experience, it is fast, flexible, and straightforward to use.
+
+To check out any local changes you've made:
+
+1. [Download Zola](https://www.getzola.org/).
+2. Clone the Bevy Website git repo and enter that directory:
+    1. `git clone https://github.com/bevyengine/bevy-website.git`
+    2. `cd bevy-website`
+3. Start the Zola server with `zola serve`.
+
+A local server should start and you should be able to access a local version of the website from there.
+
+## Testing changes to book code snippets
+
+The code in the book is compiled and tested to make sure that the examples work for readers.
+
+To check your local changes, move into the `code-validation` folder of this project using `cd code-validation`, and then run `cargo test`. If you write a new section of the book, you have to add it in `code-validation/src/lib.rs` to enable code validation for it.
+
+## Learning material structure
 
 As you probably noticed, our introductory learning material is split into two main sections:
 
@@ -26,7 +48,7 @@ Each of these requires their own complementary learning paths that branch as soo
 
 Once users have completed the introductory learning materials in their path of choice, they can begin creating their own games or move on to our advanced examples to see how everything comes together in a realistic way.
 
-## Bevy Quick Start: the example-first path
+### Bevy Quick Start: the example-first path
 
 Users following the example-first path will tend to take the following route:
 
@@ -60,7 +82,7 @@ This path should prioritize:
 5. Ease of extending the quick-start game with their own tweaks.
 6. Explaining how to get unstuck, through documentation, community help and filing issues.
 
-## The Bevy Book: the definition-first path
+### The Bevy Book: the definition-first path
 
 Users following the definition-first path will tend to take the following route:
 
