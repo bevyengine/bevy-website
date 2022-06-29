@@ -122,6 +122,8 @@ rename `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`
 
 You can no longer use `.system()`. It was deprecated in 0.7.0. You can just remove the method call.
 
+If you needed this for tests purposes, you can use `bevy_ecs::system::assert_is_system` instead.
+
 ### [Change gamepad.rs tuples to normal structs](https://github.com/bevyengine/bevy/pull/4519)
 
 The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a new() function. To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of .0 and .1.
@@ -295,6 +297,6 @@ Exhaustive matches on `RenderGraphRunnerError` will need to add a branch to hand
 
 ### [Mark mutable APIs under ECS storage as pub(crate)](https://github.com/bevyengine/bevy/pull/5065)
 
-<!-- TODO not sure what to say here -->
-
 <!-- Dear God, I hope not. -->
+
+If you experienced any problems caused by this change, please [create an issue](https://github.com/bevyengine/bevy/issues) explaining _in details_ what you were doing with those apis.
