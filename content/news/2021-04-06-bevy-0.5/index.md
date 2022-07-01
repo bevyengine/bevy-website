@@ -1143,7 +1143,7 @@ We also plan on breaking ground on the Bevy Editor as soon as we converge on a f
 
 [Sponsorships](https://github.com/sponsors/cart) help make full time work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring @cart](https://github.com/sponsors/cart) ... every bit helps!
 
-<a class="header-item header-button header-button-donate" style="margin-left: 0px;" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+<a class="button button--pink header__cta" href="https://github.com/sponsors/cart">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
 
 ## Contributors
 
