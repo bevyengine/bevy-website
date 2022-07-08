@@ -1,4 +1,9 @@
 .assets {
+    .assets-intro {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
     .asset-section {
         font-size: 2.4rem;
         margin: 0 0 20px;
@@ -36,5 +41,6 @@
 
     a {
         text-decoration: none;
+        color: $link-color;
     }
 }
