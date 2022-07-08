@@ -13,6 +13,11 @@
 
 {% block page_content %}
 <div class="assets">
+    <div class="assets-intro">
+        These examples demonstrate how to use Bevy's features in a minimal, easy to understand way. Click an example below to run it in
+        your browser (using WASM + WebGL) and view the source code. You can also view these examples (and others) in the
+        <a href="https://github.com/bevyengine/bevy/tree/latest/examples#examples">Bevy repo</a>.
+    </div>
     {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
