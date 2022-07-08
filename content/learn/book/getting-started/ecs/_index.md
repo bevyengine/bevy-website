@@ -64,7 +64,7 @@ Now run your App again using `cargo run`. You should see `hello world!` printed 
 
 Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Let's start simple with a `Person` component.
 
-Add this struct to `main.rs`:
+Add this struct to your `main.rs` file:
 
 ```rs
 #[derive(Component)]
