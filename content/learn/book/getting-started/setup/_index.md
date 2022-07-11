@@ -92,6 +92,24 @@ If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo
 resolver = "2" # Important! wgpu/Bevy needs this!
 ```
 
+### Compile with Performance Optimizations
+
+While it may not be an issue for simple projects, debug builds in Rust can be _very slow_ - especially when you start using Bevy to make real games.
+
+It's not uncommon for debug builds using the default configuration to take multiple minutes to load large 3D models, or for the framerate for simple scenes to drop to near-unplayable levels.
+
+Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles!
+
+```toml
+# Enable only a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+```
+
 ### Enable Fast Compiles (Optional)
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
