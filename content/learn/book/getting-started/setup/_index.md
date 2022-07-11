@@ -98,10 +98,10 @@ While it may not be an issue for simple projects, debug builds in Rust can be _v
 
 It's not uncommon for debug builds using the default configuration to take multiple minutes to load large 3D models, or for the framerate for simple scenes to drop to near-unplayable levels.
 
-Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles!
+Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add this to your `Cargo.toml`:
 
 ```toml
-# Enable only a small amount of optimization in debug mode
+# Enable a small amount of optimization in debug mode
 [profile.dev]
 opt-level = 1
 
@@ -109,6 +109,8 @@ opt-level = 1
 [profile.dev.package."*"]
 opt-level = 3
 ```
+
+You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
 
 ### Enable Fast Compiles (Optional)
 
