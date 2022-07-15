@@ -83,7 +83,7 @@ The `ElementState` type has been renamed to `ButtonState`.
 
 ### [Improve docs and naming for RawWindowHandle functionality](https://github.com/bevyengine/bevy/pull/4335)
 
-rename `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`
+Renamed `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`.
 
 ### [Migrate to encase from crevice](https://github.com/bevyengine/bevy/pull/4339)
 
