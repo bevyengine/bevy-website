@@ -127,7 +127,8 @@ If you needed this for tests purposes, you can use `bevy_ecs::system::assert_is_
 
 ### [Change gamepad.rs tuples to normal structs](https://github.com/bevyengine/bevy/pull/4519)
 
-The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a new() function. To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of .0 and .1.
+The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a new() function.
+To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of .0 and .1.
 
 ### [Remove EntityMut::get_unchecked](https://github.com/bevyengine/bevy/pull/4547)
 
