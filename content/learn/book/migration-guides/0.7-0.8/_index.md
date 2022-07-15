@@ -186,7 +186,7 @@ fn parallel_system(query: Query<&MyComponent>) {
 }
 ```
 
-If using `Query(State)` outside of a system run by the scheduler, you may need to manually configure and initialize a `ComputeTaskPool` as a resource in the `World`.
+If using `Query` or `QueryState` outside of a system run by the scheduler, you may need to manually configure and initialize a `ComputeTaskPool` as a resource in the `World`.
 
 ### [Fail to compile on 16-bit platforms](https://github.com/bevyengine/bevy/pull/4736)
 
