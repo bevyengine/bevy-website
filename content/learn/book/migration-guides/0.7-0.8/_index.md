@@ -383,7 +383,8 @@ Please note that all existing extract systems need to be updated to match this n
 
 ### [Improve Gamepad DPad Button Detection](https://github.com/bevyengine/bevy/pull/5220)
 
-If your game reads gamepad events or queries the axis state of GamePadAxisType::DPadX or GamePadAxisType::DPadY, then you must migrate your code to check whether or not the GamepadButtonType::DPadUp, GamepadButtonType::DPadDown, etc. buttons were pressed instead.
+D-pad inputs can no longer be accessed as axes.
+Acess them as gamepad buttons instead.
 
 ### [Change window position types from tuple to vec](https://github.com/bevyengine/bevy/pull/5276)
 
