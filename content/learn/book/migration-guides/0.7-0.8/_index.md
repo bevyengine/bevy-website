@@ -308,13 +308,92 @@ Thread pools don't need to be stored in a resource anymore since they are now st
 
 ```rust
 // 0.7
-fn spawn_tasks(mut commands: Commands, thread_pool: Res<AsyncComputeTaskPool>) {
+fn spawn_tasks(thread_pool: Res<AsyncComputeTaskPool>) {
     // Do something with thread_pool
 }
 
 // 0.8
-fn spawn_tasks(mut commands: Commands) {
+fn spawn_tasks() {
     let thread_pool = AsyncComputeTaskPool::get();
     // Do something with thread_pool
 }
 ```
+
+### [Simplify design for *Labels](https://github.com/bevyengine/bevy/pull/4957)
+
+* Any previous use of `Box<dyn SystemLabel>` should be replaced with `SystemLabelId`.
+* `AsSystemLabel` trait has been modified.
+  * No more output generics.
+  * Method `as_system_label` now returns `SystemLabelId`, removing an unnecessary level of indirection.
+* If you _need_ a label that is determined at runtime, you can use `Box::leak`. Not recommended.
+
+### [Move get_short_name utility method from bevy_reflect into bevy_utils](https://github.com/bevyengine/bevy/pull/5174)
+
+* added bevy_utils::get_short_name, which strips the path from a type name for convenient display.
+* removed the TypeRegistry::get_short_name method. Use the function in bevy_utils instead.
+
+### [Remove dead SystemLabelMarker struct](https://github.com/bevyengine/bevy/pull/5190)
+
+This struct had no internal use, docs, or intuitable external use.
+
+It has been removed.
+
+### [Add reflection for resources](https://github.com/bevyengine/bevy/pull/5175)
+
+Rename `ReflectComponent::add_component` into `ReflectComponent::insert_component`.
+
+### [Make reflect_partial_eq return more accurate results](https://github.com/bevyengine/bevy/pull/5210)
+
+Updated [struct_trait](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/struct_trait.rs#L455-L457), [tuple_struct](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/tuple_struct.rs#L366-L368), [tuple](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/tuple.rs#L386), [array](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/array.rs#L335-L337), [list](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/list.rs#L309-L311) and [map](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/map.rs#L361-L363) to return `None` when comparison couldn't be performed.
+
+### [Rename CameraUi](https://github.com/bevyengine/bevy/pull/5234)
+
+Rename CameraUi to UiCameraConfig
+
+### [Make RenderStage::Extract run on the render world](https://github.com/bevyengine/bevy/pull/4402)
+
+The `Extract` `RenderStage` now runs on the render world (instead of the main world as before).
+You must use the `Extract` `SystemParam` to access the main world during the extract phase. `Extract` takes a single type parameter, which is any system parameter (such as `Res`, `Query` etc.). It will extract this from the main world, and returns the result of this extraction when `value` is called on it.
+
+```rust
+// 0.7
+fn extract_clouds(mut commands: Commands, clouds: Query<Entity, With<Cloud>>) {
+    for cloud in clouds.iter() {
+        commands.get_or_spawn(cloud).insert(Cloud);
+    }
+}
+
+// 0.8
+fn extract_clouds(mut commands: Commands, mut clouds: Extract<Query<Entity, With<Cloud>>>) {
+    for cloud in clouds.value().iter() {
+        commands.get_or_spawn(cloud).insert(Cloud);
+    }
+}
+```
+
+You can now also access resources from the render world using the normal system parameters during `Extract`:
+
+```rust
+fn extract_assets(mut render_assets: ResMut<MyAssets>, source_assets: Extract<Res<MyAssets>>) {
+     *render_assets = source_assets.clone();
+}
+```
+
+Please note that all existing extract systems need to be updated to match this new style; even if they currently compile they will not run as expected. A warning will be emitted on a best-effort basis if this is not met.
+
+### [Improve Gamepad DPad Button Detection](https://github.com/bevyengine/bevy/pull/5220)
+
+If your game reads gamepad events or queries the axis state of GamePadAxisType::DPadX or GamePadAxisType::DPadY, then you must migrate your code to check whether or not the GamepadButtonType::DPadUp, GamepadButtonType::DPadDown, etc. buttons were pressed instead.
+
+### [Change window position types from tuple to vec](https://github.com/bevyengine/bevy/pull/5276)
+
+Changed the following fields
+
+* `WindowCommand::SetWindowMode.resolution` from `(u32, u32)` to `UVec2`
+* `WindowCommand::SetResolution.logical_resolution` from `(f32, f32)` to `Vec2`
+
+### [Full documentation for bevy_asset](https://github.com/bevyengine/bevy/pull/3536)
+
+* Rename `FileAssetIo::get_root_path` uses to `FileAssetIo::get_base_path`
+
+    `FileAssetIo::root_path()` is a getter for the `root_path` field, while `FileAssetIo::get_root_path` returned the parent directory of the asset root path, which was the executable's directory unless `CARGO_MANIFEST_DIR` was set. This change solves the ambiguity between the two methods.
