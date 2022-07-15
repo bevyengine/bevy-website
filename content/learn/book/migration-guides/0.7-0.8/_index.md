@@ -232,7 +232,7 @@ UI no longer requires a dedicated camera. `UiCameraBundle` has been removed. `Ca
 ```rust
 commands
     .spawn_bundle(Camera3dBundle::default())
-    .insert(CameraUi {
+    .insert(UiCameraConfig {
         is_enabled: false,
         ..default()
     })
