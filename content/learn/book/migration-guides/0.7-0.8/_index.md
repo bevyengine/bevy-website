@@ -190,7 +190,10 @@ If using `Query` or `QueryState` outside of a system run by the scheduler, you m
 
 ### [Fail to compile on 16-bit platforms](https://github.com/bevyengine/bevy/pull/4736)
 
-`bevy_ecs` will now explicitly fail to compile on 16-bit platforms. If this is required, there is currently no alternative. Please file an issue (<https://github.com/bevyengine/bevy/issues>) to help detail your use case.
+`bevy_ecs` will now explicitly fail to compile on 16-bit platforms, as the behavior was undefined.
+
+There is currently no alternative, but we're open to adding support.
+Please file an issue (<https://github.com/bevyengine/bevy/issues>) to help detail your use case.
 
 ### [Camera Driven Rendering](https://github.com/bevyengine/bevy/pull/4745)
 
