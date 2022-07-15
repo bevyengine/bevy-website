@@ -79,7 +79,7 @@ The `Rect` type has been renamed to `UiRect`.
 
 ### [Rename ElementState to ButtonState](https://github.com/bevyengine/bevy/pull/4314)
 
-The `ElementState` type received a rename and is now called `ButtonState`. To migrate you just have to change every occurrence of `ElementState` to `ButtonState`.
+The `ElementState` type has been renamed to `ButtonState`.
 
 ### [Improve docs and naming for RawWindowHandle functionality](https://github.com/bevyengine/bevy/pull/4335)
 
