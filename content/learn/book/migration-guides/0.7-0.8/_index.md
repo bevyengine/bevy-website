@@ -299,4 +299,4 @@ Exhaustive matches on `RenderGraphRunnerError` will need to add a branch to hand
 
 <!-- Dear God, I hope not. -->
 
-If you experienced any problems caused by this change, please [create an issue](https://github.com/bevyengine/bevy/issues) explaining _in details_ what you were doing with those apis.
+If you experienced any problems caused by this change, please [create an issue](https://github.com/bevyengine/bevy/issues) explaining _in detail_ what you were doing with those apis.
