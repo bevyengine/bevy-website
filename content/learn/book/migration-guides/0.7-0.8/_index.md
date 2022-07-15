@@ -346,10 +346,6 @@ Rename `ReflectComponent::add_component` into `ReflectComponent::insert_componen
 
 Updated [struct_trait](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/struct_trait.rs#L455-L457), [tuple_struct](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/tuple_struct.rs#L366-L368), [tuple](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/tuple.rs#L386), [array](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/array.rs#L335-L337), [list](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/list.rs#L309-L311) and [map](https://github.com/bevyengine/bevy/blob/dfe969005264fff54060f9fb148639f80f9cfb29/crates/bevy_reflect/src/map.rs#L361-L363) to return `None` when comparison couldn't be performed.
 
-### [Rename CameraUi](https://github.com/bevyengine/bevy/pull/5234)
-
-Rename CameraUi to UiCameraConfig
-
 ### [Make RenderStage::Extract run on the render world](https://github.com/bevyengine/bevy/pull/4402)
 
 The `Extract` `RenderStage` now runs on the render world (instead of the main world as before).
