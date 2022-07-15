@@ -18,6 +18,7 @@ Adds ability to specify scaling factor for `WindowSize`, size of the fixed axis 
 ### [Allow closing windows at runtime](https://github.com/bevyengine/bevy/pull/3575)
 
 `bevy::input::system::exit_on_esc_system` has been removed. Use `bevy::window::close_on_esc` instead.
+
 `CloseWindow` has been removed. Use `Window::close` instead.
 The Close variant has been added to `WindowCommand`. Handle this by closing the relevant window.
 
@@ -300,3 +301,20 @@ Exhaustive matches on `RenderGraphRunnerError` will need to add a branch to hand
 <!-- Dear God, I hope not. -->
 
 If you experienced any problems caused by this change, please [create an issue](https://github.com/bevyengine/bevy/issues) explaining _in detail_ what you were doing with those apis.
+
+### [Add global init and get accessors for all newtyped TaskPools](https://github.com/bevyengine/bevy/pull/2250)
+
+Thread pools don't need to be stored in a resource anymore since they are now stored globally. You can now use `get()` to access it.
+
+```rust
+// 0.7
+fn spawn_tasks(mut commands: Commands, thread_pool: Res<AsyncComputeTaskPool>) {
+    // Do something with thread_pool
+}
+
+// 0.8
+fn spawn_tasks(mut commands: Commands) {
+    let thread_pool = AsyncComputeTaskPool::get();
+    // Do something with thread_pool
+}
+```
