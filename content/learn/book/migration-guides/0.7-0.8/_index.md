@@ -75,7 +75,7 @@ Replace imports of `bevy::core::FloatOrd` with `bevy::utils::FloatOrd`.
 
 ### [Move Rect to bevy_ui and rename it to UiRect](https://github.com/bevyengine/bevy/pull/4276)
 
-The `Rect` type got renamed to `UiRect`. To migrate you just have to change every occurrence of `Rect` to `UiRect`.
+The `Rect` type has been renamed to `UiRect`.
 
 ### [Rename ElementState to ButtonState](https://github.com/bevyengine/bevy/pull/4314)
 
