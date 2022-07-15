@@ -234,7 +234,7 @@ UI no longer requires a dedicated camera. `UiCameraBundle` has been removed. `Ca
 commands
     .spawn_bundle(Camera3dBundle::default())
     .insert(UiCameraConfig {
-        is_enabled: false,
+        show_ui: false,
         ..default()
     })
 ```
