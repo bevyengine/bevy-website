@@ -80,8 +80,11 @@
             grid-area: tags;
             display: grid;
             grid-template-areas: "versions licenses";
-
             padding: 0.3rem;
+        }
+
+        &__tag-icon {
+            display: flex;
 
             img, svg {
                 height: 1.2rem;
