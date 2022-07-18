@@ -19,7 +19,6 @@
     }
 
     .asset-card {
-        height: 19rem;
         overflow: hidden;
         border-radius: $border-radius;
         background-color: $syntax-theme-background;
@@ -34,7 +33,7 @@
         &__banner {
             display: block;
             position: relative;
-            height: 11rem;
+            height: 10rem;
             background-color: $default-image-background-color;
 
             img {
@@ -60,7 +59,7 @@
         &__description {
             padding: 0.3rem 0.5rem;
             font-size: 1rem;
-            height: 5.2rem;
+            height: 5.5rem;
             color: $color-white;
         }
 
