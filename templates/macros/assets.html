@@ -58,7 +58,8 @@
         <a class="tree-menu__link" href="#{{section.title | slugify}}">{{ section.title }}</a>
         {% if section.subsections %}
         <label class="tree-menu__toggle" for="{{id}}">
-            <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg" alt="Tree menu toggle">
+            <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg"
+                title="Toggle {{section.title}} section">
         </label>
         {% endif %}
     </div>
