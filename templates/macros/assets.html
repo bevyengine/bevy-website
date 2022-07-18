@@ -23,39 +23,36 @@
 
 
 {% macro card(post) %}
-<div class="card" id="{{ post.title | slugify }}">
+<div class="asset-card" id="{{ post.title | slugify }}">
     <a href="{{ post.extra.link }}">
-        <div class="card-banner">
-            <div class="card-title"><span class="name">{{post.title}}</span> {% if post.extra.version %}<span
-                    class=version>{{post.extra.version}}</span>{% endif %}
-            </div>
+        <div class="asset-card__banner">
+            <div class="asset-card__title">{{post.title}}</div>
             {% if post.extra.image %}
             <img src="{{ image_macros::resize_image(path=post.extra.image, width=340, height=340) }}" />
             {% endif %}
         </div>
-        <div class="card-text">
-            <div class="card-description">
-                {{ post.description | striptags | truncate(length=140) | safe }}
-            </div>
-            <div class="tags">
-                {% if post.extra.bevy_versions %}
-                <div class="supported-versions">
-                    {{ assets_macros::bevy_logo_svg() }}
-                    {% for version in post.extra.bevy_versions %}
-                    <span class="tag">{{version}}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                {% if post.extra.licenses %}
-                <div class="licenses">
-                    {{ assets_macros::license_logo_svg() }}
-                    {% for license in post.extra.licenses %}
-                    <span class="tag">{{license}}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
+        <div class="asset-card__description">
+            {{ post.description | striptags | truncate(length=120) | safe }}
         </div>
+        <div class="asset-card__tags">
+            {% if post.extra.bevy_versions %}
+            <ul class="asset-card__bevy-versions">
+                {{ assets_macros::bevy_logo_svg() }}
+                {% for version in post.extra.bevy_versions %}
+                <li class="asset-card__tag asset-card__tag">{{version}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% if post.extra.licenses %}
+            <ul class="asset-card__licenses">
+                {{ assets_macros::license_logo_svg() }}
+                {% for license in post.extra.licenses %}
+                <li class="asset-card__tag">{{license}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
     </a>
 </div>
 {% endmacro card %}

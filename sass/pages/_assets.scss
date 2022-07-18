@@ -18,15 +18,20 @@
         margin-bottom: 52px;
     }
 
-    .card {
+    .asset-card {
         height: 19rem;
+        overflow: hidden;
+        border-radius: $border-radius;
+        background-color: $syntax-theme-background;
+        font-style: normal;
+        border: 2px solid #383838;
 
         &:hover {
             background-color: $card-hover-background;
             border: 2px solid #6b6b6b;
         }
 
-        .card-banner {
+        &__banner {
             display: block;
             position: relative;
             height: 11rem;
@@ -37,72 +42,65 @@
                 height: 100%;
                 object-fit: contain;
             }
+        }
 
-            .card-title {
-                position: absolute;
-                width: 100%;
-                bottom: 0;
-                padding: 0.3rem;
-                background-color: rgba(0, 0, 0, 0.5);
-                color: silver;
-                font-weight: bold;
-                font-size: 1.2rem;
-                overflow-wrap: break-word;
+        &__title {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            padding: 0.3rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            font-size: 1.2rem;
+            overflow-wrap: break-word;
+            color: $color-white;
+        }
 
-                .name {
-                    color: whitesmoke;
-                }
 
-                .version {
-                    color: rgb(122, 122, 133);
-                    float: right;
-                }
+        &__description {
+            padding: 0.3rem 0.5rem;
+            font-size: 1rem;
+            height: 5.2rem;
+            color: $color-white;
+        }
+
+        &__bevy-versions {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        &__licenses {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            float: right;
+        }
+
+        &__tags {
+            padding: 0.3rem 0.5rem;
+            display: flex;
+            justify-content: space-between;
+
+            svg {
+                height: 1.2rem;
+                width: 1.2rem;
+                fill: rgb(149, 149, 157);
             }
         }
 
-        .card-text {
-            display: block;
-            padding: 0.3rem 0.5rem;
-            height: auto;
+        &__tag {
+            padding: .3em .5em;
+            margin-right: .5em;
+            border-radius: .3em;
+            font-size: .85em;
+            background: rgb(89, 89, 94);
+            color: $color-white;
 
-            .card-description {
-                font-size: 1rem;
-                height: 5rem;
-            }
-
-            .tags {
-                margin-top: 5px;
-
-                .tag {
-                    padding: 0.2rem 0.4rem;
-                    border-radius: 0.4rem;
-                    font-size: 0.9rem;
-                    color: whitesmoke;
-                    font-weight: 400;
-                    background-color: rgb(89, 89, 94);
-
-                    &.supported {
-                        font-weight: 500;
-                        background-color: rgb(110, 110, 247);
-                    }
-                }
-
-                svg {
-                    height: 1.2rem;
-                    width: 1.2rem;
-                    fill: rgb(149, 149, 157);
-                }
-
-                .supported-versions {
-                    display: inline-flex;
-                    gap: .25rem;
-                }
-
-                .licenses {
-                    float: right;
-                    display: inline-flex;
-                    gap: .25rem;
-                }
+            &--supported {
+                background-color: rgb(110, 110, 247);
             }
         }
 
