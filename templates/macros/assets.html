@@ -24,7 +24,8 @@
         <div class="asset-card__tags">
             {% if post.extra.bevy_versions %}
             <div class="asset-card__tag-list asset-card__bevy-versions">
-                <img src="/assets/bevy_icon_dark.svg" title="Supported bevy versions">
+                <img src="/assets/bevy_icon_dark.svg" title="Supported bevy versions" 
+                    alt="Supported bevy versions">
                 {% for version in post.extra.bevy_versions %}
                 <span class="asset-card__tag">{{version}}</span>
                 {% endfor %}
@@ -59,6 +60,7 @@
         {% if section.subsections %}
         <label class="tree-menu__toggle" for="{{id}}">
             <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg"
+                alt="Toggle {{section.title}} section"
                 title="Toggle {{section.title}} section">
         </label>
         {% endif %}
