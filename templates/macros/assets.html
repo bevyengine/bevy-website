@@ -23,8 +23,8 @@
 
 
 {% macro card(post) %}
-<div class="asset-card" id="{{ post.title | slugify }}">
-    <a href="{{ post.extra.link }}">
+<div id="{{ post.title | slugify }}">
+    <a class="asset-card" href="{{ post.extra.link }}">
         <div class="asset-card__banner">
             <div class="asset-card__title">{{post.title}}</div>
             {% if post.extra.image %}
@@ -36,23 +36,22 @@
         </div>
         <div class="asset-card__tags">
             {% if post.extra.bevy_versions %}
-            <ul class="asset-card__bevy-versions">
+            <div class="asset-card__tag-list asset-card__bevy-versions">
                 {{ assets_macros::bevy_logo_svg() }}
                 {% for version in post.extra.bevy_versions %}
-                <li class="asset-card__tag asset-card__tag">{{version}}</li>
+                <span class="asset-card__tag">{{version}}</span>
                 {% endfor %}
-            </ul>
+            </div>
             {% endif %}
             {% if post.extra.licenses %}
-            <ul class="asset-card__licenses">
+            <div class="asset-card__tag-list asset-card__licenses">
                 {{ assets_macros::license_logo_svg() }}
                 {% for license in post.extra.licenses %}
-                <li class="asset-card__tag">{{license}}</li>
+                <span class="asset-card__tag">{{license}}</span>
                 {% endfor %}
-            </ul>
+            </div>
             {% endif %}
         </div>
-
     </a>
 </div>
 {% endmacro card %}
