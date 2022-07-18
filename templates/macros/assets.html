@@ -1,18 +1,5 @@
 {% import "macros/images.html" as image_macros %}
 
-{% macro bevy_logo_svg() %}
-<svg version="1.1" viewBox="0 0 49.68324 36.62384">
-    <g transform="translate(-33.379558,-123.86623)">
-        <g transform="matrix(-0.45399624,0.36689705,0.36689705,0.45399624,73.527335,10.816805)">
-            <g transform="matrix(-0.35254083,0.28490586,0.28490586,0.35254083,477.11004,-1021.7666)">
-                <path transform="translate(5.0092774e-5,-757.87625)"
-                    d="m 2191.1465,2276.7832 c -5.9729,-0.035 -12.0979,2.348 -17.3613,7.459 -6.9129,6.7127 -9.0602,12.7555 -7.8477,20.2949 l 0.332,2.0684 -2.0664,-0.336 c -15.1877,-2.4609 -33.9847,-1.2178 -55.3711,7.4336 6.2868,2.6948 17.8259,7.1926 30.6309,13.3418 l 4.0605,1.9512 -4.414,0.8945 c -16.9087,3.4274 -36.9729,13.3275 -55.2989,34.9336 8.1981,-0.6372 24.9531,-2.6089 42.4278,-2.582 9.7138,0.015 19.2869,0.687 27.0859,2.709 7.7991,2.022 14.0258,5.4353 16.3672,11.2851 l 0.1602,0.4004 -0.076,0.4238 c -0.3844,2.1831 -0.7613,4.1493 -1.1172,5.7598 -0.8163,3.6943 -4.0098,6.6817 -8.1953,9.3418 -4.1855,2.6601 -9.4961,4.9849 -15.0137,6.9609 -11.0352,3.9521 -22.7798,6.4773 -27.9648,6.959 -1.1021,0.1024 -1.5421,0.4983 -1.9668,1.2696 -0.4247,0.7712 -0.659,1.9824 -0.6934,3.25 -0.046,1.6926 0.181,3.1045 0.3672,4.0625 33.7495,2.7665 58.8475,-5.6513 76.959,-12.8379 20.3508,-9.3311 33.2134,-27.7577 36.0058,-44.3477 1.7499,-10.395 1.3746,-15.4894 -0.3124,-19.8281 -1.6873,-4.3387 -4.9223,-8.1914 -9.0254,-15.5488 -2.6368,-4.7281 -4.1077,-9.367 -5.0196,-13.6875 l -0.1933,-0.9102 0.7265,-0.582 c 7.5403,-6.0446 13.6809,-12.6444 15.9102,-17.4492 -4.5742,-4.8648 -12.4787,-5.893 -21.3223,-4.9473 l -0.7265,0.076 -0.5118,-0.5215 c -4.7125,-4.8006 -10.5615,-7.2614 -16.5351,-7.2969 z m 2.6484,11.2324 a 5.628704,5.5244684 76.402924 0 1 5.502,4.3223 5.628704,5.5244684 76.402924 0 1 -4.0469,6.7695 5.628704,5.5244684 76.402924 0 1 -6.6934,-4.1719 5.628704,5.5244684 76.402924 0 1 4.0469,-6.7695 5.628704,5.5244684 76.402924 0 1 1.1914,-0.1504 z" />
-            </g>
-        </g>
-    </g>
-</svg>
-{% endmacro bevy_logo_svg %}
-
 {% macro license_logo_svg() %}
 <svg height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-law mr-2">
     <path fill-rule="evenodd"
@@ -21,14 +8,14 @@
 </svg>
 {% endmacro license_logo_svg %}
 
-
 {% macro card(post) %}
 <div id="{{ post.title | slugify }}">
     <a class="asset-card" href="{{ post.extra.link }}">
         <div class="asset-card__banner">
             <div class="asset-card__title">{{post.title}}</div>
             {% if post.extra.image %}
-            <img src="{{ image_macros::resize_image(path=post.extra.image, width=340, height=340) }}" />
+            <img src="{{ image_macros::resize_image(path=post.extra.image, width=340, height=340) }}"
+                alt="Asset showcase image"/>
             {% endif %}
         </div>
         <div class="asset-card__description">
@@ -37,7 +24,7 @@
         <div class="asset-card__tags">
             {% if post.extra.bevy_versions %}
             <div class="asset-card__tag-list asset-card__bevy-versions">
-                <img src="/assets/bevy_icon_dark.svg" alt="Small bevy icon">
+                <img src="/assets/bevy_icon_dark.svg" title="Supported bevy versions">
                 {% for version in post.extra.bevy_versions %}
                 <span class="asset-card__tag">{{version}}</span>
                 {% endfor %}
@@ -71,7 +58,7 @@
         <a class="tree-menu__link" href="#{{section.title | slugify}}">{{ section.title }}</a>
         {% if section.subsections %}
         <label class="tree-menu__toggle" for="{{id}}">
-            <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg">
+            <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg" alt="Tree menu toggle">
         </label>
         {% endif %}
     </div>
