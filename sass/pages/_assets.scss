@@ -69,8 +69,9 @@
         }
 
         &__description {
+            @include text-ellipsis(4);
+
             grid-area: desc;
-            display: flex;
 
             padding: 0.6rem;
             font-size: 1rem;
