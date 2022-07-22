@@ -90,6 +90,12 @@ fn system(query: Query<&ComputedVisibility>) {
 }
 ```
 
+### [SpatialBundle](https://github.com/bevyengine/bevy/pull/5344)
+
+If you previously needed a `TransformBundle` and a `VisibilityBundle` you should now use a `SpatialBundle`.
+
+If things are misteriously not visible anymore, it's most likely because you need to use a `SpatialBundle`.
+
 ### [Use Affine3A for GlobalTransform to allow any affine transformation](https://github.com/bevyengine/bevy/pull/4379)
 
 `GlobalTransform` fields have changed
@@ -123,10 +129,6 @@ commands.spawn_bundle(SceneBundle {
 ```
 
 The scene will be spawned as a child of the entity with the `SceneBundle`
-
-### [SpatialBundle](https://github.com/bevyengine/bevy/pull/5344)
-
-If you previously needed a `TransformBundle` and a `VisibilityBundle` you should now use a `SpatialBundle`
 
 ### [Make ScalingMode more flexible](https://github.com/bevyengine/bevy/pull/3253)
 
