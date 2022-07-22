@@ -66,7 +66,9 @@ camera.world_to_screen(transform, world_position);
 camera.world_to_viewport(transform, world_position);
 ```
 
-<!-- TODO SpatialBundle -->
+### [SpatialBundle](https://github.com/bevyengine/bevy/pull/5344)
+
+If you previously needed a `TransformBundle` and a `VisibilityBundle` you should now use a `SpatialBundle`
 
 ### [Make ScalingMode more flexible](https://github.com/bevyengine/bevy/pull/3253)
 
@@ -442,3 +444,5 @@ fn add_parent(
 
 * Replace `global_transform.translation` by `global_transform.translation()` (For other fields, use the `compute_transform` method)
 * `GlobalTransform` do not support non-linear scales anymore, we'd like to hear from you if it is an inconvenience for you
+
+<!-- TODO mention .to_scale_rotation_translation() -->
