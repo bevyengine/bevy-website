@@ -155,7 +155,7 @@ Renamed `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`.
 
 ### [Make paused timers update just_finished on tick](https://github.com/bevyengine/bevy/pull/4445)
 
-`Timer::times_finished has` been renamed to `Timer::times_finished_this_tick` for clarity.
+`Timer::times_finished` has been renamed to `Timer::times_finished_this_tick` for clarity.
 
 ### [Change default Image FilterMode to Linear](https://github.com/bevyengine/bevy/pull/4465)
 
