@@ -90,11 +90,16 @@ fn system(query: Query<&ComputedVisibility>) {
 }
 ```
 
-### [SpatialBundle](https://github.com/bevyengine/bevy/pull/5344)
+### [Visibility Inheritance](https://github.com/bevyengine/bevy/pull/5310)
 
-If you previously needed a `TransformBundle` and a `VisibilityBundle` you should now use a `SpatialBundle`.
+`Visibility` is now propagated into children in a similar way to `Transform`. Root elements of a hierarchy must now contain [`Visibility`] and [`ComputedVisiblity`] for visibility propagation to work.
 
-If you were defining your own bundle with `Transform` and `Visibility` components, make sure they now have a `ComputedVisiblity` component.
+[`SpatialBundle`] and [`VisibilityBundle`] have been added for convenience.
+
+[`Visibility`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.Visibility.html
+[`ComputedVisiblity`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.ComputedVisibility.html
+[`SpatialBundle`]: https://docs.rs/bevy/0.8.0/bevy/prelude/struct.SpatialBundle.html
+[`VisibilityBundle`]: https://docs.rs/bevy/0.8.0/bevy/prelude/struct.VisibilityBundle.html
 
 ### [Use Affine3A for GlobalTransform to allow any affine transformation](https://github.com/bevyengine/bevy/pull/4379)
 
