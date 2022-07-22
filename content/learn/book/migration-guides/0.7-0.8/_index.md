@@ -150,7 +150,7 @@ The run criterion `RunOnce`, which would make the controlled systems run only on
 
 ### [Move system_param fetch struct into anonymous scope to avoid name collisions](https://github.com/bevyengine/bevy/pull/4100)
 
-For code that was using a system param's fetch struct, such as EventReader's EventReaderState, the fetch struct can now be identified via the SystemParam trait associated type Fetch, e.g. for `EventReader<T>` it can be identified as `<EventReader<'static, 'static, T>` as SystemParam>::Fetch
+For code that was using a system param's fetch struct, such as EventReader's EventReaderState, the fetch struct can now be identified via the SystemParam trait associated type Fetch, e.g. for `EventReader<T>` it can be identified as `<EventReader<'static, 'static, T> as SystemParam>::Fetch`
 
 ### [Task doesn't impl Component](https://github.com/bevyengine/bevy/pull/4113)
 
