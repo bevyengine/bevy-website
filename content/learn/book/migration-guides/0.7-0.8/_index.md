@@ -59,6 +59,13 @@ commands
     })
 ```
 
+```rust
+// 0.7
+camera.world_to_screen(transform, world_position);
+// 0.8
+camera.world_to_viewport(transform, world_position);
+```
+
 <!-- TODO SpatialBundle -->
 
 ### [Make ScalingMode more flexible](https://github.com/bevyengine/bevy/pull/3253)
@@ -405,3 +412,33 @@ Changed the following fields
 * Rename `FileAssetIo::get_root_path` uses to `FileAssetIo::get_base_path`
 
     `FileAssetIo::root_path()` is a getter for the `root_path` field, while `FileAssetIo::get_root_path` returned the parent directory of the asset root path, which was the executable's directory unless `CARGO_MANIFEST_DIR` was set. This change solves the ambiguity between the two methods.
+
+### [Hierarchy commandization](https://github.com/bevyengine/bevy/pull/4197)
+
+The `Parent` and `Children` component fields are now private.
+
+* Replace `parent.0` by `parent.get()`
+* Replace `children.0` with `*children`
+* You can't construct `Children` or `Parent` component anymore, you can use this as a stopgap measure, which may introduce a single frame delay
+
+```rust
+#[derive(Component)]
+pub struct MakeChildOf(pub Entity);
+
+fn add_parent(
+    mut commands: Commands,
+    orphans: Query<(Entity, &MakeChildOf)>,
+) {
+    for (child, MakeChildOf(parent)) in &orphans {
+        commands.entity(parent).add_child(child);
+        commands.entity(child).remove::<MakeChildOf>();
+    }
+}
+```
+
+### [Use Affine3A for GlobalTransform to allow any affine transformation](https://github.com/bevyengine/bevy/pull/4379)
+
+`GlobalTransform` fields have changed
+
+* Replace `global_transform.translation` by `global_transform.translation()` (For other fields, use the `compute_transform` method)
+* `GlobalTransform` do not support non-linear scales anymore, we'd like to hear from you if it is an inconvenience for you
