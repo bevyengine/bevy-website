@@ -239,7 +239,7 @@ If using `Query` or `QueryState` outside of a system run by the scheduler, you m
 
 ### [Fail to compile on 16-bit platforms](https://github.com/bevyengine/bevy/pull/4736)
 
-`bevy_ecs` will now explicitly fail to compile on 16-bit platforms, as the behavior was undefined.
+`bevy_ecs` will now explicitly fail to compile on 16-bit platforms, , due to an inability to write sound unsafe code for these platforms.
 
 There is currently no alternative, but we're open to adding support.
 Please file an issue (<https://github.com/bevyengine/bevy/issues>) to help detail your use case.
