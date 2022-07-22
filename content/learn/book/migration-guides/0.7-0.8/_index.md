@@ -205,9 +205,8 @@ Functions `update_component_access` and `update_archetype_component_access` have
 
 ### [Fix unsoundness with Or/AnyOf/Option component access'](https://github.com/bevyengine/bevy/pull/4659)
 
-<!-- TODO make this a bit friendlier -->
-
-If you are now getting query conflicts from `Or`/`AnyOf`/`Option` rip to you and ur welcome for it now being caught.
+Query conflicts from `Or`/`AnyOf`/`Option` have been fixed, and made stricter to avoid undefined behaviour.
+If you have new query conflicts due to this you must refactor your systems; consider using `ParamSet`.
 
 ### [Remove task_pool parameter from par_for_each(_mut)](https://github.com/bevyengine/bevy/pull/4705)
 
