@@ -68,7 +68,7 @@ camera.world_to_viewport(transform, world_position);
 
 ### [Visibilty Inheritance, universal ComputedVisibility and RenderLayers support](https://github.com/bevyengine/bevy/pull/5310)
 
-`Visibility` is now propagated into children in a similar way to `Transform`. Root elements of a hierarchy must now contain [`Visibility`] and [`ComputedVisiblity`] for visibility propagation to work.
+[`Visibility`] is now propagated into children in a similar way to `Transform`. Root elements of a hierarchy must now contain [`Visibility`] and [`ComputedVisiblity`] for visibility propagation to work.
 
 [`SpatialBundle`] and [`VisibilityBundle`] have been added for convenience.
 
