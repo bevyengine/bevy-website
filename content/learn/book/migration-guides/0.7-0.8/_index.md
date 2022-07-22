@@ -13,7 +13,7 @@ long_title = "Migration Guide: 0.7 to 0.8"
 
 ### [Camera Driven Rendering](https://github.com/bevyengine/bevy/pull/4745)
 
-<!-- TODO pls cart add a migration guide section :( -->
+<!-- pls cart add a migration guide section :( -->
 
 This is a very complicated change and it is recommended to read the linked PRs for more details
 
@@ -168,14 +168,16 @@ Renamed `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`.
 
 ### [Change default Image FilterMode to Linear](https://github.com/bevyengine/bevy/pull/4465)
 
+Default `Image` filtering changed from `Nearest` to `Linear`.
+
 ```rs
 // 0.7
 
-//TODO
+// Nothing, nearest was the default
 
 // 0.8
-
-// TODO
+App::new()
+    .insert_resource(ImageSettings::default_nearest())
 ```
 
 ### [Remove .system()](https://github.com/bevyengine/bevy/pull/4499)
@@ -421,8 +423,18 @@ Changed the following fields
 
 * Replace `global_transform.translation` by `global_transform.translation()` (For other fields, use the `compute_transform` method)
 * `GlobalTransform` do not support non-linear scales anymore, we'd like to hear from you if it is an inconvenience for you
+* If you need the `scale`, `rotation` or `translation` property you can now use `global_transform.to_scale_rotation_translation()`
 
-<!-- TODO mention .to_scale_rotation_translation() -->
+```rust
+// 0.7
+let transform = Transform::from(*global_transform);
+transform.scale
+transform.rotation
+transform.translation
+
+// 0.8
+let (scale, rotation, translation) = global_transform.to_scale_rotation_translation();
+```
 
 ### [Hierarchy commandization](https://github.com/bevyengine/bevy/pull/4197)
 
