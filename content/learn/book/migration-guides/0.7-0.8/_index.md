@@ -415,6 +415,15 @@ Changed the following fields
 
     `FileAssetIo::root_path()` is a getter for the `root_path` field, while `FileAssetIo::get_root_path` returned the parent directory of the asset root path, which was the executable's directory unless `CARGO_MANIFEST_DIR` was set. This change solves the ambiguity between the two methods.
 
+### [Use Affine3A for GlobalTransform to allow any affine transformation](https://github.com/bevyengine/bevy/pull/4379)
+
+`GlobalTransform` fields have changed
+
+* Replace `global_transform.translation` by `global_transform.translation()` (For other fields, use the `compute_transform` method)
+* `GlobalTransform` do not support non-linear scales anymore, we'd like to hear from you if it is an inconvenience for you
+
+<!-- TODO mention .to_scale_rotation_translation() -->
+
 ### [Hierarchy commandization](https://github.com/bevyengine/bevy/pull/4197)
 
 The `Parent` and `Children` component fields are now private.
@@ -438,11 +447,51 @@ fn add_parent(
 }
 ```
 
-### [Use Affine3A for GlobalTransform to allow any affine transformation](https://github.com/bevyengine/bevy/pull/4379)
+### [Visibilty Inheritance, universal ComputedVisibility and RenderLayers support](https://github.com/bevyengine/bevy/pull/5310)
 
-`GlobalTransform` fields have changed
+If you were previously reading `Visibility::is_visible` as the "actual visibility" for sprites or lights, use `ComputedVisibilty::is_visible()` instead:
 
-* Replace `global_transform.translation` by `global_transform.translation()` (For other fields, use the `compute_transform` method)
-* `GlobalTransform` do not support non-linear scales anymore, we'd like to hear from you if it is an inconvenience for you
+```rust
+// before (0.7)
+fn system(query: Query<&Visibility>) {
+  for visibility in query.iter() {
+    if visibility.is_visible {
+       log!("found visible entity");
+    }
+  }
+}
 
-<!-- TODO mention .to_scale_rotation_translation() -->
+// after (0.8)
+fn system(query: Query<&ComputedVisibility>) {
+  for visibility in query.iter() {
+    if visibility.is_visible() {
+       log!("found visible entity");
+    }
+  }
+}
+```
+
+### [remove blanket Serialize + Deserialize requirement for Reflect on generic types](https://github.com/bevyengine/bevy/pull/5197)
+
+* `.register_type` for generic types like `Option<T>`, `Vec<T>`, `HashMap<K, V>` will no longer insert `ReflectSerialize` and `ReflectDeserialize` type data. Instead you need to register it separately for concrete generic types like so:
+
+```rust
+    .register_type::<Option<String>>()
+    .register_type_data::<Option<String>, ReflectSerialize>()
+    .register_type_data::<Option<String>, ReflectDeserialize>()
+```
+
+### [add a SceneBundle to spawn a scene](https://github.com/bevyengine/bevy/pull/2424)
+
+```rust
+// 0.7
+commands.spawn_scene(asset_server.load("models/FlightHelmet/FlightHelmet.gltf#Scene0"));
+
+//0.8
+commands.spawn_bundle(SceneBundle {
+    scene: asset_server.load("models/FlightHelmet/FlightHelmet.gltf#Scene0"),
+    ..Default::default()
+});
+```
+
+The scene will be spawned as a child of the entity with the `SceneBundle`
