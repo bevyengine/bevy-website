@@ -265,7 +265,7 @@ The trait `ReadOnlyFetch` has been replaced with `ReadOnlyWorldQuery` along with
 The trait `ReadOnlyFetch` has been replaced with `ReadOnlyWorldQuery` along with the `WorldQueryGats::ReadOnlyFetch` assoc type which has been replaced with `<WorldQuery::ReadOnly as WorldQueryGats>::Fetch`
 
 * Any where clauses such as `QueryFetch<Q>: ReadOnlyFetch` should be replaced with `Q: ReadOnlyWorldQuery`.
-* Any custom world query impls should implement `ReadOnlyWorldQuery` insead of `ReadOnlyFetch`
+* Any custom world query impls should implement `ReadOnlyWorldQuery` instead of `ReadOnlyFetch`
 
 Functions `update_component_access` and `update_archetype_component_access` have been moved from the `FetchState` trait to `WorldQuery`
 
