@@ -372,7 +372,7 @@ fn extract_clouds(mut commands: Commands, clouds: Query<Entity, With<Cloud>>) {
 
 // 0.8
 fn extract_clouds(mut commands: Commands, mut clouds: Extract<Query<Entity, With<Cloud>>>) {
-    for cloud in clouds.value().iter() {
+    for cloud in clouds.iter() {
         commands.get_or_spawn(cloud).insert(Cloud);
     }
 }
