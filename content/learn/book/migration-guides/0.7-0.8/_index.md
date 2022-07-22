@@ -11,6 +11,56 @@ long_title = "Migration Guide: 0.7 to 0.8"
 
 <!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-04-15 [Merged by Bors]" -->
 
+### [Camera Driven Rendering](https://github.com/bevyengine/bevy/pull/4745)
+
+<!-- TODO pls cart add a migration guide section :( -->
+
+This is a very complicated change and it is recommended to read the linked PRs for more details
+
+```rust
+// old 3d perspective camera
+commands.spawn_bundle(PerspectiveCameraBundle::default())
+
+// new 3d perspective camera
+commands.spawn_bundle(Camera3dBundle::default())
+```
+
+```rust
+// old 2d orthographic camera
+commands.spawn_bundle(OrthographicCameraBundle::new_2d())
+
+// new 2d orthographic camera
+commands.spawn_bundle(Camera2dBundle::default())
+```
+
+```rust
+// old 3d orthographic camera
+commands.spawn_bundle(OrthographicCameraBundle::new_3d())
+
+// new 3d orthographic camera
+commands.spawn_bundle(Camera3dBundle {
+    projection: OrthographicProjection {
+        scale: 3.0,
+        scaling_mode: ScalingMode::FixedVertical,
+        ..default()
+    }.into(),
+    ..default()
+})
+```
+
+UI no longer requires a dedicated camera. `UiCameraBundle` has been removed. `Camera2dBundle` and `Camera3dBundle` now both default to rendering UI as part of their own render graphs. To disable UI rendering for a camera, disable it using the CameraUi component:
+
+```rust
+commands
+    .spawn_bundle(Camera3dBundle::default())
+    .insert(UiCameraConfig {
+        show_ui: false,
+        ..default()
+    })
+```
+
+<!-- TODO SpatialBundle -->
+
 ### [Make ScalingMode more flexible](https://github.com/bevyengine/bevy/pull/3253)
 
 Adds ability to specify scaling factor for `WindowSize`, size of the fixed axis for `FixedVertical` and `FixedHorizontal` and a new `ScalingMode` that is a mix of `FixedVertical` and `FixedHorizontal`
@@ -89,19 +139,19 @@ Renamed `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`.
 
 #### StorageBuffer
 
-* removed set_body(), values(), values_mut(), clear(), push(), append()
-* added set(), get(), get_mut()
+* removed `set_body()`, `values()`, `values_mut()`, `clear()`, `push()`, `append()`
+* added `set()`, `get()`, `get_mut()`
 
 #### UniformVec -> UniformBuffer
 
-* renamed uniform_buffer() to buffer()
-* removed len(), is_empty(), capacity(), push(), reserve(), clear(), values()
-* added set(), get()
+* renamed `uniform_buffer()` to `buffer()`
+* removed `len()`, `is_empty()`, `capacity()`, `push()`, `reserve()`, `clear()`, `values()`
+* added `set()`, `get()`
 
 #### DynamicUniformVec -> DynamicUniformBuffer
 
-* renamed uniform_buffer() to buffer()
-* removed capacity(), reserve()
+* renamed `uniform_buffer()` to `buffer()`
+* removed `capacity()`, `reserve()`
 
 ### [Make paused timers update just_finished on tick](https://github.com/bevyengine/bevy/pull/4445)
 
@@ -136,7 +186,7 @@ Replace calls to `EntityMut::get_unchecked` with calls to `EntityMut::get`.
 
 ### [Replace ReadOnlyFetch with ReadOnlyWorldQuery](https://github.com/bevyengine/bevy/pull/4626)
 
-The trait ReadOnlyFetch has been replaced with ReadOnlyWorldQuery along with the WorldQueryGats::ReadOnlyFetch assoc type which has been replaced with <WorldQuery::ReadOnly as WorldQueryGats>::Fetch
+The trait `ReadOnlyFetch` has been replaced with `ReadOnlyWorldQuery` along with the `WorldQueryGats::ReadOnlyFetch` assoc type which has been replaced with `<WorldQuery::ReadOnly as WorldQueryGats>::Fetch`
 
 The trait `ReadOnlyFetch` has been replaced with `ReadOnlyWorldQuery` along with the `WorldQueryGats::ReadOnlyFetch` assoc type which has been replaced with `<WorldQuery::ReadOnly as WorldQueryGats>::Fetch`
 
@@ -194,54 +244,6 @@ If using `Query` or `QueryState` outside of a system run by the scheduler, you m
 
 There is currently no alternative, but we're open to adding support.
 Please file an issue (<https://github.com/bevyengine/bevy/issues>) to help detail your use case.
-
-### [Camera Driven Rendering](https://github.com/bevyengine/bevy/pull/4745)
-
-<!-- TODO pls cart add a migration guide section :( -->
-
-This is a very complicated change and it is recommended to read the linked PRs for more details
-
-```rust
-// old 3d perspective camera
-commands.spawn_bundle(PerspectiveCameraBundle::default())
-
-// new 3d perspective camera
-commands.spawn_bundle(Camera3dBundle::default())
-```
-
-```rust
-// old 2d orthographic camera
-commands.spawn_bundle(OrthographicCameraBundle::new_2d())
-
-// new 2d orthographic camera
-commands.spawn_bundle(Camera2dBundle::default())
-```
-
-```rust
-// old 3d orthographic camera
-commands.spawn_bundle(OrthographicCameraBundle::new_3d())
-
-// new 3d orthographic camera
-commands.spawn_bundle(Camera3dBundle {
-    projection: OrthographicProjection {
-        scale: 3.0,
-        scaling_mode: ScalingMode::FixedVertical,
-        ..default()
-    }.into(),
-    ..default()
-})
-```
-
-UI no longer requires a dedicated camera. `UiCameraBundle` has been removed. `Camera2dBundle` and `Camera3dBundle` now both default to rendering UI as part of their own render graphs. To disable UI rendering for a camera, disable it using the CameraUi component:
-
-```rust
-commands
-    .spawn_bundle(Camera3dBundle::default())
-    .insert(UiCameraConfig {
-        show_ui: false,
-        ..default()
-    })
-```
 
 ### [Enforce type safe usage of Handle::get](https://github.com/bevyengine/bevy/pull/4794)
 
