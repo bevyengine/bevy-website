@@ -94,7 +94,7 @@ fn system(query: Query<&ComputedVisibility>) {
 
 If you previously needed a `TransformBundle` and a `VisibilityBundle` you should now use a `SpatialBundle`.
 
-If things are misteriously not visible anymore, it's most likely because you need to use a `SpatialBundle`.
+If you were defining your own bundle with `Transform` and `Visibility` components, make sure they now have a `ComputedVisiblity` component.
 
 ### [Use Affine3A for GlobalTransform to allow any affine transformation](https://github.com/bevyengine/bevy/pull/4379)
 
