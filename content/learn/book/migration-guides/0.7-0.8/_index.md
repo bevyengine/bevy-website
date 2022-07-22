@@ -70,7 +70,7 @@ camera.world_to_viewport(transform, world_position);
 
 `Visibility` is now propagated into children in a similar way to `Transform`. Root elements of a hierarchy must now contain [`Visibility`] and [`ComputedVisiblity`] for visibility propagation to work.
 
-[`SpatialBundle`] and [`VisibilityBundle`] have been added for convenience.
+[`SpatialBundle`] and [`VisibilityBundle`] have been added for convenience. If you were using a `TransformBundle` you should probably be using a `SpatialBundle` now.
 
 If you were previously reading `Visibility::is_visible` as the "actual visibility" for sprites or lights, use `ComputedVisibilty::is_visible()` instead:
 
