@@ -254,7 +254,11 @@ Please file an issue (<https://github.com/bevyengine/bevy/issues>) to help detai
 
 ### [Allow higher order systems](https://github.com/bevyengine/bevy/pull/4833)
 
-<!-- TODO marked as breaking change, but need to figure out what actually is breaking -->
+`SystemParamFunction` has changed. It was not previously part of the public API, so no migration instructions are provided. (It is now included in the public API, although you still should not implement this trait for your own types).
+
+If possible, any custom `System` implementations should be migrated to use higher order systems, which are significantly less error-prone.
+
+Research is needed into allowing this to work for more cases.
 
 ### [Added offset parameter to TextureAtlas::from_grid_with_padding](https://github.com/bevyengine/bevy/pull/4836)
 
