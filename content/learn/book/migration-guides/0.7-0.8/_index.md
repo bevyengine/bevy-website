@@ -79,7 +79,7 @@ If you were previously reading `Visibility::is_visible` as the "actual visibilit
 fn system(query: Query<&Visibility>) {
   for visibility in query.iter() {
     if visibility.is_visible {
-       log!("found visible entity");
+       info!("found visible entity");
     }
   }
 }
@@ -88,7 +88,7 @@ fn system(query: Query<&Visibility>) {
 fn system(query: Query<&ComputedVisibility>) {
   for visibility in query.iter() {
     if visibility.is_visible() {
-       log!("found visible entity");
+       info!("found visible entity");
     }
   }
 }
@@ -181,7 +181,7 @@ fn system(mut commands: Commands) {
         }
         Vec2::ZERO
     });
-    commands.spawn().insert(ComputeVec2(task))
+    commands.spawn().insert(ComputeVec2(task));
 }
 ```
 
@@ -294,7 +294,7 @@ fn parallel_system(
    query: Query<&MyComponent>,
 ) {
    query.par_for_each(&task_pool, 32, |comp| {
-        ...
+        // ...
    });
 }
 ```
@@ -304,7 +304,7 @@ After:
 ```rust
 fn parallel_system(query: Query<&MyComponent>) {
    query.par_for_each(32, |comp| {
-        ...
+        // ...
    });
 }
 ```
@@ -497,7 +497,7 @@ fn add_parent(
     orphans: Query<(Entity, &MakeChildOf)>,
 ) {
     for (child, MakeChildOf(parent)) in &orphans {
-        commands.entity(parent).add_child(child);
+        commands.entity(*parent).add_child(child);
         commands.entity(child).remove::<MakeChildOf>();
     }
 }
