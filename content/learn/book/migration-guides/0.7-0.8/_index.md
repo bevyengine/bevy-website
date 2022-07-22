@@ -354,7 +354,9 @@ Updated [struct_trait](https://github.com/bevyengine/bevy/blob/dfe969005264fff54
 ### [Make RenderStage::Extract run on the render world](https://github.com/bevyengine/bevy/pull/4402)
 
 The `Extract` `RenderStage` now runs on the render world (instead of the main world as before).
-You must use the `Extract` `SystemParam` to access the main world during the extract phase. `Extract` takes a single type parameter, which is any system parameter (such as `Res`, `Query` etc.). It will extract this from the main world, and returns the result of this extraction when `value` is called on it.
+You must use the `Extract` `SystemParam` to access the main world during the extract phase. `Extract` takes a single type parameter, which is any system parameter (such as `Res`, `Query` etc.).
+It will extract this from the main world.
+Note that `Commands` will not work correctly in `Extract` - it will currently silently do nothing.
 
 ```rust
 // 0.7
