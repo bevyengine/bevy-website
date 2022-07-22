@@ -465,7 +465,7 @@ Please note that all existing extract systems need to be updated to match this n
 ### [Improve Gamepad DPad Button Detection](https://github.com/bevyengine/bevy/pull/5220)
 
 D-pad inputs can no longer be accessed as axes.
-Acess them as gamepad buttons instead.
+Access them as gamepad buttons instead.
 
 ### [Change window position types from tuple to vec](https://github.com/bevyengine/bevy/pull/5276)
 
