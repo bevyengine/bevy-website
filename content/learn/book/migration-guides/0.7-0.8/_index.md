@@ -71,7 +71,7 @@ camera.world_to_viewport(transform, world_position);
 
 [`Visibility`] is now propagated into children in a similar way to `Transform`. Root elements of a hierarchy must now contain [`Visibility`] and [`ComputedVisiblity`] for visibility propagation to work.
 
-[`SpatialBundle`] and [`VisibilityBundle`] have been added for convenience. If you were using a `TransformBundle` you should probably be using a `SpatialBundle` now.
+[`SpatialBundle`] and [`VisibilityBundle`] have been added for convenience. If you were using a `TransformBundle` you should probably be using a [`SpatialBundle`] now.
 
 If you were previously reading `Visibility::is_visible` as the "actual visibility" for sprites or lights, use `ComputedVisibilty::is_visible()` instead:
 
@@ -119,7 +119,7 @@ transform.translation
 let (scale, rotation, translation) = global_transform.to_scale_rotation_translation();
 ```
 
-### [add a SceneBundle to spawn a scene](https://github.com/bevyengine/bevy/pull/2424)
+### [Add a SceneBundle to spawn a scene](https://github.com/bevyengine/bevy/pull/2424)
 
 ```rust
 // 0.7
@@ -161,10 +161,7 @@ If you need a `Task` to be a `Component` you should use a wrapper type.
 // 0.7
 fn system(mut commands: Commands) {
     let task = thread_pool.spawn(async move {
-        let start_time = Instant::now();
-        while Instant::now() - start_time < Duration::from_secs_f32(5.0) {
-            // Spinning for 'duration', simulating doing hard
-        }
+        // Complicated async work
         Vec2::ZERO
     });
     commands.spawn().insert(task);
@@ -176,10 +173,7 @@ struct ComputeVec2(Task<Vec2>);
 
 fn system(mut commands: Commands) {
     let task = thread_pool.spawn(async move {
-        let start_time = Instant::now();
-        while Instant::now() - start_time < Duration::from_secs_f32(5.0) {
-            // Spinning for 'duration', simulating doing hard
-        }
+        // Complicated async work
         Vec2::ZERO
     });
     commands.spawn().insert(ComputeVec2(task));
@@ -287,7 +281,6 @@ If you have new query conflicts due to this you must refactor your systems; cons
 
 The `task_pool` parameter for `Query(State)::par_for_each(_mut)` has been removed. Remove these parameters from all calls to these functions.
 
-
 ```rust
 // 0.7
 fn parallel_system(
@@ -314,7 +307,7 @@ If using `Query` or `QueryState` outside of a system run by the scheduler, you m
 `bevy_ecs` will now explicitly fail to compile on 16-bit platforms, because it is unsound on those platforms due to various internal assumptions.
 
 There is currently no alternative, but we're open to adding support.
-Please file an issue (<https://github.com/bevyengine/bevy/issues>) to help detail your use case.
+Please [file an issue](https://github.com/bevyengine/bevy/issues) to help detail your use case.
 
 ### [Enforce type safe usage of Handle::get](https://github.com/bevyengine/bevy/pull/4794)
 
@@ -346,21 +339,23 @@ from_grid_with_padding(texture, tile_size, columns, rows, padding, Vec2::ZERO)
 
 ### [Split mesh shader files](https://github.com/bevyengine/bevy/pull/4867)
 
-* In shaders for 3D meshes:
-  * `#import bevy_pbr::mesh_view_bind_group` -> `#import bevy_pbr::mesh_view_bindings`
-  * `#import bevy_pbr::mesh_struct` -> `#import bevy_pbr::mesh_types`
-    * NOTE: If you are using the mesh bind group at bind group index 2, you can remove those binding statements in your shader and just use `#import bevy_pbr::mesh_bindings` which itself imports the mesh types needed for the bindings.
-* In shaders for 2D meshes:
-  * `#import bevy_sprite::mesh2d_view_bind_group` -> `#import bevy_sprite::mesh2d_view_bindings`
-  * `#import bevy_sprite::mesh2d_struct` -> `#import bevy_sprite::mesh2d_types`
-    * NOTE: If you are using the mesh2d bind group at bind group index 2, you can remove those binding statements in your shader and just use `#import bevy_sprite::mesh2d_bindings` which itself imports the mesh2d types needed for the bindings.
+In shaders for 3D meshes:
+
+* `#import bevy_pbr::mesh_view_bind_group` -> `#import bevy_pbr::mesh_view_bindings`
+* `#import bevy_pbr::mesh_struct` -> `#import bevy_pbr::mesh_types`
+  * NOTE: If you are using the mesh bind group at bind group index 2, you can remove those binding statements in your shader and just use `#import bevy_pbr::mesh_bindings` which itself imports the mesh types needed for the bindings.
+
+In shaders for 2D meshes:
+
+* `#import bevy_sprite::mesh2d_view_bind_group` -> `#import bevy_sprite::mesh2d_view_bindings`
+* `#import bevy_sprite::mesh2d_struct` -> `#import bevy_sprite::mesh2d_types`
+  * NOTE: If you are using the mesh2d bind group at bind group index 2, you can remove those binding statements in your shader and just use `#import bevy_sprite::mesh2d_bindings` which itself imports the mesh2d types needed for the bindings.
 
 ### [Camera Driven Viewports](https://github.com/bevyengine/bevy/pull/4898)
 
 `Camera::projection_matrix` is no longer a public field. Use the new `Camera::projection_matrix()` method instead:
 
 ```rust
-
 // 0.7
 let projection = camera.projection_matrix;
 
@@ -368,7 +363,7 @@ let projection = camera.projection_matrix;
 let projection = camera.projection_matrix();
 ```
 
-### [diagnostics: meaningful error when graph node has wrong number of inputs](https://github.com/bevyengine/bevy/pull/4924)
+### [Diagnostics: meaningful error when graph node has wrong number of inputs](https://github.com/bevyengine/bevy/pull/4924)
 
 Exhaustive matches on `RenderGraphRunnerError` will need to add a branch to handle the new `MismatchedInputCount` variant.
 
@@ -475,9 +470,9 @@ Changed the following fields
 
 ### [Full documentation for bevy_asset](https://github.com/bevyengine/bevy/pull/3536)
 
-* Rename `FileAssetIo::get_root_path` uses to `FileAssetIo::get_base_path`
+Rename `FileAssetIo::get_root_path` to `FileAssetIo::get_base_path`
 
-    `FileAssetIo::root_path()` is a getter for the `root_path` field, while `FileAssetIo::get_root_path` returned the parent directory of the asset root path, which was the executable's directory unless `CARGO_MANIFEST_DIR` was set. This change solves the ambiguity between the two methods.
+`FileAssetIo::root_path()` is a getter for the `root_path` field, while `FileAssetIo::get_root_path` returned the parent directory of the asset root path, which was the executable's directory unless `CARGO_MANIFEST_DIR` was set. This change solves the ambiguity between the two methods.
 
 ### [Hierarchy commandization](https://github.com/bevyengine/bevy/pull/4197)
 
@@ -502,9 +497,9 @@ fn add_parent(
 }
 ```
 
-### [remove blanket Serialize + Deserialize requirement for Reflect on generic types](https://github.com/bevyengine/bevy/pull/5197)
+### [Remove blanket Serialize + Deserialize requirement for Reflect on generic types](https://github.com/bevyengine/bevy/pull/5197)
 
-* `.register_type` for generic types like `Option<T>`, `Vec<T>`, `HashMap<K, V>` will no longer insert `ReflectSerialize` and `ReflectDeserialize` type data. Instead you need to register it separately for concrete generic types like so:
+`.register_type` for generic types like `Option<T>`, `Vec<T>`, `HashMap<K, V>` will no longer insert `ReflectSerialize` and `ReflectDeserialize` type data. Instead you need to register it separately for concrete generic types like so:
 
 ```rust
     .register_type::<Option<String>>()
