@@ -76,7 +76,7 @@ camera.world_to_viewport(transform, world_position);
 If you were previously reading `Visibility::is_visible` as the "actual visibility" for sprites or lights, use `ComputedVisibilty::is_visible()` instead:
 
 ```rust
-// before (0.7)
+// 0.7
 fn system(query: Query<&Visibility>) {
   for visibility in query.iter() {
     if visibility.is_visible {
@@ -85,7 +85,7 @@ fn system(query: Query<&Visibility>) {
   }
 }
 
-// after (0.8)
+// 0.8
 fn system(query: Query<&ComputedVisibility>) {
   for visibility in query.iter() {
     if visibility.is_visible() {
@@ -125,7 +125,7 @@ let (scale, rotation, translation) = global_transform.to_scale_rotation_translat
 // 0.7
 commands.spawn_scene(asset_server.load("models/FlightHelmet/FlightHelmet.gltf#Scene0"));
 
-//0.8
+// 0.8
 commands.spawn_bundle(SceneBundle {
     scene: asset_server.load("models/FlightHelmet/FlightHelmet.gltf#Scene0"),
     ..Default::default()
@@ -287,9 +287,9 @@ If you have new query conflicts due to this you must refactor your systems; cons
 
 The `task_pool` parameter for `Query(State)::par_for_each(_mut)` has been removed. Remove these parameters from all calls to these functions.
 
-Before:
 
 ```rust
+// 0.7
 fn parallel_system(
    task_pool: Res<ComputeTaskPool>,
    query: Query<&MyComponent>,
@@ -298,11 +298,8 @@ fn parallel_system(
         // ...
    });
 }
-```
 
-After:
-
-```rust
+// 0.8
 fn parallel_system(query: Query<&MyComponent>) {
    query.par_for_each(32, |comp| {
         // ...
@@ -340,9 +337,10 @@ Research is needed into allowing this to work for more cases.
 Calls to `TextureAtlas::from_grid_with_padding` should be modified to include a new parameter, which can be set to `Vec2::ZERO` to retain old behaviour.
 
 ```rust
+// 0.7
 from_grid_with_padding(texture, tile_size, columns, rows, padding)
-                                  |
-                                  V
+
+// 0.8
 from_grid_with_padding(texture, tile_size, columns, rows, padding, Vec2::ZERO)
 ```
 
