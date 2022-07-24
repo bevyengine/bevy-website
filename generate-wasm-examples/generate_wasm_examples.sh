@@ -6,7 +6,6 @@
 git init bevy
 cd bevy
 git remote add origin https://github.com/bevyengine/bevy
-git restore Cargo.toml
 git pull --depth=1 origin latest
 
 # remove markdown files from assets so that they don't get picked up by Zola
@@ -21,18 +20,16 @@ sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crat
 export CARGO_TARGET_DIR="target"
 
 if [ "$1" = --ci ] ; then
+    # disable optimizations
+    cargo_profile="dev"
+    cargo_target_dir="debug"
     # Do not optimize on --ci check,
     # wasm-opt takes A LOT of time to run
     wasm_opt_flag="-O0"
 else
-    echo "
-
-[profile.release]
-opt-level = \"z\"
-lto = \"fat\"
-codegen-units = 1
-" >> Cargo.toml
-
+    # enable optimizations
+    cargo_profile="wasm-release"
+    cargo_target_dir="wasm-release"
     # Optimize for size
     wasm_opt_flag="-Oz"
 fi
@@ -61,10 +58,10 @@ add_category()
         out_dir=$examples_dir/$category_slug/$example_slug
         mkdir $out_dir
         cp examples/$category_path/$code_filename $out_dir
-        cargo build --release --target wasm32-unknown-unknown --example $example
+        cargo build --profile $cargo_profile --target wasm32-unknown-unknown --example $example
 
         wasm-bindgen --out-dir $out_dir \
-            --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
+            --no-typescript --target web target/wasm32-unknown-unknown/$cargo_target_dir/examples/$example.wasm
 
         wasm-opt $wasm_opt_flag \
             --output "$out_dir/${example}_bg.wasm.optimized" \
