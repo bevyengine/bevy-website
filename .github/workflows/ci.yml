@@ -13,6 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: "Install binaryen for wasm-opt tool"
+        run: sudo apt-get install -y binaryen
+
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh
 
@@ -25,7 +28,7 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
-        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh
+        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh --ci
 
       - name: "Build website"
         uses: shalzz/zola-deploy-action@master
