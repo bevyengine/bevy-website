@@ -13,6 +13,11 @@
 
 {% block page_content %}
     <div class="assets">
+        <div class="assets-intro">
+            A collection of Bevy assets, plugins, learning resources, and apps made by the community. If you would like to
+            share what you're working on, <a href="https://github.com/bevyengine/bevy-assets">submit a PR</a>!
+        </div>
+
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
