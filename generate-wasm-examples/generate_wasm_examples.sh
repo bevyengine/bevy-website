@@ -19,19 +19,19 @@ sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crat
 
 export CARGO_TARGET_DIR="target"
 
-if [ "$1" = --ci ] ; then
+if [ "$1" = --optimize-wasm ] ; then
+    # enable optimizations
+    cargo_profile="wasm-release"
+    cargo_target_dir="wasm-release"
+    # Optimize for size
+    wasm_opt_flag="-Oz"
+else
     # disable optimizations
     cargo_profile="dev"
     cargo_target_dir="debug"
     # Do not optimize on --ci check,
     # wasm-opt takes A LOT of time to run
     wasm_opt_flag="-O0"
-else
-    # enable optimizations
-    cargo_profile="wasm-release"
-    cargo_target_dir="wasm-release"
-    # Optimize for size
-    wasm_opt_flag="-Oz"
 fi
 
 examples_dir="../../content/examples"
