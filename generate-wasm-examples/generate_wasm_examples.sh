@@ -1,9 +1,8 @@
 #!/bin/sh
 
-git init bevy
+./clone_bevy.sh
+
 cd bevy
-git remote add origin https://github.com/bevyengine/bevy
-git pull --depth=1 origin latest
 
 # remove markdown files from assets so that they don't get picked up by Zola
 find assets -type f -name '*.md' -exec rm {} +
@@ -14,15 +13,15 @@ sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_win
 # setting the asset folder root to the root url of this domain
 sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crates/bevy_asset/src/lib.rs
 
-
 add_category()
 {
     category=$1
     category_path=$2
     category_slug=`echo $category_path | tr '_' '-'`
     example_weight=0
+    category_dir="../../content/examples/$category_slug/"
 
-    mkdir ../../content/examples/$category_slug
+    [ -d "$category_dir" ] || mkdir $category_dir
 
     # Remove first two arguments
     shift 2
@@ -34,17 +33,24 @@ add_category()
         echo "building $category / $example"
         example_slug=`echo $example | tr '_' '-'`
         code_filename="$example.rs"
-        mkdir ../../content/examples/$category_slug/$example_slug
-        cp examples/$category_path/$code_filename ../../content/examples/$category_slug/$example_slug/
-        cargo build --release --target wasm32-unknown-unknown --example $example
-        wasm-bindgen --out-dir ../../content/examples/$category_slug/$example_slug --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
+        [ -d "$category_dir/$example_slug" ] || mkdir $category_dir/$example_slug
+        cp examples/$category_path/$code_filename $category_dir/$example_slug/
+
+        example_file="$category_dir/$example_slug/${example}_bg.wasm"
+        if [ -f "$example_file" ]; then
+            echo "$example_file already exists."
+        else
+            cargo build --release --target wasm32-unknown-unknown --example $example
+        fi
+
+        wasm-bindgen --out-dir $category_dir/$example_slug --no-typescript --target web target/wasm32-unknown-unknown/release/examples/$example.wasm
 
         # Patch generated JS to allow to inject custom `fetch` with loading feedback.
         # See: https://github.com/bevyengine/bevy-website/pull/355
         sed -i.bak \
           -e 's/getObject(arg0).fetch(/window.bevyLoadingBarFetch(/' \
           -e 's/input = fetch(/input = window.bevyLoadingBarFetch(/' \
-          ../../content/examples/$category_slug/$example_slug/$example.js
+          $category_dir/$example_slug/$example.js
 
         echo "+++
 title = \"$example\"
@@ -55,7 +61,7 @@ weight = $example_weight
 code_path = \"content/examples/$category_slug/$example_slug/$code_filename\"
 github_code_path = \"examples/$category_path/$code_filename\"
 header_message = \"Examples\"
-+++" > ../../content/examples/$category_slug/$example_slug/index.md
++++" > $category_dir/$example_slug/index.md
 
         example_weight=$((example_weight+1))
     done
@@ -65,12 +71,12 @@ header_message = \"Examples\"
 title = \"$category\"
 sort_by = \"weight\"
 weight = $category_weight
-+++" > ../../content/examples/$category_slug/_index.md
++++" > $category_dir/_index.md
 
     category_weight=$((category_weight+1))
 }
 
-mkdir ../../content/examples
+[ -d "../../content/examples" ] || mkdir ../../content/examples
 cp -r assets/ ../../static/assets/examples/
 
 echo "+++
