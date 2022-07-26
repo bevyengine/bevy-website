@@ -506,3 +506,16 @@ fn add_parent(
     .register_type_data::<Option<String>, ReflectSerialize>()
     .register_type_data::<Option<String>, ReflectDeserialize>()
 ```
+
+### [Lighter no default features](https://github.com/bevyengine/bevy/pull/5447)
+
+`bevy_asset` and `bevy_scene` are no longer enabled when `no-default-features` is used with the `bevy` dependency.
+
+- Crates that use bevy with `no-default-features` will need to add these features manually
+
+```toml
+bevy = { version = "0.8", default-features = false, features = [
+    "bevy_asset",
+    "bevy_scene",
+] }
+```
