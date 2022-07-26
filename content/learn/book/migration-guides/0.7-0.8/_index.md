@@ -512,7 +512,7 @@ fn add_parent(
 
 `bevy_asset` and `bevy_scene` are no longer enabled when `no-default-features` is used with the `bevy` dependency.
 
-* Crates that use bevy with `no-default-features` will need to add these features manually
+* Crates that use Bevy with `no-default-features` will need to add these features manually if they rely on them.
 
 ```toml
 bevy = { version = "0.8", default-features = false, features = [
