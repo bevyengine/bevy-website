@@ -159,7 +159,7 @@ If you need a `Task` to be a `Component` you should use a wrapper type.
 
 ```rs
 // 0.7
-fn system(mut commands: Commands) {
+fn system(mut commands: Commands, thread_pool: Res<AsyncComputeTaskPool>) {
     let task = thread_pool.spawn(async move {
         // Complicated async work
         Vec2::ZERO
@@ -172,6 +172,7 @@ fn system(mut commands: Commands) {
 struct ComputeVec2(Task<Vec2>);
 
 fn system(mut commands: Commands) {
+    let thread_pool = AsyncComputeTaskPool::get();
     let task = thread_pool.spawn(async move {
         // Complicated async work
         Vec2::ZERO
@@ -511,7 +512,7 @@ fn add_parent(
 
 `bevy_asset` and `bevy_scene` are no longer enabled when `no-default-features` is used with the `bevy` dependency.
 
-- Crates that use bevy with `no-default-features` will need to add these features manually
+* Crates that use bevy with `no-default-features` will need to add these features manually
 
 ```toml
 bevy = { version = "0.8", default-features = false, features = [
