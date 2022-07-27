@@ -105,7 +105,7 @@ impl CodeBlockDefinition {
     pub fn get_hidden_ranges(&self) -> Option<&HiddenRanges> {
         self.hide_lines_idx.map(|idx| match &self.annotations[idx] {
             Annotation::HideLines(ranges) => ranges,
-            Annotation::Other(_) => panic!("Unreachable?"),
+            Annotation::Other(_) => unreachable!(),
         })
     }
 
