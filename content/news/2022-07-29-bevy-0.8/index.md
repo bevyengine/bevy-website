@@ -784,7 +784,7 @@ Bevy ECS had a number of optimizations this time around:
 
 * `@james7132` sped up entity moves between tables by reducing the number of copies conducted. For larger components, this is a huge win. The `many_cubes` stress test saw a ~16% speed boost in the `prepare_uniform_components` system, which relies heavily on commands / table moves.
 * `@DJMcNab` removed no-op drop function calls for ECS storage internals, which reduced the dropping time for the `many_cubes` stress test from ~150μs to ~80μs.
-* `@james7132` changed [`ComponentSparseSet`] indices from `usize` to `u32`, which makes them use less space / making some operations more cache friendly. Sparse Set iteration is ~15% faster.
+* `@james7132` changed [`ComponentSparseSet`] indices from `usize` to `u32`, which makes them use less space / making some operations more cache friendly. Sparse Set iteration became ~15% faster with this change.
 
 [`ComponentSparseSet`]: http://docs.rs/bevy/0.8.0/bevy/ecs/storage/struct.ComponentSparseSet.html
 
