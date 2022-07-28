@@ -1,4 +1,5 @@
 use std::{
+    fmt::Write,
     fs::{self, File},
     io::{self, BufRead},
     path::Path,
@@ -34,7 +35,7 @@ pub fn run(dir: &Path) {
 
             // Skip the line, save it as is
             if !is_inside_rust_code_block {
-                contents.push_str(&format!("{}\n", &line));
+                writeln!(&mut contents, "{}", &line)?;
                 continue;
             }
 
@@ -63,7 +64,7 @@ pub fn run(dir: &Path) {
                 rust_block[0] = definition.into_string();
 
                 // Write code block
-                contents.push_str(&format!("{}\n", &rust_block.join("\n")));
+                writeln!(&mut contents, "{}", &rust_block.join("\n"))?;
 
                 // Reset state
                 is_inside_rust_code_block = false;
