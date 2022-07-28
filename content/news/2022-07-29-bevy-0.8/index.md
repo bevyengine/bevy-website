@@ -207,7 +207,7 @@ commands.spawn_bundle(Camera3dBundle {
 })
 ```
 
-This enables you to draw the camera with whatever custom render logic you need! Note that this generally won't be required: most custom rendering scenarios will be covered by high level [Materials](#new-material-system) or extending the built in render graphs.
+This enables you to draw the camera with whatever custom render logic you need! Note that this generally won't be required: most custom rendering scenarios will be covered by high-level [Materials](#new-material-system) or extending the built in render graphs.
 
 ### Enabling / Disabling Cameras
 
