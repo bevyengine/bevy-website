@@ -12,7 +12,7 @@ image_subtitle = "Bevy-shaped mountains in a Bevy-based Witcher 3 terrain textur
 image_subtitle_link = "https://codeberg.org/rmemr/w3.terrain-texturing"
 +++
 
-Thanks to **X** contributors, community reviewers, **X** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -20,21 +20,21 @@ To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 
 
 As always, there are a _ton_ of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights: 
 
-* **New Material system**: Custom shaders are now _much_ easier to define, thanks to the new Material trait and AsBindGroup derive
-* **Camera-driven rendering**: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.
+* **New Material System**: Custom shaders are now _much_ easier to define, thanks to the new Material trait and AsBindGroup derive.
+* **Camera-driven Rendering**: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.
 * **Built-in Shader Modularization**: Many built-in shader types and functions are now importable. Notably, custom shaders can now import the PBR shader logic
-* **Spot Lights**: A new light type that emits light in a cone shape from a fixed point
-* **Visibility Inheritance**: Hiding an entity now also hides all of its descendants in the hierarchy
-* **Scene Bundle**: Easily spawn scenes using a normal Bevy bundle and extend them with new components and children
-* **Upgraded to wgpu 0.13**: Uses a new, more ergonomic WGSL shader syntax
-* **Automatic Mesh tangent generation**: If tangents are missing for a mesh, generate them with mikktspace
-* **Renderer Optimizations**: Parallel Frustum Culling, thread local check visiblity, unstable sorts for unbatched render phases, 
-* **Scripting / Modding Progress: Untyped ECS apis**: A step toward 3rd party scripting language support! Interact with bevy ECS internals directly via pointers.
-* **ECS Query ergonomics and usability**: Queries now implement `IntoIter` and mutable queries can be converted to immutable queries
-* **ECS internals refactors**: Sweeping changes to Bevy ECS internals that make it simpler, safer, and easier to maintain
-* **Reflection improvements**: Support for reflecting more types, ECS resource reflection, untyped reflection, improved internals
-* **Hierarchy Commands**: Hierarchy updates now use "transactional commands" to ensure hierarchy consistency at all times
-* **Bevy UI now uses Taffy**:  We've swapped to (and help maintain) a collaborative fork of the now abandoned Stretch UI layout library. Exponential blow-up bug begone!
+* **Spot Lights**: A new light type that emits light in a cone shape from a fixed point.
+* **Visibility Inheritance**: Hiding an entity now also hides all of its descendants in the hierarchy.
+* **Upgraded to wgpu 0.13**: Uses a new, more ergonomic WGSL shader syntax.
+* **Automatic Mesh Tangent Generation**: If tangents are missing for a mesh, generate them with mikktspace.
+* **Renderer Optimizations**: Parallel frustum culling and unstable sorts for unbatched render phases yielded some big wins!
+* **Scene Bundle**: Easily spawn scenes using a normal Bevy bundle and extend them with new components and children.
+* **Scripting / Modding Progress: Untyped ECS APIs**: A step toward 3rd party scripting language support! Interact with bevy ECS internals directly via pointers.
+* **ECS Query Ergonomics and Usability**: Queries now implement `IntoIter` and mutable queries can be converted to immutable queries.
+* **ECS Internals Refactors**: Sweeping changes to Bevy ECS internals that make it simpler, safer, and easier to maintain.
+* **Reflection Improvements**: Support for reflecting more types, ECS resource reflection, untyped reflection, improved internals.
+* **Hierarchy Commands**: Hierarchy updates now use "transactional commands" to ensure hierarchy consistency at all times.
+* **Bevy UI Now Uses Taffy**:  We've swapped to (and help maintain) a collaborative fork of the now abandoned Stretch UI layout library. Exponential blow-up bug begone!
 
 <!-- more -->
 
@@ -188,7 +188,9 @@ camera.world_to_viewport(camera_transform, world_position);
 
 ### New Camera Bundles
 
-The old `OrthographicCameraBundle` and `PerspectiveCameraBundle` have been replaced with [`Camera3dBundle`] and [`Camera2dBundle`]. In most cases migration should be as simple as replacing the old names with the new ones.
+The old `OrthographicCameraBundle` and `PerspectiveCameraBundle` have been replaced with [`Camera3dBundle`] and [`Camera2dBundle`]. In most cases migration should be as simple as replacing the old names with the new ones. 3D cameras default to "perspective" projections, but they can still be switched to orthographic using the new [`Projection`] component in the bundle.
+
+[`Projection`]: https://docs.rs/bevy/0.8.0/bevy/core_pipeline/core_3d/struct.Camera3dBundle.html#structfield.projection
 
 ### No More CameraUiBundle!
 
@@ -269,6 +271,37 @@ The "inherited visibility" is computed in the [`PostUpdate`] stage and stored on
 [`Visibility`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.Visibility.html
 [`ComputedVisibility`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.ComputedVisibility.html
 
+### SpatialBundle and VisibilityBundle
+
+<div class="release-feature-authors">authors: @mockersf, @rparrett</div>
+
+With the addition of [Visibility Inheritance](#visibility-inheritance) comes the constraint that visibility propagation requires all elements in the hierarchy to have the appropriate visibility components. When constructing scenes, developers often want to group entities under parent "organizational" entities, which exist solely to group entities together, reposition them, and hide them as a unit. These "organizational" entities still require visibility components to propagate the [`Transform`] and [`Visibility`] to [`GlobalTransform`] and [`ComputedVisibility`] (respectively).
+
+To make this easy, we've added a new [`SpatialBundle`], which adds the components mentioned above. This allows the entity to configure and propagate visibility and transform data without incurring the cost of actually rendering it.
+
+```rust
+commands
+    // This entity controls the position and visibility of the entities beneath it.
+    .spawn_bundle(SpatialBundle {
+        transform: Transform::from_xyz(10.0, 20.0, 30.0),
+        visibility: Visibility {
+            is_visible: true,
+        },
+        ..default()
+    }).with_children(|parent| {
+        parent
+            .spawn_bundle(TableBundle::default())
+            .spawn_bundle(ShopKeeperBundle::default())
+            .spawn_bundle(PotionBundle::default());
+    });
+```
+
+If you know you don't need [`Transform`] propagation (or your entity already has those components), you can instead use the new [`VisibilityBundle`], which only adds the components required for visibility propagation.
+
+[`Transform`]: https://docs.rs/bevy/0.8.0/bevy/transform/struct.Transform.html
+[`GlobalTransform`]: https://docs.rs/bevy/0.8.0/bevy/transform/struct.GlobalTransform.html
+[`SpatialBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/struct.SpatialBundle.html
+[`VisibilityBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.VisibilityBundle.html
 
 ## Built-in Shader Modularization
 
@@ -294,7 +327,7 @@ fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {
 }
 ```
 
-We've also modularized our mesh and view binding shader logic. When paired with the [New Material System](#new-material-system), users can now reasonably write custom PBR Materials without re-defining all of the PBR logic in their shaders. The new [Array Texture Example](https://github.com/bevyengine/bevy/blob/v0.8.0/examples/shader/array_texture.rs) illustrates how to define a custom PBR shader Material using these new APIs:
+We've also modularized our mesh and view binding shader logic. When paired with the [New Material System](#new-material-system), users can now reasonably write custom PBR materials without re-defining all of the PBR logic in their shaders. The new [Array Texture Example](https://github.com/bevyengine/bevy/blob/v0.8.0/examples/shader/array_texture.rs) illustrates how to define a custom PBR shader material using these new APIs:
 
 ![array texture](array_texture.png)
 
@@ -381,7 +414,7 @@ Note that "parallel b" stand for "parallel batch size" (number of entities in ea
 
 ## Automatic Mesh Tangent Generation
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @DJMcNab</div>
+<div class="release-feature-authors">authors: Rob Swain (@superdump), @jakobhellermann, @DJMcNab</div>
 
 Vertex tangents are used in tandem with normal maps to give meshes more detailed normals when rendering them. Some imported meshes have normal maps, but don't have vertex tangents calculated. Bevy can now automatically generate vertex tangents for [`Meshes`][`Mesh`] that are missing them using the defacto industry-standard MikkTSpace library / algorithm (Godot, Unity, Unreal, and Blender all use this).
 
@@ -431,38 +464,6 @@ Notably, this allows for shear to be represented. Shear is a controversial topic
 <div class="release-feature-authors">authors: @mlodato517</div>
 
 When a [`Mesh`] asset is changed, the AABB (axis aligned bounding box) is now recalculated, ensuring frustum culling calculations are still correct.
-
-## SpatialBundle and VisibilityBundle
-
-<div class="release-feature-authors">authors: @mockersf, @rparrett</div>
-
-With the addition of [Visibility Inheritance](#visibility-inheritance) comes the constraint that visibility propagation requires all elements in the hierarchy to have the appropriate visibility components. When constructing scenes, developers often want to group entities under parent "organizational" entities, which exist solely to group entities together, reposition them, and hide them as a unit. These "organizational" entities still require visibility components to propagate the [`Transform`] and [`Visibility`] to [`GlobalTransform`] and [`ComputedVisibility`] (respectively).
-
-To make this easy, we've added a new [`SpatialBundle`], which adds the components mentioned above. This allows the entity to configure and propagate visibility and transform data without incurring the cost of actually rendering it.
-
-```rust
-commands
-    // This entity controls the position and visibility of the entities beneath it.
-    .spawn_bundle(SpatialBundle {
-        transform: Transform::from_xyz(10.0, 20.0, 30.0),
-        visibility: Visibility {
-            is_visible: true,
-        },
-        ..default()
-    }).with_children(|parent| {
-        parent
-            .spawn_bundle(TableBundle::default())
-            .spawn_bundle(ShopKeeperBundle::default())
-            .spawn_bundle(PotionBundle::default());
-    });
-```
-
-If you know you don't need [`Transform`] propagation (or your entity already has those components), you can instead use the new [`VisibilityBundle`], which only adds the components required for visibility propagation.
-
-[`Transform`]: https://docs.rs/bevy/0.8.0/bevy/transform/struct.Transform.html
-[`GlobalTransform`]: https://docs.rs/bevy/0.8.0/bevy/transform/struct.GlobalTransform.html
-[`SpatialBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/struct.SpatialBundle.html
-[`VisibilityBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.VisibilityBundle.html
 
 ## ShaderType derive
 
@@ -1056,10 +1057,10 @@ If you are itching to test Bevy on mobile platforms, our [iOS support](https://g
 
 As always, Bevy's CI had plenty of improvements this cycle:
 
-* Examples are now run in WASM when validating builds. Screenshots are taken and stored as part of the build outputs to ensure rendering works (`@mockersf`)
-* The Bevy examples are now run on a Windows VM once per day to ensure they aren't broken (`@mockersf`)
-* License files are now automatically added to all published crates (`@NiklasEi`)
-* There is now a workflow to automatically generate a PR with version number bumps for all bevy crates (`@mockersf`)
+* Examples are now run in WASM when validating builds. Screenshots are taken and stored as part of the build outputs to ensure rendering works (`@mockersf`).
+* The Bevy examples are now run on a Windows VM once per day to ensure they aren't broken (`@mockersf`).
+* License files are now automatically added to all published crates (`@NiklasEi`).
+* There is now a workflow to automatically generate a PR with version number bumps for all bevy crates (`@mockersf`).
 * To make the occasional nightly Rust breakage less disruptive, we've parameterized the nightly toolchain to make it easier to pin to a specific nightly. (`@mockersf`)
 
 ## Example: Post Processing
@@ -1082,7 +1083,7 @@ helper tool to build examples in wasm (#4776)
 
 ## Website: Improved Examples Page
 
-<div class="release-feature-authors">authors: @doup</div>
+<div class="release-feature-authors">authors: @doup, @ickk</div>
 
 The [Bevy WASM Examples](/examples/) pages have been reworked:
 
