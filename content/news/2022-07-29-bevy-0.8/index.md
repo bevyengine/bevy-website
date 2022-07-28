@@ -12,29 +12,29 @@ image_subtitle = "Bevy-shaped mountains in a Bevy-based Witcher 3 terrain textur
 image_subtitle_link = "https://codeberg.org/rmemr/w3.terrain-texturing"
 +++
 
-Thanks to **X** contributors, **X** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **X** contributors, community reviewers, **X** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/book/migration-guides/0.7-0.8/).
 
 As always, there are a _ton_ of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights: 
 
 * **New Material system**: Custom shaders are now _much_ easier to define, thanks to the new Material trait and AsBindGroup derive
-* **Camera driven rendering**: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.
-* **Built-in Shader Modularization**: Many built in shader types and functions are now importable. Notably, custom shaders can now import the PBR shader logic
+* **Camera-driven rendering**: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.
+* **Built-in Shader Modularization**: Many built-in shader types and functions are now importable. Notably, custom shaders can now import the PBR shader logic
 * **Spot Lights**: A new light type that emits light in a cone shape from a fixed point
 * **Visibility Inheritance**: Hiding an entity now also hides all of its descendants in the hierarchy
 * **Scene Bundle**: Easily spawn scenes using a normal Bevy bundle and extend them with new components and children
 * **Upgraded to wgpu 0.13**: Uses a new, more ergonomic WGSL shader syntax
 * **Automatic Mesh tangent generation**: If tangents are missing for a mesh, generate them with mikktspace
 * **Renderer Optimizations**: Parallel Frustum Culling, thread local check visiblity, unstable sorts for unbatched render phases, 
-* **Scripting / Modding Progress: Untyped ECS apis**: A step toward 3rd party scripting language support! Interact with bevy ecs internals directly via pointers.
-* **ECS Query ergonomics and usability**: Queries now implement IntoIter and mutable queries can be converted to immutable queries
+* **Scripting / Modding Progress: Untyped ECS apis**: A step toward 3rd party scripting language support! Interact with bevy ECS internals directly via pointers.
+* **ECS Query ergonomics and usability**: Queries now implement `IntoIter` and mutable queries can be converted to immutable queries
 * **ECS internals refactors**: Sweeping changes to Bevy ECS internals that make it simpler, safer, and easier to maintain
 * **Reflection improvements**: Support for reflecting more types, ECS resource reflection, untyped reflection, improved internals
-* **Hierarchy Commands**: Hierarchy updates now use "transactional commands" to ensure hierarchy integrity at a given point in time
-* **Bevy UI now uses Taffy**: Switched to a community maintained fork (that we helped build) of the now abandoned Stretch layout library 
+* **Hierarchy Commands**: Hierarchy updates now use "transactional commands" to ensure hierarchy consistency at all times
+* **Bevy UI now uses Taffy**:  We've swapped to (and help maintain) a collaborative fork of the now abandoned Stretch UI layout library. Exponential blow-up bug begone!
 
 <!-- more -->
 
@@ -42,7 +42,7 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 
 <div class="release-feature-authors">authors: @cart, @Wrapperup, @johanhelsing</div>
 
-Bevy has a brand new [`Material`] system that makes defining custom shaders a breeze. Bevy's previous material system required hundreds of lines of "mid-level" rendering api boilerplate. This was never the long term plan, just an intermediate step. In **Bevy 0.8**, custom shader materials are as simple as this:
+Bevy has a brand new [`Material`] system that makes defining custom shaders a breeze. Bevy's previous material system required hundreds of lines of "mid-level" boilerplate. This was never the long term plan, just an intermediate step. In **Bevy 0.8**, custom shader materials are as simple as this:
 
 ```rust
 #[derive(AsBindGroup, TypeUuid, Clone)]
@@ -91,9 +91,9 @@ And just like that, we have a configurable shader material!
 **TODO: replace this video with Griffin's cool sphere example**
 <video controls loop><source  src="shader_material.mp4" type="video/mp4"/></video>
 
-This is thanks to the new [`AsBindGroup`] trait / derive, which does all of the hard work of converting the material to GPU-compatible datatypes, writing them to the GPU, and creating the final [`BindGroup`]. The [`AsBindGroup`] trait is powerful: it supports combining multiple fields into the same uniform binding, configuring texture binding types (2d, 3d, filtering, etc), and more. For details, check out the [`AsBindGroup`] docs.
+This is thanks to the new [`AsBindGroup`] trait / derive, which does all of the hard work of converting the material to GPU-compatible datatypes, writing them to the GPU, and creating the final [`BindGroup`]. The [`AsBindGroup`] trait is powerful: it supports combining multiple fields into the same uniform binding, configuring texture binding types (2D, 3D, filtering, etc), and more. For details, check out the [`AsBindGroup`] docs.
 
-All built in materials, such as the PBR [`StandardMaterial`] have been ported to use this new system. We strive to make Bevy "internals" the same as user code, and this is no exception! [`Material`] also works seamlessly with our more advanced shader features, such as [shader pipeline specialization](https://github.com/bevyengine/bevy/blob/v0.8.0/examples/shader/shader_defs.rs).
+All built-in materials, such as the PBR [`StandardMaterial`] have been ported to use this new system. We strive to make Bevy "internals" the same as user code, and this is no exception! [`Material`] also works seamlessly with our more advanced shader features, such as [shader pipeline specialization](https://github.com/bevyengine/bevy/blob/v0.8.0/examples/shader/shader_defs.rs).
 
 There is also an equivalent [`Material2d`] trait, which enables custom materials in 2D.
 
@@ -103,13 +103,13 @@ There is also an equivalent [`Material2d`] trait, which enables custom materials
 [`StandardMaterial`]: https://docs.rs/bevy/0.8.0/bevy/pbr/struct.StandardMaterial.html
 [`Material2d`]: https://docs.rs/bevy/0.8.0/bevy/sprite/trait.Material2d.html
 
-## Camera Driven Rendering
+## Camera-Driven Rendering
 
 <div class="release-feature-authors">authors: @cart</div>
 
 In previous versions of Bevy, [`Cameras`][`Camera`] were selected and run as a part of one "global" [`RenderGraph`]. There could only be one "active" camera of a given type, and that camera could only render to one target. The only way to render from multiple perspectives at the same time was to manually extend the render graph with duplicate logic. This was _full_ of complicated low-level renderer boilerplate that wasn't approachable for the average Bevy user.
 
-In **Bevy 0.8**, each [`Camera`] now configures what it renders, how it renders it, and what it renders to. An enabled camera will start a new run of a [`RenderGraph`] to a specified [`RenderTarget`]. The render graph defines [modular render logic](/news/bevy-0-6/#render-graphs-and-sub-graphs) for the given camera and the render target defines the window or texture the graph will render to.
+In **Bevy 0.8**, each [`Camera`] now configures what it renders, how it renders, and what it renders to. An enabled camera will start a new run of a [`RenderGraph`] to a specified [`RenderTarget`]. The render graph defines [modular render logic](/news/bevy-0-6/#render-graphs-and-sub-graphs) for the given camera and the render target defines the window or texture the graph will render to.
 
 This makes scenarios that were previously hundreds (or thousands) of lines of code as simple as setting a few fields on the [`Camera`] entity:
 
@@ -127,7 +127,7 @@ Here is an example of a "portal effect":
 
 <video controls loop><source  src="portals.mp4" type="video/mp4"/></video>
 
-This accomplished by rendering a second camera to a texture, synchronizing its orientation with the main player's camera, and using that texture in the main camera's scene.
+This is accomplished by rendering a second camera to a texture, synchronizing its orientation with the main player's camera, and using that texture in the main camera's scene.
 
 ### Split Screen
 
@@ -137,7 +137,7 @@ Each [`Camera`] now has an optional [`Viewport`], which if set will draw to a se
 
 ### Layered Rendering
 
-Cameras can now be layered on top of each other using the new "camera priority" field
+Cameras can now be layered on top of each other using the new "camera priority" field:
 
 ```rust
 // This camera defaults to priority 0 and is rendered "first" / "at the back" 
@@ -167,7 +167,7 @@ This can be used for things like "custom UI passes", "minimaps", etc.
 
 ### Ergonomic Target Size Access
 
-Working with cameras is now also much easier. They now store their [`RenderTarget`] size locally, which makes retrieving the size much simpler:
+Cameras now store their [`RenderTarget`] size locally, which makes retrieving the size much simpler:
 
 ```rust
 /// Much nicer than needing to look up the size on the target Window or Image manually,
@@ -205,7 +205,7 @@ commands.spawn_bundle(Camera3dBundle {
 })
 ```
 
-This enables you to draw the camera with whatever custom render logic you need! Note that generally this won't be required: most custom rendering scenarios will be covered by high level [Materials](#new-material-system) or extending the built in render graphs.
+This enables you to draw the camera with whatever custom render logic you need! Note that this generally won't be required: most custom rendering scenarios will be covered by high level [Materials](#new-material-system) or extending the built in render graphs.
 
 ### Enabling / Disabling Cameras
 
@@ -217,7 +217,7 @@ camera.is_active = true;
 
 ### RenderLayers
 
-Bevy's existing [`RenderLayers`] system can be used to tell a [`Camera`] to only render entities on specific layers. **Camera Driven Rendering** pairs nicely with this feature. This enables rendering one set of entities to one camera and another set of entities to another camera. We've ported the [`RenderLayers`] system to all entities with [`Visibility`], so this will all Just Work™.
+Bevy's existing [`RenderLayers`] system can be used to tell a [`Camera`] to only render entities on specific layers. **Camera-Driven Rendering** pairs nicely with this feature. This enables rendering one set of entities to one camera and another set of entities to another camera. We've ported the [`RenderLayers`] system to all entities with [`Visibility`], so this will all Just Work™.
 
 [`Camera`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.Camera.html
 [`RenderGraph`]: https://docs.rs/bevy/0.8.0/bevy/render/render_graph/struct.RenderGraph.html
@@ -274,7 +274,7 @@ The "inherited visibility" is computed in the [`PostUpdate`] stage and stored on
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-In **Bevy 0.8**, we've (started) modularizing our built-in shaders. Notably, this means you can now import and run the built in PBR shader / lighting logic:
+In **Bevy 0.8**, we've started modularizing our built-in shaders. Notably, this means you can now import and run the built in PBR shader / lighting logic:
 
 ```rust
 #import bevy_pbr::utils
@@ -386,8 +386,8 @@ Note that "parallel b" stand for "parallel batch size" (number of entities in ea
 Vertex tangents are used in tandem with normal maps to give meshes more detailed normals when rendering them. Some imported meshes have normal maps, but don't have vertex tangents calculated. Bevy can now automatically generate vertex tangents for [`Meshes`][`Mesh`] that are missing them using the defacto industry-standard MikkTSpace library / algorithm (Godot, Unity, Unreal, and Blender all use this).
 
 We have started maintaining [our own fork](https://github.com/bevyengine/bevy/tree/v0.8.0/crates/bevy_mikktspace) of the [gltf-rs/mikktspace crate](https://github.com/gltf-rs/mikktspace) so we can:
-1. Update dependencies at the speed required for Bevy
-2. [Start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932) (it currently uses unsafe rust code auto-generated from the original mikktspace.h written in C).
+1) update dependencies at the speed required for Bevy;
+2) [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932) (it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C).
 
 ## Default to Linear Texture Filtering
 
@@ -417,7 +417,7 @@ With that, we get crisp pixel art:
 
 <div class="release-feature-authors">authors: @HackerFoo</div>
 
-The internal representation of the [`GlobalTransform`] component (representing the "world space" transform for an entity) has been changed from a "similarity" (translation [`Vec3`] / rotation [`Quat`] / scale [`Vec3`]) to an "affine 3d transform" ([`Mat3A`] and a [`Vec3`] translation).
+The internal representation of the [`GlobalTransform`] component (representing the "world space" transform for an entity) has been changed from a "similarity" (translation [`Vec3`] / rotation [`Quat`] / scale [`Vec3`]) to an "affine 3D transform" ([`Mat3A`] and a [`Vec3`] translation).
 
 Notably, this allows for shear to be represented. Shear is a controversial topic. Engine and physics programmers tend to hate it. Artists tend to love it. Given that most artist tools and game engines support shear in their equivalent types, we believe it is important to provide this as an option. 
 
@@ -597,8 +597,8 @@ The extract system is now parallel, the data access is consistent with other ren
 Some ECS resources have very simple extract logic:
 
 ```rust
-fn extract_cool_color(mut extracted_time: ResMut<CoolColor>, time: Extract<Res<CoolColor>>) {
-    *cool_color = cool_color.clone();
+fn extract_cool_color(mut extracted_cool_color: ResMut<CoolColor>, cool_color: Extract<Res<CoolColor>>) {
+    *extracted_cool_color = cool_color.clone();
 }
 ```
 
@@ -696,7 +696,7 @@ players.many_for_each_mut(&blue_team.members, |mut player| {
 
 <div class="release-feature-authors">authors: @harudagondi</div>
 
-Mutable [`Queries`][`Query`] can now be converted to their read-only versions, which makes it easier to build and use abstractions on queries:
+Mutable [`Queries`][`Query`] can now be converted to their read-only versions, which makes it easier to build and use abstractions over queries:
 
 ```rust
 fn system(mut players: Query<&mut Player>) {
@@ -728,7 +728,7 @@ When we [released Bevy ECS V2](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2
 let health_ptr: Ptr = world.entity(player).get_by_id(heath_component_id).unwrap();
 ```
 
-These, when combined with our Reflection apis, provide the tools needed to start building scripting support!
+These, when combined with our reflection APIs, provide the tools needed to start building scripting support!
 
 `@jakobhellermann` has [started building their own JavaScript / TypeScript plugin for Bevy](https://github.com/jakobhellermann/bevy_mod_js_scripting/blob/main/assets/scripts/debug.ts). Note that:
 1. This plugin is still very much a work in progress and is not ready to be used in projects.
@@ -769,7 +769,7 @@ By retaining this lifetime, we can rely more on Rust's borrow checker to yell at
 * `ReadOnlyFetch` was replaced with [`ReadOnlyWorldQuery`], moving this trait constraint "up a level", making it easier to express in the type system.
 * "QF Fetch generics" were removed from [`Query`] and [`QueryState`] methods and types in favor of [`WorldQuery`] usage, making filters and normal fetches consistent in the type system and simpler to express.
 
-We have more changes in this vein planned for the next release. Bevy ECS internals are starting to be more approachable!
+We have more changes in this vein planned for the next release. Bevy ECS internals are becoming considerably easier to understand!
 
 [`ReadOnlyWorldQuery`]: https://docs.rs/bevy/0.8.0/bevy/ecs/query/trait.ReadOnlyWorldQuery.html
 [`WorldQuery`]: https://docs.rs/bevy/0.8.0/bevy/ecs/query/trait.WorldQuery.html
@@ -782,7 +782,7 @@ We have more changes in this vein planned for the next release. Bevy ECS interna
 Bevy ECS had a number of optimizations this time around:
 
 * `@james7132` sped up entity moves between tables by reducing the number of copies conducted. For larger components, this is a huge win. The `many_cubes` stress test saw a ~16% speed boost in the `prepare_uniform_components` system, which relies heavily on commands / table moves.
-* `@DJMcNab` removed no-op drop function calls for ECS storage internals, which reduced the dropping time for the `many_cubes` stress test from ~150μs to ~80μs
+* `@DJMcNab` removed no-op drop function calls for ECS storage internals, which reduced the dropping time for the `many_cubes` stress test from ~150μs to ~80μs.
 * `@james7132` changed [`ComponentSparseSet`] indices from `usize` to `u32`, which makes them use less space / making some operations more cache friendly. Sparse Set iteration is ~15% faster.
 
 [`ComponentSparseSet`]: http://docs.rs/bevy/0.8.0/bevy/ecs/storage/struct.ComponentSparseSet.html
@@ -795,7 +795,7 @@ Bevy relies on "labels" to identify things like systems, stages, and apps. This 
 
 In **Bevy 0.8** we've optimized the internal representation of labels by removing boxing / trait objects in favor of a single cheap-to-copy-and-compare "system label id" type. 
 
-This new representation sped up schedule construction by ~30 percent!
+This new representation sped up schedule construction by ~30%!
 
 **TODO: insert graph here**
 
@@ -809,7 +809,7 @@ enum MovementSystem {
     Gravity,
 }
 
-// New (Bevy 0.7)
+// New (Bevy 0.8)
 #[derive(SystemLabel, Clone)]
 enum MovementSystem {
     Velocity,
@@ -823,7 +823,7 @@ enum MovementSystem {
 
 ## Bevy Reflection Improvements
 
-Bevy's "Rust reflection" system: `bevy_reflect` is a core, foundational piece of Bevy's scene system. It provides a way to dynamically interact with Rust types at run-time without knowing their actual types. We've invested heavily in it this release in preparation for scripting support and scene system improvements.
+Bevy's "Rust reflection" system `bevy_reflect` is a core, foundational piece of Bevy's scene system. It provides a way to dynamically interact with Rust types at run-time without knowing their actual types. We've invested heavily in it this release to prepare for scripting support and scene system improvements.
 
 [`bevy_reflect`](https://crates.io/crates/bevy_reflect) aims to be a "generic" Rust reflection system. It can be used without Bevy. We believe it fills a very real gap in the Rust ecosystem and we encourage the wider Rust community to use it (and contribute!). 
 
@@ -831,7 +831,7 @@ Bevy's "Rust reflection" system: `bevy_reflect` is a core, foundational piece of
 
 <div class="release-feature-authors">authors: @jakobhellermann</div>
 
-The [`Reflect`] derives now automatically add a new [`ReflectFromPtr`] struct to the [`TypeRegistry`] for each reflected type. This enables using the new [untyped ECS apis](#scripting-modding-progress-untyped-ecs-apis) in combination with the reflection system. Thi helps enable things like 3rd party scripting and modding.
+The [`Reflect`] derives now automatically add a new [`ReflectFromPtr`] struct to the [`TypeRegistry`] for each reflected type. This enables using the new [untyped ECS apis](#scripting-modding-progress-untyped-ecs-apis) in combination with the reflection system. This helps enable things like 3rd party scripting and modding.
 
 [`Reflect`]: https://docs.rs/bevy/0.8.0/bevy/reflect/trait.Reflect.html
 [`ReflectFromPtr`]: https://docs.rs/bevy/0.8.0/bevy/reflect/struct.ReflectFromPtr.html
@@ -940,15 +940,15 @@ println!("{:#?}", foo_reflect);
 In previous versions of Bevy, this would have printed:
 
 ```
-Reflect(sprite::setup::Foo)
+Reflect(my_crate::Foo)
 ```
 
 In **Bevy 0.8**, it prints:
 
 ```
-sprite::setup::Foo {
+my_crate::Foo {
     a: 42.0,
-    b: sprite::setup::Bar {
+    b: my_crate::Bar {
         x: "hello",
         y: 123,
     },
@@ -964,8 +964,8 @@ Much better!
 Now that `bevy_reflect` is starting to get some serious investment and usage, we've invested time in reworking the internals to make them easier to maintain and extend:
 
 * **[`Reflect`] Derive Reorganization**: the derive logic was broken up into smaller, more maintainable pieces. "Metadata structs" were added to collect and organize derive inputs. (`@MrGVSV`) 
-* **The [`Reflect`] trait is now safe to implement**: Soundness no longer hinges on the implementor doing the right thing, thanks to some changes to the [`Reflect`] interface. As a result, we were able to remove the "unsafe" keyword from the [`Reflect`] trait. (`@PROMETHIA-27`)
-* "Serialize" logic is now implemented using [`TypeRegistry`] type data like other reflected trait logic, rather than being hard-coded into [`Reflect`] impls. (`@jakobhellermann`)
+* **The [`Reflect`] trait is now safe to implement**: Soundness no longer hinges on the implementor doing the right thing, thanks to some changes to the [`Reflect`] interface. As a result, we were able to remove the `unsafe` keyword from the [`Reflect`] trait. (`@PROMETHIA-27`)
+* `Serialize` logic is now implemented using [`TypeRegistry`] type data like other reflected trait logic, rather than being hard-coded into [`Reflect`] impls. (`@jakobhellermann`)
 
 ## Hierarchy Commands
 
@@ -1034,7 +1034,7 @@ Bevy ECS received a solid number of soundness and correctness bug fixes this rel
 * **Fix some memory leaks detected by miri**: Miri detected a case that leaks in our `BlobVec` drop impl. That is now fixed.
 * **Lint for missing SAFETY comments in bevy_ecs**: We now require safety comments for unsafe code blocks in `bevy_ecs`.
 
-As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks because we are modeling parallel data access that Rust cannot reason about without our help. But we are committed to removing as much unsafe code as we can and improving the quality and scope of our unsafe code.
+As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks because we are modeling parallel data access that Rust cannot reason about without our help. But we are committed to both removing as much unsafe code as we can and improving the quality of the unsafe code that remains.
 
 ## Android Progress: We aren't there yet, but we're closer!
 
@@ -1048,7 +1048,7 @@ However Android support _is not_ ready yet. There are issues with how we manage 
 
 That being said, this is an important step forward, as Bevy developers can now build, deploy, (and in some cases test) Bevy apps on Android!
 
-If you are itching to test Bevy on mobile platforms, our [iOS support](https://github.com/bevyengine/bevy/blob/v0.8.0/examples/README.md#ios) is much more polished. Bevy developers have already started [publishing Bevy-based iOS apps to the Apple App Store](https://noumenal.app/).  
+If you are itching to test Bevy on mobile platforms, our [iOS support](https://github.com/bevyengine/bevy/blob/v0.8.0/examples/README.md#ios) is much more polished. Bevy developers have already started [publishing Bevy-based iOS apps to the Apple App Store](https://noumenal.app/)!
 
 ## CI / Build System Improvements
 
@@ -1057,7 +1057,7 @@ If you are itching to test Bevy on mobile platforms, our [iOS support](https://g
 As always, Bevy's CI had plenty of improvements this cycle:
 
 * Examples are now run in WASM when validating builds. Screenshots are taken and stored as part of the build outputs to ensure rendering works (`@mockersf`)
-* The Bevy examples are now run on a windows VM once per day to ensure they aren't broken (`@mockersf`)
+* The Bevy examples are now run on a Windows VM once per day to ensure they aren't broken (`@mockersf`)
 * License files are now automatically added to all published crates (`@NiklasEi`)
 * There is now a workflow to automatically generate a PR with version number bumps for all bevy crates (`@mockersf`)
 * To make the occasional nightly Rust breakage less disruptive, we've parameterized the nightly toolchain to make it easier to pin to a specific nightly. (`@mockersf`)
@@ -1098,7 +1098,7 @@ As Bevy grows, we are constantly re-evaluating our development process to accomm
 This release cycle, there were two major changes to the Bevy Org:
 
 1. All existing developers with "delegated merge rights" (`@mockersf` and `@alice-i-cecile`) now have the title "maintainer".
-2. Rob Swain (`@superdump`) is now a maintainer. You will probably recognize them from their work on Bevy's renderer. They've been a veritable force of nature, driving forward clustered forward rendering, directional and point light shadows, visibility / frustum culling, alpha blending, compressed gpu textures, and more. Rob has demonstrated deep understanding of rendering algorithms, Bevy internals, and Bevy project direction. I'm certainly looking forward to what they build next!
+2. Rob Swain (`@superdump`) is now a maintainer. You will probably recognize them from their work on Bevy's renderer. They've been a veritable force of nature, driving forward clustered forward rendering, directional and point light shadows, visibility / frustum culling, alpha blending, compressed GPU textures, and more. Rob has demonstrated deep understanding of rendering algorithms, Bevy internals, and Bevy project direction. I'm certainly looking forward to what they build next!
 
 Being a "maintainer" now works like this:
 
@@ -1108,11 +1108,11 @@ Being a "maintainer" now works like this:
 4. **Controversial Decision Making on a Timer**: For all controversial PRs (including RFCs), if two maintainers approve, the PR can be labeled with a `S-Ready-For-Final-Review` label. As soon as this label is added and I have been pinged, a clock starts. If I have not responded with actionable feedback, a "snooze button" / "we aren't ready for this yet", or a veto within a month and a half (45 days), maintainers are free to merge the PR. This gives me the ability to dictate project direction in areas where that is important while also empowering maintainers to move things forward in parallel when that makes sense. We will be calibrating this approach as we go to make sure we strike the right balance between progress, quality, and consistent vision.
 5. **I still reserve the right to veto all code changes and make unilateral code changes**. This includes reverting "controversial changes" merged via (4).
 
-We've used this process for most of the last cycle and I'm loving how it is working so far: more trust, more eyes on each decision, faster development velocity. I still get to enforce consistent vision when that matters, but the community is empowered to drive efforts forward.
+We've used this process for most of the last cycle and I'm loving how it is working so far: more trust, more eyes on each decision, faster development velocity, no more trivial fixes sitting in limbo. I still get to enforce consistent vision when that matters, but the community is empowered to drive efforts forward.
 
-## What is Next?
+## What's Next?
 
-* **Post Processing**: We have a lot of post processing work in the pipeline (some of it almost made it in to this release). The next release will make it easier to write post processing effects (thanks to intermediate HDR textures and a separate tonemapping step), and it will also include built in effects like "bloom" and "upscaling".
+* **Post Processing**: We have a lot of post processing work in the pipeline (some of it almost made it in to this release). The next release will make it easier to write post processing effects (thanks to intermediate HDR textures and a separate tonemapping step), and it will also include built in effects like bloom and upscaling.
 * **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on 
 * **Scene System Improvements**: This release saw a lot of investment in Reflection. We can now build then next iteration of the scene system on top of it, with a nicer scene format, nested scenes, and improved workflows.  
 * **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, its time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine on twitter](https://twitter.com/BevyEngine) and join the [Official Bevy Discord](https://discord.gg/bevy). 
