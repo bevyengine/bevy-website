@@ -1,10 +1,11 @@
+use anyhow::Result;
 use std::{
     ffi::OsStr,
     fs::{self, DirEntry},
-    path::Path, error::Error,
+    path::Path,
 };
 
-pub fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<(), Box<dyn Error>>) -> Result<(), Box<dyn Error>> {
+pub fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Result<()> {
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
