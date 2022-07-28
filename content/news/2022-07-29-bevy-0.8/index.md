@@ -863,7 +863,7 @@ This enables constructing components for entities without _any_ compile time inf
 
 ### Array Reflection
 
-<div class="release-feature-authors">authors: @MrGVSV</div>
+<div class="release-feature-authors">authors: @NathanSWard, @MrGVSV</div>
 
 Bevy's reflection system now supports reflecting Rust arrays, which can be interacted with in a type-erased manner using the new [`Array`] trait. 
 
