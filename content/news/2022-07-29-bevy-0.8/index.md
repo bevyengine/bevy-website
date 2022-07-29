@@ -208,7 +208,7 @@ commands.spawn_bundle(Camera3dBundle {
 })
 ```
 
-This enables you to draw the camera with whatever custom render logic you need! Note that this generally won't be required: most custom rendering scenarios will be covered by high-level [Materials](#new-material-system) or extending the built in render graphs.
+This enables you to draw the camera with whatever custom render logic you need! Note that this generally won't be required: most custom rendering scenarios will be covered by high-level [Materials](#new-material-system) or extending the built-in render graphs.
 
 ### Enabling / Disabling Cameras
 
@@ -308,7 +308,7 @@ If you know you don't need [`Transform`] propagation (or your entity already has
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-In **Bevy 0.8**, we've started modularizing our built-in shaders. Notably, this means you can now import and run the built in PBR shader / lighting logic:
+In **Bevy 0.8**, we've started modularizing our built-in shaders. Notably, this means you can now import and run the built-in PBR shader / lighting logic:
 
 ```rust
 #import bevy_pbr::utils
@@ -1075,7 +1075,7 @@ We're discussing ways to resolve this class of problem, such as [Archetype Rules
 
 <div class="release-feature-authors">authors: @alice-i-cecile, @jkelleyrtp, @Weibye, @TimJentzsch, @colepoirier</div>
 
-Bevy's moved off the abandoned [`stretch`](https://crates.io/crates/stretch) UI layout crate and onto its new community-maintained hard fork: `taffy`. Together with the [Dioxus](https://dioxuslabs.com/) team, we've dramatically cleaned up the code base, solved a critical performance issue with deep UI trees and freshened up the docs.
+Bevy's moved off the abandoned [`stretch`](https://crates.io/crates/stretch) UI layout crate and onto its new community-maintained hard fork: [`taffy`](https://crates.io/crates/taffy). Together with the [Dioxus](https://dioxuslabs.com/) team, we've dramatically cleaned up the code base, solved a critical performance issue with deep UI trees and freshened up the docs.
 
 We're looking forward to its continued maintenance and development as the team continues to improve its performance, fix bugs, and add support for alternative layout paradigms.
 
@@ -1085,11 +1085,11 @@ We're looking forward to its continued maintenance and development as the team c
 
 Bevy ECS received a solid number of soundness and correctness bug fixes this release:
 
-* **Removed EntityMut::get_unchecked**: The only way to soundly use this API is already encapsulated within `EntityMut::get`. Therefore there was no reason to keep this unsafe API around.
+* **Removed `EntityMut::get_unchecked`**: The only way to soundly use this API is already encapsulated within `EntityMut::get`. Therefore there was no reason to keep this unsafe API around.
 * **Fixed unsoundness with some `Or`/`AnyOf`/`Option` component access**: Previous Bevy versions allowed unsound versions of these queries. We now properly prevent those uses.
 * **Improve soundness of `CommandQueue`**: It is now sound to store Commands with padding or uninitialized bytes. A "use after move" case was also removed.
-* **Fix some memory leaks detected by miri**: Miri detected a case that leaks in our `BlobVec` drop impl. That is now fixed.
-* **Lint for missing SAFETY comments in bevy_ecs**: We now require safety comments for unsafe code blocks in `bevy_ecs`.
+* **Fix some memory leaks detected by Miri**: Miri detected a case that leaks in our `BlobVec` drop impl. That is now fixed.
+* **Lint for missing SAFETY comments in `bevy_ecs`**: We now require safety comments for unsafe code blocks in `bevy_ecs`.
 
 As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks because we are modeling parallel data access that Rust cannot reason about without our help. But we are committed to both removing as much unsafe code as we can and improving the quality of the unsafe code that remains.
 
@@ -1177,7 +1177,7 @@ This release cycle, there were two major changes to the Bevy Org:
 
 Being a "maintainer" now works like this:
 
-1. **Maintainers now have no (hard) limits on the "area" of PRs they can merge**. No more limits on "docs only", "rendering only", etc. It is now each maintainers' responsibility to evaluate their areas of comfort. This does increase risk to an extent, but I think its an important step to allow maintainers to grow organically.
+1. **Maintainers now have no (hard) limits on the "area" of PRs they can merge**. No more limits on "docs only", "rendering only", etc. It is now each maintainers' responsibility to evaluate their areas of comfort. This does increase risk to an extent, but I think it's an important step to allow maintainers to grow organically.
 2. **Maintainers can merge "relatively uncontroversial" PRs with at least two community approvals**. Maintainers will collectively decide and enforce what is uncontroversial. Controversial PRs should be labeled with the `S-Controversial` label. Note that "two community approvals" is the minimum requirement. Maintainers are responsible for ensuring the appropriate people have approved a PR.
 3. **Maintainers can merge "completely trivial" PRs without two community approvals**. Some examples of "completely trivial": typo fixes, removing unused dependencies or code, and small "api consistency" fixes.
 4. **Controversial Decision Making on a Timer**: For all controversial PRs (including RFCs), if two maintainers approve, the PR can be labeled with a `S-Ready-For-Final-Review` label. As soon as this label is added and I have been pinged, a clock starts. If I have not responded with actionable feedback, a "snooze button" / "we aren't ready for this yet", or a veto within a month and a half (45 days), maintainers are free to merge the PR. This gives me the ability to dictate project direction in areas where that is important while also empowering maintainers to move things forward in parallel when that makes sense. We will be calibrating this approach as we go to make sure we strike the right balance between progress, quality, and consistent vision.
@@ -1187,12 +1187,12 @@ We've used this process for most of the last cycle and I'm loving how it is work
 
 ## What's Next?
 
-* **Post Processing**: We have a lot of post processing work in the pipeline (some of it almost made it in to this release). The next release will make it easier to write post processing effects (thanks to intermediate HDR textures and a separate tonemapping step), and it will also include built in effects like bloom and upscaling.
+* **Post Processing**: We have a lot of post processing work in the pipeline (some of it almost made it in to this release). The next release will make it easier to write post processing effects (thanks to intermediate HDR textures and a separate tonemapping step), and it will also include built-in effects like bloom and upscaling.
 * **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on:
     1. Pre-processing assets to do expensive work "during development time", so Bevy Apps can be deployed with assets that are prettier, smaller, and/or faster to load.
     2. Enabling configuring assets with `.meta` files. For example, you could define a texture compression level, the filter it should use, or the target format. 
 * **Scene System Improvements**: This release saw a lot of investment in Reflection. We can now build the next iteration of the scene system on top of it, with a nicer scene format, nested scenes, and improved workflows.  
-* **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, its time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine](https://twitter.com/BevyEngine) on Twitter and join the [Official Bevy Discord](https://discord.gg/bevy). 
+* **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, it's time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine](https://twitter.com/BevyEngine) on Twitter and join the [Official Bevy Discord](https://discord.gg/bevy). 
 
 ## Support Bevy
 
