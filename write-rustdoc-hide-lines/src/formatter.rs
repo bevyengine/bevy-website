@@ -114,7 +114,7 @@ mod tests {
     use indoc::indoc;
     use super::*;
 
-    fn file_iter(code: &str) -> impl Iterator<Item = Result<String>> + '_ {
+    fn lines_iter(code: &str) -> impl Iterator<Item = Result<String>> + '_ {
         code.split("\n").map(|line| Ok(String::from(line)))
     }
 
@@ -131,7 +131,7 @@ mod tests {
             ```
         "#};
 
-        let contents = format_file(file_iter(markdown), markdown.len());
+        let contents = format_file(lines_iter(markdown), markdown.len());
 
         assert_eq!(
             contents.unwrap(),
@@ -161,7 +161,7 @@ mod tests {
             ```
         "#};
 
-        let contents = format_file(file_iter(markdown), markdown.len());
+        let contents = format_file(lines_iter(markdown), markdown.len());
 
         assert_eq!(
             contents.unwrap(),
@@ -188,7 +188,7 @@ mod tests {
             ```
         "#};
 
-        let contents = format_file(file_iter(markdown), markdown.len());
+        let contents = format_file(lines_iter(markdown), markdown.len());
 
         assert_eq!(
             contents.unwrap(),
