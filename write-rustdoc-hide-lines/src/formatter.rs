@@ -108,3 +108,97 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
 
     Ok(contents)
 }
+
+#[cfg(test)]
+mod tests {
+    use indoc::indoc;
+    use super::*;
+
+    fn file_iter(code: &str) -> impl Iterator<Item = Result<String>> + '_ {
+        code.split("\n").map(|line| Ok(String::from(line)))
+    }
+
+    #[test]
+    fn add_missing_annotation() {
+        let markdown = indoc! {r#"
+            ```rust
+            # test
+            # test 2
+            fn not_hidden() {
+
+            }
+            # test 3
+            ```
+        "#};
+
+        let contents = format_file(file_iter(markdown), markdown.len());
+
+        assert_eq!(
+            contents.unwrap(),
+            indoc! {r#"
+                ```rust,hide_lines=1-2 6
+                # test
+                # test 2
+                fn not_hidden() {
+
+                }
+                # test 3
+                ```
+            "#}
+        );
+    }
+
+    #[test]
+    fn fix_wrong_annotation() {
+        let markdown = indoc! {r#"
+            ```rust,hide_lines=2-3 7
+            # test
+            # test 2
+            fn not_hidden() {
+
+            }
+            # test 3
+            ```
+        "#};
+
+        let contents = format_file(file_iter(markdown), markdown.len());
+
+        assert_eq!(
+            contents.unwrap(),
+            indoc! {r#"
+                ```rust,hide_lines=1-2 6
+                # test
+                # test 2
+                fn not_hidden() {
+
+                }
+                # test 3
+                ```
+            "#}
+        );
+    }
+
+    #[test]
+    fn remove_annotation() {
+        let markdown = indoc! {r#"
+            ```rust,hide_lines=2-3 7
+            fn not_hidden() {
+
+            }
+            ```
+        "#};
+
+        let contents = format_file(file_iter(markdown), markdown.len());
+
+        assert_eq!(
+            contents.unwrap(),
+            indoc! {r#"
+                ```rust
+                fn not_hidden() {
+
+                }
+                ```
+            "#}
+        );
+    }
+}
