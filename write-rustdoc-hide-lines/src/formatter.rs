@@ -144,12 +144,13 @@ mod tests {
                 }
                 # test 3
                 ```
+
             "#}
         );
     }
 
     #[test]
-    fn fix_wrong_annotation() {
+    fn update_wrong_annotation() {
         let markdown = indoc! {r#"
             ```rust,hide_lines=2-3 7
             # test
@@ -174,6 +175,7 @@ mod tests {
                 }
                 # test 3
                 ```
+
             "#}
         );
     }
@@ -198,6 +200,7 @@ mod tests {
 
                 }
                 ```
+
             "#}
         );
     }
