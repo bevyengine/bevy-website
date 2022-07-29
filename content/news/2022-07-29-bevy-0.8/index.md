@@ -29,7 +29,7 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 * **Automatic Mesh Tangent Generation**: If tangents are missing for a mesh, generate them with mikktspace.
 * **Renderer Optimizations**: Parallel frustum culling and unstable sorts for unbatched render phases yielded some big wins!
 * **Scene Bundle**: Easily spawn scenes using a normal Bevy bundle and extend them with new components and children.
-* **Scripting / Modding Progress: Untyped ECS APIs**: A step toward 3rd party scripting language support! Interact with bevy ECS internals directly via pointers.
+* **Scripting / Modding Progress: Untyped ECS APIs**: A step toward 3rd party scripting language support! Interact with Bevy ECS internals directly via pointers.
 * **ECS Query Ergonomics and Usability**: Queries now implement `IntoIter` and mutable queries can be converted to immutable queries.
 * **ECS Internals Refactors**: Sweeping changes to Bevy ECS internals that make it simpler, safer, and easier to maintain.
 * **Reflection Improvements**: Support for reflecting more types, ECS resource reflection, untyped reflection, improved internals.
@@ -1111,7 +1111,7 @@ As always, Bevy's CI had plenty of improvements this cycle:
 * Examples are now run in WASM when validating builds. Screenshots are taken and stored as part of the build outputs to ensure rendering works (`@mockersf`).
 * The Bevy examples are now run on a Windows VM once per day to ensure they aren't broken (`@mockersf`).
 * License files are now automatically added to all published crates (`@NiklasEi`).
-* There is now a workflow to automatically generate a PR with version number bumps for all bevy crates (`@mockersf`).
+* There is now a workflow to automatically generate a PR with version number bumps for all Bevy crates (`@mockersf`).
 * To make the occasional nightly Rust breakage less disruptive, we've parameterized the nightly toolchain to make it easier to pin to a specific nightly. (`@mockersf`)
 
 ## Example: Post Processing
