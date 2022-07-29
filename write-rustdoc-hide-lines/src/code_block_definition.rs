@@ -44,7 +44,7 @@ impl From<&str> for Annotation {
 }
 
 impl Annotation {
-    fn into_string(&self) -> String {
+    fn into_string(self) -> String {
         match self {
             Annotation::HideLines(ranges) => {
                 let ranges = ranges
@@ -61,7 +61,7 @@ impl Annotation {
 
                 format!("hide_lines={}", ranges)
             }
-            Annotation::Other(content) => content.to_owned(),
+            Annotation::Other(content) => content,
         }
     }
 }
@@ -109,7 +109,7 @@ impl CodeBlockDefinition {
         })
     }
 
-    pub fn into_string(&self) -> String {
+    pub fn into_string(self) -> String {
         let mut out = String::from("```rust");
 
         if !self.annotations.is_empty() {
@@ -119,7 +119,7 @@ impl CodeBlockDefinition {
         out.push_str(
             &self
                 .annotations
-                .iter()
+                .into_iter()
                 .map(|a| a.into_string())
                 .collect::<Vec<String>>()
                 .join(","),
