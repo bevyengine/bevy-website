@@ -420,7 +420,7 @@ Vertex tangents are used in tandem with normal maps to give meshes more detailed
 
 We have started maintaining [our own fork](https://github.com/bevyengine/bevy/tree/v0.8.0/crates/bevy_mikktspace) of the [gltf-rs/mikktspace crate](https://github.com/gltf-rs/mikktspace) so we can:
 1) update dependencies at the speed required for Bevy;
-2) [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932) (it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C).
+2) [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932), as it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C.
 
 ## Default to Linear Texture Filtering
 
@@ -632,6 +632,42 @@ impl ExtactResource for ExtractedCoolColor {
 [`ExtractResourcePlugin`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/struct.ExtractResourcePlugin.html
 [`App`]: https://docs.rs/bevy/0.8.0/bevy/app/struct.App.html
 
+## Scripting / Modding Progress: Untyped ECS APIs
+
+<div class="release-feature-authors">authors: @jakobhellermann</div>
+
+Bevy officially only supports Rust as the "one true way to define app logic". We have [very good reasons for this](https://github.com/bevyengine/bevy/issues/114#issuecomment-672397351) and that philosophy likely won't change any time soon. But we _do_ want to provide the tools needed for the community to build 3rd party scripting / modding plugins for their languages of choice. 
+
+When we [released Bevy ECS V2](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2), we intentionally built our internal ECS storage with these cases in mind. But we didn't expose public APIs that made it possible to interact with ECS data without normal Rust types.
+
+**Bevy 0.8** adds public "untyped" ECS apis that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types. 
+
+```rust
+let health_ptr: Ptr = world.entity(player).get_by_id(heath_component_id).unwrap();
+```
+
+These, when combined with our reflection APIs, provide the tools needed to start building scripting support!
+
+`@jakobhellermann` has [started building their own JavaScript / TypeScript plugin for Bevy](https://github.com/jakobhellermann/bevy_mod_js_scripting/blob/main/assets/scripts/debug.ts). Note that:
+1. This plugin is still very much a work in progress and is not ready to be used in projects.
+2. This is an unofficial community effort. Bevy will not be adding official JavaScript/TypeScript support.
+
+Here is a TypeScript snippet from their repository that queries Bevy ECS data from the script:
+
+```typescript
+const ballQuery = world.query({
+    components: [ballId, transformId, velocityId],
+});
+for (const item of ballQuery) {
+    let [ball, transform, velocity] = item.components;
+    velocity = velocity[0];
+
+    info(velocity.toString());
+}
+```
+
+[`ComponentId`]: https://docs.rs/bevy/0.8.0/bevy/ecs/component/struct.ComponentId.html
+
 ## Query IntoIter
 
 <div class="release-feature-authors">authors: @TheRawMeatball</div>
@@ -714,42 +750,6 @@ fn log_players(players: Query<&Players>) {
     }
 }
 ```
-
-## Scripting / Modding Progress: Untyped ECS APIs
-
-<div class="release-feature-authors">authors: @jakobhellermann</div>
-
-Bevy officially only supports Rust as the "one true way to define app logic". We have [very good reasons for this](https://github.com/bevyengine/bevy/issues/114#issuecomment-672397351) and that philosophy likely won't change any time soon. But we _do_ want to provide the tools needed for the community to build 3rd party scripting / modding plugins for their languages of choice. 
-
-When we [released Bevy ECS V2](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2), we intentionally built our internal ECS storage with these cases in mind. But we didn't expose public APIs that made it possible to interact with ECS data without normal Rust types.
-
-**Bevy 0.8** adds public "untyped" ECS apis that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types. 
-
-```rust
-let health_ptr: Ptr = world.entity(player).get_by_id(heath_component_id).unwrap();
-```
-
-These, when combined with our reflection APIs, provide the tools needed to start building scripting support!
-
-`@jakobhellermann` has [started building their own JavaScript / TypeScript plugin for Bevy](https://github.com/jakobhellermann/bevy_mod_js_scripting/blob/main/assets/scripts/debug.ts). Note that:
-1. This plugin is still very much a work in progress and is not ready to be used in projects.
-2. This is an unofficial community effort. Bevy will not be adding official JavaScript/TypeScript support.
-
-Here is a TypeScript snippet from their repository that queries Bevy ECS data from the script:
-
-```typescript
-const ballQuery = world.query({
-    components: [ballId, transformId, velocityId],
-});
-for (const item of ballQuery) {
-    let [ball, transform, velocity] = item.components;
-    velocity = velocity[0];
-
-    info(velocity.toString());
-}
-```
-
-[`ComponentId`]: https://docs.rs/bevy/0.8.0/bevy/ecs/component/struct.ComponentId.html
 
 ## ECS "lifetimed pointers"
 
