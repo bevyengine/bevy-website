@@ -1118,13 +1118,23 @@ As always, Bevy's CI had plenty of improvements this cycle:
 
 <div class="release-feature-authors">authors: @Vrixyz</div>
 
-Add 3d shapes example (#4613)
-Add a fun skinned mesh stress test based on the animated_fox example (#4674)
-add a post-processing example (#4797)
-Array texture example (#5077)
-    Use tone mapping in array_texture example (#5131)
-Add transparency examples (#3695)
-add a 3d lines example (#5319)
+We've add a new example that shows how to use the new [Camera Driven Rendering](#camera-driven-rendering) and [Shader Materials](#new-material-system) to build a "chromatic aberration" post processing effects using a full screen quad and "render to texture".
+
+![post processing](post_processing.png)
+
+We plan on building more formal post processing APIs in future releases, but this approach is relatively straightforward and opens up a lot of doors. Much simpler than extending the lower level [`RenderGraph`]!
+
+Run it by cloning the Bevy repo and running `cargo run --release --example post_processing`.
+
+## Example: Many Animated Foxes
+
+<div class="release-feature-authors">authors: @superdump</div>
+
+This is a fun stress test of our [Skeletal Animation System](/news/bevy-0-7/#skeletal-animation) that renders many animated foxes walking around in a circle.
+
+![many foxes](many_foxes.png)
+
+Run it by cloning the Bevy repo and running `cargo run --release --example many_foxes`.
 
 ## WASM Example Build Tool
 
@@ -1173,9 +1183,11 @@ We've used this process for most of the last cycle and I'm loving how it is work
 ## What's Next?
 
 * **Post Processing**: We have a lot of post processing work in the pipeline (some of it almost made it in to this release). The next release will make it easier to write post processing effects (thanks to intermediate HDR textures and a separate tonemapping step), and it will also include built in effects like bloom and upscaling.
-* **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on 
-* **Scene System Improvements**: This release saw a lot of investment in Reflection. We can now build then next iteration of the scene system on top of it, with a nicer scene format, nested scenes, and improved workflows.  
-* **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, its time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine on twitter](https://twitter.com/BevyEngine) and join the [Official Bevy Discord](https://discord.gg/bevy). 
+* **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on:
+    1. Pre-processing assets to do expensive work "during development time", so Bevy Apps can be deployed with assets that are prettier, smaller, and/or faster to load.
+    2. Enabling configuring assets with `.meta` files. For example, you could define a texture compression level, the filter it should use, or the target format. 
+* **Scene System Improvements**: This release saw a lot of investment in Reflection. We can now build the next iteration of the scene system on top of it, with a nicer scene format, nested scenes, and improved workflows.  
+* **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, its time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine](https://twitter.com/BevyEngine) on Twitter and join the [Official Bevy Discord](https://discord.gg/bevy). 
 
 ## Support Bevy
 
@@ -1183,7 +1195,7 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 
 * **[Carter Anderson (@cart)](https://github.com/sponsors/cart)**: Full-time lead developer, project manager, and creator of Bevy. Focused on building out core engine systems, guiding project direction, and managing the community.
 * **[Alice Cecile (@alice-i-cecile)](https://github.com/sponsors/alice-i-cecile)**: Full-time technical project manager, mad scientist, and documentation lead. While she regularly leads expeditions into new domains, ECS will always be home base.
-* **[François Mockers (@mockersf)](https://github.com/sponsors/mockersf)**: CI whisperer. Making sure everything is running smoothly, and improving Bevy one PR at a time.
+* **[François Mockers (@mockersf)](https://github.com/sponsors/mockersf)**: CI whisperer. Making sure everything is running smoothly and improving Bevy one PR at a time.
 
 ## Contributors
 
