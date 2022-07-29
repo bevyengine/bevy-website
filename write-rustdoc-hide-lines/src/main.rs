@@ -4,12 +4,13 @@ use write_rustdoc_hide_lines::formatter;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let folder = args.get(1);
+    let folder = args.get(1).expect("Please provide a folder");
+    let path = Path::new(&folder);
 
-    if let Some(folder) = folder {
-        let path = Path::new(&folder);
-        formatter::run(path);
-    } else {
-        panic!("Please provide a folder.");
+    println!("Formatting folder: {:?}", path);
+
+    match formatter::run(path) {
+        Ok(_) => println!("Done!"),
+        Err(error) => println!("Error: {}", error),
     }
 }

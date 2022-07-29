@@ -1,20 +1,18 @@
 use anyhow::Result;
 use std::{
+    ffi::OsStr,
     fmt::Write,
-    fs::{self, File},
+    fs::{self, DirEntry, File},
     io::{self, BufRead},
     path::Path,
 };
 
 use crate::{
-    code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges,
-    utils::visit_dir_md_files,
+    code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges
 };
 
-pub fn run(dir: &Path) {
-    println!("Formatting folder: {:?}", dir);
-
-    let result = visit_dir_md_files(dir, &|entry| {
+pub fn run(dir: &Path) -> Result<()> {
+    visit_dir_md_files(dir, &|entry| {
         println!("{:?}", entry.path());
 
         // Load and format file annotations
@@ -29,12 +27,28 @@ pub fn run(dir: &Path) {
         fs::write(entry.path(), contents)?;
 
         Ok(())
-    });
+    })
+}
 
-    match result {
-        Ok(_) => println!("Done!"),
-        Err(error) => println!("Error: {}", error),
+fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Result<()> {
+    if !dir.is_dir() {
+        return Ok(());
     }
+
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.is_dir() {
+            visit_dir_md_files(&path, cb)?;
+        } else if let Some(ext) = path.extension().and_then(OsStr::to_str) {
+            if ext.to_lowercase() == "md" {
+                cb(&entry)?;
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -> Result<String> {
