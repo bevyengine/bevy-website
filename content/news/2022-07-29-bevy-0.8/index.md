@@ -88,8 +88,9 @@ fn fragment(
 
 And just like that, we have a configurable shader material!
 
-**TODO: replace this video with Griffin's cool sphere example**
-<video controls loop><source  src="shader_material.mp4" type="video/mp4"/></video>
+This can be used to create whatever effects you want! For example: `@DGriffin91` made this cool "glowing orb" effect:
+
+<video controls loop><source  src="marbles.mp4" type="video/mp4"/></video>
 
 This is thanks to the new [`AsBindGroup`] trait / derive, which does all of the hard work of converting the material to GPU-compatible datatypes, writing them to the GPU, and creating the final [`BindGroup`]. The [`AsBindGroup`] trait is powerful: it supports combining multiple fields into the same uniform binding, configuring texture binding types (2D, 3D, filtering, etc), and more. For details, check out the [`AsBindGroup`] docs.
 
