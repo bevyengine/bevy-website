@@ -1023,6 +1023,15 @@ We're discussing ways to resolve this class of problem, such as [Archetype Rules
 [`Children`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Children.html
 [`HierarchyEvent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.HierarchyEvent.html
 
+
+## Taffy migration: a refreshed UI layout library
+
+<div class="release-feature-authors">authors: @alice-i-cecile, @jkelleyrtp, @Weibye, @TimJentzsch, @colepoirier</div>
+
+Bevy's moved off the abandoned [`stretch`](https://crates.io/crates/stretch) UI layout crate and onto its new community-maintained hard fork: `taffy`. Together with the [Dioxus](https://dioxuslabs.com/) team, we've dramatically cleaned up the code base, solved a critical performance issue with deep UI trees and freshened up the docs.
+
+We're looking forward to its continued maintenance and development as the team continues to improve its performance, fix bugs, and add support for alternative layout paradigms.
+
 ## ECS Soundness / Correctness Improvements
 
 <div class="release-feature-authors">authors: @TheRawMeatball, @BoxyUwU, @SkiFire13, @jakobhellermann</div>
