@@ -1201,6 +1201,7 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 * **[Carter Anderson (@cart)](https://github.com/sponsors/cart)**: Full-time lead developer, project manager, and creator of Bevy. Focused on building out core engine systems, guiding project direction, and managing the community.
 * **[Alice Cecile (@alice-i-cecile)](https://github.com/sponsors/alice-i-cecile)**: Full-time technical project manager, mad scientist, and documentation lead. While she regularly leads expeditions into new domains, ECS will always be home base.
 * **[François Mockers (@mockersf)](https://github.com/sponsors/mockersf)**: CI whisperer. Making sure everything is running smoothly and improving Bevy one PR at a time.
+* **Rob Swain (@superdump)**: Wielder of light. Turning data into shiny with massive parallelism. Currently hobby hacking so please donate to/sponsor the rest of the team. ❤️
 
 ## Contributors
 
