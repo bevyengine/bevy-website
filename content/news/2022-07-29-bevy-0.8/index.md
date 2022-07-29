@@ -518,7 +518,9 @@ Bevy uses "render phases" to collect per-entity render logic for a render pass. 
 
 When possible, **Bevy 0.8** now uses "unstable sorts" (currently "radix sort"), which yields a significant performance improvement:
 
-**TODO: insert graph here**
+### many_cubes stress test "opaque phase" sort times (in milliseconds, less is better)
+
+![unstable sort](unstable_sort.svg)
 
 ## Vertex Colors
 
@@ -798,7 +800,9 @@ In **Bevy 0.8** we've optimized the internal representation of labels by removin
 
 This new representation sped up schedule construction by ~30%!
 
-**TODO: insert graph here**
+### time to prepare and compute schedule with 100 systems (in milliseconds, less is better)
+
+![label bench](label_bench.svg)
 
 This change also removed a number of trait requirements from our label derives:
 
