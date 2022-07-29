@@ -887,6 +887,48 @@ if let ReflectRef::Array(array) = position.reflect_ref() {
 
 [`Array`]: https://docs.rs/bevy/0.8.0/bevy/reflect/trait.Array.html
 
+### Static TypeInfo
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+The [`Reflect`] trait provides dynamic access to a _specific instance_ of a type, but some scenarios (such as deserializing) benefit from knowing type information _before_ we have an instance of a type. This opens the doors to building a Reflect-based `serde` alternative (or at the very least, a serde-less Bevy Scene deserializer).
+
+**Bevy 0.8** adds the ability to retrieve [`TypeInfo`] for any type implementing [`Reflect`]:
+
+```rust
+#[derive(Reflect)]
+struct Foo {
+    a: f32,
+    b: usize,
+}
+
+let info = Foo::type_info();
+if let TypeInfo::Struct(info) = info {
+  assert!(info.is::<Foo>());
+  assert_eq!(info.type_name(), std::any::type_name::<Foo>(),);
+  assert!(info.field("a").unwrap().is::<i32>());
+  assert!(info.field_at(1).unwrap().is::<usize>());
+}
+```
+
+Note that `type_info()` returns `&'static TypeInfo`: it will lazily allocate and store [`TypeInfo`] the first time it is requested, then reuse that on each subsequent request.
+
+Generic types also support [`TypeInfo`]:
+
+```rust
+#[derive(Reflect)]
+struct Foo<T> {
+    value: T
+}
+
+let info = Foo::<f32>::type_info();
+if let TypeInfo::Struct(info) = info {
+  assert!(info.field("value").unwrap().is::<f32>());
+}
+```
+
+[`TypeInfo`]: https://docs.rs/bevy/0.8.0/bevy/reflect/enum.TypeInfo.html
+
 ### Resource Reflection
 
 <div class="release-feature-authors">authors: @Shatur</div>
@@ -1086,9 +1128,17 @@ add a 3d lines example (#5319)
 
 ## WASM Example Build Tool
 
-<div class="release-feature-authors">authors: @X</div>
+<div class="release-feature-authors">authors: @mockersf</div>
 
-helper tool to build examples in wasm (#4776)
+We've built a tool to make it easier to build and run Bevy's examples in your browser:
+
+In the root of the Bevy repo, run the following command:
+
+```
+cargo run -p build-wasm-example -- lighting
+```
+
+This will run the `cargo build` and `wasm-bindgen` commands, and place the output in the `examples/wasm` folder. Run your favorite "local webserver" command there, such as `python3 -m http.server` and open that url in your browser! 
 
 ## Website: Improved Examples Page
 
