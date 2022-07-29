@@ -462,12 +462,6 @@ Notably, this allows for shear to be represented. Shear is a controversial topic
 [`Vec3A`]: https://docs.rs/bevy/0.8.0/bevy/math/struct.Vec3A.html
 [`Quat`]: https://docs.rs/bevy/0.8.0/bevy/math/struct.Quat.html
 
-## AABB Recalculation
-
-<div class="release-feature-authors">authors: @mlodato517</div>
-
-When a [`Mesh`] asset is changed, the AABB (axis aligned bounding box) is now recalculated, ensuring frustum culling calculations are still correct.
-
 ## ShaderType derive
 
 <div class="release-feature-authors">authors: @teoxoy</div>
