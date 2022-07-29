@@ -1101,6 +1101,8 @@ Bevy now "kind of" runs on Android again!
 
 However Android support _is not_ ready yet. There are issues with how we manage render contexts that must be resolved that sometimes break rendering at startup and _always_ break rendering when apps are minimized. Audio also doesn't work yet.
 
+Here is the `load_gltf` Bevy example running on my Pixel 6:
+
 ![android](android.png)
 
 That being said, this is an important step forward, as Bevy developers can now build, deploy, (and in some cases test) Bevy apps on Android!
