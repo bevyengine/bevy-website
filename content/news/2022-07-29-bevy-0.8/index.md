@@ -422,8 +422,8 @@ Note that "parallel b" stand for "parallel batch size" (number of entities in ea
 Vertex tangents are used in tandem with normal maps to give meshes more detailed normals when rendering them. Some imported meshes have normal maps, but don't have vertex tangents calculated. Bevy can now automatically generate vertex tangents for [`Meshes`][`Mesh`] that are missing them using the defacto industry-standard MikkTSpace library / algorithm (Godot, Unity, Unreal, and Blender all use this).
 
 We have started maintaining [our own fork](https://github.com/bevyengine/bevy/tree/v0.8.0/crates/bevy_mikktspace) of the [gltf-rs/mikktspace crate](https://github.com/gltf-rs/mikktspace) so we can:
-1) update dependencies at the speed required for Bevy;
-2) [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932), as it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C.
+ * update dependencies at the speed required for Bevy;
+ * [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932), as it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C.
 
 ## Default to Linear Texture Filtering
 
