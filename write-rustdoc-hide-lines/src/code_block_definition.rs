@@ -10,11 +10,12 @@ enum Annotation {
 
 impl From<&str> for Annotation {
     fn from(text: &str) -> Self {
-        let is_hide_lines = text.starts_with("hide_lines=");
+        const HIDE_LINES: &str = "hide_lines=";
+        let is_hide_lines = text.starts_with(HIDE_LINES);
 
         if is_hide_lines {
             Annotation::HideLines(
-                text.get(11..)
+                text.get(HIDE_LINES.len()..)
                     .unwrap_or("")
                     .split(' ')
                     .filter(|r| r.trim() != "")
@@ -74,13 +75,15 @@ pub struct CodeBlockDefinition {
 
 impl CodeBlockDefinition {
     pub fn new(line: &str) -> Option<CodeBlockDefinition> {
-        if !line.starts_with("```rust") {
+        const RUST_CODE_BLOCK: &str = "```rust";
+
+        if !line.starts_with(RUST_CODE_BLOCK) {
             return None;
         }
 
         let mut hide_lines_idx = None;
         let annotations = line
-            .get(7..)
+            .get(RUST_CODE_BLOCK.len()..)
             .unwrap_or("")
             .split(',')
             .filter(|a| a.trim() != "")
