@@ -173,8 +173,8 @@ This can be used for things like "custom UI passes", "minimaps", etc.
 Cameras now store their [`RenderTarget`] size locally, which makes retrieving the size much simpler:
 
 ```rust
-/// Much nicer than needing to look up the size on the target Window or Image manually,
-/// like you had to in previous Bevy versions!
+// Much nicer than needing to look up the size on the target Window or Image manually,
+// like you had to in previous Bevy versions!
 let target_size = camera.logical_target_size();
 let viewport_size = camera.logical_viewport_size();
 ```
