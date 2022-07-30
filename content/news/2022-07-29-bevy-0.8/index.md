@@ -716,7 +716,7 @@ fn system(blue_team: Res<BlueTeam>, players: Query<&Player>) {
 }
 ```
 
-There is also a [`Query::iter_many_mut`], which provides similar functionality for mutable queries. But to ensure aliased mutability is not allowed, it doesn't not implement iterator. Instead, use this pattern:
+There is also a [`Query::iter_many_mut`], which provides similar functionality for mutable queries. But to ensure aliased mutability is not allowed, it does not implement iterator. Instead, use this pattern:
 
 ```rust
 let mut iter = players.iter_many_mut(&blue_team.members);
