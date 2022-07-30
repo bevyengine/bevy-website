@@ -4,6 +4,7 @@
 
 // Visual outline on focused elements, for accessibility
 *:focus {
+    border-radius: 5px;
     outline: $focus-outline;
 }
 

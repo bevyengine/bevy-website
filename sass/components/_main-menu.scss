@@ -42,6 +42,7 @@
 
         // Instead we have the outline on the text inside the link
         &:focus span {
+            border-radius: 5px;
             outline: $focus-outline;
         }
     }
