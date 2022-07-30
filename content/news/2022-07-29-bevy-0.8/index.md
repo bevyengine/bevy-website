@@ -199,6 +199,14 @@ The old `OrthographicCameraBundle` and `PerspectiveCameraBundle` have been repla
 
 Bevy UI now no longer needs a separate camera entity to work. UI "just works" for all camera types and can be enabled or disabled per-camera using the [`UiCameraConfig`] component.
 
+```rust
+commands
+    .spawn_bundle(Camera3dBundle::default())
+    .insert(UiCameraConfig {
+        show_ui: false,
+    });
+```
+
 ### Custom Render Graphs
 
 The default 2D and 3D [`RenderGraphs`][`RenderGraph`] for each [`Camera`] can be overridden by setting the [`CameraRenderGraph`] component:
@@ -210,7 +218,7 @@ commands.spawn_bundle(Camera3dBundle {
 })
 ```
 
-This enables you to draw the camera with whatever custom render logic you need! Note that this generally won't be required: most custom rendering scenarios will be covered by high-level [Materials](#new-material-system) or extending the built-in render graphs.
+This enables you to draw the camera with whatever custom render logic you need! For example, you could replace the built in clustered-forward-rendering with deferred rendering. Note that this generally won't be required: most custom rendering scenarios will be covered by high-level [Materials](#new-material-system) or extending the built-in render graphs. And using the default render graph will ensure maximum compatibility with other plugins.
 
 ### Enabling / Disabling Cameras
 
@@ -296,6 +304,20 @@ commands
             .spawn_bundle(TableBundle::default())
             .spawn_bundle(ShopKeeperBundle::default())
             .spawn_bundle(PotionBundle::default());
+    });
+```
+
+To ensure visibility and transforms are propagated, make sure the whole hierarchy (root -> leaf) has these components:
+
+```rust
+commands
+    .spawn_bundle(SpatialBundle::default())
+    .with_children(|parent| {
+        parent
+            .spawn_bundle(SpatialBundle::default())
+            .with_children(|parent| {
+                parent.spawn_bundle(SpatialBundle::default());
+            });
     });
 ```
 
@@ -469,7 +491,7 @@ Notably, this allows for shear to be represented. Shear is a controversial topic
 **Bevy 0.8** now uses the [`ShaderType`] trait / derive (provided by the [encase][encase] crate) to easily convert Rust data types to GPU-compatible shader data types. 
 
 ```rust
-// ShaderType assumes each field also implements ShaderType,
+// ShaderType requires each field to implement ShaderType,
 // which Bevy's math types and Color type implement.
 #[derive(ShaderType)]
 struct SpriteData {
@@ -549,87 +571,6 @@ commands.spawn_bundle(ColorMesh2dBundle {
 
 [`Circle`]: https://docs.rs/bevy/0.8.0/bevy/render/mesh/shape/struct.Circle.html
 [`RegularPolygon`]: https://docs.rs/bevy/0.8.0/bevy/render/mesh/shape/struct.RegularPolygon.html
-
-## Render World Extract
-
-<div class="release-feature-authors">authors: @DJMcNab, @cart</div>
-
-Note: The renderer APIs discussed here are for developers of advanced custom rendering features and core Bevy renderer developers. If this seems verbose or the intent is confusing, don't worry!
-
-Bevy's [new renderer](/news/bevy-0-6/#the-new-bevy-renderer) "extracts" data needed for rendering from the "main" Bevy app, which enables parallel [pipelined rendering](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render). To facilitate this, in previous versions of Bevy we made the ECS [`RenderStage::Extract`] "special" (and more than a little bit weird). Systems in that stage ran on the "main" app world, but applied the system [`Commands`] to the "render" app world. 
-
-This accomplished the goal, but it:
-
-1. **Was confusing**: render feature developers had to "know" that this stage behaved differently from the other "normal" ECS stages in the schedule. Implicitly, [`Commands`] behaved differently and the ECS data access was "flipped". Using "normal" entity spawning apis _would not work as expected_ because the [`Commands`] parameter internally still used the main app's Entities collection.
-2. **Prevented parallelism**: directly modifying existing "render world" resources required exclusive access to `ResMut<RenderWorld>`, which prevented these systems from running in parallel. Making this access parallel required unnecessary allocations using [`Commands`], which for "large" (or incrementally updated) extractions was inefficient.
-
-```rust
-// Old: Bevy 0.7 (limited parallelism)
-fn extract_score(score: Res<Score>, mut render_world: ResMut<RenderWorld>) {
-    *render_world.resource_mut::<ExtractedScore>() = ExtractedScore::from(score);
-}
-
-// Old: Bevy 0.7 (unnecessary allocations / prevents incremental updates)
-fn extract_score(mut commands: Commands, score: Res<Score>) {
-    commands.insert_resource(ExtractedScore::from(&score));
-}
-```
-
-In **Bevy 0.8**, we've made the extract stage "normal". It runs directly on the "render world", just like the other render app stages. To "extract" data from the main app world, just wrap the relevant system parameters in the new [`Extract`] type to retrieve that parameter from the main app world instead:
-
-```rust
-// New: Bevy 0.8 (parallel and not weird!)
-fn extract_score(mut extracted_score: ResMut<ExtractedScore>, score: Extract<Res<Score>>) {
-    *extracted_score = ExtractedScore::from(&score);
-}
-```
-
-The extract system is now parallel, the data access is consistent with other renderer ECS stages, and the intent of the system is clearer. 
-
-[`RenderStage::Extract`]: https://docs.rs/bevy/0.8.0/bevy/render/enum.RenderStage.html#variant.Extract
-[`Commands`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Commands.html
-[`Extract`]: https://docs.rs/bevy/0.8.0/bevy/render/struct.Extract.html
-
-## ExtractResource Trait and Plugin
-
-<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
-
-Some ECS resources have very simple extract logic:
-
-```rust
-fn extract_cool_color(mut extracted_cool_color: ResMut<CoolColor>, cool_color: Extract<Res<CoolColor>>) {
-    *extracted_cool_color = cool_color.clone();
-}
-```
-
-Rather than force developers to write this out manually, **Bevy 0.8** now provides the [`ExtractResource`] trait / derive:
-
-```rust
-#[derive(ExtractResource, Clone)]
-struct CoolColor {
-    color: Color,
-}
-```
-
-Then, just add the [`ExtractResourcePlugin<CoolColor>`][`ExtractResourcePlugin`] to your [`App`] and the resource will be automatically extracted.
-
-[`ExtractResource`] can also be implemented manually if you need custom logic (or the type needs to change):
-
-```rust
-impl ExtactResource for ExtractedCoolColor {
-    type Source = CoolColor;
-    fn extract_resource(source: &CoolColor) -> Self {
-        Self {
-            color: source.color.as_rgba_linear(),
-        }
-    }
-}
-```
-
-
-[`ExtractResource`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/trait.ExtractResource.html
-[`ExtractResourcePlugin`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/struct.ExtractResourcePlugin.html
-[`App`]: https://docs.rs/bevy/0.8.0/bevy/app/struct.App.html
 
 ## Scripting / Modding Progress: Untyped ECS APIs
 
@@ -824,6 +765,61 @@ enum MovementSystem {
 [`StageLabel`]: https://docs.rs/bevy/0.8.0/bevy/ecs/schedule/trait.StageLabel.html
 [`AppLabel`]: https://docs.rs/bevy/0.8.0/bevy/app/derive.AppLabel.html
 
+## Hierarchy Commands
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+Bevy's entity hierarchy system is based on two components: [`Parent`] (which points to an entity's parent) and [`Children`] (which points to a list of the entity's children). This separation is important, as it makes it easy and cheap to query for "hierarchy roots":
+
+```rust
+fn system(roots: Query<Entity, Without<Parent>>) { }
+```
+
+In past versions of Bevy, we built a complex system to "maintain" the integrity of the hierarchy. As [`Parent`] / [`Children`] components were added/removed/changed for an entity, we would do our best to sync everything up across the hierarchy.
+
+However this meant that for a given point in time, the hierarchy could be "out of sync" and incorrect.
+
+Our solution to this problem is to remove the deferred "hierarchy maintenance system" in favor of making hierarchy changes "transactional". Hierarchy changes are now done via transactional [`Commands`], and directly modifying the component fields individually is no longer possible. This ensures that for a given point in time, the hierarchy is "correct".
+
+For most Bevy developers this is a non-breaking change, as most hierarchies are already constructed using `with_children` commands: 
+
+```rust
+commands
+    .spawn_bundle(SpatialBundle::default())
+    .with_children(|parent| {
+        parent.spawn_bundle(SpriteBundle {
+            texture: player_texture,
+            ..default()
+        });
+        parent.spawn_bundle(SpriteBundle {
+            texture: hat_texture,
+            ..default()
+        });
+    });
+```
+
+However for logic that adds/removes child entities from parents at runtime, the following commands must be used:
+```rust
+// removes the given children from the parent
+commands.entity(some_parent).remove_children(&[child1, child2]);
+// pushes the given children to the "end" of the parent's Children list
+commands.entity(some_parent).push_children(&[child3, child4]);
+// inserts the given children into the parent's Children list at the given index 
+commands.entity(some_parent).insert_children(1, &[child5]);
+``` 
+
+We've also added [`HierarchyEvent`], which makes it possible for developers to track changes in the hierarchy.
+
+There are still a couple of small holes to close, but staying on the "happy path" is much easier now:
+* removing only one of the components is possible (although heavily discouraged)
+* adding default values of only one of the components manually is still possible (although heavily discouraged)
+
+We're discussing ways to resolve this class of problem, such as [Archetype Rules / Invariants](https://github.com/bevyengine/bevy/issues/1481).
+
+[`Parent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Parent.html
+[`Children`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Children.html
+[`HierarchyEvent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.HierarchyEvent.html
+
 ## Bevy Reflection Improvements
 
 Bevy's "Rust reflection" system `bevy_reflect` is a core, foundational piece of Bevy's scene system. It provides a way to dynamically interact with Rust types at run-time without knowing their actual types. We've invested heavily in it this release to prepare for scripting support and scene system improvements.
@@ -1012,61 +1008,86 @@ Now that `bevy_reflect` is starting to get some serious investment and usage, we
 * **The [`Reflect`] trait is now safe to implement**: Soundness no longer hinges on the implementor doing the right thing, thanks to some changes to the [`Reflect`] interface. As a result, we were able to remove the `unsafe` keyword from the [`Reflect`] trait. (`@PROMETHIA-27`)
 * `Serialize` logic is now implemented using [`TypeRegistry`] type data like other reflected trait logic, rather than being hard-coded into [`Reflect`] impls. (`@jakobhellermann`)
 
-## Hierarchy Commands
+## Render World Extract
 
-<div class="release-feature-authors">authors: @james7132</div>
+<div class="release-feature-authors">authors: @DJMcNab, @cart</div>
 
-Bevy's entity hierarchy system is based on two components: [`Parent`] (which points to an entity's parent) and [`Children`] (which points to a list of the entity's children). This separation is important, as it makes it easy and cheap to query for "hierarchy roots":
+Note: The renderer APIs discussed here are for developers of advanced custom rendering features and core Bevy renderer developers. If this seems verbose or the intent is confusing, don't worry!
+
+Bevy's [new renderer](/news/bevy-0-6/#the-new-bevy-renderer) "extracts" data needed for rendering from the "main" Bevy app, which enables parallel [pipelined rendering](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render). To facilitate this, in previous versions of Bevy we made the ECS [`RenderStage::Extract`] "special" (and more than a little bit weird). Systems in that stage ran on the "main" app world, but applied the system [`Commands`] to the "render" app world. 
+
+This accomplished the goal, but it:
+
+1. **Was confusing**: render feature developers had to "know" that this stage behaved differently from the other "normal" ECS stages in the schedule. Implicitly, [`Commands`] behaved differently and the ECS data access was "flipped". Using "normal" entity spawning apis _would not work as expected_ because the [`Commands`] parameter internally still used the main app's Entities collection.
+2. **Prevented parallelism**: directly modifying existing "render world" resources required exclusive access to `ResMut<RenderWorld>`, which prevented these systems from running in parallel. Making this access parallel required unnecessary allocations using [`Commands`], which for "large" (or incrementally updated) extractions was inefficient.
 
 ```rust
-fn system(roots: Query<Entity, Without<Parent>>) { }
+// Old: Bevy 0.7 (limited parallelism)
+fn extract_score(score: Res<Score>, mut render_world: ResMut<RenderWorld>) {
+    *render_world.resource_mut::<ExtractedScore>() = ExtractedScore::from(score);
+}
+
+// Old: Bevy 0.7 (unnecessary allocations / prevents incremental updates)
+fn extract_score(mut commands: Commands, score: Res<Score>) {
+    commands.insert_resource(ExtractedScore::from(&score));
+}
 ```
 
-In past versions of Bevy, we built a complex system to "maintain" the integrity of the hierarchy. As [`Parent`] / [`Children`] components were added/removed/changed for an entity, we would do our best to sync everything up across the hierarchy.
-
-However this meant that for a given point in time, the hierarchy could be "out of sync" and incorrect.
-
-Our solution to this problem is to remove the deferred "hierarchy maintenance system" in favor of making hierarchy changes "transactional". Hierarchy changes are now done via transactional [`Commands`], and directly modifying the component fields individually is no longer possible. This ensures that for a given point in time, the hierarchy is "correct".
-
-For most Bevy developers this is a non-breaking change, as most hierarchies are already constructed using `with_children` commands: 
+In **Bevy 0.8**, we've made the extract stage "normal". It runs directly on the "render world", just like the other render app stages. To "extract" data from the main app world, just wrap the relevant system parameters in the new [`Extract`] type to retrieve that parameter from the main app world instead:
 
 ```rust
-commands
-    .spawn_bundle(SpatialBundle::default())
-    .with_children(|parent| {
-        parent.spawn_bundle(SpriteBundle {
-            texture: player_texture,
-            ..default()
-        });
-        parent.spawn_bundle(SpriteBundle {
-            texture: hat_texture,
-            ..default()
-        });
-    });
+// New: Bevy 0.8 (parallel and not weird!)
+fn extract_score(mut extracted_score: ResMut<ExtractedScore>, score: Extract<Res<Score>>) {
+    *extracted_score = ExtractedScore::from(&score);
+}
 ```
 
-However for logic that adds/removes child entities from parents at runtime, the following commands must be used:
+The extract system is now parallel, the data access is consistent with other renderer ECS stages, and the intent of the system is clearer. 
+
+[`RenderStage::Extract`]: https://docs.rs/bevy/0.8.0/bevy/render/enum.RenderStage.html#variant.Extract
+[`Commands`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Commands.html
+[`Extract`]: https://docs.rs/bevy/0.8.0/bevy/render/struct.Extract.html
+
+## ExtractResource Trait and Plugin
+
+<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
+
+Some ECS resources have very simple extract logic:
+
 ```rust
-// removes the given children from the parent
-commands.entity(some_parent).remove_children(&[child1, child2]);
-// pushes the given children to the "end" of the parent's Children list
-commands.entity(some_parent).push_children(&[child3, child4]);
-// inserts the given children into the parent's Children list at the given index 
-commands.entity(some_parent).insert_children(1, &[child5]);
-``` 
+fn extract_cool_color(mut extracted_cool_color: ResMut<CoolColor>, cool_color: Extract<Res<CoolColor>>) {
+    *extracted_cool_color = cool_color.clone();
+}
+```
 
-We've also added [`HierarchyEvent`], which makes it possible for developers to track changes in the hierarchy.
+Rather than force developers to write this out manually, **Bevy 0.8** now provides the [`ExtractResource`] trait / derive:
 
-There are still a couple of small holes to close, but staying on the "happy path" is much easier now:
-* removing only one of the components is possible (although heavily discouraged)
-* adding default values of only one of the components manually is still possible (although heavily discouraged)
+```rust
+#[derive(ExtractResource, Clone)]
+struct CoolColor {
+    color: Color,
+}
+```
 
-We're discussing ways to resolve this class of problem, such as [Archetype Rules / Invariants](https://github.com/bevyengine/bevy/issues/1481).
+Then, just add the [`ExtractResourcePlugin<CoolColor>`][`ExtractResourcePlugin`] to your [`App`] and the resource will be automatically extracted.
 
-[`Parent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Parent.html
-[`Children`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Children.html
-[`HierarchyEvent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.HierarchyEvent.html
+[`ExtractResource`] can also be implemented manually if you need custom logic (or the type needs to change):
 
+```rust
+impl ExtactResource for ExtractedCoolColor {
+    type Source = CoolColor;
+    fn extract_resource(source: &CoolColor) -> Self {
+        Self {
+            color: source.color.as_rgba_linear(),
+        }
+    }
+}
+```
+
+
+[`ExtractResource`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/trait.ExtractResource.html
+[`ExtractResourcePlugin`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/struct.ExtractResourcePlugin.html
+[`App`]: https://docs.rs/bevy/0.8.0/bevy/app/struct.App.html
 
 ## Taffy migration: a refreshed UI layout library
 
