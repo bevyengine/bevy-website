@@ -33,6 +33,17 @@
                 color: $color-blue;
             }
         }
+
+        // Having the focus outline on the header link directly looks weird,
+        // because it is cut off at the top
+        &:focus {
+            outline: none;
+        }
+
+        // Instead we have the outline on the text inside the link
+        &:focus span {
+            outline: $focus-outline;
+        }
     }
 }
 

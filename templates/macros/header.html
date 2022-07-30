@@ -17,6 +17,8 @@
     {% endif %}
 
     <li class="main-menu__entry">
-        <a href="{{route | lower}}" class="{{ class }}">{{name}}</a>
+        <a href="{{route | lower}}" class="{{ class }}">
+            <span>{{name}}</span>
+        </a>
     </li>
 {% endmacro %}

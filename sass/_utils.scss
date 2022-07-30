@@ -2,8 +2,9 @@
     display: none;
 }
 
-a:focus {
-    outline: none;
+// Visual outline on focused elements, for accessibility
+*:focus {
+    outline: $focus-outline;
 }
 
 .section {
