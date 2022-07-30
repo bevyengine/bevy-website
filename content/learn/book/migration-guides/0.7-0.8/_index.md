@@ -538,3 +538,14 @@ bevy = { version = "0.8", default-features = false, features = [
     "bevy_scene",
 ] }
 ```
+
+### [Improve ergonomics and reduce boilerplate around creating text elements](https://github.com/bevyengine/bevy/pull/5343)
+
+`Text::with_section` was renamed to `Text::from_section` and no longer takes a `TextAlignment` as argument.
+Use `with_alignment` to set the alignment instead.
+
+
+### [Add QueryState::get_single_unchecked_manual and its family](https://github.com/bevyengine/bevy/pull/4841)
+
+Change `system::QuerySingleError` to `query::QuerySingleError`
+
