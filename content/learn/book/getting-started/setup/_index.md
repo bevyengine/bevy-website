@@ -69,9 +69,17 @@ edition = "2021"
 [dependencies]
 ```
 
-### Add Bevy to your project's Cargo.toml
+### Add Bevy as a dependency
 
-Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository. Find the latest version number ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)) and add it to your Cargo.toml file:
+Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository.
+
+The easiest way to add it to your project is to use `cargo add`:
+
+```cli
+$ cargo add bevy
+```
+
+Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [package]
@@ -82,6 +90,8 @@ edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 [dependencies]
 bevy = "0.8" # make sure this is the latest version
 ```
+
+Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
 
 ### Cargo Workspaces
 
