@@ -531,7 +531,7 @@ pub struct GpuPointLightsStorage {
 
 ## Render Phase Sorting Optimization
 
-<div class="release-feature-authors">authors: @james7132</div>
+<div class="release-feature-authors">authors: @james7132, Rob Swain (@superdump)</div>
 
 Bevy uses "render phases" to collect per-entity render logic for a render pass. These phases can be sorted to control draw order for a variety of reasons: back-to-front depth sorting for transparency correctness and front-to-back sorting for early fragment discarding during opaque rendering.
 
