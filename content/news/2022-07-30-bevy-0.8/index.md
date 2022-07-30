@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.8"
-date = 2022-07-29
+date = 2022-07-30
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"
