@@ -904,7 +904,7 @@ let info = Foo::type_info();
 if let TypeInfo::Struct(info) = info {
   assert!(info.is::<Foo>());
   assert_eq!(info.type_name(), std::any::type_name::<Foo>(),);
-  assert!(info.field("a").unwrap().is::<i32>());
+  assert!(info.field("a").unwrap().is::<f32>());
   assert!(info.field_at(1).unwrap().is::<usize>());
 }
 ```
