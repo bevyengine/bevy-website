@@ -716,16 +716,17 @@ fn system(blue_team: Res<BlueTeam>, players: Query<&Player>) {
 }
 ```
 
-There is also a [`Query::many_for_each_mut`], which provides similar functionality for mutable queries, but it uses a closure to ensure there is never aliased mutability if the given list contains duplicates:
+There is also a [`Query::iter_many_mut`], which provides similar functionality for mutable queries. But to ensure aliased mutability is not allowed, it doesn't not implement iterator. Instead, use this pattern:
 
 ```rust
-players.many_for_each_mut(&blue_team.members, |mut player| {
+let mut iter = players.iter_many_mut(&blue_team.members);
+while let Some(mut player) = iter.fetch_next() {
     player.score += 1;
-});
+}
 ```
 
 [`Query::iter_many`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Query.html#method.iter_many
-[`Query::many_for_each_mut`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Query.html#method.many_for_each_mut
+[`Query::iter_many_mut`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Query.html#method.iter_many_mut
 
 
 ## Convert Mutable Queries to Read-only
