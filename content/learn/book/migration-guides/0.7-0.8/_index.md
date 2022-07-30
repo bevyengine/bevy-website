@@ -205,6 +205,24 @@ Renamed `HasRawWindowHandleWrapper` to `ThreadLockedRawWindowHandleWrapper`.
 
 ### [Migrate to encase from crevice](https://github.com/bevyengine/bevy/pull/4339)
 
+### Use ShaderType instead of AsStd140 and AsStd430
+
+```rust
+// old
+#[derive(AsStd140)]
+struct Foo {
+    a: Vec4,
+    b: Mat4,
+}
+
+// new
+#[derive(ShaderType)]
+struct Foo {
+    a: Vec4,
+    b: Mat4,
+}
+```
+
 #### StorageBuffer
 
 * removed `set_body()`, `values()`, `values_mut()`, `clear()`, `push()`, `append()`
