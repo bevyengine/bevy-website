@@ -473,6 +473,8 @@ fn extract_assets(mut render_assets: ResMut<MyAssets>, source_assets: Extract<Re
 }
 ```
 
+Because extraction now runs in the render world, usage of `Res<RenderWorld>` in the main world, should be replaced with usage of `Res<MainWorld>` in the render world.
+
 Please note that all existing extract systems need to be updated to match this new style; even if they currently compile they will not run as expected. A warning will be emitted on a best-effort basis if this is not met.
 
 ### [Improve Gamepad DPad Button Detection](https://github.com/bevyengine/bevy/pull/5220)
