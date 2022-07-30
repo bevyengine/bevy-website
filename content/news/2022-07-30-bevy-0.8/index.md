@@ -514,7 +514,7 @@ var<uniform> sprite_data: SpriteData;
 
 This trait can be used in the [new Material system](#new-material-system) if you need to define custom shader uniform or buffer bindings. 
 
-[`ShaderType`] replaces the `AsStd140` and `AsStd430` traits / drives (provided by the [crevice](https://github.com/LPGhatguy/crevice) crate) used in previous Bevy versions. This simplifies (and clarifies) the "how to transfer data to the GPU" story in Bevy, while also adding new features, such as support for unbounded Rust vecs (for storage buffers) and configurable dynamic offsets for uniform and storage buffers.
+[`ShaderType`] replaces the `AsStd140` and `AsStd430` traits / derives (provided by the [crevice](https://github.com/LPGhatguy/crevice) crate) used in previous Bevy versions. This simplifies (and clarifies) the "how to transfer data to the GPU" story in Bevy, while also adding new features, such as support for unbounded Rust vecs (for storage buffers) and configurable dynamic offsets for uniform and storage buffers.
 
 For example, Bevy's built-in lighting pipeline was adjusted to take advantage of this:
 
