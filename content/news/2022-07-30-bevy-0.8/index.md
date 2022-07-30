@@ -240,7 +240,7 @@ Bevy's existing [`RenderLayers`] system can be used to tell a [`Camera`] to only
 [`Camera3dBundle`]: https://docs.rs/bevy/0.8.0/bevy/core_pipeline/core_3d/struct.Camera3dBundle.html
 [`UiCameraConfig`]: https://docs.rs/bevy/0.8.0/bevy/ui/entity/struct.UiCameraConfig.html
 [`CameraRenderGraph`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.CameraRenderGraph.html
-[`RenderLayers`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.CameraRenderGraph.html
+[`RenderLayers`]: https://docs.rs/bevy/0.8.0/bevy/render/view/visibility/struct.RenderLayers.html
 
 ## Spotlights
 
