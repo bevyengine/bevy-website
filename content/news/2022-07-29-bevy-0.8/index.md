@@ -6,7 +6,7 @@ author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
-image = "bevy_terrain.png"
+image = "bevy_terrain.jpg"
 show_image = true
 image_subtitle = "Bevy-shaped mountains in a Bevy-based Witcher 3 terrain texturing tool built by rmemr"
 image_subtitle_link = "https://codeberg.org/rmemr/w3.terrain-texturing"
@@ -136,7 +136,7 @@ This is accomplished by rendering a second camera to a texture, synchronizing it
 
 Each [`Camera`] now has an optional [`Viewport`], which if set will draw to a section of a [`RenderTarget`] instead of the whole. If you spawn two active cameras and set each camera's [`Viewport`] to draw to half of the window, you have simple, painless split screen!  
 
-![split screen](split_screen.png)
+![split screen](split_screen.jpg)
 
 ### Layered Rendering
 
