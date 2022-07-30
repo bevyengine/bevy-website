@@ -2,8 +2,10 @@
     display: none;
 }
 
-a:focus {
-    outline: none;
+// Visual outline on focused elements, for accessibility
+*:focus-visible {
+    border-radius: 5px;
+    outline: $focus-outline;
 }
 
 .section {
