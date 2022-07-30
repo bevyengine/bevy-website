@@ -12,13 +12,13 @@ image_subtitle = "Bevy-shaped mountains in a Bevy-based Witcher 3 terrain textur
 image_subtitle_link = "https://codeberg.org/rmemr/w3.terrain-texturing"
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **130** contributors, **461** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/book/migration-guides/0.7-0.8/).
 
-As always, there are a _ton_ of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights: 
+Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights: 
 
 * **New Material System**: Custom shaders are now _much_ easier to define, thanks to the new Material trait and AsBindGroup derive.
 * **Camera-driven Rendering**: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.
@@ -1204,8 +1204,139 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 
 ## Contributors
 
-A huge thanks to the **X contributors** that made this release (and associated docs) possible! In random order:
+A huge thanks to the **130 contributors** that made this release (and associated docs) possible! In random order:
 
+* @spooky-th-ghost
+* @afonsolage
+* @mlodato517
+* @ostwilkens
+* @mattwilkinsonn
+* @geckoxx
+* @SarthakSingh31
+* @zicklag
+* @teoxoy
+* @nsarlin
+* @HackerFoo
+* @elijaharita
+* @inact1v1ty
+* @bjorn3
+* @james-j-obrien
+* @Daniikk1012
+* @nihohit
+* @Ku95
+* @superdump
+* @dilyankostov
+* @SkiFire13
+* @edwardvear
+* @jakobhellermann
+* @KDecay
+* @TheRawMeatball
+* @fadhliazhari
+* @colepoirier
+* @brandon-reinhart
+* @Davier
+* @ManevilleF
+* @Bobox214
+* @RalfJung
+* @robtfm
+* @its-danny
+* @alice-i-cecile
+* @MonaMayrhofer
+* @yilinwei
+* @MrGVSV
+* @ickshonpe
+* @bzm3r
+* @nagisa
+* @fgiordana
+* @DJMcNab
+* @oliverpauffley
+* @64kramsystem
+* @alteous
+* @maniwani
+* @hoshino111
+* @Kanabenki
+* @JoJoJet
+* @x-52
+* @djeedai
+* @BoxyUwU
+* @MDeiml
+* @GarettCooper
+* @hymm
+* @mockersf
+* @nebkor
+* @2ne1ugly
+* @BGR360
+* @SUPERCILEX
+* @CGMossa
+* @infmagic2047
+* @CleanCut
+* @YoshieraHuang
+* @kornelski
+* @mdickopp
+* @SpecificProtagonist
+* @PROMETHIA-27
+* @eiei114
+* @Hoidigan
+* @Wcubed
+* @adsick
+* @nicopap
+* @siph
+* @C-BJ
+* @tamasfe
+* @object71
+* @LegNeato
+* @Elabajaba
+* @bytemuck
+* @AronDerenyi
+* @makspll
+* @cryscan
+* @NiklasEi
+* @grace125
+* @NathanSWard
+* @IceSentry
+* @Vrixyz
+* @Piturnah
+* @its-justus
+* @dataphract
+* @thomas992
+* @Olexorus
+* @ShadowCurse
+* @LoipesMas
+* @ImDanTheDev
+* @johanhelsing
+* @wrapperup
+* @james7132
+* @rebelroad-reinhart
+* @SuperSamus
+* @manokara
+* @Nilirad
+* @NeoRaider
+* @thebracket
+* @sarkahn
+* @MrPicklePinosaur
+* @Shatur
+* @themasch
+* @devil-ira
+* @fluunke
+* @DGriffin91
+* @aevyrie
+* @henryksloan
+* @bwasty
+* @MiniaczQ
+* @rparrett
+* @komadori
+* @ChristopherBiscardi
+* @dtaralla
+* @Sheepyhead
+* @TethysSvensson
+* @Neopallium
+* @FraserLee
+* @cart
+* @Obdzen
+* @oddfacade
+* @CAD97
+* @XBagon
+ 
 ## Full Change Log
 
 ### Added
@@ -1275,7 +1406,7 @@ A huge thanks to the **X contributors** that made this release (and associated d
 - [Add a helper tool to build examples for wasm][4776]
 - [bevy_reflect: add a `ReflectFromPtr` type to create `&dyn Reflect` from a `*const ()`][4475]
 - [Add a `ReflectDefault` type and add `#[reflect(Default)]` to all component types that implement Default and are user facing][3733]
-- [Add a macro to implement `Reflect` for struct types and migrate glam types to use this for reflectio][4540]
+- [Add a macro to implement `Reflect` for struct types and migrate glam types to use this for reflection][4540]
 - [bevy_reflect: reflect arrays][4701]
 - [bevy_reflect: reflect char][4790]
 - [bevy_reflect: add `GetTypeRegistration` impl for reflected tuples][4226]
