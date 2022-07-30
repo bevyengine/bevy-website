@@ -235,10 +235,10 @@ Bevy's existing [`RenderLayers`] system can be used to tell a [`Camera`] to only
 [`Camera`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.Camera.html
 [`RenderGraph`]: https://docs.rs/bevy/0.8.0/bevy/render/render_graph/struct.RenderGraph.html
 [`Viewport`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.Viewport.html
-[`RenderTarget`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.RenderTarget.html
+[`RenderTarget`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/enum.RenderTarget.html
 [`Camera2dBundle`]: https://docs.rs/bevy/0.8.0/bevy/core_pipeline/core_2d/struct.Camera2dBundle.html
 [`Camera3dBundle`]: https://docs.rs/bevy/0.8.0/bevy/core_pipeline/core_3d/struct.Camera3dBundle.html
-[`UiCameraConfig`]: https://docs.rs/bevy/0.8.0/bevy/ui/struct.UiCameraConfig.html
+[`UiCameraConfig`]: https://docs.rs/bevy/0.8.0/bevy/ui/entity/struct.UiCameraConfig.html
 [`CameraRenderGraph`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.CameraRenderGraph.html
 [`RenderLayers`]: https://docs.rs/bevy/0.8.0/bevy/render/camera/struct.CameraRenderGraph.html
 
@@ -323,9 +323,9 @@ commands
 
 If you know you don't need [`Transform`] propagation (or your entity already has those components), you can instead use the new [`VisibilityBundle`], which only adds the components required for visibility propagation.
 
-[`Transform`]: https://docs.rs/bevy/0.8.0/bevy/transform/struct.Transform.html
-[`GlobalTransform`]: https://docs.rs/bevy/0.8.0/bevy/transform/struct.GlobalTransform.html
-[`SpatialBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/struct.SpatialBundle.html
+[`Transform`]: https://docs.rs/bevy/0.8.0/bevy/transform/components/struct.Transform.html
+[`GlobalTransform`]: https://docs.rs/bevy/0.8.0/bevy/transform/components/struct.GlobalTransform.html
+[`SpatialBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/prelude/struct.SpatialBundle.html
 [`VisibilityBundle`]: https://docs.rs/bevy/0.8.0/bevy/render/view/struct.VisibilityBundle.html
 
 ## Built-in Shader Modularization
@@ -550,7 +550,7 @@ Bevy's 2D and 3D pipelines and [`Materials`][`Material`] now support vertex colo
 ![vertex colors](vertex_colors.png)
 
 [`Mesh`]: https://docs.rs/bevy/0.8.0/bevy/render/mesh/struct.Mesh.html
-[`ColorMaterial`]: https://docs.rs/bevy/0.8.0/bevy/sprite/mesh/struct.ColorMaterial.html
+[`ColorMaterial`]: https://docs.rs/bevy/0.8.0/bevy/sprite/struct.ColorMaterial.html
 
 ## Regular Polygon and Circle Mesh Primitives
 
@@ -569,8 +569,8 @@ commands.spawn_bundle(ColorMesh2dBundle {
 });
 ```
 
-[`Circle`]: https://docs.rs/bevy/0.8.0/bevy/render/mesh/shape/struct.Circle.html
-[`RegularPolygon`]: https://docs.rs/bevy/0.8.0/bevy/render/mesh/shape/struct.RegularPolygon.html
+[`Circle`]: https://docs.rs/bevy/0.8.0/bevy/prelude/shape/struct.Circle.html
+[`RegularPolygon`]: https://docs.rs/bevy/0.8.0/bevy/prelude/shape/struct.RegularPolygon.html
 
 ## Scripting / Modding Progress: Untyped ECS APIs
 
@@ -818,7 +818,7 @@ We're discussing ways to resolve this class of problem, such as [Archetype Rules
 
 [`Parent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Parent.html
 [`Children`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.Children.html
-[`HierarchyEvent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/struct.HierarchyEvent.html
+[`HierarchyEvent`]: https://docs.rs/bevy/0.8.0/bevy/hierarchy/enum.HierarchyEvent.html
 
 ## Bevy Reflection Improvements
 
