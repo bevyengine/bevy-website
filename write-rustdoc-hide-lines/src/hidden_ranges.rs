@@ -2,8 +2,8 @@ use std::ops::Range;
 
 pub type HiddenRanges = Vec<Range<usize>>;
 
-// To allow both `&[String]` (vec slice of `String`) and `&[&str]` (vec slice of `&str`), see:
-// https://stackoverflow.com/a/41180422/379923
+// The generic is to allow both `&[String]` (slice of `Vec<String>`) and `&[&str]` (slice of `Vec<&str>`)
+// See: https://stackoverflow.com/a/41180422/379923
 pub fn get_hidden_ranges<T: AsRef<str>>(code: &[T]) -> HiddenRanges {
     let mut ranges = vec![];
     let mut curr_range: Option<Range<usize>> = None;
