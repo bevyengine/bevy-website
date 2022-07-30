@@ -1191,6 +1191,7 @@ We've used this process for most of the last cycle and I'm loving how it is work
     1. Pre-processing assets to do expensive work "during development time", so Bevy Apps can be deployed with assets that are prettier, smaller, and/or faster to load.
     2. Enabling configuring assets with `.meta` files. For example, you could define a texture compression level, the filter it should use, or the target format. 
 * **Scene System Improvements**: This release saw a lot of investment in Reflection. We can now build the next iteration of the scene system on top of it, with a nicer scene format, nested scenes, and improved workflows.  
+* **Bevy UI Improvements**: In preparation for the visual Bevy Editor, we will be improving the capabilities and user experince of Bevy UI.
 * **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, it's time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine](https://twitter.com/BevyEngine) on Twitter and join the [Official Bevy Discord](https://discord.gg/bevy). 
 
 ## Support Bevy
