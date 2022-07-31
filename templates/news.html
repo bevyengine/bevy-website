@@ -8,11 +8,11 @@
     {% if page.extra.image %}
     {% set image_parent = page.path | replace(from="_index.md", to="") %}
     <div class="card-image">
-      <img src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=580, height=326) }}" class="centered-card-image" />
+      <img src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=580, height=326) }}"  class="centered-card-image" loading="lazy" />
     </div>
     {% else %}
     <div class="card-image">
-      <img src="/assets/bevy_logo_dark.svg" class="centered-card-image" style="max-width: 15rem;" />
+      <img src="/assets/bevy_logo_dark.svg" class="centered-card-image" style="max-width: 15rem;" loading="lazy" />
     </div>
     {% endif %}
     <div class="card-text">
