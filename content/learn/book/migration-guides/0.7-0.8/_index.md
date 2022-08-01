@@ -551,3 +551,6 @@ Use `with_alignment` to set the alignment instead.
 
 Change `system::QuerySingleError` to `query::QuerySingleError`
 
+### [tracing-tracy updated from 0.8.0 to 0.10.0](https://github.com/bevyengine/bevy/pull/4991)
+
+The required tracy version when using the [trace-tracy](https://github.com/bevyengine/bevy/blob/main/docs/profiling.md#backend-trace_tracy) feature is now [0.8.1](https://github.com/wolfpld/tracy/releases/tag/v0.8.1).
