@@ -9,6 +9,11 @@ insert_anchor_links = "right"
 long_title = "Migration Guide: 0.7 to 0.8"
 +++
 
+Before migrating make sure to run `rustup update`
+
+Bevy relies heavily on improvements in the Rust language and compiler.
+As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
+
 <!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-04-15 [Merged by Bors]" -->
 
 ### [Camera Driven Rendering](https://github.com/bevyengine/bevy/pull/4745)
@@ -545,7 +550,6 @@ bevy = { version = "0.8", default-features = false, features = [
 
 `Text::with_section` was renamed to `Text::from_section` and no longer takes a `TextAlignment` as argument.
 Use `with_alignment` to set the alignment instead.
-
 
 ### [Add QueryState::get_single_unchecked_manual and its family](https://github.com/bevyengine/bevy/pull/4841)
 
