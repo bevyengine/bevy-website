@@ -1143,7 +1143,7 @@ As always, Bevy's CI had plenty of improvements this cycle:
 
 <div class="release-feature-authors">authors: @Vrixyz</div>
 
-We've add a new example that shows how to use the new [Camera Driven Rendering](#camera-driven-rendering) and [Shader Materials](#new-material-system) to build a "chromatic aberration" post processing effects using a full screen quad and "render to texture".
+We've added a new example that shows how to use the new [Camera Driven Rendering](#camera-driven-rendering) and [Shader Materials](#new-material-system) to build a "chromatic aberration" post processing effects using a full screen quad and "render to texture".
 
 ![post processing](post_processing.png)
 
