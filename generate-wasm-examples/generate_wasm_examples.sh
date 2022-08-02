@@ -75,7 +75,7 @@ category_weight=0
 # - first param: the label that will show on the website
 # - second param: `bevy/examples/???` folder name
 # - rest params: space separated list of example files within the folder that want to be used
-add_category 2D 2d rect sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
+add_category 2D 2d sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
 add_category 3D 3d 3d_scene lighting load_gltf orthographic parenting pbr spherical_area_lights texture update_gltf_scene
 add_category UI ui button text text_debug ui
 add_category Audio audio audio
