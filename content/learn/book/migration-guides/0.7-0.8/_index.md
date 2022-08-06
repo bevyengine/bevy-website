@@ -265,7 +265,7 @@ App::new()
 `Image.sampler_descriptor` has been changed to use `ImageSampler` instead of `SamplerDescriptor`.
 
 ```rs
-// 0,7
+// 0.7
 texture.sampler_descriptor = SamplerDescriptor {
     address_mode_u: AddressMode::Repeat,
     address_mode_v: AddressMode::Repeat,
