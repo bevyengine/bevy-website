@@ -73,13 +73,7 @@ edition = "2021"
 
 Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository.
 
-The easiest way to add it to your project is to use `cargo add`:
-
-```cli
-$ cargo add bevy
-```
-
-Alternatively, you can manually add it to your project's Cargo.toml like this:
+You can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [package]
