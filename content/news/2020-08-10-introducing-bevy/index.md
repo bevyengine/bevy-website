@@ -614,13 +614,14 @@ Load GLTF files as Mesh assets
 ![boat render](boat.png)
 
 ```rs
-.spawn(PbrComponents {
-    // load the model
-    mesh: asset_server.load("boat.gltf").unwrap(),
-    // create a material for the model
-    material: materials.add(asset_server.load("boat.png").into()),
-    ..Default::default()
-})
+commands
+    .spawn(PbrComponents {
+        // load the model
+        mesh: asset_server.load("boat.gltf").unwrap(),
+        // create a material for the model
+        material: materials.add(asset_server.load("boat.png").into()),
+        ..Default::default()
+    })
 ```
 
 Note: in the near future we will add support for loading GLTF files as Scenes instead of meshes.
@@ -638,16 +639,17 @@ Parent transforms are propagated to their descendants
 <video controls loop><source  src="parenting.mp4" type="video/mp4"/></video>
 
 ```rs
-.spawn(PbrComponents {
-    mesh: cube_handle,
-    ..Default::default()
-}).with_children(|parent| {
-    parent.spawn(PbrComponents {
+commands
+    .spawn(PbrComponents {
         mesh: cube_handle,
-        translation: Translation::new(0.0, 2.0, 0.0),
         ..Default::default()
-    });
-})
+    }).with_children(|parent| {
+        parent.spawn(PbrComponents {
+            mesh: cube_handle,
+            translation: Translation::new(0.0, 2.0, 0.0),
+            ..Default::default()
+        });
+    })
 ```
 
 ### [MSAA](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/3d/msaa.rs)
