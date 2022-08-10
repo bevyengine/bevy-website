@@ -333,12 +333,13 @@ If using `Query` or `QueryState` outside of a system run by the scheduler, you m
 There is currently no alternative, but we're open to adding support.
 Please [file an issue](https://github.com/bevyengine/bevy/issues) to help detail your use case.
 
-### [Enforce type safe usage of Handle::get](https://github.com/bevyengine/bevy/pull/4794)
+### [Enforce type safe usage of Assets::get](https://github.com/bevyengine/bevy/pull/4794)
 
 `Assets::<T>::get` and `Assets::<T>::get_mut` now require that the passed handles are `Handle<T>`, improving the type safety of handles. If you were previously passing in:
 
 * a `HandleId`, use `&Handle::weak(id)` instead, to create a weak handle. You may have been able to store a type safe `Handle` instead.
 * a `HandleUntyped`, use `&handle_untyped.typed_weak()` to create a weak handle of the specified type. This is most likely to be the useful when using [load_folder](https://docs.rs/bevy_asset/latest/bevy_asset/struct.AssetServer.html#method.load_folder)
+* a `&str` or anything not previously mentioned: `assets.get(&assets.get_handle("asset/path.ron"))`
 * a `Handle<U>` of  of a different type, consider whether this is the correct handle type to store. If it is (i.e. the same handle id is used for multiple different Asset types) use `Handle::weak(handle.id)` to cast to a different type.
 
 ### [Allow higher order systems](https://github.com/bevyengine/bevy/pull/4833)
