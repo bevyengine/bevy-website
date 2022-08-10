@@ -52,8 +52,8 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 * **470** unique Bevy contributors on [GitHub](https://github.com/bevyengine) (up from 255)
 * **17,830** [GitHub](https://github.com/bevyengine) stars (up from 10,030)
 * **1,693** forks on [GitHub](https://github.com/bevyengine) (up from 837)
-* **3,610** pull requests (X merged) on [GitHub](https://github.com/bevyengine) (up from 1,501)
-* **2,228** issues (X closed) on [GitHub](https://github.com/bevyengine) (up from 1,112)
+* **3,610** pull requests (2354 merged) on [GitHub](https://github.com/bevyengine) (up from 1,501 prs and 1060 merged)
+* **2,228** issues (1,303 closed) on [GitHub](https://github.com/bevyengine) (up from 1,112)
 * **3,629** commits on [GitHub](https://github.com/bevyengine) (up from 1,895)
 * **470**  [GitHub Discussions](https://github.com/bevyengine/bevy/discussions) (up from 153)
 * **191** [Bevy Assets](/assets/) (plugins, crates, games, apps, and learning materials) (up from 110)
@@ -75,7 +75,7 @@ I'll try not to repeat myself here, but note that I am still extremely proud of 
 
 Last year we _heavily_ invested in Bevy's renderer. At the start of the year, we [built a new renderer from scratch](/news/bevy-0-6/#the-new-bevy-renderer). From that foundation we continued to iterate with success. Bevy's renderer is now:
 
-1. **Faster**: frustum culling, clustered forward rendering, sprite batching, more "internal" parallelism, lower render costs per entity, parallel pipelining (to be enabled soon ... I'll cover this in a bit),
+1. **Faster**: frustum culling, clustered forward rendering, sprite batching, more "internal" parallelism, lower render costs per entity, parallel pipelining (to be enabled soon ... I'll cover this in a bit)
 2. **Easier to Understand**: clearer layers of abstraction and dataflow (low: raw wgpu, mid: Render Graph, Extract/Prepare/Queue, PipelineCache, ShaderType, high: Material, Meshes)
 3. **Easier to Extend**: new high level Material system for simple custom shaders, camera driven rendering / per camera render graphs, flexible mesh vertex layouts, shader imports, modularized / extensible shader logic (such as our PBR logic), better Rust->GPU dataflow via ShaderType
 4. **More Featureful**: More lighting options (point / directional / spot / spherical), shadows, shader imports and preprocessing, compute shaders, skeletal animation, camera driven rendering (render to texture, split screen, portals, etc), unlimited* point lights, compressed gpu textures, visibility inheritance, mesh tangent generation, better pipeline specialization, etc
@@ -110,7 +110,7 @@ In particular, the following Bevy plugins are particularly popular and useful:
 * **Editor**: Bevy doesn't yet have an official visual editor. [bevy_editor_pls](https://github.com/jakobhellermann/bevy_editor_pls) is a 3rd party Bevy Plugin that adds editor functionality to your game. Still a work in progress, but very useful!
 * **Networking**: Game networking is a pretty opinionated space, so it is unsurprising that there are a lot of options here! [bevy_ggrs](https://crates.io/crates/bevy_ggrs), [bevy_renet](https://crates.io/crates/bevy_renet), [bevy_backroll](https://crates.io/crates/bevy_backroll), and [naia](https://github.com/naia-lib/naia/tree/main/demos/bevy) are some of the most popular choices.
 
-There are _tons_ of other plugins listed on [Bevy Assets](/assets/#assets)
+There are _tons_ of other plugins listed on [Bevy Assets](/assets/#assets).
 
 Thanks to our first [Bevy Jam](https://itch.io/jam/bevy-jam-1), games listed on [Bevy Assets](/assets/#games), and the many [Bevy games listed on itch.io](https://itch.io/games/tag-bevy), we now have hundreds of examples of Bevy games, many of which are open source.
 
