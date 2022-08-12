@@ -146,6 +146,18 @@ Bevy can be built just fine using default configuration on stable Rust. However 
         rustup component add llvm-tools-preview
         ```
     * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
+* **Alternative - Mold linker**: Mold is _up to five times faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues. To install mold, find your OS below and run the given command:
+    * **Ubuntu**: `sudo apt-get install mold`
+    * **Arch**: `sudo pacman -S mold`
+    * **Windows**: Mold does not yet support Windows. [See this tracking issue](https://github.com/rui314/mold/issues/190) for more information.
+    * **MacOS**: Mold does not yet support MacOS. [See this tracking issue](https://github.com/rui314/mold/issues/189) for more information.
+
+    You will also need to add the following to your Cargo config at `YOUR_WORKSPACE/.cargo/config.toml`:
+    ```toml
+    [target.x86_64-unknown-linux-gnu]
+    linker = "clang"
+    rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
+    ```
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
     
     Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
