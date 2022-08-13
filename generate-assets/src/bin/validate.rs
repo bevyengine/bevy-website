@@ -1,6 +1,13 @@
+use std::path::Path;
+
+use image::io::Reader as ImageReader;
 use regex::Regex;
 
 use generate_assets::*;
+
+const MAX_IMAGE_WIDTH: u32 = 1000;
+const MAX_IMAGE_HEIGHT: u32 = 1000;
+const MAX_IMAGE_BYTES: u64 = 1_000_000;
 
 fn main() -> Result<(), ()> {
     let asset_dir = std::env::args().nth(1).unwrap();
@@ -24,6 +31,9 @@ enum AssetError {
     DescriptionTooLong,
     DescriptionWithFormatting,
     ImageInvalidLink,
+    ImageInvalid,
+    ImageFileSizeTooLarge,
+    ImageDimensionsTooLarge,
 }
 
 impl AssetValidator for Section {
@@ -74,6 +84,14 @@ impl AssetValidator for Asset {
                 valid = false;
                 println!("{:50} - {:?}", self.name, AssetError::ImageInvalidLink);
             }
+
+            let mut image_path = self.original_path.clone().unwrap();
+            image_path.pop();
+            image_path.push(image);
+
+            if let Err(err) = validate_image(image_path.as_path()) {
+                println!("{:50} - {:?}", self.name, err);
+            }
         }
 
         return valid;
@@ -93,4 +111,26 @@ fn has_forbidden_formatting(string: &str) -> bool {
     }
 
     return false;
+}
+
+fn validate_image(path: &Path) -> Result<(), AssetError> {
+    let size = path
+        .metadata()
+        .map_err(|_| AssetError::ImageInvalidLink)?
+        .len();
+
+    if size > MAX_IMAGE_BYTES {
+        return Err(AssetError::ImageFileSizeTooLarge);
+    }
+
+    let img = ImageReader::open(path)
+        .map_err(|_| AssetError::ImageInvalidLink)?
+        .decode()
+        .map_err(|_| AssetError::ImageInvalid)?;
+
+    if img.width() > MAX_IMAGE_WIDTH || img.height() > MAX_IMAGE_HEIGHT {
+        return Err(AssetError::ImageDimensionsTooLarge);
+    }
+
+    return Ok(());
 }
