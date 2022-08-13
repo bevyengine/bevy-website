@@ -90,6 +90,7 @@ impl AssetValidator for Asset {
             image_path.push(image);
 
             if let Err(err) = validate_image(image_path.as_path()) {
+                valid = false;
                 println!("{:50} - {:?}", self.name, err);
             }
         }
