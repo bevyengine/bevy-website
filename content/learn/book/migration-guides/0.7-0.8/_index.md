@@ -262,6 +262,24 @@ App::new()
     .insert_resource(ImageSettings::default_nearest())
 ```
 
+`Image.sampler_descriptor` has been changed to use `ImageSampler` instead of `SamplerDescriptor`.
+
+```rs
+// 0.7
+texture.sampler_descriptor = SamplerDescriptor {
+    address_mode_u: AddressMode::Repeat,
+    address_mode_v: AddressMode::Repeat,
+    ..default()
+};
+
+// 0.8
+texture.sampler_descriptor = ImageSampler::Descriptor(SamplerDescriptor {
+    address_mode_u: AddressMode::Repeat,
+    address_mode_v: AddressMode::Repeat,
+    ..default()
+});
+```
+
 ### [Remove .system()](https://github.com/bevyengine/bevy/pull/4499)
 
 You can no longer use `.system()`. It was deprecated in 0.7.0. You can just remove the method call.
