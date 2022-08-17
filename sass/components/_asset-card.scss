@@ -23,10 +23,9 @@
         display: block;
         position: relative;
 
-        background: linear-gradient(45deg,
-                $default-image-background-color 0%,
-                $card-hover-background 40%,
-                $default-image-background-color 100%);
+        background: linear-gradient(0deg,
+            $card-hover-background 0%,
+            $default-image-background-color 100%);
 
         img {
             width: 100%;
