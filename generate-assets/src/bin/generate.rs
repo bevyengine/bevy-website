@@ -116,7 +116,7 @@ impl FrontMatterWriter for Asset {
                 .replace('/', "-")
                 .replace(' ', "_")
                 .replace(
-                    |c: char| !c.is_ascii_alphanumeric() || !matches!(c, '-' | '_'),
+                    |c: char| !c.is_ascii_alphanumeric() && !matches!(c, '-' | '_'),
                     ""
                 )
         ));
