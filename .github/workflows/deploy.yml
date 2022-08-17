@@ -13,6 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Cache multiple crates.io datadump
+        uses: actions/cache@v2
+        with:
+          path: generate-assets/data
+          key: ${{ runner.os }}-${{ steps.date.outputs.date }}
+
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh
 
