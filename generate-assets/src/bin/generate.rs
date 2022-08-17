@@ -72,10 +72,21 @@ impl FrontMatterWriter for Asset {
             let _ = fs::copy(original_image, image_file_path);
         }
 
-        let mut file = File::create(path.join(format!(
+        let formatted_path = path.join(format!(
             "{}.md",
-            self.name.to_ascii_lowercase().replace("/", "-")
-        )))?;
+            self.name
+                .to_ascii_lowercase()
+                .replace('/', "-")
+                .replace(' ', "_")
+                .replace(
+                    |c: char| !c.is_ascii_alphanumeric() || !matches!(c, '-' | '_'),
+                    ""
+                )
+        ));
+
+        let mut file = File::create(formatted_path.clone())
+            .unwrap_or_else(|err| panic!("Failed to create file at {:?}\n{}", formatted_path, err));
+
         file.write_all(
             format!(
                 r#"+++
