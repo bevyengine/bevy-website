@@ -4,8 +4,8 @@ on:
   pull_request:
   push:
     branches:
-      - "staging"
-      - "trying"
+      - 'staging'
+      - 'trying'
 
 jobs:
   generate-assets:
@@ -23,9 +23,20 @@ jobs:
             generate-assets/target/
           key: ${{ runner.os }}-generate-assets-${{ hashFiles('generate-assets/Cargo.toml') }}
 
+      - name: Get cache key
+        id: cache-key
+        run: echo "::set-output name=key::$(date +'%Y-%m-%d')"
+
+      - name: Get crates.io datadump from cache
+        uses: actions/cache@v2
+        with:
+          path: generate-assets/data
+          key: ${{ runner.os }}-${{ steps.cache-key.outputs.key }}
+
       - name: "Build Bevy Assets"
         run: >
           cd generate-assets &&
+          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} &&
           ./generate_assets.sh
 
       - uses: actions/upload-artifact@master

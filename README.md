@@ -15,3 +15,8 @@ To check out any local changes you've made:
 3. Start the Zola server with `zola serve`.
 
 A local server should start and you should be able to access a local version of the website from there.
+
+## Assets generation
+
+Assets are generated using data from /generate/assets and crates.io using their [datadump](https://crates.io/data-access) trough [cratesio-dbdump-lookup](https://github.com/alyti/cratesio-dbdump-lookup).
+Please notice when unpacked, the crates.io dump fills about 500 mb.
