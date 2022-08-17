@@ -41,13 +41,17 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
 
 Bevy is [available as a library on crates.io](https://crates.io/crates/bevy).
 
-Add the bevy crate to your project's Cargo.toml like this:
+The easiest way to add it to your project is to use `cargo add`:
+
+```cli
+$ cargo add bevy
+```
+
+Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
 bevy = "0.8" # make sure this is the latest version
 ```
 
-This is the current `bevy` crate version:
-
-<a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy.svg" style="height: 1.7rem;"/></a>
+Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).

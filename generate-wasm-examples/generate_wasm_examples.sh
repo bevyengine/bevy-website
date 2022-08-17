@@ -10,6 +10,7 @@ find assets -type f -name '*.md' -exec rm {} +
 
 # setting a canvas by default to help with integration
 sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_window/src/window.rs
+sed -i.bak 's/fit_canvas_to_parent: false,/fit_canvas_to_parent: true,/' crates/bevy_window/src/window.rs
 
 # setting the asset folder root to the root url of this domain
 sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crates/bevy_asset/src/lib.rs

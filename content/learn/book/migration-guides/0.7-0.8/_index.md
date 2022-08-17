@@ -9,6 +9,11 @@ insert_anchor_links = "right"
 long_title = "Migration Guide: 0.7 to 0.8"
 +++
 
+Before migrating make sure to run `rustup update`
+
+Bevy relies heavily on improvements in the Rust language and compiler.
+As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
+
 <!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-04-15 [Merged by Bors]" -->
 
 ### [Camera Driven Rendering](https://github.com/bevyengine/bevy/pull/4745)
@@ -257,6 +262,24 @@ App::new()
     .insert_resource(ImageSettings::default_nearest())
 ```
 
+`Image.sampler_descriptor` has been changed to use `ImageSampler` instead of `SamplerDescriptor`.
+
+```rs
+// 0.7
+texture.sampler_descriptor = SamplerDescriptor {
+    address_mode_u: AddressMode::Repeat,
+    address_mode_v: AddressMode::Repeat,
+    ..default()
+};
+
+// 0.8
+texture.sampler_descriptor = ImageSampler::Descriptor(SamplerDescriptor {
+    address_mode_u: AddressMode::Repeat,
+    address_mode_v: AddressMode::Repeat,
+    ..default()
+});
+```
+
 ### [Remove .system()](https://github.com/bevyengine/bevy/pull/4499)
 
 You can no longer use `.system()`. It was deprecated in 0.7.0. You can just remove the method call.
@@ -328,12 +351,13 @@ If using `Query` or `QueryState` outside of a system run by the scheduler, you m
 There is currently no alternative, but we're open to adding support.
 Please [file an issue](https://github.com/bevyengine/bevy/issues) to help detail your use case.
 
-### [Enforce type safe usage of Handle::get](https://github.com/bevyengine/bevy/pull/4794)
+### [Enforce type safe usage of Assets::get](https://github.com/bevyengine/bevy/pull/4794)
 
 `Assets::<T>::get` and `Assets::<T>::get_mut` now require that the passed handles are `Handle<T>`, improving the type safety of handles. If you were previously passing in:
 
 * a `HandleId`, use `&Handle::weak(id)` instead, to create a weak handle. You may have been able to store a type safe `Handle` instead.
 * a `HandleUntyped`, use `&handle_untyped.typed_weak()` to create a weak handle of the specified type. This is most likely to be the useful when using [load_folder](https://docs.rs/bevy_asset/latest/bevy_asset/struct.AssetServer.html#method.load_folder)
+* a `&str` or anything not previously mentioned: `assets.get(&assets.get_handle("asset/path.ron"))`
 * a `Handle<U>` of  of a different type, consider whether this is the correct handle type to store. If it is (i.e. the same handle id is used for multiple different Asset types) use `Handle::weak(handle.id)` to cast to a different type.
 
 ### [Allow higher order systems](https://github.com/bevyengine/bevy/pull/4833)
@@ -473,6 +497,8 @@ fn extract_assets(mut render_assets: ResMut<MyAssets>, source_assets: Extract<Re
 }
 ```
 
+Because extraction now runs in the render world, usage of `Res<RenderWorld>` in the main world, should be replaced with usage of `Res<MainWorld>` in the render world.
+
 Please note that all existing extract systems need to be updated to match this new style; even if they currently compile they will not run as expected. A warning will be emitted on a best-effort basis if this is not met.
 
 ### [Improve Gamepad DPad Button Detection](https://github.com/bevyengine/bevy/pull/5220)
@@ -544,8 +570,10 @@ bevy = { version = "0.8", default-features = false, features = [
 `Text::with_section` was renamed to `Text::from_section` and no longer takes a `TextAlignment` as argument.
 Use `with_alignment` to set the alignment instead.
 
-
 ### [Add QueryState::get_single_unchecked_manual and its family](https://github.com/bevyengine/bevy/pull/4841)
 
 Change `system::QuerySingleError` to `query::QuerySingleError`
 
+### [tracing-tracy updated from 0.8.0 to 0.10.0](https://github.com/bevyengine/bevy/pull/4991)
+
+The required tracy version when using the [trace-tracy](https://github.com/bevyengine/bevy/blob/main/docs/profiling.md#backend-trace_tracy) feature is now [0.8.1](https://github.com/wolfpld/tracy/releases/tag/v0.8.1).
