@@ -9,6 +9,7 @@ find assets -type f -name '*.md' -exec rm {} +
 
 # setting a canvas by default to help with integration
 sed -i.bak 's/canvas: None,/canvas: Some("#bevy".to_string()),/' crates/bevy_window/src/window.rs
+sed -i.bak 's/fit_canvas_to_parent: false,/fit_canvas_to_parent: true,/' crates/bevy_window/src/window.rs
 
 # setting the asset folder root to the root url of this domain
 sed -i.bak 's/asset_folder: "assets"/asset_folder: "\/assets\/examples\/"/' crates/bevy_asset/src/lib.rs
@@ -94,7 +95,7 @@ category_weight=0
 # - first param: the label that will show on the website
 # - second param: `bevy/examples/???` folder name
 # - rest params: space separated list of example files within the folder that want to be used
-add_category 2D 2d rect sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
+add_category 2D 2d sprite sprite_flipping sprite_sheet text2d mesh2d mesh2d_manual
 add_category 3D 3d 3d_scene lighting load_gltf orthographic parenting pbr spherical_area_lights texture update_gltf_scene
 add_category UI ui button text text_debug ui
 add_category Audio audio audio
