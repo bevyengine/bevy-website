@@ -8,7 +8,7 @@ const MAX_DESCRIPTION_LENGTH: usize = 100;
 fn main() -> Result<()> {
     let asset_dir = std::env::args()
         .nth(1)
-        .ok_or_else(|| anyhow!("Specify asset dir"))?;
+        .ok_or_else(|| anyhow!("Please specify the path to bevy-assets"))?;
 
     let asset_root_section =
         parse_assets(&asset_dir, None, None, None).with_context(|| "Parsing assets")?;
