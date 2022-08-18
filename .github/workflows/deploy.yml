@@ -25,6 +25,8 @@ jobs:
 
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
