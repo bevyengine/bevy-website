@@ -1,10 +1,12 @@
+$asset-card-padding: 0.4rem;
+
 .asset-card {
     display: grid;
     grid-template-areas:
         "banner"
         "desc"
         "tags";
-    grid-template-rows: 12rem 4rem 2rem;
+    grid-template-rows: 12rem 4.2rem 2.2rem;
 
     text-decoration: none;
     overflow: hidden;
@@ -41,7 +43,7 @@
         width: 100%;
         bottom: 0;
 
-        padding: 0.3rem;
+        padding: $asset-card-padding;
         font-weight: bold;
         font-size: 1.2rem;
         background-color: rgba(0, 0, 0, 0.5);
@@ -52,7 +54,7 @@
 
         grid-area: desc;
 
-        padding: 0.3rem;
+        padding: $asset-card-padding;
         font-size: 1rem;
         overflow: ellipsis;
     }
@@ -61,7 +63,7 @@
         grid-area: tags;
         display: grid;
         grid-template-areas: "versions licenses";
-        padding: 0.3rem;
+        padding: $asset-card-padding;
     }
 
     &__tag-icon {
