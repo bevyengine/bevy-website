@@ -4,7 +4,7 @@
         "banner"
         "desc"
         "tags";
-    grid-template-rows: 12rem 5.5rem 2rem;
+    grid-template-rows: 12rem 4rem 2rem;
 
     text-decoration: none;
     overflow: hidden;
@@ -41,19 +41,20 @@
         width: 100%;
         bottom: 0;
 
-        padding: 0.3rem 0.6rem;
+        padding: 0.3rem;
         font-weight: bold;
         font-size: 1.2rem;
         background-color: rgba(0, 0, 0, 0.5);
     }
 
     &__description {
-        @include text-ellipsis(4);
+        @include text-ellipsis(3);
 
         grid-area: desc;
 
-        padding: 0.6rem;
+        padding: 0.3rem;
         font-size: 1rem;
+        overflow: ellipsis;
     }
 
     &__tags {
