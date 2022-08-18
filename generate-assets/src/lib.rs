@@ -138,7 +138,7 @@ fn visit_dirs(
                     continue;
                 }
 
-                let mut asset: Asset = toml::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
+                let mut asset: Asset = toml::from_str(&fs::read_to_string(&path).unwrap())?;
                 asset.original_path = Some(path);
 
                 if let Err(err) =

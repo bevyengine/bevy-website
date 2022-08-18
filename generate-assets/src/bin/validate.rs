@@ -1,45 +1,54 @@
+use anyhow::{anyhow, Context, Result};
 use regex::Regex;
 
 use generate_assets::*;
 
-fn main() -> Result<(), ()> {
-    let asset_dir = std::env::args().nth(1).unwrap();
-    if let Ok(asset_root_section) = parse_assets(&asset_dir, None, None, None) {
-        if asset_root_section.validate() {
-            Ok(())
-        } else {
-            Err(())
-        }
-    } else {
-        Err(())
+fn main() -> Result<()> {
+    let asset_dir = std::env::args()
+        .nth(1)
+        .ok_or_else(|| anyhow!("Specify asset dir"))?;
+
+    let asset_root_section =
+        parse_assets(&asset_dir, None, None, None).with_context(|| "Parsing assets")?;
+    let errors = asset_root_section.validate();
+
+    if errors.is_empty() {
+        return Ok(());
     }
+
+    eprintln!("{} error(s).", errors.len());
+
+    for error in errors.iter() {
+        eprintln!("{:?}", error);
+    }
+
+    Err(anyhow!("One or more assets are invalid."))
 }
 
 trait AssetValidator {
-    fn validate(&self) -> bool;
+    fn validate(&self) -> Vec<AssetError>;
 }
 
 #[derive(Debug)]
 enum AssetError {
-    DescriptionTooLong,
-    DescriptionWithFormatting,
-    ImageInvalidLink,
+    DescriptionTooLong(String),
+    DescriptionWithFormatting(String),
+    ImageInvalidLink(String),
+    ImageInvalidExtension(String),
 }
 
 impl AssetValidator for Section {
-    fn validate(&self) -> bool {
-        let mut valid = true;
-        for content in self.content.iter() {
-            if !content.validate() {
-                valid = false;
-            }
-        }
-        valid
+    fn validate(&self) -> Vec<AssetError> {
+        self.content
+            .iter()
+            .map(|content| content.validate())
+            .flatten()
+            .collect()
     }
 }
 
 impl AssetValidator for AssetNode {
-    fn validate(&self) -> bool {
+    fn validate(&self) -> Vec<AssetError> {
         match self {
             AssetNode::Section(content) => content.validate(),
             AssetNode::Asset(content) => content.validate(),
@@ -48,36 +57,36 @@ impl AssetValidator for AssetNode {
 }
 
 impl AssetValidator for Asset {
-    fn validate(&self) -> bool {
-        let mut valid = true;
+    fn validate(&self) -> Vec<AssetError> {
+        let mut errors = vec![];
+
         if self.description.len() > 100 {
-            valid = false;
-            println!("{:50} - {:?}", self.name, AssetError::DescriptionTooLong);
+            errors.push(AssetError::DescriptionTooLong(self.name.clone()));
         }
+
         if has_forbidden_formatting(&self.description) {
-            valid = false;
-            println!(
-                "{:50} - {:?}",
-                self.name,
-                AssetError::DescriptionWithFormatting
-            );
+            errors.push(AssetError::DescriptionWithFormatting(self.name.clone()));
         }
+
         if let Some(image) = self.image.as_ref() {
-            if image.starts_with('.')
-                || image.starts_with('/')
-                || image.starts_with("http")
-                || !(image.ends_with(".gif")
-                    || image.ends_with(".jpeg")
-                    || image.ends_with(".jpg")
-                    || image.ends_with(".webp")
-                    || image.ends_with(".png"))
-            {
-                valid = false;
-                println!("{:50} - {:?}", self.name, AssetError::ImageInvalidLink);
+            let mut image_path = self.original_path.clone().unwrap();
+            image_path.pop();
+            image_path.push(image);
+
+            if !image_path.is_file() {
+                errors.push(AssetError::ImageInvalidLink(self.name.clone()));
+            }
+
+            if let Some(extension) = image_path.extension().and_then(|ext| ext.to_str()) {
+                if !["gif", "jpg", "jpeg", "png", "webp"].contains(&extension) {
+                    errors.push(AssetError::ImageInvalidExtension(self.name.clone()));
+                }
+            } else {
+                errors.push(AssetError::ImageInvalidExtension(self.name.clone()))
             }
         }
 
-        valid
+        errors
     }
 }
 
