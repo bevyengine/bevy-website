@@ -17,30 +17,4 @@
     .item-grid {
         margin-bottom: 52px;
     }
-
-    .card {
-        margin: 0;
-        height: 8rem;
-    }
-
-    .card-title {
-        font-size: 1.3rem;
-        overflow-wrap: break-word;
-    }
-
-    .card-description {
-        font-size: 1rem;
-        height: initial;
-    }
-
-    .card-image > img {
-        display: block;
-        height: auto;
-        max-width: 100%;
-    }
-
-    a {
-        text-decoration: none;
-        color: $link-color;
-    }
 }

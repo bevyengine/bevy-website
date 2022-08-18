@@ -9,11 +9,11 @@
     font-style: normal;
     text-decoration: none;
     border: 2px solid #383838;
-}
 
-.card:hover {
-    background-color: $card-hover-background;
-    border: 2px solid #6b6b6b;
+    &:hover {
+        background-color: $card-hover-background;
+        border: 2px solid #6b6b6b;
+    }
 }
 
 .card-image {
