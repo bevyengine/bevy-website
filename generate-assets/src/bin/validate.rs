@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use anyhow::{anyhow, Context, Result};
 use regex::Regex;
 
@@ -12,35 +14,51 @@ fn main() -> Result<()> {
 
     let asset_root_section =
         parse_assets(&asset_dir, None, None, None).with_context(|| "Parsing assets")?;
-    let errors = asset_root_section.validate();
+
+    let results = asset_root_section.validate();
+
+    let errors: Vec<_> = results.iter().filter_map(|r| r.as_ref().err()).collect();
 
     if errors.is_empty() {
         return Ok(());
     }
 
-    eprintln!("{} error(s).", errors.len());
-
-    for error in errors.iter() {
-        eprintln!("{:?}", error);
+    for error in &errors {
+        eprintln!("{}", error);
     }
 
-    Err(anyhow!("One or more assets are invalid."))
+    Err(anyhow!("{} asset(s) are invalid.", errors.len()))
 }
 
-trait AssetValidator {
-    fn validate(&self) -> Vec<AssetError>;
+#[derive(Debug)]
+struct ValidationError {
+    asset_name: String,
+    errors: Vec<AssetError>,
+}
+impl Display for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "{}", self.asset_name)?;
+        for error in &self.errors {
+            write!(f, "  {:?}", error)?;
+        }
+        Ok(())
+    }
 }
 
 #[derive(Debug)]
 enum AssetError {
-    DescriptionTooLong(String),
-    DescriptionWithFormatting(String),
-    ImageInvalidLink(String),
-    ImageInvalidExtension(String),
+    DescriptionTooLong,
+    DescriptionWithFormatting,
+    ImageInvalidLink,
+    ImageInvalidExtension,
+}
+
+trait AssetValidator {
+    fn validate(&self) -> Vec<Result<(), ValidationError>>;
 }
 
 impl AssetValidator for Section {
-    fn validate(&self) -> Vec<AssetError> {
+    fn validate(&self) -> Vec<Result<(), ValidationError>> {
         self.content
             .iter()
             .map(|content| content.validate())
@@ -50,7 +68,7 @@ impl AssetValidator for Section {
 }
 
 impl AssetValidator for AssetNode {
-    fn validate(&self) -> Vec<AssetError> {
+    fn validate(&self) -> Vec<Result<(), ValidationError>> {
         match self {
             AssetNode::Section(content) => content.validate(),
             AssetNode::Asset(content) => content.validate(),
@@ -59,15 +77,15 @@ impl AssetValidator for AssetNode {
 }
 
 impl AssetValidator for Asset {
-    fn validate(&self) -> Vec<AssetError> {
+    fn validate(&self) -> Vec<Result<(), ValidationError>> {
         let mut errors = vec![];
 
         if self.description.len() > MAX_DESCRIPTION_LENGTH {
-            errors.push(AssetError::DescriptionTooLong(self.name.clone()));
+            errors.push(AssetError::DescriptionTooLong);
         }
 
         if has_forbidden_formatting(&self.description) {
-            errors.push(AssetError::DescriptionWithFormatting(self.name.clone()));
+            errors.push(AssetError::DescriptionWithFormatting);
         }
 
         if let Some(image) = self.image.as_ref() {
@@ -76,19 +94,26 @@ impl AssetValidator for Asset {
             image_path.push(image);
 
             if !image_path.is_file() {
-                errors.push(AssetError::ImageInvalidLink(self.name.clone()));
+                errors.push(AssetError::ImageInvalidLink);
             }
 
             if let Some(extension) = image_path.extension().and_then(|ext| ext.to_str()) {
                 if !["gif", "jpg", "jpeg", "png", "webp"].contains(&extension) {
-                    errors.push(AssetError::ImageInvalidExtension(self.name.clone()));
+                    errors.push(AssetError::ImageInvalidExtension);
                 }
             } else {
-                errors.push(AssetError::ImageInvalidExtension(self.name.clone()))
+                errors.push(AssetError::ImageInvalidExtension)
             }
         }
 
-        errors
+        if errors.is_empty() {
+            vec![Ok(())]
+        } else {
+            vec![Err(ValidationError {
+                asset_name: self.name.clone(),
+                errors,
+            })]
+        }
     }
 }
 
