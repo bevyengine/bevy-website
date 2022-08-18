@@ -3,6 +3,8 @@ use regex::Regex;
 
 use generate_assets::*;
 
+const MAX_DESCRIPTION_LENGTH: usize = 100;
+
 fn main() -> Result<()> {
     let asset_dir = std::env::args()
         .nth(1)
@@ -60,7 +62,7 @@ impl AssetValidator for Asset {
     fn validate(&self) -> Vec<AssetError> {
         let mut errors = vec![];
 
-        if self.description.len() > 100 {
+        if self.description.len() > MAX_DESCRIPTION_LENGTH {
             errors.push(AssetError::DescriptionTooLong(self.name.clone()));
         }
 
