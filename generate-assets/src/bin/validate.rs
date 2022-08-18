@@ -31,11 +31,11 @@ fn main() -> Result<()> {
 }
 
 #[derive(Debug)]
-struct ValidationError {
+struct AssetError {
     asset_name: String,
-    errors: Vec<AssetError>,
+    errors: Vec<ValidationError>,
 }
-impl Display for ValidationError {
+impl Display for AssetError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "{}", self.asset_name)?;
         for error in &self.errors {
@@ -46,7 +46,7 @@ impl Display for ValidationError {
 }
 
 #[derive(Debug)]
-enum AssetError {
+enum ValidationError {
     DescriptionTooLong,
     DescriptionWithFormatting,
     ImageInvalidLink,
@@ -54,11 +54,11 @@ enum AssetError {
 }
 
 trait AssetValidator {
-    fn validate(&self) -> Vec<Result<(), ValidationError>>;
+    fn validate(&self) -> Vec<Result<(), AssetError>>;
 }
 
 impl AssetValidator for Section {
-    fn validate(&self) -> Vec<Result<(), ValidationError>> {
+    fn validate(&self) -> Vec<Result<(), AssetError>> {
         self.content
             .iter()
             .map(|content| content.validate())
@@ -68,7 +68,7 @@ impl AssetValidator for Section {
 }
 
 impl AssetValidator for AssetNode {
-    fn validate(&self) -> Vec<Result<(), ValidationError>> {
+    fn validate(&self) -> Vec<Result<(), AssetError>> {
         match self {
             AssetNode::Section(content) => content.validate(),
             AssetNode::Asset(content) => content.validate(),
@@ -77,15 +77,15 @@ impl AssetValidator for AssetNode {
 }
 
 impl AssetValidator for Asset {
-    fn validate(&self) -> Vec<Result<(), ValidationError>> {
+    fn validate(&self) -> Vec<Result<(), AssetError>> {
         let mut errors = vec![];
 
         if self.description.len() > MAX_DESCRIPTION_LENGTH {
-            errors.push(AssetError::DescriptionTooLong);
+            errors.push(ValidationError::DescriptionTooLong);
         }
 
         if has_forbidden_formatting(&self.description) {
-            errors.push(AssetError::DescriptionWithFormatting);
+            errors.push(ValidationError::DescriptionWithFormatting);
         }
 
         if let Some(image) = self.image.as_ref() {
@@ -94,22 +94,22 @@ impl AssetValidator for Asset {
             image_path.push(image);
 
             if !image_path.is_file() {
-                errors.push(AssetError::ImageInvalidLink);
+                errors.push(ValidationError::ImageInvalidLink);
             }
 
             if let Some(extension) = image_path.extension().and_then(|ext| ext.to_str()) {
                 if !["gif", "jpg", "jpeg", "png", "webp"].contains(&extension) {
-                    errors.push(AssetError::ImageInvalidExtension);
+                    errors.push(ValidationError::ImageInvalidExtension);
                 }
             } else {
-                errors.push(AssetError::ImageInvalidExtension)
+                errors.push(ValidationError::ImageInvalidExtension)
             }
         }
 
         if errors.is_empty() {
             vec![Ok(())]
         } else {
-            vec![Err(ValidationError {
+            vec![Err(AssetError {
                 asset_name: self.name.clone(),
                 errors,
             })]
