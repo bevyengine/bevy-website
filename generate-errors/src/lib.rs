@@ -74,6 +74,14 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
         }
     }
 
+    for content in &section.content {
+        println!("{} b4", content.code);
+    }
+    section.content.sort_by(|a, b| a.code.cmp(&b.code));
+    for content in &section.content {
+        println!("{} after", content.code);
+    }
+
     Ok(())
 }
 
