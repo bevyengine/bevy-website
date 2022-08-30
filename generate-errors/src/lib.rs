@@ -74,6 +74,8 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
         }
     }
 
+    section.content.sort_by(|a, b| a.code.cmp(&b.code));
+
     Ok(())
 }
 
