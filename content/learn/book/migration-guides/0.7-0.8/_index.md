@@ -46,7 +46,7 @@ commands.spawn_bundle(OrthographicCameraBundle::new_3d())
 commands.spawn_bundle(Camera3dBundle {
     projection: OrthographicProjection {
         scale: 3.0,
-        scaling_mode: ScalingMode::FixedVertical,
+        scaling_mode: ScalingMode::FixedVertical(5.0),
         ..default()
     }.into(),
     ..default()
