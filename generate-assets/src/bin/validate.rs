@@ -62,8 +62,7 @@ impl AssetValidator for Section {
     fn validate(&self) -> Vec<Result<(), AssetError>> {
         self.content
             .iter()
-            .map(|content| content.validate())
-            .flatten()
+            .flat_map(|content| content.validate())
             .collect()
     }
 }
