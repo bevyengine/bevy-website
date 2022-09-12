@@ -88,71 +88,73 @@ fn visit_dirs(
     github_client: Option<&GithubClient>,
     gitlab_client: Option<&GitlabClient>,
 ) -> anyhow::Result<()> {
-    if dir.is_dir() {
-        for entry in fs::read_dir(dir)? {
-            let entry = entry?;
-            let path = entry.path();
-            if path.file_name().unwrap() == ".git" || path.file_name().unwrap() == ".github" {
+    if dir.is_file() {
+        return Ok(());
+    }
+
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.file_name().unwrap() == ".git" || path.file_name().unwrap() == ".github" {
+            continue;
+        }
+        if path.is_dir() {
+            let folder = path.file_name().unwrap();
+            let (order, sort_order_reversed) = if path.join("_category.toml").exists() {
+                let from_file: toml::Value =
+                    toml::de::from_str(&fs::read_to_string(path.join("_category.toml")).unwrap())
+                        .unwrap();
+                (
+                    from_file
+                        .get("order")
+                        .and_then(|v| v.as_integer())
+                        .map(|v| v as usize),
+                    from_file
+                        .get("sort_order_reversed")
+                        .and_then(|v| v.as_bool())
+                        .unwrap_or(false),
+                )
+            } else {
+                (None, false)
+            };
+            let mut new_section = Section {
+                name: folder.to_str().unwrap().to_string(),
+                content: vec![],
+                template: None,
+                header: None,
+                order,
+                sort_order_reversed,
+            };
+            visit_dirs(
+                path.clone(),
+                &mut new_section,
+                crates_io_db,
+                github_client,
+                gitlab_client,
+            )?;
+            section.content.push(AssetNode::Section(new_section));
+        } else {
+            if path.file_name().unwrap() == "_category.toml"
+                || path.extension().expect("file must have an extension") != "toml"
+            {
                 continue;
             }
-            if path.is_dir() {
-                let folder = path.file_name().unwrap();
-                let (order, sort_order_reversed) = if path.join("_category.toml").exists() {
-                    let from_file: toml::Value = toml::de::from_str(
-                        &fs::read_to_string(path.join("_category.toml")).unwrap(),
-                    )
-                    .unwrap();
-                    (
-                        from_file
-                            .get("order")
-                            .and_then(|v| v.as_integer())
-                            .map(|v| v as usize),
-                        from_file
-                            .get("sort_order_reversed")
-                            .and_then(|v| v.as_bool())
-                            .unwrap_or(false),
-                    )
-                } else {
-                    (None, false)
-                };
-                let mut new_section = Section {
-                    name: folder.to_str().unwrap().to_string(),
-                    content: vec![],
-                    template: None,
-                    header: None,
-                    order,
-                    sort_order_reversed,
-                };
-                visit_dirs(
-                    path.clone(),
-                    &mut new_section,
-                    crates_io_db,
-                    github_client,
-                    gitlab_client,
-                )?;
-                section.content.push(AssetNode::Section(new_section));
-            } else {
-                if path.file_name().unwrap() == "_category.toml"
-                    || path.extension().expect("file must have an extension") != "toml"
-                {
-                    continue;
-                }
 
-                let mut asset: Asset = toml::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
-                asset.original_path = Some(path);
+            let mut asset: Asset = toml::from_str(&fs::read_to_string(&path).unwrap())?;
+            asset.original_path = Some(path);
 
-                if let Err(err) =
-                    get_extra_metadata(&mut asset, crates_io_db, github_client, gitlab_client)
-                {
-                    // We don't want to stop execution here
-                    eprintln!("Failed to get metadata for {}", asset.name);
-                    eprintln!("ERROR: {err:?}");
-                }
-
-                section.content.push(AssetNode::Asset(asset));
+            if let Err(err) =
+                get_extra_metadata(&mut asset, crates_io_db, github_client, gitlab_client)
+            {
+                // We don't want to stop execution here
+                eprintln!("Failed to get metadata for {}", asset.name);
+                eprintln!("ERROR: {err:?}");
             }
+
+            section.content.push(AssetNode::Asset(asset));
         }
     }
+
     Ok(())
 }
 
