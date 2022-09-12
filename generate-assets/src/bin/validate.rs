@@ -69,6 +69,7 @@ impl AssetValidator for Asset {
                 || !(image.ends_with(".gif")
                     || image.ends_with(".jpeg")
                     || image.ends_with(".jpg")
+                    || image.ends_with(".webp")
                     || image.ends_with(".png"))
             {
                 valid = false;
