@@ -1,11 +1,17 @@
-use std::fmt::Display;
+use std::{fmt::Display, ops::Range, path::Path};
 
 use anyhow::{anyhow, Context, Result};
+use image::{io::Reader as ImageReader, DynamicImage};
 use regex::Regex;
 
 use generate_assets::*;
 
 const MAX_DESCRIPTION_LENGTH: usize = 100;
+const MAX_IMAGE_WIDTH: u32 = 1000;
+const MAX_IMAGE_HEIGHT: u32 = 1000;
+const MAX_IMAGE_BYTES: u64 = 1_000_000;
+const ALLOWED_IMAGE_ASPECT_RATIO: Range<f32> = 1.0..2.0;
+const ALLOWED_IMAGE_EXTENSIONS: &[&str] = &["gif", "jpg", "jpeg", "png", "webp"];
 
 fn main() -> Result<()> {
     let asset_dir = std::env::args()
@@ -40,7 +46,7 @@ impl Display for AssetError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "{}", self.asset_name)?;
         for error in &self.errors {
-            writeln!(f, "  {:?}", error)?;
+            writeln!(f, "  {}", error)?;
         }
         Ok(())
     }
@@ -52,6 +58,40 @@ enum ValidationError {
     DescriptionWithFormatting,
     ImageInvalidLink,
     ImageInvalidExtension,
+    ImageInvalid,
+    ImageFileSizeTooLarge,
+    ImageDimensionsTooLarge,
+    ImageAspectRatioExtreme,
+}
+impl Display for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ValidationError::DescriptionTooLong => write!(
+                f,
+                "Description must be at most {} chars in length.",
+                MAX_DESCRIPTION_LENGTH
+            ),
+            ValidationError::DescriptionWithFormatting => {
+                write!(f, "Description must not contain formatting.")
+            }
+            ValidationError::ImageInvalidLink => write!(f, "Image file not found."),
+            ValidationError::ImageInvalidExtension => write!(f, "Image extension not allowed"),
+            ValidationError::ImageInvalid => write!(f, "Image file is invalid or corrupt."),
+            ValidationError::ImageFileSizeTooLarge => {
+                write!(f, "Image file must be at most {} bytes.", MAX_IMAGE_BYTES)
+            }
+            ValidationError::ImageDimensionsTooLarge => write!(
+                f,
+                "Image dimensions must not exceed {}x{} px.",
+                MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+            ),
+            ValidationError::ImageAspectRatioExtreme => write!(
+                f,
+                "Image aspect ratio must be between {} and {}.",
+                ALLOWED_IMAGE_ASPECT_RATIO.start, ALLOWED_IMAGE_ASPECT_RATIO.end
+            ),
+        }
+    }
 }
 
 trait AssetValidator {
@@ -93,17 +133,15 @@ impl AssetValidator for Asset {
             image_path.pop();
             image_path.push(image);
 
-            if !image_path.is_file() {
-                errors.push(ValidationError::ImageInvalidLink);
-            }
-
             if let Some(extension) = image_path.extension().and_then(|ext| ext.to_str()) {
-                if !["gif", "jpg", "jpeg", "png", "webp"].contains(&extension) {
+                if !ALLOWED_IMAGE_EXTENSIONS.contains(&extension) {
                     errors.push(ValidationError::ImageInvalidExtension);
                 }
             } else {
                 errors.push(ValidationError::ImageInvalidExtension)
             }
+
+            errors.append(&mut validate_image(&image_path));
         }
 
         if errors.is_empty() {
@@ -130,4 +168,45 @@ fn has_forbidden_formatting(string: &str) -> bool {
     }
 
     false
+}
+
+fn open_image(path: &Path) -> Result<DynamicImage, ValidationError> {
+    let size = path
+        .metadata()
+        .map_err(|_| ValidationError::ImageInvalidLink)?
+        .len();
+
+    if size > MAX_IMAGE_BYTES {
+        return Err(ValidationError::ImageFileSizeTooLarge);
+    }
+
+    let img = ImageReader::open(path)
+        .map_err(|_| ValidationError::ImageInvalidLink)?
+        .decode()
+        .map_err(|_| ValidationError::ImageInvalid)?;
+
+    Ok(img)
+}
+
+fn validate_image(path: &Path) -> Vec<ValidationError> {
+    let mut errors = vec![];
+
+    let img = match open_image(path) {
+        Ok(img) => img,
+        Err(err) => {
+            errors.push(err);
+            return errors;
+        }
+    };
+
+    if img.width() > MAX_IMAGE_WIDTH || img.height() > MAX_IMAGE_HEIGHT {
+        errors.push(ValidationError::ImageDimensionsTooLarge);
+    }
+
+    let aspect_ratio = img.width() as f32 / img.height() as f32;
+    if !ALLOWED_IMAGE_ASPECT_RATIO.contains(&aspect_ratio) {
+        errors.push(ValidationError::ImageAspectRatioExtreme);
+    }
+
+    errors
 }
