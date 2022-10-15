@@ -146,7 +146,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
         rustup component add llvm-tools-preview
         ```
     * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
-* **Alternative - Mold linker**: Mold is _up to five times faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
+* **Alternative - Mold linker**: Mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install Mold, find your OS below and run the given command:
     * **Ubuntu**: `sudo apt-get install mold`
     * **Arch**: `sudo pacman -S mold`
     * **Windows**: Mold does not yet support Windows. [See this tracking issue](https://github.com/rui314/mold/issues/190) for more information.
