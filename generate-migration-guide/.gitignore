@@ -3,3 +3,5 @@ assets
 data/
 .env
 out.md
+migration-guide.md
+release-note.md
