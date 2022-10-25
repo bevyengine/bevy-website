@@ -131,7 +131,7 @@ transform.scale *= scale_factor;
 
 `UiColor` has been renamed to `BackgroundColor`. This change affects `NodeBundle`, `ButtonBundle` and `ImageBundle`. In addition, the corresponding field on `ExtractedUiNode` has been renamed to `background_color` for consistency.
 
-### [Merge TextureAtlas::from_grid_with_padding into TextureAtlas::from_grid through option arguments](https://github.com/bevyengine/bevy/pull/6057)
+### [Merge `TextureAtlas::from_grid_with_padding` into `TextureAtlas::from_grid` through option arguments](https://github.com/bevyengine/bevy/pull/6057)
 
 `TextureAtlas::from_grid_with_padding` was merged into `from_grid` which takes two additional parameters for padding and an offset.
 
@@ -173,7 +173,7 @@ let entity = world.spawn().id();
 let entity = world.spawn_empty();
 ```
 
-### [Accept Bundles for insert and remove. Deprecate insert/remove_bundle](https://github.com/bevyengine/bevy/pull/6039)
+### [Accept Bundles for insert and remove. Deprecate `insert`/`remove_bundle`](https://github.com/bevyengine/bevy/pull/6039)
 
 Replace `insert_bundle` with `insert`:
 
@@ -253,7 +253,7 @@ app // AssetServerSettings must be inserted before adding the AssetPlugin or Def
 
 Ambiguity sets have been removed.
 
-### [Remove ExactSizeIterator from QueryCombinationIter](https://github.com/bevyengine/bevy/pull/5895)
+### [Remove `ExactSizeIterator` from `QueryCombinationIter`](https://github.com/bevyengine/bevy/pull/5895)
 
 * Switch to using other methods of getting the length.
 
@@ -325,7 +325,7 @@ Use the associated constant `IDENTITY` instead.
 
 <!-- TODO -->
 
-### [Swap out num_cpus for std::thread::available_parallelism](https://github.com/bevyengine/bevy/pull/4970)
+### [Swap out `num_cpus` for `std::thread::available_parallelism`](https://github.com/bevyengine/bevy/pull/4970)
 
 `bevy_tasks::logical_core_count` and `bevy_tasks::physical_core_count` have been removed. `logical_core_count` has been replaced with `bevy_tasks::available_parallelism`, which works identically. If `bevy_tasks::physical_core_count` is required, the `num_cpus` crate can be used directly, as these two were just aliases for `num_cpus` APIs.
 
