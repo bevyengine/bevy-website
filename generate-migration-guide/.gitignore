@@ -1,0 +1,5 @@
+target
+assets
+data/
+.env
+out.md
