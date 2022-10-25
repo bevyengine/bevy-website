@@ -1,19 +1,20 @@
 //! This will generate a markdown file (out.md) containing all the migration guides
 //! from PRs marked as `C-Breaking-Change`.
 //!
+//! Requires a valid GITHUB_TOKEN, you can use a .env file or use your prefered method of passing env arguments
+//!
 //! Example used to generate for 0.9:
-//! cargo r -- --date 2022-07-31 --title "0.8 to 0.9" -w 5
+//! cargo r -- --date 2022-07-31 --title "0.8 to 0.9" --weight 5
 
 use clap::Parser as ClapParser;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
-use std::fmt::Write;
+use std::{fmt::Write, path::PathBuf};
 
 #[derive(ClapParser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// Date of the release of the previous version
-    /// Format: YYYY-MM-DD
+    /// Date of the release of the previous version. Format: YYYY-MM-DD
     #[arg(short, long)]
     date: String,
 
@@ -21,16 +22,21 @@ struct Args {
     #[arg(short, long)]
     title: String,
 
-    /// Title of the frontmatter
+    /// Weight used for sorting
     #[arg(short, long)]
-    weight: String,
+    weight: i32,
+
+    /// Path used to output the generated file. Defaults to ./out.md
+    #[arg(short, long)]
+    path: Option<std::path::PathBuf>,
 }
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let _ = dotenv::dotenv();
-
     let mut output = String::new();
+
+    // Write the frontmatter based on given parameters
     write!(
         &mut output,
         r#"+++
@@ -51,19 +57,24 @@ long_title = "Migration Guide: {}"
     for pr in &prs {
         println!("## {}", pr.title.replace("[Merged by Bors] - ", "").trim());
 
+        // Write title for the PR with correct heading and github url
         writeln!(
             &mut output,
             "\n### [{}](https://github.com/bevyengine/bevy/pull/{})",
             pr.title.replace("[Merged by Bors] - ", "").trim(),
             pr.number
         )?;
+
+        // Parse the body of the PR
         let mut options = Options::empty();
         options.insert(Options::ENABLE_TABLES);
         options.insert(Options::ENABLE_SMART_PUNCTUATION);
         let mut markdown = Parser::new_ext(&pr.body, options);
         let mut guide_found = false;
+
         while let Some(event) = markdown.next() {
             if let Event::Start(Tag::Heading(migration_guide_level, _, _)) = event {
+                // Find the migration guide section
                 if let Some(Event::Text(heading_text)) = markdown.next() {
                     if !heading_text.to_lowercase().contains("migration guide") {
                         continue;
@@ -71,6 +82,8 @@ long_title = "Migration Guide: {}"
                 }
                 guide_found = true;
                 markdown.next(); // skip heading end
+
+                // Write the migration guide section
                 while let Some(event) = markdown.next() {
                     if let Event::Start(Tag::Heading(level, _, _)) = event {
                         if level >= migration_guide_level {
@@ -78,6 +91,9 @@ long_title = "Migration Guide: {}"
                             break;
                         }
                     }
+                    // Write the markdown Event based on the Tag
+                    // This handles some edge cases like some code blocks not having a specified lang
+                    // This also makes sure the result has a more consistent formatting
                     match event {
                         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => writeln!(
                             &mut output,
@@ -92,6 +108,7 @@ long_title = "Migration Guide: {}"
                         Event::Start(Tag::Emphasis) | Event::End(Tag::Emphasis) => {
                             write!(&mut output, "_")?
                         }
+                        // FIXME List currently always assume they are unordered
                         Event::Start(Tag::List(_)) => {}
                         Event::End(Tag::List(_)) => writeln!(&mut output)?,
                         Event::Start(Tag::Item) => write!(&mut output, "\n* ")?,
@@ -109,12 +126,13 @@ long_title = "Migration Guide: {}"
         }
 
         if !guide_found {
+            // Someone didn't write a migration guide 😢
             writeln!(&mut output, "\n<!-- TODO -->")?;
             println!("\x1b[93mMigration Guide not found!\x1b[0m");
         }
     }
 
-    std::fs::write("./out.md", output)?;
+    std::fs::write(args.path.unwrap_or(PathBuf::from("./out.md")), output)?;
 
     println!("\nFound {} breaking PRs merged by bors", prs.len());
 
@@ -128,6 +146,7 @@ struct GithubIssuesResponse {
     body: String,
 }
 
+/// Get all closed PRs with the label `C-Breaking-Change` since the given date
 fn get_breaking_prs(date: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
     let token = std::env::var("GITHUB_TOKEN")
         .expect("GITHUB_TOKEN not found, github links will be skipped");
@@ -149,6 +168,7 @@ fn get_breaking_prs(date: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         .into_json()?;
     Ok(response
         .iter()
+        // Make sure to only get the PRs that were merged by bors
         .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
         .cloned()
         .collect())
