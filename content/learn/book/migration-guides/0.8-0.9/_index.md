@@ -282,10 +282,6 @@ Ambiguity sets have been removed.
 window.set_position(MonitorSelection::Current, position);
 ```
 
-<!-- ### [Miscellaneous code-quality improvements.](https://github.com/bevyengine/bevy/pull/5860) -->
-
-<!-- TODO -->
-
 ### [Add `pop` method for `List` trait.](https://github.com/bevyengine/bevy/pull/5797)
 
 * Any custom type that implements the `List` trait will now need to implement the `pop` method.
