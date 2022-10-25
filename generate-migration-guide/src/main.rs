@@ -70,7 +70,7 @@ long_title = "Migration Guide: 0.8 to 0.9"
         let mut markdown = Parser::new_ext(&pr.body, options);
         let mut guide_found = false;
         while let Some(event) = markdown.next() {
-            if !matches!(event, Event::Start(Tag::Heading(HeadingLevel::H2, _, _))) {
+            if !matches!(event, Event::Start(Tag::Heading(_, _, _))) {
                 continue;
             }
             if let Some(Event::Text(heading_text)) = markdown.next() {
