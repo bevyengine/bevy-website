@@ -121,7 +121,7 @@ transform.scale *= scale_factor;
 
 ### [Rename `Transform::mul_vec3` to `transform_point` and improve docs](https://github.com/bevyengine/bevy/pull/6132)
 
-<!-- TODO -->
+`Transform::mul_vec3` has been renamed to `transform_point`.
 
 ### [Make `raw_window_handle` field in `Window` and `ExtractedWindow` an `Option`.](https://github.com/bevyengine/bevy/pull/6114)
 
