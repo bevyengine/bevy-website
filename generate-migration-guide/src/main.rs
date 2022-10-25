@@ -1,60 +1,54 @@
 //! This will generate a markdown file (out.md) containing all the migration guides
 //! from PRs marked as `C-Breaking-Change`.
+//!
+//! Example used to generate for 0.9:
+//! cargo r -- --date 2022-07-31 --title "0.8 to 0.9" -w 5
 
+use clap::Parser as ClapParser;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
 use std::fmt::Write;
 
-#[derive(Deserialize)]
-struct GithubIssuesResponse {
+#[derive(ClapParser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Date of the release of the previous version
+    /// Format: YYYY-MM-DD
+    #[arg(short, long)]
+    date: String,
+
+    /// Title of the frontmatter
+    #[arg(short, long)]
     title: String,
-    number: i32,
-    body: String,
+
+    /// Title of the frontmatter
+    #[arg(short, long)]
+    weight: String,
 }
 
 fn main() -> anyhow::Result<()> {
+    let args = Args::parse();
     let _ = dotenv::dotenv();
-    let token = std::env::var("GITHUB_TOKEN")
-        .expect("GITHUB_TOKEN not found, github links will be skipped");
-    let agent: ureq::Agent = ureq::AgentBuilder::new()
-        .user_agent("bevy-website-generate-migration-guide")
-        .build();
-    let response: Vec<GithubIssuesResponse> = agent
-        .get(&format!(
-            "https://api.github.com/repos/bevyengine/bevy/issues"
-        ))
-        .set("Accept", "application/json")
-        .set("Authorization", &format!("Bearer {}", token))
-        .query("state", "closed")
-        .query("labels", "C-Breaking-Change")
-        // release date of 0.8, could probably be automated
-        .query("since", "2022-08-24T00:00:00Z")
-        .query("per_page", "100")
-        .call()?
-        .into_json()?;
-    let closed_by_bors: Vec<_> = response
-        .iter()
-        .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
-        .collect();
 
     let mut output = String::new();
     write!(
         &mut output,
         r#"+++
-title = "0.8 to 0.9"
-weight = 5
+title = "{}"
+weight = {}
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
 insert_anchor_links = "right"
 [extra]
-long_title = "Migration Guide: 0.8 to 0.9"
-+++"#
+long_title = "Migration Guide: {}"
++++"#,
+        args.title, args.weight, args.title
     )?;
     writeln!(&mut output)?;
 
-    for pr in &closed_by_bors {
-        println!();
+    let prs = get_breaking_prs(&args.date)?;
+    for pr in &prs {
         println!("## {}", pr.title.replace("[Merged by Bors] - ", "").trim());
 
         writeln!(
@@ -116,16 +110,46 @@ long_title = "Migration Guide: 0.8 to 0.9"
 
         if !guide_found {
             writeln!(&mut output, "\n<!-- TODO -->")?;
-            println!("Migration Guide not found")
+            println!("\x1b[93mMigration Guide not found!\x1b[0m");
         }
     }
 
     std::fs::write("./out.md", output)?;
 
-    println!(
-        "\nFound {} breaking PRs closed by bors",
-        closed_by_bors.len()
-    );
+    println!("\nFound {} breaking PRs merged by bors", prs.len());
 
     Ok(())
+}
+
+#[derive(Deserialize, Clone)]
+struct GithubIssuesResponse {
+    title: String,
+    number: i32,
+    body: String,
+}
+
+fn get_breaking_prs(date: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
+    let token = std::env::var("GITHUB_TOKEN")
+        .expect("GITHUB_TOKEN not found, github links will be skipped");
+    let agent: ureq::Agent = ureq::AgentBuilder::new()
+        .user_agent("bevy-website-generate-migration-guide")
+        .build();
+    let response: Vec<GithubIssuesResponse> = agent
+        .get(&format!(
+            "https://api.github.com/repos/bevyengine/bevy/issues"
+        ))
+        .set("Accept", "application/json")
+        .set("Authorization", &format!("Bearer {}", token))
+        .query("state", "closed")
+        .query("labels", "C-Breaking-Change")
+        // release date of 0.8, could probably be automated
+        .query("since", &format!("{}T00:00:00Z", date))
+        .query("per_page", "100")
+        .call()?
+        .into_json()?;
+    Ok(response
+        .iter()
+        .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
+        .cloned()
+        .collect())
 }
