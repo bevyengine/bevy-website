@@ -282,7 +282,7 @@ Ambiguity sets have been removed.
 window.set_position(MonitorSelection::Current, position);
 ```
 
-### [Miscellaneous code-quality improvements.](https://github.com/bevyengine/bevy/pull/5860)
+<!-- ### [Miscellaneous code-quality improvements.](https://github.com/bevyengine/bevy/pull/5860) -->
 
 <!-- TODO -->
 
