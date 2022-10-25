@@ -11,7 +11,7 @@ long_title = "Migration Guide: 0.8 to 0.9"
 
 ### [Rename `play` to `start` and add new `play` method that won't overwrite the existing animation if it's already playing](https://github.com/bevyengine/bevy/pull/6350)
 
-<!-- TODO -->
+* If you were using `play` to restart an animation that was already playing, that functionality has been moved to `start`. Now, `play` won’t have any effect if the requested animation is already playing.
 
 ### [Plugins own their settings. Rework PluginGroup trait.](https://github.com/bevyengine/bevy/pull/6336)
 
@@ -337,4 +337,4 @@ All APIs accessing the raw data of individual resources (mutable _and_ read-only
 
 ### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
 
-<!-- TODO -->
+In `derive(Bundle)`, the `bundle` attribute has been removed. Nested bundles are not collapsed automatically. You should remove `#[bundle]` attributes.
