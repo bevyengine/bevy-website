@@ -305,7 +305,7 @@ The `bevy::sprite::Rect` type moved to the math utility crate as
 
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
-<!-- TODO -->
+`Children::with()` is now renamed `Children::from_entities()` and is now `pub(crate)`
 
 ### [Remove `Sync` bound from `Local`](https://github.com/bevyengine/bevy/pull/5483)
 
@@ -323,7 +323,11 @@ Use the associated constant `IDENTITY` instead.
 
 ### [Add Exponential Moving Average into diagnostics](https://github.com/bevyengine/bevy/pull/4992)
 
-<!-- TODO -->
+`LogDiagnosticsPlugin` now records the smoothed value rather than the raw value.
+
+* For diagnostics recorded less often than every 0.1 seconds, this change to defaults will have no visible effect.
+* For discrete diagnostics where this smoothing is not desirable, set a smoothing factor of 0 to disable smoothing.
+* The average of the recent history is still shown when available.
 
 ### [Swap out `num_cpus` for `std::thread::available_parallelism`](https://github.com/bevyengine/bevy/pull/4970)
 
