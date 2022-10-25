@@ -4,36 +4,112 @@
 //! Requires a valid GITHUB_TOKEN, you can use a .env file or use your prefered method of passing env arguments
 //!
 //! Example used to generate for 0.9:
-//! cargo r -- --date 2022-07-31 --title "0.8 to 0.9" --weight 5
+//! cargo r -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
 
-use clap::Parser as ClapParser;
+use clap::{Parser as ClapParser, Subcommand};
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
-use std::{fmt::Write, path::PathBuf};
+use std::{any, fmt::Write, path::PathBuf};
 
-#[derive(ClapParser, Debug)]
+#[derive(ClapParser)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// Date of the release of the previous version. Format: YYYY-MM-DD
-    #[arg(short, long)]
-    date: String,
+    #[command(subcommand)]
+    command: Commands,
+}
 
-    /// Title of the frontmatter
-    #[arg(short, long)]
-    title: String,
+#[derive(Subcommand)]
+enum Commands {
+    MigrationGuide {
+        /// Date of the release of the previous version. Format: YYYY-MM-DD
+        #[arg(short, long)]
+        date: String,
 
-    /// Weight used for sorting
-    #[arg(short, long)]
-    weight: i32,
+        /// Title of the frontmatter
+        #[arg(short, long)]
+        title: String,
 
-    /// Path used to output the generated file. Defaults to ./out.md
-    #[arg(short, long)]
-    path: Option<std::path::PathBuf>,
+        /// Weight used for sorting
+        #[arg(short, long)]
+        weight: i32,
+
+        /// Path used to output the generated file. Defaults to ./migration-guide.md
+        #[arg(short, long)]
+        path: Option<std::path::PathBuf>,
+    },
+    ReleaseNote {
+        /// Date of the release of the previous version. Format: YYYY-MM-DD
+        #[arg(short, long)]
+        date: String,
+
+        /// Path used to output the generated file. Defaults to ./release-note.md
+        #[arg(short, long)]
+        path: Option<std::path::PathBuf>,
+    },
 }
 
 fn main() -> anyhow::Result<()> {
-    let args = Args::parse();
     let _ = dotenv::dotenv();
+    let args = Args::parse();
+    let args = match args.command {
+        Commands::MigrationGuide {
+            date,
+            title,
+            weight,
+            path,
+        } => generate_migration_guide(
+            &title,
+            weight,
+            &date,
+            path.unwrap_or(PathBuf::from("./migration-guide.md")),
+        )?,
+        Commands::ReleaseNote { date, path } => todo!(),
+    };
+
+    Ok(())
+}
+
+#[derive(Deserialize, Clone)]
+struct GithubIssuesResponse {
+    title: String,
+    number: i32,
+    body: String,
+}
+
+/// Get all closed PRs with the label `C-Breaking-Change` since the given date
+fn get_breaking_prs(date: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
+    let token = std::env::var("GITHUB_TOKEN")
+        .expect("GITHUB_TOKEN not found, github links will be skipped");
+    let agent: ureq::Agent = ureq::AgentBuilder::new()
+        .user_agent("bevy-website-generate-migration-guide")
+        .build();
+    let response: Vec<GithubIssuesResponse> = agent
+        .get(&format!(
+            "https://api.github.com/repos/bevyengine/bevy/issues"
+        ))
+        .set("Accept", "application/json")
+        .set("Authorization", &format!("Bearer {}", token))
+        .query("state", "closed")
+        .query("labels", "C-Breaking-Change")
+        // release date of 0.8, could probably be automated
+        .query("since", &format!("{}T00:00:00Z", date))
+        .query("per_page", "100")
+        .call()?
+        .into_json()?;
+    Ok(response
+        .iter()
+        // Make sure to only get the PRs that were merged by bors
+        .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
+        .cloned()
+        .collect())
+}
+
+fn generate_migration_guide(
+    title: &str,
+    weight: i32,
+    date: &str,
+    path: PathBuf,
+) -> anyhow::Result<()> {
     let mut output = String::new();
 
     // Write the frontmatter based on given parameters
@@ -49,11 +125,11 @@ insert_anchor_links = "right"
 [extra]
 long_title = "Migration Guide: {}"
 +++"#,
-        args.title, args.weight, args.title
+        title, weight, title
     )?;
     writeln!(&mut output)?;
 
-    let prs = get_breaking_prs(&args.date)?;
+    let prs = get_breaking_prs(&date)?;
     for pr in &prs {
         println!("## {}", pr.title.replace("[Merged by Bors] - ", "").trim());
 
@@ -132,44 +208,9 @@ long_title = "Migration Guide: {}"
         }
     }
 
-    std::fs::write(args.path.unwrap_or(PathBuf::from("./out.md")), output)?;
+    std::fs::write(path, output)?;
 
     println!("\nFound {} breaking PRs merged by bors", prs.len());
 
     Ok(())
-}
-
-#[derive(Deserialize, Clone)]
-struct GithubIssuesResponse {
-    title: String,
-    number: i32,
-    body: String,
-}
-
-/// Get all closed PRs with the label `C-Breaking-Change` since the given date
-fn get_breaking_prs(date: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-    let token = std::env::var("GITHUB_TOKEN")
-        .expect("GITHUB_TOKEN not found, github links will be skipped");
-    let agent: ureq::Agent = ureq::AgentBuilder::new()
-        .user_agent("bevy-website-generate-migration-guide")
-        .build();
-    let response: Vec<GithubIssuesResponse> = agent
-        .get(&format!(
-            "https://api.github.com/repos/bevyengine/bevy/issues"
-        ))
-        .set("Accept", "application/json")
-        .set("Authorization", &format!("Bearer {}", token))
-        .query("state", "closed")
-        .query("labels", "C-Breaking-Change")
-        // release date of 0.8, could probably be automated
-        .query("since", &format!("{}T00:00:00Z", date))
-        .query("per_page", "100")
-        .call()?
-        .into_json()?;
-    Ok(response
-        .iter()
-        // Make sure to only get the PRs that were merged by bors
-        .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
-        .cloned()
-        .collect())
 }
