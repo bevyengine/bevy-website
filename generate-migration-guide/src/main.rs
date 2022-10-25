@@ -1,8 +1,7 @@
 //! This will generate a markdown file (out.md) containing all the migration guides
 //! from PRs marked as `C-Breaking-Change`.
 
-use anyhow::bail;
-use pulldown_cmark::{CodeBlockKind, Event, HeadingLevel, Options, Parser, Tag};
+use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
 use std::fmt::Write;
 
@@ -70,21 +69,20 @@ long_title = "Migration Guide: 0.8 to 0.9"
         let mut markdown = Parser::new_ext(&pr.body, options);
         let mut guide_found = false;
         while let Some(event) = markdown.next() {
-            if !matches!(event, Event::Start(Tag::Heading(_, _, _))) {
-                continue;
-            }
-            if let Some(Event::Text(heading_text)) = markdown.next() {
-                if !heading_text.to_lowercase().contains("migration guide") {
-                    continue;
+            if let Event::Start(Tag::Heading(migration_guide_level, _, _)) = event {
+                if let Some(Event::Text(heading_text)) = markdown.next() {
+                    if !heading_text.to_lowercase().contains("migration guide") {
+                        continue;
+                    }
                 }
                 guide_found = true;
                 markdown.next(); // skip heading end
                 while let Some(event) = markdown.next() {
-                    if let Event::Start(Tag::Heading(HeadingLevel::H1 | HeadingLevel::H2, _, _)) =
-                        event
-                    {
-                        // go until next heading
-                        break;
+                    if let Event::Start(Tag::Heading(level, _, _)) = event {
+                        if level >= migration_guide_level {
+                            // go until next heading
+                            break;
+                        }
                     }
                     match event {
                         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => writeln!(
@@ -117,15 +115,17 @@ long_title = "Migration Guide: 0.8 to 0.9"
         }
 
         if !guide_found {
-            writeln!(&mut output)?;
-            writeln!(&mut output, "<!-- TODO -->")?;
+            writeln!(&mut output, "\n<!-- TODO -->")?;
             println!("Migration Guide not found")
         }
     }
 
     std::fs::write("./out.md", output)?;
 
-    println!("Found {} breaking PRs closed by bors", closed_by_bors.len());
+    println!(
+        "\nFound {} breaking PRs closed by bors",
+        closed_by_bors.len()
+    );
 
     Ok(())
 }
