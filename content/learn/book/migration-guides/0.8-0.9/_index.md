@@ -9,9 +9,42 @@ insert_anchor_links = "right"
 long_title = "Migration Guide: 0.8 to 0.9"
 +++
 
+### [bevy_scene: Replace root list with struct](https://github.com/bevyengine/bevy/pull/6354)
+
+The scene file format now uses a struct as the root object rather than a list of entities. The list of entities is now found in the `entities` field of this struct.
+
+```rust
+// OLD
+[
+  (
+    entity: 0,
+    components: [
+      // Components...
+    ]
+  ),
+]
+
+// NEW
+(
+  entities: [
+    (
+      entity: 0,
+      components: [
+        // Components...
+      ]
+    ),
+  ]
+)
+```
+
 ### [Rename `play` to `start` and add new `play` method that won't overwrite the existing animation if it's already playing](https://github.com/bevyengine/bevy/pull/6350)
 
 * If you were using `play` to restart an animation that was already playing, that functionality has been moved to `start`. Now, `play` won’t have any effect if the requested animation is already playing.
+
+### [feat: add GamepadInfo, expose gamepad names](https://github.com/bevyengine/bevy/pull/6342)
+
+* Pattern matches on `GamepadEventType::Connected` will need to be updated, as the form of the variant has changed.
+* Code that requires `GamepadEvent`, `GamepadEventRaw` or `GamepadEventType` to be `Copy` will need to be updated.
 
 ### [Plugins own their settings. Rework PluginGroup trait.](https://github.com/bevyengine/bevy/pull/6336)
 
@@ -80,6 +113,10 @@ Any use of `Table::len` should now be `Table::entity_count`. Any use of `Table::
 
 The `.chain(handler_system)` method on systems is now `.pipe(handler_system)`.
 The `IntoChainSystem` trait is now `IntoPipeSystem`, and the `ChainSystem` struct is now `PipeSystem`.
+
+### [Update `wgpu` to 0.14.0, `naga` to `0.10.0`, `winit` to 0.27.4, `raw-window-handle` to 0.5.0, `ndk` to 0.7](https://github.com/bevyengine/bevy/pull/6218)
+
+* Adjust usage of `bevy_window::WindowDescriptor`’s `cursor_locked` to `cursor_grab_mode`, and adjust its type from `bool` to `bevy_window::CursorGrabMode`.
 
 ### [Make the default background color of `NodeBundle` transparent](https://github.com/bevyengine/bevy/pull/6211)
 
