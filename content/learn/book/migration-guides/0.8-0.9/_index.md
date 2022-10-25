@@ -336,6 +336,22 @@ If you aren’t sure which to use, most systems should continue to use “scaled
 The `bevy::sprite::Rect` type moved to the math utility crate as
 `bevy::math::Rect`. You should change your imports from `use bevy::sprite::Rect` to `use bevy::math::Rect`.
 
+### [Remove unused DepthCalculation enum](https://github.com/bevyengine/bevy/pull/5684)
+
+Remove references to `bevy_render::camera::DepthCalculation`, such as `use bevy_render::camera::DepthCalculation`. Remove `depth_calculation` fields from Projections.
+
+### [remove `ReflectMut` in favor of `Mut<dyn Reflect>`](https://github.com/bevyengine/bevy/pull/5630)
+
+<!-- TODO -->
+
+### [Make internal struct `ShaderData` non-`pub`](https://github.com/bevyengine/bevy/pull/5609)
+
+<!-- TODO -->
+
+### [changed diagnostics from seconds to milliseconds](https://github.com/bevyengine/bevy/pull/5554)
+
+<!-- TODO -->
+
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
 `Children::with()` is now renamed `Children::from_entities()` and is now `pub(crate)`
@@ -343,6 +359,54 @@ The `bevy::sprite::Rect` type moved to the math utility crate as
 ### [Remove `Sync` bound from `Local`](https://github.com/bevyengine/bevy/pull/5483)
 
 * Any code relying on `Local<T>` having `T: Resource` may have to be changed, but this is unlikely.
+
+### [Add `FromWorld` bound to `T` in `Local<T>`](https://github.com/bevyengine/bevy/pull/5481)
+
+* It might be possible for references to `Local`s without `T: FromWorld` to exist, but these should be exceedingly rare and probably dead code. In the event that one of these is encountered, the easiest solutions are to delete the code or wrap the inner `T` in an `Option` to allow it to be default constructed to `None`.
+
+### [bevy_reflect: Update enum derives](https://github.com/bevyengine/bevy/pull/5473)
+
+Bevy-defined enums have been updated to implement `Enum` and are not considered value types (`ReflectRef::Value`) anymore. This means that their serialized representations will need to be updated. For example, given the Bevy enum:
+
+```rust
+pub enum ScalingMode {
+  None,
+  WindowSize,
+  Auto { min_width: f32, min_height: f32 },
+  FixedVertical(f32),
+  FixedHorizontal(f32),
+}
+```
+
+You will need to update the serialized versions accordingly.
+
+```js
+// OLD FORMAT
+{
+  "type": "bevy_render::camera::projection::ScalingMode",
+  "value": FixedHorizontal(720),
+},
+
+// NEW FORMAT
+{
+  "type": "bevy_render::camera::projection::ScalingMode",
+  "enum": {
+    "variant": "FixedHorizontal",
+    "tuple": [
+      {
+        "type": "f32",
+        "value": 720,
+      },
+    ],
+  },
+},
+```
+
+This may also have other smaller implications (such as `Debug` representation), but serialization is probably the most prominent.
+
+### [Remove `Size` and `UiRect` generics](https://github.com/bevyengine/bevy/pull/5404)
+
+* The generic `T` of `Size` and `UiRect` got removed and instead they both now always use `Val`. If you used a `Size<f32>` consider replacing it with a `Vec2` which is way more powerful.
 
 ### [Add associated constant `IDENTITY` to `Transform` and friends.](https://github.com/bevyengine/bevy/pull/5340)
 
@@ -353,6 +417,10 @@ Use the associated constant `IDENTITY` instead.
 
 * `Gamepads::iter` now returns an iterator of `Gamepad`. rather than an iterator of `&Gamepad`.
 * `Gamepads::contains` now accepts a `Gamepad`, rather than a `&Gamepad`.
+
+### [remove blanket `Serialize + Deserialize` requirement for `Reflect` on generic types](https://github.com/bevyengine/bevy/pull/5197)
+
+<!-- TODO -->
 
 ### [Add Exponential Moving Average into diagnostics](https://github.com/bevyengine/bevy/pull/4992)
 
@@ -371,6 +439,30 @@ Use the associated constant `IDENTITY` instead.
 Resources have been moved to `Resources` under `Storages` in `World`. All code dependent on `Archetype::unique_components(_mut)` should access it via `world.storages().resources()` instead.
 
 All APIs accessing the raw data of individual resources (mutable _and_ read-only) have been removed as these APIs allowed for unsound unsafe code. All usages of these APIs should be changed to use `World::{get, insert, remove}_resource`.
+
+### [Change `gamepad.rs` tuples to normal structs](https://github.com/bevyengine/bevy/pull/4519)
+
+* The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a `new()` function. To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of `.0` and `.1`.
+
+### [Rename `ElementState` to `ButtonState`](https://github.com/bevyengine/bevy/pull/4314)
+
+* The `ElementState` type received a rename and is now called `ButtonState`. To migrate you just have to change every occurrence of `ElementState` to `ButtonState`.
+
+### [Move `Size` to `bevy_ui`](https://github.com/bevyengine/bevy/pull/4285)
+
+* The `Size` type got moved from `bevy::math` to `bevy::ui`. To migrate you just have to import `bevy::ui::Size` instead of `bevy::math::Math` or use the `bevy::prelude` instead.
+
+### [Remove `margins.rs`](https://github.com/bevyengine/bevy/pull/4284)
+
+* The `Margins` type got removed. To migrate you just have to change every occurrence of `Margins` to `UiRect`.
+
+### [Remove `face_toward.rs`](https://github.com/bevyengine/bevy/pull/4277)
+
+* The `FaceToward` trait got removed. To migrate you just have to change every occurrence of `Mat4::face_toward` to `Mat4::look_at_rh`.
+
+### [Move `Rect` to `bevy_ui` and rename it to `UiRect`](https://github.com/bevyengine/bevy/pull/4276)
+
+* The `Rect` type got renamed to `UiRect`. To migrate you just have to change every occurrence of `Rect` to `UiRect`.
 
 ### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
 
