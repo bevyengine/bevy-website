@@ -41,8 +41,7 @@ fn main() -> anyhow::Result<()> {
     let mut output = String::new();
     write!(
         &mut output,
-        r#"
-+++
+        r#"+++
 title = "0.8 to 0.9"
 weight = 5
 sort_by = "weight"
@@ -65,7 +64,6 @@ long_title = "Migration Guide: 0.8 to 0.9"
             pr.title.replace("[Merged by Bors] - ", "").trim(),
             pr.number
         )?;
-        // let mut markdown = Parser::new(&pr.body);
         let mut options = Options::empty();
         options.insert(Options::ENABLE_TABLES);
         options.insert(Options::ENABLE_SMART_PUNCTUATION);
@@ -76,7 +74,7 @@ long_title = "Migration Guide: 0.8 to 0.9"
                 continue;
             }
             if let Some(Event::Text(heading_text)) = markdown.next() {
-                if !heading_text.contains("Migration Guide") {
+                if !heading_text.to_lowercase().contains("migration guide") {
                     continue;
                 }
                 guide_found = true;
