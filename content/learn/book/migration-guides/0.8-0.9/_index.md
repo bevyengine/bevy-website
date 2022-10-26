@@ -195,8 +195,6 @@ let node = NodeBundle {
 
 ### [Add methods for silencing system-order ambiguity warnings](https://github.com/bevyengine/bevy/pull/6158)
 
-_Note for maintainers: This should replace the migration guide for #5916_
-
 Ambiguity sets have been replaced with a simpler API.
 
 ```rust
@@ -414,10 +412,6 @@ app // AssetServerSettings must be inserted before adding the AssetPlugin or Def
   ..default()
  })
 ```
-
-### [Remove ambiguity sets](https://github.com/bevyengine/bevy/pull/5916)
-
-Ambiguity sets have been removed.
 
 ### [Remove `ExactSizeIterator` from `QueryCombinationIter`](https://github.com/bevyengine/bevy/pull/5895)
 
