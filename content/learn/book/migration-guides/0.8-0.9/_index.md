@@ -9,6 +9,52 @@ insert_anchor_links = "right"
 long_title = "Migration Guide: 0.8 to 0.9"
 +++
 
+### [Use plugin setup for resource only used at setup time](https://github.com/bevyengine/bevy/pull/6360)
+
+The `LogSettings` settings have been moved from a resource to `LogPlugin` configuration:
+
+```rust
+// Old (Bevy 0.8)
+app
+  .insert_resource(LogSettings {
+    level: Level::DEBUG,
+    filter: "wgpu=error,bevy_render=info,bevy_ecs=trace".to_string(),
+  })
+  .add_plugins(DefaultPlugins)
+
+// New (Bevy 0.9)
+app.add_plugins(DefaultPlugins.set(LogPlugin {
+    level: Level::DEBUG,
+    filter: "wgpu=error,bevy_render=info,bevy_ecs=trace".to_string(),
+}))
+```
+
+The `ImageSettings` settings have been moved from a resource to `ImagePlugin` configuration:
+
+```rust
+// Old (Bevy 0.8)
+app
+  .insert_resource(ImageSettings::default_nearest())
+  .add_plugins(DefaultPlugins)
+
+// New (Bevy 0.9)
+app.add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
+```
+
+The `DefaultTaskPoolOptions` settings have been moved from a resource to `CorePlugin::task_pool_options`:
+
+```rust
+// Old (Bevy 0.8)
+app
+  .insert_resource(DefaultTaskPoolOptions::with_num_threads(4))
+  .add_plugins(DefaultPlugins)
+
+// New (Bevy 0.9)
+app.add_plugins(DefaultPlugins.set(CorePlugin {
+  task_pool_options: TaskPoolOptions::with_num_threads(4),
+}))
+```
+
 ### [bevy_scene: Replace root list with struct](https://github.com/bevyengine/bevy/pull/6354)
 
 The scene file format now uses a struct as the root object rather than a list of entities. The list of entities is now found in the `entities` field of this struct.
@@ -147,6 +193,40 @@ let node = NodeBundle {
 
 <!-- TODO -->
 
+### [Add methods for silencing system-order ambiguity warnings](https://github.com/bevyengine/bevy/pull/6158)
+
+_Note for maintainers: This should replace the migration guide for #5916_
+
+Ambiguity sets have been replaced with a simpler API.
+
+```rust
+// These systems technically conflict, but we don't care which order they run in.
+fn jump_on_click(mouse: Res<Input<MouseButton>>, mut transforms: Query<&mut Transform>) { ... }
+fn jump_on_spacebar(keys: Res<Input<KeyCode>>, mut transforms: Query<&mut Transform>) { ... }
+
+//
+// Before
+
+#[derive(AmbiguitySetLabel)]
+struct JumpSystems;
+
+app
+  .add_system(jump_on_click.in_ambiguity_set(JumpSystems))
+  .add_system(jump_on_spacebar.in_ambiguity_set(JumpSystems));
+
+//
+// After
+
+app
+  .add_system(jump_on_click.ambiguous_with(jump_on_spacebar))
+  .add_system(jump_on_spacebar);
+
+```
+
+### [Utility methods for Val](https://github.com/bevyengine/bevy/pull/6134)
+
+Instead of using the + and - operators, perform calculations on `Val`s using the new `try_add` and `try_sub` methods. Multiplication and division remained unchanged. Also, when adding or subtracting from `Size`, ~~use a `Val` tuple instead of `Vec2`~~ perform the addition on `width` and `height` separately.
+
 ### [Remove `Transform::apply_non_uniform_scale`](https://github.com/bevyengine/bevy/pull/6133)
 
 `Transform::apply_non_uniform_scale` has been removed.
@@ -164,11 +244,55 @@ transform.scale *= scale_factor;
 
 `Window::raw_window_handle()` now returns `Option<RawWindowHandleWrapper>`.
 
+### [Add getters and setters for `InputAxis` and `ButtonSettings`](https://github.com/bevyengine/bevy/pull/6088)
+
+`AxisSettings` now has a `new()`, which may return an `AxisSettingsError`.
+`AxisSettings` fields made private; now must be accessed through getters and setters.  There’s a dead zone, from `.deadzone_upperbound()` to `.deadzone_lowerbound()`, and a live zone, from `.deadzone_upperbound()` to `.livezone_upperbound()` and from `.deadzone_lowerbound()` to `.livezone_lowerbound()`.
+`AxisSettings` setters no longer panic.
+`ButtonSettings` fields made private; now must be accessed through getters and setters.
+`ButtonSettings` now has a `new()`, which may return a `ButtonSettingsError`.
+
 ### [Rename `UiColor`  to `BackgroundColor`](https://github.com/bevyengine/bevy/pull/6087)
 
 `UiColor` has been renamed to `BackgroundColor`. This change affects `NodeBundle`, `ButtonBundle` and `ImageBundle`. In addition, the corresponding field on `ExtractedUiNode` has been renamed to `background_color` for consistency.
 
-### [Merge `TextureAtlas::from_grid_with_padding` into `TextureAtlas::from_grid` through option arguments](https://github.com/bevyengine/bevy/pull/6057)
+### [Exclusive Systems Now Implement `System`. Flexible Exclusive System Params](https://github.com/bevyengine/bevy/pull/6083)
+
+Calling `.exclusive_system()` is no longer required (or supported) for converting exclusive system functions to exclusive systems:
+
+```rust
+// Old (0.8)
+app.add_system(some_exclusive_system.exclusive_system());
+// New (0.9)
+app.add_system(some_exclusive_system);
+```
+
+Converting “normal” parallel systems to exclusive systems is done by calling the exclusive ordering apis:
+
+```rust
+// Old (0.8)
+app.add_system(some_system.exclusive_system().at_end());
+// New (0.9)
+app.add_system(some_system.at_end());
+```
+
+Query state in exclusive systems can now be cached via ExclusiveSystemParams, which should be preferred for clarity and performance reasons:
+
+```rust
+// Old (0.8)
+fn some_system(world: &mut World) {
+  let mut transforms = world.query::<&Transform>();
+  for transform in transforms.iter(world) {
+  }
+}
+// New (0.9)
+fn some_system(world: &mut World, transforms: &mut QueryState<&Transform>) {
+  for transform in transforms.iter(world) {
+  }
+}
+```
+
+### [Merge TextureAtlas::from_grid_with_padding into TextureAtlas::from_grid through option arguments](https://github.com/bevyengine/bevy/pull/6057)
 
 `TextureAtlas::from_grid_with_padding` was merged into `from_grid` which takes two additional parameters for padding and an offset.
 
@@ -260,6 +384,11 @@ commands.spawn_bundle((
 ))
 ```
 
+### [Fix inconsistent children removal behavior](https://github.com/bevyengine/bevy/pull/6017)
+
+* Queries with `Changed<Children>` will no longer match entities that had all of their children removed using `remove_children`.
+* `RemovedComponents<Children>` will now contain entities that had all of their children remove using `remove_children`.
+
 ### [`Query` filter types must be `ReadOnlyWorldQuery`](https://github.com/bevyengine/bevy/pull/6008)
 
 Query filter (`F`) generics are now bound by `ReadOnlyWorldQuery`, rather than `WorldQuery`. If for some reason you were requesting `Query<&A, &mut B>`, please use `Query<&A, With<B>>` instead.
@@ -331,6 +460,39 @@ window.set_position(MonitorSelection::Current, position);
 
 If you aren’t sure which to use, most systems should continue to use “scaled” time (e.g. `time.delta_seconds()`). The realtime “unscaled” time measurements (e.g. `time.raw_delta_seconds()`) are mostly for debugging and profiling.
 
+### [bevy_reflect: Improve serialization format even more](https://github.com/bevyengine/bevy/pull/5723)
+
+* This PR reduces the verbosity of the scene format. Scenes will need to be updated accordingly:
+
+```js
+// Old format
+{
+  "type": "my_game::item::Item",
+  "struct": {
+    "id": {
+      "type": "alloc::string::String",
+      "value": "bevycraft:stone",
+    },
+    "tags": {
+      "type": "alloc::vec::Vec<alloc::string::String>",
+      "list": [
+        {
+          "type": "alloc::string::String",
+          "value": "material"
+        },
+      ],
+    },
+}
+
+// New format
+{
+  "my_game::item::Item": (
+    id: "bevycraft:stone",
+    tags: ["material"]
+  )
+}
+```
+
 ### [Move `sprite::Rect` into `bevy_math`](https://github.com/bevyengine/bevy/pull/5686)
 
 The `bevy::sprite::Rect` type moved to the math utility crate as
@@ -340,6 +502,10 @@ The `bevy::sprite::Rect` type moved to the math utility crate as
 
 Remove references to `bevy_render::camera::DepthCalculation`, such as `use bevy_render::camera::DepthCalculation`. Remove `depth_calculation` fields from Projections.
 
+### [Remove an outdated workaround for `impl Trait`](https://github.com/bevyengine/bevy/pull/5659)
+
+The methods `Schedule::get_stage` and `get_stage_mut` now accept `impl StageLabel` instead of `&dyn StageLabel`.
+
 ### [remove `ReflectMut` in favor of `Mut<dyn Reflect>`](https://github.com/bevyengine/bevy/pull/5630)
 
 <!-- TODO -->
@@ -347,6 +513,15 @@ Remove references to `bevy_render::camera::DepthCalculation`, such as `use bevy_
 ### [Make internal struct `ShaderData` non-`pub`](https://github.com/bevyengine/bevy/pull/5609)
 
 <!-- TODO -->
+
+### [Make `Resource` trait opt-in, requiring `#[derive(Resource)]` V2](https://github.com/bevyengine/bevy/pull/5577)
+
+Add `#[derive(Resource)]` to all types you are using as a resource.
+
+If you are using a third party type as a resource, wrap it in a tuple struct to bypass orphan rules. Consider deriving `Deref` and `DerefMut` to improve ergonomics.
+
+`ClearColor` no longer implements `Component`. Using `ClearColor` as a component in 0.8 did nothing.
+Use the `ClearColorConfig` in the `Camera3d` and `Camera2d` components instead.
 
 ### [changed diagnostics from seconds to milliseconds](https://github.com/bevyengine/bevy/pull/5554)
 
