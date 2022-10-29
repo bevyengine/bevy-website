@@ -150,7 +150,8 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     * **Ubuntu**: `sudo apt-get install mold`
     * **Arch**: `sudo pacman -S mold`
     * **Windows**: mold does not yet support Windows. [See this tracking issue](https://github.com/rui314/mold/issues/190) for more information.
-    * **MacOS**: mold does not yet support MacOS. [See this tracking issue](https://github.com/rui314/mold/issues/189) for more information.
+    * **MacOS**: `brew install mold` or `sudo port install mold`, then follow the note in the file mentioned in the "enable fast compiles"
+      section below to ensure the linker works.
 
     You will also need to add the following to your Cargo config at `YOUR_WORKSPACE/.cargo/config.toml`:
     ```toml
@@ -161,7 +162,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
     NOTE: Disabling `bevy/dynamic` may improve the performance of this linker.
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
-    
+
     Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
     ```toml
     [toolchain]
