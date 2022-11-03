@@ -4,12 +4,12 @@
 //! Requires a valid GITHUB_TOKEN, you can use a .env file or use your prefered method of passing env arguments
 //!
 //! Example used to generate for 0.9:
-//! cargo r -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
+//! cargo run -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
 
 use clap::{Parser as ClapParser, Subcommand};
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
-use std::{any, fmt::Write, path::PathBuf};
+use std::{fmt::Write, path::PathBuf};
 
 #[derive(ClapParser)]
 #[command(author, version, about, long_about = None)]
@@ -51,7 +51,7 @@ enum Commands {
 fn main() -> anyhow::Result<()> {
     let _ = dotenv::dotenv();
     let args = Args::parse();
-    let args = match args.command {
+    match args.command {
         Commands::MigrationGuide {
             date,
             title,
@@ -61,35 +61,23 @@ fn main() -> anyhow::Result<()> {
             &title,
             weight,
             &date,
-            path.unwrap_or(PathBuf::from("./migration-guide.md")),
+            path.unwrap_or_else(|| PathBuf::from("./migration-guide.md")),
         )?,
-        Commands::ReleaseNote { date, path } => {
-            generate_release_note(&date, path.unwrap_or(PathBuf::from("./release-note.md")))?
-        }
+        Commands::ReleaseNote { date, path } => generate_release_note(
+            &date,
+            path.unwrap_or_else(|| PathBuf::from("./release-note.md")),
+        )?,
     };
 
     Ok(())
 }
 
 fn generate_release_note(date: &str, path: PathBuf) -> anyhow::Result<()> {
-    let mut prs = Vec::<GithubIssuesResponse>::with_capacity(100);
-    let mut page = 1;
-    loop {
-        println!("Page: {}", page);
-        let mut prs_in_page = get_merged_prs(date, page, None)?;
-        if prs_in_page.is_empty() {
-            break;
-        } else {
-            page += 1;
-        }
-
-        prs.append(&mut prs_in_page);
-    }
-
+    let prs = get_merged_prs(date, None)?;
     let mut output = String::new();
     writeln!(&mut output, "# Full Changelog")?;
     for pr in &prs {
-        let mut pr_title = pr
+        let pr_title = pr
             .title
             .replace("[Merged by Bors] - ", "")
             .trim()
@@ -140,9 +128,9 @@ long_title = "Migration Guide: {}"
     )?;
     writeln!(&mut output)?;
 
-    let prs = get_merged_prs(&date, 0, Some("C-Breaking-Change"))?;
+    let prs = get_merged_prs(date, Some("C-Breaking-Change"))?;
     for pr in &prs {
-        let mut pr_title = pr
+        let pr_title = pr
             .title
             .replace("[Merged by Bors] - ", "")
             .trim()
@@ -160,7 +148,7 @@ long_title = "Migration Guide: {}"
         let mut options = Options::empty();
         options.insert(Options::ENABLE_TABLES);
         options.insert(Options::ENABLE_SMART_PUNCTUATION);
-        let mut markdown = Parser::new_ext(&pr.body.as_ref().unwrap(), options);
+        let mut markdown = Parser::new_ext(pr.body.as_ref().unwrap(), options);
         let mut guide_found = false;
 
         while let Some(event) = markdown.next() {
@@ -175,7 +163,7 @@ long_title = "Migration Guide: {}"
                 markdown.next(); // skip heading end
 
                 // Write the migration guide section
-                while let Some(event) = markdown.next() {
+                for event in markdown.by_ref() {
                     if let Event::Start(Tag::Heading(level, _, _)) = event {
                         if level >= migration_guide_level {
                             // go until next heading
@@ -249,8 +237,23 @@ struct GithubUser {
     login: String,
 }
 
-// TODO handle pages
-fn get_merged_prs(
+fn get_merged_prs(date: &str, label: Option<&str>) -> anyhow::Result<Vec<GithubIssuesResponse>> {
+    let mut prs = Vec::<GithubIssuesResponse>::new();
+    let mut page = 1;
+    loop {
+        println!("Page: {}", page);
+        let mut prs_in_page = get_merged_prs_by_page(date, page, label)?;
+        if prs_in_page.is_empty() {
+            break;
+        } else {
+            page += 1;
+        }
+        prs.append(&mut prs_in_page);
+    }
+    Ok(prs)
+}
+
+fn get_merged_prs_by_page(
     date: &str,
     page: i32,
     label: Option<&str>,
@@ -261,9 +264,7 @@ fn get_merged_prs(
         .user_agent("bevy-website-generate-migration-guide")
         .build();
     let mut request = agent
-        .get(&format!(
-            "https://api.github.com/repos/bevyengine/bevy/issues"
-        ))
+        .get("https://api.github.com/repos/bevyengine/bevy/issues")
         .set("Accept", "application/json")
         .set("Authorization", &format!("Bearer {}", token))
         .query("state", "closed")
