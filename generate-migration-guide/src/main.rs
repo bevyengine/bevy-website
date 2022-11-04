@@ -123,7 +123,10 @@ page_template = "book-section.html"
 insert_anchor_links = "right"
 [extra]
 long_title = "Migration Guide: {}"
-+++"#,
++++
+
+Bevy relies heavily on improvements in the Rust language and compiler.
+As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust."#,
         title, weight, title
     )?;
     writeln!(&mut output)?;
