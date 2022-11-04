@@ -243,7 +243,7 @@ The `IntoChainSystem` trait is now `IntoPipeSystem`, and the `ChainSystem` struc
 
 ### [Update `wgpu` to 0.14.0, `naga` to `0.10.0`, `winit` to 0.27.4, `raw-window-handle` to 0.5.0, `ndk` to 0.7](https://github.com/bevyengine/bevy/pull/6218)
 
-* Adjust usage of `bevy_window::WindowDescriptor`’s `cursor_locked` to `cursor_grab_mode`, and adjust its type from `bool` to `bevy_window::CursorGrabMode`.
+Adjust usage of `bevy_window::WindowDescriptor`’s `cursor_locked` to `cursor_grab_mode`, and adjust its type from `bool` to `bevy_window::CursorGrabMode`.
 
 ### [Make the default background color of `NodeBundle` transparent](https://github.com/bevyengine/bevy/pull/6211)
 
@@ -536,7 +536,7 @@ window.set_position(MonitorSelection::Current, position);
 
 ### [Add `pop` method for `List` trait.](https://github.com/bevyengine/bevy/pull/5797)
 
-* Any custom type that implements the `List` trait will now need to implement the `pop` method.
+Any custom type that implements the `List` trait will now need to implement the `pop` method.
 
 ### [bevy_pbr: Fix incorrect and unnecessary normal-mapping code](https://github.com/bevyengine/bevy/pull/5766)
 
@@ -591,7 +591,7 @@ If you aren’t sure which to use, most systems should continue to use “scaled
 
 ### [bevy_reflect: Improve serialization format even more](https://github.com/bevyengine/bevy/pull/5723)
 
-* This PR reduces the verbosity of the scene format. Scenes will need to be updated accordingly:
+This PR reduces the verbosity of the scene format. Scenes will need to be updated accordingly:
 
 ```js
 // Old format
@@ -692,11 +692,11 @@ Diagnostics values are now in milliseconds. If you need secconds, simply divide 
 
 ### [Remove `Sync` bound from `Local`](https://github.com/bevyengine/bevy/pull/5483)
 
-* Any code relying on `Local<T>` having `T: Resource` may have to be changed, but this is unlikely.
+Any code relying on `Local<T>` having `T: Resource` may have to be changed, but this is unlikely.
 
 ### [Add `FromWorld` bound to `T` in `Local<T>`](https://github.com/bevyengine/bevy/pull/5481)
 
-* It might be possible for references to `Local`s without `T: FromWorld` to exist, but these should be exceedingly rare and probably dead code. In the event that one of these is encountered, the easiest solutions are to delete the code or wrap the inner `T` in an `Option` to allow it to be default constructed to `None`.
+It might be possible for references to `Local`s without `T: FromWorld` to exist, but these should be exceedingly rare and probably dead code. In the event that one of these is encountered, the easiest solutions are to delete the code or wrap the inner `T` in an `Option` to allow it to be default constructed to `None`.
 
 ### [bevy_reflect: Update enum derives](https://github.com/bevyengine/bevy/pull/5473)
 
@@ -740,7 +740,7 @@ This may also have other smaller implications (such as `Debug` representation), 
 
 ### [Remove `Size` and `UiRect` generics](https://github.com/bevyengine/bevy/pull/5404)
 
-* The generic `T` of `Size` and `UiRect` got removed and instead they both now always use `Val`. If you used a `Size<f32>` consider replacing it with a `Vec2` which is way more powerful.
+The generic `T` of `Size` and `UiRect` got removed and instead they both now always use `Val`. If you used a `Size<f32>` consider replacing it with a `Vec2` which is way more powerful.
 
 ### [Add associated constant `IDENTITY` to `Transform` and friends.](https://github.com/bevyengine/bevy/pull/5340)
 
@@ -786,7 +786,7 @@ TODO
 
 ### [Change `gamepad.rs` tuples to normal structs](https://github.com/bevyengine/bevy/pull/4519)
 
-* The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a `new()` function. To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of `.0` and `.1`.
+The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a `new()` function. To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of `.0` and `.1`.
 
 ### [Nested spawns on scope](https://github.com/bevyengine/bevy/pull/4466)
 
@@ -802,23 +802,23 @@ fn scoped_function<'scope>(scope: &Scope<'_, 'scope, ()>) {}
 
 ### [Rename `ElementState` to `ButtonState`](https://github.com/bevyengine/bevy/pull/4314)
 
-* The `ElementState` type received a rename and is now called `ButtonState`. To migrate you just have to change every occurrence of `ElementState` to `ButtonState`.
+The `ElementState` type received a rename and is now called `ButtonState`. To migrate you just have to change every occurrence of `ElementState` to `ButtonState`.
 
 ### [Move `Size` to `bevy_ui`](https://github.com/bevyengine/bevy/pull/4285)
 
-* The `Size` type got moved from `bevy::math` to `bevy::ui`. To migrate you just have to import `bevy::ui::Size` instead of `bevy::math::Math` or use the `bevy::prelude` instead.
+The `Size` type got moved from `bevy::math` to `bevy::ui`. To migrate you just have to import `bevy::ui::Size` instead of `bevy::math::Math` or use the `bevy::prelude` instead.
 
 ### [Remove `margins.rs`](https://github.com/bevyengine/bevy/pull/4284)
 
-* The `Margins` type got removed. To migrate you just have to change every occurrence of `Margins` to `UiRect`.
+The `Margins` type got removed. To migrate you just have to change every occurrence of `Margins` to `UiRect`.
 
 ### [Remove `face_toward.rs`](https://github.com/bevyengine/bevy/pull/4277)
 
-* The `FaceToward` trait got removed. To migrate you just have to change every occurrence of `Mat4::face_toward` to `Mat4::look_at_rh`.
+The `FaceToward` trait got removed. To migrate you just have to change every occurrence of `Mat4::face_toward` to `Mat4::look_at_rh`.
 
 ### [Move `Rect` to `bevy_ui` and rename it to `UiRect`](https://github.com/bevyengine/bevy/pull/4276)
 
-* The `Rect` type got renamed to `UiRect`. To migrate you just have to change every occurrence of `Rect` to `UiRect`.
+The `Rect` type got renamed to `UiRect`. To migrate you just have to change every occurrence of `Rect` to `UiRect`.
 
 ### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
 
