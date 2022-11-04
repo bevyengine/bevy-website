@@ -15,6 +15,9 @@ All Bevy app and engine code is written in Rust. This means that before we begin
 
 ### Installing Rust
 
+Bevy relies heavily on improvements in the Rust language and compiler.
+As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
+
 Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang.org/learn/get-started).
 
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
