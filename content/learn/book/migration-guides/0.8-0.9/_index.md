@@ -230,11 +230,21 @@ struct PlayerBundle {
 
 ### [Add global time scaling](https://github.com/bevyengine/bevy/pull/5752)
 
-* `time.time_since_startup()` -> `time.elapsed()`
-* `time.seconds_since_startup()` -> `time.elapsed_seconds_f64()`
-* `time.seconds_since_startup_wrapped_f32()` -> `time.elapsed_seconds_wrapped()`
+Some `Time` methods were renamed for consistency.
 
-If you aren’t sure which to use, most systems should continue to use “scaled” time (e.g. `time.delta_seconds()`). The realtime “unscaled” time measurements (e.g. `time.raw_delta_seconds()`) are mostly for debugging and profiling.
+The values returned by most methods are now scaled by a value optionally set with `set_relative_speed`. Most systems should continue to use these scaled values. If you need unscaled time, use the new methods prefixed with `raw_`.
+
+```rust
+// Old (Bevy 0.8)
+let dur: Duration = time.time_since_startup();
+let secs: f32 = time.time_since_startup().as_secs_f32();
+let secs: f64 = time.seconds_since_startup();
+
+// New (Bevy 0.9)
+let dur: Duration = time.elapsed();
+let secs: f32 = time.elapsed_seconds();
+let secs: f64 = time.elapsed_seconds_f64();
+```
 
 ### [Change UI coordinate system to have origin at top left corner](https://github.com/bevyengine/bevy/pull/6000)
 
