@@ -497,7 +497,7 @@ Add the `Inner` associated type and new methods to any type that you’ve implem
 
 ### [Make internal struct `ShaderData` non-`pub`](https://github.com/bevyengine/bevy/pull/5609)
 
-<!-- TODO -->
+Removed `ShaderData` from the public API, which was only ever used internally. No public function was using it so there should be no need for any migration action.
 
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
