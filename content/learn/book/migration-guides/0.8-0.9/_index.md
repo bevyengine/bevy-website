@@ -498,7 +498,7 @@ app // AssetServerSettings must be inserted before adding the AssetPlugin or Def
 
 Ambiguity sets have been removed.
 
-### [Remove ExactSizeIterator from QueryCombinationIter](https://github.com/bevyengine/bevy/pull/5895)
+### [Remove `ExactSizeIterator` from `QueryCombinationIter`](https://github.com/bevyengine/bevy/pull/5895)
 
 * Switch to using other methods of getting the length.
 
@@ -677,6 +677,7 @@ Use the `ClearColorConfig` in the `Camera3d` and `Camera2d` components instead.
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
 `Children::with()` is now renamed `Children::from_entities()` and is now `pub(crate)`
+
 ### [Expose `Image` conversion functions (fixes #5452)](https://github.com/bevyengine/bevy/pull/5527)
 
 <!-- TODO -->
