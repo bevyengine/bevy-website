@@ -464,7 +464,7 @@ commands.spawn((
 ### [Fix inconsistent children removal behavior](https://github.com/bevyengine/bevy/pull/6017)
 
 * Queries with `Changed<Children>` will no longer match entities that had all of their children removed using `remove_children`.
-* `RemovedComponents<Children>` will now contain entities that had all of their children remove using `remove_children`.
+* `RemovedComponents<Children>` will now contain entities that had all of their children removed using `remove_children`.
 
 ### [`Query` filter types must be `ReadOnlyWorldQuery`](https://github.com/bevyengine/bevy/pull/6008)
 
@@ -675,7 +675,7 @@ Use the `ClearColorConfig` in the `Camera3d` and `Camera2d` components instead.
 
 ### [Changed diagnostics from seconds to milliseconds](https://github.com/bevyengine/bevy/pull/5554)
 
-Diagnostics values are now in milliseconds. If you need secconds, simply divide it by 1000.0;
+Diagnostics values are now in milliseconds. If you need seconds, simply divide it by 1000.0;
 
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
@@ -741,7 +741,7 @@ The generic `T` of `Size` and `UiRect` got removed and instead they both now alw
 
 ### [Add associated constant `IDENTITY` to `Transform` and friends.](https://github.com/bevyengine/bevy/pull/5340)
 
-The method `identity()` on `Transform`, `GlobalTransform` and `TransformBundle` has been deprecated.
+The method `identity()` on `Transform`, `GlobalTransform` and `TransformBundle` has been removed.
 Use the associated constant `IDENTITY` instead.
 
 ### [Rename Handle::as_weak() to cast_weak()](https://github.com/bevyengine/bevy/pull/5321)
@@ -827,4 +827,4 @@ The `Rect` type got renamed to `UiRect`. To migrate you just have to change ever
 
 ### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
 
-In `derive(Bundle)`, the `bundle` attribute has been removed. Nested bundles are not collapsed automatically. You should remove `#[bundle]` attributes.
+In `derive(Bundle)`, the `bundle` attribute has been removed. Nested bundles are now collapsed automatically. You should remove `#[bundle]` attributes.
