@@ -89,7 +89,7 @@ The scene file format now uses a struct as the root object rather than a list of
 
 ### [Rename `play` to `start` and add new `play` method that won't overwrite the existing animation if it's already playing](https://github.com/bevyengine/bevy/pull/6350)
 
-* If you were using `play` to restart an animation that was already playing, that functionality has been moved to `start`. Now, `play` won’t have any effect if the requested animation is already playing.
+If you were using `play` to restart an animation that was already playing, that functionality has been moved to `start`. Now, `play` won’t have any effect if the requested animation is already playing.
 
 ### [bevy_scene: Use map for scene `components`](https://github.com/bevyengine/bevy/pull/6345)
 
@@ -217,7 +217,7 @@ app.add_plugins(DefaultPlugins.build().disable::<AssetPlugin>());
 
 ### [Replace `WorldQueryGats` trait with actual gats](https://github.com/bevyengine/bevy/pull/6319)
 
-* Replace usage of `WorldQueryGats` assoc types with the actual gats on `WorldQuery` trait
+Replace usage of `WorldQueryGats` assoc types with the actual gats on `WorldQuery` trait
 
 ### [Add a method for accessing the width of a `Table`](https://github.com/bevyengine/bevy/pull/6249)
 
@@ -249,17 +249,13 @@ Adjust usage of `bevy_window::WindowDescriptor`’s `cursor_locked` to `cursor_g
 
 If you want a `NodeBundle` with a white background color, you must explicitly specify it:
 
-Before:
-
 ```rust
+// Old (Bevy 0.8)
 let node = NodeBundle {
     ..default()
 }
-```
 
-After:
-
-```rust
+// New (Bevy 0.9)
 let node = NodeBundle {
     background_color: Color::WHITE.into(),
     ..default()
@@ -285,9 +281,7 @@ Ambiguity sets have been replaced with a simpler API.
 fn jump_on_click(mouse: Res<Input<MouseButton>>, mut transforms: Query<&mut Transform>) { ... }
 fn jump_on_spacebar(keys: Res<Input<KeyCode>>, mut transforms: Query<&mut Transform>) { ... }
 
-//
-// Before
-
+// Old (Bevy 0.8)
 #[derive(AmbiguitySetLabel)]
 struct JumpSystems;
 
@@ -295,9 +289,7 @@ app
   .add_system(jump_on_click.in_ambiguity_set(JumpSystems))
   .add_system(jump_on_spacebar.in_ambiguity_set(JumpSystems));
 
-//
-// After
-
+// New (Bevy 0.9)
 app
   .add_system(jump_on_click.ambiguous_with(jump_on_spacebar))
   .add_system(jump_on_spacebar);
@@ -325,7 +317,7 @@ transform.scale *= scale_factor;
 
 `Window::raw_window_handle()` now returns `Option<RawWindowHandleWrapper>`.
 
-### [[Fixes #6059] ``Entity``'s “ID” should be named “index” instead](https://github.com/bevyengine/bevy/pull/6107)
+### [``Entity``'s “ID” should be named “index” instead](https://github.com/bevyengine/bevy/pull/6107)
 
 The `Entity::id()` method was renamed to `Entity::index()`.
 
@@ -506,7 +498,7 @@ Ambiguity sets have been removed.
 
 ### [Remove `ExactSizeIterator` from `QueryCombinationIter`](https://github.com/bevyengine/bevy/pull/5895)
 
-* Switch to using other methods of getting the length.
+Switch to using other methods of getting the length.
 
 ### [Support monitor selection for all window modes.](https://github.com/bevyengine/bevy/pull/5878)
 
