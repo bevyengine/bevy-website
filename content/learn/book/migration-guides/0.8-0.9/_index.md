@@ -495,7 +495,7 @@ The `Entity::id()` method was renamed to `Entity::index()`.
 
 ### [Remove `ExactSizeIterator` from `QueryCombinationIter`](https://github.com/bevyengine/bevy/pull/5895)
 
-Switch to using other methods of getting the length.
+`len` is no longer implemented for `QueryCombinationIter`. You can get the same value with `size_hint().0`, but be aware that values exceeding `usize::MAX` will be returned as `usize::MAX`.
 
 ### [`Query` filter types must be `ReadOnlyWorldQuery`](https://github.com/bevyengine/bevy/pull/6008)
 
