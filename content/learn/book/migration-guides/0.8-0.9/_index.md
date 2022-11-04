@@ -119,6 +119,19 @@ app.add_plugins(DefaultPlugins.set(CorePlugin {
 }))
 ```
 
+### [Remove `AssetServer::watch_for_changes()`](https://github.com/bevyengine/bevy/pull/5968)
+
+`AssetServer::watch_for_changes()` was removed.
+Instead, set it directly on the `AssetPlugin`.
+
+```rust
+app
+  .add_plugin(DefaultPlugins.set(AssetPlugin {
+    watch_for_changes: true,
+    ..default()
+  }))
+```
+
 ### [Spawn now takes a Bundle](https://github.com/bevyengine/bevy/pull/6054)
 
 ```rust
@@ -195,6 +208,10 @@ commands.spawn((
 ))
 ```
 
+### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
+
+In `derive(Bundle)`, the `bundle` attribute has been removed. Nested bundles are now collapsed automatically. You should remove `#[bundle]` attributes.
+
 ### [Replace the `bool` argument of `Timer` with `TimerMode`](https://github.com/bevyengine/bevy/pull/6247)
 
 * Replace `Timer::new(duration, false)` with `Timer::new(duration, TimerMode::Once)`.
@@ -202,6 +219,14 @@ commands.spawn((
 * Replace `Timer::from_seconds(seconds, false)` with `Timer::from_seconds(seconds, TimerMode::Once)`.
 * Replace `Timer::from_seconds(seconds, true)` with `Timer::from_seconds(seconds, TimerMode::Repeating)`.
 * Change `timer.repeating()` to `timer.mode() == TimerMode::Repeating`.
+
+### [Add global time scaling](https://github.com/bevyengine/bevy/pull/5752)
+
+* `time.time_since_startup()` -> `time.elapsed()`
+* `time.seconds_since_startup()` -> `time.elapsed_seconds_f64()`
+* `time.seconds_since_startup_wrapped_f32()` -> `time.elapsed_seconds_wrapped()`
+
+If you aren’t sure which to use, most systems should continue to use “scaled” time (e.g. `time.delta_seconds()`). The realtime “unscaled” time measurements (e.g. `time.raw_delta_seconds()`) are mostly for debugging and profiling.
 
 ### [Change UI coordinate system to have origin at top left corner](https://github.com/bevyengine/bevy/pull/6000)
 
@@ -254,10 +279,6 @@ The `Rect` type got renamed to `UiRect`. To migrate you just have to change ever
 The `bevy::sprite::Rect` type moved to the math utility crate as
 `bevy::math::Rect`. You should change your imports from `use bevy::sprite::Rect` to `use bevy::math::Rect`.
 
-### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
-
-In `derive(Bundle)`, the `bundle` attribute has been removed. Nested bundles are now collapsed automatically. You should remove `#[bundle]` attributes.
-
 ### [Exclusive Systems Now Implement `System`. Flexible Exclusive System Params](https://github.com/bevyengine/bevy/pull/6083)
 
 Calling `.exclusive_system()` is no longer required (or supported) for converting exclusive system functions to exclusive systems:
@@ -309,14 +330,6 @@ TextureAtlas::from_grid_with_padding(texture_handle, Vec2::new(24.0, 24.0), 7, 1
 // 0.9
 TextureAtlas::from_grid(texture_handle, Vec2::new(24.0, 24.0), 7, 1, Some(Vec2::new(4.0, 4.0)), None)
 ```
-
-### [Add global time scaling](https://github.com/bevyengine/bevy/pull/5752)
-
-* `time.time_since_startup()` -> `time.elapsed()`
-* `time.seconds_since_startup()` -> `time.elapsed_seconds_f64()`
-* `time.seconds_since_startup_wrapped_f32()` -> `time.elapsed_seconds_wrapped()`
-
-If you aren’t sure which to use, most systems should continue to use “scaled” time (e.g. `time.delta_seconds()`). The realtime “unscaled” time measurements (e.g. `time.raw_delta_seconds()`) are mostly for debugging and profiling.
 
 ### [Rename `play` to `start` and add new `play` method that won't overwrite the existing animation if it's already playing](https://github.com/bevyengine/bevy/pull/6350)
 
@@ -374,19 +387,6 @@ Adjust usage of `bevy_window::WindowDescriptor`’s `cursor_locked` to `cursor_g
 
 ```rust
 window.set_position(MonitorSelection::Current, position);
-```
-
-### [Remove `AssetServer::watch_for_changes()`](https://github.com/bevyengine/bevy/pull/5968)
-
-`AssetServer::watch_for_changes()` was removed.
-Instead, set it directly on the `AssetPlugin`.
-
-```rust
-app
-  .add_plugin(DefaultPlugins.set(AssetPlugin {
-    watch_for_changes: true,
-    ..default()
-  }))
 ```
 
 ### [Rename system chaining to system piping](https://github.com/bevyengine/bevy/pull/6230)
@@ -567,7 +567,7 @@ Changed: `Fetch::table_fetch` and `Fetch::archetype_fetch` have been merged into
 
 The `ElementState` type received a rename and is now called `ButtonState`. To migrate you just have to change every occurrence of `ElementState` to `ButtonState`.
 
-### [bevy_pbr: Fix incorrect and unnecessary normal-mapping code](https://github.com/bevyengine/bevy/pull/5766)
+### [Fix incorrect and unnecessary normal-mapping code](https://github.com/bevyengine/bevy/pull/5766)
 
 `prepare_normal` from the `bevy_pbr::pbr_functions` shader import has been reworked.
 
@@ -610,7 +610,7 @@ After:
     );
 ```
 
-### [bevy_scene: Replace root list with struct](https://github.com/bevyengine/bevy/pull/6354)
+### [Replace root list with struct](https://github.com/bevyengine/bevy/pull/6354)
 
 The scene file format now uses a struct as the root object rather than a list of entities. The list of entities is now found in the `entities` field of this struct.
 
@@ -638,7 +638,7 @@ The scene file format now uses a struct as the root object rather than a list of
 )
 ```
 
-### [bevy_scene: Use map for scene `components`](https://github.com/bevyengine/bevy/pull/6345)
+### [Use map for scene `components`](https://github.com/bevyengine/bevy/pull/6345)
 
 The scene format now uses a map to represent the collection of components. Scene files will need to update from the old list format.
 
@@ -711,7 +711,7 @@ The scene format now uses a map to represent the collection of components. Scene
 * `Input<T>` now implements `Reflect` via `#[reflect]` instead of `#[reflect_value]`. This means it now exposes its private fields via the `Reflect` trait rather than being treated as a value type. For code that relies on the `Input<T>` struct being treated as a value type by reflection, it is still possible to wrap the `Input<T>` type with a wrapper struct and apply `#[reflect_value]` to it.
 * As a reminder, private fields exposed via reflection are not subject to any stability guarantees.
 
-### [bevy_reflect: Improve serialization format even more](https://github.com/bevyengine/bevy/pull/5723)
+### [Improve serialization format even more](https://github.com/bevyengine/bevy/pull/5723)
 
 This PR reduces the verbosity of the scene format. Scenes will need to be updated accordingly:
 
@@ -745,7 +745,7 @@ This PR reduces the verbosity of the scene format. Scenes will need to be update
 }
 ```
 
-### [bevy_reflect: Relax bounds on `Option<T>`](https://github.com/bevyengine/bevy/pull/5658)
+### [Relax bounds on `Option<T>`](https://github.com/bevyengine/bevy/pull/5658)
 
 If using `Option<T>` with Bevy’s reflection API, `T` now needs to implement `FromReflect` rather than just `Clone`. This can be achieved easily by simply deriving `FromReflect`:
 
@@ -771,7 +771,7 @@ Note: You can still derive `Clone`, but it’s not required in order to compile.
 * relax `T: ?Sized` bound in `Mut<T>`
 * replace all instances of `ReflectMut` with `Mut<dyn Reflect>`
 
-### [bevy_reflect: Update enum derives](https://github.com/bevyengine/bevy/pull/5473)
+### [Update enum derives](https://github.com/bevyengine/bevy/pull/5473)
 
 Bevy-defined enums have been updated to implement `Enum` and are not considered value types (`ReflectRef::Value`) anymore. This means that their serialized representations will need to be updated. For example, given the Bevy enum:
 
@@ -814,9 +814,9 @@ You will need to update the serialized versions accordingly.
 `.register_type` for generic types like `Option<T>`, `Vec<T>`, `HashMap<K, V>` will no longer insert `ReflectSerialize` and `ReflectDeserialize` type data. Instead you need to register it separately for concrete generic types like so:
 
 ```rust
-        .register_type::<Option<String>>()
-        .register_type_data::<Option<String>, ReflectSerialize>()
-        .register_type_data::<Option<String>, ReflectDeserialize>()
+  .register_type::<Option<String>>()
+  .register_type_data::<Option<String>, ReflectSerialize>()
+  .register_type_data::<Option<String>, ReflectDeserialize>()
 ```
 
 ### [Utility methods for Val](https://github.com/bevyengine/bevy/pull/6134)
