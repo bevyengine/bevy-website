@@ -5,11 +5,16 @@
 //!
 //! Example used to generate for 0.9:
 //! cargo run -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
+//! cargo run -- release-note --date 2022-07-31
 
 use clap::{Parser as ClapParser, Subcommand};
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
-use std::{fmt::Write, path::PathBuf};
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Write,
+    path::PathBuf,
+};
 
 #[derive(ClapParser)]
 #[command(author, version, about, long_about = None)]
@@ -74,29 +79,68 @@ fn main() -> anyhow::Result<()> {
 
 fn generate_release_note(date: &str, path: PathBuf) -> anyhow::Result<()> {
     let prs = get_merged_prs(date, None)?;
-    let mut output = String::new();
-    writeln!(&mut output, "# Full Changelog")?;
+    let mut authors = HashSet::new();
+    let mut pr_map = HashMap::new();
+    let mut areas = HashMap::<String, Vec<i32>>::new();
     for pr in &prs {
-        let pr_title = pr
-            .title
-            .replace("[Merged by Bors] - ", "")
-            .trim()
-            .to_string();
-        writeln!(&mut output, "\n## {}\n", pr_title)?;
-        writeln!(
-            &mut output,
-            "Labels: {:?}",
-            pr.labels.iter().map(|l| l.name.clone()).collect::<Vec<_>>()
-        )?;
-        writeln!(&mut output, "Created by: {}", pr.user.login)?;
-        writeln!(
-            &mut output,
-            "link: <https://github.com/bevyengine/bevy/pull/{}>",
-            pr.number
-        )?;
+        authors.insert(pr.user.login.clone());
+        pr_map.insert(pr.number, pr.clone());
+
+        let mut area = pr
+            .labels
+            .iter()
+            .filter(|l| l.name.starts_with("A-"))
+            .map(|l| l.name.clone());
+        let area = if let Some(area) = area.next() {
+            area
+        } else {
+            String::from("No area label")
+        };
+
+        areas.entry(area).or_default().push(pr.number);
     }
 
     println!("Found {} prs merged by bors since {}", prs.len(), date);
+
+    let mut output = String::new();
+
+    writeln!(&mut output, "## Contributors\n")?;
+    writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
+    for author in &authors {
+        writeln!(&mut output, "- @{}", author)?;
+    }
+    writeln!(&mut output)?;
+
+    writeln!(&mut output, "## Full Changelog")?;
+
+    for (area, prs) in &areas {
+        writeln!(&mut output)?;
+        writeln!(&mut output, "## {}", area)?;
+        writeln!(&mut output)?;
+
+        for pr_number in prs {
+            let Some(pr) = pr_map.get(pr_number) else {
+                continue;
+            };
+            let pr_title = pr
+                .title
+                .replace("[Merged by Bors] - ", "")
+                .trim()
+                .to_string();
+
+            writeln!(&mut output, "- [{}][{}]", pr_title, pr_number)?;
+        }
+    }
+
+    writeln!(&mut output)?;
+
+    for pr in prs {
+        writeln!(
+            &mut output,
+            "[{}]: https://github.com/bevyengine/bevy/pull/{}",
+            pr.number, pr.number
+        )?;
+    }
 
     std::fs::write(path, output)?;
 
@@ -147,77 +191,91 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             pr_title, pr.number
         )?;
 
-        // Parse the body of the PR
-        let mut options = Options::empty();
-        options.insert(Options::ENABLE_TABLES);
-        options.insert(Options::ENABLE_SMART_PUNCTUATION);
-        let mut markdown = Parser::new_ext(pr.body.as_ref().unwrap(), options);
-        let mut guide_found = false;
-
-        while let Some(event) = markdown.next() {
-            if let Event::Start(Tag::Heading(migration_guide_level, _, _)) = event {
-                // Find the migration guide section
-                if let Some(Event::Text(heading_text)) = markdown.next() {
-                    if !heading_text.to_lowercase().contains("migration guide") {
-                        continue;
-                    }
-                }
-                guide_found = true;
-                markdown.next(); // skip heading end
-
-                // Write the migration guide section
-                for event in markdown.by_ref() {
-                    if let Event::Start(Tag::Heading(level, _, _)) = event {
-                        if level >= migration_guide_level {
-                            // go until next heading
-                            break;
-                        }
-                    }
-                    // Write the markdown Event based on the Tag
-                    // This handles some edge cases like some code blocks not having a specified lang
-                    // This also makes sure the result has a more consistent formatting
-                    match event {
-                        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => writeln!(
-                            &mut output,
-                            "\n```{}",
-                            if lang.is_empty() {
-                                "rust".to_string()
-                            } else {
-                                lang.to_string()
-                            }
-                        )?,
-                        Event::End(Tag::CodeBlock(_)) => writeln!(&mut output, "```")?,
-                        Event::Start(Tag::Emphasis) | Event::End(Tag::Emphasis) => {
-                            write!(&mut output, "_")?
-                        }
-                        // FIXME List currently always assume they are unordered
-                        Event::Start(Tag::List(_)) => {}
-                        Event::End(Tag::List(_)) => writeln!(&mut output)?,
-                        Event::Start(Tag::Item) => write!(&mut output, "\n* ")?,
-                        Event::End(Tag::Item) => {}
-                        Event::Start(tag) | Event::End(tag) if matches!(tag, Tag::Paragraph) => {
-                            writeln!(&mut output)?
-                        }
-                        Event::Text(text) => write!(&mut output, "{text}")?,
-                        Event::Code(text) => write!(&mut output, "`{text}`")?,
-                        Event::SoftBreak => writeln!(&mut output)?,
-                        _ => println!("unknown event {:?}", event),
-                    };
-                }
-            }
-        }
-
-        if !guide_found {
-            // Someone didn't write a migration guide 😢
-            writeln!(&mut output, "\n<!-- TODO -->")?;
-            println!("\x1b[93mMigration Guide not found!\x1b[0m");
-        }
+        write_markdown_section(pr.body.as_ref().unwrap(), "migration guide", &mut output)?;
     }
 
     println!("\nFound {} breaking PRs merged by bors", prs.len());
 
     std::fs::write(path, output)?;
 
+    Ok(())
+}
+
+/// Writes the markdown section of the givent section header to the output.
+/// The header name needs to be in lower case.
+fn write_markdown_section(
+    body: &str,
+    section_header: &str,
+    output: &mut String,
+) -> anyhow::Result<bool> {
+    // Parse the body of the PR
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+    options.insert(Options::ENABLE_SMART_PUNCTUATION);
+    let mut markdown = Parser::new_ext(body, options);
+    let mut section_found = false;
+
+    while let Some(event) = markdown.next() {
+        if let Event::Start(Tag::Heading(migration_guide_level, _, _)) = event {
+            // Find the section header
+            if let Some(Event::Text(heading_text)) = markdown.next() {
+                if !heading_text.to_lowercase().contains(section_header) {
+                    continue;
+                }
+            }
+            section_found = true;
+            markdown.next(); // skip heading end
+
+            // Write the section's content
+            for event in markdown.by_ref() {
+                if let Event::Start(Tag::Heading(level, _, _)) = event {
+                    if level >= migration_guide_level {
+                        // go until next heading
+                        break;
+                    }
+                }
+                write_markdown_event(&event, output)?;
+            }
+        }
+    }
+
+    if !section_found {
+        // Someone didn't write a migration guide 😢
+        writeln!(output, "\n<!-- TODO -->")?;
+        println!("\x1b[93m{} not found!\x1b[0m", section_header);
+        Ok(false)
+    } else {
+        Ok(true)
+    }
+}
+
+/// Write the markdown Event based on the Tag
+/// This handles some edge cases like some code blocks not having a specified lang
+/// This also makes sure the result has a more consistent formatting
+fn write_markdown_event(event: &Event, output: &mut String) -> anyhow::Result<()> {
+    match event {
+        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => writeln!(
+            output,
+            "\n```{}",
+            if lang.is_empty() {
+                "rust".to_string()
+            } else {
+                lang.to_string()
+            }
+        )?,
+        Event::End(Tag::CodeBlock(_)) => writeln!(output, "```")?,
+        Event::Start(Tag::Emphasis) | Event::End(Tag::Emphasis) => write!(output, "_")?,
+        // FIXME List currently always assume they are unordered
+        Event::Start(Tag::List(_)) => {}
+        Event::End(Tag::List(_)) => writeln!(output)?,
+        Event::Start(Tag::Item) => write!(output, "\n* ")?,
+        Event::End(Tag::Item) => {}
+        Event::Start(tag) | Event::End(tag) if matches!(tag, Tag::Paragraph) => writeln!(output)?,
+        Event::Text(text) => write!(output, "{text}")?,
+        Event::Code(text) => write!(output, "`{text}`")?,
+        Event::SoftBreak => writeln!(output)?,
+        _ => println!("unknown event {:?}", event),
+    };
     Ok(())
 }
 
