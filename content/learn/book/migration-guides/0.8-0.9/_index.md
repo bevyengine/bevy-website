@@ -159,7 +159,7 @@ The scene format now uses a map to represent the collection of components. Scene
 ]
 ```
 
-### [feat: add GamepadInfo, expose gamepad names](https://github.com/bevyengine/bevy/pull/6342)
+### [Add GamepadInfo, expose gamepad names](https://github.com/bevyengine/bevy/pull/6342)
 
 * Pattern matches on `GamepadEventType::Connected` will need to be updated, as the form of the variant has changed.
 * Code that requires `GamepadEvent`, `GamepadEventRaw` or `GamepadEventType` to be `Copy` will need to be updated.
@@ -266,13 +266,15 @@ let node = NodeBundle {
 }
 ```
 
-### [make `Handle::<T>` field id private, and replace with a getter](https://github.com/bevyengine/bevy/pull/6176)
+### [Make `Handle::<T>` field id private, and replace with a getter](https://github.com/bevyengine/bevy/pull/6176)
 
-* If you were accessing the value `handle.id`, you can now do so with `handle.id()`
+If you were accessing the value `handle.id`, you can now do so with `handle.id()`
 
 ### [Add `TimeUpdateStrategy` resource for manual `Time` updating](https://github.com/bevyengine/bevy/pull/6159)
 
-<!-- TODO -->
+Changes the value reported by `time.delta()` on startup.
+
+Before it would be `[0, 0, correct]` and this PR changes it to be `[0, "approximately the time between the time_system and present_frame", correct]`.
 
 ### [Add methods for silencing system-order ambiguity warnings](https://github.com/bevyengine/bevy/pull/6158)
 
@@ -661,9 +663,10 @@ Note: You can still derive `Clone`, but it’s not required in order to compile.
 
 Add the `Inner` associated type and new methods to any type that you’ve implemented `DetectChanges` for.
 
-### [remove `ReflectMut` in favor of `Mut<dyn Reflect>`](https://github.com/bevyengine/bevy/pull/5630)
+### [Remove `ReflectMut` in favor of `Mut<dyn Reflect>`](https://github.com/bevyengine/bevy/pull/5630)
 
-<!-- TODO -->
+* relax `T: ?Sized` bound in `Mut<T>`
+* replace all instances of `ReflectMut` with `Mut<dyn Reflect>`
 
 ### [Make internal struct `ShaderData` non-`pub`](https://github.com/bevyengine/bevy/pull/5609)
 
@@ -678,7 +681,7 @@ If you are using a third party type as a resource, wrap it in a tuple struct to 
 `ClearColor` no longer implements `Component`. Using `ClearColor` as a component in 0.8 did nothing.
 Use the `ClearColorConfig` in the `Camera3d` and `Camera2d` components instead.
 
-### [changed diagnostics from seconds to milliseconds](https://github.com/bevyengine/bevy/pull/5554)
+### [Changed diagnostics from seconds to milliseconds](https://github.com/bevyengine/bevy/pull/5554)
 
 Diagnostics values are now in milliseconds. If you need secconds, simply divide it by 1000.0;
 
@@ -688,7 +691,9 @@ Diagnostics values are now in milliseconds. If you need secconds, simply divide 
 
 ### [Expose `Image` conversion functions (fixes #5452)](https://github.com/bevyengine/bevy/pull/5527)
 
-<!-- TODO -->
+* Rename `image_to_texture` to `Image::from_dynamic`
+* Rename `texture_to_image` to `Image::try_into_dynamic`
+* `Image::try_into_dynamic` now returns a `Result` (this is to make it easier for users who didn't read that only a few conversions are supported to figure it out.)
 
 ### [Remove `Sync` bound from `Local`](https://github.com/bevyengine/bevy/pull/5483)
 
@@ -760,7 +765,13 @@ The method now properly sets the associated type uuid if the handle is a direct 
 
 ### [remove blanket `Serialize + Deserialize` requirement for `Reflect` on generic types](https://github.com/bevyengine/bevy/pull/5197)
 
-<!-- TODO -->
+`.register_type` for generic types like `Option<T>`, `Vec<T>`, `HashMap<K, V>` will no longer insert `ReflectSerialize` and `ReflectDeserialize` type data. Instead you need to register it separately for concrete generic types like so:
+
+```rust
+        .register_type::<Option<String>>()
+        .register_type_data::<Option<String>, ReflectSerialize>()
+        .register_type_data::<Option<String>, ReflectDeserialize>()
+```
 
 ### [Add Exponential Moving Average into diagnostics](https://github.com/bevyengine/bevy/pull/4992)
 
@@ -782,7 +793,7 @@ All APIs accessing the raw data of individual resources (mutable _and_ read-only
 
 ### [Clean up Fetch code](https://github.com/bevyengine/bevy/pull/4800)
 
-TODO
+Changed: `Fetch::table_fetch` and `Fetch::archetype_fetch` have been merged into a single `Fetch::fetch` function.
 
 ### [Change `gamepad.rs` tuples to normal structs](https://github.com/bevyengine/bevy/pull/4519)
 
@@ -793,8 +804,10 @@ The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventR
 If you were using explicit lifetimes and Passing Scope you’ll need to specify two lifetimes now.
 
 ```rust
+// 0.8
 fn scoped_function<'scope>(scope: &mut Scope<'scope, ()>) {}
-// should become
+
+// 0.9
 fn scoped_function<'scope>(scope: &Scope<'_, 'scope, ()>) {}
 ```
 
