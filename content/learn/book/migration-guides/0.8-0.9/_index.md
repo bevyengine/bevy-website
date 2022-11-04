@@ -178,7 +178,6 @@ commands.entity(some_entity).remove_bundle::<SomeBundle>();
 commands.entity(some_entity).remove::<SomeBundle>();
 ```
 
-Replace `remove_bundle_intersection` with `remove_intersection`:
 
 ```rust
 // Old (0.8)
@@ -210,7 +209,16 @@ commands.spawn((
 
 ### [Implement `Bundle` for `Component`. Use `Bundle` tuples for insertion](https://github.com/bevyengine/bevy/pull/2975)
 
-In `derive(Bundle)`, the `bundle` attribute has been removed. Nested bundles are now collapsed automatically. You should remove `#[bundle]` attributes.
+The `#[bundle]` attribute is no longer required when deriving `Bundle` for nested bundles.
+
+```rust
+#[derive(Bundle)]
+struct PlayerBundle {
+    #[bundle] // Remove this line
+    sprite_bundle: SpriteBundle,
+    collider: Collider,
+}
+```
 
 ### [Replace the `bool` argument of `Timer` with `TimerMode`](https://github.com/bevyengine/bevy/pull/6247)
 
