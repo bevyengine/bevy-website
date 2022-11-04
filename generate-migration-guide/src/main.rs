@@ -1,12 +1,3 @@
-//! This will generate a markdown file (out.md) containing all the migration guides
-//! from PRs marked as `C-Breaking-Change`.
-//!
-//! Requires a valid GITHUB_TOKEN, you can use a .env file or use your prefered method of passing env arguments
-//!
-//! Example used to generate for 0.9:
-//! cargo run -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
-//! cargo run -- release-note --date 2022-07-31
-
 use clap::{Parser as ClapParser, Subcommand};
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use serde::Deserialize;
@@ -16,8 +7,27 @@ use std::{
     path::PathBuf,
 };
 
+/// Generates markdown files used for a bevy releases.
+///
+/// Migration Guide:
+/// * Gets all PRs with the `C-Breaking-Change` label and that were merged by bors.
+/// * For each PR:
+///     * Generate the title with a link to the relevant PR and
+///     * Generate the migration guide section. This parses the markdown and generates valid makrdown that should pass markdownlint rules.
+///
+/// Release notes:
+/// * Gets all PRs merged by bors
+/// * Collect each author of closed PRs (Should this just list all contributors?)
+/// * Sort each PR per area label
+/// * Generate the list of merge PR
+///
+/// Requires a valid GITHUB_TOKEN environment variable, you can use a .env file or use your prefered method of passing env arguments.
+///
+/// Example used to generate for 0.9:
+/// cargo run -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
+/// cargo run -- release-note --date 2022-07-31
 #[derive(ClapParser)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version, about)]
 struct Args {
     #[command(subcommand)]
     command: Commands,
@@ -77,6 +87,7 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
+/// Generates the list of contributors and a list of all closed PRs sorted by area labels
 fn generate_release_note(date: &str, path: PathBuf) -> anyhow::Result<()> {
     let prs = get_merged_prs(date, None)?;
     let mut authors = HashSet::new();
@@ -86,13 +97,8 @@ fn generate_release_note(date: &str, path: PathBuf) -> anyhow::Result<()> {
         authors.insert(pr.user.login.clone());
         pr_map.insert(pr.number, pr.clone());
 
-        let mut area = pr
-            .labels
-            .iter()
-            .filter(|l| l.name.starts_with("A-"))
-            .map(|l| l.name.clone());
-        let area = if let Some(area) = area.next() {
-            area
+        let area = if let Some(label) = pr.labels.iter().find(|l| l.name.starts_with("A-")) {
+            label.name.clone()
         } else {
             String::from("No area label")
         };
@@ -298,18 +304,22 @@ struct GithubUser {
     login: String,
 }
 
+/// Gets a list of all PRs merged by bors after the given date.
+/// The date needs to be in the YYYY-MM-DD format
+/// To validate that bors merged the PR we simply check if the pr title contains "[Merged by Bors] - "
 fn get_merged_prs(date: &str, label: Option<&str>) -> anyhow::Result<Vec<GithubIssuesResponse>> {
     let mut prs = Vec::<GithubIssuesResponse>::new();
     let mut page = 1;
+    // The github rest api is limited to 100 prs per page,
+    // so to get all the prs we need to iterate on every page available.
     loop {
-        println!("Page: {}", page);
         let mut prs_in_page = get_merged_prs_by_page(date, page, label)?;
+        println!("Page: {} ({} prs)", page, prs_in_page.len());
         if prs_in_page.is_empty() {
             break;
-        } else {
-            page += 1;
         }
         prs.append(&mut prs_in_page);
+        page += 1;
     }
     Ok(prs)
 }
