@@ -451,13 +451,13 @@ commands.spawn()
   .insert(SomeComponent);
 
 // New (0.9) - Option 1
-commands.spawn().insert((
+commands.spawn_empty().insert((
   SomeBundle::default(),
   SomeComponent,
 ))
 
 // New (0.9) - Option 2
-commands.spawn_bundle((
+commands.spawn((
   SomeBundle::default(),
   SomeComponent,
 ))
