@@ -818,3 +818,8 @@ You will need to update the serialized versions accordingly.
 ### [Utility methods for Val](https://github.com/bevyengine/bevy/pull/6134)
 
 Instead of using the + and - operators, perform calculations on `Val`s using the new `try_add` and `try_sub` methods. Multiplication and division remained unchanged. Also, when adding or subtracting from `Size`, ~~use a `Val` tuple instead of `Vec2`~~ perform the addition on `width` and `height` separately.
+
+### [Allow passing glam vector types as vertex attributes](https://github.com/bevyengine/bevy/pull/6442)
+
+Implementations of `From<Vec<[u16; 4]>>` and `From<Vec<[u8; 4]>>` for `VertexAttributeValues` have been removed.
+I you're passing either `Vec<[u16; 4]>` or `Vec<[u8; 4]>` into `Mesh::insert_attribute` it will now require wrapping it with right the `VertexAttributeValues` enum variant.
