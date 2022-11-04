@@ -87,6 +87,74 @@ The scene file format now uses a struct as the root object rather than a list of
 
 * If you were using `play` to restart an animation that was already playing, that functionality has been moved to `start`. Now, `play` won’t have any effect if the requested animation is already playing.
 
+### [bevy_scene: Use map for scene `components`](https://github.com/bevyengine/bevy/pull/6345)
+
+The scene format now uses a map to represent the collection of components. Scene files will need to update from the old list format.
+
+```rust
+// OLD
+[
+  (
+    entity: 0,
+    components: [
+      {
+        "bevy_transform::components::transform::Transform": (
+          translation: (
+            x: 0.0,
+            y: 0.0,
+            z: 0.0
+          ),
+          rotation: (0.0, 0.0, 0.0, 1.0),
+          scale: (
+            x: 1.0,
+            y: 1.0,
+            z: 1.0
+          ),
+        ),
+      },
+      {
+        "my_crate::Foo": (
+          text: "Hello World",
+        ),
+      },
+      {
+        "my_crate::Bar": (
+          baz: 123,
+        ),
+      },
+    ],
+  ),
+]
+
+// NEW
+[
+  (
+    entity: 0,
+    components: {
+      "bevy_transform::components::transform::Transform": (
+        translation: (
+          x: 0.0,
+          y: 0.0,
+          z: 0.0
+        ),
+        rotation: (0.0, 0.0, 0.0, 1.0),
+        scale: (
+          x: 1.0,
+          y: 1.0,
+          z: 1.0
+        ),
+      ),
+      "my_crate::Foo": (
+        text: "Hello World",
+      ),
+      "my_crate::Bar": (
+        baz: 123
+      ),
+    },
+  ),
+]
+```
+
 ### [feat: add GamepadInfo, expose gamepad names](https://github.com/bevyengine/bevy/pull/6342)
 
 * Pattern matches on `GamepadEventType::Connected` will need to be updated, as the form of the variant has changed.
@@ -143,6 +211,10 @@ app.add_plugins_with(DefaultPlugins, |group| group.disable::<AssetPlugin>());
 app.add_plugins(DefaultPlugins.build().disable::<AssetPlugin>());
 ```
 
+### [Replace `WorldQueryGats` trait with actual gats](https://github.com/bevyengine/bevy/pull/6319)
+
+* Replace usage of `WorldQueryGats` assoc types with the actual gats on `WorldQuery` trait
+
 ### [Add a method for accessing the width of a `Table`](https://github.com/bevyengine/bevy/pull/6249)
 
 Any use of `Table::len` should now be `Table::entity_count`. Any use of `Table::capacity` should now be `Table::entity_capacity`.
@@ -154,6 +226,11 @@ Any use of `Table::len` should now be `Table::entity_count`. Any use of `Table::
 * Replace `Timer::from_seconds(seconds, false)` with `Timer::from_seconds(seconds, TimerMode::Once)`.
 * Replace `Timer::from_seconds(seconds, true)` with `Timer::from_seconds(seconds, TimerMode::Repeating)`.
 * Change `timer.repeating()` to `timer.mode() == TimerMode::Repeating`.
+
+### [Derive `Reflect` + `FromReflect` for input types](https://github.com/bevyengine/bevy/pull/6232)
+
+* `Input<T>` now implements `Reflect` via `#[reflect]` instead of `#[reflect_value]`. This means it now exposes its private fields via the `Reflect` trait rather than being treated as a value type. For code that relies on the `Input<T>` struct being treated as a value type by reflection, it is still possible to wrap the `Input<T>` type with a wrapper struct and apply `#[reflect_value]` to it.
+* As a reminder, private fields exposed via reflection are not subject to any stability guarantees.
 
 ### [Rename system chaining to system piping](https://github.com/bevyengine/bevy/pull/6230)
 
@@ -241,6 +318,10 @@ transform.scale *= scale_factor;
 ### [Make `raw_window_handle` field in `Window` and `ExtractedWindow` an `Option`.](https://github.com/bevyengine/bevy/pull/6114)
 
 `Window::raw_window_handle()` now returns `Option<RawWindowHandleWrapper>`.
+
+### [[Fixes #6059] ``Entity``'s “ID” should be named “index” instead](https://github.com/bevyengine/bevy/pull/6107)
+
+The `Entity::id()` method was renamed to `Entity::index()`.
 
 ### [Add getters and setters for `InputAxis` and `ButtonSettings`](https://github.com/bevyengine/bevy/pull/6088)
 
@@ -413,7 +494,11 @@ app // AssetServerSettings must be inserted before adding the AssetPlugin or Def
  })
 ```
 
-### [Remove `ExactSizeIterator` from `QueryCombinationIter`](https://github.com/bevyengine/bevy/pull/5895)
+### [Remove ambiguity sets](https://github.com/bevyengine/bevy/pull/5916)
+
+Ambiguity sets have been removed.
+
+### [Remove ExactSizeIterator from QueryCombinationIter](https://github.com/bevyengine/bevy/pull/5895)
 
 * Switch to using other methods of getting the length.
 
@@ -445,6 +530,49 @@ window.set_position(MonitorSelection::Current, position);
 ### [Add `pop` method for `List` trait.](https://github.com/bevyengine/bevy/pull/5797)
 
 * Any custom type that implements the `List` trait will now need to implement the `pop` method.
+
+### [bevy_pbr: Fix incorrect and unnecessary normal-mapping code](https://github.com/bevyengine/bevy/pull/5766)
+
+`prepare_normal` from the `bevy_pbr::pbr_functions` shader import has been reworked.
+
+Before:
+
+```rust
+    pbr_input.world_normal = in.world_normal;
+
+    pbr_input.N = prepare_normal(
+        pbr_input.material.flags,
+        in.world_normal,
+#ifdef VERTEX_TANGENTS
+#ifdef STANDARDMATERIAL_NORMAL_MAP
+        in.world_tangent,
+#endif
+#endif
+        in.uv,
+        in.is_front,
+    );
+```
+
+After:
+
+```rust
+    pbr_input.world_normal = prepare_world_normal(
+        in.world_normal,
+        (material.flags & STANDARD_MATERIAL_FLAGS_DOUBLE_SIDED_BIT) != 0u,
+        in.is_front,
+    );
+
+    pbr_input.N = apply_normal_mapping(
+        pbr_input.material.flags,
+        pbr_input.world_normal,
+#ifdef VERTEX_TANGENTS
+#ifdef STANDARDMATERIAL_NORMAL_MAP
+        in.world_tangent,
+#endif
+#endif
+        in.uv,
+    );
+```
 
 ### [Add global time scaling](https://github.com/bevyengine/bevy/pull/5752)
 
@@ -500,6 +628,31 @@ Remove references to `bevy_render::camera::DepthCalculation`, such as `use bevy_
 
 The methods `Schedule::get_stage` and `get_stage_mut` now accept `impl StageLabel` instead of `&dyn StageLabel`.
 
+### [bevy_reflect: Relax bounds on `Option<T>`](https://github.com/bevyengine/bevy/pull/5658)
+
+If using `Option<T>` with Bevy’s reflection API, `T` now needs to implement `FromReflect` rather than just `Clone`. This can be achieved easily by simply deriving `FromReflect`:
+
+```rust
+
+// OLD
+#[derive(Reflect, Clone)]
+struct Foo;
+
+let reflected: Box<dyn Reflect> = Box::new(Some(Foo));
+
+// NEW
+#[derive(Reflect, FromReflect)]
+struct Foo;
+
+let reflected: Box<dyn Reflect> = Box::new(Some(Foo));
+```
+
+Note: You can still derive `Clone`, but it’s not required in order to compile.
+
+### [Add a change detection bypass and manual control over change ticks](https://github.com/bevyengine/bevy/pull/5635)
+
+Add the `Inner` associated type and new methods to any type that you’ve implemented `DetectChanges` for.
+
 ### [remove `ReflectMut` in favor of `Mut<dyn Reflect>`](https://github.com/bevyengine/bevy/pull/5630)
 
 <!-- TODO -->
@@ -524,6 +677,9 @@ Use the `ClearColorConfig` in the `Camera3d` and `Camera2d` components instead.
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
 `Children::with()` is now renamed `Children::from_entities()` and is now `pub(crate)`
+### [Expose `Image` conversion functions (fixes #5452)](https://github.com/bevyengine/bevy/pull/5527)
+
+<!-- TODO -->
 
 ### [Remove `Sync` bound from `Local`](https://github.com/bevyengine/bevy/pull/5483)
 
@@ -582,6 +738,12 @@ This may also have other smaller implications (such as `Debug` representation), 
 The method `identity()` on `Transform`, `GlobalTransform` and `TransformBundle` has been deprecated.
 Use the associated constant `IDENTITY` instead.
 
+### [Rename Handle::as_weak() to cast_weak()](https://github.com/bevyengine/bevy/pull/5321)
+
+* Rename `Handle::as_weak` uses to `Handle::cast_weak`
+
+The method now properly sets the associated type uuid if the handle is a direct reference (e.g. not a reference to an `AssetPath`), so adjust you code accordingly if you relied on the previous behavior.
+
 ### [`Gamepad` type is `Copy`; do not require / return references to it in `Gamepads` API](https://github.com/bevyengine/bevy/pull/5296)
 
 * `Gamepads::iter` now returns an iterator of `Gamepad`. rather than an iterator of `&Gamepad`.
@@ -609,9 +771,25 @@ Resources have been moved to `Resources` under `Storages` in `World`. All code d
 
 All APIs accessing the raw data of individual resources (mutable _and_ read-only) have been removed as these APIs allowed for unsound unsafe code. All usages of these APIs should be changed to use `World::{get, insert, remove}_resource`.
 
+### [Clean up Fetch code](https://github.com/bevyengine/bevy/pull/4800)
+
+TODO
+
 ### [Change `gamepad.rs` tuples to normal structs](https://github.com/bevyengine/bevy/pull/4519)
 
 * The `Gamepad`, `GamepadButton`, `GamepadAxis`, `GamepadEvent` and `GamepadEventRaw` types are now normal structs instead of tuple structs and have a `new()` function. To migrate change every instantiation to use the `new()` function instead and use the appropriate field names instead of `.0` and `.1`.
+
+### [Nested spawns on scope](https://github.com/bevyengine/bevy/pull/4466)
+
+If you were using explicit lifetimes and Passing Scope you’ll need to specify two lifetimes now.
+
+```rust
+fn scoped_function<'scope>(scope: &mut Scope<'scope, ()>) {}
+// should become
+fn scoped_function<'scope>(scope: &Scope<'_, 'scope, ()>) {}
+```
+
+`scope.spawn_local` changed to `scope.spawn_on_scope` this should cover cases where you needed to run tasks on the local thread, but does not cover spawning Nonsend Futures. Spawning of NonSend futures on scope is no longer supported.
 
 ### [Rename `ElementState` to `ButtonState`](https://github.com/bevyengine/bevy/pull/4314)
 
