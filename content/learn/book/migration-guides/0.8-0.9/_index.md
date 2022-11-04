@@ -60,7 +60,7 @@ app.add_plugins(DefaultPlugins.set(CorePlugin {
 The scene file format now uses a struct as the root object rather than a list of entities. The list of entities is now found in the `entities` field of this struct.
 
 ```rust
-// OLD
+// Old (Bevy 0.8)
 [
   (
     entity: 0,
@@ -70,7 +70,7 @@ The scene file format now uses a struct as the root object rather than a list of
   ),
 ]
 
-// NEW
+// New (Bevy 0.9)
 (
   entities: [
     (
@@ -92,7 +92,7 @@ The scene file format now uses a struct as the root object rather than a list of
 The scene format now uses a map to represent the collection of components. Scene files will need to update from the old list format.
 
 ```rust
-// OLD
+// Old (Bevy 0.8)
 [
   (
     entity: 0,
@@ -126,7 +126,7 @@ The scene format now uses a map to represent the collection of components. Scene
   ),
 ]
 
-// NEW
+// New (Bevy 0.9)
 [
   (
     entity: 0,
@@ -484,14 +484,14 @@ All references to the old `size` name has been changed, to access `bevy::ui::Nod
 ### [Remove `AssetServer::watch_for_changes()`](https://github.com/bevyengine/bevy/pull/5968)
 
 `AssetServer::watch_for_changes()` was removed.
-Instead, use the `AssetServerSettings` resource.
+Instead, set it directly on the `AssetPlugin`.
 
 ```rust
-app // AssetServerSettings must be inserted before adding the AssetPlugin or DefaultPlugins.
- .insert_resource(AssetServerSettings {
-  watch_for_changes: true,
-  ..default()
- })
+app
+  .add_plugin(DefaultPlugins.set(AssetPlugin {
+    watch_for_changes: true,
+    ..default()
+  }))
 ```
 
 ### [Remove ambiguity sets](https://github.com/bevyengine/bevy/pull/5916)
@@ -514,11 +514,14 @@ Ambiguity sets have been removed.
     ..default()
 })
 // After
-.insert_resource(WindowDescriptor {
-    monitor: MonitorSelection::Index(1),
-    position: WindowPosition::Centered,
+.add_plugins(DefaultPlugins.set(WindowPlugin {
+    window: WindowDescriptor {
+        monitor: MonitorSelection::Index(1),
+        position: WindowPosition::Centered,
+        ..default()
+    },
     ..default()
-})
+}))
 ```
 
 `Window::set_position` now takes a `MonitorSelection` as argument.
@@ -537,7 +540,7 @@ window.set_position(MonitorSelection::Current, position);
 
 Before:
 
-```rust
+```wgsl
     pbr_input.world_normal = in.world_normal;
 
     pbr_input.N = prepare_normal(
@@ -555,7 +558,7 @@ Before:
 
 After:
 
-```rust
+```wgsl
     pbr_input.world_normal = prepare_world_normal(
         in.world_normal,
         (material.flags & STANDARD_MATERIAL_FLAGS_DOUBLE_SIDED_BIT) != 0u,
@@ -604,6 +607,7 @@ If you aren’t sure which to use, most systems should continue to use “scaled
         },
       ],
     },
+  }
 }
 
 // New format
@@ -672,7 +676,7 @@ Use the `ClearColorConfig` in the `Camera3d` and `Camera2d` components instead.
 
 ### [changed diagnostics from seconds to milliseconds](https://github.com/bevyengine/bevy/pull/5554)
 
-<!-- TODO -->
+Diagnostics values are now in milliseconds. If you need secconds, simply divide it by 1000.0;
 
 ### [Make `Children` constructor `pub(crate)`.](https://github.com/bevyengine/bevy/pull/5532)
 
