@@ -9,6 +9,10 @@ insert_anchor_links = "right"
 long_title = "Migration Guide: 0.8 to 0.9"
 +++
 
+Before migrating make sure to run rustup update
+
+Bevy relies heavily on improvements in the Rust language and compiler. As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
+
 ### [Use plugin setup for resource only used at setup time](https://github.com/bevyengine/bevy/pull/6360)
 
 The `LogSettings` settings have been moved from a resource to `LogPlugin` configuration:
