@@ -166,7 +166,7 @@ Replace `insert_bundle` with `insert`:
 // Old (0.8)
 commands.spawn().insert_bundle(SomeBundle::default());
 // New (0.9)
-commands.spawn().insert(SomeBundle::default());
+commands.spawn_empty().insert(SomeBundle::default());
 ```
 
 Replace `remove_bundle` with `remove`:
@@ -457,10 +457,6 @@ app
   .add_system(jump_on_spacebar);
 
 ```
-
-### [Remove ambiguity sets](https://github.com/bevyengine/bevy/pull/5916)
-
-Ambiguity sets have been removed.
 
 ### [Remove unused DepthCalculation enum](https://github.com/bevyengine/bevy/pull/5684)
 
@@ -822,9 +818,3 @@ You will need to update the serialized versions accordingly.
 ### [Utility methods for Val](https://github.com/bevyengine/bevy/pull/6134)
 
 Instead of using the + and - operators, perform calculations on `Val`s using the new `try_add` and `try_sub` methods. Multiplication and division remained unchanged. Also, when adding or subtracting from `Size`, ~~use a `Val` tuple instead of `Vec2`~~ perform the addition on `width` and `height` separately.
-
-### [Expose `Image` conversion functions (fixes #5452)](https://github.com/bevyengine/bevy/pull/5527)
-
-* Rename `image_to_texture` to `Image::from_dynamic`
-* Rename `texture_to_image` to `Image::try_into_dynamic`
-* `Image::try_into_dynamic` now returns a `Result` (this is to make it easier for users who didn't read that only a few conversions are supported to figure it out.)
