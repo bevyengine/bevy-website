@@ -177,7 +177,7 @@ commands.entity(some_entity).remove_bundle::<SomeBundle>();
 // New (0.9)
 commands.entity(some_entity).remove::<SomeBundle>();
 ```
-
+Replace `remove_bundle_intersection` with `remove_intersection`:
 
 ```rust
 // Old (0.8)
