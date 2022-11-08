@@ -177,6 +177,7 @@ commands.entity(some_entity).remove_bundle::<SomeBundle>();
 // New (0.9)
 commands.entity(some_entity).remove::<SomeBundle>();
 ```
+
 Replace `remove_bundle_intersection` with `remove_intersection`:
 
 ```rust
@@ -624,140 +625,18 @@ After:
     );
 ```
 
-### [Replace root list with struct](https://github.com/bevyengine/bevy/pull/6354)
+### Scene serialization format improvements from [#6354](https://github.com/bevyengine/bevy/pull/6354), [#6345](https://github.com/bevyengine/bevy/pull/6345), and [#5723](https://github.com/bevyengine/bevy/pull/5723)
 
-The scene file format now uses a struct as the root object rather than a list of entities. The list of entities is now found in the `entities` field of this struct.
+* The root of the scene is now a struct rather than a list
+* Components are now a map keyed by type name rather than a list
+* Type information is now omitted when possible, making scenes much more compact
 
-```rust
-// Old (Bevy 0.8)
-[
-  (
-    entity: 0,
-    components: [
-      // Components...
-    ]
-  ),
-]
-
-// New (Bevy 0.9)
-(
-  entities: [
-    (
-      entity: 0,
-      components: [
-        // Components...
-      ]
-    ),
-  ]
-)
-```
-
-### [Use map for scene `components`](https://github.com/bevyengine/bevy/pull/6345)
-
-The scene format now uses a map to represent the collection of components. Scene files will need to update from the old list format.
-
-```rust
-// Old (Bevy 0.8)
-[
-  (
-    entity: 0,
-    components: [
-      {
-        "bevy_transform::components::transform::Transform": (
-          translation: (
-            x: 0.0,
-            y: 0.0,
-            z: 0.0
-          ),
-          rotation: (0.0, 0.0, 0.0, 1.0),
-          scale: (
-            x: 1.0,
-            y: 1.0,
-            z: 1.0
-          ),
-        ),
-      },
-      {
-        "my_crate::Foo": (
-          text: "Hello World",
-        ),
-      },
-      {
-        "my_crate::Bar": (
-          baz: 123,
-        ),
-      },
-    ],
-  ),
-]
-
-// New (Bevy 0.9)
-[
-  (
-    entity: 0,
-    components: {
-      "bevy_transform::components::transform::Transform": (
-        translation: (
-          x: 0.0,
-          y: 0.0,
-          z: 0.0
-        ),
-        rotation: (0.0, 0.0, 0.0, 1.0),
-        scale: (
-          x: 1.0,
-          y: 1.0,
-          z: 1.0
-        ),
-      ),
-      "my_crate::Foo": (
-        text: "Hello World",
-      ),
-      "my_crate::Bar": (
-        baz: 123
-      ),
-    },
-  ),
-]
-```
+See [this diff](https://github.com/bevyengine/bevy/compare/v0.8.0...main#diff-12b7f105bbb2a716e818a2a7eb2c79d40bef29ae8cba45b536c79cfa16b83558) for an illustration.
 
 ### [Derive `Reflect` + `FromReflect` for input types](https://github.com/bevyengine/bevy/pull/6232)
 
 * `Input<T>` now implements `Reflect` via `#[reflect]` instead of `#[reflect_value]`. This means it now exposes its private fields via the `Reflect` trait rather than being treated as a value type. For code that relies on the `Input<T>` struct being treated as a value type by reflection, it is still possible to wrap the `Input<T>` type with a wrapper struct and apply `#[reflect_value]` to it.
 * As a reminder, private fields exposed via reflection are not subject to any stability guarantees.
-
-### [Improve serialization format even more](https://github.com/bevyengine/bevy/pull/5723)
-
-This PR reduces the verbosity of the scene format. Scenes will need to be updated accordingly:
-
-```js
-// Old format
-{
-  "type": "my_game::item::Item",
-  "struct": {
-    "id": {
-      "type": "alloc::string::String",
-      "value": "bevycraft:stone",
-    },
-    "tags": {
-      "type": "alloc::vec::Vec<alloc::string::String>",
-      "list": [
-        {
-          "type": "alloc::string::String",
-          "value": "material"
-        },
-      ],
-    },
-  }
-}
-
-// New format
-{
-  "my_game::item::Item": (
-    id: "bevycraft:stone",
-    tags: ["material"]
-  )
-}
-```
 
 ### [Relax bounds on `Option<T>`](https://github.com/bevyengine/bevy/pull/5658)
 
