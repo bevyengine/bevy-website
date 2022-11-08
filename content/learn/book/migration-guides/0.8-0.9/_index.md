@@ -631,7 +631,106 @@ After:
 * Components are now a map keyed by type name rather than a list
 * Type information is now omitted when possible, making scenes much more compact
 
-See [this diff](https://github.com/bevyengine/bevy/compare/v0.8.0...main#diff-12b7f105bbb2a716e818a2a7eb2c79d40bef29ae8cba45b536c79cfa16b83558) for an illustration.
+```diff
+-[
+-  (
+-    entity: 0,
+-    components: [
+-      {
+-        "type": "bevy_transform::components::transform::Transform",
+-        "struct": {
+-          "translation": {
+-            "type": "glam::vec3::Vec3",
+-            "value": (0.0, 0.0, 0.0),
+-          },
+-          "rotation": {
+-            "type": "glam::quat::Quat",
+-            "value": (0.0, 0.0, 0.0, 1.0),
+-          },
+-          "scale": {
+-            "type": "glam::vec3::Vec3",
+-            "value": (1.0, 1.0, 1.0),
+-          },
+-        },
++(
++  entities: {
++    0: (
++      components: {
++        "bevy_transform::components::transform::Transform": (
++          translation: (
++            x: 0.0,
++            y: 0.0,
++            z: 0.0
++          ),
++          rotation: (0.0, 0.0, 0.0, 1.0),
++          scale: (
++            x: 1.0,
++            y: 1.0,
++            z: 1.0
++          ),
++        ),
++        "scene::ComponentB": (
++          value: "hello",
++        ),
++        "scene::ComponentA": (
++          x: 1.0,
++          y: 2.0,
++        ),
+       },
+-      {
+-        "type": "scene::ComponentB",
+-        "struct": {
+-          "value": {
+-            "type": "alloc::string::String",
+-            "value": "hello",
+-          },
+-        },
++    ),
++    1: (
++      components: {
++        "scene::ComponentA": (
++          x: 3.0,
++          y: 4.0,
++        ),
+       },
+-      {
+-        "type": "scene::ComponentA",
+-        "struct": {
+-          "x": {
+-            "type": "f32",
+-            "value": 1.0,
+-          },
+-          "y": {
+-            "type": "f32",
+-            "value": 2.0,
+-          },
+-        },
+-      },
+-    ],
+-  ),
+-  (
+-    entity: 1,
+-    components: [
+-      {
+-        "type": "scene::ComponentA",
+-        "struct": {
+-          "x": {
+-            "type": "f32",
+-            "value": 3.0,
+-          },
+-          "y": {
+-            "type": "f32",
+-            "value": 4.0,
+-          },
+-        },
+-      },
+-    ],
+-  ),
+-]
++    ),
++  }
++)
+```
 
 ### [Derive `Reflect` + `FromReflect` for input types](https://github.com/bevyengine/bevy/pull/6232)
 
