@@ -772,44 +772,6 @@ Note: You can still derive `Clone`, but it’s not required in order to compile.
 * relax `T: ?Sized` bound in `Mut<T>`
 * replace all instances of `ReflectMut` with `Mut<dyn Reflect>`
 
-### [Update enum derives](https://github.com/bevyengine/bevy/pull/5473)
-
-Bevy-defined enums have been updated to implement `Enum` and are not considered value types (`ReflectRef::Value`) anymore. This means that their serialized representations will need to be updated. For example, given the Bevy enum:
-
-```rust
-pub enum ScalingMode {
-  None,
-  WindowSize,
-  Auto { min_width: f32, min_height: f32 },
-  FixedVertical(f32),
-  FixedHorizontal(f32),
-}
-```
-
-You will need to update the serialized versions accordingly.
-
-```js
-// OLD FORMAT
-{
-  "type": "bevy_render::camera::projection::ScalingMode",
-  "value": FixedHorizontal(720),
-},
-
-// NEW FORMAT
-{
-  "type": "bevy_render::camera::projection::ScalingMode",
-  "enum": {
-    "variant": "FixedHorizontal",
-    "tuple": [
-      {
-        "type": "f32",
-        "value": 720,
-      },
-    ],
-  },
-},
-```
-
 ### [remove blanket `Serialize + Deserialize` requirement for `Reflect` on generic types](https://github.com/bevyengine/bevy/pull/5197)
 
 `.register_type` for generic types like `Option<T>`, `Vec<T>`, `HashMap<K, V>` will no longer insert `ReflectSerialize` and `ReflectDeserialize` type data. Instead you need to register it separately for concrete generic types like so:
