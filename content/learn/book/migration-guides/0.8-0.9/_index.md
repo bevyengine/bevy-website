@@ -631,6 +631,10 @@ After:
 * Components are now a map keyed by type name rather than a list
 * Type information is now omitted when possible, making scenes much more compact
 
+Scenes serialized with Bevy 0.8 will need to be recreated, but it is possible to hand-edit scenes to match the new format.
+
+Here's an example scene in the old and new format:
+
 ```javascript
 // Old (Bevy 0.8)
 [
