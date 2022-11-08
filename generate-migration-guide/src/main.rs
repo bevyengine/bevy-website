@@ -1,11 +1,12 @@
 use clap::{Parser as ClapParser, Subcommand};
+use github_client::GithubClient;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
-use serde::Deserialize;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Write,
     path::PathBuf,
 };
+mod github_client;
 
 /// Generates markdown files used for a bevy releases.
 ///
@@ -65,6 +66,11 @@ enum Commands {
 
 fn main() -> anyhow::Result<()> {
     let _ = dotenv::dotenv();
+
+    let mut client = github_client::GithubClient::new(
+        std::env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found"),
+    );
+
     let args = Args::parse();
     match args.command {
         Commands::MigrationGuide {
@@ -77,10 +83,12 @@ fn main() -> anyhow::Result<()> {
             weight,
             &date,
             path.unwrap_or_else(|| PathBuf::from("./migration-guide.md")),
+            &mut client,
         )?,
         Commands::ReleaseNote { date, path } => generate_release_note(
             &date,
             path.unwrap_or_else(|| PathBuf::from("./release-note.md")),
+            &mut client,
         )?,
     };
 
@@ -88,8 +96,13 @@ fn main() -> anyhow::Result<()> {
 }
 
 /// Generates the list of contributors and a list of all closed PRs sorted by area labels
-fn generate_release_note(date: &str, path: PathBuf) -> anyhow::Result<()> {
-    let prs = get_merged_prs(date, None)?;
+fn generate_release_note(
+    date: &str,
+    path: PathBuf,
+    client: &mut GithubClient,
+) -> anyhow::Result<()> {
+    let prs = client.get_merged_prs(date, None)?;
+
     let mut authors = HashSet::new();
     let mut pr_map = HashMap::new();
     let mut areas = HashMap::<String, Vec<i32>>::new();
@@ -158,6 +171,7 @@ fn generate_migration_guide(
     weight: i32,
     date: &str,
     path: PathBuf,
+    client: &mut GithubClient,
 ) -> anyhow::Result<()> {
     let mut output = String::new();
 
@@ -181,7 +195,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     )?;
     writeln!(&mut output)?;
 
-    let prs = get_merged_prs(date, Some("C-Breaking-Change"))?;
+    let prs = client.get_merged_prs(date, Some("C-Breaking-Change"))?;
     for pr in &prs {
         let pr_title = pr
             .title
@@ -283,73 +297,4 @@ fn write_markdown_event(event: &Event, output: &mut String) -> anyhow::Result<()
         _ => println!("unknown event {:?}", event),
     };
     Ok(())
-}
-
-#[derive(Deserialize, Clone, Debug)]
-struct GithubIssuesResponse {
-    title: String,
-    number: i32,
-    body: Option<String>,
-    labels: Vec<GithubLabel>,
-    user: GithubUser,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-struct GithubLabel {
-    name: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-struct GithubUser {
-    login: String,
-}
-
-/// Gets a list of all PRs merged by bors after the given date.
-/// The date needs to be in the YYYY-MM-DD format
-/// To validate that bors merged the PR we simply check if the pr title contains "[Merged by Bors] - "
-fn get_merged_prs(date: &str, label: Option<&str>) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-    let mut prs = Vec::<GithubIssuesResponse>::new();
-    let mut page = 1;
-    // The github rest api is limited to 100 prs per page,
-    // so to get all the prs we need to iterate on every page available.
-    loop {
-        let mut prs_in_page = get_merged_prs_by_page(date, page, label)?;
-        println!("Page: {} ({} prs)", page, prs_in_page.len());
-        if prs_in_page.is_empty() {
-            break;
-        }
-        prs.append(&mut prs_in_page);
-        page += 1;
-    }
-    Ok(prs)
-}
-
-fn get_merged_prs_by_page(
-    date: &str,
-    page: i32,
-    label: Option<&str>,
-) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-    let token = std::env::var("GITHUB_TOKEN")
-        .expect("GITHUB_TOKEN not found, github links will be skipped");
-    let agent: ureq::Agent = ureq::AgentBuilder::new()
-        .user_agent("bevy-website-generate-migration-guide")
-        .build();
-    let mut request = agent
-        .get("https://api.github.com/repos/bevyengine/bevy/issues")
-        .set("Accept", "application/json")
-        .set("Authorization", &format!("Bearer {}", token))
-        .query("state", "closed")
-        .query("since", &format!("{}T00:00:00Z", date))
-        .query("per_page", "100")
-        .query("page", &page.to_string());
-    if let Some(label) = label {
-        request = request.query("labels", label);
-    }
-    let response: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
-    Ok(response
-        .iter()
-        // Make sure to only get the PRs that were merged by bors
-        .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
-        .cloned()
-        .collect())
 }
