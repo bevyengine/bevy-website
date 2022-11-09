@@ -73,6 +73,26 @@ app.add_plugins_with(DefaultPlugins, |group| group.disable::<AssetPlugin>());
 app.add_plugins(DefaultPlugins.build().disable::<AssetPlugin>());
 ```
 
+`PluginGroupBoulder` and the `PluginGroup` trait have also been reworked.
+
+```rust
+// Old (Bevy 0.8)
+impl PluginGroup for HelloWorldPlugins {
+    fn build(&mut self, group: &mut PluginGroupBuilder) {
+        group.add(PrintHelloPlugin).add(PrintWorldPlugin);
+    }
+}
+
+// New (Bevy 0.9)
+impl PluginGroup for HelloWorldPlugins {
+    fn build(self) -> PluginGroupBuilder {
+        PluginGroupBuilder::start::<Self>()
+            .add(PrintHelloPlugin)
+            .add(PrintWorldPlugin)
+    }
+}
+
+```
 ### [Use plugin setup for resource only used at setup time](https://github.com/bevyengine/bevy/pull/6360)
 
 The `LogSettings` settings have been moved from a resource to `LogPlugin` configuration:
@@ -333,6 +353,10 @@ fn some_system(world: &mut World, transforms: &mut QueryState<&Transform>) {
   }
 }
 ```
+
+The `IntoExclusiveSystem` trait was removed. Use `IntoSystem` instead.
+
+The `ExclusiveSystemDescriptorCoercion` trait was removed. You can delete any imports of it.
 
 ### [Merge TextureAtlas::from_grid_with_padding into TextureAtlas::from_grid through option arguments](https://github.com/bevyengine/bevy/pull/6057)
 
