@@ -35,6 +35,7 @@ fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
 The `delta` field on `Time` gives us the time that has passed since the last update. But in order to run our system once every two seconds, we must track the amount of time that has passed over a series of updates. To make this easier, Bevy provides the `Timer` type. Let's create a new Resource for our system to track elapsed time with a `Timer`:
 
 ```rs
+#[derive(Resource)]
 struct GreetTimer(Timer);
 
 fn greet_people(
