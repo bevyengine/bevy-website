@@ -66,6 +66,8 @@ commands.spawn((
 
 The bloom effect can be overbearing if misconfigured. [`BloomSettings`] has a number of options to tune it, but the most relevant is `intensity`, which can be used to adjust how much the effect is applied:
 
+TODO_ADD_EXAMPLE_OFF_INTENSITY
+
 [`BloomSettings`]: https://docs.rs/bevy/0.9.0/bevy/core_pipeline/bloom/struct.BloomSettings.html
 
 ## FXAA: Fast Approximate Anti-Aliasing
