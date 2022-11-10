@@ -846,7 +846,6 @@ The following cursor-driven selection uses [`viewport_to_world`] to calculate th
 
 <video controls loop><source  src="viewport_to_world.mp4" type="video/mp4"/></video>
 
-
 [`viewport_to_world`]: https://docs.rs/bevy/0.9.0/bevy/render/camera/struct.Camera.html#method.viewport_to_world
 
 ## Multiple Directional Lights
@@ -989,7 +988,50 @@ Fortunately, in **Bevy 0.9** we're now aligned with the rest of the ecosystem!
 
 ## Bevy UI: Z-Indices
 
-- [Add z-index support with a predictable UI stack][5877]
+<div class="release-feature-authors">authors: @oceantume</div>
+
+Bevy UI elements now have more control over their "z index" (whether or not they are "in front" or "behind" each other). In past versions of Bevy, this was determined entirely by hierarchy: children stack on top of parents and earlier siblings. This is a nice "default" and works for a good portion of UIs, but some types of UI need more control over element ordering.
+
+If you are a web developer and you have ever reached for the `z-index` css property, that is the problem we're discussing here.
+
+**Bevy 0.9** adds a new [`ZIndex`] component, which is an enum with two modes:
+
+* `ZIndex::Local(i32)`: Overrides the depth relative to its siblings.
+* `ZIndex::Global(i32)`: Overrides the depth relative to the UI root. Setting this essentially allows UI elements to "escape" z-ordering relative to their parents and instead be ordered relative to the entire UI.
+
+UI items with a higher z-level within the context (local vs global) will show up in front of UI items with a lower z-level. Ties within a z-level fall back to hierarchy order. "Later" children stack on top of "earlier" children.
+
+To illustrate, consider the following UI:
+
+```txt
+root (green)
+  child1 (red)
+  child2 (blue)
+```
+
+By default these all have a z-index of 0. The root is at the bottom and each subsequent child stacks "on top":
+
+![z-index default](z-default.png)
+
+If we want the blue child to stack "behind" the earlier red child, we can set its z-index to a "local" value smaller than the default of 0:
+
+```rust
+blue.z_index = ZIndex::Local(-1);
+```
+
+![z-index blue local](z-blue-local.png)
+
+If we want the blue child to stack "behind" the green root, we can set its z-index to a "global" value smaller than the default of 0:
+
+```rust
+blue.z_index = ZIndex::Global(-1);
+```
+
+![z-index blue global](z-blue-global.png)
+
+Very useful stuff!
+
+[`ZIndex`]: https://docs.rs/bevy/0.9.0/bevy/ui/enum.ZIndex.html
 
 ## Bevy UI scaling
 
