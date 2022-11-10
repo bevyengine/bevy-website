@@ -934,7 +934,8 @@ let results = task_pool.scope(|scope| {
     });
 });
 
-assert_eq!(results, vec![2, 1]);
+assert!(results.contains(&1));
+assert!(results.contains(&2));
 ```
 
 This enables adding new tasks to the task pool scope while performing other tasks! This was a requirement for implementing the newly merged [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45), but it enables new patterns for anyone spawning async tasks in Bevy!
