@@ -664,7 +664,7 @@ This change was made on the tail of [making the same decision](/news/bevy-0-6/#t
 
 ## Enum Reflection
 
-<div class="release-feature-authors">authors: @MrGVSV</div>
+<div class="release-feature-authors">authors: @MrGVSV, @Davier, @nicopap</div>
 
 Bevy Reflect now has native support for Rust enums! Bevy Reflect is Bevy's "Rust reflection system", which allows us to access Rust type information about values and types dynamically at runtime.  
 
