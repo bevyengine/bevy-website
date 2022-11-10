@@ -373,7 +373,7 @@ Bevy Scenes now have a top level struct, which allows us to add additional value
 
 ### Use Maps Where Appropriate
 
-Entity IDs and Component values must be unique in Bevy ECS. To better represent that, we now use map syntax instead of a lists.
+Entity IDs and Component values must be unique in Bevy ECS. To better represent that, we now use map syntax instead of a list.
 
 ```rust
 // Old
@@ -491,11 +491,11 @@ These principles apply to the insert apis as well:
 ```rust
 // Old
 commands
-  .insert_bundle::<PlayerBundle>()
-  .insert::<ActivePlayer>();
+  .insert_bundle(PlayerBundle::default())
+  .insert(ActivePlayer);
 
 // New
-commands.insert::<(PlayerBundle, ActivePlayer)>();
+commands.insert((PlayerBundle::default(), ActivePlayer));
 ```
 
 They also apply to the remove apis:
