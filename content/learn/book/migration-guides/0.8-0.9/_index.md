@@ -175,7 +175,7 @@ let entity = commands.spawn_empty().id();
 // Old (0.8)
 let entity = world.spawn().id();
 // New (0.9)
-let entity = world.spawn_empty();
+let entity = world.spawn_empty().id();
 ```
 
 ### [Accept Bundles for insert and remove. Deprecate `insert`/`remove_bundle`](https://github.com/bevyengine/bevy/pull/6039)
