@@ -686,6 +686,8 @@ This change was made on the tail of [making the same decision](/news/bevy-0-6/#t
     // This inserts the constructor function pointer as a resource!
     // Weird and confusing!
     app.insert_resource(Counter);
+    // This is how it should be done!
+    app.insert_resource(Counter(0));
     ```
 
 2. Deriving [`Resource`] documents intent in a structured way. Without a derive, resource-ness is implicit by default.
@@ -966,7 +968,7 @@ Bevy Shaders now have access to the following globals:
 
 <div class="release-feature-authors">authors: @TheRawMeatball</div>
 
-[Bevy's new renderer](/news/bevy-0-6/#the-new-bevy-renderer) synchronizes entity state between the "main world" and the "render world", which enables parallel pipelined rendering. To implement this, we clear out the render entities every frame to ensure the integrity of the extracted state.
+[Bevy's renderer](/news/bevy-0-6/#the-new-bevy-renderer) synchronizes entity state between the "main world" and the "render world", which enables parallel pipelined rendering. To implement this, we clear out the render entities every frame to ensure the integrity of the extracted state.
 
 However, it became apparent that the method we were using to clear entities each frame was incurring a per-entity cost that became notable at very high entity counts.
 
