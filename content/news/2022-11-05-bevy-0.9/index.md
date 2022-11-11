@@ -486,7 +486,7 @@ let scene = Scene::from_dynamic_scene(dynamic_scene, type_registry).unwrap();
 
 Spawning entities with components and adding / removing them from entities just got even easier!
 
-First some quick fundamentals: Bevy ECS uses [`Components`][`Component`], to add data and logic to entities. To make entity composition easier, Bevy ECS also has [`Bundles`][`Bundle`], which define groups of components to be added together.
+First some quick fundamentals: Bevy ECS uses [`Components`][`Component`] to add data and logic to entities. To make entity composition easier, Bevy ECS also has [`Bundles`][`Bundle`], which define groups of components to be added together.
 
 Just like in previous versions of Bevy, Bundles can be tuples of components:
 
@@ -509,7 +509,7 @@ In **Bevy 0.9**, [`Component`] types now _also_ automatically implement the [`Bu
 
 The [`Bundle`] trait is now also implemented for tuples of [`Bundles`][`Bundle`] instead of just tuples of [`Components`][`Component`]. The value of this will be made clear in a moment.
 
-First: spawn now takes a bundle:
+First, `spawn` now takes a bundle:
 
 ```rust
 // Old (variant 1)
@@ -596,9 +596,9 @@ app.add_system(some_exclusive_system.exclusive_system())
 app.add_system(some_exclusive_system)
 ```
 
-We've also expanded exclusive systems to support more system parameters, which vastly improves the user experience of writing exclusive systems, and makes them more efficient by caching state across executions.
+We've also expanded exclusive systems to support more system parameters, which vastly improves the user experience of writing exclusive systems and makes them more efficient by caching state across executions.
 
-[`SystemState`] can now be used to use "normal" system parameters from inside an exclusive system:
+[`SystemState`] enables using "normal" system parameters from inside an exclusive system:
 
 ```rust
 // Old
@@ -614,7 +614,7 @@ fn some_system(world: &mut World, state: &mut SystemState<(Res<Time>, Query<&mut
 }
 ```
 
-[`QueryState`] can also be used to cache individual queries:
+[`QueryState`] enables cached access to individual queries:
 
 ```rust
 // Old
@@ -631,7 +631,7 @@ fn some_system(world: &mut World, transforms: &mut QueryState<&Transform>) {
 }
 ```
 
-[`Local`] can be used to store local data inside of the exclusive system:
+[`Local`] enables storing local data inside of the exclusive system:
 
 ```rust
 // Old
@@ -694,39 +694,68 @@ This change was made on the tail of [making the same decision](/news/bevy-0-6/#t
 
 [`Resource`]: https://docs.rs/bevy/0.9.0/bevy/ecs/system/trait.Resource.html
 
-## Query Internals Reworks
+## System Ambiguity Resolution API Improvements
 
-- [make `WorldQuery` very flat][5205]
+<div class="release-feature-authors">authors: @JoJoJet, @alice-i-cecile</div>
+
+Bevy ECS schedules systems to run in parallel by default. It will safely schedule systems in parallel, honoring dependencies between systems and enforcing Rust's mutability rules. By default, this means that if System A reads a resource and System B writes the resource (and they have no order defined between them), then System A might execute before _or_ after System B. We call these systems "ambiguous". In some situations this ambiguity might matter, in other situations it might not.
+
+Bevy already has a [system ambiguity detection system](https://bevyengine.org/news/bevy-0-5/#ambiguity-detection-and-resolution) which enables users to detect ambiguous systems and resolve the ambiguity (either by adding ordering constraints or ignoring the ambiguity). Users could add systems to "ambiguity sets" to ignore ambiguities between systems in these sets:
+
+```rust
+#[derive(AmbiguitySet)]
+struct AmbiguousSystems;
+
+app
+  .add_system(a.in_ambiguity_set(AmbiguousSystems))
+  .add_system(b.in_ambiguity_set(AmbiguousSystems))
+```
+
+This was a bit hard to reason about and introduced more boilerplate than necessary.
+
+In **Bevy 0.9**, we have replaced ambiguity sets with simpler `ambiguous_with` calls:
+
+```rust
+app
+  .add_system(a)
+  .add_system(b.ambiguous_with(a))
+```
+
+This builds on the existing [`SystemLabel`] approach, which means you can also use labels to accomplish "set-like" ambiguity resolution:
+
+```rust
+#[derive(SystemLabel)]
+struct Foo;
+
+app
+  .add_system(a.label(Foo))
+  .add_system(b.label(Foo))
+  .add_system(b.ambiguous_with(Foo))
+```
+
+## Bevy ECS Optimizations
+
 - [Clean up Fetch code][4800]
-
-## System Ambiguity 
-
-- [Add methods for silencing system-order ambiguity warnings][6158]
-- [Remove ambiguity sets][5916]
-
-- [Extract Resources into their own dedicated storage][4809]
-
-- [Add iter_entities to World #6228][6242]
-- [Rename system chaining to system piping][6230]
-- [implemented #[bundle(ignore)]][6123]
-- [Implement IntoIterator for ECS wrapper types.][5096]
-
-- [Add `send_event` and friends to `WorldCell`][6515]
-- [Fix unsound `EntityMut::remove_children`. Add `EntityMut::world_scope`][6464]
 - [Remove unnecesary branches/panics from Query accesses][6461]
 - [Speed up `Query::get_many` and add benchmarks][6400]
-- [Fix query.to_readonly().get_component_mut() soundness bug][6401]
-- [Allow access to non-send resource through `World::resource_scope`][6113]
-- [Add get_entity to Commands][5854]
-- [`Query` filter types must be `ReadOnlyWorldQuery`][6008]
-- [Added the ability to get or set the last change tick of a system.][5838]
-- [Add a module for common system `chain`/`pipe` adapters][5776]
-- [SystemParam for the name of the system you are currently in][5731]
-- [Add a change detection bypass and manual control over change ticks][5635]
-- [Avoid making `Fetch`s `Clone`][5593]
-- [Replace `many_for_each_mut` with `iter_many_mut`.][5402]
 - [Start running systems while prepare_systems is running][4919]
 - [Skip empty archetypes and tables when iterating over queries][4724]
+
+## ECS Change Detection Bypass
+
+<div class="release-feature-authors">authors: @alice-i-cecile</div>
+
+Bevy ECS automatically detects changes to components and resources thanks to some very fancy Rust usage.
+
+However sometimes, a user might make a change that they don't want to be detected. In **Bevy 0.9**, change detection can now be bypassed:
+
+```rust
+fn system(mut transforms: Query<&mut Transform>) {
+  for transform in &mut transforms {
+    transform.bypass_change_detection().translation.x = 1.0;
+  }
+}
+```
 
 ## Enum Reflection
 
@@ -1067,12 +1096,6 @@ impl Plugin for MyPlugin {
 }
 ```
 
-## Task Pool Panic Handling
-
-<div class="release-feature-authors">authors: @james7132</div>
-
-- [TaskPool Panic Handling][6443]
-
 ## Task Pool: Nested Spawns on Scope
 
 <div class="release-feature-authors">authors: @hymm</div>
@@ -1092,6 +1115,14 @@ assert!(results.contains(&2));
 ```
 
 This enables adding new tasks to the task pool scope while performing other tasks! This was a requirement for implementing the newly merged (but not yet implemented) [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45), but it enables new patterns for anyone spawning async tasks in Bevy!
+
+## Task Pool Panic Handling
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+Bevy uses its own custom async task pools to manage scheduling parallel, async tasks. In previous versions of Bevy, if a task panicked in one of these pools, it would be non-recoverable unless every scheduled task used `catch_unwind` (which isn't feasible). This would also permanently kill worker threads in the global task pools.
+
+**Bevy 0.9** resolves this problem by calling `catch_unwind` inside the task pool executors.
 
 ## Hierarchy Query Methods
 
