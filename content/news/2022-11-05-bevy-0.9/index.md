@@ -117,7 +117,6 @@ You can enable and disable this per-camera:
   });
 ```
 
-
 ## Post Processing: View Target Double Buffering
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -131,7 +130,7 @@ let post_process = view_target.post_process_write();
 render_some_effect(render_context, post_process.source, post_process.destination);
 ```
 
-This reduces the complexity burden on post processing effect developers and keeps our pipeline nice and efficient. The new [FXAA effect](/news/bevy-0-9/#fxaa-fast-approximate-anti-aliasing) was implemented using this new system. Post processing plugin developers can use that implementation as a reference. 
+This reduces the complexity burden on post processing effect developers and keeps our pipeline nice and efficient. The new [FXAA effect](/news/bevy-0-9/#fxaa-fast-approximate-anti-aliasing) was implemented using this new system. Post processing plugin developers can use that implementation as a reference.
 
 ## Improved Render Target Texture Format Handling
 
@@ -437,11 +436,49 @@ Bevy Scenes can be serialized and deserialized to/from binary formats, such as [
 
 In the case of postcard, this can be almost 5x smaller (4.53x for the scene above)! Very useful if you are trying to keep the size of the scene small on disk, or send the scene over the network.
 
-## Scene Creation Tooling
+## Dynamic Scene Builder
 
-- [Create a scene from a dynamic scene][6229]
-- [dynamic scene builder][6227]
-- [can clone a scene][5855]
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy Scenes can now be constructed dynamically using the new [`DynamicSceneBuilder`]. Previous versions of Bevy already supported [writing "whole worlds" to scenes](https://github.com/bevyengine/bevy/blob/v0.8.1/examples/scene/scene.rs#L78), but in some cases, users might only want to write _specific_ entities to a scene. **Bevy 0.9**'s [`DynamicSceneBuilder`] makes this possible:
+
+```rust
+// Write players to a scene
+fn system(world: &World, players: Query<Entity, With<Player>>) {
+  let builder = DynamicSceneBuilder::from_world(world);
+  builder.extract_entities(players.iter());
+  let dynamic_scene = builder.build();
+}
+```
+
+`extract_entities` accepts any `Entity` iterator.
+
+You can also pass in specific entities:
+
+```rust
+builder.extract_entity(entity);
+```
+
+[`DynamicSceneBuilder`]: https://docs.rs/bevy/0.9.0/bevy/scene/struct.DynamicSceneBuilder.html
+
+## More Scene Construction Tools
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+[`Scenes`][`Scene`] can now be cloned:
+
+```rust
+let scene scene.clone_with(type_registry).unwrap();
+```
+
+[`DynamicScenes`][`DynamicScene`] can now be converted to [`Scenes`][`Scene`]:
+
+```rust
+let scene = Scene::from_dynamic_scene(dynamic_scene, type_registry).unwrap();
+```
+
+[`Scene`]: https://docs.rs/bevy/0.9.0/bevy/scene/struct.Scene.html
+[`DynamicScene`]: https://docs.rs/bevy/0.9.0/bevy/scene/struct.DynamicScene.html
 
 ## Improved Entity / Component APIs
 
@@ -545,7 +582,7 @@ commands.remove::<(PlayerBundle, ActivePlayer)>();
 
 <div class="release-feature-authors">authors: @cart, @maniwani</div>
 
-In preparation for the larger scheduler changes outlined in the newly-merged [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45), we've started blurring the lines between "exclusive systems" (systems with "exclusive" full mutable access to the ECS [`World`]) and normal systems, which historically have been separate types with strict lines between them.
+In preparation for the larger scheduler changes outlined in the newly-merged (but not yet implemented) [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45), we've started blurring the lines between "exclusive systems" (systems with "exclusive" full mutable access to the ECS [`World`]) and normal systems, which historically have been separate types with strict lines between them.
 
 In **Bevy 0.9**, exclusive systems now implement the normal [`System`] trait! This will ultimately have even larger implications, but in **Bevy 0.9** this means that you no longer need to call `.exclusive_system()` when adding exclusive systems to your schedule:
 
@@ -612,6 +649,7 @@ fn some_system(world: &mut World, mut counter: Local<usize>) {
 ```
 
 [`World`]: https://docs.rs/bevy/0.9.0/bevy/ecs/world/struct.World.html
+[`System`]: https://docs.rs/bevy/0.9.0/bevy/ecs/system/trait.System.html
 [`QueryState`]: https://docs.rs/bevy/0.9.0/bevy/ecs/query/struct.QueryState.html
 [`SystemState`]: https://docs.rs/bevy/0.9.0/bevy/ecs/system/struct.SystemState.html
 [`Local`]: https://docs.rs/bevy/0.9.0/bevy/ecs/system/struct.Local.html
@@ -764,27 +802,80 @@ Deriving [`Reflect`] on enums also automatically adds support for "reflect-based
 
 [`Reflect`]: https://docs.rs/bevy/0.9.0/bevy/reflect/trait.Reflect.html
 
-- [bevy_reflect: Get owned fields][5728]
-- [Add `reflect(skip_serializing)` which retains reflection but disables automatic serialization][5250]
-- [bevy_reflect: Add `Reflect::into_reflect`][6502]
-- [Add reflect_owned][6494]
-- [make `register` on `TypeRegistry` idempotent][6487]
-- [Enable Constructing ReflectComponent/Resource][6257]
-- [Support multiple `#[reflect]`/`#[reflect_value]` + improve error messages][6237]
-- [Make arrays behave like lists in reflection][5987]
-- [Add `pop` method for `List` trait.][5797]
+## Other Bevy Reflect Improvements
+
+<div class="release-feature-authors">authors: @MrGVSV, @makspll, @Shatur, @themasch, @NathanSWard</div>
+
+We've made a lot of other improvements to Bevy Reflect!
+
+"Container" Reflect traits (Map, List, Array, Tuple) can now be drained to get owned values:
+
+```rust
+let container: Box<dyn List> = Box::new(vec![1.0, 2.0]);
+let values: Vec<Box<dyn Reflect>> = container.drain();
+```
+
+Reflected fields can now opt out of serialization without _also_ opting out of reflection as a whole:
+
+```rust
+#[derive(Reflect)]
+struct Foo {
+  a: i32,
+  // fully invisible to reflection, including serialization
+  #[reflect(ignore)]
+  b: i32,
+  // can still be reflected, but will be skipped when serializing
+  #[reflect(skip_serializing)]
+  c: i32,
+}
+```
+
+Boxed "reflection type" traits (Struct, Enum, List, etc) can now be converted to the more generic `Box<dyn Reflect>`:
+
+```rust
+let list: Box<dyn List> = Box::new(vec![1.0, 2.0]);
+let reflect: Box<dyn Reflect> = list.into_reflect();
+```
+
+It is now possible to get owned variants of reflected types:
+
+```rust
+let value: Box<Sprite> = Box::new(Sprite::default());
+if let ReflectOwned::Struct(owned) = value.reflect_owned() {
+  // owned is a Box<dyn Struct>
+}
+```
+
+Arrays in the "reflection path api" can now use list syntax:
+
+```rust
+#[derive(Reflect)]
+struct Foo {
+    bar: [u8; 3],
+}
+
+let foo = Foo {
+  bar: [10, 20, 30],
+};
+
+assert_eq!(*foo.get_path("bar[1]").unwrap(), 20);
+```
+
+Reflected Lists now have a pop operation:
+
+```rust
+let mut list: Box<dyn List> = Box::new(vec![1u8, 2u8]);
+let value: Box<dyn Reflect> = list.pop().unwrap();
+assert_eq!(*value.downcast::<u8>().unwrap(), 2u8);
+```
 
 ## Example: Gamepad Viewer
 
 <div class="release-feature-authors">authors: @rparrett</div>
 
-Bevy now has a gamepad input viewer app, which can be run using `cargo run --example gamepad_viewer` from the Bevy repo. 
+Bevy now has a gamepad input viewer app, which can be run using `cargo run --example gamepad_viewer` from the Bevy repo.
 
 <video controls loop><source  src="gamepad.mp4" type="video/mp4"/></video>
-
-
-- [Add getters and setters for `InputAxis` and `ButtonSettings`][6088]
-- [Added keyboard scan input event][5495]
 
 ## Axis and Button Settings Validation
 
@@ -798,6 +889,25 @@ For example, attempting to set the "press threshold" of a button to a value lowe
 button_settings.set_release_threshold(0.65);
 // this is too low!
 assert!(button_settings.try_set_press_threshold(0.6).is_err())
+```
+
+## ScanCode Input Resource
+
+<div class="release-feature-authors">authors: @Bleb1k</div>
+
+**Bevy 0.9** adds a `Input<ScanCode>` resource, which behaves like `Input<KeyCode>`, but ignores keyboard layout:
+
+```rust
+fn system(scan_code: Res<Input<ScanCode>>, key_code: Res<Input<KeyCode>>) {
+  // 33 is the scan code for F on a physical keyboard
+  if scan_code.pressed(ScanCode(33)) {
+    log!("The physical F key is pressed on the keyboard");
+  }
+  
+  if keycode.pressed(KeyCode::F) {
+    log!("The logical F key is pressed on the keyboard, taking layout into account.");
+  }
+}
 ```
 
 ## Time Shader Globals
@@ -818,6 +928,7 @@ fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {
 <video controls loop><source  src="blinking_cube.mp4" type="video/mp4"/></video>
 
 Bevy Shaders now have access to the following globals:
+
 * `time`: time since startup in seconds, wrapping to 0 after 1 hour
 * `delta_time`: time since the previous frame in seconds
 * `frame_count`: frame count since the start of the app, wrapping to 0 after reaching the max size of a `u32`
@@ -884,13 +995,28 @@ Bevy now supports multiple directional lights (the new limit is 10 at once). Muc
 
 ![multiple directional](multiple_directional.png)
 
-## WGPU Upgrade
-
-- [Update `wgpu` to 0.14.0, `naga` to `0.10.0`, `winit` to 0.27.4, `raw-window-handle` to 0.5.0, `ndk` to 0.7][6218]
-
 ## Sprite Rects
 
-- [Sprite: allow using a sub-region (Rect) of the image][6014]
+<div class="release-feature-authors">authors: @inodentry</div>
+
+[`Sprites`][`Sprite`] can now define "rects" that select a specific area of their texture to be used as the "sprite":
+
+```rust
+Sprite {
+  rect: Some(Rect {
+    min: Vec2::new(100.0, 0.0),
+    max: Vec2::new(200.0, 100.0),
+  }),
+  ..default()
+}
+```
+
+![sprite rect](sprite_rect.png)
+
+This is similar to how [`TextureAtlasSprite`] / "sprite sheets" work, but without the need to define a texture atlas.
+
+[`Sprite`]: https://docs.rs/bevy/0.9.0/bevy/sprite/struct.Sprite.html
+[`TextureAtlasSprite`]: https://docs.rs/bevy/0.9.0/bevy/sprite/struct.TextureAtlasSprite.html
 
 ## Plugin Settings
 
@@ -923,7 +1049,7 @@ app.add_plugins(DefaultPlugins
 
 This makes the connection between the settings and the plugin clear, and differentiates these "plugin init" settings from "runtime configurable" settings (which are still represented as ECS resources).
 
-## Plugins are now unique by default
+## Plugins Are Now Unique By Default
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
@@ -965,7 +1091,7 @@ assert!(results.contains(&1));
 assert!(results.contains(&2));
 ```
 
-This enables adding new tasks to the task pool scope while performing other tasks! This was a requirement for implementing the newly merged [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45), but it enables new patterns for anyone spawning async tasks in Bevy!
+This enables adding new tasks to the task pool scope while performing other tasks! This was a requirement for implementing the newly merged (but not yet implemented) [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45), but it enables new patterns for anyone spawning async tasks in Bevy!
 
 ## Hierarchy Query Methods
 
@@ -1154,6 +1280,5 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 A huge thanks to the **X contributors** that made this release (and associated docs) possible! In random order:
 
 * @X
- 
-## Full Change Log
 
+## Full Change Log
