@@ -1134,7 +1134,7 @@ To make navigating hierarchies easier, we've added some convience methods to `Qu
 #[derive(Resource)]
 struct SomeEntity(Entity);
 
-fn system(children: Query<&Children>, some_entity: Res<SomeEnitty>) {
+fn system(children: Query<&Children>, some_entity: Res<SomeEntity>) {
   // iterate all descendents of some_entity 
   for entity in children.iter_descendants(some_entity.0) {
   }
@@ -1144,7 +1144,7 @@ fn system(children: Query<&Children>, some_entity: Res<SomeEnitty>) {
   }
 }
 
-fn other_system(parents: Query<&Parent>, some_entity: Res<SomeEnitty>) {
+fn other_system(parents: Query<&Parent>, some_entity: Res<SomeEntity>) {
   // iterate all ancestors of some_entity 
   for entity in parents.iter_ancestors(some_entity.0) {
   }
