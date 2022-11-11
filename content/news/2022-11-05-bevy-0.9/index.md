@@ -90,6 +90,34 @@ Picking an anti-aliasing implementation is all about tradeoffs:
 
 Now that our post processing pipeline is maturing, we plan on adding even more anti-aliasing options in future Bevy releases. We already have TAA (temporal anti-aliasing) and SMAA (subpixel morphological anti-aliasing) implementations in the works!
 
+## Deband Dithering
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+"Color banding" is a known limitation when using 8 bit color channels (which are required by pretty much every device / screen).
+
+This is most visible when trying to render smooth gradients for low noise textures (ex: the lighting on a "pure green" material):
+
+![banding](banding.png)
+
+If you look closely at the green plane _or_ the tan cube, you will notice distinct bands for each shade of color. A popular solution to this problem is to "dither" the final image.
+
+**Bevy 0.9** now performs "deband dithering" by default in the tonemapping stage:
+
+![debanding](debanding.png)
+
+You can enable and disable this per-camera:
+
+```rust
+  commands.spawn(Camera3dBundle {
+      tonemapping: Tonemapping::Enabled {
+          deband_dither: true,
+      },
+      ..default()
+  });
+```
+
+
 ## Post Processing: View Target Double Buffering
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -1033,9 +1061,22 @@ Very useful stuff!
 
 [`ZIndex`]: https://docs.rs/bevy/0.9.0/bevy/ui/enum.ZIndex.html
 
-## Bevy UI scaling
+## Bevy UI Scaling
 
-- [Add UI scaling][5814]
+<div class="release-feature-authors">authors: @Weibye</div>
+
+Bevy UI's global "pixel scale" can now be set using the [`UiScale`] resource:
+
+```rust
+// Render UI pixel units 2x bigger
+app.insert_resource(UiScale { scale: 2.0 })
+```
+
+This allows developers to expose arbitrary scale configuration to users in cases where that flexibility is beneficial.
+
+<video controls loop><source  src="ui_scaling.mp4" type="video/mp4"/></video>
+
+[`UiScale`]: https://docs.rs/bevy/0.9.0/bevy/ui/struct.UiScale.html
 
 ## Audio Playback Toggling
 
@@ -1057,17 +1098,47 @@ audio_sink.toggle();
 
 ## Time Scaling
 
-- [Add global time scaling][5752]
+<div class="release-feature-authors">authors: @maniwani</div>
+
+The "global" time scale can now be configured on [`Time`], which scales the values common functions like `Time::delta_seconds()` return.
+
+```rust
+time.set_relative_speed(2.0);
+```
+
+In cases where unscaled values are required, you can use the new "raw" variants of these functions:
+
+```rust
+// The number of seconds elapsed since the last update, with time scaling taken into account.
+let delta = time.delta_seconds();
+
+// The number of seconds elapsed since the last update, with time scaling ignored.
+let raw_delta = time.raw_delta_seconds();
+```
+
+<video controls loop><source  src="time_scale.mp4" type="video/mp4"/></video>
+
+[`Time`]: https://docs.rs/bevy/0.9.0/bevy/time/struct.Time.html
 
 ## Time Wrapping
 
-- [Add `TimeUpdateStrategy` resource for manual `Time` updating][6159]
-- [add time wrapping to Time][5982]
+<div class="release-feature-authors">authors: @IceSentry</div>
+
+Some scenarios, [such as shaders](/news/bevy-0-9/#time-shader-globals), need to represent elapsed time values as `f32`, which will suffer from precision issues pretty quickly. To resolve this, [`Time`] has been extended to support "time wrapping":
+
+```rust
+// Wrap once every hour
+time.wrapping_period = Duration::from_secs(60 * 60):
+
+// If one hour and 6 seconds have passed since the app started,
+// this will return 6 seconds.
+let wrapped = time.seconds_since_startup_wrapped_f32();
+```
 
 ## What's Next?
 
 * **High Level Post Processing Stack**: Now that we have the core post processing pipeline in place, we need to make a higher level system that makes it easier for users to select, configure, and re-order post processing effects on a per-camera basis. Additionally for performance reasons we want to combine as many post processing effects into a single pass as we can, so we need an opinionated set of post processing apis that facilitate this.
-* **More Post Processing Effects**: More anti-aliasing options (TAA, SMAA), more tonemapping algorithm options (Ex: ACES), debanding, SSAO
+* **More Post Processing Effects**: More anti-aliasing options (TAA, SMAA), more tonemapping algorithm options (Ex: ACES), SSAO
 
 ## Support Bevy
 
