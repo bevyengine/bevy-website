@@ -1160,10 +1160,6 @@ fn system(children: Query<&Children>, some_entity: Res<SomeEntity>) {
   // iterate all descendents of some_entity 
   for entity in children.iter_descendants(some_entity.0) {
   }
-  
-  // iterate all ancestors of some_entity 
-  for entity in children.iter_ancestors(some_entity.0) {
-  }
 }
 
 fn other_system(parents: Query<&Parent>, some_entity: Res<SomeEntity>) {
