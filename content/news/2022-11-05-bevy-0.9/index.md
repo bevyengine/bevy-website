@@ -10,7 +10,7 @@ image = "bloom_lion.png"
 show_image = true
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.9** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **159** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.9** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -1344,8 +1344,166 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 
 ## Contributors
 
-A huge thanks to the **X contributors** that made this release (and associated docs) possible! In random order:
+A huge thanks to the **159 contributors** that made this release (and associated docs) possible! In random order:
 
-* @X
+* @Edwox
+* @targrub
+* @fvacek
+* @xtr3m3nerd
+* @timokoesters
+* @Suficio
+* @Sergi-Ferrez
+* @hymm
+* @MrGVSV
+* @SleepySwords
+* @nicopap
+* @Vrixyz
+* @McSpidey
+* @VitalyAnkh
+* @ramirezmike
+* @jiftoo
+* @TheNeikos
+* @ManevilleF
+* @KDecay
+* @Zearin
+* @marlyx
+* @StarArawn
+* @Ixentus
+* @hmeine
+* @emersonmx
+* @gilescope
+* @inodentry
+* @robtfm
+* @yrns
+* @Lucidus115
+* @kurtkuehnert
+* @zmarlon
+* @leereilly
+* @galkowskit
+* @DGriffin91
+* @Ptrskay3
+* @strattonbrazil
+* @Pand9
+* @PROMETHIA-27
+* @zicklag
+* @lewiszlw
+* @contagnas
+* @EMachad0
+* @SpecificProtagonist
+* @BoxyUwU
+* @jkb0o
+* @xgbwei
+* @andresovela
+* @0x182d4454fb211940
+* @TehPers
+* @pcone
+* @CleanCut
+* @makspll
+* @64kramsystem
+* @Wandalen
+* @coreh
+* @Fracey
+* @Azervu
+* @SyamaMishra
+* @BeastLe9enD
+* @Weibye
+* @Pietrek14
+* @NiklasEi
+* @TheRawMeatball
+* @jgoday
+* @7flash
+* @light4
+* @Ian-Yy
+* @Carter0
+* @slyedoc
+* @devil-ira
+* @MDeiml
+* @NathanSWard
+* @robem
+* @Bleb1k
+* @bzm3r
+* @anchpop
+* @aevyrie
+* @amiani
+* @x3ro
+* @NoahShomette
+* @bjorn3
+* @djeedai
+* @bwhitt7
+* @oceantume
+* @micron-mushroom
+* @JMS55
+* @asherkin
+* @afonsolage
+* @shuoli84
+* @harudagondi
+* @Demiu
+* @TimJentzsch
+* @gak
+* @dataphract
+* @raffimolero
+* @Moulberry
+* @james7132
+* @torsteingrindvik
+* @jakobhellermann
+* @hakolao
+* @themasch
+* @CatThingy
+* @Metadorius
+* @merelymyself
+* @SludgePhD
+* @CGMossa
+* @sullyj3
+* @ian-h-chamberlain
+* @lain-dono
+* @mwcz
+* @thebluefish
+* @manokara
+* @mirkoRainer
+* @hankjordan
+* @cryscan
+* @WaffleLapkin
+* @mahulst
+* @AlexOkafor
+* @Davier
+* @jwagner
+* @CAD97
+* @alice-i-cecile
+* @james-j-obrien
+* @rparrett
+* @tguichaoua
+* @YohDeadfall
+* @msvbg
+* @komadori
+* @maniwani
+* @Shatur
+* @LarsDu
+* @DJMcNab
+* @JoJoJet
+* @polarvoid
+* @KirmesBude
+* @Aceeri
+* @ottah
+* @IceSentry
+* @Piturnah
+* @lovelymono
+* @maxwellodri
+* @oledfish
+* @BorisBoutillier
+* @mockersf
+* @Nilirad
+* @elbertronnie
+* @maccesch
+* @vertesians
+* @superdump
+* @wanderrful
+* @Neo-Zhixing
+* @rustui
+* @cart
+* @JohnTheCoolingFan
+* @pascualex
+* @fishykins
+* @Carlrs
+* @leath-dub
 
 ## Full Change Log
