@@ -20,6 +20,8 @@ To update an existing Bevy App or Plugin to **Bevy 0.9**, check out our [0.8 to 
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
+<!-- more -->
+
 * **HDR Post Processing, Tonemapping, and Bloom**: Bevy has a new HDR post processing and tonemapping pipeline, which we used to implement the "bloom" post processing effect!
 * **FXAA**: Fast approximate anti-aliasing was added, which gives users a new cheap option for screen space anti-aliasing.
 * **Deband Dithering**: Hide gradient precision errors with this new post processing effect!
