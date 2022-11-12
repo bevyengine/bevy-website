@@ -30,9 +30,7 @@ INSERT_HIGHLIGHTS_HERE
 
 Bevy now supports the "bloom" post processing effect, backed by a ton of internal improvements to our HDR (High Dynamic Range) render pipeline.
 
-TODO: REPLACE THIS WITH NICER BLOOM SCENE
-
-![temp bloom](tempbloom.png)
+![bloom](bloom.png)
 
 Bloom creates a "blurred" effect around bright lights, which emulates how cameras (and our eyes) often perceive light in the real world. High quality bloom builds on top of HDR render pipelines, which represents light and color using more than the standard 8 bits per channel (rgba) used elsewhere. In previous releases Bevy already did [HDR lighting internally in its PBR shader](/news/bevy-0-5/#physically-based-rendering-pbr), but because we were rendering to a "normal" (low dynamic range) texture, we had to lose the extra high dynamic range information when we mapped the HDR lighting to the LDR texture (using a process called tonemapping).
 
@@ -64,9 +62,17 @@ commands.spawn((
 ));
 ```
 
-The bloom effect can be overbearing if misconfigured. [`BloomSettings`] has a number of options to tune it, but the most relevant is `intensity`, which can be used to adjust how much the effect is applied:
+The bloom effect can be overbearing if misconfigured. [`BloomSettings`] has a number of options to tune it, but the most relevant is `intensity`, which can (and should) be used to adjust how much the effect is applied.
 
-TODO_ADD_EXAMPLE_OFF_INTENSITY
+Seriously ... this effect can be obnoxious:
+
+![too much bloom](too_much_bloom.png)
+
+In most cases, it is best to err on the side of subtlety.
+
+HDR rendering is also available in 2D, which means you can also use bloom effects in 2D!
+
+![2D bloom](2d_bloom.png)
 
 [`BloomSettings`]: https://docs.rs/bevy/0.9.0/bevy/core_pipeline/bloom/struct.BloomSettings.html
 
@@ -1296,8 +1302,17 @@ let wrapped = time.seconds_since_startup_wrapped_f32();
 
 ## What's Next?
 
+Here are some of the things
+
 * **High Level Post Processing Stack**: Now that we have the core post processing pipeline in place, we need to make a higher level system that makes it easier for users to select, configure, and re-order post processing effects on a per-camera basis. Additionally for performance reasons we want to combine as many post processing effects into a single pass as we can, so we need an opinionated set of post processing apis that facilitate this.
 * **More Post Processing Effects**: More anti-aliasing options (TAA, SMAA), more tonemapping algorithm options (Ex: ACES), SSAO
+* **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on:
+  1. Pre-processing assets to do expensive work "during development time", so Bevy Apps can be deployed with assets that are prettier, smaller, and/or faster to load.
+  2. Enabling configuring assets with .meta files. For example, you could define a texture compression level, the filter it should use, or the target format.
+* **Bevy UI Improvements**: We will continue improving Bevy UI's functionality and expanding its widget library, with a focus on enabling editor experiences.
+* **More Scene Improvements**: Nested scenes, implicit defaults, and inline assets.
+* **Bevy Editor**: We will start prototyping Bevy Editor experiences, starting with scene editor tooling.
+* **Stageless ECS**: Now that the [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45) is merged, we can start implementing stageless scheduling! See the RFC for an outline of the improvements coming. This will be a game changer!
 
 ## Support Bevy
 
