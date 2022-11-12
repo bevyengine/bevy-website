@@ -761,7 +761,7 @@ We had some _huge_ performance wins in **Bevy 0.9** thanks to `@james7132`:
 * The parallel executor [now start running systems](https://github.com/bevyengine/bevy/pull/4919) while the `prepare_systems` step is running, cutting out a lot of delay when there are many systems with very little work to do. This cut almost 1 millisecond from our `many_foxes` animation benchmark (~12% improvement). That is a _very_ big deal!
 * Iterators now [skip empty archetypes and tables](https://github.com/bevyengine/bevy/pull/4724) when iterating over queries, which significantly reduces per-archetype iteration overhead when the archetype is empty.
 
-`@JoJoJet` also optimized `Query::get_many` access [was optimized](https://github.com/bevyengine/bevy/pull/6400) by replacing `array::map` with loops, optimizing `get_many` by ~20-30%!
+`@JoJoJet` [also optimized](https://github.com/bevyengine/bevy/pull/6400) `Query::get_many` access by replacing `array::map` with loops, optimizing `get_many` by ~20-30%!
 
 ## ECS Change Detection Bypass
 
