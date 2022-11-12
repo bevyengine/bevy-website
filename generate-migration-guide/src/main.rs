@@ -1,6 +1,8 @@
+use anyhow::Context;
 use clap::{Parser as ClapParser, Subcommand};
 use github_client::GithubClient;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
+use regex::Regex;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Write,
@@ -97,29 +99,107 @@ fn main() -> anyhow::Result<()> {
 
 /// Generates the list of contributors and a list of all closed PRs sorted by area labels
 fn generate_release_note(
-    date: &str,
+    since: &str,
     path: PathBuf,
     client: &mut GithubClient,
 ) -> anyhow::Result<()> {
-    let prs = client.get_merged_prs(date, None)?;
+    let main_sha = client
+        .get_branch_sha("main")
+        .context("Failed to get branch_sha")?;
 
-    let mut authors = HashSet::new();
+    println!("commit sha for main: {main_sha}");
+
+    // We use the list of commits to make sure the PRs are only on main
+    let commits = client
+        .get_commits(since, &main_sha)
+        .context("Failed to get commits for branch")?;
+    // We also get the list of merged PRs in batches instead of getting them separately for each commit
+    let prs = client.get_merged_prs(since, None)?;
+
     let mut pr_map = HashMap::new();
     let mut areas = HashMap::<String, Vec<i32>>::new();
-    for pr in &prs {
-        authors.insert(pr.user.login.clone());
-        pr_map.insert(pr.number, pr.clone());
+    let mut authors = HashSet::new();
+    let mut co_authors = HashSet::<String>::new();
+
+    for commit in &commits {
+        let mut message_lines = commit.commit.message.lines();
+
+        // Title is always the first line of a commit message
+        let title = message_lines.next().context("Commit message empty")?;
+
+        // Get the pr number added by bors at the end of the title
+        let re = Regex::new(r"\(#([\d]*)\)").unwrap();
+        let Some(cap) = re.captures_iter(title).last() else {
+            // This means there wasn't a PR associated with the commit
+            // Or bors didn't add a pr number
+            continue;
+        };
+        // remove PR number from title
+        let title = title.replace(&cap[0].to_string(), "");
+        let title = title.trim_end();
+        // let pr_number = cap[1].to_string();
+
+        // This is really expensive. Consider querying a list of PRs separately and cache the result
+        // let pr = client.get_pr_by_number(&pr_number)?;
+        let Some(pr) = prs.iter().find(|pr| pr.title.contains(title)) else {
+            println!("\x1b[93mPR not found for {title}\x1b[0m");
+            continue;
+        };
+
+        // Find co-authors
+        loop {
+            let Some(line) = message_lines.next() else {
+                break;
+            };
+
+            if line.starts_with("Co-authored-by: ") {
+                let user = line.replace("Co-authored-by: ", "");
+                let re = Regex::new(r"<(.*)>").unwrap();
+                let Some(cap) = re.captures_iter(line).last() else {
+                    continue;
+                };
+                let email = cap[1].to_string();
+                // co_authors.insert(email);
+                // This is really slow and a lot of users aren't found by it
+                match client.get_user_by_email(&user) {
+                    Ok(possible_users) => {
+                        co_authors.insert(if possible_users.items.is_empty() {
+                            format!("<{email}> -> not found")
+                        } else {
+                            let login = possible_users.items[0].login.clone();
+                            format!("<{email}> -> @{login}")
+                        });
+                    }
+                    Err(err) => {
+                        println!("Error while getting user by email: {}", err);
+                        println!("sleeping to avoid being rate limited");
+                        std::thread::sleep(std::time::Duration::from_secs(10));
+                        println!("sleeping to avoid being rate limited");
+                        std::thread::sleep(std::time::Duration::from_secs(10));
+                        println!("sleeping to avoid being rate limited");
+                        std::thread::sleep(std::time::Duration::from_secs(10));
+                    }
+                }
+            }
+        }
+
+        pr_map.insert(pr.number, title.to_string());
 
         let area = if let Some(label) = pr.labels.iter().find(|l| l.name.starts_with("A-")) {
             label.name.clone()
         } else {
             String::from("No area label")
         };
-
         areas.entry(area).or_default().push(pr.number);
+
+        authors.insert(pr.user.login.clone());
+        println!(
+            "[{title}](https://github.com/bevyengine/bevy/pull/{})",
+            pr.number
+        );
     }
 
-    println!("Found {} prs merged by bors since {}", prs.len(), date);
+    println!("Found {} prs merged by bors since {}", commits.len(), since);
 
     let mut output = String::new();
 
@@ -127,6 +207,19 @@ fn generate_release_note(
     writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
     for author in &authors {
         writeln!(&mut output, "- @{}", author)?;
+    }
+    writeln!(&mut output)?;
+    writeln!(&mut output, "### Co-Authors")?;
+
+    writeln!(&mut output)?;
+    writeln!(
+        &mut output,
+        "!!! WARNING This section should be removed before release !!!"
+    )?;
+    writeln!(&mut output)?;
+
+    for co_author in &co_authors {
+        writeln!(&mut output, "- {}", co_author)?;
     }
     writeln!(&mut output)?;
 
@@ -138,26 +231,20 @@ fn generate_release_note(
         writeln!(&mut output)?;
 
         for pr_number in prs {
-            let Some(pr) = pr_map.get(pr_number) else {
+            let Some(pr_title) = pr_map.get(pr_number) else {
                 continue;
             };
-            let pr_title = pr
-                .title
-                .replace("[Merged by Bors] - ", "")
-                .trim()
-                .to_string();
-
             writeln!(&mut output, "- [{}][{}]", pr_title, pr_number)?;
         }
     }
 
     writeln!(&mut output)?;
 
-    for pr in prs {
+    for pr in pr_map.keys() {
         writeln!(
             &mut output,
             "[{}]: https://github.com/bevyengine/bevy/pull/{}",
-            pr.number, pr.number
+            pr, pr
         )?;
     }
 

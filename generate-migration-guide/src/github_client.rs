@@ -18,7 +18,7 @@ pub struct GithubBranchesCommitResponse {
 pub struct GithubCommitResponse {
     pub sha: String,
     pub commit: GithubCommitContent,
-    pub author: GithubUser,
+    pub author: Option<GithubUser>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
@@ -112,6 +112,26 @@ impl GithubClient {
         bail!("commit sha not found for main branch")
     }
 
+    /// Gets a list of all PRs merged by bors after the given date.
+    /// The date needs to be in the YYYY-MM-DD format
+    /// To validate that bors merged the PR we simply check if the pr title contains "[Merged by Bors] - "
+    pub fn get_commits(&self, since: &str, sha: &str) -> anyhow::Result<Vec<GithubCommitResponse>> {
+        let mut commits = vec![];
+        let mut page = 1;
+        // The github rest api is limited to 100 prs per page,
+        // so to get all the prs we need to iterate on every page available.
+        loop {
+            let mut commits_in_page = self.get_commits_by_page(since, page, sha)?;
+            println!("Page: {} ({} commits)", page, commits_in_page.len());
+            if commits_in_page.is_empty() {
+                break;
+            }
+            commits.append(&mut commits_in_page);
+            page += 1;
+        }
+        Ok(commits)
+    }
+
     #[allow(unused)]
     pub fn get_commits_by_page(
         &self,
@@ -144,7 +164,7 @@ impl GithubClient {
         }
         let request = self
             .get("https://api.github.com/search/users")
-            .query("q", &format!("{email} in:email"));
+            .query("q", &format!("{email}"));
         let response = request.call()?.into_json()?;
         self.user_cache.insert(email.to_string(), response);
         Ok(self.user_cache.get(email).unwrap().clone())
@@ -212,5 +232,11 @@ impl GithubClient {
             .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
             .cloned()
             .collect())
+    }
+
+    pub fn generate_release_note(&self) -> anyhow::Result<String> {
+        let request =
+            self.get("https://api.github.com/repos/bevyengine/bevy/releases/generate-notes");
+        Ok(request.call()?.into_json()?)
     }
 }
