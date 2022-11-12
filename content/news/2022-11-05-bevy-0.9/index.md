@@ -20,9 +20,18 @@ To update an existing Bevy App or Plugin to **Bevy 0.9**, check out our [0.8 to 
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-INSERT_HIGHLIGHTS_HERE
-
-<!-- more -->
+* **HDR Post Processing, Tonemapping, and Bloom**: Bevy has a new HDR post processing and tonemapping pipeline, which we used to implement the "bloom" post processing effect!
+* **FXAA**: Fast approximate anti-aliasing was added, which gives users a new cheap option for screen space anti-aliasing.
+* **Deband Dithering**: Hide gradient precision errors with this new post processing effect!
+* **Other Post Processing Improvements**: View target double buffering and automatic render target format handling.
+* **New Scene Format**: Bevy's new scene format is smaller, simpler to compose manually, and easier to read. Comes in both "human readable" and "binary" variants!
+* **Code Driven Scene Construction**: Build scenes dynamically from an existing app using queries and specific entity references.
+* **Improved Entity/Component APIs**: Spawning entities with components is now simpler and more ergonomic than ever!
+* **Exclusive System Rework**: Exclusive systems (systems with unique ECS World access) are now just "normal" systems with significantly improved usability.
+* **Enum Reflection**: Bevy Reflect can now reflect enum types, which exposes them to Bevy's scene system and opens doors to editor tooling for enums.
+* **Time Shader Globals**: Time is now passed to shaders as a global, making time-driven animation in custom shaders easy!
+* **Plugin Settings**: Plugins can now have settings, which can be overridden in plugin groups, simplifying the plugin configuration story.
+* **Bevy UI Z-Indices**: Control how UI elements stack on top of each other using local and global z-indices
 
 ## HDR Post Processing, Tonemapping, and Bloom
 
