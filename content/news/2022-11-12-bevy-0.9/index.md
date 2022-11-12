@@ -1330,8 +1330,8 @@ Here are some of the things
 
 We're also looking for experts in some key areas. Most of our current devs are focused on the efforts above, so if you have interest and experience in the following areas, we would love to hear from you!
 
-* **Animation**: Animation blending, procedural animation, and higher level animation systems.
-* **Audio**: We need more control over audio playback, especially when it comes to layering effects.
+* **Animation**: Animation blending, procedural animation, and higher level animation systems. Check out the issues labeled [`A-Animation`](https://github.com/bevyengine/bevy/labels/A-Animation) on GitHub and introduce yourself on the [`#animation-dev`](https://discord.com/channels/691052431525675048/774027865020039209) channel of our Discord.
+* **Audio**: We need more control over audio playback, especially when it comes to layering effects. Check out the issues labeled [`A-Audio`](https://github.com/bevyengine/bevy/labels/A-Audio) on GitHub and introduce yourself on the [`#audio-dev`](https://discord.com/channels/691052431525675048/749430447326625812) channel of our Discord.
 
 ## Support Bevy
 
