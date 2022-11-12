@@ -483,7 +483,7 @@ builder.extract_entity(entity);
 [`Scenes`][`Scene`] can now be cloned:
 
 ```rust
-let scene scene.clone_with(type_registry).unwrap();
+let scene = scene.clone_with(type_registry).unwrap();
 ```
 
 [`DynamicScenes`][`DynamicScene`] can now be converted to [`Scenes`][`Scene`]:
