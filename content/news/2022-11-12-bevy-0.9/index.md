@@ -369,7 +369,7 @@ Lets compare how it is serialized:
 "game::Team": A,
 ```
 
-Also note that Bevy Reflect didn't even directly support enums until **Bevy 0.9**. Older versions of Bevy required using `#[reflect_value]` in combination with normal serde for enums, which was much more complicated. See the Reflect Enum section of this blog post for details!  
+Also note that Bevy Reflect didn't even directly support enums until **Bevy 0.9**. Older versions of Bevy required using `#[reflect_value]` in combination with normal serde for enums, which was much more complicated. See the [Enum Reflection](#enum-reflection) section of this blog post for details!  
 
 ### Nicer Tuples
 
