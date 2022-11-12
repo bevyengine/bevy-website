@@ -6,10 +6,8 @@ author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
-image = ""
+image = "bloom_lion.png"
 show_image = true
-image_subtitle = "TODO_ADD_SPLASH_IMAGE"
-image_subtitle_link = "https://bevyengine.org"
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.9** release on [crates.io](https://crates.io/crates/bevy)!
