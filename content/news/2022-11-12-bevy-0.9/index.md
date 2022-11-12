@@ -683,7 +683,7 @@ In **Bevy 0.9**, we now have a single [`WorldQuery`] trait! This makes Bevy ECS 
 
 ## Derive Resource
 
-<div class="release-feature-authors">authors: @devil-ira</div>
+<div class="release-feature-authors">authors: @devil-ira, @alice-i-cecile</div>
 
 The [`Resource`] trait is now no longer automatically implemented for all types. It must be derived:
 
