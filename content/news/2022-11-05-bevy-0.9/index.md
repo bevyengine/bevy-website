@@ -743,11 +743,16 @@ app
 
 ## Bevy ECS Optimizations
 
-- [Clean up Fetch code][4800]
-- [Remove unnecesary branches/panics from Query accesses][6461]
-- [Speed up `Query::get_many` and add benchmarks][6400]
-- [Start running systems while prepare_systems is running][4919]
-- [Skip empty archetypes and tables when iterating over queries][4724]
+<div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
+
+We had some _huge_ performance wins in **Bevy 0.9** thanks to `@james7132`:
+
+* The Query fetch abstraction [was reworked](https://github.com/bevyengine/bevy/pull/4800) to hoist common parts out of individual iteration, improving iterator performance on some benchmarks by ~10-20%. `Query::get` performance also saw some improvements.
+* [Some unnecessary branches were removed](https://github.com/bevyengine/bevy/pull/6461) from our data access apis, improving performance across most of our ECS benchmarks by ~5-20%!
+* The parallel executor [now start running systems](https://github.com/bevyengine/bevy/pull/4919) while the `prepare_systems` step is running, cutting out a lot of delay when there are many systems with very little work to do. This cut almost 1 millisecond from our `many_foxes` animation benchmark (~12% improvement). That is a _very_ big deal!
+* Iterators now [skip empty archetypes and tables](https://github.com/bevyengine/bevy/pull/4724) when iterating over queries, which significantly reduces per-archetype iteration overhead when the archetype is empty.
+
+`@JoJoJet` also optimized `Query::get_many` access [was optimized](https://github.com/bevyengine/bevy/pull/6400) by replacing `array::map` with loops, optimizing `get_many` by ~20-30%!
 
 ## ECS Change Detection Bypass
 
@@ -1313,6 +1318,11 @@ Here are some of the things
 * **More Scene Improvements**: Nested scenes, implicit defaults, and inline assets.
 * **Bevy Editor**: We will start prototyping Bevy Editor experiences, starting with scene editor tooling.
 * **Stageless ECS**: Now that the [Stageless RFC](https://github.com/bevyengine/rfcs/pull/45) is merged, we can start implementing stageless scheduling! See the RFC for an outline of the improvements coming. This will be a game changer!
+
+We're also looking for experts in some key areas. Most of our current devs are focused on the efforts above, so if you have interest and experience in the following areas, we would love to hear from you!
+
+* **Animation**: Animation blending, procedural animation, and higher level animation systems.
+* **Audio**: We need more control over audio playback, especially when it comes to layering effects.
 
 ## Support Bevy
 
