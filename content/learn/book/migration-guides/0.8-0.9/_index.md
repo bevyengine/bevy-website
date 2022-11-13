@@ -73,7 +73,7 @@ app.add_plugins_with(DefaultPlugins, |group| group.disable::<AssetPlugin>());
 app.add_plugins(DefaultPlugins.build().disable::<AssetPlugin>());
 ```
 
-`PluginGroupBoulder` and the `PluginGroup` trait have also been reworked.
+`PluginGroupBuilder` and the `PluginGroup` trait have also been reworked.
 
 ```rust
 // Old (Bevy 0.8)
