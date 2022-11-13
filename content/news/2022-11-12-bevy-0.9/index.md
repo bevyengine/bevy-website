@@ -138,7 +138,7 @@ You can enable and disable this per-camera:
 
 Rendering post processing effects requires both an input texture (containing the "current" render) and an output texture (the "new" render with the effect applied). Previous versions of Bevy only had one main "view target" image. This meant that naively, post processing effects would need to manage and render to their own "intermediate" texture, then write it _back_ to the main target. This is clearly inefficient, as we have a new texture allocation for each effect _and_ we have the extra work of copying the intermediate texture back to the main texture.
 
-To solve this, in **Bevy 0.9** we now "double buffer" our view target textures, which mean we have two copies of them that we flip between. At a given moment in time, one is the current "main" texture and the other is the "next" main texture. Post processing effect developers can now trigger a "post process write", which returns a `source` and `destination` texture. It assumes that an effect will write `source` to `destination` (with or without modifications). `destination` will then become the new "main" texture.
+To solve this, in **Bevy 0.9** we now "double buffer" our view target textures, which means we have two copies of them that we flip between. At a given moment in time, one is the current "main" texture and the other is the "next" main texture. Post processing effect developers can now trigger a "post process write", which returns a `source` and `destination` texture. It assumes that an effect will write `source` to `destination` (with or without modifications). `destination` will then become the new "main" texture.
 
 ```rust
 let post_process = view_target.post_process_write();
@@ -758,7 +758,7 @@ We had some _huge_ performance wins in **Bevy 0.9** thanks to `@james7132`:
 
 * The Query fetch abstraction [was reworked](https://github.com/bevyengine/bevy/pull/4800) to hoist common parts out of individual iteration, improving iterator performance on some benchmarks by ~10-20%. `Query::get` performance also saw some improvements.
 * [Some unnecessary branches were removed](https://github.com/bevyengine/bevy/pull/6461) from our data access apis, improving performance across most of our ECS benchmarks by ~5-20%!
-* The parallel executor [now start running systems](https://github.com/bevyengine/bevy/pull/4919) while the `prepare_systems` step is running, cutting out a lot of delay when there are many systems with very little work to do. This cut almost 1 millisecond from our `many_foxes` animation benchmark (~12% improvement). That is a _very_ big deal!
+* The parallel executor [now starts running systems](https://github.com/bevyengine/bevy/pull/4919) while the `prepare_systems` step is running, cutting out a lot of delay when there are many systems with very little work to do. This cut almost 1 millisecond from our `many_foxes` animation benchmark (~12% improvement). That is a _very_ big deal!
 * Iterators now [skip empty archetypes and tables](https://github.com/bevyengine/bevy/pull/4724) when iterating over queries, which significantly reduces per-archetype iteration overhead when the archetype is empty.
 
 `@JoJoJet` [also optimized](https://github.com/bevyengine/bevy/pull/6400) `Query::get_many` access by replacing `array::map` with loops, optimizing `get_many` by ~20-30%!
@@ -946,7 +946,7 @@ assert!(button_settings.try_set_press_threshold(0.6).is_err())
 
 <div class="release-feature-authors">authors: @Bleb1k</div>
 
-**Bevy 0.9** adds a `Input<ScanCode>` resource, which behaves like `Input<KeyCode>`, but ignores keyboard layout:
+**Bevy 0.9** adds an `Input<ScanCode>` resource, which behaves like `Input<KeyCode>`, but ignores keyboard layout:
 
 ```rust
 fn system(scan_code: Res<Input<ScanCode>>, key_code: Res<Input<KeyCode>>) {
@@ -1003,7 +1003,6 @@ In a previous release we [made it possible to make vertex attributes optional by
 ## Expose Multi Draw Indirect
 
 <div class="release-feature-authors">authors: @Neo-Zhixing</div>
-
 
 Wgpu has opt-in support for "multi draw indirect" apis on platforms that support them, which are a key piece of implementing efficient "gpu driven rendering". Bevy now exposes these apis through its "tracked render pass" abstraction, enabling developers to build render features using these apis.
 
