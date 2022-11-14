@@ -101,5 +101,6 @@ add_category UI ui button text text_debug ui
 add_category Audio audio audio
 add_category Shader shader shader_instancing shader_material_glsl shader_material
 add_category ECS ecs iter_combinations
+add_category Tools tools gamepad_viewer
 add_category Games games breakout alien_cake_addict
 add_category "Stress Tests" stress_tests bevymark
