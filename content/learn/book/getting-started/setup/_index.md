@@ -91,7 +91,7 @@ version = "0.1.0"
 edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
 [dependencies]
-bevy = "0.8" # make sure this is the latest version
+bevy = "0.9" # make sure this is the latest version
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
@@ -136,7 +136,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
     ```toml
     [dependencies]
-    bevy = { version = "0.8.0", features = ["dynamic"] }
+    bevy = { version = "0.9.0", features = ["dynamic"] }
     ```
     NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
 
