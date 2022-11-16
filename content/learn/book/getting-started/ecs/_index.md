@@ -82,9 +82,9 @@ We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" mod="
 
 ```rs
 fn add_people(mut commands: Commands) {
-    commands.spawn((Person, Name("Elaina Proctor".to_string())));
-    commands.spawn((Person, Name("Renzo Hume".to_string())));
-    commands.spawn((Person, Name("Zayna Nieves".to_string())));
+    commands.spawn_bundle((Person, Name("Elaina Proctor".to_string())));
+    commands.spawn_bundle((Person, Name("Renzo Hume".to_string())));
+    commands.spawn_bundle((Person, Name("Zayna Nieves".to_string())));
 }
 ```
 
