@@ -1149,7 +1149,7 @@ Bevy uses its own custom async task pools to manage scheduling parallel, async t
 
 <div class="release-feature-authors">authors: @devil-ira</div>
 
-To make navigating hierarchies easier, we've added some convience methods to `Query<&Children>` and `Query<&Parent>`:
+To make navigating hierarchies easier, we've added some convenience methods to `Query<&Children>` and `Query<&Parent>`:
 
 ```rust
 #[derive(Resource)]
