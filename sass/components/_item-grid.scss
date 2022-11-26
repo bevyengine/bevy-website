@@ -1,5 +1,8 @@
 .item-grid {
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    justify-content: space-evenly;
     gap: 16px;
 }
