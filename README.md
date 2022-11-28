@@ -16,11 +16,11 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-* Note: If you try to access tab assets, and recover 404 Not Found, it's necessary to into the repository .\generate-assets and run the command in terminal: <br>
+## Assets Page
+
+To access Assets Page with successfully, it's necessary to go into the repository in **.\generate-assets** and run the command in terminal: <br>
 ``generate_assets.sh``<br>
-* If you are on Windows, maybe this cannot work, so in the file have commands for run in your terminal:<br>
-``git clone --depth=1 https://github.com/bevyengine/bevy-assets assets``<br>
-``cargo run --release --bin generate -- assets ../content``
+If you are on Windows, maybe this cannot work, so It`s suggest recommending to use WSL or Git Bash.<br>
 
 ## Assets generation
 
