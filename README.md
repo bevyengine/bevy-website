@@ -16,6 +16,12 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
+* Note: If you try to access tab assets, and recover 404 Not Found, it's necessary to into the repository .\generate-assets and run the command in terminal: <br>
+``generate_assets.sh``<br>
+* If you are on Windows, maybe this cannot work, so in the file have commands for run in your terminal:<br>
+``git clone --depth=1 https://github.com/bevyengine/bevy-assets assets``<br>
+``cargo run --release --bin generate -- assets ../content``
+
 ## Assets generation
 
 Assets are generated using data from /generate/assets and crates.io using their [datadump](https://crates.io/data-access) trough [cratesio-dbdump-lookup](https://github.com/alyti/cratesio-dbdump-lookup).
