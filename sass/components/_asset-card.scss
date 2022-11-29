@@ -1,14 +1,14 @@
 $asset-card-padding: 0.4rem;
 
 .asset-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    display: grid;
+    max-width: 94vw;
+    aspect-ratio: auto 10/9;
     grid-template-areas:
         "banner"
         "desc"
         "tags";
-    grid-template-rows: 12rem 4.2rem 2.2rem;
+    grid-template-rows: 65% 23% 10%;
     text-decoration: none;
     overflow: hidden;
     border-radius: $border-radius;
@@ -33,7 +33,7 @@ $asset-card-padding: 0.4rem;
         img {
             width: 100%;
             height: 100%;
-            object-fit: fill;
+            object-fit: contain;
 
             background-color: $default-image-background-color;
         }
@@ -106,5 +106,26 @@ $asset-card-padding: 0.4rem;
         &--supported {
             background-color: rgb(110, 110, 247);
         }
+    }
+}
+
+@media (min-width: 285px) {
+    .asset-card{
+        max-width: 100vw !important;
+    }
+}
+@media (min-width: 315px) {
+    .asset-card{
+        aspect-ratio: auto 10/6 !important;
+    }
+}
+@media (min-width: 572px) {
+    .asset-card{
+        aspect-ratio: auto 10/9 !important;
+    }
+}
+@media (min-width: 858px) {
+    .asset-card{
+        aspect-ratio: auto 10/10 !important;
     }
 }
