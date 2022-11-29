@@ -16,11 +16,11 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-## Assets Page
+### Assets Page
 
-To access Assets Page with successfully, it's necessary to go into the repository in **.\generate-assets** and run the command in terminal: <br>
-``generate_assets.sh``<br>
-If you are on Windows, maybe this cannot work, so It`s suggest recommending to use WSL or Git Bash.<br>
+1. To build the Assets page, it's necessary to go into the **.\generate-assets** folder and run the command:
+   1. `generate_assets.sh`
+2. If you are on Windows, it`s recommended to use WSL or Git Bash.
 
 ## Assets generation
 
