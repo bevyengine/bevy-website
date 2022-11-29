@@ -9,7 +9,7 @@ insert_anchor_links = "right"
 
 All app logic in Bevy uses the Entity Component System paradigm, which is often shortened to ECS. ECS is a software pattern that involves breaking your program up into **Entities**, **Components**, and **Systems**. **Entities** are unique "things" that are assigned groups of **Components**, which are then processed using **Systems**.
 
-For example, one entity might have a `Position` and `Velocity` component, whereas another entity might have a `Position` and `UI` component. Systems are logic that runs on a specific set of component types. You might have a `movement` system that runs on all entities with a `Position` and `Velocity` component.
+For example, one entity might have a `Position` and `Velocity` component, whereas another entity might have a `Position` and `UI` component. If it helps, you can think of Components as supercharged 'properties' that you can attach to Entities.  Components bring optimized cache and storage efficiency for reuse. **Systems** are logic that runs on a specific set of component types. You might have a `movement` system that runs on all entities with a `Position` and `Velocity` component.
 
 The ECS pattern encourages clean, decoupled designs by forcing you to break up your app data and logic into its core components. It also helps make your code faster by optimizing memory access patterns and making parallelism easier.
 
