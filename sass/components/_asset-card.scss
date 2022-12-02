@@ -22,7 +22,7 @@ $asset-card-padding: 0.4rem;
         grid-area: banner;
         display: block;
         position: relative;
-        aspect-ratio: 551/168;
+        aspect-ratio: 16/9;
         align-self: start;
 
         background: linear-gradient(0deg,
@@ -107,26 +107,5 @@ $asset-card-padding: 0.4rem;
         &--supported {
             background-color: rgb(110, 110, 247);
         }
-    }
-}
-
-@media (min-width: 572px) {
-    .asset-card__banner{
-        aspect-ratio: 408.5/192 !important;
-    }
-}
-@media (min-width: 858px) {
-    .asset-card__banner{
-        aspect-ratio: 310.33/192 !important;
-    }
-}
-@media (min-width: 992px) {
-    .asset-card__banner{
-        aspect-ratio: 408.5/192 !important;
-    }
-}
-@media (min-width: 1148px) {
-    .asset-card__banner{
-        aspect-ratio: 294/192 !important;
     }
 }
