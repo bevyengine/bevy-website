@@ -32,6 +32,7 @@ $asset-card-padding: 0.4rem;
         img {
             width: 100%;
             height: 100%;
+            display: block;
             object-fit: contain;
 
             background-color: $default-image-background-color;
