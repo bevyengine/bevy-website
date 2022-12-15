@@ -110,4 +110,13 @@
             </main>
         </div>
     </body>
+    <script>
+        // Moves window position when navigating to anchors to prevent content cut
+        if (location.hash) {
+            scrollBy(0, -70)
+        };
+        window.onhashchange = () => { 
+            scrollBy(0, -70) 
+        };
+    </script>
 </html>
