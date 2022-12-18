@@ -9,11 +9,34 @@
     font-style: normal;
     text-decoration: none;
     border: 2px solid #383838;
+    position: relative;
 
     &:hover {
         background-color: $card-hover-background;
         border: 2px solid #6b6b6b;
     }
+}
+
+.card-profile-picture {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 1.5em;
+    width: 1.5em;
+    border-radius: $border-radius;
+    overflow: hidden;
+    display: flex;
+}
+
+.card-social-icon {
+    position: relative;
+    top: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.card-sponsor-icon {
+    fill: $color-pink;
 }
 
 .card-image {

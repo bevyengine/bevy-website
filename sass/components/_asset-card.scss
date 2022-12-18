@@ -61,6 +61,19 @@ $asset-card-padding: 0.4rem;
         height: 4.2rem;
     }
 
+    &__small_description {
+        @include text-ellipsis(3);
+
+        grid-area: desc;
+
+        padding: $asset-card-padding / 2;
+        font-size: 0.9rem;
+        overflow: ellipsis;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
     &__tags {
         grid-area: tags;
         display: grid;
