@@ -62,6 +62,12 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
             if member.twitter.is_some() {
                 social_links += 1;
             }
+            if member.itch_io.is_some() {
+                social_links += 1;
+            }
+            if member.steam_developer.is_some() {
+                social_links += 1;
+            }
             if member.website.is_some() {
                 social_links += 1;
             }

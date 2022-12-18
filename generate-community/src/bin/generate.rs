@@ -39,6 +39,8 @@ struct FrontMatterMemberExtra {
     mastodon_user: Option<String>,
     mastodon_instance: Option<String>,
     twitter: Option<String>,
+    itch_io: Option<String>,
+    steam_developer: Option<String>,
     website: Option<String>,
 }
 
@@ -62,6 +64,8 @@ impl From<&Member> for FrontMatterMember {
                 mastodon_user: member.mastodon.as_ref().map(|m| m.username.clone()),
                 mastodon_instance: member.mastodon.as_ref().map(|m| m.instance.clone()),
                 twitter: member.twitter.clone(),
+                itch_io: member.itch_io.clone(),
+                steam_developer: member.steam_developer.clone(),
                 website: member.website.clone(),
             },
         }
