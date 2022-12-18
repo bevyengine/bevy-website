@@ -32,7 +32,6 @@ struct FrontMatterMember {
 
 #[derive(Serialize)]
 struct FrontMatterMemberExtra {
-    link: String,
     profile_picture: Option<String>,
     sponsor: Option<String>,
     discord: Option<String>,
@@ -49,7 +48,6 @@ impl From<&Member> for FrontMatterMember {
             title: member.name.clone(),
             weight: member.order.unwrap_or(0),
             extra: FrontMatterMemberExtra {
-                link: member.github.as_ref().unwrap().clone(),
                 profile_picture: match member.profile_picture.as_ref() {
                     Some(ProfilePicture::GitHub) => Some(format!(
                         "https://github.com/{}.png",
