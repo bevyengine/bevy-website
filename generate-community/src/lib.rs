@@ -10,8 +10,11 @@ pub struct Member {
     pub profile_picture: Option<ProfilePicture>,
     pub sponsor: Option<String>,
 
+    pub bio: Option<String>,
+
     // social links
     pub discord: Option<String>,
+    pub discord_userid: Option<String>,
     pub github: Option<String>,
     #[serde(default, deserialize_with = "extract_mastodon")]
     pub mastodon: Option<Mastodon>,

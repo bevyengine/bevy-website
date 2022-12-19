@@ -49,34 +49,6 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
                 }
                 None => (),
             };
-            let mut social_links = 0;
-            if member.github.is_some() {
-                social_links += 1;
-            }
-            if member.discord.is_some() {
-                social_links += 1;
-            }
-            if member.mastodon.is_some() {
-                social_links += 1;
-            }
-            if member.twitter.is_some() {
-                social_links += 1;
-            }
-            if member.itch_io.is_some() {
-                social_links += 1;
-            }
-            if member.steam_developer.is_some() {
-                social_links += 1;
-            }
-            if member.website.is_some() {
-                social_links += 1;
-            }
-            if social_links > 4 {
-                Err(format!(
-                    "{:?}: Too many social links, keep at most 4",
-                    member.original_path.as_ref().unwrap()
-                ))?;
-            }
         }
     }
     Ok(())
