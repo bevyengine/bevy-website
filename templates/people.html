@@ -137,10 +137,12 @@
                             {% endif %}
                             {% if post.extra.steam_developer %}
                                 <div>
-                                    <svg class="card-social-icon">
-                                        <use href="#steam" />
-                                    </svg>
-                                    <a href="https://store.steampowered.com/developer/{{ post.extra.steam_developer }}">{{ post.extra.steam_developer }} on Steam</a>
+                                    <a href="https://store.steampowered.com/developer/{{ post.extra.steam_developer }}">
+                                        <svg class="card-social-icon">
+                                            <title>{{ post.extra.steam_developer }} on Steam</title>
+                                            <use href="#steam" />
+                                        </svg>
+                                    </a>
                                 </div>
                             {% endif %}
                             {% if post.extra.website %}
