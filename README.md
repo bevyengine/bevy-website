@@ -20,7 +20,3 @@ A local server should start and you should be able to access a local version of 
 
 These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
 
-Assets are generated from a [crates.io data dump](https://crates.io/data-access) through [cratesio-dbdump-lookup](https://github.com/alyti/cratesio-dbdump-lookup).
-
-Please note that when unpacked, the crates.io dump fills about 500 mb.
-Please notice when unpacked, the crates.io dump fills about 500 mb.
