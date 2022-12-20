@@ -21,9 +21,9 @@
     position: absolute;
     right: 0px;
     top: 0px;
-    height: 1.5em;
-    width: 1.5em;
-    border-radius: $border-radius;
+    height: 2.0em;
+    width: 2.0em;
+    border-radius: 0px $border-radius 0px $border-radius;
     overflow: hidden;
     display: flex;
 }
