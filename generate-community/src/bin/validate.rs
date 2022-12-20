@@ -10,6 +10,8 @@ fn main() -> Result<(), String> {
     Ok(())
 }
 
+const MAX_BIO_LENGTH: usize = 180;
+
 fn validate_section(section: &Section) -> Result<(), String> {
     section
         .content
@@ -49,6 +51,12 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
                 }
                 None => (),
             };
+
+            if let Some(bio) = &member.bio {
+                if bio.len() > MAX_BIO_LENGTH {
+                    Err(format!("Bio is longer than the maximum allowed length of {}. It is currently {} characters long.", MAX_BIO_LENGTH, bio.len()))?;
+                }
+            }
         }
     }
     Ok(())
