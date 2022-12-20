@@ -16,13 +16,11 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-### Assets Page
+### Assets, Errors, and Examples pages
 
-1. To build the Assets page, it's necessary to go into the **.\generate-assets** folder and run the command:
-   1. `generate_assets.sh`
-2. If you are on Windows, it`s recommended to use WSL or Git Bash.
+These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
 
-## Assets generation
+Assets are generated from a [crates.io data dump](https://crates.io/data-access) through [cratesio-dbdump-lookup](https://github.com/alyti/cratesio-dbdump-lookup).
 
-Assets are generated using data from /generate/assets and crates.io using their [datadump](https://crates.io/data-access) trough [cratesio-dbdump-lookup](https://github.com/alyti/cratesio-dbdump-lookup).
+Please note that when unpacked, the crates.io dump fills about 500 mb.
 Please notice when unpacked, the crates.io dump fills about 500 mb.
