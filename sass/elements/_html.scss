@@ -3,7 +3,7 @@ html {
     font-family: 'Fira Sans', sans-serif;
     font-size: calc-rem($size-body-mobile);
     background-color: $color-grey-900;
-    scroll-padding-top: 76px;
+    scroll-padding-top: var(--scroll-padding-top);
 
     * {
         box-sizing: border-box;
@@ -13,6 +13,5 @@ html {
 
     @media #{$bp-tablet-portrait-up} {
         font-size: calc-rem($size-body);
-        scroll-padding-top: 88px;
     }
 }
