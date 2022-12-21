@@ -54,9 +54,11 @@ $card-list-gap: 15px;
 // CSS Vars
 :root {
     --header-height: 60px;
+    scroll-padding-top: 76px;
 
     @media #{$bp-tablet-landscape-up} {
         --header-height: 72px;
+        scroll-padding-top: 88px;
     }
 }
 
