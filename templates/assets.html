@@ -23,7 +23,7 @@
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <h1 class="asset-section" id="{{ section.title | slugify }}" >
+        <h1 class="asset-section" id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
