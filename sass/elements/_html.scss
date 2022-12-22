@@ -3,6 +3,7 @@ html {
     font-family: 'Fira Sans', sans-serif;
     font-size: calc-rem($size-body-mobile);
     background-color: $color-grey-900;
+    scroll-padding-top: var(--scroll-padding-top);
 
     * {
         box-sizing: border-box;

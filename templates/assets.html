@@ -23,8 +23,7 @@
         {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
-        <h1 id="{{ section.title | slugify }}" class="asset-section">
+        <h1 class="asset-section" id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
@@ -47,8 +46,7 @@
         {% for subsection in subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
-        <h3 class="asset-subsection">
+        <h3 class="asset-subsection" id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
         <div class="item-grid">

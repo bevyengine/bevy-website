@@ -26,15 +26,6 @@
     color: #c8c864;
 }
 
-// Anchor target that applies an offset to compesate for the header height
-// Thanks: https://stackoverflow.com/a/13184714/379923
-.anchor-target {
-    display: block;
-    position: relative;
-    top: calc(0px - var(--header-height) - 8px);
-    visibility: hidden;
-}
-
 .anchor-link, .anchor-link:focus, .anchor-link:hover, .anchor-link:active, .anchor-link:hover, .anchor-link:link, .anchor-link:visited {
     margin-left: 0.3rem;
     color: #505050;
