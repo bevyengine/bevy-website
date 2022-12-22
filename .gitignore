@@ -5,5 +5,7 @@ content/assets
 content/learn/errors
 content/examples
 static/assets/examples
+static/processed_images
+.vscode/
 code-validation/target
 code-validation/Cargo.lock

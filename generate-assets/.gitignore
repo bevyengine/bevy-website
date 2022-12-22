@@ -1,2 +1,4 @@
 target
 assets
+data/
+.env

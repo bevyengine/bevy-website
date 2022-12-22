@@ -1,7 +1,6 @@
 .bevy-logo-header {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 32px auto;
     width: 100%;
     max-width: 35rem;
 }
@@ -33,7 +32,8 @@
 }
 
 .feature-title {
-    margin-top: 1.0rem;
+    font-size: 2.1rem;
+    margin-top: 0;
     margin-bottom: 0.3rem;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .feature-image {
-    height: 20rem;
+    height: 24rem;
     background-color: #2b2c2f;
     border-radius: 4rem;
     display: flex;
@@ -53,16 +53,23 @@
 }
 
 .feature-text {
-    max-height: 18rem;
     align-self: center;
 }
 
 .feature-image, .feature-text {
-    min-width: 30rem;
-    max-width: 30rem;
+    width: 100%;
+    max-width: 535px;
     border-width: 1.8rem;
     border-style: solid;
     border-color: transparent;
+
+    @media #{$bp-tablet-portrait-up} {
+        width: 50%;
+    }
+
+    @media #{$bp-desktop-up} {
+        min-width: 535px;
+    }
 }
 
 .feature-sublist {

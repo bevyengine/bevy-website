@@ -8,8 +8,12 @@
     }
 
     &__title {
-        font-size: 2.2rem;
-        margin: 0 0 24px;
+        font-size: 2.8rem;
+        margin-bottom: -10px;
+    }
+
+    &__amount {
+        font-size: 1.2rem;
     }
 
     &__content {
@@ -50,6 +54,10 @@
         &--#{map-get($tier, 'tier')} {
             .sponsors {
                 &__title {
+                    color: map-get($tier, 'color');
+                }
+
+                &__amount {
                     color: map-get($tier, 'color');
                 }
 

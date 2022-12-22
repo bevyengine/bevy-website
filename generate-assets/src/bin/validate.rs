@@ -1,45 +1,74 @@
+use std::fmt::Display;
+
+use anyhow::{anyhow, Context, Result};
 use regex::Regex;
 
 use generate_assets::*;
 
-fn main() -> Result<(), ()> {
-    let asset_dir = std::env::args().nth(1).unwrap();
-    if let Ok(asset_root_section) = parse_assets(&asset_dir) {
-        if asset_root_section.validate() {
-            Ok(())
-        } else {
-            Err(())
-        }
-    } else {
-        Err(())
-    }
-}
+const MAX_DESCRIPTION_LENGTH: usize = 100;
 
-trait AssetValidator {
-    fn validate(&self) -> bool;
+fn main() -> Result<()> {
+    let asset_dir = std::env::args()
+        .nth(1)
+        .ok_or_else(|| anyhow!("Please specify the path to bevy-assets"))?;
+
+    let asset_root_section =
+        parse_assets(&asset_dir, None, None, None).with_context(|| "Parsing assets")?;
+
+    let results = asset_root_section.validate();
+
+    let errors: Vec<_> = results.iter().filter_map(|r| r.as_ref().err()).collect();
+
+    if errors.is_empty() {
+        return Ok(());
+    }
+
+    eprintln!();
+    for error in &errors {
+        eprintln!("{}", error);
+    }
+
+    Err(anyhow!("{} asset(s) are invalid.", errors.len()))
 }
 
 #[derive(Debug)]
-enum AssetError {
+struct AssetError {
+    asset_name: String,
+    errors: Vec<ValidationError>,
+}
+impl Display for AssetError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "{}", self.asset_name)?;
+        for error in &self.errors {
+            writeln!(f, "  {:?}", error)?;
+        }
+        Ok(())
+    }
+}
+
+#[derive(Debug)]
+enum ValidationError {
     DescriptionTooLong,
     DescriptionWithFormatting,
     ImageInvalidLink,
+    ImageInvalidExtension,
+}
+
+trait AssetValidator {
+    fn validate(&self) -> Vec<Result<(), AssetError>>;
 }
 
 impl AssetValidator for Section {
-    fn validate(&self) -> bool {
-        let mut valid = true;
-        for content in self.content.iter() {
-            if !content.validate() {
-                valid = false;
-            }
-        }
-        valid
+    fn validate(&self) -> Vec<Result<(), AssetError>> {
+        self.content
+            .iter()
+            .flat_map(|content| content.validate())
+            .collect()
     }
 }
 
 impl AssetValidator for AssetNode {
-    fn validate(&self) -> bool {
+    fn validate(&self) -> Vec<Result<(), AssetError>> {
         match self {
             AssetNode::Section(content) => content.validate(),
             AssetNode::Asset(content) => content.validate(),
@@ -48,35 +77,43 @@ impl AssetValidator for AssetNode {
 }
 
 impl AssetValidator for Asset {
-    fn validate(&self) -> bool {
-        let mut valid = true;
-        if self.description.len() > 100 {
-            valid = false;
-            println!("{:50} - {:?}", self.name, AssetError::DescriptionTooLong);
+    fn validate(&self) -> Vec<Result<(), AssetError>> {
+        let mut errors = vec![];
+
+        if self.description.len() > MAX_DESCRIPTION_LENGTH {
+            errors.push(ValidationError::DescriptionTooLong);
         }
+
         if has_forbidden_formatting(&self.description) {
-            valid = false;
-            println!(
-                "{:50} - {:?}",
-                self.name,
-                AssetError::DescriptionWithFormatting
-            );
+            errors.push(ValidationError::DescriptionWithFormatting);
         }
+
         if let Some(image) = self.image.as_ref() {
-            if image.starts_with('.')
-                || image.starts_with('/')
-                || image.starts_with("http")
-                || !(image.ends_with(".gif")
-                    || image.ends_with(".jpeg")
-                    || image.ends_with(".jpg")
-                    || image.ends_with(".png"))
-            {
-                valid = false;
-                println!("{:50} - {:?}", self.name, AssetError::ImageInvalidLink);
+            let mut image_path = self.original_path.clone().unwrap();
+            image_path.pop();
+            image_path.push(image);
+
+            if !image_path.is_file() {
+                errors.push(ValidationError::ImageInvalidLink);
+            }
+
+            if let Some(extension) = image_path.extension().and_then(|ext| ext.to_str()) {
+                if !["gif", "jpg", "jpeg", "png", "webp"].contains(&extension) {
+                    errors.push(ValidationError::ImageInvalidExtension);
+                }
+            } else {
+                errors.push(ValidationError::ImageInvalidExtension)
             }
         }
 
-        return valid;
+        if errors.is_empty() {
+            vec![Ok(())]
+        } else {
+            vec![Err(AssetError {
+                asset_name: self.name.clone(),
+                errors,
+            })]
+        }
     }
 }
 
@@ -92,5 +129,5 @@ fn has_forbidden_formatting(string: &str) -> bool {
         return true;
     }
 
-    return false;
+    false
 }

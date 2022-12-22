@@ -1,5 +1,8 @@
 status = [
-    "build",
+    "build-website",
+    "generate-wasm-examples",
+    "generate-assets",
+    "generate-errors",
     "markdownlint",
     "test-code",
 ]

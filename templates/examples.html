@@ -1,17 +1,28 @@
-{% extends "layouts/base.html" %}
+{% extends "layouts/page-with-menu.html" %}
 {% import "macros/assets.html" as assets_macros %}
 
-{% block content %}
+{% block page_name %}Examples{% endblock %}
+
+{% block mobile_page_menu %}
+    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
+{% endblock %}
+
+{% block page_menu %}
+    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
+{% endblock %}
+
+{% block page_content %}
 <div class="assets">
-    <input type="checkbox" style="display: none" id="show-book-nav" />
-    <nav class="book-nav" role="navigation">
-        {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
-    </nav>
-    <div class="book-content">
-        {% for subsection in section.subsections %}
+    <div class="assets-intro media-content">
+        These examples demonstrate how to use Bevy's features in a minimal, easy to understand way. Click an example below to run it in
+        your browser (using WASM + WebGL) and view the source code. You can also view these examples (and others) in the
+        <a href="https://github.com/bevyengine/bevy/tree/latest/examples#examples">Bevy repo</a>.
+    </div>
+    {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
-        <h1 id="{{ section.title | slugify }}" class="asset-section">
+        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
+        <h1 class="asset-section">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
@@ -39,7 +50,6 @@
         </div>
         {% endif %}
 
-        {% endfor %}
-    </div>
+    {% endfor %}
 </div>
 {% endblock content %}

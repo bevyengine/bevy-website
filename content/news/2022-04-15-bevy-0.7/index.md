@@ -751,7 +751,7 @@ It has a built in "fly camera" and has tools to play animations and toggle light
 
 Sponsorships help make my full time work on Bevy sustainable. If you believe in Bevy's mission, consider sponsoring me (@cart) ... every bit helps!
 
-<a class="header-item header-button header-button-donate" style="margin-left: 0px;" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+<a class="button button--pink header__cta" href="https://github.com/sponsors/cart">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
 
 ## Contributors
 

@@ -1,16 +1,22 @@
-{% extends "layouts/base.html" %}
+{% extends "layouts/page-with-menu.html" %}
 {% import "macros/book.html" as book_macros %}
 
 {% block head_extensions %}
-<script src="/optional-helpers.js"></script>
+    <script src="/optional-helpers.js"></script>
 {% endblock %}
 
-{% block content %}
+{% block page_name %}Book{% endblock %}
+
+{% block mobile_page_menu %}
+    {{book_macros::book_menu(prefix="mobile-menu", root=get_section(path="learn/book/_index.md"))}}
+{% endblock %}
+
+{% block page_menu %}
+    {{book_macros::book_menu(prefix="page-menu", root=get_section(path="learn/book/_index.md"))}}
+{% endblock %}
+
+{% block page_content %}
 <div class="book-page">
-    <input type="checkbox" style="display: none" id="show-book-nav" />
-    <nav class="book-nav" role="navigation">
-        {{book_macros::book_menu(prefix="page-menu", root=get_section(path="learn/book/_index.md"))}}
-    </nav>
     <div class="book-content">
         {# Create an array of sections, in reading order #}
         {% set root_section = get_section(path="learn/book/_index.md") %}
@@ -92,5 +98,4 @@
         </div>
     </div>
 </div>
-
 {% endblock content %}
