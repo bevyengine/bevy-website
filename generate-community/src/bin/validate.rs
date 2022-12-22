@@ -1,4 +1,5 @@
 use generate_community::*;
+use unicode_segmentation::UnicodeSegmentation;
 
 fn main() -> Result<(), String> {
     let community_dir = std::env::args().nth(1).unwrap();
@@ -53,7 +54,7 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
             };
 
             if let Some(bio) = &member.bio {
-                if bio.chars().count() > MAX_BIO_LENGTH {
+                if bio.graphemes(true).count() > MAX_BIO_LENGTH {
                     Err(format!("Bio is longer than the maximum allowed length of {}. It is currently {} characters long.", MAX_BIO_LENGTH, bio.len()))?;
                 }
             }
