@@ -31,6 +31,9 @@ jobs:
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
 
+      - name: "Build Bevy Community"
+        run: cd generate-community && ./generate_community.sh
+
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
