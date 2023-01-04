@@ -64,9 +64,9 @@
             {% for post in pages %}
 
             <div class="card" id="{{ post.title | slugify }}">
-                <div class="card-text media-content">
+                <div class="card-text media-content card-dense">
                     <div class="card-title">
-                        <div style="font-size: {% if post.title | length > 30 %} 0.5rem; {% elif post.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
+                        <div style="width: 210px; font-size: {% if post.title | length > 30 %} 0.5rem; {% elif post.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
                             {{ post.title }}
                         </div>
                         {% if post.extra.profile_picture %}
@@ -162,13 +162,11 @@
                             </div>
                         {% endif %}
                         {% if post.extra.sponsor %}
-                            <div style="align-self: flex-end; position: relative; width: 100%; height: 100%;">
-                                <div style="position: absolute; bottom: 1rem; right: 0px;">
-                                    <svg class="card-social-icon card-sponsor-icon">
-                                        <use href="#heart" />
-                                    </svg>
-                                    <a href="{{ post.extra.sponsor }}">Sponsor me!</a>
-                                </div>
+                            <div style="position: absolute; bottom: 0.4rem; right: 0.8rem;">
+                                <svg class="card-social-icon card-sponsor-icon">
+                                    <use href="#heart" />
+                                </svg>
+                                <a href="{{ post.extra.sponsor }}">Sponsor me!</a>
                             </div>
                         {% endif %}
 
