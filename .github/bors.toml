@@ -4,6 +4,7 @@ status = [
     "generate-assets",
     "generate-errors",
     "generate-community",
+    "markdownlint",
 ]
 
 use_squash_merge = true
