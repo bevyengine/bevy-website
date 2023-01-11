@@ -42,7 +42,7 @@ We decided to resolve this problem by building a custom async-friendly task syst
 
 <div class="release-feature-authors">authors: @smokku</div>
 
-(A subset of) Bevy now runs on the web using WebAssembly/WASM! Specifically, Bevy apps can run Bevy ECS schedules, react to input events, create an empty canvas (using winit), and a few other things. This is a huge first step, but it is important to call out that there are still a number of missing pieces, such as 2D/3D rendering, multi-threading, and sound. 
+(A subset of) Bevy now runs on the web using WebAssembly/WASM! Specifically, Bevy apps can run Bevy ECS schedules, react to input events, create an empty canvas (using winit), and a few other things. This is a huge first step, but it is important to call out that there are still a number of missing pieces, such as 2D/3D rendering, multi-threading, and sound.
 
 Those limitations haven't stopped @mrk-its from building the first WASM Bevy game!
 
@@ -50,7 +50,7 @@ Those limitations haven't stopped @mrk-its from building the first WASM Bevy gam
 
 ![bevy-robbo](bevy-robbo.png)
 
-They use Bevy for game logic and cleverly work around the render limitations by passing ASCII art game state from [this Bevy system](https://github.com/mrk-its/bevy-robbo/blob/ascii/src/systems/js_render.rs) to [this JavaScript function](https://github.com/mrk-its/bevy-robbo/blob/ascii/wasm/render.js). 
+They use Bevy for game logic and cleverly work around the render limitations by passing ASCII art game state from [this Bevy system](https://github.com/mrk-its/bevy-robbo/blob/ascii/src/systems/js_render.rs) to [this JavaScript function](https://github.com/mrk-its/bevy-robbo/blob/ascii/wasm/render.js).
 
 You can play around with some Bevy WASM examples by [following the instructions here](https://github.com/bevyengine/bevy/tree/v0.2.0/examples#wasm).
 
@@ -68,7 +68,7 @@ fn system(pool: Res<ComputeTaskPool>, mut query: Query<&mut Transform>) {
 }
 ```
 
-This provides a nice functional api (similar to Rayon) that runs on top of the new `bevy_tasks` system. It breaks the query up into 32 "batches" and runs each batch as a different task in the bevy task system. 
+This provides a nice functional api (similar to Rayon) that runs on top of the new `bevy_tasks` system. It breaks the query up into 32 "batches" and runs each batch as a different task in the bevy task system.
 
 ## Transform System Rewrite
 
@@ -115,7 +115,6 @@ fn button_system(gamepads: Res<Vec<Gamepad>>, button_input: Res<Input<GamepadBut
 }
 ```
 
-
 ## Bevy ECS Performance Improvements
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -125,7 +124,6 @@ fn button_system(gamepads: Res<Vec<Gamepad>>, button_input: Res<Input<GamepadBut
 We changed Entity IDs from being random UUIDs to incrementing generational indices. Random UUIDs were nice because they could be created anywhere, were unique across game runs, and could be safely persisted to files or reused across networks. I was really hoping we could make them work, but they ended up being too slow relative to the alternatives. The randomness had a measurable cost and entity locations had to be looked up using a hash map.
 
 By moving to generational indices (we use the hecs implementation), we can directly use entity ids as array indices, which makes entity location lookups lightning fast.
-
 
 ### Read Only Queries
 
@@ -137,7 +135,7 @@ This gives us a really nice speed boost. We can do this safely due to a combinat
 
 This is not yet enabled for `Queries` in systems because a system could have multiple `Queries`, which could be simultaneously accessed in a way that doesn't make mutable access unique. I think thats a solve-able problem, but it will take a bit more work. Fortunately "for-each" systems don't have any collision risk, so we now use lock-less queries there.
 
-### Direct component lookup (in nanoseconds, smaller is better) 
+### Direct component lookup (in nanoseconds, smaller is better)
 
 As a result of these optimizations, direct component lookup is _much_ faster than it used to be:
 
@@ -149,73 +147,74 @@ Note that this benchmark used `world.get::<T>(entity)`. `query.get::<T>(entity)`
 
 ### Added
 
-- [Task System for Bevy][384]
-  - Replaces rayon with a custom designed task system that consists of several "TaskPools".
-  - Exports `IOTaskPool`, `ComputePool`, and `AsyncComputePool` in `bevy_tasks` crate.
-- [Parallel queries for distributing work over with the `ParallelIterator` trait.][292]
-  - e.g. `query.iter().par_iter(batch_size).for_each(/* ... */)`
-- [Added gamepad support using Gilrs][280]
-- [Implement WASM support for bevy_winit][503]
-- [Create winit canvas under WebAssembly][506] 
-- [Implement single threaded task scheduler for WebAssembly][496]
-- [Support for binary glTF (.glb).][271]
-- [Support for `Or` in ECS queries.][358]
-- [Added methods `unload()` and `unload_sync()` on `SceneSpawner` for unloading scenes.][339].
-- [Custom rodio source for audio.][145]
-  - `AudioOuput` is now able to play anything `Decodable`.
-- [`Color::hex`][362] for creating `Color` from string hex values.
-  - Accepts the forms RGB, RGBA, RRGGBB, and RRGGBBAA.
-- [`Color::rgb_u8` and `Color::rgba_u8`.][381]
-- [Added `bevy_render::pass::ClearColor` to prelude.][396]
-- [`SpriteResizeMode` may choose how `Sprite` resizing should be handled. `Automatic` by default.][430]
-- [Added methods on `Input<T>`][428] for iterator access to keys.
-  - `get_pressed()`, `get_just_pressed()`, `get_just_released()`
-- [Derived `Copy` for `MouseScrollUnit`.][270]
-- [Derived `Clone` for UI component bundles.][390]
-- [Some examples of documentation][338]
-- [Update docs for Updated, Changed and Mutated][451]
-- Tips for faster builds on macOS: [#312][312], [#314][314], [#433][433]
-- Added and documented cargo features
-  - [Created document `docs/cargo_features.md`.][249]
-  - [Added features for x11 and wayland display servers.][249]
-  - [and added a feature to disable libloading.][363] (helpful for WASM support)
-- Added more instructions for Linux dependencies
-  - [Arch / Manjaro][275], [NixOS][290], [Ubuntu][463] and [Solus][331]
-- [Provide shell.nix for easier compiling with nix-shell][491]
-- [Add `AppBuilder::add_startup_stage_|before/after`][505]
+* [Task System for Bevy][384]
+  * Replaces rayon with a custom designed task system that consists of several "TaskPools".
+  * Exports `IOTaskPool`, `ComputePool`, and `AsyncComputePool` in `bevy_tasks` crate.
+* [Parallel queries for distributing work over with the `ParallelIterator` trait.][292]
+  * e.g. `query.iter().par_iter(batch_size).for_each(/* ... */)`
+* [Added gamepad support using Gilrs][280]
+* [Implement WASM support for bevy_winit][503]
+* [Create winit canvas under WebAssembly][506]
+* [Implement single threaded task scheduler for WebAssembly][496]
+* [Support for binary glTF (.glb).][271]
+* [Support for `Or` in ECS queries.][358]
+* [Added methods `unload()` and `unload_sync()` on `SceneSpawner` for unloading scenes.][339].
+* [Custom rodio source for audio.][145]
+  * `AudioOuput` is now able to play anything `Decodable`.
+* [`Color::hex`][362] for creating `Color` from string hex values.
+  * Accepts the forms RGB, RGBA, RRGGBB, and RRGGBBAA.
+* [`Color::rgb_u8` and `Color::rgba_u8`.][381]
+* [Added `bevy_render::pass::ClearColor` to prelude.][396]
+* [`SpriteResizeMode` may choose how `Sprite` resizing should be handled. `Automatic` by default.][430]
+* [Added methods on `Input<T>`][428] for iterator access to keys.
+  * `get_pressed()`, `get_just_pressed()`, `get_just_released()`
+* [Derived `Copy` for `MouseScrollUnit`.][270]
+* [Derived `Clone` for UI component bundles.][390]
+* [Some examples of documentation][338]
+* [Update docs for Updated, Changed and Mutated][451]
+* Tips for faster builds on macOS: [#312][312], [#314][314], [#433][433]
+* Added and documented cargo features
+  * [Created document `docs/cargo_features.md`.][249]
+  * [Added features for x11 and wayland display servers.][249]
+  * [and added a feature to disable libloading.][363] (helpful for WASM support)
+* Added more instructions for Linux dependencies
+  * [Arch / Manjaro][275], [NixOS][290], [Ubuntu][463] and [Solus][331]
+* [Provide shell.nix for easier compiling with nix-shell][491]
+* [Add `AppBuilder::add_startup_stage_|before/after`][505]
 
 ### Changed
- 
-- [Transform rewrite][374]
-- [Use generational entity ids and other optimizations][504]
-- [Optimize transform systems to only run on changes.][417]
-- [Send an AssetEvent when modifying using `get_id_mut`][323]
-- [Rename `Assets::get_id_mut` -> `Assets::get_with_id_mut`][332]
-- [Support multiline text in `DrawableText`][183]
-- [iOS: use shaderc-rs for glsl to spirv compilation][324]
-- [Changed the default node size to Auto instead of Undefined to match the Stretch implementation.][304]
-- [Load assets from root path when loading directly][478]
-- [Add `render` feature][485], which makes the entire render pipeline optional.
+
+* [Transform rewrite][374]
+* [Use generational entity ids and other optimizations][504]
+* [Optimize transform systems to only run on changes.][417]
+* [Send an AssetEvent when modifying using `get_id_mut`][323]
+* [Rename `Assets::get_id_mut` -> `Assets::get_with_id_mut`][332]
+* [Support multiline text in `DrawableText`][183]
+* [iOS: use shaderc-rs for glsl to spirv compilation][324]
+* [Changed the default node size to Auto instead of Undefined to match the Stretch implementation.][304]
+* [Load assets from root path when loading directly][478]
+* [Add `render` feature][485], which makes the entire render pipeline optional.
 
 ### Fixed
 
-- [Properly track added and removed RenderResources in RenderResourcesNode.][361]
-  - Fixes issues where entities vanished or changed color when new entities were spawned/despawned.
-- [Fixed sprite clipping at same depth][385]
-  - Transparent sprites should no longer clip.
-- [Check asset path existence][345]
-- [Fixed deadlock in hot asset reloading][376]
-- [Fixed hot asset reloading on Windows][394]
-- [Allow glTFs to be loaded that don't have uvs and normals][406]
-- [Fixed archetypes_generation being incorrectly updated for systems][383]
-- [Remove child from parent when it is despawned][386]
-- [Initialize App.schedule systems when running the app][444]
-- [Fix missing asset info path for synchronous loading][486]
-- [fix font atlas overflow][495]
-- [do not assume font handle is present in assets][490]
+* [Properly track added and removed RenderResources in RenderResourcesNode.][361]
+  * Fixes issues where entities vanished or changed color when new entities were spawned/despawned.
+* [Fixed sprite clipping at same depth][385]
+  * Transparent sprites should no longer clip.
+* [Check asset path existence][345]
+* [Fixed deadlock in hot asset reloading][376]
+* [Fixed hot asset reloading on Windows][394]
+* [Allow glTFs to be loaded that don't have uvs and normals][406]
+* [Fixed archetypes_generation being incorrectly updated for systems][383]
+* [Remove child from parent when it is despawned][386]
+* [Initialize App.schedule systems when running the app][444]
+* [Fix missing asset info path for synchronous loading][486]
+* [fix font atlas overflow][495]
+* [do not assume font handle is present in assets][490]
 
 ### Internal Improvements
-- Many improvements to Bevy's CI [#325][325], [#349][349], [#357][357], [#373][373], [#423][423]
+
+* Many improvements to Bevy's CI [#325][325], [#349][349], [#357][357], [#373][373], [#423][423]
 
 [145]: https://github.com/bevyengine/bevy/pull/145
 [183]: https://github.com/bevyengine/bevy/pull/183

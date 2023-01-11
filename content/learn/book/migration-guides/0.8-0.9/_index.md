@@ -93,6 +93,7 @@ impl PluginGroup for HelloWorldPlugins {
 }
 
 ```
+
 ### [Use plugin setup for resource only used at setup time](https://github.com/bevyengine/bevy/pull/6360)
 
 The `LogSettings` settings have been moved from a resource to `LogPlugin` configuration:

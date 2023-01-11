@@ -28,7 +28,6 @@ You can try out the [Bevy Android example](https://github.com/bevyengine/bevy/tr
 
 ![android](android.png)
 
-
 This was a massive group effort that spanned multiple projects:
 
 * Bevy: rewrote bevy-glsl-to-spirv to support android / static libraries (@PrototypeNM1, @enfipy)
@@ -36,7 +35,7 @@ This was a massive group effort that spanned multiple projects:
 * Bevy: Touch support (@naithar)
 * Bevy: Texture format fix (@enfipy)
 * Bevy: UI touch fixes, touch force, and android example (@enfipy)
-* Cpal: android audio support (@endragor) 
+* Cpal: android audio support (@endragor)
 * android-ndk-rs / cargo-apk: fix to support Bevy project structure (@PrototypeNM1)
 
 ## Initial iOS Support
@@ -55,10 +54,11 @@ This was another large group effort that spanned multiple projects:
 * Bevy: Runtime shader compilation using shaderc (@MichaelHills)
 * Bevy: Rodio upgrade (@Dash-L)
 * Bevy: Touch support (@naithar)
-* Winit: Fix iOS portrait view (@MichaelHills) 
+* Winit: Fix iOS portrait view (@MichaelHills)
 * RustAudio: iOS support (@simlay and @MichaelHills)
 
 Known issues:
+
 * [Audio doesn't quite work yet](https://github.com/RustAudio/cpal/pull/485)
 
 ## WASM Asset Loading
@@ -74,7 +74,6 @@ asset_server.load("sprite.png");
 If the asset hasn't already been loaded, this will make a `fetch()` request to retrieve the asset over HTTP.
 
 @mrk-its has also been building a custom WebGL2 `bevy_render` backend. It is already pretty usable, but its not _quite_ ready yet. Expect more news on this soon!
-
 
 ## Touch Input
 
@@ -134,9 +133,9 @@ commands.despawn(sprite_entity);
 // There are no more active handles to "sprite.png", so it will be freed before the next update
 ```
 
-### Asset Loaders can now load multiple assets 
+### Asset Loaders can now load multiple assets
 
-In past releases, `AssetLoaders` could only produce a single asset of a single type. In **Bevy 0.3**, they can now produce any number of assets for any type. The old behavior was extremely limiting when loading assets like GLTF files, which might produce many meshes, textures, and scenes. 
+In past releases, `AssetLoaders` could only produce a single asset of a single type. In **Bevy 0.3**, they can now produce any number of assets for any type. The old behavior was extremely limiting when loading assets like GLTF files, which might produce many meshes, textures, and scenes.
 
 ### Sub-Asset Loading
 
@@ -157,7 +156,7 @@ Assets can now depend on other assets, which will automatically be loaded when t
 
 ### Removed AssetServer::load_sync()
 
-This might rustle some feathers, but `AssetServer::load_sync()` had to go! This api wasn't WASM friendly, encouraged users to block game execution for the sake of convenience (which causes "hitching"), and was incompatible with the new AssetLoader api. Asset loading is now always asynchronous. Users of `load_sync()` should instead `load()` their assets, check load status in their systems, and change game state accordingly. 
+This might rustle some feathers, but `AssetServer::load_sync()` had to go! This api wasn't WASM friendly, encouraged users to block game execution for the sake of convenience (which causes "hitching"), and was incompatible with the new AssetLoader api. Asset loading is now always asynchronous. Users of `load_sync()` should instead `load()` their assets, check load status in their systems, and change game state accordingly.
 
 ## GLTF Scene Loader
 
@@ -223,7 +222,7 @@ if let Ok((a,b)) = query.get(entity) {
 
 You might naturally be thinking something like:
 
-*Why did this take so long? Why would removing a single `&mut` be hard?*
+_Why did this take so long? Why would removing a single `&mut` be hard?_
 
 It's a long story! In summary:
 
@@ -236,7 +235,7 @@ Fortunately we finally found ways to solve all of these problems. The newly adde
 
 ### 100% Lockless Parallel ECS
 
-Bevy ECS is now completely lock free. In Bevy 0.2, we made direct `World` access and "for-each" systems lock free. This is possible because the Bevy ECS scheduler ensures that systems only run in parallel in ways that respect Rust's mutability rules. 
+Bevy ECS is now completely lock free. In Bevy 0.2, we made direct `World` access and "for-each" systems lock free. This is possible because the Bevy ECS scheduler ensures that systems only run in parallel in ways that respect Rust's mutability rules.
 
 We couldn't remove locks from `Query` systems because of systems like this:
 
@@ -251,7 +250,7 @@ fn conflicting_query_system(mut q0: Query<&mut A>, mut q1: Query<(&mut A, &B)>) 
 
 The locks ensured that the second `q1.get_mut(some_entity)` access panicked, keeping us nice and safe. In **Bevy 0.3**, a system like `conflicting_query_system` will fail when the schedule is constructed. By default, _systems cannot have conflicting queries_.
 
-However there are some cases where a system _needs_ conflicting queries to do what it needs to do. For these cases, we added `QuerySets`: 
+However there are some cases where a system _needs_ conflicting queries to do what it needs to do. For these cases, we added `QuerySets`:
 
 ```rust
 fn system(mut queries: QuerySet<(Query<&mut A>, Query<(&mut A, &B)>)>) {
@@ -265,7 +264,7 @@ fn system(mut queries: QuerySet<(Query<&mut A>, Query<(&mut A, &B)>)>) {
 
 By putting our conflicting `Queries` in a `QuerySet`, the Rust borrow checker protects us from unsafe query accesses.
 
-Because of this, we were able to remove _all_ safety checks from `query.iter()` and `query.get(entity)`, which means these methods are now _exactly_ as fast as their `World` counterparts (which we made lock-free in Bevy 0.2). 
+Because of this, we were able to remove _all_ safety checks from `query.iter()` and `query.get(entity)`, which means these methods are now _exactly_ as fast as their `World` counterparts (which we made lock-free in Bevy 0.2).
 
 ### Performance Improvements
 
@@ -293,9 +292,9 @@ The test was to lookup (and modify) a specific entity's component 100,000 times 
 * bevy (world): Direct `World` access using `world.get_mut::<A>(entity)`
 * bevy (system): A system containing a `Query<&mut A>` that accesses the component using `query.get_mut(entity)`
 * legion (world): Direct `World` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()`
-* legion (system): A system with `SubWorld` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()` 
+* legion (system): A system with `SubWorld` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()`
 
-It's worth noting that using `query.get_component::<T>(entity)` instead of `query.get(entity)` does require safety checks, for the same reason the legion entry api does. We cannot know ahead of time what component type a caller will pass into the method, which means we _must_ check it to make sure it matches the `Query`. 
+It's worth noting that using `query.get_component::<T>(entity)` instead of `query.get(entity)` does require safety checks, for the same reason the legion entry api does. We cannot know ahead of time what component type a caller will pass into the method, which means we _must_ check it to make sure it matches the `Query`.
 
 Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-gamedev/ecs_bench_suite) results (omitted benchmarks had no significant change):
 
@@ -310,7 +309,6 @@ Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-g
 #### Fragmented Iteration (in nanoseconds, smaller is better)
 
 ![fragmented iteration](ecs_frag_iter.svg)
-
 
 ### Thread Local Resources
 
@@ -460,7 +458,6 @@ fn change_title(time: Res<Time>, mut windows: ResMut<Windows>) {
 }
 ```
 
-
 ## Documentation Search-ability
 
 <div class="release-feature-authors">authors: @memoryruins</div>
@@ -469,90 +466,89 @@ The  `bevy` crate documentation search function now returns results for all sub-
 
 ![docs](docs.png)
 
-
 ## Change Log
 
 ### Added
 
-- [Touch Input][696]
-- [iOS XCode Project][539]
-- [Android Example and use bevy-glsl-to-spirv 0.2.0][740]
-- [Introduce Mouse capture API][679]
-- [`bevy_input::touch`: implement touch input][696]
-- [D-pad support on MacOS][653]
-- [Support for Android file system][723]
-- [app: PluginGroups and DefaultPlugins][744]
-  - `PluginGroup` is a collection of plugins where each plugin can be enabled or disabled.
-- [Support to get gamepad button/trigger values using `Axis<GamepadButton>`][683]
-- [Expose Winit decorations][627]
-- [Enable changing window settings at runtime][644]
-- [Expose a pointer of EventLoopProxy to process custom messages][674]
-- [Add a way to specify padding/ margins between sprites in a TextureAtlas][460]
-- [Add `bevy_ecs::Commands::remove` for bundles][579]
-- [impl `Default` for `TextureFormat`][675]
-- [Expose current_entity in ChildBuilder][595]
-- [`AppBuilder::add_thread_local_resource`][671]
-- [`Commands::write_world_boxed` takes a pre-boxed world writer to the ECS's command queue][661]
-- [`FrameTimeDiagnosticsPlugin` now shows "frame count" in addition to "frame time" and "fps"][678]
-- [Add hierarchy example][565]
-- [`WgpuPowerOptions` for choosing between low power, high performance, and adaptive power][397]
-- Derive `Debug` for more types: [#597][597], [#632][632] 
-- Index buffer specialization
-  - [Allows the use of U32 indices in Mesh index buffers in addition to the usual U16 indices][568]
-  - [Switch to u32 indices by default][572]
-- More instructions for system dependencies
-  - [Add `systemd-devel` for Fedora Linux dependencies][528]
-  - [Add `libudev-dev` to Ubuntu dependencies][538]
-  - [Add Void Linux to linux dependencies file][645]
-  - [WSL2 instructions][727]
-- [Suggest `-Zrun-dsymutil-no` for faster compilation on MacOS][552]
+* [Touch Input][696]
+* [iOS XCode Project][539]
+* [Android Example and use bevy-glsl-to-spirv 0.2.0][740]
+* [Introduce Mouse capture API][679]
+* [`bevy_input::touch`: implement touch input][696]
+* [D-pad support on MacOS][653]
+* [Support for Android file system][723]
+* [app: PluginGroups and DefaultPlugins][744]
+  * `PluginGroup` is a collection of plugins where each plugin can be enabled or disabled.
+* [Support to get gamepad button/trigger values using `Axis<GamepadButton>`][683]
+* [Expose Winit decorations][627]
+* [Enable changing window settings at runtime][644]
+* [Expose a pointer of EventLoopProxy to process custom messages][674]
+* [Add a way to specify padding/ margins between sprites in a TextureAtlas][460]
+* [Add `bevy_ecs::Commands::remove` for bundles][579]
+* [impl `Default` for `TextureFormat`][675]
+* [Expose current_entity in ChildBuilder][595]
+* [`AppBuilder::add_thread_local_resource`][671]
+* [`Commands::write_world_boxed` takes a pre-boxed world writer to the ECS's command queue][661]
+* [`FrameTimeDiagnosticsPlugin` now shows "frame count" in addition to "frame time" and "fps"][678]
+* [Add hierarchy example][565]
+* [`WgpuPowerOptions` for choosing between low power, high performance, and adaptive power][397]
+* Derive `Debug` for more types: [#597][597], [#632][632]
+* Index buffer specialization
+  * [Allows the use of U32 indices in Mesh index buffers in addition to the usual U16 indices][568]
+  * [Switch to u32 indices by default][572]
+* More instructions for system dependencies
+  * [Add `systemd-devel` for Fedora Linux dependencies][528]
+  * [Add `libudev-dev` to Ubuntu dependencies][538]
+  * [Add Void Linux to linux dependencies file][645]
+  * [WSL2 instructions][727]
+* [Suggest `-Zrun-dsymutil-no` for faster compilation on MacOS][552]
 
 ### Changed
 
-- [ecs: ergonomic query.iter(), remove locks, add QuerySets][741]
-  - `query.iter()` is now a real iterator!
-  - `QuerySet` allows working with conflicting queries and is checked at compile-time.
-- [Rename `query.entity()` and `query.get()`][752]
-  - `query.get::<Component>(entity)` is now `query.get_component::<Component>(entity)`
-  - `query.entity(entity)` is now `query.get(entity)`
-- [Asset system rework and GLTF scene loading][693]
-- [Introduces WASM implementation of `AssetIo`][703]
-- [Move transform data out of Mat4][596]
-- [Separate gamepad state code from gamepad event code and other customizations][700]
-- [gamepad: expose raw and filtered gamepad events][711]
-- [Do not depend on `spirv-reflect` on `wasm32` target][689]
-- [Move dynamic plugin loading to its own optional crate][544]
-- [Add field to `WindowDescriptor` on wasm32 targets to optionally provide an existing canvas element as winit window][515]
-- [Adjust how `ArchetypeAccess` tracks mutable & immutable deps][660]
-- [Use `FnOnce` in `Commands` and `ChildBuilder` where possible][535]
-- [Runners explicitly call `App.initialize()`][690]
-- [sRGB awareness for `Color`][616]
-  - Color is now assumed to be provided in the non-linear sRGB colorspace.
+* [ecs: ergonomic query.iter(), remove locks, add QuerySets][741]
+  * `query.iter()` is now a real iterator!
+  * `QuerySet` allows working with conflicting queries and is checked at compile-time.
+* [Rename `query.entity()` and `query.get()`][752]
+  * `query.get::<Component>(entity)` is now `query.get_component::<Component>(entity)`
+  * `query.entity(entity)` is now `query.get(entity)`
+* [Asset system rework and GLTF scene loading][693]
+* [Introduces WASM implementation of `AssetIo`][703]
+* [Move transform data out of Mat4][596]
+* [Separate gamepad state code from gamepad event code and other customizations][700]
+* [gamepad: expose raw and filtered gamepad events][711]
+* [Do not depend on `spirv-reflect` on `wasm32` target][689]
+* [Move dynamic plugin loading to its own optional crate][544]
+* [Add field to `WindowDescriptor` on wasm32 targets to optionally provide an existing canvas element as winit window][515]
+* [Adjust how `ArchetypeAccess` tracks mutable & immutable deps][660]
+* [Use `FnOnce` in `Commands` and `ChildBuilder` where possible][535]
+* [Runners explicitly call `App.initialize()`][690]
+* [sRGB awareness for `Color`][616]
+  * Color is now assumed to be provided in the non-linear sRGB colorspace.
     Constructors such as `Color::rgb` and `Color::rgba` will be converted to linear sRGB.
-  - New methods `Color::rgb_linear` and `Color::rgba_linear` will accept colors already in linear sRGB (the old behavior)
-  - Individual color-components must now be accessed through setters and getters.
-- [`Mesh` overhaul with custom vertex attributes][599]
-  - Any vertex attribute can now be added over `mesh.attributes.insert()`.
-  - See `example/shader/mesh_custom_attribute.rs`
-  - Removed `VertexAttribute`, `Vertex`, `AsVertexBufferDescriptor`.
-  - For missing attributes (requested by shader, but not defined by mesh), Bevy will provide a zero-filled fallback buffer.
-- Despawning an entity multiple times causes a debug-level log message to be emitted instead of a panic: [#649][649], [#651][651]
-- [Migrated to Rodio 0.12][692]
-  - New method of playing audio can be found in the examples.
-- Added support for inserting custom initial values for `Local<T>` system resources [#745][745] 
+  * New methods `Color::rgb_linear` and `Color::rgba_linear` will accept colors already in linear sRGB (the old behavior)
+  * Individual color-components must now be accessed through setters and getters.
+* [`Mesh` overhaul with custom vertex attributes][599]
+  * Any vertex attribute can now be added over `mesh.attributes.insert()`.
+  * See `example/shader/mesh_custom_attribute.rs`
+  * Removed `VertexAttribute`, `Vertex`, `AsVertexBufferDescriptor`.
+  * For missing attributes (requested by shader, but not defined by mesh), Bevy will provide a zero-filled fallback buffer.
+* Despawning an entity multiple times causes a debug-level log message to be emitted instead of a panic: [#649][649], [#651][651]
+* [Migrated to Rodio 0.12][692]
+  * New method of playing audio can be found in the examples.
+* Added support for inserting custom initial values for `Local<T>` system resources [#745][745]
   
 ### Fixed
 
-- [Properly update bind group ids when setting dynamic bindings][560]
-- [Properly exit the app on AppExit event][610]
-- [Fix FloatOrd hash being different for different NaN values][618]
-- [Fix Added behavior for QueryOne get][543]
-- [Update camera_system to fix issue with late camera addition][488]
-- [Register `IndexFormat` as a property][664]
-- [Fix breakout example bug][685]
-- [Fix PreviousParent lag by merging parent update systems][713]
-- [Fix bug of connection event of gamepad at startup][730]
-- [Fix wavy text][725]
+* [Properly update bind group ids when setting dynamic bindings][560]
+* [Properly exit the app on AppExit event][610]
+* [Fix FloatOrd hash being different for different NaN values][618]
+* [Fix Added behavior for QueryOne get][543]
+* [Update camera_system to fix issue with late camera addition][488]
+* [Register `IndexFormat` as a property][664]
+* [Fix breakout example bug][685]
+* [Fix PreviousParent lag by merging parent update systems][713]
+* [Fix bug of connection event of gamepad at startup][730]
+* [Fix wavy text][725]
 
 [397]: https://github.com/bevyengine/bevy/pull/397
 [460]: https://github.com/bevyengine/bevy/pull/460
@@ -613,7 +609,6 @@ The  `bevy` crate documentation search function now returns results for all sub-
 [745]: https://github.com/bevyengine/bevy/pull/745
 [752]: https://github.com/bevyengine/bevy/pull/752
 
-
 ## Contributors
 
 A huge thanks to the **59 contributors** that made this release (and associated docs) possible!  
@@ -635,7 +630,7 @@ A huge thanks to the **59 contributors** that made this release (and associated 
 * EthanYidong
 * Gregoor
 * HyperLightKitsune
-* ian-h-chamberlain 
+* ian-h-chamberlain
 * J-F-Liu
 * Jerald
 * jngbsn

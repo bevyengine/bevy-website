@@ -11,7 +11,7 @@ long_title = "Contributing Code"
 
 Would you like to contribute code to Bevy?  Here's how!
 
-# How to Contribute
+## How to Contribute
 
 1. Fork the [`bevyengine/bevy` repository on GitHub][bevy], you'll need to create a GitHub account if you don't have one already.*
 2. Make your changes in a local clone of your fork
@@ -25,7 +25,6 @@ Would you like to contribute code to Bevy?  Here's how!
 Remember to follow Bevy's [Code of Conduct][coc], and thanks for contributing!
 
 *The same steps apply for any other repository in the [Bevy organization][bevyorg] that you would like to contribute to.
-
 
 [bevy]: https://github.com/bevyengine/bevy
 [bevyorg]: https://github.com/bevyengine

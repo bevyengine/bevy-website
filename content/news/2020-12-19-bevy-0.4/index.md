@@ -18,20 +18,19 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 Here are some of the highlights from this release:
 
-
 <!-- more -->
 
 ## WASM + WebGL2
 
 <div class="release-feature-authors">authors: @mrk-its</div>
 
-Bevy now has a WebGL2 render backend! @mrk-its has been hard at work building the [Bevy WebGL2 Plugin](https://github.com/mrk-its/bevy_webgl2) and expanding `bevy_render` to meet the needs of the web. He also put together a nice website showcasing various Bevy examples and games running on the web. 
+Bevy now has a WebGL2 render backend! @mrk-its has been hard at work building the [Bevy WebGL2 Plugin](https://github.com/mrk-its/bevy_webgl2) and expanding `bevy_render` to meet the needs of the web. He also put together a nice website showcasing various Bevy examples and games running on the web.
 
 I think the results speak for themselves:
 
 ### [Bevy WebGL2 Showcase](https://mrk.sed.pl/bevy-showcase/)
-[![webgl2 showcase](webgl_showcase.png)](https://mrk.sed.pl/bevy-showcase/)
 
+[![webgl2 showcase](webgl_showcase.png)](https://mrk.sed.pl/bevy-showcase/)
 
 ## Cross Platform Main Function
 
@@ -103,7 +102,7 @@ fn system(query: Query<&Transform>, commands: &mut Commands, time: Res<Time>) {
 }
 ```
 
-Notice that in **Bevy 0.4**, commands now look like `commands: &mut Commands` instead of `mut commands: Commands`. 
+Notice that in **Bevy 0.4**, commands now look like `commands: &mut Commands` instead of `mut commands: Commands`.
 
 ### Simplified Query Filters
 
@@ -166,6 +165,7 @@ fn error_handler_system(In(result): In<Result<()>>, error_handler: Res<MyErrorHa
 ```
 
 The {{rust_type(type="trait" crate="bevy_ecs" version="0.4.0" name="System" no_mod=true)}} trait now looks like this:
+
 ```rust
 // Has no inputs and no outputs
 System<In = (), Out = ()>
@@ -182,9 +182,9 @@ Bevy's old Schedule was nice. System registrations were easy to read and easy to
 
 * Only one Schedule allowed
 * Very static: you were limited to using the tools we gave you:
-    * stages are just lists of systems
-    * stages are added to schedules
-    * stages use hard-coded system runners
+  * stages are just lists of systems
+  * stages are added to schedules
+  * stages use hard-coded system runners
 * Couldn't switch between schedules at runtime
 * Couldn't easily support "fixed timestep" scenarios
 
@@ -292,7 +292,6 @@ app.add_stage_after(stage::UPDATE, "fixed_update", SystemStage::parallel()
 This builds on top of `ShouldRun::YesAndLoop`, which ensures that the schedule continues to loop until it has consumed all accumulated time.
 
 Check out the excellent ["Fix Your Timestep!"](https://gafferongames.com/post/fix_your_timestep/) article if you want to learn more about fixed timesteps.
-
 
 #### Typed Stage Builders
 
@@ -413,8 +412,8 @@ And here is how it looks in Bevy (the lighting is different because we don't imp
 
 ![gltf_camera_bevy](gltf_camera_bevy.png)
 
-
 There were also a number of other improvements:
+
 * Pixel format conversion while importing images from a GLTF
 * Default material loading
 * Hierarchy fixes
@@ -454,7 +453,6 @@ This _significantly_ reduces iterative compile times. Check out how long it take
 
 ![fast_compiles](fast_compiles.svg)
 
-
 We added a cargo feature to easily enable dynamic linking during development
 
 ```sh
@@ -479,7 +477,6 @@ The new text layout system uses glyph_brush_layout, which fixes the layout bugs 
 
 ![text_layout](text_layout.png)
 
-
 ## Renderer Optimization
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -493,6 +490,7 @@ For **Bevy 0.4** I decided to resolve as many of those TODOs as I could. There i
 Most of Bevy's high level render abstractions were designed to be incrementally updated, but when I was first building the engine, ECS change detection wasn't implemented. Now that we have all of these nice optimization tools, it makes sense to use them!
 
 For the first optimization round, I incrementalized as much as I could:
+
 * Added change detection to RenderResourceNode, Sprites, and Transforms, which improved performance when those values don't change
 * Only sync asset gpu data when the asset changes
 * Share asset RenderResourceBindings across all entities that reference an asset
@@ -525,13 +523,13 @@ Bevy now uses wgpu's "mailbox vsync" by default. This reduces input latency on p
 
 <div class="release-feature-authors">authors: @cart</div>
 
-Rust has a pretty big "reflection" gap. For those who aren't aware, "reflection" is a class of language feature that enables you to interact with language constructs at runtime. They add a form of "dynamic-ness" to what are traditionally static language concepts. 
+Rust has a pretty big "reflection" gap. For those who aren't aware, "reflection" is a class of language feature that enables you to interact with language constructs at runtime. They add a form of "dynamic-ness" to what are traditionally static language concepts.
 
 We have bits and pieces of reflection in Rust, such as {{rust_type(type="struct" crate="std", mod="any", name="TypeId")}} and {{rust_type(type="fn" crate="std", mod="any", name="type_name")}}. But when it comes to interacting with datatypes ... we don't have anything yet. This is unfortunate because some problems are inherently dynamic in nature.
 
 When I was first building Bevy, I decided that the engine would benefit from such features. Reflection is a good foundation for scene systems, Godot-like (or Unity-like) property animation systems, and editor inspection tools. I built the `bevy_property` and `bevy_type_registry` crates to fill these needs.
 
-They got the job done, but they were custom-tailored to Bevy's needs, were full of custom jargon (rather than reflecting Rust language constructs directly), didn't handle traits, and had a number of fundamental restrictions on how data could be accessed. 
+They got the job done, but they were custom-tailored to Bevy's needs, were full of custom jargon (rather than reflecting Rust language constructs directly), didn't handle traits, and had a number of fundamental restrictions on how data could be accessed.
 
 In this release we replaced the old `bevy_property` and `bevy_type_registry` crates with a new {{rust_mod(crate="bevy_reflect" version="0.4.0")}} crate. Bevy Reflect is intended to be a "generic" Rust reflection crate. I'm hoping it will be as useful for non-Bevy projects as it is for Bevy. We now use it for our Scene system, but in the future we will use it for animating Component fields and auto-generating Bevy Editor inspector widgets.
 
@@ -671,7 +669,6 @@ let my_trait: &dyn DoThing = reflect_do_thing.get(&*reflect_value).unwrap();
 println!("{}", my_trait.do_thing());
 ```
 
-
 ## 3D Texture Assets
 
 <div class="release-feature-authors">authors: @bonsairobo</div>
@@ -687,7 +684,6 @@ The Texture asset now has support for 3D textures. The new `array_texture.rs` ex
 Bevy finally has built in logging, which is now enabled by default via the new {{rust_type(type="struct" crate="bevy_log" version="0.4.0" name="LogPlugin" no_mod=true)}}. We evaluated various logging libraries and eventually landed on the new `tracing` crate. `tracing` is a structured logger that handles async / parallel logging well (perfect for an engine like Bevy), and enables profiling in addition to "normal" logging.
 
 The {{rust_type(type="struct" crate="bevy_log" version="0.4.0" name="LogPlugin" no_mod=true)}} configures each platform to log to the appropriate backend by default: the terminal on desktop, the console on web, and Android Logs / logcat on Android. We built a new Android `tracing` backend because one didn't exist yet.
-
 
 ### Logging
 
@@ -718,7 +714,6 @@ If you run your app with `cargo run --features bevy/trace,bevy/trace_chrome` you
 
 @superdump added support for those nice "span names" to upstream `tracing_chrome`.
 
-
 ## HIDPI
 
 <div class="release-feature-authors">authors: @mockersf, @blunted2night, @cart</div>
@@ -727,7 +722,7 @@ Bevy now handles HIDPI / Retina / high pixel density displays properly:
 
 * OS-reported pixel density is now taken into account when creating windows. If a Bevy App asks for a 1280x720 window on a 2x pixel density display, it will create a window that is 2560x1440
 * Window width/height is now reported in "logical units" (1280x720 in the example above). Physical units are still available using the `window.physical_width()` and `window.physical_height()` methods.
-* Window "swap chains" are created using the physical resolution to ensure we still have crisp rendering (2560x1440 in the example above) 
+* Window "swap chains" are created using the physical resolution to ensure we still have crisp rendering (2560x1440 in the example above)
 * Bevy UI has been adapted to handle HIDPI scaling correctly
 
 There is still a bit more work to be done here. While Bevy UI renders images and boxes at crisp HIDPI resolutions, text is still rendered using the logical resolution, which means it won't be as crisp as it could be on HIDPI displays.
@@ -778,7 +773,7 @@ Bevy now runs on Apple silicon thanks to upstream work on winit (@scoopr) and co
 
 ## New Examples
 
-### Contributors
+### Bevy Contributors
 
 <div class="release-feature-authors">author: @karroffel</div>
 
@@ -797,185 +792,158 @@ A "bunnymark-style" benchmark illustrating Bevy's sprite rendering performance. 
 ## Change Log
 
 ### Added
-- [add bevymark benchmark example][273]
-- [gltf: support camera and fix hierarchy][772] 
-- [Add tracing spans to schedules, stages, systems][789]
-- [add example that represents contributors as bevy icons][801]
-- [Add received character][805]
-- [Add bevy_dylib to force dynamic linking of bevy][808] 
-- [Added RenderPass::set_scissor_rect][815]
-- [`bevy_log`][836]
-  - Adds logging functionality as a Plugin.
-  - Changes internal logging to work with the new implementation.
-- [cross-platform main function][847]
-- [Controllable ambient light color][852]
-  - Added a resource to change the current ambient light color for PBR.
-- [Added more basic color constants][859]
-- [Add box shape][883]
-- [Expose an EventId for events][894]
-- [System Inputs, Outputs, and Chaining][876]
-- [Expose an `EventId` for events][894]
-- [Added `set_cursor_position` to `Window`][917]
-- [Added new Bevy reflection system][926]
-  - Replaces the properties system
-- [Add support for Apple Silicon][928]
-- [Live reloading of shaders][937]
-- [ Store mouse cursor position in Window][940]
-- [Add removal_detection example][945]
-- [Additional vertex attribute value types][946]
-- [Added WindowFocused event][956]
-- [Tracing chrome span names][979]
-- [Allow windows to be maximized][1004]
-- [GLTF: load default material][1016]
-- [can spawn a scene from a ChildBuilder, or directly set its parent when spawning it][1026]
-- [add ability to load `.dds`, `.tga`, and `.jpeg` texture formats][1038]
-- [add ability to provide custom a `AssetIo` implementation][1037]
+
+* [add bevymark benchmark example][273]
+* [gltf: support camera and fix hierarchy][772]
+* [Add tracing spans to schedules, stages, systems][789]
+* [add example that represents contributors as bevy icons][801]
+* [Add received character][805]
+* [Add bevy_dylib to force dynamic linking of bevy][808]
+* [Added RenderPass::set_scissor_rect][815]
+* [`bevy_log`][836]
+  * Adds logging functionality as a Plugin.
+  * Changes internal logging to work with the new implementation.
+* [cross-platform main function][847]
+* [Controllable ambient light color][852]
+  * Added a resource to change the current ambient light color for PBR.
+* [Added more basic color constants][859]
+* [Add box shape][883]
+* [Expose an EventId for events][894]
+* [System Inputs, Outputs, and Chaining][876]
+* [Expose an `EventId` for events][894]
+* [Added `set_cursor_position` to `Window`][917]
+* [Added new Bevy reflection system][926]
+  * Replaces the properties system
+* [Add support for Apple Silicon][928]
+* [Live reloading of shaders][937]
+* [Store mouse cursor position in Window][940]
+* [Add removal_detection example][945]
+* [Additional vertex attribute value types][946]
+* [Added WindowFocused event][956]
+* [Tracing chrome span names][979]
+* [Allow windows to be maximized][1004]
+* [GLTF: load default material][1016]
+* [can spawn a scene from a ChildBuilder, or directly set its parent when spawning it][1026]
+* [add ability to load `.dds`, `.tga`, and `.jpeg` texture formats][1038]
+* [add ability to provide custom a `AssetIo` implementation][1037]
 
 ### Changed
 
-- [delegate layout reflection to RenderResourceContext][691] 
-- [Fall back to remove components one by one when failing to remove a bundle][719]
-- [Port hecs derive macro improvements][761] 
-- [Use glyph_brush_layout and add text alignment support][765]
-- [upgrade glam and hexasphere][791]
-- [Flexible ECS Params][798]
-- [Make Timer.tick return &Self][820]
-- [FileAssetIo includes full path on error][821]
-- [Removed ECS query APIs that could easily violate safety from the public interface][829]
-- [Changed Query filter API to be easier to understand][834]
-- [bevy_render: delegate buffer aligning to render_resource_context][842]
-- [wasm32: non-spirv shader specialization][843]
-- [Renamed XComponents to XBundle][863]
-- [Check for conflicting system resource parameters][864]
-- [Tweaks to TextureAtlasBuilder.finish()][887]
-- [do not spend time drawing text with is_visible = false][893]
-- [Extend the Texture asset type to support 3D data][903]
-- [Breaking changes to timer API][914]
-  - Created getters and setters rather than exposing struct members.
-- [Removed timer auto-ticking system][931]
-  - Added an example of how to tick timers manually.
-- [When a task scope produces <= 1 task to run, run it on the calling thread immediately][932]
-- [Breaking changes to Time API][934]
-  - Created getters to get `Time` state and made members private.
-  - Modifying `Time`'s values directly is no longer possible outside of bevy.
-- [Use `mailbox` instead of `fifo` for vsync on supported systems][920]
-- [switch winit size to logical to be dpi independent][947]
-- [Change bevy_input::Touch API to match similar APIs][952]
-- [Run parent-update and transform-propagation during the "post-startup" stage (instead of "startup")][955]
-- [Renderer Optimization Round 1][958]
-- [Change`TextureAtlasBuilder` into expected Builder conventions][969]
-- [Optimize Text rendering / SharedBuffers][972]
-- [hidpi swap chains][973]
-- [optimize asset gpu data transfer][987]
-- [naming coherence for cameras][995]
-- [Schedule v2][1021]
-- [Use shaderc for aarch64-apple-darwin][1027]
-- [update `Window`'s `width` & `height` methods to return `f32`][1033]
-- [Break out Visible component from Draw][1034]
-  - Users setting `Draw::is_visible` or `Draw::is_transparent` should now set `Visible::is_visible` and `Visible::is_transparent`
-- [`winit` upgraded from version 0.23 to version 0.24][1043]
-- [set is_transparent to true by default for UI bundles][1071]
+* [delegate layout reflection to RenderResourceContext][691]
+* [Fall back to remove components one by one when failing to remove a bundle][719]
+* [Port hecs derive macro improvements][761]
+* [Use glyph_brush_layout and add text alignment support][765]
+* [upgrade glam and hexasphere][791]
+* [Flexible ECS Params][798]
+* [Make Timer.tick return &Self][820]
+* [FileAssetIo includes full path on error][821]
+* [Removed ECS query APIs that could easily violate safety from the public interface][829]
+* [Changed Query filter API to be easier to understand][834]
+* [bevy_render: delegate buffer aligning to render_resource_context][842]
+* [wasm32: non-spirv shader specialization][843]
+* [Renamed XComponents to XBundle][863]
+* [Check for conflicting system resource parameters][864]
+* [Tweaks to TextureAtlasBuilder.finish()][887]
+* [do not spend time drawing text with is_visible = false][893]
+* [Extend the Texture asset type to support 3D data][903]
+* [Breaking changes to timer API][914]
+  * Created getters and setters rather than exposing struct members.
+* [Removed timer auto-ticking system][931]
+  * Added an example of how to tick timers manually.
+* [When a task scope produces <= 1 task to run, run it on the calling thread immediately][932]
+* [Breaking changes to Time API][934]
+  * Created getters to get `Time` state and made members private.
+  * Modifying `Time`'s values directly is no longer possible outside of bevy.
+* [Use `mailbox` instead of `fifo` for vsync on supported systems][920]
+* [switch winit size to logical to be dpi independent][947]
+* [Change bevy_input::Touch API to match similar APIs][952]
+* [Run parent-update and transform-propagation during the "post-startup" stage (instead of "startup")][955]
+* [Renderer Optimization Round 1][958]
+* [Change`TextureAtlasBuilder` into expected Builder conventions][969]
+* [Optimize Text rendering / SharedBuffers][972]
+* [hidpi swap chains][973]
+* [optimize asset gpu data transfer][987]
+* [naming coherence for cameras][995]
+* [Schedule v2][1021]
+* [Use shaderc for aarch64-apple-darwin][1027]
+* [update `Window`'s `width` & `height` methods to return `f32`][1033]
+* [Break out Visible component from Draw][1034]
+  * Users setting `Draw::is_visible` or `Draw::is_transparent` should now set `Visible::is_visible` and `Visible::is_transparent`
+* [`winit` upgraded from version 0.23 to version 0.24][1043]
+* [set is_transparent to true by default for UI bundles][1071]
 
 ### Fixed
 
-- [Fixed typos in KeyCode identifiers][857]
-- [Remove redundant texture copies in TextureCopyNode][871]
-- [Fix a deadlock that can occur when using scope() on ComputeTaskPool from within a system][892]
-- [Don't draw text that isn't visible][893]
-- [Use `instant::Instant` for WASM compatibility][895]
-- [Fix pixel format conversion in bevy_gltf][897]
-- [Fixed duplicated children when spawning a Scene][904]
-- [Corrected behaviour of the UI depth system][905]
-- [Allow despawning of hierarchies in threadlocal systems][908]
-- [Fix `RenderResources` index slicing][948]
-- [Run parent-update and transform-propagation during the "post-startup" stage][955]
-- [Fix collision detection by comparing abs() penetration depth][966]
-- [deal with rounding issue when creating the swap chain][997]
-- [only update components for entities in map][1023]
-- [Don't panic when attempting to set shader defs from an asset that hasn't loaded yet][1035]
+* [Fixed typos in KeyCode identifiers][857]
+* [Remove redundant texture copies in TextureCopyNode][871]
+* [Fix a deadlock that can occur when using scope() on ComputeTaskPool from within a system][892]
+* [Don't draw text that isn't visible][893]
+* [Use `instant::Instant` for WASM compatibility][895]
+* [Fix pixel format conversion in bevy_gltf][897]
+* [Fixed duplicated children when spawning a Scene][904]
+* [Corrected behaviour of the UI depth system][905]
+* [Allow despawning of hierarchies in threadlocal systems][908]
+* [Fix `RenderResources` index slicing][948]
+* [Run parent-update and transform-propagation during the "post-startup" stage][955]
+* [Fix collision detection by comparing abs() penetration depth][966]
+* [deal with rounding issue when creating the swap chain][997]
+* [only update components for entities in map][1023]
+* [Don't panic when attempting to set shader defs from an asset that hasn't loaded yet][1035]
 
 [273]: https://github.com/bevyengine/bevy/pull/273
 [691]: https://github.com/bevyengine/bevy/pull/691
 [719]: https://github.com/bevyengine/bevy/pull/719
 [761]: https://github.com/bevyengine/bevy/pull/761
-[761]: https://github.com/bevyengine/bevy/pull/761
 [765]: https://github.com/bevyengine/bevy/pull/765
-[772]: https://github.com/bevyengine/bevy/pull/772
 [772]: https://github.com/bevyengine/bevy/pull/772
 [789]: https://github.com/bevyengine/bevy/pull/789
 [791]: https://github.com/bevyengine/bevy/pull/791
 [798]: https://github.com/bevyengine/bevy/pull/798
-[801]: https://github.com/bevyengine/bevy/pull/801
 [801]: https://github.com/bevyengine/bevy/pull/801
 [805]: https://github.com/bevyengine/bevy/pull/805
 [808]: https://github.com/bevyengine/bevy/pull/808
 [815]: https://github.com/bevyengine/bevy/pull/815
 [820]: https://github.com/bevyengine/bevy/pull/820
 [821]: https://github.com/bevyengine/bevy/pull/821
-[821]: https://github.com/bevyengine/bevy/pull/821
-[829]: https://github.com/bevyengine/bevy/pull/829
 [829]: https://github.com/bevyengine/bevy/pull/829
 [834]: https://github.com/bevyengine/bevy/pull/834
-[834]: https://github.com/bevyengine/bevy/pull/834
-[836]: https://github.com/bevyengine/bevy/pull/836
 [836]: https://github.com/bevyengine/bevy/pull/836
 [842]: https://github.com/bevyengine/bevy/pull/842
 [843]: https://github.com/bevyengine/bevy/pull/843
 [847]: https://github.com/bevyengine/bevy/pull/847
 [852]: https://github.com/bevyengine/bevy/pull/852
-[852]: https://github.com/bevyengine/bevy/pull/852
 [857]: https://github.com/bevyengine/bevy/pull/857
-[857]: https://github.com/bevyengine/bevy/pull/857
-[859]: https://github.com/bevyengine/bevy/pull/859
 [859]: https://github.com/bevyengine/bevy/pull/859
 [863]: https://github.com/bevyengine/bevy/pull/863
 [864]: https://github.com/bevyengine/bevy/pull/864
 [871]: https://github.com/bevyengine/bevy/pull/871
 [876]: https://github.com/bevyengine/bevy/pull/876
-[876]: https://github.com/bevyengine/bevy/pull/876
 [883]: https://github.com/bevyengine/bevy/pull/883
 [887]: https://github.com/bevyengine/bevy/pull/887
 [892]: https://github.com/bevyengine/bevy/pull/892
 [893]: https://github.com/bevyengine/bevy/pull/893
-[893]: https://github.com/bevyengine/bevy/pull/893
-[893]: https://github.com/bevyengine/bevy/pull/893
 [894]: https://github.com/bevyengine/bevy/pull/894
-[894]: https://github.com/bevyengine/bevy/pull/894
-[894]: https://github.com/bevyengine/bevy/pull/894
-[895]: https://github.com/bevyengine/bevy/pull/895
 [895]: https://github.com/bevyengine/bevy/pull/895
 [897]: https://github.com/bevyengine/bevy/pull/897
 [903]: https://github.com/bevyengine/bevy/pull/903
 [904]: https://github.com/bevyengine/bevy/pull/904
-[904]: https://github.com/bevyengine/bevy/pull/904
-[905]: https://github.com/bevyengine/bevy/pull/905
 [905]: https://github.com/bevyengine/bevy/pull/905
 [908]: https://github.com/bevyengine/bevy/pull/908
 [914]: https://github.com/bevyengine/bevy/pull/914
-[914]: https://github.com/bevyengine/bevy/pull/914
-[917]: https://github.com/bevyengine/bevy/pull/917
 [917]: https://github.com/bevyengine/bevy/pull/917
 [920]: https://github.com/bevyengine/bevy/pull/920
-[920]: https://github.com/bevyengine/bevy/pull/920
-[926]: https://github.com/bevyengine/bevy/pull/926
 [926]: https://github.com/bevyengine/bevy/pull/926
 [928]: https://github.com/bevyengine/bevy/pull/928
-[928]: https://github.com/bevyengine/bevy/pull/928
-[931]: https://github.com/bevyengine/bevy/pull/931
 [931]: https://github.com/bevyengine/bevy/pull/931
 [932]: https://github.com/bevyengine/bevy/pull/932
 [934]: https://github.com/bevyengine/bevy/pull/934
-[934]: https://github.com/bevyengine/bevy/pull/934
 [937]: https://github.com/bevyengine/bevy/pull/937
 [940]: https://github.com/bevyengine/bevy/pull/940
-[945]: https://github.com/bevyengine/bevy/pull/945
 [945]: https://github.com/bevyengine/bevy/pull/945
 [946]: https://github.com/bevyengine/bevy/pull/946
 [947]: https://github.com/bevyengine/bevy/pull/947
 [948]: https://github.com/bevyengine/bevy/pull/948
 [952]: https://github.com/bevyengine/bevy/pull/952
-[955]: https://github.com/bevyengine/bevy/pull/955
-[955]: https://github.com/bevyengine/bevy/pull/955
 [955]: https://github.com/bevyengine/bevy/pull/955
 [956]: https://github.com/bevyengine/bevy/pull/956
 [958]: https://github.com/bevyengine/bevy/pull/958
@@ -995,11 +963,9 @@ A "bunnymark-style" benchmark illustrating Bevy's sprite rendering performance. 
 [1027]: https://github.com/bevyengine/bevy/pull/1027
 [1033]: https://github.com/bevyengine/bevy/pull/1033
 [1034]: https://github.com/bevyengine/bevy/pull/1034
-[1034]: https://github.com/bevyengine/bevy/pull/1034
 [1035]: https://github.com/bevyengine/bevy/pull/1035
 [1037]: https://github.com/bevyengine/bevy/pull/1037
 [1038]: https://github.com/bevyengine/bevy/pull/1038
-[1043]: https://github.com/bevyengine/bevy/pull/1043
 [1043]: https://github.com/bevyengine/bevy/pull/1043
 [1071]: https://github.com/bevyengine/bevy/pull/1071
 

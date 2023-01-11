@@ -18,7 +18,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 To update an existing Bevy App or Plugin to **Bevy 0.7**, check out our [0.6 to 0.7 Migration Guide](/learn/book/migration-guides/0.6-0.7/).
 
-As always, there are a _ton_ of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights: 
+As always, there are a _ton_ of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights:
 
 * Skeletal animation and mesh skinning
 * GLTF animation importing
@@ -31,7 +31,7 @@ As always, there are a _ton_ of new features, bug fixes, and quality of life twe
 * ECS improvements: Order systems using their names, Query::many_mut, use conflicting parameters in systems via ParamSets, WorldQuery derives
 * Documentation improvements: better examples, more doc tests and more coverage
 * More audio control: pause, volume, speed, and looping
-* Power usage options to enable only updating Bevy Apps when input occurs 
+* Power usage options to enable only updating Bevy Apps when input occurs
 
 <!-- more -->
 
@@ -43,7 +43,7 @@ Bevy finally supports 3D skeletal animation!
 
 <video controls loop><source  src="skeletal_animation.mp4" type="video/mp4"/></video>
 
-<div style="font-size: 1.0rem" class="release-feature-authors">Scene Credits: <a href="https://skfb.ly/6TsvL">Tanabata evening - Kyoto inspired city scene</a> by Mathias Tossens is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a>. Character model and animation are royalty free assets from Mixamo. 
+<div style="font-size: 1.0rem" class="release-feature-authors">Scene Credits: <a href="https://skfb.ly/6TsvL">Tanabata evening - Kyoto inspired city scene</a> by Mathias Tossens is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a>. Character model and animation are royalty free assets from Mixamo.
 </div>
 
 Skeletal animations can now be played, paused, scrubbed, looped, reversed, and speed controlled using the new [`AnimationPlayer`] component and [`AnimationClip`] asset:
@@ -107,7 +107,7 @@ fn play_on_load(
 
 Bevy can now render scenes with arbitrary numbers of point lights on platforms that support storage buffers (which is basically everything but WebGL). In the last Bevy release (0.6) we added [Clustered Forward Rendering](/news/bevy-0-6/#clustered-forward-rendering), which is a rendering technique that optimizes each fragment's light calculation costs by assigning lights to sub-volumes of the visible volume, called "clusters". However in the interest of platform compatibility (WebGL), we initially limited ourselves to 256 lights because that is what fit in a uniform buffer binding.
 
-In **Bevy 0.7**, we added the ability to automatically "upgrade" to using unbounded storage buffers for Clustered Forward Rendering on platforms that support them, enabling unlimited* point lights. There is an asterisk there because in practice this is limited by memory and hardware constraints. 
+In **Bevy 0.7**, we added the ability to automatically "upgrade" to using unbounded storage buffers for Clustered Forward Rendering on platforms that support them, enabling unlimited* point lights. There is an asterisk there because in practice this is limited by memory and hardware constraints.
 
 ## Light Clustering Features and Optimizations
 
@@ -129,9 +129,9 @@ Here is a video illustrating a progression from the old limit of 256 point light
 
 <video controls loop><source  src="many_lights.mp4" type="video/mp4"/></video>
 
-And we have [even more clustering optimizations](https://github.com/bevyengine/bevy/pull/4345) in the works! 
+And we have [even more clustering optimizations](https://github.com/bevyengine/bevy/pull/4345) in the works!
 
-## Configurable Light Visibility 
+## Configurable Light Visibility
 
 <div class="release-feature-authors">authors: @robtfm</div>
 
@@ -161,7 +161,6 @@ The Bistro scene took a total of 12.9s to load with PNG textures, but only 1.5s 
 The benefits don't stop there either - because the textures are compressed and can be used by the GPU in that format, reading from them uses less memory bandwidth, which can bring performance benefits. The Bistro scene gains about 10% in frame rate from using compressed textures.
 
 ![bistro compressed](bistro_compressed.png)
-
 
 Another benefit is that mipmaps are supported, which makes for smoother, less noisy textures. Bevy currently doesn't have support for automatically generating mipmaps for uncompressed textures, so using compressed textures is a nice way to have mipmaps now!
 
@@ -556,10 +555,12 @@ fn system(world: &World, transforms: Query<&Transform>) {
 Just keep in mind that `&World` will conflict with _any_ mutable Query:
 
 {% incorrect_code_block() %}
+
 ```rust
 fn invalid_system(world: &World, transforms: Query<&mut Transform>) {
 }
 ```
+
 {% end %}
 
 In these cases, consider using our new [ParamSets](/news/bevy-0-7/#paramsets) to resolve the conflict:
@@ -574,13 +575,14 @@ fn valid_system(set: ParamSet<(&World, Query<&mut Transform>)>) {
 <div class="release-feature-authors">authors: @BoxyUwU, @TheRawMeatball, @bjorn3</div>
 
 Bevy ECS received a solid number of soundness and correctness bug fixes this release:
+
 * Removed unsound lifetime annotations on `EntityMut` and `Query`, which could be used to get aliased mutability in some situations.
 * Labeled `World::entities_mut` unsafe (because manually modifying entity metadata can invalidate safety assumptions)
 * Removed unsound `World::components_mut` (which allowed replacing component metadata, invalidating assumptions made elsewhere in World)
 * Fixed a `World::resource_scope` soundness bug
 * Used `ManuallyDrop` in resource id initialization instead of `forget()` to avoid invalidating a data pointer before it is used.
 
-We now also run the [miri](https://github.com/rust-lang/miri) interpreter on Bevy ECS in our CI to help detect and prevent future soundness / correctness issues. 
+We now also run the [miri](https://github.com/rust-lang/miri) interpreter on Bevy ECS in our CI to help detect and prevent future soundness / correctness issues.
 
 As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks because we are modeling parallel data access that Rust cannot reason about without our help. But we are committed to removing as much unsafe code as we can and improving the quality and scope of our unsafe code.
 
@@ -664,10 +666,10 @@ By default Bevy will run updates "as fast as it can" (limited by the screen's re
 **Bevy 0.7** adds the ability to configure the [`UpdateMode`] in [`WinitConfig`] to configure how Bevy Apps run updates:
 
 * **Continuous**: always update "as soon as possible" (honoring vsync configuration)
-* **Reactive**: only update when there is a window event, a redraw is requested, or a configurable wait time has elapsed 
+* **Reactive**: only update when there is a window event, a redraw is requested, or a configurable wait time has elapsed
 * **ReactiveLowPower**: only update when there is user input (mouse movement, keyboard input, etc), a redraw is requested, or a configurable wait time has elapsed
 
-These settings can be configured separately for focused windows and unfocused windows (enabling you to save power when a window loses focus). 
+These settings can be configured separately for focused windows and unfocused windows (enabling you to save power when a window loses focus).
 
 **ReactiveLowPower** can _significantly_ reduce power / resource usage, but it won't be suitable for every app type, as some apps need to assume that they are constantly being updated as quickly as possible. Therefore these settings are opt-in.
 
@@ -715,7 +717,7 @@ We now automatically deploy Bevy's `main` development branch to [https://dev-doc
 
 ![dev docs](dev_docs.png)
 
-## Website Improvements 
+## Website Improvements
 
 <div class="release-feature-authors">authors: @doup</div>
 
@@ -723,13 +725,13 @@ The [Bevy Book](/learn/book) now has a much nicer pager widget that displays pre
 
 ![pager](pager.png)
 
-We also added an "improve this page" footer link to make it easier for Bevy Book readers to contribute changes. 
+We also added an "improve this page" footer link to make it easier for Bevy Book readers to contribute changes.
 
 The sidebar got an overhaul that improves clarity and makes it possible to open/close sections without clicking on them:
 
 ![sidebar](sidebar.png)
 
-The responsiveness of the website has also been improved and some sections layout much better on mobile. 
+The responsiveness of the website has also been improved and some sections layout much better on mobile.
 
 ## Scene Viewer Tool
 
@@ -737,14 +739,13 @@ The responsiveness of the website has also been improved and some sections layou
 
 Bevy now has a dedicated scene viewer tool that can load arbitrary GLTF scene files. If you check out the main Bevy repo you can try it out by running:
 
-```
+```sh
 cargo run --release --example scene_viewer /some/path/castle.gltf
 ```
 
 It has a built in "fly camera" and has tools to play animations and toggle lights and shadows.
 
 ![scene viewer](bevy_scene_viewer.png)
-
 
 ## Support Bevy
 
@@ -884,147 +885,147 @@ A huge thanks to the **123 contributors** that made this release (and associated
 
 ### Added
 
-- [Mesh Skinning][4238]
-- [Animation Player][4375]
-- [Gltf animations][3751]
-- [Mesh vertex buffer layouts][3959]
-- [Render to a texture][3412]
-- [KTX2/DDS/.basis compressed texture support][3884]
-- [Audio control - play, pause, volume, speed, loop][3948]
-- [Auto-label function systems with SystemTypeIdLabel][4224]
-- [Query::get_many][4298]
-- [Dynamic light clusters][3968]
-- [Always update clusters and remove per-frame allocations][4169]
-- [`ParamSet` for conflicting `SystemParam`:s][2765]
-- [default() shorthand][4071]
-- [use marker components for cameras instead of name strings][3635]
-- [Implement `WorldQuery` derive macro][2713]
-- [Implement AnyOf queries][2889]
-- [Compute Pipeline Specialization][3979]
-- [Make get_resource (and friends) infallible][4047]
-- [bevy_pbr: Support flipping tangent space normal map y for DirectX normal maps][4433]
-- [Faster view frustum culling][4181]
-- [Use storage buffers for clustered forward point lights][3989]
-- [Add &World as SystemParam][2923]
-- [Add text wrapping support to Text2d][4347]
-- [Scene Viewer to display glTF files][4183]
-- [Internal Asset Hot Reloading][3966]
-- [Add FocusPolicy to NodeBundle and ImageBundle][3952]
-- [Allow iter combinations on queries with filters][3656]
-- [bevy_render: Support overriding wgpu features and limits][3912]
-- [bevy_render: Use RenderDevice to get limits/features and expose AdapterInfo][3931]
-- [Reduce power usage with configurable event loop][3974]
-- [can specify an anchor for a sprite][3463]
-- [Implement len and is_empty for EventReaders][2969]
-- [Add more FromWorld implementations][3945]
-- [Add cart's fork of ecs_bench_suite][4225]
-- [bevy_derive: Add derives for `Deref` and `DerefMut`][4328]
-- [Add clear_schedule][3941]
-- [Add Query::contains][3090]
-- [bevy_render: Support removal of nodes, edges, subgraphs][3048]
-- [Implement init_resource for `Commands` and `World`][3079]
-- [Added method to restart the current state][3328]
-- [Simplify sending empty events][2935]
-- [impl Command for <impl FnOnce(&mut World)>][2996]
-- [Useful error message when two assets have the save UUID][3739]
-- [bevy_asset: Add AssetServerSettings watch_for_changes member][3643]
-- [Add conversio from Color to u32][4088]
-- [Introduce `SystemLabel`'s for `RenderAssetPlugin`, and change `Image` preparation system to run before others][3917]
-- [Add a helper for storage buffers similar to `UniformVec`][4079]
-- [StandardMaterial: expose a cull_mode option][3982]
-- [Expose draw indirect][4056]
-- [Add view transform to view uniform][3885]
-- [Add a size method on Image.][3696]
-- [add Visibility for lights][3958]
-- [bevy_render: Provide a way to opt-out of the built-in frustum culling][3711]
-- [use error scope to handle errors on shader module creation][3675]
-- [include sources in shader validation error][3724]
-- [insert the gltf mesh name on the entity if there is one][4119]
-- [expose extras from gltf nodes][2154]
-- [gltf: add a name to nodes without names][4396]
-- [Enable drag-and-drop events on windows][3772]
-- [Add transform hierarchy stress test][4170]
-- [Add TransformBundle][3054]
-- [Add Transform::rotate_around method][3107]
-- [example on how to create an animation in code][4399]
-- [Add examples for Transforms][2441]
-- [Add mouse grab example][4114]
-- [examples: add screenspace texture shader example][4063]
-- [Add generic systems example][2636]
-- [add examples on how to have a data source running in another thread / in a task pool thread][2915]
-- [Simple 2d rotation example][3065]
-- [Add move sprite example. ][2414]
-- [add an example using UI & states to create a game menu][2960]
-- [CI runs `cargo miri test -p bevy_ecs`][4310]
-- [Tracy spans around main 3D passes][4182]
-- [Add automatic docs deployment to GitHub Pages][3535]
+* [Mesh Skinning][4238]
+* [Animation Player][4375]
+* [Gltf animations][3751]
+* [Mesh vertex buffer layouts][3959]
+* [Render to a texture][3412]
+* [KTX2/DDS/.basis compressed texture support][3884]
+* [Audio control - play, pause, volume, speed, loop][3948]
+* [Auto-label function systems with SystemTypeIdLabel][4224]
+* [Query::get_many][4298]
+* [Dynamic light clusters][3968]
+* [Always update clusters and remove per-frame allocations][4169]
+* [`ParamSet` for conflicting `SystemParam`:s][2765]
+* [default() shorthand][4071]
+* [use marker components for cameras instead of name strings][3635]
+* [Implement `WorldQuery` derive macro][2713]
+* [Implement AnyOf queries][2889]
+* [Compute Pipeline Specialization][3979]
+* [Make get_resource (and friends) infallible][4047]
+* [bevy_pbr: Support flipping tangent space normal map y for DirectX normal maps][4433]
+* [Faster view frustum culling][4181]
+* [Use storage buffers for clustered forward point lights][3989]
+* [Add &World as SystemParam][2923]
+* [Add text wrapping support to Text2d][4347]
+* [Scene Viewer to display glTF files][4183]
+* [Internal Asset Hot Reloading][3966]
+* [Add FocusPolicy to NodeBundle and ImageBundle][3952]
+* [Allow iter combinations on queries with filters][3656]
+* [bevy_render: Support overriding wgpu features and limits][3912]
+* [bevy_render: Use RenderDevice to get limits/features and expose AdapterInfo][3931]
+* [Reduce power usage with configurable event loop][3974]
+* [can specify an anchor for a sprite][3463]
+* [Implement len and is_empty for EventReaders][2969]
+* [Add more FromWorld implementations][3945]
+* [Add cart's fork of ecs_bench_suite][4225]
+* [bevy_derive: Add derives for `Deref` and `DerefMut`][4328]
+* [Add clear_schedule][3941]
+* [Add Query::contains][3090]
+* [bevy_render: Support removal of nodes, edges, subgraphs][3048]
+* [Implement init_resource for `Commands` and `World`][3079]
+* [Added method to restart the current state][3328]
+* [Simplify sending empty events][2935]
+* [impl Command for <impl FnOnce(&mut World)>][2996]
+* [Useful error message when two assets have the save UUID][3739]
+* [bevy_asset: Add AssetServerSettings watch_for_changes member][3643]
+* [Add conversio from Color to u32][4088]
+* [Introduce `SystemLabel`'s for `RenderAssetPlugin`, and change `Image` preparation system to run before others][3917]
+* [Add a helper for storage buffers similar to `UniformVec`][4079]
+* [StandardMaterial: expose a cull_mode option][3982]
+* [Expose draw indirect][4056]
+* [Add view transform to view uniform][3885]
+* [Add a size method on Image.][3696]
+* [add Visibility for lights][3958]
+* [bevy_render: Provide a way to opt-out of the built-in frustum culling][3711]
+* [use error scope to handle errors on shader module creation][3675]
+* [include sources in shader validation error][3724]
+* [insert the gltf mesh name on the entity if there is one][4119]
+* [expose extras from gltf nodes][2154]
+* [gltf: add a name to nodes without names][4396]
+* [Enable drag-and-drop events on windows][3772]
+* [Add transform hierarchy stress test][4170]
+* [Add TransformBundle][3054]
+* [Add Transform::rotate_around method][3107]
+* [example on how to create an animation in code][4399]
+* [Add examples for Transforms][2441]
+* [Add mouse grab example][4114]
+* [examples: add screenspace texture shader example][4063]
+* [Add generic systems example][2636]
+* [add examples on how to have a data source running in another thread / in a task pool thread][2915]
+* [Simple 2d rotation example][3065]
+* [Add move sprite example.][2414]
+* [add an example using UI & states to create a game menu][2960]
+* [CI runs `cargo miri test -p bevy_ecs`][4310]
+* [Tracy spans around main 3D passes][4182]
+* [Add automatic docs deployment to GitHub Pages][3535]
 
-### Changed 
+### Changed
 
-- [Proper prehashing][3963]
-- [Move import_path definitions into shader source][3976]
-- [Make `System` responsible for updating its own archetypes][4115]
-- [Some small changes related to run criteria piping][3923]
-- [Remove unnecessary system labels][4340]
-- [Increment last event count on next instead of iter][2382]
-- [Obviate the need for `RunSystem`, and remove it][3817]
-- [Cleanup some things which shouldn't be components][2982]
-- [Remove the config api][3633]
-- [Deprecate `.system`][3302]
-- [Hide docs for concrete impls of Fetch, FetchState, and SystemParamState][4250]
-- [Move the CoreStage::Startup to a seperate StartupSchedule label][2434]
-- [`iter_mut` on Assets: send modified event only when asset is iterated over][3565]
-- [check if resource for asset already exists before adding it][3560]
-- [bevy_render: Batch insertion for prepare_uniform_components][4179]
-- [Change default `ColorMaterial` color to white][3981]
-- [bevy_render: Only auto-disable mappable primary buffers for discrete GPUs][3803]
-- [bevy_render: Do not automatically enable MAPPABLE_PRIMARY_BUFFERS][3698]
-- [increase the maximum number of point lights with shadows to the max supported by the device][4435]
-- [perf: only recalculate frusta of changed lights][4086]
-- [bevy_pbr: Optimize assign_lights_to_clusters][3984]
-- [improve error messages for render graph runner][3930]
-- [Skinned extraction speedup][4428]
-- [Sprites - keep color as 4 f32][4361]
-- [Change scaling mode to FixedHorizontal][4055]
-- [Replace VSync with PresentMode][3812]
-- [do not set cursor grab on window creation if not asked for][3617]
-- [bevy_transform: Use Changed in the query for much faster transform_propagate_system][4180]
-- [Split bevy_hierarchy out from bevy_transform][4168]
-- [Make transform builder methods const][3045]
-- [many_cubes: Add a cube pattern suitable for benchmarking culling changes][4126]
-- [Make many_cubes example more interesting][4015]
-- [Run tests (including doc tests) in `cargo run -p ci` command][3849]
-- [Use more ergonomic span syntax][4246]
+* [Proper prehashing][3963]
+* [Move import_path definitions into shader source][3976]
+* [Make `System` responsible for updating its own archetypes][4115]
+* [Some small changes related to run criteria piping][3923]
+* [Remove unnecessary system labels][4340]
+* [Increment last event count on next instead of iter][2382]
+* [Obviate the need for `RunSystem`, and remove it][3817]
+* [Cleanup some things which shouldn't be components][2982]
+* [Remove the config api][3633]
+* [Deprecate `.system`][3302]
+* [Hide docs for concrete impls of Fetch, FetchState, and SystemParamState][4250]
+* [Move the CoreStage::Startup to a seperate StartupSchedule label][2434]
+* [`iter_mut` on Assets: send modified event only when asset is iterated over][3565]
+* [check if resource for asset already exists before adding it][3560]
+* [bevy_render: Batch insertion for prepare_uniform_components][4179]
+* [Change default `ColorMaterial` color to white][3981]
+* [bevy_render: Only auto-disable mappable primary buffers for discrete GPUs][3803]
+* [bevy_render: Do not automatically enable MAPPABLE_PRIMARY_BUFFERS][3698]
+* [increase the maximum number of point lights with shadows to the max supported by the device][4435]
+* [perf: only recalculate frusta of changed lights][4086]
+* [bevy_pbr: Optimize assign_lights_to_clusters][3984]
+* [improve error messages for render graph runner][3930]
+* [Skinned extraction speedup][4428]
+* [Sprites - keep color as 4 f32][4361]
+* [Change scaling mode to FixedHorizontal][4055]
+* [Replace VSync with PresentMode][3812]
+* [do not set cursor grab on window creation if not asked for][3617]
+* [bevy_transform: Use Changed in the query for much faster transform_propagate_system][4180]
+* [Split bevy_hierarchy out from bevy_transform][4168]
+* [Make transform builder methods const][3045]
+* [many_cubes: Add a cube pattern suitable for benchmarking culling changes][4126]
+* [Make many_cubes example more interesting][4015]
+* [Run tests (including doc tests) in `cargo run -p ci` command][3849]
+* [Use more ergonomic span syntax][4246]
 
 ### Fixed
 
-- [Remove unsound lifetime annotations on `EntityMut`][4096]
-- [Remove unsound lifetime annotations on `Query` methods][4243]
-- [Remove `World::components_mut`][4092]
-- [unsafeify `World::entities_mut`][4093]
-- [Use ManuallyDrop instead of forget in insert_resource_with_id][2947]
-- [Backport soundness fix][3685]
-- [Fix clicked UI nodes getting reset when hovering child nodes][4194]
-- [Fix ui interactions when cursor disappears suddenly][3926]
-- [Fix node update][3785]
-- [Fix derive(SystemParam) macro][4400]
-- [SystemParam Derive fixes][2838]
-- [Do not crash if RenderDevice doesn't exist][4427]
-- [Fixed case of R == G, following original conversion formula][4383]
-- [Fixed the frustum-sphere collision and added tests][4035]
-- [bevy_render: Fix Quad flip][3741]
-- [Fix HDR asset support][3795]
-- [fix cluster tiling calculations][4148]
-- [bevy_pbr: Do not panic when more than 256 point lights are added the scene][3697]
-- [fix issues with too many point lights][3916]
-- [shader preprocessor - do not import if scope is not valid][4012]
-- [support all line endings in shader preprocessor][3603]
-- [Fix animation: shadow and wireframe support][4367]
-- [add AnimationPlayer component only on scene roots that are also animation roots][4417]
-- [Fix loading non-TriangleList meshes without normals in gltf loader][4376]
-- [gltf-loader: disable backface culling if material is double-sided][4270]
-- [Fix glTF perspective camera projection][4006]
-- [fix mul_vec3 transformation order: should be scale -> rotate -> translate][3811]
+* [Remove unsound lifetime annotations on `EntityMut`][4096]
+* [Remove unsound lifetime annotations on `Query` methods][4243]
+* [Remove `World::components_mut`][4092]
+* [unsafeify `World::entities_mut`][4093]
+* [Use ManuallyDrop instead of forget in insert_resource_with_id][2947]
+* [Backport soundness fix][3685]
+* [Fix clicked UI nodes getting reset when hovering child nodes][4194]
+* [Fix ui interactions when cursor disappears suddenly][3926]
+* [Fix node update][3785]
+* [Fix derive(SystemParam) macro][4400]
+* [SystemParam Derive fixes][2838]
+* [Do not crash if RenderDevice doesn't exist][4427]
+* [Fixed case of R == G, following original conversion formula][4383]
+* [Fixed the frustum-sphere collision and added tests][4035]
+* [bevy_render: Fix Quad flip][3741]
+* [Fix HDR asset support][3795]
+* [fix cluster tiling calculations][4148]
+* [bevy_pbr: Do not panic when more than 256 point lights are added the scene][3697]
+* [fix issues with too many point lights][3916]
+* [shader preprocessor - do not import if scope is not valid][4012]
+* [support all line endings in shader preprocessor][3603]
+* [Fix animation: shadow and wireframe support][4367]
+* [add AnimationPlayer component only on scene roots that are also animation roots][4417]
+* [Fix loading non-TriangleList meshes without normals in gltf loader][4376]
+* [gltf-loader: disable backface culling if material is double-sided][4270]
+* [Fix glTF perspective camera projection][4006]
+* [fix mul_vec3 transformation order: should be scale -> rotate -> translate][3811]
 
 [2154]: https://github.com/bevyengine/bevy/pull/2154
 [2382]: https://github.com/bevyengine/bevy/pull/2382
@@ -1142,12 +1143,10 @@ A huge thanks to the **123 contributors** that made this release (and associated
 [4243]: https://github.com/bevyengine/bevy/pull/4243
 [4246]: https://github.com/bevyengine/bevy/pull/4246
 [4250]: https://github.com/bevyengine/bevy/pull/4250
-[4252]: https://github.com/bevyengine/bevy/pull/4252
 [4270]: https://github.com/bevyengine/bevy/pull/4270
 [4298]: https://github.com/bevyengine/bevy/pull/4298
 [4310]: https://github.com/bevyengine/bevy/pull/4310
 [4328]: https://github.com/bevyengine/bevy/pull/4328
-[4332]: https://github.com/bevyengine/bevy/pull/4332
 [4340]: https://github.com/bevyengine/bevy/pull/4340
 [4347]: https://github.com/bevyengine/bevy/pull/4347
 [4361]: https://github.com/bevyengine/bevy/pull/4361
@@ -1158,11 +1157,7 @@ A huge thanks to the **123 contributors** that made this release (and associated
 [4396]: https://github.com/bevyengine/bevy/pull/4396
 [4399]: https://github.com/bevyengine/bevy/pull/4399
 [4400]: https://github.com/bevyengine/bevy/pull/4400
-[4403]: https://github.com/bevyengine/bevy/pull/4403
-[4405]: https://github.com/bevyengine/bevy/pull/4405
 [4417]: https://github.com/bevyengine/bevy/pull/4417
-[4420]: https://github.com/bevyengine/bevy/pull/4420
-[4426]: https://github.com/bevyengine/bevy/pull/4426
 [4427]: https://github.com/bevyengine/bevy/pull/4427
 [4428]: https://github.com/bevyengine/bevy/pull/4428
 [4433]: https://github.com/bevyengine/bevy/pull/4433

@@ -18,7 +18,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 0.6 Migration Guide](/learn/book/migration-guides/0.5-0.6/).
 
-There are a _ton_ of improvements, bug fixes and quality of life tweaks in this release. Here are some of the highlights: 
+There are a _ton_ of improvements, bug fixes and quality of life tweaks in this release. Here are some of the highlights:
 
 * A brand new modern renderer that is prettier, faster, and simpler to extend
 * Directional and point light shadows
@@ -37,9 +37,10 @@ Read on for details!
 ## The New Bevy Renderer
 
 **Bevy 0.6** introduces a brand new modern renderer that is:
+
 * **Faster**: More parallel, less computation per-entity, more efficient CPU->GPU dataflow, and (with soon-to-be-enabled) pipelined rendering
 * **Prettier**: We're releasing the new renderer alongside a number of graphical improvements, such as directional and point light shadows, clustered forward rendering (so you can draw more lights in a scene), and spherical area lights. We also have a ton of new features in development (cascaded shadow maps, bloom, particles, shadow filters, and more!)
-* **Simpler**: Fewer layers of abstraction, simpler data flow, improved low-level, mid-level, and high-level interfaces, direct wgpu access 
+* **Simpler**: Fewer layers of abstraction, simpler data flow, improved low-level, mid-level, and high-level interfaces, direct wgpu access
 * **Modular to its core**: Standardized 2d and 3d core pipelines, extensible Render Phases and Views, composable entity/component-driven draw functions, shader imports, extensible and repeatable render pipelines via "sub graphs"
 * **Industry Proven**: We've taken inspiration from battle tested renderer architectures, such as [Bungie's pipelined Destiny renderer](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf). We also learned a lot from (and worked closely with) other renderer developers in the Rust space, namely @aclysma ([rafx](https://github.com/aclysma/rafx)) and @cwfitzgerald ([rend3](https://github.com/BVE-Reborn/rend3)). The New Bevy Renderer wouldn't be what it is without them, and I highly recommend checking out their projects!
 
@@ -50,6 +51,7 @@ I promise I'll qualify all of those fluffy buzzwords below. I am confident that 
 ### Why build a new renderer?
 
 Before we cover what's new, it's worth discussing why we embarked on such a massive effort. The old Bevy Renderer got a number of things right:
+
 * **Modular render logic** (via the Render Graph)
 * **Multiple backends** (both first and third party)
 * **High level data-driven API**: this made it easy and ergonomic to write custom per-entity render logic
@@ -65,7 +67,7 @@ However, it also had a number of _significant_ shortcomings:
 
 The shortcomings above were acceptable in Bevy's early days, but were clearly holding us back as Bevy grew from a [one person side project](/news/introducing-bevy) to the most popular Rust game engine on GitHub (and one of the most [popular open source game engines ... period](https://github.com/topics/game-engine)). A "passable" renderer no longer cuts it when we have hundreds of contributors, a paid full-time developer, thousands of individual users, and a growing number of companies paying people to work on Bevy apps and features. It was time for a change.
 
-For a deeper view into our decision-making and development process (including the alternatives we considered) check out the [New Renderer Tracking Issue](https://github.com/bevyengine/bevy/issues/2535). 
+For a deeper view into our decision-making and development process (including the alternatives we considered) check out the [New Renderer Tracking Issue](https://github.com/bevyengine/bevy/issues/2535).
 
 ### Pipelined Rendering: Extract, Prepare, Queue, Render
 
@@ -87,10 +89,11 @@ Pipelined rendering looks like this:
 Much better!
 
 Bevy apps are now split into the Main App, which is where app logic occurs, and the Render App, which has its own separate ECS World and Schedule. The Render App consists of the following ECS stages, which developers add ECS Systems to when they are composing new render features:
+
 * **Extract**: This is the one synchronization point between the Main World and the Render World. Relevant Entities, Components, and Resources are read from the Main World and written to corresponding Entities, Components, and Resources in the Render World. The goal is to keep this step as quick as possible, as it is the one piece of logic that cannot run in parallel. It is a good rule of thumb to extract only the minimum amount of data needed for rendering, such as by only considering "visible" entities and only copying the relevant components.
 * **Prepare**: Extracted data is then "prepared" by writing it to the GPU. This generally involves writing to GPU Buffers and Textures and creating Bind Groups.
 * **Queue**: This "queues" render jobs that feed off of "prepared" data.
-* **Render**: This runs the Render Graph, which produces actual render commands from the results stored in the Render World from the Extract, Prepare, and Queue steps. 
+* **Render**: This runs the Render Graph, which produces actual render commands from the results stored in the Render World from the Extract, Prepare, and Queue steps.
 
 So pipelined rendering actually looks more like this, with the next app update occurring after the extract step:
 
@@ -107,6 +110,7 @@ As a quick callout, pipelined rendering doesn't _actually_ happen in parallel ye
 The New Bevy Renderer has a Render Graph, [much like the old Bevy renderer](/news/introducing-bevy/#render-graph). Render Graphs are a way to logically model GPU command construction in a modular way. Graph Nodes pass GPU resources like Textures and Buffers (and sometimes Entities) to each other, forming a directed acyclic graph. When a Graph Node runs, it uses its graph inputs and the Render World to construct GPU command lists.
 
 The biggest change to this API is that we now support Sub Graphs, which are basically "namespaced" Render Graphs that can be run from any Node in the graph with arbitrary inputs. This enables us to define things like a "2d" and "3d" sub graph, which users can insert custom logic into. This opens two doors simultaneously:
+
 * The ability to repeat render logic, but for different views (split screen, mirrors, rendering to a texture, shadow maps).
 * The ability for users to extend this repeated logic.
 
@@ -117,12 +121,14 @@ The biggest change to this API is that we now support Sub Graphs, which are basi
 Bevy has always used [wgpu](https://github.com/gfx-rs/wgpu), a native GPU abstraction layer with support for most graphics backends: Vulkan, Metal, DX12, OpenGL, WebGL2, and WebGPU (and WIP DX11 support). But the old renderer hid it behind our own hardware abstraction layer. In practice, this was largely just a mirror of the wgpu API. It gave us the ability to build our own graphics backends without bothering the wgpu folks, but in practice it created a lot of pain (due to being an imperfect mirror), overhead (due to introducing a dynamic API and requiring global mutex locks over GPU resource collections), and complexity (bevy_render -> wgpu -> Vulkan). In return, we didn't get many practical benefits ... just slightly more autonomy.
 
 The truth of the matter is that wgpu already occupies _exactly_ the space we want it to:
+
 * Multiple backends, with the goal to support as many platforms as possible
 * A "baseline" feature set that works almost everywhere with a consistent API
 * A "limits" and "features" system that enables opting-in to arbitrary (sometimes backend-specific features) and detecting when those features are available. This will be important when we start adding things like raytracing and VR support.
 * A modern GPU API, but without the pain and complexity of raw Vulkan. Perfect for user-facing Bevy renderer extensions.
 
 However, initially there were a couple of reasons not to make it our "public facing API":
+
 * **Complexity**: wgpu used to be built on top of gfx-hal (an older GPU abstraction layer also built and managed by the wgpu team). These multiple layers of abstraction in multiple repos made contributing to and reasoning about the internals difficult. Additionally, I have a rule for "3rd party dependencies publicly exposed in Bevy APIs": we must feel comfortable forking and maintaining them if we need to (ex: upstream stops being maintained, visions diverge, etc). I wasn't particularly comfortable with doing that with the old architecture.
 * **Licensing**: wgpu used to be licensed under the "copyleft" MPL license, which created concerns about integration with proprietary graphics apis (such as consoles like the Switch).
 * **WebGL2 Support**: wgpu used to not have a WebGL2 backend. Bevy's old renderer had a custom WebGL2 backend and we weren't willing to give up support for the Web as a platform.
@@ -137,7 +143,7 @@ Bevy was also updated to use the latest and greatest wgpu version: [0.12](https:
 
 <div class="release-feature-authors">authors: @cart</div>
 
-The new renderer is what I like to call "ECS-driven": 
+The new renderer is what I like to call "ECS-driven":
 
 * As we covered previously, the Render World is populated using data Extracted from the Main World.
 * Scenes are rendered from one or more Views, which are just Entities in the Render World with Components relevant to that View. View Entities can be extended with arbitrary Components, which makes it easy to extend the renderer with custom View data and logic. Cameras aren't the only type of View. Views can be defined by the Render App for arbitrary concepts, such as "shadow map perspectives".
@@ -190,6 +196,7 @@ impl Material for CustomMaterial {
 There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built-in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
 
 We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material" plural=true)}} even better:
+
 * **Bind Group derives**: this should cut down on the boilerplate of passing materials to the GPU.
 * **Material Instancing**: materials enable us to implement high-level mesh instancing as a simple configuration item for both built in and custom materials.
 
@@ -200,7 +207,6 @@ We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version
 [![view frustum](ViewFrustum.svg)](https://en.wikipedia.org/wiki/Viewing_frustum#/media/File:ViewFrustum.svg)
 
 Drawing things is expensive! It requires writing data from the CPU to the GPU, constructing draw calls, and running shaders. We can save a lot of time by _not_ drawing things that the camera can't see. "Frustum culling" is the act of excluding objects that are outside the bounds of the camera's "view frustum", to avoid wasting work drawing them. For large scenes, this can be the difference between a crisp 60 frames per second and chugging to a grinding halt.
-
 
 **Bevy 0.6** now automatically does frustum culling for 3d objects using their axis-aligned bounding boxes. We might also enable this for 2d objects in future releases, but the wins there will be less pronounced, as drawing sprites is now much cheaper thanks to the new batched rendering.
 
@@ -219,7 +225,6 @@ Note: directional shadows currently require more manual configuration than neces
 <div class="release-feature-authors">authors: @mtsr, Rob Swain (@superdump), @cart</div>
 
 Point lights can now cast "omnidirectional shadows", which can be enabled by setting `PointLight::shadows_enabled` to `true`:
-
 
 ![point light](point_light.png)
 
@@ -257,7 +262,7 @@ Bevy's StandardMaterial now has an `alpha_mode` field, which can be set to `Alph
 
 ![alpha blend modes](alpha_blend.png)
 
-### Clustered Forward Rendering 
+### Clustered Forward Rendering
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
@@ -347,7 +352,6 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 }
 ```
 
-
 ### Shader Preprocessor
 
 <div class="release-feature-authors">authors: @cart, Rob Swain (@superdump), @mockersf</div>
@@ -425,7 +429,7 @@ Bevy now uses [Naga](https://github.com/gfx-rs/naga) for all of its shader needs
 
 Render logic for internal Bevy crates had to be rewritten in a number of cases to take advantage of the new renderer. The following people helped with this effort:
 
-* bevy_sprites: @cart, @StarArawn, @Davier 
+* bevy_sprites: @cart, @StarArawn, @Davier
 * bevy_pbr: Rob Swain (@superdump), @aevyrie, @cart, @zicklag, @jakobhellermann
 * bevy_ui: @Davier
 * bevy_text: @Davier
@@ -452,14 +456,13 @@ You can try out Bevy's WASM support in your browser using our new [Bevy Examples
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-For improved precision in the "useful range", the industry has largely adopted "reverse projections" with an "infinite" far plane. The new Bevy renderer was adapted to use the "right-handed infinite reverse z" projection. [This Nvidia article](https://developer.nvidia.com/content/depth-precision-visualized) does a great job of explaining why this is so worthwhile. 
+For improved precision in the "useful range", the industry has largely adopted "reverse projections" with an "infinite" far plane. The new Bevy renderer was adapted to use the "right-handed infinite reverse z" projection. [This Nvidia article](https://developer.nvidia.com/content/depth-precision-visualized) does a great job of explaining why this is so worthwhile.
 
 ### Compute Shaders
 
 The new renderer makes it possible for users to write compute shaders. Our new ["compute shader game of life" example](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/compute_shader_game_of_life.rs) (by @jakobhellermann) illustrates how to write compute shaders in Bevy.
 
 ![compute game of life](compute.png)
-
 
 ### New Multiple Windows Example
 
@@ -497,6 +500,7 @@ var<uniform> mesh: Mesh;
 ```
 
 We (in the short term) forked crevice for a couple of reasons:
+
 * To merge [Array Support PR](https://github.com/LPGhatguy/crevice/pull/27/) by @ElectronicRU, as we need support for arrays in our uniforms.  
 * To re-export crevice derives and provide an "out of the box" experience for Bevy
 
@@ -522,7 +526,7 @@ Mesh::from(UVSphere {
 
 <div class="release-feature-authors">authors: @jakobhellermann</div>
 
-The `Mesh` type now has a `compute_flat_normals()` function. Imported GLTF meshes without normals now automatically have flat normals computed, [in accordance with the GLTF spec](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#meshes). 
+The `Mesh` type now has a `compute_flat_normals()` function. Imported GLTF meshes without normals now automatically have flat normals computed, [in accordance with the GLTF spec](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#meshes).
 
 ![flat normals](flat_normals.png)
 
@@ -587,8 +591,8 @@ This removed the need for users to manually implement {{rust_type(type="trait" c
 * **Optimizations**: If we implement Component for everything automatically, we can't customize the Component type with associated types. This prevents an entire class of optimization. For example, Bevy ECS now has [multiple Component storage types](/news/bevy-0-5/#hybrid-component-storage-the-solution). By moving the storage type into Component, we enable rustc to optimize checks that would normally need to happen at runtime. @Frizi was able to [significantly improve our Query iterator performance](https://github.com/bevyengine/bevy/pull/2254#issuecomment-857863116) by moving the storage type into Component. I expect us to find more optimizations in this category.
 * **Automatic registration**: Moving more logic into Component also gives us the ability to do fancier things in the future like "automatically registering Reflect impls when deriving Component". Non-blanket Component impls do add a small amount of boilerplate, but they also have the potential to massively reduce the "total boilerplate" of an app.
 * **Documentation**: Deriving Component serves as a form of self-documentation. It's now easy to tell what types are components at a glance.
-* **Organized**: In Bevy 0.5 Component-specific configuration like "storage type" had to be registered in a centralized Plugin somewhere. Moving Component configuration into the Component trait allows users to keep "Component type information" right next to the type itself. 
-* **Event Handlers**: Non-blanket Component impls will eventually allow us to add event handlers like `on_insert(world: &mut World)` to the Component trait. Very useful! 
+* **Organized**: In Bevy 0.5 Component-specific configuration like "storage type" had to be registered in a centralized Plugin somewhere. Moving Component configuration into the Component trait allows users to keep "Component type information" right next to the type itself.
+* **Event Handlers**: Non-blanket Component impls will eventually allow us to add event handlers like `on_insert(world: &mut World)` to the Component trait. Very useful!
 
 Hopefully by now you're convinced that this is the right move. If not ... I'm sorry ... you still need to implement Component manually in Bevy 0.6. You can either derive Component:
 
@@ -730,7 +734,7 @@ System and Query lifetimes were made more explicit by splitting out the `'system
 
 Note that this does make the lifetimes on SystemParam derives slightly more complicated as a result:
 
-```rust
+```rs
 #[derive(SystemParam)]
 struct CustomParam<'w, 's> {
     res: Res<'w, AssetServer>,
@@ -743,7 +747,7 @@ struct CustomParam<'w, 's> {
 
 <div class="release-feature-authors">authors: @BoxyUwU, @TheRawMeatball, @Frizi, @thebluefish, @sapir, @bjorn3, @DJMcNab</div>
 
-Bevy ECS received a solid number of soundness and correctness bug fixes this release, alongside some unsafe code block removals. Queries and internal storages like Tables and BlobVecs in particular had a number of fixes and improvements in these areas. As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks, because we are modeling parallel data access that Rust literally cannot reason about without our help. But we are committed to removing as much unsafe code as we can (and we have a number of refactors in the works to further improve the situation). 
+Bevy ECS received a solid number of soundness and correctness bug fixes this release, alongside some unsafe code block removals. Queries and internal storages like Tables and BlobVecs in particular had a number of fixes and improvements in these areas. As Bevy ECS matures, our bar for unsafe code blocks and soundness must also mature. Bevy ECS will probably never be 100% free of unsafe code blocks, because we are modeling parallel data access that Rust literally cannot reason about without our help. But we are committed to removing as much unsafe code as we can (and we have a number of refactors in the works to further improve the situation).
 
 ### Hierarchy Convenience Functions
 
@@ -777,7 +781,7 @@ UI now respects the flexbox `Overflow::Hidden` property. This can be used to cut
 
 Note that while `Transform::scale` does have its uses, it is generally still a good idea to adjust text size using the "font size" to ensure it renders "crisply".
 
-### Window Transparency 
+### Window Transparency
 
 <div class="release-feature-authors">authors: @louisgjohnson</div>
 
@@ -831,7 +835,7 @@ version = "0.1.0"
 edition = "2021"
 ```
 
-Note that "virtual Cargo workspaces" still need to manually define `resolver = "2"`, even in Rust 2021. [Refer to the Rust 2021 documentation](https://doc.rust-lang.org/edition-guide/rust-2021/default-cargo-resolver.html#details) for details. 
+Note that "virtual Cargo workspaces" still need to manually define `resolver = "2"`, even in Rust 2021. [Refer to the Rust 2021 documentation](https://doc.rust-lang.org/edition-guide/rust-2021/default-cargo-resolver.html#details) for details.
 
 ```toml
 [workspace]
@@ -855,11 +859,11 @@ fn system(gamepads: Res<Gamepads>) {
 }
 ```
 
-### Input "any" variants 
+### Input "any" variants
 
 <div class="release-feature-authors">authors: @DJMcNab</div>
 
-`Input` collections now have an `any_pressed()` function, which returns true when any of the given inputs are pressed. 
+`Input` collections now have an `any_pressed()` function, which returns true when any of the given inputs are pressed.
 
 ```rust
  fn system(input: Res<Input<KeyCode>>) {
@@ -916,7 +920,7 @@ Error codes and their descriptions also have an automatically-generated [page on
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-The curated awesome-bevy GitHub repo containing a list of Bevy plugins, crates, apps, and learning resources is now reborn as [Bevy Assets](https://github.com/bevyengine/bevy-assets)! 
+The curated awesome-bevy GitHub repo containing a list of Bevy plugins, crates, apps, and learning resources is now reborn as [Bevy Assets](https://github.com/bevyengine/bevy-assets)!
 
 Bevy Assets introduces:
 
@@ -946,13 +950,13 @@ However, there were a variety of issues that have come up that make dual-licensi
 * The MIT license (arguably) requires binaries to reproduce countless copies of the same license boilerplate for every MIT library in use. Apache-2.0 allows us to compress the boilerplate into a single instance of the license.
 * The Apache-2.0 license has protections from patent trolls and an explicit contribution licensing clause.
 * The Rust ecosystem is largely Apache-2.0. Being available under that license is good for interoperation and opens the doors to upstreaming Bevy code into other projects (Rust, the async ecosystem, etc).
-* The Apache license is incompatible with GPLv2, but MIT is compatible. 
+* The Apache license is incompatible with GPLv2, but MIT is compatible.
 
 ## Bevy Org Changes
 
 ### More pull request mergers!
 
-I've been at my scalability limits for a while. It has been  * cough * ... challenging  ... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far ... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
+I've been at my scalability limits for a while. It has been _cough_... challenging... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far ... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
 
 * @mockersf now has merge rights for "uncontroversial changes"
 * @alice-i-cecile now has merge rights for "uncontroversial documentation changes"
@@ -965,7 +969,7 @@ After [much discussion about naming conventions and colors](https://github.com/b
 
 <div class="release-feature-authors">authors: @alice-i-cecile</div>
 
-We now have a relatively complete [Contributors Guide](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md). If you are interested in contributing code or documentation to Bevy, that is a great place to start! 
+We now have a relatively complete [Contributors Guide](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md). If you are interested in contributing code or documentation to Bevy, that is a great place to start!
 
 ### CI Build System Improvements
 
@@ -994,18 +998,19 @@ In the last two Bevy releases we made massive, sweeping changes to core systems.
 From now on, we will cut releases _approximately_ once every three months (as an upper bound ... sometimes we might release early if it makes sense). After the end of a release cycle, we will start preparing to cut a release. If there are small tweaks that need to be made or "life happens" ... we will happily postpone releases. But we won't hold releases back for "big ticket" items anymore.
 
 We are balancing a lot of different concerns here:
+
 * Building trust with Bevy contributors that their changes will land in a timely manner
 * Building trust with Bevy users that they will receive regular updates and bug fixes
-* Giving enough time between releases to cut down on churn in the Bevy Plugin ecosystem (Bevy isn't "stable" yet, but longer releases give reasonable windows of "ecosystem stability") 
+* Giving enough time between releases to cut down on churn in the Bevy Plugin ecosystem (Bevy isn't "stable" yet, but longer releases give reasonable windows of "ecosystem stability")
 * Providing enough content in a release to generate "hype". Bevy release blog posts tend to be a "rallying cry" for the community and I don't want to lose that.
 * Establishing proper work / life balance for core developers (crunch is bad!)
-    
+
 We will refine this process over time and see what works best.
 
 ### More Renderer Features
 
 * **Post-Processing Stack / HDR / Bloom**: HDR and bloom [almost made it into Bevy 0.6](https://github.com/bevyengine/bevy/pull/2876), but we decided to hold them back so we can polish them a bit and build a proper "modular post-processing stack".
-* **Skeletal Animation**: Ultimately Bevy will have a general purpose, property based animation system (we already have a [working implementation](https://github.com/bevyengine/bevy/pull/1429)). We've been holding off on adding skeletal animation, so we can slot it in to that system, but in retrospect that was a mistake. People need skeletal animation _now_. In the short term we will build a scoped 3d skeletal animation system, just to get the ball rolling. Then later we will port it to the general purpose system (whenever that is ready), 
+* **Skeletal Animation**: Ultimately Bevy will have a general purpose, property based animation system (we already have a [working implementation](https://github.com/bevyengine/bevy/pull/1429)). We've been holding off on adding skeletal animation, so we can slot it in to that system, but in retrospect that was a mistake. People need skeletal animation _now_. In the short term we will build a scoped 3d skeletal animation system, just to get the ball rolling. Then later we will port it to the general purpose system (whenever that is ready),
 * **Screen Space Ambient Occlusion (SSAO)**: A popular and straightforward ambient occlusion approximation that can drastically improve render quality.
 * **Global Illumination**: GI will provide a massive boost to the feel of "realism", so it is worth prioritizing at least one form of GI in the short term. This is a complicated topic and will require experimentation.
 * **Compressed Textures**: This will make scenes load faster and cut down on GPU memory usage.
@@ -1015,6 +1020,7 @@ We will refine this process over time and see what works best.
 ### UI Refresh
 
 We will break ground on the Bevy Editor this year. To do that, we need a number of improvements to Bevy UI:
+
 * Improved "data driven UI" (potentially "reactive")
 * A solid set of pre-constructed widgets
 * Generally improved UX
@@ -1027,7 +1033,7 @@ Preprocessing assets is a critical part of a production game engine. It cuts dow
 
 ### Scene Improvements
 
-Nested scenes, property overrides, inline assets, and nicer syntax are all on the agenda. We already have a number of working experiments in these areas, so we should see relatively quick progress here. 
+Nested scenes, property overrides, inline assets, and nicer syntax are all on the agenda. We already have a number of working experiments in these areas, so we should see relatively quick progress here.
 
 ### The New Bevy Book
 
@@ -1224,332 +1230,332 @@ A huge thanks to the **170 contributors** that made this release (and associated
 
 ### Added
 
-- [New Renderer][3175]
-- [Clustered forward rendering][3153]
-- [Frustum culling][2861]
-- [Sprite Batching][3060]
-- [Materials and MaterialPlugin][3428]
-- [2D Meshes and Materials][3460]
-- [WebGL2 support][3039]
-- [Pipeline Specialization, Shader Assets, and Shader Preprocessing][3031]
-- [Modular Rendering][2831]
-- [Directional light and shadow][c6]
-- [Directional light][2112]
-- [Use the infinite reverse right-handed perspective projection][2543]
-- [Implement and require `#[derive(Component)]` on all component structs][2254]
-- [Shader Imports. Decouple Mesh logic from PBR][3137]
-- [Add support for opaque, alpha mask, and alpha blend modes][3072]
-- [bevy_gltf: Load light names from gltf][3553]
-- [bevy_gltf: Add support for loading lights][3506]
-- [Spherical Area Lights][1901]
-- [Shader Processor: process imported shader][3290]
-- [Add support for not casting/receiving shadows][2726]
-- [Add support for configurable shadow map sizes][2700]
-- [Implement the `Overflow::Hidden` style property for UI][3296]
-- [SystemState][2283]
-- [Add a method `iter_combinations` on query to iterate over combinations of query results][1763]
-- [Add FromReflect trait to convert dynamic types to concrete types][1395]
-- [More pipelined-rendering shader examples][3041]
-- [Configurable wgpu features/limits priority][3452]
-- [Cargo feature for bevy UI][3546]
-- [Spherical area lights example][3498]
-- [Implement ReflectValue serialization for Duration][3318]
-- [bevy_ui: register Overflow type][3443]
-- [Add Visibility component to UI][3426]
-- [Implement non-indexed mesh rendering][3415]
-- [add tracing spans for parallel executor and system overhead][3416]
-- [RemoveChildren command][1925]
-- [report shader processing errors in `RenderPipelineCache`][3289]
-- [enable Webgl2 optimisation in pbr under feature][3291]
-- [Implement Sub-App Labels][2695]
-- [Added `set_cursor_icon(...)` to `Window`][3395]
-- [Support topologies other than TriangleList][3349]
-- [Add an example 'showcasing' using multiple windows][3367]
-- [Add an example to draw a rectangle][2957]
-- [Added set_scissor_rect to tracked render pass.][3320]
-- [Add RenderWorld to Extract step][2555]
-- [re-export ClearPassNode][3336]
-- [add default standard material in PbrBundle][3325]
-- [add methods to get reads and writes of Access<T>][3166]
-- [Add despawn_children][2903]
-- [More Bevy ECS schedule spans][3281]
-- [Added transparency to window builder][3105]
-- [Add Gamepads resource][3257]
-- [Add support for #else for shader defs][3206]
-- [Implement iter() for mutable Queries][2305]
-- [add shadows in examples][3201]
-- [Added missing wgpu image render resources.][3171]
-- [Per-light toggleable shadow mapping][3126]
-- [Support nested shader defs][3113]
-- [use bytemuck crate instead of Byteable trait][2183]
-- [`iter_mut()` for Assets type][3118]
-- [EntityRenderCommand and PhaseItemRenderCommand][3111]
-- [add position to WindowDescriptor][3070]
-- [Add System Command apply and RenderGraph node spans][3069]
-- [Support for normal maps including from glTF models][2741]
-- [MSAA example][3049]
-- [Add MSAA to new renderer][3042]
-- [Add support for IndexFormat::Uint16][2990]
-- [Apply labels to wgpu resources for improved debugging/profiling][2912]
-- [Add tracing spans around render subapp and stages][2907]
-- [Add set_stencil_reference to TrackedRenderPass][2885]
-- [Add despawn_recursive to EntityMut][2855]
-- [Add trace_tracy feature for Tracy profiling][2832]
-- [Expose wgpu's StencilOperation with bevy ][2819]
-- [add get_single variant][2793]
-- [Add builder methods to Transform][2778]
-- [add get_history function to Diagnostic][2772]
-- [Add convenience methods for checking a set of inputs][2760]
-- [Add error messages for the spooky insertions][2581]
-- [Add Deref implementation for ComputePipeline][2759]
-- [Derive thiserror::Error for HexColorError][2740]
-- [Spawn specific entities: spawn or insert operations, refactor spawn internals, world clearing][2673]
-- [Add ClearColor Resource to Pipelined Renderer][2631]
-- [remove_component for ReflectComponent][2682]
-- [Added ComputePipelineDescriptor][2628]
-- [Added StorageTextureAccess to the exposed wgpu API][2614]
-- [Add sprite atlases into the new renderer.][2560]
-- [Log adapter info on initialization][2542]
-- [Add feature flag to enable wasm for bevy_audio][2397]
-- [Allow Option<NonSend<T>> and Option<NonSendMut<T>> as SystemParam][2345]
-- [Added helpful adders for systemsets][2366]
-- [Derive Clone for Time][2360]
-- [Implement Clone for Fetches][2641]
-- [Implement IntoSystemDescriptor for SystemDescriptor][2718]
-- [implement DetectChanges for NonSendMut][2326]
-- [Log errors when loading textures from a gltf file][2260]
-- [expose texture/image conversions as From/TryFrom][2175]
-- [[ecs] implement is_empty for queries][2271]
-- [Add audio to ios example][1007]
-- [Example showing how to use AsyncComputeTaskPool and Tasks ][2180]
-- [Expose set_changed() on ResMut and Mut][2208]
-- [Impl AsRef+AsMut for Res, ResMut, and Mut][2189]
-- [Add exit_on_esc_system to examples with window][2121]
-- [Implement rotation for Text2d][2084]
-- [Mesh vertex attributes for skinning and animation][1831]
-- [load zeroed UVs as fallback in gltf loader][1803]
-- [Implement direct mutable dereferencing][2100]
-- [add a span for frames][2053]
-- [Add an alias mouse position -> cursor position][2038]
-- [Adding `WorldQuery` for `WithBundle`][2024]
-- [Automatic System Spans][2033]
-- [Add system sets and run criteria example][1909]
-- [EnumVariantMeta derive][1972]
-- [Added TryFrom for VertexAttributeValues][1963]
-- [add render_to_texture example][1927]
-- [Added example of entity sorting by components][1817]
-- [calculate flat normals for mesh if missing][1808]
-- [Add animate shaders example][1765]
-- [examples on how to tests systems][1714]
-- [Add a UV sphere implementation][1887]
-- [Add additional vertex formats][1878]
-- [gltf-loader: support data url for images][1828]
-- [glTF: added color attribute support][1775]
-- [Add synonyms for transform relative vectors][1667]
+* [New Renderer][3175]
+* [Clustered forward rendering][3153]
+* [Frustum culling][2861]
+* [Sprite Batching][3060]
+* [Materials and MaterialPlugin][3428]
+* [2D Meshes and Materials][3460]
+* [WebGL2 support][3039]
+* [Pipeline Specialization, Shader Assets, and Shader Preprocessing][3031]
+* [Modular Rendering][2831]
+* [Directional light and shadow][c6]
+* [Directional light][2112]
+* [Use the infinite reverse right-handed perspective projection][2543]
+* [Implement and require `#[derive(Component)]` on all component structs][2254]
+* [Shader Imports. Decouple Mesh logic from PBR][3137]
+* [Add support for opaque, alpha mask, and alpha blend modes][3072]
+* [bevy_gltf: Load light names from gltf][3553]
+* [bevy_gltf: Add support for loading lights][3506]
+* [Spherical Area Lights][1901]
+* [Shader Processor: process imported shader][3290]
+* [Add support for not casting/receiving shadows][2726]
+* [Add support for configurable shadow map sizes][2700]
+* [Implement the `Overflow::Hidden` style property for UI][3296]
+* [SystemState][2283]
+* [Add a method `iter_combinations` on query to iterate over combinations of query results][1763]
+* [Add FromReflect trait to convert dynamic types to concrete types][1395]
+* [More pipelined-rendering shader examples][3041]
+* [Configurable wgpu features/limits priority][3452]
+* [Cargo feature for bevy UI][3546]
+* [Spherical area lights example][3498]
+* [Implement ReflectValue serialization for Duration][3318]
+* [bevy_ui: register Overflow type][3443]
+* [Add Visibility component to UI][3426]
+* [Implement non-indexed mesh rendering][3415]
+* [add tracing spans for parallel executor and system overhead][3416]
+* [RemoveChildren command][1925]
+* [report shader processing errors in `RenderPipelineCache`][3289]
+* [enable Webgl2 optimisation in pbr under feature][3291]
+* [Implement Sub-App Labels][2695]
+* [Added `set_cursor_icon(...)` to `Window`][3395]
+* [Support topologies other than TriangleList][3349]
+* [Add an example 'showcasing' using multiple windows][3367]
+* [Add an example to draw a rectangle][2957]
+* [Added set_scissor_rect to tracked render pass.][3320]
+* [Add RenderWorld to Extract step][2555]
+* [re-export ClearPassNode][3336]
+* [add default standard material in PbrBundle][3325]
+* [add methods to get reads and writes of Access<T>][3166]
+* [Add despawn_children][2903]
+* [More Bevy ECS schedule spans][3281]
+* [Added transparency to window builder][3105]
+* [Add Gamepads resource][3257]
+* [Add support for #else for shader defs][3206]
+* [Implement iter() for mutable Queries][2305]
+* [add shadows in examples][3201]
+* [Added missing wgpu image render resources.][3171]
+* [Per-light toggleable shadow mapping][3126]
+* [Support nested shader defs][3113]
+* [use bytemuck crate instead of Byteable trait][2183]
+* [`iter_mut()` for Assets type][3118]
+* [EntityRenderCommand and PhaseItemRenderCommand][3111]
+* [add position to WindowDescriptor][3070]
+* [Add System Command apply and RenderGraph node spans][3069]
+* [Support for normal maps including from glTF models][2741]
+* [MSAA example][3049]
+* [Add MSAA to new renderer][3042]
+* [Add support for IndexFormat::Uint16][2990]
+* [Apply labels to wgpu resources for improved debugging/profiling][2912]
+* [Add tracing spans around render subapp and stages][2907]
+* [Add set_stencil_reference to TrackedRenderPass][2885]
+* [Add despawn_recursive to EntityMut][2855]
+* [Add trace_tracy feature for Tracy profiling][2832]
+* [Expose wgpu's StencilOperation with bevy][2819]
+* [add get_single variant][2793]
+* [Add builder methods to Transform][2778]
+* [add get_history function to Diagnostic][2772]
+* [Add convenience methods for checking a set of inputs][2760]
+* [Add error messages for the spooky insertions][2581]
+* [Add Deref implementation for ComputePipeline][2759]
+* [Derive thiserror::Error for HexColorError][2740]
+* [Spawn specific entities: spawn or insert operations, refactor spawn internals, world clearing][2673]
+* [Add ClearColor Resource to Pipelined Renderer][2631]
+* [remove_component for ReflectComponent][2682]
+* [Added ComputePipelineDescriptor][2628]
+* [Added StorageTextureAccess to the exposed wgpu API][2614]
+* [Add sprite atlases into the new renderer.][2560]
+* [Log adapter info on initialization][2542]
+* [Add feature flag to enable wasm for bevy_audio][2397]
+* [Allow Option<NonSend<T>> and Option<NonSendMut<T>> as SystemParam][2345]
+* [Added helpful adders for systemsets][2366]
+* [Derive Clone for Time][2360]
+* [Implement Clone for Fetches][2641]
+* [Implement IntoSystemDescriptor for SystemDescriptor][2718]
+* [implement DetectChanges for NonSendMut][2326]
+* [Log errors when loading textures from a gltf file][2260]
+* [expose texture/image conversions as From/TryFrom][2175]
+* [[ecs] implement is_empty for queries][2271]
+* [Add audio to ios example][1007]
+* [Example showing how to use AsyncComputeTaskPool and Tasks][2180]
+* [Expose set_changed() on ResMut and Mut][2208]
+* [Impl AsRef+AsMut for Res, ResMut, and Mut][2189]
+* [Add exit_on_esc_system to examples with window][2121]
+* [Implement rotation for Text2d][2084]
+* [Mesh vertex attributes for skinning and animation][1831]
+* [load zeroed UVs as fallback in gltf loader][1803]
+* [Implement direct mutable dereferencing][2100]
+* [add a span for frames][2053]
+* [Add an alias mouse position -> cursor position][2038]
+* [Adding `WorldQuery` for `WithBundle`][2024]
+* [Automatic System Spans][2033]
+* [Add system sets and run criteria example][1909]
+* [EnumVariantMeta derive][1972]
+* [Added TryFrom for VertexAttributeValues][1963]
+* [add render_to_texture example][1927]
+* [Added example of entity sorting by components][1817]
+* [calculate flat normals for mesh if missing][1808]
+* [Add animate shaders example][1765]
+* [examples on how to tests systems][1714]
+* [Add a UV sphere implementation][1887]
+* [Add additional vertex formats][1878]
+* [gltf-loader: support data url for images][1828]
+* [glTF: added color attribute support][1775]
+* [Add synonyms for transform relative vectors][1667]
 
 ### Changed
 
-- [Relicense Bevy under the dual MIT or Apache-2.0 license][2509]
-- [[ecs] Improve `Commands` performance][2332]
-- [Merge AppBuilder into App][2531]
-- [Use a special first depth slice for clustered forward rendering][3545]
-- [Add a separate ClearPass][3209]
-- [bevy_pbr2: Improve lighting units and documentation][2704]
-- [gltf loader: do not use the taskpool for only one task][3577]
-- [System Param Lifetime Split][2605]
-- [Optional `.system`][2398]
-- [Optional `.system()`, part 2][2403]
-- [Optional `.system()`, part 3][2422]
-- [Optional `.system()`, part 4 (run criteria)][2431]
-- [Optional `.system()`, part 6 (chaining)][2494]
-- [Make the `iter_combinators` examples prettier ][3075]
-- [Remove dead anchor.rs code][3551]
-- [gltf: load textures asynchronously using io task pool][1767]
-- [Use fully-qualified type names in Label derive.][3544]
-- [Remove Bytes, FromBytes, Labels, EntityLabels][3521]
-- [StorageType parameter removed from ComponentDescriptor::new_resource][3495]
-- [remove dead code: ShaderDefs derive][3490]
-- [Enable Msaa for webgl by default][3489]
-- [Renamed Entity::new to Entity::from_raw][3465]
-- [bevy::scene::Entity renamed to bevy::scene::DynamicEntity.][3448]
-- [make `sub_app` return an `&App` and add `sub_app_mut() -> &mut App`][3309]
-- [use ogg by default instead of mp3][3421]
-- [enable `wasm-bindgen` feature on gilrs][3420]
-- [Use EventWriter for gilrs_system][3413]
-- [Add some of the missing methods to `TrackedRenderPass`][3401]
-- [Only bevy_render depends directly on wgpu][3393]
-- [Update wgpu to 0.12 and naga to 0.8][3375]
-- [Improved bevymark: no bouncing offscreen and spawn waves from CLI][3364]
-- [Rename render UiSystem to RenderUiSystem][3371]
-- [Use updated window size in bevymark example][3335]
-- [Enable trace feature for subfeatures using it][3337]
-- [Schedule gilrs system before input systems][2989]
-- [Rename fixed timestep state and add a test][3260]
-- [Port bevy_ui to pipelined-rendering][2653]
-- [update wireframe rendering to new renderer][3193]
-- [Allow `String` and `&String` as `Id` for `AssetServer.get_handle(id)`][3280]
-- [Ported WgpuOptions to new renderer][3282]
-- [Down with the system!][2496]
-- [Update dependencies `ron` `winit`& fix `cargo-deny` lists][3244]
-- [Improve contributors example quality][3258]
-- [Expose command encoders][3271]
-- [Made Time::time_since_startup return from last tick.][3264]
-- [Default image used in PipelinedSpriteBundle to be able to render without loading a texture][3270]
-- [make texture from sprite pipeline filterable][3236]
-- [iOS: replace cargo-lipo, and update for new macOS ][3109]
-- [increase light intensity in pbr example][3182]
-- [Faster gltf loader][3189]
-- [Use crevice std140_size_static everywhere][3168]
-- [replace matrix swizzles in pbr shader with index accesses][3122]
-- [Disable default features from `bevy_asset` and `bevy_ecs`][3097]
-- [Update tracing-subscriber requirement from 0.2.22 to 0.3.1][3076]
-- [Update vendored Crevice to 0.8.0 + PR for arrays][3059]
-- [change texture atlas sprite indexing to usize][2887]
-- [Update derive(DynamicPlugin) to edition 2021][3038]
-- [Update to edition 2021 on master][3028]
-- [Add entity ID to expect() message][2943]
-- [Use RenderQueue in BufferVec][2847]
-- [removed unused RenderResourceId and SwapChainFrame][2890]
-- [Unique WorldId][2827]
-- [add_texture returns index to texture][2864]
-- [Update hexasphere requirement from 4.0.0 to 5.0.0][2880]
-- [enable change detection for hierarchy maintenance][2411]
-- [Make events reuse buffers][2850]
-- [Replace `.insert_resource(T::default())` calls with `init_resource::<T>()`][2807]
-- [Improve many sprites example][2785]
-- [Update glam requirement from 0.17.3 to 0.18.0][2748]
-- [update ndk-glue to 0.4][2684]
-- [Remove Need for Sprite Size Sync System][2632]
-- [Pipelined separate shadow vertex shader][2727]
-- [Sub app label changes][2717]
-- [Use Explicit Names for Flex Direction][2672]
-- [Make default near plane more sensible at 0.1][2703]
-- [Reduce visibility of various types and fields ][2690]
-- [Cleanup FromResources][2601]
-- [Better error message for unsupported shader features Fixes #869][2598]
-- [Change definition of `ScheduleRunnerPlugin`][2606]
-- [Re-implement Automatic Sprite Sizing][2613]
-- [Remove with bundle filter][2623]
-- [Remove bevy_dynamic_plugin as a default][2578]
-- [Port bevy_gltf to pipelined-rendering][2537]
-- [Bump notify to 5.0.0-pre.11][2564]
-- [Add 's (state) lifetime to `Fetch`][2515]
-- [move bevy_core_pipeline to its own plugin][2552]
-- [Refactor ECS to reduce the dependency on a 1-to-1 mapping between components and real rust types][2490]
-- [Inline world get][2520]
-- [Dedupe move logic in remove_bundle and remove_bundle_intersection][2521]
-- [remove .system from pipelined code][2538]
-- [Scale normal bias by texel size][c26]
-- [Make Remove Command's fields public][2449]
-- [bevy_utils: Re-introduce `with_capacity()`.][2393]
-- [Update rodio requirement from 0.13 to 0.14][2244]
-- [Optimize Events::extend and impl std::iter::Extend][2207]
-- [Bump winit to 0.25][2186]
-- [Improve legibility of RunOnce::run_unsafe param][2181]
-- [Update gltf requirement from 0.15.2 to 0.16.0][2196]
-- [Move to smallvec v1.6][2074]
-- [Update rectangle-pack requirement from 0.3 to 0.4][2086]
-- [Make Commands public?][2034]
-- [Monomorphize vrious things][1914]
-- [Detect camera projection changes][2015]
-- [support assets of any size][1997]
-- [Separate Query filter access from fetch access during initial evaluation][1977]
-- [Provide better error message when missing a render backend][1965]
-- [par_for_each: split batces when iterating on a sparse query][1945]
-- [Allow deriving `SystemParam` on private types][1936]
-- [Angle bracket annotated types to support generics][1919]
-- [More detailed errors when resource not found][1864]
-- [Moved events to ECS][1823]
-- [Use a sorted Map for vertex buffer attributes][1796]
-- [Error message improvements for shader compilation/gltf loading][1786]
-- [Rename Light => PointLight and remove unused properties][1778]
-- [Override size_hint for all Iterators and add ExactSizeIterator where applicable][1734]
-- [Change breakout to use fixed timestamp][1541]
+* [Relicense Bevy under the dual MIT or Apache-2.0 license][2509]
+* [[ecs] Improve `Commands` performance][2332]
+* [Merge AppBuilder into App][2531]
+* [Use a special first depth slice for clustered forward rendering][3545]
+* [Add a separate ClearPass][3209]
+* [bevy_pbr2: Improve lighting units and documentation][2704]
+* [gltf loader: do not use the taskpool for only one task][3577]
+* [System Param Lifetime Split][2605]
+* [Optional `.system`][2398]
+* [Optional `.system()`, part 2][2403]
+* [Optional `.system()`, part 3][2422]
+* [Optional `.system()`, part 4 (run criteria)][2431]
+* [Optional `.system()`, part 6 (chaining)][2494]
+* [Make the `iter_combinators` examples prettier][3075]
+* [Remove dead anchor.rs code][3551]
+* [gltf: load textures asynchronously using io task pool][1767]
+* [Use fully-qualified type names in Label derive.][3544]
+* [Remove Bytes, FromBytes, Labels, EntityLabels][3521]
+* [StorageType parameter removed from ComponentDescriptor::new_resource][3495]
+* [remove dead code: ShaderDefs derive][3490]
+* [Enable Msaa for webgl by default][3489]
+* [Renamed Entity::new to Entity::from_raw][3465]
+* [bevy::scene::Entity renamed to bevy::scene::DynamicEntity.][3448]
+* [make `sub_app` return an `&App` and add `sub_app_mut() -> &mut App`][3309]
+* [use ogg by default instead of mp3][3421]
+* [enable `wasm-bindgen` feature on gilrs][3420]
+* [Use EventWriter for gilrs_system][3413]
+* [Add some of the missing methods to `TrackedRenderPass`][3401]
+* [Only bevy_render depends directly on wgpu][3393]
+* [Update wgpu to 0.12 and naga to 0.8][3375]
+* [Improved bevymark: no bouncing offscreen and spawn waves from CLI][3364]
+* [Rename render UiSystem to RenderUiSystem][3371]
+* [Use updated window size in bevymark example][3335]
+* [Enable trace feature for subfeatures using it][3337]
+* [Schedule gilrs system before input systems][2989]
+* [Rename fixed timestep state and add a test][3260]
+* [Port bevy_ui to pipelined-rendering][2653]
+* [update wireframe rendering to new renderer][3193]
+* [Allow `String` and `&String` as `Id` for `AssetServer.get_handle(id)`][3280]
+* [Ported WgpuOptions to new renderer][3282]
+* [Down with the system!][2496]
+* [Update dependencies `ron` `winit`& fix `cargo-deny` lists][3244]
+* [Improve contributors example quality][3258]
+* [Expose command encoders][3271]
+* [Made Time::time_since_startup return from last tick.][3264]
+* [Default image used in PipelinedSpriteBundle to be able to render without loading a texture][3270]
+* [make texture from sprite pipeline filterable][3236]
+* [iOS: replace cargo-lipo, and update for new macOS][3109]
+* [increase light intensity in pbr example][3182]
+* [Faster gltf loader][3189]
+* [Use crevice std140_size_static everywhere][3168]
+* [replace matrix swizzles in pbr shader with index accesses][3122]
+* [Disable default features from `bevy_asset` and `bevy_ecs`][3097]
+* [Update tracing-subscriber requirement from 0.2.22 to 0.3.1][3076]
+* [Update vendored Crevice to 0.8.0 + PR for arrays][3059]
+* [change texture atlas sprite indexing to usize][2887]
+* [Update derive(DynamicPlugin) to edition 2021][3038]
+* [Update to edition 2021 on master][3028]
+* [Add entity ID to expect() message][2943]
+* [Use RenderQueue in BufferVec][2847]
+* [removed unused RenderResourceId and SwapChainFrame][2890]
+* [Unique WorldId][2827]
+* [add_texture returns index to texture][2864]
+* [Update hexasphere requirement from 4.0.0 to 5.0.0][2880]
+* [enable change detection for hierarchy maintenance][2411]
+* [Make events reuse buffers][2850]
+* [Replace `.insert_resource(T::default())` calls with `init_resource::<T>()`][2807]
+* [Improve many sprites example][2785]
+* [Update glam requirement from 0.17.3 to 0.18.0][2748]
+* [update ndk-glue to 0.4][2684]
+* [Remove Need for Sprite Size Sync System][2632]
+* [Pipelined separate shadow vertex shader][2727]
+* [Sub app label changes][2717]
+* [Use Explicit Names for Flex Direction][2672]
+* [Make default near plane more sensible at 0.1][2703]
+* [Reduce visibility of various types and fields][2690]
+* [Cleanup FromResources][2601]
+* [Better error message for unsupported shader features Fixes #869][2598]
+* [Change definition of `ScheduleRunnerPlugin`][2606]
+* [Re-implement Automatic Sprite Sizing][2613]
+* [Remove with bundle filter][2623]
+* [Remove bevy_dynamic_plugin as a default][2578]
+* [Port bevy_gltf to pipelined-rendering][2537]
+* [Bump notify to 5.0.0-pre.11][2564]
+* [Add 's (state) lifetime to `Fetch`][2515]
+* [move bevy_core_pipeline to its own plugin][2552]
+* [Refactor ECS to reduce the dependency on a 1-to-1 mapping between components and real rust types][2490]
+* [Inline world get][2520]
+* [Dedupe move logic in remove_bundle and remove_bundle_intersection][2521]
+* [remove .system from pipelined code][2538]
+* [Scale normal bias by texel size][c26]
+* [Make Remove Command's fields public][2449]
+* [bevy_utils: Re-introduce `with_capacity()`.][2393]
+* [Update rodio requirement from 0.13 to 0.14][2244]
+* [Optimize Events::extend and impl std::iter::Extend][2207]
+* [Bump winit to 0.25][2186]
+* [Improve legibility of RunOnce::run_unsafe param][2181]
+* [Update gltf requirement from 0.15.2 to 0.16.0][2196]
+* [Move to smallvec v1.6][2074]
+* [Update rectangle-pack requirement from 0.3 to 0.4][2086]
+* [Make Commands public?][2034]
+* [Monomorphize vrious things][1914]
+* [Detect camera projection changes][2015]
+* [support assets of any size][1997]
+* [Separate Query filter access from fetch access during initial evaluation][1977]
+* [Provide better error message when missing a render backend][1965]
+* [par_for_each: split batces when iterating on a sparse query][1945]
+* [Allow deriving `SystemParam` on private types][1936]
+* [Angle bracket annotated types to support generics][1919]
+* [More detailed errors when resource not found][1864]
+* [Moved events to ECS][1823]
+* [Use a sorted Map for vertex buffer attributes][1796]
+* [Error message improvements for shader compilation/gltf loading][1786]
+* [Rename Light => PointLight and remove unused properties][1778]
+* [Override size_hint for all Iterators and add ExactSizeIterator where applicable][1734]
+* [Change breakout to use fixed timestamp][1541]
 
 ### Fixed
 
-- [Fix shadows for non-TriangleLists][3581]
-- [Fix error message for the `Component` macro's `component` `storage` attribute.][3534]
-- [do not add plugin ExtractComponentPlugin twice for StandardMaterial][3502]
-- [load spirv using correct API][3466]
-- [fix shader compilation error reporting for non-wgsl shaders][3441]
-- [bevy_ui: Check clip when handling interactions][3461]
-- [crevice derive macro: fix path to render_resource when importing from bevy][3438]
-- [fix parenting of scenes][2410]
-- [Do not panic on failed setting of GameOver state in AlienCakeAddict][3411]
-- [Fix minimization crash because of cluster updates.][3369]
-- [Fix custom mesh pipelines][3381]
-- [Fix hierarchy example panic][3378]
-- [Fix double drop in BlobVec::replace_unchecked (#2597)][2848]
-- [Remove vestigial derives][3343]
-- [Fix crash with disabled winit][3330]
-- [Fix clustering for orthographic projections][3316]
-- [Run a clear pass on Windows without any Views][3304]
-- [Remove some superfluous unsafe code][3297]
-- [clearpass: also clear views without depth (2d)][3286]
-- [Check for NaN in `Camera::world_to_screen()`][3268]
-- [Fix sprite hot reloading in new renderer][3207]
-- [Fix path used by macro not considering that we can use a sub-crate][3178]
-- [Fix torus normals][3549]
-- [enable alpha mode for textures materials that are transparent][3202]
-- [fix calls to as_rgba_linear][3200]
-- [Fix shadow logic][3186]
-- [fix: as_rgba_linear used wrong variant][3192]
-- [Fix MIME type support for glTF buffer Data URIs][3101]
-- [Remove wasm audio feature flag for 2021][3000]
-- [use correct size of pixel instead of 4][2977]
-- [Fix custom_shader_pipelined example shader][2992]
-- [Fix scale factor for cursor position][2932]
-- [fix window resize after wgpu 0.11 upgrade][2953]
-- [Fix unsound lifetime annotation on `Query::get_component`][2964]
-- [Remove double Events::update in bevy-gilrs][2894]
-- [Fix bevy_ecs::schedule::executor_parallel::system span management][2905]
-- [Avoid some format! into immediate format!][2913]
-- [Fix panic on is_resource_* calls (#2828)][2863]
-- [Fix window size change panic][2858]
-- [fix `Default` implementation of `Image` so that size and data match][2833]
-- [Fix scale_factor_override in the winit backend][2784]
-- [Fix breakout example scoreboard][2770]
-- [Fix Option<NonSend<T>> and Option<NonSendMut<T>>][2757]
-- [fix missing paths in ECS SystemParam derive macro v2][2550]
-- [Add missing bytemuck feature][2625]
-- [Update EntityMut's location in push_children() and insert_children()][2604]
-- [Fixed issue with how texture arrays were uploaded with write_texture.][c24]
-- [Don't update when suspended to avoid GPU use on iOS.][2482]
-- [update archetypes for run criterias][2177]
-- [Fix AssetServer::get_asset_loader deadlock][2395]
-- [Fix unsetting RenderLayers bit in without fn][2409]
-- [Fix view vector in pbr frag to work in ortho][2370]
-- [Fixes Timer Precision Error Causing Panic][2362]
-- [[assets] Fix `AssetServer::get_handle_path`][2310]
-- [Fix bad bounds for NonSend SystemParams][2325]
-- [Add minimum sizes to textures to prevent crash][2300]
-- [[assets] set LoadState properly and more testing!][2226]
-- [[assets] properly set `LoadState` with invalid asset extension][2318]
-- [Fix Bevy crashing if no audio device is found][2269]
-- [Fixes dropping empty BlobVec][2295]
-- [[assets] fix Assets being set as 'changed' each frame][2280]
-- [drop overwritten component data on double insert][2227]
-- [Despawn with children doesn't need to remove entities from parents children when parents are also removed][2278]
-- [reduce tricky unsafety and simplify table structure][2221]
-- [Use bevy_reflect as path in case of no direct references][1875]
-- [Fix Events::<drain/clear> bug][2206]
-- [small ecs cleanup and remove_bundle drop bugfix][2172]
-- [Fix PBR regression for unlit materials ][2197]
-- [prevent memory leak when dropping ParallelSystemContainer][2176]
-- [fix diagnostic length for asset count][2165]
-- [Fixes incorrect `PipelineCompiler::compile_pipeline()` step_mode][2126]
-- [Asset re-loading while it's being deleted][2011]
-- [Bevy derives handling generics in impl definitions.][2044]
-- [Fix unsoundness in `Query::for_each_mut`][2045]
-- [Fix mesh with no vertex attributes causing panic][2036]
-- [Fix alien_cake_addict: cake should not be at height of player's location][1954]
-- [fix memory size for PointLightBundle][1940]
-- [Fix unsoundness in query component access][1929]
-- [fixing compilation error on macos aarch64][1905]
-- [Fix SystemParam handling of Commands][1899]
-- [Fix IcoSphere UV coordinates][1871]
-- [fix 'attempted to subtract with overflow' for State::inactives][1668]
+* [Fix shadows for non-TriangleLists][3581]
+* [Fix error message for the `Component` macro's `component` `storage` attribute.][3534]
+* [do not add plugin ExtractComponentPlugin twice for StandardMaterial][3502]
+* [load spirv using correct API][3466]
+* [fix shader compilation error reporting for non-wgsl shaders][3441]
+* [bevy_ui: Check clip when handling interactions][3461]
+* [crevice derive macro: fix path to render_resource when importing from bevy][3438]
+* [fix parenting of scenes][2410]
+* [Do not panic on failed setting of GameOver state in AlienCakeAddict][3411]
+* [Fix minimization crash because of cluster updates.][3369]
+* [Fix custom mesh pipelines][3381]
+* [Fix hierarchy example panic][3378]
+* [Fix double drop in BlobVec::replace_unchecked (#2597)][2848]
+* [Remove vestigial derives][3343]
+* [Fix crash with disabled winit][3330]
+* [Fix clustering for orthographic projections][3316]
+* [Run a clear pass on Windows without any Views][3304]
+* [Remove some superfluous unsafe code][3297]
+* [clearpass: also clear views without depth (2d)][3286]
+* [Check for NaN in `Camera::world_to_screen()`][3268]
+* [Fix sprite hot reloading in new renderer][3207]
+* [Fix path used by macro not considering that we can use a sub-crate][3178]
+* [Fix torus normals][3549]
+* [enable alpha mode for textures materials that are transparent][3202]
+* [fix calls to as_rgba_linear][3200]
+* [Fix shadow logic][3186]
+* [fix: as_rgba_linear used wrong variant][3192]
+* [Fix MIME type support for glTF buffer Data URIs][3101]
+* [Remove wasm audio feature flag for 2021][3000]
+* [use correct size of pixel instead of 4][2977]
+* [Fix custom_shader_pipelined example shader][2992]
+* [Fix scale factor for cursor position][2932]
+* [fix window resize after wgpu 0.11 upgrade][2953]
+* [Fix unsound lifetime annotation on `Query::get_component`][2964]
+* [Remove double Events::update in bevy-gilrs][2894]
+* [Fix bevy_ecs::schedule::executor_parallel::system span management][2905]
+* [Avoid some format! into immediate format!][2913]
+* [Fix panic on is_resource_* calls (#2828)][2863]
+* [Fix window size change panic][2858]
+* [fix `Default` implementation of `Image` so that size and data match][2833]
+* [Fix scale_factor_override in the winit backend][2784]
+* [Fix breakout example scoreboard][2770]
+* [Fix Option<NonSend<T>> and Option<NonSendMut<T>>][2757]
+* [fix missing paths in ECS SystemParam derive macro v2][2550]
+* [Add missing bytemuck feature][2625]
+* [Update EntityMut's location in push_children() and insert_children()][2604]
+* [Fixed issue with how texture arrays were uploaded with write_texture.][c24]
+* [Don't update when suspended to avoid GPU use on iOS.][2482]
+* [update archetypes for run criterias][2177]
+* [Fix AssetServer::get_asset_loader deadlock][2395]
+* [Fix unsetting RenderLayers bit in without fn][2409]
+* [Fix view vector in pbr frag to work in ortho][2370]
+* [Fixes Timer Precision Error Causing Panic][2362]
+* [[assets] Fix `AssetServer::get_handle_path`][2310]
+* [Fix bad bounds for NonSend SystemParams][2325]
+* [Add minimum sizes to textures to prevent crash][2300]
+* [[assets] set LoadState properly and more testing!][2226]
+* [[assets] properly set `LoadState` with invalid asset extension][2318]
+* [Fix Bevy crashing if no audio device is found][2269]
+* [Fixes dropping empty BlobVec][2295]
+* [[assets] fix Assets being set as 'changed' each frame][2280]
+* [drop overwritten component data on double insert][2227]
+* [Despawn with children doesn't need to remove entities from parents children when parents are also removed][2278]
+* [reduce tricky unsafety and simplify table structure][2221]
+* [Use bevy_reflect as path in case of no direct references][1875]
+* [Fix Events::<drain/clear> bug][2206]
+* [small ecs cleanup and remove_bundle drop bugfix][2172]
+* [Fix PBR regression for unlit materials][2197]
+* [prevent memory leak when dropping ParallelSystemContainer][2176]
+* [fix diagnostic length for asset count][2165]
+* [Fixes incorrect `PipelineCompiler::compile_pipeline()` step_mode][2126]
+* [Asset re-loading while it's being deleted][2011]
+* [Bevy derives handling generics in impl definitions.][2044]
+* [Fix unsoundness in `Query::for_each_mut`][2045]
+* [Fix mesh with no vertex attributes causing panic][2036]
+* [Fix alien_cake_addict: cake should not be at height of player's location][1954]
+* [fix memory size for PointLightBundle][1940]
+* [Fix unsoundness in query component access][1929]
+* [fixing compilation error on macos aarch64][1905]
+* [Fix SystemParam handling of Commands][1899]
+* [Fix IcoSphere UV coordinates][1871]
+* [fix 'attempted to subtract with overflow' for State::inactives][1668]
 
 [1007]: https://github.com/bevyengine/bevy/pull/1007
 [1395]: https://github.com/bevyengine/bevy/pull/1395

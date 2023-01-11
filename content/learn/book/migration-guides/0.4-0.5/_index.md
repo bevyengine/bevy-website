@@ -60,6 +60,7 @@ commands.entity(entity).despawn();
 `commands.spawn()` no longer accepts any parameters.  To spawn bundles, use `commands.spawn_bundle(bundle)`.
 
 Similarly, rather than using `with(some_component)` to spawn an object with multiple components, you must now use `insert(some_component)`:
+
 ```rust
 // 0.4
 commands.spawn(some_bundle)
@@ -76,6 +77,7 @@ commands.spawn()
 ```
 
 Removing and adding components on entities has also been changed:
+
 ```rust
 // 0.4
 commands.insert_one(some_entity, SomeComponent);
@@ -125,9 +127,11 @@ fn event_reader_system(mut my_event_reader: EventReader<MyEvent>) {
     }
 }
 ```
+
 You no longer need two system parameters to read your events. One `EventReader` is sufficient.
 
 Following the above example of using an `EventReader` to read events, you can now use `EventWriter` to create new ones.
+
 ```rust
 // 0.4
 fn event_writer_system(
@@ -183,7 +187,9 @@ TextBundle {
 ```
 
 ### Scene must now be specified when loading a GLTF scene
+
 Previously, you were able to load a GLTF scene asset with only a path. Now, you must include a fragment specifying the scene you want to load. If you only have one scene in the file, it's `#Scene0`.
+
 ```rust
 // 0.4
 asset_server.load("models/foo.glb");
@@ -261,9 +267,11 @@ fn some_system(
 ```
 
 ### Cameras
+
 `Camera3dBundle` is now known as `PerspectiveCameraBundle`, and `Camera2dBundle` is now known as `OrthographicCameraBundle`.
 
 `OrthographicCameraBundle` does not implement `Default`, so to change its transform at spawn while keeping everything else the same, consider something like the following:
+
 ```rust
 let mut camera = OrthographicCameraBundle::new_2d();
 camera.transform = Transform::from_translation(Vec3::new(0.0, 0.0, 5.0));
@@ -271,9 +279,11 @@ commands.spawn_bundle(camera);
 ```
 
 ### Render API changes
+
 `RasterizationStateDescriptor` no longer exists.  Much of its functionality has been moved to other fields on `PipelineDescriptor`.  `cull_mode`, for example, is now found in the `primitive: PrimitiveState` field.
 
 Buffers of type `Vec<Color>` can no longer be uploaded to the GPU directly due to limitations with `RenderResources` and the new `Byteable` requirement.  Consider using a `Vec<Vec4>` instead, and inserting colors with `as_rgba_f32()` and `.into()` instead:
+
 ```rust
 #[derive(RenderResources, Default, TypeUuid)]
 struct SomeShader {
@@ -287,6 +297,7 @@ fn add_some_color(shader: SomeShader, color: Color) {
 ```
 
 ### Shaders should now use `CameraViewProj`
+
 The `ViewProj` matrix is now set via the name `CameraViewProj` rather than `Camera`.  If you don't update this, bevy will fail silently and you won't be able to see anything!
 
 ```glsl
@@ -302,8 +313,8 @@ layout(set = 0, binding = 0) uniform CameraViewProj {
 ```
 
 ### Diagnostics
-`PrintDiagnosticsPlugin` is now `LogDiagnosticsPlugin`.
 
+`PrintDiagnosticsPlugin` is now `LogDiagnosticsPlugin`.
 
 ### System Ordering
 

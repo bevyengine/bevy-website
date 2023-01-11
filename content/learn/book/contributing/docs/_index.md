@@ -18,11 +18,14 @@ The Bevy Book is open source, along with the rest of this website. Check out the
 The website is built using the [Zola static site generator](https://www.getzola.org/). Download Zola, then do the following:
 
 1. Clone the Bevy Website git repo and move to that directory:
+
     ```sh
     git clone https://github.com/bevyengine/bevy-website.git
     cd bevy-website
     ```
+
 2. Start the Zola server
+
     ```sh
     zola serve
     ```
