@@ -55,15 +55,47 @@
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
+        {% if section.title == "The Bevy Organization" %}
+        <div class="people-section-description">
+        <p>
+            The Bevy Organization is the group of people responsible for stewarding the Bevy project. It handles things
+            like choosing project direction, merging pull requests, managing bugs / issues / feature requests, running
+            the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
+        </p>
+        <p>
+            Anyone with a history of contributing to Bevy can join the Bevy Organization. Reach out to the Project Lead
+            if you would like to join!
+        </p>
+        <p>
+            Bevy Organization members can also have the following roles:
+            <div class="people-role-descriptions">
+                <div class="people-role-description">
+                    <div class="people-role people-role-top-level people-role-project-lead">Project Leads</div>
+                    <div class="people-role-description-text">have the final call on all design and code changes within Bevy. They are responsible for representing the project publicly and they choose how the project is organized.</div>
+                </div>
+                <div class="people-role-description">
+                    <div class="people-role people-role-top-level people-role-maintainer">Maintainers</div>
+                    <div class="people-role-description-text">have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy project.</div>
+                </div>
+                <div class="people-role-description">
+                    <div class="people-role people-role-top-level people-role-sme">SMEs</div>
+                    <div class="people-role-description-text">(Subject Matter Experts) have proven themselves to be experts in a given development area. They help guide Bevy's direction in their area and they are great people to reach out to if you have questions about a given area.</div>
+                </div>
+            </div>
+        </p>
+        </div>
+        {% endif %}
+
         {% if section.pages %}
         <div class="item-grid">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
             {% endif %}
+            
             {% for post in pages %}
 
-            <div class="card" id="{{ post.title | slugify }}">
+            <div class="card people-card" id="{{ post.title | slugify }}">
                 <div class="card-text media-content card-dense">
                     <div class="card-title">
                         <div style="width: 210px; font-size: {% if post.title | length > 30 %} 0.5rem; {% elif post.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
@@ -80,7 +112,7 @@
                         {% endif %}    
                     </div>
                     <div class="asset-card__small_description">
-                        <div style="display: flex; flex-direction: row; gap: 1rem;">
+                        <div class="people-links">
                             {% if post.extra.github %}
                                 <div>
                                     <a href="https://github.com/{{ post.extra.github }}">
@@ -156,6 +188,21 @@
                                 </div>
                             {% endif %}
                         </div>
+                        {% if post.extra.roles %}
+                        <div class="people-roles">
+                            {% for role in post.extra.roles %}
+                                {% if role == "Project Lead" %}
+                                    <div class="people-role people-role-project-lead">{{ role }}</div>
+                                {% elif role == "Maintainer" %}
+                                    <div class="people-role people-role-maintainer">{{ role }}</div>
+                                {% elif role is starting_with("SME-") %}
+                                    <div class="people-role people-role-sme">{{ role }}</div>
+                                {% else %}
+                                    <div class="people-role">{{ role }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         {% if post.extra.bio %}
                             <div class="card-text-dense">
                                 {{ post.extra.bio }}
