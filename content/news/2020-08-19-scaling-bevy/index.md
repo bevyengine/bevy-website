@@ -47,6 +47,7 @@ First, I want to take a moment to highlight just how wild the last week has been
 ## How can Bevy operate at this scale?
 
 I didn't in my wildest dreams anticipate a community to show up so quickly and in such force. Clearly the Bevy project resonates with people! This is wonderful, but it also presents some interesting challenges that I thought I would have a lot more time to solve:
+
 * **I am a bottleneck**: Right now I am the only one with the right to merge code. This can't change until people get ramped up and trust is built.
 * **Everyone is fresh**: Everyone is new to the codebase, so changes require a lot of scrutiny, and developers need a lot of guidance.
 * **No structure**: We don't have an organization or a well-defined development process.
@@ -56,6 +57,7 @@ Before we try to solve these problems, I think we need to ask ourselves:
 ### What made Bevy "good"?
 
 I think this is actually a relatively straightforward answer. I think it boils down to:
+
 1. **Learn from the best**: I thoroughly reviewed at all of the existing options, learned all I could from them, and either built something new based on those learnings or made iterative improvements
 2. **Freedom to experiment**: I was unencumbered by stability guarantees, pressure to make the "right" call every time, or deadlines
 3. **Focus**: I was able to work on Bevy full time with zero distractions for ~5 months
@@ -74,7 +76,7 @@ I plan on being a **B**enevolent **D**ictator **F**or **A**s **L**ong **A**s **I
 
 [We have a long road ahead of us](https://github.com/bevyengine/bevy/projects/1). Building an engine is a lot like leveling up a skill tree in a game. Some features can't (or shouldn't) be built until we have built their predecessors. An example of this is the Bevy Editor. Before we break ground on the editor, we need to make sure Bevy UI and Bevy Scenes are in a good spot. I am just one person. I have limited bandwidth to build designs and review proposals, so I can't afford to waste energy on the editor yet.
 
-At a given point in time, Bevy will have 3 [focus areas](https://github.com/bevyengine/bevy/labels/focus-area). These areas will receive priority for my time, and I will try my best to direct contributors to those areas. This doesn't mean others aren't free to explore other areas they are interested in. Just don't expect to get them merged quickly. Ideally you're building a standalone plugin that doesn't require being directly merged into the Bevy repo anyway. 
+At a given point in time, Bevy will have 3 [focus areas](https://github.com/bevyengine/bevy/labels/focus-area). These areas will receive priority for my time, and I will try my best to direct contributors to those areas. This doesn't mean others aren't free to explore other areas they are interested in. Just don't expect to get them merged quickly. Ideally you're building a standalone plugin that doesn't require being directly merged into the Bevy repo anyway.
 
 ### Fast and Loose
 
@@ -86,17 +88,17 @@ I don't want to get stuck in "design hell". We can debate the best way to build 
 
 ### Collaborate
 
-Bevy has caught the attention of many popular Rust projects. [We are currently discussing the best way to collaborate with Amethyst Engine](https://community.amethyst.rs/t/bevy-engine-addressing-the-elephant-in-the-room). I'm also talking to a number of other Rust project leads about the best way to make Bevy a good ecosystem player. As much as possible we should be building up common foundations. Please reach out to me (Twitter DMs or on Discord) if you know of potential collaboration areas. 
+Bevy has caught the attention of many popular Rust projects. [We are currently discussing the best way to collaborate with Amethyst Engine](https://community.amethyst.rs/t/bevy-engine-addressing-the-elephant-in-the-room). I'm also talking to a number of other Rust project leads about the best way to make Bevy a good ecosystem player. As much as possible we should be building up common foundations. Please reach out to me (Twitter DMs or on Discord) if you know of potential collaboration areas.
 
 ## Bevy's Current Focus Areas
 
-Here are Bevy's current focus areas. I will direct my attention and attempt to direct everyone elses' attention to them. There are no deadlines. We will take as long as we need to get them right. I will work as hard as I can (full-time) to ensure we make quick progress on them: 
+Here are Bevy's current focus areas. I will direct my attention and attempt to direct everyone elses' attention to them. There are no deadlines. We will take as long as we need to get them right. I will work as hard as I can (full-time) to ensure we make quick progress on them:
 
 ### [Editor-Ready UI](https://github.com/bevyengine/bevy/issues/254)
 
 Before we can start work on the Bevy Editor, we need a solid UI implementation. Bevy UI already has nice "flexbox" layout, and we already have a first stab at buttons and interaction events. But Bevy UI still needs a lot more experimentation if we're going to find the "right" patterns and paradigms. **Editor-Ready UI** has the following requirements:
 
-* Embraces the Bevy architecture: Bevy ECS, Bevy Scenes, Bevy Assets, Bevy Events 
+* Embraces the Bevy architecture: Bevy ECS, Bevy Scenes, Bevy Assets, Bevy Events
 * A Canvas-style API for drawing widgets with shapes and anti-aliased curves
 * Define a consistent way to implement widgets
 * A core set of widgets: buttons, inputs, resizable panels, etc
@@ -104,7 +106,7 @@ Before we can start work on the Bevy Editor, we need a solid UI implementation. 
 * "Interaction" and "focus" events
 * Translation-friendly. We can't be anglo-centric here
 
-Suggesting other UI frameworks or stacks is out of scope. The Bevy Editor _will be_ built on top of Bevy UI. See the [Introducing Bevy](https://bevyengine.org/news/introducing-bevy/) blog post for my rationale. 
+Suggesting other UI frameworks or stacks is out of scope. The Bevy Editor _will be_ built on top of Bevy UI. See the [Introducing Bevy](https://bevyengine.org/news/introducing-bevy/) blog post for my rationale.
 
 ### [Physically Based Rendering (PBR)](https://github.com/bevyengine/bevy/issues/179)
 
@@ -133,6 +135,5 @@ If you want to hop on this wild ride with us, here are a few ways you can help:
     * If you can't find an existing project and you want to start one, set up a new crate/repo and link to it in the "focus-area" issue. We will maintain an index of active projects at the top of the thread. We will also encourage collaboration when it looks like there are overly-redundant efforts.
 2. **Assist the Bevy Community**: If you are able, help us resolve issues on the [Bevy Issue Tracker](https://github.com/bevyengine/bevy/issues), review [pull requests](https://github.com/bevyengine/bevy/pulls), and provide help on the [#help channel of our Discord](https://discord.com/channels/691052431525675048/742884593551802431). It is a real challenge to keep up with the sheer volume of work here, so any help is _very very_ appreciated.
 3. **Help Me Make Full Time Development Sustainable**: I need your help to make Bevy development sustainable! Five months ago I quit my comfortable Senior Software Engineer job at Microsoft to work on Bevy full time. I am currently paying my rent and living expenses out of pocket. I can't sustain this for long, as much as I want to. [We're already 37% of the way to sustainable development](https://github.com/sponsors/cart) and it has only been two days!
-
 
 I'm looking forward to seeing you in the [Bevy Community](/community)!

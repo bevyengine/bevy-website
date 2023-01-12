@@ -16,7 +16,6 @@ Today is Bevy's first birthday! And what a year it has been! Now seems like as g
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/book/getting-started/) and a [Bevy Book](https://bevyengine.org/learn/book/introduction/). You can also check out [Bevy Assets](https://bevyengine.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
 
-
 <!-- more -->
 
 ## A Year of Milestones
@@ -24,31 +23,31 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 ![milestones](milestones.svg)
 
 * **August 10**: [Bevy 0.1](/news/introducing-bevy/)
-    * Bevy's first public release! After months of working incognito, I released Bevy to the world. It was by no means complete, but it had most of the pillars in place to show the world what Bevy is (and could be): a modern and flexible renderer built on top of a modular Render Graph, a custom ECS with unrivaled ergonomics and competitive performance, 2D and 3D rendering features, asset handling, a modular app model that blurs the lines between engine developers and app developers, a custom UI system that integrates deeply with the engine, scenes, hot reloading, and blissfully productive iterative compile times.
+  * Bevy's first public release! After months of working incognito, I released Bevy to the world. It was by no means complete, but it had most of the pillars in place to show the world what Bevy is (and could be): a modern and flexible renderer built on top of a modular Render Graph, a custom ECS with unrivaled ergonomics and competitive performance, 2D and 3D rendering features, asset handling, a modular app model that blurs the lines between engine developers and app developers, a custom UI system that integrates deeply with the engine, scenes, hot reloading, and blissfully productive iterative compile times.
 * **August 19**: [Absolutely Wild Public Reception](/news/scaling-bevy/)
-    * Just a week after release we became the 3rd most popular /r/rust post of all time, hit #2 on Hacker News, received 2,200 Github stars, merged pull requests from 26 new contributors, gained 644 Discord members, and received [sponsorships](https://github.com/sponsors/cart) that brought us 37% of the way to our first funding goal. 
+  * Just a week after release we became the 3rd most popular /r/rust post of all time, hit #2 on Hacker News, received 2,200 Github stars, merged pull requests from 26 new contributors, gained 644 Discord members, and received [sponsorships](https://github.com/sponsors/cart) that brought us 37% of the way to our first funding goal.
 * **August 20**: [Reached our first funding goal ($1500 / month)](https://github.com/sponsors/cart)
-    * [Embark became our first platinum sponsor](https://twitter.com/BevyEngine/status/1296525644004593664), which brought us past our first funding goal, allowing me to work on Bevy full time without eating into my savings. This honestly set the course for the rest of the year of Bevy development.
-* **August 20**: [The Amethyst forum post: "Bevy Engine - Addressing the elephant in the room"](https://community.amethyst.rs/t/bevy-engine-addressing-the-elephant-in-the-room/) 
-    * This helped establish the strengths of each project and identified various collaboration areas, marking the beginning of a fruitful relationship between the two communities.
+  * [Embark became our first platinum sponsor](https://twitter.com/BevyEngine/status/1296525644004593664), which brought us past our first funding goal, allowing me to work on Bevy full time without eating into my savings. This honestly set the course for the rest of the year of Bevy development.
+* **August 20**: [The Amethyst forum post: "Bevy Engine - Addressing the elephant in the room"](https://community.amethyst.rs/t/bevy-engine-addressing-the-elephant-in-the-room/)
+  * This helped establish the strengths of each project and identified various collaboration areas, marking the beginning of a fruitful relationship between the two communities.
 * **August 28**: [Reached our second funding goal ($2080 / month)](https://github.com/sponsors/cart)
-    * As of this point, I'm making "state of Washington minimum wage" working on Bevy. This marks the point where I start thinking about building and managing Bevy as "my job".  
+  * As of this point, I'm making "state of Washington minimum wage" working on Bevy. This marks the point where I start thinking about building and managing Bevy as "my job".  
 * **September 19**: [Bevy 0.2](/news/bevy-0-2/)
-    * A month after the initial release we dropped another big one! This included a new async task system with significantly improved performance, initial Web platform support, parallel queries, a new transform system, joystick input, and some tasty Bevy ECS performance improvements. 
+  * A month after the initial release we dropped another big one! This included a new async task system with significantly improved performance, initial Web platform support, parallel queries, a new transform system, joystick input, and some tasty Bevy ECS performance improvements.
 * **November 3**: [Bevy 0.3](/news/bevy-0-3/)
-    * Another month after Bevy 0.2 we had _another_ big release! This one added initial Android and iOS support, WASM asset loading, touch input, asset reference counting, dependencies, and sub assets, GLTF scene loading, Bevy ECS query ergonomics, 100% lockless parallel ECS and other performance improvements, flexible mesh attributes, another transform system rewrite, gamepad settings, plugin groups, and dynamic window settings.   
+  * Another month after Bevy 0.2 we had _another_ big release! This one added initial Android and iOS support, WASM asset loading, touch input, asset reference counting, dependencies, and sub assets, GLTF scene loading, Bevy ECS query ergonomics, 100% lockless parallel ECS and other performance improvements, flexible mesh attributes, another transform system rewrite, gamepad settings, plugin groups, and dynamic window settings.
 * **December 19**: [Bevy 0.4](/news/bevy-0-4/)
-    * We somehow still managed to keep up the "approximately once a month" release cadence. We added a WebGL2 render backend, cross platform main functions, live shader reloading, flexible ECS parameter orders, simplified query filters, system inputs, outputs, and chaining, a more featureful and flexible ECS schedule implementation, "fixed timesteps", states, gltf improvements, spawning scenes as children, dynamic linking for _drastically_ faster iterative compile times, a new text layout implementation, renderer optimizations, a new rust reflection crate (filling a major gap in the rust ecosystem), 3d texture assets, logging and profiling, hidpi rendering, timer improvements, task system improvements, and apple silicon support.
+  * We somehow still managed to keep up the "approximately once a month" release cadence. We added a WebGL2 render backend, cross platform main functions, live shader reloading, flexible ECS parameter orders, simplified query filters, system inputs, outputs, and chaining, a more featureful and flexible ECS schedule implementation, "fixed timesteps", states, gltf improvements, spawning scenes as children, dynamic linking for _drastically_ faster iterative compile times, a new text layout implementation, renderer optimizations, a new rust reflection crate (filling a major gap in the rust ecosystem), 3d texture assets, logging and profiling, hidpi rendering, timer improvements, task system improvements, and apple silicon support.
 * **April 6**: [Bevy 0.5](/news/bevy-0-5/)
-    * The almost-one-release-a-month streak finally ended. But thats not because we slowed down our pace! This release was a big one. It added Physically Based Rendering (PBR), GLTF asset improvements, Bevy ECS V2: a complete from-scratch rewrite with a novel archetype/sparse-set hybrid storage model, an "archetype graph" for faster archetype changes, query caching, uber fast for-each iterators, a new system executor with system labels, explicit system ordering/dependencies, system sets, and increased parallelism, "reliable" change detection, and a full rewrite of the State system). We also added a rich text api, hidpi and 2d-world space text, world-to-screen coordinate conversions, a 3d orthographic camera and new scaling modes, flexible camera bindings in shaders, render layers, sprite flipping, color spaces, wireframe rendering, and more smaller tweaks that I don't have room for here.
+  * The almost-one-release-a-month streak finally ended. But thats not because we slowed down our pace! This release was a big one. It added Physically Based Rendering (PBR), GLTF asset improvements, Bevy ECS V2: a complete from-scratch rewrite with a novel archetype/sparse-set hybrid storage model, an "archetype graph" for faster archetype changes, query caching, uber fast for-each iterators, a new system executor with system labels, explicit system ordering/dependencies, system sets, and increased parallelism, "reliable" change detection, and a full rewrite of the State system). We also added a rich text api, hidpi and 2d-world space text, world-to-screen coordinate conversions, a 3d orthographic camera and new scaling modes, flexible camera bindings in shaders, render layers, sprite flipping, color spaces, wireframe rendering, and more smaller tweaks that I don't have room for here.
 * **April 14**: [The Bevy RFC process is unveiled](https://github.com/bevyengine/rfcs)
-    * Inspired by the Rust RFC process, we added a way to collaboratively design and review Bevy APIs prior to implementing them. This generally isn't required, but for bigger changes it ensures we think deeply about what we are building, mitigates risk, and encodes designs and intents for future Bevy developers.
+  * Inspired by the Rust RFC process, we added a way to collaboratively design and review Bevy APIs prior to implementing them. This generally isn't required, but for bigger changes it ensures we think deeply about what we are building, mitigates risk, and encodes designs and intents for future Bevy developers.
 * **June 1**: [First public release of Bevy Assets](https://twitter.com/BevyEngine/status/1399891316939448320)
-    * [Bevy Assets](https://bevyengine.org/assets/) is a public library of community developed Bevy plugins, crates, assets, games, and learning materials. The website is fed by structured toml files in the [bevy-assets repo](https://github.com/bevyengine/bevy-assets). It has its roots in the awesome-bevy repo, our old unstructured markdown document with a list of community projects. It is still hot off the presses, but we have big plans for it!  
+  * [Bevy Assets](https://bevyengine.org/assets/) is a public library of community developed Bevy plugins, crates, assets, games, and learning materials. The website is fed by structured toml files in the [bevy-assets repo](https://github.com/bevyengine/bevy-assets). It has its roots in the awesome-bevy repo, our old unstructured markdown document with a list of community projects. It is still hot off the presses, but we have big plans for it!  
 * **June 24**: [Reached our third funding goal ($4000 / month)](https://github.com/sponsors/cart)
-    * Reaching this goal marked the point where I started thinking about Bevy as a career. I'm not making "market rate" for my skills and I'm still making less than 1/4th what I made as a Senior Software Engineer at Microsoft, but I'm no longer "just breaking even" and I'm starting to save some money.
+  * Reaching this goal marked the point where I started thinking about Bevy as a career. I'm not making "market rate" for my skills and I'm still making less than 1/4th what I made as a Senior Software Engineer at Microsoft, but I'm no longer "just breaking even" and I'm starting to save some money.
 * **August 2**: [Bevy hits 10,000 stars on Github](https://twitter.com/cart_cart/status/1422393321394085888)
-    * I honestly can't believe we hit this so quickly.
+  * I honestly can't believe we hit this so quickly.
 * **August 10**: Bevy is now one year old!
 
 ## A Year By The Numbers
@@ -66,7 +65,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 * **57,349** downloads on [crates.io](https://crates.io/crates/bevy)
 * **93** [@BevyEngine](https://twitter.com/BevyEngine) retweets of Bevy community content on Twitter
 * **4,871** [Bevy Discord](https://discord.com/invite/bevy) members
-* **771** community #showcase entries in the [Bevy Discord](https://discord.com/invite/bevy) 
+* **771** community #showcase entries in the [Bevy Discord](https://discord.com/invite/bevy)
 * **420,250** messages in the [Bevy Discord](https://discord.com/invite/bevy)
 
 ## Things I'm Proud Of
@@ -94,6 +93,7 @@ I know the lack of stability has been tough for some people, but I think this is
 This year we invested heavily in what I call The Bevy App Model. Bevy {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=true)}} are easy to understand, ergonomic to write, and modular via {{rust_type(type="trait", crate="bevy_app", name="Plugin", no_mod=true, plural=true)}}. My goal was to blur the lines between engine developers and app developers. I think we absolutely nailed it:
 
 1. There is no "scripting interface" separating "engine logic" from "app logic". We use a single language (Rust) for the whole stack. Rust feels modern with "high level" niceties while retaining low level performance and control. In my opinion, Bevy Apps are often simpler and more expressive than high level equivalents like Unity or Godot, thanks to the state-of-the-art [Bevy ECS](https://github.com/bevyengine/bevy/tree/main/crates/bevy_ecs). And under the hood Bevy Apps _are_ simpler because there are no internal translation layers between languages like C++ and scripting languages like C#:
+
     ```rust
     use bevy::prelude::*;
 
@@ -122,13 +122,14 @@ This year we invested heavily in what I call The Bevy App Model. Bevy {{rust_typ
         }
     }
     ```
+
 2. Bevy Engine "internals" are entirely implemented using the same App Model that "app developers" use. "App developers" _are_ "engine developers". "Engine developers" _are_ "app developers".
 
 As a result of (1), (2), and Bevy being free and open source, we foster a feeling of "stack ownership" that the other major players can't. Curious app developers can dig into Bevy's internals and feel immediately at home. The [_thousands of pull requests_](https://github.com/bevyengine/bevy/pulls) are a testament to that. We've seen an [explosion of third party plugins](https://bevyengine.org/assets/#assets) being developed ranging from [realistic physics](https://rapier.rs/) to [specialized tilemap renderers](https://github.com/StarArawn/bevy_ecs_tilemap). Bevy's modular nature enables app developers to mix and match the pieces they like and "build their own engine". Bevy's core plugins like {{rust_type(type="struct", crate="bevy_asset", name="AssetPlugin", no_mod=true)}} and {{rust_type(type="struct", crate="bevy_render", name="RenderPlugin", no_mod=true)}} provide a common ground to ensure {{rust_type(type="trait", crate="bevy_app", name="Plugin", no_mod=true)}} interoperability. This composes nicely with the "modular Render Graph", which makes for an extremely pluggable engine.
 
 ### Bevy ECS
 
-**Content Warning: I'm going to boast a lot here and make some hard-to-verify claims, which might offend some peoples' sensibilities :)**
+**Content Warning**: I'm going to boast a lot here and make some hard-to-verify claims, which might offend some peoples' sensibilities :)
 
 Bevy ECS is the interface we use to build both engine features and apps, so it was natural to give it focus last year. I honestly don't think it is controversial to say that Bevy ECS has pushed the envelope of what an ECS can be. Bevy ECS is the "secret sauce" (well ... \*\*cough\*\* ... "open sauce") that I believe uniquely positions us in the engine market. This is a result of meticulous experimentation, benchmarking, collaboration with other experts in the field, and unification of a lot of good ideas in the wider ECS ecosystem.
 
@@ -146,7 +147,7 @@ With over 10,000 stars, we are now the most popular Rust game engine on Github b
 
 ### Bevy Jobs
 
-We're starting to see paid Bevy jobs pop up and some of them are resulting in open-source contributions back to Bevy. This is the start of the next phase of Bevy's maturity: adoption by professionals. The "stability warning" still stands and studios should take that into account, but these developments excite me. 
+We're starting to see paid Bevy jobs pop up and some of them are resulting in open-source contributions back to Bevy. This is the start of the next phase of Bevy's maturity: adoption by professionals. The "stability warning" still stands and studios should take that into account, but these developments excite me.
 
 ## There is Always Room for Improvement
 
@@ -160,7 +161,7 @@ Part of this was me being a control freak to an irrational extent. Part of this 
 
 Fortunately, after learning lessons the hard way, I finally started delegating a bit. I created a [Triage Team](https://github.com/orgs/bevyengine/teams/triage-team/members) and opened it up to interested Bevy contributors. I gave [@mockersf](https://github.com/mockersf) the ability to merge small and relatively "uncontroversial" pull requests. [@alice-i-cecile](https://github.com/alice-i-cecile) has been fantastic at wrangling issues and capturing and consolidating information. They're also heading up the new Bevy Book effort. [@Ratysz](https://github.com/Ratysz) built and generally "owns" the new Bevy ECS scheduler. There are plenty of other people shouldering responsibility now ... but I've gotta stop the list somewhere.
 
-I'm still learning how to delegate properly and I'm still not doing it enough. Bevy is growing rapidly and I promise I'll do my best to ensure I'm not the bottleneck going forward. 
+I'm still learning how to delegate properly and I'm still not doing it enough. Bevy is growing rapidly and I promise I'll do my best to ensure I'm not the bottleneck going forward.
 
 I don't plan on giving up my "benevolent dictator" status any time soon. Rest assured that I still intend to review (almost) all pull requests and strictly dictate the direction of the engine. But don't be surprised when you start seeing more people drive increasingly large efforts. Scaling out is the only way to allow Bevy to grow at the pace it needs to.
 
@@ -168,7 +169,7 @@ I don't plan on giving up my "benevolent dictator" status any time soon. Rest as
 
 Immediately after the initial Bevy release, I [said we needed to focus](https://bevyengine.org/news/scaling-bevy/#focus-focus-focus). I outlined three [focus-areas](https://github.com/bevyengine/bevy/labels/focus-area) for us:
 
-* [**Scenes**](https://github.com/bevyengine/bevy/issues/255): better scene format, inline assets, enabling / disabling systems 
+* [**Scenes**](https://github.com/bevyengine/bevy/issues/255): better scene format, inline assets, enabling / disabling systems
 * [**PBR / Clustered Forward Rendering**](https://github.com/bevyengine/bevy/issues/179): PBR shaders, HDR, bloom, shadowing, all using clustered-forward rendering
 * [**Editor-Ready UI**](https://github.com/bevyengine/bevy/issues/254): iterate on the current Bevy UI, add a canvas style drawing api, implement core widgets, theme-ability
 
@@ -206,7 +207,7 @@ I consider the old design of the mid-level apis to be a pretty costly "mistake".
 
 I'm especially unhappy with how long it takes to merge PRs, especially those that make "big" changes. Part of this is intentionally tabling PRs in subject areas we aren't ready to commit time and brainpower to, but a lot of it is just a bandwidth / attention problem. I've been working with other core contributors to build systems that streamline this process:
 
-* Giving merge rights to a small group of trusted and capable people. Currently this is just [@mockersf](https://github.com/mockersf) and is scoped to "uncontroversial" prs. 
+* Giving merge rights to a small group of trusted and capable people. Currently this is just [@mockersf](https://github.com/mockersf) and is scoped to "uncontroversial" prs.
 * A "community review system" that forces a PR into my "high priority review queue" when there are enough approvals from the community.
 
 I don't think we've seen these systems work at their full capacity yet, as some of them are new and we're currently prioritizing preparing for the Bevy 0.6 release. Thousands of merged PRs a year _is_ something to be proud of, but volume of pull requests is only going to get larger going forward. We need to be able to accommodate that.
@@ -225,16 +226,16 @@ Never thought I'd say those words but here we are. I have a pretty big backlog o
 
 Here are some of my plans for the next year:
 
-* **Bevy 0.6**: In the very near future we will release Bevy 0.6, which will include a brand new renderer that is drastically more efficient, more capable, easier to understand, and much more extensible. It draws inspiration from the [Bungie / Destiny](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf) and [rafx](https://github.com/aclysma/rafx) architectures. This will include ports of all existing renderer features and initial implementations of features like shadows, viewports, material batching, and improved custom shaders. 
+* **Bevy 0.6**: In the very near future we will release Bevy 0.6, which will include a brand new renderer that is drastically more efficient, more capable, easier to understand, and much more extensible. It draws inspiration from the [Bungie / Destiny](https://advances.realtimerendering.com/destiny/gdc_2015/Tatarchuk_GDC_2015__Destiny_Renderer_web.pdf) and [rafx](https://github.com/aclysma/rafx) architectures. This will include ports of all existing renderer features and initial implementations of features like shadows, viewports, material batching, and improved custom shaders.
 * **Asset Pipeline Maturity**: The asset pipeline will get asset pre-processing, import configuration, and better dependency management. This will feed into renderer and scene improvements.
 * **Next Generation Bevy UI**: We will build a new UI framework that takes advantage of Bevy ECS features, adds new features where necessary (such as "reactivity"), and makes UI development workflows more pleasant.
 * **The Bevy Editor**: We will break ground on the Bevy Editor, which will be a Bevy App building on top of the "next generation Bevy UI". We will start with scene editing functionality and then build out from there.
-* **Scene Improvements**: Scenes will get support for nested scenes, a nicer scene file format, and property overloading 
-* **The New Bevy Book**: The current Bevy Book hasn't changed much since its initial release and doesn't cover much more than basic Bevy ECS usage. The new Book is already in progress and will be a much more comprehensive guide to all aspects of Bevy. 
+* **Scene Improvements**: Scenes will get support for nested scenes, a nicer scene file format, and property overloading
+* **The New Bevy Book**: The current Bevy Book hasn't changed much since its initial release and doesn't cover much more than basic Bevy ECS usage. The new Book is already in progress and will be a much more comprehensive guide to all aspects of Bevy.
 * **New Bevy ECS Features**: We will likely get some form of "reactive ECS", entity-relationship indexing, and more granular and featureful parallel system scheduling  
 * **Animation**: We will build a unified animation system that makes 2D and 3D animation easier and integrates naturally with the Bevy Editor
 * **2D Features**: Sprite batching, more tileset features, layers, visual / interactive tooling in the Bevy Editor
-* **3D Features**: Skeletal animation (that integrates with the Animation system), configurable / flexible / good looking shadows, at least one form of global illumination, more PBR properties, and visual / interactive tooling in the Bevy Editor 
+* **3D Features**: Skeletal animation (that integrates with the Animation system), configurable / flexible / good looking shadows, at least one form of global illumination, more PBR properties, and visual / interactive tooling in the Bevy Editor
 * **Bevy Game Jam**: We will have at least one official Bevy Game Jam to promote Bevy, battle test apis, and give users more examples to build off of.
 
 I am relatively confident that we can make these things happen. We already have working prototypes for many of the features above and have started reaching consensus in a number of areas.
@@ -248,7 +249,7 @@ Here are some predictions about Bevy's trajectory over the next year:
 * If the "Next Generation Bevy UI" effort is successful, people wanting to build "Rust GUI apps" will start reaching for Bevy.
 * We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable apis.
 
-If any of this excites you, we would love your help! Check out our code on [Github](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project. 
+If any of this excites you, we would love your help! Check out our code on [Github](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
 
 I'm looking forward to spending the next year with you all!
 

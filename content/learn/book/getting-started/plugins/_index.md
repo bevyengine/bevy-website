@@ -15,8 +15,8 @@ However, most developers don't need a custom experience and just want the "full 
 
 ## Bevy's Default Plugins
 
-Let's make our app more interesting by adding the "default Bevy plugins". 
-`add_plugins(DefaultPlugins)` adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input. 
+Let's make our app more interesting by adding the "default Bevy plugins".
+`add_plugins(DefaultPlugins)` adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input.
 
 ```rs
 fn main() {
@@ -32,10 +32,12 @@ fn main() {
 Once again run `cargo run`.
 
 You should hopefully notice two things:
+
 * **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window api.
 * **Your console is now full of "hello" messages**: This is because {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
 Note that `add_plugins(DefaultPlugins)` is equivalent to the following:
+
 ```rs
 fn main() {
     App::new()
@@ -64,6 +66,7 @@ impl Plugin for HelloPlugin {
 ```
 
 Then register the plugin in your App like this:
+
 ```rs
 fn main() {
     App::new()
@@ -95,4 +98,4 @@ fn main() {
 }
 ```
 
-Try running the app again. It should do exactly what it did before. In the next section, we'll fix the "hello" spam using Resources. 
+Try running the app again. It should do exactly what it did before. In the next section, we'll fix the "hello" spam using Resources.

@@ -20,7 +20,6 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 Here are some of the highlights from this release:
 
-
 <!-- more -->
 
 ## Physically Based Rendering (PBR)
@@ -29,7 +28,7 @@ Here are some of the highlights from this release:
 
 Bevy now uses PBR shaders when rendering. PBR is a semi-standard approach to rendering that attempts to use approximations of real-world "physically based" lighting and material properties. We largely use techniques from the [Filament](https://github.com/google/filament/) PBR implementation, but we also incorporate some ideas from [Unreal](https://www.unrealengine.com/en-US/blog/physically-based-shading-on-mobile) and [Disney](https://google.github.io/filament/Filament.html#citation-burley12).
 
-Bevy's `StandardMaterial` now has `base_color`, `roughness`, `metallic`, `reflection`, and `emissive` properties. It also now supports textures for `base_color`, `normal_map`, `metallic_roughness`, `emissive`, and `occlusion` properties. 
+Bevy's `StandardMaterial` now has `base_color`, `roughness`, `metallic`, `reflection`, and `emissive` properties. It also now supports textures for `base_color`, `normal_map`, `metallic_roughness`, `emissive`, and `occlusion` properties.
 
 The new PBR example helps visualize these new material properties:
 
@@ -71,22 +70,22 @@ fn system(handle: Res<Handle<Gltf>>, gltfs: Res<Assets<Gltf>>, materials: Res<As
 This release marks a huge step forward for Bevy's ECS. It has significant implications for how Bevy Apps are composed and how well they perform:
 
 * **[A full rewrite of the ECS core:](#ecs-core-rewrite)**
-    * Massively improved performance across the board
-    * "Hybrid" component storage
-    * An "Archetype Graph" for faster archetype changes 
-    * Stateful queries that cache results across runs
+  * Massively improved performance across the board
+  * "Hybrid" component storage
+  * An "Archetype Graph" for faster archetype changes
+  * Stateful queries that cache results across runs
 * **[A brand new parallel System executor:](#new-parallel-system-executor)**
-    * Support for explicit system ordering
-    * System Labels
-    * System Sets
-    * Improved system "run criteria"
-    * Increased system parallelism
+  * Support for explicit system ordering
+  * System Labels
+  * System Sets
+  * Improved system "run criteria"
+  * Increased system parallelism
 * **["Reliable" change detection:](#reliable-change-detection)**
-    * Systems will now always detect component changes, even across frames
-* **[A rewrite of the State system:](#states-v2)** 
-    * A much more natural "stack-based state machine" model
-    * Direct integration with the new scheduler 
-    * Improved "state lifecycle" events
+  * Systems will now always detect component changes, even across frames
+* **[A rewrite of the State system:](#states-v2)**
+  * A much more natural "stack-based state machine" model
+  * Direct integration with the new scheduler
+  * Improved "state lifecycle" events
 
 Read on for the details!
 
@@ -98,24 +97,24 @@ Up until this point, Bevy used a heavily forked version of [hecs](https://github
 
 Bevy ECS v2 is our first step into that future. It also means that Bevy ECS is no longer a "hecs fork". We are going out on our own!
 
-### Component Storage (The Problem) 
+### Component Storage (The Problem)
 
 Two ECS storage paradigms have gained a lot of traction over the years:
 
 * **Archetypal ECS**:
-    * Stores components in "tables" with static schemas. Each "column" stores components of a given type. Each "row" is an entity.
-    * Each "archetype" has its own table. Adding/removing an entity's component changes the archetype.
-    * Enables super-fast Query iteration due to its cache-friendly data layout
-    * Comes at the cost of more expensive add/remove operations for an Entity's components, because all components need to be copied to the new archetype's "table"
-    * Parallelism-friendly: entities only exist in one archetype at a time so systems that access the same components but in different archetypes can run in parallel 
-    * Frameworks: Old Bevy ECS, hecs, legion, flecs, Unity DOTS
+  * Stores components in "tables" with static schemas. Each "column" stores components of a given type. Each "row" is an entity.
+  * Each "archetype" has its own table. Adding/removing an entity's component changes the archetype.
+  * Enables super-fast Query iteration due to its cache-friendly data layout
+  * Comes at the cost of more expensive add/remove operations for an Entity's components, because all components need to be copied to the new archetype's "table"
+  * Parallelism-friendly: entities only exist in one archetype at a time so systems that access the same components but in different archetypes can run in parallel
+  * Frameworks: Old Bevy ECS, hecs, legion, flecs, Unity DOTS
 * **Sparse Set ECS**:
-    * Stores components of the same type in densely packed arrays, which are sparsely indexed by densely packed unsigned integers (entity ids)
-    * Query iteration is slower than Archetypal ECS (by default) because each entity's component could be at any position in the sparse set. This "random access" pattern isn't cache friendly. Additionally, there is an extra layer of indirection because you must first map the entity id to an index in the component array.
-    * Adding/removing components is a cheap, constant time operation
-    * "Component Packs" are used to optimize iteration performance on a case by case basis (but packs conflict with each other)
-    * Less parallelism friendly: systems need to either lock a whole component storage (not granular) or individual entities (expensive)
-    * Frameworks: Shipyard, EnTT
+  * Stores components of the same type in densely packed arrays, which are sparsely indexed by densely packed unsigned integers (entity ids)
+  * Query iteration is slower than Archetypal ECS (by default) because each entity's component could be at any position in the sparse set. This "random access" pattern isn't cache friendly. Additionally, there is an extra layer of indirection because you must first map the entity id to an index in the component array.
+  * Adding/removing components is a cheap, constant time operation
+  * "Component Packs" are used to optimize iteration performance on a case by case basis (but packs conflict with each other)
+  * Less parallelism friendly: systems need to either lock a whole component storage (not granular) or individual entities (expensive)
+  * Frameworks: Shipyard, EnTT
 
 Developers selecting an ECS framework are stuck with a hard choice. Select an "archetypal" framework with "fast iteration everywhere" but without the ability to cheaply add/remove components, or select a "sparse set" framework to cheaply add/remove components but with slower iteration performance or manual (and conflicting) pack optimizations.
 
@@ -124,13 +123,13 @@ Developers selecting an ECS framework are stuck with a hard choice. Select an "a
 In Bevy ECS V2, we get to have our cake and eat it too. It now has _both_ of the component storage types above (and more can be added later if needed):
 
 * **Tables** (aka "archetypal" storage in other frameworks)
-    * The default storage. If you don't configure anything, this is what you get
-    * Fast iteration by default
-    * Slower add/remove operations
+  * The default storage. If you don't configure anything, this is what you get
+  * Fast iteration by default
+  * Slower add/remove operations
 * **Sparse Sets**
-    * Opt-in
-    * Slower iteration
-    * Faster add/remove operations
+  * Opt-in
+  * Slower iteration
+  * Faster add/remove operations
 
 These storage types complement each other perfectly. By default Query iteration is fast. If developers know that they want to add/remove a component at high frequencies, they can set the storage to "sparse set":
 
@@ -177,7 +176,6 @@ This benchmark runs a query that matches 5 entities within a single archetype an
 
 ![sparse_frag_iter](sparse_frag_iter.svg)
 
-
 **Bevy 0.5** marks a huge improvement for cases like this, thanks to the new "stateful queries". **Bevy 0.4** needs to check every archetype each time the iterator is run, whereas **Bevy 0.5** amortizes that cost to zero.
 
 #### Fragmented Iterator Benchmark (in milliseconds, less is better)
@@ -186,11 +184,11 @@ This is the [ecs_bench_suite](https://github.com/rust-gamedev/ecs_bench_suite) `
 
 ![frag_iter](frag_iter.svg)
 
-The gains here compared to the last benchmark are smaller because there aren't any unmatched archetypes. However **Bevy 0.5** still gets a nice boost due to better iterator/query impls, amortizing the cost of matched archetypes to zero, and for_each iterators. 
+The gains here compared to the last benchmark are smaller because there aren't any unmatched archetypes. However **Bevy 0.5** still gets a nice boost due to better iterator/query impls, amortizing the cost of matched archetypes to zero, and for_each iterators.
 
 ### Uber Fast "for_each" Query Iterators
 
-Developers now have the choice to use a fast {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Query" no_mod=true method="for_each")}} iterator, which yields ~1.5-3x iteration speed improvements for "fragmented iteration", and minor ~1.2x iteration speed improvements for unfragmented iteration. 
+Developers now have the choice to use a fast {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Query" no_mod=true method="for_each")}} iterator, which yields ~1.5-3x iteration speed improvements for "fragmented iteration", and minor ~1.2x iteration speed improvements for unfragmented iteration.
 
 ```rust
 fn system(query: Query<(&A, &mut B)>) {
@@ -326,7 +324,6 @@ Run Criteria are now decoupled from systems and will be re-used when possible. F
 
 Run Criteria can now also be labeled and referenced by other systems:
 
-
 ```rust
 fn every_other_time(mut has_ran: Local<bool>) -> ShouldRun {
     *has_ran = !*has_ran;
@@ -383,7 +380,7 @@ app
 
 The author clearly intended `print_every_other_time` to run every other update. However, due to the fact that these systems have no order defined, they could run in a different order each update and create a situation where nothing is printed over the course of two updates:
 
-```
+```txt
 UPDATE
 - increment_counter (counter now equals 1)
 - print_every_other_time (nothing printed)
@@ -401,9 +398,9 @@ To help detect this class of error, we built an opt-in tool that detects these a
 app.insert_resource(ReportExecutionOrderAmbiguities)
 ```
 
-Then when we run our App, we will see the following message printed to our terminal: 
+Then when we run our App, we will see the following message printed to our terminal:
 
-```
+```txt
 Execution order ambiguities detected, you might want to add an explicit dependency relation between some of these systems:
  * Parallel systems:
  -- "&app::increment_counter" and "&app::print_every_other_time"
@@ -604,7 +601,7 @@ Text can now be spawned into 2D scenes using the new `Text2dBundle`. This makes 
 
 <div class="release-feature-authors">authors: @aevyrie</div>
 
-It is now possible to convert world coordinates to a given camera's screen coordinates using the new `Camera::world_to_screen()` function. Here is an example of this feature being used to position a UI element on top of a moving 3d object. 
+It is now possible to convert world coordinates to a given camera's screen coordinates using the new `Camera::world_to_screen()` function. Here is an example of this feature being used to position a UI element on top of a moving 3d object.
 
 <video controls loop><source src="world_to_screen.mp4" type="video/mp4"/></video>
 
@@ -788,15 +785,14 @@ Bevy's asset system had a few minor improvements this release:
 
 * Bevy no longer panics on errors when loading assets
 * Asset paths with multiple dots are now properly handled
-* Improved type safety for "labeled assets" produced by asset loaders 
-* Made asset path loading case-insensitive 
+* Improved type safety for "labeled assets" produced by asset loaders
+* Made asset path loading case-insensitive
 
 ## WGPU Configuration Options
 
 <div class="release-feature-authors">authors: @Neo-Zhixing</div>
 
 It is now possible to enable/disable wgpu features (such as `WgpuFeature::PushConstants` and `WgpuFeature::NonFillPolygonMode`) by setting them in the `WgpuOptions` resource:
-
 
 ```rust
 app
@@ -816,7 +812,6 @@ Wgpu limits (such as `WgpuLimits::max_bind_groups`) can also now be configured i
 <div class="release-feature-authors">authors: @mockersf</div>
 
 It is now possible to iterate all entities in a spawned scene instance. This makes it possible to perform post-processing on scenes after they have been loaded.
-
 
 ```rust
 struct MySceneInstance(InstanceId);
@@ -978,7 +973,6 @@ fn system(query: Query<&Player>) {
 
 We have removed `ChangedRes<A>` in favor of the following:
 
-
 ```rust
 fn system(a: Res<A>) {
     if a.is_changed() {
@@ -1003,7 +997,7 @@ fn system(a: Option<Res<A>>) {
 
 ### New Bundle Naming Convention
 
-Component Bundles previously used the `XComponents` naming convention (ex: `SpriteComponents`, `TextComponents`, etc). We decided to move to a `XBundle` naming convention (ex: `SpriteBundle`, `TextBundle`, etc) to be more explicit about what these types are and to help prevent new users from conflating Bundles and Components. 
+Component Bundles previously used the `XComponents` naming convention (ex: `SpriteComponents`, `TextComponents`, etc). We decided to move to a `XBundle` naming convention (ex: `SpriteBundle`, `TextBundle`, etc) to be more explicit about what these types are and to help prevent new users from conflating Bundles and Components.
 
 ### World Metadata Improvements
 
@@ -1062,7 +1056,7 @@ fn system(foo: Res<f64>, bar: ResMut<i32>) {
 }
 ```
 
-_But_ this merge did create problems for people directly interacting with `World`. What if you need mutable access to multiple resources at the same time? `world.get_resource_mut()` borrows World mutably, which prevents multiple mutable accesses! We solved this with `WorldCell`. 
+_But_ this merge did create problems for people directly interacting with `World`. What if you need mutable access to multiple resources at the same time? `world.get_resource_mut()` borrows World mutably, which prevents multiple mutable accesses! We solved this with `WorldCell`.
 
 ### WorldCell
 
@@ -1076,9 +1070,9 @@ let a = world_cell.get_resource_mut::<i32>().unwrap();
 let b = world_cell.get_resource_mut::<f64>().unwrap();
 ```
 
-This adds cheap runtime checks to ensure that world accesses do not conflict with each other. 
+This adds cheap runtime checks to ensure that world accesses do not conflict with each other.
 
-We made this a separate api to enable users to decide what tradeoffs they want. Direct World access has stricter lifetimes, but it is more efficient and does compile time access control. `WorldCell` has looser lifetimes, but incurs a _small_ runtime penalty as a result. 
+We made this a separate api to enable users to decide what tradeoffs they want. Direct World access has stricter lifetimes, but it is more efficient and does compile time access control. `WorldCell` has looser lifetimes, but incurs a _small_ runtime penalty as a result.
 
 The api is currently limited to resource access, but it will be extended to queries / entity component access in the future.
 
@@ -1112,6 +1106,7 @@ fn filter_system(a: Query<&mut A, With<B>>, b: Query<&mut B, Without<B>>) {
 ```
 
 But it also had a significant downside:
+
 ```rust
 // these queries will not conflict _until_ an entity with A, B, and C is spawned
 fn maybe_conflicts_system(a: Query<(&mut A, &C)>, b: Query<(&mut A, &B)>) {
@@ -1124,7 +1119,7 @@ In **Bevy 0.5**, we switched to using `ComponentId` instead of `ArchetypeCompone
 
 Naively, it would also _disallow_ `filter_system`, which would be a significant downgrade in usability. Bevy has a number of internal systems that rely on disjoint queries and we expect it to be a common pattern in userspace. To resolve this, we added a new internal `FilteredAccess<T>` type, which wraps `Access<T>` and adds with/without filters. If two `FilteredAccess` have with/without values that prove they are disjoint, they will no longer conflict.
 
-This means `filter_system` is still perfectly valid in **Bevy 0.5**. We get most of the benefits of the old implementation, but with consistent and predictable rules enforced at app startup. 
+This means `filter_system` is still perfectly valid in **Bevy 0.5**. We get most of the benefits of the old implementation, but with consistent and predictable rules enforced at app startup.
 
 ## What's Next For Bevy?
 
@@ -1133,7 +1128,7 @@ We still have a long road ahead of us, but the Bevy developer community is growi
 * "Pipelined" rendering and other renderer optimizations
 * Bevy UI redesign
 * Animation: component animation and 3d skeletal animation
-* ECS: relationships/indexing, async systems, archetype invariants, "stageless" system schedules 
+* ECS: relationships/indexing, async systems, archetype invariants, "stageless" system schedules
 * 3D Lighting Features: shadows, more light types
 * More Bevy Scene features and usability improvements
 
@@ -1242,126 +1237,125 @@ A huge thanks to the **88 contributors** that made this release (and associated 
 
 ### Added
 
-- [PBR Rendering][1554]
-- [PBR Textures][1632]
-- [HIDPI Text][1132]
-- [Rich text][1245]
-- [Wireframe Rendering Pipeline][562]
-- [Render Layers][1209]
-- [Add Sprite Flipping][1407]
-- [OrthographicProjection scaling mode + camera bundle refactoring][400]
-- [3D OrthographicProjection improvements + new example][1361]
-- [Flexible camera bindings][1689]
-- [Render text in 2D scenes][1122]
-- [Text2d render quality][1171]
-- [System sets and run criteria v2][1675]
-- [System sets and parallel executor v2][1144]
-- [Many-to-many system labels][1576]
-- [Non-string labels (#1423 continued)][1473]
-- [Make EventReader a SystemParam][1244]
-- [Add EventWriter][1575]
-- [Reliable change detection][1471]
-- [Redo State architecture][1424]
-- [Query::get_unique][1263]
-- [gltf: load normal and occlusion as linear textures][1762]
-- [Add separate brightness field to AmbientLight][1605]
-- [world coords to screen space][1258]
-- [Experimental Frustum Culling (for Sprites)][1492]
-- [Enable wgpu device limits][1544]
-- [bevy_render: add torus and capsule shape][1223]
-- [New mesh attribute: color][1194]
-- [Minimal change to support instanced rendering][1262]
-- [Add support for reading from mapped buffers][1274]
-- [Texture atlas format and conversion][1365]
-- [enable wgpu device features][547]
-- [Subpixel text positioning][1196]
-- [make more information available from loaded GLTF model][1020]
-- [use Name on node when loading a gltf file][1183]
-- [GLTF loader: support mipmap filters][1639]
-- [Add support for gltf::Material::unlit][1341]
-- [Implement Reflect for tuples up to length 12][1218]
-- [Process Asset File Extensions With Multiple Dots][1277]
-- [Update Scene Example to Use scn.ron File][1339]
-- [3d game example][1252]
-- [Add keyboard modifier example (#1656)][1657]
-- [Count number of times a repeating Timer wraps around in a tick][1112]
-- [recycle `Timer` refactor to duration.sparkles Add `Stopwatch` struct.][1151]
-- [add scene instance entity iteration][1058]
-- [Make Commands and World apis consistent][1703]
-- [Add `insert_children` and `push_children` to EntityMut][1728]
-- [Extend AppBuilder api with `add_system_set` and similar methods][1453]
-- [add labels and ordering for transform and parent systems in POST_UPDATE stage][1456]
-- [Explicit execution order ambiguities API][1469]
-- [Resolve (most) internal system ambiguities][1606]
-- [Change 'components' to 'bundles' where it makes sense semantically][1257]
-- [add `Flags<T>` as a query to get flags of component][1172]
-- [Rename add_resource to insert_resource][1356]
-- [Update init_resource to not overwrite][1349]
-- [Enable dynamic mutable access to component data][1284]
-- [Get rid of ChangedRes][1313]
-- [impl SystemParam for Option<Res<T>> / Option<ResMut<T>>][1494]
-- [Add Window Resize Constraints][1409]
-- [Add basic file drag and drop support][1096]
-- [Modify Derive to allow unit structs for RenderResources.][1089]
-- [bevy_render: load .spv assets][1104]
-- [Expose wgpu backend in WgpuOptions and allow it to be configured from the environment][1042]
-- [updates on diagnostics (log + new diagnostics)][1085]
-- [enable change detection for labels][1155]
-- [Name component with fast comparisons][1109]
-- [Support for !Send tasks][1216]
-- [Add missing spawn_local method to Scope in the single threaded executor case][1266]
-- [Add bmp as a supported texture format][1081]
-- [Add an alternative winit runner that can be started when not on the main thread][1063]
-- [Added use_dpi setting to WindowDescriptor][1131]
-- [Implement Copy for ElementState][1154]
-- [Mutable mesh accessors: indices_mut and attribute_mut][1164]
-- [Add support for OTF fonts][1200]
-- [Add `from_xyz` to `Transform`][1212]
-- [Adding copy_texture_to_buffer and copy_texture_to_texture][1236]
-- [Added `set_minimized` and `set_position` to `Window`][1292]
-- [Example for 2D Frustum Culling][1503]
-- [Add remove resource to commands][1478]
+* [PBR Rendering][1554]
+* [PBR Textures][1632]
+* [HIDPI Text][1132]
+* [Rich text][1245]
+* [Wireframe Rendering Pipeline][562]
+* [Render Layers][1209]
+* [Add Sprite Flipping][1407]
+* [OrthographicProjection scaling mode + camera bundle refactoring][400]
+* [3D OrthographicProjection improvements + new example][1361]
+* [Flexible camera bindings][1689]
+* [Render text in 2D scenes][1122]
+* [Text2d render quality][1171]
+* [System sets and run criteria v2][1675]
+* [System sets and parallel executor v2][1144]
+* [Many-to-many system labels][1576]
+* [Non-string labels (#1423 continued)][1473]
+* [Make EventReader a SystemParam][1244]
+* [Add EventWriter][1575]
+* [Reliable change detection][1471]
+* [Redo State architecture][1424]
+* [Query::get_unique][1263]
+* [gltf: load normal and occlusion as linear textures][1762]
+* [Add separate brightness field to AmbientLight][1605]
+* [world coords to screen space][1258]
+* [Experimental Frustum Culling (for Sprites)][1492]
+* [Enable wgpu device limits][1544]
+* [bevy_render: add torus and capsule shape][1223]
+* [New mesh attribute: color][1194]
+* [Minimal change to support instanced rendering][1262]
+* [Add support for reading from mapped buffers][1274]
+* [Texture atlas format and conversion][1365]
+* [enable wgpu device features][547]
+* [Subpixel text positioning][1196]
+* [make more information available from loaded GLTF model][1020]
+* [use Name on node when loading a gltf file][1183]
+* [GLTF loader: support mipmap filters][1639]
+* [Add support for gltf::Material::unlit][1341]
+* [Implement Reflect for tuples up to length 12][1218]
+* [Process Asset File Extensions With Multiple Dots][1277]
+* [Update Scene Example to Use scn.ron File][1339]
+* [3d game example][1252]
+* [Add keyboard modifier example (#1656)][1657]
+* [Count number of times a repeating Timer wraps around in a tick][1112]
+* [recycle `Timer` refactor to duration.sparkles Add `Stopwatch` struct.][1151]
+* [add scene instance entity iteration][1058]
+* [Make Commands and World apis consistent][1703]
+* [Add `insert_children` and `push_children` to EntityMut][1728]
+* [Extend AppBuilder api with `add_system_set` and similar methods][1453]
+* [add labels and ordering for transform and parent systems in POST_UPDATE stage][1456]
+* [Explicit execution order ambiguities API][1469]
+* [Resolve (most) internal system ambiguities][1606]
+* [Change 'components' to 'bundles' where it makes sense semantically][1257]
+* [add `Flags<T>` as a query to get flags of component][1172]
+* [Rename add_resource to insert_resource][1356]
+* [Update init_resource to not overwrite][1349]
+* [Enable dynamic mutable access to component data][1284]
+* [Get rid of ChangedRes][1313]
+* [impl SystemParam for Option<Res<T>> / Option<ResMut<T>>][1494]
+* [Add Window Resize Constraints][1409]
+* [Add basic file drag and drop support][1096]
+* [Modify Derive to allow unit structs for RenderResources.][1089]
+* [bevy_render: load .spv assets][1104]
+* [Expose wgpu backend in WgpuOptions and allow it to be configured from the environment][1042]
+* [updates on diagnostics (log + new diagnostics)][1085]
+* [enable change detection for labels][1155]
+* [Name component with fast comparisons][1109]
+* [Support for !Send tasks][1216]
+* [Add missing spawn_local method to Scope in the single threaded executor case][1266]
+* [Add bmp as a supported texture format][1081]
+* [Add an alternative winit runner that can be started when not on the main thread][1063]
+* [Added use_dpi setting to WindowDescriptor][1131]
+* [Implement Copy for ElementState][1154]
+* [Mutable mesh accessors: indices_mut and attribute_mut][1164]
+* [Add support for OTF fonts][1200]
+* [Add `from_xyz` to `Transform`][1212]
+* [Adding copy_texture_to_buffer and copy_texture_to_texture][1236]
+* [Added `set_minimized` and `set_position` to `Window`][1292]
+* [Example for 2D Frustum Culling][1503]
+* [Add remove resource to commands][1478]
 
 ### Changed
 
-- [Bevy ECS V2][1525]
-- [Fix Reflect serialization of tuple structs][1366]
-- [color spaces and representation][1572]
-- [Make vertex buffers optional][1485]
-- [add to lower case to make asset loading case insensitive][1427]
-- [Replace right/up/forward and counter parts with local_x/local_y and local_z][1476]
-- [Use valid keys to initialize AHasher in FixedState][1268]
-- [Change Name to take Into<String> instead of String][1283]
-- [Update to wgpu-rs 0.7][542]
-- [Update glam to 0.13.0.][1550]
-- [use std clamp instead of Bevy's][1644]
-- [Make Reflect impls unsafe (Reflect::any must return `self`)][1679]
+* [Bevy ECS V2][1525]
+* [Fix Reflect serialization of tuple structs][1366]
+* [color spaces and representation][1572]
+* [Make vertex buffers optional][1485]
+* [add to lower case to make asset loading case insensitive][1427]
+* [Replace right/up/forward and counter parts with local_x/local_y and local_z][1476]
+* [Use valid keys to initialize AHasher in FixedState][1268]
+* [Change Name to take Into<String> instead of String][1283]
+* [Update to wgpu-rs 0.7][542]
+* [Update glam to 0.13.0.][1550]
+* [use std clamp instead of Bevy's][1644]
+* [Make Reflect impls unsafe (Reflect::any must return `self`)][1679]
 
 ### Fixed
 
-- [convert grayscale images to rgb][1524]
-- [Glb textures should use bevy_render to load images][1454]
-- [Don't panic on error when loading assets][1286]
-- [Prevent ImageBundles from causing constant layout recalculations][1299]
-- [do not check for focus until cursor position has been set][1070]
-- [Fix lock order to remove the chance of deadlock][1121]
-- [Prevent double panic in the Drop of TaksPoolInner][1064]
-- [Ignore events when receiving unknown WindowId][1072]
-- [Fix potential bug when using multiple lights.][1055]
-- [remove panics when mixing UI and non UI entities in hierarchy][1180]
-- [fix label to load gltf scene][1204]
-- [fix repeated gamepad events][1221]
-- [Fix iOS touch location][1224]
-- [Don't panic if there's no index buffer and call draw][1229]
-- [Fix Bug in Asset Server Error Message Formatter][1340]
-- [add_stage now checks Stage existence][1346]
-- [Fix Un-Renamed add_resource Compile Error][1357]
-- [Fix Interaction not resetting to None sometimes][1315]
-- [Fix regression causing "flipped" sprites to be invisible][1399]
-- [revert default vsync mode to Fifo][1416]
-- [Fix missing paths in ECS SystemParam derive macro][1434]
-- [Fix staging buffer required size calculation (fixes #1056)][1509]
-
+* [convert grayscale images to rgb][1524]
+* [Glb textures should use bevy_render to load images][1454]
+* [Don't panic on error when loading assets][1286]
+* [Prevent ImageBundles from causing constant layout recalculations][1299]
+* [do not check for focus until cursor position has been set][1070]
+* [Fix lock order to remove the chance of deadlock][1121]
+* [Prevent double panic in the Drop of TaksPoolInner][1064]
+* [Ignore events when receiving unknown WindowId][1072]
+* [Fix potential bug when using multiple lights.][1055]
+* [remove panics when mixing UI and non UI entities in hierarchy][1180]
+* [fix label to load gltf scene][1204]
+* [fix repeated gamepad events][1221]
+* [Fix iOS touch location][1224]
+* [Don't panic if there's no index buffer and call draw][1229]
+* [Fix Bug in Asset Server Error Message Formatter][1340]
+* [add_stage now checks Stage existence][1346]
+* [Fix Un-Renamed add_resource Compile Error][1357]
+* [Fix Interaction not resetting to None sometimes][1315]
+* [Fix regression causing "flipped" sprites to be invisible][1399]
+* [revert default vsync mode to Fifo][1416]
+* [Fix missing paths in ECS SystemParam derive macro][1434]
+* [Fix staging buffer required size calculation (fixes #1056)][1509]
 
 [400]: https://github.com/bevyengine/bevy/pull/400
 [542]: https://github.com/bevyengine/bevy/pull/542

@@ -20,7 +20,7 @@ It has the following design goals:
 
 * <b class="fun-list">Capable</b>: Offer a complete 2D and 3D feature set
 * <b class="fun-list">Simple</b>: Easy for newbies to pick up, but infinitely flexible for power users
-* <b class="fun-list">Data Focused</b>: Data-oriented architecture using the Entity Component System paradigm 
+* <b class="fun-list">Data Focused</b>: Data-oriented architecture using the Entity Component System paradigm
 * <b class="fun-list">Modular</b>: Use only what you need. Replace what you don't like
 * <b class="fun-list">Fast</b>: App logic should run quickly, and when possible, in parallel
 * <b class="fun-list">Productive</b>: Changes should compile quickly ... waiting isn't fun
@@ -33,6 +33,7 @@ Bevy has a number of features that I think set it apart from other engines:
 * <b class="fun-list">Productive Compile Times</b>: Expect changes to compile in ~0.8-3.0 seconds with the "fast compiles" config
 
 It also has many features most people expect from a modern, general purpose engine:
+
 * <b class="fun-list">Cross Platform</b>: Windows, MacOS, and Linux (with planned support for mobile and web)
 * <b class="fun-list">3D</b>: Lights, meshes, textures, MSAA, and GLTF loading
 * <b class="fun-list">Sprites</b>: Render individual images as sprites, render from sprite sheets, and dynamically generate new sprite sheets
@@ -45,17 +46,15 @@ It also has many features most people expect from a modern, general purpose engi
 * <b class="fun-list">Hot Asset Reloading</b>: Automatically reload changes to assets at runtime without recompiles or restarts
 * <b class="fun-list">Events</b>: Efficiently consume and produce Events from within ECS systems
 * <b class="fun-list">Properties</b>: Dynamically get and set component fields using a string version of their names
-* <b class="fun-list">Hierarchical Transforms</b>: Create parent-child relationships between entities that propagate Transforms down the hierarchy 
+* <b class="fun-list">Hierarchical Transforms</b>: Create parent-child relationships between entities that propagate Transforms down the hierarchy
 
 That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. <span class="warning">I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability</span>.
-
 
 Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
 
 **Quick note to the reader**: in this article you will find text formatted like this: {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="texture" name="Texture" no_mod=true)}}
 
 This formatting indicates that the text is a Rust type that links to API documentation. I encourage you to click on anything that seems interesting to you!
- 
 
 ## Bevy Apps
 
@@ -105,6 +104,7 @@ All Bevy engine and game logic is built on top of a custom [Entity Component Sys
 The ECS pattern encourages clean, decoupled designs by forcing you to break up your app data and logic into its core components.
 
 Unlike other Rust ECS implementations, which require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
+
 * <b class="fun-list">Components</b>: normal Rust structs
 * <b class="fun-list">Systems</b>: normal Rust functions
 * <b class="fun-list">Entities</b>: a type containing a unique integer  
@@ -148,6 +148,7 @@ That is a complete self-contained Bevy app with automatic parallel system schedu
 ### Performance
 
 One of the reasons the ECS paradigm is so popular is that it has the potential to make game logic _super_ fast, primarily for these two reasons:
+
 1. <b class="fun-list">Iteration Speed</b>: Components are packed tightly together to optimize for cache-locality, which makes iterating over them blazing fast
 2. <b class="fun-list">Parallelism</b>: Systems declare read/write dependencies, which enables automatic and efficient lock-free parallel scheduling
 
@@ -161,7 +162,7 @@ Bevy ECS does both of these things about as well as it can. According to the pop
 
 ![ecs iter performance graph](ecs_build.svg)
 
-Note that `ecs_bench` is a single threaded benchmark, so it doesn't illustrate the multi-threading capabilities of these framework. And as always, please be aware that `ecs_bench` is a micro benchmark and it doesn't illustrate the performance of a complex game. There is a lot of nuance in the ECS performance space and each of the ECS implementations above will perform differently under different workloads. 
+Note that `ecs_bench` is a single threaded benchmark, so it doesn't illustrate the multi-threading capabilities of these framework. And as always, please be aware that `ecs_bench` is a micro benchmark and it doesn't illustrate the performance of a complex game. There is a lot of nuance in the ECS performance space and each of the ECS implementations above will perform differently under different workloads.
 
 I have pushed my version of `ecs_bench` [here](https://github.com/cart/ecs_bench) if anyone wants to double-check my methodology. For some reasonable amount of time I will post updates here if anyone reports a problem or my results are not (on average) reproducible.
 
@@ -192,6 +193,7 @@ fn system(mut query: Query<(&Position, &mut Velocity)>) {
 ```
 
 #### Change Detection
+
 ```rs
 // Added<T> queries only run when the given component has been added
 fn system(mut query: Query<Added<Position>>) {
@@ -223,6 +225,7 @@ fn system(mut query: Query<&Position>>) {
 ```
 
 #### Multiple Queries
+
 ```rs
 fn system(mut wall_query: Query<&Wall>, mut player_query: Query<&Player>) {
     for player in &mut player_query.iter() {
@@ -236,6 +239,7 @@ fn system(mut wall_query: Query<&Wall>, mut player_query: Query<&Player>) {
 ```
 
 #### Entity Queries and Direct Component Access
+
 ```rs
 fn system(mut entity_query: Query<Entity>, mut player_query: Query<&Player>) {
     for entity in &mut entity_query.iter() {
@@ -247,6 +251,7 @@ fn system(mut entity_query: Query<Entity>, mut player_query: Query<&Player>) {
 ```
 
 #### Resources
+
 ```rs
 // Res and ResMut access global resources 
 fn system(time: Res<Time>, score: ResMut<Score>) {
@@ -263,6 +268,7 @@ fn system(time: Res<Time>, &Position) {
 ```
 
 #### "Local" System Resources
+
 ```rs
 // Local<T> resources are unique per-system. Two instances of the same system will each have their own resource. Local resources are automatically initialized to their default value.
 fn system(state: Local<State>, &Position) {
@@ -271,6 +277,7 @@ fn system(state: Local<State>, &Position) {
 ```
 
 #### Empty Systems
+
 ```rs
 // for the hyper-minimalists
 fn system() {
@@ -279,6 +286,7 @@ fn system() {
 ```
 
 #### With/Without Filters
+
 ```rs
 // only runs on entities With or Without a given component
 fn system(mut query: Query<Without<Parent, &Position>>) {
@@ -289,6 +297,7 @@ fn system(mut query: Query<Without<Parent, &Position>>) {
 ```
 
 #### Thread-Local Systems
+
 ```rs
 // systems that must run on the main thread with exclusive access to World and Resources
 fn system(world: &mut World, resources: &mut Resources) {
@@ -297,6 +306,7 @@ fn system(world: &mut World, resources: &mut Resources) {
 ```
 
 #### Stages
+
 ```rs
 // the scheduler provides Stages as a way to run sets of systems in order  
 fn main() {
@@ -310,6 +320,7 @@ fn main() {
 ```
 
 #### Commands
+
 ```rs
 // use Commands to queue up World and Resource changes, which will be applied at the end of the current Stage
 fn system(mut commands: Commands) {
@@ -338,7 +349,6 @@ fn main() {
 
 The `.system()` call takes the `some_system` function pointer and converts it to a `Box<dyn System>`. This works because we implement the {{rust_type(type="trait" crate="bevy_ecs" version="0.1.0" name="IntoQuerySystem")}} trait for all functions that match a certain set of function signatures.
 
-
 ### Good Bones
 
 Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](https://github.com/Ralith/hecs). Hecs is an efficient single-threaded archetypal ECS. It provides the core {{rust_type(type="struct" crate="bevy_ecs" version="0.1.0" name="World")}}, {{rust_type(type="struct" crate="bevy_ecs" version="0.1.0" name="Archetype")}}, and internal {{rust_type(type="trait" crate="bevy_ecs" version="0.1.0" name="Query")}} data structures. Bevy ECS adds the following on top:
@@ -351,7 +361,7 @@ Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](htt
 * <b class="fun-list">Change Detection</b>: Automatically (and efficiently) tracks component add/remove/update operations and exposes them in the Query interface.
 * <b class="fun-list">Stable Entity IDs</b>: Almost every ECS (including Hecs) uses unstable entity ids that cannot be used for serialization (scenes / save files) or networking. In Bevy ECS, entity ids are globally unique and stable. You can use them in any context!  
 
-In the near future I will file an issue on the Hecs git repo offering to upstream whatever changes they want from Bevy ECS. I have a feeling they won't want the "high level" stuff like function systems and parallel scheduling, but I guess we'll see! 
+In the near future I will file an issue on the Hecs git repo offering to upstream whatever changes they want from Bevy ECS. I have a feeling they won't want the "high level" stuff like function systems and parallel scheduling, but I guess we'll see!
 
 ## Bevy UI
 
@@ -379,7 +389,7 @@ commands.spawn(NodeComponents::default())
 
 ### Layout
 
-For layout, Bevy uses a fantastic 100% Rust flexbox implementation called [Stretch](https://github.com/vislyhq/stretch). Stretch provides the algorithms for positioning rectangles in 2D space according to the flexbox spec. Bevy exposes flex properties inside the {{rust_type(type="struct" name="Style" version="0.1.0" crate="bevy_ui")}} component mentioned above and renders rectangles with the positions and sizes that Stretch outputs. Bevy uses its own z-layering algorithm to "stack" elements on top of each other, but its basically the same one that HTML/CSS uses.   
+For layout, Bevy uses a fantastic 100% Rust flexbox implementation called [Stretch](https://github.com/vislyhq/stretch). Stretch provides the algorithms for positioning rectangles in 2D space according to the flexbox spec. Bevy exposes flex properties inside the {{rust_type(type="struct" name="Style" version="0.1.0" crate="bevy_ui")}} component mentioned above and renders rectangles with the positions and sizes that Stretch outputs. Bevy uses its own z-layering algorithm to "stack" elements on top of each other, but its basically the same one that HTML/CSS uses.
 
 ### Relative Positioning
 
@@ -436,6 +446,7 @@ commands
 Just like any other Entity, Nodes can have children. Children are positioned and scaled relative to their parent. By default, children will always appear in front of their parents.
 
 ![ui_parenting](ui_parenting.png)
+
 ```rs
 commands
     .spawn(NodeComponents {
@@ -609,7 +620,7 @@ let texture_atlas = texture_atlas_builder.finish(&mut textures).unwrap();
 
 ### [GLTF Model Loading](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/3d/load_model.rs)
 
-Load GLTF files as Mesh assets 
+Load GLTF files as Mesh assets
 
 ![boat render](boat.png)
 
@@ -725,7 +736,7 @@ Any ECS `World` can be converted to a scene like this:
 let scene = Scene::from_world(&world, &component_type_registry);
 ```
 
-You can then convert the scene to a RON formatted string like this: 
+You can then convert the scene to a RON formatted string like this:
 
 ```rs
 let ron_string = scene.serialize_ron(&property_type_registry)?;
@@ -820,14 +831,14 @@ fn event_consumer(mut state: Local<State>, my_events: Res<Events<MyEvent>>) {
 
 `app.add_event::<MyEvent>()` adds a new {{rust_type(type="struct", crate="bevy_app" version="0.1.0" name="Events")}} resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  {{rust_type(type="struct" crate="bevy_app" version="0.1.0" name="EventReader" plural=true)}} are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
 
-
 Events are used in Bevy for features like window resizing, assets, and input. The tradeoff for being both allocation and cpu efficient is that each system only has one chance to receive an event, otherwise it will be lost on the next update. I believe this is the correct tradeoff for apps that run in a loop (ex: games).
 
 ## Assets
 
 Bevy {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Assets")}} are just typed data that can be referenced using asset {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Handle" plural=true)}} . For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
 
-#### Asset Creation
+### Asset Creation
+
 ```rs
 fn create_texture_system(mut textures: ResMut<Assets<Texture>>) {
     // creates a new Texture asset and returns a handle, which can then be used to retrieve the actual asset
@@ -835,7 +846,8 @@ fn create_texture_system(mut textures: ResMut<Assets<Texture>>) {
 }
 ```
 
-#### Asset Access
+### Asset Access
+
 ```rs
 fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<Texture>) {
     // retrieves a Texture using the current entity's Handle<Texture> component
@@ -843,8 +855,10 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 }
 ```
 
-#### Asset Events
+### Asset Events
+
 The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed `Events`. These events can also be consumed as a system resource, just like any other `Events`:
+
 ```rs
 fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
     for event in state.reader.iter(&texture_events) {
@@ -855,7 +869,7 @@ fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
 }
 ```
 
-#### Asset Server
+### Asset Server
 
 The ```Assets<T>``` collection doesn't know anything about filesystems or multi-threading. This is the responsibility of the {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="AssetServer" no_mod=true)}} resource:
 
@@ -886,20 +900,22 @@ fn system(mut commands: Commands, asset_server: Res<AssetServer>, mut textures: 
 }
 ```
 
-#### Hot Reloading
+### Hot Reloading
 
 You can enable asset change detection by calling:
+
 ```rs
 asset_server.watch_for_changes().unwrap();
 ```
 
 This will load new versions of assets whenever their files have changed.
 
-#### Adding New Asset Types
+### Adding New Asset Types
 
 To add a new asset type, implement the {{rust_type(type="trait" crate="bevy_asset" version="0.1.0" name="AssetLoader" no_mod=true)}} trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
 
 Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you can register your new loader like this:
+
 ```rs
 app.add_asset_loader::<MyAsset, MyAssetLoader>();
 ```
@@ -922,7 +938,7 @@ fn system(asset_server: Res<AssetServer>, audio_output: Res<AudioOutput>) {
 }
 ```
 
-We plan on extending the audio system with more control and features in the future. 
+We plan on extending the audio system with more control and features in the future.
 
 ## Render Graph
 
@@ -934,7 +950,7 @@ Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderRes
 
 Components and Assets can derive the {{rust_type(type="trait" crate="bevy_render" version="0.1.0" mod="renderer" name="RenderResources" no_mod=true)}} trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
 
-Binding uniforms to a custom shader is literally as simple as deriving `RenderResources` on your component or asset: 
+Binding uniforms to a custom shader is literally as simple as deriving `RenderResources` on your component or asset:
 
 ```rs
 #[derive(RenderResources, Default)]
@@ -944,6 +960,7 @@ struct MyMaterial {
 ```
 
 And then adding a new RenderResourceNode to the Render Graph:
+
 ```rs
 // create the new node
 render_graph.add_system_node("my_material", RenderResourcesNode::<MyMaterial>::new(true));
@@ -958,7 +975,7 @@ From there, MyMaterial components will be automatically copied to GPU buffers. A
 layout(set = 1, binding = 1) uniform MyMaterial_color {
     vec4 color;
 };
-``` 
+```
 
 I think the simplicity of the [fully self-contained custom shader example](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_custom_material.rs) speaks for itself.
 
@@ -975,7 +992,9 @@ struct MyMaterial {
     pub always_blue: bool,
 }
 ```
+
 Then in your fragment shader you could do something like this:
+
 ```c
 void main() {
     o_Target = color;
@@ -1018,18 +1037,20 @@ One of the most popular Rust engines today takes _over 30 seconds_ to compile a 
 Currently, with the "fast compiles" configuration, changes to Bevy examples can be compiled in ~0.8-3 seconds, based on your computer specs, configuration, and OS choice (more on this later). There is of course always room for improvement here, but Bevy currently falls into my "usability sweet spot".
 
 The "Rust compiles slow" meme exists largely because many Rust projects aren't thinking enough about the compile time performance implications of certain code patterns. Rust code generally compiles slowly for three reasons:
+
 * <b class="fun-list">Generic Monomorphization</b>: The compile step where generic code gets turned into a non-generic copy. Compile times go up as the volume of monomorphized code goes up. To keep costs low you should either avoid generics entirely or keep generic code "small" and shallow.
 * <b class="fun-list">Link Time</b>: How long it takes to link code. Here the important thing is to keep code volume and dependency counts low.
-* <b class="fun-list">LLVM</b>: Rust throws a large amounts of IR code at LLVM and expects it to optimize it. This takes time. Additionally LLVM is optimized for "fast code at runtime" more than "fast code generation". 
+* <b class="fun-list">LLVM</b>: Rust throws a large amounts of IR code at LLVM and expects it to optimize it. This takes time. Additionally LLVM is optimized for "fast code at runtime" more than "fast code generation".
 
 The LLVM bit is out of our hands (for now). Keeping generic usage low and shallow isn't a particularly hard problem, provided you employ that mindset from the beginning. Link times, on the other hand, are a constant and very real "enemy" of iterative compile times. Linking happens on every iterative compile. Adding any code to your project will increase link times. Adding any dependency to your project will increase link times.
 
 The cards are stacked against us for a variety of reasons:
+
 * <b class="fun-list">The Game Engine Domain</b>
   * Game engines inherently touch a large number of domains (and therefore involve a large number of dependencies)
   * Game engines are "big" ... they require a lot of code
 * <b class="fun-list">Rust's Design Choices</b>
-  * Dependencies are statically linked by default, which means every new dependency adds link times 
+  * Dependencies are statically linked by default, which means every new dependency adds link times
   * Rust's default linker is quite slow
   * Cargo makes taking dependencies very easy. What appears to be a small, simple crate might actually have a large dependency tree
 
@@ -1053,7 +1074,7 @@ While Bevy is currently "productive" by my criteria, it isn't all sunshine and r
 
 #### Dynamic Linking to the Rescue
 
-An easy way to cut down on link times is to just dynamically link instead. On my 2013 MacBook Pro running MacOS (with no LLD), I was able to drop iterative Bevy compile times from ~6 seconds to ~0.6 seconds by dynamically linking app plugins. Bevy actually already has support for dynamic App plugins, but the new Bevy ECS does not currently support dynamic linking because it relies on TypeIds (which are incompatible with dynamic linking). Fortunately, I have already solved the TypeId problem in other projects, so we should be able to add this back soon. 
+An easy way to cut down on link times is to just dynamically link instead. On my 2013 MacBook Pro running MacOS (with no LLD), I was able to drop iterative Bevy compile times from ~6 seconds to ~0.6 seconds by dynamically linking app plugins. Bevy actually already has support for dynamic App plugins, but the new Bevy ECS does not currently support dynamic linking because it relies on TypeIds (which are incompatible with dynamic linking). Fortunately, I have already solved the TypeId problem in other projects, so we should be able to add this back soon.
 
 #### Cranelift Rustc Backend
 
@@ -1077,7 +1098,7 @@ These experiences led me to want the following from a game engine:
 * <b class="fun-list">Productive</b>: It needs to have fast build/run/test loops, which translates to either scripting languages or fast compile times in native languages. But scripting languages introduce runtime overhead, cognitive load, and a barrier between me and the actual engine, so my preference here is a native language with fast compile times. Sadly compile times are a huge problem in the Rust ecosystem and many Rust engines have prohibitively long iterative compiles. Fortunately Rust game engines like Macroquad and coffee prove that productive iterative compile times are possible.
 * <b class="fun-list">Turtles All The Way Down</b>: Ideally the engine is written in the same language that games are. Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept. You also don't need to worry about heavy language translation layers or lossy abstractions. If an engine's community builds games in the same language as the engine, they are more likely (and able) to contribute back to the engine.
 * <b class="fun-list">Simple</b>: It needs to be easy to use for common tasks, but it also can't hide the details from you. Many engines are either "easy to use but too high level" or "very low level but difficult to do common tasks in". Additionally, many engines in Rust are littered with lifetimes and generics. Both are powerful tools to be sure, but they also introduce cognitive load and reduce ergonomics. Generics can also have a huge impact on compile times if you aren't careful.
-* <b class="fun-list">Editor</b>: It needs to have an (optional) graphical editor. Scene creation is a large part of game development and in many cases visual editors beat code. As a bonus, the editor should be built _in the engine_. Godot uses this approach and it is _so smart_. Doing so [dogfoods](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) the engine's UI system and creates positive feedback loops. Improvements to the editor are also often improvements to the core engine. It also makes sure your engine is flexible enough to build tooling (and not just games). I personally consider building an engine's editor in another stack to be a missed opportunity (ex: the web, QT, native widgets). 
+* <b class="fun-list">Editor</b>: It needs to have an (optional) graphical editor. Scene creation is a large part of game development and in many cases visual editors beat code. As a bonus, the editor should be built _in the engine_. Godot uses this approach and it is _so smart_. Doing so [dogfoods](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) the engine's UI system and creates positive feedback loops. Improvements to the editor are also often improvements to the core engine. It also makes sure your engine is flexible enough to build tooling (and not just games). I personally consider building an engine's editor in another stack to be a missed opportunity (ex: the web, QT, native widgets).
 * <b class="fun-list">Data Driven</b>: It needs to be data-driven/data-oriented/data-first. ECS is a common way of doing this, but it definitely isn't the only way. These paradigms can make your game faster (cache friendly, easier to parallelize), but they also make common tasks like game state serialization and synchronization delightfully straightforward.
 
 None of the engines on the market _quite_ line up with what I'm looking for. And the changes required to make them meet my requirements are either massive in scope, impossible (closed source), or unwelcome (the things I want aren't what the developers or customers want). On top of that, making new game engines is fun!
@@ -1116,10 +1137,9 @@ Animation permeates almost everything in gamedev. First, I want to add a general
 
 The current scene format is workable, but it isn't yet ideal for manual scene composition because it is a flat list of unordered entities. I also want to add nested scenes. Eventually, I would like the scene format to [look something like this](https://gist.github.com/cart/3e77d6537e1a0979a69de5c6749b6bcb).
 
-
 ### Dynamic Plugin Loading
 
-To mitigate the cost of compiling and linking plugins and make hot-code-reloading possible, we will provide the option to dynamically load App plugins. Bevy actually already supports this feature, but there is one hangup: Rust's `TypeId`. TypeIds are unstable across binaries, which means `TypeId::of::<T>()` in the host binary will not match `TypeId::of::<T>()` in a dynamically loaded binary. Bevy ECS uses TypeIds, which means dynamically loaded ECS types won't behave correctly. In the past, Bevy used a custom fork of the Legion ECS (where we fixed the TypeId problem). But since moving to Bevy ECS the problem has resurfaced. The fix is to apply the same approach we used in Legion to Bevy ECS. 
+To mitigate the cost of compiling and linking plugins and make hot-code-reloading possible, we will provide the option to dynamically load App plugins. Bevy actually already supports this feature, but there is one hangup: Rust's `TypeId`. TypeIds are unstable across binaries, which means `TypeId::of::<T>()` in the host binary will not match `TypeId::of::<T>()` in a dynamically loaded binary. Bevy ECS uses TypeIds, which means dynamically loaded ECS types won't behave correctly. In the past, Bevy used a custom fork of the Legion ECS (where we fixed the TypeId problem). But since moving to Bevy ECS the problem has resurfaced. The fix is to apply the same approach we used in Legion to Bevy ECS.
 
 ### Physics
 
