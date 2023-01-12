@@ -9,11 +9,34 @@
     font-style: normal;
     text-decoration: none;
     border: 2px solid #383838;
+    position: relative;
 
     &:hover {
         background-color: $card-hover-background;
         border: 2px solid #6b6b6b;
     }
+}
+
+.card-profile-picture {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 2.0em;
+    width: 2.0em;
+    border-radius: 0px $border-radius 0px $border-radius;
+    overflow: hidden;
+    display: flex;
+}
+
+.card-social-icon {
+    position: relative;
+    top: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.card-sponsor-icon {
+    fill: $color-pink;
 }
 
 .card-image {
@@ -46,6 +69,10 @@
     padding-right: 1.2rem;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.card-text-dense {
+    line-height: 1.0rem;
 }
 
 .card-subtitle {
@@ -85,4 +112,8 @@
     margin-left: auto;
     margin-right: auto;
     align-items: center;
+}
+
+.card-dense {
+    padding: 0.8rem;
 }

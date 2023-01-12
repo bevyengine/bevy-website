@@ -23,6 +23,7 @@ Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
 ### Install OS dependencies
+
 * [Linux](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)
 * Windows: Make sure to install [VS2019 build tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 * MacOS: Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835)
@@ -37,7 +38,6 @@ The goal of this book is to learn Bevy, so it won't serve as a full Rust educati
 
 * [**The Rust Book**](https://doc.rust-lang.org/book/): the best place to learn Rust from scratch
 * [**Rust by Example**](https://doc.rust-lang.org/rust-by-example/): learn Rust by working through live coding examples
-
 
 ## Create a new Bevy Project
 
@@ -55,6 +55,7 @@ cd my_bevy_game
 Now run ```cargo run``` to build and run your project. You should see ```Hello, world!``` printed to your terminal. Open the ```my_bevy_game``` folder in your code editor of choice and take some time to look through the files.
 
 ```main.rs``` is the entry point of your program:
+
 ```rs
 fn main() {
     println!("Hello, world!");
@@ -78,8 +79,8 @@ Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), th
 
 The easiest way to add it to your project is to use `cargo add`:
 
-```cli
-$ cargo add bevy
+```sh
+cargo add bevy
 ```
 
 Alternatively, you can manually add it to your project's Cargo.toml like this:
@@ -130,32 +131,39 @@ You might think to simply develop in release mode instead, but we recommend agai
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
 
 * **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking). Note that right now, this doesn't work on Windows.
-    ```sh
-    cargo run --features bevy/dynamic
-    ```
-    If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
-    ```toml
-    [dependencies]
-    bevy = { version = "0.9.0", features = ["dynamic"] }
-    ```
-    NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
+
+  ```sh
+  cargo run --features bevy/dynamic
+  ```
+
+  If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
+
+  ```toml
+  [dependencies]
+  bevy = { version = "0.9.0", features = ["dynamic"] }
+  ```
+
+  NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
-    * **Ubuntu**: `sudo apt-get install lld`
-    * **Arch**: `sudo pacman -S lld`
-    * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
-        ```sh
-        cargo install -f cargo-binutils
-        rustup component add llvm-tools-preview
-        ```
-    * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
+  * **Ubuntu**: `sudo apt-get install lld`
+  * **Arch**: `sudo pacman -S lld`
+  * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
+
+    ```sh
+    cargo install -f cargo-binutils
+    rustup component add llvm-tools-preview
+    ```
+
+  * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
-    * **Ubuntu**: `sudo apt-get install mold`
-    * **Arch**: `sudo pacman -S mold`
-    * **Windows**: mold does not yet support Windows. [See this tracking issue](https://github.com/rui314/mold/issues/190) for more information.
-    * **MacOS**: mold does not yet support MacOS. [See this tracking issue](https://github.com/rui314/mold/issues/189) for more information.
+  * **Ubuntu**: `sudo apt-get install mold`
+  * **Arch**: `sudo pacman -S mold`
+  * **Windows**: mold does not yet support Windows. [See this tracking issue](https://github.com/rui314/mold/issues/190) for more information.
+  * **MacOS**: mold does not yet support MacOS. [See this tracking issue](https://github.com/rui314/mold/issues/189) for more information.
 
     You will also need to add the following to your Cargo config at `YOUR_WORKSPACE/.cargo/config.toml`:
+
     ```toml
     [target.x86_64-unknown-linux-gnu]
     linker = "clang"
@@ -163,14 +171,18 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     ```
 
     NOTE: Disabling `bevy/dynamic` may improve the performance of this linker.
+
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
-    
+
     Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
+
     ```toml
     [toolchain]
     channel = "nightly"
     ```
+
     For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
+
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.

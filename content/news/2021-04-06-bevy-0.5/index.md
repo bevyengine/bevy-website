@@ -395,7 +395,7 @@ app
 
 The author clearly intended `print_every_other_time` to run every other update. However, due to the fact that these systems have no order defined, they could run in a different order each update and create a situation where nothing is printed over the course of two updates:
 
-```sh
+```txt
 UPDATE
 - increment_counter (counter now equals 1)
 - print_every_other_time (nothing printed)
@@ -415,7 +415,7 @@ app.insert_resource(ReportExecutionOrderAmbiguities)
 
 Then when we run our App, we will see the following message printed to our terminal:
 
-```sh
+```txt
 Execution order ambiguities detected, you might want to add an explicit dependency relation between some of these systems:
  * Parallel systems:
  -- "&app::increment_counter" and "&app::print_every_other_time"

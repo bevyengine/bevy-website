@@ -24,25 +24,25 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 * **January 1**: Alice Cecile (@alice-i-cecile) gets scoped merge rights for documentation work.
 * **January 8**: [Bevy 0.6](/news/bevy-0-6)
-    * We added a brand new modern renderer that is prettier, faster, and simpler to extend, directional and point light shadows, clustered forward rendering, frustum culling, significantly faster sprite rendering with less boilerplate, native WebGL2 support, high level custom Materials, more powerful shaders: preprocessors, imports, WGSL support, Bevy ECS ergonomics and performance improvements, no more .system(), and more!
+  * We added a brand new modern renderer that is prettier, faster, and simpler to extend, directional and point light shadows, clustered forward rendering, frustum culling, significantly faster sprite rendering with less boilerplate, native WebGL2 support, high level custom Materials, more powerful shaders: preprocessors, imports, WGSL support, Bevy ECS ergonomics and performance improvements, no more .system(), and more!
 * **January 8**: Train Release Model
-    * Bevy adopts a rough "3 month train release model". We no longer hold releases back for specific features. Approximately every 3 months, we kick off the release process.
+  * Bevy adopts a rough "3 month train release model". We no longer hold releases back for specific features. Approximately every 3 months, we kick off the release process.
 * **February 24**: [The first Bevy game is released on Steam: Molecoole](https://store.steampowered.com/app/1792170/Molecoole/)
 * **February 25**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1)
-    * The first official Bevy Jam! 431 people joined, 74 people submitted games, and people left 1,618 ratings. [Petty Party](https://jabuwu.itch.io/petty-party) won!
+  * The first official Bevy Jam! 431 people joined, 74 people submitted games, and people left 1,618 ratings. [Petty Party](https://jabuwu.itch.io/petty-party) won!
 * **April 10 (approximately)** Bevy hits 15,000 stars on GitHub!
 * **April 15**: [Bevy 0.7](/news/bevy-0-7)
-    * We added skeletal animation and mesh skinning, GLTF animation importing, unlimited* point lights in a scene, improved clustered forward rendering,
+  * We added skeletal animation and mesh skinning, GLTF animation importing, unlimited* point lights in a scene, improved clustered forward rendering,
     compressed texture support (KTX2 / DDS / .basis), compute shader / pipeline specialization,
     render to texture, flexible mesh vertex layouts in shaders, ECS improvements: Order systems using their names, Query::many_mut, ParamSets, WorldQuery derives, documentation improvements: better examples, more doc tests and more coverage, more audio control: pause, volume, speed, and looping, power usage options, and more!
 * **April 21**: [New Project Role: Maintainer](/news/bevy-0-8/#bevy-org-changes)
-    * The "maintainer" role replaces our old "delegated merge rights" roles, providing more decision making power, removing explicit scope/area restrictions, while still preserving my ability to ensure consistent project direction when that is important.
-    * Everyone with "delegated / scoped merge rights" is now a "maintainer" (@alice-i-cecile, @mockersf).
+  * The "maintainer" role replaces our old "delegated merge rights" roles, providing more decision making power, removing explicit scope/area restrictions, while still preserving my ability to ensure consistent project direction when that is important.
+  * Everyone with "delegated / scoped merge rights" is now a "maintainer" (@alice-i-cecile, @mockersf).
 * **April 21**: Rob Swain (@superdump) is made a maintainer.
 * **June 10 (approximately)**: Bevy becomes the [3rd most popular game engine on GitHub](https://github.com/topics/game-engine)
 * **June 18**: [The first Bevy iOS app is published to the Apple App Store: Noumenal](https://apps.apple.com/us/app/noumenal/id1584884105)
 * **July 30**: [Bevy 0.8](/news/bevy-0-8)
-    * We added a new Material system / simpler custom shaders / AsBindGroup derives, camera-driven rendering (simple split screen, portals, render to texture, renderer layering, etc), built-in shader modularization (importable built in shader types and functions, custom shaders can now import the PBR shader logic), spotlights, visibility inheritance, automatic mesh tangent generation, renderer optimizations: parallel frustum culling and unstable sorts for unbatched render phases, scene bundle, scripting / modding progress via untyped ECS APIs, ECS query ergonomics and usability, ECS internals refactors/cleanups, reflection improvements: support for reflecting more types, ECS resource reflection, untyped reflection, improved reflection internals, transactional hierarchy commands, [`taffy`](https://github.com/DioxusLabs/taffy) layout, and more!
+  * We added a new Material system / simpler custom shaders / AsBindGroup derives, camera-driven rendering (simple split screen, portals, render to texture, renderer layering, etc), built-in shader modularization (importable built in shader types and functions, custom shaders can now import the PBR shader logic), spotlights, visibility inheritance, automatic mesh tangent generation, renderer optimizations: parallel frustum culling and unstable sorts for unbatched render phases, scene bundle, scripting / modding progress via untyped ECS APIs, ECS query ergonomics and usability, ECS internals refactors/cleanups, reflection improvements: support for reflecting more types, ECS resource reflection, untyped reflection, improved reflection internals, transactional hierarchy commands, [`taffy`](https://github.com/DioxusLabs/taffy) layout, and more!
 * **August 10**: Bevy is now two years old!
 
 ## A Year By The Numbers

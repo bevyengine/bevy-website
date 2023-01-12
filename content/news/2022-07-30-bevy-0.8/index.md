@@ -18,7 +18,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/book/migration-guides/0.7-0.8/).
 
-Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights: 
+Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
 * **New Material System**: Custom shaders are now _much_ easier to define, thanks to the new Material trait and AsBindGroup derive.
 * **Camera-driven Rendering**: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.
@@ -29,7 +29,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Automatic Mesh Tangent Generation**: If tangents are missing for a mesh, generate them with mikktspace.
 * **Renderer Optimizations**: Parallel frustum culling and unstable sorts for unbatched render phases yielded some big wins!
 * **Scene Bundle**: Easily spawn scenes using a normal Bevy bundle and extend them with new components and children.
-* **Scripting / Modding Progress: Untyped ECS APIs**: A step toward 3rd party scripting language support! Interact with Bevy ECS internals directly via pointers.
+* **Scripting and Modding Progress: Untyped ECS APIs**: A step toward 3rd party scripting language support! Interact with Bevy ECS internals directly via pointers.
 * **ECS Query Ergonomics and Usability**: Queries now implement `IntoIter` and mutable queries can be converted to immutable queries.
 * **ECS Internals Refactors**: Sweeping changes to Bevy ECS internals that make it simpler, safer, and easier to maintain.
 * **Reflection Improvements**: Support for reflecting more types, ECS resource reflection, untyped reflection, improved internals.
@@ -246,7 +246,7 @@ Bevy's existing [`RenderLayers`] system can be used to tell a [`Camera`] to only
 
 <div class="release-feature-authors">authors: @robtfm</div>
 
-Bevy now has a [`SpotLight`] entity type, which emits light in a cone shape from a point in space. 
+Bevy now has a [`SpotLight`] entity type, which emits light in a cone shape from a point in space.
 
 ![spotlight](spotlight.png)
 
@@ -258,7 +258,7 @@ Bevy now has a [`SpotLight`] entity type, which emits light in a cone shape from
 
 Visibility in entity hierarchies (using the [`Visibility`] component) now propagates down the hierarchy. This is hugely useful, as entities in a game often have _many_ entities nested beneath them. A "player entity" is often made up of many pieces: the player sprite or mesh, what the player is wearing / holding, visual effects, etc.
 
-Visibility inheritance means that you only need to hide the top level "player" entity in your code and everything beneath it will be hidden for you. 
+Visibility inheritance means that you only need to hide the top level "player" entity in your code and everything beneath it will be hidden for you.
 
 This "flight helmet" scene consists of many "pieces" nested under the main helmet entity. Hiding all of these "sub entities" is as now as easy as hiding the top level helmet entity.
 
@@ -274,6 +274,7 @@ fn hide_helmets(mut helmet_visibilities: Query<&mut Visibility, With<Helmet>>) {
 In past versions of Bevy, you had to hide each piece manually!
 
 The "inherited visibility" is computed in the [`PostUpdate`] stage and stored on the [`ComputedVisibility`] component. [`ComputedVisibility`] now has the following functions:
+
 * `is_visible_in_hierarchy()`: Whether or not the entity is visible according to "visibility inheritance".
 * `is_visible_in_view()`: Whether or not the entity is visible in any view. This is used for culling entities in cases like "frustum culling".
 * `is_visible()`: The canonical place to determine whether or not an entity will be drawn. Combines "view visibility" and "hierarchy visibility".
@@ -365,6 +366,7 @@ We also plan on evolving the user experience here. Now that we've broken everyth
 We've updated to the latest and greatest wgpu version. wgpu 0.13 brings plenty of fixes and improvements, but the most visible change is the new more ergonomic WGSL "attribute" syntax:
 
 Bindings now look like this:
+
 ```rust
 // wgpu 0.12 (old)
 [[group(1), binding(0)]]
@@ -375,7 +377,8 @@ var<uniform> material: Material;
 var<uniform> material: Material;
 ```
 
-Shader stage entry points and inputs now look like this: 
+Shader stage entry points and inputs now look like this:
+
 ```rust
 // wgpu 0.12 (old)
 [[stage(vertex)]]
@@ -431,7 +434,7 @@ commands
 
 Bevy uses ["frustum culling"](/news/bevy-0-6/#visibility-and-frustum-culling) to skip drawing entities that are outside of the camera's view. In **Bevy 0.8**, frustum culling is now done in parallel. When culling thousands of entities, this yields significant performance improvements:
 
-### frustum culling system time vs number of entities culled (lower is better) 
+### frustum culling system time vs number of entities culled (lower is better)
 
 ![parallel frustum culling](parallel_frustum_culling.png)
 
@@ -444,14 +447,15 @@ Note that "parallel b" stand for "parallel batch size" (number of entities in ea
 Vertex tangents are used in tandem with normal maps to give meshes more detailed normals when rendering them. Some imported meshes have normal maps, but don't have vertex tangents calculated. Bevy can now automatically generate vertex tangents for [`Meshes`][`Mesh`] that are missing them using the defacto industry-standard MikkTSpace library / algorithm (Godot, Unity, Unreal, and Blender all use this).
 
 We have started maintaining [our own fork](https://github.com/bevyengine/bevy/tree/v0.8.0/crates/bevy_mikktspace) of the [gltf-rs/mikktspace crate](https://github.com/gltf-rs/mikktspace) so we can:
- * update dependencies at the speed required for Bevy;
- * [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932), as it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C.
+
+* update dependencies at the speed required for Bevy;
+* [start reining in the unsafe code](https://github.com/bevyengine/bevy/pull/4932), as it currently uses unsafe Rust code auto-generated from the original `mikktspace.h` written in C.
 
 ## Default to Linear Texture Filtering
 
 <div class="release-feature-authors">authors: @aevyrie, @cart</div>
 
-Images in Bevy now use linear texture filtering by default, which is more in line with the rest of the gamedev ecosystem (Unity and Godot both default to filtered textures). 
+Images in Bevy now use linear texture filtering by default, which is more in line with the rest of the gamedev ecosystem (Unity and Godot both default to filtered textures).
 
 This means that textures that require unfiltered pixels (such as "pixel art" sprites) must override this default, either per-image:
 
@@ -477,18 +481,17 @@ With that, we get crisp pixel art:
 
 The internal representation of the [`GlobalTransform`] component (representing the "world space" transform for an entity) has been changed from a "similarity" (translation [`Vec3`] / rotation [`Quat`] / scale [`Vec3`]) to an "affine 3D transform" ([`Mat3A`] and a [`Vec3`] translation).
 
-Notably, this allows for shear to be represented. Shear is a controversial topic. Engine and physics programmers tend to hate it. Artists tend to love it. Given that most artist tools and game engines support shear in their equivalent types, we believe it is important to provide this as an option. 
+Notably, this allows for shear to be represented. Shear is a controversial topic. Engine and physics programmers tend to hate it. Artists tend to love it. Given that most artist tools and game engines support shear in their equivalent types, we believe it is important to provide this as an option.
 
 [`Mat3A`]: https://docs.rs/bevy/0.8.0/bevy/math/struct.Mat3A.html
 [`Vec3`]: https://docs.rs/bevy/0.8.0/bevy/math/struct.Vec3.html
-[`Vec3A`]: https://docs.rs/bevy/0.8.0/bevy/math/struct.Vec3A.html
 [`Quat`]: https://docs.rs/bevy/0.8.0/bevy/math/struct.Quat.html
 
 ## ShaderType derive
 
 <div class="release-feature-authors">authors: @teoxoy</div>
 
-**Bevy 0.8** now uses the [`ShaderType`] trait / derive (provided by the [encase][encase] crate) to easily convert Rust data types to GPU-compatible shader data types. 
+**Bevy 0.8** now uses the [`ShaderType`] trait / derive (provided by the [encase][encase] crate) to easily convert Rust data types to GPU-compatible shader data types.
 
 ```rust
 // ShaderType requires each field to implement ShaderType,
@@ -512,7 +515,7 @@ struct SpriteData {
 var<uniform> sprite_data: SpriteData;
 ```
 
-This trait can be used in the [new Material system](#new-material-system) if you need to define custom shader uniform or buffer bindings. 
+This trait can be used in the [new Material system](#new-material-system) if you need to define custom shader uniform or buffer bindings.
 
 [`ShaderType`] replaces the `AsStd140` and `AsStd430` traits / derives (provided by the [crevice](https://github.com/LPGhatguy/crevice) crate) used in previous Bevy versions. This simplifies (and clarifies) the "how to transfer data to the GPU" story in Bevy, while also adding new features, such as support for unbounded Rust vecs (for storage buffers) and configurable dynamic offsets for uniform and storage buffers.
 
@@ -572,15 +575,15 @@ commands.spawn_bundle(ColorMesh2dBundle {
 [`Circle`]: https://docs.rs/bevy/0.8.0/bevy/prelude/shape/struct.Circle.html
 [`RegularPolygon`]: https://docs.rs/bevy/0.8.0/bevy/prelude/shape/struct.RegularPolygon.html
 
-## Scripting / Modding Progress: Untyped ECS APIs
+## Scripting and Modding Progress: Untyped ECS APIs
 
 <div class="release-feature-authors">authors: @jakobhellermann</div>
 
-Bevy officially only supports Rust as the "one true way to define app logic". We have [very good reasons for this](https://github.com/bevyengine/bevy/issues/114#issuecomment-672397351) and that philosophy likely won't change any time soon. But we _do_ want to provide the tools needed for the community to build 3rd party scripting / modding plugins for their languages of choice. 
+Bevy officially only supports Rust as the "one true way to define app logic". We have [very good reasons for this](https://github.com/bevyengine/bevy/issues/114#issuecomment-672397351) and that philosophy likely won't change any time soon. But we _do_ want to provide the tools needed for the community to build 3rd party scripting / modding plugins for their languages of choice.
 
 When we [released Bevy ECS V2](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2), we intentionally built our internal ECS storage with these cases in mind. But we didn't expose public APIs that made it possible to interact with ECS data without normal Rust types.
 
-**Bevy 0.8** adds public "untyped" ECS apis that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types. 
+**Bevy 0.8** adds public "untyped" ECS apis that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types.
 
 ```rust
 let health_ptr: Ptr = world.entity(player).get_by_id(heath_component_id).unwrap();
@@ -589,6 +592,7 @@ let health_ptr: Ptr = world.entity(player).get_by_id(heath_component_id).unwrap(
 These, when combined with our reflection APIs, provide the tools needed to start building scripting support!
 
 `@jakobhellermann` has [started building their own JavaScript / TypeScript plugin for Bevy](https://github.com/jakobhellermann/bevy_mod_js_scripting/blob/main/assets/scripts/debug.ts). Note that:
+
 1. This plugin is still very much a work in progress and is not ready to be used in projects.
 2. This is an unofficial community effort. Bevy will not be adding official JavaScript/TypeScript support.
 
@@ -669,7 +673,6 @@ while let Some(mut player) = iter.fetch_next() {
 [`Query::iter_many`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Query.html#method.iter_many
 [`Query::iter_many_mut`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Query.html#method.iter_many_mut
 
-
 ## Convert Mutable Queries to Read-only
 
 <div class="release-feature-authors">authors: @harudagondi</div>
@@ -698,7 +701,7 @@ fn log_players(players: Query<&Players>) {
 
 Bevy ECS has been refactored to use lifetimed, type-erased pointers instead of "raw pointers", which significantly improved the safety and legibility of our internals without compromising performance or flexibility.
 
-From a high level, this enables us to "retain" the lifetime of World borrows throughout our internals while still using type-erased APIs to support scenarios like [3rd party scripting languages](#scripting-modding-progress-untyped-ecs-apis).
+From a high level, this enables us to "retain" the lifetime of World borrows throughout our internals while still using type-erased APIs to support scenarios like [3rd party scripting languages](#scripting-and-modding-progress-untyped-ecs-apis).
 
 By retaining this lifetime, we can rely more on Rust's borrow checker to yell at us when we are doing something unsound. And, as it happens, this caught a number of soundness bugs!
 
@@ -735,7 +738,7 @@ Bevy ECS had a number of optimizations this time around:
 
 Bevy relies on "labels" to identify things like systems, stages, and apps. This is useful for things like [defining system dependencies](/news/bevy-0-5/#explicit-system-dependencies-and-system-labels). The traits [`SystemLabel`], [`StageLabel`], and [`AppLabel`] build on the same underlying "typed label" system. It enables developers to define custom labels while retaining type safety. Much better than using something like a string or an integer label!
 
-In **Bevy 0.8** we've optimized the internal representation of labels by removing boxing / trait objects in favor of a single cheap-to-copy-and-compare "system label id" type. 
+In **Bevy 0.8** we've optimized the internal representation of labels by removing boxing / trait objects in favor of a single cheap-to-copy-and-compare "system label id" type.
 
 This new representation sped up schedule construction by ~30%!
 
@@ -781,7 +784,7 @@ However this meant that for a given point in time, the hierarchy could be "out o
 
 Our solution to this problem is to remove the deferred "hierarchy maintenance system" in favor of making hierarchy changes "transactional". Hierarchy changes are now done via transactional [`Commands`], and directly modifying the component fields individually is no longer possible. This ensures that for a given point in time, the hierarchy is "correct".
 
-For most Bevy developers this is a non-breaking change, as most hierarchies are already constructed using `with_children` commands: 
+For most Bevy developers this is a non-breaking change, as most hierarchies are already constructed using `with_children` commands:
 
 ```rust
 commands
@@ -799,6 +802,7 @@ commands
 ```
 
 However for logic that adds/removes child entities from parents at runtime, the following commands must be used:
+
 ```rust
 // removes the given children from the parent
 commands.entity(some_parent).remove_children(&[child1, child2]);
@@ -806,11 +810,12 @@ commands.entity(some_parent).remove_children(&[child1, child2]);
 commands.entity(some_parent).push_children(&[child3, child4]);
 // inserts the given children into the parent's Children list at the given index 
 commands.entity(some_parent).insert_children(1, &[child5]);
-``` 
+```
 
 We've also added [`HierarchyEvent`], which makes it possible for developers to track changes in the hierarchy.
 
 There are still a couple of small holes to close, but staying on the "happy path" is much easier now:
+
 * removing only one of the components is possible (although heavily discouraged)
 * adding default values of only one of the components manually is still possible (although heavily discouraged)
 
@@ -824,13 +829,13 @@ We're discussing ways to resolve this class of problem, such as [Archetype Rules
 
 Bevy's "Rust reflection" system `bevy_reflect` is a core, foundational piece of Bevy's scene system. It provides a way to dynamically interact with Rust types at run-time without knowing their actual types. We've invested heavily in it this release to prepare for scripting support and scene system improvements.
 
-[`bevy_reflect`](https://crates.io/crates/bevy_reflect) aims to be a "generic" Rust reflection system. It can be used without Bevy. We believe it fills a very real gap in the Rust ecosystem and we encourage the wider Rust community to use it (and contribute!). 
+[`bevy_reflect`](https://crates.io/crates/bevy_reflect) aims to be a "generic" Rust reflection system. It can be used without Bevy. We believe it fills a very real gap in the Rust ecosystem and we encourage the wider Rust community to use it (and contribute!).
 
 ### "Untyped" Reflection
 
 <div class="release-feature-authors">authors: @jakobhellermann</div>
 
-The [`Reflect`] derives now automatically add a new [`ReflectFromPtr`] struct to the [`TypeRegistry`] for each reflected type. This enables using the new [untyped ECS apis](#scripting-modding-progress-untyped-ecs-apis) in combination with the reflection system. This helps enable things like 3rd party scripting and modding.
+The [`Reflect`] derives now automatically add a new [`ReflectFromPtr`] struct to the [`TypeRegistry`] for each reflected type. This enables using the new [untyped ECS apis](#scripting-and-modding-progress-untyped-ecs-apis) in combination with the reflection system. This helps enable things like 3rd party scripting and modding.
 
 [`Reflect`]: https://docs.rs/bevy/0.8.0/bevy/reflect/trait.Reflect.html
 [`ReflectFromPtr`]: https://docs.rs/bevy/0.8.0/bevy/reflect/struct.ReflectFromPtr.html
@@ -864,7 +869,7 @@ This enables constructing components for entities without _any_ compile time inf
 
 <div class="release-feature-authors">authors: @NathanSWard, @MrGVSV</div>
 
-Bevy's reflection system now supports reflecting Rust arrays, which can be interacted with in a type-erased manner using the new [`Array`] trait. 
+Bevy's reflection system now supports reflecting Rust arrays, which can be interacted with in a type-erased manner using the new [`Array`] trait.
 
 ```rust
 #[derive(Reflect)]
@@ -941,7 +946,7 @@ struct Scoreboard {
 }
 ```
 
-This registers a [`ReflectResource`] in the [`TypeRegistry`] entry for the type, enabling type-erased read/write operations for the resource in an ECS [`World`]. 
+This registers a [`ReflectResource`] in the [`TypeRegistry`] entry for the type, enabling type-erased read/write operations for the resource in an ECS [`World`].
 
 [`ReflectResource`]: https://docs.rs/bevy/0.8.0/bevy/ecs/reflect/struct.ReflectResource.html
 [`World`]: https://docs.rs/bevy/0.8.0/bevy/ecs/world/struct.World.html
@@ -952,7 +957,7 @@ This registers a [`ReflectResource`] in the [`TypeRegistry`] entry for the type,
 
 "Debug printing" [`Reflect`] references now provides pretty / useful outputs.
 
-Consider the following example: 
+Consider the following example:
 
 ```rust
 #[derive(Reflect)]
@@ -980,13 +985,13 @@ println!("{:#?}", foo_reflect);
 
 In previous versions of Bevy, this would have printed:
 
-```
+```txt
 Reflect(my_crate::Foo)
 ```
 
 In **Bevy 0.8**, it prints:
 
-```
+```txt
 my_crate::Foo {
     a: 42.0,
     b: my_crate::Bar {
@@ -1004,7 +1009,7 @@ Much better!
 
 Now that `bevy_reflect` is starting to get some serious investment and usage, we've invested time in reworking the internals to make them easier to maintain and extend:
 
-* **[`Reflect`] Derive Reorganization**: the derive logic was broken up into smaller, more maintainable pieces. "Metadata structs" were added to collect and organize derive inputs. (`@MrGVSV`) 
+* **[`Reflect`] Derive Reorganization**: the derive logic was broken up into smaller, more maintainable pieces. "Metadata structs" were added to collect and organize derive inputs. (`@MrGVSV`)
 * **The [`Reflect`] trait is now safe to implement**: Soundness no longer hinges on the implementor doing the right thing, thanks to some changes to the [`Reflect`] interface. As a result, we were able to remove the `unsafe` keyword from the [`Reflect`] trait. (`@PROMETHIA-27`)
 * `Serialize` logic is now implemented using [`TypeRegistry`] type data like other reflected trait logic, rather than being hard-coded into [`Reflect`] impls. (`@jakobhellermann`)
 
@@ -1014,7 +1019,7 @@ Now that `bevy_reflect` is starting to get some serious investment and usage, we
 
 Note: The renderer APIs discussed here are for developers of advanced custom rendering features and core Bevy renderer developers. If this seems verbose or the intent is confusing, don't worry!
 
-Bevy's [new renderer](/news/bevy-0-6/#the-new-bevy-renderer) "extracts" data needed for rendering from the "main" Bevy app, which enables parallel [pipelined rendering](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render). To facilitate this, in previous versions of Bevy we made the ECS [`RenderStage::Extract`] "special" (and more than a little bit weird). Systems in that stage ran on the "main" app world, but applied the system [`Commands`] to the "render" app world. 
+Bevy's [new renderer](/news/bevy-0-6/#the-new-bevy-renderer) "extracts" data needed for rendering from the "main" Bevy app, which enables parallel [pipelined rendering](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render). To facilitate this, in previous versions of Bevy we made the ECS [`RenderStage::Extract`] "special" (and more than a little bit weird). Systems in that stage ran on the "main" app world, but applied the system [`Commands`] to the "render" app world.
 
 This accomplished the goal, but it:
 
@@ -1042,7 +1047,7 @@ fn extract_score(mut extracted_score: ResMut<ExtractedScore>, score: Extract<Res
 }
 ```
 
-The extract system is now parallel, the data access is consistent with other renderer ECS stages, and the intent of the system is clearer. 
+The extract system is now parallel, the data access is consistent with other renderer ECS stages, and the intent of the system is clearer.
 
 [`RenderStage::Extract`]: https://docs.rs/bevy/0.8.0/bevy/render/enum.RenderStage.html#variant.Extract
 [`Commands`]: https://docs.rs/bevy/0.8.0/bevy/ecs/system/struct.Commands.html
@@ -1083,7 +1088,6 @@ impl ExtactResource for ExtractedCoolColor {
     }
 }
 ```
-
 
 [`ExtractResource`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/trait.ExtractResource.html
 [`ExtractResourcePlugin`]: https://docs.rs/bevy/0.8.0/bevy/render/extract_resource/struct.ExtractResourcePlugin.html
@@ -1169,11 +1173,11 @@ We've built a tool to make it easier to build and run Bevy's examples in your br
 
 In the root of the Bevy repo, run the following command:
 
-```
+```sh
 cargo run -p build-wasm-example -- lighting
 ```
 
-This will run the `cargo build` and `wasm-bindgen` commands, and place the output in the `examples/wasm` folder. Run your favorite "local webserver" command there, such as `python3 -m http.server` and open that url in your browser! 
+This will run the `cargo build` and `wasm-bindgen` commands, and place the output in the `examples/wasm` folder. Run your favorite "local webserver" command there, such as `python3 -m http.server` and open that url in your browser!
 
 ## Website: Improved Examples Page
 
@@ -1210,10 +1214,10 @@ We've used this process for most of the last cycle and I'm loving how it is work
 * **Post Processing**: We have a lot of post processing work in the pipeline (some of it almost made it in to this release). The next release will make it easier to write post processing effects (thanks to intermediate HDR textures and a separate tonemapping step), and it will also include built-in effects like bloom and upscaling.
 * **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on:
     1. Pre-processing assets to do expensive work "during development time", so Bevy Apps can be deployed with assets that are prettier, smaller, and/or faster to load.
-    2. Enabling configuring assets with `.meta` files. For example, you could define a texture compression level, the filter it should use, or the target format. 
+    2. Enabling configuring assets with `.meta` files. For example, you could define a texture compression level, the filter it should use, or the target format.
 * **Scene System Improvements**: This release saw a lot of investment in Reflection. We can now build the next iteration of the scene system on top of it, with a nicer scene format, nested scenes, and improved workflows.  
 * **Bevy UI Improvements**: In preparation for the visual Bevy Editor, we will be improving the capabilities and user experince of Bevy UI.
-* **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, it's time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine](https://twitter.com/BevyEngine) on Twitter and join the [Official Bevy Discord](https://discord.gg/bevy). 
+* **Bevy Jam #2**: [Bevy Jam #1](https://itch.io/jam/bevy-jam-1) was a massive success: 74 entries, 1,618 ratings, and lots of good community vibes. Now that **Bevy 0.8** is released, it's time to jam again! We'll release details on this soon. To stay in the loop, follow [@BevyEngine](https://twitter.com/BevyEngine) on Twitter and join the [Official Bevy Discord](https://discord.gg/bevy).
 
 ## Support Bevy
 
@@ -1358,267 +1362,267 @@ A huge thanks to the **130 contributors** that made this release (and associated
 * @oddfacade
 * @CAD97
 * @XBagon
- 
+
 ## Full Change Log
 
 ### Added
 
-- [Callable PBR functions][4939]
-- [Spotlights][4715]
-- [Camera Driven Rendering][4745]
-- [Camera Driven Viewports][4898]
-- [Visibilty Inheritance, universal `ComputedVisibility`, and `RenderLayers` support][5310]
-- [Better Materials: `AsBindGroup` trait and derive, simpler `Material` trait][5053]
-- [Derive `AsBindGroup` Improvements: Better errors, more options, update examples][5364]
-- [Support `AsBindGroup` for 2d materials as well][5312]
-- [Parallel Frustum Culling][4489]
-- [Hierarchy commandization][4197]
-- [Generate vertex tangents using mikktspace][3872]
-- [Add a `SpatialBundle` with `Visibility` and `Transform` components][5344]
-- [Add `RegularPolygon` and `Circle` meshes][3730]
-- [Add a `SceneBundle` to spawn a scene][2424]
-- [Allow higher order systems][4833]
-- [Add global `init()` and `get()` accessors for all newtyped `TaskPools`][2250]
-- [Add reusable shader functions for transforming position/normal/tangent][4901]
-- [Add support for vertex colors][4528]
-- [Add support for removing attributes from meshes][5254]
-- [Add option to center a window][4999]
-- [Add `depth_load_op` configuration field to `Camera3d`][4904]
-- [Refactor `Camera` methods and add viewport rect][4948]
-- [Add `TextureFormat::R16Unorm` support for `Image`][5249]
-- [Add a `VisibilityBundle` with `Visibility` and `ComputedVisibility` components][5335]
-- [Add ExtractResourcePlugin][3745]
-- [Add depth_bias to SpecializedMaterial][4101]
-- [Added `offset` parameter to `TextureAtlas::from_grid_with_padding`][4836]
-- [Add the possibility to create custom 2d orthographic cameras][4048]
-- [bevy_render: Add `attributes` and `attributes_mut` methods to `Mesh`][3927]
-- [Add helper methods for rotating `Transform`s][5151]
-- [Enable wgpu profiling spans when using bevy's trace feature][5182]
-- [bevy_pbr: rework `extract_meshes`][4240]
-- [Add `inverse_projection` and `inverse_view_proj` fields to shader view uniform][5119]
-- [Add `ViewRangefinder3d` to reduce boilerplate when enqueuing standard 3D `PhaseItems`][5014]
-- [Create `bevy_ptr` standalone crate][4653]
-- [Add `IntoIterator` impls for `&Query` and `&mut Query`][4692]
-- [Add untyped APIs for `Components` and `Resources`][4447]
-- [Add infallible resource getters for `WorldCell`][4104]
-- [Add `get_change_ticks` method to `EntityRef` and `EntityMut`][2539]
-- [Add comparison methods to `FilteredAccessSet`][4211]
-- [Add `Commands::new_from_entities`][4423]
-- [Add `QueryState::get_single_unchecked_manual` and its family members][4841]
-- [Add `ParallelCommands` system parameter][4749]
-- [Add methods for querying lists of entities][4879]
-- [Implement `FusedIterator` for eligible `Iterator` types][4942]
-- [Add `component_id()` function to `World` and `Components`][5066]
-- [Add ability to inspect entity's components][5136]
-- [Add a more helpful error to help debug panicking command on despawned entity][5198]
-- [Add `ExactSizeIterator` implementation for `QueryCombinatonIter`][5148]
-- [Added the `ignore_fields` attribute to the derive macros for `*Label` types][5366]
-- [Exact sized event iterators][3863]
-- [Add a `clear()` method to the `EventReader` that consumes the iterator][4693]
-- [Add helpers to send `Events` from `World`][5355]
-- [Add file metadata to `AssetIo`][2123]
-- [Add missing audio/ogg file extensions: .oga, .spx][4703]
-- [Add `reload_asset` method to `AssetServer`][5106]
-- [Allow specifying chrome tracing file path using an environment variable][4618]
-- [Create a simple tool to compare traces between executions][4628]
-- [Add a tracing span for run criteria][4709]
-- [Add tracing spans for `Query::par_for_each` and its variants. ][4711]
-- [Add a `release_all` method on `Input`][5011]
-- [Add a `reset_all` method on `Input`][5015]
-- [Add a helper tool to build examples for wasm][4776]
-- [bevy_reflect: add a `ReflectFromPtr` type to create `&dyn Reflect` from a `*const ()`][4475]
-- [Add a `ReflectDefault` type and add `#[reflect(Default)]` to all component types that implement Default and are user facing][3733]
-- [Add a macro to implement `Reflect` for struct types and migrate glam types to use this for reflection][4540]
-- [bevy_reflect: reflect arrays][4701]
-- [bevy_reflect: reflect char][4790]
-- [bevy_reflect: add `GetTypeRegistration` impl for reflected tuples][4226]
-- [Add reflection for `Resources`][5175]
-- [bevy_reflect: add `as_reflect` and `as_reflect_mut` methods on `Reflect`][4350]
-- [Add an `apply_or_insert` method to `ReflectResource` and `ReflectComponent`][5201]
-- [bevy_reflect: `IntoIter` for `DynamicList` and `DynamicMap`][4108]
-- [bevy_reflect: Add `PartialEq` to reflected `f32`s and `f64`s][4217]
-- [Create mutable versions of `TypeRegistry` methods][4484]
-- [bevy_reflect: add a `get_boxed` method to `reflect_trait`][4120]
-- [bevy_reflect: add `#[reflect(default)]` attribute for `FromReflect`][4140]
-- [bevy_reflect: add statically available type info for reflected types][4042]
-- [Add an `assert_is_exclusive_system` function][5275]
-- [bevy_ui: add a multi-windows check for `Interaction` (we dont yet support multiple windows)][5225]
+* [Callable PBR functions][4939]
+* [Spotlights][4715]
+* [Camera Driven Rendering][4745]
+* [Camera Driven Viewports][4898]
+* [Visibilty Inheritance, universal `ComputedVisibility`, and `RenderLayers` support][5310]
+* [Better Materials: `AsBindGroup` trait and derive, simpler `Material` trait][5053]
+* [Derive `AsBindGroup` Improvements: Better errors, more options, update examples][5364]
+* [Support `AsBindGroup` for 2d materials as well][5312]
+* [Parallel Frustum Culling][4489]
+* [Hierarchy commandization][4197]
+* [Generate vertex tangents using mikktspace][3872]
+* [Add a `SpatialBundle` with `Visibility` and `Transform` components][5344]
+* [Add `RegularPolygon` and `Circle` meshes][3730]
+* [Add a `SceneBundle` to spawn a scene][2424]
+* [Allow higher order systems][4833]
+* [Add global `init()` and `get()` accessors for all newtyped `TaskPools`][2250]
+* [Add reusable shader functions for transforming position/normal/tangent][4901]
+* [Add support for vertex colors][4528]
+* [Add support for removing attributes from meshes][5254]
+* [Add option to center a window][4999]
+* [Add `depth_load_op` configuration field to `Camera3d`][4904]
+* [Refactor `Camera` methods and add viewport rect][4948]
+* [Add `TextureFormat::R16Unorm` support for `Image`][5249]
+* [Add a `VisibilityBundle` with `Visibility` and `ComputedVisibility` components][5335]
+* [Add ExtractResourcePlugin][3745]
+* [Add depth_bias to SpecializedMaterial][4101]
+* [Added `offset` parameter to `TextureAtlas::from_grid_with_padding`][4836]
+* [Add the possibility to create custom 2d orthographic cameras][4048]
+* [bevy_render: Add `attributes` and `attributes_mut` methods to `Mesh`][3927]
+* [Add helper methods for rotating `Transform`s][5151]
+* [Enable wgpu profiling spans when using bevy's trace feature][5182]
+* [bevy_pbr: rework `extract_meshes`][4240]
+* [Add `inverse_projection` and `inverse_view_proj` fields to shader view uniform][5119]
+* [Add `ViewRangefinder3d` to reduce boilerplate when enqueuing standard 3D `PhaseItems`][5014]
+* [Create `bevy_ptr` standalone crate][4653]
+* [Add `IntoIterator` impls for `&Query` and `&mut Query`][4692]
+* [Add untyped APIs for `Components` and `Resources`][4447]
+* [Add infallible resource getters for `WorldCell`][4104]
+* [Add `get_change_ticks` method to `EntityRef` and `EntityMut`][2539]
+* [Add comparison methods to `FilteredAccessSet`][4211]
+* [Add `Commands::new_from_entities`][4423]
+* [Add `QueryState::get_single_unchecked_manual` and its family members][4841]
+* [Add `ParallelCommands` system parameter][4749]
+* [Add methods for querying lists of entities][4879]
+* [Implement `FusedIterator` for eligible `Iterator` types][4942]
+* [Add `component_id()` function to `World` and `Components`][5066]
+* [Add ability to inspect entity's components][5136]
+* [Add a more helpful error to help debug panicking command on despawned entity][5198]
+* [Add `ExactSizeIterator` implementation for `QueryCombinatonIter`][5148]
+* [Added the `ignore_fields` attribute to the derive macros for `*Label` types][5366]
+* [Exact sized event iterators][3863]
+* [Add a `clear()` method to the `EventReader` that consumes the iterator][4693]
+* [Add helpers to send `Events` from `World`][5355]
+* [Add file metadata to `AssetIo`][2123]
+* [Add missing audio/ogg file extensions: .oga, .spx][4703]
+* [Add `reload_asset` method to `AssetServer`][5106]
+* [Allow specifying chrome tracing file path using an environment variable][4618]
+* [Create a simple tool to compare traces between executions][4628]
+* [Add a tracing span for run criteria][4709]
+* [Add tracing spans for `Query::par_for_each` and its variants.][4711]
+* [Add a `release_all` method on `Input`][5011]
+* [Add a `reset_all` method on `Input`][5015]
+* [Add a helper tool to build examples for wasm][4776]
+* [bevy_reflect: add a `ReflectFromPtr` type to create `&dyn Reflect` from a `*const ()`][4475]
+* [Add a `ReflectDefault` type and add `#[reflect(Default)]` to all component types that implement Default and are user facing][3733]
+* [Add a macro to implement `Reflect` for struct types and migrate glam types to use this for reflection][4540]
+* [bevy_reflect: reflect arrays][4701]
+* [bevy_reflect: reflect char][4790]
+* [bevy_reflect: add `GetTypeRegistration` impl for reflected tuples][4226]
+* [Add reflection for `Resources`][5175]
+* [bevy_reflect: add `as_reflect` and `as_reflect_mut` methods on `Reflect`][4350]
+* [Add an `apply_or_insert` method to `ReflectResource` and `ReflectComponent`][5201]
+* [bevy_reflect: `IntoIter` for `DynamicList` and `DynamicMap`][4108]
+* [bevy_reflect: Add `PartialEq` to reflected `f32`s and `f64`s][4217]
+* [Create mutable versions of `TypeRegistry` methods][4484]
+* [bevy_reflect: add a `get_boxed` method to `reflect_trait`][4120]
+* [bevy_reflect: add `#[reflect(default)]` attribute for `FromReflect`][4140]
+* [bevy_reflect: add statically available type info for reflected types][4042]
+* [Add an `assert_is_exclusive_system` function][5275]
+* [bevy_ui: add a multi-windows check for `Interaction` (we dont yet support multiple windows)][5225]
 
 ### Changed
 
-- [Depend on Taffy (a Dioxus and Bevy-maintained fork of Stretch)][4716]
-- [Use lifetimed, type erased pointers in bevy_ecs][3001]
-- [Migrate to `encase` from `crevice`][4339]
-- [Update `wgpu` to 0.13][5168]
-- [Pointerfication followup: Type safety and cleanup][4621]
-- [bevy_ptr works in no_std environments][4760]
-- [Fail to compile on 16-bit platforms][4736]
-- [Improve ergonomics and reduce boilerplate around creating text elements][5343]
-- [Don't cull `Ui` nodes that have a rotation][5389]
-- [Rename `ElementState` to `ButtonState`][4314]
-- [Move `Size` to `bevy_ui`][4285]
-- [Move `Rect` to `bevy_ui` and rename it to `UiRect`][4276]
-- [Modify `FontAtlas` so that it can handle fonts of any size][3592]
-- [Rename `CameraUi`][5234]
-- [Remove `task_pool` parameter from `par_for_each(_mut)`][4705]
-- [Copy `TaskPool` resoures to sub-Apps][4792]
-- [Allow closing windows at runtime][3575]
-- [Move the configuration of the `WindowPlugin` to a `Resource`][5227]
-- [Optionally resize `Window` canvas element to fit parent element][4726]
-- [Change window resolution types from tuple to `Vec2`][5276]
-- [Update time by sending frame `Instant` through a channel][4744]
-- [Split time functionality into `bevy_time`][4187]
-- [Split mesh shader files to make the shaders more reusable][4867]
-- [Set `naga` capabilities corresponding to `wgpu` features][4824]
-- [Separate out PBR lighting, shadows, clustered forward, and utils from pbr.wgsl][4938]
-- [Separate PBR and tonemapping into 2 functions][5078]
-- [Make `RenderStage::Extract` run on the render world][4402]
-- [Change default `FilterMode` of `Image` to `Linear`][4465]
-- [bevy_render: Fix KTX2 UASTC format mapping][4569]
-- [Allow rendering meshes without UV coordinate data][5222]
-- [Validate vertex attribute format on insertion][5259]
-- [Use `Affine3A` for `GlobalTransform `to allow any affine transformation][4379]
-- [Recalculate entity `AABB`s when meshes change][4944]
-- [Change `check_visibility` to use thread-local queues instead of a channel][4663]
-- [Allow unbatched render phases to use unstable sorts][5049]
-- [Extract resources into their target location][5271]
-- [Enable loading textures of unlimited size][5305]
-- [Do not create nor execute render passes which have no `PhaseItems` to draw][4643]
-- [Filter material handles on extraction][4178]
-- [Apply vertex colors to `ColorMaterial` and `Mesh2D`][4812]
-- [Make `MaterialPipelineKey` fields public][4508]
-- [Simplified API to get NDC from camera and world position][4041]
-- [Set `alpha_mode` based on alpha value][4658]
-- [Make `Wireframe` respect `VisibleEntities`][4660]
-- [Use const `Vec2` in lights cluster and bounding box when possible][4602]
-- [Make accessors for mesh vertices and indices public][3906]
-- [Use `BufferUsages::UNIFORM` for `SkinnedMeshUniform`][4816]
-- [Place origin of `OrthographicProjection` at integer pixel when using `ScalingMode::WindowSize`][4085]
-- [Make `ScalingMode` more flexible][3253]
-- [Move texture sample out of branch in `prepare_normal`][5129]
-- [Make the fields of the `Material2dKey` public][5212]
-- [Use collect to build mesh attributes][5255]
-- [Replace `ReadOnlyFetch` with `ReadOnlyWorldQuery`][4626]
-- [Replace `ComponentSparseSet`'s internals with a `Column`][4909]
-- [Remove QF generics from all `Query/State` methods and types][5170]
-- [Remove `.system()`][4499]
-- [Make change lifespan deterministic and update docs][3956]
-- [Make derived `SystemParam` readonly if possible][4650]
-- [Merge `matches_archetype` and `matches_table`][4807]
-- [Allows conversion of mutable queries to immutable queries][5376]
-- [Skip `drop` when `needs_drop` is `false`][4773]
-- [Use u32 over usize for `ComponentSparseSet` indicies][4723]
-- [Remove redundant `ComponentId` in `Column`][4855]
-- [Directly copy moved `Table` components to the target location][5056]
-- [`SystemSet::before` and `SystemSet::after` now take `AsSystemLabel`][4503]
-- [Converted exclusive systems to parallel systems wherever possible][2774]
-- [Improve `size_hint` on `QueryIter`][4244]
-- [Improve debugging tools for change detection][4160]
-- [Make `RunOnce` a non-manual `System` impl][3922]
-- [Apply buffers in `ParamSet`][4677]
-- [Don't allocate for `ComponentDescriptors` of non-dynamic component types][4725]
-- [Mark mutable APIs under ECS storage as `pub(crate)`][5065]
-- [Update `ExactSizeIterator` impl to support archetypal filters (`With`, `Without`)][5124]
-- [Removed world cell from places where split multable access is not needed][5167]
-- [Add Events to `bevy_ecs` prelude][5159]
-- [Improve `EntityMap` API][5231]
-- [Implement `From<bool>` for `ShouldRun`.][5306]
-- [Allow iter combinations on custom world queries][5286]
-- [Simplify design for `*Label`s][4957]
-- [Tidy up the code of events][4713]
-- [Rename `send_default_event` to `send_event_default` on world][5383]
-- [enable optional dependencies to stay optional][5023]
-- [Remove the dependency cycles][5171]
-- [Enforce type safe usage of Handle::get][4794]
-- [Export anyhow::error for custom asset loaders][5359]
-- [Update `shader_material_glsl` example to include texture sampling][5215]
-- [Remove unused code in game of life shader][5349]
-- [Make the contributor birbs bounce to the window height][5274]
-- [Improve Gamepad D-Pad Button Detection][5220]
-- [bevy_reflect: support map insertion ][5173]
-- [bevy_reflect: improve debug formatting for reflected types][4218]
-- [bevy_reflect_derive: big refactor tidying up the code][4712]
-- [bevy_reflect: small refactor and default `Reflect` methods][4739]
-- [Make `Reflect` safe to implement][5010]
-- [`bevy_reflect`: put `serialize` into external `ReflectSerialize` type][4782]
-- [Remove `Serialize` impl for `dyn Array` and friends][4780]
-- [Re-enable `#[derive(TypeUuid)]` for generics][4118]
-- [Move primitive type registration into `bevy_reflect`][4844]
-- [Implement reflection for more `glam` types][5194]
-- [Make `reflect_partial_eq` return more accurate results][5210]
-- [Make public macros more robust with `$crate`][4655]
-- [Ensure that the parent is always the expected entity][4717]
-- [Support returning data out of `with_children`][4708]
-- [Remove `EntityMut::get_unchecked`][4547]
-- [Diagnostics: meaningful error when graph node has wrong number of inputs][4924]
-- [Remove redundant `Size` import][5339]
-- [Export and register `Mat2`.][5324]
-- [Implement `Debug` for `Gamepads`][5291]
-- [Update codebase to use `IntoIterator` where possible.][5269]
-- [Rename `headless_defaults` example to `no_renderer` for clarity][5263]
-- [Remove dead `SystemLabelMarker` struct][5190]
-- [bevy_reflect: remove `glam` from a test which is active without the glam feature][5195]
-- [Disable vsync for stress tests][5187]
-- [Move `get_short_name` utility method from `bevy_reflect` into `bevy_utils`][5174]
-- [Derive `Default` for enums where possible][5158]
-- [Implement `Eq` and `PartialEq` for `MouseScrollUnit`][5048]
-- [Some cleanup for `bevy_ptr`][4668]
-- [Move float_ord from `bevy_core` to `bevy_utils`][4189]
-- [Remove unused `CountdownEvent`][4290]
-- [Some minor cleanups of asset_server][4604]
-- [Use `elapsed()` on `Instant`][4599]
-- [Make paused `Timers` update `just_finished` on tick][4445]
-- [bevy_utils: remove hardcoded log level limit][4580]
-- [Make `Time::update_with_instant` public for use in tests][4469]
-- [Do not impl Component for Task][4113]
-- [Remove nonexistent `WgpuResourceDiagnosticsPlugin`][4541]
-- [Update ndk-glue requirement from 0.5 to 0.6][3624]
-- [Update tracing-tracy requirement from 0.8.0 to 0.9.0][4786]
-- [update image to 0.24][4121]
-- [update xshell to 0.2][4789]
-- [Update gilrs to v0.9][4848]
-- [bevy_log: upgrade to tracing-tracy 0.10.0][4991]
-- [update hashbrown to 0.12][5035]
-- [Update `clap` to 3.2 in tools using `value_parser`][5031]
-- [Updated `glam` to `0.21`.][5142]
-- [Update Notify Dependency][5396]
+* [Depend on Taffy (a Dioxus and Bevy-maintained fork of Stretch)][4716]
+* [Use lifetimed, type erased pointers in bevy_ecs][3001]
+* [Migrate to `encase` from `crevice`][4339]
+* [Update `wgpu` to 0.13][5168]
+* [Pointerfication followup: Type safety and cleanup][4621]
+* [bevy_ptr works in no_std environments][4760]
+* [Fail to compile on 16-bit platforms][4736]
+* [Improve ergonomics and reduce boilerplate around creating text elements][5343]
+* [Don't cull `Ui` nodes that have a rotation][5389]
+* [Rename `ElementState` to `ButtonState`][4314]
+* [Move `Size` to `bevy_ui`][4285]
+* [Move `Rect` to `bevy_ui` and rename it to `UiRect`][4276]
+* [Modify `FontAtlas` so that it can handle fonts of any size][3592]
+* [Rename `CameraUi`][5234]
+* [Remove `task_pool` parameter from `par_for_each(_mut)`][4705]
+* [Copy `TaskPool` resoures to sub-Apps][4792]
+* [Allow closing windows at runtime][3575]
+* [Move the configuration of the `WindowPlugin` to a `Resource`][5227]
+* [Optionally resize `Window` canvas element to fit parent element][4726]
+* [Change window resolution types from tuple to `Vec2`][5276]
+* [Update time by sending frame `Instant` through a channel][4744]
+* [Split time functionality into `bevy_time`][4187]
+* [Split mesh shader files to make the shaders more reusable][4867]
+* [Set `naga` capabilities corresponding to `wgpu` features][4824]
+* [Separate out PBR lighting, shadows, clustered forward, and utils from pbr.wgsl][4938]
+* [Separate PBR and tonemapping into 2 functions][5078]
+* [Make `RenderStage::Extract` run on the render world][4402]
+* [Change default `FilterMode` of `Image` to `Linear`][4465]
+* [bevy_render: Fix KTX2 UASTC format mapping][4569]
+* [Allow rendering meshes without UV coordinate data][5222]
+* [Validate vertex attribute format on insertion][5259]
+* [Use `Affine3A` for `GlobalTransform`to allow any affine transformation][4379]
+* [Recalculate entity `AABB`s when meshes change][4944]
+* [Change `check_visibility` to use thread-local queues instead of a channel][4663]
+* [Allow unbatched render phases to use unstable sorts][5049]
+* [Extract resources into their target location][5271]
+* [Enable loading textures of unlimited size][5305]
+* [Do not create nor execute render passes which have no `PhaseItems` to draw][4643]
+* [Filter material handles on extraction][4178]
+* [Apply vertex colors to `ColorMaterial` and `Mesh2D`][4812]
+* [Make `MaterialPipelineKey` fields public][4508]
+* [Simplified API to get NDC from camera and world position][4041]
+* [Set `alpha_mode` based on alpha value][4658]
+* [Make `Wireframe` respect `VisibleEntities`][4660]
+* [Use const `Vec2` in lights cluster and bounding box when possible][4602]
+* [Make accessors for mesh vertices and indices public][3906]
+* [Use `BufferUsages::UNIFORM` for `SkinnedMeshUniform`][4816]
+* [Place origin of `OrthographicProjection` at integer pixel when using `ScalingMode::WindowSize`][4085]
+* [Make `ScalingMode` more flexible][3253]
+* [Move texture sample out of branch in `prepare_normal`][5129]
+* [Make the fields of the `Material2dKey` public][5212]
+* [Use collect to build mesh attributes][5255]
+* [Replace `ReadOnlyFetch` with `ReadOnlyWorldQuery`][4626]
+* [Replace `ComponentSparseSet`'s internals with a `Column`][4909]
+* [Remove QF generics from all `Query/State` methods and types][5170]
+* [Remove `.system()`][4499]
+* [Make change lifespan deterministic and update docs][3956]
+* [Make derived `SystemParam` readonly if possible][4650]
+* [Merge `matches_archetype` and `matches_table`][4807]
+* [Allows conversion of mutable queries to immutable queries][5376]
+* [Skip `drop` when `needs_drop` is `false`][4773]
+* [Use u32 over usize for `ComponentSparseSet` indicies][4723]
+* [Remove redundant `ComponentId` in `Column`][4855]
+* [Directly copy moved `Table` components to the target location][5056]
+* [`SystemSet::before` and `SystemSet::after` now take `AsSystemLabel`][4503]
+* [Converted exclusive systems to parallel systems wherever possible][2774]
+* [Improve `size_hint` on `QueryIter`][4244]
+* [Improve debugging tools for change detection][4160]
+* [Make `RunOnce` a non-manual `System` impl][3922]
+* [Apply buffers in `ParamSet`][4677]
+* [Don't allocate for `ComponentDescriptors` of non-dynamic component types][4725]
+* [Mark mutable APIs under ECS storage as `pub(crate)`][5065]
+* [Update `ExactSizeIterator` impl to support archetypal filters (`With`, `Without`)][5124]
+* [Removed world cell from places where split multable access is not needed][5167]
+* [Add Events to `bevy_ecs` prelude][5159]
+* [Improve `EntityMap` API][5231]
+* [Implement `From<bool>` for `ShouldRun`.][5306]
+* [Allow iter combinations on custom world queries][5286]
+* [Simplify design for `*Label`s][4957]
+* [Tidy up the code of events][4713]
+* [Rename `send_default_event` to `send_event_default` on world][5383]
+* [enable optional dependencies to stay optional][5023]
+* [Remove the dependency cycles][5171]
+* [Enforce type safe usage of Handle::get][4794]
+* [Export anyhow::error for custom asset loaders][5359]
+* [Update `shader_material_glsl` example to include texture sampling][5215]
+* [Remove unused code in game of life shader][5349]
+* [Make the contributor birbs bounce to the window height][5274]
+* [Improve Gamepad D-Pad Button Detection][5220]
+* [bevy_reflect: support map insertion][5173]
+* [bevy_reflect: improve debug formatting for reflected types][4218]
+* [bevy_reflect_derive: big refactor tidying up the code][4712]
+* [bevy_reflect: small refactor and default `Reflect` methods][4739]
+* [Make `Reflect` safe to implement][5010]
+* [`bevy_reflect`: put `serialize` into external `ReflectSerialize` type][4782]
+* [Remove `Serialize` impl for `dyn Array` and friends][4780]
+* [Re-enable `#[derive(TypeUuid)]` for generics][4118]
+* [Move primitive type registration into `bevy_reflect`][4844]
+* [Implement reflection for more `glam` types][5194]
+* [Make `reflect_partial_eq` return more accurate results][5210]
+* [Make public macros more robust with `$crate`][4655]
+* [Ensure that the parent is always the expected entity][4717]
+* [Support returning data out of `with_children`][4708]
+* [Remove `EntityMut::get_unchecked`][4547]
+* [Diagnostics: meaningful error when graph node has wrong number of inputs][4924]
+* [Remove redundant `Size` import][5339]
+* [Export and register `Mat2`.][5324]
+* [Implement `Debug` for `Gamepads`][5291]
+* [Update codebase to use `IntoIterator` where possible.][5269]
+* [Rename `headless_defaults` example to `no_renderer` for clarity][5263]
+* [Remove dead `SystemLabelMarker` struct][5190]
+* [bevy_reflect: remove `glam` from a test which is active without the glam feature][5195]
+* [Disable vsync for stress tests][5187]
+* [Move `get_short_name` utility method from `bevy_reflect` into `bevy_utils`][5174]
+* [Derive `Default` for enums where possible][5158]
+* [Implement `Eq` and `PartialEq` for `MouseScrollUnit`][5048]
+* [Some cleanup for `bevy_ptr`][4668]
+* [Move float_ord from `bevy_core` to `bevy_utils`][4189]
+* [Remove unused `CountdownEvent`][4290]
+* [Some minor cleanups of asset_server][4604]
+* [Use `elapsed()` on `Instant`][4599]
+* [Make paused `Timers` update `just_finished` on tick][4445]
+* [bevy_utils: remove hardcoded log level limit][4580]
+* [Make `Time::update_with_instant` public for use in tests][4469]
+* [Do not impl Component for Task][4113]
+* [Remove nonexistent `WgpuResourceDiagnosticsPlugin`][4541]
+* [Update ndk-glue requirement from 0.5 to 0.6][3624]
+* [Update tracing-tracy requirement from 0.8.0 to 0.9.0][4786]
+* [update image to 0.24][4121]
+* [update xshell to 0.2][4789]
+* [Update gilrs to v0.9][4848]
+* [bevy_log: upgrade to tracing-tracy 0.10.0][4991]
+* [update hashbrown to 0.12][5035]
+* [Update `clap` to 3.2 in tools using `value_parser`][5031]
+* [Updated `glam` to `0.21`.][5142]
+* [Update Notify Dependency][5396]
 
 ### Fixed
 
-- [bevy_ui: keep `Color` as 4 `f32`s][4494]
-- [Fix issues with bevy on android other than the rendering][5130]
-- [Update layout/style when scale factor changes too][4689]
-- [Fix `Overflow::Hidden` so it works correctly with `scale_factor_override`][3854]
-- [Fix `bevy_ui` touch input][4099]
-- [Fix physical viewport calculation][5055]
-- [Minimally fix the known unsoundness in `bevy_mikktspace`][5299]
-- [Make `Transform` propagation correct in the presence of updated children][4608]
-- [`StorageBuffer` uses wrong type to calculate the buffer size.][4557]
-- [Fix confusing near and far fields in Camera][4457]
-- [Allow minimising window if using a 2d camera][4527]
-- [WGSL: use correct syntax for matrix access][5039]
-- [Gltf: do not import `IoTaskPool` in wasm][5038]
-- [Fix skinned mesh normal handling in mesh shader][5095]
-- [Don't panic when `StandardMaterial` `normal_map` hasn't loaded yet][5307]
-- [Fix incorrect rotation in `Transform::rotate_around`][5300]
-- [Fix `extract_wireframes`][5301]
-- [Fix type parameter name conflicts of `#[derive(Bundle)]`][4636]
-- [Remove unnecessary `unsafe impl` of `Send+Sync` for `ParallelSystemContainer`][5137]
-- [Fix line material shader][5348]
-- [Fix `mouse_clicked` check for touch][2029]
-- [Fix unsoundness with `Or`/`AnyOf`/`Option` component access][4659]
-- [Improve soundness of `CommandQueue`][4863]
-- [Fix some memory leaks detected by miri][4959]
-- [Fix Android example icon][4076]
-- [Fix broken `WorldCell` test][5009]
-- [Bugfix `State::set` transition condition infinite loop][4890]
-- [Fix crash when using `Duration::MAX`][4900]
-- [Fix release builds: Move asserts under `#[cfg(debug_assertions)]`][4871]
-- [Fix frame count being a float][4493]
-- [Fix "unused" warnings when compiling with `render` feature but without `animation`][4714]
-- [Fix re-adding a plugin to a `PluginGroup`][2039]
-- [Fix torus normals][4520]
-- [Add `NO_STORAGE_BUFFERS_SUPPORT` shaderdef when needed][4949]
+* [bevy_ui: keep `Color` as 4 `f32`s][4494]
+* [Fix issues with bevy on android other than the rendering][5130]
+* [Update layout/style when scale factor changes too][4689]
+* [Fix `Overflow::Hidden` so it works correctly with `scale_factor_override`][3854]
+* [Fix `bevy_ui` touch input][4099]
+* [Fix physical viewport calculation][5055]
+* [Minimally fix the known unsoundness in `bevy_mikktspace`][5299]
+* [Make `Transform` propagation correct in the presence of updated children][4608]
+* [`StorageBuffer` uses wrong type to calculate the buffer size.][4557]
+* [Fix confusing near and far fields in Camera][4457]
+* [Allow minimising window if using a 2d camera][4527]
+* [WGSL: use correct syntax for matrix access][5039]
+* [Gltf: do not import `IoTaskPool` in wasm][5038]
+* [Fix skinned mesh normal handling in mesh shader][5095]
+* [Don't panic when `StandardMaterial` `normal_map` hasn't loaded yet][5307]
+* [Fix incorrect rotation in `Transform::rotate_around`][5300]
+* [Fix `extract_wireframes`][5301]
+* [Fix type parameter name conflicts of `#[derive(Bundle)]`][4636]
+* [Remove unnecessary `unsafe impl` of `Send+Sync` for `ParallelSystemContainer`][5137]
+* [Fix line material shader][5348]
+* [Fix `mouse_clicked` check for touch][2029]
+* [Fix unsoundness with `Or`/`AnyOf`/`Option` component access][4659]
+* [Improve soundness of `CommandQueue`][4863]
+* [Fix some memory leaks detected by miri][4959]
+* [Fix Android example icon][4076]
+* [Fix broken `WorldCell` test][5009]
+* [Bugfix `State::set` transition condition infinite loop][4890]
+* [Fix crash when using `Duration::MAX`][4900]
+* [Fix release builds: Move asserts under `#[cfg(debug_assertions)]`][4871]
+* [Fix frame count being a float][4493]
+* [Fix "unused" warnings when compiling with `render` feature but without `animation`][4714]
+* [Fix re-adding a plugin to a `PluginGroup`][2039]
+* [Fix torus normals][4520]
+* [Add `NO_STORAGE_BUFFERS_SUPPORT` shaderdef when needed][4949]
 
 [2029]: https://github.com/bevyengine/bevy/pull/2029
 [2039]: https://github.com/bevyengine/bevy/pull/2039

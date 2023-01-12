@@ -109,9 +109,49 @@ jobs:
           path: content/examples
           retention-days: 1
 
+  generate-community:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            generate-community/target/
+          key: ${{ runner.os }}-generate-community-${{ hashFiles('generate-community/Cargo.toml') }}
+
+      - name: "Build Bevy Community"
+        run: >
+          cd generate-community &&
+          ./generate_community.sh
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-community
+          path: content/community/people
+          retention-days: 1
+
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+      - name: Run Markdown Lint
+        uses: docker://ghcr.io/github/super-linter:slim-v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_MARKDOWN: true
+          DEFAULT_BRANCH: master
+
   build-website:
     runs-on: ubuntu-latest
-    needs: [generate-assets, generate-errors, generate-wasm-examples]
+    needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@master
@@ -129,6 +169,11 @@ jobs:
         with:
           name: generated-wasm-examples
           path: content/examples
+
+      - uses: actions/download-artifact@master
+        with:
+          name: generated-community
+          path: content/community/people
 
       - name: "Build website"
         uses: shalzz/zola-deploy-action@master

@@ -3,6 +3,7 @@ status = [
     "generate-wasm-examples",
     "generate-assets",
     "generate-errors",
+    "generate-community",
     "markdownlint",
     "test-code",
 ]
