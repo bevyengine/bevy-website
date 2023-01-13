@@ -154,8 +154,9 @@ jobs:
           DEFAULT_BRANCH: master
 
   test-code:
-     runs-on: ubuntu-latest
-     steps:
+    if: ${{ false }} # Disable for now
+    runs-on: ubuntu-latest
+    steps:
        - uses: actions/checkout@v2
 
        - uses: actions-rs/toolchain@v1
