@@ -62,9 +62,12 @@ fn main() {
 }
 ```
 
-The {{rust_type(type="struct" crate="bevy_app", name="App" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
+The [`add_system`] function adds the system to your App's [`Schedule`], but we'll cover that more later.
 
 Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
+
+[`add_system`]: https://docs.rs/bevy_app/latest/bevy_app/struct.App.html#method.add_system
+[`Schedule`]: https://docs.rs/bevy_ecs/latest/bevy_ecs/schedule/struct.Schedule.html
 
 ## Your First Components
 
@@ -84,7 +87,7 @@ But what if we want our people to have a name? In a more traditional design, we 
 struct Name(String);
 ```
 
-We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" mod="system" no_mod=true name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
+We can then add `People` to our [`World`] using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use [`Commands`] to spawn some entities into our [`World`]:
 
 ```rs
 fn add_people(mut commands: Commands) {
@@ -105,7 +108,7 @@ fn main() {
 }
 ```
 
-We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
+We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our [`World`]:
 
 ```rs
 fn greet_people(query: Query<&Name, With<Person>>) {
@@ -143,3 +146,6 @@ hello Zayna Nieves!
 Marvelous!
 
 **Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
+
+[`Commands`]: https://docs.rs/bevy_ecs/latest/bevy_ecs/system/struct.Commands.html
+[`World`]: https://docs.rs/bevy_ecs/latest/bevy_ecs/world/struct.World.html
