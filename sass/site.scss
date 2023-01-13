@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 // Core
+@import 'functions';
 @import 'vars';
 @import 'mixins';
 
@@ -9,8 +10,9 @@
 @import 'fonts/firasans';
 
 // Elements
-// - HTML element tweaks: html, body, ul, li…
+// - HTML element tweaks: html, body, a, ul, li…
 @import 'elements/html';
+@import 'elements/body';
 
 // CSS utility classes
 @import 'utils';
@@ -19,16 +21,26 @@
 // - Repeating visual patterns: buttons, cards, menus…
 // - Components can be composed between them to create new components
 // - These should be self contained and shouldn't affect other styling
+@import "components/bevy-instance";
 @import "components/book-footer";
-@import "components/book-nav";
+@import "components/button-square";
+@import "components/button";
 @import "components/card";
+@import "components/container";
 @import "components/example";
-@import "components/headerbar";
+@import "components/header";
 @import "components/icon";
-@import "components/sponsors";
 @import "components/item-grid";
+@import "components/layout";
+@import "components/logo";
+@import "components/main-menu-backdrop";
+@import "components/main-menu";
+@import "components/menu-switch";
+@import "components/page-with-menu";
+@import "components/sponsors";
 @import "components/syntax-theme";
 @import "components/tree-menu";
+@import "components/asset-card";
 
 // Pages
 // - Page specific CSS

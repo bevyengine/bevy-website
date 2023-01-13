@@ -754,7 +754,7 @@ System and Query lifetimes were made more explicit by splitting out the `'system
 
 Note that this does make the lifetimes on SystemParam derives slightly more complicated as a result:
 
-```rust
+```rs
 #[derive(SystemParam)]
 struct CustomParam<'w, 's> {
     res: Res<'w, AssetServer>,
@@ -976,7 +976,7 @@ However, there were a variety of issues that have come up that make dual-licensi
 
 ### More pull request mergers!
 
-I've been at my scalability limits for a while. It has been  _cough_ ... challenging  ... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far ... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
+I've been at my scalability limits for a while. It has been _cough_... challenging... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
 
 * @mockersf now has merge rights for "uncontroversial changes"
 * @alice-i-cecile now has merge rights for "uncontroversial documentation changes"
@@ -1069,7 +1069,7 @@ To solve this problem @alice-i-cecile has [started working](https://github.com/b
 
 Sponsorships help make my full time work on Bevy sustainable. If you believe in Bevy's mission, consider sponsoring me (@cart) ... every bit helps!
 
-<a class="header-item header-button header-button-donate" style="margin-left: 0px;" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+<a class="button button--pink header__cta" href="https://github.com/sponsors/cart">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
 
 ## Contributors
 
@@ -1388,7 +1388,7 @@ A huge thanks to the **170 contributors** that made this release (and associated
 * [Optional `.system()`, part 3][2422]
 * [Optional `.system()`, part 4 (run criteria)][2431]
 * [Optional `.system()`, part 6 (chaining)][2494]
-* [Make the iter_combinators examples prettier][3075]
+* [Make the `iter_combinators` examples prettier][3075]
 * [Remove dead anchor.rs code][3551]
 * [gltf: load textures asynchronously using io task pool][1767]
 * [Use fully-qualified type names in Label derive.][3544]

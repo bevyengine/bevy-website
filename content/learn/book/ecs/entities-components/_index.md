@@ -49,8 +49,6 @@ Instead, all it does is provide us an [`Entity`] identifer for a collection of c
 
 In order to make this useful, we need to be able to add, remove and modify component data for each entity.
 
-[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
-
 ### Defining components
 
 To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
@@ -145,8 +143,6 @@ fn spawn_combatants_system(mut commands: Commands) {
         .insert(Allegiance::Hostile);
 }
 ```
-
-[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ### Adding and removing components
 

@@ -214,7 +214,7 @@ Note that this benchmark used `world.get::<T>(entity)`. `query.get::<T>(entity)`
 
 ### Internal Improvements
 
-Many improvements to Bevy's CI [#325][325], [#349][349], [#357][357], [#373][373], [#423][423]
+Many improvements to Bevy's CI: [#325][325], [#349][349], [#357][357], [#373][373], [#423][423].
 
 [145]: https://github.com/bevyengine/bevy/pull/145
 [183]: https://github.com/bevyengine/bevy/pull/183

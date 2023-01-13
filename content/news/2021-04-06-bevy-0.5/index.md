@@ -395,7 +395,7 @@ app
 
 The author clearly intended `print_every_other_time` to run every other update. However, due to the fact that these systems have no order defined, they could run in a different order each update and create a situation where nothing is printed over the course of two updates:
 
-```sh
+```txt
 UPDATE
 - increment_counter (counter now equals 1)
 - print_every_other_time (nothing printed)
@@ -415,7 +415,7 @@ app.insert_resource(ReportExecutionOrderAmbiguities)
 
 Then when we run our App, we will see the following message printed to our terminal:
 
-```sh
+```txt
 Execution order ambiguities detected, you might want to add an explicit dependency relation between some of these systems:
  * Parallel systems:
  -- "&app::increment_counter" and "&app::print_every_other_time"
@@ -1165,7 +1165,7 @@ We also plan on breaking ground on the Bevy Editor as soon as we converge on a f
 
 [Sponsorships](https://github.com/sponsors/cart) help make full time work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring @cart](https://github.com/sponsors/cart) ... every bit helps!
 
-<a class="header-item header-button header-button-donate" style="margin-left: 0px;" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+<a class="button button--pink header__cta" href="https://github.com/sponsors/cart">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
 
 ## Contributors
 

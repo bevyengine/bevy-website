@@ -8,7 +8,7 @@
             <a href="https://github.com/bevyengine/bevy/tree/main/errors">repository</a>.</p>
         </div>
         {% for page in section.pages %}
-            <h1 id="{{ page.title | slugify }}" class="asset-section">
+            <h1 class="asset-section" id="{{ page.title | slugify }}">
                 {{ page.title }}<a class="anchor-link" href="#{{ page.title | slugify }}">#</a>
             </h1>
             <div class="media-content">{{ page.content | safe }}</div>

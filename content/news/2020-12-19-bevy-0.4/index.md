@@ -285,8 +285,6 @@ app
     )
 ```
 
-[`SystemStage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/struct.SystemStage.html
-
 #### Fixed Timestep
 
 You can now run stages on a "fixed timestep".
@@ -916,84 +914,56 @@ A "bunnymark-style" benchmark illustrating Bevy's sprite rendering performance. 
 [691]: https://github.com/bevyengine/bevy/pull/691
 [719]: https://github.com/bevyengine/bevy/pull/719
 [761]: https://github.com/bevyengine/bevy/pull/761
-[761]: https://github.com/bevyengine/bevy/pull/761
 [765]: https://github.com/bevyengine/bevy/pull/765
-[772]: https://github.com/bevyengine/bevy/pull/772
 [772]: https://github.com/bevyengine/bevy/pull/772
 [789]: https://github.com/bevyengine/bevy/pull/789
 [791]: https://github.com/bevyengine/bevy/pull/791
 [798]: https://github.com/bevyengine/bevy/pull/798
-[801]: https://github.com/bevyengine/bevy/pull/801
 [801]: https://github.com/bevyengine/bevy/pull/801
 [805]: https://github.com/bevyengine/bevy/pull/805
 [808]: https://github.com/bevyengine/bevy/pull/808
 [815]: https://github.com/bevyengine/bevy/pull/815
 [820]: https://github.com/bevyengine/bevy/pull/820
 [821]: https://github.com/bevyengine/bevy/pull/821
-[821]: https://github.com/bevyengine/bevy/pull/821
-[829]: https://github.com/bevyengine/bevy/pull/829
 [829]: https://github.com/bevyengine/bevy/pull/829
 [834]: https://github.com/bevyengine/bevy/pull/834
-[834]: https://github.com/bevyengine/bevy/pull/834
-[836]: https://github.com/bevyengine/bevy/pull/836
 [836]: https://github.com/bevyengine/bevy/pull/836
 [842]: https://github.com/bevyengine/bevy/pull/842
 [843]: https://github.com/bevyengine/bevy/pull/843
 [847]: https://github.com/bevyengine/bevy/pull/847
 [852]: https://github.com/bevyengine/bevy/pull/852
-[852]: https://github.com/bevyengine/bevy/pull/852
 [857]: https://github.com/bevyengine/bevy/pull/857
-[857]: https://github.com/bevyengine/bevy/pull/857
-[859]: https://github.com/bevyengine/bevy/pull/859
 [859]: https://github.com/bevyengine/bevy/pull/859
 [863]: https://github.com/bevyengine/bevy/pull/863
 [864]: https://github.com/bevyengine/bevy/pull/864
 [871]: https://github.com/bevyengine/bevy/pull/871
 [876]: https://github.com/bevyengine/bevy/pull/876
-[876]: https://github.com/bevyengine/bevy/pull/876
 [883]: https://github.com/bevyengine/bevy/pull/883
 [887]: https://github.com/bevyengine/bevy/pull/887
 [892]: https://github.com/bevyengine/bevy/pull/892
 [893]: https://github.com/bevyengine/bevy/pull/893
-[893]: https://github.com/bevyengine/bevy/pull/893
-[893]: https://github.com/bevyengine/bevy/pull/893
 [894]: https://github.com/bevyengine/bevy/pull/894
-[894]: https://github.com/bevyengine/bevy/pull/894
-[894]: https://github.com/bevyengine/bevy/pull/894
-[895]: https://github.com/bevyengine/bevy/pull/895
 [895]: https://github.com/bevyengine/bevy/pull/895
 [897]: https://github.com/bevyengine/bevy/pull/897
 [903]: https://github.com/bevyengine/bevy/pull/903
 [904]: https://github.com/bevyengine/bevy/pull/904
-[904]: https://github.com/bevyengine/bevy/pull/904
-[905]: https://github.com/bevyengine/bevy/pull/905
 [905]: https://github.com/bevyengine/bevy/pull/905
 [908]: https://github.com/bevyengine/bevy/pull/908
 [914]: https://github.com/bevyengine/bevy/pull/914
-[914]: https://github.com/bevyengine/bevy/pull/914
-[917]: https://github.com/bevyengine/bevy/pull/917
 [917]: https://github.com/bevyengine/bevy/pull/917
 [920]: https://github.com/bevyengine/bevy/pull/920
-[920]: https://github.com/bevyengine/bevy/pull/920
-[926]: https://github.com/bevyengine/bevy/pull/926
 [926]: https://github.com/bevyengine/bevy/pull/926
 [928]: https://github.com/bevyengine/bevy/pull/928
-[928]: https://github.com/bevyengine/bevy/pull/928
-[931]: https://github.com/bevyengine/bevy/pull/931
 [931]: https://github.com/bevyengine/bevy/pull/931
 [932]: https://github.com/bevyengine/bevy/pull/932
 [934]: https://github.com/bevyengine/bevy/pull/934
-[934]: https://github.com/bevyengine/bevy/pull/934
 [937]: https://github.com/bevyengine/bevy/pull/937
 [940]: https://github.com/bevyengine/bevy/pull/940
-[945]: https://github.com/bevyengine/bevy/pull/945
 [945]: https://github.com/bevyengine/bevy/pull/945
 [946]: https://github.com/bevyengine/bevy/pull/946
 [947]: https://github.com/bevyengine/bevy/pull/947
 [948]: https://github.com/bevyengine/bevy/pull/948
 [952]: https://github.com/bevyengine/bevy/pull/952
-[955]: https://github.com/bevyengine/bevy/pull/955
-[955]: https://github.com/bevyengine/bevy/pull/955
 [955]: https://github.com/bevyengine/bevy/pull/955
 [956]: https://github.com/bevyengine/bevy/pull/956
 [958]: https://github.com/bevyengine/bevy/pull/958
@@ -1013,11 +983,9 @@ A "bunnymark-style" benchmark illustrating Bevy's sprite rendering performance. 
 [1027]: https://github.com/bevyengine/bevy/pull/1027
 [1033]: https://github.com/bevyengine/bevy/pull/1033
 [1034]: https://github.com/bevyengine/bevy/pull/1034
-[1034]: https://github.com/bevyengine/bevy/pull/1034
 [1035]: https://github.com/bevyengine/bevy/pull/1035
 [1037]: https://github.com/bevyengine/bevy/pull/1037
 [1038]: https://github.com/bevyengine/bevy/pull/1038
-[1043]: https://github.com/bevyengine/bevy/pull/1043
 [1043]: https://github.com/bevyengine/bevy/pull/1043
 [1071]: https://github.com/bevyengine/bevy/pull/1071
 
