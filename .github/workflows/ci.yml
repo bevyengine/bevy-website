@@ -142,7 +142,7 @@ jobs:
   markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -157,7 +157,7 @@ jobs:
     if: ${{ false }} # Disable for now
     runs-on: ubuntu-latest
     steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@master
 
        - uses: actions-rs/toolchain@v1
          with:
