@@ -13,7 +13,7 @@ The process is straightforward: we first create a new [`App`].
 Then, we add a simple system, which prints "Hello, Bevy!" when it is run.
 Finally once we're done configuring the app, we call [`App`] to actually make our app *do things*.
 
-```no_run,rust
+```rust,no_run
 use bevy::prelude::*;
 
 fn main() {
@@ -43,7 +43,7 @@ The most basic tools are:
   3. Importing other blocks of [`App`]-modifying code using [`Plugins`].
 Let's write a very simple demo that shows how those work.
 
-```no_run,rust
+```rust,no_run
 use bevy::prelude::*;
 
 fn main() {
@@ -59,6 +59,7 @@ fn main() {
 }
 
 // This resource can store a string
+#[derive(Resource)]
 struct Message {
     string: String,
 }
