@@ -154,7 +154,6 @@ jobs:
           DEFAULT_BRANCH: master
 
   test-code:
-    if: ${{ false }} # Disable for now
     runs-on: ubuntu-latest
     steps:
        - uses: actions/checkout@master
@@ -165,11 +164,12 @@ jobs:
            components: rustfmt, clippy
            override: true
 
-       - name: Install alsa and udev
-         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+      # Temporarily disable steps
+      #  - name: Install alsa and udev
+      #    run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
-       - name: Build & run tests
-         run: cd code-validation && cargo test
+      #  - name: Build & run tests
+      #    run: cd code-validation && cargo test
 
   build-website:
     runs-on: ubuntu-latest
