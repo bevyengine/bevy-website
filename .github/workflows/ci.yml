@@ -149,9 +149,26 @@ jobs:
           VALIDATE_MARKDOWN: true
           DEFAULT_BRANCH: master
 
+  test-code:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v2
+
+       - uses: actions-rs/toolchain@v1
+         with:
+           toolchain: stable
+           components: rustfmt, clippy
+           override: true
+
+       - name: Install alsa and udev
+         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+       - name: Build & run tests
+         run: cd code-validation && cargo test
+
   build-website:
     runs-on: ubuntu-latest
-    needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [markdownlint, test-code, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@master
@@ -182,20 +199,3 @@ jobs:
           BUILD_DIR: .
           BUILD_ONLY: true
           TOKEN: fake-secret
-
-  test-code:
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v2
-
-       - uses: actions-rs/toolchain@v1
-         with:
-           toolchain: stable
-           components: rustfmt, clippy
-           override: true
-
-       - name: Install alsa and udev
-         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-
-       - name: Build & run tests
-         run: cd code-validation && cargo test
