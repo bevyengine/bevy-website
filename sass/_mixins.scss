@@ -10,3 +10,46 @@
         @content;
     }
 }
+
+@mixin text-ellipsis($lines: 1) {
+    overflow: hidden;
+
+    @if ($lines == 1) {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    } @else {
+        // Ellipsis on second line
+        // See: https://css-tricks.com/almanac/properties/l/line-clamp/
+        display: -webkit-box;
+        -webkit-line-clamp: $lines;
+        -webkit-box-orient: vertical;
+    }
+}
+
+@mixin state-checked($id) {
+    ##{$id}-state:checked + [data-#{$id}-state-container] {
+        @content;
+    }
+}
+
+@mixin scrollbar-v {
+    $track-width: 4px;
+    $thumb-color: rgba($color-white, 0.2);
+
+    scrollbar-width: thin;
+    scrollbar-color: $thumb-color transparent;
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+  
+    &::-webkit-scrollbar {
+        width: $track-width;
+        background-color: transparent;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+        background-color: $thumb-color;
+        border-radius: $track-width;
+    }
+}

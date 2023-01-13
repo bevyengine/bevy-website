@@ -1,0 +1,23 @@
+.logo {
+    $bp-icon: '(min-width: 440px)';
+
+    height: 28px;
+    
+    @media #{$bp-tablet-landscape-up} {
+        height: 40px;
+    }
+
+    &--icon {
+        @media #{$bp-icon} {
+            display: none;
+        }
+    }
+
+    &--full {
+        display: none;
+
+        @media #{$bp-icon} {
+            display: block;
+        }
+    }
+}

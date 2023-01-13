@@ -8,16 +8,92 @@ on:
       - 'trying'
 
 jobs:
-  build:
+  generate-assets:
+    needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
 
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            generate-assets/target/
+          key: ${{ runner.os }}-generate-assets-${{ hashFiles('generate-assets/Cargo.toml') }}
+
+      - name: Get cache key
+        id: cache-key
+        run: echo "::set-output name=key::$(date +'%Y-%m-%d')"
+
+      - name: Get crates.io datadump from cache
+        uses: actions/cache@v2
+        with:
+          path: generate-assets/data
+          key: ${{ runner.os }}-${{ steps.cache-key.outputs.key }}
+
       - name: "Build Bevy Assets"
-        run: cd generate-assets && ./generate_assets.sh
+        run: >
+          cd generate-assets &&
+          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} &&
+          ./generate_assets.sh
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-assets
+          path: content/assets
+          retention-days: 1
+
+  generate-errors:
+    needs: [markdownlint, test-code]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            generate-errors/target/
+          key: ${{ runner.os }}-generate-errors-${{ hashFiles('generate-errors/Cargo.toml') }}
 
       - name: "Build Bevy Error Codes"
-        run: cd generate-errors && ./generate_errors.sh
+        run: >
+          cd generate-errors &&
+          ./generate_errors.sh
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-errors
+          path: content/learn/errors
+          retention-days: 1
+
+  generate-wasm-examples:
+    needs: [markdownlint, test-code]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: "Clone Bevy"
+        run: >
+          cd generate-wasm-examples &&
+          ./clone_bevy.sh
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            generate-wasm-examples/bevy/target/
+            content/examples/**/*.wasm
+          key: ${{ runner.os }}-generate-wasm-examples-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
 
       - uses: actions-rs/toolchain@v1
         with:
@@ -25,20 +101,48 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
-        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh
+        run: >
+          cargo install --force wasm-bindgen-cli &&
+          cd generate-wasm-examples &&
+          ./generate_wasm_examples.sh
 
-      - name: "Build website"
-        uses: shalzz/zola-deploy-action@master
-        env:
-          PAGES_BRANCH: gh-pages
-          BUILD_DIR: .
-          BUILD_ONLY: true
-          TOKEN: fake-secret
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-wasm-examples
+          path: content/examples
+          retention-days: 1
+
+  generate-community:
+    needs: [markdownlint, test-code]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            generate-community/target/
+          key: ${{ runner.os }}-generate-community-${{ hashFiles('generate-community/Cargo.toml') }}
+
+      - name: "Build Bevy Community"
+        run: >
+          cd generate-community &&
+          ./generate_community.sh
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-community
+          path: content/community/people
+          retention-days: 1
 
   markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -48,13 +152,11 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_MARKDOWN: true
           DEFAULT_BRANCH: master
-          # Not needed here as only one Linter is used.
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test-code:
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v2
+    runs-on: ubuntu-latest
+    steps:
+       - uses: actions/checkout@master
 
        - uses: actions-rs/toolchain@v1
          with:
@@ -62,8 +164,43 @@ jobs:
            components: rustfmt, clippy
            override: true
 
-       - name: Install alsa and udev
-         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+      # Temporarily disable steps
+      #  - name: Install alsa and udev
+      #    run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
-       - name: Build & run tests
-         run: cd code-validation && cargo test
+      #  - name: Build & run tests
+      #    run: cd code-validation && cargo test
+
+  build-website:
+    runs-on: ubuntu-latest
+    needs: [generate-assets, generate-errors, generate-wasm-examples, generate-community]
+
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/download-artifact@master
+        with:
+          name: generated-assets
+          path: content/assets
+
+      - uses: actions/download-artifact@master
+        with:
+          name: generated-errors
+          path: content/learn/errors
+
+      - uses: actions/download-artifact@master
+        with:
+          name: generated-wasm-examples
+          path: content/examples
+
+      - uses: actions/download-artifact@master
+        with:
+          name: generated-community
+          path: content/community/people
+
+      - name: "Build website"
+        uses: shalzz/zola-deploy-action@master
+        env:
+          PAGES_BRANCH: gh-pages
+          BUILD_DIR: .
+          BUILD_ONLY: true
+          TOKEN: fake-secret

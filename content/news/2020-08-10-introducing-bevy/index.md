@@ -603,8 +603,6 @@ commands.spawn(SpriteComponents {
 });
 ```
 
-[`Texture`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Texture.html
-
 ### [Sprite Sheets](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/2d/sprite_sheet.rs)
 
 Sprite sheets (also known as texture atlases) can be used for animations, tile sets, or just for optimized sprite rendering.
@@ -646,13 +644,14 @@ Load GLTF files as Mesh assets
 ![boat render](boat.png)
 
 ```rs
-.spawn(PbrComponents {
-    // load the model
-    mesh: asset_server.load("boat.gltf").unwrap(),
-    // create a material for the model
-    material: materials.add(asset_server.load("boat.png").into()),
-    ..Default::default()
-})
+commands
+    .spawn(PbrComponents {
+        // load the model
+        mesh: asset_server.load("boat.gltf").unwrap(),
+        // create a material for the model
+        material: materials.add(asset_server.load("boat.png").into()),
+        ..Default::default()
+    })
 ```
 
 Note: in the near future we will add support for loading GLTF files as Scenes instead of meshes.
@@ -670,16 +669,17 @@ Parent transforms are propagated to their descendants
 <video controls loop><source  src="parenting.mp4" type="video/mp4"/></video>
 
 ```rs
-.spawn(PbrComponents {
-    mesh: cube_handle,
-    ..Default::default()
-}).with_children(|parent| {
-    parent.spawn(PbrComponents {
+commands
+    .spawn(PbrComponents {
         mesh: cube_handle,
-        translation: Translation::new(0.0, 2.0, 0.0),
         ..Default::default()
-    });
-})
+    }).with_children(|parent| {
+        parent.spawn(PbrComponents {
+            mesh: cube_handle,
+            translation: Translation::new(0.0, 2.0, 0.0),
+            ..Default::default()
+        });
+    })
 ```
 
 ### [MSAA](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/3d/msaa.rs)
@@ -852,7 +852,7 @@ fn event_consumer(mut state: Local<State>, my_events: Res<Events<MyEvent>>) {
 }
 ```
 
-`app.add_event::<MyEvent>()` adds a new [`Events`] resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  [`EventReaders`] are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
+`app.add_event::<MyEvent>()` adds a new [`Events`] resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update. [`EventReaders`] are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
 
 Events are used in Bevy for features like window resizing, assets, and input. The tradeoff for being both allocation and cpu efficient is that each system only has one chance to receive an event, otherwise it will be lost on the next update. I believe this is the correct tradeoff for apps that run in a loop (ex: games).
 
@@ -875,7 +875,7 @@ fn create_texture_system(mut textures: ResMut<Assets<Texture>>) {
 }
 ```
 
-#### Asset Access
+### Asset Access
 
 ```rs
 fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<Texture>) {
@@ -884,7 +884,7 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 }
 ```
 
-#### Asset Events
+### Asset Events
 
 The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed [`Events`]. These events can also be consumed as a system resource, just like any other [`Events`]:
 
@@ -898,7 +898,7 @@ fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
 }
 ```
 
-#### Asset Server
+### Asset Server
 
 The ```Assets<T>``` collection doesn't know anything about filesystems or multi-threading. This is the responsibility of the [`AssetServer`] resource:
 
@@ -931,7 +931,7 @@ fn system(mut commands: Commands, asset_server: Res<AssetServer>, mut textures: 
 
 [`AssetServer`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.AssetServer.html
 
-#### Hot Reloading
+### Hot Reloading
 
 You can enable asset change detection by calling:
 
@@ -941,7 +941,7 @@ asset_server.watch_for_changes().unwrap();
 
 This will load new versions of assets whenever their files have changed.
 
-#### Adding New Asset Types
+### Adding New Asset Types
 
 To add a new asset type, implement the [`AssetLoader`] trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
 

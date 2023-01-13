@@ -13,15 +13,13 @@
 }
 
 .book-content {
-    padding-left: $default-padding;
-    padding-right: $default-padding;
     position: relative;
     width: 100%;
     min-width: 0;
+
     h1 {
-        margin-top: $default-padding;
         font-size: 2.4rem;
-        margin-bottom: 15px;
+        margin: 0 0 16px;
     }
 
     h2 {
@@ -32,7 +30,6 @@
     h3 {
         font-size: 1.4rem;
         font-weight: 500;
-        text-decoration: underline;
         margin-bottom: 15px;
     }
 

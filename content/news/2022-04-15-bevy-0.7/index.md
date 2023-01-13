@@ -739,7 +739,7 @@ The responsiveness of the website has also been improved and some sections layou
 
 Bevy now has a dedicated scene viewer tool that can load arbitrary GLTF scene files. If you check out the main Bevy repo you can try it out by running:
 
-```shell
+```sh
 cargo run --release --example scene_viewer /some/path/castle.gltf
 ```
 
@@ -751,7 +751,7 @@ It has a built in "fly camera" and has tools to play animations and toggle light
 
 Sponsorships help make my full time work on Bevy sustainable. If you believe in Bevy's mission, consider sponsoring me (@cart) ... every bit helps!
 
-<a class="header-item header-button header-button-donate" style="margin-left: 0px;" href="https://github.com/sponsors/cart">Donate <img src="/assets/heart.svg" class="header-button-donate-heart" alt="heart icon"/></a>
+<a class="button button--pink header__cta" href="https://github.com/sponsors/cart">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
 
 ## Contributors
 
@@ -1143,12 +1143,10 @@ A huge thanks to the **123 contributors** that made this release (and associated
 [4243]: https://github.com/bevyengine/bevy/pull/4243
 [4246]: https://github.com/bevyengine/bevy/pull/4246
 [4250]: https://github.com/bevyengine/bevy/pull/4250
-[4252]: https://github.com/bevyengine/bevy/pull/4252
 [4270]: https://github.com/bevyengine/bevy/pull/4270
 [4298]: https://github.com/bevyengine/bevy/pull/4298
 [4310]: https://github.com/bevyengine/bevy/pull/4310
 [4328]: https://github.com/bevyengine/bevy/pull/4328
-[4332]: https://github.com/bevyengine/bevy/pull/4332
 [4340]: https://github.com/bevyengine/bevy/pull/4340
 [4347]: https://github.com/bevyengine/bevy/pull/4347
 [4361]: https://github.com/bevyengine/bevy/pull/4361
@@ -1159,11 +1157,7 @@ A huge thanks to the **123 contributors** that made this release (and associated
 [4396]: https://github.com/bevyengine/bevy/pull/4396
 [4399]: https://github.com/bevyengine/bevy/pull/4399
 [4400]: https://github.com/bevyengine/bevy/pull/4400
-[4403]: https://github.com/bevyengine/bevy/pull/4403
-[4405]: https://github.com/bevyengine/bevy/pull/4405
 [4417]: https://github.com/bevyengine/bevy/pull/4417
-[4420]: https://github.com/bevyengine/bevy/pull/4420
-[4426]: https://github.com/bevyengine/bevy/pull/4426
 [4427]: https://github.com/bevyengine/bevy/pull/4427
 [4428]: https://github.com/bevyengine/bevy/pull/4428
 [4433]: https://github.com/bevyengine/bevy/pull/4433

@@ -2,3 +2,14 @@
     width: 50% !important;
     max-width: 7rem;
 }
+
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,  minmax(300px, 500px));
+    justify-content: center;
+    gap: 1rem;
+}
+
+.community-card {
+    margin-bottom: 0px;
+}

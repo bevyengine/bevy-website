@@ -1,3 +1,7 @@
+// Typography
+$size-body: 16px; // Usual browser default size
+$size-body-mobile: 14px; // Size for mobile
+
 // Breakpoints
 $bp-phone-landscape: 480px; // Mobile-landscape (and larger)
 $bp-tablet-portrait: 768px; // Tablet-portrait (and larger)
@@ -14,7 +18,11 @@ $bp-tablet-landscape-down: '(max-width: #{$bp-desktop - 1})';
 $bp-desktop-up: '(min-width: #{$bp-desktop})';
 
 // Colors
+$color-black: #000;
 $color-white: #ececec;
+$color-grey-800: #232326;
+$color-grey-900: #1e1e22;
+$color-pink: #bb799c;
 
 $headerbar-color: #1e1e22;
 $hover-color: #ececec;
@@ -32,9 +40,27 @@ $card-hover-background: #2f3033;
 $duration-fast: 100ms;
 $duration: 250ms;
 
+// Z-Index
+$z-layout-header: 800;
+$z-main-menu-backdrop: 900;
+$z-main-menu: 1000;
+
 // General
+$max-width: 1200px;
+$mobile-menu-width: 300px;
 $content-top-margin: 30px;
-$default-padding: 15px;
-$media-max-width: 1000px;
 $border-radius: 10px;
 $card-list-gap: 15px;
+
+// CSS Vars
+:root {
+    --header-height: 60px;
+    --scroll-padding-top: calc(var(--header-height) + 16px);
+
+    @media #{$bp-tablet-landscape-up} {
+        --header-height: 72px;
+    }
+}
+
+// Accessibility
+$focus-outline: solid #b1d9ff 3px;
