@@ -9,7 +9,7 @@ on:
 
 jobs:
   generate-assets:
-    needs: [markdownlint, test-code]
+    needs: &generate-needs [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -47,6 +47,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
+    needs: *generate-needs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -73,6 +74,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
+    needs: *generate-needs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -111,6 +113,7 @@ jobs:
           retention-days: 1
 
   generate-community:
+    needs: *generate-needs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
