@@ -285,8 +285,6 @@ app
     )
 ```
 
-[`SystemStage`]: https://docs.rs/bevy/0.4.0/bevy/ecs/struct.SystemStage.html
-
 #### Fixed Timestep
 
 You can now run stages on a "fixed timestep".

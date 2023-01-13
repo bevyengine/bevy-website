@@ -603,8 +603,6 @@ commands.spawn(SpriteComponents {
 });
 ```
 
-[`Texture`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Texture.html
-
 ### [Sprite Sheets](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/2d/sprite_sheet.rs)
 
 Sprite sheets (also known as texture atlases) can be used for animations, tile sets, or just for optimized sprite rendering.

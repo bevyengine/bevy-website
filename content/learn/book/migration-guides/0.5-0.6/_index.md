@@ -179,8 +179,6 @@ fn player_system_fallible(query: Query<&Transform, With<Player>>) {
 
 [`Query::single()`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html#method.single
 [`Query::single_mut()`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html#method.single_mut
-[`Query::get_single`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html#method.get_single
-[`Query_get_single_mut`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html#method.get_single_mut
 
 ### "Light" and "LightBundle" are now "PointLight" and "PointLightBundle"
 
@@ -261,7 +259,6 @@ fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Tran
 ```
 
 [`QuerySet`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.QuerySet.html
-[`QueryState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/query/struct.QueryState.html
 [`Query`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html
 
 ### "Input\<T\>.update()" is renamed to "Input\<T\>.clear()"
