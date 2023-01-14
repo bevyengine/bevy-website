@@ -85,5 +85,6 @@ The next Bevy release (Bevy 0.10) is roughly a month away and I'm very excited f
 * **Screen Space Ambient Occlusion**: This is a popular, relatively cheap illumination technique that can make scenes look much more natural. It builds on the Depth Prepass work.
 * **Asset Preprocessing**: We're reworking our asset system to allow for pre processing assets into more efficient forms, which can make deployed games faster to load, prettier, and faster. This is a full asset system rework that improves a good portion of our asset APIs.
 * **Windows as Entities**: Windows are now ECS Entities instead of Resources, which makes them more natural to construct and query, more extensible, and opens the doors to including them in Bevy Scenes.
+* **UI Style Split**: Breaks the monolithic UI style type out into smaller pieces, embracing a less centralized and more extensible pattern.
 
 See you in about a month!
