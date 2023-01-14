@@ -156,20 +156,19 @@ jobs:
   test-code:
     runs-on: ubuntu-latest
     steps:
-       - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-       - uses: actions-rs/toolchain@v1
-         with:
-           toolchain: stable
-           components: rustfmt, clippy
-           override: true
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+          override: true
 
-      # Temporarily disable steps
-      #  - name: Install alsa and udev
-      #    run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
-      #  - name: Build & run tests
-      #    run: cd code-validation && cargo test
+      - name: Build & run tests
+        run: cd code-validation && cargo test
 
   build-website:
     runs-on: ubuntu-latest

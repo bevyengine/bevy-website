@@ -18,7 +18,7 @@ There's no magic to be found here; they're just a straightforward tool for code 
 
 Plugins are types that implement the [`Plugin`] trait:
 
-```no_run,rust
+```rust,no_run
 use bevy::prelude::*;
 
 fn main(){
@@ -46,7 +46,7 @@ impl Plugin for ScorePlugin {
   }
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Resource)]
 struct Score(u8);
 
 fn increment_score(mut score: ResMut<Score>) {

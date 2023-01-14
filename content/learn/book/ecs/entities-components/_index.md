@@ -32,9 +32,9 @@ As a result, we must use [`Commands`], which queue up work to do later.
 // which operate on the `World` once all of the current systems have finished running
 fn spawning_system(mut commands: Commands){
     // Spawning a single entity with no components
-    commands.spawn();
+    commands.spawn(());
     // Getting the `Entity` identifier of a new entity
-    let my_entity = commands.spawn().id();
+    let my_entity = commands.spawn(()).id();
     // Selecting and then despawning the just-spawned second entity
     commands.entity(my_entity).despawn();
 }
@@ -112,35 +112,35 @@ Now that we have some components defined, let's try adding them to our entities 
 # }
 
 fn spawn_combatants_system(mut commands: Commands) {
-    commands
-        .spawn()
+    commands.spawn((
         // This inserts a data-less `Combatant` component into the entity we're spawning
-        .insert(Combatant)
+        Combatant,
         // We configure starting component values by passing in concrete instances of our types
-        .insert(Life(10))
+        Life(10),
         // By chaining .insert method calls like this, we continue to add more components to our entity
         // Instances of named structs are constructed with {field_name: value}
-        .insert(Stats {
+        Stats {
             strength: 15,
             dexterity: 10,
             intelligence: 8,
-        })
+        },
         // Instances of enums are created by picking one of their variants
-        .insert(Allegiance::Friendly);
+        Allegiance::Friendly,
+    ));
 
     // We've ended our Commands method chain using a ;,
     // and so now we can create a second entity
     // by calling .spawn() again
-    commands
-        .spawn()
-        .insert(Combatant)
-        .insert(Life(10))
-        .insert(Stats {
+    commands.spawn((
+        Combatant,
+        Life(10),
+        Stats {
             strength: 17,
             dexterity: 8,
             intelligence: 6,
-        })
-        .insert(Allegiance::Hostile);
+        },
+        Allegiance::Hostile,
+    ));
 }
 ```
 
@@ -160,7 +160,7 @@ struct InCombat;
 // This query returns the `Entity` identifier of all entities
 // that have the `Combatant` component but do not yet have the `InCombat` component
 fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)>, mut commands: Commands){
-    for entity in query.iter(){
+    for entity in query.iter() {
         // The component will be inserted at the end of the current stage
         commands.entity(entity).insert(InCombat);
     }
@@ -168,7 +168,7 @@ fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)
 
 // Now to undo our hard work
 fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mut commands: Commands){
-    for entity in query.iter(){
+    for entity in query.iter() {
         // The component will be removed at the end of the current stage
         // It is provided as a type parameter,
         // as we do not need to know a specific value in order to remove a component of the correct type
@@ -237,12 +237,11 @@ impl Default for CombatantBundle {
 }
 
 fn spawn_combatants_system(mut commands: Commands) {
-    commands
-        .spawn()
-        // We're using struct-update syntax to modify 
+    commands.spawn((
+        // We're using struct-update syntax to modify
         // the instance of `CombatantBundle` returned by its default() method
         // See the page on Rust Tips and Tricks at the end of this chapter for more info!
-        .insert_bundle(CombatantBundle{
+        CombatantBundle{
             stats: Stats {
                 strength: 15,
                 dexterity: 10,
@@ -250,11 +249,11 @@ fn spawn_combatants_system(mut commands: Commands) {
             },
             allegiance: Allegiance::Friendly,
             ..default()
-        });
+        },
+    ));
     
-    commands
-        // .spawn_bundle is just syntactic sugar for .spawn().insert_bundle
-        .spawn_bundle(CombatantBundle{
+    commands.spawn((
+        CombatantBundle{
             stats: Stats {
                 strength: 17,
                 dexterity: 8,
@@ -262,7 +261,8 @@ fn spawn_combatants_system(mut commands: Commands) {
             },
             allegiance: Allegiance::Hostile,
             ..default()
-        });
+        },
+    ));
 }
 ```
 
