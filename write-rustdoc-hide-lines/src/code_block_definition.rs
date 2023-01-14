@@ -69,21 +69,29 @@ impl Annotation {
 
 #[derive(Debug, PartialEq)]
 pub struct CodeBlockDefinition {
+    tag: String,
     annotations: Vec<Annotation>,
     hide_lines_idx: Option<usize>,
 }
 
+const RUST_CODE_BLOCK_LONG: &str = "```rust";
+const RUST_CODE_BLOCK_SHORT: &str = "```rs";
+
 impl CodeBlockDefinition {
     pub fn new(line: &str) -> Option<CodeBlockDefinition> {
-        const RUST_CODE_BLOCK: &str = "```rust";
+        let tag: String;
 
-        if !line.starts_with(RUST_CODE_BLOCK) {
+        if line.starts_with(RUST_CODE_BLOCK_LONG) {
+            tag = RUST_CODE_BLOCK_LONG.into();
+        } else if line.starts_with(RUST_CODE_BLOCK_SHORT) {
+            tag = RUST_CODE_BLOCK_SHORT.into();
+        } else {
             return None;
         }
 
         let mut hide_lines_idx = None;
         let annotations = line
-            .get(RUST_CODE_BLOCK.len()..)
+            .get(tag.len()..)
             .unwrap_or("")
             .split(',')
             .filter(|a| a.trim() != "")
@@ -100,6 +108,7 @@ impl CodeBlockDefinition {
             .collect();
 
         Some(CodeBlockDefinition {
+            tag,
             annotations,
             hide_lines_idx,
         })
@@ -113,7 +122,7 @@ impl CodeBlockDefinition {
     }
 
     pub fn into_string(self) -> String {
-        let mut out = String::from("```rust");
+        let mut out = self.tag;
 
         if !self.annotations.is_empty() {
             out.push(',');
@@ -172,28 +181,33 @@ mod tests {
 
     #[test]
     fn should_parse_simple_lines() {
-        let line = "```rust";
-        let definition = CodeBlockDefinition::new(line).unwrap();
+        let cases = vec!["```rust", "```rs"];
 
-        assert_eq!(
-            definition,
-            CodeBlockDefinition {
-                annotations: vec![],
-                hide_lines_idx: None,
-            }
-        );
+        for case in cases {
+            let definition = CodeBlockDefinition::new(case).unwrap();
 
-        assert_eq!(definition.into_string(), String::from(line));
+            assert_eq!(
+                definition,
+                CodeBlockDefinition {
+                    tag: case.into(),
+                    annotations: vec![],
+                    hide_lines_idx: None,
+                }
+            );
+
+            assert_eq!(definition.into_string(), String::from(case));
+        }
     }
 
     #[test]
     fn should_parse_other_annotations() {
-        let line = "```rust,linenos,linenostart=10  , hl_lines=3-4 8-9";
+        let line = "```rs,linenos,linenostart=10  , hl_lines=3-4 8-9";
         let definition = CodeBlockDefinition::new(line).unwrap();
 
         assert_eq!(
             definition,
             CodeBlockDefinition {
+                tag: "```rs".into(),
                 annotations: vec![
                     Annotation::Other(String::from("linenos")),
                     Annotation::Other(String::from("linenostart=10  ")),
@@ -218,6 +232,7 @@ mod tests {
         assert_eq!(
             definition,
             CodeBlockDefinition {
+                tag: "```rust".into(),
                 annotations: vec![Annotation::HideLines(vec![
                     new_range(3, 4),
                     new_range(9, 9),
@@ -237,6 +252,7 @@ mod tests {
         assert_eq!(
             definition,
             CodeBlockDefinition {
+                tag: "```rust".into(),
                 annotations: vec![
                     Annotation::Other(String::from("   linenos")),
                     Annotation::HideLines(vec![new_range(3, 9)]),
