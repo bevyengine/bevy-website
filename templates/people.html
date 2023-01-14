@@ -67,7 +67,10 @@
             if you would like to join!
         </p>
         <p>
-            Bevy Organization members can also have the following roles:
+            <a class="anchor-target" id="org-roles"></a>
+            <h2>
+                Roles<a class="anchor-link" href="#org-roles">#</a>
+            </h2>
             <div class="people-role-descriptions">
                 <div class="people-role-description">
                     <div class="people-role people-role-top-level people-role-project-lead">Project Leads</div>
@@ -86,6 +89,12 @@
         </div>
         {% endif %}
 
+        {% if section.title == "The Bevy Organization" %}
+        <a class="anchor-target" id="org-members"></a>
+        <h2>
+            Members<a class="anchor-link" href="#org-members">#</a>
+        </h2>
+        {% endif %}
         {% if section.pages %}
         <div class="item-grid">
             {% set pages = section.pages %}
