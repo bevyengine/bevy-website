@@ -1,4 +1,4 @@
-use std::{fmt::Display, ops::Range, path::Path};
+use std::{fmt::Display, path::Path};
 
 use anyhow::{anyhow, Context, Result};
 use image::{io::Reader as ImageReader, DynamicImage};
@@ -10,7 +10,6 @@ const MAX_DESCRIPTION_LENGTH: usize = 100;
 const MAX_IMAGE_WIDTH: u32 = 1000;
 const MAX_IMAGE_HEIGHT: u32 = 1000;
 const MAX_IMAGE_BYTES: u64 = 1_000_000;
-const ALLOWED_IMAGE_ASPECT_RATIO: Range<f32> = 1.0..2.0;
 const ALLOWED_IMAGE_EXTENSIONS: &[&str] = &["gif", "jpg", "jpeg", "png", "webp"];
 
 fn main() -> Result<()> {
@@ -61,7 +60,6 @@ enum ValidationError {
     ImageInvalid,
     ImageFileSizeTooLarge,
     ImageDimensionsTooLarge,
-    ImageAspectRatioExtreme,
 }
 impl Display for ValidationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -84,11 +82,6 @@ impl Display for ValidationError {
                 f,
                 "Image dimensions must not exceed {}x{} px.",
                 MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
-            ),
-            ValidationError::ImageAspectRatioExtreme => write!(
-                f,
-                "Image aspect ratio must be between {} and {}.",
-                ALLOWED_IMAGE_ASPECT_RATIO.start, ALLOWED_IMAGE_ASPECT_RATIO.end
             ),
         }
     }
@@ -201,11 +194,6 @@ fn validate_image(path: &Path) -> Vec<ValidationError> {
 
     if img.width() > MAX_IMAGE_WIDTH || img.height() > MAX_IMAGE_HEIGHT {
         errors.push(ValidationError::ImageDimensionsTooLarge);
-    }
-
-    let aspect_ratio = img.width() as f32 / img.height() as f32;
-    if !ALLOWED_IMAGE_ASPECT_RATIO.contains(&aspect_ratio) {
-        errors.push(ValidationError::ImageAspectRatioExtreme);
     }
 
     errors
