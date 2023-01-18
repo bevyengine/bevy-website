@@ -107,10 +107,13 @@ impl FrontMatterWriter for Member {
             let _ = fs::copy(original_image, image_file_path);
         }
 
-        let mut file = File::create(path.join(format!(
-            "{}.md",
-            self.name.to_ascii_lowercase().replace("/", "-")
-        )))?;
+        let file_name = self
+            .original_path
+            .as_ref()
+            .and_then(|f| f.file_name())
+            .map(|f| f.to_string_lossy().replace(".toml", ""))
+            .expect("Failed to get file_name");
+        let mut file = File::create(path.join(format!("{}.md", file_name)))?;
         file.write_all(
             format!(
                 r#"+++
