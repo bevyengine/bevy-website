@@ -1,14 +1,11 @@
 use std::{fmt::Display, path::Path};
 
 use anyhow::{anyhow, Context, Result};
-use image::{io::Reader as ImageReader, DynamicImage};
 use regex::Regex;
 
 use generate_assets::*;
 
 const MAX_DESCRIPTION_LENGTH: usize = 100;
-const MAX_IMAGE_WIDTH: u32 = 1000;
-const MAX_IMAGE_HEIGHT: u32 = 1000;
 const MAX_IMAGE_BYTES: u64 = 1_000_000;
 const ALLOWED_IMAGE_EXTENSIONS: &[&str] = &["gif", "jpg", "jpeg", "png", "webp"];
 
@@ -57,9 +54,7 @@ enum ValidationError {
     DescriptionWithFormatting,
     ImageInvalidLink,
     ImageInvalidExtension,
-    ImageInvalid,
-    ImageFileSizeTooLarge,
-    ImageDimensionsTooLarge,
+    ImageFileSizeTooLarge(u64),
 }
 impl Display for ValidationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -73,16 +68,18 @@ impl Display for ValidationError {
                 write!(f, "Description must not contain formatting.")
             }
             ValidationError::ImageInvalidLink => write!(f, "Image file not found."),
-            ValidationError::ImageInvalidExtension => write!(f, "Image extension not allowed"),
-            ValidationError::ImageInvalid => write!(f, "Image file is invalid or corrupt."),
-            ValidationError::ImageFileSizeTooLarge => {
-                write!(f, "Image file must be at most {} bytes.", MAX_IMAGE_BYTES)
-            }
-            ValidationError::ImageDimensionsTooLarge => write!(
+            ValidationError::ImageInvalidExtension => write!(
                 f,
-                "Image dimensions must not exceed {}x{} px.",
-                MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+                "Image extension not allowed. Must be one of: {}",
+                ALLOWED_IMAGE_EXTENSIONS.join(", ")
             ),
+            ValidationError::ImageFileSizeTooLarge(size) => {
+                write!(
+                    f,
+                    "Image file size {} exceeds maximum {} bytes.",
+                    size, MAX_IMAGE_BYTES
+                )
+            }
         }
     }
 }
@@ -134,7 +131,9 @@ impl AssetValidator for Asset {
                 errors.push(ValidationError::ImageInvalidExtension)
             }
 
-            errors.append(&mut validate_image(&image_path));
+            if let Err(err) = validate_image(&image_path) {
+                errors.push(err);
+            }
         }
 
         if errors.is_empty() {
@@ -163,38 +162,15 @@ fn has_forbidden_formatting(string: &str) -> bool {
     false
 }
 
-fn open_image(path: &Path) -> Result<DynamicImage, ValidationError> {
+fn validate_image(path: &Path) -> Result<(), ValidationError> {
     let size = path
         .metadata()
         .map_err(|_| ValidationError::ImageInvalidLink)?
         .len();
 
     if size > MAX_IMAGE_BYTES {
-        return Err(ValidationError::ImageFileSizeTooLarge);
+        return Err(ValidationError::ImageFileSizeTooLarge(size));
     }
 
-    let img = ImageReader::open(path)
-        .map_err(|_| ValidationError::ImageInvalidLink)?
-        .decode()
-        .map_err(|_| ValidationError::ImageInvalid)?;
-
-    Ok(img)
-}
-
-fn validate_image(path: &Path) -> Vec<ValidationError> {
-    let mut errors = vec![];
-
-    let img = match open_image(path) {
-        Ok(img) => img,
-        Err(err) => {
-            errors.push(err);
-            return errors;
-        }
-    };
-
-    if img.width() > MAX_IMAGE_WIDTH || img.height() > MAX_IMAGE_HEIGHT {
-        errors.push(ValidationError::ImageDimensionsTooLarge);
-    }
-
-    errors
+    Ok(())
 }
