@@ -6,7 +6,7 @@ use regex::Regex;
 use generate_assets::*;
 
 const MAX_DESCRIPTION_LENGTH: usize = 100;
-const MAX_IMAGE_BYTES: u64 = 1_000_000;
+const MAX_IMAGE_BYTES: u64 = 2_097_152; // keep in sync with docs in bevy-assets
 const ALLOWED_IMAGE_EXTENSIONS: &[&str] = &["gif", "jpg", "jpeg", "png", "webp"];
 
 fn main() -> Result<()> {
