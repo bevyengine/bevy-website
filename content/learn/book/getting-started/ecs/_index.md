@@ -55,6 +55,8 @@ fn hello_world() {
 This will be our first system. The only remaining step is to add it to our App!
 
 ```rs
+use bevy::app::App;
+
 fn main() {
     App::new()
         .add_system(hello_world)
