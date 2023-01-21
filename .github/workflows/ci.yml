@@ -92,9 +92,8 @@ jobs:
             content/examples/**/*.wasm
           key: ${{ runner.os }}-generate-wasm-examples-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
 
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
