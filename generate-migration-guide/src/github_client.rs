@@ -141,7 +141,7 @@ impl GithubClient {
     ) -> anyhow::Result<Vec<GithubCommitResponse>> {
         let request = self
             .get("https://api.github.com/repos/bevyengine/bevy/commits")
-            .query("since", &format!("{}T00:00:00Z", since))
+            .query("since", &format!("{since}T00:00:00Z"))
             .query("per_page", "100")
             .query("page", &page.to_string())
             .query("sha", sha);
@@ -164,7 +164,7 @@ impl GithubClient {
         }
         let request = self
             .get("https://api.github.com/search/users")
-            .query("q", &format!("{email}"));
+            .query("q", email);
         let response = request.call()?.into_json()?;
         self.user_cache.insert(email.to_string(), response);
         Ok(self.user_cache.get(email).unwrap().clone())
@@ -217,7 +217,7 @@ impl GithubClient {
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         let mut request = self
             .get("https://api.github.com/repos/bevyengine/bevy/issues")
-            .query("since", &format!("{}T00:00:00Z", date))
+            .query("since", &format!("{date}T00:00:00Z"))
             .query("state", "closed")
             .query("base", "main")
             .query("per_page", "100")
@@ -232,11 +232,5 @@ impl GithubClient {
             .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
             .cloned()
             .collect())
-    }
-
-    pub fn generate_release_note(&self) -> anyhow::Result<String> {
-        let request =
-            self.get("https://api.github.com/repos/bevyengine/bevy/releases/generate-notes");
-        Ok(request.call()?.into_json()?)
     }
 }

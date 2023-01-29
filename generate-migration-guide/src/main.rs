@@ -171,7 +171,7 @@ fn generate_release_note(
                         });
                     }
                     Err(err) => {
-                        println!("Error while getting user by email: {}", err);
+                        println!("Error while getting user by email: {err}");
                         println!("sleeping to avoid being rate limited");
                         std::thread::sleep(std::time::Duration::from_secs(10));
                         println!("sleeping to avoid being rate limited");
@@ -206,7 +206,7 @@ fn generate_release_note(
     writeln!(&mut output, "## Contributors\n")?;
     writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
     for author in &authors {
-        writeln!(&mut output, "- @{}", author)?;
+        writeln!(&mut output, "- @{author}")?;
     }
     writeln!(&mut output)?;
     writeln!(&mut output, "### Co-Authors")?;
@@ -219,7 +219,7 @@ fn generate_release_note(
     writeln!(&mut output)?;
 
     for co_author in &co_authors {
-        writeln!(&mut output, "- {}", co_author)?;
+        writeln!(&mut output, "- {co_author}")?;
     }
     writeln!(&mut output)?;
 
@@ -227,14 +227,14 @@ fn generate_release_note(
 
     for (area, prs) in &areas {
         writeln!(&mut output)?;
-        writeln!(&mut output, "## {}", area)?;
+        writeln!(&mut output, "## {area}")?;
         writeln!(&mut output)?;
 
         for pr_number in prs {
             let Some(pr_title) = pr_map.get(pr_number) else {
                 continue;
             };
-            writeln!(&mut output, "- [{}][{}]", pr_title, pr_number)?;
+            writeln!(&mut output, "- [{pr_title}][{pr_number}]")?;
         }
     }
 
@@ -243,8 +243,7 @@ fn generate_release_note(
     for pr in pr_map.keys() {
         writeln!(
             &mut output,
-            "[{}]: https://github.com/bevyengine/bevy/pull/{}",
-            pr, pr
+            "[{pr}]: https://github.com/bevyengine/bevy/pull/{pr}"
         )?;
     }
 
@@ -266,19 +265,18 @@ fn generate_migration_guide(
     write!(
         &mut output,
         r#"+++
-title = "{}"
-weight = {}
+title = "{title}"
+weight = {weight}
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
 insert_anchor_links = "right"
 [extra]
-long_title = "Migration Guide: {}"
+long_title = "Migration Guide: {title}"
 +++
 
 Bevy relies heavily on improvements in the Rust language and compiler.
-As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust."#,
-        title, weight, title
+As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust."#
     )?;
     writeln!(&mut output)?;
 
@@ -289,7 +287,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             .replace("[Merged by Bors] - ", "")
             .trim()
             .to_string();
-        println!("# {}", pr_title);
+        println!("# {pr_title}");
 
         // Write title for the PR with correct heading and github url
         writeln!(
@@ -349,7 +347,7 @@ fn write_markdown_section(
     if !section_found {
         // Someone didn't write a migration guide 😢
         writeln!(output, "\n<!-- TODO -->")?;
-        println!("\x1b[93m{} not found!\x1b[0m", section_header);
+        println!("\x1b[93m{section_header} not found!\x1b[0m");
         Ok(false)
     } else {
         Ok(true)
@@ -381,7 +379,7 @@ fn write_markdown_event(event: &Event, output: &mut String) -> anyhow::Result<()
         Event::Text(text) => write!(output, "{text}")?,
         Event::Code(text) => write!(output, "`{text}`")?,
         Event::SoftBreak => writeln!(output)?,
-        _ => println!("unknown event {:?}", event),
+        _ => println!("unknown event {event:?}"),
     };
     Ok(())
 }
