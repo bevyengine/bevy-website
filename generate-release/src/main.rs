@@ -189,7 +189,7 @@ fn generate_release_note(
 
     let mut output = String::new();
 
-    writeln!(&mut output, "## Release Notes - {since}")?;
+    writeln!(&mut output, "# Release Notes - {since}\n")?;
 
     writeln!(&mut output, "## Contributors\n")?;
     writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
