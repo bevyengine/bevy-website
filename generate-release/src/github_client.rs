@@ -286,7 +286,7 @@ query {{
                 } else if login.is_string() {
                     vec![login.as_str().unwrap().to_string()]
                 } else {
-                    bail!("Invalid login format, if it contains a null, it probably means we are being throttled.\n{json}");
+                    bail!("Invalid login format. If it contains a null, it probably means we are being rate limited.\n{json}");
                 };
                 logins.extend(login);
             }
