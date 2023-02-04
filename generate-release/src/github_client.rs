@@ -206,7 +206,7 @@ impl GithubClient {
                         "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
                         pr.closed_at
                     );
-                    break;
+                    continue;
                 }
             }
         }
