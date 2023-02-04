@@ -161,8 +161,9 @@ fn generate_release_note(
                 }
                 Err(err) => {
                     println!("\x1b[93m{err:?}\x1b[0m");
-                    println!("Sleeping 20s to avoid being rate limited");
-                    std::thread::sleep(std::time::Duration::from_secs(20));
+                    // 15 is mostly arbitrary, but it seems to work as intended
+                    println!("Sleeping 15s to avoid being rate limited");
+                    std::thread::sleep(std::time::Duration::from_secs(15));
                     break 'retry;
                 }
             }
