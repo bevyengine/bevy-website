@@ -27,8 +27,8 @@ mod github_client;
 /// Requires a valid GITHUB_TOKEN environment variable, you can use a .env file or use your prefered method of passing env arguments.
 ///
 /// Example used to generate for 0.9:
-/// cargo run -- migration-guide --date 2022-07-31 --title "0.8 to 0.9" --weight 5
-/// cargo run -- release-note --date 2022-07-31
+/// cargo run -- migration-guide --date 2022-11-12 --title "0.9 to 0.10" --weight 6
+/// cargo run -- release-note --date 2022-11-12
 #[derive(ClapParser)]
 #[command(author, version, about)]
 struct Args {
@@ -67,7 +67,7 @@ enum Commands {
 }
 
 fn main() -> anyhow::Result<()> {
-    let _ = dotenv::dotenv();
+    let _ = dotenvy::dotenv();
 
     let mut client = github_client::GithubClient::new(
         std::env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found"),
@@ -113,13 +113,13 @@ fn generate_release_note(
     let commits = client
         .get_commits(since, &main_sha)
         .context("Failed to get commits for branch")?;
+
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
     let prs = client.get_merged_prs(since, None)?;
 
     let mut pr_map = HashMap::new();
     let mut areas = HashMap::<String, Vec<i32>>::new();
     let mut authors = HashSet::new();
-    let mut co_authors = HashSet::<String>::new();
 
     for commit in &commits {
         let mut message_lines = commit.commit.message.lines();
@@ -139,46 +139,31 @@ fn generate_release_note(
         let title = title.trim_end();
         // let pr_number = cap[1].to_string();
 
-        // This is really expensive. Consider querying a list of PRs separately and cache the result
-        // let pr = client.get_pr_by_number(&pr_number)?;
         let Some(pr) = prs.iter().find(|pr| pr.title.contains(title)) else {
-            println!("\x1b[93mPR not found for {title}\x1b[0m");
+            println!("\x1b[93mPR not found for {title} sha: {}\x1b[0m", commit.sha);
             continue;
         };
 
-        // Find co-authors
-        loop {
-            let Some(line) = message_lines.next() else {
-                break;
-            };
-
-            if line.starts_with("Co-authored-by: ") {
-                let user = line.replace("Co-authored-by: ", "");
-                let re = Regex::new(r"<(.*)>").unwrap();
-                let Some(cap) = re.captures_iter(line).last() else {
-                    continue;
-                };
-                let email = cap[1].to_string();
-                // co_authors.insert(email);
-                // This is really slow and a lot of users aren't found by it
-                match client.get_user_by_email(&user) {
-                    Ok(possible_users) => {
-                        co_authors.insert(if possible_users.items.is_empty() {
-                            format!("<{email}> -> not found")
-                        } else {
-                            let login = possible_users.items[0].login.clone();
-                            format!("<{email}> -> @{login}")
-                        });
+        // Find authors and co-authors
+        'retry: {
+            match client.get_contributors(&commit.sha) {
+                Ok(logins) => {
+                    if logins.is_empty() {
+                        println!(
+                            "\x1b[93mNo contributors found for https://github.com/bevyengine/bevy/pull/{} sha: {}\x1b[0m",
+                            pr.number,
+                            commit.sha
+                        );
                     }
-                    Err(err) => {
-                        println!("Error while getting user by email: {err}");
-                        println!("sleeping to avoid being rate limited");
-                        std::thread::sleep(std::time::Duration::from_secs(10));
-                        println!("sleeping to avoid being rate limited");
-                        std::thread::sleep(std::time::Duration::from_secs(10));
-                        println!("sleeping to avoid being rate limited");
-                        std::thread::sleep(std::time::Duration::from_secs(10));
+                    for login in logins {
+                        authors.insert(login);
                     }
+                }
+                Err(err) => {
+                    println!("\x1b[93m{err:?}\x1b[0m");
+                    println!("Sleeping 20s to avoid being rate limited");
+                    std::thread::sleep(std::time::Duration::from_secs(20));
+                    break 'retry;
                 }
             }
         }
@@ -203,23 +188,12 @@ fn generate_release_note(
 
     let mut output = String::new();
 
+    writeln!(&mut output, "## Release Notes - {since}")?;
+
     writeln!(&mut output, "## Contributors\n")?;
     writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
     for author in &authors {
         writeln!(&mut output, "- @{author}")?;
-    }
-    writeln!(&mut output)?;
-    writeln!(&mut output, "### Co-Authors")?;
-
-    writeln!(&mut output)?;
-    writeln!(
-        &mut output,
-        "!!! WARNING This section should be removed before release !!!"
-    )?;
-    writeln!(&mut output)?;
-
-    for co_author in &co_authors {
-        writeln!(&mut output, "- {co_author}")?;
     }
     writeln!(&mut output)?;
 

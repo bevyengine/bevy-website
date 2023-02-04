@@ -1,6 +1,6 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Debug};
 
-use anyhow::bail;
+use anyhow::{bail, Ok};
 use chrono::{DateTime, NaiveDate, Utc};
 use serde::Deserialize;
 
@@ -100,6 +100,12 @@ impl GithubClient {
             .set("Authorization", &format!("Bearer {}", self.token))
     }
 
+    fn post(&self, path: &str) -> ureq::Request {
+        self.agent
+            .post(path)
+            .set("Authorization", &format!("bearer {}", self.token))
+    }
+
     #[allow(unused)]
     pub fn get_branch_sha(&self, branch_name: &str) -> anyhow::Result<String> {
         let request = self.get("https://api.github.com/repos/bevyengine/bevy/branches");
@@ -196,7 +202,10 @@ impl GithubClient {
             page += 1;
             if let Some(pr) = prs.last() {
                 if pr.closed_at < datetime_utc {
-                    dbg!(pr.closed_at);
+                    println!(
+                        "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
+                        pr.closed_at
+                    );
                     break;
                 }
             }
@@ -209,6 +218,7 @@ impl GithubClient {
             .collect())
     }
 
+    // Returns all PRs from the main branch that are closed
     pub fn get_merged_prs_by_page(
         &self,
         date: &str,
@@ -232,5 +242,58 @@ impl GithubClient {
             .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
             .cloned()
             .collect())
+    }
+
+    pub fn get_contributors(&self, commit_sha: &str) -> anyhow::Result<Vec<String>> {
+        let query = format!(
+            r#"
+query {{
+    resource(url: "https://github.com/bevyengine/bevy/commit/{commit_sha}") {{
+        ... on Commit {{
+            authors(first: 10) {{
+                nodes {{
+                    user {{
+                        login
+                    }}
+                }}
+            }}
+        }}
+    }}
+}}"#
+        );
+        // for whatever reasons, github doesn't accept newlines in graphql queries
+        let query = query.replace('\n', "");
+        let resp = self
+            .post("https://api.github.com/graphql") // WARN if this ends in a / it will break
+            .send_json(ureq::json!({ "query": query }))?;
+        let json: serde_json::Value = resp.into_json()?;
+
+        let mut logins = vec![];
+
+        // this returns an heavily nested struct so we parse it manually instead of having 6 intermediary struct
+        let nodes = &json["data"]["resource"]["authors"]["nodes"];
+
+        if nodes.is_array() {
+            for node in nodes.as_array().unwrap() {
+                let login = &node["user"]["login"];
+                let login = if login.is_array() {
+                    login
+                        .as_array()
+                        .unwrap_or(&Vec::new())
+                        .iter()
+                        .map(|l| l.as_str().unwrap().to_string())
+                        .collect()
+                } else if login.is_string() {
+                    vec![login.as_str().unwrap().to_string()]
+                } else {
+                    bail!("Invalid login format, if it contains a null, it probably means we are being throttled.\n{json}");
+                };
+                logins.extend(login);
+            }
+        } else {
+            bail!("nodes should be an array\n: {json}");
+        }
+
+        Ok(logins)
     }
 }
