@@ -217,7 +217,7 @@ unsafe impl ReadOnlySystemParam for MyParam<'_, '_> {}
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-A `World` can only hold a maximum of 232 - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
+A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
 
 ### [Round out the untyped api s](https://github.com/bevyengine/bevy/pull/7009)
 
