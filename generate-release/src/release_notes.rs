@@ -1,8 +1,8 @@
-use crate::github_client::GithubClient;
 use crate::helpers::get_merged_prs;
+use crate::{github_client::GithubClient, helpers::get_pr_area};
 use anyhow::Context;
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, HashMap, HashSet},
     fmt::Write,
     path::PathBuf,
 };
@@ -19,7 +19,7 @@ pub fn generate_release_note(
 
     println!("commit sha for main: {main_sha}");
 
-    let mut pr_map = HashMap::new();
+    let mut pr_map = BTreeMap::new();
     let mut areas = HashMap::<String, Vec<i32>>::new();
     let mut authors = HashSet::new();
 
@@ -53,11 +53,7 @@ pub fn generate_release_note(
 
         pr_map.insert(pr.number, title.to_string());
 
-        let area = if let Some(label) = pr.labels.iter().find(|l| l.name.starts_with("A-")) {
-            label.name.clone()
-        } else {
-            String::from("No area label")
-        };
+        let area = get_pr_area(pr);
         areas.entry(area).or_default().push(pr.number);
 
         authors.insert(pr.user.login.clone());

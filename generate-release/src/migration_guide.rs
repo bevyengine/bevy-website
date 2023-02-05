@@ -1,7 +1,10 @@
-use crate::{github_client::GithubClient, helpers::get_merged_prs};
+use crate::{
+    github_client::{GithubClient, GithubIssuesResponse},
+    helpers::{get_merged_prs, get_pr_area},
+};
 use anyhow::Context;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
-use std::{fmt::Write, path::PathBuf};
+use std::{collections::BTreeMap, fmt::Write, path::PathBuf};
 
 pub fn generate_migration_guide(
     title: &str,
@@ -30,6 +33,7 @@ Bevy relies heavily on improvements in the Rust language and compiler.
 As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust."#
     )?;
     writeln!(&mut output)?;
+    writeln!(&mut output, "<div class=\"migration-guide\">")?;
 
     let main_sha = client
         .get_branch_sha("main")
@@ -37,18 +41,47 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
     println!("commit sha for main: {main_sha}");
 
+    let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
+
     let merged_breaking_prs = get_merged_prs(client, date, &main_sha, Some("C-Breaking-Change"))?;
     for (pr, _, title) in &merged_breaking_prs {
-        println!("# {title}");
-
-        // Write title for the PR with correct heading and github url
-        writeln!(
-            &mut output,
-            "\n### [{}](https://github.com/bevyengine/bevy/pull/{})",
-            title, pr.number
-        )?;
-        write_markdown_section(pr.body.as_ref().unwrap(), "migration guide", &mut output)?;
+        let area = get_pr_area(pr);
+        areas
+            .entry(area)
+            .or_insert(Vec::new())
+            .push((title.clone(), pr.clone()));
     }
+
+    for (area, prs) in areas {
+        println!("Area: {area}");
+
+        let area = area.replace("A-", "");
+        let areas = area.split(" + ").collect::<Vec<_>>();
+
+        for (title, pr) in prs {
+            println!("# {title}");
+
+            // Write title for the PR with correct heading and github url
+            writeln!(
+                &mut output,
+                "\n### [{}](https://github.com/bevyengine/bevy/pull/{})",
+                title, pr.number
+            )?;
+            // Write custom HTML to show area tag on each section
+            write!(&mut output, "\n<div class=\"migration-guide-area-tags\">")?;
+            for area in &areas {
+                write!(
+                    &mut output,
+                    "\n    <div class=\"migration-guide-area-tag\">{area}</div>"
+                )?;
+            }
+            write!(&mut output, "\n</div>")?;
+            writeln!(&mut output)?;
+
+            write_markdown_section(pr.body.as_ref().unwrap(), "migration guide", &mut output)?;
+        }
+    }
+    writeln!(&mut output, "</div>")?;
 
     println!(
         "\nFound {} breaking PRs merged by bors",
@@ -127,7 +160,7 @@ fn write_markdown_event(event: &Event, output: &mut String) -> anyhow::Result<()
         // FIXME List currently always assume they are unordered
         Event::Start(Tag::List(_)) => {}
         Event::End(Tag::List(_)) => writeln!(output)?,
-        Event::Start(Tag::Item) => write!(output, "\n* ")?,
+        Event::Start(Tag::Item) => write!(output, "\n- ")?,
         Event::End(Tag::Item) => {}
         Event::Start(tag) | Event::End(tag) if matches!(tag, Tag::Paragraph) => writeln!(output)?,
         Event::Text(text) => write!(output, "{text}")?,

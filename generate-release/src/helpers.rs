@@ -59,3 +59,17 @@ fn get_pr_title_from_commit(commit: &GithubCommitResponse) -> Option<String> {
     let title = title.trim_end();
     Some(title.to_string())
 }
+
+pub fn get_pr_area(pr: &GithubIssuesResponse) -> String {
+    let areas: Vec<String> = pr
+        .labels
+        .iter()
+        .map(|l| l.name.clone())
+        .filter(|l| l.starts_with("A-"))
+        .collect();
+    if areas.is_empty() {
+        String::from("No area label")
+    } else {
+        areas.join(" + ")
+    }
+}
