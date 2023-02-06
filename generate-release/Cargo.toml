@@ -1,5 +1,5 @@
 [package]
-name = "generate-migration-guide"
+name = "generate-release"
 version = "0.1.0"
 edition = "2021"
 
