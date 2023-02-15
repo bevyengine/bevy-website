@@ -6,6 +6,8 @@ use anyhow::Context;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use std::{collections::BTreeMap, fmt::Write, path::PathBuf};
 
+// TODO use the compare_commits api
+
 pub fn generate_migration_guide(
     title: &str,
     weight: i32,

@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use anyhow::{bail, Ok};
+use anyhow::bail;
 use chrono::{DateTime, NaiveDate, Utc};
 use serde::Deserialize;
 
@@ -125,25 +125,27 @@ impl GithubClient {
         bail!("commit sha not found for main branch")
     }
 
+    /// Gets the list of all commits between two git ref
     pub fn compare_commits(
         &self,
         from: &str,
         to: &str,
     ) -> anyhow::Result<Vec<GithubCommitResponse>> {
         let mut commits = vec![];
+        // The github page stuff is 1-based indexing and not 0-based.
+        // Starting at 0 will give you the same page for 0 and 1.
         let mut page = 1;
         // To get all the prs we need to iterate on every page available.
         loop {
             let mut commits_in_page = self.compare_commits_page(from, to, page)?;
             println!("Page: {page} ({} commits)", commits_in_page.commits.len());
-            // When it starts returning empty page it means we have all the commits
+            // When it returns an empty page it means we have all the commits in the given range
             if commits_in_page.commits.is_empty() {
                 break;
             }
             commits.append(&mut commits_in_page.commits);
             page += 1;
         }
-
         Ok(commits)
     }
 
