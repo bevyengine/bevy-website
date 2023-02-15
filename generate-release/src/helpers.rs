@@ -1,5 +1,5 @@
 use crate::github_client::{GithubClient, GithubCommitResponse, GithubIssuesResponse};
-use anyhow::Context;
+use anyhow::{bail, Context};
 use regex::Regex;
 
 pub fn get_merged_prs(
@@ -79,5 +79,34 @@ pub fn get_pr_area(pr: &GithubIssuesResponse) -> String {
         String::from("No area label")
     } else {
         areas.join(" + ")
+    }
+}
+
+pub fn get_contributors(
+    client: &mut GithubClient,
+    commit: &GithubCommitResponse,
+    pr: &GithubIssuesResponse,
+) -> anyhow::Result<Vec<String>> {
+    // Find authors and co-authors
+    // TODO this could probably be done with multiple threads to speed it up
+    match client.get_contributors(&commit.sha) {
+        Ok(logins) => {
+            if logins.is_empty() {
+                bail!(
+                    "\x1b[93mNo contributors found for https://github.com/bevyengine/{}/pull/{} sha: {}\x1b[0m",
+                    client.repo,
+                    pr.number,
+                    commit.sha
+                );
+            }
+            Ok(logins)
+        }
+        Err(err) => {
+            bail!(
+                "\x1b[93m{err:?}\nhttps://github.com/bevyengine/bevy/pull/{}\n{}\x1b[0m",
+                pr.number,
+                commit.sha
+            );
+        }
     }
 }

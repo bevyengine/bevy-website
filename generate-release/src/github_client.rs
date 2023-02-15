@@ -90,32 +90,37 @@ pub struct GithubIssuesResponse {
 pub struct GithubClient {
     agent: ureq::Agent,
     token: String,
+    pub repo: String,
 }
 
 impl GithubClient {
-    pub fn new(token: String) -> Self {
+    pub fn new(token: String, repo: String) -> Self {
         let agent: ureq::Agent = ureq::AgentBuilder::new()
-            .user_agent("bevy-website-generate-assets")
+            .user_agent("bevy-website-generate-release")
             .build();
 
-        Self { agent, token }
+        Self { agent, token, repo }
     }
 
     fn get(&self, path: &str) -> ureq::Request {
         self.agent
-            .get(path)
+            .get(&format!(
+                "https://api.github.com/repos/bevyengine/{}/{path}",
+                self.repo
+            ))
             .set("Accept", "application/json")
             .set("Authorization", &format!("Bearer {}", self.token))
     }
 
-    fn post(&self, path: &str) -> ureq::Request {
+    fn post_graphql(&self) -> ureq::Request {
         self.agent
-            .post(path)
+            // WARN if this path ends with a / it will break
+            .post("https://api.github.com/graphql")
             .set("Authorization", &format!("bearer {}", self.token))
     }
 
     pub fn get_branch_sha(&self, branch_name: &str) -> anyhow::Result<String> {
-        let request = self.get("https://api.github.com/repos/bevyengine/bevy/branches");
+        let request = self.get("branches");
         let reponse: Vec<GithubBranchesResponse> = request.call()?.into_json()?;
         for branch in &reponse {
             if branch.name == branch_name {
@@ -156,9 +161,7 @@ impl GithubClient {
         page: i32,
     ) -> anyhow::Result<GithubCompareResponse> {
         let request = self
-            .get(&format!(
-                "https://api.github.com/repos/bevyengine/bevy/compare/{from}...{to}"
-            ))
+            .get(&format!("compare/{from}...{to}"))
             .query("per_page", "250")
             .query("page", &page.to_string());
         Ok(request.call()?.into_json()?)
@@ -214,7 +217,7 @@ impl GithubClient {
         label: Option<&str>,
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         let mut request = self
-            .get("https://api.github.com/repos/bevyengine/bevy/issues")
+            .get("issues")
             .query("since", &format!("{date}T00:00:00Z"))
             .query("state", "closed")
             .query("base", "main")
@@ -236,23 +239,25 @@ impl GithubClient {
         let query = format!(
             r#"
 query {{
-    resource(url: "https://github.com/bevyengine/bevy/commit/{commit_sha}") {{
+    resource(url: "https://github.com/bevyengine/{}/commit/{commit_sha}") {{
         ... on Commit {{
             authors(first: 10) {{
                 nodes {{
                     user {{
                         login
-                    }}
+                    }},
+                    name
                 }}
             }}
         }}
     }}
-}}"#
+}}"#,
+            self.repo
         );
         // for whatever reasons, github doesn't accept newlines in graphql queries
         let query = query.replace('\n', "");
         let resp = self
-            .post("https://api.github.com/graphql") // WARN if this ends in a / it will break
+            .post_graphql()
             .send_json(ureq::json!({ "query": query }))?;
         let json: serde_json::Value = resp.into_json()?;
 
@@ -260,35 +265,29 @@ query {{
 
         // this returns an heavily nested struct so we parse it manually instead of having 6 intermediary struct
         let nodes = &json["data"]["resource"]["authors"]["nodes"];
-
-        if nodes.is_array() {
-            for node in nodes.as_array().unwrap() {
-                let login = &node["user"]["login"];
-                let login = if login.is_array() {
-                    login
-                        .as_array()
-                        .unwrap_or(&Vec::new())
-                        .iter()
-                        .map(|l| l.as_str().unwrap().to_string())
-                        .collect()
-                } else if login.is_string() {
-                    vec![login.as_str().unwrap().to_string()]
-                } else {
-                    bail!("Invalid login format. If it contains a null, it probably means we are being rate limited.\n{json}");
-                };
-                logins.extend(login);
-            }
-        } else {
+        let Some(nodes) = nodes.as_array() else {
             bail!("nodes should be an array\n: {json}");
+        };
+        for node in nodes {
+            if let Some(login) = &node["user"]["login"].as_str() {
+                logins.push(login.to_string());
+                continue;
+            } else if node["user"].is_null() {
+                // In some situations, github doesn't have a github user associated with a commit,
+                // so instead we need to get the name associated with the commit
+                if let Some(name) = &node["name"].as_str() {
+                    println!("\x1b[93mUser not found, using name instead.\n{json}\x1b[0m");
+                    logins.push(name.to_string());
+                    continue;
+                }
+            }
+            bail!("Unexpected user format. \n{json}")
         }
-
         Ok(logins)
     }
 
     pub fn get_commit(&self, git_ref: &str) -> anyhow::Result<GithubCommitResponse> {
-        let request = self.get(&format!(
-            "https://api.github.com/repos/bevyengine/bevy/commits/{git_ref}"
-        ));
+        let request = self.get(&format!("commits/{git_ref}"));
         Ok(request.call()?.into_json()?)
     }
 }

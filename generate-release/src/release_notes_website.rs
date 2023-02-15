@@ -7,7 +7,7 @@ use std::{
 };
 
 /// Generates the list of contributors and a list of all closed PRs sorted by area labels
-pub fn generate_release_note(
+pub fn generate_release_notes_website(
     from: &str,
     to: &str,
     path: PathBuf,
@@ -31,7 +31,7 @@ pub fn generate_release_note(
 
         authors.insert(pr.user.login.clone());
         println!(
-            "[{title}](https://github.com/bevyengine/bevy/pull/{})",
+            "[{title}](https://github.com/bevyengine/bevy-website/pull/{})",
             pr.number
         );
     }
@@ -45,7 +45,10 @@ pub fn generate_release_note(
 
     let mut output = String::new();
 
-    writeln!(&mut output, "# Release Notes - From {from} to {to}\n")?;
+    writeln!(
+        &mut output,
+        "# Release Notes Website - From {from} to {to}\n"
+    )?;
 
     writeln!(&mut output, "## Contributors\n")?;
     writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
@@ -74,7 +77,7 @@ pub fn generate_release_note(
     for pr in pr_map.keys() {
         writeln!(
             &mut output,
-            "[{pr}]: https://github.com/bevyengine/bevy/pull/{pr}"
+            "[{pr}]: https://github.com/bevyengine/bevy-website/pull/{pr}"
         )?;
     }
 
