@@ -102,6 +102,7 @@ where
 #[derive(Debug, Clone)]
 pub struct Section {
     pub name: String,
+    pub filename: Option<String>,
     pub content: Vec<CommunityNode>,
     pub template: Option<String>,
     pub header: Option<String>,
@@ -189,6 +190,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 };
                 let mut new_section = Section {
                     name: folder.to_str().unwrap().to_string(),
+                    filename: None,
                     content: vec![],
                     template: None,
                     header: None,
@@ -217,6 +219,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
 pub fn parse_members(community_dir: &str) -> io::Result<Section> {
     let mut people_root_section = Section {
         name: "People".to_string(),
+        filename: None,
         content: vec![],
         template: Some("people.html".to_string()),
         header: Some("People".to_string()),
