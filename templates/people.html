@@ -201,11 +201,11 @@
                         <div class="people-roles">
                             {% for role in post.extra.roles %}
                                 {% if role == "Project Lead" %}
-                                    <div class="people-role people-role-project-lead">{{ role }}</div>
+                                    <div class="people-role people-role-card people-role-project-lead">{{ role }}</div>
                                 {% elif role == "Maintainer" %}
-                                    <div class="people-role people-role-maintainer">{{ role }}</div>
+                                    <div class="people-role people-role-card people-role-maintainer">{{ role }}</div>
                                 {% elif role is starting_with("SME-") %}
-                                    <div class="people-role people-role-sme">{{ role }}</div>
+                                    <div class="people-role people-role-card  people-role-sme">{{ role }}</div>
                                 {% else %}
                                     <div class="people-role">{{ role }}</div>
                                 {% endif %}

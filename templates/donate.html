@@ -35,13 +35,31 @@
 <div class="assets">
 
         <a class="anchor-target" id="{{ section.title | slugify }}"></a>
-        <h1 class="asset-section">
-            {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
-        </h1>
-
-        <div class="people-section-description">
+        <div class="people-section-description media-content">
         <p>
-            Thank you for your support! Consider sponsoring one of the member of the Bevy Organization.
+            Bevy is a community-driven project and many of us rely on financial support to continue building Bevy.
+            Bevy is built by a large group of people, so consider backing the ones that are building what you care about!
+            If you are uncertain, a
+            <span class="people-role people-role-inline people-role-project-lead">Project Lead</span>,
+            <span class="people-role people-role-inline people-role-maintainer">Maintainer</span>, or
+            <span class="people-role people-role-inline people-role-sme">SME</span>
+            is a good choice. You can <a href="/community/people/">learn more about these roles here</a>.
+        </p>
+        <p>
+            If you are interested in backing Bevy in a big way (and you would like to <a href="/">see your logo on Bevy's home page</a>),
+            consider supporting one of our <span class="people-role people-role-inline people-role-maintainer">Maintainers</span> at one
+            of the following tiers:
+            <ul>
+                <li><b>Diamond</b>: $4000 / month</li>
+                <li><b>Platinum</b>: $1000 / month</li>
+                <li><b>Gold</b>: $300 / month</li>
+                <li><b>Silver</b>: $200 / month</li>
+                <li><b>Bronze</b>: $100 / month</li>
+            </ul>
+
+            Reach out to us <a href="bevyengine@gmail.com">here</a> if you have any questions about sponsorship or you would like to
+            claim a sponsorship reward.
+        </p>
         </p>
         </div>
 
@@ -54,7 +72,7 @@
             
             {% for post in pages %}
 
-            <div class="card people-card" id="{{ post.title | slugify }}">
+            <div onclick="location.href='{{ post.extra.sponsor }}';" class="card people-card" id="{{ post.title | slugify }}">
                 <div class="card-text media-content card-dense">
                     <div class="card-title">
                         <div style="width: 210px; font-size: {% if post.title | length > 30 %} 0.5rem; {% elif post.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
@@ -151,11 +169,11 @@
                         <div class="people-roles">
                             {% for role in post.extra.roles %}
                                 {% if role == "Project Lead" %}
-                                    <div class="people-role people-role-project-lead">{{ role }}</div>
+                                    <div class="people-role people-role-card people-role-project-lead">{{ role }}</div>
                                 {% elif role == "Maintainer" %}
-                                    <div class="people-role people-role-maintainer">{{ role }}</div>
+                                    <div class="people-role people-role-card people-role-maintainer">{{ role }}</div>
                                 {% elif role is starting_with("SME-") %}
-                                    <div class="people-role people-role-sme">{{ role }}</div>
+                                    <div class="people-role people-role-card people-role-sme">{{ role }}</div>
                                 {% else %}
                                     <div class="people-role">{{ role }}</div>
                                 {% endif %}
