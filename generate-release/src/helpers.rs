@@ -10,14 +10,15 @@ pub fn get_merged_prs(
 ) -> anyhow::Result<Vec<(GithubIssuesResponse, GithubCommitResponse, String)>> {
     println!("Getting list of all commits from {from} to {to}");
     // We use the list of commits to make sure the PRs are only on main
-    let response = client
+    let commits = client
         .compare_commits(from, to)
         .context("Failed to get commits")?;
-    println!("Found {} commits", response.commits.len());
+    println!("Found {} commits", commits.len());
 
     println!("Getting list of all merged PRs from {from} to {to} with label {label:?}");
 
-    let base_commit_date = &response.base_commit.commit.committer.date[0..10];
+    let base_commit = client.get_commit(from)?;
+    let base_commit_date = &base_commit.commit.committer.date[0..10];
 
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
     let prs = client.get_merged_prs(base_commit_date, label)?;
@@ -28,7 +29,7 @@ pub fn get_merged_prs(
     );
 
     let mut out = vec![];
-    for commit in &response.commits {
+    for commit in &commits {
         let Some(title) = get_pr_title_from_commit(commit)else {
             continue;
         };

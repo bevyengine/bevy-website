@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::Debug};
+use std::fmt::Debug;
 
 use anyhow::{bail, Ok};
 use chrono::{DateTime, NaiveDate, Utc};
@@ -90,7 +90,6 @@ pub struct GithubIssuesResponse {
 pub struct GithubClient {
     agent: ureq::Agent,
     token: String,
-    user_cache: HashMap<String, GithubUserSearchResponse>,
 }
 
 impl GithubClient {
@@ -99,11 +98,7 @@ impl GithubClient {
             .user_agent("bevy-website-generate-assets")
             .build();
 
-        Self {
-            agent,
-            token,
-            user_cache: Default::default(),
-        }
+        Self { agent, token }
     }
 
     fn get(&self, path: &str) -> ureq::Request {
@@ -119,7 +114,6 @@ impl GithubClient {
             .set("Authorization", &format!("bearer {}", self.token))
     }
 
-    #[allow(unused)]
     pub fn get_branch_sha(&self, branch_name: &str) -> anyhow::Result<String> {
         let request = self.get("https://api.github.com/repos/bevyengine/bevy/branches");
         let reponse: Vec<GithubBranchesResponse> = request.call()?.into_json()?;
@@ -131,69 +125,41 @@ impl GithubClient {
         bail!("commit sha not found for main branch")
     }
 
-    /// Gets a list of all PRs merged by bors after the given date.
-    /// The date needs to be in the YYYY-MM-DD format
-    /// To validate that bors merged the PR we simply check if the pr title contains "[Merged by Bors] - "
-    pub fn get_commits(&self, since: &str, sha: &str) -> anyhow::Result<Vec<GithubCommitResponse>> {
+    pub fn compare_commits(
+        &self,
+        from: &str,
+        to: &str,
+    ) -> anyhow::Result<Vec<GithubCommitResponse>> {
         let mut commits = vec![];
         let mut page = 1;
-        // The github rest api is limited to 100 prs per page,
-        // so to get all the prs we need to iterate on every page available.
+        // To get all the prs we need to iterate on every page available.
         loop {
-            let mut commits_in_page = self.get_commits_by_page(since, page, sha)?;
-            println!("Page: {} ({} commits)", page, commits_in_page.len());
-            if commits_in_page.is_empty() {
+            let mut commits_in_page = self.compare_commits_page(from, to, page)?;
+            println!("Page: {page} ({} commits)", commits_in_page.commits.len());
+            // When it starts returning empty page it means we have all the commits
+            if commits_in_page.commits.is_empty() {
                 break;
             }
-            commits.append(&mut commits_in_page);
+            commits.append(&mut commits_in_page.commits);
             page += 1;
         }
+
         Ok(commits)
     }
 
-    #[allow(unused)]
-    pub fn get_commits_by_page(
+    fn compare_commits_page(
         &self,
-        since: &str,
+        from: &str,
+        to: &str,
         page: i32,
-        sha: &str,
-    ) -> anyhow::Result<Vec<GithubCommitResponse>> {
+    ) -> anyhow::Result<GithubCompareResponse> {
         let request = self
-            .get("https://api.github.com/repos/bevyengine/bevy/commits")
-            .query("since", &format!("{since}T00:00:00Z"))
-            .query("per_page", "100")
-            .query("page", &page.to_string())
-            .query("sha", sha);
+            .get(&format!(
+                "https://api.github.com/repos/bevyengine/bevy/compare/{from}...{to}"
+            ))
+            .query("per_page", "250")
+            .query("page", &page.to_string());
         Ok(request.call()?.into_json()?)
-    }
-
-    pub fn compare_commits(&self, from: &str, to: &str) -> anyhow::Result<GithubCompareResponse> {
-        let request = self.get(&format!(
-            "https://api.github.com/repos/bevyengine/bevy/compare/{from}...{to}"
-        ));
-        Ok(request.call()?.into_json()?)
-    }
-
-    #[allow(unused)]
-    pub fn get_pr_by_number(&self, pr_number: &str) -> anyhow::Result<GithubPullRequestResponse> {
-        let request = self.get(&format!(
-            "https://api.github.com/repos/bevyengine/bevy/pulls/{pr_number}",
-        ));
-        Ok(request.call()?.into_json()?)
-    }
-
-    #[allow(unused)]
-    pub fn get_user_by_email(&mut self, email: &str) -> anyhow::Result<GithubUserSearchResponse> {
-        // This api is really slow so we keep a cache of responses
-        if let Some(response) = self.user_cache.get(email) {
-            return Ok(response.clone());
-        }
-        let request = self
-            .get("https://api.github.com/search/users")
-            .query("q", email);
-        let response = request.call()?.into_json()?;
-        self.user_cache.insert(email.to_string(), response);
-        Ok(self.user_cache.get(email).unwrap().clone())
     }
 
     /// Gets a list of all PRs merged by bors after the given date.
@@ -315,5 +281,12 @@ query {{
         }
 
         Ok(logins)
+    }
+
+    pub fn get_commit(&self, git_ref: &str) -> anyhow::Result<GithubCommitResponse> {
+        let request = self.get(&format!(
+            "https://api.github.com/repos/bevyengine/bevy/commits/{git_ref}"
+        ));
+        Ok(request.call()?.into_json()?)
     }
 }
