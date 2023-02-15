@@ -22,10 +22,17 @@ pub struct GithubCommitResponse {
 }
 
 #[derive(Deserialize, Clone, Debug)]
+pub struct Committer {
+    pub name: String,
+    pub date: String,
+}
+
+#[derive(Deserialize, Clone, Debug)]
 pub struct GithubCommitContent {
     // First line is the title
     // If multiple authors, it will add "Co-Authored by: <author>" at the end
     pub message: String,
+    pub committer: Committer,
 }
 
 #[derive(Deserialize, Clone, Debug)]
@@ -52,6 +59,12 @@ pub struct GithubPullRequestResponse {
     pub labels: Vec<GithubLabel>,
     pub user: GithubUser,
     pub closed_at: DateTime<Utc>,
+}
+
+#[derive(Deserialize, Clone, Debug)]
+pub struct GithubCompareResponse {
+    pub base_commit: GithubCommitResponse,
+    pub commits: Vec<GithubCommitResponse>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
@@ -154,6 +167,13 @@ impl GithubClient {
         Ok(request.call()?.into_json()?)
     }
 
+    pub fn compare_commits(&self, from: &str, to: &str) -> anyhow::Result<GithubCompareResponse> {
+        let request = self.get(&format!(
+            "https://api.github.com/repos/bevyengine/bevy/compare/{from}...{to}"
+        ));
+        Ok(request.call()?.into_json()?)
+    }
+
     #[allow(unused)]
     pub fn get_pr_by_number(&self, pr_number: &str) -> anyhow::Result<GithubPullRequestResponse> {
         let request = self.get(&format!(
@@ -235,6 +255,8 @@ impl GithubClient {
         if let Some(label) = label {
             request = request.query("labels", label);
         }
+        println!("{}", request.call()?.into_string()?);
+        todo!();
         let response: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
         Ok(response
             .iter()

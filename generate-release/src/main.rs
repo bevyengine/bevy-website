@@ -54,9 +54,13 @@ enum Commands {
         path: Option<std::path::PathBuf>,
     },
     ReleaseNote {
-        /// Date of the release of the previous version. Format: YYYY-MM-DD
+        /// The name of the branch / tag to start from
         #[arg(short, long)]
-        date: String,
+        from: String,
+
+        /// The name of the branch / tag to end on
+        #[arg(short, long)]
+        to: String,
 
         /// Path used to output the generated file. Defaults to ./release-note.md
         #[arg(short, long)]
@@ -85,8 +89,9 @@ fn main() -> anyhow::Result<()> {
             path.unwrap_or_else(|| PathBuf::from("./migration-guide.md")),
             &mut client,
         )?,
-        Commands::ReleaseNote { date, path } => generate_release_note(
-            &date,
+        Commands::ReleaseNote { from, to, path } => generate_release_note(
+            &from,
+            &to,
             path.unwrap_or_else(|| PathBuf::from("./release-note.md")),
             &mut client,
         )?,

@@ -4,24 +4,31 @@ use regex::Regex;
 
 pub fn get_merged_prs(
     client: &GithubClient,
-    since: &str,
-    sha: &str,
+    from: &str,
+    to: &str,
     label: Option<&str>,
 ) -> anyhow::Result<Vec<(GithubIssuesResponse, GithubCommitResponse, String)>> {
-    println!("Getting list of all commits since: {since}");
+    println!("Getting list of all commits from {from} to {to}");
     // We use the list of commits to make sure the PRs are only on main
-    let commits = client
-        .get_commits(since, sha)
-        .context("Failed to get commits for branch")?;
-    println!("Found {} commits", commits.len());
+    let response = client
+        .compare_commits(from, to)
+        .context("Failed to get commits")?;
+    println!("Found {} commits", response.commits.len());
 
-    println!("Getting list of all merged PRs since {since} with label {label:?}");
+    println!("Getting list of all merged PRs from {from} to {to} with label {label:?}");
+
+    let base_commit_date = &response.base_commit.commit.committer.date[0..10];
+
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
-    let prs = client.get_merged_prs(since, label)?;
-    println!("Found {} merged PRs", prs.len());
+    let prs = client.get_merged_prs(base_commit_date, label)?;
+    println!(
+        "Found {} merged PRs since {} (the base commit date)",
+        prs.len(),
+        base_commit_date
+    );
 
     let mut out = vec![];
-    for commit in &commits {
+    for commit in &response.commits {
         let Some(title) = get_pr_title_from_commit(commit)else {
             continue;
         };

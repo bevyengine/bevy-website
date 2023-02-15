@@ -1,6 +1,5 @@
 use crate::helpers::get_merged_prs;
 use crate::{github_client::GithubClient, helpers::get_pr_area};
-use anyhow::Context;
 use std::{
     collections::{BTreeMap, HashMap, HashSet},
     fmt::Write,
@@ -9,21 +8,16 @@ use std::{
 
 /// Generates the list of contributors and a list of all closed PRs sorted by area labels
 pub fn generate_release_note(
-    since: &str,
+    from: &str,
+    to: &str,
     path: PathBuf,
     client: &mut GithubClient,
 ) -> anyhow::Result<()> {
-    let main_sha = client
-        .get_branch_sha("main")
-        .context("Failed to get branch_sha")?;
-
-    println!("commit sha for main: {main_sha}");
-
     let mut pr_map = BTreeMap::new();
     let mut areas = HashMap::<String, Vec<i32>>::new();
     let mut authors = HashSet::new();
 
-    let merged_prs = get_merged_prs(client, since, &main_sha, None)?;
+    let merged_prs = get_merged_prs(client, from, to, None)?;
     for (pr, commit, title) in &merged_prs {
         // Find authors and co-authors
         // TODO this could probably be done with multiple threads to speed it up
@@ -64,14 +58,15 @@ pub fn generate_release_note(
     }
 
     println!(
-        "Found {} prs merged by bors since {}",
+        "Found {} prs merged by bors from {} to {}",
         merged_prs.len(),
-        since
+        from,
+        to,
     );
 
     let mut output = String::new();
 
-    writeln!(&mut output, "# Release Notes - {since}\n")?;
+    writeln!(&mut output, "# Release Notes - From {from} to {to}\n")?;
 
     writeln!(&mut output, "## Contributors\n")?;
     writeln!(&mut output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", authors.len())?;
