@@ -255,8 +255,6 @@ impl GithubClient {
         if let Some(label) = label {
             request = request.query("labels", label);
         }
-        println!("{}", request.call()?.into_string()?);
-        todo!();
         let response: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
         Ok(response
             .iter()
