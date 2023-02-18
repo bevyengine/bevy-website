@@ -35,29 +35,25 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
 `App::add_sub_app` has been removed in favor of `App::insert_sub_app`. Use `SubApp::new` and insert it via `App::add_sub_app`
 
-Old:
-
 ```rust
+// 0.9
 let mut sub_app = App::new()
 // Build subapp here
 app.add_sub_app(MySubAppLabel, sub_app);
-```
 
-New:
-
-```rust
+// 0.10
 let mut sub_app = App::new()
 // Build subapp here
 app.insert_sub_app(MySubAppLabel, SubApp::new(sub_app, extract_fn));
 ```
 
-### [asset: make HandleUntyped::id private](https://github.com/bevyengine/bevy/pull/7076)
+### [Make HandleUntyped::id private](https://github.com/bevyengine/bevy/pull/7076)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-- Instead of directly accessing the ID of a `HandleUntyped` as `handle.id`, use the new getter `handle.id()`.
+Instead of directly accessing the ID of a `HandleUntyped` as `handle.id`, use the new getter `handle.id()`.
 
 ### [Break `CorePlugin` into `TaskPoolPlugin`, `TypeRegistrationPlugin`, `FrameCountPlugin`.](https://github.com/bevyengine/bevy/pull/7083)
 
@@ -65,7 +61,15 @@ app.insert_sub_app(MySubAppLabel, SubApp::new(sub_app, extract_fn));
     <div class="migration-guide-area-tag">Core</div>
 </div>
 
-- `CorePlugin` broken into separate plugins.  If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
+`CorePlugin` broken into separate plugins.  If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
+
+### [Remove broken `DoubleEndedIterator` impls on event iterators](https://github.com/bevyengine/bevy/pull/7469)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+`ManualEventIterator` and `ManualEventIteratorWithId` are no longer `DoubleEndedIterator`s.
 
 ### [Replace `RemovedComponents<T>` backing with `Events<Entity>`](https://github.com/bevyengine/bevy/pull/5680)
 
@@ -82,17 +86,18 @@ app.insert_sub_app(MySubAppLabel, SubApp::new(sub_app, extract_fn));
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
+<!-- TODO -->
 _Note for maintainers: this migration guide makes more sense if it’s placed above the one for #6919._
 
 The trait method `ExclusiveSystemParamState::apply` has been removed. If you have an exclusive system with buffers that must be applied, you should apply them within the body of the exclusive system.
 
-### [add `UnsafeWorldCell` abstraction](https://github.com/bevyengine/bevy/pull/6404)
+### [Add `UnsafeWorldCell` abstraction](https://github.com/bevyengine/bevy/pull/6404)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove later -->
 
 ### [Added `resource_id` and changed `init_resource` and `init_non_send_resource` to return `ComponentId`](https://github.com/bevyengine/bevy/pull/7284)
 
@@ -100,7 +105,8 @@ The trait method `ExclusiveSystemParamState::apply` has been removed. If you hav
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO -->
+- Changed `World::init_resource` to return the generated `ComponentId`.
+- Changed `World::init_non_send_resource` to return the generated `ComponentId`.
 
 ### [Basic adaptive batching for parallel query iteration](https://github.com/bevyengine/bevy/pull/4777)
 
@@ -110,19 +116,15 @@ The trait method `ExclusiveSystemParamState::apply` has been removed. If you hav
 
 The `batch_size` parameter for `Query(State)::par_for_each(_mut)` has been removed. These calls will automatically compute a batch size for you. Remove these parameters from all calls to these functions.
 
-Before:
-
 ```rust
+// 0.9
 fn parallel_system(query: Query<&MyComponent>) {
    query.par_for_each(32, |comp| {
         ...
    });
 }
-```
 
-After:
-
-```rust
+// 0.10
 fn parallel_system(query: Query<&MyComponent>) {
    query.par_iter().for_each(|comp| {
         ...
@@ -139,12 +141,12 @@ fn parallel_system(query: Query<&MyComponent>) {
 Exclusive systems (systems that access `&mut World`) now support system piping, so the `ExclusiveSystemParamFunction` trait now has generics for the `In`put and `Out`put types.
 
 ```rust
-// Before
+// 0.9
 fn my_generic_system<T, Param>(system_function: T)
 where T: ExclusiveSystemParamFunction<Param>
 { ... }
 
-// After
+// 0.10
 fn my_generic_system<T, In, Out, Param>(system_function: T)
 where T: ExclusiveSystemParamFunction<In, Out, Param>
 { ... }
@@ -156,7 +158,7 @@ where T: ExclusiveSystemParamFunction<In, Out, Param>
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-- Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` methods have been changed. All callers should re-audit for soundness.
+Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` methods have been changed. All callers should re-audit for soundness.
 
 ### [Panic on dropping NonSend in non-origin thread.](https://github.com/bevyengine/bevy/pull/6534)
 
@@ -178,7 +180,7 @@ This is relative to Bevy 0.9, not main.
 The traits `SystemParamState` and `SystemParamFetch` have been removed, and their functionality has been transferred to `SystemParam`.
 
 ```rust
-// Before (0.9)
+// 0.9
 impl SystemParam for MyParam<'_, '_> {
     type State = MyParamState;
 }
@@ -191,7 +193,7 @@ unsafe impl<'w, 's> SystemParamFetch<'w, 's> for MyParamState {
 }
 unsafe impl ReadOnlySystemParamFetch for MyParamState { }
 
-// After (0.10)
+// 0.10
 unsafe impl SystemParam for MyParam<'_, '_> {
     type State = MyParamState;
     type Item<'w, 's> = MyParam<'w, 's>;
@@ -204,10 +206,10 @@ unsafe impl ReadOnlySystemParam for MyParam<'_, '_> { }
 The trait `ReadOnlySystemParamFetch` has been replaced with `ReadOnlySystemParam`.
 
 ```rust
-// Before
+// 0.9
 unsafe impl ReadOnlySystemParamFetch for MyParamState {}
 
-// After
+// 0.10
 unsafe impl ReadOnlySystemParam for MyParam<'_, '_> {}
 ```
 
@@ -225,7 +227,7 @@ A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables no
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-- `MutUntyped::into_inner` now marks things as changed.
+`MutUntyped::into_inner` now marks things as changed.
 
 ### [Simplify trait hierarchy for `SystemParam`](https://github.com/bevyengine/bevy/pull/6865)
 
@@ -241,7 +243,7 @@ _Merged with the guide for #6919._
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO -->
+`Archetype` indices and `Table` rows have been newtyped as `ArchetypeRow` and `TableRow`.
 
 ### [Borrow instead of consuming in `EventReader::clear`](https://github.com/bevyengine/bevy/pull/6851)
 
@@ -252,12 +254,12 @@ _Merged with the guide for #6919._
 `EventReader::clear` now takes a mutable reference instead of consuming the event reader. This means that `clear` now needs explicit mutable access to the reader variable, which previously could have been omitted in some cases:
 
 ```rust
-// Old (0.9)
+// 0.9
 fn clear_events(reader: EventReader<SomeEvent>) {
   reader.clear();
 }
 
-// New (0.10)
+// 0.10
 fn clear_events(mut reader: EventReader<SomeEvent>) {
   reader.clear();
 }
@@ -272,13 +274,13 @@ fn clear_events(mut reader: EventReader<SomeEvent>) {
 The lifetime `'s` has been removed from `EventWriter`. Any code that explicitly specified the lifetimes for this type will need to be updated.
 
 ```rust
-// Before
+// 0.9
 #[derive(SystemParam)]
 struct MessageWriter<'w, 's> {
     events: EventWriter<'w, 's, Message>,
 }
 
-// After
+// 0.10
 #[derive(SystemParam)]
 struct MessageWriter<'w> {
     events: EventWriter<'w, Message>,
@@ -291,7 +293,9 @@ struct MessageWriter<'w> {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO -->
+`Entities`’s `Default` implementation has been removed. You can fetch a reference to a `World`’s `Entities` via `World::entities` and `World::entities_mut`.
+
+`Entities::alloc_at_without_replacement` and `AllocAtWithoutReplacement` has been made private due to difficulty in using it properly outside of `bevy_ecs`. If you still need use of this API, please file an issue.
 
 ### [Document and lock down types in bevy_ecs::archetype](https://github.com/bevyengine/bevy/pull/6742)
 
@@ -299,7 +303,9 @@ struct MessageWriter<'w> {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO -->
+`ArchetypeId`, `ArchetypeGeneration`, and `ArchetypeComponentId` are all now opaque IDs and cannot be turned into a numeric value. Please file an issue if this does not work for your use case.
+
+`Archetype` and `Archetypes` are not constructible outside of `bevy_ecs` now. Use `World::archetypes` to get a read-only reference to either of these types.
 
 ### [Split Component Ticks](https://github.com/bevyengine/bevy/pull/6547)
 
@@ -307,7 +313,15 @@ struct MessageWriter<'w> {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-TODO
+Various low level APIs interacting with the change detection ticks no longer return `&UnsafeCell<ComponentTicks>`, instead returning `TickCells` which contains two separate `&UnsafeCell<Tick>`s instead.
+
+```rust
+// 0.9
+column.get_ticks(row).deref().changed
+
+// 0.10
+column.get_ticks(row).changed.deref()
+```
 
 ### [Immutable sparse sets for metadata storage](https://github.com/bevyengine/bevy/pull/4928)
 
@@ -332,16 +346,16 @@ Do I still need to do this? I really hope people were not relying on the public 
     <div class="migration-guide-area-tag">Diagnostics</div>
 </div>
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove later-->
 
-### [bevy_ecs: ReflectComponentFns without World](https://github.com/bevyengine/bevy/pull/7206)
+### [ReflectComponentFns without World](https://github.com/bevyengine/bevy/pull/7206)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-- Call `World::entity` before calling into the changed `ReflectComponent` methods, most likely user already has a `EntityRef` or `EntityMut` which was being queried redundantly.
+Call `World::entity` before calling into the changed `ReflectComponent` methods, most likely user already has a `EntityRef` or `EntityMut` which was being queried redundantly.
 
 ### [Allow iterating over with EntityRef over the entire World](https://github.com/bevyengine/bevy/pull/6843)
 
@@ -350,7 +364,7 @@ Do I still need to do this? I really hope people were not relying on the public 
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-<!-- TODO -->
+`World::iter_entities` now returns an iterator of `EntityRef` instead of `Entity`. To get the actual ID, use `EntityRef::id` from the returned `EntityRef`s.
 
 ### [Remove `BuildWorldChildren` impl from `WorldChildBuilder`](https://github.com/bevyengine/bevy/pull/6727)
 
@@ -358,8 +372,7 @@ Do I still need to do this? I really hope people were not relying on the public 
     <div class="migration-guide-area-tag">Hierarchy</div>
 </div>
 
-Hierarchy editing methods such as `with_children` and `push_children` have been removed from `WorldChildBuilder`.
-You can edit the hierarchy via `EntityMut` instead.
+Hierarchy editing methods such as `with_children` and `push_children` have been removed from `WorldChildBuilder`. You can edit the hierarchy via `EntityMut` instead.
 
 ### [Rename dynamic feature](https://github.com/bevyengine/bevy/pull/7340)
 
@@ -367,18 +380,17 @@ You can edit the hierarchy via `EntityMut` instead.
     <div class="migration-guide-area-tag">Meta</div>
 </div>
 
-- `dynamic` feature was renamed to `dynamic_linking`
+`dynamic` feature was renamed to `dynamic_linking`
 
-### [reflect: add `insert` and `remove` methods to `List`](https://github.com/bevyengine/bevy/pull/7063)
+### [Add `insert` and `remove` methods to `List`](https://github.com/bevyengine/bevy/pull/7063)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-- Manual implementors of `List` need to implement the new methods `insert` and `remove` and
-consider whether to use the new default implementation of `push` and `pop`.
+Manual implementors of `List` need to implement the new methods `insert` and `remove` and consider whether to use the new default implementation of `push` and `pop`.
 
-### [bevy_reflect: Remove `ReflectSerialize` and `ReflectDeserialize` registrations from most glam types](https://github.com/bevyengine/bevy/pull/6580)
+### [Remove `ReflectSerialize` and `ReflectDeserialize` registrations from most glam types](https://github.com/bevyengine/bevy/pull/6580)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Reflection</div>
@@ -390,11 +402,11 @@ This PR removes `ReflectSerialize` and `ReflectDeserialize` registrations from m
 This also means that some serialized glam types will need to be updated. For example, here is `Affine3A`:
 
 ```rust
-// BEFORE
+// 0.9
 (
   "glam::f32::affine3a::Affine3A": (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0),
 
-// AFTER
+// 0.10
   "glam::f32::affine3a::Affine3A": (
     matrix3: (
       x_axis: (
@@ -437,12 +449,12 @@ This also means that some serialized glam types will need to be updated. For exa
 </div>
 
 ```rust
+// 0.9
 let multi = Msaa { samples: 4 }
-// is now
-let multi = Msaa::Sample4
-
 multi.samples
-// is now
+
+// 0.10
+let multi = Msaa::Sample4
 multi.samples()
 ```
 
@@ -452,7 +464,7 @@ multi.samples()
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- Most usages of `resource_mut::<PipelineCache>` and `ResMut<PipelineCache>` can be changed to `resource::<PipelineCache>` and `Res<PipelineCache>` as long as they don’t use any methods requiring mutability - the only public method requiring it is `process_queue`.
+Most usages of `resource_mut::<PipelineCache>` and `ResMut<PipelineCache>` can be changed to `resource::<PipelineCache>` and `Res<PipelineCache>` as long as they don’t use any methods requiring mutability - the only public method requiring it is `process_queue`.
 
 ### [Reduce branching in TrackedRenderPass](https://github.com/bevyengine/bevy/pull/7053)
 
@@ -460,7 +472,21 @@ multi.samples()
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-TODO
+`TrackedRenderPass` now requires a `RenderDevice` to construct. To make this easier, use `RenderContext.begin_tracked_render_pass` instead.
+
+```rust
+// 0.9
+TrackedRenderPass::new(render_context.command_encoder.begin_render_pass(
+  &RenderPassDescriptor {
+    ...
+  },
+));
+
+// 0.10
+render_context.begin_tracked_render_pass(RenderPassDescriptor {
+  ...
+});
+```
 
 ### [Rename camera "priority" to "order"](https://github.com/bevyengine/bevy/pull/6908)
 
@@ -468,9 +494,27 @@ TODO
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-<!-- TODO -->
+```rust
+// 0.9
+Camera2dBundle {
+    camera: Camera {
+        priority: 1,
+        ..default()
+    },
+    ..default()
+}
 
-### [enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
+// 0.10
+Camera2dBundle {
+    camera: Camera {
+        order: 1,
+        ..default()
+    },
+    ..default()
+}
+```
+
+### [Enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -481,7 +525,7 @@ TODO
 - usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
 - `ComputedVisibility::INVISIBLE` and `SpatialBundle::VISIBLE_IDENTITY` have been renamed to `ComputedVisibility::HIDDEN` and `SpatialBundle::INHERITED_IDENTITY` respectively.
 
-### [run clear trackers on render world](https://github.com/bevyengine/bevy/pull/6878)
+### [Run clear trackers on render world](https://github.com/bevyengine/bevy/pull/6878)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -489,7 +533,7 @@ TODO
 
 The call to `clear_trackers` in `App` has been moved from the schedule to App::update for the main world and calls to `clear_trackers` have been added for sub_apps in the same function. This was due to needing stronger guarantees. If clear_trackers isn’t called on a world it can lead to memory leaks in `RemovedComponents`.
 
-### [get pixel size from wgpu](https://github.com/bevyengine/bevy/pull/6820)
+### [Get pixel size from wgpu](https://github.com/bevyengine/bevy/pull/6820)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -512,11 +556,9 @@ The call to `clear_trackers` in `App` has been moved from the schedule to App::u
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Remove `.unwrap()` from `add_node_edge` and `add_slot_edge`.
-For cases where the error was handled, use `try_add_node_edge` and `try_add_slot_edge` instead.
+Remove `.unwrap()` from `add_node_edge` and `add_slot_edge`. For cases where the error was handled, use `try_add_node_edge` and `try_add_slot_edge` instead.
 
-Remove `.unwrap()` from `input_node`.
-For cases where the option was handled, use `get_input_node` instead.
+Remove `.unwrap()` from `input_node`. For cases where the option was handled, use `get_input_node` instead.
 
 ### [Add AutoMax next to ScalingMode::AutoMin](https://github.com/bevyengine/bevy/pull/6496)
 
@@ -524,7 +566,7 @@ For cases where the option was handled, use `get_input_node` instead.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
+Rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
 
 ### [Change `From<Icosphere>` to `TryFrom<Icosphere>`](https://github.com/bevyengine/bevy/pull/6484)
 
@@ -532,7 +574,22 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-<!-- TODO -->
+```rust
+// 0.9
+shape::Icosphere {
+    radius: 0.5,
+    subdivisions: 5,
+}
+.into()
+
+// 0.10
+shape::Icosphere {
+    radius: 0.5,
+    subdivisions: 5,
+}
+.try_into()
+.unwrap()
+```
 
 ### [Directly extract joints into SkinnedMeshJoints](https://github.com/bevyengine/bevy/pull/6833)
 
@@ -550,7 +607,7 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-<!-- TODO -->
+No api changes are required, but it's possible that your gltf meshes look different
 
 ### [The `update_frame_count` system should be placed in CorePlugin](https://github.com/bevyengine/bevy/pull/6676)
 
@@ -560,7 +617,36 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Time</div>
 </div>
 
-<!-- TODO -->
+The `FrameCount`  resource was previously only updated when using the `bevy_render` feature. If you are not using this feature but still want the `FrameCount` it will now be updated correctly.
+
+### [Migrate engine to Schedule v3](https://github.com/bevyengine/bevy/pull/7267)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+- Calls to `.label(MyLabel)` should be replaced with `.in_set(MySet)`
+- Stages have been removed. Replace these with system sets, and then add command flushes using the `apply_system_buffers` exclusive system where needed.
+- The `CoreStage`, `StartupStage,`RenderStage`and`AssetStage`enums have been replaced with`CoreSet`,`StartupSet, `RenderSet` and `AssetSet`. The same scheduling guarantees have been preserved.
+  - Systems are no longer added to `CoreSet::Update` by default. Add systems manually if this behavior is needed, although you should consider adding your game logic systems to `CoreSchedule::FixedTimestep` instead for more reliable framerate-independent behavior.
+  - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
+  - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
+  - `add_system(my_system.in_set(CoreSet::PostUpdate)`
+- When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
+- Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
+- Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
+- For app-level control flow over which schedules get run when (such as for rollback networking), create your own schedule and insert it under the `CoreSchedule::Outer` label.
+- Fixed timesteps are now evaluated in a schedule, rather than controlled via run criteria. The `run_fixed_timestep` system runs this schedule between `CoreSet::First` and `CoreSet::PreUpdate` by default.
+- Command flush points introduced by `AssetStage` have been removed. If you were relying on these, add them back manually.
+- the `calculate_bounds` system, with the `CalculateBounds` label, is now in `CoreSet::Update`, rather than in `CoreSet::PostUpdate` before commands are applied. You may need to order your movement systems to occur before this system in order to avoid system order ambiguities in culling behavior.
+- the `RenderLabel` `AppLabel` was renamed to `RenderApp` for clarity
+- `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
+- Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` or `on_update` siblings.
+- `SystemLabel` derives should be replaced with `SystemSet`. You will also need to add the `Debug`, `PartialEq`, `Eq`, and `Hash` traits to satisfy the new trait bounds.
+- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a bool.
+- States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
+- Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
 
 ### [Pipelined Rendering](https://github.com/bevyengine/bevy/pull/6503)
 
@@ -569,6 +655,10 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Tasks</div>
 </div>
 
+__App `runner` and SubApp `extract` functions are now required to be Send__
+
+This was changed to enable pipelined rendering. If this breaks your use case please report it as these new bounds might be able to be relaxed.
+
 ### [Rename the `background_color` of 'ExtractedUiNode` to `color`](https://github.com/bevyengine/bevy/pull/7452)
 
 <div class="migration-guide-area-tags">
@@ -576,7 +666,7 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-- The `background_color` field of `ExtractedUiNode` is now named `color`.
+The `background_color` field of `ExtractedUiNode` is now named `color`.
 
 ### [Remove ImageMode](https://github.com/bevyengine/bevy/pull/6674)
 
@@ -585,15 +675,15 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-<!-- TODO -->
+`ImageNode` never worked, if you were using it please create an issue.
 
-### [Make spawn_dynamic return InstanceId](https://github.com/bevyengine/bevy/pull/6663)
+### [Make `spawn_dynamic` return InstanceId](https://github.com/bevyengine/bevy/pull/6663)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove it later-->
 
 ### [Parallelized transform propagation](https://github.com/bevyengine/bevy/pull/4775)
 
@@ -601,7 +691,7 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Transform</div>
 </div>
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove it later-->
 
 ### [Remove the `GlobalTransform::translation_mut` method](https://github.com/bevyengine/bevy/pull/7134)
 
@@ -610,14 +700,9 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Hierarchy</div>
 </div>
 
-`GlobalTransform::translation_mut` has been removed without alternative,
-if you were relying on this, update the `Transform` instead. If the given entity
-had children or parent, you may need to remove its parent to make its transform
-independent (in which case the new `Commands::set_parent_in_place` and
-`Commands::remove_parent_in_place` may be of interest)
+`GlobalTransform::translation_mut` has been removed without alternative, if you were relying on this, update the `Transform` instead. If the given entity had children or parent, you may need to remove its parent to make its transform independent (in which case the new `Commands::set_parent_in_place` and `Commands::remove_parent_in_place` may be of interest)
 
-Bevy may add in the future a way to toggle transform propagation on
-an entity basis.
+Bevy may add in the future a way to toggle transform propagation on an entity basis.
 
 ### [change the default `width` and `height` of `Size` to `Val::Auto`](https://github.com/bevyengine/bevy/pull/7475)
 
@@ -625,8 +710,7 @@ an entity basis.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-The default values for `Size` `width` and `height` have been changed from `Val::Undefined` to `Val::Auto`.
-It’s unlikely to cause any issues with existing code.
+The default values for `Size` `width` and `height` have been changed from `Val::Undefined` to `Val::Auto`. It’s unlikely to cause any issues with existing code.
 
 ### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
 
@@ -634,7 +718,7 @@ It’s unlikely to cause any issues with existing code.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-<!-- TODO -->
+`QueuedText` was never meant to be user facing. If you relied on it, please make an issue.
 
 ### [Remove VerticalAlign from TextAlignment](https://github.com/bevyengine/bevy/pull/6807)
 
@@ -644,13 +728,23 @@ It’s unlikely to cause any issues with existing code.
 
 The `alignment` field of `Text` now only affects the text’s internal alignment.
 
+__Change `TextAlignment` to TextAlignment` which is now an enum. Replace:__
+
+- `TextAlignment::TOP_LEFT`, `TextAlignment::CENTER_LEFT`, `TextAlignment::BOTTOM_LEFT` with `TextAlignment::Left`
+- `TextAlignment::TOP_CENTER`, `TextAlignment::CENTER_LEFT`, `TextAlignment::BOTTOM_CENTER` with `TextAlignment::Center`
+- `TextAlignment::TOP_RIGHT`, `TextAlignment::CENTER_RIGHT`, `TextAlignment::BOTTOM_RIGHT` with `TextAlignment::Right`
+
+__Changes for `Text2dBundle`__
+
+`Text2dBundle` has a new field ‘text_anchor’ that takes an `Anchor` component that controls its position relative to its transform.
+
 ### [Change default FocusPolicy to Pass](https://github.com/bevyengine/bevy/pull/7161)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-- `FocusPolicy` default has changed from `FocusPolicy::Block` to `FocusPolicy::Pass`
+`FocusPolicy` default has changed from `FocusPolicy::Block` to `FocusPolicy::Pass`
 
 ### [Remove `TextError::ExceedMaxTextAtlases(usize)` variant](https://github.com/bevyengine/bevy/pull/6796)
 
@@ -658,7 +752,7 @@ The `alignment` field of `Text` now only affects the text’s internal alignment
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-<!-- TODO -->
+`TextError::ExceedMaxTextAtlases(usize)` was never thrown so if you were matching on this variant you can simply remove it.
 
 ### [Flip UI image](https://github.com/bevyengine/bevy/pull/6292)
 
@@ -666,33 +760,43 @@ The `alignment` field of `Text` now only affects the text’s internal alignment
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-<!-- TODO -->
+```rust
+// 0.9
+commands.spawn(ImageBundle {
+    style: button_icon_style.clone(),
+    image: UiImage(icon),
+    ..default()
+});
 
-### [update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
+// 0.10
+commands.spawn(ImageBundle {
+    style: button_icon_style.clone(),
+    image: UiImage::new(icon),
+    ..default()
+});
+```
+
+### [Update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Windowing</div>
 </div>
 
-before:
-
 ```rust
-    app.new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
+// 0.9
+app.new()
+    .add_plugins(DefaultPlugins.set(WindowPlugin {
+        primary_window: Some(Window {
                 always_on_top: true,
                 ..default()
-            }),
-            ..default()
-        }));
-```
+        }),
+        ..default()
+    }));
 
-after:
-
-```rust
-    app.new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
+// 0.10
+app.new()
+    .add_plugins(DefaultPlugins.set(WindowPlugin {
+        primary_window: Some(Window {
                 window_level: bevy::window::WindowLevel::AlwaysOnTop,
                 ..default()
             }),
@@ -706,7 +810,7 @@ after:
     <div class="migration-guide-area-tag">Windowing</div>
 </div>
 
-<!-- TODO -->
+<!-- TODO I'm not sure this needs a guide, I assume most people would be using the ..default() anyway and the ones that aren't doing that will just have a clear compile error -->
 
 ### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
 
