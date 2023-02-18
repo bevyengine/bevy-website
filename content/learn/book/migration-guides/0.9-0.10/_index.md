@@ -26,197 +26,37 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
 `App::add_sub_app` has been removed in favor of `App::insert_sub_app`. Use `SubApp::new` and insert it via `App::add_sub_app`
 
+Old:
+
 ```rust
-// 0.9
 let mut sub_app = App::new()
 // Build subapp here
 app.add_sub_app(MySubAppLabel, sub_app);
+```
 
-// 0.10
+New:
+
+```rust
 let mut sub_app = App::new()
 // Build subapp here
 app.insert_sub_app(MySubAppLabel, SubApp::new(sub_app, extract_fn));
 ```
 
-### [Make HandleUntyped::id private](https://github.com/bevyengine/bevy/pull/7076)
+### [asset: make HandleUntyped::id private](https://github.com/bevyengine/bevy/pull/7076)
 
-Instead of directly accessing the ID of a `HandleUntyped` as `handle.id`, use the new getter `handle.id()`.
+- Instead of directly accessing the ID of a `HandleUntyped` as `handle.id`, use the new getter `handle.id()`.
 
 ### [Break `CorePlugin` into `TaskPoolPlugin`, `TypeRegistrationPlugin`, `FrameCountPlugin`.](https://github.com/bevyengine/bevy/pull/7083)
 
-`CorePlugin` broken into separate plugins.  If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
+- `CorePlugin` broken into separate plugins.  If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
 
-### [Remove broken `DoubleEndedIterator` impls on event iterators](https://github.com/bevyengine/bevy/pull/7469)
+### [Remove redundant table and sparse set component IDs from Archetype](https://github.com/bevyengine/bevy/pull/4927)
 
-`ManualEventIterator` and `ManualEventIteratorWithId` are no longer `DoubleEndedIterator`s.
+Do I still need to do this? I really hope people were not relying on the public facing APIs changed here.
 
-### [Replace `RemovedComponents<T>` backing with `Events<Entity>`](https://github.com/bevyengine/bevy/pull/5680)
+### [Immutable sparse sets for metadata storage](https://github.com/bevyengine/bevy/pull/4928)
 
-- Add a `mut` for `removed: RemovedComponents<T>` since we are now modifying an event reader internally.
-- Iterating over removed components now requires `&mut removed_components` or `removed_components.iter()` instead of `&removed_components`.
-
-### [Remove `ExclusiveSystemParam::apply`](https://github.com/bevyengine/bevy/pull/7489)
-
-<!-- TODO -->
-_Note for maintainers: this migration guide makes more sense if it’s placed above the one for #6919._
-
-The trait method `ExclusiveSystemParamState::apply` has been removed. If you have an exclusive system with buffers that must be applied, you should apply them within the body of the exclusive system.
-
-### [Add `UnsafeWorldCell` abstraction](https://github.com/bevyengine/bevy/pull/6404)
-
-<!-- TODO no migration required, will remove later -->
-
-### [Added `resource_id` and changed `init_resource` and `init_non_send_resource` to return `ComponentId`](https://github.com/bevyengine/bevy/pull/7284)
-
-- Changed `World::init_resource` to return the generated `ComponentId`.
-- Changed `World::init_non_send_resource` to return the generated `ComponentId`.
-
-### [Basic adaptive batching for parallel query iteration](https://github.com/bevyengine/bevy/pull/4777)
-
-The `batch_size` parameter for `Query(State)::par_for_each(_mut)` has been removed. These calls will automatically compute a batch size for you. Remove these parameters from all calls to these functions.
-
-```rust
-// 0.9
-fn parallel_system(query: Query<&MyComponent>) {
-   query.par_for_each(32, |comp| {
-        ...
-   });
-}
-
-// 0.10
-fn parallel_system(query: Query<&MyComponent>) {
-   query.par_iter().for_each(|comp| {
-        ...
-   });
-}
-```
-
-### [Support piping exclusive systems](https://github.com/bevyengine/bevy/pull/7023)
-
-Exclusive systems (systems that access `&mut World`) now support system piping, so the `ExclusiveSystemParamFunction` trait now has generics for the `In`put and `Out`put types.
-
-```rust
-// 0.9
-fn my_generic_system<T, Param>(system_function: T)
-where T: ExclusiveSystemParamFunction<Param>
-{ ... }
-
-// 0.10
-fn my_generic_system<T, In, Out, Param>(system_function: T)
-where T: ExclusiveSystemParamFunction<In, Out, Param>
-{ ... }
-```
-
-### [Document alignment requirements of `Ptr`, `PtrMut` and `OwningPtr`](https://github.com/bevyengine/bevy/pull/7151)
-
-Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` methods have been changed. All callers should re-audit for soundness.
-
-### [Panic on dropping NonSend in non-origin thread.](https://github.com/bevyengine/bevy/pull/6534)
-
-Normal resources and `NonSend` resources no longer share the same backing storage. If `R: Resource`, then `NonSend<R>` and `Res<R>` will return different instances from each other. If you are using both `Res<T>` and `NonSend<T>` (or their mutable variants), to fetch the same resources, it’s strongly advised to use `Res<T>`.
-
-### [Remove the `SystemParamState` trait and remove types like `ResState`](https://github.com/bevyengine/bevy/pull/6919)
-
-Note: this replaces the migration guide for #6865.
-This is relative to Bevy 0.9, not main.
-
-The traits `SystemParamState` and `SystemParamFetch` have been removed, and their functionality has been transferred to `SystemParam`.
-
-```rust
-// 0.9
-impl SystemParam for MyParam<'_, '_> {
-    type State = MyParamState;
-}
-unsafe impl SystemParamState for MyParamState {
-    fn init(world: &mut World, system_meta: &mut SystemMeta) -> Self { ... }
-}
-unsafe impl<'w, 's> SystemParamFetch<'w, 's> for MyParamState {
-    type Item = MyParam<'w, 's>;
-    fn get_param(&mut self, ...) -> Self::Item;
-}
-unsafe impl ReadOnlySystemParamFetch for MyParamState { }
-
-// 0.10
-unsafe impl SystemParam for MyParam<'_, '_> {
-    type State = MyParamState;
-    type Item<'w, 's> = MyParam<'w, 's>;
-    fn init_state(world: &mut World, system_meta: &mut SystemMeta) -> Self::State { ... }
-    fn get_param<'w, 's>(state: &mut Self::State, ...) -> Self::Item<'w, 's>;
-}
-unsafe impl ReadOnlySystemParam for MyParam<'_, '_> { }
-```
-
-The trait `ReadOnlySystemParamFetch` has been replaced with `ReadOnlySystemParam`.
-
-```rust
-// 0.9
-unsafe impl ReadOnlySystemParamFetch for MyParamState {}
-
-// 0.10
-unsafe impl ReadOnlySystemParam for MyParam<'_, '_> {}
-```
-
-### [Extend EntityLocation with TableId and TableRow](https://github.com/bevyengine/bevy/pull/6681)
-
-A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
-
-### [Round out the untyped api s](https://github.com/bevyengine/bevy/pull/7009)
-
-`MutUntyped::into_inner` now marks things as changed.
-
-### [Simplify trait hierarchy for `SystemParam`](https://github.com/bevyengine/bevy/pull/6865)
-
-_Merged with the guide for #6919._
-
-### [Newtype ArchetypeRow and TableRow](https://github.com/bevyengine/bevy/pull/4878)
-
-`Archetype` indices and `Table` rows have been newtyped as `ArchetypeRow` and `TableRow`.
-
-### [Borrow instead of consuming in `EventReader::clear`](https://github.com/bevyengine/bevy/pull/6851)
-
-`EventReader::clear` now takes a mutable reference instead of consuming the event reader. This means that `clear` now needs explicit mutable access to the reader variable, which previously could have been omitted in some cases:
-
-```rust
-// 0.9
-fn clear_events(reader: EventReader<SomeEvent>) {
-  reader.clear();
-}
-
-// 0.10
-fn clear_events(mut reader: EventReader<SomeEvent>) {
-  reader.clear();
-}
-```
-
-### [Make the `SystemParam` derive macro more flexible](https://github.com/bevyengine/bevy/pull/6694)
-
-The lifetime `'s` has been removed from `EventWriter`. Any code that explicitly specified the lifetimes for this type will need to be updated.
-
-```rust
-// 0.9
-#[derive(SystemParam)]
-struct MessageWriter<'w, 's> {
-    events: EventWriter<'w, 's, Message>,
-}
-
-// 0.10
-#[derive(SystemParam)]
-struct MessageWriter<'w> {
-    events: EventWriter<'w, Message>,
-}
-```
-
-### [Lock down access to Entities](https://github.com/bevyengine/bevy/pull/6740)
-
-`Entities`’s `Default` implementation has been removed. You can fetch a reference to a `World`’s `Entities` via `World::entities` and `World::entities_mut`.
-
-`Entities::alloc_at_without_replacement` and `AllocAtWithoutReplacement` has been made private due to difficulty in using it properly outside of `bevy_ecs`. If you still need use of this API, please file an issue.
-
-### [Document and lock down types in bevy_ecs::archetype](https://github.com/bevyengine/bevy/pull/6742)
-
-`ArchetypeId`, `ArchetypeGeneration`, and `ArchetypeComponentId` are all now opaque IDs and cannot be turned into a numeric value. Please file an issue if this does not work for your use case.
-
-`Archetype` and `Archetypes` are not constructible outside of `bevy_ecs` now. Use `World::archetypes` to get a read-only reference to either of these types.
+`Table::component_capacity()` has been removed as Tables do not support adding/removing columns after construction.
 
 ### [Split Component Ticks](https://github.com/bevyengine/bevy/pull/6547)
 
@@ -230,21 +70,230 @@ column.get_ticks(row).deref().changed
 column.get_ticks(row).changed.deref()
 ```
 
-### [Immutable sparse sets for metadata storage](https://github.com/bevyengine/bevy/pull/4928)
+### [Document and lock down types in bevy_ecs::archetype](https://github.com/bevyengine/bevy/pull/6742)
 
-`Table::component_capacity()` has been removed as Tables do not support adding/removing columns after construction.
+`ArchetypeId`, `ArchetypeGeneration`, and `ArchetypeComponentId` are all now opaque IDs and cannot be turned into a numeric value. Please file an issue if this does not work for your use case.
 
-### [Remove redundant table and sparse set component IDs from Archetype](https://github.com/bevyengine/bevy/pull/4927)
+`Archetype` and `Archetypes` are not constructible outside of `bevy_ecs` now. Use `World::archetypes` to get a read-only reference to either of these types.
 
-Do I still need to do this? I really hope people were not relying on the public facing APIs changed here.
+### [Lock down access to Entities](https://github.com/bevyengine/bevy/pull/6740)
+
+`Entities`’s `Default` implementation has been removed. You can fetch a reference to a `World`’s `Entities` via `World::entities` and `World::entities_mut`.
+
+`Entities::alloc_at_without_replacement` and `AllocAtWithoutReplacement` has been made private due to difficulty in using it properly outside of `bevy_ecs`. If you still need use of this API, please file an issue.
+
+### [Make the `SystemParam` derive macro more flexible](https://github.com/bevyengine/bevy/pull/6694)
+
+The lifetime `'s` has been removed from `EventWriter`. Any code that explicitly specified the lifetimes for this type will need to be updated.
+
+```rust
+// Before
+#[derive(SystemParam)]
+struct MessageWriter<'w, 's> {
+    events: EventWriter<'w, 's, Message>,
+}
+
+// After
+#[derive(SystemParam)]
+struct MessageWriter<'w> {
+    events: EventWriter<'w, Message>,
+}
+```
+
+### [Borrow instead of consuming in `EventReader::clear`](https://github.com/bevyengine/bevy/pull/6851)
+
+`EventReader::clear` now takes a mutable reference instead of consuming the event reader. This means that `clear` now needs explicit mutable access to the reader variable, which previously could have been omitted in some cases:
+
+```rust
+// Old (0.9)
+fn clear_events(reader: EventReader<SomeEvent>) {
+  reader.clear();
+}
+
+// New (0.10)
+fn clear_events(mut reader: EventReader<SomeEvent>) {
+  reader.clear();
+}
+```
+
+### [Newtype ArchetypeRow and TableRow](https://github.com/bevyengine/bevy/pull/4878)
+
+<!-- TODO -->
+
+### [Simplify trait hierarchy for `SystemParam`](https://github.com/bevyengine/bevy/pull/6865)
+
+_Merged with the guide for #6919._
+
+### [Round out the untyped api s](https://github.com/bevyengine/bevy/pull/7009)
+
+- `MutUntyped::into_inner` now marks things as changed.
+
+### [Extend EntityLocation with TableId and TableRow](https://github.com/bevyengine/bevy/pull/6681)
+
+A `World` can only hold a maximum of 232 - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
+
+### [Remove the `SystemParamState` trait and remove types like `ResState`](https://github.com/bevyengine/bevy/pull/6919)
+
+Note: this replaces the migration guide for #6865. This is relative to Bevy 0.9, not main.
+
+The traits `SystemParamState` and `SystemParamFetch` have been removed, and their functionality has been transferred to `SystemParam`.
+
+```rust
+// Before (0.9)
+impl SystemParam for MyParam<'_, '_> {
+    type State = MyParamState;
+}
+unsafe impl SystemParamState for MyParamState {
+    fn init(world: &mut World, system_meta: &mut SystemMeta) -> Self { ... }
+}
+unsafe impl<'w, 's> SystemParamFetch<'w, 's> for MyParamState {
+    type Item = MyParam<'w, 's>;
+    fn get_param(&mut self, ...) -> Self::Item;
+}
+unsafe impl ReadOnlySystemParamFetch for MyParamState { }
+
+// After (0.10)
+unsafe impl SystemParam for MyParam<'_, '_> {
+    type State = MyParamState;
+    type Item<'w, 's> = MyParam<'w, 's>;
+    fn init_state(world: &mut World, system_meta: &mut SystemMeta) -> Self::State { ... }
+    fn get_param<'w, 's>(state: &mut Self::State, ...) -> Self::Item<'w, 's>;
+}
+unsafe impl ReadOnlySystemParam for MyParam<'_, '_> { }
+```
+
+The trait `ReadOnlySystemParamFetch` has been replaced with `ReadOnlySystemParam`.
+
+```rust
+// Before
+unsafe impl ReadOnlySystemParamFetch for MyParamState {}
+
+// After
+unsafe impl ReadOnlySystemParam for MyParam<'_, '_> {}
+```
+
+### [Panic on dropping NonSend in non-origin thread.](https://github.com/bevyengine/bevy/pull/6534)
+
+Normal resources and `NonSend` resources no longer share the same backing storage. If `R: Resource`, then `NonSend<R>` and `Res<R>` will return different instances from each other. If you are using both `Res<T>` and `NonSend<T>` (or their mutable variants), to fetch the same resources, it’s strongly advised to use `Res<T>`.
+
+### [Document alignment requirements of `Ptr`, `PtrMut` and `OwningPtr`](https://github.com/bevyengine/bevy/pull/7151)
+
+- Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` methods have been changed. All callers should re-audit for soundness.
+
+### [Support piping exclusive systems](https://github.com/bevyengine/bevy/pull/7023)
+
+_Merged with the guide for #7675_.
+
+### [Basic adaptive batching for parallel query iteration](https://github.com/bevyengine/bevy/pull/4777)
+
+The `batch_size` parameter for `Query(State)::par_for_each(_mut)` has been removed. These calls will automatically compute a batch size for you. Remove these parameters from all calls to these functions.
+
+Before:
+
+```rust
+fn parallel_system(query: Query<&MyComponent>) {
+   query.par_for_each(32, |comp| {
+        ...
+   });
+}
+```
+
+After:
+
+```rust
+fn parallel_system(query: Query<&MyComponent>) {
+   query.par_iter().for_each(|comp| {
+        ...
+   });
+}
+```
+
+### [Added `resource_id` and changed `init_resource` and `init_non_send_resource` to return `ComponentId`](https://github.com/bevyengine/bevy/pull/7284)
+
+<!-- TODO -->
+
+### [add `UnsafeWorldCell` abstraction](https://github.com/bevyengine/bevy/pull/6404)
+
+<!-- TODO -->
+
+### [Remove `ExclusiveSystemParam::apply`](https://github.com/bevyengine/bevy/pull/7489)
+
+_Note for maintainers: this migration guide makes more sense if it’s placed above the one for #6919._
+
+The trait method `ExclusiveSystemParamState::apply` has been removed. If you have an exclusive system with buffers that must be applied, you should apply them within the body of the exclusive system.
+
+### [Replace `RemovedComponents<T>` backing with `Events<Entity>`](https://github.com/bevyengine/bevy/pull/5680)
+
+- Add a `mut` for `removed: RemovedComponents<T>` since we are now modifying an event reader internally.
+- Iterating over removed components now requires `&mut removed_components` or `removed_components.iter()` instead of `&removed_components`.
+
+### [Remove broken `DoubleEndedIterator` impls on event iterators](https://github.com/bevyengine/bevy/pull/7469)
+
+`ManualEventIterator` and `ManualEventIteratorWithId` are no longer `DoubleEndedIterator`s.
+
+### [Rename `Tick::is_older_than` to `Tick::is_newer_than`](https://github.com/bevyengine/bevy/pull/7561)
+
+- Replace usages of `Tick::is_older_than` with `Tick::is_newer_than`.
+
+### [Rename `UnsafeWorldCellEntityRef` to `UnsafeEntityCell`](https://github.com/bevyengine/bevy/pull/7568)
+
+_Note for maintainers:_ This PR has no breaking changes relative to bevy 0.9. Instead of this PR having its own migration guide, we should just edit the changelog for #6404.
+
+The type `UnsafeWorldCellEntityRef` has been renamed to `UnsafeEntityCell`.
+
+### [Cleanup system sets called labels](https://github.com/bevyengine/bevy/pull/7678)
+
+`PrepareAssetLabel` is now called `PrepareAssetSet`
+
+### [Simplify generics for the `SystemParamFunction` trait](https://github.com/bevyengine/bevy/pull/7675)
+
+_The guide for #7023 has been merged into this one._
+
+For the `SystemParamFunction` trait, the type parameters `In`, `Out`, and `Param` have been turned into associated types.
+
+```rust
+// Before
+fn my_generic_system<T, In, Out, Param, Marker>(system_function: T)
+where
+    T: SystemParamFunction<In, Out, Param, Marker>,
+    T: Param: SystemParam,
+{ ... }
+
+// After
+fn my_generic_system<T, Marker>(system_function: T)
+where
+    T: SystemParamFunction<Marker>,
+{ ... }
+```
+
+For the `ExclusiveSystemParamFunction` trait, the type parameter `Param` has been turned into an associated type. Also, `In` and `Out` associated types have been added, since exclusive systems now support system piping.
+
+```rust
+// Before
+fn my_exclusive_system<T, Param, Marker>(system_function: T)
+where
+    T: ExclusiveSystemParamFunction<Param, Marker>,
+    T: Param: ExclusiveSystemParam,
+{ ... }
+
+// After
+fn my_exclusive_system<T, Marker>(system_function: T)
+where
+    T: ExclusiveSystemParamFunction<Marker>,
+{ ... }
+```
+
+### [Cleanup ScheduleBuildSettings](https://github.com/bevyengine/bevy/pull/7721)
+
+<!-- TODO -->
 
 ### [Move system_commands spans into apply_buffers](https://github.com/bevyengine/bevy/pull/6900)
 
-<!-- TODO no migration required, will remove later-->
+<!-- TODO -->
 
-### [ReflectComponentFns without World](https://github.com/bevyengine/bevy/pull/7206)
+### [bevy_ecs: ReflectComponentFns without World](https://github.com/bevyengine/bevy/pull/7206)
 
-Call `World::entity` before calling into the changed `ReflectComponent` methods, most likely user already has a `EntityRef` or `EntityMut` which was being queried redundantly.
+- Call `World::entity` before calling into the changed `ReflectComponent` methods, most likely user already has a `EntityRef` or `EntityMut` which was being queried redundantly.
 
 ### [Allow iterating over with EntityRef over the entire World](https://github.com/bevyengine/bevy/pull/6843)
 
@@ -256,24 +305,77 @@ Hierarchy editing methods such as `with_children` and `push_children` have been 
 
 ### [Rename dynamic feature](https://github.com/bevyengine/bevy/pull/7340)
 
-`dynamic` feature was renamed to `dynamic_linking`
+- `dynamic` feature was renamed to `dynamic_linking`
 
-### [Add `insert` and `remove` methods to `List`](https://github.com/bevyengine/bevy/pull/7063)
+### [reflect: add `insert` and `remove` methods to `List`](https://github.com/bevyengine/bevy/pull/7063)
 
-Manual implementors of `List` need to implement the new methods `insert` and `remove` and consider whether to use the new default implementation of `push` and `pop`.
+- Manual implementors of `List` need to implement the new methods `insert` and `remove` and  consider whether to use the new default implementation of `push` and `pop`.
 
-### [Remove `ReflectSerialize` and `ReflectDeserialize` registrations from most glam types](https://github.com/bevyengine/bevy/pull/6580)
+### [bevy_reflect: Decouple `List` and `Array` traits](https://github.com/bevyengine/bevy/pull/7467)
+
+My guess for why we originally made `List` a subtrait of `Array` is that they share a lot of common operations. We could potentially move these overlapping methods to a `Sequence` (name taken from #7059) trait and make that a supertrait of both. This would allow functions to contain logic that simply operates on a sequence rather than “list vs array”.
+
+However, this means that we’d need to add methods for converting to a `dyn Sequence`. It also might be confusing since we wouldn’t add a `ReflectRef::Sequence` or anything like that. Is such a trait worth adding (either in this PR or a followup one)?
+
+The `List` trait is no longer dependent on `Array`. Implementors of `List` can remove the `Array` impl and move its methods into the `List` impl (with only a couple tweaks).
+
+```rust
+// BEFORE
+impl Array for Foo {
+  fn get(&self, index: usize) -> Option<&dyn Reflect> {/* ... */}
+  fn get_mut(&mut self, index: usize) -> Option<&mut dyn Reflect> {/* ... */}
+  fn len(&self) -> usize {/* ... */}
+  fn is_empty(&self) -> bool {/* ... */}
+  fn iter(&self) -> ArrayIter {/* ... */}
+  fn drain(self: Box<Self>) -> Vec<Box<dyn Reflect>> {/* ... */}
+  fn clone_dynamic(&self) -> DynamicArray {/* ... */}
+}
+
+impl List for Foo {
+  fn insert(&mut self, index: usize, element: Box<dyn Reflect>) {/* ... */}
+  fn remove(&mut self, index: usize) -> Box<dyn Reflect> {/* ... */}
+  fn push(&mut self, value: Box<dyn Reflect>) {/* ... */}
+  fn pop(&mut self) -> Option<Box<dyn Reflect>> {/* ... */}
+  fn clone_dynamic(&self) -> DynamicList {/* ... */}
+}
+
+// AFTER
+impl List for Foo {
+  fn get(&self, index: usize) -> Option<&dyn Reflect> {/* ... */}
+  fn get_mut(&mut self, index: usize) -> Option<&mut dyn Reflect> {/* ... */}
+  fn insert(&mut self, index: usize, element: Box<dyn Reflect>) {/* ... */}
+  fn remove(&mut self, index: usize) -> Box<dyn Reflect> {/* ... */}
+  fn push(&mut self, value: Box<dyn Reflect>) {/* ... */}
+  fn pop(&mut self) -> Option<Box<dyn Reflect>> {/* ... */}
+  fn len(&self) -> usize {/* ... */}
+  fn is_empty(&self) -> bool {/* ... */}
+  fn iter(&self) -> ListIter {/* ... */}
+  fn drain(self: Box<Self>) -> Vec<Box<dyn Reflect>> {/* ... */}
+  fn clone_dynamic(&self) -> DynamicList {/* ... */}
+}
+```
+
+Some other small tweaks that will need to be made include:
+
+- Use `ListIter` for `List::iter` instead of `ArrayIter` (the return type from `Array::iter`)
+- Replace `array_hash` with `list_hash` in `Reflect::reflect_hash` for implementors of `List`
+
+### [implement `TypeUuid` for primitives and fix multiple-parameter generics having the same `TypeUuid`](https://github.com/bevyengine/bevy/pull/6633)
+
+<!-- TODO -->
+
+### [bevy_reflect: Remove `ReflectSerialize` and `ReflectDeserialize` registrations from most glam types](https://github.com/bevyengine/bevy/pull/6580)
 
 This PR removes `ReflectSerialize` and `ReflectDeserialize` registrations from most glam types. This means any code relying on either of those type data existing for those glam types will need to not do that.
 
 This also means that some serialized glam types will need to be updated. For example, here is `Affine3A`:
 
 ```rust
-// 0.9
+// BEFORE
 (
   "glam::f32::affine3a::Affine3A": (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0),
 
-// 0.10
+// AFTER
   "glam::f32::affine3a::Affine3A": (
     matrix3: (
       x_axis: (
@@ -301,25 +403,43 @@ This also means that some serialized glam types will need to be updated. For exa
 )
 ```
 
-### [Support recording multiple CommandBuffers in RenderContext](https://github.com/bevyengine/bevy/pull/7248)
+### [Add AutoMax next to ScalingMode::AutoMin](https://github.com/bevyengine/bevy/pull/6496)
 
-`RenderContext`’s fields are now private. Use the accessors on `RenderContext` instead, and construct it with `RenderContext::new`.
+just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
 
-### [Changed Msaa to Enum](https://github.com/bevyengine/bevy/pull/7292)
+### [Change `From<Icosphere>` to `TryFrom<Icosphere>`](https://github.com/bevyengine/bevy/pull/6484)
 
-```rust
-// 0.9
-let multi = Msaa { samples: 4 }
-multi.samples
+<!-- TODO -->
 
-// 0.10
-let multi = Msaa::Sample4
-multi.samples()
-```
+### [Add try_* to add_slot_edge, add_node_edge](https://github.com/bevyengine/bevy/pull/6720)
 
-### [Make PipelineCache internally mutable.](https://github.com/bevyengine/bevy/pull/7205)
+Remove `.unwrap()` from `add_node_edge` and `add_slot_edge`. For cases where the error was handled, use `try_add_node_edge` and `try_add_slot_edge` instead.
 
-Most usages of `resource_mut::<PipelineCache>` and `ResMut<PipelineCache>` can be changed to `resource::<PipelineCache>` and `Res<PipelineCache>` as long as they don’t use any methods requiring mutability - the only public method requiring it is `process_queue`.
+Remove `.unwrap()` from `input_node`. For cases where the option was handled, use `get_input_node` instead.
+
+### [Shader defs can now have a value](https://github.com/bevyengine/bevy/pull/5900)
+
+- replace `shader_defs.push(String::from("NAME"));` by `shader_defs.push("NAME".into());`
+- if you used shader def `NO_STORAGE_BUFFERS_SUPPORT`, check how `AVAILABLE_STORAGE_BUFFER_BINDINGS` is now used in Bevy default shaders
+
+### [get pixel size from wgpu](https://github.com/bevyengine/bevy/pull/6820)
+
+`PixelInfo` has been removed. `PixelInfo::components` is equivalent to `texture_format.describe().components`. `PixelInfo::type_size` can be gotten from `texture_format.describe().block_size/ texture_format.describe().components`. But note this can yield incorrect results for some texture types like Rg11b10Float.
+
+### [run clear trackers on render world](https://github.com/bevyengine/bevy/pull/6878)
+
+The call to `clear_trackers` in `App` has been moved from the schedule to App::update for the main world and calls to `clear_trackers` have been added for sub_apps in the same function. This was due to needing stronger guarantees. If clear_trackers isn’t called on a world it can lead to memory leaks in `RemovedComponents`. If you were ordering systems with clear_trackers this is no longer possible.
+
+### [Rename camera "priority" to "order"](https://github.com/bevyengine/bevy/pull/6908)
+
+<!-- TODO -->
+
+### [enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
+
+- evaluation of the `visibility.is_visible` field should now check for `visibility == Visibility::Inherited`.
+- setting the `visibility.is_visible` field should now directly set the value: `*visibility = Visibility::Inherited`.
+- usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
+- `ComputedVisibility::INVISIBLE` and `SpatialBundle::VISIBLE_IDENTITY` have been renamed to `ComputedVisibility::HIDDEN` and `SpatialBundle::INHERITED_IDENTITY` respectively.
 
 ### [Reduce branching in TrackedRenderPass](https://github.com/bevyengine/bevy/pull/7053)
 
@@ -339,76 +459,55 @@ render_context.begin_tracked_render_pass(RenderPassDescriptor {
 });
 ```
 
-### [Rename camera "priority" to "order"](https://github.com/bevyengine/bevy/pull/6908)
+### [Make PipelineCache internally mutable.](https://github.com/bevyengine/bevy/pull/7205)
+
+- Most usages of `resource_mut::<PipelineCache>` and `ResMut<PipelineCache>` can be changed to `resource::<PipelineCache>` and `Res<PipelineCache>` as long as they don’t use any methods requiring mutability - the only public method requiring it is `process_queue`.
+
+### [Changed Msaa to Enum](https://github.com/bevyengine/bevy/pull/7292)
 
 ```rust
-// 0.9
-Camera2dBundle {
-    camera: Camera {
-        priority: 1,
-        ..default()
-    },
-    ..default()
-}
+let multi = Msaa { samples: 4 }
+// is now
+let multi = Msaa::Sample4
 
-// 0.10
-Camera2dBundle {
-    camera: Camera {
-        order: 1,
-        ..default()
-    },
-    ..default()
-}
+multi.samples
+// is now
+multi.samples()
 ```
 
-### [Enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
+### [Support recording multiple CommandBuffers in RenderContext](https://github.com/bevyengine/bevy/pull/7248)
 
-- evaluation of the `visibility.is_visible` field should now check for `visibility == Visibility::Inherited`.
-- setting the `visibility.is_visible` field should now directly set the value: `*visibility = Visibility::Inherited`.
-- usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
-- `ComputedVisibility::INVISIBLE` and `SpatialBundle::VISIBLE_IDENTITY` have been renamed to `ComputedVisibility::HIDDEN` and `SpatialBundle::INHERITED_IDENTITY` respectively.
+`RenderContext`’s fields are now private. Use the accessors on `RenderContext` instead, and construct it with `RenderContext::new`.
 
-### [Run clear trackers on render world](https://github.com/bevyengine/bevy/pull/6878)
+### [Improve `OrthographicCamera` consistency and usability](https://github.com/bevyengine/bevy/pull/6201)
 
-The call to `clear_trackers` in `App` has been moved from the schedule to App::update for the main world and calls to `clear_trackers` have been added for sub_apps in the same function. This was due to needing stronger guarantees. If clear_trackers isn’t called on a world it can lead to memory leaks in `RemovedComponents`.
+- Change `window_origin` to `viewport_origin`; replace `WindowOrigin::Center` with `Vec2::new(0.5, 0.5)` and `WindowOrigin::BottomLeft` with `Vec2::new(0.0, 0.0)`
+- For shadow projections and such, replace `left`, `right`, `bottom`, and `top` with `area: Rect::new(left, bottom, right, top)`
+- For camera projections, remove l/r/b/t values from `OrthographicProjection` instantiations, as they no longer have any effect in any `ScalingMode`
+- Change `ScalingMode::None` to `ScalingMode::Fixed`
+  - Replace manual changes of l/r/b/t with:
+    - Arguments in `ScalingMode::Fixed` to specify size
+    - `viewport_origin` to specify offset
 
-### [Get pixel size from wgpu](https://github.com/bevyengine/bevy/pull/6820)
+- Change `ScalingMode::WindowSize` to `ScalingMode::WindowSize(1.0)`
 
-`PixelInfo` has been removed. `PixelInfo::components` is equivalent to `texture_format.describe().components`. `PixelInfo::type_size` can be gotten from `texture_format.describe().block_size/ texture_format.describe().components`. But note this can yield incorrect results for some texture types like Rg11b10Float.
+### [Changed &mut PipelineCache to &PipelineCache](https://github.com/bevyengine/bevy/pull/7598)
 
-### [Shader defs can now have a value](https://github.com/bevyengine/bevy/pull/5900)
+- `SpecializedComputePipelines::specialize` now takes a `&PipelineCache` instead of a `&mut PipelineCache`
 
-- replace `shader_defs.push(String::from("NAME"));` by `shader_defs.push("NAME".into());`
-- if you used shader def `NO_STORAGE_BUFFERS_SUPPORT`, check how `AVAILABLE_STORAGE_BUFFER_BINDINGS` is now used in Bevy default shaders
+### [Introduce detailed_trace macro, use in TrackedRenderPass](https://github.com/bevyengine/bevy/pull/7639)
 
-### [Add try_* to add_slot_edge, add_node_edge](https://github.com/bevyengine/bevy/pull/6720)
+- Some detailed bevy trace events now require the use of the cargo feature `detailed_trace` in addition to enabling `TRACE` level logging to view. Should you wish to see these logs, please compile your code with the bevy feature `detailed_trace`. Currently, the only logs that are affected are the renderer logs pertaining to `TrackedRenderPass` functions
 
-Remove `.unwrap()` from `add_node_edge` and `add_slot_edge`. For cases where the error was handled, use `try_add_node_edge` and `try_add_slot_edge` instead.
+### [added subdivisions to shape::Plane](https://github.com/bevyengine/bevy/pull/7546)
 
-Remove `.unwrap()` from `input_node`. For cases where the option was handled, use `get_input_node` instead.
+All the examples needed to be updated to initalize the subdivisions field. Also there were two tests in tests/window that need to be updated.
 
-### [Add AutoMax next to ScalingMode::AutoMin](https://github.com/bevyengine/bevy/pull/6496)
+A user would have to update all their uses of shape::Plane to initalize the subdivisions field.
 
-Rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
+### [Change standard material defaults and update docs](https://github.com/bevyengine/bevy/pull/7664)
 
-### [Change `From<Icosphere>` to `TryFrom<Icosphere>`](https://github.com/bevyengine/bevy/pull/6484)
-
-```rust
-// 0.9
-shape::Icosphere {
-    radius: 0.5,
-    subdivisions: 5,
-}
-.into()
-
-// 0.10
-shape::Icosphere {
-    radius: 0.5,
-    subdivisions: 5,
-}
-.try_into()
-.unwrap()
-```
+`StandardMaterial`’s default have now changed to be a fully dielectric material with medium roughness. If you want to use the old defaults, you can set  `perceptual_roughness = 0.089` and `metallic = 0.01` (though metallic should generally only be set to 0.0 or 1.0).
 
 ### [Directly extract joints into SkinnedMeshJoints](https://github.com/bevyengine/bevy/pull/6833)
 
@@ -416,11 +515,11 @@ shape::Icosphere {
 
 ### [Intepret glTF colors as linear instead of sRGB](https://github.com/bevyengine/bevy/pull/6828)
 
-No api changes are required, but it's possible that your gltf meshes look different
+<!-- TODO -->
 
 ### [The `update_frame_count` system should be placed in CorePlugin](https://github.com/bevyengine/bevy/pull/6676)
 
-The `FrameCount`  resource was previously only updated when using the `bevy_render` feature. If you are not using this feature but still want the `FrameCount` it will now be updated correctly.
+<!-- TODO -->
 
 ### [Migrate engine to Schedule v3](https://github.com/bevyengine/bevy/pull/7267)
 
@@ -431,6 +530,7 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
   - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
   - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
   - `add_system(my_system.in_set(CoreSet::PostUpdate)`
+
 - When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 - Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
 - Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
@@ -452,21 +552,21 @@ __App `runner` and SubApp `extract` functions are now required to be Send__
 
 This was changed to enable pipelined rendering. If this breaks your use case please report it as these new bounds might be able to be relaxed.
 
-### [Rename the `background_color` of 'ExtractedUiNode` to `color`](https://github.com/bevyengine/bevy/pull/7452)
-
-The `background_color` field of `ExtractedUiNode` is now named `color`.
-
 ### [Remove ImageMode](https://github.com/bevyengine/bevy/pull/6674)
 
-`ImageNode` never worked, if you were using it please create an issue.
+<!-- TODO -->
 
-### [Make `spawn_dynamic` return InstanceId](https://github.com/bevyengine/bevy/pull/6663)
+### [Rename the `background_color` of 'ExtractedUiNode` to `color`](https://github.com/bevyengine/bevy/pull/7452)
 
-<!-- TODO no migration required, will remove it later-->
+- The `background_color` field of `ExtractedUiNode` is now named `color`.
+
+### [Make spawn_dynamic return InstanceId](https://github.com/bevyengine/bevy/pull/6663)
+
+<!-- TODO -->
 
 ### [Parallelized transform propagation](https://github.com/bevyengine/bevy/pull/4775)
 
-<!-- TODO no migration required, will remove it later-->
+<!-- TODO -->
 
 ### [Remove the `GlobalTransform::translation_mut` method](https://github.com/bevyengine/bevy/pull/7134)
 
@@ -474,13 +574,17 @@ The `background_color` field of `ExtractedUiNode` is now named `color`.
 
 Bevy may add in the future a way to toggle transform propagation on an entity basis.
 
-### [change the default `width` and `height` of `Size` to `Val::Auto`](https://github.com/bevyengine/bevy/pull/7475)
+### [Flip UI image](https://github.com/bevyengine/bevy/pull/6292)
 
-The default values for `Size` `width` and `height` have been changed from `Val::Undefined` to `Val::Auto`. It’s unlikely to cause any issues with existing code.
+<!-- TODO -->
 
-### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
+### [Remove `TextError::ExceedMaxTextAtlases(usize)` variant](https://github.com/bevyengine/bevy/pull/6796)
 
-`QueuedText` was never meant to be user facing. If you relied on it, please make an issue.
+<!-- TODO -->
+
+### [Change default FocusPolicy to Pass](https://github.com/bevyengine/bevy/pull/7161)
+
+- `FocusPolicy` default has changed from `FocusPolicy::Block` to `FocusPolicy::Pass`
 
 ### [Remove VerticalAlign from TextAlignment](https://github.com/bevyengine/bevy/pull/6807)
 
@@ -496,64 +600,26 @@ __Changes for `Text2dBundle`__
 
 `Text2dBundle` has a new field ‘text_anchor’ that takes an `Anchor` component that controls its position relative to its transform.
 
-### [Change default FocusPolicy to Pass](https://github.com/bevyengine/bevy/pull/7161)
+### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
 
-`FocusPolicy` default has changed from `FocusPolicy::Block` to `FocusPolicy::Pass`
+<!-- TODO -->
 
-### [Remove `TextError::ExceedMaxTextAtlases(usize)` variant](https://github.com/bevyengine/bevy/pull/6796)
+### [change the default `width` and `height` of `Size` to `Val::Auto`](https://github.com/bevyengine/bevy/pull/7475)
 
-`TextError::ExceedMaxTextAtlases(usize)` was never thrown so if you were matching on this variant you can simply remove it.
+The default values for `Size` `width` and `height` have been changed from `Val::Undefined` to `Val::Auto`. It’s unlikely to cause any issues with existing code.
 
-### [Flip UI image](https://github.com/bevyengine/bevy/pull/6292)
+### [Fix the `Size` helper functions using the wrong default value and improve the UI examples](https://github.com/bevyengine/bevy/pull/7626)
 
-```rust
-// 0.9
-commands.spawn(ImageBundle {
-    style: button_icon_style.clone(),
-    image: UiImage(icon),
-    ..default()
-});
+The `Size::width` constructor function now sets the `height` to `Val::Auto` instead of `Val::Undefined`. The `Size::height` constructor function now sets the `width` to `Val::Auto` instead of `Val::Undefined`.
 
-// 0.10
-commands.spawn(ImageBundle {
-    style: button_icon_style.clone(),
-    image: UiImage::new(icon),
-    ..default()
-});
-```
+### [The `size` field of `CalculatedSize` should not be a `Size`](https://github.com/bevyengine/bevy/pull/7641)
 
-### [Update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
-
-```rust
-// 0.9
-app.new()
-    .add_plugins(DefaultPlugins.set(WindowPlugin {
-        primary_window: Some(Window {
-                always_on_top: true,
-                ..default()
-        }),
-        ..default()
-    }));
-
-// 0.10
-app.new()
-    .add_plugins(DefaultPlugins.set(WindowPlugin {
-        primary_window: Some(Window {
-                window_level: bevy::window::WindowLevel::AlwaysOnTop,
-                ..default()
-            }),
-            ..default()
-        }));
-```
-
-### [Allow not preventing default event behaviors on wasm](https://github.com/bevyengine/bevy/pull/7304)
-
-<!-- TODO I'm not sure this needs a guide, I assume most people would be using the ..default() anyway and the ones that aren't doing that will just have a clear compile error -->
+- The size field of `CalculatedSize` has been changed to a `Vec2`.
 
 ### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
 
 - Replace `WindowDescriptor` with `Window`.
-- Change `width` and `height` fields in a `WindowResolution`, either by doing
+  - Change `width` and `height` fields in a `WindowResolution`, either by doing
 
 ```rust
 WindowResolution::new(width, height) // Explicitly
@@ -566,6 +632,38 @@ WindowResolution::new(width, height) // Explicitly
 ```rust
 let window = commands.spawn(Window { ... }).id(); // open window
 commands.entity(window).despawn(); // close window
+```
+
+### [Allow not preventing default event behaviors on wasm](https://github.com/bevyengine/bevy/pull/7304)
+
+<!-- TODO -->
+
+### [update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
+
+before:
+
+```rust
+    app.new()
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                always_on_top: true,
+                ..default()
+            }),
+            ..default()
+        }));
+```
+
+after:
+
+```rust
+    app.new()
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                window_level: bevy::window::WindowLevel::AlwaysOnTop,
+                ..default()
+            }),
+            ..default()
+        }));
 ```
 
 </div>
