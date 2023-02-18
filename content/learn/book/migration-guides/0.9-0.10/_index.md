@@ -118,7 +118,7 @@ fn clear_events(mut reader: EventReader<SomeEvent>) {
 
 ### [Newtype ArchetypeRow and TableRow](https://github.com/bevyengine/bevy/pull/4878)
 
-<!-- TODO -->
+`Archetype` indices and `Table` rows have been newtyped as `ArchetypeRow` and `TableRow`.
 
 ### [Simplify trait hierarchy for `SystemParam`](https://github.com/bevyengine/bevy/pull/6865)
 
@@ -130,7 +130,7 @@ _Merged with the guide for #6919._
 
 ### [Extend EntityLocation with TableId and TableRow](https://github.com/bevyengine/bevy/pull/6681)
 
-A `World` can only hold a maximum of 232 - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
+A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
 
 ### [Remove the `SystemParamState` trait and remove types like `ResState`](https://github.com/bevyengine/bevy/pull/6919)
 
@@ -210,11 +210,12 @@ fn parallel_system(query: Query<&MyComponent>) {
 
 ### [Added `resource_id` and changed `init_resource` and `init_non_send_resource` to return `ComponentId`](https://github.com/bevyengine/bevy/pull/7284)
 
-<!-- TODO -->
+- Changed `World::init_resource` to return the generated `ComponentId`.
+- Changed `World::init_non_send_resource` to return the generated `ComponentId`.
 
 ### [add `UnsafeWorldCell` abstraction](https://github.com/bevyengine/bevy/pull/6404)
 
-<!-- TODO -->
+<!-- TODO  no migration required, will remove later -->
 
 ### [Remove `ExclusiveSystemParam::apply`](https://github.com/bevyengine/bevy/pull/7489)
 
@@ -289,7 +290,7 @@ where
 
 ### [Move system_commands spans into apply_buffers](https://github.com/bevyengine/bevy/pull/6900)
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove later -->
 
 ### [bevy_ecs: ReflectComponentFns without World](https://github.com/bevyengine/bevy/pull/7206)
 
@@ -515,11 +516,11 @@ A user would have to update all their uses of shape::Plane to initalize the subd
 
 ### [Intepret glTF colors as linear instead of sRGB](https://github.com/bevyengine/bevy/pull/6828)
 
-<!-- TODO -->
+No api changes are required, but it's possible that your gltf meshes look different
 
 ### [The `update_frame_count` system should be placed in CorePlugin](https://github.com/bevyengine/bevy/pull/6676)
 
-<!-- TODO -->
+The `FrameCount`  resource was previously only updated when using the `bevy_render` feature. If you are not using this feature but still want the `FrameCount` it will now be updated correctly.
 
 ### [Migrate engine to Schedule v3](https://github.com/bevyengine/bevy/pull/7267)
 
@@ -530,7 +531,6 @@ A user would have to update all their uses of shape::Plane to initalize the subd
   - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
   - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
   - `add_system(my_system.in_set(CoreSet::PostUpdate)`
-
 - When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 - Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
 - Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
@@ -554,7 +554,7 @@ This was changed to enable pipelined rendering. If this breaks your use case ple
 
 ### [Remove ImageMode](https://github.com/bevyengine/bevy/pull/6674)
 
-<!-- TODO -->
+`ImageNode` never worked, if you were using it please create an issue.
 
 ### [Rename the `background_color` of 'ExtractedUiNode` to `color`](https://github.com/bevyengine/bevy/pull/7452)
 
@@ -562,11 +562,11 @@ This was changed to enable pipelined rendering. If this breaks your use case ple
 
 ### [Make spawn_dynamic return InstanceId](https://github.com/bevyengine/bevy/pull/6663)
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove it later-->
 
 ### [Parallelized transform propagation](https://github.com/bevyengine/bevy/pull/4775)
 
-<!-- TODO -->
+<!-- TODO no migration required, will remove it later-->
 
 ### [Remove the `GlobalTransform::translation_mut` method](https://github.com/bevyengine/bevy/pull/7134)
 
@@ -580,7 +580,7 @@ Bevy may add in the future a way to toggle transform propagation on an entity ba
 
 ### [Remove `TextError::ExceedMaxTextAtlases(usize)` variant](https://github.com/bevyengine/bevy/pull/6796)
 
-<!-- TODO -->
+TextError::ExceedMaxTextAtlases(usize)` was never thrown so if you were matching on this variant you can simply remove it.
 
 ### [Change default FocusPolicy to Pass](https://github.com/bevyengine/bevy/pull/7161)
 
@@ -602,7 +602,7 @@ __Changes for `Text2dBundle`__
 
 ### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
 
-<!-- TODO -->
+`QueuedText` was never meant to be user facing. If you relied on it, please make an issue.
 
 ### [change the default `width` and `height` of `Size` to `Val::Auto`](https://github.com/bevyengine/bevy/pull/7475)
 
@@ -636,7 +636,7 @@ commands.entity(window).despawn(); // close window
 
 ### [Allow not preventing default event behaviors on wasm](https://github.com/bevyengine/bevy/pull/7304)
 
-<!-- TODO -->
+<!-- TODO I'm not sure this needs a guide, I assume most people would be using the ..default() anyway and the ones that aren't doing that will just have a clear compile error -->
 
 ### [update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
 
