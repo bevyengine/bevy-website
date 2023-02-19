@@ -118,8 +118,8 @@ fn write_markdown_event(
             write!(output, "- ")?
         }
         Event::End(Tag::Item) => writeln!(output)?,
+        Event::Start(Tag::Paragraph) => writeln!(output)?,
         Event::End(Tag::Paragraph) => writeln!(output)?,
-        Event::Start(Tag::Paragraph) => {}
         Event::Text(text) => write!(output, "{text}")?,
         Event::Code(text) => write!(output, "`{text}`")?,
         Event::SoftBreak => writeln!(output)?,
