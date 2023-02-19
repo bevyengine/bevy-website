@@ -578,7 +578,22 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-<!-- TODO -->
+```rust
+// 0.9
+shape::Icosphere {
+    radius: 0.5,
+    subdivisions: 5,
+}
+.into()
+
+// 0.10
+shape::Icosphere {
+    radius: 0.5,
+    subdivisions: 5,
+}
+.try_into()
+.unwrap()
+```
 
 ### [Add try_* to add_slot_edge, add_node_edge](https://github.com/bevyengine/bevy/pull/6720)
 
