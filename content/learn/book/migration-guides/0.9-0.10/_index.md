@@ -466,10 +466,6 @@ Hierarchy editing methods such as `with_children` and `push_children` have been 
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-My guess for why we originally made `List` a subtrait of `Array` is that they share a lot of common operations. We could potentially move these overlapping methods to a `Sequence` (name taken from #7059) trait and make that a supertrait of both. This would allow functions to contain logic that simply operates on a sequence rather than “list vs array”.
-
-However, this means that we’d need to add methods for converting to a `dyn Sequence`. It also might be confusing since we wouldn’t add a `ReflectRef::Sequence` or anything like that. Is such a trait worth adding (either in this PR or a followup one)?
-
 The `List` trait is no longer dependent on `Array`. Implementors of `List` can remove the `Array` impl and move its methods into the `List` impl (with only a couple tweaks).
 
 ```rust
