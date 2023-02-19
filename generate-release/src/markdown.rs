@@ -17,19 +17,22 @@ pub fn write_markdown_section(
     let mut section_found = false;
 
     while let Some(event) = markdown.next() {
+        if section_found {
+            break;
+        }
+
         let Event::Start(Tag::Heading(heading_level, _, _)) = event else {
             continue;
         };
 
         // Find the section header
-        if let Some(Event::Text(heading_text)) = markdown.next() {
-            if section_found {
-                break;
-            }
+        // Sometimes people will write code in the header
+        if let Some(Event::Text(heading_text) | Event::Code(heading_text)) = markdown.next() {
             if !heading_text.to_lowercase().contains(section_header) {
                 continue;
             }
         }
+
         section_found = true;
         markdown.next(); // skip heading end event
 
