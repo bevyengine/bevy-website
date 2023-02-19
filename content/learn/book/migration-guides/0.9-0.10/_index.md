@@ -199,7 +199,8 @@ A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables no
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-Note: this replaces the migration guide for #6865. This is relative to Bevy 0.9, not main.
+Note: this replaces the migration guide for #6865.
+This is relative to Bevy 0.9, not main.
 
 The traits `SystemParamState` and `SystemParamFetch` have been removed, and their functionality has been transferred to `SystemParam`.
 
@@ -384,7 +385,8 @@ where
 { ... }
 ```
 
-For the `ExclusiveSystemParamFunction` trait, the type parameter `Param` has been turned into an associated type. Also, `In` and `Out` associated types have been added, since exclusive systems now support system piping.
+For the `ExclusiveSystemParamFunction` trait, the type parameter `Param` has been turned into an associated type.
+Also, `In` and `Out` associated types have been added, since exclusive systems now support system piping.
 
 ```rust
 // Before
@@ -442,7 +444,8 @@ where
     <div class="migration-guide-area-tag">Hierarchy</div>
 </div>
 
-Hierarchy editing methods such as `with_children` and `push_children` have been removed from `WorldChildBuilder`. You can edit the hierarchy via `EntityMut` instead.
+Hierarchy editing methods such as `with_children` and `push_children` have been removed from `WorldChildBuilder`.
+You can edit the hierarchy via `EntityMut` instead.
 
 ### [Rename dynamic feature](https://github.com/bevyengine/bevy/pull/7340)
 
@@ -583,9 +586,11 @@ just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Remove `.unwrap()` from `add_node_edge` and `add_slot_edge`. For cases where the error was handled, use `try_add_node_edge` and `try_add_slot_edge` instead.
+Remove `.unwrap()` from `add_node_edge` and `add_slot_edge`.
+For cases where the error was handled, use `try_add_node_edge` and `try_add_slot_edge` instead.
 
-Remove `.unwrap()` from `input_node`. For cases where the option was handled, use `get_input_node` instead.
+Remove `.unwrap()` from `input_node`.
+For cases where the option was handled, use `get_input_node` instead.
 
 ### [Shader defs can now have a value](https://github.com/bevyengine/bevy/pull/5900)
 
@@ -723,7 +728,8 @@ multi.samples()
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-All the examples needed to be updated to initalize the subdivisions field. Also there were two tests in tests/window that need to be updated.
+All the examples needed to be updated to initalize the subdivisions field.
+Also there were two tests in tests/window that need to be updated.
 
 A user would have to update all their uses of shape::Plane to initalize the subdivisions field.
 
@@ -844,9 +850,14 @@ This was changed to enable pipelined rendering. If this breaks your use case ple
     <div class="migration-guide-area-tag">Hierarchy</div>
 </div>
 
-`GlobalTransform::translation_mut` has been removed without alternative, if you were relying on this, update the `Transform` instead. If the given entity had children or parent, you may need to remove its parent to make its transform independent (in which case the new `Commands::set_parent_in_place` and `Commands::remove_parent_in_place` may be of interest)
+`GlobalTransform::translation_mut` has been removed without alternative,
+if you were relying on this, update the `Transform` instead. If the given entity
+had children or parent, you may need to remove its parent to make its transform
+independent (in which case the new `Commands::set_parent_in_place` and
+`Commands::remove_parent_in_place` may be of interest)
 
-Bevy may add in the future a way to toggle transform propagation on an entity basis.
+Bevy may add in the future a way to toggle transform propagation on
+an entity basis.
 
 ### [Flip UI image](https://github.com/bevyengine/bevy/pull/6292)
 
@@ -904,7 +915,8 @@ __Changes for `Text2dBundle`__
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-The default values for `Size` `width` and `height` have been changed from `Val::Undefined` to `Val::Auto`. It’s unlikely to cause any issues with existing code.
+The default values for `Size` `width` and `height` have been changed from `Val::Undefined` to `Val::Auto`.
+It’s unlikely to cause any issues with existing code.
 
 ### [Fix the `Size` helper functions using the wrong default value and improve the UI examples](https://github.com/bevyengine/bevy/pull/7626)
 
@@ -912,7 +924,8 @@ The default values for `Size` `width` and `height` have been changed from `Val::
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-The `Size::width` constructor function now sets the `height` to `Val::Auto` instead of `Val::Undefined`. The `Size::height` constructor function now sets the `width` to `Val::Auto` instead of `Val::Undefined`.
+The `Size::width` constructor function now sets the `height` to `Val::Auto` instead of `Val::Undefined`.
+The `Size::height` constructor function now sets the `width` to `Val::Auto` instead of `Val::Undefined`.
 
 ### [The `size` field of `CalculatedSize` should not be a `Size`](https://github.com/bevyengine/bevy/pull/7641)
 
