@@ -411,6 +411,34 @@ where
 
 <!-- TODO -->
 
+### [Deprecate `ChangeTrackers<T>` in favor of `Ref<T>`](https://github.com/bevyengine/bevy/pull/7306)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+`ChangeTrackers<T>` has been deprecated, and will be removed in the next release. Any usage should be replaced with `Ref<T>`.
+
+```rust
+// Before (0.9)
+fn my_system(q: Query<(&MyComponent, ChangeTrackers<MyComponent>)>) {
+    for (value, trackers) in &q {
+        if trackers.is_changed() {
+            // Do something with `value`.
+        }
+    }
+}
+
+// After (0.10)
+fn my_system(q: Query<Ref<MyComponent>>) {
+    for value in &q {
+        if value.is_changed() {
+            // Do something with `value`.
+        }
+    }
+}
+```
+
 ### [Move system_commands spans into apply_buffers](https://github.com/bevyengine/bevy/pull/6900)
 
 <div class="migration-guide-area-tags">
