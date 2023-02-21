@@ -18,5 +18,8 @@ A local server should start and you should be able to access a local version of 
 
 ### Assets, Errors, and Examples pages
 
-These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
+These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories.
 
+On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
+
+Some brief instructions on this process are [available here](./local_build_instructions.md).
