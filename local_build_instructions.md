@@ -1,4 +1,4 @@
-### Windows local build instructions ###
+# Windows local build instructions
 
 Building bevy-website locally is tedious, especially on windows. Here is one (brute force) method:
 
