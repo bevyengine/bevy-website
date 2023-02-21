@@ -1,6 +1,6 @@
 # Windows local build instructions
 
-Building bevy-website locally is tedious, especially on windows. Here is one (brute force) method:
+Building bevy-website locally is tedious, especially on Windows. Here is one (brute force) method:
 
 1. [Install WSL](https://learn.microsoft.com/en-us/windows/wsl/install), with Ubuntu.
 
