@@ -46,7 +46,7 @@ fn inspect_changes_system<T: Debug>(q: Query<Ref<T>>) {
 }
 ```
 
-Now that we have `Ref<T>`, we are deprecating `ChangeTrackers<T>`, which is the old, more situational way of immutably accessing a component's change ticks within a system. This type will be removed in the next version.
+We are also deprecating `ChangeTrackers<T>`, which is the old, more situational way of immutably accessing a component's change ticks within a system. This type will be removed in the next version.
 
 ## What's Next?
 
