@@ -46,7 +46,7 @@ fn inspect_system<T: Debug>(q: Query<Ref<T>>) {
 }
 ```
 
-Now that we have a convenient and universal way of immutably accessing a system's change ticks, we are deprecating `ChangeTrackers<T>`, which is the old, more situational way of doing this.
+Now that we have a convenient and universal way of immutably accessing a component's change ticks within a system, we are deprecating `ChangeTrackers<T>`, which is the old, more situational way of doing this. `ChangeTrackers<T>` will be removed in Bevy 0.10.
 
 ## What's Next?
 
