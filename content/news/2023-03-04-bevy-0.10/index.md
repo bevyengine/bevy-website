@@ -31,6 +31,21 @@ Since Bevy [version], `Mut<T>` has used to enable change detection in bevy (alon
 
 Now, the change detection family has grown with `Ref<T>`, which gives immutable access to a component, along with its metadata. Just like `Mut<T>`, this allows you to react to changes made outside of the current system.
 
+```rust
+use bevy::prelude::*;
+
+fn inspect_system<T: Debug>(q: Query<Ref<T>>) {
+    // Iterate over each component of type `T`, and log its changed status.
+    for val in &q {
+        if val.is_changed() {
+            println!("Value `{val:?}` is unchanged.");
+        } else {
+            println!("Value `{val:?}` was last changed at tick {}.", val.last_changed());
+        }
+    }
+}
+```
+
 Now that we have a convenient and universal way of immutably accessing a system's change ticks, we are deprecating `ChangeTrackers<T>`, which is the old, more situational way of doing this.
 
 ## What's Next?
