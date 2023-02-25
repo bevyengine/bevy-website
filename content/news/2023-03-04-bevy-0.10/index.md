@@ -29,7 +29,7 @@ Description here.
 
 Since Bevy 0.1, `Mut<T>` has used to enable change detection (along with related types like `ResMut<T>`). It's a simple wrapper type that provides mutable access to a component, and marks a change any time it is mutated. It also provides access to change tick metadata, which allows you to react to changes made outside of the current system.
 
-Now, the change detection family has grown with `Ref<T>`, which is the immutable variant of `Mut<T>`. It provides access to a component alongside its change tick metadata.
+In **Bevy 0.10**, the change detection family has grown with `Ref<T>`, which is the immutable variant of `Mut<T>`. It provides access to a component alongside its change tick metadata.
 
 ```rust
 use bevy::prelude::*;
@@ -46,7 +46,7 @@ fn inspect_changes_system<T: Debug>(q: Query<Ref<T>>) {
 }
 ```
 
-Now that we have `Ref<T>`, we are deprecating `ChangeTrackers<T>`, which is the old, more situational way of immutably accessing a component's change ticks within a system. This type will be removed in Bevy 0.11.
+Now that we have `Ref<T>`, we are deprecating `ChangeTrackers<T>`, which is the old, more situational way of immutably accessing a component's change ticks within a system. This type will be removed in the next version.
 
 ## What's Next?
 
