@@ -31,7 +31,7 @@ The library Bevy uses for audio, [`rodio`], contains support for spatial audio. 
 
 Interestingly, during the development of this specific feature, `@harudagondi` found a [bug][reverse-channels-bug] where the audio channels reverse when running the app in either debug or release mode. This turns out to be a `rodio` issue, and this also affect previous versions of Bevy. Thanks to `@dis-da-moe`, the bug have been [fixed upstream][rodio-pr]. See the linked PR for interesting details about audio programming quirks and performance issues.
 
-Now, you can now have spatial audio in your game! Clone the `bevy` repository and invoke `cargo run --example spatial_audio_3d --release` in the command line for a showcase of 3D spatial audio in Bevy. 
+Now, you can now have spatial audio in your game! Clone the `bevy` repository and invoke `cargo run --example spatial_audio_3d --release` in the command line for a showcase of 3D spatial audio in Bevy.
 
 [`rodio`]: https://crates.io/crates/rodio
 [reverse-channels-bug]: https://github.com/RustAudio/rodio/issues/444
