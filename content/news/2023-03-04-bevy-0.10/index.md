@@ -23,6 +23,12 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 Description here.
 
+## `Ref<T>` Queries
+
+<div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
+
+Description here.
+
 ## What's Next?
 
 * **Some Work In Progress Feature**: Description here.
