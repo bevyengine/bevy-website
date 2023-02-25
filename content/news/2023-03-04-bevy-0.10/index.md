@@ -38,9 +38,9 @@ fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
     // Iterate over each component of type `T` and log its changed status.
     for val in &q {
         if val.is_changed() {
-            println!("Value `{val:?}` is unchanged.");
-        } else {
             println!("Value `{val:?}` was last changed at tick {}.", val.last_changed());
+        } else {
+            println!("Value `{val:?}` is unchanged.");
         }
     }
 }
