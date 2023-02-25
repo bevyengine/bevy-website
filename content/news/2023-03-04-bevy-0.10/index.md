@@ -25,7 +25,7 @@ Description here.
 
 ## Spatial Audio
 
-<div class="release-feature-authors">authors: @mockersf, @ DGriffin91, @harudagondi, @alice-i-cecile</div>
+<div class="release-feature-authors">authors: @mockersf, @DGriffin91, @harudagondi, @alice-i-cecile</div>
 
 The library Bevy uses for audio, [`rodio`], contains support for spatial audio. In this version, we now support spatial audio (with certain caveats, like no HRTF and no first class support for `Emitter` and `Listener` components).
 
