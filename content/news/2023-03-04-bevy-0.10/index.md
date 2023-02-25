@@ -34,7 +34,7 @@ In **Bevy 0.10**, the change detection family has grown with `Ref<T>`, which is 
 ```rust
 use bevy::prelude::*;
 
-fn inspect_changes_system<T: Debug>(q: Query<Ref<T>>) {
+fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
     // Iterate over each component of type `T`, and log its changed status.
     for val in &q {
         if val.is_changed() {
