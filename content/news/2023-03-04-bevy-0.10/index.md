@@ -35,7 +35,7 @@ In **Bevy 0.10**, the change detection family has grown with `Ref<T>`, the immut
 use bevy::prelude::*;
 
 fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
-    // Iterate over each component of type `T`, and log its changed status.
+    // Iterate over each component of type `T` and log its changed status.
     for val in &q {
         if val.is_changed() {
             println!("Value `{val:?}` is unchanged.");
