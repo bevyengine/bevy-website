@@ -48,7 +48,7 @@ fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
 
 We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting a component's change ticks. This type will be removed in the next version of Bevy.
 
-## Android Support 
+## Android Support
 
 <div class="release-feature-authors">authors: @mockersf, @slyedoc</div>
 
