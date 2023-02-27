@@ -320,7 +320,7 @@ Secondly, it allows Bevy to set good default behavior for systems added by users
 Let me tell you a story, set in a world where all of Mr. Straw Man's points above are true, and no default set is added.
 
 1. A new user adds the `make_player_run` system to their app.
-2. Sometimes this system runs before input handling, leading to randomly dropped inputs. Sometimes it runs after rendering, leading to stranges flickers.
+2. Sometimes this system runs before input handling, leading to randomly dropped inputs. Sometimes it runs after rendering, leading to strange flickers.
 3. After much frustration, the user discovers that these are due to "system execution order ambiguities".
 4. The user runs a specialized tool, digs into the source code of the engine, figures out what order their system should run in relative to the engine's system sets, and then continues on their merry way, doing this for each new system.
 5. Bevy (or one of their third-party plugins) updates, breaking all of our poor users system ordering once again.
