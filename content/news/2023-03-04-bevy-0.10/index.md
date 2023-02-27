@@ -62,6 +62,9 @@ enum PhysicsSet {
 
 app
     // .with_run_criteria -> .run_if <3
+    // Note that in this case we're modifying this single `gravity` system, not the entire `PhysicsSet::Forces`
+    // as this is a method on a single system.
+    // The order of these method calls doesn't matter!
    .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
     // Add multiple systems at once with add_systems!    
     .add_systems((
