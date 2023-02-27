@@ -197,9 +197,11 @@ app.add_system(win_game.run_if(contrived_run_condition));
 
 Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
 
-Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Like always though: benchmark!
+Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Reducing the number of tasks spawned can really add up. Like always though: benchmark!
 
-Finally, courtesy of [#7559](https://github.com/bevyengine/bevy/pull/7559) and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can cobble them together to create new run coniditons with the use of the `not`, `and_then` or `or_else` run criteria combinators.
+Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](TODO). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579)and [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), you can quickly check if there are events to process, changes to resources, input states and more.
+
+When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run criteria combinators.
 
 ## Simpler States
 
