@@ -27,7 +27,7 @@ Description here.
 
 <div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
 
-ECS underlies the entire engine, so eliminating overhead in the ECS results in engine-wide speedups. In 0.10, we've found quite a few areas where we were able to massively reduce the overhead and improve CPU utilization for the entire engine.
+ECS underlies the entire engine, so eliminating overhead in the ECS results in engine-wide speedups. In **Bevy 0.10**, we've found quite a few areas where we were able to massively reduce the overhead and improve CPU utilization for the entire engine.
 
 In [#6547](https://github.com/bevyengine/bevy/pull/6547), we enabled [autovectorization](https://en.wikipedia.org/wiki/Automatic_vectorization) when using `Query::for_each`, and its parallel variants. Depending on the target architecture the engine is being compiled for, this can result in a 50-87.5% speed up in query iteration time. In 0.11, we may be extending this optimization to all iterator combinators based on `Iterator::fold`, like `Iterator::count`. See [this PR](https://github.com/bevyengine/bevy/pull/6773) for more details.
 
