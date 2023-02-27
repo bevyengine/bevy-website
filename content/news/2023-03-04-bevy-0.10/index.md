@@ -25,7 +25,7 @@ Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" sch
 
 There's been a lot of changes, but we really do think that ripping off the band-aid now (before any form of stability guarantees) is essential to the health of Bevy's scheduling model going forward.
 
-The [migration path](TODO) for existing applications won't be trivial, but we've done our best to keep it surprisingly straightforward. Don't sweat it!
+The [migration path](../../learn/book/migration-guides/0.9-0.10/_index.md) for existing applications won't be trivial, but we've done our best to keep it surprisingly straightforward. Don't sweat it!
 
 ## A Single Unified Schedule
 
@@ -170,7 +170,7 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 4. **Rendering:** all rendering logic is stored in its own schedule to allow it to run asynchronously relative to gameplay logic.
 5. **Controlling the outermost loop:** in order to handle the "startup schedule first, then main schedule" logic, we wrap it all up in a minimal overhead `CoreSchedule::Outer` and then run our schedules as the sole exclusive system there.
 
-Follow the bread crumbs starting at [`CoreSchedule`](TODO) and [`RenderSchedule`](TODO) for more info.
+Follow the bread crumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSchedule.html) for more info.
 
 ## Simpler Run Conditions
 
@@ -197,7 +197,7 @@ Systems may have any number of run conditions (and inherit them from the sets th
 
 Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Reducing the number of tasks spawned can really add up. Like always though: benchmark!
 
-Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](TODO). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579)and [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), you can quickly check if there are events to process, changes to resources, input states and more.
+Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://dev-docs.bevyengine.org/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579)and [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), you can quickly check if there are events to process, changes to resources, input states and more.
 
 When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run criteria combinators.
 
@@ -276,7 +276,7 @@ Now hold on, you're saying that:
 
 Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ambiguity? I _liked_ stages, they helped me understand the structure of my app!
 
-Well, I'm glad you asked, rhetorical straw man. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](TODO), [`StartupSet`](TODO) and [`RenderSet`](TODO). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html) and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
+Well, I'm glad you asked, rhetorical straw man. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSet.html), [`StartupSet`](https://dev-docs.bevyengine.org/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://dev-docs.bevyengine.org/bevy/render/enum.RenderSet.html). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html) and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
 
 Some parts of the stage-centric architecture were appealing: a clear high level structure, coordination on flush points (to reduce excessive bottlenecks) and good default behavior.
 
@@ -402,12 +402,12 @@ app.add_systems(
 
 We've also:
 
-* added trivial single threaded evaluation via the [`SingleThreadedExecutor`](TODO) for users who prefer alternate parallelization strategies (or simply don't need it)
+* added trivial single threaded evaluation via the [`SingleThreadedExecutor`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.SingleThreadedExecutor.html) for users who prefer alternate parallelization strategies (or simply don't need it)
   * we already default to this on WASM, so don't worry about setting it up for your jam games!
-  * wish commands just applied instantly? We've got you: use [`SimpleExecutor`] and trade performance for convenience to your heart's content.
+  * wish commands just applied instantly? We've got you: use [`SimpleExecutor`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.SimpleExecutor.html) and trade performance for clarity and convenience to your heart's content.
 * removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs and are no longer needed due to the much improved ergonomics of ordering systems in other forms
-* made sure you can pipe data into and out of exclusive systems ([#6698](https://github.com/bevyengine/bevy/pull/6698))
-* significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](TODO) docs for more info. If you haven't tried this out on your app yet: you should take a look!
+* made sure you can pipe data into and out of exclusive systems in [#6698](https://github.com/bevyengine/bevy/pull/6698)
+* significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.ScheduleBuildSettings.html) docs for more info. If you haven't tried this out on your app yet: you should take a look!
 
 The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bevy_mod_debugdump`](https://crates.io/crates/bevy_mod_debugdump), the leading third-party schedule visualization plugin, to ensure it keeps working better than ever.
 
