@@ -320,7 +320,7 @@ Secondly, it allows Bevy to set good default behavior for systems added by users
 Let me tell you a story, set in a world where all of Mr. Straw Man's points above are true, and no default set is added.
 
 1. A new user adds the `make_player_run` system to their app.
-2. Sometimes this system runs before input handling, leading to randomly dropped inputs. Sometimes it runs after rendering, leading to strange flickers.
+2. Sometimes this system runs before input handling, leading to randomly dropped inputs. Sometimes it runs after rendering, leading to stranges flickers.
 3. After much frustration, the user discovers that these are due to "system execution order ambiguities".
 4. The user runs a specialized tool, digs into the source code of the engine, figures out what order their system should run in relative to the engine's system sets, and then continues on their merry way, doing this for each new system.
 5. Bevy (or one of their third-party plugins) updates, breaking all of our poor users system ordering once again.
@@ -424,6 +424,8 @@ It's a great tool that we are looking to build on to create a first party soluti
 * **Better plugins:** Clearer and more standardized tools for [adapting third-party plugins to your app's unique architecture](https://github.com/bevyengine/bevy/issues/2160), eliminating [order-dependence in their initialization](https://github.com/bevyengine/bevy/issues/1255) and defining [dependencies](https://github.com/bevyengine/bevy/issues/69) between them.
 * **Pull `!Send` data out of the `World`:** storing non thread-safe data in a structure designed to be sent across threads has caused us no end of headaches. We plan on pulling these out into the `App`, resolving a major blocker for a first-class [multiple worlds](https://github.com/bevyengine/rfcs/pull/43) design.
 * **Timestamp window and input events:** As discussed in [#5984](https://github.com/bevyengine/bevy/issues/5984), tracking the exact timing of input events is essential to ensuring that event ordering and timing can be precisely reconstructed.
+* **[Opt-out change detection](https://github.com/bevyengine/bevy/issues/4882):** reduce the memory overhead of your components (and resources) by turning off change detection at compile or runtime.
+* **[Batched queries](https://github.com/bevyengine/bevy/pull/6161):** SIMD-accelerated query iteration to get the most out of modern CPUs.
 
 ## Support Bevy
 
