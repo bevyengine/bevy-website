@@ -18,6 +18,20 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Headliner Feature**: Description here.
 * **Simpler, more flexible scheduling**: systems are now stored in a unified schedule, commands can be applied explicitly via `apply_system_buffers` and a whole lot of quality of life and bug fixes.
 
+## Enable Parallel Pipelined Rendering
+
+<div class="release-feature-authors">authors: @hymm, @james7132</div>
+
+![Trace with Pipelined Rendering](pipelined-rendering-trace.png)
+
+On multithreaded platforms bevy will now run significantly faster by running simulation and rendering in parallel. The renderer was rearchiteched in [bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render) to enable this, but the final step of actually running them in parallel was not done until now. There was a bit of tricky work to figure out around enabling running specific rendering systems on the main app thread instead of the rendering thread and making sure !Send resources aren't accessed from a different thread than they are initialized on.
+
+![Histogram of Many Foxes Frame Time](pipelined-rendering-histogram.png)
+
+In testing different bevy examples, the gains were typically in the 10% to 30% range. As seen in the above histogram the many foxes stress test gains around 1ms. (TODO: I need to redo the histogram with lto on.)
+
+To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`. If you're using `DefaultPlugins` then it will automatically be added for you on all platforms except wasm. Bevy does not currently support multithreading on wasm which is needed for this feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
+
 ## Section Template
 
 <div class="release-feature-authors">authors: @Foo, @Bar</div>
