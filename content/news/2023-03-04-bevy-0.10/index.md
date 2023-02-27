@@ -19,11 +19,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Simpler, more flexible scheduling
 
-<div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe and a whole lot more </div>
+<div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe, @jakobhellermann, @JoJoJet, @geieredgar and a whole lot more </div>
 
-Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented! But as we all know, plans and implementations are two different things. Let's take a look at what actually shipped for 0.10.
+Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented! But as we all know, plans and implementations (start at [#6587](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and [#7267](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile`) are two different things. Let's take a look at what actually shipped for 0.10.
 
-We know that there's been a lot of changes, but we really do think that ripping off the band-aid now (before any form of stability guarantees) is essential to the health of Bevy's scheduling model going forward.
+There's been a lot of changes, but we really do think that ripping off the band-aid now (before any form of stability guarantees) is essential to the health of Bevy's scheduling model going forward.
 
 The [migration path](TODO) for existing applications won't be trivial, but we've done our best to keep it surprisingly straightforward. Don't sweat it!
 
@@ -282,7 +282,7 @@ Well, I'm glad you asked, rhetorical straw man. To reduce this chaos (and ease m
 
 Some parts of the stage-centric architecture were appealing: a clear high level structure, coordination on flush points (to reduce excessive bottlenecks) and good default behavior.
 
-To keep those bits (while excising the frustrating ones), we've introduced the concept of **base sets**. Base sets are system sets, except:
+To keep those bits (while excising the frustrating ones), we've introduced the concept of **base sets**, added in [#7466](https://github.com/bevyengine/bevy/pull/7466) by `@cart`. Base sets are system sets, except:
 
 1. Every system (but not every system set) must belong to exactly one base set.
 2. Systems that do not specify a base set will be added to the default base set for the schedule.
