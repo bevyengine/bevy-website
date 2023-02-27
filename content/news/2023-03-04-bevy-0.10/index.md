@@ -93,8 +93,6 @@ As long as you can construct the type of a system set, you can both order your s
 
 Plugin authors: consider offering both a "default configuration" and a "minimal configuration" version of your plugins to support more unusual scheduling patterns while keeping that "it just works" behavior you've come to love.
 
-Stay tuned for [more work](https://github.com/bevyengine/bevy/issues/2160) on plugin configurability in 0.11.
-
 ## Directly Schedule Exclusive Systems
 
 Ever wished that you could just flush commands or run an exclusive system right before this system but after that system without shuffling your entire schedule to make it work?
@@ -417,7 +415,8 @@ It's a great tool that we are looking to build on to create a first party soluti
 
 ## What's Next?
 
-* **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192)**: Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
+* **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
+* **Better plugins:** Clearer and more standardized tools for [adapting third-party plugins to your app's unique architecture](https://github.com/bevyengine/bevy/issues/2160), eliminating [order-dependence in their initialization](https://github.com/bevyengine/bevy/issues/1255) and defining [dependencies](https://github.com/bevyengine/bevy/issues/69) between them.
 
 ## Support Bevy
 
