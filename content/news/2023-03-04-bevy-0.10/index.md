@@ -124,7 +124,7 @@ Do be careful with this pattern though: it's easy to quickly end up with many po
 
 Similarly, state transitions can be scheduled manually, one type at a time, in the `apply_state_transitions::<S>` exclusive system.
 
-What will you do with this much power? We don't know, but we're keen to find out.
+What will you do with this much power? We're keen to find out!
 
 ## It's All Schedules? Managing complex control flow
 
@@ -135,7 +135,7 @@ It turns out, Bevy already _had_ a great tool for this: schedules run inside of 
 1. Construct a schedule, that stores whatever complex logic you want to run.
 2. Store that schedule inside of a resource.
 3. In an exclusive system, perform any arbitrary Rust logic you want to decide if and how your schedule runs.
-4. Temporarily take the schedule out of the world, run it on the rest of the world to mutate both the schedule and the world, and then put it back in. Or as I like to call it: the hokey-pokey pattern.
+4. Temporarily take the schedule out of the world, run it on the rest of the world to mutate both the schedule and the world, and then put it back in.
 
 With the addition of the new `Schedules` resource and the `world.run_schedule(schedule_label: impl ScheduleLabel)`API it's more :sparkles: ergonomic :sparkles: than ever.
 
@@ -174,11 +174,13 @@ Follow the bread crumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine
 
 ## Simpler Run Conditions
 
-With a new blessed pattern for complex control flow, we can finally get rid of looping run criteria. [`ShouldRun::YesAndCheckAgain`](https://docs.rs/bevy/0.9.1/bevy/ecs/schedule/enum.ShouldRun.html) was not exactly the most straightforward to reason about, either for engine devs or users. It's always a bad sign when your bool-like enums have four possible values.
-
-If you crave that powerful, complex control flow: use the "schedules in exclusive systems" pattern listed above. For the rest of us: rejoice!
-
+Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
 Run criteria have been renamed to the clearer **run conditions**, which can be constructed out of any read-only system that returns `bool`.
+
+With a new blessed pattern for complex control flow, we can finally get rid of looping run criteria. [`ShouldRun::YesAndCheckAgain`](https://docs.rs/bevy/0.9.1/bevy/ecs/schedule/enum.ShouldRun.html) was not exactly straightforward to reason about, either for engine devs or users. It's always a bad sign when your bool-like enums have four possible values.
+
+If you crave that powerful, complex control flow: use the "schedules in exclusive systems" pattern listed above.
+For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
 
 ```rust!
 // Let's make our own run condition
@@ -193,8 +195,6 @@ fn contrived_run_condition(query: Query<&Life, With<Player>>, score: Res<Score>)
 app.add_system(win_game.run_if(contrived_run_condition));
 ```
 
-Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
-
 Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Reducing the number of tasks spawned can really add up. Like always though: benchmark!
 
 Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://dev-docs.bevyengine.org/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579)and [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), you can quickly check if there are events to process, changes to resources, input states and more.
@@ -203,9 +203,8 @@ When you need something more sophisticated, combining run conditions is a breeze
 
 ## Simpler States
 
-Of course, looping run criteria were a key feature of how Bevy's states worked. With them gone, how does this all work?!
-
-Well, there's a bit of machinery, but it's all straightforward. Here's how Bevy 0.10 makes states work:
+Of course, looping run criteria were used to power states.
+How do they work in Bevy 0.10?
 
 1. The current value of the state of type `S` is stored in the `State<S: States>` resource. The pending value is stored in `NextState<S: States>`.
     1. To set the next state, simply mutate the value of the `NextState<S>` resource.
@@ -255,7 +254,6 @@ fn start_game(
 But wait you say: what about my state stack? My elaborate queued transitions?! My meticulous error handling on every operation that I definitely didn't just unwrap?!!
 
 In practice, we found that the state stack was a) very complex to learn b) very prone to exasperating bugs c) mostly ignored.
-
 As a result, states are now "stackless": only one queued state of each type at a time.
 
 Thanks to the help of some brave alpha testers, we're reasonably confident that this shouldn't be too bad to migrate away from.
@@ -267,19 +265,19 @@ If you were relying on the state stack, you might choose to:
 
 ## Base Sets: Getting Default Behavior Right
 
-Now hold on, you're saying that:
+Of course the skeptical reader may point out that:
 
 1. Bevy automatically runs its systems in parallel.
 2. [The order of systems is nondeterministic unless there is an explicit ordering relationship between them](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/nondeterministic_system_order.rs)?
 3. All of the systems are now stored in a single `Schedule` object with no barriers between them?
 4. Systems can belong to any number of system sets, each of which can add their own behavior?
 
-Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ambiguity? I _liked_ stages, they helped me understand the structure of my app!
+Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ordering ambiguity?
+Many users _liked_ stages, they were helpful for understanding the structure of my app!
 
-Well, I'm glad you asked, rhetorical straw man. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSet.html), [`StartupSet`](https://dev-docs.bevyengine.org/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://dev-docs.bevyengine.org/bevy/render/enum.RenderSet.html). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html) and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
+Well, I'm glad you asked, rhetorical skeptic. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSet.html), [`StartupSet`](https://dev-docs.bevyengine.org/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://dev-docs.bevyengine.org/bevy/render/enum.RenderSet.html). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html) and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
 
 Some parts of the stage-centric architecture were appealing: a clear high level structure, coordination on flush points (to reduce excessive bottlenecks) and good default behavior.
-
 To keep those bits (while excising the frustrating ones), we've introduced the concept of **base sets**, added in [#7466](https://github.com/bevyengine/bevy/pull/7466) by `@cart`. Base sets are system sets, except:
 
 1. Every system (but not every system set) must belong to exactly one base set.
@@ -308,9 +306,7 @@ app
 ```
 
 Pretty simple, but what does this buy us?
-
 First, it gives you a clear hook to impose, reason about and visualize high level structure to your schedule. Yearning for a linear, stage-like design? Just order your base sets!
-
 Secondly, it allows Bevy to set good default behavior for systems added by users, without removing their control.
 
 Let me tell you a story, set in a world where all of Mr. Straw Man's points above are true, and no default set is added.
@@ -321,10 +317,9 @@ Let me tell you a story, set in a world where all of Mr. Straw Man's points abov
 4. The user runs a specialized tool, digs into the source code of the engine, figures out what order their system should run in relative to the engine's system sets, and then continues on their merry way, doing this for each new system.
 5. Bevy (or one of their third-party plugins) updates, breaking all of our poor users system ordering once again.
 
-In practice, there are three broad classes of systems: gameplay logic (99% of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling) and stuff that needs to happen after gameplay logic (like rendering and audio).
+In practice, there are three broad classes of systems: gameplay logic (the majority of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling) and stuff that needs to happen after gameplay logic (like rendering and audio).
 
 By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
-
 Let us know how it works out for you!
 
 ## Polish Matters
