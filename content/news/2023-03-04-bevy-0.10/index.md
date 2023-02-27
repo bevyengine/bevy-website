@@ -39,7 +39,7 @@ This simplifies our internal logic, makes your code more robust to refactoring, 
 
 To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
 
-**System sets** are named collections of systems that share a set of **system configuration**: if there are run conditions attached, how they are ordered relative to other systems or sets and so on. This is distributive: Ordering systems relative to a system set applies that ordering to *all* systems in that set.
+**System sets** are named collections of systems that share a set of **system configuration**: if there are run conditions attached, how they are ordered relative to other systems or sets and so on. This is distributive: Ordering systems relative to a system set applies that ordering to _all_ systems in that set.
 
 Let's jump right in to what this would look like.
 
@@ -89,9 +89,9 @@ A system can belong to any number of sets, adding the configuration from each se
 
 These rules must be compatible with each other: any paradoxes (like a system set inside of itself, or a system that must run both before and after a set) will result in a runtime panic with a helpful error message.
 
-As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot *remove* rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
+As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
-Plugin authors: consider offering both a "default configuration" and a "minimal configuration" version of your plugins to support more unusual scheduling patterns while keeping that "it just works" behavior you've come to love. 
+Plugin authors: consider offering both a "default configuration" and a "minimal configuration" version of your plugins to support more unusual scheduling patterns while keeping that "it just works" behavior you've come to love.
 
 Stay tuned for [more work](https://github.com/bevyengine/bevy/issues/2160) on plugin configurability in 0.11.
 
@@ -258,14 +258,14 @@ But wait you say: what about my state stack? My elaborate queued transitions?! M
 
 In practice, we found that the state stack was a) very complex to learn b) very prone to exasperating bugs c) mostly ignored.
 
-As a result, states are now "stackless": only one queued state of each type at a time. 
+As a result, states are now "stackless": only one queued state of each type at a time.
 
 Thanks to the help of some brave alpha testers, we're reasonably confident that this shouldn't be too bad to migrate away from.
 If you were relying on the state stack, you might choose to:
 
 * rearchitect some of that logic out of states
 * use additional state types, which capture orthogonal elements of your app's status
-* build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate! 
+* build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate!
 
 ## Base Sets: Getting Default Behavior Right
 
@@ -276,7 +276,7 @@ Now hold on, you're saying that:
 3. All of the systems are now stored in a single `Schedule` object with no barriers between them?
 4. Systems can belong to any number of system sets, each of which can add their own behavior?
 
-Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ambiguity? I *liked* stages, they helped me understand the structure of my app!
+Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ambiguity? I _liked_ stages, they helped me understand the structure of my app!
 
 Well, I'm glad you asked, rhetorical straw man. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](TODO), [`StartupSet`](TODO) and [`RenderSet`](TODO). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html) and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
 
@@ -325,7 +325,7 @@ Let me tell you a story, set in a world where all of Mr. Straw Man's points abov
 
 In practice, there are three broad classes of systems: gameplay logic (99% of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling) and stuff that needs to happen after gameplay logic (like rendering and audio).
 
-By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave. 
+By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 
 Let us know how it works out for you!
 
@@ -387,7 +387,6 @@ app
     )    
 
 ```
-
 
 Bevy 0.10:
 
