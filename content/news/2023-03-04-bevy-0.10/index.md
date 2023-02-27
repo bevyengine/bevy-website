@@ -15,17 +15,17 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Headliner Feature**: Description here.
+* **Simpler, more flexible scheduling**: systems are now stored in a unified schedule, commands can be applied explicitly via `apply_system_buffers` and a whole lot of quality of life and bug fixes.
 
-## Section Template
+## Simpler, more flexible scheduling
 
-<div class="release-feature-authors">authors: @Foo, @Bar</div>
+<div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe and a whole lot more </div>
 
 Description here.
 
 ## What's Next?
 
-* **Some Work In Progress Feature**: Description here.
+* **One-shot systems**: Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
 
 ## Support Bevy
 
