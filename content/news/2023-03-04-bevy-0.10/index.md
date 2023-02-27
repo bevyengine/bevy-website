@@ -43,7 +43,7 @@ This diagram, made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://
 
 To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
 
-Every system, once it is part of a schedule, stores **system configuration** metadata: f there are run conditions attached, how they are ordered relative to other systems or sets and so on.
+Every system, once it is part of a schedule, stores **system configuration** metadata: which run conditions are attached, how they are ordered relative to other systems or sets and so on.
 **System sets** are named collections of systems that share system configuration across all of their members. This is both distributive and additive: ordering systems relative to a system set applies that ordering to _all_ systems in that set, in addition to any configuration on each individual system.
 
 Let's jump right in to what this would look like.
