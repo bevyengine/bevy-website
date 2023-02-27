@@ -188,7 +188,7 @@ For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
 
 ```rust!
 // Let's make our own run condition
-fn contrived_run_condition(query: Query<&Life, With<Player>>, score: Res<Score>) -> bool{
+fn contrived_run_condition(query: Query<&Life, With<Player>>, score: Res<Score>) -> bool {
     let player_life = query.single();
     
     if score.0 * player_life > 9000 {
