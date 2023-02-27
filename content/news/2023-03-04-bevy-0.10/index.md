@@ -21,9 +21,6 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe and a whole lot more </div>
 
-
-# Simpler, More Flexible Scheduling
-
 Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented! But as we all know, plans and implementations are two different things. Let's take a look at what actually shipped for 0.10.
 
 We know that there's been a lot of changes, but we really do think that ripping off the band-aid now (before any form of stability guarantees) is essential to the health of Bevy's scheduling model going forward.
@@ -133,9 +130,9 @@ What will you do with this much power? We don't know, but we're keen to find out
 
 ## It's All Schedules? Managing complex control flow
 
-But what if you want to do something *weird* with your schedule. Something non-linear, or branching, or looping. What should you reach for?
+But what if you want to do something _weird_ with your schedule. Something non-linear, or branching, or looping. What should you reach for?
 
-It turns out, Bevy already *had* a great tool for this: schedules run inside of an exclusive system. The idea is pretty simple:
+It turns out, Bevy already _had_ a great tool for this: schedules run inside of an exclusive system. The idea is pretty simple:
 
 1. Construct a schedule, that stores whatever complex logic you want to run.
 2. Store that schedule inside of a resource.
@@ -212,13 +209,13 @@ Well, there's a bit of machinery, but it's all straightforward. Here's how Bevy 
 
 1. The current value of the state of type `S` is stored in the `State<S: States>` resource. The pending value is stored in `NextState<S: States>`.
     1. To set the next state, simply mutate the value of the `NextState<S>` resource.
-3. Run conditions can read the value of the `State<S>` resource.
+2. Run conditions can read the value of the `State<S>` resource.
     1. Systems with the `in_state(AppState::InGame)` run condition will only run if the value of the `State<AppState>` resource equals `AppState::InGame`.
-4. Check for and apply state transitions as part of the `apply_state_transitions<S>` exclusive system. When transitioning between states:
+3. Check for and apply state transitions as part of the `apply_state_transitions<S>` exclusive system. When transitioning between states:
     1. First run the `OnExit(S::VariantLeft)` schedule for the state you're leaving.
     2. Then run the `OnEnter(S::VariantEntered)` schedule.
     3. These schedules are stored in the `Schedules` resource, and can be looked up via their `ScheduleLabel`.
-5. When the user calls `app.add_state:<s>()`:
+4. When the user calls `app.add_state:<s>()`:
     1. Initialize an `OnEnter` and an `OnExit` schedule for each variant of our state type `S`.
     2. Configure the `OnUpdate(S::Variant)` system set to belong to `CoreSet::Update` and only run when `State<S>` is `S::Variant`.
     3. Add a copy of `apply_state_transitions<S>` to `CoreSet::ApplyStateTransitions`.
@@ -263,9 +260,10 @@ As a result, states are now "stackless": only one queued state of each type at a
 
 Thanks to the help of some brave alpha testers, we're reasonably confident that this shouldn't be too bad to migrate away from.
 If you were relying on the state stack, you might choose to:
- - rearchitect some of that logic out of states
- - use additional state types, which capture orthogonal elements of your app's status
- - build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate! 
+
+* rearchitect some of that logic out of states
+* use additional state types, which capture orthogonal elements of your app's status
+* build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate! 
 
 ## Base Sets: Getting Default Behavior Right
 
@@ -376,6 +374,7 @@ app
 There's another lovely change lurking in that last example: the `add_systems` API.
 
 Bevy 0.9:
+
 ```rust
 app
     .add_system_set(SystemSet::on_update(AppState::InGame)
@@ -403,12 +402,13 @@ app.add_systems(
 ```
 
 We've also:
-- added trivial single threaded evaluation via the [`SingleThreadedExecutor`](TODO) for users who prefer alternate parallelization strategies (or simply don't need it)
-    - we already default to this on WASM, so don't worry about setting it up for your jam games!
-    - wish commands just applied instantly? We've got you: use [`SimpleExecutor`] and trade performance for convenience to your heart's content.
-- removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs and are no longer needed due to the much improved ergonomics of ordering systems in other forms
--  made sure you can pipe data into and out of exclusive systems ([#6698](https://github.com/bevyengine/bevy/pull/6698))
-- significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](TODO) docs for more info. If you haven't tried this out on your app yet: you should take a look!
+
+* added trivial single threaded evaluation via the [`SingleThreadedExecutor`](TODO) for users who prefer alternate parallelization strategies (or simply don't need it)
+  * we already default to this on WASM, so don't worry about setting it up for your jam games!
+  * wish commands just applied instantly? We've got you: use [`SimpleExecutor`] and trade performance for convenience to your heart's content.
+* removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs and are no longer needed due to the much improved ergonomics of ordering systems in other forms
+* made sure you can pipe data into and out of exclusive systems ([#6698](https://github.com/bevyengine/bevy/pull/6698))
+* significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](TODO) docs for more info. If you haven't tried this out on your app yet: you should take a look!
 
 The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bevy_mod_debugdump`](https://crates.io/crates/bevy_mod_debugdump), the leading third-party schedule visualization plugin, to ensure it keeps working better than ever.
 
