@@ -418,7 +418,7 @@ It's a great tool that we are looking to build on to create a first party soluti
 
 ## What's Next?
 
-* **One-shot systems**: Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
+* **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192)**: Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
 
 ## Support Bevy
 
