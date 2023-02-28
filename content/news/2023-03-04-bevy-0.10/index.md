@@ -522,12 +522,3 @@ A huge thanks to the **X contributors** that made this release (and associated d
 * @Foo
 
 ## Full Change Log
-
-+++
-title = "Bevy 0.10"
-date = 2023-03-04
-[extra]
-author = "Bevy Contributors"
-+++
-
-<!-- more -->
