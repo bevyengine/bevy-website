@@ -23,9 +23,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented! But as we all know, plans and implementations (start at [#6587](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and [#7267](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile`) are two different things. Let's take a look at what actually shipped for 0.10.
 
-There's been a lot of changes, but we really do think that ripping off the band-aid now (before any form of stability guarantees) is essential to the health of Bevy's scheduling model going forward.
-
-The [migration path](../../learn/book/migration-guides/0.9-0.10/_index.md) for existing applications won't be trivial, but we've done our best to keep it surprisingly straightforward. Don't sweat it!
+There's been a lot of changes, but we've put a lot of care into ensuring the [migration path](../../learn/book/migration-guides/0.9-0.10/_index.md) for existing applications is relatively straightforward. Don't sweat it!
 
 ## A Single Unified Schedule
 
