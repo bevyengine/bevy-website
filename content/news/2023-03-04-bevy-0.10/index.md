@@ -52,9 +52,7 @@ We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting 
 
 <div class="release-feature-authors">authors: @mockersf, @slyedoc</div>
 
-<div>
-<img src="./android%20emulator.png" alt="Android emulator running Bevy" width="50%" /><img src="./ios%20emulator.png" alt="iOS emulator running Bevy" width="50%" />
-</div>
+<img src="./android%20emulator.png" alt="Android emulator running Bevy" />
 
 Bevy now runs out of the box on Android on more devices. This was unlocked by waiting for the [`Resumed`](https://docs.rs/winit/0.28/winit/event/enum.Event.html#variant.Resumed) event to create the window instead of doing it on startup, matching the [`onResume()`](https://developer.android.com/guide/components/activities/activity-lifecycle#onresume) callback on Android.
 
@@ -63,6 +61,8 @@ To follow the recommendations on the [`Suspended`](https://docs.rs/winit/0.28/wi
 Please test on your devices and report successes or issues you may encounter! There is a known issue around touch position on some devices with software buttons, as winit doesn't expose [yet](https://github.com/rust-windowing/winit/issues/2308) the inset size, only the inner size.
 
 As this brings Bevy closer to full support of Android, there isn't a need anymore for separated examples for Android and iOS. They have been regrouped in one ["mobile" example](https://github.com/bevyengine/bevy/tree/v0.10.0/examples/mobile), and the instructions updated ([for Android](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#android) and [for iOS](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#ios)).
+
+<img src="./ios%20emulator.png" alt="iOS emulator running Bevy" />
 
 ## What's Next?
 
