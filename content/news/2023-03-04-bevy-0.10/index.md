@@ -41,9 +41,9 @@ In [#6391](https://github.com/bevyengine/bevy/pull/6391), we've reworked `Comman
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-In 0.9 and before, `Query::par_for_each` required providing a batch size, which would be used to chunk the matched entities into batches for parallel processing. This often resulted in users just randomly picking a value and rolling with it, or fine tuning the value based on their development machines. Unfortunately, the most effective value is dependent on the runtime environment (i.e. how many logical cores does a player's computer have) and the state of the ECS World (i.e. how many entities are matched?). Ultimately most users of the API just chose a flat number and lived with the results, good or bad.
+`Query::par_for_each` is the tool everyone reaches for when their ECS world gets too big to run single threaded. Got 10,0000 entities running around on your screen? No problem, `Query::par_for_each` will chunk it up into smaller batches and distribute the workload over multiple threads. In **Bevy 0.9** and before, `Query::par_for_each` required callers to provide a batch size to help tune these batches for maximum performance. This rather opaque knob often resulted in users just randomly picking a value and rolling with it, or fine tuning the value based on their development machines. Unfortunately, the most effective value is dependent on the runtime environment (i.e. how many logical cores does a player's computer have) and the state of the ECS World (i.e. how many entities are matched?). Ultimately most users of the API just chose a flat number and lived with the results, good or bad.
 
-In 0.10, you no longer need to provide a batch size! We'll automatically evaluate the state of the World and task pools and select a batch size using a heuristic to ensure sufficient parallelism, without incurring too much overhead. For more complete details on how this is computed, see the documentation of [`Query::par_iter`]. In the future, we may further tune the backing heuristics to try to get the default to be more flexible.
+In 0.10, you no longer need to provide a batch size! Bevy will automatically evaluate the state of the World and task pools and select a batch size using a heuristic to ensure sufficient parallelism, without incurring too much overhead. This makes parallel queries as easy to use as normal single-threaded queries! For more complete details on how this is computed, see the documentation of [`Query::par_iter`]. In the future, we may further tune the backing heuristics to try to get the default to be more flexible.
 
 ```rust
 // 0.9
@@ -57,7 +57,14 @@ query.par_for_each(QUERY_BATCH_SIZE, |mut component| {
 query.par_iter().for_each(|mut component| {
    // ...
 });
+
+// Fairly easily to convert from a single threaded for_each. Just change iter to par_iter!
+query.iter().for_each(|mut component| {
+   // ...
+});
 ```
+
+[`Query::par_iter`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Query.html#method.par_iter
 
 ## Spatial Audio
 
