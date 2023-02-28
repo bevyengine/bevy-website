@@ -209,7 +209,7 @@ When you need something more sophisticated, combining run conditions is a breeze
 
 ## Simpler States
 
-Of course, looping run criteria were used to power states.
+Previously, looping run criteria were used to power states, but as mentioned above, they've been removed.
 How do they work in Bevy 0.10?
 
 1. The current value of the state of type `S` is stored in the `State<S: States>` resource. The pending value is stored in `NextState<S: States>`.
