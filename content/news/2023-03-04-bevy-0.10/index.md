@@ -190,15 +190,12 @@ For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
 
 ```rust!
 // Let's make our own run condition
-fn contrived_run_condition(query: Query<&Life, With<Player>>, score: Res<Score>) -> bool {
-    let player_life = query.single();
-    
-    if score.0 * player_life > 9000 {
-        true
-    }
+fn game_end_condition(query: Query<&Player>, score: Res<Score>) -> bool {
+    let player = query.single();
+    player.is_alive() && score.0 > 9000
 }
 
-app.add_system(win_game.run_if(contrived_run_condition));
+app.add_system(win_game.run_if(game_end_condition));
 ```
 
 Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Reducing the number of tasks spawned can really add up. Like always though: benchmark!
