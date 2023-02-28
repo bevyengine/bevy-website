@@ -52,7 +52,7 @@ We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting 
 
 <div class="release-feature-authors">authors: @mockersf, @slyedoc</div>
 
-<img src="./android%20emulator.png" alt="Android emulator running Bevy" />
+![Android emulator running Bevy](android%20emulator.png)
 
 Bevy now runs out of the box on Android on more devices. This was unlocked by waiting for the [`Resumed`](https://docs.rs/winit/0.28/winit/event/enum.Event.html#variant.Resumed) event to create the window instead of doing it on startup, matching the [`onResume()`](https://developer.android.com/guide/components/activities/activity-lifecycle#onresume) callback on Android.
 
@@ -62,7 +62,7 @@ Please test on your devices and report successes or issues you may encounter! Th
 
 As this brings Bevy closer to full support of Android, there isn't a need anymore for separated examples for Android and iOS. They have been regrouped in one ["mobile" example](https://github.com/bevyengine/bevy/tree/v0.10.0/examples/mobile), and the instructions updated ([for Android](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#android) and [for iOS](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#ios)).
 
-<img src="./ios%20emulator.png" alt="iOS emulator running Bevy" />
+![iOS emulator running Bevy](ios%20emulator.png)
 
 ## What's Next?
 
