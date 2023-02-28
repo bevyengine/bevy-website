@@ -29,9 +29,9 @@ Description here.
 
 The library Bevy uses for audio, [`rodio`], contains support for spatial audio. In this version, we now support spatial audio (with certain caveats, like no HRTF and no first class support for `Emitter` and `Listener` components).
 
-Interestingly, during the development of this specific feature, `@harudagondi` found a [bug][reverse-channels-bug] where the audio channels reverse when running the app in either debug or release mode. This turns out to be a `rodio` issue, and this also affect previous versions of Bevy. Thanks to `@dis-da-moe`, the bug have been [fixed upstream][rodio-pr]. See the linked PR for interesting details about audio programming quirks and performance issues.
+Interestingly, during the development of this specific feature, `@harudagondi` found a [bug][reverse-channels-bug] where the audio channels reverse when running the app in either debug or release mode. This turns out to be a `rodio` issue, and this also affects previous versions of Bevy. Thanks to `@dis-da-moe`, the bug has been [fixed upstream][rodio-pr]. See the linked PR for interesting details about audio programming quirks and performance issues.
 
-Now, you can now have spatial audio in your game! Clone the `bevy` repository and invoke `cargo run --example spatial_audio_3d --release` in the command line for a showcase of 3D spatial audio in Bevy.
+You can now have spatial audio in your game! Clone the `bevy` repository and invoke `cargo run --example spatial_audio_3d --release` in the command line for a showcase of 3D spatial audio in Bevy.
 
 [`rodio`]: https://crates.io/crates/rodio
 [reverse-channels-bug]: https://github.com/RustAudio/rodio/issues/444
@@ -41,7 +41,7 @@ Now, you can now have spatial audio in your game! Clone the `bevy` repository an
 
 <div class="release-feature-authors">authors: @dis-da-moe</div>
 
-Bevy supports custom audio sources through the [`Decodable`] trait, but the way to register to the bevy app is very boilerplatey and sparsely documented. In **Bevy 0.10**, a new extension trait for `App` is added and the documentation for [`Decodable`] have vastly improved.
+Bevy supports custom audio sources through the [`Decodable`] trait, but the way to register to the bevy app is very boilerplatey and sparsely documented. In **Bevy 0.10**, a new extension trait for `App` is added and the documentation for [`Decodable`] has vastly improved.
 
 As such, instead of doing this:
 
@@ -54,7 +54,7 @@ app.add_asset::<MyCustomAudioSource>()
     .add_system(play_queued_audio_system::<MyCustomAudioSource>.in_base_set(CoreSet::PostUpdate))
 ```
 
-You only now have to do this:
+You only have to do this:
 
 ```rust
 app.add_audio_source::<MyCustomAudioSource>()
