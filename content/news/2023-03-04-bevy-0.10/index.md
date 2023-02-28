@@ -79,8 +79,9 @@ app
     )
     .configure_set(
         PhysicSet::Kinematics
-        // Look ma, I can order systems across command flushes
         .in_base_set(CoreSet::PostUpdate)
+        // Previously, this would have been impossible,
+        // as `CollisionDetection` is run in `Update`, which would be represented by a different stage
         .before(PhysicsSet::CollisionDetection)
         // Ooh run condition combinators :eyes:
         .run_if(not(game_paused))
