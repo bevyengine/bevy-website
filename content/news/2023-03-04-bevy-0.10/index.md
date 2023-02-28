@@ -32,6 +32,10 @@ In testing different bevy examples, the gains were typically in the 10% to 30% r
 
 To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`. If you're using `DefaultPlugins` then it will automatically be added for you on all platforms except wasm. Bevy does not currently support multithreading on wasm which is needed for this feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
 
+## Added a post-build method on `Plugin`
+
+A `setup` method was added to `Plugin` that runs after all the build methods have been called. This was required to enable pipelined rendering. It needed to remove the sub app from the app to send it between the main thread and the rendering thread. But this is only valid to do after all the plugin build methods have been called, because any plugin may want to modify the rendering sub app. 
+
 ## Section Template
 
 <div class="release-feature-authors">authors: @Foo, @Bar</div>
