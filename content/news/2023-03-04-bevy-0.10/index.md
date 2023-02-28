@@ -99,8 +99,6 @@ These rules must be compatible with each other: any paradoxes (like a system set
 
 As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
-Plugin authors: consider offering both a "default configuration" and a "minimal configuration" version of your plugins to support more unusual scheduling patterns while keeping that "it just works" behavior you've come to love.
-
 ## Directly Schedule Exclusive Systems
 
 Ever wished that you could just flush commands or run an exclusive system right before this system but after that system without shuffling your entire schedule to make it work?
