@@ -425,7 +425,6 @@ It's a great tool that we are looking to build on to create a first party soluti
 * **Pull `!Send` data out of the `World`:** storing non thread-safe data in a structure designed to be sent across threads has caused us no end of headaches. We plan on pulling these out into the `App`, resolving a major blocker for a first-class [multiple worlds](https://github.com/bevyengine/rfcs/pull/43) design.
 * **Timestamp window and input events:** As discussed in [#5984](https://github.com/bevyengine/bevy/issues/5984), tracking the exact timing of input events is essential to ensuring that event ordering and timing can be precisely reconstructed.
 * **[Opt-out change detection](https://github.com/bevyengine/bevy/issues/4882):** improve performance for tiny components by turning off change detection at compile or run-time.
-* **[Batched queries](https://github.com/bevyengine/bevy/pull/6161):** explicit SIMD-accelerated query iteration to get the most out of modern CPUs.
 
 ## Support Bevy
 
