@@ -59,6 +59,31 @@ query.par_iter().for_each(|mut component| {
 });
 ```
 
+## `Ref<T>` Queries
+
+<div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
+
+Since Bevy 0.1, `Mut<T>` has been used to enable change detection (along with related types like `ResMut<T>`). It's a simple wrapper type that provides mutable access to a component alongside its change tick metadata, automatically marking a change when the value is mutated.
+
+In **Bevy 0.10**, the change detection family has grown with `Ref<T>`, the immutable variant of `Mut<T>`. Like its mutable sibling, it allows you to react to changes made outside of the current system.
+
+```rust
+use bevy::prelude::*;
+
+fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
+    // Iterate over each component of type `T` and log its changed status.
+    for val in &q {
+        if val.is_changed() {
+            println!("Value `{val:?}` was last changed at tick {}.", val.last_changed());
+        } else {
+            println!("Value `{val:?}` is unchanged.");
+        }
+    }
+}
+```
+
+We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting a component's change ticks. This type will be removed in the next version of Bevy.
+
 ## What's Next?
 
 * **Some Work In Progress Feature**: Description here.
