@@ -119,9 +119,9 @@ app
         system_that_produces_commands,
         // Built-in exclusive system that applies generated commands
         apply_system_buffers,
-        system_that_needs_commands
+        system_that_needs_commands_to_have_been_applied
     // chain() creates an ordering between each of these systems,
-    // so we know that our commands will be ready in time
+    // so we know that our commands will have been applied by the time our last system is run
     ).chain().in_set(CoreSet::PostUpdate))
 ```
 
