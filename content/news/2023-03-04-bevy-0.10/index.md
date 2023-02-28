@@ -70,7 +70,7 @@ app
     .add_systems((
         apply_acceleration,
         apply_velocity
-    // Quickly order a list of systems with .chain()
+    // Quickly order a list of systems to run one after the next by using .chain()
     ).chain().in_set(PhysicsSet::Kinematics))
     .add_system(detect_collisions.in_set(PhysicsSet::CollisionDetection))
     // You can add configuration for an entire set in a single place
