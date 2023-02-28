@@ -19,7 +19,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Simpler, more flexible scheduling
 
-<div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe, @jakobhellermann, @JoJoJet, @geieredgar and a whole lot more </div>
+<div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe, @cart, @jakobhellermann, @JoJoJet, @geieredgar and a whole lot more </div>
 
 Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented! But as we all know, plans and implementations (start at [#6587](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and [#7267](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile`) are two different things. Let's take a look at what actually shipped for 0.10.
 
