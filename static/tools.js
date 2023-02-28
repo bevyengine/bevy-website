@@ -1,6 +1,3 @@
-import { ReadableStream as PolyfillReadableStream, TransformStream as PolyfillTransformStream } from '/web-streams-polyfill-3.2.1.mjs';
-import { createReadableStreamWrapper } from '/web-streams-adapter-0.1.0.mjs';
-
 function getFilename(resource) {
     const pathname = (typeof resource === 'string')
         ? resource
@@ -16,8 +13,6 @@ function getFilename(resource) {
 // `progressiveFetch` is a wrapper over `window.fetch`. It allows you to insert middle-ware that is
 // polled as the fetch completes. See bevy-website/issues/338 for details.
 async function progressiveFetch(resource, callbacks={}) {
-    const toPolyfillReadable = createReadableStreamWrapper(PolyfillReadableStream);
-    const toNativeReadable = createReadableStreamWrapper(window.ReadableStream);
     const filename = getFilename(resource);
     const cb = Object.assign({
         start: (params) => {},
@@ -37,7 +32,7 @@ async function progressiveFetch(resource, callbacks={}) {
         cb.update({ filename, isIndeterminate, loaded, loadedPercent, loadedBytes, lengthBytes });
     }
 
-    const transform = new PolyfillTransformStream({
+    const transform = new TransformStream({
         start() {
             cb.start({ filename, lengthBytes });
         },
@@ -52,10 +47,7 @@ async function progressiveFetch(resource, callbacks={}) {
         },
     });
 
-    return new Response(
-        toNativeReadable(toPolyfillReadable(response.body).pipeThrough(transform)), 
-        response,
-    );
+    return new Response(response.body.pipeThrough(transform), response);
 }
 
 export { progressiveFetch };
