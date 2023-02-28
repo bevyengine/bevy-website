@@ -112,7 +112,7 @@ While it may not be an issue for simple projects, debug builds in Rust can be _v
 
 It's not uncommon for debug builds using the default configuration to take multiple minutes to load large 3D models, or for the framerate for simple scenes to drop to near-unplayable levels.
 
-Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add this to your `Cargo.toml`:
+Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add the following to your `Cargo.toml`:
 
 ```toml
 # Enable a small amount of optimization in debug mode
