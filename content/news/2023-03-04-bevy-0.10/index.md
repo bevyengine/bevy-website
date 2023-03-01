@@ -507,16 +507,16 @@ As this brings Bevy closer to full support of Android, there isn't a need anymor
 
 ![Trace with Pipelined Rendering](pipelined-rendering-trace.png)
 
-On multithreaded platforms bevy will now run significantly faster by running simulation and
-rendering in parallel. The renderer was rearchiteched in [bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
+On multithreaded platforms, bevy will now run significantly faster by running simulation and
+rendering in parallel. The renderer was rearchitected in [bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
 to enable this, but the final step of actually running them in parallel was not done until
 now. There was a bit of tricky work to figure out around enabling running specific rendering
-systems on the main app thread instead of the rendering thread and making sure !Send
+systems on the main app thread instead of the rendering thread and making sure `!Send`
 resources aren't accessed from a different thread than they are initialized on.
 
 ![Histogram of Many Foxes Frame Time](pipelined-rendering-histogram.png)
 
-In testing different bevy examples, the gains were typically in the 10% to 30% range. As seen in the above histogram the many foxes stress test gains 1.8ms.
+In testing different bevy examples, the gains were typically in the 10% to 30% range. As seen in the above histogram, the "many foxes" stress test gains 1.8ms.
 
 To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`. If you're
 using `DefaultPlugins` then it will automatically be added for you on all platforms except
@@ -525,9 +525,9 @@ feature to work. If you are not using `DefaultPlugins` you can add the plugin ma
 
 ## Added a post-build method on `Plugin`
 
-A optional `setup` method was added to `Plugin` that runs after all the build methods have
-been called. This was required to enable pipelined rendering. It needed to remove the sub
-app from the app to send it between the main thread and the rendering thread. But this is
+An optional `setup` method was added to the `Plugin` trait that runs after all the build methods have
+been called. This was required to enable pipelined rendering, which needed to remove the sub
+app from the app to send it between the main thread and the rendering thread. This is
 only valid to do after all the plugin build methods have been called, because any plugin may
 want to modify the rendering sub app.
 
