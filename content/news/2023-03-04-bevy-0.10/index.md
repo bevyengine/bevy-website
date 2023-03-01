@@ -509,14 +509,17 @@ As this brings Bevy closer to full support of Android, there isn't a need anymor
 
 On multithreaded platforms, bevy will now run significantly faster by running simulation and
 rendering in parallel. The renderer was rearchitected in [bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
-to enable this, but the final step of actually running them in parallel was not done until
-now. There was a bit of tricky work to figure out around enabling running specific rendering
-systems on the main app thread instead of the rendering thread and making sure `!Send`
-resources aren't accessed from a different thread than they are initialized on.
+to enable this, but the final step of actually running them in parallel was not done until now.
+There was a bit of tricky work to figure out. The render world has a system that has to run on
+the main thread, but task pool only had the ability to run on the world's thread. So when we send
+the render world to another thread we need to accommodate still running render systems on the main
+thread. So we added the ability to spawn tasks onto the main thread in addition to the world's thread.
 
 ![Histogram of Many Foxes Frame Time](pipelined-rendering-histogram.png)
 
-In testing different bevy examples, the gains were typically in the 10% to 30% range. As seen in the above histogram, the "many foxes" stress test gains 1.8ms.
+In testing different bevy examples, the gains were typically in the 10% to 30% range.
+As seen in the above histogram, the mean frame time of the "many foxes" stress test
+is 1.8ms faster than before.
 
 To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`. If you're
 using `DefaultPlugins` then it will automatically be added for you on all platforms except
