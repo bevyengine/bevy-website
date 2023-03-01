@@ -28,7 +28,7 @@ On multithreaded platforms bevy will now run significantly faster by running sim
 
 ![Histogram of Many Foxes Frame Time](pipelined-rendering-histogram.png)
 
-In testing different bevy examples, the gains were typically in the 10% to 30% range. As seen in the above histogram the many foxes stress test gains around 1ms. (TODO: I need to redo the histogram with lto on.)
+In testing different bevy examples, the gains were typically in the 10% to 30% range. As seen in the above histogram the many foxes stress test gains 1.8ms.
 
 To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`. If you're using `DefaultPlugins` then it will automatically be added for you on all platforms except wasm. Bevy does not currently support multithreading on wasm which is needed for this feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
 
