@@ -34,7 +34,7 @@ To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`.
 
 ## Added a post-build method on `Plugin`
 
-A `setup` method was added to `Plugin` that runs after all the build methods have been called. This was required to enable pipelined rendering. It needed to remove the sub app from the app to send it between the main thread and the rendering thread. But this is only valid to do after all the plugin build methods have been called, because any plugin may want to modify the rendering sub app. 
+A optional `setup` method was added to `Plugin` that runs after all the build methods have been called. This was required to enable pipelined rendering. It needed to remove the sub app from the app to send it between the main thread and the rendering thread. But this is only valid to do after all the plugin build methods have been called, because any plugin may want to modify the rendering sub app. 
 
 ## Section Template
 
