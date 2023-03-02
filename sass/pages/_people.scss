@@ -37,7 +37,6 @@
 }
 
 .people-role {
-    display: block;
     font-weight: 400;
     font-size: 0.8rem;
     padding-left: 0.3rem;
@@ -50,7 +49,17 @@
     border-width: 1px;
 }
 
+.people-role-card {
+    display: block;
+}
+
+.people-role-inline {
+    font-size: 1.0rem;
+    margin-right: 0.2rem;
+}
+
 .people-role-top-level {
+    display: block;
     float: left;
     font-size: 1.0rem;
     margin-right: 0.2rem;

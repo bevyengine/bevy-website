@@ -1,17 +1,6 @@
-{% extends "layouts/page-with-menu.html" %}
-{% import "macros/assets.html" as assets_macros %}
+{% extends "layouts/base.html" %}
 
-{% block page_name %}People{% endblock %}
-
-{% block mobile_page_menu %}
-    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
-{% endblock %}
-
-{% block page_menu %}
-    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
-{% endblock %}
-
-{% block page_content %}
+{% block content %}
 
 <svg style="display: none" xmlns="http://www.w3.org/2000/svg" >
     <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -44,71 +33,38 @@
 </svg>
 
 <div class="assets">
-    <div class="assets-intro media-content">
-        The Bevy community! If you want to see yourself here, <a href="https://github.com/bevyengine/bevy-community">submit a pull request</a>!
-    </div>
-    {% for subsection in section.subsections %}
-        {% set section = get_section(path=subsection) %}
 
         <a class="anchor-target" id="{{ section.title | slugify }}"></a>
-        <h1 class="asset-section">
-            {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
-        </h1>
-
-        {% if section.title == "The Bevy Organization" %}
-        <div class="people-section-description">
-        <p>
-            The Bevy Organization is the group of people responsible for stewarding the Bevy project. It handles things
-            like choosing project direction, merging pull requests, managing bugs / issues / feature requests, running
-            the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
-        </p>
-        <p>
-            Anyone with a history of contributing to Bevy can join the Bevy Organization. Reach out to the Project Lead
-            if you would like to join!
-        </p>
-        <p>
-            <a class="anchor-target" id="org-roles"></a>
-            <h2>
-                Roles<a class="anchor-link" href="#org-roles">#</a>
-            </h2>
-            <div class="people-role-descriptions">
-                <div class="people-role-description">
-                    <div class="people-role people-role-top-level people-role-project-lead">Project Leads</div>
-                    <div class="people-role-description-text">have the final call on all design and code changes within Bevy. They are responsible for representing the project publicly and they choose how the project is organized.</div>
-                </div>
-                <div class="people-role-description">
-                    <div class="people-role people-role-top-level people-role-maintainer">Maintainers</div>
-                    <div class="people-role-description-text">have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy project.</div>
-                </div>
-                <div class="people-role-description">
-                    <div class="people-role people-role-top-level people-role-sme">SMEs</div>
-                    <div class="people-role-description-text">(Subject Matter Experts) have proven themselves to be experts in a given development area. They help guide Bevy's direction in their area and they are great people to reach out to if you have questions about a given area.</div>
-                </div>
-                <div class="people-role-description">
-                    <div class="people-role-description-text">Other members, without a special role, are part of the GitHub organization. They have the power to manage GitHub issues and pull requests.</div>
-                </div>
-            </div>
-        </p>
-        </div>
-        {% endif %}
-
-        {% if section.title == "The Bevy Organization" %}
-        <a class="anchor-target" id="org-members"></a>
-        <h2>
-            Members<a class="anchor-link" href="#org-members">#</a>
-        </h2>
-        {% endif %}
-
-        {% if section.title == "Community Members" %}
         <div class="people-section-description media-content">
         <p>
-            People in the Bevy community who are not part of the organization.
+            Bevy is a community-driven project and many of us rely on financial support to continue building Bevy.
+            Bevy is built by a large group of people, so consider backing the ones that are building what you care about!
+            If you are uncertain, a
+            <span class="people-role people-role-inline people-role-project-lead">Project Lead</span>,
+            <span class="people-role people-role-inline people-role-maintainer">Maintainer</span>, or
+            <span class="people-role people-role-inline people-role-sme">SME</span>
+            is a good choice. You can <a href="/community/people/">learn more about these roles here</a>.
         </p>
         <p>
-            Anyone can add themselves here! <a href="https://github.com/bevyengine/bevy-community">Submit a pull request</a>!
+            If you are interested in backing Bevy in a big way (and you would like to <a href="/">see your logo on Bevy's home page</a>),
+            consider supporting one of our <span class="people-role people-role-inline people-role-maintainer">Maintainers</span> at one
+            of the following tiers:
+            <ul>
+                <li><b>Bronze</b>: $100 / month</li>
+                <li><b>Silver</b>: $200 / month</li>
+                <li><b>Gold</b>: $300 / month</li>
+                <li><b>Platinum</b>: $1000 / month</li>
+                <li><b>Diamond</b>: $4000 / month</li>
+                <li><b>Patron</b>: Anything over $100,000 / year</li>
+            </ul>
+
+            If a maintainer offers these roles in their sponsors page, that counts! If you are interested in Patron sponsorship, contact us directly.
+            Reach out to us <a href="bevyengine@gmail.com">here</a> if you have any questions about sponsorship or you would like to claim a sponsorship reward.
+        </p>
+        <p>
+            All Bevy leaders sign our <a href="/sponsorship-pledge">Sponsorship Pledge</a> to ensure the needs of the Bevy Community always come first.
         </p>
         </div>
-        {% endif %}
 
         {% if section.pages %}
         <div class="item-grid">
@@ -119,7 +75,7 @@
             
             {% for post in pages %}
 
-            <div class="card people-card" id="{{ post.title | slugify }}">
+            <div onclick="location.href='{{ post.extra.sponsor }}';" class="card people-card" id="{{ post.title | slugify }}">
                 <div class="card-text media-content card-dense">
                     <div class="card-title">
                         <div style="width: 210px; font-size: {% if post.title | length > 30 %} 0.5rem; {% elif post.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
@@ -220,7 +176,7 @@
                                 {% elif role == "Maintainer" %}
                                     <div class="people-role people-role-card people-role-maintainer">{{ role }}</div>
                                 {% elif role is starting_with("SME-") %}
-                                    <div class="people-role people-role-card  people-role-sme">{{ role }}</div>
+                                    <div class="people-role people-role-card people-role-sme">{{ role }}</div>
                                 {% else %}
                                     <div class="people-role">{{ role }}</div>
                                 {% endif %}
@@ -249,6 +205,5 @@
         </div>
         {% endif %}
 
-    {% endfor %}
 </div>
 {% endblock content %}
