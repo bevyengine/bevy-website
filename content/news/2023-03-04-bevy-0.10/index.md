@@ -579,7 +579,6 @@ query.iter().for_each(|mut component| {
 
 [`Query::par_iter`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Query.html#method.par_iter
 
-
 ## `UnsafeWorldCell` and `UnsafeEntityCell`
 
 <div class="release-feature-authors">authors: @jakobhellermann, @BoxyUwU and @JoJoJet</div>
