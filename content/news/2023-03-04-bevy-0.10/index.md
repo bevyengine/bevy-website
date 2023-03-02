@@ -579,6 +579,15 @@ query.iter().for_each(|mut component| {
 
 [`Query::par_iter`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Query.html#method.par_iter
 
+
+## `UnsafeWorldCell` and `UnsafeEntityCell`
+
+<div class="release-feature-authors">authors: @jakobhellermann, @BoxyUwU and @JoJoJet</div>
+
+`UnsafeWorldCell` and `UnsafeEntityCell` allow shared mutable access to parts of the world via unsafe code. It serves a similar purpose as `UnsafeCell`, allowing people to build interior mutability abstractions such as `Cell` `Mutex` `Channel` etc. In bevy `UnsafeWorldCell` will be used to support the scheduler and system param implementations as these are interior mutability abstractions for `World`, it also currently is used to implement `WorldCell`. It's also likely that `UnsafeEntityCell` will be used to implement versions of `EntityRef`/`EntityMut` that only have access to the components on the entity rather than the entire world.
+
+These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
