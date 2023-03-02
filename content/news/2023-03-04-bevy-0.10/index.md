@@ -501,7 +501,6 @@ As this brings Bevy closer to full support of Android, there isn't a need anymor
 
 ![iOS emulator running Bevy](ios%20emulator.png)
 
-
 ## ECS Optimizations
 
 <div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
