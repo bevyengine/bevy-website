@@ -1170,6 +1170,44 @@ commands.spawn(SpriteBundle::default()).add(MyCustomCommand);
 [`EntityCommand`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.EntityCommand.html
 [`Commands`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Commands.html
 
+## Windows as Entities
+
+<div class="release-feature-authors">authors: @aceeri, @Weibye, @cart</div>
+
+On today's news about the crusade of **X as Entities**, windows are now entities with a [`Window`] component.
+
+You might think this is a bit overkill, but more complex behaviors around windows required extra state management in some fashion. Which tended to be either other resources (which ended up being more brittle to usecases of multiple windows) or in components on entities (which begs the question, why even have a special case?)
+
+This gives us the expressiveness of the ECS while also improving readability/discoverability of how to create, use, and close windows. As well as benefit from any feature we add to the ECS (e.g. relations 🌈).
+
+Plus now that [`Window`] is a component, changing the title of a window is the same for both initialising and modifying, no fuss!
+
+```rust
+fn windows_go_brr(mut commands: Commands) {
+    // A new window will be created by any entity with a `Window` component
+    let window = commands.spawn(Window {
+        title: "My window :D".to_owned(),
+        ..default()
+    }).id();
+}
+
+fn modify_windows(mut windows: Query<&mut Window>) {
+    for window in &mut windows {
+        // and modifying fields on the `Window` component will update the window accordingly
+        window.title = "My improved window! :D".to_owned();
+    }
+}
+
+fn destroy_them(mut commands: Commands, windows: Query<Entity, With<Window>>) {
+    for entity in &mut windows {
+        // and closing a window can be done with despawning the window entity!
+        commands.entity(entity).despawn();
+    }
+}
+```
+
+[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
