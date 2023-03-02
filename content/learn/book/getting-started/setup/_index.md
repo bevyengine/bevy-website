@@ -112,7 +112,7 @@ While it may not be an issue for simple projects, debug builds in Rust can be _v
 
 It's not uncommon for debug builds using the default configuration to take multiple minutes to load large 3D models, or for the framerate for simple scenes to drop to near-unplayable levels.
 
-Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add this to your `Cargo.toml`:
+Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add the following to your `Cargo.toml`:
 
 ```toml
 # Enable a small amount of optimization in debug mode
@@ -130,7 +130,7 @@ You might think to simply develop in release mode instead, but we recommend agai
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking). Note that right now, this doesn't work on Windows.
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic" feature flag (enables dynamic linking). Note that right now, this doesn't work on Windows.
 
   ```sh
   cargo run --features bevy/dynamic
@@ -155,7 +155,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustup component add llvm-tools-preview
     ```
 
-  * **MacOS**: Modern LLD does not yet support MacOS, but we can use zld instead: `brew install michaeleisel/zld/zld`
+  * **MacOS**: You can follow this [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install mold`
   * **Arch**: `sudo pacman -S mold`
