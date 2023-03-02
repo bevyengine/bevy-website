@@ -511,7 +511,7 @@ On multithreaded platforms, bevy will now run significantly faster by running si
 rendering in parallel. The renderer was rearchitected in [bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
 to enable this, but the final step of actually running them in parallel was not done until now.
 There was a bit of tricky work to figure out. The render world has a system that has to run on
-the main thread, but task pool only had the ability to run on the world's thread. So when we send
+the main thread, but the task pool only had the ability to run on the world's thread. So, when we send
 the render world to another thread we need to accommodate still running render systems on the main
 thread. So we added the ability to spawn tasks onto the main thread in addition to the world's thread.
 
