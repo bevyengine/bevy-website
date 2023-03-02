@@ -72,11 +72,11 @@ app
     // The order of these method calls doesn't matter!
    .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
     // Add multiple systems at once with add_systems!    
-    .add_systems((
-        apply_acceleration,
-        apply_velocity
-    // Quickly order a list of systems to run one after the next by using .chain()
-    ).chain().in_set(PhysicsSet::Kinematics))
+    .add_systems(
+        (apply_acceleration, apply_velocity)
+            // Quickly order a list of systems to run one after the next by using .chain()
+            .chain()
+            .in_set(PhysicsSet::Kinematics)),
     .add_system(detect_collisions.in_set(PhysicsSet::CollisionDetection))
     // You can add configuration for an entire set in a single place
     .configure_set(
@@ -151,8 +151,7 @@ It turns out, Bevy already _had_ a great tool for this: schedules run inside of 
 
 With the addition of the new `Schedules` resource and the `world.run_schedule(schedule_label: impl ScheduleLabel)`API it's more :sparkles: ergonomic :sparkles: than ever.
 
-```rust!
-
+```rust
 // A schedule!
 let mut my_schedule = Schedule::new();
 schedule.add_system(my_system);
@@ -194,7 +193,7 @@ With a new blessed pattern for complex control flow, we can finally get rid of l
 If you crave that powerful, complex control flow: use the "schedules in exclusive systems" pattern listed above.
 For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
 
-```rust!
+```rust
 // Let's make our own run condition
 fn game_end_condition(query: Query<&Player>, score: Res<Score>) -> bool {
     let player = query.single();
@@ -231,7 +230,7 @@ How do they work in Bevy 0.10?
 
 As a user though, you don't have to worry about those details:
 
-```rust!
+```rust
 // Setting up our state type.
 // Note that each variant of this enum is a distinct state.
 #[derive(States, PartialEq, Eq, Debug, Default)]
@@ -372,7 +371,7 @@ app
 :sparkles: **Ergonomic** :sparkles::
 
 ```rust
-    app.add_systems((a, b, c, d).chain());
+app.add_systems((a, b, c, d).chain());
 ```
 
 There's another lovely change lurking in that last example: the `add_systems` API.
