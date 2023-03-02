@@ -72,11 +72,12 @@ app
     // The order of these method calls doesn't matter!
    .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
     // Add multiple systems at once with add_systems!    
-    .add_systems((
-        apply_acceleration,
-        apply_velocity
-    // Quickly order a list of systems to run one after the next by using .chain()
-    ).chain().in_set(PhysicsSet::Kinematics))
+    .add_systems(
+        (apply_acceleration, apply_velocity)
+            // Quickly order a list of systems to run one after the next by using .chain()
+            .chain()
+            .in_set(PhysicsSet::Kinematics),
+    )
     .add_system(detect_collisions.in_set(PhysicsSet::CollisionDetection))
     // You can add configuration for an entire set in a single place
     .configure_set(
@@ -151,8 +152,7 @@ It turns out, Bevy already _had_ a great tool for this: schedules run inside of 
 
 With the addition of the new `Schedules` resource and the `world.run_schedule(schedule_label: impl ScheduleLabel)`API it's more :sparkles: ergonomic :sparkles: than ever.
 
-```rust!
-
+```rust
 // A schedule!
 let mut my_schedule = Schedule::new();
 schedule.add_system(my_system);
@@ -194,7 +194,7 @@ With a new blessed pattern for complex control flow, we can finally get rid of l
 If you crave that powerful, complex control flow: use the "schedules in exclusive systems" pattern listed above.
 For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
 
-```rust!
+```rust
 // Let's make our own run condition
 fn game_end_condition(query: Query<&Player>, score: Res<Score>) -> bool {
     let player = query.single();
@@ -231,7 +231,7 @@ How do they work in Bevy 0.10?
 
 As a user though, you don't have to worry about those details:
 
-```rust!
+```rust
 // Setting up our state type.
 // Note that each variant of this enum is a distinct state.
 #[derive(States, PartialEq, Eq, Debug, Default)]
@@ -372,7 +372,7 @@ app
 :sparkles: **Ergonomic** :sparkles::
 
 ```rust
-    app.add_systems((a, b, c, d).chain());
+app.add_systems((a, b, c, d).chain());
 ```
 
 There's another lovely change lurking in that last example: the `add_systems` API.
@@ -533,6 +533,51 @@ been called. This was required to enable pipelined rendering, which needed to re
 app from the app to send it between the main thread and the rendering thread. This is
 only valid to do after all the plugin build methods have been called, because any plugin may
 want to modify the rendering sub app.
+
+## ECS Optimizations
+
+<div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
+
+ECS underlies the entire engine, so eliminating overhead in the ECS results in engine-wide speedups. In **Bevy 0.10**, we've found quite a few areas where we were able to massively reduce the overhead and improve CPU utilization for the entire engine.
+
+In [#6547](https://github.com/bevyengine/bevy/pull/6547), we enabled [autovectorization](https://en.wikipedia.org/wiki/Automatic_vectorization) when using `Query::for_each`, and its parallel variants. Depending on the target architecture the engine is being compiled for, this can result in a 50-87.5% speed up in query iteration time. In 0.11, we may be extending this optimization to all iterator combinators based on `Iterator::fold`, such as `Iterator::count`. See [this PR](https://github.com/bevyengine/bevy/pull/6773) for more details.
+
+In [#6681](https://github.com/bevyengine/bevy/pull/6681), by tightly packing entity location metadata and avoiding extra memory lookups, we've significantly reduced the overhead when making random query lookups via `Query::get`, seeing up to a 43% reduction in the overhead spent in `Query::get` and `World::get`.
+
+In [#6800](https://github.com/bevyengine/bevy/pull/6800) and [#6902](https://github.com/bevyengine/bevy/pull/6902), we've found that rustc can optimize out compile-time constant branches across function boundaries, moving the branch from runtime to compile time, has resulted in up to a 50% reduction in overhead when using `EntityRef::get`, `EntityMut::insert`, `EntityMut::remove`, and their variants.
+
+In [#6391](https://github.com/bevyengine/bevy/pull/6391), we've reworked `CommandQueue`'s internals to be more CPU-cache friendly, which has shown up to a 37% speedup when encoding and applying commands.
+
+## Adaptive Batching for Parallel Query Iteration
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+`Query::par_for_each` has been the tool everyone reaches for when their queries get too big to run single-threaded. Got 10,0000 entities running around on your screen? No problem, `Query::par_for_each` chunks it up into smaller batches and distributes the workload over multiple threads. However, in **Bevy 0.9** and before, `Query::par_for_each` required callers to provide a batch size to help tune these batches for maximum performance. This rather opaque knob often resulted in users just randomly picking a value and rolling with it, or fine tuning the value based on their development machines. Unfortunately, the most effective value is dependent on the runtime environment (i.e. how many logical cores does a player's computer have) and the state of the ECS World (i.e. how many entities are matched?). Ultimately most users of the API just chose a flat number and lived with the results, good or bad.
+
+```rust
+// 0.9
+const QUERY_BATCH_SIZE: usize = 32;
+
+query.par_for_each(QUERY_BATCH_SIZE, |mut component| {
+   // ...
+});
+```
+
+In 0.10, you no longer need to provide a batch size! Bevy will automatically evaluate the state of the World and task pools and select a batch size using a heuristic to ensure sufficient parallelism, without incurring too much overhead. This makes parallel queries as easy to use as normal single-threaded queries! While great for most typical use cases, these heuristics may not be suitable for every workload, so we've provided an escape hatch for those who need finer control over the workload distribution. In the future, we may further tune the backing heuristics to try to get the default to be closer to optimal in these workloads. For more complete details on how the heuristics work and what workloads may be considered atypical, see the documentation of [`Query::par_iter`].
+
+```rust
+// 0.10
+query.par_iter().for_each(|mut component| {
+   // ...
+});
+
+// Fairly easy to convert from a single threaded for_each. Just change iter to par_iter!
+query.iter().for_each(|mut component| {
+   // ...
+});
+```
+
+[`Query::par_iter`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Query.html#method.par_iter
 
 ## What's Next?
 
