@@ -485,6 +485,39 @@ fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
 
 We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting a component's change ticks. This type will be removed in the next version of Bevy.
 
+## Renderer Optimizations
+
+<div class="release-feature-authors">authors: @danchia, @superdump, james7132, @kurtkuehnert</div>
+
+Bevy's renderer has had quite a few low hanging fruit for optimization. 
+
+The biggest bottleneck when rendering anything in Bevy the final render stage, where we collect all of the data in the render world to issue draw calls to the GPU. The core loops here are extremely hot and any extra overhead is noticable. In **Bevy 0.10**, we've thrown the kitchen sink at this problem and have attacked it from every angle. Overall, these following optimizations should make the render stage **2-3 times faster** than it was in 0.9:
+
+ * In [#7639](https://github.com/bevyengine/bevy/pull/7639) by @danchia, we found that even disabled logging has a strong impact on hot loops, netting us 20-50% speedups in the stage.
+ * In [#6944](https://github.com/bevyengine/bevy/pull/6944) by @james7132, we shrank the core data structures involved in the stage, reducing memory fetches and netting us 9% speedups.
+ * In [#6885](https://github.com/bevyengine/bevy/pull/6885) by @james7132, TODO
+ * In [#7053](https://github.com/bevyengine/bevy/pull/7053) by @james7132, we changed `TrackedRenderPass`'s allocation patterns to minimize branching within these loops, netting a 6% speedup.
+ * In [#7084](https://github.com/bevyengine/bevy/pull/7084) by @james7132, we altered how we're fetching resources from the World to minimize use of atomics in the stage, netting a 2% speedup.
+ * In [#6988](https://github.com/bevyengine/bevy/pull/6988) by @kurtkuehnert, we changed our internal resource IDs to use atomically incremented counters instead of UUIDs, reducing the comparison cost of some of the branches in the stage.
+
+One other ongoing development is enabling the render stage to properly parallelize command encoding across multiple threads. Following [#7248](https://github.com/bevyengine/bevy/pull/7248) by @james7132, we now support ingesting externally created `CommandBuffer`s into the render graph, which should allow users to encode GPU commands in parallel and import them into the render graph. This is currently blocked by wgpu internally requiring locking the device whenever writing 
+
+Optimization isn't all about CPU time! We've also reduced the memory usage of `ComputedVisibility` by 50% thanks to @james7132.
+
+TODO: bevy_pbr: Avoid copying structs and using registers in shaders
+TODO: improve compile time by type-erasing wgpu structs
+TODO: Make PipelineCache internally mutable.
+TODO: Directly extract joints into SkinnedMeshJoints
+TODO: Optimize color computation in prepare_uinodes
+TODO: Improve Color::hex performance (include with other color API changes?)
+
+## Parallelized Transform Propagation and Animation Kinematics
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+TODO: Parallelize forward kinematics animation systems
+TODO: Parallelized transform propagation
+
 ## Android Support
 
 <div class="release-feature-authors">authors: @mockersf, @slyedoc</div>
