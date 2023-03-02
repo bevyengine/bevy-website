@@ -538,7 +538,7 @@ query.par_iter().for_each(|mut component| {
    // ...
 });
 
-// Fairly easily to convert from a single threaded for_each. Just change iter to par_iter!
+// Fairly easy to convert from a single threaded for_each. Just change iter to par_iter!
 query.iter().for_each(|mut component| {
    // ...
 });
