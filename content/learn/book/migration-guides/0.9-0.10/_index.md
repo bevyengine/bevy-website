@@ -33,14 +33,15 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">App</div>
 </div>
 
-`App::add_sub_app` has been removed in favor of `App::insert_sub_app`. Use `SubApp::new` and insert it via `App::add_sub_app`
+`App::add_sub_app` has been removed in favor of `App::insert_sub_app`. Use `SubApp::new` and insert it via `App::insert_sub_app`
+
 
 Old:
 
 ```rust
 let mut sub_app = App::new()
 // Build subapp here
-app.add_sub_app(MySubAppLabel, sub_app);
+app.add_sub_app(MySubAppLabel, sub_app, extract_fn);
 ```
 
 New:
@@ -66,14 +67,6 @@ app.insert_sub_app(MySubAppLabel, SubApp::new(sub_app, extract_fn));
 </div>
 
 - `CorePlugin` broken into separate plugins.  If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
-
-### [Remove redundant table and sparse set component IDs from Archetype](https://github.com/bevyengine/bevy/pull/4927)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-Do I still need to do this? I really hope people were not relying on the public facing APIs changed here.
 
 ### [Immutable sparse sets for metadata storage](https://github.com/bevyengine/bevy/pull/4928)
 
@@ -105,7 +98,7 @@ column.get_ticks(row).changed.deref()
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-`ArchetypeId`, `ArchetypeGeneration`, and `ArchetypeComponentId` are all now opaque IDs and cannot be turned into a numeric value. Please file an issue if this does not work for your use case.
+`ArchetypeId`, `ArchetypeGeneration`, and `ArchetypeComponentId` are all now opaque IDs and cannot be turned into a numeric value. Please file an issue if this does not work for your use case or check [bevy_ecs is excessively public](https://github.com/bevyengine/bevy/issues/3362) for more info.
 
 `Archetype` and `Archetypes` are not constructible outside of `bevy_ecs` now. Use `World::archetypes` to get a read-only reference to either of these types.
 
@@ -117,7 +110,7 @@ column.get_ticks(row).changed.deref()
 
 `Entities`’s `Default` implementation has been removed. You can fetch a reference to a `World`’s `Entities` via `World::entities` and `World::entities_mut`.
 
-`Entities::alloc_at_without_replacement` and `AllocAtWithoutReplacement` has been made private due to difficulty in using it properly outside of `bevy_ecs`. If you still need use of this API, please file an issue.
+`Entities::alloc_at_without_replacement` and `AllocAtWithoutReplacement` has been made private due to difficulty in using it properly outside of `bevy_ecs`. If you still need use of this API, please file an issue or check [bevy_ecs is excessively public](https://github.com/bevyengine/bevy/issues/3362) for more info.
 
 ### [Make the `SystemParam` derive macro more flexible](https://github.com/bevyengine/bevy/pull/6694)
 
@@ -169,14 +162,6 @@ fn clear_events(mut reader: EventReader<SomeEvent>) {
 
 `Archetype` indices and `Table` rows have been newtyped as `ArchetypeRow` and `TableRow`.
 
-### [Simplify trait hierarchy for `SystemParam`](https://github.com/bevyengine/bevy/pull/6865)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-_Merged with the guide for #6919._
-
 ### [Round out the untyped api s](https://github.com/bevyengine/bevy/pull/7009)
 
 <div class="migration-guide-area-tags">
@@ -192,15 +177,19 @@ _Merged with the guide for #6919._
 </div>
 
 A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
+### [Remove `ExclusiveSystemParam::apply`](https://github.com/bevyengine/bevy/pull/7489)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The trait method `ExclusiveSystemParamState::apply` has been removed. If you have an exclusive system with buffers that must be applied, you should apply them within the body of the exclusive system.
 
 ### [Remove the `SystemParamState` trait and remove types like `ResState`](https://github.com/bevyengine/bevy/pull/6919)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
 </div>
-
-Note: this replaces the migration guide for #6865.
-This is relative to Bevy 0.9, not main.
 
 The traits `SystemParamState` and `SystemParamFetch` have been removed, and their functionality has been transferred to `SystemParam`.
 
@@ -246,14 +235,6 @@ Normal resources and `NonSend` resources no longer share the same backing storag
 
 - Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` methods have been changed. All callers should re-audit for soundness.
 
-### [Support piping exclusive systems](https://github.com/bevyengine/bevy/pull/7023)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-_Merged with the guide for #7675_.
-
 ### [Basic adaptive batching for parallel query iteration](https://github.com/bevyengine/bevy/pull/4777)
 
 <div class="migration-guide-area-tags">
@@ -287,7 +268,7 @@ fn parallel_system(query: Query<&MyComponent>) {
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
 </div>
-
+- Added `Components::resource_id`.
 - Changed `World::init_resource` to return the generated `ComponentId`.
 - Changed `World::init_non_send_resource` to return the generated `ComponentId`.
 
@@ -297,17 +278,7 @@ fn parallel_system(query: Query<&MyComponent>) {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO  no migration required, will remove later -->
-
-### [Remove `ExclusiveSystemParam::apply`](https://github.com/bevyengine/bevy/pull/7489)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-_Note for maintainers: this migration guide makes more sense if it’s placed above the one for #6919._
-
-The trait method `ExclusiveSystemParamState::apply` has been removed. If you have an exclusive system with buffers that must be applied, you should apply them within the body of the exclusive system.
+The type UnsafeWorldCellEntityRef has been renamed to UnsafeEntityCell
 
 ### [Replace `RemovedComponents<T>` backing with `Events<Entity>`](https://github.com/bevyengine/bevy/pull/5680)
 
@@ -324,7 +295,7 @@ The trait method `ExclusiveSystemParamState::apply` has been removed. If you hav
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-`ManualEventIterator` and `ManualEventIteratorWithId` are no longer `DoubleEndedIterator`s.
+`ManualEventIterator` and `ManualEventIteratorWithId` are no longer `DoubleEndedIterator`s since the impls didn't work correctly, and any code using this was likely broken.
 
 ### [Rename `Tick::is_older_than` to `Tick::is_newer_than`](https://github.com/bevyengine/bevy/pull/7561)
 
@@ -333,16 +304,6 @@ The trait method `ExclusiveSystemParamState::apply` has been removed. If you hav
 </div>
 
 - Replace usages of `Tick::is_older_than` with `Tick::is_newer_than`.
-
-### [Rename `UnsafeWorldCellEntityRef` to `UnsafeEntityCell`](https://github.com/bevyengine/bevy/pull/7568)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-_Note for maintainers:_ This PR has no breaking changes relative to bevy 0.9. Instead of this PR having its own migration guide, we should just edit the changelog for #6404.
-
-The type `UnsafeWorldCellEntityRef` has been renamed to `UnsafeEntityCell`.
 
 ### [Cleanup system sets called labels](https://github.com/bevyengine/bevy/pull/7678)
 
@@ -357,8 +318,6 @@ The type `UnsafeWorldCellEntityRef` has been renamed to `UnsafeEntityCell`.
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
 </div>
-
-_The guide for #7023 has been merged into this one._
 
 For the `SystemParamFunction` trait, the type parameters `In`, `Out`, and `Param` have been turned into associated types.
 
@@ -394,14 +353,6 @@ where
     T: ExclusiveSystemParamFunction<Marker>,
 { ... }
 ```
-
-### [Cleanup ScheduleBuildSettings](https://github.com/bevyengine/bevy/pull/7721)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-<!-- TODO -->
 
 ### [Deprecate `ChangeTrackers<T>` in favor of `Ref<T>`](https://github.com/bevyengine/bevy/pull/7306)
 
@@ -468,15 +419,6 @@ fn clear_children(parent: Entity, world: &mut World) {
     }
 }
 ```
-
-### [Move system_commands spans into apply_buffers](https://github.com/bevyengine/bevy/pull/6900)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-    <div class="migration-guide-area-tag">Diagnostics</div>
-</div>
-
-<!-- TODO no migration required, will remove later -->
 
 ### [bevy_ecs: ReflectComponentFns without World](https://github.com/bevyengine/bevy/pull/7206)
 
@@ -571,14 +513,6 @@ Some other small tweaks that will need to be made include:
 - Use `ListIter` for `List::iter` instead of `ArrayIter` (the return type from `Array::iter`)
 - Replace `array_hash` with `list_hash` in `Reflect::reflect_hash` for implementors of `List`
 
-### [implement `TypeUuid` for primitives and fix multiple-parameter generics having the same `TypeUuid`](https://github.com/bevyengine/bevy/pull/6633)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Reflection</div>
-</div>
-
-<!-- TODO -->
-
 ### [bevy_reflect: Remove `ReflectSerialize` and `ReflectDeserialize` registrations from most glam types](https://github.com/bevyengine/bevy/pull/6580)
 
 <div class="migration-guide-area-tags">
@@ -629,7 +563,7 @@ This also means that some serialized glam types will need to be updated. For exa
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-just rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
+ - Rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
 
 ### [Change `From<Icosphere>` to `TryFrom<Icosphere>`](https://github.com/bevyengine/bevy/pull/6484)
 
@@ -673,7 +607,7 @@ For cases where the option was handled, use `get_input_node` instead.
 </div>
 
 - replace `shader_defs.push(String::from("NAME"));` by `shader_defs.push("NAME".into());`
-- if you used shader def `NO_STORAGE_BUFFERS_SUPPORT`, check how `AVAILABLE_STORAGE_BUFFER_BINDINGS` is now used in Bevy default shaders
+- if you used shader def `NO_STORAGE_BUFFERS_SUPPORT`, check how `AVAILABLE_STORAGE_BUFFER_BINDINGS` is now used in [Bevy default shaders](https://github.com/bevyengine/bevy/blob/3ec87e49ca49767fad658e72fbae353f6687198c/crates/bevy_pbr/src/render/mesh_view_bindings.wgsl#L28)
 
 ### [get pixel size from wgpu](https://github.com/bevyengine/bevy/pull/6820)
 
@@ -689,7 +623,7 @@ For cases where the option was handled, use `get_input_node` instead.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-The call to `clear_trackers` in `App` has been moved from the schedule to App::update for the main world and calls to `clear_trackers` have been added for sub_apps in the same function. This was due to needing stronger guarantees. If clear_trackers isn’t called on a world it can lead to memory leaks in `RemovedComponents`. If you were ordering systems with clear_trackers this is no longer possible.
+The call to `clear_trackers` in `App` has been moved from the schedule to `App::update` for the main world and calls to `clear_trackers` have been added for `sub_apps` in the same function. This was due to needing stronger guarantees. If `clear_trackers` isn’t called on a world it can lead to memory leaks in `RemovedComponents`. If you were ordering systems with `clear_trackers` this is no longer possible.
 
 ### [Rename camera "priority" to "order"](https://github.com/bevyengine/bevy/pull/6908)
 
@@ -697,7 +631,7 @@ The call to `clear_trackers` in `App` has been moved from the schedule to App::u
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-<!-- TODO -->
+- Rename `priority` to `order` in usage of `Camera`.
 
 ### [enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
 
@@ -802,10 +736,7 @@ multi.samples()
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-All the examples needed to be updated to initalize the subdivisions field.
-Also there were two tests in tests/window that need to be updated.
-
-A user would have to update all their uses of shape::Plane to initalize the subdivisions field.
+- `shape::Plane` now takes an additional `subdivisions` parameter so users should provide it or use the new `shape::Plane::from_size`.
 
 ### [Change standard material defaults and update docs](https://github.com/bevyengine/bevy/pull/7664)
 
@@ -864,7 +795,8 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
   - Systems are no longer added to `CoreSet::Update` by default. Add systems manually if this behavior is needed, although you should consider adding your game logic systems to `CoreSchedule::FixedTimestep` instead for more reliable framerate-independent behavior.
   - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
   - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
-  - `add_system(my_system.in_set(CoreSet::PostUpdate)`
+  - `add_system(my_system.in_base_set(CoreSet::PostUpdate)`
+
 
 - When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 - Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
@@ -877,7 +809,8 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
 - `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
 - Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` or `on_update` siblings.
 - `SystemLabel` derives should be replaced with `SystemSet`. You will also need to add the `Debug`, `PartialEq`, `Eq`, and `Hash` traits to satisfy the new trait bounds.
-- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a bool.
+- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a `bool` instead of `schedule::ShouldRun`.
+
 - States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
 - Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
 
@@ -910,22 +843,6 @@ This was changed to enable pipelined rendering. If this breaks your use case ple
 
 - The `background_color` field of `ExtractedUiNode` is now named `color`.
 
-### [Make spawn_dynamic return InstanceId](https://github.com/bevyengine/bevy/pull/6663)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Scenes</div>
-</div>
-
-<!-- TODO no migration required, will remove it later-->
-
-### [Parallelized transform propagation](https://github.com/bevyengine/bevy/pull/4775)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Transform</div>
-</div>
-
-<!-- TODO no migration required, will remove it later-->
-
 ### [Remove the `GlobalTransform::translation_mut` method](https://github.com/bevyengine/bevy/pull/7134)
 
 <div class="migration-guide-area-tags">
@@ -948,7 +865,8 @@ an entity basis.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-<!-- TODO -->
+- `UiImage` is a struct now, so use `UiImage::new(handler)` instead of `UiImage(handler)`
+- `UiImage` no longer implements `Deref` and `DereftMut`, so use `&image.texture` or ``&mut image.texture` instead
 
 ### [Remove `TextError::ExceedMaxTextAtlases(usize)` variant](https://github.com/bevyengine/bevy/pull/6796)
 
@@ -984,6 +902,7 @@ __Changes for `Text2dBundle`__
 
 `Text2dBundle` has a new field ‘text_anchor’ that takes an `Anchor` component that controls its position relative to its transform.
 
+`Text2dSize` was removed. Use `TextLayoutInfo` instead.
 ### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
 
 <div class="migration-guide-area-tags">
@@ -1039,14 +958,6 @@ WindowResolution::new(width, height) // Explicitly
 let window = commands.spawn(Window { ... }).id(); // open window
 commands.entity(window).despawn(); // close window
 ```
-
-### [Allow not preventing default event behaviors on wasm](https://github.com/bevyengine/bevy/pull/7304)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Windowing</div>
-</div>
-
-<!-- TODO I'm not sure this needs a guide, I assume most people would be using the ..default() anyway and the ones that aren't doing that will just have a clear compile error -->
 
 ### [update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
 
