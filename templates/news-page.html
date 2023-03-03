@@ -1,6 +1,17 @@
-{% extends "layouts/base.html" %}
+{% extends "layouts/page-with-menu.html" %}
+{% import "macros/news.html" as news_macros %}
 
-{% block content %}
+{% block page_name %}Post{% endblock %}
+
+{% block mobile_page_menu %}
+  {{news_macros::news_menu(toc=page.toc, max_levels=1)}}
+{% endblock %}
+
+{% block page_menu %}
+  {{news_macros::news_menu(toc=page.toc, max_levels=2)}}
+{% endblock %}
+
+{% block page_content %}
 <div class="padded-content">
   <h1 class="news-title">
     {{ page.title }}
