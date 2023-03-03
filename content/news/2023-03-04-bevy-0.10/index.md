@@ -481,7 +481,7 @@ in the schedule. Deferring mutations in this way has a few benefits:
 * Minimizing world accesses -- systems do not need mutable access in order to defer a mutation, which allows greater parallelizability in systems that use this pattern.
 * Order indepdencence -- systems that defer mutations are less affected by system ordering, which can make scheduling them easier to reason about.
 
-In **Bevy 0.10**, we've added first-class support for this pattern via the `Deferred<>` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
+**Bevy 0.10** adds first-class support for this pattern via the `Deferred<>` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
 
 ```rust
 /// This type sends events with a delay, but can run in parallel with other event writers.
