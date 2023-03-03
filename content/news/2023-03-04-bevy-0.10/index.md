@@ -416,6 +416,102 @@ The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bev
 
 It's a great tool that we are looking to build on to create a first party solution: you should strongly consider adding it to your toolbox.
 
+## Cascaded Shadow Maps
+
+<div class="release-feature-authors">authors: @danchia, @superdump</div>
+
+Bevy uses "shadow maps" to cast shadows for lights / objects. Previous versions of Bevy used a simple but limited shadow map implementation. For a given light, you would define the resolution of the shadow map _and_ a manual "view projection" that would determine how the shadow is cast. This had a number of downsides:
+
+* The resolution of the shadow map was fixed. You had to choose something between "cover a large area, but have a lower resolution" and "cover a smaller area, but have a higher resolution".
+* The resolution didn't adapt to camera positioning. Shadows might look great in one position, but terrible in another position.
+* The "shadow projection" had to be manually defined. This made it hard and unapproachable to configure shadows to match a given scene.
+
+**Bevy 0.10** adds "cascaded shadow maps", which breaks up the camera's view frustum into a series of configurable "cascades", which each have their own shadow map. This enables shadows in the cascade "close to the camera" to be highly detailed, while allowing shadows "far from the camera" to cover a wider area with less detail. Because it uses the camera's view frustum to define the shadow projections, the shadow quality remains consistent as the camera moves through the scene. This also means that users don't need to manually configure shadow projections anymore. They are automatically calculated!
+
+<video controls loop><source  src="shadow_cascades.mp4" type="video/mp4"/></video>
+
+Notice how the nearby shadows are highly detailed whereas the shadows in the distance become less detailed as they get farther away (which doesn't matter as much because they are far away).
+
+While shadow cascades solve important problems, they also introduce new ones. How many cascades should you use? What is the minimum and maximum distance from the camera where shadows should appear? How much overlap should there be between cascades? These parameters must be dialed in to fit a given scene.
+
+## Environment Map Lighting
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Environment maps are a popular and computationally cheap way to significantly improve the quality of a scene's lighting. It uses a cube map texture to provide 360 lighting "from all directions". This is especially apparent for reflective surfaces, but it applies to all lit materials.
+
+This is what the PBR material looks like without environment map lighting:
+
+![env map before](env_map_before.png)
+
+And this is what the PBR material looks like with environment map lighting:
+
+![env map after](env_map_after.png)
+
+For scenes that need constant lighting (especially outdoor scenes), environment maps are a great solution. And because environment maps are arbitrary images, artists have a lot of control over the character of the scene's lighting.
+
+## More Tonemapping Choices
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
+
+### No Tonemapping 
+
+This is generally not recommended as HDR lighting is not intended to be used as color.
+
+![no tonemapping](tm_none.png)
+
+### Reinhard
+
+![reinhard](tm_reinhard.png)
+
+### Reinhard Luminance
+
+This is what we had in previous versions of Bevy. It is still our default algorithm.
+
+![reinhard luminance](tm_reinhard_luminance.png)
+
+### ACES
+
+![aces](tm_aces.png)
+
+### AgX
+
+![agx](tm_agx.png)
+
+### SomewhatBoringDisplayTransform
+
+![SomewhatBoringDisplayTransform](tm_sbdt.png)
+
+### TonyMcMapface
+
+Tomasz Stachowiak [recently released](https://twitter.com/h3r2tic/status/1626579257559502850?lang=en) this nice new display transform. In their own words "Tony maps HDR Rec.709 to LDR in a (subjectively) natural way, without messing too much with contrast or look"
+
+![TonyMcMapface](tm_tonymcmapface.png)
+
+### Blender Filmic
+
+From the 3D software package we know and love!
+
+![Blender Filmic](tm_blender_filmic.png)
+
+## Color Grading Control
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+We've added some basic control over color grading parameters such as exposure, gamma, "pre tonemapping saturation", and "post tone mapping saturation". These can be configured per-camera using the new [`ColorGrading`] component
+
+[`ColorGrading`]: https://docs.rs/bevy/0.10.0/bevy/render/view/struct.ColorGrading.html
+
+### 0.5 Exposure
+
+![0.5 exposure](exposure_005.png)
+
+### 2.25 Exposure
+
+![2.25 exposure](exposure_225.png)
+
 ## Spatial Audio
 
 <div class="release-feature-authors">authors: @mockersf, @DGriffin91, @harudagondi, @alice-i-cecile</div>
