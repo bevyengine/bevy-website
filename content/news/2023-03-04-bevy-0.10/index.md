@@ -494,7 +494,7 @@ struct EventBuffer<E>(Vec<E>);
 
 impl<E> BufferedEventWriter<E> {
     // Queues up an event to be sent when `apply_system_buffers` runs next.
-    pub fn send(&mut self, event: E) { self.queue.push(event); }
+    pub fn send(&mut self, event: E) { self.queue.0.push(event); }
 }
 
 // The `SystemBuffer` trait controls how deferred mutations get applied to the world.
