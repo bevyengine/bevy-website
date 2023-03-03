@@ -478,7 +478,7 @@ Additionally, the `#[derive(SystemParam)]` macro has received a host of miscella
 You probably know that when you send a `Command`, it doesn't mutate the world right away. The command gets stored in the system and gets applied later on
 in the schedule. Deferring mutations in this way has a few benefits:
 
-* Minimizing world accesses: systems do not need mutable access in order to defer a mutation, which allows greater parallelizability in systems that use this pattern.
+* Minimizing world accesses: unlike mutable queries (and resources), deferred mutations are free from data access conflicts, which affords greater parallelizability to systems using this pattern.
 * Order indepdencence: when performing idempotent operations (like setting a global flag), deferred mutations allow you to not worry about system execution order.
 * Structural mutations: deferred mutations are able to change the structure of the world in ways that `Query<>` and `ResMut<>` cannot, such as adding components or spawning and despawning entities.
 
