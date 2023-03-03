@@ -457,6 +457,41 @@ Much cleaner!
 
 [`Decodable`]: https://docs.rs/bevy_audio/latest/bevy_audio/trait.Decodable.html
 
+## Deferred World Mutations
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+You probably know that when you send a `Command`, it doesn't mutate the world right away. It gets stored in the system's state, to be applied later on
+in the schedule. Deferring mutations in this way has a few benefits:
+
+* Minimizing world accesses -- systems do not need mutable access in order to defer a mutation, which allows greater parallelizability in systems that use this pattern.
+* Order indepdencence -- systems that defer mutations are less affected by system ordering, which can make scheduling them easier to reason about.
+
+In **Bevy 0.10**, we've added first-class support for this pattern via the `Deferred<>` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
+
+```rust
+/// This type sends events with a delay, but can run in parallel with other event writers.
+#[derive(SystemParam)]
+pub struct BufferedEventWriter<E> {
+    queue: Deferred<EventBuffer<E>>,
+}
+
+struct EventBuffer<E>(Vec<E>);
+
+impl<E> BufferedEventWriter<E> {
+    // Queues up an event to be sent when `apply_system_buffers` runs next.
+    pub fn send(&mut self, event: E) { self.queue.push(event); }
+}
+
+// The `SystemBuffer` trait controls how deferred mutations get applied to the world.
+impl<E> SystemBuffer for EventBuffer<E> {
+    fn apply(&mut self, world: &mut World) {
+        world.resource_mut::<Events<E>>().send_batch(self.0.drain(..));
+    }
+}
+```
+
+Note that this feature should be used with care -- inappropriate usage can actually *worsen* performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
 
 ## `SystemParam` Improvements
 
@@ -471,14 +506,6 @@ Additionally, the `#[derive(SystemParam)]` macro has received a host of miscella
 * **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
 * **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
 * **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously long as you want. This is most useful for generated code.
-
-
-## Deferred World Mutations
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-You probably know that when you send a `Command`, it doesn't mutate the world right away. It gets stored in the system's state, to be applied later on
-in the schedule.
 
 ## Ref&lt;T&gt; Queries
 
