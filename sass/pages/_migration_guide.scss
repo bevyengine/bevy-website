@@ -1,24 +1,14 @@
 .migration-guide {
     h3 {
-        margin-top: 3rem;
-        margin-bottom: 0.2rem;
-        padding-bottom: 0.1rem;
-        border-bottom: solid darken($color-white, 60%) 0.15rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        margin-bottom: 0.1rem;
+        border-top: solid darken($color-white, 60%) 1px;
     }
 
     p, ul, li, code {
         font-size: 1rem;
     }
-
-    // a {
-    //     color: $color-white;
-    //     // font-weight: normal;
-    //     &:hover{
-    //         // font-weight: 500;
-    //         color: $link-color;
-    //         text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
-    //     }
-    // }
 }
 
 .migration-guide-area-tags {
