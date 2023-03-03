@@ -204,6 +204,8 @@ This is relative to Bevy 0.9, not main.
 
 The traits `SystemParamState` and `SystemParamFetch` have been removed, and their functionality has been transferred to `SystemParam`.
 
+The trait `ReadOnlySystemParamFetch` has been replaced with `ReadOnlySystemParam`.
+
 ```rust
 // Before (0.9)
 impl SystemParam for MyParam<'_, '_> {
@@ -226,16 +228,6 @@ unsafe impl SystemParam for MyParam<'_, '_> {
     fn get_param<'w, 's>(state: &mut Self::State, ...) -> Self::Item<'w, 's>;
 }
 unsafe impl ReadOnlySystemParam for MyParam<'_, '_> { }
-```
-
-The trait `ReadOnlySystemParamFetch` has been replaced with `ReadOnlySystemParam`.
-
-```rust
-// Before
-unsafe impl ReadOnlySystemParamFetch for MyParamState {}
-
-// After
-unsafe impl ReadOnlySystemParam for MyParam<'_, '_> {}
 ```
 
 ### [Panic on dropping NonSend in non-origin thread.](https://github.com/bevyengine/bevy/pull/6534)
@@ -439,6 +431,44 @@ fn my_system(q: Query<Ref<MyComponent>>) {
 }
 ```
 
+### [Make boxed conditions read-only](https://github.com/bevyengine/bevy/pull/7786)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+<!-- TODO -->
+
+### [`EntityMut`: rename `remove_intersection` to `remove` and `remove` to `take`](https://github.com/bevyengine/bevy/pull/7810)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+Before
+
+```rust
+fn clear_children(parent: Entity, world: &mut World) {
+    if let Some(children) = world.entity_mut(parent).remove::<Children>() {
+        for &child in &children.0 {
+            world.entity_mut(child).remove_intersection::<Parent>();
+        }
+    }
+}
+```
+
+After
+
+```rust
+fn clear_children(parent: Entity, world: &mut World) {
+    if let Some(children) = world.entity_mut(parent).take::<Children>() {
+        for &child in &children.0 {
+            world.entity_mut(child).remove::<Parent>();
+        }
+    }
+}
+```
+
 ### [Move system_commands spans into apply_buffers](https://github.com/bevyengine/bevy/pull/6900)
 
 <div class="migration-guide-area-tags">
@@ -489,7 +519,8 @@ You can edit the hierarchy via `EntityMut` instead.
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-- Manual implementors of `List` need to implement the new methods `insert` and `remove` and  consider whether to use the new default implementation of `push` and `pop`.
+- Manual implementors of `List` need to implement the new methods `insert` and `remove` and
+consider whether to use the new default implementation of `push` and `pop`.
 
 ### [bevy_reflect: Decouple `List` and `Array` traits](https://github.com/bevyengine/bevy/pull/7467)
 
@@ -784,6 +815,14 @@ A user would have to update all their uses of shape::Plane to initalize the subd
 
 `StandardMaterial`’s default have now changed to be a fully dielectric material with medium roughness. If you want to use the old defaults, you can set  `perceptual_roughness = 0.089` and `metallic = 0.01` (though metallic should generally only be set to 0.0 or 1.0).
 
+### [Remove dead code after #7784](https://github.com/bevyengine/bevy/pull/7875)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- Removed `SetShadowViewBindGroup`, `queue_shadow_view_bind_group()`, and `LightMeta::shadow_view_bind_group` in favor of reusing the prepass view bind group.
+
 ### [Directly extract joints into SkinnedMeshJoints](https://github.com/bevyengine/bevy/pull/6833)
 
 <div class="migration-guide-area-tags">
@@ -826,6 +865,7 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
   - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
   - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
   - `add_system(my_system.in_set(CoreSet::PostUpdate)`
+
 - When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 - Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
 - Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
