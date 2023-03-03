@@ -464,7 +464,7 @@ Much cleaner!
 
 Central to Bevy's ECS are `SystemParam`s: these types, such as `Query<>` and `Res<>`, dictate what a system can and can't do.
 Previously, manually creating one required implementing a family of four inseparable traits.
-In **Bevy 0.10**, we've used generic associated types to reduce this to just two traits: `SystemParam` and `ReadOnlySystemParam`.
+In **Bevy 0.10**, we've [used generic associated types](https://github.com/bevyengine/bevy/pull/6865) to [reduce this to just two traits](https://github.com/bevyengine/bevy/pull/6919): `SystemParam` and `ReadOnlySystemParam`.
 
 Additionally, the `#[derive(SystemParam)]` macro has received a host of miscellaneous improvements to reduce friction:
 
