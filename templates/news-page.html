@@ -1,8 +1,6 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/news.html" as news_macros %}
 
-{% block page_with_menu_extra_class %}page-with-menu--news{% endblock %}
-
 {% block page_name %}Post{% endblock %}
 
 {% block mobile_page_menu %}
@@ -14,7 +12,6 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="padded-content">
   <h1 class="news-title">
     {{ page.title }}
   </h1>
@@ -57,5 +54,4 @@
   </div>
   {% endif %}
   <div class="media-content news-content">{{ page.content | safe }}</div>
-</div>
 {% endblock content %}

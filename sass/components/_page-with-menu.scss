@@ -27,11 +27,9 @@
     &__menu {
         @include scrollbar-v;
 
-        --sidebar-margin-top: 0px;
-
         position: sticky;
-        top: calc(var(--header-height) + #{$margin-top} + var(--sidebar-margin-top));
-        height: calc(100vh - var(--header-height) - #{$margin-top * 2} - var(--sidebar-margin-top));
+        top: calc(var(--header-height) + #{$margin-top});
+        height: calc(100vh - var(--header-height) - #{$margin-top * 2});
         overflow-y: auto;
         padding-bottom: $margin-top;
     }
@@ -39,16 +37,5 @@
     &__content {
         grid-area: content;
         overflow-x: hidden;
-    }
-
-    &--news {
-        @media #{$bp-tablet-landscape-up} {
-            grid-template-columns: 1fr $sidebar-width;
-            grid-template-areas: 'content menu';
-        }
-
-        .page-with-menu__menu {
-            --sidebar-margin-top: 32px;
-        }
     }
 }
