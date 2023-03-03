@@ -466,9 +466,9 @@ Central to Bevy's ECS are `SystemParam`s: these types, such as `Query<>` and `Re
 
 The preferred way to implement this trait is to use `#[derive(SystemParam)]`, so the previous change will be invisible to most users. However, the derive macro has recieved a host of miscellaneous improvements to reduce friction:
 
-1. Greater flexibility: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
-2. Encapsulation: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
-3. Limitless: the 16-field limit has been lifted, so you can make your params as ridiculously long as you want. This is most useful for generated code.
+* **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
+* **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
+* **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously long as you want. This is most useful for generated code.
 
 ## Ref&lt;T&gt; Queries
 
