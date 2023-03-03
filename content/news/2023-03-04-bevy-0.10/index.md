@@ -587,6 +587,35 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
+## `StandardMaterial` Blend Modes
+
+<div class="release-feature-authors">author: @coreh</div>
+
+The `AlphaMode` enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the `StandardMaterial`. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
+
+<figure>
+<!-- TODO: Add video here -->
+<video controls loop><source src="" type="video/mp4"/></video>
+<figcaption>Demo showcasing the use of blend modes to create stained glass and fire effects. (<a href="https://github.com/coreh/bevy-demo-ruins">Source Code</a>)</figcaption>
+</figure>
+
+Additionally, support for semi-transparent textures with [premultiplied alpha](https://en.wikipedia.org/wiki/Alpha_compositing#Straight_versus_premultiplied) has been added, via a dedicated alpha mode.
+
+Here's a high level overview of the new modes:
+
+- `AlphaMode::Add` — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
+- `AlphaMode::Multiply` — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
+- `AlphaMode::Premultiplied` — Behaves very similarly to `AlphaMode::Blend`, but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
+
+<figure>
+<img src="blend-modes.png">
+<figcaption>The new <code>blend_modes</code> example.</figcaption>
+</figure>
+
+**Note:** Meshes using the new blend modes are drawn on the existing `Transparent3d` render phase, and therefore the same _z-sorting considerations/limitations_ from `AlphaMode::Blend` apply.
+
+For efficiency, `Blend`, `Premultiplied` and `Add` alpha modes all share a single `MeshPipelineKey` bitflag and a single `BlendState`, with conditional logic in the fragment shader producing their differentiated end results. `Multiply` necessitates its own separate `MeshPipelineKey` and `BlendState` key.
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
