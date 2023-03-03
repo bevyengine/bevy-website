@@ -462,12 +462,13 @@ Much cleaner!
 
 <div class="release-feature-authors">authors: @JoJoJet</div>
 
-`SystemParam` types are central to bevy's ECS: they define how a system can access the `World`; what it can and can't do. Previously, implementing a custom system parameter required implementing a whole family of inseparable traits: `SystemParam`, `SystemParamState`, `SystemParamFetch`, and `ReadOnlySystemParamFetch`. In **Bevy 0.10**, we have used generic associated types to reduce this to just two traits: `SystemParam` and `ReadOnlySystemParam`. This reduces the boilerplate signifcantly, and removes the need for each `SystemParam` type to have a unique "State" type associated with it.
+Central to Bevy's ECS are `SystemParam`s: these types, such as `Query<>` and `Res<>`, dictate what a system can and can't do. Previously, manually creating one required implementing a whole family of inseparable traits: `SystemParam`, `SystemParamState`, `SystemParamFetch`, and `ReadOnlySystemParamFetch`. In **Bevy 0.10**, we've used generic associated types to reduce this to just two traits: `SystemParam` and `ReadOnlySystemParam`. This reduces the boilerplate signifcantly, and removes the need for each `SystemParam` type to have a unique "State" type associated with it.
 
 The preferred way to implement this trait is to use `#[derive(SystemParam)]`, so the previous change will be invisible to most users. However, the derive macro has recieved a host of miscellaneous improvements to reduce friction:
 
-1. Greater flexibility: you are no longer forced to declare unused lifetimes.
-2. Encapsulation: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate things.
+1. Greater flexibility: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
+2. Encapsulation: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
+3. Limitless: the 16-field limit has been lifted, so you can make your params as ridiculously long as you want. This is most useful for generated code.
 
 ## Ref&lt;T&gt; Queries
 
