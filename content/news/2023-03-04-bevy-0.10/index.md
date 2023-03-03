@@ -477,6 +477,9 @@ Additionally, the `#[derive(SystemParam)]` macro has received a host of miscella
 
 <div class="release-feature-authors">authors: @JoJoJet</div>
 
+You probably know that when you send a `Command`, it doesn't mutate the world right away. It gets stored in the system's state, to be applied later on
+in the schedule.
+
 ## Ref&lt;T&gt; Queries
 
 <div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
