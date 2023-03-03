@@ -475,7 +475,7 @@ Additionally, the `#[derive(SystemParam)]` macro has received a host of miscella
 
 <div class="release-feature-authors">authors: @JoJoJet</div>
 
-You probably know that when you send a `Command`, it doesn't mutate the world right away. It gets stored in the system's state, to be applied later on
+You probably know that when you send a `Command`, it doesn't mutate the world right away. The command gets stored in the system and gets applied later on
 in the schedule. Deferring mutations in this way has a few benefits:
 
 * Minimizing world accesses -- systems do not need mutable access in order to defer a mutation, which allows greater parallelizability in systems that use this pattern.
