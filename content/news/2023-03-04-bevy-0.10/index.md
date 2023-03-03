@@ -470,6 +470,11 @@ The preferred way to implement this trait is to use `#[derive(SystemParam)]`, so
 * **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
 * **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously long as you want. This is most useful for generated code.
 
+
+## Deferred World Mutations
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
 ## Ref&lt;T&gt; Queries
 
 <div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
