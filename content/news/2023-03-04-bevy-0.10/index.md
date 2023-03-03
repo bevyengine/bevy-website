@@ -418,9 +418,9 @@ It's a great tool that we are looking to build on to create a first party soluti
 
 ## Cascaded Shadow Maps
 
-<div class="release-feature-authors">authors: @danchia, @superdump</div>
+<div class="release-feature-authors">authors: @danchia, Rob Swain (@superdump)</div>
 
-Bevy uses "shadow maps" to cast shadows for lights / objects. Previous versions of Bevy used a simple but limited shadow map implementation. For a given light, you would define the resolution of the shadow map _and_ a manual "view projection" that would determine how the shadow is cast. This had a number of downsides:
+Bevy uses "shadow maps" to cast shadows for lights / objects. Previous versions of Bevy used a simple but limited shadow map implementation for directional light sources. For a given light, you would define the resolution of the shadow map _and_ a manual "view projection" that would determine how the shadow is cast. This had a number of downsides:
 
 * The resolution of the shadow map was fixed. You had to choose something between "cover a large area, but have a lower resolution" and "cover a smaller area, but have a higher resolution".
 * The resolution didn't adapt to camera positioning. Shadows might look great in one position, but terrible in another position.
@@ -452,9 +452,9 @@ For scenes that need constant lighting (especially outdoor scenes), environment 
 
 ## More Tonemapping Choices
 
-<div class="release-feature-authors">authors: @JMS55</div>
+<div class="release-feature-authors">authors: @DGriffin91, @JMS55</div>
 
-Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
+Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
 
 ### No Tonemapping 
 
@@ -472,7 +472,7 @@ This is what we had in previous versions of Bevy. It is still our default algori
 
 ![reinhard luminance](tm_reinhard_luminance.png)
 
-### ACES
+### ACES Fitted
 
 ![aces](tm_aces.png)
 
@@ -498,9 +498,9 @@ From the 3D software package we know and love!
 
 ## Color Grading Control
 
-<div class="release-feature-authors">authors: @JMS55</div>
+<div class="release-feature-authors">authors: @DGriffin91</div>
 
-We've added some basic control over color grading parameters such as exposure, gamma, "pre tonemapping saturation", and "post tone mapping saturation". These can be configured per-camera using the new [`ColorGrading`] component
+We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per-camera using the new [`ColorGrading`] component
 
 [`ColorGrading`]: https://docs.rs/bevy/0.10.0/bevy/render/view/struct.ColorGrading.html
 
