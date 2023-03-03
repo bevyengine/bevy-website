@@ -456,7 +456,7 @@ For scenes that need constant lighting (especially outdoor scenes), environment 
 
 Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
 
-### No Tonemapping 
+### No Tonemapping
 
 This is generally not recommended as HDR lighting is not intended to be used as color.
 
