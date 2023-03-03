@@ -421,7 +421,7 @@ It's a great tool that we are looking to build on to create a first party soluti
 <div class="release-feature-authors">authors: @icesentry, @superdump, @robtfm, @JMS55</div>
 
 <video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
-<p class="release-feature-authors">This effect uses the depth from the prepass to find the interesection between the ground and the force field</p>
+<p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
 
 Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing and many more. These are currently being worked on and should be available in the next release of bevy.
 
