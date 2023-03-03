@@ -831,7 +831,7 @@ This was changed to enable pipelined rendering. If this breaks your use case ple
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-`ImageNode` never worked, if you were using it please create an issue.
+`ImageMode` never worked, if you were using it please create an issue.
 
 ### [Rename the `background_color` of 'ExtractedUiNode` to `color`](https://github.com/bevyengine/bevy/pull/7452)
 
@@ -901,6 +901,7 @@ __Changes for `Text2dBundle`__
 
 `Text2dBundle` has a new field ‘text_anchor’ that takes an `Anchor` component that controls its position relative to its transform.
 
+`Text2dSize` was removed. Use `TextLayoutInfo` instead.
 `Text2dSize` was removed. Use `TextLayoutInfo` instead.
 
 ### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
