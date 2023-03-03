@@ -457,6 +457,11 @@ Much cleaner!
 
 [`Decodable`]: https://docs.rs/bevy_audio/latest/bevy_audio/trait.Decodable.html
 
+
+## `SystemParam` improvements.
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
 ## Ref&lt;T&gt; Queries
 
 <div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
