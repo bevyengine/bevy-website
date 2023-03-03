@@ -485,24 +485,15 @@ in the schedule. Deferring mutations in this way has a few benefits:
 **Bevy 0.10** adds first-class support for this pattern via the `Deferred<>` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
 
 ```rust
-/// This type sends events with a delay, but can run in parallel with other event writers.
-#[derive(SystemParam)]
-pub struct BufferedEventWriter<E> {
-    queue: Deferred<EventBuffer<E>>,
-}
-
-struct EventBuffer<E>(Vec<E>);
-
-impl<E> BufferedEventWriter<E> {
-    // Queues up an event to be sent when `apply_system_buffers` runs next.
-    pub fn send(&mut self, event: E) { self.queue.0.push(event); }
-}
+/// Sends events with a delay, but can run in parallel with other event writers.
+pub struct EventBuffer<E>(Vec<E>);
 
 // The `SystemBuffer` trait controls how deferred mutations get applied to the world.
-impl<E> SystemBuffer for EventBuffer<E> {
-    fn apply(&mut self, world: &mut World) {
-        world.resource_mut::<Events<E>>().send_batch(self.0.drain(..));
-    }
+impl<E> SystemBuffer for EventBuffer<E> { ... }
+
+fn my_system(mut events: Deferred<EventBuffer<MyEvent>>) {
+    // Queue up an event to get sent when commands are applied.
+    events.0.push(MyEvent);
 }
 ```
 
