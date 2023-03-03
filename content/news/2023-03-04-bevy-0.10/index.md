@@ -29,7 +29,7 @@ There's been a lot of changes, but we've put a lot of care into ensuring the [mi
 
 Lets take a look at what shipped in 0.10!
 
-## A Single Unified Schedule
+### A Single Unified Schedule
 
 Have you ever wanted to specify that `system_a` runs before `system_b`, only to be met with confusing warnings that `system_b` isn't found because it's in a different stage?
 
@@ -41,7 +41,7 @@ This simplifies our internal logic, makes your code more robust to refactoring, 
 
 This diagram, made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
 
-## Configurable System Sets
+### Configurable System Sets
 
 To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
 
@@ -103,7 +103,7 @@ These rules must be compatible with each other: any paradoxes (like a system set
 
 As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
-## Directly Schedule Exclusive Systems
+### Directly Schedule Exclusive Systems
 
 Ever wished that you could just flush commands or run an exclusive system right before this system but after that system without shuffling your entire schedule to make it work?
 
@@ -136,7 +136,7 @@ Similarly, state transitions can be scheduled manually, one type at a time, in t
 
 What will you do with this much power? We're keen to find out!
 
-## It's All Schedules? Managing complex control flow
+### It's All Schedules? Managing complex control flow
 
 But what if you want to do something _weird_ with your schedule. Something non-linear, or branching, or looping. What should you reach for?
 
@@ -181,7 +181,7 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 
 Follow the bread crumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSchedule.html) for more info.
 
-## Simpler Run Conditions
+### Simpler Run Conditions
 
 Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
 Run criteria have been renamed to the clearer **run conditions**, which can be constructed out of any read-only system that returns `bool`.
@@ -207,7 +207,7 @@ Bevy 0.10 is shipping with a lovely collection of built-in [common run condition
 
 When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run criteria combinators.
 
-## Simpler States
+### Simpler States
 
 Previously, looping run criteria were used to power states, but as mentioned above, they've been removed.
 How do they work in Bevy 0.10?
@@ -269,7 +269,7 @@ If you were relying on the state stack, you might choose to:
 * use additional state types, which capture orthogonal elements of your app's status
 * build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate!
 
-## Base Sets: Getting Default Behavior Right
+### Base Sets: Getting Default Behavior Right
 
 Of course the skeptical reader may point out that:
 
@@ -328,7 +328,7 @@ In practice, there are three broad classes of systems: gameplay logic (the major
 By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 Let us know how it works out for you!
 
-## Polish Matters
+### Polish Matters
 
 As part of this work, we've taken the time to listen to our users and fix some small but high-impact things about how scheduling works.
 
