@@ -61,7 +61,7 @@ Instead of directly accessing the ID of a `HandleUntyped` as `handle.id`, use th
     <div class="migration-guide-area-tag">Core</div>
 </div>
 
-`CorePlugin` broken into separate plugins.  If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
+`CorePlugin` broken into separate plugins. If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
 
 ### [Immutable sparse sets for metadata storage](https://github.com/bevyengine/bevy/pull/4928)
 
@@ -192,7 +192,7 @@ The traits `SystemParamState` and `SystemParamFetch` have been removed, and thei
 The trait `ReadOnlySystemParamFetch` has been replaced with `ReadOnlySystemParam`.
 
 ```rust
-// 0.9 (0.9)
+// 0.9
 impl SystemParam for MyParam<'_, '_> {
     type State = MyParamState;
 }
@@ -205,7 +205,7 @@ unsafe impl<'w, 's> SystemParamFetch<'w, 's> for MyParamState {
 }
 unsafe impl ReadOnlySystemParamFetch for MyParamState { }
 
-// 0.10 (0.10)
+// 0.10
 unsafe impl SystemParam for MyParam<'_, '_> {
     type State = MyParamState;
     type Item<'w, 's> = MyParam<'w, 's>;
@@ -271,7 +271,7 @@ fn parallel_system(query: Query<&MyComponent>) {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-The type UnsafeWorldCellEntityRef has been renamed to UnsafeEntityCell
+The type `UnsafeWorldCellEntityRef` has been renamed to UnsafeEntityCell
 
 ### [Replace `RemovedComponents<T>` backing with `Events<Entity>`](https://github.com/bevyengine/bevy/pull/5680)
 
@@ -356,7 +356,7 @@ where
 `ChangeTrackers<T>` has been deprecated, and will be removed in the next release. Any usage should be replaced with `Ref<T>`.
 
 ```rust
-// 0.9 (0.9)
+// 0.9
 fn my_system(q: Query<(&MyComponent, ChangeTrackers<MyComponent>)>) {
     for (value, trackers) in &q {
         if trackers.is_changed() {
@@ -365,7 +365,7 @@ fn my_system(q: Query<(&MyComponent, ChangeTrackers<MyComponent>)>) {
     }
 }
 
-// 0.10 (0.10)
+// 0.10
 fn my_system(q: Query<Ref<MyComponent>>) {
     for value in &q {
         if value.is_changed() {
@@ -374,14 +374,6 @@ fn my_system(q: Query<Ref<MyComponent>>) {
     }
 }
 ```
-
-### [Make boxed conditions read-only](https://github.com/bevyengine/bevy/pull/7786)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-<!-- TODO -->
 
 ### [`EntityMut`: rename `remove_intersection` to `remove` and `remove` to `take`](https://github.com/bevyengine/bevy/pull/7810)
 
@@ -595,8 +587,8 @@ For cases where the option was handled, use `get_input_node` instead.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- replace `shader_defs.push(String::from("NAME"));` by `shader_defs.push("NAME".into());`
-- if you used shader def `NO_STORAGE_BUFFERS_SUPPORT`, check how `AVAILABLE_STORAGE_BUFFER_BINDINGS` is now used in [Bevy default shaders](https://github.com/bevyengine/bevy/blob/3ec87e49ca49767fad658e72fbae353f6687198c/crates/bevy_pbr/src/render/mesh_view_bindings.wgsl#L28)
+- Replace `shader_defs.push(String::from("NAME"));` by `shader_defs.push("NAME".into());`
+- If you used shader def `NO_STORAGE_BUFFERS_SUPPORT`, check how `AVAILABLE_STORAGE_BUFFER_BINDINGS` is now used in [Bevy default shaders](https://github.com/bevyengine/bevy/blob/3ec87e49ca49767fad658e72fbae353f6687198c/crates/bevy_pbr/src/render/mesh_view_bindings.wgsl#L28)
 
 ### [Get pixel size from wgpu](https://github.com/bevyengine/bevy/pull/6820)
 
@@ -622,15 +614,15 @@ The call to `clear_trackers` in `App` has been moved from the schedule to `App::
 
 Rename `priority` to `order` in usage of `Camera`.
 
-### [enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
+### [Enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- evaluation of the `visibility.is_visible` field should now check for `visibility == Visibility::Inherited`.
-- setting the `visibility.is_visible` field should now directly set the value: `*visibility = Visibility::Inherited`.
-- usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
+- Evaluation of the `visibility.is_visible` field should now check for `visibility == Visibility::Inherited`.
+- Setting the `visibility.is_visible` field should now directly set the value: `*visibility = Visibility::Inherited`.
+- Usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
 - `ComputedVisibility::INVISIBLE` and `SpatialBundle::VISIBLE_IDENTITY` have been renamed to `ComputedVisibility::HIDDEN` and `SpatialBundle::INHERITED_IDENTITY` respectively.
 
 ### [Reduce branching in TrackedRenderPass](https://github.com/bevyengine/bevy/pull/7053)
@@ -743,7 +735,7 @@ Some detailed bevy trace events now require the use of the cargo feature `detail
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- Removed `SetShadowViewBindGroup`, `queue_shadow_view_bind_group()`, and `LightMeta::shadow_view_bind_group` in favor of reusing the prepass view bind group.
+Removed `SetShadowViewBindGroup`, `queue_shadow_view_bind_group()`, and `LightMeta::shadow_view_bind_group` in favor of reusing the prepass view bind group.
 
 ### [Directly extract joints into SkinnedMeshJoints](https://github.com/bevyengine/bevy/pull/6833)
 
@@ -864,7 +856,7 @@ an entity basis.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-TextError::ExceedMaxTextAtlases(usize)` was never thrown so if you were matching on this variant you can simply remove it.
+`TextError::ExceedMaxTextAtlases(usize)` was never thrown so if you were matching on this variant you can simply remove it.
 
 ### [Change default FocusPolicy to Pass](https://github.com/bevyengine/bevy/pull/7161)
 
@@ -890,7 +882,7 @@ __Change `TextAlignment` to TextAlignment` which is now an enum. Replace:__
 
 __Changes for `Text2dBundle`__
 
-`Text2dBundle` has a new field ‘text_anchor’ that takes an `Anchor` component that controls its position relative to its transform.
+`Text2dBundle` has a new field `text_anchor` that takes an `Anchor` component that controls its position relative to its transform.
 
 `Text2dSize` was removed. Use `TextLayoutInfo` instead.
 `Text2dSize` was removed. Use `TextLayoutInfo` instead.
@@ -935,8 +927,9 @@ The size field of `CalculatedSize` has been changed to a `Vec2`.
     <div class="migration-guide-area-tag">Windowing</div>
 </div>
 
-- Replace `WindowDescriptor` with `Window`.
-  - Change `width` and `height` fields in a `WindowResolution`, either by doing
+Replace `WindowDescriptor` with `Window`.
+
+Change `width` and `height` fields in a `WindowResolution`, either by doing
 
 ```rust
 WindowResolution::new(width, height) // Explicitly
@@ -944,14 +937,14 @@ WindowResolution::new(width, height) // Explicitly
 (1920., 1080.).into()
 ```
 
-- Replace any `WindowCommand` code to just modify the `Window`’s fields directly  and creating/closing windows is now by spawning/despawning an entity with a `Window` component like so:
+Replace any `WindowCommand` code to just modify the `Window`’s fields directly  and creating/closing windows is now by spawning/despawning an entity with a `Window` component like so:
 
 ```rust
 let window = commands.spawn(Window { ... }).id(); // open window
 commands.entity(window).despawn(); // close window
 ```
 
-- To get a window, you now need to use a `Query` instead of a `Res`
+To get a window, you now need to use a `Query` instead of a `Res`
 
 ```rust
 // 0.9
