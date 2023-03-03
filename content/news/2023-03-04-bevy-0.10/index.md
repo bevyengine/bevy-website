@@ -466,7 +466,7 @@ Central to Bevy's ECS are `SystemParam`s: these types, such as `Query<>` and `Re
 Previously, manually creating one required implementing a family of four inseparable traits.
 In **Bevy 0.10**, we've used generic associated types to reduce this to just two traits: `SystemParam` and `ReadOnlySystemParam`.
 
-The preferred way to implement this trait is to use `#[derive(SystemParam)]`, so the previous change will be invisible to most users. However, the derive macro has recieved a host of miscellaneous improvements to reduce friction:
+Additionally, the `#[derive(SystemParam)]` macro has received a host of miscellaneous improvements to reduce friction:
 
 * **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
 * **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
