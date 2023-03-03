@@ -469,7 +469,7 @@ Additionally, the `#[derive(SystemParam)]` macro has received a host of miscella
 
 * **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
 * **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
-* **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously long as you want. This is most useful for generated code.
+* **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously complex as you want. This is most useful for generated code.
 
 ## Deferred World Mutations
 
@@ -480,9 +480,9 @@ in the schedule. Deferring mutations in this way has a few benefits:
 
 * Minimizing world accesses: unlike mutable queries (and resources), deferred mutations are free from data access conflicts, which affords greater parallelizability to systems using this pattern.
 * Order indepdencence: when performing idempotent operations (like setting a global flag), deferred mutations allow you to not worry about system execution order.
-* Structural mutations: deferred mutations are able to change the structure of the world in ways that `Query<>` and `ResMut<>` cannot, such as adding components or spawning and despawning entities.
+* Structural mutations: deferred mutations are able to change the structure of the world in ways that `Query` and `ResMut` cannot, such as adding components or spawning and despawning entities.
 
-**Bevy 0.10** adds first-class support for this pattern via the `Deferred<>` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
+**Bevy 0.10** adds first-class support for this pattern via the `Deferred` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
 
 ```rust
 /// Sends events with a delay, but can run in parallel with other event writers.
