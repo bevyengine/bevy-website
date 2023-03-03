@@ -981,7 +981,7 @@ app.new()
         ..default()
     }));
 
-// 0.9
+// 0.10
 app.new()
     .add_plugins(DefaultPlugins.set(WindowPlugin {
         primary_window: Some(Window {
