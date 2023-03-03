@@ -35,7 +35,6 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
 `App::add_sub_app` has been removed in favor of `App::insert_sub_app`. Use `SubApp::new` and insert it via `App::insert_sub_app`
 
-
 Old:
 
 ```rust
@@ -177,6 +176,7 @@ fn clear_events(mut reader: EventReader<SomeEvent>) {
 </div>
 
 A `World` can only hold a maximum of 2<sup>32</sup> - 1 archetypes and tables now. If your use case requires more than this, please file an issue explaining your use case.
+
 ### [Remove `ExclusiveSystemParam::apply`](https://github.com/bevyengine/bevy/pull/7489)
 
 <div class="migration-guide-area-tags">
@@ -563,7 +563,7 @@ This also means that some serialized glam types will need to be updated. For exa
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
- - Rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
+- Rename `ScalingMode::Auto` to `ScalingMode::AutoMin` if you are using it.
 
 ### [Change `From<Icosphere>` to `TryFrom<Icosphere>`](https://github.com/bevyengine/bevy/pull/6484)
 
@@ -797,7 +797,6 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
   - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
   - `add_system(my_system.in_base_set(CoreSet::PostUpdate)`
 
-
 - When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 - Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
 - Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
@@ -903,6 +902,7 @@ __Changes for `Text2dBundle`__
 `Text2dBundle` has a new field ‘text_anchor’ that takes an `Anchor` component that controls its position relative to its transform.
 
 `Text2dSize` was removed. Use `TextLayoutInfo` instead.
+
 ### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
 
 <div class="migration-guide-area-tags">
@@ -957,6 +957,26 @@ WindowResolution::new(width, height) // Explicitly
 ```rust
 let window = commands.spawn(Window { ... }).id(); // open window
 commands.entity(window).despawn(); // close window
+```
+
+Now that windows are components on entity, you should use `Query` instead of `Res` to access windows.
+
+```rust
+// 0.9
+fn count_pixels(windows: Res<Windows>) {
+    let Some(primary) = windows.get_primary() else {
+        return;
+    };
+    println!("{}", primary.width() * primary.height());
+}
+
+// 0.10
+fn count_pixels(primary_query: Query<&Window, With<PrimaryWindow>>) {
+    let Ok(primary) = primary_query.get_single() else {
+        return;
+    };
+    println!("{}", primary.width() * primary.height());
+}
 ```
 
 ### [update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
