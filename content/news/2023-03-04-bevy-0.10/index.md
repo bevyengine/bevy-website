@@ -533,6 +533,17 @@ Bevy now has the ability to run a depth and/or normal prepass. This means the de
 
 Unfortunately, the prepass still has performance issues so it's currently disabled by default, but if you need to use it for a specific effect you can simply add the `DepthPrepass` component to your camera.
 
+## Shadow Mapping using Prepass Shaders
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+Previously, the shader used for shadow mapping was hard-coded and had no knowledge of the material, only meshes. Now in **Bevy 0.10**, a `Material`'s depth prepass shaders are used for shadow mapping. This means that the shaders used to do the shadow mapping for a `Material` are customizable!
+
+As a bonus, the availability of `Material` information during shadow mapping means that we could instantly enable alpha mask shadows allowing foliage to cast shadows according to the alpha values in their texture rather than only based on their geometry.
+
+![Alpha mask shadows](alpha_mask_shadows.png)
+<p class="release-feature-authors">NVIDIA ORCA Emerald Square scene with alpha mask shadow support</p>
+
 ## Spatial Audio
 
 <div class="release-feature-authors">authors: @mockersf, @DGriffin91, @harudagondi, @alice-i-cecile</div>
