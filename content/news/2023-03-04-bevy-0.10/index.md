@@ -739,6 +739,63 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
+## Cylinder Shape
+
+<div class="release-feature-authors">authors: @JayPavlinas, @rparrett, @davidhof</div>
+
+The cylinder shape primitive has joined our zoo of built-in shapes!
+
+![primitive shapes](primitive_shapes.png)
+
+## Subdividable Plane Shape
+
+<div class="release-feature-authors">authors: @woodroww</div>
+
+Bevy's [`Plane`] shape can now be subdivided any number of times.
+
+![plane](plane.png)
+
+[`Plane`]: https://docs.rs/bevy/0.10.0/bevy/prelude/shape/struct.Plane.html
+
+## Configurable Visibility Component
+
+<div class="release-feature-authors">authors: @ickk</div>
+
+The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** changes it from being an `is_visible: bool` to an enum with multiple modes:
+
+```rust
+pub enum Visibility {
+  Hidden,    // unconditionally hidden
+  Visible,   // unconditionally visible
+  Inherited, // inherit visibility from parent
+}
+```
+
+The enum is much easier to understand! And in previous Bevy versions, "inherited visibility" and "hidden" were essentially the only two options. Now entities can opt to be visible, even if their parent is hidden!
+
+## `AsBindGroup` Storage Buffers
+
+<div class="release-feature-authors">authors: @IceSentry, @AndrewB330</div>
+
+[`AsBindGroup`] is a useful Bevy trait that [makes it very easy to pass data into shaders](/news/bevy-0-8/#new-material-system).
+
+**Bevy 0.10** expands this with support for "storage buffer bindings", which are very useful when passing in large / unbounded chunks of data:
+
+```rust
+#[derive(AsBindGroup)]
+struct CoolMaterial {
+    #[uniform(0)]
+    color: Color,
+    #[texture(1)]
+    #[sampler(2)]
+    color_texture: Handle<Image>,
+    #[storage(3)]
+    values: Vec<f32>,
+    #[storage(4, read_only, buffer)]
+    buffer: Buffer,
+}
+```
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
@@ -749,7 +806,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 ## Support Bevy
 
-Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](Bevy ) ... every bit helps!
+Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](/community/donate) ... every bit helps!
 
 <a class="button button--pink header__cta" href="/community/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"></a>
 
