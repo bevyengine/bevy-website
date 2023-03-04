@@ -508,7 +508,7 @@ Optimization isn't all about CPU time! We've also improved memory usage, compile
 
  * We've also reduced the memory usage of `ComputedVisibility` by 50% thanks to @james7132. This was done by replacing the internal storage with a set of bitflags instead of multiple booleans.
  * @robfm also used type erasure as a work-around a [rustc performance regression](https://github.com/rust-lang/rust/issues/99188) to ensure that rendering related crates have better compile times, with some of the crates compiling **up to 60% faster**! Full details can be seen in [#5950](https://github.com/bevyengine/bevy/pull/5950).
- * In [#7069](https://github.com/bevyengine/bevy/pull/7069), @superdump reduced the number of active registers used on the GPU to prevent register spilling, significantly improving GPU-side performance.
+ * In [#7069](https://github.com/bevyengine/bevy/pull/7069), Rob Swain (@superdump) reduced the number of active registers used on the GPU to prevent register spilling, significantly improving GPU-side performance.
 
 Finally, we have made some improvements on specific usage scenarios:
 
