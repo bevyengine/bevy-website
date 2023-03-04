@@ -771,7 +771,7 @@ pub enum Visibility {
 }
 ```
 
-The enum is much easier to understand! And in previous Bevy versions, "inherited visibility" and "hidden" were essentially the only two options. Now entities can opt to be visible, even if their parent is hidden!
+Much easier to understand! In previous Bevy versions, "inherited visibility" and "hidden" were essentially the only two options. Now entities can opt to be visible, even if their parent is hidden!
 
 [`Visibility`]: https://docs.rs/bevy/0.10.0/bevy/render/view/enum.Visibility.html
 [`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/index.html
