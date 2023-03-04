@@ -589,7 +589,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 ## StandardMaterial Blend Modes
 
-<div class="release-feature-authors">author: @coreh</div>
+<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
 
 The [`AlphaMode`] enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the `StandardMaterial`. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
 
@@ -614,7 +614,7 @@ For efficiency, `Blend`, `Premultiplied` and `Add` alpha modes all share a singl
 
 ## Distance and Atmospheric Fog
 
-<div class="release-feature-authors">author: @coreh</div>
+<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
 
 Bevy can now render distance and atmospheric fog effects, bringing a heightened sense of _depth_ and _ambiance_ to your scenes by making objects appear dimmer the further away they are from view.
 
