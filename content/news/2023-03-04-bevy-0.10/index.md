@@ -678,7 +678,7 @@ using `DefaultPlugins` then it will automatically be added for you on all platfo
 wasm. Bevy does not currently support multithreading on wasm which is needed for this
 feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
 
-## Added a post-build method on Plugin
+### Added a post-build method on Plugin
 
 An optional `setup` method was added to the `Plugin` trait that runs after all the build methods have
 been called. This was required to enable pipelined rendering, which needed to remove the sub
@@ -800,6 +800,173 @@ struct CoolMaterial {
 ```
 
 [`AsBindGroup`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/trait.AsBindGroup.html
+
+## Upgraded wgpu to 0.15
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+**Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
+
+## Exposed Non-Uniform Indexing Support (Bindless)
+
+<div class="release-feature-authors">authors: @cryscan</div>
+
+**Bevy 0.10** wired up initial support for non-uniform indexing of textures and storage buffers. This is an important step toward modern ["bindless / gpu-driven rendering"](https://vkguide.dev/docs/gpudriven/gpu_driven_engines/), which can unlock significant performance on platforms that support it. Note that this is just making the feature available to render plugin developers. Bevy's core rendering features do not (yet) use the bindless approach.
+
+We've added [a new example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/shader/texture_binding_array.rs) illustrating how to use this feature:
+
+![texture binding array](texture_binding_array.png)
+
+## Gamepad API Improvements
+
+<div class="release-feature-authors">authors: @DevinLeamy</div>
+
+The [`GamepadEventRaw`] type has been removed in favor of separate [`GamepadConnectionEvent`], [`GamepadAxisChangedEvent`], and [`GamepadButtonChangedEvent`], and the internals have been reworked to accommodate this.
+
+This allows for simpler, more granular event access without filtering down the general [`GamepadEvent`] type. Nice!
+
+```rust
+fn system(mut events: EventReader<GamepadConnectionEvent>)
+    for event in events.iter() {
+    }
+}
+```
+
+[`GamepadEventRaw`]: https://docs.rs/bevy/0.9.0/bevy/input/gamepad/struct.GamepadEventRaw.html
+[`GamepadConnectionEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadConnectionEvent.html
+[`GamepadAxisChangedEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadAxisChangedEvent.html
+[`GamepadButtonChangedEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadButtonChangedEvent.html
+[`GamepadEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/enum.GamepadEvent.html
+
+## Input Method Editor (IME) Support
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+[`Window`] can now configure IME support using `ime_enabled` and `ime_position`, which enables the use of "dead keys", which add support for French, Pinyin, etc:
+
+<video controls loop><source  src="ime.mp4" type="video/mp4"/></video>
+
+[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
+
+## Cubic Curves
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+<video controls loop><source  src="cubic_curves.mp4" type="video/mp4"/></video>
+<p class="release-feature-authors">This video shows four kinds of cubic curves being smoothly animated with bezier easing. The curve itself is white, green is velocity, red is acceleration, and blue are the control points that determine the shape of the curve.</p>
+
+In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`.  The implementation provides multiple curves out of the box, useful in various applications:
+
+* `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing as demonstrated in the above video.
+* `Hermite`: smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
+* `Cardinal`: easy interpolation between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
+* `B-Spline`: acceleration-continuous motion, particularly useful for camera paths where a smooth change in velocity (acceleration) is important to prevent harsh jerking motion.
+
+The `CubicGenerator` trait is public, allowing you to define your own custom splines that generate `CubicCurve`s!
+
+### Performance
+
+The position, velocity, and acceleration of a `CubicCurve` can be evaluated at any point. These evaluations all have the same performance cost, regardless of the type of cubic curve being used. On a modern CPU, these evaluations take 1-2 ns, and animation easing - which is an iterative process - takes 15-20 ns.
+
+## Reflection Paths: Enums and Tuples
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy's "reflection paths" enable navigating Rust values using a simple (and dynamic) string syntax. **Bevy 0.10** expands this system by adding support for tuples and enums in reflect paths:
+
+```rust
+#[derive(Reflect)]
+struct MyStruct {
+  data: Data,
+  some_tuple: (u32, u32),
+}
+
+#[derive(Reflect)]
+struct Data {
+  Foo(u32, u32),
+  Bar(bool)
+}
+
+let x = MyStruct {
+  data: Data::Foo(123),
+  some_tuple: (10, 20),
+};
+
+assert_eq!(*x.path::<u32>("data.1").unwrap(), 123);
+assert_eq!(*x.path::<u32>("some_tuple.0").unwrap(), 10);
+```
+
+## Pre-Parsed Reflection Paths
+
+<div class="release-feature-authors">authors: @MrGVSV, @james7132 </div>
+
+Reflection paths enable a lot of interesting and dynamic editor scenarios, but they do have a downside: calling `path()` requires parsing strings every time. To solve this problem we added [`ParsedPath`], which enables pre-parsing paths and then reusing those results on each access:
+
+```rust
+let parsed_path = ParsedPath::parse("foo.bar[0]").unwrap();
+let element = parsed_path.element::<usize>(&some_value);
+```
+
+Much more suitable for repeated access, such as doing the same lookup every frame!
+
+## `ReflectFromReflect`
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When using Bevy's Rust reflection system, we sometimes end up in a scenario where we have a "dynamic reflect value" representing a certain type `MyType` (even though under the hood, it isn't really that type). Such scenarios happen when we call `Reflect::clone_value`, use the reflection deserializers, or create the dynamic value ourselves. Unfortunately, we can't just call `MyType::from_reflect` as we do not have knowledge of the concrete `MyType` at runtime.
+
+[`ReflectFromReflect`] is a new "type data" struct in the [`TypeRegistry`] that enables `FromReflect` trait operations without any concrete references to a given type. Very cool!
+
+```rust
+#[derive(Reflect, FromReflect)]
+#[reflect(FromReflect)] // <- Register `ReflectFromReflect`
+struct MyStruct(String);
+
+let type_id = TypeId::of::<MyStruct>();
+
+// Register our type
+let mut registry = TypeRegistry::default();
+registry.register::<MyStruct>();
+
+// Create a concrete instance
+let my_struct = MyStruct("Hello world".to_string());
+
+// `Reflect::clone_value` will generate a `DynamicTupleStruct` for tuple struct types
+// Note that this is _not_ a MyStruct instance
+let dynamic_value: Box<dyn Reflect> = my_struct.clone_value();
+
+// Get the `ReflectFromReflect` type data from the registry
+let rfr: &ReflectFromReflect = registry
+  .get_type_data::<ReflectFromReflect>(type_id)
+  .unwrap();
+
+// Call `FromReflect::from_reflect` on our Dynamic value
+let concrete_value: Box<dyn Reflect> = rfr.from_reflect(&dynamic_value);
+assert!(concrete_value.is::<MyStruct>());
+```
+
+[`ReflectFromReflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.ReflectFromReflect.html
+[`TypeRegistry`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.TypeRegistry.html
+
+## Other Reflection Improvements
+
+<div class="release-feature-authors">authors: @james7132, @soqb, @cBournhonesque, @SkiFire13</div>
+
+* [`Reflect`] is now implemented for [`std::collections::VecDeque`]
+* Reflected [`List`] types now have `insert` and `remove` operations
+* Reflected [`Map`] types now have the `remove` operation
+* Reflected generic types now automatically implement [`Reflect`] if the generics also implement Reflect. No need to add manual `T: Reflect` bounds!
+* Component Reflection now uses [`EntityRef`] / [`EntityMut`] instead of both [`World`] and [`Entity`], which allows it to be used in more scenarios
+* The Reflection deserializer now avoids unnecessarily cloning strings in some scenarios!
+
+[`std::collections::VecDeque`]: https://doc.rust-lang.org/std/collections/vec_deque/struct.VecDeque.html
+[`List`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.List.html
+[`Map`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Map.html
+[`Reflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Reflect.html
+[`EntityRef`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityRef.html
+[`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
+[`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/struct.Entity.html
+[`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
 
 ## What's Next?
 
