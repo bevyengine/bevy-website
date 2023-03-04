@@ -739,6 +739,106 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
+## Reflection Paths: Enums and Tuples
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy's "reflection paths" enable navigating Rust values using a simple (and dynamic) string syntax. **Bevy 0.10** expands this system by adding support for tuples and enums in reflect paths:
+
+```rust
+#[derive(Reflect)]
+struct MyStruct {
+  data: Data,
+  some_tuple: (u32, u32),
+}
+
+#[derive(Reflect)]
+struct Data {
+  Foo(u32, u32),
+  Bar(bool)
+}
+
+let x = MyStruct {
+  data: Data::Foo(123),
+  some_tuple: (10, 20),
+};
+
+assert_eq!(*x.path::<u32>("data.1").unwrap(), 123);
+assert_eq!(*x.path::<u32>("some_tuple.0").unwrap(), 10);
+```
+
+## Pre-Parsed Reflection Paths
+
+<div class="release-feature-authors">authors: @MrGVSV, @james7132 </div>
+
+Reflection paths enable a lot of interesting and dynamic editor scenarios, but they do have a downside: calling `path()` requires parsing strings every time. To solve this problem we added [`ParsedPath`], which enables pre-parsing paths and then reusing those results on each access:
+
+```rust
+let parsed_path = ParsedPath::parse("foo.bar[0]").unwrap();
+let element = parsed_path.element::<usize>(&some_value);
+```
+
+Much more suitable for repeated access, such as doing the same lookup every frame!
+
+## `ReflectFromReflect`
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When using Bevy's Rust reflection system, we sometimes end up in a scenario where we have a "dynamic reflect value" representing a certain type `MyType` (even though under the hood, it isn't really that type). Such scenarios happen when we call `Reflect::clone_value`, use the reflection deserializers, or create the dynamic value ourselves. Unfortunately, we can't just call `MyType::from_reflect` as we do not have knowledge of the concrete `MyType` at runtime.
+
+[`ReflectFromReflect`] is a new "type data" struct in the [`TypeRegistry`] that enables `FromReflect` trait operations without any concrete references to a given type. Very cool!
+
+```rust
+#[derive(Reflect, FromReflect)]
+#[reflect(FromReflect)] // <- Register `ReflectFromReflect`
+struct MyStruct(String);
+
+let type_id = TypeId::of::<MyStruct>();
+
+// Register our type
+let mut registry = TypeRegistry::default();
+registry.register::<MyStruct>();
+
+// Create a concrete instance
+let my_struct = MyStruct("Hello world".to_string());
+
+// `Reflect::clone_value` will generate a `DynamicTupleStruct` for tuple struct types
+// Note that this is _not_ a MyStruct instance
+let dynamic_value: Box<dyn Reflect> = my_struct.clone_value();
+
+// Get the `ReflectFromReflect` type data from the registry
+let rfr: &ReflectFromReflect = registry
+  .get_type_data::<ReflectFromReflect>(type_id)
+  .unwrap();
+
+// Call `FromReflect::from_reflect` on our Dynamic value
+let concrete_value: Box<dyn Reflect> = rfr.from_reflect(&dynamic_value);
+assert!(concrete_value.is::<MyStruct>());
+```
+
+[`ReflectFromReflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.ReflectFromReflect.html
+[`TypeRegistry`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.TypeRegistry.html
+
+## Other Reflection Improvements
+
+<div class="release-feature-authors">authors: @james7132, @soqb, @cBournhonesque, @SkiFire13</div>
+
+* [`Reflect`] is now implemented for [`std::collections::VecDeque`]
+* Reflected [`List`] types now have `insert` and `remove` operations
+* Reflected [`Map`] types now have the `remove` operation
+* Reflected generic types now automatically implement [`Reflect`] if the generics also implement Reflect. No need to add manual `T: Reflect` bounds!
+* Component Reflection now uses [`EntityRef`] / [`EntityMut`] instead of both [`World`] and [`Entity`], which allows it to be used in more scenarios
+* The Reflection deserializer now avoids unnecessarily cloning strings in some scenarios!
+
+[`std::collections::VecDeque`]: https://doc.rust-lang.org/std/collections/vec_deque/struct.VecDeque.html
+[`List`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.List.html
+[`Map`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Map.html
+[`Reflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Reflect.html
+[`EntityRef`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityRef.html
+[`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
+[`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/struct.Entity.html
+[`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
