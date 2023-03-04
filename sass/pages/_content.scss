@@ -74,6 +74,10 @@ $content-font-size: 1.22rem;
         background-color: $syntax-theme-background-hover;
     }
 
+    a.button {
+        color: $color-white;
+    }
+
     a {
         text-decoration: none;
         color: $link-color;
