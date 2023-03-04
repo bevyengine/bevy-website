@@ -591,7 +591,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 <div class="release-feature-authors">author: Marco Buono (@coreh)</div>
 
-The [`AlphaMode`] enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the `StandardMaterial`. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
+The [`AlphaMode`] enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the [`StandardMaterial`]. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
 
 <!-- TODO: Add video here -->
 <video controls loop><source src="" type="video/mp4"/></video>
@@ -600,7 +600,7 @@ _Demo showcasing the use of blend modes to create stained glass and fire effects
 
 Additionally, support for semi-transparent textures with [premultiplied alpha](https://en.wikipedia.org/wiki/Alpha_compositing#Straight_versus_premultiplied) has been added, via a dedicated alpha mode.
 
-Here's a high level overview of the new modes:
+Here's a high-level overview of the new modes:
 
 - [`AlphaMode::Add`] — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
 - [`AlphaMode::Multiply`] — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
