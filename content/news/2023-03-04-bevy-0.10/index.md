@@ -690,6 +690,91 @@ app from the app to send it between the main thread and the rendering thread. Th
 only valid to do after all the plugin build methods have been called, because any plugin may
 want to modify the rendering sub app.
 
+## ShaderDef Values
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy's shader processor now supports ShaderDefs with values, using the new [`ShaderDefVal`]. This allows developers to pass constant values into their shaders:
+
+```rust
+let shader_defs = vec![
+    ShaderDefVal::Int("MAX_DIRECTIONAL_LIGHTS".to_string(), 10),
+];
+```
+
+These can be used in `#if` statements to selectively enable shader code based on the value:
+
+```rust
+#if MAX_DIRECTIONAL_LIGHTS >= 10
+let color = vec4<f32>(1.0, 0.0, 0.0, 1.0);
+#else
+let color = vec4<f32>(0.0, 1.0, 0.0, 1.0);
+#endif
+```
+
+ShaderDef values can be inlined into shaders:
+
+```rust
+for (var i: u32 = 0u; i < #{MAX_DIRECTIONAL_LIGHTS}; i = i + 1u) {
+}
+```
+
+They can also be defined inline in shaders:
+
+```rust
+#define MAX_DIRECTIONAL_LIGHTS 10 
+```
+
+ShaderDefs defined in shaders override values passed in from Bevy.
+
+[`ShaderDefVal`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/enum.ShaderDefVal.html
+
+## `#else ifdef` Chains in Shaders
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+Bevy's shader processor now also supports `#else ifdef` chains like this:
+
+```rust
+#ifdef FOO
+// foo code
+#else ifdef BAR
+// bar code
+#else ifdef BAZ
+// baz code
+#else
+// fallback code
+#endif
+```
+
+## New Shader Imports: Global and View
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+The `Global` and `View` structs are now importable in shaders using `#import bevy_render::globals` and `#import bevy_render::view`. Bevy's internal shaders now use these imports (saving a lot of redundancy). Previously you either needed to re-define in each shader or import the larger `bevy_pbr::mesh_view_types` (which wasn't always what was needed).
+
+Previously this was needed:
+
+```rust
+struct View {
+    view_proj: mat4x4<f32>,
+    inverse_view_proj: mat4x4<f32>,
+    view: mat4x4<f32>,
+    inverse_view: mat4x4<f32>,
+    projection: mat4x4<f32>,
+    inverse_projection: mat4x4<f32>,
+    world_position: vec3<f32>,
+    // viewport(x_origin, y_origin, width, height)
+    viewport: vec4<f32>,
+};
+```
+
+Now you can just do this!
+
+```rust
+#import bevy_render::view
+```
+
 ## ECS Optimizations
 
 <div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
