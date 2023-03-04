@@ -3,6 +3,10 @@ title = "Bevy 0.10"
 date = 2023-03-04
 [extra]
 author = "Bevy Contributors"
+image = "ruins.png"
+show_image = true
+image_subtitle = "Ruins scene illustrating Bevy's new material blend modes and fog"
+image_subtitle_link = "https://github.com/coreh/bevy-demo-ruins"
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), I'm happy to announce the **Bevy 0.10** release on [crates.io](https://crates.io/crates/bevy)!
