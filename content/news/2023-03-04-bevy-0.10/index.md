@@ -641,6 +641,46 @@ fn inspect_changes_system<T: Component + Debug>(q: Query<Ref<T>>) {
 
 We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting a component's change ticks. This type will be removed in the next version of Bevy.
 
+## Renderer Optimizations
+
+<div class="release-feature-authors">authors: @danchia, Rob Swain (@superdump), james7132, @kurtkuehnert, @robfm</div>
+
+Bevy's renderer has had quite a few low hanging fruit for optimization.
+
+The biggest bottleneck when rendering anything in Bevy is the final render stage, where we collect all of the data in the render world to issue draw calls to the GPU. The core loops here are extremely hot and any extra overhead is noticeable. In **Bevy 0.10**, we've thrown the kitchen sink at this problem and have attacked it from every angle. Overall, these following optimizations should make the render stage **2-3 times faster** than it was in 0.9:
+
+* In [#7639](https://github.com/bevyengine/bevy/pull/7639) by @danchia, we found that even disabled logging has a strong impact on hot loops, netting us 20-50% speedups in the stage.
+* In [#6944](https://github.com/bevyengine/bevy/pull/6944) by @james7132, we shrank the core data structures involved in the stage, reducing memory fetches and netting us 9% speedups.
+* In [#6885](https://github.com/bevyengine/bevy/pull/6885) by @james7132, we rearchitected our `PhaseItem` and `RenderCommand` infrastructure to combine common operations when fetching component data from the `World`, netting us a 7% speedup.
+* In [#7053](https://github.com/bevyengine/bevy/pull/7053) by @james7132, we changed `TrackedRenderPass`'s allocation patterns to minimize branching within these loops, netting a 6% speedup.
+* In [#7084](https://github.com/bevyengine/bevy/pull/7084) by @james7132, we altered how we're fetching resources from the World to minimize use of atomics in the stage, netting a 2% speedup.
+* In [#6988](https://github.com/bevyengine/bevy/pull/6988) by @kurtkuehnert, we changed our internal resource IDs to use atomically incremented counters instead of UUIDs, reducing the comparison cost of some of the branches in the stage.
+
+One other ongoing development is enabling the render stage to properly parallelize command encoding across multiple threads. Following [#7248](https://github.com/bevyengine/bevy/pull/7248) by @james7132, we now support ingesting externally created `CommandBuffer`s into the render graph, which should allow users to encode GPU commands in parallel and import them into the render graph. This is currently blocked by wgpu, which currently locks the GPU device when encoding render passes, but we should be able to support parallel command encoding as soon as that's addressed.
+
+On a similar note, we've made steps to enable higher parallelism in other stages of the rendering pipeline. `PipelineCache` has been a resource that almost every Queue stage system needed to access mutably, but also only rarely needed to be written to. In [#7205](https://github.com/bevyengine/bevy/pull/7205), @danchia changed this to use internal mutability to allow for these systems to parallelize. This doesn't fully allow every system in this stage to parallelize just yet, as there still remains a few common blockers, but it should allow non-conflicting render phases to queue commands at the same time.
+
+Optimization isn't all about CPU time! We've also improved memory usage, compile times, and GPU performance as well!
+
+* We've also reduced the memory usage of `ComputedVisibility` by 50% thanks to @james7132. This was done by replacing the internal storage with a set of bitflags instead of multiple booleans.
+* @robfm also used type erasure as a work-around a [rustc performance regression](https://github.com/rust-lang/rust/issues/99188) to ensure that rendering related crates have better compile times, with some of the crates compiling **up to 60% faster**! Full details can be seen in [#5950](https://github.com/bevyengine/bevy/pull/5950).
+* In [#7069](https://github.com/bevyengine/bevy/pull/7069), Rob Swain (@superdump) reduced the number of active registers used on the GPU to prevent register spilling, significantly improving GPU-side performance.
+
+Finally, we have made some improvements on specific usage scenarios:
+
+* In [#6833](https://github.com/bevyengine/bevy/pull/6833), @james7132 improved the extraction of bones for mesh skinning by 40-50% by omitting an unnecessary buffer copy.
+* In [#7311](https://github.com/bevyengine/bevy/pull/7311), @james7132 improved UI extraction by 33% by lifting a common computation out of a hot loop.
+
+## Parallelized Transform Propagation and Animation Kinematics
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+Transform propagation is one of the core systems of any game engine. If you move a parent entity, you expect its children to move in worldspace. Bevy's transform propagation system happens to be one of the largest bottlenecks for multiple systems: rendering, UI, physics, animation, etc. cannot run until it's complete. It's imperative that transform propagation is fast to avoid blocking all of these systems. In **Bevy 0.9** and before, transform propagation has always been single-threaded and always requires a full hierarchy traversal. As worlds got larger, so did the time spent in this key bottleneck. In **Bevy 0.10**, transform propagation leverages the structure of a well-formed hierarchy to fully run over multiple threads. The full performance benefits entirely depend on how the hierarchy is structured and how many CPU cores are available. In our testing, this has made transform propagation in our `many_foxes` benchmark **4 times faster** on our testing hardware.
+
+If transform propagation can be parallelized, so can forward kinematics for animation. We leveraged the same guaranteed structure of well formed hierarchies to fully parallelize playing skeletal animations. We also enabled a basic entity-path cache lookup to reduce the extra lookups the system was doing. All together, we were able to make the animation player system on the same `many_foxes` benchmark **10 times faster**.
+
+Combined with all of the other optimizations seen in this release, our tests on the `many_foxes` benchmark has sped up from ~10ms per frame (~100 FPS) to ~2.3ms per frame (~434 FPS), a near 5x speedup!
+
 ## Android Support
 
 <div class="release-feature-authors">authors: @mockersf, @slyedoc</div>
@@ -689,6 +729,91 @@ been called. This was required to enable pipelined rendering, which needed to re
 app from the app to send it between the main thread and the rendering thread. This is
 only valid to do after all the plugin build methods have been called, because any plugin may
 want to modify the rendering sub app.
+
+## ShaderDef Values
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy's shader processor now supports ShaderDefs with values, using the new [`ShaderDefVal`]. This allows developers to pass constant values into their shaders:
+
+```rust
+let shader_defs = vec![
+    ShaderDefVal::Int("MAX_DIRECTIONAL_LIGHTS".to_string(), 10),
+];
+```
+
+These can be used in `#if` statements to selectively enable shader code based on the value:
+
+```rust
+#if MAX_DIRECTIONAL_LIGHTS >= 10
+let color = vec4<f32>(1.0, 0.0, 0.0, 1.0);
+#else
+let color = vec4<f32>(0.0, 1.0, 0.0, 1.0);
+#endif
+```
+
+ShaderDef values can be inlined into shaders:
+
+```rust
+for (var i: u32 = 0u; i < #{MAX_DIRECTIONAL_LIGHTS}; i = i + 1u) {
+}
+```
+
+They can also be defined inline in shaders:
+
+```rust
+#define MAX_DIRECTIONAL_LIGHTS 10 
+```
+
+ShaderDefs defined in shaders override values passed in from Bevy.
+
+[`ShaderDefVal`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/enum.ShaderDefVal.html
+
+## `#else ifdef` Chains in Shaders
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+Bevy's shader processor now also supports `#else ifdef` chains like this:
+
+```rust
+#ifdef FOO
+// foo code
+#else ifdef BAR
+// bar code
+#else ifdef BAZ
+// baz code
+#else
+// fallback code
+#endif
+```
+
+## New Shader Imports: Global and View
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+The `Global` and `View` structs are now importable in shaders using `#import bevy_render::globals` and `#import bevy_render::view`. Bevy's internal shaders now use these imports (saving a lot of redundancy). Previously you either needed to re-define in each shader or import the larger `bevy_pbr::mesh_view_types` (which wasn't always what was needed).
+
+Previously this was needed:
+
+```rust
+struct View {
+    view_proj: mat4x4<f32>,
+    inverse_view_proj: mat4x4<f32>,
+    view: mat4x4<f32>,
+    inverse_view: mat4x4<f32>,
+    projection: mat4x4<f32>,
+    inverse_projection: mat4x4<f32>,
+    world_position: vec3<f32>,
+    // viewport(x_origin, y_origin, width, height)
+    viewport: vec4<f32>,
+};
+```
+
+Now you can just do this!
+
+```rust
+#import bevy_render::view
+```
 
 ## ECS Optimizations
 
@@ -805,11 +930,56 @@ struct CoolMaterial {
 
 [`AsBindGroup`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/trait.AsBindGroup.html
 
+## `ExtractComponent` Derive
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+To pass component data from the "main app" to the "render app" for [pipelined rendering](#enable-parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy you had to implement it manually, but now you can derive it!
+
+```rust
+#[derive(Component, Clone, ExtractComponent)]
+pub struct Car {
+    pub wheels: usize,
+}
+```
+
+This expands to this:
+
+```rust
+impl ExtractComponent for Car
+{
+    type Query = &'static Self;
+    type Filter = ();
+    type Out = Self;
+    fn extract_component(item: QueryItem<'_, Self::Query>) -> Option<Self::Out> {
+        Some(item.clone())
+    }
+}
+```
+
+It also supports filters!
+
+```rust
+#[derive(Component, Clone, ExtractComponent)]
+#[extract_component_filter(With<Fuel>)]
+pub struct Car {
+    pub wheels: usize,
+}
+```
+
+[`ExtractComponent`]: https://docs.rs/bevy/0.10.0/bevy/render/extract_component/trait.ExtractComponent.html
+
 ## Upgraded wgpu to 0.15
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
 **Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
+
+## Enabled OpenGL Backend By Default
+
+<div class="release-feature-authors">authors: @wangling12</div>
+
+Bevy has supported `wgpu`'s OpenGL backend for a while now, but it was opt-in. This caused Bevy to fail to start up on some machines that don't support modern apis like Vulkan. In **Bevy 0.10** the OpenGL backend is enabled by default, which means machines will automatically fall back to OpenGL if no other API is available.
 
 ## Exposed Non-Uniform Indexing Support (Bindless)
 
@@ -1007,6 +1177,75 @@ const COOL_STYLE: Style = Style {
 ```
 
 [`Default`]: https://doc.rust-lang.org/std/default/trait.Default.html
+
+## LCH Color Space
+
+<div class="release-feature-authors">authors: @ldubos</div>
+
+Bevy's [`Color`] type now supports the LCH color space (Lightness, Chroma, Hue). LCH has a lot of arguments for it, including that it provides access to about 50% more colors over sRGB. Check out [this article](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) for more information.
+
+```rust
+Color::Lcha {
+    lightness: 1.0,
+    chroma: 0.5,
+    hue: 200.0,
+    alpha: 1.0,
+}
+```
+
+[`Color`]: https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html
+
+## Optimized `Color::hex` Performance
+
+<div class="release-feature-authors">authors: @wyhaya</div>
+
+[`Color::hex`](https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html#method.hex) is now a `const` function, which brought the runtime of `hex` from ~14ns to ~4ns!
+
+## Split Up `CorePlugin`
+
+<div class="release-feature-authors">authors: @targrub</div>
+
+`CorePlugin` has historically been a bit of a "kitchen sink plugin". "Core" things that didn't fit anywhere else ended up there. This isn't a great organizational strategy, so we broke it up into individual pieces: [`TaskPoolPlugin`], [`TypeRegistrationPlugin`], and [`FrameCountPlugin`].
+
+[`TaskPoolPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.TaskPoolPlugin.html
+[`TypeRegistrationPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.TypeRegistrationPlugin.html
+[`FrameCountPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.FrameCountPlugin.html
+
+## `EntityCommand`s
+
+<div class="release-feature-authors">authors: @targrub</div>
+
+[`Commands`] are "deferred ECS" operations. They enable developers to define custom ECS operations that are applied after a parallel system has finished running. Many [`Commands`] ran on individual entities, but this pattern was a bit cumbersome:
+
+```rust
+struct MyCustomCommand(Entity);
+
+impl Command for MyCustomCommand {
+    fn write(self, world: &mut World) {
+        // do something with the entity at self.0
+    }
+}
+
+let id = commands.spawn(SpriteBundle::default()).id();
+commmands.add(MyCustomCommand(id));
+```
+
+To solve this, in **Bevy 0.10** we added the [`EntityCommand`] trait. This allows the command to be ergonomically applied to spawned entities:
+
+```rust
+struct MyCustomCommand;
+
+impl EntityCommand for MyCustomCommand {
+    fn write(self, id: Entity, world: &mut World) {
+        // do something with the given entity id
+    }
+}
+
+commands.spawn(SpriteBundle::default()).add(MyCustomCommand);
+```
+
+[`EntityCommand`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.EntityCommand.html
+[`Commands`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Commands.html
 
 ## Pixel Perfect Example
 
