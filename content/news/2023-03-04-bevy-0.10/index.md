@@ -1151,7 +1151,7 @@ assert!(concrete_value.is::<MyStruct>());
 
 <div class="release-feature-authors">authors: @Pietrek14</div>
 
-We've added a new [`RelativeCursorPosition`] UI component, which when added to a UI entity tracks the cursor position relative to the node. `Some((0, 0))` represents the top-left corner of the node, `Some((1,1))` represents the bottom-left corner of the node, and `None` represents the cursor being "outside of the node".
+We've added a new [`RelativeCursorPosition`] UI component, which when added to a UI entity tracks the cursor position relative to the node. `Some((0, 0))` represents the top-left corner of the node, `Some((1,1))` represents the bottom-right corner of the node, and `None` represents the cursor being "outside of the node".
 
 ```rust
 commands.spawn((
