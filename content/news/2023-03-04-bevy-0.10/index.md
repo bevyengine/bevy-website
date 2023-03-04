@@ -604,7 +604,7 @@ fn modify_windows(mut windows: Query<&mut Window>) {
 }
 
 fn close_windows(mut commands: Commands, windows: Query<Entity, With<Window>>) {
-    for entity in &mut windows {
+    for entity in &windows {
         commands.entity(entity).despawn();
     }
 }
