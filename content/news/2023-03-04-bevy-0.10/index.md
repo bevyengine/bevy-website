@@ -487,7 +487,7 @@ We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting 
 
 ## Renderer Optimizations
 
-<div class="release-feature-authors">authors: @danchia, @superdump, james7132, @kurtkuehnert</div>
+<div class="release-feature-authors">authors: @danchia, Rob Swain (@superdump), james7132, @kurtkuehnert</div>
 
 Bevy's renderer has had quite a few low hanging fruit for optimization. 
 
