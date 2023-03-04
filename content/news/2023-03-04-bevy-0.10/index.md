@@ -618,7 +618,7 @@ For efficiency, `Blend`, `Premultiplied` and `Add` alpha modes all share a singl
 
 Bevy can now render distance and atmospheric fog effects, bringing a heightened sense of _depth_ and _ambiance_ to your scenes by making objects appear dimmer the further away they are from view.
 
-![The new fog example, showcasing different fog modes and parameters.](fog.png)
+![The new fog example showcases different fog modes and parameters.](fog.png)
 
 Fog is controllable per-camera via the new [`FogSettings`] component. Special care has been put in exposing several knobs to give you full artistic control over the look of your fog, including the ability to fade the fog in and out by controlling the alpha channel of the fog color.
 
@@ -704,7 +704,7 @@ Additionally, a more sophisticated [`FogFalloff::Atmospheric`] mode is available
 
 [`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
 
-![The new atmospheric_fog example, showcasing a terrain with atmospheric fog and directional light influence.](atmospheric-fog.png)
+![The new atmospheric_fog example showcases a terrain with atmospheric fog and directional light influence.](atmospheric-fog.png)
 
 Since directly controlling the non-linear fog falloff parameters “by hand” can be tricky to get right, a number of helper functions based on [meteorological visibility](https://en.wikipedia.org/wiki/Visibility) are available, such as [`FogFalloff::from_visibility()`]:
 
