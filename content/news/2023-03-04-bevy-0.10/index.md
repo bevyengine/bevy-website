@@ -1033,7 +1033,7 @@ Color::Lcha {
 
 <div class="release-feature-authors">authors: @wyhaya</div>
 
-[`Color::hex`](https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html#method.hex) is now a `const` function, which brought the runtime of `hex` from ~14ns to ~4ns! 
+[`Color::hex`](https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html#method.hex) is now a `const` function, which brought the runtime of `hex` from ~14ns to ~4ns!
 
 ## Split Up `CorePlugin`
 
