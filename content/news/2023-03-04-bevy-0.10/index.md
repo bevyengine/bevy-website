@@ -570,6 +570,48 @@ Much cleaner!
 
 [`Decodable`]: https://docs.rs/bevy_audio/latest/bevy_audio/trait.Decodable.html
 
+## SystemParam Improvements
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+Central to Bevy's ECS are `SystemParam`s: these types, such as `Query` and `Res`, dictate what a system can and can't do.
+Previously, manually creating one required implementing a family of four inseparable traits.
+In **Bevy 0.10**, we've [used generic associated types](https://github.com/bevyengine/bevy/pull/6865) to [reduce this to just two traits](https://github.com/bevyengine/bevy/pull/6919): `SystemParam` and `ReadOnlySystemParam`.
+
+Additionally, the `#[derive(SystemParam)]` macro has received a host of miscellaneous usability improvements:
+
+* **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
+* **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
+* **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously complex as you want. This is most useful for generated code.
+
+## Deferred World Mutations
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+You probably know that when you send a `Command`, it doesn't mutate the world right away. The command gets stored in the system and applied later on
+in the schedule. Deferring mutations in this way has a few benefits:
+
+* Minimizing world accesses: unlike mutable queries (and resources), deferred mutations are free from data access conflicts, which affords greater parallelizability to systems using this pattern.
+* Order independence: when performing idempotent operations (like setting a global flag), deferred mutations allow you to not worry about system execution order.
+* Structural mutations: deferred mutations are able to change the structure of the world in ways that `Query` and `ResMut` cannot, such as adding components or spawning and despawning entities.
+
+**Bevy 0.10** adds first-class support for this pattern via the `Deferred` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
+
+```rust
+/// Sends events with a delay, but can run in parallel with other event writers.
+pub struct EventBuffer<E>(Vec<E>);
+
+// The `SystemBuffer` trait controls how deferred mutations get applied to the world.
+impl<E> SystemBuffer for EventBuffer<E> { ... }
+
+fn my_system(mut events: Deferred<EventBuffer<MyEvent>>) {
+    // Queue up an event to get sent when commands are applied.
+    events.0.push(MyEvent);
+}
+```
+
+Note that this feature should be used with care -- despite the potential performance benefits, inappropriate usage can actually _worsen_ performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
+
 ## Ref&lt;T&gt; Queries
 
 <div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
