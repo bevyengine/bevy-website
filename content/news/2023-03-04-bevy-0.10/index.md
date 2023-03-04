@@ -1523,6 +1523,30 @@ fn run_or_attack(
 [`AnimationPlayer`]: https://docs.rs/bevy/0.10.0/bevy/animation/struct.AnimationPlayer.html
 [`play_with_transition`]: https://docs.rs/bevy/0.10/bevy/animation/struct.AnimationPlayer.html#method.play_with_transition
 
+## Revamped Bloom
+Bloom has undergone some major changes, and now looks better, is easier to control, and has less visual artifacts.
+In combination with the the new tonemapping options, bloom has been much improved since the previous release!
+
+Here's what bloom looked like in bevy 0.9:
+![bevy 0.9 bloom](old_bloom.png)
+
+Switching the tonemapper to something like AcesFitted is already a big improvement:
+![bevy 0.9 bloom with aces tonemapper](old_bloom_aces.png)
+
+Bloom now looks like this. It's much more controlled and less overbearing:
+![bevy 0.10 bloom](new_bloom.png)
+
+To make the bloom stronger, rather than riase the `BloomSettings` intensity,
+lets double the `emissive` value of each cube:
+![bevy 0.10 bloom doubled emission](new_bloom_double_emission.png)
+
+Finally, if you want the extreme bloom similiar to the old algorithm,
+you can change `BloomSettings::composite_mode` from
+`BloomCompositeMode::EnergyConserving` to `BloomCompositeMode::Additive`:
+![bevy 0.10 bloom additive mode](new_bloom_additive.png)
+
+Check out the new `bloom_3d` and `bloom_2d` examples for an interactive playground to explore the new bloom settings.
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
