@@ -842,15 +842,16 @@ Additionally, support for semi-transparent textures with [premultiplied alpha](h
 
 Here's a high-level overview of the new modes:
 
-* [`AlphaMode::Add`] — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
-* [`AlphaMode::Multiply`] — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
-* [`AlphaMode::Premultiplied`] — Behaves very similarly to [`AlphaMode::Blend`], but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
+* [`AlphaMode::Add`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Add) — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
+* [`AlphaMode::Multiply`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Multiply) — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
+* [`AlphaMode::Premultiplied`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Premultiplied) — Behaves very similarly to [`AlphaMode::Blend`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Blend), but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
 
 ![The new blend_modes example.](blend-modes.png)
 
 **Note:** Meshes using the new blend modes are drawn on the existing `Transparent3d` render phase, and therefore the same _z-sorting considerations/limitations_ from `AlphaMode::Blend` apply.
 
-For efficiency, `Blend`, `Premultiplied` and `Add` alpha modes all share a single [`MeshPipelineKey`] bitflag and a single [`BlendState`], with conditional logic in the fragment shader producing their differentiated end results. `Multiply` necessitates its own separate [`MeshPipelineKey`] and [`BlendState`] key.
+[`AlphaMode`]: https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.StandardMaterial.html
 
 ## Distance and Atmospheric Fog
 
@@ -874,7 +875,7 @@ commands.spawn((
 
 _Exactly how_ fog behaves with regards to distance is controlled via the [`FogFalloff`] enum. All of the “traditional” fog falloff modes from the fixed-function OpenGL 1.x / DirectX 7 days are supported:
 
-[`FogFalloff::Linear`] increases in intensity linearly from 0 to 1 between `start` and `end` parameters. (This example uses values of 0.8 and 2.2, respectively.)
+`FogFalloff::Linear` increases in intensity linearly from 0 to 1 between `start` and `end` parameters. (This example uses values of 0.8 and 2.2, respectively.)
 
 <svg width="370" height="212" viewBox="0 0 370 212" fill="none">
 <path d="M331 151H42V49" stroke="currentColor" stroke-width="2"/>
@@ -892,7 +893,7 @@ _Exactly how_ fog behaves with regards to distance is controlled via the [`FogFa
 <text font-family="sans-serif" fill="#FF00E5" style="white-space: pre" font-family="Inter" font-size="10" letter-spacing="0em"><tspan x="267" y="58.6364">end</tspan></text>
 </svg>
 
-[`FogFalloff::Exponential`] increases according to an (inverse) exponential formula, controlled by a `density` parameter.
+`FogFalloff::Exponential` increases according to an (inverse) exponential formula, controlled by a `density` parameter.
 
 <svg width="370" height="212" viewBox="0 0 370 212" fill="none">
 <mask id="mask0_3_31" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="42" y="42" width="286" height="108">
@@ -916,7 +917,7 @@ _Exactly how_ fog behaves with regards to distance is controlled via the [`FogFa
 <text font-family="sans-serif" transform="translate(10 132) rotate(-90)" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="0" y="11.8636">fog intensity</tspan></text>
 </svg>
 
-[`FogFalloff::ExponentialSquared`] grows according to a slightly modified (inverse) exponential square formula, also controlled by a `density` parameter.
+`FogFalloff::ExponentialSquared` grows according to a slightly modified (inverse) exponential square formula, also controlled by a `density` parameter.
 
 <svg width="370" height="212" viewBox="0 0 370 212" fill="none">
 <mask id="mask0_1_3" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="42" y="42" width="286" height="108">
@@ -940,13 +941,13 @@ _Exactly how_ fog behaves with regards to distance is controlled via the [`FogFa
 <text font-family="sans-serif" transform="translate(10 132) rotate(-90)" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="0" y="11.8636">fog intensity</tspan></text>
 </svg>
 
-Additionally, a more sophisticated [`FogFalloff::Atmospheric`] mode is available which provides _more physically accurate_ results by taking light `extinction` and `inscattering` into account separately.
+Additionally, a more sophisticated `FogFalloff::Atmospheric` mode is available which provides _more physically accurate_ results by taking light `extinction` and `inscattering` into account separately.
 
 [`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
 
 ![The new atmospheric_fog example showcases a terrain with atmospheric fog and directional light influence.](atmospheric-fog.png)
 
-Since directly controlling the non-linear fog falloff parameters “by hand” can be tricky to get right, a number of helper functions based on [meteorological visibility](https://en.wikipedia.org/wiki/Visibility) are available, such as [`FogFalloff::from_visibility()`]:
+Since directly controlling the non-linear fog falloff parameters “by hand” can be tricky to get right, a number of helper functions based on [meteorological visibility](https://en.wikipedia.org/wiki/Visibility) are available, such as [`FogFalloff::from_visibility()`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.FogFalloff.html#method.from_visibility):
 
 ```rust
 FogSettings {
@@ -959,6 +960,10 @@ FogSettings {
 Fog is applied “forward rendering-style” on the PBR fragment shader, instead of as a post-processing effect, which allows it to properly handle semi-transparent meshes.
 
 The atmospheric fog implementation is largely based on [this great article](https://iquilezles.org/articles/fog/) by Inigo Quilez, Shadertoy co-creator and computer graphics legend. _Thanks for the great write up and inspiration!_
+
+[`FogSettings`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.FogSettings.html
+[`FogFalloff`]: https://docs.rs/bevy/0.10.0/bevy/pbr/enum.FogFalloff.html
+[`DirectionalLight`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.DirectionalLight.html
 
 ## Cylinder Shape
 
