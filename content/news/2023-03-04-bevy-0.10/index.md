@@ -3,6 +3,10 @@ title = "Bevy 0.10"
 date = 2023-03-04
 [extra]
 author = "Bevy Contributors"
+image = "ruins.png"
+show_image = true
+image_subtitle = "Ruins scene illustrating Bevy's new material blend modes and fog"
+image_subtitle_link = "https://github.com/coreh/bevy-demo-ruins"
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), I'm happy to announce the **Bevy 0.10** release on [crates.io](https://crates.io/crates/bevy)!
@@ -15,36 +19,33 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Headliner Feature**: Description here.
-* **Simpler, more flexible scheduling**: systems are now stored in a unified schedule, commands can be applied explicitly via `apply_system_buffers` and a whole lot of quality of life and bug fixes.
+* **ECS Schedule v3**: Bevy now has much simpler, more flexible scheduling. Systems are now stored in a unified schedule, commands can be applied explicitly via `apply_system_buffers`, and a whole lot of quality of life and bug fixes.
 
-## Section Template
-
-<div class="release-feature-authors">authors: @Foo, @Bar</div>
-
-Description here.
-
-## Simpler, more flexible scheduling
+## ECS Schedule v3: simpler, more flexible scheduling
 
 <div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe, @cart, @jakobhellermann, @JoJoJet, @geieredgar and a whole lot more </div>
 
-Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented! But as we all know, plans and implementations (start at [#6587](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and [#7267](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile`) are two different things. Let's take a look at what actually shipped for 0.10.
+Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented!
 
-There's been a lot of changes, but we've put a lot of care into ensuring the [migration path](../../learn/book/migration-guides/0.9-0.10/_index.md) for existing applications is relatively straightforward. Don't sweat it!
+Schedule v3 is the culmination of significant design and implementation work. Scheduling APIs are a central and defining part of the Bevy developer experience, so we had to be very thoughtful and meticulous about this next evolution of the API. In addition to the [RFC PR](https://github.com/bevyengine/rfcs/pull/45), the [initial implementation PR](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and the [Bevy Engine internals port PR](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile` are great places to start if you would like a view into our process and rationale. As we all know, plans and implementations are two different things. Our final implementation is a bit different from the initial RFC (in a good way).
 
-## A Single Unified Schedule
+There's been a lot of changes, but we've put a lot of care into ensuring the [migration path](/learn/book/migration-guides/0.9-0.10/) for existing applications is relatively straightforward. Don't sweat it!
 
-Ever wanted to specify that `system_a` runs before `system_b`, only to be met with confusing warnings that `system_b` isn't found because it's in a different stage?
+Lets take a look at what shipped in 0.10!
+
+### A Single Unified Schedule
+
+Have you ever wanted to specify that `system_a` runs before `system_b`, only to be met with confusing warnings that `system_b` isn't found because it's in a different stage?
 
 No more! All systems within a single **schedule** are now stored in a single data structure with a global awareness of what's going on.
 
 This simplifies our internal logic, makes your code more robust to refactoring, and allows plugin authors to specify high-level invariants (e.g. "movement must occur before collision checking") without locking themselves in to an exact schedule location.
 
-[!main_schedule_diagram](main_schedule_diagram.svg)
+![main_schedule_diagram](main_schedule_diagram.svg)
 
 This diagram, made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
 
-## Configurable System Sets
+### Configurable System Sets
 
 To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
 
@@ -71,7 +72,7 @@ app
     // as this is a method on a single system.
     // The order of these method calls doesn't matter!
    .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
-    // Add multiple systems at once with add_systems!    
+    // Add multiple systems at once with add_systems!
     .add_systems(
         (apply_acceleration, apply_velocity)
             // Quickly order a list of systems to run one after the next by using .chain()
@@ -106,7 +107,7 @@ These rules must be compatible with each other: any paradoxes (like a system set
 
 As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
-## Directly Schedule Exclusive Systems
+### Directly Schedule Exclusive Systems
 
 Ever wished that you could just flush commands or run an exclusive system right before this system but after that system without shuffling your entire schedule to make it work?
 
@@ -139,7 +140,7 @@ Similarly, state transitions can be scheduled manually, one type at a time, in t
 
 What will you do with this much power? We're keen to find out!
 
-## It's All Schedules? Managing complex control flow
+### It's All Schedules? Managing complex control flow
 
 But what if you want to do something _weird_ with your schedule. Something non-linear, or branching, or looping. What should you reach for?
 
@@ -184,7 +185,7 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 
 Follow the bread crumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSchedule.html) for more info.
 
-## Simpler Run Conditions
+### Simpler Run Conditions
 
 Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
 Run criteria have been renamed to the clearer **run conditions**, which can be constructed out of any read-only system that returns `bool`.
@@ -206,11 +207,11 @@ app.add_system(win_game.run_if(game_end_condition));
 
 Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Reducing the number of tasks spawned can really add up. Like always though: benchmark!
 
-Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://dev-docs.bevyengine.org/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579)and [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), you can quickly check if there are events to process, changes to resources, input states and more.
+Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://dev-docs.bevyengine.org/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579), [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), and [#7866 by `@jabuwu`](https://github.com/bevyengine/bevy/pull/7866) you can easily run systems if there are events to process, timers that elapsed, resources that changed, input state changes, and more.
 
 When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run criteria combinators.
 
-## Simpler States
+### Simpler States
 
 Previously, looping run criteria were used to power states, but as mentioned above, they've been removed.
 How do they work in Bevy 0.10?
@@ -272,7 +273,7 @@ If you were relying on the state stack, you might choose to:
 * use additional state types, which capture orthogonal elements of your app's status
 * build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate!
 
-## Base Sets: Getting Default Behavior Right
+### Base Sets: Getting Default Behavior Right
 
 Of course the skeptical reader may point out that:
 
@@ -289,8 +290,8 @@ Well, I'm glad you asked, rhetorical skeptic. To reduce this chaos (and ease mig
 Some parts of the stage-centric architecture were appealing: a clear high level structure, coordination on flush points (to reduce excessive bottlenecks) and good default behavior.
 To keep those bits (while excising the frustrating ones), we've introduced the concept of **base sets**, added in [#7466](https://github.com/bevyengine/bevy/pull/7466) by `@cart`. Base sets are system sets, except:
 
-1. Every system (but not every system set) must belong to exactly one base set.
-2. Systems that do not specify a base set will be added to the default base set for the schedule.
+1. Every system can belong to at most one base set.
+2. Systems that do not specify a base set will be added to the default base set for the schedule (if the schedule has one).
 
 ```rust
 // You can add new base sets to any built-in ones
@@ -331,7 +332,7 @@ In practice, there are three broad classes of systems: gameplay logic (the major
 By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 Let us know how it works out for you!
 
-## Polish Matters
+### Polish Matters
 
 As part of this work, we've taken the time to listen to our users and fix some small but high-impact things about how scheduling works.
 
@@ -386,7 +387,7 @@ app
         .with_system(b.label(MyLabel::Variant))
         .with_system(c)
         .with_run_criteria(blue_moon)
-    )    
+    )
 
 ```
 
@@ -418,6 +419,119 @@ We've also:
 The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bevy_mod_debugdump`](https://crates.io/crates/bevy_mod_debugdump), the leading third-party schedule visualization plugin, to ensure it keeps working better than ever.
 
 It's a great tool that we are looking to build on to create a first party solution: you should strongly consider adding it to your toolbox.
+
+## Cascaded Shadow Maps
+
+<div class="release-feature-authors">authors: @danchia, Rob Swain (@superdump)</div>
+
+Bevy uses "shadow maps" to cast shadows for lights / objects. Previous versions of Bevy used a simple but limited shadow map implementation for directional light sources. For a given light, you would define the resolution of the shadow map _and_ a manual "view projection" that would determine how the shadow is cast. This had a number of downsides:
+
+* The resolution of the shadow map was fixed. You had to choose something between "cover a large area, but have a lower resolution" and "cover a smaller area, but have a higher resolution".
+* The resolution didn't adapt to camera positioning. Shadows might look great in one position, but terrible in another position.
+* The "shadow projection" had to be manually defined. This made it hard and unapproachable to configure shadows to match a given scene.
+
+**Bevy 0.10** adds "cascaded shadow maps", which breaks up the camera's view frustum into a series of configurable "cascades", which each have their own shadow map. This enables shadows in the cascade "close to the camera" to be highly detailed, while allowing shadows "far from the camera" to cover a wider area with less detail. Because it uses the camera's view frustum to define the shadow projections, the shadow quality remains consistent as the camera moves through the scene. This also means that users don't need to manually configure shadow projections anymore. They are automatically calculated!
+
+<video controls loop><source  src="shadow_cascades.mp4" type="video/mp4"/></video>
+
+Notice how the nearby shadows are highly detailed whereas the shadows in the distance become less detailed as they get farther away (which doesn't matter as much because they are far away).
+
+While shadow cascades solve important problems, they also introduce new ones. How many cascades should you use? What is the minimum and maximum distance from the camera where shadows should appear? How much overlap should there be between cascades? These parameters must be dialed in to fit a given scene.
+
+## Environment Map Lighting
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Environment maps are a popular and computationally cheap way to significantly improve the quality of a scene's lighting. It uses a cube map texture to provide 360 lighting "from all directions". This is especially apparent for reflective surfaces, but it applies to all lit materials.
+
+This is what the PBR material looks like without environment map lighting:
+
+![env map before](env_map_before.png)
+
+And this is what the PBR material looks like with environment map lighting:
+
+![env map after](env_map_after.png)
+
+For scenes that need constant lighting (especially outdoor scenes), environment maps are a great solution. And because environment maps are arbitrary images, artists have a lot of control over the character of the scene's lighting.
+
+## More Tonemapping Choices
+
+<div class="release-feature-authors">authors: @DGriffin91, @JMS55</div>
+
+Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
+
+### No Tonemapping
+
+This is generally not recommended as HDR lighting is not intended to be used as color.
+
+![no tonemapping](tm_none.png)
+
+### Reinhard
+
+![reinhard](tm_reinhard.png)
+
+### Reinhard Luminance
+
+This is what we had in previous versions of Bevy. It is still our default algorithm.
+
+![reinhard luminance](tm_reinhard_luminance.png)
+
+### ACES Fitted
+
+![aces](tm_aces.png)
+
+### AgX
+
+![agx](tm_agx.png)
+
+### SomewhatBoringDisplayTransform
+
+![SomewhatBoringDisplayTransform](tm_sbdt.png)
+
+### TonyMcMapface
+
+Tomasz Stachowiak [recently released](https://twitter.com/h3r2tic/status/1626579257559502850?lang=en) this nice new display transform. In their own words "Tony maps HDR Rec.709 to LDR in a (subjectively) natural way, without messing too much with contrast or look"
+
+![TonyMcMapface](tm_tonymcmapface.png)
+
+### Blender Filmic
+
+From the 3D software package we know and love!
+
+![Blender Filmic](tm_blender_filmic.png)
+
+## Color Grading Control
+
+<div class="release-feature-authors">authors: @DGriffin91</div>
+
+We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per-camera using the new [`ColorGrading`] component
+
+[`ColorGrading`]: https://docs.rs/bevy/0.10.0/bevy/render/view/struct.ColorGrading.html
+
+### 0.5 Exposure
+
+![0.5 exposure](exposure_005.png)
+
+### 2.25 Exposure
+
+![2.25 exposure](exposure_225.png)
+
+## Depth and normal prepass
+
+<div class="release-feature-authors">authors: @icesentry, @superdump, @robtfm, @JMS55</div>
+
+<video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
+<p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
+
+Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing and many more. These are currently being worked on and should be available in the next release of bevy.
+
+![Edge detection](edge_detection.png)
+<p class="release-feature-authors">In the image on the right, green lines are edges detected in the normal texture and blue lines are edges detected in the depth texture</p>
+
+![Edge detection prepass](edge_detection_prepass.png)
+<p class="release-feature-authors">The depth and normal textures generated by the prepass</p>
+
+Unfortunately, the prepass still has performance issues so it's currently disabled by default, but if you need to use it for a specific effect you can simply add the `DepthPrepass` component to your camera.
 
 ## Spatial Audio
 
@@ -460,7 +574,49 @@ Much cleaner!
 
 [`Decodable`]: https://docs.rs/bevy_audio/latest/bevy_audio/trait.Decodable.html
 
-## `Ref<T>` Queries
+## SystemParam Improvements
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+Central to Bevy's ECS are `SystemParam`s: these types, such as `Query` and `Res`, dictate what a system can and can't do.
+Previously, manually creating one required implementing a family of four inseparable traits.
+In **Bevy 0.10**, we've [used generic associated types](https://github.com/bevyengine/bevy/pull/6865) to [reduce this to just two traits](https://github.com/bevyengine/bevy/pull/6919): `SystemParam` and `ReadOnlySystemParam`.
+
+Additionally, the `#[derive(SystemParam)]` macro has received a host of miscellaneous usability improvements:
+
+* **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
+* **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
+* **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously complex as you want. This is most useful for generated code.
+
+## Deferred World Mutations
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+You probably know that when you send a `Command`, it doesn't mutate the world right away. The command gets stored in the system and applied later on
+in the schedule. Deferring mutations in this way has a few benefits:
+
+* Minimizing world accesses: unlike mutable queries (and resources), deferred mutations are free from data access conflicts, which affords greater parallelizability to systems using this pattern.
+* Order independence: when performing idempotent operations (like setting a global flag), deferred mutations allow you to not worry about system execution order.
+* Structural mutations: deferred mutations are able to change the structure of the world in ways that `Query` and `ResMut` cannot, such as adding components or spawning and despawning entities.
+
+**Bevy 0.10** adds first-class support for this pattern via the `Deferred` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
+
+```rust
+/// Sends events with a delay, but can run in parallel with other event writers.
+pub struct EventBuffer<E>(Vec<E>);
+
+// The `SystemBuffer` trait controls how deferred mutations get applied to the world.
+impl<E> SystemBuffer for EventBuffer<E> { ... }
+
+fn my_system(mut events: Deferred<EventBuffer<MyEvent>>) {
+    // Queue up an event to get sent when commands are applied.
+    events.0.push(MyEvent);
+}
+```
+
+Note that this feature should be used with care -- despite the potential performance benefits, inappropriate usage can actually _worsen_ performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
+
+## Ref&lt;T&gt; Queries
 
 <div class="release-feature-authors">authors: @Guvante, @JoJoJet</div>
 
@@ -507,8 +663,8 @@ As this brings Bevy closer to full support of Android, there isn't a need anymor
 
 ![Trace with Pipelined Rendering](pipelined-rendering-trace.png)
 
-On multithreaded platforms, bevy will now run significantly faster by running simulation and
-rendering in parallel. The renderer was rearchitected in [bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
+On multithreaded platforms, **Bevy 0.10** will now run significantly faster by running simulation and
+rendering in parallel. The renderer was rearchitected in [Bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
 to enable this, but the final step of actually running them in parallel was not done until now.
 There was a bit of tricky work to figure out. The render world has a system that has to run on
 the main thread, but the task pool only had the ability to run on the world's thread. So, when we send
@@ -517,7 +673,7 @@ thread. So we added the ability to spawn tasks onto the main thread in addition 
 
 ![Histogram of Many Foxes Frame Time](pipelined-rendering-histogram.png)
 
-In testing different bevy examples, the gains were typically in the 10% to 30% range.
+In testing different Bevy examples, the gains were typically in the 10% to 30% range.
 As seen in the above histogram, the mean frame time of the "many foxes" stress test
 is 1.8ms faster than before.
 
@@ -526,13 +682,98 @@ using `DefaultPlugins` then it will automatically be added for you on all platfo
 wasm. Bevy does not currently support multithreading on wasm which is needed for this
 feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
 
-## Added a post-build method on `Plugin`
+### Added a post-build method on Plugin
 
 An optional `setup` method was added to the `Plugin` trait that runs after all the build methods have
 been called. This was required to enable pipelined rendering, which needed to remove the sub
 app from the app to send it between the main thread and the rendering thread. This is
 only valid to do after all the plugin build methods have been called, because any plugin may
 want to modify the rendering sub app.
+
+## ShaderDef Values
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy's shader processor now supports ShaderDefs with values, using the new [`ShaderDefVal`]. This allows developers to pass constant values into their shaders:
+
+```rust
+let shader_defs = vec![
+    ShaderDefVal::Int("MAX_DIRECTIONAL_LIGHTS".to_string(), 10),
+];
+```
+
+These can be used in `#if` statements to selectively enable shader code based on the value:
+
+```rust
+#if MAX_DIRECTIONAL_LIGHTS >= 10
+let color = vec4<f32>(1.0, 0.0, 0.0, 1.0);
+#else
+let color = vec4<f32>(0.0, 1.0, 0.0, 1.0);
+#endif
+```
+
+ShaderDef values can be inlined into shaders:
+
+```rust
+for (var i: u32 = 0u; i < #{MAX_DIRECTIONAL_LIGHTS}; i = i + 1u) {
+}
+```
+
+They can also be defined inline in shaders:
+
+```rust
+#define MAX_DIRECTIONAL_LIGHTS 10
+```
+
+ShaderDefs defined in shaders override values passed in from Bevy.
+
+[`ShaderDefVal`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/enum.ShaderDefVal.html
+
+## `#else ifdef` Chains in Shaders
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+Bevy's shader processor now also supports `#else ifdef` chains like this:
+
+```rust
+#ifdef FOO
+// foo code
+#else ifdef BAR
+// bar code
+#else ifdef BAZ
+// baz code
+#else
+// fallback code
+#endif
+```
+
+## New Shader Imports: Global and View
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+The `Global` and `View` structs are now importable in shaders using `#import bevy_render::globals` and `#import bevy_render::view`. Bevy's internal shaders now use these imports (saving a lot of redundancy). Previously you either needed to re-define in each shader or import the larger `bevy_pbr::mesh_view_types` (which wasn't always what was needed).
+
+Previously this was needed:
+
+```rust
+struct View {
+    view_proj: mat4x4<f32>,
+    inverse_view_proj: mat4x4<f32>,
+    view: mat4x4<f32>,
+    inverse_view: mat4x4<f32>,
+    projection: mat4x4<f32>,
+    inverse_projection: mat4x4<f32>,
+    world_position: vec3<f32>,
+    // viewport(x_origin, y_origin, width, height)
+    viewport: vec4<f32>,
+};
+```
+
+Now you can just do this!
+
+```rust
+#import bevy_render::view
+```
 
 ## ECS Optimizations
 
@@ -720,6 +961,348 @@ Fog is applied “forward rendering-style” on the PBR fragment shader, instead
 
 The atmospheric fog implementation is largely based on [this great article](https://iquilezles.org/articles/fog/) by Inigo Quilez, Shadertoy co-creator and computer graphics legend. _Thanks for the great write up and inspiration!_
 
+## Cylinder Shape
+
+<div class="release-feature-authors">authors: @JayPavlinas, @rparrett, @davidhof</div>
+
+The cylinder shape primitive has joined our zoo of built-in shapes!
+
+![primitive shapes](primitive_shapes.png)
+
+## Subdividable Plane Shape
+
+<div class="release-feature-authors">authors: @woodroww</div>
+
+Bevy's [`Plane`] shape can now be subdivided any number of times.
+
+![plane](plane.png)
+
+[`Plane`]: https://docs.rs/bevy/0.10.0/bevy/prelude/shape/struct.Plane.html
+
+## Configurable Visibility Component
+
+<div class="release-feature-authors">authors: @ickk</div>
+
+The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** reworked the type definition: rather having a single `is_visible: bool` field, we now use an enum with an additional mode:
+
+```rust
+pub enum Visibility {
+  Hidden,    // unconditionally hidden
+  Visible,   // unconditionally visible
+  Inherited, // inherit visibility from parent
+}
+```
+
+Much easier to understand! In previous Bevy versions, "inherited visibility" and "hidden" were essentially the only two options. Now entities can opt to be visible, even if their parent is hidden!
+
+[`Visibility`]: https://docs.rs/bevy/0.10.0/bevy/render/view/enum.Visibility.html
+[`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/index.html
+
+## `AsBindGroup` Storage Buffers
+
+<div class="release-feature-authors">authors: @IceSentry, @AndrewB330</div>
+
+[`AsBindGroup`] is a useful Bevy trait that [makes it very easy to pass data into shaders](/news/bevy-0-8/#new-material-system).
+
+**Bevy 0.10** expands this with support for "storage buffer bindings", which are very useful when passing in large / unbounded chunks of data:
+
+```rust
+#[derive(AsBindGroup)]
+struct CoolMaterial {
+    #[uniform(0)]
+    color: Color,
+    #[texture(1)]
+    #[sampler(2)]
+    color_texture: Handle<Image>,
+    #[storage(3)]
+    values: Vec<f32>,
+    #[storage(4, read_only, buffer)]
+    buffer: Buffer,
+}
+```
+
+[`AsBindGroup`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/trait.AsBindGroup.html
+
+## `ExtractComponent` Derive
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+To pass component data from the "main app" to the "render app" for [pipelined rendering](#enable-parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy you had to implement it manually, but now you can derive it!
+
+```rust
+#[derive(Component, Clone, ExtractComponent)]
+pub struct Car {
+    pub wheels: usize,
+}
+```
+
+This expands to this:
+
+```rust
+impl ExtractComponent for Car
+{
+    type Query = &'static Self;
+    type Filter = ();
+    type Out = Self;
+    fn extract_component(item: QueryItem<'_, Self::Query>) -> Option<Self::Out> {
+        Some(item.clone())
+    }
+}
+```
+
+It also supports filters!
+
+```rust
+#[derive(Component, Clone, ExtractComponent)]
+#[extract_component_filter(With<Fuel>)]
+pub struct Car {
+    pub wheels: usize,
+}
+```
+
+[`ExtractComponent`]: https://docs.rs/bevy/0.10.0/bevy/render/extract_component/trait.ExtractComponent.html
+
+## Upgraded wgpu to 0.15
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+**Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
+
+## Enabled OpenGL Backend By Default
+
+<div class="release-feature-authors">authors: @wangling12</div>
+
+Bevy has supported `wgpu`'s OpenGL backend for a while now, but it was opt-in. This caused Bevy to fail to start up on some machines that don't support modern apis like Vulkan. In **Bevy 0.10** the OpenGL backend is enabled by default, which means machines will automatically fall back to OpenGL if no other API is available.
+
+## Exposed Non-Uniform Indexing Support (Bindless)
+
+<div class="release-feature-authors">authors: @cryscan</div>
+
+**Bevy 0.10** wired up initial support for non-uniform indexing of textures and storage buffers. This is an important step toward modern ["bindless / gpu-driven rendering"](https://vkguide.dev/docs/gpudriven/gpu_driven_engines/), which can unlock significant performance on platforms that support it. Note that this is just making the feature available to render plugin developers. Bevy's core rendering features do not (yet) use the bindless approach.
+
+We've added [a new example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/shader/texture_binding_array.rs) illustrating how to use this feature:
+
+![texture binding array](texture_binding_array.png)
+
+## Gamepad API Improvements
+
+<div class="release-feature-authors">authors: @DevinLeamy</div>
+
+The [`GamepadEventRaw`] type has been removed in favor of separate [`GamepadConnectionEvent`], [`GamepadAxisChangedEvent`], and [`GamepadButtonChangedEvent`], and the internals have been reworked to accommodate this.
+
+This allows for simpler, more granular event access without filtering down the general [`GamepadEvent`] type. Nice!
+
+```rust
+fn system(mut events: EventReader<GamepadConnectionEvent>)
+    for event in events.iter() {
+    }
+}
+```
+
+[`GamepadEventRaw`]: https://docs.rs/bevy/0.9.0/bevy/input/gamepad/struct.GamepadEventRaw.html
+[`GamepadConnectionEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadConnectionEvent.html
+[`GamepadAxisChangedEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadAxisChangedEvent.html
+[`GamepadButtonChangedEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadButtonChangedEvent.html
+[`GamepadEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/enum.GamepadEvent.html
+
+## Input Method Editor (IME) Support
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+[`Window`] can now configure IME support using `ime_enabled` and `ime_position`, which enables the use of "dead keys", which add support for French, Pinyin, etc:
+
+<video controls loop><source  src="ime.mp4" type="video/mp4"/></video>
+
+[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
+
+## Cubic Curves
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+<video controls loop><source  src="cubic_curves.mp4" type="video/mp4"/></video>
+<p class="release-feature-authors">This video shows four kinds of cubic curves being smoothly animated with bezier easing. The curve itself is white, green is velocity, red is acceleration, and blue are the control points that determine the shape of the curve.</p>
+
+In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`.  The implementation provides multiple curves out of the box, useful in various applications:
+
+* `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing as demonstrated in the above video.
+* `Hermite`: smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
+* `Cardinal`: easy interpolation between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
+* `B-Spline`: acceleration-continuous motion, particularly useful for camera paths where a smooth change in velocity (acceleration) is important to prevent harsh jerking motion.
+
+The `CubicGenerator` trait is public, allowing you to define your own custom splines that generate `CubicCurve`s!
+
+### Performance
+
+The position, velocity, and acceleration of a `CubicCurve` can be evaluated at any point. These evaluations all have the same performance cost, regardless of the type of cubic curve being used. On a modern CPU, these evaluations take 1-2 ns, and animation easing - which is an iterative process - takes 15-20 ns.
+
+## Reflection Paths: Enums and Tuples
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy's "reflection paths" enable navigating Rust values using a simple (and dynamic) string syntax. **Bevy 0.10** expands this system by adding support for tuples and enums in reflect paths:
+
+```rust
+#[derive(Reflect)]
+struct MyStruct {
+  data: Data,
+  some_tuple: (u32, u32),
+}
+
+#[derive(Reflect)]
+struct Data {
+  Foo(u32, u32),
+  Bar(bool)
+}
+
+let x = MyStruct {
+  data: Data::Foo(123),
+  some_tuple: (10, 20),
+};
+
+assert_eq!(*x.path::<u32>("data.1").unwrap(), 123);
+assert_eq!(*x.path::<u32>("some_tuple.0").unwrap(), 10);
+```
+
+## Pre-Parsed Reflection Paths
+
+<div class="release-feature-authors">authors: @MrGVSV, @james7132 </div>
+
+Reflection paths enable a lot of interesting and dynamic editor scenarios, but they do have a downside: calling `path()` requires parsing strings every time. To solve this problem we added [`ParsedPath`], which enables pre-parsing paths and then reusing those results on each access:
+
+```rust
+let parsed_path = ParsedPath::parse("foo.bar[0]").unwrap();
+let element = parsed_path.element::<usize>(&some_value);
+```
+
+Much more suitable for repeated access, such as doing the same lookup every frame!
+
+## `ReflectFromReflect`
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When using Bevy's Rust reflection system, we sometimes end up in a scenario where we have a "dynamic reflect value" representing a certain type `MyType` (even though under the hood, it isn't really that type). Such scenarios happen when we call `Reflect::clone_value`, use the reflection deserializers, or create the dynamic value ourselves. Unfortunately, we can't just call `MyType::from_reflect` as we do not have knowledge of the concrete `MyType` at runtime.
+
+[`ReflectFromReflect`] is a new "type data" struct in the [`TypeRegistry`] that enables `FromReflect` trait operations without any concrete references to a given type. Very cool!
+
+```rust
+#[derive(Reflect, FromReflect)]
+#[reflect(FromReflect)] // <- Register `ReflectFromReflect`
+struct MyStruct(String);
+
+let type_id = TypeId::of::<MyStruct>();
+
+// Register our type
+let mut registry = TypeRegistry::default();
+registry.register::<MyStruct>();
+
+// Create a concrete instance
+let my_struct = MyStruct("Hello world".to_string());
+
+// `Reflect::clone_value` will generate a `DynamicTupleStruct` for tuple struct types
+// Note that this is _not_ a MyStruct instance
+let dynamic_value: Box<dyn Reflect> = my_struct.clone_value();
+
+// Get the `ReflectFromReflect` type data from the registry
+let rfr: &ReflectFromReflect = registry
+  .get_type_data::<ReflectFromReflect>(type_id)
+  .unwrap();
+
+// Call `FromReflect::from_reflect` on our Dynamic value
+let concrete_value: Box<dyn Reflect> = rfr.from_reflect(&dynamic_value);
+assert!(concrete_value.is::<MyStruct>());
+```
+
+[`ReflectFromReflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.ReflectFromReflect.html
+[`TypeRegistry`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.TypeRegistry.html
+
+## Other Reflection Improvements
+
+<div class="release-feature-authors">authors: @james7132, @soqb, @cBournhonesque, @SkiFire13</div>
+
+* [`Reflect`] is now implemented for [`std::collections::VecDeque`]
+* Reflected [`List`] types now have `insert` and `remove` operations
+* Reflected [`Map`] types now have the `remove` operation
+* Reflected generic types now automatically implement [`Reflect`] if the generics also implement Reflect. No need to add manual `T: Reflect` bounds!
+* Component Reflection now uses [`EntityRef`] / [`EntityMut`] instead of both [`World`] and [`Entity`], which allows it to be used in more scenarios
+* The Reflection deserializer now avoids unnecessarily cloning strings in some scenarios!
+
+[`std::collections::VecDeque`]: https://doc.rust-lang.org/std/collections/vec_deque/struct.VecDeque.html
+[`List`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.List.html
+[`Map`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Map.html
+[`Reflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Reflect.html
+[`EntityRef`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityRef.html
+[`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
+[`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
+
+## LCH Color Space
+
+<div class="release-feature-authors">authors: @ldubos</div>
+
+Bevy's [`Color`] type now supports the LCH color space (Lightness, Chroma, Hue). LCH has a lot of arguments for it, including that it provides access to about 50% more colors over sRGB. Check out [this article](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) for more information.
+
+```rust
+Color::Lcha {
+    lightness: 1.0,
+    chroma: 0.5,
+    hue: 200.0,
+    alpha: 1.0,
+}
+```
+
+[`Color`]: https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html
+
+## Optimized `Color::hex` Performance
+
+<div class="release-feature-authors">authors: @wyhaya</div>
+
+[`Color::hex`](https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html#method.hex) is now a `const` function, which brought the runtime of `hex` from ~14ns to ~4ns!
+
+## Split Up `CorePlugin`
+
+<div class="release-feature-authors">authors: @targrub</div>
+
+`CorePlugin` has historically been a bit of a "kitchen sink plugin". "Core" things that didn't fit anywhere else ended up there. This isn't a great organizational strategy, so we broke it up into individual pieces: [`TaskPoolPlugin`], [`TypeRegistrationPlugin`], and [`FrameCountPlugin`].
+
+[`TaskPoolPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.TaskPoolPlugin.html
+[`TypeRegistrationPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.TypeRegistrationPlugin.html
+[`FrameCountPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.FrameCountPlugin.html
+
+## `EntityCommand`s
+
+<div class="release-feature-authors">authors: @targrub</div>
+
+[`Commands`] are "deferred ECS" operations. They enable developers to define custom ECS operations that are applied after a parallel system has finished running. Many [`Commands`] ran on individual entities, but this pattern was a bit cumbersome:
+
+```rust
+struct MyCustomCommand(Entity);
+
+impl Command for MyCustomCommand {
+    fn write(self, world: &mut World) {
+        // do something with the entity at self.0
+    }
+}
+
+let id = commands.spawn(SpriteBundle::default()).id();
+commmands.add(MyCustomCommand(id));
+```
+
+To solve this, in **Bevy 0.10** we added the [`EntityCommand`] trait. This allows the command to be ergonomically applied to spawned entities:
+
+```rust
+struct MyCustomCommand;
+
+impl EntityCommand for MyCustomCommand {
+    fn write(self, id: Entity, world: &mut World) {
+        // do something with the given entity id
+    }
+}
+
+commands.spawn(SpriteBundle::default()).add(MyCustomCommand);
+```
+
+[`EntityCommand`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.EntityCommand.html
+[`Commands`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Commands.html
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
@@ -730,7 +1313,7 @@ The atmospheric fog implementation is largely based on [this great article](http
 
 ## Support Bevy
 
-Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](Bevy ) ... every bit helps!
+Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](/community/donate) ... every bit helps!
 
 <a class="button button--pink header__cta" href="/community/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"></a>
 
