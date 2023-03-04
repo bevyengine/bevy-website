@@ -759,7 +759,6 @@ The `CubicGenerator` trait is public, allowing you to define your own custom spl
 
 The position, velocity, and acceleration of a `CubicCurve` can be evaluated at any point. These evaluations all have the same performance cost, regardless of the type of cubic curve being used. On a modern CPU, these evaluations take 1-2 ns, and animation easing - which is an iterative process - takes 15-20 ns.
 
-
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
