@@ -796,6 +796,10 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
 - States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
 - Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
 
+#### Multiple fixed timesteps
+
+Only one fixed timestep is supported. If you were relying on this functionality, you should swap to using timers, via the on_timer(MY_PERIOD) run condition.
+
 ### [Pipelined Rendering](https://github.com/bevyengine/bevy/pull/6503)
 
 <div class="migration-guide-area-tags">
