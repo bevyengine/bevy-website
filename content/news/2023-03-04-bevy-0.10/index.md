@@ -743,12 +743,15 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 <div class="release-feature-authors">authors: @aevyrie</div>
 
+<video controls loop><source  src="cubic_curves.mp4" type="video/mp4"/></video>
+<p class="release-feature-authors">This video shows four kinds of cubic curves being smoothly animated with bezier easing. The curve itself is white, green is velocity, red is acceleration, and blue are the control points that determine the shape of the curve.</p>
+
 In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`.  The implementation provides multiple curves out of the box, useful in various applications:
 
-- `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing.
-- `Hermite`: useful for smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
-- `Cardinal`: interpolates between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
-- `B-Spline`: the only acceleration-continuous curve, particularly useful for smooth camera motion where smooth change in velocity (acceleration) is important.
+- `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing as demonstrated in the above video.
+- `Hermite`: smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
+- `Cardinal`: easy interpolation between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
+- `B-Spline`: acceleration-continuous motion, particularly useful for camera paths where a smooth change in velocity (acceleration) is important to prevent harsh jerking motion.
 
 The `CubicGenerator` trait is public, allowing you to define your own custom splines that generate `CubicCurve`s!
 
