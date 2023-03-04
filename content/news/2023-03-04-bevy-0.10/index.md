@@ -1143,7 +1143,7 @@ assert!(concrete_value.is::<MyStruct>());
 
 ## Upgraded Taffy To 0.3
 
-<div class="release-feature-authors">authors: @rparret</div>
+<div class="release-feature-authors">authors: @ickshonpe, @rparret</div>
 
 [Taffy](https://crates.io/crates/taffy) is the library we use to compute layouts for `bevy_ui`. Taffy 0.2 significantly improves the performance of nested UIs. Our `many_buttons` example is now 8% faster. More highly nested UIs should see even bigger gains! Taffy 0.3 adds some nice API tweaks (and also a grid layout feature, which we have disabled for now as it still needs some integration work).
 
