@@ -850,7 +850,7 @@ pub struct Car {
 
 <div class="release-feature-authors">authors: @wangling12</div>
 
-Bevy has supported `wgpu`'s OpenGL backend for awhile now, but it was opt-in. This caused Bevy to fail to start up on some machines that don't support modern apis like Vulkan. In **Bevy 0.10** the OpenGL backend is enabled by default, which means machines will automatically fall back to OpenGL if no other API is available.
+Bevy has supported `wgpu`'s OpenGL backend for a while now, but it was opt-in. This caused Bevy to fail to start up on some machines that don't support modern apis like Vulkan. In **Bevy 0.10** the OpenGL backend is enabled by default, which means machines will automatically fall back to OpenGL if no other API is available.
 
 ## Exposed Non-Uniform Indexing Support (Bindless)
 
