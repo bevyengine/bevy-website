@@ -1018,8 +1018,6 @@ fn system(mut events: EventReader<GamepadConnectionEvent>)
 
 <video controls loop><source  src="ime.mp4" type="video/mp4"/></video>
 
-[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
-
 ## Cubic Curves
 
 <div class="release-feature-authors">authors: @aevyrie</div>
