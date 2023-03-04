@@ -21,25 +21,19 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 </div>
 
 - Calls to `.label(MyLabel)` should be replaced with `.in_set(MySet)`
+- `SystemLabel` derives should be replaced with `SystemSet`. You will also need to add the `Debug`, `PartialEq`, `Eq`, and `Hash` traits to satisfy the new trait bounds.
 - Stages have been removed. Replace these with system sets, and then add command flushes using the `apply_system_buffers` exclusive system where needed.
-- The `CoreStage`, `StartupStage,`RenderStage`and`AssetStage`enums have been replaced with`CoreSet`,`StartupSet, `RenderSet` and `AssetSet`. The same scheduling guarantees have been preserved.
-  - Systems are no longer added to `CoreSet::Update` by default. Add systems manually if this behavior is needed, although you should consider adding your game logic systems to `CoreSchedule::FixedTimestep` instead for more reliable framerate-independent behavior.
-  - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
-  - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
-  - `add_system(my_system.in_base_set(CoreSet::PostUpdate)`
-
-- When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
-- Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
+- The `CoreStage`, `StartupStage`, `RenderStage`, and `AssetStage` enums have been replaced with `CoreSet`, `StartupSet`, `RenderSet` and `AssetSet`. The same scheduling guarantees have been preserved.
+- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a `bool` instead of `schedule::ShouldRun`.
 - Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
+- `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
+- Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` sibling.
 - For app-level control flow over which schedules get run when (such as for rollback networking), create your own schedule and insert it under the `CoreSchedule::Outer` label.
 - Fixed timesteps are now evaluated in a schedule, rather than controlled via run criteria. The `run_fixed_timestep` system runs this schedule between `CoreSet::First` and `CoreSet::PreUpdate` by default.
 - Command flush points introduced by `AssetStage` have been removed. If you were relying on these, add them back manually.
 - the `calculate_bounds` system, with the `CalculateBounds` label, is now in `CoreSet::Update`, rather than in `CoreSet::PostUpdate` before commands are applied. You may need to order your movement systems to occur before this system in order to avoid system order ambiguities in culling behavior.
 - the `RenderLabel` `AppLabel` was renamed to `RenderApp` for clarity
-- `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
-- Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` or `on_update` siblings.
-- `SystemLabel` derives should be replaced with `SystemSet`. You will also need to add the `Debug`, `PartialEq`, `Eq`, and `Hash` traits to satisfy the new trait bounds.
-- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a `bool` instead of `schedule::ShouldRun`.
+- When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 
 - States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
 - Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
