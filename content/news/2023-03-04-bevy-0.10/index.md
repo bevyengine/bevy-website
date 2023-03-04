@@ -1524,6 +1524,8 @@ fn run_or_attack(
 [`play_with_transition`]: https://docs.rs/bevy/0.10/bevy/animation/struct.AnimationPlayer.html#method.play_with_transition
 
 ## Revamped Bloom
+<div class="release-feature-authors">authors: @StarLederer, @JMS55</div>
+
 Bloom has undergone some major changes, and now looks better, is easier to control, and has less visual artifacts.
 In combination with the the new tonemapping options, bloom has been much improved since the previous release!
 
