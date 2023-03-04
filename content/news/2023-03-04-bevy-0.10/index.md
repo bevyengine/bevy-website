@@ -769,7 +769,7 @@ assert_eq!(*x.path::<u32>("some_tuple.0").unwrap(), 10);
 
 ## Pre-Parsed Reflection Paths
 
-<div class="release-feature-authors">authors: @MrGVSV</div>
+<div class="release-feature-authors">authors: @MrGVSV, @james7132 </div>
 
 Reflection paths enable a lot of interesting and dynamic editor scenarios, but they do have a downside: calling `path()` requires parsing strings every time. To solve this problem we added [`ParsedPath`], which enables pre-parsing paths and then reusing those results on each access:
 
