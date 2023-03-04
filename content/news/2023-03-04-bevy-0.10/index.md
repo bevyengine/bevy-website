@@ -578,33 +578,33 @@ Much cleaner!
 
 <div class="release-feature-authors">authors: @aceeri, @Weibye, @cart</div>
 
-On today's news about the crusade of **X as Entities**, windows are now entities with a [`Window`] component.
+In previous versions of Bevy [`Window`] was represented as an ECS resource (contained in the `Windows` resource). In **Bevy 0.10** [`Window`] is now a component (and therefore windows are represented as entities).
 
-You might think this is a bit overkill, but more complex behaviors around windows required extra state management in some fashion. Which tended to be either other resources (which ended up being more brittle to usecases of multiple windows) or in components on entities (which begs the question, why even have a special case?)
+This accomplishes a number of goals:
 
-This gives us the expressiveness of the ECS while also improving readability/discoverability of how to create, use, and close windows. As well as benefit from any feature we add to the ECS (e.g. relations 🌈).
-
-Plus now that [`Window`] is a component, changing the title of a window is the same for both initialising and modifying, no fuss!
+* It opens the doors to representing Windows in Bevy's scene system
+* It exposes Windows to Bevy's powerful ECS queries
+* It provides granular per-window change detection
+* Improves the readability/discoverability of creating, using, and closing windows
+* Changing the properties of a window is the same for both initializing and modifying. No more `WindowDescriptor` fuss!
+* It allows Bevy developers and users to easily attach new component data to windows
 
 ```rust
-fn windows_go_brr(mut commands: Commands) {
-    // A new window will be created by any entity with a `Window` component
-    let window = commands.spawn(Window {
-        title: "My window :D".to_owned(),
+fn create_window(mut commands: Commands) {
+    commands.spawn(Window {
+        title: "My window :D".to_string(),
         ..default()
-    }).id();
+    });
 }
 
 fn modify_windows(mut windows: Query<&mut Window>) {
     for window in &mut windows {
-        // Modifying fields on the `Window` component will update the window accordingly
-        window.title = "My improved window! :D".to_owned();
+        window.title = "My changed window! :D".to_string();
     }
 }
 
-fn destroy_them(mut commands: Commands, windows: Query<Entity, With<Window>>) {
+fn close_windows(mut commands: Commands, windows: Query<Entity, With<Window>>) {
     for entity in &mut windows {
-        // Closing a window can be done by despawning the window entity!
         commands.entity(entity).despawn();
     }
 }
