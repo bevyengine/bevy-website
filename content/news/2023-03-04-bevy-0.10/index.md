@@ -518,7 +518,7 @@ We've added some basic control over color grading parameters such as exposure, g
 
 ## Depth and normal prepass
 
-<div class="release-feature-authors">authors: @icesentry, @superdump, @robtfm, @JMS55</div>
+<div class="release-feature-authors">authors: @icesentry, Rob Swain (@superdump), @robtfm, @JMS55</div>
 
 <video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
 <p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
@@ -882,7 +882,7 @@ In [#6391](https://github.com/bevyengine/bevy/pull/6391), we've reworked `Comman
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-`Query::par_for_each` has been the tool everyone reaches for when their queries get too big to run single-threaded. Got 10,0000 entities running around on your screen? No problem, `Query::par_for_each` chunks it up into smaller batches and distributes the workload over multiple threads. However, in **Bevy 0.9** and before, `Query::par_for_each` required callers to provide a batch size to help tune these batches for maximum performance. This rather opaque knob often resulted in users just randomly picking a value and rolling with it, or fine tuning the value based on their development machines. Unfortunately, the most effective value is dependent on the runtime environment (i.e. how many logical cores does a player's computer have) and the state of the ECS World (i.e. how many entities are matched?). Ultimately most users of the API just chose a flat number and lived with the results, good or bad.
+`Query::par_for_each` has been the tool everyone reaches for when their queries get too big to run single-threaded. Got 10,000 entities running around on your screen? No problem, `Query::par_for_each` chunks it up into smaller batches and distributes the workload over multiple threads. However, in **Bevy 0.9** and before, `Query::par_for_each` required callers to provide a batch size to help tune these batches for maximum performance. This rather opaque knob often resulted in users just randomly picking a value and rolling with it, or fine tuning the value based on their development machines. Unfortunately, the most effective value is dependent on the runtime environment (i.e. how many logical cores does a player's computer have) and the state of the ECS World (i.e. how many entities are matched?). Ultimately most users of the API just chose a flat number and lived with the results, good or bad.
 
 ```rust
 // 0.9
@@ -1159,7 +1159,7 @@ pub struct Car {
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
-**Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
+**Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our choice of low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
 
 ## Enabled OpenGL Backend By Default
 
