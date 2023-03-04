@@ -1527,27 +1527,25 @@ fn run_or_attack(
 <div class="release-feature-authors">authors: @StarLederer, @JMS55</div>
 
 Bloom has undergone some major changes, and now looks better, is easier to control, and has less visual artifacts.
-In combination with the the new tonemapping options, bloom has been much improved since the previous release!
+In combination with the new tonemapping options, bloom has been much improved since the previous release!
 
-Here's what bloom looked like in bevy 0.9:
-![bevy 0.9 bloom](old_bloom.png)
+1. In Bevy 0.9, bloom looked like this.
+2. Switching the tonemapper to something like `AcesFitted` is already a big improvement.
+3. in Bevy 0.10, bloom now looks like this. It's much more controlled and less overbearing.
+4. To make the bloom stronger, rather than raise the `BloomSettings` intensity,
+let's double the `emissive` value of each cube.
+5. Finally, if you want the extreme bloom similar to the old algorithm, you can change
+`BloomSettings::composite_mode` from `BloomCompositeMode::EnergyConserving` to `BloomCompositeMode::Additive`.
+6. Explore the new bloom settings in an interactive playground using the new `bloom_3d` (and `bloom_2d`) examples.
 
-Switching the tonemapper to something like AcesFitted is already a big improvement:
-![bevy 0.9 bloom with aces tonemapper](old_bloom_aces.png)
-
-Bloom now looks like this. It's much more controlled and less overbearing:
-![bevy 0.10 bloom](new_bloom.png)
-
-To make the bloom stronger, rather than riase the `BloomSettings` intensity,
-lets double the `emissive` value of each cube:
-![bevy 0.10 bloom doubled emission](new_bloom_double_emission.png)
-
-Finally, if you want the extreme bloom similiar to the old algorithm,
-you can change `BloomSettings::composite_mode` from
-`BloomCompositeMode::EnergyConserving` to `BloomCompositeMode::Additive`:
-![bevy 0.10 bloom additive mode](new_bloom_additive.png)
-
-Check out the new `bloom_3d` and `bloom_2d` examples for an interactive playground to explore the new bloom settings.
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 16px;">
+    <div><div>(1)</div><img src="old_bloom.png" /></div>
+    <div><div>(2)</div><img src="old_bloom_aces.png" /></div>
+    <div><div>(3)</div><img src="new_bloom.png" /></div>
+    <div><div>(4)</div><img src="new_bloom_double_emission.png" /></div>
+    <div><div>(5)</div><img src="new_bloom_additive.png" /></div>
+    <div><div>(6)</div><img src="bloom_example.png" /></div>
+</div>
 
 ## What's Next?
 
