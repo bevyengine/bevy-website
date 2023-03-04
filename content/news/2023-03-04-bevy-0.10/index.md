@@ -497,7 +497,7 @@ fn my_system(mut events: Deferred<EventBuffer<MyEvent>>) {
 }
 ```
 
-Note that this feature should be used with care -- despite the potential performance benefits, inappropriate usage can actually *worsen* performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
+Note that this feature should be used with care -- despite the potential performance benefits, inappropriate usage can actually _worsen_ performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
 
 ## Ref&lt;T&gt; Queries
 
