@@ -1071,7 +1071,7 @@ struct MyCustomCommand;
 
 impl EntityCommand for MyCustomCommand {
     fn write(self, id: Entity, world: &mut World) {
-        // do something with given entity id
+        // do something with the given entity id
     }
 }
 
