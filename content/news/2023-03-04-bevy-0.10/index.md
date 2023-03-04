@@ -591,7 +591,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 <div class="release-feature-authors">author: @coreh</div>
 
-The `AlphaMode` enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the `StandardMaterial`. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
+The [`AlphaMode`] enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the `StandardMaterial`. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
 
 <figure>
 <!-- TODO: Add video here -->
@@ -603,9 +603,9 @@ Additionally, support for semi-transparent textures with [premultiplied alpha](h
 
 Here's a high level overview of the new modes:
 
-- `AlphaMode::Add` — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
-- `AlphaMode::Multiply` — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
-- `AlphaMode::Premultiplied` — Behaves very similarly to `AlphaMode::Blend`, but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
+- [`AlphaMode::Add`] — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
+- [`AlphaMode::Multiply`] — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
+- [`AlphaMode::Premultiplied`] — Behaves very similarly to [`AlphaMode::Blend`], but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
 
 <figure>
 <img src="blend-modes.png">
@@ -614,7 +614,7 @@ Here's a high level overview of the new modes:
 
 **Note:** Meshes using the new blend modes are drawn on the existing `Transparent3d` render phase, and therefore the same _z-sorting considerations/limitations_ from `AlphaMode::Blend` apply.
 
-For efficiency, `Blend`, `Premultiplied` and `Add` alpha modes all share a single `MeshPipelineKey` bitflag and a single `BlendState`, with conditional logic in the fragment shader producing their differentiated end results. `Multiply` necessitates its own separate `MeshPipelineKey` and `BlendState` key.
+For efficiency, `Blend`, `Premultiplied` and `Add` alpha modes all share a single [`MeshPipelineKey`] bitflag and a single [`BlendState`], with conditional logic in the fragment shader producing their differentiated end results. `Multiply` necessitates its own separate [`MeshPipelineKey`] and [`BlendState`] key.
 
 ## Distance and Atmospheric Fog
 
@@ -627,7 +627,7 @@ Bevy can now render distance and atmospheric fog effects, bringing a heightened 
 <figcaption>The new <code>fog</code> example, showcasing different fog modes and parameters.</figcaption>
 </figure>
 
-Fog is controllable per-camera via the new `FogSettings` component. Special care has been put in exposing several knobs to give you full artistic control over the look of your fog, including the ability to fade the fog in and out by controlling the alpha channel of the fog color.
+Fog is controllable per-camera via the new [`FogSettings`] component. Special care has been put in exposing several knobs to give you full artistic control over the look of your fog, including the ability to fade the fog in and out by controlling the alpha channel of the fog color.
 
 ```rust
 commands.spawn((
@@ -639,7 +639,7 @@ commands.spawn((
 ));
 ```
 
-_Exactly how_ fog behaves with regards to distance is controlled via the `FogFalloff` enum. All of the “traditional” fog falloff modes from the fixed-function OpenGL 1.x / DirectX 7 days are supported:
+_Exactly how_ fog behaves with regards to distance is controlled via the [`FogFalloff`] enum. All of the “traditional” fog falloff modes from the fixed-function OpenGL 1.x / DirectX 7 days are supported:
 
 <figure>
 <figcaption><code>FogFalloff::Linear</code> increases in intensity linearly from 0 to 1 between <code>start</code> and <code>end</code> parameters. (This example uses values of 0.8 and 2.2, respectively.)</figcaption>
@@ -710,16 +710,16 @@ _Exactly how_ fog behaves with regards to distance is controlled via the `FogFal
 </svg>
 </figure>
 
-Additionally, a more sophisticated `FogFalloff::Atmospheric` mode is available which provides *more physically accurate* results by taking light `extinction` and `inscattering` into account separately.
+Additionally, a more sophisticated [`FogFalloff::Atmospheric`] mode is available which provides *more physically accurate* results by taking light `extinction` and `inscattering` into account separately.
 
-`DirectionalLight` influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
+[`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
 
 <figure>
 <img src="atmospheric-fog.png">
 <figcaption>The new <code>atmospheric_fog</code> example, showcasing a terrain with atmospheric fog and directional light influence.</figcaption>
 </figure>
 
-Since directly controlling the non-linear fog falloff parameters “by hand” can be tricky to get right, a number of helper functions based on [meteorological visibility](https://en.wikipedia.org/wiki/Visibility) are available, such as `FogFalloff::from_visibility()`:
+Since directly controlling the non-linear fog falloff parameters “by hand” can be tricky to get right, a number of helper functions based on [meteorological visibility](https://en.wikipedia.org/wiki/Visibility) are available, such as [`FogFalloff::from_visibility()`]:
 
 ```rust
 FogSettings {
