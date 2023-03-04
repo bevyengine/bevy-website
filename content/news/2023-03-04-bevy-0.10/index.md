@@ -1526,7 +1526,7 @@ fn run_or_attack(
 ## Revamped Bloom
 <div class="release-feature-authors">authors: @StarLederer, @JMS55</div>
 
-Bloom has undergone some major changes, and now looks better, is easier to control, and has less visual artifacts.
+Bloom has undergone some major changes and now looks better, is easier to control, and has fewer visual artifacts.
 In combination with the new tonemapping options, bloom has been much improved since the previous release!
 
 1. In Bevy 0.9, bloom looked like this.
