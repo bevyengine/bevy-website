@@ -890,11 +890,56 @@ struct CoolMaterial {
 
 [`AsBindGroup`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/trait.AsBindGroup.html
 
+## `ExtractComponent` Derive
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+To pass component data from the "main app" to the "render app" for [pipelined rendering](#enable-parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy you had to implement it manually, but now you can derive it!
+
+```rust
+#[derive(Component, Clone, ExtractComponent)]
+pub struct Car {
+    pub wheels: usize,
+}
+```
+
+This expands to this:
+
+```rust
+impl ExtractComponent for Car
+{
+    type Query = &'static Self;
+    type Filter = ();
+    type Out = Self;
+    fn extract_component(item: QueryItem<'_, Self::Query>) -> Option<Self::Out> {
+        Some(item.clone())
+    }
+}
+```
+
+It also supports filters!
+
+```rust
+#[derive(Component, Clone, ExtractComponent)]
+#[extract_component_filter(With<Fuel>)]
+pub struct Car {
+    pub wheels: usize,
+}
+```
+
+[`ExtractComponent`]: https://docs.rs/bevy/0.10.0/bevy/render/extract_component/trait.ExtractComponent.html
+
 ## Upgraded wgpu to 0.15
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
 **Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
+
+## Enabled OpenGL Backend By Default
+
+<div class="release-feature-authors">authors: @wangling12</div>
+
+Bevy has supported `wgpu`'s OpenGL backend for a while now, but it was opt-in. This caused Bevy to fail to start up on some machines that don't support modern apis like Vulkan. In **Bevy 0.10** the OpenGL backend is enabled by default, which means machines will automatically fall back to OpenGL if no other API is available.
 
 ## Exposed Non-Uniform Indexing Support (Bindless)
 
@@ -1055,6 +1100,75 @@ assert!(concrete_value.is::<MyStruct>());
 [`EntityRef`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityRef.html
 [`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
 [`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
+
+## LCH Color Space
+
+<div class="release-feature-authors">authors: @ldubos</div>
+
+Bevy's [`Color`] type now supports the LCH color space (Lightness, Chroma, Hue). LCH has a lot of arguments for it, including that it provides access to about 50% more colors over sRGB. Check out [this article](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) for more information.
+
+```rust
+Color::Lcha {
+    lightness: 1.0,
+    chroma: 0.5,
+    hue: 200.0,
+    alpha: 1.0,
+}
+```
+
+[`Color`]: https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html
+
+## Optimized `Color::hex` Performance
+
+<div class="release-feature-authors">authors: @wyhaya</div>
+
+[`Color::hex`](https://docs.rs/bevy/0.10.0/bevy/render/color/enum.Color.html#method.hex) is now a `const` function, which brought the runtime of `hex` from ~14ns to ~4ns!
+
+## Split Up `CorePlugin`
+
+<div class="release-feature-authors">authors: @targrub</div>
+
+`CorePlugin` has historically been a bit of a "kitchen sink plugin". "Core" things that didn't fit anywhere else ended up there. This isn't a great organizational strategy, so we broke it up into individual pieces: [`TaskPoolPlugin`], [`TypeRegistrationPlugin`], and [`FrameCountPlugin`].
+
+[`TaskPoolPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.TaskPoolPlugin.html
+[`TypeRegistrationPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.TypeRegistrationPlugin.html
+[`FrameCountPlugin`]: https://docs.rs/bevy/0.10.0/bevy/core/struct.FrameCountPlugin.html
+
+## `EntityCommand`s
+
+<div class="release-feature-authors">authors: @targrub</div>
+
+[`Commands`] are "deferred ECS" operations. They enable developers to define custom ECS operations that are applied after a parallel system has finished running. Many [`Commands`] ran on individual entities, but this pattern was a bit cumbersome:
+
+```rust
+struct MyCustomCommand(Entity);
+
+impl Command for MyCustomCommand {
+    fn write(self, world: &mut World) {
+        // do something with the entity at self.0
+    }
+}
+
+let id = commands.spawn(SpriteBundle::default()).id();
+commmands.add(MyCustomCommand(id));
+```
+
+To solve this, in **Bevy 0.10** we added the [`EntityCommand`] trait. This allows the command to be ergonomically applied to spawned entities:
+
+```rust
+struct MyCustomCommand;
+
+impl EntityCommand for MyCustomCommand {
+    fn write(self, id: Entity, world: &mut World) {
+        // do something with the given entity id
+    }
+}
+
+commands.spawn(SpriteBundle::default()).add(MyCustomCommand);
+```
+
+[`EntityCommand`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.EntityCommand.html
+[`Commands`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Commands.html
 
 ## What's Next?
 
