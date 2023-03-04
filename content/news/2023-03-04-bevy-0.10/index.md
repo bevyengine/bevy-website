@@ -739,6 +739,68 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
+## Cylinder Shape
+
+<div class="release-feature-authors">authors: @JayPavlinas, @rparrett, @davidhof</div>
+
+The cylinder shape primitive has joined our zoo of built-in shapes!
+
+![primitive shapes](primitive_shapes.png)
+
+## Subdividable Plane Shape
+
+<div class="release-feature-authors">authors: @woodroww</div>
+
+Bevy's [`Plane`] shape can now be subdivided any number of times.
+
+![plane](plane.png)
+
+[`Plane`]: https://docs.rs/bevy/0.10.0/bevy/prelude/shape/struct.Plane.html
+
+## Configurable Visibility Component
+
+<div class="release-feature-authors">authors: @ickk</div>
+
+The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** reworked the type definition: rather having a single `is_visible: bool` field, we now use an enum with an additional mode:
+
+```rust
+pub enum Visibility {
+  Hidden,    // unconditionally hidden
+  Visible,   // unconditionally visible
+  Inherited, // inherit visibility from parent
+}
+```
+
+Much easier to understand! In previous Bevy versions, "inherited visibility" and "hidden" were essentially the only two options. Now entities can opt to be visible, even if their parent is hidden!
+
+[`Visibility`]: https://docs.rs/bevy/0.10.0/bevy/render/view/enum.Visibility.html
+[`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/index.html
+
+## `AsBindGroup` Storage Buffers
+
+<div class="release-feature-authors">authors: @IceSentry, @AndrewB330</div>
+
+[`AsBindGroup`] is a useful Bevy trait that [makes it very easy to pass data into shaders](/news/bevy-0-8/#new-material-system).
+
+**Bevy 0.10** expands this with support for "storage buffer bindings", which are very useful when passing in large / unbounded chunks of data:
+
+```rust
+#[derive(AsBindGroup)]
+struct CoolMaterial {
+    #[uniform(0)]
+    color: Color,
+    #[texture(1)]
+    #[sampler(2)]
+    color_texture: Handle<Image>,
+    #[storage(3)]
+    values: Vec<f32>,
+    #[storage(4, read_only, buffer)]
+    buffer: Buffer,
+}
+```
+
+[`AsBindGroup`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/trait.AsBindGroup.html
+
 ## Upgraded wgpu to 0.15
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
@@ -903,7 +965,6 @@ assert!(concrete_value.is::<MyStruct>());
 [`Reflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Reflect.html
 [`EntityRef`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityRef.html
 [`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
-[`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/struct.Entity.html
 [`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
 
 ## What's Next?
@@ -916,7 +977,7 @@ assert!(concrete_value.is::<MyStruct>());
 
 ## Support Bevy
 
-Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](Bevy ) ... every bit helps!
+Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](/community/donate) ... every bit helps!
 
 <a class="button button--pink header__cta" href="/community/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"></a>
 
