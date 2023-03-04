@@ -842,9 +842,9 @@ Additionally, support for semi-transparent textures with [premultiplied alpha](h
 
 Here's a high-level overview of the new modes:
 
-- [`AlphaMode::Add`] — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
-- [`AlphaMode::Multiply`] — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
-- [`AlphaMode::Premultiplied`] — Behaves very similarly to [`AlphaMode::Blend`], but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
+* [`AlphaMode::Add`] — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
+* [`AlphaMode::Multiply`] — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
+* [`AlphaMode::Premultiplied`] — Behaves very similarly to [`AlphaMode::Blend`], but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
 
 ![The new blend_modes example.](blend-modes.png)
 
@@ -940,7 +940,7 @@ _Exactly how_ fog behaves with regards to distance is controlled via the [`FogFa
 <text font-family="sans-serif" transform="translate(10 132) rotate(-90)" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="0" y="11.8636">fog intensity</tspan></text>
 </svg>
 
-Additionally, a more sophisticated [`FogFalloff::Atmospheric`] mode is available which provides *more physically accurate* results by taking light `extinction` and `inscattering` into account separately.
+Additionally, a more sophisticated [`FogFalloff::Atmospheric`] mode is available which provides _more physically accurate_ results by taking light `extinction` and `inscattering` into account separately.
 
 [`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
 
