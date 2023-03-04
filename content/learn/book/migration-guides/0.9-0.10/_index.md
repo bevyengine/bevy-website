@@ -13,6 +13,137 @@ Bevy relies heavily on improvements in the Rust language and compiler.
 As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
 <div class="migration-guide">
 
+### [Migrate engine to Schedule v3 (stageless)](https://github.com/bevyengine/bevy/pull/7267)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+- Calls to `.label(MyLabel)` should be replaced with `.in_set(MySet)`
+- Stages have been removed. Replace these with system sets, and then add command flushes using the `apply_system_buffers` exclusive system where needed.
+- The `CoreStage`, `StartupStage,`RenderStage`and`AssetStage`enums have been replaced with`CoreSet`,`StartupSet, `RenderSet` and `AssetSet`. The same scheduling guarantees have been preserved.
+  - Systems are no longer added to `CoreSet::Update` by default. Add systems manually if this behavior is needed, although you should consider adding your game logic systems to `CoreSchedule::FixedTimestep` instead for more reliable framerate-independent behavior.
+  - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
+  - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
+  - `add_system(my_system.in_base_set(CoreSet::PostUpdate)`
+
+- When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
+- Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
+- Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
+- For app-level control flow over which schedules get run when (such as for rollback networking), create your own schedule and insert it under the `CoreSchedule::Outer` label.
+- Fixed timesteps are now evaluated in a schedule, rather than controlled via run criteria. The `run_fixed_timestep` system runs this schedule between `CoreSet::First` and `CoreSet::PreUpdate` by default.
+- Command flush points introduced by `AssetStage` have been removed. If you were relying on these, add them back manually.
+- the `calculate_bounds` system, with the `CalculateBounds` label, is now in `CoreSet::Update`, rather than in `CoreSet::PostUpdate` before commands are applied. You may need to order your movement systems to occur before this system in order to avoid system order ambiguities in culling behavior.
+- the `RenderLabel` `AppLabel` was renamed to `RenderApp` for clarity
+- `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
+- Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` or `on_update` siblings.
+- `SystemLabel` derives should be replaced with `SystemSet`. You will also need to add the `Debug`, `PartialEq`, `Eq`, and `Hash` traits to satisfy the new trait bounds.
+- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a `bool` instead of `schedule::ShouldRun`.
+
+- States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
+- Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
+
+### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Windowing</div>
+</div>
+
+Replace `WindowDescriptor` with `Window`.
+
+Change `width` and `height` fields in a `WindowResolution`, either by doing
+
+```rust
+WindowResolution::new(width, height) // Explicitly
+// or using From<_> for tuples for convenience
+(1920., 1080.).into()
+```
+
+Replace any `WindowCommand` code to just modify the `Window`’s fields directly  and creating/closing windows is now by spawning/despawning an entity with a `Window` component like so:
+
+```rust
+let window = commands.spawn(Window { ... }).id(); // open window
+commands.entity(window).despawn(); // close window
+```
+
+To get a window, you now need to use a `Query` instead of a `Res`
+
+```rust
+// 0.9
+fn count_pixels(windows: Res<Windows>) {
+    let Some(primary) = windows.get_primary() else {
+        return;
+    };
+    println!("{}", primary.width() * primary.height());
+}
+
+// 0.10
+fn count_pixels(primary_query: Query<&Window, With<PrimaryWindow>>) {
+    let Ok(primary) = primary_query.get_single() else {
+        return;
+    };
+    println!("{}", primary.width() * primary.height());
+}
+```
+
+### [Make the `SystemParam` derive macro more flexible](https://github.com/bevyengine/bevy/pull/6694)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The lifetime `'s` has been removed from `EventWriter`. Any code that explicitly specified the lifetimes for this type will need to be updated.
+
+```rust
+// 0.9
+#[derive(SystemParam)]
+struct MessageWriter<'w, 's> {
+    events: EventWriter<'w, 's, Message>,
+}
+
+// 0.10
+#[derive(SystemParam)]
+struct MessageWriter<'w> {
+    events: EventWriter<'w, Message>,
+}
+```
+
+### [Basic adaptive batching for parallel query iteration](https://github.com/bevyengine/bevy/pull/4777)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The `batch_size` parameter for `Query(State)::par_for_each(_mut)` has been removed. These calls will automatically compute a batch size for you. Remove these parameters from all calls to these functions.
+
+```rust
+// 0.9
+fn parallel_system(query: Query<&MyComponent>) {
+   query.par_for_each(32, |comp| {
+        ...
+   });
+}
+
+// 0.10
+fn parallel_system(query: Query<&MyComponent>) {
+   query.par_iter().for_each(|comp| {
+        ...
+   });
+}
+```
+
+### [Enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- Evaluation of the `visibility.is_visible` field should now check for `visibility == Visibility::Inherited`.
+- Setting the `visibility.is_visible` field should now directly set the value: `*visibility = Visibility::Inherited`.
+- Usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
+- `ComputedVisibility::INVISIBLE` and `SpatialBundle::VISIBLE_IDENTITY` have been renamed to `ComputedVisibility::HIDDEN` and `SpatialBundle::INHERITED_IDENTITY` respectively.
+
 ### [bevy_reflect: Pre-parsed paths](https://github.com/bevyengine/bevy/pull/7321)
 
 <div class="migration-guide-area-tags">
@@ -106,28 +237,6 @@ column.get_ticks(row).changed.deref()
 `Entities`’s `Default` implementation has been removed. You can fetch a reference to a `World`’s `Entities` via `World::entities` and `World::entities_mut`.
 
 `Entities::alloc_at_without_replacement` and `AllocAtWithoutReplacement` has been made private due to difficulty in using it properly outside of `bevy_ecs`. If you still need use of this API, please file an issue or check [bevy_ecs is excessively public](https://github.com/bevyengine/bevy/issues/3362) for more info.
-
-### [Make the `SystemParam` derive macro more flexible](https://github.com/bevyengine/bevy/pull/6694)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-The lifetime `'s` has been removed from `EventWriter`. Any code that explicitly specified the lifetimes for this type will need to be updated.
-
-```rust
-// 0.9
-#[derive(SystemParam)]
-struct MessageWriter<'w, 's> {
-    events: EventWriter<'w, 's, Message>,
-}
-
-// 0.10
-#[derive(SystemParam)]
-struct MessageWriter<'w> {
-    events: EventWriter<'w, Message>,
-}
-```
 
 ### [Borrow instead of consuming in `EventReader::clear`](https://github.com/bevyengine/bevy/pull/6851)
 
@@ -230,30 +339,6 @@ Normal resources and `NonSend` resources no longer share the same backing storag
 </div>
 
 Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` methods have been changed. All callers should re-audit for soundness.
-
-### [Basic adaptive batching for parallel query iteration](https://github.com/bevyengine/bevy/pull/4777)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-The `batch_size` parameter for `Query(State)::par_for_each(_mut)` has been removed. These calls will automatically compute a batch size for you. Remove these parameters from all calls to these functions.
-
-```rust
-// 0.9
-fn parallel_system(query: Query<&MyComponent>) {
-   query.par_for_each(32, |comp| {
-        ...
-   });
-}
-
-// 0.10
-fn parallel_system(query: Query<&MyComponent>) {
-   query.par_iter().for_each(|comp| {
-        ...
-   });
-}
-```
 
 ### [Added `resource_id` and changed `init_resource` and `init_non_send_resource` to return `ComponentId`](https://github.com/bevyengine/bevy/pull/7284)
 
@@ -614,17 +699,6 @@ The call to `clear_trackers` in `App` has been moved from the schedule to `App::
 
 Rename `priority` to `order` in usage of `Camera`.
 
-### [Enum `Visibility` component](https://github.com/bevyengine/bevy/pull/6320)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-- Evaluation of the `visibility.is_visible` field should now check for `visibility == Visibility::Inherited`.
-- Setting the `visibility.is_visible` field should now directly set the value: `*visibility = Visibility::Inherited`.
-- Usage of `Visibility::VISIBLE` or `Visibility::INVISIBLE` should now use `Visibility::Inherited` or `Visibility::Hidden` respectively.
-- `ComputedVisibility::INVISIBLE` and `SpatialBundle::VISIBLE_IDENTITY` have been renamed to `ComputedVisibility::HIDDEN` and `SpatialBundle::INHERITED_IDENTITY` respectively.
-
 ### [Reduce branching in TrackedRenderPass](https://github.com/bevyengine/bevy/pull/7053)
 
 <div class="migration-guide-area-tags">
@@ -758,10 +832,11 @@ No api changes are required, but it's possible that your gltf meshes look differ
 ### [Send emissive color to uniform as linear instead of sRGB](https://github.com/bevyengine/bevy/pull/7897)
 
 - If you have previously manually specified emissive values with `Color::rgb()` and would like to retain the old visual results, you must now use `Color::rgb_linear()` instead;
-- If you have previously manually specified emissive values with `Color::rgb_linear()` and would like to retain the old visual results, you'll need to apply a one-time gamma calculation to your channels manually to get the _actual_ linear RGB value: 
+- If you have previously manually specified emissive values with `Color::rgb_linear()` and would like to retain the old visual results, you'll need to apply a one-time gamma calculation to your channels manually to get the _actual_ linear RGB value:
   - For channel values greater than `0.0031308`, use `(1.055 * value.powf(1.0 / 2.4)) - 0.055`;
   - For channel values lower than or equal to `0.0031308`, use `value * 12.92`;
 - Otherwise, the results should now be more consistent with other tools/engines.
+
 ### [The `update_frame_count` system should be placed in CorePlugin](https://github.com/bevyengine/bevy/pull/6676)
 
 <div class="migration-guide-area-tags">
@@ -771,37 +846,6 @@ No api changes are required, but it's possible that your gltf meshes look differ
 </div>
 
 The `FrameCount`  resource was previously only updated when using the `bevy_render` feature. If you are not using this feature but still want the `FrameCount` it will now be updated correctly.
-
-### [Migrate engine to Schedule v3 (stageless)](https://github.com/bevyengine/bevy/pull/7267)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-- Calls to `.label(MyLabel)` should be replaced with `.in_set(MySet)`
-- Stages have been removed. Replace these with system sets, and then add command flushes using the `apply_system_buffers` exclusive system where needed.
-- The `CoreStage`, `StartupStage,`RenderStage`and`AssetStage`enums have been replaced with`CoreSet`,`StartupSet, `RenderSet` and `AssetSet`. The same scheduling guarantees have been preserved.
-  - Systems are no longer added to `CoreSet::Update` by default. Add systems manually if this behavior is needed, although you should consider adding your game logic systems to `CoreSchedule::FixedTimestep` instead for more reliable framerate-independent behavior.
-  - Similarly, startup systems are no longer part of `StartupSet::Startup` by default. In most cases, this won’t matter to you.
-  - For example, `add_system_to_stage(CoreStage::PostUpdate, my_system)` should be replaced with
-  - `add_system(my_system.in_base_set(CoreSet::PostUpdate)`
-
-- When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
-- Run criteria have been renamed to run conditions. These can now be combined with each other and with states.
-- Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
-- For app-level control flow over which schedules get run when (such as for rollback networking), create your own schedule and insert it under the `CoreSchedule::Outer` label.
-- Fixed timesteps are now evaluated in a schedule, rather than controlled via run criteria. The `run_fixed_timestep` system runs this schedule between `CoreSet::First` and `CoreSet::PreUpdate` by default.
-- Command flush points introduced by `AssetStage` have been removed. If you were relying on these, add them back manually.
-- the `calculate_bounds` system, with the `CalculateBounds` label, is now in `CoreSet::Update`, rather than in `CoreSet::PostUpdate` before commands are applied. You may need to order your movement systems to occur before this system in order to avoid system order ambiguities in culling behavior.
-- the `RenderLabel` `AppLabel` was renamed to `RenderApp` for clarity
-- `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
-- Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` or `on_update` siblings.
-- `SystemLabel` derives should be replaced with `SystemSet`. You will also need to add the `Debug`, `PartialEq`, `Eq`, and `Hash` traits to satisfy the new trait bounds.
-- `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a `bool` instead of `schedule::ShouldRun`.
-
-- States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
-- Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
 
 #### Multiple fixed timesteps
 
@@ -931,49 +975,6 @@ The `Size::height` constructor function now sets the `width` to `Val::Auto` inst
 </div>
 
 The size field of `CalculatedSize` has been changed to a `Vec2`.
-
-### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Windowing</div>
-</div>
-
-Replace `WindowDescriptor` with `Window`.
-
-Change `width` and `height` fields in a `WindowResolution`, either by doing
-
-```rust
-WindowResolution::new(width, height) // Explicitly
-// or using From<_> for tuples for convenience
-(1920., 1080.).into()
-```
-
-Replace any `WindowCommand` code to just modify the `Window`’s fields directly  and creating/closing windows is now by spawning/despawning an entity with a `Window` component like so:
-
-```rust
-let window = commands.spawn(Window { ... }).id(); // open window
-commands.entity(window).despawn(); // close window
-```
-
-To get a window, you now need to use a `Query` instead of a `Res`
-
-```rust
-// 0.9
-fn count_pixels(windows: Res<Windows>) {
-    let Some(primary) = windows.get_primary() else {
-        return;
-    };
-    println!("{}", primary.width() * primary.height());
-}
-
-// 0.10
-fn count_pixels(primary_query: Query<&Window, With<PrimaryWindow>>) {
-    let Ok(primary) = primary_query.get_single() else {
-        return;
-    };
-    println!("{}", primary.width() * primary.height());
-}
-```
 
 ### [Update winit to 0.28](https://github.com/bevyengine/bevy/pull/7480)
 
