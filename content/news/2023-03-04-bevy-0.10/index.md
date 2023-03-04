@@ -739,6 +739,26 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
+## Cubic Curves
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+<video controls loop><source  src="cubic_curves.mp4" type="video/mp4"/></video>
+<p class="release-feature-authors">This video shows four kinds of cubic curves being smoothly animated with bezier easing. The curve itself is white, green is velocity, red is acceleration, and blue are the control points that determine the shape of the curve.</p>
+
+In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`.  The implementation provides multiple curves out of the box, useful in various applications:
+
+* `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing as demonstrated in the above video.
+* `Hermite`: smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
+* `Cardinal`: easy interpolation between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
+* `B-Spline`: acceleration-continuous motion, particularly useful for camera paths where a smooth change in velocity (acceleration) is important to prevent harsh jerking motion.
+
+The `CubicGenerator` trait is public, allowing you to define your own custom splines that generate `CubicCurve`s!
+
+### Performance
+
+The position, velocity, and acceleration of a `CubicCurve` can be evaluated at any point. These evaluations all have the same performance cost, regardless of the type of cubic curve being used. On a modern CPU, these evaluations take 1-2 ns, and animation easing - which is an iterative process - takes 15-20 ns.
+
 ## Reflection Paths: Enums and Tuples
 
 <div class="release-feature-authors">authors: @MrGVSV</div>
