@@ -588,7 +588,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 <div class="release-feature-authors">authors: @aevyrie</div>
 
-In preparation for UI animation and animation editing, cubic curves have been added to `bevy_math` with a public `CubicGenerator` trait to enable user-defined cubic curves. The implementation provides multiple curves out of the box, useful in various applications:
+In preparation for UI animation and hand-tweaked animation curves cubic curves have been added to `bevy_math` with a public `CubicGenerator` trait to enable user-defined cubic curves. The implementation provides multiple curves out of the box, useful in various applications:
 
 - `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing.
 - `Hermite`: useful for smooth interpolation betwen two points in time where you know both the position and velocity, such as network prediction.
