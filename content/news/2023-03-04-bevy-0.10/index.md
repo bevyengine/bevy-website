@@ -29,7 +29,7 @@ There's been a lot of changes, but we've put a lot of care into ensuring the [mi
 
 Lets take a look at what shipped in 0.10!
 
-### A Single Unified Schedule
+## A Single Unified Schedule
 
 Have you ever wanted to specify that `system_a` runs before `system_b`, only to be met with confusing warnings that `system_b` isn't found because it's in a different stage?
 
@@ -41,7 +41,7 @@ This simplifies our internal logic, makes your code more robust to refactoring, 
 
 This diagram, made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
 
-### Configurable System Sets
+## Configurable System Sets
 
 To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
 
@@ -68,7 +68,7 @@ app
     // as this is a method on a single system.
     // The order of these method calls doesn't matter!
    .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
-    // Add multiple systems at once with add_systems!
+    // Add multiple systems at once with add_systems!    
     .add_systems(
         (apply_acceleration, apply_velocity)
             // Quickly order a list of systems to run one after the next by using .chain()
@@ -103,7 +103,7 @@ These rules must be compatible with each other: any paradoxes (like a system set
 
 As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
-### Directly Schedule Exclusive Systems
+## Directly Schedule Exclusive Systems
 
 Ever wished that you could just flush commands or run an exclusive system right before this system but after that system without shuffling your entire schedule to make it work?
 
@@ -136,7 +136,7 @@ Similarly, state transitions can be scheduled manually, one type at a time, in t
 
 What will you do with this much power? We're keen to find out!
 
-### It's All Schedules? Managing complex control flow
+## It's All Schedules? Managing complex control flow
 
 But what if you want to do something _weird_ with your schedule. Something non-linear, or branching, or looping. What should you reach for?
 
@@ -181,7 +181,7 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 
 Follow the bread crumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSchedule.html) for more info.
 
-### Simpler Run Conditions
+## Simpler Run Conditions
 
 Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
 Run criteria have been renamed to the clearer **run conditions**, which can be constructed out of any read-only system that returns `bool`.
@@ -207,7 +207,7 @@ Bevy 0.10 is shipping with a lovely collection of built-in [common run condition
 
 When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run criteria combinators.
 
-### Simpler States
+## Simpler States
 
 Previously, looping run criteria were used to power states, but as mentioned above, they've been removed.
 How do they work in Bevy 0.10?
@@ -269,7 +269,7 @@ If you were relying on the state stack, you might choose to:
 * use additional state types, which capture orthogonal elements of your app's status
 * build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate!
 
-### Base Sets: Getting Default Behavior Right
+## Base Sets: Getting Default Behavior Right
 
 Of course the skeptical reader may point out that:
 
@@ -328,7 +328,7 @@ In practice, there are three broad classes of systems: gameplay logic (the major
 By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 Let us know how it works out for you!
 
-### Polish Matters
+## Polish Matters
 
 As part of this work, we've taken the time to listen to our users and fix some small but high-impact things about how scheduling works.
 
@@ -383,7 +383,7 @@ app
         .with_system(b.label(MyLabel::Variant))
         .with_system(c)
         .with_run_criteria(blue_moon)
-    )
+    )    
 
 ```
 
@@ -415,119 +415,6 @@ We've also:
 The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bevy_mod_debugdump`](https://crates.io/crates/bevy_mod_debugdump), the leading third-party schedule visualization plugin, to ensure it keeps working better than ever.
 
 It's a great tool that we are looking to build on to create a first party solution: you should strongly consider adding it to your toolbox.
-
-## Cascaded Shadow Maps
-
-<div class="release-feature-authors">authors: @danchia, Rob Swain (@superdump)</div>
-
-Bevy uses "shadow maps" to cast shadows for lights / objects. Previous versions of Bevy used a simple but limited shadow map implementation for directional light sources. For a given light, you would define the resolution of the shadow map _and_ a manual "view projection" that would determine how the shadow is cast. This had a number of downsides:
-
-* The resolution of the shadow map was fixed. You had to choose something between "cover a large area, but have a lower resolution" and "cover a smaller area, but have a higher resolution".
-* The resolution didn't adapt to camera positioning. Shadows might look great in one position, but terrible in another position.
-* The "shadow projection" had to be manually defined. This made it hard and unapproachable to configure shadows to match a given scene.
-
-**Bevy 0.10** adds "cascaded shadow maps", which breaks up the camera's view frustum into a series of configurable "cascades", which each have their own shadow map. This enables shadows in the cascade "close to the camera" to be highly detailed, while allowing shadows "far from the camera" to cover a wider area with less detail. Because it uses the camera's view frustum to define the shadow projections, the shadow quality remains consistent as the camera moves through the scene. This also means that users don't need to manually configure shadow projections anymore. They are automatically calculated!
-
-<video controls loop><source  src="shadow_cascades.mp4" type="video/mp4"/></video>
-
-Notice how the nearby shadows are highly detailed whereas the shadows in the distance become less detailed as they get farther away (which doesn't matter as much because they are far away).
-
-While shadow cascades solve important problems, they also introduce new ones. How many cascades should you use? What is the minimum and maximum distance from the camera where shadows should appear? How much overlap should there be between cascades? These parameters must be dialed in to fit a given scene.
-
-## Environment Map Lighting
-
-<div class="release-feature-authors">authors: @JMS55</div>
-
-Environment maps are a popular and computationally cheap way to significantly improve the quality of a scene's lighting. It uses a cube map texture to provide 360 lighting "from all directions". This is especially apparent for reflective surfaces, but it applies to all lit materials.
-
-This is what the PBR material looks like without environment map lighting:
-
-![env map before](env_map_before.png)
-
-And this is what the PBR material looks like with environment map lighting:
-
-![env map after](env_map_after.png)
-
-For scenes that need constant lighting (especially outdoor scenes), environment maps are a great solution. And because environment maps are arbitrary images, artists have a lot of control over the character of the scene's lighting.
-
-## More Tonemapping Choices
-
-<div class="release-feature-authors">authors: @DGriffin91, @JMS55</div>
-
-Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
-
-### No Tonemapping
-
-This is generally not recommended as HDR lighting is not intended to be used as color.
-
-![no tonemapping](tm_none.png)
-
-### Reinhard
-
-![reinhard](tm_reinhard.png)
-
-### Reinhard Luminance
-
-This is what we had in previous versions of Bevy. It is still our default algorithm.
-
-![reinhard luminance](tm_reinhard_luminance.png)
-
-### ACES Fitted
-
-![aces](tm_aces.png)
-
-### AgX
-
-![agx](tm_agx.png)
-
-### SomewhatBoringDisplayTransform
-
-![SomewhatBoringDisplayTransform](tm_sbdt.png)
-
-### TonyMcMapface
-
-Tomasz Stachowiak [recently released](https://twitter.com/h3r2tic/status/1626579257559502850?lang=en) this nice new display transform. In their own words "Tony maps HDR Rec.709 to LDR in a (subjectively) natural way, without messing too much with contrast or look"
-
-![TonyMcMapface](tm_tonymcmapface.png)
-
-### Blender Filmic
-
-From the 3D software package we know and love!
-
-![Blender Filmic](tm_blender_filmic.png)
-
-## Color Grading Control
-
-<div class="release-feature-authors">authors: @DGriffin91</div>
-
-We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per-camera using the new [`ColorGrading`] component
-
-[`ColorGrading`]: https://docs.rs/bevy/0.10.0/bevy/render/view/struct.ColorGrading.html
-
-### 0.5 Exposure
-
-![0.5 exposure](exposure_005.png)
-
-### 2.25 Exposure
-
-![2.25 exposure](exposure_225.png)
-
-## Depth and normal prepass
-
-<div class="release-feature-authors">authors: @icesentry, @superdump, @robtfm, @JMS55</div>
-
-<video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
-<p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
-
-Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing and many more. These are currently being worked on and should be available in the next release of bevy.
-
-![Edge detection](edge_detection.png)
-<p class="release-feature-authors">In the image on the right, green lines are edges detected in the normal texture and blue lines are edges detected in the depth texture</p>
-
-![Edge detection prepass](edge_detection_prepass.png)
-<p class="release-feature-authors">The depth and normal textures generated by the prepass</p>
-
-Unfortunately, the prepass still has performance issues so it's currently disabled by default, but if you need to use it for a specific effect you can simply add the `DepthPrepass` component to your camera.
 
 ## Spatial Audio
 
@@ -569,48 +456,6 @@ app.add_audio_source::<MyCustomAudioSource>()
 Much cleaner!
 
 [`Decodable`]: https://docs.rs/bevy_audio/latest/bevy_audio/trait.Decodable.html
-
-## SystemParam Improvements
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-Central to Bevy's ECS are `SystemParam`s: these types, such as `Query` and `Res`, dictate what a system can and can't do.
-Previously, manually creating one required implementing a family of four inseparable traits.
-In **Bevy 0.10**, we've [used generic associated types](https://github.com/bevyengine/bevy/pull/6865) to [reduce this to just two traits](https://github.com/bevyengine/bevy/pull/6919): `SystemParam` and `ReadOnlySystemParam`.
-
-Additionally, the `#[derive(SystemParam)]` macro has received a host of miscellaneous usability improvements:
-
-* **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
-* **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
-* **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously complex as you want. This is most useful for generated code.
-
-## Deferred World Mutations
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-You probably know that when you send a `Command`, it doesn't mutate the world right away. The command gets stored in the system and applied later on
-in the schedule. Deferring mutations in this way has a few benefits:
-
-* Minimizing world accesses: unlike mutable queries (and resources), deferred mutations are free from data access conflicts, which affords greater parallelizability to systems using this pattern.
-* Order independence: when performing idempotent operations (like setting a global flag), deferred mutations allow you to not worry about system execution order.
-* Structural mutations: deferred mutations are able to change the structure of the world in ways that `Query` and `ResMut` cannot, such as adding components or spawning and despawning entities.
-
-**Bevy 0.10** adds first-class support for this pattern via the `Deferred` system parameter. This lets you create systems with custom deferred mutation behavior while skipping the overhead associated with `Commands`!
-
-```rust
-/// Sends events with a delay, but can run in parallel with other event writers.
-pub struct EventBuffer<E>(Vec<E>);
-
-// The `SystemBuffer` trait controls how deferred mutations get applied to the world.
-impl<E> SystemBuffer for EventBuffer<E> { ... }
-
-fn my_system(mut events: Deferred<EventBuffer<MyEvent>>) {
-    // Queue up an event to get sent when commands are applied.
-    events.0.push(MyEvent);
-}
-```
-
-Note that this feature should be used with care -- despite the potential performance benefits, inappropriate usage can actually _worsen_ performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
 
 ## Ref&lt;T&gt; Queries
 
@@ -738,6 +583,17 @@ query.iter().for_each(|mut component| {
 `UnsafeWorldCell` and `UnsafeEntityCell` allow shared mutable access to parts of the world via unsafe code. It serves a similar purpose as `UnsafeCell`, allowing people to build interior mutability abstractions such as `Cell` `Mutex` `Channel` etc. In bevy `UnsafeWorldCell` will be used to support the scheduler and system param implementations as these are interior mutability abstractions for `World`, it also currently is used to implement `WorldCell`. We're planning to use `UnsafeEntityCell` to implement versions of `EntityRef`/`EntityMut` that only have access to the components on the entity rather than the entire world.
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
+
+## Cubic Curves
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+In preparation for UI animation and animation editing, cubic curves have been added to `bevy_math` with a public `CubicGenerator` trait to enable user-defined cubic curves. The implementation provides multiple curves out of the box, useful in various applications:
+
+- `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing.
+- `Hermite`: useful for smooth interpolation betwen two points in time where you know both the position and velocity, such as network prediction.
+- `Cardinal`: interpolates between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
+- `B-Spline`: the only C2 continuous curve, particularly useful for smooth camera motion where continuous acceleration is important.
 
 ## What's Next?
 
