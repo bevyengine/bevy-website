@@ -1298,15 +1298,16 @@ fn run_or_attack(
 Games are for everyone: and the way they're built should reflect that.
 Acessible games are rare, and proper support is often an afterthought, both at an engine and a game level.
 By building our UI solution with acessibility in mind, we hope to fix that.
-Doing the right thing should be easy.
 
 Bevy has [joined `egui`](https://github.com/emilk/egui/pull/2294) in making the first steps towards cross-platform accessibility-by-default, with the help of the outstanding [AccessKit](https://github.com/AccessKit/accesskit) crate.
 To our knowledge, this makes Bevy the first general purpose game engine with first-party acessibility support.
 
 We've exposed Bevy's UI hierarchy and text elements to screen readers and other assistive devices, managed by the new on-by-default `bevy_a11y` crate.
+This is ultimately powered by the new [`AccesibilityNode`](TODO) component, which combines with the existing hierarchy to expose this information directly to AccessKit and the [`Focus`](https://dev-docs.bevyengine.org/bevy/a11y/struct.Focus.html) resource, which stores the entity that has focus.
+
 There's still a lot more to be done here: integrating the focus system with a [gamepad-driven UI controls](https://github.com/bevyengine/rfcs/pull/41) solution, cleaning up the data model to [make sure "accessible by default" is a reality](https://github.com/bevyengine/bevy/issues/7862)), and adding support for remaining features in AccessKit.
 
-Special thanks to `@mcwcampbell`, the lead author of `AccessKit`, for reviewing our integration and working with us to reduce the number of dependencies upstream, substantially improving both compile times and final executable size.
+Special thanks to `@mcwcampbell`, the lead author of AccessKit, for reviewing our integration and working with us to reduce the number of dependencies upstream, substantially improving both compile times and final executable size.
 
 ## What's Next?
 
