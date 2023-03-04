@@ -1534,7 +1534,7 @@ In combination with the new tonemapping options, bloom has been much improved si
 3. in Bevy 0.10, bloom now looks like this. It's much more controlled and less overbearing.
 4. To make the bloom stronger, rather than raise the `BloomSettings` intensity,
 let's double the `emissive` value of each cube.
-5. Finally, if you want the extreme bloom similar to the old algorithm, you can change
+5. Finally, if you want more extreme bloom similar to the old algorithm, you can change
 `BloomSettings::composite_mode` from `BloomCompositeMode::EnergyConserving` to `BloomCompositeMode::Additive`.
 6. Explore the new bloom settings in an interactive playground using the new `bloom_3d` (and `bloom_2d`) examples.
 
