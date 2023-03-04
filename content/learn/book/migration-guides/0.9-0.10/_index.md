@@ -798,7 +798,8 @@ The `FrameCount`  resource was previously only updated when using the `bevy_rend
 
 #### Multiple fixed timesteps
 
-Only one fixed timestep is supported. If you were relying on this functionality, you should swap to using timers, via the on_timer(MY_PERIOD) run condition.
+Apps may now only have one unified fixed timestep. If you were relying on this functionality, you should swap to using timers, via the `on_timer(MY_PERIOD)` run condition.
+
 
 ### [Pipelined Rendering](https://github.com/bevyengine/bevy/pull/6503)
 
