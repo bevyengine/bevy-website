@@ -119,17 +119,6 @@ impl GithubClient {
             .set("Authorization", &format!("bearer {}", self.token))
     }
 
-    pub fn get_branch_sha(&self, branch_name: &str) -> anyhow::Result<String> {
-        let request = self.get("branches");
-        let reponse: Vec<GithubBranchesResponse> = request.call()?.into_json()?;
-        for branch in &reponse {
-            if branch.name == branch_name {
-                return Ok(branch.commit.sha.clone());
-            }
-        }
-        bail!("commit sha not found for main branch")
-    }
-
     /// Gets the list of all commits between two git ref
     pub fn compare_commits(
         &self,
