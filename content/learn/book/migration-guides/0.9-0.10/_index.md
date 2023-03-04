@@ -755,6 +755,13 @@ Removed `SetShadowViewBindGroup`, `queue_shadow_view_bind_group()`, and `LightMe
 
 No api changes are required, but it's possible that your gltf meshes look different
 
+### [Send emissive color to uniform as linear instead of sRGB](https://github.com/bevyengine/bevy/pull/7897)
+
+- If you have previously manually specified emissive values with `Color::rgb()` and would like to retain the old visual results, you must now use `Color::rgb_linear()` instead;
+- If you have previously manually specified emissive values with `Color::rgb_linear()` and would like to retain the old visual results, you'll need to apply a one-time gamma calculation to your channels manually to get the _actual_ linear RGB value: 
+  - For channel values greater than `0.0031308`, use `(1.055 * value.powf(1.0 / 2.4)) - 0.055`;
+  - For channel values lower than or equal to `0.0031308`, use `value * 12.92`;
+- Otherwise, the results should now be more consistent with other tools/engines.
 ### [The `update_frame_count` system should be placed in CorePlugin](https://github.com/bevyengine/bevy/pull/6676)
 
 <div class="migration-guide-area-tags">
