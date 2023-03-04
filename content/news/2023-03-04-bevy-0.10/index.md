@@ -739,6 +739,53 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
+## Upgraded wgpu to 0.15
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+**Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
+
+## Exposed Non-Uniform Indexing Support (Bindless)
+
+<div class="release-feature-authors">authors: @cryscan</div>
+
+**Bevy 0.10** wired up initial support for non-uniform indexing of textures and storage buffers. This is an important step toward modern ["bindless / gpu-driven rendering"](https://vkguide.dev/docs/gpudriven/gpu_driven_engines/), which can unlock significant performance on platforms that support it. Note that this is just making the feature available to render plugin developers. Bevy's core rendering features do not (yet) use the bindless approach.
+
+We've added [a new example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/shader/texture_binding_array.rs) illustrating how to use this feature:
+
+![texture binding array](texture_binding_array.png)
+
+## Gamepad API Improvements
+
+<div class="release-feature-authors">authors: @DevinLeamy</div>
+
+The [`GamepadEventRaw`] type has been removed in favor of separate [`GamepadConnectionEvent`], [`GamepadAxisChangedEvent`], and [`GamepadButtonChangedEvent`], and the internals have been reworked to accommodate this.
+
+This allows for simpler, more granular event access without filtering down the general [`GamepadEvent`] type. Nice!
+
+```rust
+fn system(mut events: EventReader<GamepadConnectionEvent>)
+    for event in events.iter() {
+    }
+}
+```
+
+[`GamepadEventRaw`]: https://docs.rs/bevy/0.9.0/bevy/input/gamepad/struct.GamepadEventRaw.html
+[`GamepadConnectionEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadConnectionEvent.html
+[`GamepadAxisChangedEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadAxisChangedEvent.html
+[`GamepadButtonChangedEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/struct.GamepadButtonChangedEvent.html
+[`GamepadEvent`]: https://docs.rs/bevy/0.10.0/bevy/input/gamepad/enum.GamepadEvent.html
+
+## Input Method Editor (IME) Support
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+[`Window`] can now configure IME support using `ime_enabled` and `ime_position`, which enables the use of "dead keys", which add support for French, Pinyin, etc:
+
+<video controls loop><source  src="ime.mp4" type="video/mp4"/></video>
+
+[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
+
 ## Cubic Curves
 
 <div class="release-feature-authors">authors: @aevyrie</div>
