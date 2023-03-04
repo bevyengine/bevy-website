@@ -319,7 +319,7 @@ For the `SystemParamFunction` trait, the type parameters `In`, `Out`, and `Param
 fn my_generic_system<T, In, Out, Param, Marker>(system_function: T)
 where
     T: SystemParamFunction<In, Out, Param, Marker>,
-    T: Param: SystemParam,
+    Param: SystemParam,
 { ... }
 
 // 0.10
