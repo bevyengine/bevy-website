@@ -686,6 +686,59 @@ app from the app to send it between the main thread and the rendering thread. Th
 only valid to do after all the plugin build methods have been called, because any plugin may
 want to modify the rendering sub app.
 
+## ShaderDef Values
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy's shader processor now supports ShaderDefs with values. This allows developers to pass constant values into their shaders:
+
+```rust
+let shader_defs = vec![
+    ShaderDefVal::Int("MAX_DIRECTIONAL_LIGHTS".to_string(), 10),
+];
+```
+
+These can be used in `#if` statements to selectively enable shader code based on the value:
+
+```rust
+#if MAX_DIRECTIONAL_LIGHTS >= 10
+let color = vec4<f32>(1.0, 0.0, 0.0, 1.0);
+#else
+let color = vec4<f32>(0.0, 1.0, 0.0, 1.0);
+#endif
+```
+
+ShaderDef values can be inlined into shaders:
+
+```rust
+for (var i: u32 = 0u; i < #{MAX_DIRECTIONAL_LIGHTS}; i = i + 1u) {
+}
+```
+
+They can also be defined inline in shaders:
+
+```rust
+#define MAX_DIRECTIONAL_LIGHTS 10 
+```
+
+## `#else ifdef` Chains in Shaders
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+Bevy's shader processor now also supports `#else ifdef` chains like this:
+
+```rust
+#ifdef FOO
+// foo code
+#else ifdef BAR
+// bar code
+#else ifdef BAZ
+// baz code
+#else
+// fallback code
+#endif
+```
+
 ## ECS Optimizations
 
 <div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
