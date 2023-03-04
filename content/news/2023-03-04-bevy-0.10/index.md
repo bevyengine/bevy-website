@@ -1181,7 +1181,7 @@ You can now smoothly transition between two (or more) skeletal animations!
 <div style="font-size: 1.0rem" class="release-feature-authors">Character model and animations are royalty free assets from Mixamo.
 </div>
 
-With the new [`play_with_transition`] method on the [`AnimationPlayer`] component, you can now specify a transition duration during which the new animation will be linearly blended with the currently playing animation, which weight will decrease during that duration until it reaches `0.0`.
+With the new [`play_with_transition`] method on the [`AnimationPlayer`] component, you can now specify a transition duration during which the new animation will be linearly blended with the currently playing animation, whose weight will decrease during that duration until it reaches `0.0`.
 
 ```rust
 #[derive(Component, Default)]
