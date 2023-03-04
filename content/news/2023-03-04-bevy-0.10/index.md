@@ -588,12 +588,18 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 <div class="release-feature-authors">authors: @aevyrie</div>
 
-In preparation for UI animation and hand-tweaked animation curves cubic curves have been added to `bevy_math` with a public `CubicGenerator` trait to enable user-defined cubic curves. The implementation provides multiple curves out of the box, useful in various applications:
+In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`.  The implementation provides multiple curves out of the box, useful in various applications:
 
 - `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing.
 - `Hermite`: useful for smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
 - `Cardinal`: interpolates between any number of control points, automatically computing tangents; Catmull-Rom is a type of Cardinal spline.
-- `B-Spline`: the only C2 continuous curve, particularly useful for smooth camera motion where continuous acceleration is important.
+- `B-Spline`: the only acceleration-continuous curve, particularly useful for smooth camera motion where smooth change in velocity (acceleration) is important.
+
+The `CubicGenerator` trait is public, allowing you to define your own custom splines that generate `CubicCurve`s!
+
+### Performance
+
+The position, velocity, and acceleration of a `CubicCurve` can be evaluated at any point. These evaluations all have the same performance cost, regardless of the type of cubic curve being used. On a modern CPU, these evaluations take 1-2 ns, and animation easing - which is an iterative process - takes 15-20 ns.
 
 ## What's Next?
 
