@@ -843,7 +843,7 @@ assert!(concrete_value.is::<MyStruct>());
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-In **Bevy 0.9**, `World::iter_entities` allows users to get an iterator over all of the entities in the `World` in `Entity` form. In **Bevy 0.10**, this has been changed to be an iterator over `EntityRef`, which gives full read-only access to all of the entity's components instead of just getting it's ID. It's new implementation should also be significantly faster than fetching the `EntityRef` by hand (though note that a `Query` will still be faster if you know the exact components you're looking for). This gives users free reign to arbitrarily read any entity data from the World, and may see use in scripting language integrations and reflection-heavy work flows.
+In **Bevy 0.9**, `World::iter_entities` allows users to get an iterator over all of the entities in the `World` in `Entity` form. In **Bevy 0.10**, this has been changed to be an iterator over `EntityRef`, which gives full read-only access to all of the entity's components instead of just getting its ID. Its new implementation should also be significantly faster than fetching the `EntityRef` by hand (though note that a `Query` will still be faster if you know the exact components you're looking for). This gives users free reign to arbitrarily read any entity data from the World, and may see use in scripting language integrations and reflection-heavy work flows.
 
 ```rust
 // Bevy 0.9
