@@ -834,8 +834,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 The [`AlphaMode`] enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the [`StandardMaterial`]. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
 
-<!-- TODO: Add video here -->
-<video controls loop><source src="" type="video/mp4"/></video>
+<video controls loop><source src="demo-ruins.mp4" type="video/mp4"/></video>
 
 _Demo showcasing the use of blend modes to create stained glass and fire effects._ (<a href="https://github.com/coreh/bevy-demo-ruins">Source Code</a>)
 
