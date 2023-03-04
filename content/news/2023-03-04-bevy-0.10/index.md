@@ -690,7 +690,7 @@ want to modify the rendering sub app.
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-Bevy's shader processor now supports ShaderDefs with values. This allows developers to pass constant values into their shaders:
+Bevy's shader processor now supports ShaderDefs with values, using the new [`ShaderDefVal`]. This allows developers to pass constant values into their shaders:
 
 ```rust
 let shader_defs = vec![
@@ -720,6 +720,10 @@ They can also be defined inline in shaders:
 ```rust
 #define MAX_DIRECTIONAL_LIGHTS 10 
 ```
+
+ShaderDefs defined in shaders override values passed in from Bevy.
+
+[`ShaderDefVal`]: https://docs.rs/bevy/0.10.0/bevy/render/render_resource/enum.ShaderDefVal.html
 
 ## `#else ifdef` Chains in Shaders
 
