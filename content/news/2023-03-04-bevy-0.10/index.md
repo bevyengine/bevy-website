@@ -1141,6 +1141,32 @@ assert!(concrete_value.is::<MyStruct>());
 [`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
 [`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
 
+## Iterating through a World's Entities
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+In **Bevy 0.9**, `World::iter_entities` allows users to get an iterator over all of the entities in the `World` in `Entity` form. In **Bevy 0.10**, this has been changed to be an iterator over `EntityRef`, which gives full read-only access to all of the entity's components instead of just getting its ID. Its new implementation should also be significantly faster than fetching the `EntityRef` by hand (though note that a `Query` will still be faster if you know the exact components you're looking for). This gives users free reign to arbitrarily read any entity data from the World, and may see use in scripting language integrations and reflection-heavy workflows.
+
+```rust
+// Bevy 0.9
+for entity in world.iter_entities() {
+   if let Some(entity_ref) = world.get_entity(entity) {
+      if let Some(component) = entity_ref.get::<MyComponent>() {
+         ...
+      }
+   }
+}
+
+// Bevy 0.10
+for entity_ref in world.iter_entities() {
+   if let Some(component) = entity_ref.get::<MyComponent>() {
+      ...
+   }
+}
+```
+
+In the future, we may have a `World::iter_entities_mut` that exposes this functionality, but gives arbitrary mutable access to all entities in the `World`. We avoided implementing this for now due to the potential safety concerns of returning an iterator of `EntityMut`. For more details, see this [GitHub issue](https://github.com/bevyengine/bevy/issues/5504).
+
 ## LCH Color Space
 
 <div class="release-feature-authors">authors: @ldubos</div>
