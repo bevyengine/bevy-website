@@ -1236,6 +1236,61 @@ commands.spawn(SpriteBundle::default()).add(MyCustomCommand);
 [`EntityCommand`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.EntityCommand.html
 [`Commands`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Commands.html
 
+## Smooth Skeletal Animation Transitions
+
+<div class="release-feature-authors">authors: @smessmer</div>
+
+You can now smoothly transition between two (or more) skeletal animations!
+
+<video controls loop><source  src="animation_transition.mp4" type="video/mp4"/></video>
+
+<div style="font-size: 1.0rem" class="release-feature-authors">Character model and animations are royalty free assets from Mixamo.
+</div>
+
+With the new [`play_with_transition`] method on the [`AnimationPlayer`] component, you can now specify a transition duration during which the new animation will be linearly blended with the currently playing animation, whose weight will decrease during that duration until it reaches `0.0`.
+
+```rust
+#[derive(Component, Default)]
+struct ActionTimer(Timer);
+
+#[derive(Component)]
+struct Animations {
+    run: Handle<AnimationClip>,
+    attack: Handle<AnimationClip>,
+}
+
+fn run_or_attack(
+    mut query: Query<(&mut AnimationPlayer, &mut ActionTimer, &Animations)>,
+    keyboard_input: Res<Input<KeyCode>>,
+    animation_clips: Res<Assets<AnimationClip>>,
+    time: Res<Time>,
+) {
+    for (mut animation_player, mut timer, animations) in query.iter_mut() {
+        // Trigger the attack animation when pressing <space>
+        if keyboard_input.just_pressed(KeyCode::Space) {
+            let clip = animation_clips.get(&animations.attack).unwrap();
+            // Set a timer for when to restart the run animation
+            timer.0 = Timer::new(
+                Duration::from_secs_f32(clip.duration() - 0.5),
+                TimerMode::Once,
+            );
+            // Will transition over half a second to the attack animation
+            animation_player
+                .play_with_transition(animations.attack.clone(), Duration::from_secs_f32(0.5));
+        }
+        if timer.0.tick(time.delta()).just_finished() {
+            // Once the attack animation is finished, restart the run animation
+            animation_player
+                .play_with_transition(animations.run.clone(), Duration::from_secs_f32(0.5))
+                .repeat();
+        }
+    }
+}
+```
+
+[`AnimationPlayer`]: https://docs.rs/bevy/0.10.0/bevy/animation/struct.AnimationPlayer.html
+[`play_with_transition`]: https://docs.rs/bevy/0.10/bevy/animation/struct.AnimationPlayer.html#method.play_with_transition
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
