@@ -574,6 +574,44 @@ Much cleaner!
 
 [`Decodable`]: https://docs.rs/bevy_audio/latest/bevy_audio/trait.Decodable.html
 
+## Windows as Entities
+
+<div class="release-feature-authors">authors: @aceeri, @Weibye, @cart</div>
+
+In previous versions of Bevy [`Window`] was represented as an ECS resource (contained in the `Windows` resource). In **Bevy 0.10** [`Window`] is now a component (and therefore windows are represented as entities).
+
+This accomplishes a number of goals:
+
+* It opens the doors to representing Windows in Bevy's scene system
+* It exposes Windows to Bevy's powerful ECS queries
+* It provides granular per-window change detection
+* Improves the readability/discoverability of creating, using, and closing windows
+* Changing the properties of a window is the same for both initializing and modifying. No more `WindowDescriptor` fuss!
+* It allows Bevy developers and users to easily attach new component data to windows
+
+```rust
+fn create_window(mut commands: Commands) {
+    commands.spawn(Window {
+        title: "My window :D".to_string(),
+        ..default()
+    });
+}
+
+fn modify_windows(mut windows: Query<&mut Window>) {
+    for window in &mut windows {
+        window.title = "My changed window! :D".to_string();
+    }
+}
+
+fn close_windows(mut commands: Commands, windows: Query<Entity, With<Window>>) {
+    for entity in &windows {
+        commands.entity(entity).despawn();
+    }
+}
+```
+
+[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
+
 ## SystemParam Improvements
 
 <div class="release-feature-authors">authors: @JoJoJet</div>
@@ -1156,8 +1194,6 @@ fn system(mut events: EventReader<GamepadConnectionEvent>)
 [`Window`] can now configure IME support using `ime_enabled` and `ime_position`, which enables the use of "dead keys", which add support for French, Pinyin, etc:
 
 <video controls loop><source  src="ime.mp4" type="video/mp4"/></video>
-
-[`Window`]: https://docs.rs/bevy/0.10.0/bevy/window/struct.Window.html
 
 ## Cubic Curves
 
