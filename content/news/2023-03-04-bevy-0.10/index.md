@@ -1539,12 +1539,12 @@ let's double the `emissive` value of each cube.
 6. Explore the new bloom settings in an interactive playground using the new `bloom_3d` (and `bloom_2d`) examples.
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 16px;">
-    <div><div>(1)</div><img src="old_bloom.png" /></div>
-    <div><div>(2)</div><img src="old_bloom_aces.png" /></div>
-    <div><div>(3)</div><img src="new_bloom.png" /></div>
-    <div><div>(4)</div><img src="new_bloom_double_emission.png" /></div>
-    <div><div>(5)</div><img src="new_bloom_additive.png" /></div>
-    <div><div>(6)</div><img src="bloom_example.png" /></div>
+    <div><div class="news-image-subtitle">(1)</div><img src="old_bloom.png" /></div>
+    <div><div class="news-image-subtitle">(2)</div><img src="old_bloom_aces.png" /></div>
+    <div><div class="news-image-subtitle">(3)</div><img src="new_bloom.png" /></div>
+    <div><div class="news-image-subtitle">(4)</div><img src="new_bloom_double_emission.png" /></div>
+    <div><div class="news-image-subtitle">(5)</div><img src="new_bloom_additive.png" /></div>
+    <div><div class="news-image-subtitle">(6)</div><img src="bloom_example.png" /></div>
 </div>
 
 ## What's Next?
