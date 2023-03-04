@@ -971,6 +971,65 @@ assert!(concrete_value.is::<MyStruct>());
 [`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
 [`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
 
+## Upgraded Taffy To 0.3
+
+<div class="release-feature-authors">authors: @rparret</div>
+
+[Taffy](https://crates.io/crates/taffy) is the library we use to compute layouts for `bevy_ui`. Taffy 0.2 significanty improves the performance of nested UIs. Our `many_buttons` example is now 8% faster. More highly nested UIs should see even bigger gains! Taffy 0.3 adds some nice API tweaks (and also a grid layout feature, which we have disabled for now as it still needs some integration work).
+
+## Relative Cursor Position
+
+<div class="release-feature-authors">authors: @Pietrek14</div>
+
+We've added a new [`RelativeCursorPosition`] UI component, which when added to a UI entity tracks the cursor position relative to the node. `Some((0, 0))` represents the top-left corner of the node, `Some((1,1))` represents the bottom-left corner of the node, and `None` represents the cursor being "outside of the node".
+
+```rust
+commands.spawn((
+    NodeBundle::default(),
+    RelativeCursorPosition::default(),
+));
+```
+
+[`RelativeCursorPosition`]: https://docs.rs/bevy/0.10.0/bevy/ui/struct.RelativeCursorPosition.html
+
+## Const Bevy UI Defaults
+
+<div class="release-feature-authors">authors: @james-j-obrien</div>
+
+Bevy uses the [`Default`] trait a lot to make it easy to construct types. Bevy UI types generally implement [`Default`]. However it has one downside (which is fundamental to Rust): [`Default`] cannot be used in `const` contexts ([yet!](https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html)). To enable UI layout config to be defined as constants, we've added `DEFAULT` associated constants to most of the Bevy UI types. For example, you can use `Style::DEFAULT` to define a const style:
+
+```rust
+const COOL_STYLE: Style = Style {
+    size: Size::width(Val::Px(200.0)),
+    border: UiRect::all(Val::Px(2.0)),
+    ..Style::DEFAULT
+};
+```
+
+[`Default`]: https://doc.rust-lang.org/std/default/trait.Default.html
+
+## Pixel Perfect Example
+
+<div class="release-feature-authors">authors: @Ian-Yy</div>
+
+We now have a new ["pixel perfect" example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/2d/pixel_perfect.rs) that illustrates how to set up pixel perfect sprites. It uses a cute new Bevy logo sprite!
+
+![pixel perfect](pixel_perfect.png)
+
+## CI Improvements
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+We take CI pretty seriously in Bevy land and we're always on the lookout for new ways to make our lives better. We made a number of nice improvements this cycle:
+
+* We now set an MSRV (minimum supported Rust version) for the `bevy` crate and we have a CI job that checks the MSRV
+* CI gives new contributors a friendly welcome message!
+* CI now asks for a migration guide when a PR is labeled as a breaking change and no migration guide is present
+
+## The First Subject Matter Expert Release
+
+This was our first release using our new [Subject Matter Expert (SME) system](/news/scaling-bevy-development/). We merged an absolutely massive amount of changes, and this was _despite_ our Project Lead `@cart` being away for about a month for Christmas and snowboarding vacations. We maintained a high quality bar and built amazing things. Suffice it to say the future is looking bright (and sustainable)! Stay tuned for more SME appointments in more areas.
+
 ## What's Next?
 
 * **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
