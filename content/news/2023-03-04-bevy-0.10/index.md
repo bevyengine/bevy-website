@@ -587,7 +587,7 @@ query.iter().for_each(|mut component| {
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
 
-## `StandardMaterial` Blend Modes
+## StandardMaterial Blend Modes
 
 <div class="release-feature-authors">author: @coreh</div>
 
