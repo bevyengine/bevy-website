@@ -965,7 +965,6 @@ assert!(concrete_value.is::<MyStruct>());
 [`Reflect`]: https://docs.rs/bevy/0.10.0/bevy/reflect/trait.Reflect.html
 [`EntityRef`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityRef.html
 [`EntityMut`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.EntityMut.html
-[`Entity`]: https://docs.rs/bevy/0.10.0/bevy/ecs/entity/struct.Entity.html
 [`World`]: https://docs.rs/bevy/0.10.0/bevy/ecs/world/struct.World.html
 
 ## What's Next?
