@@ -597,14 +597,14 @@ fn windows_go_brr(mut commands: Commands) {
 
 fn modify_windows(mut windows: Query<&mut Window>) {
     for window in &mut windows {
-        // and modifying fields on the `Window` component will update the window accordingly
+        // Modifying fields on the `Window` component will update the window accordingly
         window.title = "My improved window! :D".to_owned();
     }
 }
 
 fn destroy_them(mut commands: Commands, windows: Query<Entity, With<Window>>) {
     for entity in &mut windows {
-        // and closing a window can be done with despawning the window entity!
+        // Closing a window can be done by despawning the window entity!
         commands.entity(entity).despawn();
     }
 }
