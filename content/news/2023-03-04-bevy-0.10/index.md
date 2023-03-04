@@ -678,7 +678,7 @@ using `DefaultPlugins` then it will automatically be added for you on all platfo
 wasm. Bevy does not currently support multithreading on wasm which is needed for this
 feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
 
-## Added a post-build method on Plugin
+### Added a post-build method on Plugin
 
 An optional `setup` method was added to the `Plugin` trait that runs after all the build methods have
 been called. This was required to enable pipelined rendering, which needed to remove the sub
