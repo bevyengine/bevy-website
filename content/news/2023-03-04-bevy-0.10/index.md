@@ -739,6 +739,34 @@ Bevy's shader processor now also supports `#else ifdef` chains like this:
 #endif
 ```
 
+## New Shader Imports: Global and View
+
+<div class="release-feature-authors">authors: @torsteingrindvik</div>
+
+The `Global` and `View` structs are now importable in shaders using `#import bevy_render::globals` and `#import bevy_render::view`. Bevy's internal shaders now use these imports (saving a lot of redundancy). Previously you either needed to re-define in each shader or import the larger `bevy_pbr::mesh_view_types` (which wasn't always what was needed).
+
+Previously this was needed:
+
+```rust
+struct View {
+    view_proj: mat4x4<f32>,
+    inverse_view_proj: mat4x4<f32>,
+    view: mat4x4<f32>,
+    inverse_view: mat4x4<f32>,
+    projection: mat4x4<f32>,
+    inverse_projection: mat4x4<f32>,
+    world_position: vec3<f32>,
+    // viewport(x_origin, y_origin, width, height)
+    viewport: vec4<f32>,
+};
+```
+
+Now you can just do this!
+
+```rust
+#import bevy_render::view
+```
+
 ## ECS Optimizations
 
 <div class="release-feature-authors">authors: @james7132, @JoJoJet</div>
