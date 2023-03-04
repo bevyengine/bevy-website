@@ -762,7 +762,7 @@ for (var i: u32 = 0u; i < #{MAX_DIRECTIONAL_LIGHTS}; i = i + 1u) {
 They can also be defined inline in shaders:
 
 ```rust
-#define MAX_DIRECTIONAL_LIGHTS 10 
+#define MAX_DIRECTIONAL_LIGHTS 10
 ```
 
 ShaderDefs defined in shaders override values passed in from Bevy.
@@ -867,6 +867,143 @@ query.iter().for_each(|mut component| {
 `UnsafeWorldCell` and `UnsafeEntityCell` allow shared mutable access to parts of the world via unsafe code. It serves a similar purpose as `UnsafeCell`, allowing people to build interior mutability abstractions such as `Cell` `Mutex` `Channel` etc. In bevy `UnsafeWorldCell` will be used to support the scheduler and system param implementations as these are interior mutability abstractions for `World`, it also currently is used to implement `WorldCell`. We're planning to use `UnsafeEntityCell` to implement versions of `EntityRef`/`EntityMut` that only have access to the components on the entity rather than the entire world.
 
 These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy/pull/6404), [#7381](https://github.com/bevyengine/bevy/pull/7381) and [#7568](https://github.com/bevyengine/bevy/pull/7568).
+
+## StandardMaterial Blend Modes
+
+<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
+
+The [`AlphaMode`] enum has been extended in **Bevy 0.10**, bringing support for _additive and multiplicative blending_ to the [`StandardMaterial`]. These two blend modes are staples of the “classic” (non physically-based) computer graphics toolbelt, and are commonly used to achieve a variety of effects.
+
+<video controls loop><source src="demo-ruins.mp4" type="video/mp4"/></video>
+
+_Demo showcasing the use of blend modes to create stained glass and fire effects._ (<a href="https://github.com/coreh/bevy-demo-ruins">Source Code</a>)
+
+Additionally, support for semi-transparent textures with [premultiplied alpha](https://en.wikipedia.org/wiki/Alpha_compositing#Straight_versus_premultiplied) has been added, via a dedicated alpha mode.
+
+Here's a high-level overview of the new modes:
+
+* [`AlphaMode::Add`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Add) — Combines the colors of the fragments with the colors behind them in an additive process, (i.e. like light) producing **brighter** results. Useful for effects like fire, holograms, ghosts, lasers and other energy beams. Also known as _Linear Dodge_ in graphics software.
+* [`AlphaMode::Multiply`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Multiply) — Combines the colors of the fragments with the colors behind them in a multiplicative process, (i.e. like pigments) producing **darker** results. Useful for effects approximating partial light transmission like stained glass, window tint film and some colored liquids.
+* [`AlphaMode::Premultiplied`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Premultiplied) — Behaves very similarly to [`AlphaMode::Blend`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html#variant.Blend), but assumes the color channels have **premultiplied alpha**. Can be used to avoid discolored “outline” artifacts that can occur when using plain alpha-blended textures, or to cleverly create materials that combine additive and regular alpha blending in a single texture, thanks to the fact that for otherwise constant RGB values, `Premultiplied` behaves more like `Blend` for alpha values closer to 1.0, and more like `Add` for alpha values closer to 0.0.
+
+![The new blend_modes example.](blend-modes.png)
+
+**Note:** Meshes using the new blend modes are drawn on the existing `Transparent3d` render phase, and therefore the same _z-sorting considerations/limitations_ from `AlphaMode::Blend` apply.
+
+[`AlphaMode`]: https://docs.rs/bevy/0.10.0/bevy/pbr/enum.AlphaMode.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.StandardMaterial.html
+
+## Distance and Atmospheric Fog
+
+<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
+
+Bevy can now render distance and atmospheric fog effects, bringing a heightened sense of _depth_ and _ambiance_ to your scenes by making objects appear dimmer the further away they are from view.
+
+![The new fog example showcases different fog modes and parameters.](fog.png)
+
+Fog is controllable per-camera via the new [`FogSettings`] component. Special care has been put in exposing several knobs to give you full artistic control over the look of your fog, including the ability to fade the fog in and out by controlling the alpha channel of the fog color.
+
+```rust
+commands.spawn((
+    Camera3dBundle::default(),
+    FogSettings {
+        color: Color::rgba(0.1, 0.2, 0.4, 1.0),
+        falloff: FogFalloff::Linear { start: 50.0, end: 100.0 },
+    },
+));
+```
+
+_Exactly how_ fog behaves with regards to distance is controlled via the [`FogFalloff`] enum. All of the “traditional” fog falloff modes from the fixed-function OpenGL 1.x / DirectX 7 days are supported:
+
+`FogFalloff::Linear` increases in intensity linearly from 0 to 1 between `start` and `end` parameters. (This example uses values of 0.8 and 2.2, respectively.)
+
+<svg width="370" height="212" viewBox="0 0 370 212" fill="none">
+<path d="M331 151H42V49" stroke="currentColor" stroke-width="2"/>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="136" y="173.864">1</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="30" y="53.8636">1</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="42" y="173.864">0</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="232" y="173.864">2</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="332" y="173.864">3</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="161" y="190.864">distance</tspan></text>
+<text font-family="sans-serif" transform="translate(10 132) rotate(-90)" fill="currentColor" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="0" y="11.8636">fog intensity</tspan></text>
+<path d="M43 150H117.227L263 48H331" stroke="#FF00E5"/>
+<path d="M118 151V49" stroke="#FF00E5" stroke-dasharray="1 4"/>
+<path d="M263 151V49" stroke="#FF00E5" stroke-dasharray="1 4"/>
+<text font-family="sans-serif" fill="#FF00E5" style="white-space: pre" font-family="Inter" font-size="10" letter-spacing="0em"><tspan x="121" y="58.6364">start</tspan></text>
+<text font-family="sans-serif" fill="#FF00E5" style="white-space: pre" font-family="Inter" font-size="10" letter-spacing="0em"><tspan x="267" y="58.6364">end</tspan></text>
+</svg>
+
+`FogFalloff::Exponential` increases according to an (inverse) exponential formula, controlled by a `density` parameter.
+
+<svg width="370" height="212" viewBox="0 0 370 212" fill="none">
+<mask id="mask0_3_31" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="42" y="42" width="286" height="108">
+<rect x="42" y="42" width="286" height="108" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_3_31)">
+<path d="M42 150C42 150 98.3894 53 254.825 53L662 53" stroke="#FF003D" stroke-width="1"/>
+<path d="M42 150C42 150 139.499 53 409.981 53L1114 53" stroke="#001AFF" stroke-width="1"/>
+<path d="M42 150C42 150 206.348 53 662.281 53L1849 53" stroke="#14FF00" stroke-width="1"/>
+</g>
+<path d="M331 151H42V49" stroke="currentColor" stroke-width="2"/>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="136" y="173.864">1</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="30" y="53.8636">1</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="42" y="173.864">0</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="232" y="173.864">2</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="332" y="173.864">3</tspan></text>
+<text font-family="sans-serif" fill="#FF003D" style="white-space: pre" font-size="10" letter-spacing="0em"><tspan x="77" y="64.6364">density = 2</tspan></text>
+<text font-family="sans-serif" fill="#001AFF" style="white-space: pre" font-size="10" letter-spacing="0em"><tspan x="236" y="76.6364">density = 1</tspan></text>
+<text font-family="sans-serif" fill="#14FF00" style="white-space: pre" font-size="10" letter-spacing="0em"><tspan x="205" y="115.636">density = 0.5</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="161" y="190.864">distance</tspan></text>
+<text font-family="sans-serif" transform="translate(10 132) rotate(-90)" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="0" y="11.8636">fog intensity</tspan></text>
+</svg>
+
+`FogFalloff::ExponentialSquared` grows according to a slightly modified (inverse) exponential square formula, also controlled by a `density` parameter.
+
+<svg width="370" height="212" viewBox="0 0 370 212" fill="none">
+<mask id="mask0_1_3" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="42" y="42" width="286" height="108">
+<rect x="42" y="42" width="286" height="108" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_3)">
+<path d="M42 150C75.4552 150 74.9241 53.1724 166.262 53.1724L404 53.1724" stroke="#FF003D" stroke-width="1"/>
+<path d="M42 150C107.986 150 106.939 53.1724 287.091 53.1724L756 53.1724" stroke="#001AFF" stroke-width="1"/>
+<path d="M42 150C166.394 150 164.42 53.1724 504.035 53.1724L1388 53.1724" stroke="#14FF00" stroke-width="1"/>
+</g>
+<path d="M331 151H42V49" stroke="currentColor" stroke-width="2"/>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="136" y="173.864">1</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="30" y="53.8636">1</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="42" y="173.864">0</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="232" y="173.864">2</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="332" y="173.864">3</tspan></text>
+<text font-family="sans-serif" fill="#FF003D" style="white-space: pre" font-size="10" letter-spacing="0em"><tspan x="61" y="54.6364">density = 2</tspan></text>
+<text font-family="sans-serif" fill="#001AFF" style="white-space: pre" font-size="10" letter-spacing="0em"><tspan x="168" y="84.6364">density = 1</tspan></text>
+<text font-family="sans-serif" fill="#14FF00" style="white-space: pre" font-size="10" letter-spacing="0em"><tspan x="174" y="121.636">density = 0.5</tspan></text>
+<text font-family="sans-serif" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="161" y="190.864">distance</tspan></text>
+<text font-family="sans-serif" transform="translate(10 132) rotate(-90)" fill="currentColor" style="white-space: pre" font-size="12" letter-spacing="0em"><tspan x="0" y="11.8636">fog intensity</tspan></text>
+</svg>
+
+Additionally, a more sophisticated `FogFalloff::Atmospheric` mode is available which provides _more physically accurate_ results by taking light `extinction` and `inscattering` into account separately.
+
+[`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
+
+![The new atmospheric_fog example showcases a terrain with atmospheric fog and directional light influence.](atmospheric-fog.png)
+
+Since directly controlling the non-linear fog falloff parameters “by hand” can be tricky to get right, a number of helper functions based on [meteorological visibility](https://en.wikipedia.org/wiki/Visibility) are available, such as [`FogFalloff::from_visibility()`](https://docs.rs/bevy/0.10.0/bevy/pbr/enum.FogFalloff.html#method.from_visibility):
+
+```rust
+FogSettings {
+    // objects retain visibility (>= 5% contrast) for up to 15 units
+    falloff: FogFalloff::from_visibility(15.0),
+    ..default()
+}
+```
+
+Fog is applied “forward rendering-style” on the PBR fragment shader, instead of as a post-processing effect, which allows it to properly handle semi-transparent meshes.
+
+The atmospheric fog implementation is largely based on [this great article](https://iquilezles.org/articles/fog/) by Inigo Quilez, Shadertoy co-creator and computer graphics legend. _Thanks for the great write up and inspiration!_
+
+[`FogSettings`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.FogSettings.html
+[`FogFalloff`]: https://docs.rs/bevy/0.10.0/bevy/pbr/enum.FogFalloff.html
+[`DirectionalLight`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.DirectionalLight.html
 
 ## Cylinder Shape
 
