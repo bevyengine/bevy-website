@@ -761,7 +761,7 @@ Bevy's [`Plane`] shape can now be subdivided any number of times.
 
 <div class="release-feature-authors">authors: @ickk</div>
 
-The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** changes it from being an `is_visible: bool` to an enum with multiple modes:
+The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** reworked the type definition: rather having a single `is_visible: bool` field, we now use an enum with an additional mode:
 
 ```rust
 pub enum Visibility {
