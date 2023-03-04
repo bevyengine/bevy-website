@@ -1303,7 +1303,7 @@ Bevy has [joined `egui`](https://github.com/emilk/egui/pull/2294) in making the 
 To our knowledge, this makes Bevy the first general purpose game engine with first-party acessibility support.
 
 We've exposed Bevy's UI hierarchy and text elements to screen readers and other assistive devices, managed by the new on-by-default `bevy_a11y` crate.
-This is ultimately powered by the new [`AccesibilityNode`](TODO) component, which combines with the existing hierarchy to expose this information directly to AccessKit and the [`Focus`](https://dev-docs.bevyengine.org/bevy/a11y/struct.Focus.html) resource, which stores the entity that has focus.
+This is ultimately powered by the new [`AccesibilityNode`](https://dev-docs.bevyengine.org/bevy/a11y/struct.AccessibilityNode.html) component, which combines with the existing hierarchy to expose this information directly to AccessKit and the [`Focus`](https://dev-docs.bevyengine.org/bevy/a11y/struct.Focus.html) resource, which stores the entity that has focus.
 
 There's still a lot more to be done here: integrating the focus system with a [gamepad-driven UI controls](https://github.com/bevyengine/rfcs/pull/41) solution, cleaning up the data model to [make sure "accessible by default" is a reality](https://github.com/bevyengine/bevy/issues/7862)), and adding support for remaining features in AccessKit.
 
