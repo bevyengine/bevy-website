@@ -1296,14 +1296,14 @@ fn run_or_attack(
 <div class="release-feature-authors">authors: @ndarilek</div>
 
 Games are for everyone: and the way they're built should reflect that.
-Acessible games are rare, and proper support is often an afterthought, both at an engine and a game level.
-By building our UI solution with acessibility in mind, we hope to fix that.
+Accessible games are rare, and proper support is often an afterthought, both at an engine and a game level.
+By building our UI solution with accessibility in mind, we hope to fix that.
 
 Bevy has [joined `egui`](https://github.com/emilk/egui/pull/2294) in making the first steps towards cross-platform accessibility-by-default, with the help of the outstanding [AccessKit](https://github.com/AccessKit/accesskit) crate.
-To our knowledge, this makes Bevy the first general purpose game engine with first-party acessibility support.
+To our knowledge, this makes Bevy the first general purpose game engine with first-party accessibility support.
 
 We've exposed Bevy's UI hierarchy and text elements to screen readers and other assistive devices, managed by the new on-by-default `bevy_a11y` crate.
-This is ultimately powered by the new [`AccesibilityNode`](https://dev-docs.bevyengine.org/bevy/a11y/struct.AccessibilityNode.html) component, which combines with the existing hierarchy to expose this information directly to AccessKit and the [`Focus`](https://dev-docs.bevyengine.org/bevy/a11y/struct.Focus.html) resource, which stores the entity that has focus.
+This is ultimately powered by the new [`AccessibilityNode`](https://dev-docs.bevyengine.org/bevy/a11y/struct.AccessibilityNode.html) component, which combines with the existing hierarchy to expose this information directly to AccessKit and the [`Focus`](https://dev-docs.bevyengine.org/bevy/a11y/struct.Focus.html) resource, which stores the entity that has keyboard focus.
 
 There's still a lot more to be done here: integrating the focus system with a [gamepad-driven UI controls](https://github.com/bevyengine/rfcs/pull/41) solution, cleaning up the data model to [make sure "accessible by default" is a reality](https://github.com/bevyengine/bevy/issues/7862)), and adding support for remaining features in AccessKit.
 
