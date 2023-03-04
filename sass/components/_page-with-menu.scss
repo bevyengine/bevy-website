@@ -1,5 +1,6 @@
 .page-with-menu {
     $margin-top: 24px;
+    $sidebar-width: 250px;
 
     display: grid;
     grid-gap: 24px;
@@ -9,7 +10,7 @@
     
     @media #{$bp-tablet-landscape-up} {
         margin-top: $margin-top;
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: $sidebar-width 1fr;
         grid-template-areas: 'menu content';
     }
 
@@ -28,7 +29,7 @@
 
         position: sticky;
         top: calc(var(--header-height) + #{$margin-top});
-        height: calc(100vh - var(--header-height) - #{$margin-top});
+        height: calc(100vh - var(--header-height) - #{$margin-top * 2});
         overflow-y: auto;
         padding-bottom: $margin-top;
     }
@@ -36,5 +37,12 @@
     &__content {
         grid-area: content;
         overflow-x: hidden;
+    }
+
+    &--news {
+        @media #{$bp-tablet-landscape-up} {
+            grid-template-columns: 1fr $sidebar-width;
+            grid-template-areas: 'content menu';
+        }
     }
 }
