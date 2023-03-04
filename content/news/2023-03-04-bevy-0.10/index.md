@@ -1178,6 +1178,32 @@ const COOL_STYLE: Style = Style {
 
 [`Default`]: https://doc.rust-lang.org/std/default/trait.Default.html
 
+## Iterating through a World's Entities
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+In **Bevy 0.9**, `World::iter_entities` allows users to get an iterator over all of the entities in the `World` in `Entity` form. In **Bevy 0.10**, this has been changed to be an iterator over `EntityRef`, which gives full read-only access to all of the entity's components instead of just getting its ID. Its new implementation should also be significantly faster than fetching the `EntityRef` by hand (though note that a `Query` will still be faster if you know the exact components you're looking for). This gives users free reign to arbitrarily read any entity data from the World, and may see use in scripting language integrations and reflection-heavy workflows.
+
+```rust
+// Bevy 0.9
+for entity in world.iter_entities() {
+   if let Some(entity_ref) = world.get_entity(entity) {
+      if let Some(component) = entity_ref.get::<MyComponent>() {
+         ...
+      }
+   }
+}
+
+// Bevy 0.10
+for entity_ref in world.iter_entities() {
+   if let Some(component) = entity_ref.get::<MyComponent>() {
+      ...
+   }
+}
+```
+
+In the future, we may have a `World::iter_entities_mut` that exposes this functionality, but gives arbitrary mutable access to all entities in the `World`. We avoided implementing this for now due to the potential safety concerns of returning an iterator of `EntityMut`. For more details, see this [GitHub issue](https://github.com/bevyengine/bevy/issues/5504).
+
 ## LCH Color Space
 
 <div class="release-feature-authors">authors: @ldubos</div>
@@ -1268,6 +1294,61 @@ We take CI pretty seriously in Bevy land and we're always on the lookout for new
 ## The First Subject Matter Expert Release
 
 This was our first release using our new [Subject Matter Expert (SME) system](/news/scaling-bevy-development/). We merged an absolutely massive amount of changes, and this was _despite_ our Project Lead `@cart` being away for about a month for Christmas and snowboarding vacations. We maintained a high quality bar and built amazing things. Suffice it to say the future is looking bright (and sustainable)! Stay tuned for more SME appointments in more areas.
+
+## Smooth Skeletal Animation Transitions
+
+<div class="release-feature-authors">authors: @smessmer</div>
+
+You can now smoothly transition between two (or more) skeletal animations!
+
+<video controls loop><source  src="animation_transition.mp4" type="video/mp4"/></video>
+
+<div style="font-size: 1.0rem" class="release-feature-authors">Character model and animations are royalty free assets from Mixamo.
+</div>
+
+With the new [`play_with_transition`] method on the [`AnimationPlayer`] component, you can now specify a transition duration during which the new animation will be linearly blended with the currently playing animation, whose weight will decrease during that duration until it reaches `0.0`.
+
+```rust
+#[derive(Component, Default)]
+struct ActionTimer(Timer);
+
+#[derive(Component)]
+struct Animations {
+    run: Handle<AnimationClip>,
+    attack: Handle<AnimationClip>,
+}
+
+fn run_or_attack(
+    mut query: Query<(&mut AnimationPlayer, &mut ActionTimer, &Animations)>,
+    keyboard_input: Res<Input<KeyCode>>,
+    animation_clips: Res<Assets<AnimationClip>>,
+    time: Res<Time>,
+) {
+    for (mut animation_player, mut timer, animations) in query.iter_mut() {
+        // Trigger the attack animation when pressing <space>
+        if keyboard_input.just_pressed(KeyCode::Space) {
+            let clip = animation_clips.get(&animations.attack).unwrap();
+            // Set a timer for when to restart the run animation
+            timer.0 = Timer::new(
+                Duration::from_secs_f32(clip.duration() - 0.5),
+                TimerMode::Once,
+            );
+            // Will transition over half a second to the attack animation
+            animation_player
+                .play_with_transition(animations.attack.clone(), Duration::from_secs_f32(0.5));
+        }
+        if timer.0.tick(time.delta()).just_finished() {
+            // Once the attack animation is finished, restart the run animation
+            animation_player
+                .play_with_transition(animations.run.clone(), Duration::from_secs_f32(0.5))
+                .repeat();
+        }
+    }
+}
+```
+
+[`AnimationPlayer`]: https://docs.rs/bevy/0.10.0/bevy/animation/struct.AnimationPlayer.html
+[`play_with_transition`]: https://docs.rs/bevy/0.10/bevy/animation/struct.AnimationPlayer.html#method.play_with_transition
 
 ## What's Next?
 
