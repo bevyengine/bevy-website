@@ -863,7 +863,7 @@ for entity_ref in world.iter_entities() {
 }
 ```
 
-In the future, we may have a `World::iter_entities_mut` that exposes this but gives arbitrary mutable access to all entities in the `World`. We explicitly avoided implementing this due to the potential safety concerns of returning an iterator of `EntityMut`. For more details, see this [GitHub issue](https://github.com/bevyengine/bevy/issues/5504).
+In the future, we may have a `World::iter_entities_mut` that exposes this functionality, but gives arbitrary mutable access to all entities in the `World`. We avoided implementing this for now due to the potential safety concerns of returning an iterator of `EntityMut`. For more details, see this [GitHub issue](https://github.com/bevyengine/bevy/issues/5504).
 
 ## What's Next?
 
