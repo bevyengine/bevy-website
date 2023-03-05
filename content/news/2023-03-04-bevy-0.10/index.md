@@ -45,7 +45,7 @@ Schedule v3 is the culmination of significant design and implementation work. Sc
 
 There's been a lot of changes, but we've put a lot of care into ensuring the [migration path](/learn/book/migration-guides/0.9-0.10/) for existing applications is relatively straightforward. Don't sweat it!
 
-Lets take a look at what shipped in 0.10!
+Let's take a look at what shipped in 0.10!
 
 ### A Single Unified Schedule
 
@@ -57,7 +57,7 @@ This simplifies our internal logic, makes your code more robust to refactoring, 
 
 [![main_schedule_diagram](main_schedule_diagram.svg)](main_schedule_diagram.svg)
 
-This diagram, made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
+This diagram made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
 
 ### Configurable System Sets
 
@@ -66,7 +66,7 @@ To support more natural and flexible control over "how are my systems run and sc
 Every system, once it is part of a schedule, stores **system configuration** metadata: which run conditions are attached, how they are ordered relative to other systems or sets and so on.
 **System sets** are named collections of systems that share system configuration across all of their members. This is both distributive and additive: ordering systems relative to a system set applies that ordering to _all_ systems in that set, in addition to any configuration on each individual system.
 
-Let's jump right in to what this would look like.
+Let's jump right into what this would look like.
 
 ```rust
 // System set types are used to provide stable, typed identifiers
@@ -106,7 +106,7 @@ app
         // Previously, this would have been impossible,
         // as `CollisionDetection` is run in `Update`, which would be represented by a different stage
         .before(PhysicsSet::CollisionDetection)
-        // Ooh run condition combinators :eyes:
+        // Ooh run condition combinators 👀
         .run_if(not(game_paused))
     )
     .configure_set(
@@ -119,7 +119,7 @@ A system can belong to any number of sets, adding the configuration from each se
 
 These rules must be compatible with each other: any paradoxes (like a system set inside of itself, or a system that must run both before and after a set) will result in a runtime panic with a helpful error message.
 
-As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elsewhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
+As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elsewhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both an "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
 ### Directly Schedule Exclusive Systems
 
@@ -197,7 +197,7 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 4. **Rendering:** all rendering logic is stored in its own schedule to allow it to run asynchronously relative to gameplay logic.
 5. **Controlling the outermost loop:** in order to handle the "startup schedule first, then main schedule" logic, we wrap it all up in a minimal overhead `CoreSchedule::Outer` and then run our schedules as the sole exclusive system there.
 
-Follow the bread crumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSchedule.html) for more info.
+Follow the breadcrumbs starting at [`CoreSchedule`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSchedule.html) for more info.
 
 ### Simpler Run Conditions
 
@@ -289,7 +289,7 @@ If you were relying on the state stack, you might choose to:
 
 ### Base Sets: Getting Default Behavior Right
 
-Of course the skeptical reader may point out that:
+Of course, the skeptical reader may point out that:
 
 1. Bevy automatically runs its systems in parallel.
 2. [The order of systems is nondeterministic unless there is an explicit ordering relationship between them](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/nondeterministic_system_order.rs)?
@@ -424,7 +424,7 @@ We've also:
   * we already default to this on WASM, so don't worry about setting it up for your jam games!
   * wish commands just applied instantly? We've got you: use [`SimpleExecutor`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.SimpleExecutor.html) and trade performance for clarity and convenience to your heart's content.
 * Added ultra-convenient prebuilt error-handling system piping adaptors in [#6751 by `@edwox`](https://github.com/bevyengine/bevy/pull/6751) so you can quickly and easily use the `?` operator in your Bevy systems and log any failure cases
-  * Put an end to the rightward drift: just use `.add_system(fallible_system.pipe(system_adaptor::warn)))` :heart_eyes:
+  * Put an end to the rightward drift: just use `.add_system(fallible_system.pipe(system_adaptor::warn)))` 😍
 * Removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs and are no longer needed due to the much improved ergonomics of ordering systems in other forms
 * Made sure you can pipe data into and out of exclusive systems in [#6698 by `@inodentry`](https://github.com/bevyengine/bevy/pull/6698)
 * Significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.ScheduleBuildSettings.html) docs for more info. If you haven't tried this out on your app yet: you should take a look!
@@ -798,7 +798,7 @@ From the 3D software package we know and love!
 
 <div class="release-feature-authors">authors: @DGriffin91</div>
 
-We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per-camera using the new [`ColorGrading`] component
+We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per-camera using the new [`ColorGrading`] component.
 
 [`ColorGrading`]: https://docs.rs/bevy/0.10.0/bevy/render/view/struct.ColorGrading.html
 
@@ -1347,7 +1347,7 @@ pub struct Car {
 
 **Bevy 0.10** now uses the latest and greatest [`wgpu`](https://github.com/gfx-rs/wgpu) (our choice of low level graphics layer). In addition to [a number of nice API improvements and bug fixes](https://github.com/gfx-rs/wgpu/releases/tag/v0.15.0), `wgpu` now uses the DXC shader compiler for DX12, which is faster, less buggy, and allows for new features.
 
-## Enabled OpenGL Backend By Default
+## Enabled OpenGL Backend by Default
 
 <div class="release-feature-authors">authors: @wangling12</div>
 
