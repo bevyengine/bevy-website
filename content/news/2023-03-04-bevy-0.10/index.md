@@ -495,7 +495,7 @@ Previously, the shader used for shadow mapping was hard-coded and had no knowled
 As a bonus, the availability of `Material` information during shadow mapping means that we could instantly enable alpha mask shadows allowing foliage to cast shadows according to the alpha values in their texture rather than only based on their geometry.
 
 ![Alpha mask shadows](alpha_mask_shadows.png)
-<p class="release-feature-authors">[NVIDIA ORCA Emerald Square scene](https://developer.nvidia.com/orca/nvidia-emerald-square) ([CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)) with alpha mask shadow support</p>
+<div style="font-size: 1.0rem" class="release-feature-authors"><a href="https://developer.nvidia.com/orca/nvidia-emerald-square">NVIDIA ORCA Emerald Square scene</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA 3.0</a>) with alpha mask shadow support</div>
 
 ## Smooth Skeletal Animation Transitions
 
@@ -995,7 +995,7 @@ fn my_system(mut events: Deferred<EventBuffer<MyEvent>>) {
 
 Note that this feature should be used with care -- despite the potential performance benefits, inappropriate usage can actually _worsen_ performance. Any time you perform an optimization, make sure you check that it actually speeds things up!
 
-[`SystemBuffer`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.SystemBuffer.html 
+[`SystemBuffer`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.SystemBuffer.html
 
 ## Ref&lt;T&gt; Queries
 
@@ -1681,7 +1681,7 @@ We take CI pretty seriously in Bevy land and we're always on the lookout for new
 
 This was our first release using our new [Subject Matter Expert (SME) system](/news/scaling-bevy-development/). We merged an absolutely massive amount of changes, and this was _despite_ our Project Lead `@cart` being away for about a month for Christmas and snowboarding vacations. We maintained a high quality bar and built amazing things. Suffice it to say the future is looking bright (and sustainable)! Stay tuned for more SME appointments in more areas.
 
-## What's Next?
+## <a name="what-s-next"></a>What's Next?
 
 * **Asset System Evolution**: We've made good progress on the [next iteration of the Bevy Asset System](https://github.com/bevyengine/bevy/discussions/3972), which will add the ability to preprocess assets and improve the flexibility and usability of the asset system.
 * **Kicking off the Bevy Editor Effort**: We are ready to start shifting our focus to building out the Bevy Editor! We've started [gathering requirements](https://github.com/bevyengine/bevy/discussions/7100) and would like to start the initial design phase in the **Bevy 0.11** cycle.  
