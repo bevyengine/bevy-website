@@ -1,6 +1,13 @@
 .migration-guide {
-    > h3 {
-        margin-bottom: 0.2rem;
+    h3 {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        margin-bottom: 0.1rem;
+        border-top: solid darken($color-white, 60%) 1px;
+    }
+
+    p, ul, li, code {
+        font-size: 1rem;
     }
 }
 
@@ -18,6 +25,8 @@
     padding-right: 0.2rem;
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
     line-height: 1;
     border-radius: 0.3rem;
     border-style: solid;
