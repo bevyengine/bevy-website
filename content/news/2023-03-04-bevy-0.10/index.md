@@ -764,13 +764,13 @@ This is generally not recommended as HDR lighting is not intended to be used as 
 
 ### Reinhard
 
-A simple method that adapts to the color in a scene: `r = color / (1.0 + color)`. Suffers from lots hue shifting, brights don't desaturate naturally. Bright primaries and secondaries don't desaturate at all.
+A simple method that adapts to the color in a scene: `r = color / (1.0 + color)`. Lots of hue shifting, brights don't desaturate naturally. Bright primaries and secondaries don't desaturate at all.
 
 ![reinhard](tm_reinhard.png)
 
 ### Reinhard Luminance
 
-A popular method similar to normal Reinhard that incorporates luminance. It adapts to the amount of light in a scene. This is what we had in previous versions of Bevy. It is still our default algorithm, but this will likely change in the future. Suffers from hue shifting. Brights don't desaturate much at all across the spectrum.
+A popular method similar to normal Reinhard that incorporates luminance. It adapts to the amount of light in a scene. This is what we had in previous versions of Bevy. It is still our default algorithm, but this will likely change in the future. Hues shift. Brights don't desaturate much at all across the spectrum.
 
 ![reinhard luminance](tm_reinhard_luminance.png)
 
@@ -813,7 +813,7 @@ To avoid posterization, selective desaturation is employed, with care to avoid t
 
 ### Blender Filmic
 
-Default Filmic Display Transform from Blender. Somewhat neutral. Suffers from hue shifting. Brights desaturate across the spectrum.
+Default Filmic Display Transform from Blender. Somewhat neutral. Hues shift. Brights desaturate across the spectrum.
 
 ![Blender Filmic](tm_blender_filmic.png)
 
