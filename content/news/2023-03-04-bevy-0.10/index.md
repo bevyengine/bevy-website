@@ -21,12 +21,12 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **ECS Schedule v3**: Bevy now has much simpler, more flexible scheduling. Systems are now stored in a unified schedule, commands can be applied explicitly via `apply_system_buffers`, and a whole lot of quality of life and bug fixes.
 * **Cascaded Shadow Maps**: Higher quality shadow maps that cover larger distances, where the quality follows the camera.
-* **Environment Map Lighting**: 360 ambient image based lighting that can cheaply and drastically improve the visual quality of a scene.
+* **Environment Map Lighting**: 360 degree ambient image based lighting that can cheaply and drastically improve the visual quality of a scene.
 * **Depth and Normal Prepass**: Render depth and normal textures for a scene prior to the main pass, enabling new effects and (in some cases) improved performance. Shadow mapping uses the prepass shaders, which enables transparent textures to cast shadows.
 * **Smooth Skeletal Animation Transitions**: Smoothly transition between two skeletal animations playing at the same time!
 * **Improved Android Support**: Bevy now works out of the box on more Android devices (with a couple of caveats)
 * **Revamped Bloom**: Bloom now looks better, is easier to control, and has fewer visual artifacts.
-* **Distance and Atmospheric Fog**: Add depth and ambience to your scene with 3D distance and atmospheric fog effects!
+* **Distance and Atmospheric Fog**: Add depth and ambiance to your scene with 3D distance and atmospheric fog effects!
 * **StandardMaterial Blend Modes**: Achieve a variety of interesting effects with more PBR material blend modes.
 * **More Tonemapping Choices**: Choose one of the 7 popular tonemapping algorithms for your HDR scenes to achieve the visual style you are looking for.
 * **Color Grading**: Control per-camera exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation".
@@ -53,7 +53,7 @@ Have you ever wanted to specify that `system_a` runs before `system_b`, only to 
 
 No more! All systems within a single **schedule** are now stored in a single data structure with a global awareness of what's going on.
 
-This simplifies our internal logic, makes your code more robust to refactoring, and allows plugin authors to specify high-level invariants (e.g. "movement must occur before collision checking") without locking themselves in to an exact schedule location.
+This simplifies our internal logic, makes your code more robust to refactoring, and allows plugin authors to specify high-level invariants (e.g. "movement must occur before collision checking") without locking themselves into an exact schedule location.
 
 [![main_schedule_diagram](main_schedule_diagram.svg)](main_schedule_diagram.svg)
 
@@ -63,7 +63,7 @@ This diagram made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://g
 
 To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
 
-Every system, once it is part of a schedule, stores **system configuration** metadata: which run conditions are attached, how they are ordered relative to other systems or sets and so on.
+Every system, once it is part of a schedule, stores **system configuration** metadata: which run conditions are attached, how they are ordered relative to other systems or sets, and so on.
 **System sets** are named collections of systems that share system configuration across all of their members. This is both distributive and additive: ordering systems relative to a system set applies that ordering to _all_ systems in that set, in addition to any configuration on each individual system.
 
 Let's jump right into what this would look like.
@@ -82,7 +82,7 @@ enum PhysicsSet {
 
 app
     // .with_run_criteria -> .run_if <3
-    // Note that in this case we're modifying this single `gravity` system, not the entire `PhysicsSet::Forces`
+    // Note that in this case, we're modifying this single `gravity` system, not the entire `PhysicsSet::Forces`
     // as this is a method on a single system.
     // The order of these method calls doesn't matter!
    .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
@@ -134,7 +134,7 @@ app
     .add_system(exclusive_system.after(ordinary_system))
 ```
 
-This is particularly powerful, as **command flushes** (which apply any queued up `Commands` added in systems to e.g. spawn and despawn entities) are now simply performed in the `apply_system_buffers` exclusive system.
+This is particularly powerful, as **command flushes** (which apply any queued-up `Commands` added in systems to e.g. spawn and despawn entities) are now simply performed in the `apply_system_buffers` exclusive system.
 
 ```rust
 app
@@ -156,9 +156,9 @@ What will you do with this much power? We're keen to find out!
 
 ### It's All Schedules? Managing complex control flow
 
-But what if you want to do something _weird_ with your schedule. Something non-linear, or branching, or looping. What should you reach for?
+But what if you want to do something _weird_ with your schedule? Something non-linear, branching, or looping. What should you reach for?
 
-It turns out, Bevy already _had_ a great tool for this: schedules run inside of an exclusive system. The idea is pretty simple:
+It turns out, Bevy already _had_ a great tool for this: schedules that run inside of an exclusive system. The idea is pretty simple:
 
 1. Construct a schedule, that stores whatever complex logic you want to run.
 2. Store that schedule inside of a resource.
@@ -178,7 +178,7 @@ struct MySchedule;
 
 // An exclusive system to run this schedule
 fn run_my_schedule(world: &mut World) {
-    while very_complex_logic(){
+    while very_complex_logic() {
         world.run_schedule(MySchedule);
     }
 }
@@ -193,7 +193,7 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 
 1. **Startup systems:** these now live in their own schedule, which is run once at the start of the app.
 2. **Fixed timestep systems:** another schedule?! The exclusive system that runs this schedule accumulates time, running a while loop that repeatedly runs `CoreSchedule::FixedTimestep` until all of the accumulated time has been spent.
-3. **Entering and exiting states:** a bonanza of schedules. Each collection of systems that runs logic to enter and exit a state variant is stored in its own schedule, which are called based on the change in state in the `apply_state_transitions::<S>` exclusive system.
+3. **Entering and exiting states:** a bonanza of schedules. Each collection of systems that runs logic to enter and exit a state variant is stored in its own schedule, which is called based on the change in state in the `apply_state_transitions::<S>` exclusive system.
 4. **Rendering:** all rendering logic is stored in its own schedule to allow it to run asynchronously relative to gameplay logic.
 5. **Controlling the outermost loop:** in order to handle the "startup schedule first, then main schedule" logic, we wrap it all up in a minimal overhead `CoreSchedule::Outer` and then run our schedules as the sole exclusive system there.
 
@@ -211,19 +211,19 @@ For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
 
 ```rust
 // Let's make our own run condition
-fn game_end_condition(query: Query<&Player>, score: Res<Score>) -> bool {
+fn game_win_condition(query: Query<&Player>, score: Res<Score>) -> bool {
     let player = query.single();
     player.is_alive() && score.0 > 9000
 }
 
-app.add_system(win_game.run_if(game_end_condition));
+app.add_system(win_game.run_if(game_win_condition));
 ```
 
-Run conditions can serve as a lightweight optimization tool: each one is evaluated only each schedule update, and shared across the system set. Reducing the number of tasks spawned can really add up. Like always though: benchmark!
+Run conditions can also serve as a lightweight optimization tool. Run conditions are evaluated on the main thread, and each run criteria is evaluated exactly once each schedule update, at the time of the first system in the set that relies on it. Systems disabled by run conditions don't spawn a task, which can add up across many systems. Like always though: benchmark!
 
 Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://dev-docs.bevyengine.org/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579), [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), and [#7866 by `@jabuwu`](https://github.com/bevyengine/bevy/pull/7866) you can easily run systems if there are events to process, timers that elapsed, resources that changed, input state changes, and more.
 
-When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run condition combinators.
+When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then`, or `or_else` run condition combinators.
 
 ### Simpler States
 
@@ -299,9 +299,9 @@ Of course, the skeptical reader may point out that:
 Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ordering ambiguity?
 Many users _liked_ stages, they were helpful for understanding the structure of my app!
 
-Well, I'm glad you asked, rhetorical skeptic. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSet.html), [`StartupSet`](https://dev-docs.bevyengine.org/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://dev-docs.bevyengine.org/bevy/render/enum.RenderSet.html). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html) and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
+Well, I'm glad you asked, rhetorical skeptic. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](https://dev-docs.bevyengine.org/bevy/app/enum.CoreSet.html), [`StartupSet`](https://dev-docs.bevyengine.org/bevy/app/enum.StartupSet.html), and [`RenderSet`](https://dev-docs.bevyengine.org/bevy/render/enum.RenderSet.html). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html), and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
 
-Some parts of the stage-centric architecture were appealing: a clear high level structure, coordination on flush points (to reduce excessive bottlenecks) and good default behavior.
+Some parts of the stage-centric architecture were appealing: a clear high-level structure, coordination on flush points (to reduce excessive bottlenecks), and good default behavior.
 To keep those bits (while excising the frustrating ones), we've introduced the concept of **base sets**, added in [#7466](https://github.com/bevyengine/bevy/pull/7466) by `@cart`. Base sets are system sets, except:
 
 1. Every system can belong to at most one base set.
@@ -330,7 +330,7 @@ app
 ```
 
 Pretty simple, but what does this buy us?
-First, it gives you a clear hook to impose, reason about and visualize high level structure to your schedule. Yearning for a linear, stage-like design? Just order your base sets!
+First, it gives you a clear hook to impose, reason about, and visualize high-level structure to your schedule. Yearning for a linear, stage-like design? Just order your base sets!
 Secondly, it allows Bevy to set good default behavior for systems added by users, without removing their control.
 
 Let me tell you a story, set in a world where all of our rhetorical skeptic's points above are true, and no default set is added.
@@ -341,9 +341,9 @@ Let me tell you a story, set in a world where all of our rhetorical skeptic's po
 4. The user runs a specialized tool, digs into the source code of the engine, figures out what order their system should run in relative to the engine's system sets, and then continues on their merry way, doing this for each new system.
 5. Bevy (or one of their third-party plugins) updates, breaking all of our poor users system ordering once again.
 
-In practice, there are three broad classes of systems: gameplay logic (the majority of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling) and stuff that needs to happen after gameplay logic (like rendering and audio).
+In practice, there are three broad classes of systems: gameplay logic (the majority of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling), and stuff that needs to happen after gameplay logic (like rendering and audio).
 
-By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
+By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high-level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 Let us know how it works out for you!
 
 ### Polish Matters
@@ -420,18 +420,18 @@ app.add_systems(
 
 We've also:
 
-* Added trivial single threaded evaluation via the [`SingleThreadedExecutor`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.SingleThreadedExecutor.html) for users who prefer alternate parallelization strategies (or simply don't need it) by `@maniwani` as part of the `bevy_ecs::schedule` rewrite
+* Added trivial single-threaded evaluation via the [`SingleThreadedExecutor`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.SingleThreadedExecutor.html) for users who prefer alternate parallelization strategies (or simply don't need it) by `@maniwani` as part of the `bevy_ecs::schedule` rewrite
   * we already default to this on WASM, so don't worry about setting it up for your jam games!
   * wish commands just applied instantly? We've got you: use [`SimpleExecutor`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.SimpleExecutor.html) and trade performance for clarity and convenience to your heart's content.
 * Added ultra-convenient prebuilt error-handling system piping adaptors in [#6751 by `@edwox`](https://github.com/bevyengine/bevy/pull/6751) so you can quickly and easily use the `?` operator in your Bevy systems and log any failure cases
   * Put an end to the rightward drift: just use `.add_system(fallible_system.pipe(system_adaptor::warn)))` 😍
-* Removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs and are no longer needed due to the much improved ergonomics of ordering systems in other forms
+* Removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs, and are no longer needed due to the much-improved ergonomics of ordering systems in other forms
 * Made sure you can pipe data into and out of exclusive systems in [#6698 by `@inodentry`](https://github.com/bevyengine/bevy/pull/6698)
 * Significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](https://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.ScheduleBuildSettings.html) docs for more info. If you haven't tried this out on your app yet: you should take a look!
 
 The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bevy_mod_debugdump`](https://crates.io/crates/bevy_mod_debugdump), the leading third-party schedule visualization plugin, to ensure it keeps working better than ever.
 
-It's a great tool that we are looking to build on to create a first party solution: you should strongly consider adding it to your toolbox.
+It's a great tool that we are looking to build on to create a first-party solution: you should strongly consider adding it to your toolbox.
 
 ## Cascaded Shadow Maps
 
@@ -449,13 +449,13 @@ Bevy uses "shadow maps" to cast shadows for lights / objects. Previous versions 
 
 Notice how the nearby shadows are highly detailed whereas the shadows in the distance become less detailed as they get farther away (which doesn't matter as much because they are far away).
 
-While shadow cascades solve important problems, they also introduce new ones. How many cascades should you use? What is the minimum and maximum distance from the camera where shadows should appear? How much overlap should there be between cascades? These parameters must be dialed in to fit a given scene.
+While shadow cascades solve important problems, they also introduce new ones. How many cascades should you use? What is the minimum and maximum distance from the camera where shadows should appear? How much overlap should there be between cascades? Be sure to dial in these parameters to fit your scenes.
 
 ## Environment Map Lighting
 
 <div class="release-feature-authors">authors: @JMS55</div>
 
-Environment maps are a popular and computationally cheap way to significantly improve the quality of a scene's lighting. It uses a cube map texture to provide 360 lighting "from all directions". This is especially apparent for reflective surfaces, but it applies to all lit materials.
+Environment maps are a popular and computationally cheap way to significantly improve the quality of a scene's lighting. It uses a cube map texture to provide 360 degree lighting "from all directions". This is especially apparent for reflective surfaces, but it applies to all lit materials.
 
 This is what the PBR material looks like without environment map lighting:
 
@@ -474,7 +474,7 @@ For scenes that need constant lighting (especially outdoor scenes), environment 
 <video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
 <p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
 
-Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing and many more. These are currently being worked on and should be available in the next release of bevy.
+Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing, and many more. These are currently being worked on and should be available in the next release of bevy.
 
 ![Edge detection](edge_detection.png)
 <p class="release-feature-authors">In the image on the right, green lines are edges detected in the normal texture and blue lines are edges detected in the depth texture</p>
@@ -482,7 +482,9 @@ Bevy now has the ability to run a depth and/or normal prepass. This means the de
 ![Edge detection prepass](edge_detection_prepass.png)
 <p class="release-feature-authors">The depth and normal textures generated by the prepass</p>
 
-Unfortunately, the prepass still has performance issues so it's currently disabled by default, but if you need to use it for a specific effect you can simply add the `DepthPrepass` component to your camera.
+Using the prepass essentially means rendering everything twice. The prepass itself is much faster since it does a lot less work than the main pass. The result of the prepass can be used to reduce overdraw in the main pass, but if your scene didn't already suffer from overdraw then enabling the prepass will negatively affect performance.  There are many things that can be done to improve this and we will keep working towards this goal. Like with anything performance related, make sure to measure it for your use case and see if it helps or not.
+
+The prepass is still very useful when working on special effects that require a depth or normal texture, so if you want to use it you can simply add the `DepthPrepass` or `NormalPrepass` components to your camera.
 
 ## Shadow Mapping using Prepass Shaders
 
@@ -493,7 +495,7 @@ Previously, the shader used for shadow mapping was hard-coded and had no knowled
 As a bonus, the availability of `Material` information during shadow mapping means that we could instantly enable alpha mask shadows allowing foliage to cast shadows according to the alpha values in their texture rather than only based on their geometry.
 
 ![Alpha mask shadows](alpha_mask_shadows.png)
-<p class="release-feature-authors">NVIDIA ORCA Emerald Square scene with alpha mask shadow support</p>
+<p class="release-feature-authors">[NVIDIA ORCA Emerald Square scene](https://developer.nvidia.com/orca/nvidia-emerald-square) ([CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)) with alpha mask shadow support</p>
 
 ## Smooth Skeletal Animation Transitions
 
@@ -562,7 +564,7 @@ To follow the recommendations on the [`Suspended`](https://docs.rs/winit/0.28/wi
 
 Please test on your devices and report successes or issues you may encounter! There is a known issue around touch position on some devices with software buttons, as winit doesn't expose [yet](https://github.com/rust-windowing/winit/issues/2308) the inset size, only the inner size.
 
-As this brings Bevy closer to full support of Android, there isn't a need anymore for separated examples for Android and iOS. They have been regrouped in one ["mobile" example](https://github.com/bevyengine/bevy/tree/v0.10.0/examples/mobile), and the instructions updated ([for Android](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#android) and [for iOS](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#ios)).
+As this brings Bevy closer to full support of Android, there isn't a need anymore for separate examples for Android and iOS. They have been regrouped in one ["mobile" example](https://github.com/bevyengine/bevy/tree/v0.10.0/examples/mobile), and the instructions updated ([for Android](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#android) and [for iOS](https://github.com/bevyengine/bevy/tree/v0.10.0/examples#ios)).
 
 Here is the same example running on iOS!
 
@@ -577,7 +579,7 @@ In combination with the new tonemapping options, bloom has been much improved si
 
 1. In Bevy 0.9, bloom looked like this.
 2. Switching the tonemapper to something like `AcesFitted` is already a big improvement.
-3. in Bevy 0.10, bloom now looks like this. It's much more controlled and less overbearing.
+3. In Bevy 0.10, bloom now looks like this. It's much more controlled and less overbearing.
 4. To make the bloom stronger, rather than raise the `BloomSettings` intensity,
 let's double the `emissive` value of each cube.
 5. Finally, if you want more extreme bloom similar to the old algorithm, you can change
@@ -619,7 +621,7 @@ Bevy can now render distance and atmospheric fog effects, bringing a heightened 
 
 ![The new fog example showcases different fog modes and parameters.](fog.png)
 
-Fog is controllable per-camera via the new [`FogSettings`] component. Special care has been put in exposing several knobs to give you full artistic control over the look of your fog, including the ability to fade the fog in and out by controlling the alpha channel of the fog color.
+Fog is controllable per camera via the new [`FogSettings`] component. Special care has been put into exposing several knobs to give you full artistic control over the look of your fog, including the ability to fade the fog in and out by controlling the alpha channel of the fog color.
 
 ```rust
 commands.spawn((
@@ -631,7 +633,7 @@ commands.spawn((
 ));
 ```
 
-_Exactly how_ fog behaves with regards to distance is controlled via the [`FogFalloff`] enum. All of the “traditional” fog falloff modes from the fixed-function OpenGL 1.x / DirectX 7 days are supported:
+_Exactly how_ fog behaves with regard to distance is controlled via the [`FogFalloff`] enum. All of the “traditional” fog falloff modes from the fixed-function OpenGL 1.x / DirectX 7 days are supported:
 
 `FogFalloff::Linear` increases in intensity linearly from 0 to 1 between `start` and `end` parameters. (This example uses values of 0.8 and 2.2, respectively.)
 
@@ -701,7 +703,7 @@ _Exactly how_ fog behaves with regards to distance is controlled via the [`FogFa
 
 Additionally, a more sophisticated `FogFalloff::Atmospheric` mode is available which provides _more physically accurate_ results by taking light `extinction` and `inscattering` into account separately.
 
-[`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen on sunny outdoor environments.
+[`DirectionalLight`] influence is also supported for all fog modes via the `directional_light_color` and `directional_light_exponent` parameters, mimicking the light dispersion effect seen in sunny outdoor environments.
 
 ![The new atmospheric_fog example showcases a terrain with atmospheric fog and directional light influence.](atmospheric-fog.png)
 
@@ -717,7 +719,7 @@ FogSettings {
 
 Fog is applied “forward rendering-style” on the PBR fragment shader, instead of as a post-processing effect, which allows it to properly handle semi-transparent meshes.
 
-The atmospheric fog implementation is largely based on [this great article](https://iquilezles.org/articles/fog/) by Inigo Quilez, Shadertoy co-creator and computer graphics legend. _Thanks for the great write up and inspiration!_
+The atmospheric fog implementation is largely based on [this great article](https://iquilezles.org/articles/fog/) by Inigo Quilez, Shadertoy co-creator, and computer graphics legend. _Thanks for the great write up and inspiration!_
 
 [`FogSettings`]: https://docs.rs/bevy/0.10.0/bevy/pbr/struct.FogSettings.html
 [`FogFalloff`]: https://docs.rs/bevy/0.10.0/bevy/pbr/enum.FogFalloff.html
@@ -752,7 +754,7 @@ Here's a high-level overview of the new modes:
 
 <div class="release-feature-authors">authors: @DGriffin91, @JMS55</div>
 
-Tonemapping is the process of transforming raw HDR information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or disabled tonemapping. In **Bevy 0.10** we've added a ton of choices!
+Tonemapping is the process of transforming raw High Dynamic Range (HDR) information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or none at all. In **Bevy 0.10** we've added a ton of choices!
 
 ### No Tonemapping
 
@@ -798,7 +800,7 @@ From the 3D software package we know and love!
 
 <div class="release-feature-authors">authors: @DGriffin91</div>
 
-We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per-camera using the new [`ColorGrading`] component.
+We've added some basic control over color grading parameters such as exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation". These can be configured per camera using the new [`ColorGrading`] component.
 
 [`ColorGrading`]: https://docs.rs/bevy/0.10.0/bevy/render/view/struct.ColorGrading.html
 
@@ -822,7 +824,7 @@ to enable this, but the final step of actually running them in parallel was not 
 There was a bit of tricky work to figure out. The render world has a system that has to run on
 the main thread, but the task pool only had the ability to run on the world's thread. So, when we send
 the render world to another thread we need to accommodate still running render systems on the main
-thread. So we added the ability to spawn tasks onto the main thread in addition to the world's thread.
+thread. To accomplish this, we added the ability to spawn tasks onto the main thread in addition to the world's thread.
 
 ![Histogram of Many Foxes Frame Time](pipelined-rendering-histogram.png)
 
@@ -839,12 +841,12 @@ feature to work. If you are not using `DefaultPlugins` you can add the plugin ma
 
 <div class="release-feature-authors">authors: @aceeri, @Weibye, @cart</div>
 
-In previous versions of Bevy [`Window`] was represented as an ECS resource (contained in the `Windows` resource). In **Bevy 0.10** [`Window`] is now a component (and therefore windows are represented as entities).
+In previous versions of Bevy, [`Window`] was represented as an ECS resource (contained in the `Windows` resource). In **Bevy 0.10** [`Window`] is now a component (and therefore windows are represented as entities).
 
 This accomplishes a number of goals:
 
 * It opens the doors to representing Windows in Bevy's scene system
-* It exposes Windows to Bevy's powerful ECS queries
+* It exposes `Windows` to Bevy's powerful ECS queries
 * It provides granular per-window change detection
 * Improves the readability/discoverability of creating, using, and closing windows
 * Changing the properties of a window is the same for both initializing and modifying. No more `WindowDescriptor` fuss!
@@ -877,7 +879,7 @@ fn close_windows(mut commands: Commands, windows: Query<Entity, With<Window>>) {
 
 <div class="release-feature-authors">authors: @danchia, Rob Swain (@superdump), james7132, @kurtkuehnert, @robfm</div>
 
-Bevy's renderer has had quite a few low hanging fruit for optimization.
+Bevy's renderer was ripe for optimization. So we optimized it!
 
 The biggest bottleneck when rendering anything in Bevy is the final render stage, where we collect all of the data in the render world to issue draw calls to the GPU. The core loops here are extremely hot and any extra overhead is noticeable. In **Bevy 0.10**, we've thrown the kitchen sink at this problem and have attacked it from every angle. Overall, these following optimizations should make the render stage **2-3 times faster** than it was in 0.9:
 
@@ -885,12 +887,12 @@ The biggest bottleneck when rendering anything in Bevy is the final render stage
 * In [#6944](https://github.com/bevyengine/bevy/pull/6944) by @james7132, we shrank the core data structures involved in the stage, reducing memory fetches and netting us 9% speedups.
 * In [#6885](https://github.com/bevyengine/bevy/pull/6885) by @james7132, we rearchitected our `PhaseItem` and `RenderCommand` infrastructure to combine common operations when fetching component data from the `World`, netting us a 7% speedup.
 * In [#7053](https://github.com/bevyengine/bevy/pull/7053) by @james7132, we changed `TrackedRenderPass`'s allocation patterns to minimize branching within these loops, netting a 6% speedup.
-* In [#7084](https://github.com/bevyengine/bevy/pull/7084) by @james7132, we altered how we're fetching resources from the World to minimize use of atomics in the stage, netting a 2% speedup.
+* In [#7084](https://github.com/bevyengine/bevy/pull/7084) by @james7132, we altered how we're fetching resources from the World to minimize the use of atomics in the stage, netting a 2% speedup.
 * In [#6988](https://github.com/bevyengine/bevy/pull/6988) by @kurtkuehnert, we changed our internal resource IDs to use atomically incremented counters instead of UUIDs, reducing the comparison cost of some of the branches in the stage.
 
 One other ongoing development is enabling the render stage to properly parallelize command encoding across multiple threads. Following [#7248](https://github.com/bevyengine/bevy/pull/7248) by @james7132, we now support ingesting externally created `CommandBuffer`s into the render graph, which should allow users to encode GPU commands in parallel and import them into the render graph. This is currently blocked by wgpu, which locks the GPU device when encoding render passes, but we should be able to support parallel command encoding as soon as that's addressed.
 
-On a similar note, we've made steps to enable higher parallelism in other stages of the rendering pipeline. `PipelineCache` has been a resource that almost every Queue stage system needed to access mutably, but also only rarely needed to be written to. In [#7205](https://github.com/bevyengine/bevy/pull/7205), @danchia changed this to use internal mutability to allow for these systems to parallelize. This doesn't fully allow every system in this stage to parallelize just yet, as there still remains a few common blockers, but it should allow non-conflicting render phases to queue commands at the same time.
+On a similar note, we've made steps to enable higher parallelism in other stages of the rendering pipeline. `PipelineCache` has been a resource that almost every Queue stage system needed to access mutably, but also only rarely needed to be written to. In [#7205](https://github.com/bevyengine/bevy/pull/7205), @danchia changed this to use internal mutability to allow for these systems to parallelize. This doesn't fully allow every system in this stage to parallelize just yet, as there still remain a few common blockers, but it should allow non-conflicting render phases to queue commands at the same time.
 
 Optimization isn't all about CPU time! We've also improved memory usage, compile times, and GPU performance as well!
 
@@ -909,7 +911,7 @@ Finally, we have made some improvements on specific usage scenarios:
 
 Transform propagation is one of the core systems of any game engine. If you move a parent entity, you expect its children to move in worldspace. Bevy's transform propagation system happens to be one of the largest bottlenecks for multiple systems: rendering, UI, physics, animation, etc. cannot run until it's complete. It's imperative that transform propagation is fast to avoid blocking all of these systems. In **Bevy 0.9** and before, transform propagation has always been single-threaded and always requires a full hierarchy traversal. As worlds got larger, so did the time spent in this key bottleneck. In **Bevy 0.10**, transform propagation leverages the structure of a well-formed hierarchy to fully run over multiple threads. The full performance benefits entirely depend on how the hierarchy is structured and how many CPU cores are available. In our testing, this has made transform propagation in our `many_foxes` benchmark **4 times faster** on our testing hardware.
 
-If transform propagation can be parallelized, so can forward kinematics for animation. We leveraged the same guaranteed structure of well formed hierarchies to fully parallelize playing skeletal animations. We also enabled a basic entity-path cache lookup to reduce the extra lookups the system was doing. All together, we were able to make the animation player system on the same `many_foxes` benchmark **10 times faster**.
+If transform propagation can be parallelized, so can forward kinematics for animation. We leveraged the same guaranteed structure of well formed hierarchies to fully parallelize playing skeletal animations. We also enabled a basic entity-path cache lookup to reduce the extra lookups the system was doing. Altogether, we were able to make the animation player system on the same `many_foxes` benchmark **10 times faster**.
 
 Combined with all of the other optimizations seen in this release, our tests on the `many_foxes` benchmark has sped up from ~10ms per frame (~100 FPS) to ~2.3ms per frame (~434 FPS), a near 5x speedup!
 
@@ -927,7 +929,7 @@ In [#6800](https://github.com/bevyengine/bevy/pull/6800) and [#6902](https://git
 
 In [#6391](https://github.com/bevyengine/bevy/pull/6391), we've reworked `CommandQueue`'s internals to be more CPU-cache friendly, which has shown up to a 37% speedup when encoding and applying commands.
 
-## SystemParam Improvements
+## `SystemParam` Improvements
 
 <div class="release-feature-authors">authors: @JoJoJet</div>
 
@@ -1001,7 +1003,7 @@ We are also deprecating `ChangeTrackers<T>`, which is the old way of inspecting 
 <video controls loop><source  src="cubic_curves.mp4" type="video/mp4"/></video>
 <p class="release-feature-authors">This video shows four kinds of cubic curves being smoothly animated with bezier easing. The curve itself is white, green is velocity, red is acceleration, and blue are the control points that determine the shape of the curve.</p>
 
-In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`.  The implementation provides multiple curves out of the box, useful in various applications:
+In preparation for UI animation and hand-tweaked animation curves, cubic curves have been added to `bevy_math`. The implementation provides multiple curves out of the box, useful in various applications:
 
 * `Bezier`: user-drawn splines, and cubic-bezier animation easing for UI - helper methods are provided for cubic animation easing as demonstrated in the above video.
 * `Hermite`: smooth interpolation between two points in time where you know both the position and velocity, such as network prediction.
@@ -1036,7 +1038,7 @@ Special thanks to `@mcwcampbell`, the lead author of AccessKit, for reviewing ou
 
 <div class="release-feature-authors">authors: @mockersf, @DGriffin91, @harudagondi, @alice-i-cecile</div>
 
-The library Bevy uses for audio, [`rodio`], contains support for spatial audio. In this version, we now support spatial audio (with certain caveats, like no HRTF and no first class support for `Emitter` and `Listener` components).
+The library Bevy uses for audio, [`rodio`], contains support for spatial audio. Bevy 0.10 exposes basic spatial audio. There are still a few caveats, like no HRTF and no first class support for `Emitter` and `Listener` components.
 
 Interestingly, during the development of this specific feature, `@harudagondi` found a [bug][reverse-channels-bug] where the audio channels reverse when running the app in either debug or release mode. This turns out to be a `rodio` issue, and this also affects previous versions of Bevy. Thanks to `@dis-da-moe`, the bug has been [fixed upstream][rodio-pr]. See the linked PR for interesting details about audio programming quirks and performance issues.
 
@@ -1173,7 +1175,7 @@ query.par_for_each(QUERY_BATCH_SIZE, |mut component| {
 });
 ```
 
-In 0.10, you no longer need to provide a batch size! If you use [`Query::par_iter`], Bevy will automatically evaluate the state of the World and task pools and select a batch size using a heuristic to ensure sufficient parallelism, without incurring too much overhead. This makes parallel queries as easy to use as normal single-threaded queries! While great for most typical use cases, these heuristics may not be suitable for every workload, so we've provided an escape hatch for those who need finer control over the workload distribution. In the future, we may further tune the backing heuristics to try to get the default to be closer to optimal in these workloads.
+In 0.10, you no longer need to provide a batch size! If you use [`Query::par_iter`], Bevy will automatically evaluate the state of the World and task pools and select a batch size [using a heuristic](https://github.com/bevyengine/bevy/blob/43ea6f239deefd7a497da6ef581a05a63a278605/crates/bevy_ecs/src/query/par_iter.rs#L24) to ensure sufficient parallelism, without incurring too much overhead. This makes parallel queries as easy to use as normal single-threaded queries! While great for most typical use cases, these heuristics may not be suitable for every workload, so we've provided an escape hatch for those who need finer control over the workload distribution. In the future, we may further tune the backing heuristics to try to get the default to be closer to optimal in these workloads.
 
 ```rust
 // 0.10
@@ -1181,7 +1183,7 @@ query.par_iter().for_each(|component| {
    // ...
 });
 
-// Fairly easy to convert from a single threaded for_each. Just change iter to par_iter!
+// Fairly easy to convert from a single-threaded for_each. Just change iter to par_iter!
 query.iter().for_each(|component| {
    // ...
 });
@@ -1232,7 +1234,7 @@ Bevy's [`Plane`] shape can now be subdivided any number of times.
 
 <div class="release-feature-authors">authors: @cart, @robtfm</div>
 
-The [camera-driven](/news/bevy-0-8/#camera-driven-rendering) post-processing features [added in Bevy 0.9](/news/bevy-0-9/#hdr-post-processing-tonemapping-and-bloom) add intuitive control over post processing across multiple cameras in a scene, but there [were a few corner cases](https://github.com/bevyengine/bevy/pull/7490) that didn't _quite_ fit into the hard-coded camera output model. And there were some bugs and limitations related to double buffered target texture sources of truth being incorrect across cameras and MSAA's sampled texture not containing what it should under some circumstances.
+The [camera-driven](/news/bevy-0-8/#camera-driven-rendering) post-processing features [added in Bevy 0.9](/news/bevy-0-9/#hdr-post-processing-tonemapping-and-bloom) add intuitive control over post-processing across multiple cameras in a scene, but there [were a few corner cases](https://github.com/bevyengine/bevy/pull/7490) that didn't _quite_ fit into the hard-coded camera output model. And there were some bugs and limitations related to double-buffered target texture sources of truth being incorrect across cameras and MSAA's sampled texture not containing what it should under some circumstances.
 
 **Bevy 0.10** adds a [`CameraOutputMode`] field to [`Camera`], which gives Bevy app developers the ability to manually configure exactly how (and if) a [`Camera`]'s render results should be written to the final output texture:
 
@@ -1247,7 +1249,7 @@ camera.output_mode = CameraOutputMode::Write {
 
 // Configure the camera to skip writing to the final output texture
 // This can save a pass when there are multiple cameras, and can be useful for
-// some post processing situations
+// some post-processing situations
 camera.output_mode = CameraOutputMode::Skip;
 ```
 
@@ -1306,7 +1308,7 @@ struct CoolMaterial {
 
 <div class="release-feature-authors">authors: @torsteingrindvik</div>
 
-To pass component data from the "main app" to the "render app" for [pipelined rendering](#parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy you had to implement it manually, but now you can derive it!
+To pass component data from the "main app" to the "render app" for [pipelined rendering](#parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy, you had to implement it manually, but now you can derive it!
 
 ```rust
 #[derive(Component, Clone, ExtractComponent)]
@@ -1495,7 +1497,7 @@ assert!(concrete_value.is::<MyStruct>());
 
 <div class="release-feature-authors">authors: @ickshonpe, @rparret</div>
 
-[Taffy](https://crates.io/crates/taffy) is the library we use to compute layouts for `bevy_ui`. Taffy 0.2 significantly improves the performance of nested UIs. Our `many_buttons` example is now 8% faster. More highly nested UIs should see even bigger gains! Taffy 0.3 adds some nice API tweaks (and also a grid layout feature, which we have disabled for now as it still needs some integration work).
+[Taffy](https://crates.io/crates/taffy) is the library we use to compute layouts for `bevy_ui`. Taffy 0.2 significantly improves the performance of nested UIs (our `many_buttons` example is now 8% faster and more deeply nested UIs should see even bigger gains!). It also brings support for the [gap](https://developer.mozilla.org/en-US/docs/Web/CSS/gap) property which makes it easier to creates UI with evenly spaced items. Taffy 0.3 adds some nice API tweaks (and also a grid layout feature, which we have disabled for now as it still needs some integration work).
 
 ## Relative Cursor Position
 
@@ -1516,7 +1518,7 @@ commands.spawn((
 
 <div class="release-feature-authors">authors: @james-j-obrien</div>
 
-Bevy uses the [`Default`] trait a lot to make it easy to construct types. Bevy UI types generally implement [`Default`]. However it has one downside (which is fundamental to Rust): [`Default`] cannot be used in `const` contexts ([yet!](https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html)). To enable UI layout config to be defined as constants, we've added `DEFAULT` associated constants to most of the Bevy UI types. For example, you can use `Style::DEFAULT` to define a const style:
+Bevy uses the [`Default`] trait a lot to make it easy to construct types. Bevy UI types generally implement [`Default`]. However, it has one downside (which is fundamental to Rust): [`Default`] cannot be used in `const` contexts ([yet!](https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html)). To enable UI layout config to be defined as constants, we've added `DEFAULT` associated constants to most of the Bevy UI types. For example, you can use `Style::DEFAULT` to define a const style:
 
 ```rust
 const COOL_STYLE: Style = Style {
@@ -1532,7 +1534,7 @@ const COOL_STYLE: Style = Style {
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-In **Bevy 0.9**, `World::iter_entities` allows users to get an iterator over all of the entities in the `World` in `Entity` form. In **Bevy 0.10**, this has been changed to be an iterator over `EntityRef`, which gives full read-only access to all of the entity's components instead of just getting its ID. Its new implementation should also be significantly faster than fetching the `EntityRef` by hand (though note that a `Query` will still be faster if you know the exact components you're looking for). This gives users free reign to arbitrarily read any entity data from the World, and may see use in scripting language integrations and reflection-heavy workflows.
+In **Bevy 0.9**, `World::iter_entities` allows users to get an iterator over all of the entities in the `World` in `Entity` form. In **Bevy 0.10**, this has been changed to be an iterator over `EntityRef`, which gives full read-only access to all of the entity's components instead of just getting its ID. Its new implementation should also be significantly faster than fetching the `EntityRef` by hand (though note that a `Query` will still be faster if you know the exact components you're looking for). This gives users free rein to arbitrarily read any entity data from the World, and may see use in scripting language integrations and reflection-heavy workflows.
 
 ```rust
 // Bevy 0.9
@@ -1627,7 +1629,7 @@ commands.spawn(SpriteBundle::default()).add(MyCustomCommand);
 
 <div class="release-feature-authors">authors: @Ian-Yy</div>
 
-We now have a new ["pixel perfect" example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/2d/pixel_perfect.rs) that illustrates how to set up pixel perfect sprites. It uses a cute new Bevy logo sprite!
+We now have a new ["pixel perfect" example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/2d/pixel_perfect.rs) that illustrates how to set up pixel-perfect sprites. It uses a cute new Bevy logo sprite!
 
 ![pixel perfect](pixel_perfect.png)
 
@@ -1655,7 +1657,7 @@ This was our first release using our new [Subject Matter Expert (SME) system](/n
 
 ## What's Next?
 
-* **Asset System Evolution**: We've made good progress on the [next iteration of the Bevy Asset System](https://github.com/bevyengine/bevy/discussions/3972), which will add the ability to preprocess assets and improve the flexibilty and usability of the asset system.
+* **Asset System Evolution**: We've made good progress on the [next iteration of the Bevy Asset System](https://github.com/bevyengine/bevy/discussions/3972), which will add the ability to preprocess assets and improve the flexibility and usability of the asset system.
 * **Temporal Anti-Aliasing (TAA)**: We've largely implemented TAA, which uses motion vectors and time to produce a very popular screen space anti-aliasing effect.
 * **Screen Space Ambient Occlusion (SSAO)**: This is a popular, relatively cheap illumination technique that can make scenes look much more natural. It builds on the Depth Prepass work.
 * **Automated Render Batching and Instancing**: Automatically cut down draw calls by combining geometry or using instancing. This will enable Bevy to render hundreds of thousands of objects without grinding to a halt. We technically already support this, but it must be implemented manually outside of our standard pipeline. This will bring batching and instancing wins "for free" in our built-in render pipeline.
@@ -1664,7 +1666,7 @@ This was our first release using our new [Subject Matter Expert (SME) system](/n
 * **Pull `!Send` data out of the `World`:** storing non thread-safe data in a structure designed to be sent across threads has caused us no end of headaches. We plan on pulling these out into the `App`, resolving a major blocker for a first-class [multiple worlds](https://github.com/bevyengine/rfcs/pull/43) design.
 * **Timestamp window and input events:** As discussed in [#5984](https://github.com/bevyengine/bevy/issues/5984), tracking the exact timing of input events is essential to ensuring that event ordering and timing can be precisely reconstructed.
 * **Opt-out change detection:** improve performance for tiny components by [turning off change detection at compile or run-time](https://github.com/bevyengine/bevy/issues/4882).
-
+ * **Comprehensive Animation Composition:** Supporting non-transitional animation composition (i.e. arbitrary weighted blending of animations). For more complete information, see the [RFC](https://github.com/bevyengine/rfcs/pull/51).
 Check out the [**Bevy 0.11 Milestone**](https://github.com/bevyengine/bevy/milestone/11) for an up-to-date list of current work being considered for **Bevy 0.11**.
 
 ## Support Bevy
