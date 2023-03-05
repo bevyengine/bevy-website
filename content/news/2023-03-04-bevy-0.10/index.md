@@ -1564,7 +1564,7 @@ fn run_or_attack(
 [`AnimationPlayer`]: https://docs.rs/bevy/0.10.0/bevy/animation/struct.AnimationPlayer.html
 [`play_with_transition`]: https://docs.rs/bevy/0.10/bevy/animation/struct.AnimationPlayer.html#method.play_with_transition
 
-### AcessKit integration into `bevy_ui`
+## AccessKit integration into `bevy_ui`
 
 <div class="release-feature-authors">authors: @ndarilek</div>
 
@@ -1581,6 +1581,49 @@ This is ultimately powered by the new [`AccessibilityNode`](https://dev-docs.bev
 There's still a lot more to be done here: integrating the focus system with a [gamepad-driven UI controls](https://github.com/bevyengine/rfcs/pull/41) solution, cleaning up the data model to [make sure "accessible by default" is a reality](https://github.com/bevyengine/bevy/issues/7862)), and adding support for remaining features in AccessKit.
 
 Special thanks to `@mcwcampbell`, the lead author of AccessKit, for reviewing our integration and working with us to reduce the number of dependencies upstream, [substantially improving both compile times and final executable size](https://github.com/bevyengine/bevy/pull/6874#issuecomment-1440978453). This is [still a serious challenge on Linux](https://github.com/bevyengine/bevy/pull/6874#issuecomment-1432144117), and so the `accesskit_unix` feature flag is [disabled by default for now](https://github.com/bevyengine/bevy/pull/6874#issuecomment-1433896811).
+
+## Revamped Bloom
+
+<div class="release-feature-authors">authors: @StarLederer, @JMS55</div>
+
+Bloom has undergone some major changes and now looks better, is easier to control, and has fewer visual artifacts.
+In combination with the new tonemapping options, bloom has been much improved since the previous release!
+
+1. In Bevy 0.9, bloom looked like this.
+2. Switching the tonemapper to something like `AcesFitted` is already a big improvement.
+3. in Bevy 0.10, bloom now looks like this. It's much more controlled and less overbearing.
+4. To make the bloom stronger, rather than raise the `BloomSettings` intensity,
+let's double the `emissive` value of each cube.
+5. Finally, if you want more extreme bloom similar to the old algorithm, you can change
+`BloomSettings::composite_mode` from `BloomCompositeMode::EnergyConserving` to `BloomCompositeMode::Additive`.
+6. Explore the new bloom settings in an interactive playground using the new `bloom_3d` (and `bloom_2d`) examples.
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); grid-gap: 16px;">
+     <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">1</div>
+        <img src="old_bloom.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">2</div>
+        <img src="old_bloom_aces.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">3</div>
+        <img src="new_bloom.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">4</div>
+        <img src="new_bloom_double_emission.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">5</div>
+        <img src="new_bloom_additive.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">6</div>
+        <img src="bloom_example.png" style="width: 100%; height: auto;"/>
+     </div>
+ </div>
 
 ## What's Next?
 
