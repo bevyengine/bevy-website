@@ -1558,27 +1558,27 @@ let's double the `emissive` value of each cube.
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 16px;">
      <div style="position: relative;">
-        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: $border-radius 0 10px 0; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">1</div>
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">1</div>
         <img src="old_bloom.png" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
-        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: $border-radius 0 10px 0; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">2</div>
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">2</div>
         <img src="old_bloom_aces.png" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
-        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: $border-radius 0 10px 0; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">3</div>
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">3</div>
         <img src="new_bloom.png" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
-        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: $border-radius 0 10px 0; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">4</div>
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">4</div>
         <img src="new_bloom_double_emission.png" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
-        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: $border-radius 0 10px 0; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">5</div>
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">5</div>
         <img src="new_bloom_additive.png" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
-        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: $border-radius 0 10px 0; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">6</div>
+        <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">6</div>
         <img src="bloom_example.png" style="width: 100%; height: auto;"/>
      </div>
  </div>
