@@ -963,8 +963,8 @@ In **Bevy 0.10**, we've [used generic associated types](https://github.com/bevye
 
 Additionally, the `#[derive(SystemParam)]` macro has received a host of miscellaneous usability improvements:
 
-* **Flexibility**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
-* **Encapsulation**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
+* **More Flexible**: you are no longer forced to declare lifetimes you don't use. Tuple structs are now allowed, and const generics don't break things.
+* **Encapsulated**: a long-standing bug has been fixed that leaked the types of private fields. Now, `SystemParam`s can properly encapsulate private world data.
 * **Limitless**: the 16-field limit has been lifted, so you can make your params as ridiculously complex as you want. This is most useful for generated code.
 
 ## Deferred World Mutations
