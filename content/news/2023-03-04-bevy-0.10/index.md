@@ -1523,7 +1523,7 @@ fn run_or_attack(
 [`AnimationPlayer`]: https://docs.rs/bevy/0.10.0/bevy/animation/struct.AnimationPlayer.html
 [`play_with_transition`]: https://docs.rs/bevy/0.10/bevy/animation/struct.AnimationPlayer.html#method.play_with_transition
 
-### AcessKit integration into `bevy_ui`
+## AccessKit integration into `bevy_ui`
 
 <div class="release-feature-authors">authors: @ndarilek</div>
 
@@ -1542,6 +1542,7 @@ There's still a lot more to be done here: integrating the focus system with a [g
 Special thanks to `@mcwcampbell`, the lead author of AccessKit, for reviewing our integration and working with us to reduce the number of dependencies upstream, [substantially improving both compile times and final executable size](https://github.com/bevyengine/bevy/pull/6874#issuecomment-1440978453). This is [still a serious challenge on Linux](https://github.com/bevyengine/bevy/pull/6874#issuecomment-1432144117), and so the `accesskit_unix` feature flag is [disabled by default for now](https://github.com/bevyengine/bevy/pull/6874#issuecomment-1433896811).
 
 ## Revamped Bloom
+
 <div class="release-feature-authors">authors: @StarLederer, @JMS55</div>
 
 Bloom has undergone some major changes and now looks better, is easier to control, and has fewer visual artifacts.
