@@ -474,7 +474,7 @@ For scenes that need constant lighting (especially outdoor scenes), environment 
 <video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
 <p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
 
-Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing, and many more. These are currently being worked on and should be [available in the next release of Bevy](#whats-next).
+Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing, and many more. These are currently being worked on and should be [available in the next release of Bevy](#what-s-next).
 
 ![Edge detection](edge_detection.png)
 <p class="release-feature-authors">In the image on the right, green lines are edges detected in the normal texture and blue lines are edges detected in the depth texture</p>
@@ -754,7 +754,7 @@ Here's a high-level overview of the new modes:
 
 <div class="release-feature-authors">authors: @DGriffin91, @JMS55</div>
 
-Tonemapping is the process of transforming raw High Dynamic Range (HDR) information into actual "screen colors". In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or none at all. In **Bevy 0.10** we've added a ton of choices!
+Tonemapping is the process of transforming raw High Dynamic Range (HDR) information into actual "screen colors" using a "display rendering transform" (DRT). In previous versions of Bevy you had exactly two tonemapping options: Reinhard Luminance or none at all. In **Bevy 0.10** we've added a ton of choices!
 
 ### No Tonemapping
 
@@ -764,35 +764,56 @@ This is generally not recommended as HDR lighting is not intended to be used as 
 
 ### Reinhard
 
+A simple method that adapts to the color in a scene: `r = color / (1.0 + color)`. Suffers from lots hue shifting, brights don't desaturate naturally. Bright primaries and secondaries don't desaturate at all.
+
 ![reinhard](tm_reinhard.png)
 
 ### Reinhard Luminance
 
-This is what we had in previous versions of Bevy. It is still our default algorithm.
+A popular method similar to normal Reinhard that incorporates luminance. It adapts to the amount of light in a scene. This is what we had in previous versions of Bevy. It is still our default algorithm, but this will likely change in the future. Suffers from hue shifting. Brights don't desaturate much at all across the spectrum.
 
 ![reinhard luminance](tm_reinhard_luminance.png)
 
 ### ACES Fitted
 
+An extremely popular algorithm used in film and industry (ex: ACES is the default Unreal tonemapping algorithm). When people say "filmic", this is often what they mean.
+
+Not neutral, has a very specific aesthetic, intentional and dramatic hue shifting.
+Bright greens and reds turn orange. Bright blues turn magenta. Significantly increased contrast. Brights desaturate across the spectrum.
+
 ![aces](tm_aces.png)
 
 ### AgX
+
+Very neutral. Image is somewhat desaturated when compared to other transforms. Little to no hue shifting. Subtle [Abney shifting](https://en.wikipedia.org/wiki/Abney_effect). [Created by Troy Sobotka](https://github.com/sobotka/AgX)
 
 ![agx](tm_agx.png)
 
 ### SomewhatBoringDisplayTransform
 
+Has little hue shifting in the darks and mids, but lots in the brights. Brights desaturate across the spectrum.
+Is sort of between Reinhard and Reinhard Luminance. Conceptually similar to reinhard-jodie.
+Designed as a compromise if you want e.g. decent skin tones in low light, but can't afford to re-do your
+VFX to look good without hue shifting. Created by Tomasz Stachowiak.
+
 ![SomewhatBoringDisplayTransform](tm_sbdt.png)
 
 ### TonyMcMapface
 
-Tomasz Stachowiak [recently released](https://twitter.com/h3r2tic/status/1626579257559502850?lang=en) this nice new display transform. In their own words "Tony maps HDR Rec.709 to LDR in a (subjectively) natural way, without messing too much with contrast or look"
+Very neutral. Subtle but intentional hue shifting. Brights desaturate across the spectrum.
+
+From the author: Tony is a display transform intended for real-time applications such as games.
+It is intentionally boring, does not increase contrast or saturation, and stays close to the
+input stimulus where compression isn't necessary.
+Brightness-equivalent luminance of the input stimulus is compressed. The non-linearity resembles Reinhard.
+Color hues are preserved during compression, except for a deliberate [Bezold–Brücke shift](https://en.wikipedia.org/wiki/Bezold%E2%80%93Br%C3%BCcke_shift).
+To avoid posterization, selective desaturation is employed, with care to avoid the [Abney effect](https://en.wikipedia.org/wiki/Abney_effect). [Created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)
 
 ![TonyMcMapface](tm_tonymcmapface.png)
 
 ### Blender Filmic
 
-From the 3D software package we know and love!
+Default Filmic Display Transform from Blender. Somewhat neutral. Suffers from hue shifting. Brights desaturate across the spectrum.
 
 ![Blender Filmic](tm_blender_filmic.png)
 
