@@ -474,7 +474,7 @@ For scenes that need constant lighting (especially outdoor scenes), environment 
 <video controls loop><source  src="force_field.mp4" type="video/mp4"/></video>
 <p class="release-feature-authors">This effect uses the depth from the prepass to find the intersection between the ground and the force field</p>
 
-Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing, and many more. These are currently being worked on and should be available in the next release of bevy.
+Bevy now has the ability to run a depth and/or normal prepass. This means the depth and normal textures will be generated in a render pass that runs before the main pass and can therefore be used during the main pass. This enables various special effects like Screen Space Ambient Occlusion, Temporal Anti Aliasing, and many more. These are currently being worked on and should be [available in the next release of Bevy](#whats-next).
 
 ![Edge detection](edge_detection.png)
 <p class="release-feature-authors">In the image on the right, green lines are edges detected in the normal texture and blue lines are edges detected in the depth texture</p>
