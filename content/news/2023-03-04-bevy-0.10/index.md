@@ -1306,7 +1306,7 @@ struct CoolMaterial {
 
 <div class="release-feature-authors">authors: @torsteingrindvik</div>
 
-To pass component data from the "main app" to the "render app" for [pipelined rendering](#enable-parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy you had to implement it manually, but now you can derive it!
+To pass component data from the "main app" to the "render app" for [pipelined rendering](#parallel-pipelined-rendering), we run an "extract step". The [`ExtractComponent`] trait is used to copy data over. In previous versions of Bevy you had to implement it manually, but now you can derive it!
 
 ```rust
 #[derive(Component, Clone, ExtractComponent)]
@@ -1655,11 +1655,15 @@ This was our first release using our new [Subject Matter Expert (SME) system](/n
 
 ## What's Next?
 
-* **[One-shot systems](https://github.com/bevyengine/bevy/issues/2192):** Run arbitrary systems in a push-based fashion via commands, and store them as callback components for ultra-flexible behavior customization.
+* **Asset System Evolution**: We've made good progress on the [next iteration of the Bevy Asset System](https://github.com/bevyengine/bevy/discussions/3972), which will add the ability to preprocess assets and improve the flexibilty and usability of the asset system.
+* **Temporal Anti-Aliasing (TAA)**: We've largely implemented TAA, which uses motion vectors and time to produce a very popular screen space anti-aliasing effect.
+* **Screen Space Ambient Occlusion (SSAO)**: This is a popular, relatively cheap illumination technique that can make scenes look much more natural. It builds on the Depth Prepass work.
+* **Automated Render Batching and Instancing**: Automatically cut down draw calls by combining geometry or using instancing. This will enable Bevy to render hundreds of thousands of objects without grinding to a halt. We technically already support this, but it must be implemented manually outside of our standard pipeline. This will bring batching and instancing wins "for free" in our built-in render pipeline.
+* **One-shot systems:** Run arbitrary systems in a [push-based fashion via commands](https://github.com/bevyengine/bevy/issues/2192), and store them as callback components for ultra-flexible behavior customization.
 * **Better plugins:** Clearer and more standardized tools for [adapting third-party plugins to your app's unique architecture](https://github.com/bevyengine/bevy/issues/2160), eliminating [order-dependence in their initialization](https://github.com/bevyengine/bevy/issues/1255) and defining [dependencies](https://github.com/bevyengine/bevy/issues/69) between them.
 * **Pull `!Send` data out of the `World`:** storing non thread-safe data in a structure designed to be sent across threads has caused us no end of headaches. We plan on pulling these out into the `App`, resolving a major blocker for a first-class [multiple worlds](https://github.com/bevyengine/rfcs/pull/43) design.
 * **Timestamp window and input events:** As discussed in [#5984](https://github.com/bevyengine/bevy/issues/5984), tracking the exact timing of input events is essential to ensuring that event ordering and timing can be precisely reconstructed.
-* **[Opt-out change detection](https://github.com/bevyengine/bevy/issues/4882):** improve performance for tiny components by turning off change detection at compile or run-time.
+* **Opt-out change detection:** improve performance for tiny components by [turning off change detection at compile or run-time](https://github.com/bevyengine/bevy/issues/4882).
 
 Check out the [**Bevy 0.11 Milestone**](https://github.com/bevyengine/bevy/milestone/11) for an up-to-date list of current work being considered for **Bevy 0.11**.
 
