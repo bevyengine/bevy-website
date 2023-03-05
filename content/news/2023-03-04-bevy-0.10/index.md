@@ -896,17 +896,30 @@ In 0.10, you no longer need to provide a batch size! If you use [`Query::par_ite
 
 ```rust
 // 0.10
-query.par_iter().for_each(|mut component| {
+query.par_iter().for_each(|component| {
    // ...
 });
 
 // Fairly easy to convert from a single threaded for_each. Just change iter to par_iter!
-query.iter().for_each(|mut component| {
+query.iter().for_each(|component| {
    // ...
 });
 ```
 
+You can also use [`BatchingStrategy`] for more control over batching:
+
+```rust
+query
+    .par_iter_mut()
+    // run with batches of 100
+    .batching_strategy(BatchingStrategy::fixed(100))
+    .for_each(|mut component| { /* ... */ });
+```
+
+See the [`BatchingStrategy`] docs for more info.
+
 [`Query::par_iter`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/struct.Query.html#method.par_iter
+[`BatchingStrategy`]: https://docs.rs/bevy/0.10.0/bevy/ecs/query/struct.BatchingStrategy.html
 
 ## `UnsafeWorldCell` and `UnsafeEntityCell`
 
