@@ -1494,6 +1494,14 @@ We now have a new ["pixel perfect" example](https://github.com/bevyengine/bevy/b
 
 ![pixel perfect](pixel_perfect.png)
 
+## UI Text Layout Example
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+We've added a nice ["text layout" example](https://github.com/bevyengine/bevy/blob/v0.10.0/examples/ui/text_layout.rs) that illustrates the various Bevy UI text layout settings:
+
+![text layout](text_layout.png)
+
 ## CI Improvements
 
 <div class="release-feature-authors">authors: @mockersf</div>
