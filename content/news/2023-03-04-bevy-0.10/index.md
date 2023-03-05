@@ -41,7 +41,7 @@ No more! All systems within a single **schedule** are now stored in a single dat
 
 This simplifies our internal logic, makes your code more robust to refactoring, and allows plugin authors to specify high-level invariants (e.g. "movement must occur before collision checking") without locking themselves in to an exact schedule location.
 
-![main_schedule_diagram](main_schedule_diagram.svg)
+[![main_schedule_diagram](main_schedule_diagram.svg)](main_schedule_diagram.svg)
 
 This diagram, made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
 
