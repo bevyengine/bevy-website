@@ -105,7 +105,7 @@ A system can belong to any number of sets, adding the configuration from each se
 
 These rules must be compatible with each other: any paradoxes (like a system set inside of itself, or a system that must run both before and after a set) will result in a runtime panic with a helpful error message.
 
-As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elswhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
+As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elsewhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both a "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
 ### Directly Schedule Exclusive Systems
 
@@ -151,7 +151,7 @@ It turns out, Bevy already _had_ a great tool for this: schedules run inside of 
 3. In an exclusive system, perform any arbitrary Rust logic you want to decide if and how your schedule runs.
 4. Temporarily take the schedule out of the world, run it on the rest of the world to mutate both the schedule and the world, and then put it back in.
 
-With the addition of the new `Schedules` resource and the `world.run_schedule(schedule_label: impl ScheduleLabel)`API it's more :sparkles: ergonomic :sparkles: than ever.
+With the addition of the new `Schedules` resource and the `world.run_schedule(schedule_label: impl ScheduleLabel)`API it's more ✨ ergonomic ✨ than ever.
 
 ```rust
 // A schedule!
@@ -209,7 +209,7 @@ Run conditions can serve as a lightweight optimization tool: each one is evaluat
 
 Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://dev-docs.bevyengine.org/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579), [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), and [#7866 by `@jabuwu`](https://github.com/bevyengine/bevy/pull/7866) you can easily run systems if there are events to process, timers that elapsed, resources that changed, input state changes, and more.
 
-When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run criteria combinators.
+When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then` or `or_else` run condition combinators.
 
 ### Simpler States
 
@@ -224,7 +224,7 @@ How do they work in Bevy 0.10?
     1. First run the `OnExit(S::VariantLeft)` schedule for the state you're leaving.
     2. Then run the `OnEnter(S::VariantEntered)` schedule.
     3. These schedules are stored in the `Schedules` resource, and can be looked up via their `ScheduleLabel`.
-4. When the user calls `app.add_state:<s>()`:
+4. When the user calls `app.add_state::<S>()`:
     1. Initialize an `OnEnter` and an `OnExit` schedule for each variant of our state type `S`.
     2. Configure the `OnUpdate(S::Variant)` system set to belong to `CoreSet::Update` and only run when `State<S>` is `S::Variant`.
     3. Add a copy of `apply_state_transitions<S>` to `CoreSet::ApplyStateTransitions`.
@@ -319,7 +319,7 @@ Pretty simple, but what does this buy us?
 First, it gives you a clear hook to impose, reason about and visualize high level structure to your schedule. Yearning for a linear, stage-like design? Just order your base sets!
 Secondly, it allows Bevy to set good default behavior for systems added by users, without removing their control.
 
-Let me tell you a story, set in a world where all of Mr. Straw Man's points above are true, and no default set is added.
+Let me tell you a story, set in a world where all of our rhetorical skeptic's points above are true, and no default set is added.
 
 1. A new user adds the `make_player_run` system to their app.
 2. Sometimes this system runs before input handling, leading to randomly dropped inputs. Sometimes it runs after rendering, leading to strange flickers.
@@ -338,11 +338,10 @@ As part of this work, we've taken the time to listen to our users and fix some s
 
 Compare the following options for adding and ordering four systems, one after the other.
 
-:coffee: **Enterprise-grade** :coffee::
+☕️ **Enterprise-grade** ☕️:
 
 ```rust
 #[derive(SystemSet, PartialEq, Eq, Clone, Copy, Hash, Debug)]
-#[allow(missing_docs)]
 pub enum Step {
     A,
     B,
@@ -360,7 +359,7 @@ app
     .add_system(d.in_set(Step::D));
 ```
 
-:weary: **Tedious** :weary::
+😩 **Tedious** 😩:
 
 ```rust
 app
@@ -370,7 +369,7 @@ app
     .add_system(d);
 ```
 
-:sparkles: **Ergonomic** :sparkles::
+✨ **Ergonomic** ✨:
 
 ```rust
 app.add_systems((a, b, c, d).chain());
@@ -705,7 +704,7 @@ The biggest bottleneck when rendering anything in Bevy is the final render stage
 * In [#7084](https://github.com/bevyengine/bevy/pull/7084) by @james7132, we altered how we're fetching resources from the World to minimize use of atomics in the stage, netting a 2% speedup.
 * In [#6988](https://github.com/bevyengine/bevy/pull/6988) by @kurtkuehnert, we changed our internal resource IDs to use atomically incremented counters instead of UUIDs, reducing the comparison cost of some of the branches in the stage.
 
-One other ongoing development is enabling the render stage to properly parallelize command encoding across multiple threads. Following [#7248](https://github.com/bevyengine/bevy/pull/7248) by @james7132, we now support ingesting externally created `CommandBuffer`s into the render graph, which should allow users to encode GPU commands in parallel and import them into the render graph. This is currently blocked by wgpu, which currently locks the GPU device when encoding render passes, but we should be able to support parallel command encoding as soon as that's addressed.
+One other ongoing development is enabling the render stage to properly parallelize command encoding across multiple threads. Following [#7248](https://github.com/bevyengine/bevy/pull/7248) by @james7132, we now support ingesting externally created `CommandBuffer`s into the render graph, which should allow users to encode GPU commands in parallel and import them into the render graph. This is currently blocked by wgpu, which locks the GPU device when encoding render passes, but we should be able to support parallel command encoding as soon as that's addressed.
 
 On a similar note, we've made steps to enable higher parallelism in other stages of the rendering pipeline. `PipelineCache` has been a resource that almost every Queue stage system needed to access mutably, but also only rarely needed to be written to. In [#7205](https://github.com/bevyengine/bevy/pull/7205), @danchia changed this to use internal mutability to allow for these systems to parallelize. This doesn't fully allow every system in this stage to parallelize just yet, as there still remains a few common blockers, but it should allow non-conflicting render phases to queue commands at the same time.
 
@@ -1106,7 +1105,7 @@ MSAA requires an extra intermediate "multisampled" texture, which gets resolved 
 
 <div class="release-feature-authors">authors: @ickk</div>
 
-The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** reworked the type definition: rather having a single `is_visible: bool` field, we now use an enum with an additional mode:
+The [`Visibility`] component controls whether or not an [`Entity`] should be rendered. **Bevy 0.10** reworked the type definition: rather than having a single `is_visible: bool` field, we now use an enum with an additional mode:
 
 ```rust
 pub enum Visibility {
@@ -1270,7 +1269,7 @@ struct MyStruct {
 }
 
 #[derive(Reflect)]
-struct Data {
+enum Data {
   Foo(u32, u32),
   Bar(bool)
 }
