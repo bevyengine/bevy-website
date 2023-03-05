@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="page-with-menu">
+    <div class="page-with-menu {% block page_with_menu_extra_class %}{% endblock %}">
         <div class="page-with-menu__menu-wrapper">
             <div class="page-with-menu__menu">
                 {% block page_menu %}{% endblock %}

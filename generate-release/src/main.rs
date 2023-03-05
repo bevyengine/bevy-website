@@ -1,11 +1,14 @@
+use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
 use migration_guide::generate_migration_guide;
 use release_notes::generate_release_note;
 use release_notes_website::generate_release_notes_website;
 use std::path::PathBuf;
 
+mod changelog;
 mod github_client;
 mod helpers;
+mod markdown;
 mod migration_guide;
 mod release_notes;
 mod release_notes_website;
@@ -40,9 +43,13 @@ struct Args {
 #[derive(Subcommand)]
 enum Commands {
     MigrationGuide {
-        /// Date of the release of the previous version. Format: YYYY-MM-DD
-        #[arg(short, long)]
-        date: String,
+        /// The name of the branch / tag to start from
+        #[arg(long)]
+        from: String,
+
+        /// The name of the branch / tag to end on
+        #[arg(long)]
+        to: String,
 
         /// Title of the frontmatter
         #[arg(short, long)]
@@ -82,6 +89,19 @@ enum Commands {
         #[arg(short, long)]
         path: Option<std::path::PathBuf>,
     },
+    Changelog {
+        /// The name of the branch / tag to start from
+        #[arg(short, long)]
+        from: String,
+
+        /// The name of the branch / tag to end on
+        #[arg(short, long)]
+        to: String,
+
+        /// Path used to output the generated file. Defaults to ./changelog.md
+        #[arg(short, long)]
+        path: Option<std::path::PathBuf>,
+    },
 }
 
 fn main() -> anyhow::Result<()> {
@@ -100,14 +120,16 @@ fn main() -> anyhow::Result<()> {
 
     match args.command {
         Commands::MigrationGuide {
-            date,
+            from,
+            to,
             title,
             weight,
             path,
         } => generate_migration_guide(
             &title,
             weight,
-            &date,
+            &from,
+            &to,
             path.unwrap_or_else(|| PathBuf::from("./migration-guide.md")),
             &mut client,
         )?,
@@ -121,6 +143,12 @@ fn main() -> anyhow::Result<()> {
             &from,
             &to,
             path.unwrap_or_else(|| PathBuf::from("./release-notes-website.md")),
+            &mut client,
+        )?,
+        Commands::Changelog { from, to, path } => generate_changelog(
+            &from,
+            &to,
+            path.unwrap_or_else(|| PathBuf::from("./changelog.md")),
             &mut client,
         )?,
     };

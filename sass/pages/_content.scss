@@ -3,20 +3,29 @@ $content-font-size: 1.22rem;
     width: 100%;
     font-size: $content-font-size;
     font-weight: 400;
-    line-height: $content-font-size * 1.43;
+    line-height: 1.43;
     color: #d2d2d2;
     font-style: normal;
     text-decoration: none;
     word-break: break-word;
 
     h2 {
-        margin-top: 3.0rem;
+        margin-top: 2.2rem;
+        margin-bottom: 0.5rem;
         font-size: 2.2rem;
+
+        code {
+            font-size: inherit;
+        }
     }
 
     h3 {
         font-size: 1.5rem;
         margin-bottom: 1rem;
+
+        code {
+            font-size: inherit;
+        }
     }
 
     h4 {
@@ -63,6 +72,10 @@ $content-font-size: 1.22rem;
 
     a:hover code {
         background-color: $syntax-theme-background-hover;
+    }
+
+    a.button {
+        color: $color-white;
     }
 
     a {
