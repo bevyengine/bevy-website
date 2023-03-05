@@ -1061,6 +1061,36 @@ Bevy's [`Plane`] shape can now be subdivided any number of times.
 
 [`Plane`]: https://docs.rs/bevy/0.10.0/bevy/prelude/shape/struct.Plane.html
 
+## Camera Output Modes
+
+<div class="release-feature-authors">authors: @cart, @robtfm</div>
+
+The [camera-driven](/news/bevy-0-8/#camera-driven-rendering) post-processing features [added in Bevy 0.9](/news/bevy-0-9/#hdr-post-processing-tonemapping-and-bloom) add intuitive control over post processing across multiple cameras in a scene, but there [were a few corner cases](https://github.com/bevyengine/bevy/pull/7490) that didn't _quite_ fit into the hard-coded camera output model. And there were some bugs and limitations related to double buffered target texture sources of truth being incorrect across cameras and MSAA's sampled texture not containing what it should under some circumstances.
+
+**Bevy 0.10** adds a [`CameraOutputMode`] field to [`Camera`], which gives Bevy app developers the ability to manually configure exactly how (and if) a [`Camera`]'s render results should be written to the final output texture:
+
+```rust
+// Configure the camera to write to the final output texture
+camera.output_mode = CameraOutputMode::Write {
+    // Do not blend with the current state of the output texture
+    blend_state: None,
+    // Clear the output texture
+    color_attachment_load_op: LoadOp::Clear(Default::default()),
+};
+
+// Configure the camera to skip writing to the final output texture
+// This can save a pass when there are multiple cameras, and can be useful for
+// some post processing situations
+camera.output_mode = CameraOutputMode::Skip;
+```
+
+_Most_ single-camera and multi-camera setups will not need to touch this setting at all. But if you need it, it will be waiting for you!
+
+MSAA requires an extra intermediate "multisampled" texture, which gets resolved to the "actual" unsampled texture. In some corner case multi-camera setups that render to the same texture, this can create weird / inconsistent results based on whether or not MSAA is enabled or disabled. We've added a new `Camera::msaa_writeback` `bool` field which (when enabled) will write the current state of the unsampled texture to the intermediate MSAA texture (if a previous camera has already rendered to the target on a given frame). This ensures that the state is consistent regardless of MSAA configuration. This defaults to true, so you only need to think about this if you have a multi-camera setup and you _don't_ want MSAA writeback.
+
+[`CameraOutputMode`]: https://docs.rs/bevy/0.10.0/bevy/render/camera/enum.CameraOutputMode.html
+[`Camera`]: https://docs.rs/bevy/0.10.0/bevy/render/camera/struct.Camera.html
+
 ## Configurable Visibility Component
 
 <div class="release-feature-authors">authors: @ickk</div>
