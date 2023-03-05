@@ -1557,13 +1557,31 @@ let's double the `emissive` value of each cube.
 6. Explore the new bloom settings in an interactive playground using the new `bloom_3d` (and `bloom_2d`) examples.
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 16px;">
-    <div><div class="news-image-subtitle">(1)</div><img src="old_bloom.png"/></div>
-    <div><div class="news-image-subtitle">(2)</div><img src="old_bloom_aces.png"/></div>
-    <div><div class="news-image-subtitle">(3)</div><img src="new_bloom.png"/></div>
-    <div><div class="news-image-subtitle">(4)</div><img src="new_bloom_double_emission.png"/></div>
-    <div><div class="news-image-subtitle">(5)</div><img src="new_bloom_additive.png"/></div>
-    <div><div class="news-image-subtitle">(6)</div><img src="bloom_example.png"/></div>
-</div>
+     <div style="position: relative;">
+        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 99px; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">1</div>
+        <img src="old_bloom.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 99px; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">2</div>
+        <img src="old_bloom_aces.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 99px; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">3</div>
+        <img src="new_bloom.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 99px; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">4</div>
+        <img src="new_bloom_double_emission.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 99px; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">5</div>
+        <img src="new_bloom_additive.png" style="width: 100%; height: auto;"/>
+     </div>
+     <div style="position: relative;">
+        <div class="news-image-subtitle" style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 99px; width: 20px; height: 20px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); opacity: 0.8; text-align: center;">6</div>
+        <img src="bloom_example.png" style="width: 100%; height: auto;"/>
+     </div>
+ </div>
 
 ## What's Next?
 
