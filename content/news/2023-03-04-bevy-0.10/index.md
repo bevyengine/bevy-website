@@ -1702,7 +1702,7 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 
 ## Contributors
 
-A huge thanks to the 173 contributors that made this release (and associated docs) possible! In random order:
+Bevy is made by a [large group of people](/community/people/). A huge thanks to the 173 contributors that made this release (and associated docs) possible! In random order:
 
 * @killercup
 * @torsteingrindvik
