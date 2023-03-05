@@ -1,3 +1,94 @@
+.card-nu {
+    $desktop-height: 12rem;
+
+    display: block;
+    overflow: hidden;
+    border-radius: $border-radius;
+    border: 2px solid #383838;
+    background-color: $syntax-theme-background;
+    text-decoration: none;
+
+    margin-bottom: 15px;
+
+    @media #{$bp-phone-landscape-up} {
+        min-height: $desktop-height;
+        position: relative;
+        display: grid;
+        grid-template-columns: 30% 1fr;
+        grid-template-areas: "xxx content";
+    }
+
+    &:hover {
+        background-color: $card-hover-background;
+        border: 2px solid #6b6b6b;
+    }
+
+    &__img-wrapper {
+        @include flex-center;
+
+        background-color: $default-image-background-color;
+        padding: 1rem;
+
+        @media #{$bp-phone-landscape-up} {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 70%;
+        }
+    }
+
+    &__img {
+        max-width: 100%;
+        max-height: 150px;
+        object-fit: contain;
+        border-radius: $border-radius;
+        
+        @media #{$bp-phone-landscape-up} {
+            max-height: 100%;
+        }
+    }
+
+    &__content {
+        padding: 0.8rem 1.2rem;
+        grid-area: content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &__title {
+        margin: 0;
+        line-height: 1.1;
+        font-size: 2.0rem;
+        font-weight: 500;
+        color: $default-color;
+        font-style: normal;
+        margin-bottom: 4px;
+    }
+
+    &__subtitle {
+        font-size: 1.4rem;
+        font-weight: 200;
+        font-style: italic;
+        color: $subtitle-color;
+    }
+
+    &__description {
+        @include text-ellipsis(5);
+
+        margin: 0.4rem 0 0;
+        font-size: 1.3rem;
+        font-weight: 300;
+        color: $default-color;
+        text-decoration: none;
+
+        @media #{$bp-phone-landscape-up} {
+            @include text-ellipsis(3);
+        }
+    }
+}
+
 .card {
     display: block;
     flex-direction: left;
