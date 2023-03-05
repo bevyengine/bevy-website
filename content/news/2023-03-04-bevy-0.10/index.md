@@ -853,10 +853,13 @@ In testing different Bevy examples, the gains were typically in the 10% to 30% r
 As seen in the above histogram, the mean frame time of the "many foxes" stress test
 is 1.8ms faster than before.
 
-To use pipelined rendering, you just need to add the `PipelinedRenderingPlugin`. If you're
-using `DefaultPlugins` then it will automatically be added for you on all platforms except
+To use pipelined rendering, you just need to add the [`PipelinedRenderingPlugin`]. If you're
+using [`DefaultPlugins`] then it will automatically be added for you on all platforms except
 wasm. Bevy does not currently support multithreading on wasm which is needed for this
-feature to work. If you are not using `DefaultPlugins` you can add the plugin manually.
+feature to work. If you are not using [`DefaultPlugins`] you can add the plugin manually.
+
+[`PipelinedRenderingPlugin`]: https://docs.rs/bevy/0.10.0/bevy/render/pipelined_rendering/struct.PipelinedRenderingPlugin.html
+[`DefaultPlugins`]: https://docs.rs/bevy/0.10.0/bevy/struct.DefaultPlugins.html
 
 ## Windows as Entities
 
