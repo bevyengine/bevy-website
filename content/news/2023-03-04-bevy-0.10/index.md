@@ -1556,7 +1556,7 @@ let's double the `emissive` value of each cube.
 `BloomSettings::composite_mode` from `BloomCompositeMode::EnergyConserving` to `BloomCompositeMode::Additive`.
 6. Explore the new bloom settings in an interactive playground using the new `bloom_3d` (and `bloom_2d`) examples.
 
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 16px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); grid-gap: 16px;">
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">1</div>
         <img src="old_bloom.png" style="width: 100%; height: auto;"/>
