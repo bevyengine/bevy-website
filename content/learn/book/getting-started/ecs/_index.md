@@ -28,7 +28,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 
     ```rs
     fn print_position_system(query: Query<&Transform>) {
-        for transform in query.iter() {
+        for transform in &query {
             println!("position: {:?}", transform.translation);
         }
     }
@@ -111,7 +111,7 @@ We could run this App now and the `add_people` system would run first, followed 
 
 ```rs
 fn greet_people(query: Query<&Name, With<Person>>) {
-    for name in query.iter() {
+    for name in &query {
         println!("hello {}!", name.0);
     }
 }
