@@ -359,7 +359,7 @@ app
 ```rust
 fn start_game(
     button_query: Query<&Interaction, With<StartGameButton>>,
-    next_state: ResMut<NextState<AppState>>,
+    mut next_state: ResMut<NextState<AppState>>,
 ){
     if button_query.single() == Interaction::Pressed {
         next_state.set(AppState::InGame);
