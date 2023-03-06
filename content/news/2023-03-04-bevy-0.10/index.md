@@ -139,7 +139,7 @@ You can combine this with the new system features mentioned above:
 app.add_systems(
     (apply_acceleration, apply_velocity)
         .chain()
-        .in_set(PhysicsSet::Movement),
+        .in_set(PhysicsSet::Movement)
 )
 ```
 
