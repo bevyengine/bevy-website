@@ -1636,7 +1636,7 @@ Color::Lcha {
 
 ## `EntityCommand`s
 
-<div class="release-feature-authors">authors: @targrub</div>
+<div class="release-feature-authors">authors: @JoJoJet</div>
 
 [`Commands`] are "deferred ECS" operations. They enable developers to define custom ECS operations that are applied after a parallel system has finished running. Many [`Commands`] ran on individual entities, but this pattern was a bit cumbersome:
 
