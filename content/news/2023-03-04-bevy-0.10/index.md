@@ -367,7 +367,7 @@ fn start_game(
 }
 ```
 
-This replaces Bevy's previous state system, which was very hard to deal with. It had state stacks, elaborate queued transitions, error handling (that most people just unwrapped). The state stack was very complex to learn, very prone to exasperating bugs, and mostly ignored.
+This replaces Bevy's previous state system, which was very hard to deal with. It had state stacks, elaborate queued transitions, and error handling (that most people just unwrapped). The state stack was very complex to learn, very prone to exasperating bugs, and mostly ignored.
 
 As a result, in **Bevy 0.10** states are now "stackless": only one queued state of each type at a time. After lots of alpha testing, we're reasonably confident that this shouldn't be too bad to migrate away from. If you were relying on the state stack, you have plenty of options:
 
