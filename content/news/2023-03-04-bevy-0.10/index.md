@@ -180,7 +180,7 @@ app.configure_set(MoveSet::Player.after(PortalSet::Teleport))
 
 Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both an "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
 
-Configuration rules _must be compatible with each other_: any paradoxes (like a system set inside of itself, or a system that must run both before and after a set) will result in a runtime panic with a helpful error message.
+Configuration rules _must be compatible with each other_: any paradoxes (like a system set inside of itself, a system that must run both before and after a set, order cycles, etc) will result in a runtime panic with a helpful error message.
 
 [`SystemSet`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.SystemSet.html
 [`SystemSets`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.SystemSet.html
@@ -438,11 +438,9 @@ We've found that in practice, there are three broad classes of systems: gameplay
 By broadly ordering the schedule via **Base Sets**, Bevy apps can have good default behavior and clear high-level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 Let us know how it works out for you!
 
-### Improved System Ambiguity Detection and Cycle Reporting
+### Improved System Ambiguity Detection
 
-When multiple systems interact with an ECS resource in conflicting ways, but don't have an ordering constraint between them, we call this an "ambiguity". If your [`App`] has ambiguities, this can cause bugs. We've significantly improved our ambiguity reporting, which can be configured in the new [`ScheduleBuildSettings`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html).
-
-Significantly improved ambiguity detection and cycle reporting: check out the  docs for more info. If you haven't tried this out on your app yet: you should take a look!
+When multiple systems interact with an ECS resource in conflicting ways, but don't have an ordering constraint between them, we call this an "ambiguity". If your [`App`] has ambiguities, this can cause bugs. We've significantly improved our ambiguity reporting, which can be configured in the new [`ScheduleBuildSettings`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html). Check out the docs for more info. If you haven't tried this out on your app yet: you should take a look!
 
 ### Single Threaded Execution
 
