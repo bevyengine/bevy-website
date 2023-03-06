@@ -1257,7 +1257,7 @@ These abstractions were introduced in [#6404](https://github.com/bevyengine/bevy
 
 ## Cylinder Shape
 
-<div class="release-feature-authors">authors: @JayPavlinas, @rparrett, @davidhof</div>
+<div class="release-feature-authors">authors: @JayPavlina, @rparrett, @davidhof</div>
 
 The cylinder shape primitive has joined our zoo of built-in shapes!
 
