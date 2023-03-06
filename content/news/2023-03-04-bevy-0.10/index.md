@@ -1898,7 +1898,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 ## Full Changelog
 
-## Added
+### Added
 
 * [Accessibility: Added `Label` for marking text specifically as a label for UI controls.][6874]
 * [Accessibility: Integrate with and expose AccessKit accessibility.][6874]
@@ -2112,7 +2112,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Windowing: Modifed the `WindowDescriptor`’s `Default` impl.][6664]
 * [Windowing: Modified the `WindowBuilder`][6664]
 
-## Changed
+### Changed
 
 * [Animation: `AnimationPlayer` that are on a child or descendant of another entity with another player will no longer be run.][6785]
 * [Animation: Animation sampling now runs fully multi-threaded using threads from `ComputeTaskPool`.][6785]
@@ -2220,10 +2220,10 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Reflect: Changed the `List::push` and `List::pop` to have default implementations.][7063]
 * [Reflect: Registered `SmallVec<[Entity; 8]>` in the type registry][6578]
 * [Renamed methods on `GetPath`:][7321]
-  - `path` -> `reflect_path`
-  - `path_mut` -> `reflect_path_mut`
-  - `get_path` -> `path`
-  - `get_path_mut` -> `path_mut`
+  * `path` -> `reflect_path`
+  * `path_mut` -> `reflect_path_mut`
+  * `get_path` -> `path`
+  * `get_path_mut` -> `path_mut`
 * [Render: Allow prepass in webgl][7537]
 * [Render: bevy_pbr: Avoid copying structs and using registers in shaders][7069]
 * [Render: bevy_pbr: Clear fog DynamicUniformBuffer before populating each frame][7432]
@@ -2283,7 +2283,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Rendering: You can now set up the rendering code of a `RenderPhase` directly using the `RenderPhase::render` method, instead of implementing it manually in your render graph node.][7013]
 * [Scenes: `SceneSpawner::spawn_dynamic` now returns `InstanceId` instead of `()`.][6663]
 * [Shape: Change `From<Icosphere>` to `TryFrom<Icosphere>`][6484]
-* [Tasks: `Scope` now uses FallibleTask` to await the cancellation of all remaining tasks when it’s dropped.][6696]
+* [Tasks: `Scope` now uses `FallibleTask` to await the cancellation of all remaining tasks when it’s dropped.][6696]
 * [Time: `Time::set_relative_speed_fXX` now allows a relative speed of -0.0.][7740]
 * [UI: `FocusPolicy` default has changed from `FocusPolicy::Block` to `FocusPolicy::Pass`][7161]
 * [UI: `TextPipeline::queue_text` and `GlyphBrush::compute_glyphs` now need a TextLineBreakBehaviour argument, in order to pass through the new field.][7283]
@@ -2315,7 +2315,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Windowing: Requesting maximization/minimization is done on the [`Window::state`] field.][5589]
 * [Windowing: Width/height consolidated into a `WindowResolution` component.][5589]
 
-## Removed
+### Removed
 
 * [App: Removed `App::add_sub_app`][7290]
 * [App: Rename dynamic feature][7340]
@@ -2404,7 +2404,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Windowing: `window.always_on_top` has been removed, you can now use `window.window_level`][7480]
 * [Windowing: Removed `ModifiesWindows` system label.][7517]
 
-## Fixed
+### Fixed
 
 * [Asset: Fix asset_debug_server hang. There should be at most one ThreadExecut…][7825]
 * [Asset: fix load_internal_binary_asset with debug_asset_server][7246]
