@@ -35,13 +35,13 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Renderer Optimizations**: We spent a _ton_ of effort optimizing the renderer this cycle. Bevy's renderer is snappier than ever!
 * **ECS Optimizations**: Likewise, we've turbocharged many common ECS operations. Bevy apps get a nice speed boost!
 
-## ECS Schedule v3: simpler, more flexible scheduling
+## ECS Schedule v3
 
 <div class="release-feature-authors">authors: @alice-i-cecile, @maniwani, @WrongShoe, @cart, @jakobhellermann, @JoJoJet, @geieredgar and a whole lot more </div>
 
 Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" scheduling RFC](https://github.com/bevyengine/rfcs/blob/main/rfcs/45-stageless.md) has been implemented!
 
-Schedule v3 is the culmination of significant design and implementation work. Scheduling APIs are a central and defining part of the Bevy developer experience, so we had to be very thoughtful and meticulous about this next evolution of the API. In addition to the [RFC PR](https://github.com/bevyengine/rfcs/pull/45), the [initial implementation PR](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and the [Bevy Engine internals port PR](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile` are great places to start if you would like a view into our process and rationale. As we all know, plans and implementations are two different things. Our final implementation is a bit different from the initial RFC (in a good way).
+**Schedule v3** is the culmination of significant design and implementation work. Scheduling APIs are a central and defining part of the Bevy developer experience, so we had to be very thoughtful and meticulous about this next evolution of the API. In addition to the [RFC PR](https://github.com/bevyengine/rfcs/pull/45), the [initial implementation PR](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and the [Bevy Engine internals port PR](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile` are great places to start if you would like a view into our process and rationale. As we all know, plans and implementations are two different things. Our final implementation is a bit different from the initial RFC (in a good way).
 
 There are a ton of changes, but we've put a lot of care into ensuring the [migration path](/learn/book/migration-guides/0.9-0.10/#migrate-engine-to-schedule-v3-stageless) for existing applications is relatively straightforward. Don't sweat it!
 
@@ -61,120 +61,187 @@ This diagram made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://g
 
 [`Schedule`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.Schedule.html
 
-### Configurable System Sets
+### Adding Systems
 
-To support more natural and flexible control over "how are my systems run and scheduled", the idea of a "system set" has been redefined, rolling up the existing "system label" concept into one straightforward but powerful abstraction.
-
-Every system, once it is part of a schedule, stores **system configuration** metadata: which run conditions are attached, how they are ordered relative to other systems or sets, and so on.
-**System sets** are named collections of systems that share system configuration across all of their members. This is both distributive and additive: ordering systems relative to a system set applies that ordering to _all_ systems in that set, in addition to any configuration on each individual system.
-
-Let's jump right into what this would look like.
+[`Systems`] (which are just [normal Rust functions!](https://github.com/bevyengine/bevy/tree/v0.10.0/crates/bevy_ecs#systems)) are how you define game logic in Bevy ECS. With **Schedule v3**, you can add systems to your [`App`] just like you did in previous versions:
 
 ```rust
-// System set types are used to provide stable, typed identifiers
-// for groups of systems, allowing external systems to order themselves
-// without being aware of internal details.
-// Each variant of this enum is a distinct system set.
-#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
-enum PhysicsSet {
-    Forces,
-    Kinematics,
-    CollisionDetection
-}
-
-app
-    // .with_run_criteria -> .run_if <3
-    // Note that in this case, we're modifying this single `gravity` system, not the entire `PhysicsSet::Forces`
-    // as this is a method on a single system.
-    // The order of these method calls doesn't matter!
-   .add_system(gravity.in_set(PhysicsSet::Forces).run_if(gravity_enabled))
-    // Add multiple systems at once with add_systems!
-    .add_systems(
-        (apply_acceleration, apply_velocity)
-            // Quickly order a list of systems to run one after the next by using .chain()
-            .chain()
-            .in_set(PhysicsSet::Kinematics),
-    )
-    .add_system(detect_collisions.in_set(PhysicsSet::CollisionDetection))
-    // You can add configuration for an entire set in a single place
-    .configure_set(
-        PhysicSet::Forces
-        .in_base_set(CoreSet::Update)
-        .before(PhysicsSet::Kinematics)
-    )
-    .configure_set(
-        PhysicSet::Kinematics
-        .in_base_set(CoreSet::PostUpdate)
-        // Previously, this would have been impossible,
-        // as `CollisionDetection` is run in `Update`, which would be represented by a different stage
-        .before(PhysicsSet::CollisionDetection)
-        // Ooh run condition combinators 👀
-        .run_if(not(game_paused))
-    )
-    .configure_set(
-        PhysicSet::CollisionDetection
-        .in_base_set(CoreSet::PostUpdate)
-    )
+app.add_system(gravity)
 ```
 
-A system can belong to any number of sets. Systems add the configuration from each set they are in to their own configuration. Similarly, sets can be nested, allowing you to granularly define a clear set of rules for app-level scheduling patterns.
+However **Schedule v3** has some new tricks up its sleeve! You can now add multiple systems at once:
 
-These rules must be compatible with each other: any paradoxes (like a system set inside of itself, or a system that must run both before and after a set) will result in a runtime panic with a helpful error message.
+```rust
+app.add_systems((apply_acceleration, apply_velocity))
+```
 
-As long as you can construct the type of a system set, you can both order your systems relative to it, and configure its behavior even after it has been initialized elsewhere! Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both an "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
+By default, Bevy runs systems in parallel to each other. In previous versions of Bevy, you ordered systems like this:
+
+```rust
+app
+    .add_system(walk.before(jump))
+    .add_system(jump))
+    .add_system(collide.after(jump))
+```
+
+You can still do that! But you can now compress this using `add_systems`:
+
+```rust
+// much cleaner!
+app.add_systems((
+    walk.before(jump),
+    jump,
+    collide.after(jump),
+))
+```
+
+`before()` and `after()` are definitely useful tools! However, thanks to the new `chain()` function, it is now _much easier_ to run systems in a specific order:
+
+```rust
+// This is equivalent to the previous example
+app.add_systems((walk, jump, collide).chain())
+```
+
+`chain()` will run the systems in the order they were defined. Chaining also pairs with per-system configuration:
+
+```rust
+app.add_systems((walk.after(input), jump, collide).chain())
+```
+
+[`App`]: http://dev-docs.bevyengine.org/bevy/app/struct.App.html
+[`Systems`]: http://dev-docs.bevyengine.org/bevy/ecs/system/trait.System.html
+
+### Configurable System Sets
+
+In **Schedule v3**, the idea of the "system set" has been redefined to support more natural and flexible control over how systems are run and scheduled. The old "system label" concept has been combined with the "set" concept, resulting in one straightforward but powerful abstraction.
+
+[`SystemSets`] are named collections of systems that share system configuration across all of their members. Ordering systems relative to a [`SystemSet`] applies that ordering to _all_ systems in that set, in addition to any configuration on each individual system.
+
+Let's jump right into what this would look like. You define [`SystemSets`] like this:
+
+```rust
+#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+enum PhysicsSet {
+    Movement,
+    CollisionDetection,
+}
+```
+
+You can add systems to sets by calling the [`in_set`] method:
+
+```rust
+app.add_system(gravity.in_set(PhysicsSet::Movement))
+```
+
+You can combine this with the new system features mentioned above:
+
+```rust
+app.add_systems(
+    (apply_acceleration, apply_velocity)
+        .chain()
+        .in_set(PhysicsSet::Movement),
+)
+```
+
+Systems can belong to any number of sets:
+
+```rust
+app.add_system(
+    move_player
+        .in_set(MoveSet::Player)
+        .in_set(PhysicsSet::Movement)
+)
+```
+
+Configuration is added to sets like this:
+
+```rust
+app.configure_set(
+    // Run systems in the Movement set before systems in the CollisionDetection set
+    PhysicSet::Movement.before(PhysicsSet::CollisionDetection)
+)
+```
+
+Sets can be nested inside other sets, which will cause them to inherit the configuration of their parent set:
+
+```rust
+app.configure_set(MoveSet::Enemy.in_set(PhysicsSet::Movement))
+```
+
+Sets can be configured multiple times:
+
+```rust
+// In PlayerPlugin:
+app.configure_set(MoveSet::Player.before(MoveSet::Enemy))
+
+// In PlayerTeleportPlugin
+app.configure_set(MoveSet::Player.after(PortalSet::Teleport))
+```
+
+Crucially system configuration is strictly additive: you cannot _remove_ rules added elsewhere. This is both an "anti-spaghetti" and "plugin privacy" consideration. When this rule is combined with Rust's robust type privacy rules, plugin authors can make careful decisions about which exact invariants need to be upheld, and reorganize code and systems internally without breaking consumers.
+
+Configuration rules _must be compatible with each other_: any paradoxes (like a system set inside of itself, or a system that must run both before and after a set) will result in a runtime panic with a helpful error message.
+
+[`SystemSet`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.SystemSet.html
+[`SystemSets`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.SystemSet.html
+[`in_set`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.IntoSystemConfig.html#method.in_set
 
 ### Directly Schedule Exclusive Systems
 
-Ever wished that you could just flush commands or run an exclusive system right before this system but after that system without shuffling your entire schedule to make it work?
+"Exclusive systems" are [`Systems`] that have mutable direct access to the entire ECS [`World`]. For this reason, they cannot be run in parallel with other [`Systems`].
 
-Now you can! Thanks to ongoing cleanup work in the ECS scheduling internals, and the unified schedule mentioned above, exclusive systems can now be scheduled and ordered like any other system.
+Since Bevy's inception, Bevy devs have wanted to schedule exclusive systems (and flush commands) relative to normal systems.
+
+Now you can! Exclusive systems can now be scheduled and ordered like any other system.
 
 ```rust
 app
     .add_system(ordinary_system)
-    // This works?!
+    // This works!
     .add_system(exclusive_system.after(ordinary_system))
 ```
 
-This is particularly powerful, as **command flushes** (which apply any queued-up `Commands` added in systems to e.g. spawn and despawn entities) are now simply performed in the `apply_system_buffers` exclusive system.
+This is particularly powerful, as **command flushes** (which apply queued-up [`Commands`] added in systems to do things like spawn and despawn entities) are now simply performed in the `apply_system_buffers` exclusive system.
 
 ```rust
-app
-    .add_systems((
-        system_that_produces_commands,
-        // Built-in exclusive system that applies generated commands
+app.add_systems(
+    (
+        // This system produces some commands
+        system_a,
+        // This will apply the queued commands from system_a
         apply_system_buffers,
-        system_that_needs_commands_to_have_been_applied
-    // chain() creates an ordering between each of these systems,
-    // so we know that our commands will have been applied by the time our last system is run
-    ).chain().in_set(CoreSet::PostUpdate))
+        // This system will have access to the results of
+        // system_a's commands
+        system_b,
+    // This chain ensures the systems above run in the order
+    // they are defined
+    ).chain()
+)
 ```
 
 Do be careful with this pattern though: it's easy to quickly end up with many poorly ordered exclusive systems, creating bottlenecks and chaos.
 
-Similarly, state transitions can be scheduled manually, one type at a time, in the `apply_state_transitions::<S>` exclusive system.
-
 What will you do with this much power? We're keen to find out!
 
-### It's All Schedules? Managing complex control flow
+### Managing Complex Control Flow with Schedules
 
-But what if you want to do something _weird_ with your schedule? Something non-linear, branching, or looping. What should you reach for?
+But what if you want to do something _weird_ with your [`Schedule`]? Something non-linear, branching, or looping. What should you reach for?
 
 It turns out, Bevy already _had_ a great tool for this: schedules that run inside of an exclusive system. The idea is pretty simple:
 
 1. Construct a schedule, that stores whatever complex logic you want to run.
 2. Store that schedule inside of a resource.
 3. In an exclusive system, perform any arbitrary Rust logic you want to decide if and how your schedule runs.
-4. Temporarily take the schedule out of the world, run it on the rest of the world to mutate both the schedule and the world, and then put it back in.
+4. Temporarily take the schedule out of the [`World`], run it on the rest of the world to mutate both the schedule and the world, and then put it back in.
 
-With the addition of the new `Schedules` resource and the `world.run_schedule(schedule_label: impl ScheduleLabel)`API it's more ✨ ergonomic ✨ than ever.
+With the addition of the new [`Schedules`] resource and the `world.run_schedule()` API it's more ✨ ergonomic ✨ than ever.
 
 ```rust
-// A schedule!
+// A Schedule!
 let mut my_schedule = Schedule::new();
 schedule.add_system(my_system);
 
-// A schedule label for it
+// A label for our new Schedule!
 #[derive(ScheduleLabel, Debug, Hash, PartialEq, Eq, Clone)]
 struct MySchedule;
 
@@ -185,13 +252,13 @@ fn run_my_schedule(world: &mut World) {
     }
 }
 
-// Behold the ergonomics
+// Behold the ergonomics!
 app
     .add_schedule(MySchedule, my_schedule)
     .add_system(run_my_schedule);
 ```
 
-Bevy uses this pattern for five rather different things at 0.10 release:
+Bevy uses this pattern for five rather different things in **Bevy 0.10**:
 
 1. **Startup systems:** these now live in their own schedule, which is run once at the start of the app.
 2. **Fixed timestep systems:** another schedule?! The exclusive system that runs this schedule accumulates time, running a while loop that repeatedly runs `CoreSchedule::FixedTimestep` until all of the accumulated time has been spent.
@@ -201,15 +268,11 @@ Bevy uses this pattern for five rather different things at 0.10 release:
 
 Follow the breadcrumbs starting at [`CoreSchedule`](https://docs.rs/bevy/0.10.0/bevy/app/enum.CoreSchedule.html) for more info.
 
-### Simpler Run Conditions
+[`Schedules`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.Schedules.html
 
-Systems may have any number of run conditions (and inherit them from the sets they belong to), but will only run if all of their run conditions return `true`.
-Run criteria have been renamed to the clearer **run conditions**, which can be constructed out of any read-only system that returns `bool`.
+### Run Conditions
 
-With a new blessed pattern for complex control flow, we can finally get rid of looping run criteria. [`ShouldRun::YesAndCheckAgain`](https://docs.rs/bevy/0.9.1/bevy/ecs/schedule/enum.ShouldRun.html) was not exactly straightforward to reason about, either for engine devs or users. It's always a bad sign when your bool-like enums have four possible values.
-
-If you crave that powerful, complex control flow: use the "schedules in exclusive systems" pattern listed above.
-For the other 99% of use cases, enjoy the simpler `bool`-based run conditions.
+[`Systems`] can have any number of **run conditions**, which are "just" systems that return a `bool`. If the `bool`s returned by _all_ of a system's **run conditions** are `true`, the system will run. Otherwise the system will be skipped for the current run of the schedule:
 
 ```rust
 // Let's make our own run condition
@@ -221,96 +284,125 @@ fn game_win_condition(query: Query<&Player>, score: Res<Score>) -> bool {
 app.add_system(win_game.run_if(game_win_condition));
 ```
 
-Run conditions can also serve as a lightweight optimization tool. Run conditions are evaluated on the main thread, and each run criteria is evaluated exactly once each schedule update, at the time of the first system in the set that relies on it. Systems disabled by run conditions don't spawn a task, which can add up across many systems. Like always though: benchmark!
+**Run conditions** also a number of "combinator" operations, thanks to [@JoJoJet](https://github.com/bevyengine/bevy/pull/7547) and [@Shatur](https://github.com/bevyengine/bevy/pull/7559):
 
-Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/common_conditions/index.html). Courtesy of [#6587 by `@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [#7579 by `@inodentry`](https://github.com/bevyengine/bevy/pull/7579), [#7806 by `@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), and [#7866 by `@jabuwu`](https://github.com/bevyengine/bevy/pull/7866) you can easily run systems if there are events to process, timers that elapsed, resources that changed, input state changes, and more.
+They can be negated with `not()`:
 
-When you need something more sophisticated, combining run conditions is a breeze. Courtesy of [#7547](https://github.com/bevyengine/bevy/pull/7547), [#7559](https://github.com/bevyengine/bevy/pull/7559), and [#7605](https://github.com/bevyengine/bevy/pull/7605), you can create new run conditions with the use of system piping and the `not`, `and_then`, or `or_else` run condition combinators.
+```rust
+app.add_system(continue_game.run_if(not(game_win_condition)))
+```
+
+They can also be combined with `and_then` and `or_else`:
+
+```rust
+app.add_system(move_player.run_if(is_alive.or_else(is_zombie)))
+```
+
+Bevy 0.10 is shipping with a lovely collection of built-in [common run conditions](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/common_conditions/index.html). You can easily run systems if there are events to process, timers that elapsed, resources that changed, input state changes, states that changed, and more (thanks to [`@maniwani`](https://github.com/bevyengine/bevy/pull/6587), [`@inodentry`](https://github.com/bevyengine/bevy/pull/7579), [`@jakobhellermann`](https://github.com/bevyengine/bevy/pull/7806), and [`@jabuwu`](https://github.com/bevyengine/bevy/pull/7866)).
+
+**Run conditions** can also serve as a lightweight optimization tool. Run conditions are evaluated on the main thread, and each run criteria is evaluated exactly once each schedule update, at the time of the first system in the set that relies on it. Systems disabled by run conditions don't spawn a task, which can add up across many systems. Like always though: benchmark!
+
+**Run conditions** have replaced the "run criteria" in previous versions of Bevy. We can finally get rid of the dreaded "looping run criteria"! [`ShouldRun::YesAndCheckAgain`](https://docs.rs/bevy/0.9.1/bevy/ecs/schedule/enum.ShouldRun.html) was not exactly straightforward to reason about, either for engine devs or users. It's always a bad sign when your bool-like enums have four possible values. If you crave more complex control flow: use the "schedules in exclusive systems" pattern in the [section above](#directly-schedule-exclusive-systems). For the other 99% of use cases, enjoy the simpler `bool`-based run conditions!
 
 ### Simpler States
 
-Previously, looping run criteria were used to power states, but as mentioned above, they've been removed.
-How do they work in Bevy 0.10?
+**Schedule v3** adds a new, much simpler "state system". [`States`] allow you to easily configure different [`App`] logic to run based on the current "state" of the [`App`].
 
-1. The current value of the state of type `S` is stored in the `State<S: States>` resource. The pending value is stored in `NextState<S: States>`.
-    1. To set the next state, simply mutate the value of the `NextState<S>` resource.
-2. Run conditions can read the value of the `State<S>` resource.
-    1. Systems with the `in_state(AppState::InGame)` run condition will only run if the value of the `State<AppState>` resource equals `AppState::InGame`.
-3. Check for and apply state transitions as part of the `apply_state_transitions<S>` exclusive system. When transitioning between states:
-    1. First run the `OnExit(S::VariantLeft)` schedule for the state you're leaving.
-    2. Then run the `OnEnter(S::VariantEntered)` schedule.
-    3. These schedules are stored in the `Schedules` resource, and can be looked up via their `ScheduleLabel`.
-4. When the user calls `app.add_state::<S>()`:
-    1. Initialize an `OnEnter` and an `OnExit` schedule for each variant of our state type `S`.
-    2. Configure the `OnUpdate(S::Variant)` system set to belong to `CoreSet::Update` and only run when `State<S>` is `S::Variant`.
-    3. Add a copy of `apply_state_transitions<S>` to `CoreSet::ApplyStateTransitions`.
-    4. Set the starting state of `S` using its `Default` trait.
-
-As a user though, you don't have to worry about those details:
+You define [`States`] like this:
 
 ```rust
-// Setting up our state type.
-// Note that each variant of this enum is a distinct state.
 #[derive(States, PartialEq, Eq, Debug, Default)]
 enum AppState {
-    InGame,
     #[default]
-    MainMenu
+    MainMenu,
+    InGame,
 }
+```
 
+Each variant of the enum corresponds to a different state the [`App`] can be in.
+
+You add [`States`] to your [`App`] like this:
+
+```rust
+app.add_state::<AppState>()
+```
+
+This will setup your [`App`] to use the given state. It adds the [`State`] resource, which can be used to find the current state the [`App`] is in:
+
+```rust
+fn check_state(state: Res<State<AppState>>) {
+    info!("We are in the {} state", state.0);
+}
+```
+
+Additionally, `add_state` will create an `OnUpdate` set for each possible value, which you can then add your systems to. These sets run as part of the normal app update, but only when the app is in a given state:
+
+```rust
 app
-    // Don't forget to initialize the state!
-    .add_state::<AppState>()
-    .add_system(load_main_menu.in_schedule(OnEnter(AppState::MainMenu)))
-    .add_system(start_game.in_set(OnUpdate(AppState::MainMenu)))
-    .add_system(cleanup_main_menu.in_schedule(OnExit(AppState::MainMenu)))
-    .add_system(make_game_fun.in_set(OnUpdate(AppState::InGame)));
+    .add_systems(
+        (main_menu, start_game)
+            .in_set(OnUpdate(AppState::MainMenu))
+    )
+    .add_system(fun_gameplay.in_set(OnUpdate(AppState::InGame)));
+```
 
+It will also create `OnEnter` and `OnExit` schedules for each state, which will only run when transitioning from one state to another:
+
+```rust
+app
+    .add_system(load_main_menu.in_schedule(OnEnter(AppState::MainMenu)))
+    .add_system(cleanup_main_menu.in_schedule(OnExit(AppState::MainMenu)))
+```
+
+`add_state` also adds the [`NextState`] resource, which can be used to queue a state change:
+
+```rust
 fn start_game(
     button_query: Query<&Interaction, With<StartGameButton>>,
     next_state: ResMut<NextState<AppState>>,
 ){
-    let start_game_interaction_state = button_query.single();
-    if start_game_interaction_state == Interaction::Pressed {
+    if button_query.single() == Interaction::Pressed {
         *next_state = NextState(AppState::InGame);
     }
 }
 ```
 
-But wait you say: what about my state stack? My elaborate queued transitions?! My meticulous error handling on every operation that I definitely didn't just unwrap?!!
+This replaces Bevy's previous state system, which was very hard to deal with. It had state stacks, elaborate queued transitions, error handling (that most people just unwrapped). The state stack was very complex to learn, very prone to exasperating bugs, and mostly ignored.
 
-In practice, we found that the state stack was a) very complex to learn b) very prone to exasperating bugs c) mostly ignored.
-As a result, states are now "stackless": only one queued state of each type at a time.
+As a result, in **Bevy 0.10** states are now "stackless": only one queued state of each type at a time. After lots of alpha testing, we're reasonably confident that this shouldn't be too bad to migrate away from. If you were relying on the state stack, you have plenty of options:
 
-Thanks to the help of some brave alpha testers, we're reasonably confident that this shouldn't be too bad to migrate away from.
-If you were relying on the state stack, you might choose to:
+* Build the "stack" logic on top of the core state system
+* Split your state into multiple states, which capture orthogonal elements of your app's status
+* Build your own state stack abstraction using the same patterns as Bevy's first-party version. None of the new state logic is hard coded! If you build something, [let the rest of the community know](/assets) so you can collaborate!
 
-* rearchitect some of that logic out of states
-* use additional state types, which capture orthogonal elements of your app's status
-* build your own state stack abstraction using the same patterns as Bevy's first-party version: please let the rest of the community know so you can collaborate!
+[`States`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.States.html
+[`State`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.State.html
+[`NextState`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.NextState.html
 
 ### Base Sets: Getting Default Behavior Right
 
-Of course, the skeptical reader may point out that:
+An astute reader may point out that:
 
 1. Bevy automatically runs its systems in parallel.
-2. [The order of systems is nondeterministic unless there is an explicit ordering relationship between them](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/nondeterministic_system_order.rs)?
-3. All of the systems are now stored in a single `Schedule` object with no barriers between them?
-4. Systems can belong to any number of system sets, each of which can add their own behavior?
+2. [The order of systems is nondeterministic unless there is an explicit ordering relationship between them](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/nondeterministic_system_order.rs)
+3. All of the systems are now stored in a single `Schedule` object with no barriers between them
+4. Systems can belong to any number of system sets, each of which can add their own behavior
+5. Bevy is a powerful engine with many internal systems.
 
 Won't this lead to utter chaos and tedious spaghetti-flavored work to resolve every last ordering ambiguity?
-Many users _liked_ stages, they were helpful for understanding the structure of my app!
+Many users _liked_ stages, they were helpful for understanding the structure of an [`App`]!
 
-Well, I'm glad you asked, rhetorical skeptic. To reduce this chaos (and ease migration), Bevy 0.10 comes with a brand new collection of system sets with the default plugins: [`CoreSet`](https://docs.rs/bevy/0.10.0/bevy/app/enum.CoreSet.html), [`StartupSet`](https://docs.rs/bevy/0.10.0/bevy/app/enum.StartupSet.html), and [`RenderSet`](https://docs.rs/bevy/0.10.0/bevy/render/enum.RenderSet.html). The similarity of their names to [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html), and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence: there are command flush points between each set, and existing systems have been migrated directly.
+Well, I'm glad you asked, rhetorical skeptic. To reduce this chaos (and ease migration), **Bevy 0.10** comes with a brand new collection of system sets provided by [`DefaultPlugins`]: [`CoreSet`](https://docs.rs/bevy/0.10.0/bevy/app/enum.CoreSet.html), [`StartupSet`](https://docs.rs/bevy/0.10.0/bevy/app/enum.StartupSet.html), and [`RenderSet`](https://docs.rs/bevy/0.10.0/bevy/render/enum.RenderSet.html). The similarity of their names to the old [`CoreStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.CoreStage.html), [`StartupStage`](https://docs.rs/bevy/0.9.1/bevy/app/enum.StartupStage.html), and [`RenderStage`](https://docs.rs/bevy/0.9.1/bevy/render/enum.RenderStage.html) is not a coincidence. Much like stages, there are command flush points between each set, and existing systems have been migrated directly.
 
 Some parts of the stage-centric architecture were appealing: a clear high-level structure, coordination on flush points (to reduce excessive bottlenecks), and good default behavior.
-To keep those bits (while excising the frustrating ones), we've introduced the concept of **base sets**, added in [#7466](https://github.com/bevyengine/bevy/pull/7466) by `@cart`. Base sets are system sets, except:
+To keep those bits (while excising the frustrating ones), we've introduced the concept of **Base Sets** ([added by @cart](https://github.com/bevyengine/bevy/pull/7466)). **Base Sets** are just normal [`SystemSets`], except:
 
 1. Every system can belong to at most one base set.
 2. Systems that do not specify a base set will be added to the default base set for the schedule (if the schedule has one).
 
 ```rust
-// You can add new base sets to any built-in ones
+// You define base sets exactly like normal sets, with the
+// addition of the system_set(base) attribute
 #[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
 #[system_set(base)]
 enum MyBaseSet {
@@ -320,7 +412,7 @@ enum MyBaseSet {
 
 app
     // This ends up in CoreSet::Update by default
-    .add_system(no_base_set)
+    .add_system(no_explicit_base_set)
     // You must use .in_base_set rather than .in_set for explicitness
     // This is a high-impact decision!
     .add_system(post_update.in_base_set(CoreSet::PostUpdate))
@@ -331,109 +423,34 @@ app
     .configure_set(MyBaseSet::Late.after(CoreSet::Update));
 ```
 
-Pretty simple, but what does this buy us?
-First, it gives you a clear hook to impose, reason about, and visualize high-level structure to your schedule. Yearning for a linear, stage-like design? Just order your base sets!
-Secondly, it allows Bevy to set good default behavior for systems added by users, without removing their control.
-
-Let me tell you a story, set in a world where all of our rhetorical skeptic's points above are true, and no default set is added.
+Let me tell you a story, set in a world without **Base Sets**:
 
 1. A new user adds the `make_player_run` system to their app.
 2. Sometimes this system runs before input handling, leading to randomly dropped inputs. Sometimes it runs after rendering, leading to strange flickers.
 3. After much frustration, the user discovers that these are due to "system execution order ambiguities".
-4. The user runs a specialized tool, digs into the source code of the engine, figures out what order their system should run in relative to the engine's system sets, and then continues on their merry way, doing this for each new system.
+4. The user runs a specialized detection tool, digs into the source code of the engine, figures out what order their system should run in relative to the engine's system sets, and then continues on their merry way, doing this for each new system.
 5. Bevy (or one of their third-party plugins) updates, breaking all of our poor users system ordering once again.
 
-In practice, there are three broad classes of systems: gameplay logic (the majority of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling), and stuff that needs to happen after gameplay logic (like rendering and audio).
+The clear problem this illustrates is that _most_ gameplay systems should not need to know or care about "internal systems".
 
-By broadly ordering the schedule via base sets, we hope that Bevy apps can have good default behavior and clear high-level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
+We've found that in practice, there are three broad classes of systems: gameplay logic (the majority of all end user systems), stuff that needs to happen before gameplay logic (like event cleanup and input handling), and stuff that needs to happen after gameplay logic (like rendering and audio).
+
+By broadly ordering the schedule via **Base Sets**, Bevy apps can have good default behavior and clear high-level structure without compromising on the scheduling flexibility and explicitness that advanced users crave.
 Let us know how it works out for you!
 
-### Polish Matters
+### Improved System Ambiguity Detection and Cycle Reporting
 
-As part of this work, we've taken the time to listen to our users and fix some small but high-impact things about how scheduling works.
+When multiple systems interact with an ECS resource in conflicting ways, but don't have an ordering constraint between them, we call this an "ambiguity". If your [`App`] has ambiguities, this can cause bugs. We've significantly improved our ambiguity reporting, which can be configured in the new [`ScheduleBuildSettings`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html).
 
-Compare the following options for adding and ordering four systems, one after the other.
+Significantly improved ambiguity detection and cycle reporting: check out the  docs for more info. If you haven't tried this out on your app yet: you should take a look!
 
-☕️ **Enterprise-grade** ☕️:
+### Single Threaded Execution
 
-```rust
-#[derive(SystemSet, PartialEq, Eq, Clone, Copy, Hash, Debug)]
-pub enum Step {
-    A,
-    B,
-    C,
-    D
-}
-
-app
-    .configure_set(Step::A.before(Step::B))
-    .configure_set(Step::B.before(Step::C))
-    .configure_set(Step::C.before(Step::D))
-    .add_system(a.in_set(Step::A))
-    .add_system(b.in_set(Step::B))
-    .add_system(c.in_set(Step::C))
-    .add_system(d.in_set(Step::D));
-```
-
-😩 **Tedious** 😩:
+You can now easily switch a [`Schedule`] to single-threaded evaluation via the [`SingleThreadedExecutor`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.SingleThreadedExecutor.html) for users who don't want or need parallelism.
 
 ```rust
-app
-    .add_system(a.before(b))
-    .add_system(b.before(c))
-    .add_system(c.before(d))
-    .add_system(d);
+schedule.set_executor_kind(ExecutorKind::SingleThreaded);
 ```
-
-✨ **Ergonomic** ✨:
-
-```rust
-app.add_systems((a, b, c, d).chain());
-```
-
-There's another lovely change lurking in that last example: the `add_systems` API.
-
-Bevy 0.9:
-
-```rust
-app
-    .add_system_set(SystemSet::on_update(AppState::InGame)
-        .with_system(a.before(b))
-        .with_system(b.label(MyLabel::Variant))
-        .with_system(c)
-        .with_run_criteria(blue_moon)
-    )
-
-```
-
-Bevy 0.10:
-
-```rust
-app.add_systems(
-    (
-        a.before(b),
-        b.in_set(MySet::Variant),
-        c
-    )
-    .run_if(blue_moon)
-    .in_set(OnUpdate(AppState::InGame))
-)
-```
-
-We've also:
-
-* Added trivial single-threaded evaluation via the [`SingleThreadedExecutor`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.SingleThreadedExecutor.html) for users who prefer alternate parallelization strategies (or simply don't need it) by `@maniwani` as part of the `bevy_ecs::schedule` rewrite
-  * we already default to this on WASM, so don't worry about setting it up for your jam games!
-  * wish commands just applied instantly? We've got you: use [`SimpleExecutor`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.SimpleExecutor.html) and trade performance for clarity and convenience to your heart's content.
-* Added ultra-convenient prebuilt error-handling system piping adaptors in [#6751 by `@edwox`](https://github.com/bevyengine/bevy/pull/6751) so you can quickly and easily use the `?` operator in your Bevy systems and log any failure cases
-  * Put an end to the rightward drift: just use `.add_system(fallible_system.pipe(system_adaptor::warn)))` 😍
-* Removed string-based labels: these were prone to nasty conflicts, easy to typo, didn't play nice with IDEs, and are no longer needed due to the much-improved ergonomics of ordering systems in other forms
-* Made sure you can pipe data into and out of exclusive systems in [#6698 by `@inodentry`](https://github.com/bevyengine/bevy/pull/6698)
-* Significantly improved ambiguity detection and cycle reporting: check out the [`ScheduleBuildSettings`](https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html) docs for more info. If you haven't tried this out on your app yet: you should take a look!
-
-The Bevy ECS team has worked closely with `@jakobhellerman`, the author of [`bevy_mod_debugdump`](https://crates.io/crates/bevy_mod_debugdump), the leading third-party schedule visualization plugin, to ensure it keeps working better than ever.
-
-It's a great tool that we are looking to build on to create a first-party solution: you should strongly consider adding it to your toolbox.
 
 ## Cascaded Shadow Maps
 
