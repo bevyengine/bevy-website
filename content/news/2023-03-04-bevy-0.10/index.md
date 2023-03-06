@@ -59,7 +59,7 @@ This simplifies our internal logic, makes your code more robust to refactoring, 
 
 This diagram made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
 
-[`Schedule`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.Schedule.html
+[`Schedule`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.Schedule.html
 
 ### Adding Systems
 
@@ -108,8 +108,8 @@ app.add_systems((walk, jump, collide).chain())
 app.add_systems((walk.after(input), jump, collide).chain())
 ```
 
-[`App`]: http://dev-docs.bevyengine.org/bevy/app/struct.App.html
-[`Systems`]: http://dev-docs.bevyengine.org/bevy/ecs/system/trait.System.html
+[`App`]: https://docs.rs/bevy/0.10.0/bevy/app/struct.App.html
+[`Systems`]: https://docs.rs/bevy/0.10.0/bevy/ecs/system/trait.System.html
 
 ### Configurable System Sets
 
@@ -182,9 +182,9 @@ Crucially system configuration is strictly additive: you cannot _remove_ rules a
 
 Configuration rules _must be compatible with each other_: any paradoxes (like a system set inside of itself, a system that must run both before and after a set, order cycles, etc) will result in a runtime panic with a helpful error message.
 
-[`SystemSet`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.SystemSet.html
-[`SystemSets`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.SystemSet.html
-[`in_set`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.IntoSystemConfig.html#method.in_set
+[`SystemSet`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/trait.SystemSet.html
+[`SystemSets`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/trait.SystemSet.html
+[`in_set`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/trait.IntoSystemConfig.html#method.in_set
 
 ### Directly Schedule Exclusive Systems
 
@@ -268,7 +268,7 @@ Bevy uses this pattern for five rather different things in **Bevy 0.10**:
 
 Follow the breadcrumbs starting at [`CoreSchedule`](https://docs.rs/bevy/0.10.0/bevy/app/enum.CoreSchedule.html) for more info.
 
-[`Schedules`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.Schedules.html
+[`Schedules`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.Schedules.html
 
 ### Run Conditions
 
@@ -375,9 +375,9 @@ As a result, in **Bevy 0.10** states are now "stackless": only one queued state 
 * Split your state into multiple states, which capture orthogonal elements of your app's status
 * Build your own state stack abstraction using the same patterns as Bevy's first-party version. None of the new state logic is hard coded! If you build something, [let the rest of the community know](/assets) so you can collaborate!
 
-[`States`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/trait.States.html
-[`State`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.State.html
-[`NextState`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.NextState.html
+[`States`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/trait.States.html
+[`State`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.State.html
+[`NextState`]: https://docs.rs/bevy/0.10.0/bevy/ecs/schedule/struct.NextState.html
 
 ### Base Sets: Getting Default Behavior Right
 
@@ -1477,6 +1477,8 @@ let element = parsed_path.element::<usize>(&some_value);
 ```
 
 Much more suitable for repeated access, such as doing the same lookup every frame!
+
+[`ParsedPath`]: https://docs.rs/bevy/0.10.0/bevy/reflect/struct.ParsedPath.html
 
 ## `ReflectFromReflect`
 
