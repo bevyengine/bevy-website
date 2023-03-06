@@ -284,7 +284,7 @@ fn game_win_condition(query: Query<&Player>, score: Res<Score>) -> bool {
 app.add_system(win_game.run_if(game_win_condition));
 ```
 
-**Run conditions** also a number of "combinator" operations, thanks to [@JoJoJet](https://github.com/bevyengine/bevy/pull/7547) and [@Shatur](https://github.com/bevyengine/bevy/pull/7559):
+**Run conditions** also have a number of "combinator" operations, thanks to [@JoJoJet](https://github.com/bevyengine/bevy/pull/7547) and [@Shatur](https://github.com/bevyengine/bevy/pull/7559):
 
 They can be negated with `not()`:
 
