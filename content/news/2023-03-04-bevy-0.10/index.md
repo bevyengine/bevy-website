@@ -158,7 +158,7 @@ Configuration is added to sets like this:
 ```rust
 app.configure_set(
     // Run systems in the Movement set before systems in the CollisionDetection set
-    PhysicSet::Movement.before(PhysicsSet::CollisionDetection)
+    PhysicsSet::Movement.before(PhysicsSet::CollisionDetection)
 )
 ```
 
