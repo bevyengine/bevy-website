@@ -28,7 +28,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Revamped Bloom**: Bloom now looks better, is easier to control, and has fewer visual artifacts.
 * **Distance and Atmospheric Fog**: Add depth and ambiance to your scene with 3D distance and atmospheric fog effects!
 * **StandardMaterial Blend Modes**: Achieve a variety of interesting effects with more PBR material blend modes.
-* **More Tonemapping Choices**: Choose one of the 7 popular tonemapping algorithms for your HDR scenes to achieve the visual style you are looking for.
+* **More Tonemapping Choices**: Choose one of 7 popular tonemapping algorithms for your HDR scenes to achieve the visual style you are looking for.
 * **Color Grading**: Control per-camera exposure, gamma, "pre-tonemapping saturation", and "post-tonemapping saturation".
 * **Parallel Pipelined Rendering**: App logic and render logic now run in parallel automatically, yielding significant performance wins.
 * **Windows as Entities**: Windows are now represented as entities instead of resources, improving the user experience and unlocking new scenarios.
@@ -43,7 +43,7 @@ Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" sch
 
 Schedule v3 is the culmination of significant design and implementation work. Scheduling APIs are a central and defining part of the Bevy developer experience, so we had to be very thoughtful and meticulous about this next evolution of the API. In addition to the [RFC PR](https://github.com/bevyengine/rfcs/pull/45), the [initial implementation PR](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and the [Bevy Engine internals port PR](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile` are great places to start if you would like a view into our process and rationale. As we all know, plans and implementations are two different things. Our final implementation is a bit different from the initial RFC (in a good way).
 
-There's been a lot of changes, but we've put a lot of care into ensuring the [migration path](/learn/book/migration-guides/0.9-0.10/#migrate-engine-to-schedule-v3-stageless) for existing applications is relatively straightforward. Don't sweat it!
+There are a ton of changes, but we've put a lot of care into ensuring the [migration path](/learn/book/migration-guides/0.9-0.10/#migrate-engine-to-schedule-v3-stageless) for existing applications is relatively straightforward. Don't sweat it!
 
 Let's take a look at what shipped in 0.10!
 
@@ -51,13 +51,15 @@ Let's take a look at what shipped in 0.10!
 
 Have you ever wanted to specify that `system_a` runs before `system_b`, only to be met with confusing warnings that `system_b` isn't found because it's in a different stage?
 
-No more! All systems within a single **schedule** are now stored in a single data structure with a global awareness of what's going on.
+No more! All systems within a single [`Schedule`] are now stored in a single data structure with a global awareness of what's going on.
 
 This simplifies our internal logic, makes your code more robust to refactoring, and allows plugin authors to specify high-level invariants (e.g. "movement must occur before collision checking") without locking themselves into an exact schedule location.
 
 [![main_schedule_diagram](main_schedule_diagram.svg)](main_schedule_diagram.svg)
 
 This diagram made with [@jakobhellermann's `bevy_mod_debugdump` crate](https://github.com/jakobhellermann/bevy_mod_debugdump) shows a simplified version of Bevy's default schedule.
+
+[`Schedule`]: http://dev-docs.bevyengine.org/bevy/ecs/schedule/struct.Schedule.html
 
 ### Configurable System Sets
 
