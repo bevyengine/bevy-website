@@ -789,7 +789,7 @@ Very neutral. Image is somewhat desaturated when compared to other transforms. L
 
 ![agx](tm_agx.png)
 
-### SomewhatBoringDisplayTransform
+### Somewhat Boring Display Transform
 
 Has little hue shifting in the darks and mids, but lots in the brights. Brights desaturate across the spectrum.
 Is sort of between Reinhard and Reinhard Luminance. Conceptually similar to reinhard-jodie.
