@@ -5,7 +5,7 @@ date = 2023-03-04
 author = "Bevy Contributors"
 image = "ruins.png"
 show_image = true
-image_subtitle = "Ruins scene illustrating Bevy's new material blend modes and fog"
+image_subtitle = "Ruins scene illustrating Bevy's new material blend modes and fog. Based on original scene by Casey Hardy (CC Attribution)"
 image_subtitle_link = "https://github.com/coreh/bevy-demo-ruins"
 +++
 
