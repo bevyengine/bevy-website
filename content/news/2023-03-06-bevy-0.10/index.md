@@ -362,7 +362,7 @@ fn start_game(
     next_state: ResMut<NextState<AppState>>,
 ){
     if button_query.single() == Interaction::Pressed {
-        *next_state = NextState(AppState::InGame);
+        next_state.set(AppState::InGame);
     }
 }
 ```
