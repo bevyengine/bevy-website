@@ -31,8 +31,8 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 - For app-level control flow over which schedules get run when (such as for rollback networking), create your own schedule and insert it under the `CoreSchedule::Outer` label.
 - Fixed timesteps are now evaluated in a schedule, rather than controlled via run criteria. The `run_fixed_timestep` system runs this schedule between `CoreSet::First` and `CoreSet::PreUpdate` by default.
 - Command flush points introduced by `AssetStage` have been removed. If you were relying on these, add them back manually.
-- the `calculate_bounds` system, with the `CalculateBounds` label, is now in `CoreSet::Update`, rather than in `CoreSet::PostUpdate` before commands are applied. You may need to order your movement systems to occur before this system in order to avoid system order ambiguities in culling behavior.
-- the `RenderLabel` `AppLabel` was renamed to `RenderApp` for clarity
+- The `calculate_bounds` system, with the `CalculateBounds` label, is now in `CoreSet::Update`, rather than in `CoreSet::PostUpdate` before commands are applied. You may need to order your movement systems to occur before this system in order to avoid system order ambiguities in culling behavior.
+- The `RenderLabel` `AppLabel` was renamed to `RenderApp` for clarity
 - When testing systems or otherwise running them in a headless fashion, simply construct and run a schedule using `Schedule::new()` and `World::run_schedule` rather than constructing stages
 
 - States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
@@ -46,7 +46,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
 Replace `WindowDescriptor` with `Window`.
 
-Change `width` and `height` fields in a `WindowResolution`, either by doing
+Change `width` and `height` fields into a `WindowResolution`, either by doing
 
 ```rust
 WindowResolution::new(width, height) // Explicitly
@@ -186,7 +186,7 @@ Instead of directly accessing the ID of a `HandleUntyped` as `handle.id`, use th
     <div class="migration-guide-area-tag">Core</div>
 </div>
 
-`CorePlugin` broken into separate plugins. If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
+`CorePlugin` was broken into separate plugins. If not using `DefaultPlugins` or `MinimalPlugins` `PluginGroup`s, the replacement for `CorePlugin` is now to add `TaskPoolPlugin`, `TypeRegistrationPlugin`, and `FrameCountPlugin` to the app.
 
 ### [Immutable sparse sets for metadata storage](https://github.com/bevyengine/bevy/pull/4928)
 
@@ -841,7 +841,7 @@ No api changes are required, but it's possible that your gltf meshes look differ
 
 The `FrameCount`  resource was previously only updated when using the `bevy_render` feature. If you are not using this feature but still want the `FrameCount` it will now be updated correctly.
 
-#### Multiple fixed timesteps
+### Multiple fixed timesteps
 
 Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
 
@@ -897,7 +897,7 @@ an entity basis.
 </div>
 
 - `UiImage` is a struct now, so use `UiImage::new(handler)` instead of `UiImage(handler)`
-- `UiImage` no longer implements `Deref` and `DereftMut`, so use `&image.texture` or ``&mut image.texture` instead
+- `UiImage` no longer implements `Deref` and `DerefMut`, so use `&image.texture` or `&mut image.texture` instead
 
 ### [Remove `TextError::ExceedMaxTextAtlases(usize)` variant](https://github.com/bevyengine/bevy/pull/6796)
 
@@ -933,7 +933,6 @@ __Changes for `Text2dBundle`__
 
 `Text2dBundle` has a new field `text_anchor` that takes an `Anchor` component that controls its position relative to its transform.
 
-`Text2dSize` was removed. Use `TextLayoutInfo` instead.
 `Text2dSize` was removed. Use `TextLayoutInfo` instead.
 
 ### [Remove `QueuedText`](https://github.com/bevyengine/bevy/pull/7414)
