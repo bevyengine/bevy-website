@@ -5,6 +5,7 @@ html {
     font-size: calc-rem($size-body-mobile);
     background-color: $color-grey-900;
     scroll-padding-top: var(--scroll-padding-top);
+    scroll-behavior: smooth;
 
     * {
         box-sizing: border-box;
