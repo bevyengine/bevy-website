@@ -348,14 +348,6 @@ Safety invariants on `bevy_ptr` types’ `new` `byte_add` and `byte_offset` meth
 - Changed `World::init_resource` to return the generated `ComponentId`.
 - Changed `World::init_non_send_resource` to return the generated `ComponentId`.
 
-### [Add `UnsafeWorldCell` abstraction](https://github.com/bevyengine/bevy/pull/6404)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-The type `UnsafeWorldCellEntityRef` has been renamed to UnsafeEntityCell
-
 ### [Replace `RemovedComponents<T>` backing with `Events<Entity>`](https://github.com/bevyengine/bevy/pull/5680)
 
 <div class="migration-guide-area-tags">
