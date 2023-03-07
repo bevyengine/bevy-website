@@ -80,7 +80,7 @@ By default, Bevy runs systems in parallel to each other. In previous versions of
 ```rust
 app
     .add_system(walk.before(jump))
-    .add_system(jump))
+    .add_system(jump)
     .add_system(collide.after(jump))
 ```
 
