@@ -147,7 +147,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_MARKDOWN: true
-          DEFAULT_BRANCH: master
+          DEFAULT_BRANCH: main
 
   build-website:
     runs-on: ubuntu-latest
