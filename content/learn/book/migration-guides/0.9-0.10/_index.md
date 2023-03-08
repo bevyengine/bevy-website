@@ -27,7 +27,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 - `with_run_criteria` has been renamed to `run_if`. Run criteria have been renamed to run conditions for clarity, and should now simply return a `bool` instead of `schedule::ShouldRun`.
 - Looping run criteria and state stacks have been removed. Use an exclusive system that runs a schedule if you need this level of control over system control flow.
 - `App::add_state` now takes 0 arguments: the starting state is set based on the `Default` impl.
-- Instead of creating `SystemSet` containers for systems that run in stages, simply use `.on_enter::<State::Variant>()` or its `on_exit` sibling.
+- Instead of creating `SystemSet` containers for systems that run in stages, use `my_system.in_schedule(OnEnter(State::Variant))` or its `OnExit` sibling.
 - For app-level control flow over which schedules get run when (such as for rollback networking), create your own schedule and insert it under the `CoreSchedule::Outer` label.
 - Fixed timesteps are now evaluated in a schedule, rather than controlled via run criteria. The `run_fixed_timestep` system runs this schedule between `CoreSet::First` and `CoreSet::PreUpdate` by default.
 - Command flush points introduced by `AssetStage` have been removed. If you were relying on these, add them back manually.
