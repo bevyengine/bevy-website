@@ -12,11 +12,6 @@ build_search_index = true
 
 generate_feed = true
 rss_limit = 1000
-highlight_theme = "charcoal"
-
-taxonomies = [
-    {name = "news", feed = true},
-]
 
 [markdown]
 # Whether to do syntax highlighting
