@@ -1,5 +1,6 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/assets.html" as assets_macros %}
+{% import "macros/members.html" as members_macro %}
 
 {% block page_name %}People{% endblock %}
 
@@ -47,208 +48,67 @@
     <div class="assets-intro media-content">
         The Bevy community! If you want to see yourself here, <a href="https://github.com/bevyengine/bevy-community">submit a pull request</a>!
     </div>
+
     {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
-
-        <a class="anchor-target" id="{{ section.title | slugify }}"></a>
         <h1 class="asset-section">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h1>
 
         {% if section.title == "The Bevy Organization" %}
-        <div class="people-section-description">
-        <p>
-            The Bevy Organization is the group of people responsible for stewarding the Bevy project. It handles things
-            like choosing project direction, merging pull requests, managing bugs / issues / feature requests, running
-            the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
-        </p>
-        <p>
-            Anyone with a history of contributing to Bevy can join the Bevy Organization. Reach out to the Project Lead
-            if you would like to join!
-        </p>
-        <p>
-            <a class="anchor-target" id="org-roles"></a>
+            {% set members = load_data(path="org_members.json") %}
+            <div class="people-section-description">
+                <p>
+                    The Bevy Organization is the group of people responsible for stewarding the Bevy project. It handles things
+                    like choosing project direction, merging pull requests, managing bugs / issues / feature requests, running
+                    the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
+                </p>
+                <p>
+                    Anyone with a history of contributing to Bevy can join the Bevy Organization. Reach out to the Project Lead
+                    if you would like to join!
+                </p>
+                <p>
+                    <a class="anchor-target" id="org-roles"></a>
+                <h2>
+                    Roles<a class="anchor-link" href="#org-roles">#</a>
+                </h2>
+                <div class="people-role-descriptions">
+                    <div class="people-role-description">
+                        <div class="people-role people-role-top-level people-role-project-lead">Project Leads</div>
+                        <div class="people-role-description-text">have the final call on all design and code changes within Bevy. They are responsible for representing the project publicly and they choose how the project is organized.</div>
+                    </div>
+                    <div class="people-role-description">
+                        <div class="people-role people-role-top-level people-role-maintainer">Maintainers</div>
+                        <div class="people-role-description-text">have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy project.</div>
+                    </div>
+                    <div class="people-role-description">
+                        <div class="people-role people-role-top-level people-role-sme">SMEs</div>
+                        <div class="people-role-description-text">(Subject Matter Experts) have proven themselves to be experts in a given development area. They help guide Bevy's direction in their area and they are great people to reach out to if you have questions about a given area.</div>
+                    </div>
+                    <div class="people-role-description">
+                        <div class="people-role-description-text">Other members, without a special role, are part of the GitHub organization. They have the power to manage GitHub issues and pull requests.</div>
+                    </div>
+                </div>
+                </p>
+            </div>
+
+            <a class="anchor-target" id="org-members"></a>
             <h2>
-                Roles<a class="anchor-link" href="#org-roles">#</a>
+                Members<a class="anchor-link" href="#org-members">#</a>
             </h2>
-            <div class="people-role-descriptions">
-                <div class="people-role-description">
-                    <div class="people-role people-role-top-level people-role-project-lead">Project Leads</div>
-                    <div class="people-role-description-text">have the final call on all design and code changes within Bevy. They are responsible for representing the project publicly and they choose how the project is organized.</div>
-                </div>
-                <div class="people-role-description">
-                    <div class="people-role people-role-top-level people-role-maintainer">Maintainers</div>
-                    <div class="people-role-description-text">have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy project.</div>
-                </div>
-                <div class="people-role-description">
-                    <div class="people-role people-role-top-level people-role-sme">SMEs</div>
-                    <div class="people-role-description-text">(Subject Matter Experts) have proven themselves to be experts in a given development area. They help guide Bevy's direction in their area and they are great people to reach out to if you have questions about a given area.</div>
-                </div>
-                <div class="people-role-description">
-                    <div class="people-role-description-text">Other members, without a special role, are part of the GitHub organization. They have the power to manage GitHub issues and pull requests.</div>
-                </div>
+        {% else %}
+            {% set members = load_data(path="community_members.json") %}
+            <div class="people-section-description media-content">
+                <p>
+                    People in the Bevy community who are not part of the organization.
+                </p>
+                <p>
+                    Anyone can add themselves here! <a href="https://github.com/bevyengine/bevy-community">Submit a pull request</a>!
+                </p>
             </div>
-        </p>
-        </div>
         {% endif %}
 
-        {% if section.title == "The Bevy Organization" %}
-        <a class="anchor-target" id="org-members"></a>
-        <h2>
-            Members<a class="anchor-link" href="#org-members">#</a>
-        </h2>
-        {% endif %}
-
-        {% if section.title == "Community Members" %}
-        <div class="people-section-description media-content">
-        <p>
-            People in the Bevy community who are not part of the organization.
-        </p>
-        <p>
-            Anyone can add themselves here! <a href="https://github.com/bevyengine/bevy-community">Submit a pull request</a>!
-        </p>
-        </div>
-        {% endif %}
-
-        {% if section.pages %}
-        <div class="item-grid">
-            {% set pages = section.pages %}
-            {% if section.extra.sort_order_reversed %}
-            {% set pages = section.pages | reverse %}
-            {% endif %}
-            
-            {% for post in pages %}
-
-            <div class="card people-card" id="{{ post.title | slugify }}">
-                <div class="card-text media-content card-dense">
-                    <div class="card-title">
-                        <div style="width: 210px; font-size: {% if post.title | length > 30 %} 0.5rem; {% elif post.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
-                            {{ post.title }}
-                        </div>
-                        {% if post.extra.profile_picture %}
-                            <div class="card-profile-picture">
-                                {% if post.extra.profile_picture is starting_with("https://") %}
-                                    <img src="{{ post.extra.profile_picture }}" />
-                                {% else %}
-                                    <img src="{{ get_url(path=post.extra.profile_picture) }}" />
-                                {% endif %}
-                            </div>
-                        {% endif %}    
-                    </div>
-                    <div class="asset-card__small_description">
-                        <div class="people-links">
-                            {% if post.extra.github %}
-                                <div>
-                                    <a href="https://github.com/{{ post.extra.github }}">
-                                        <svg class="card-social-icon">
-                                            <title>{{ post.extra.github }} on GitHub</title>
-                                            <use href="#github" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if post.extra.discord %}
-                                <div>
-                                    {% if post.extra.discord_userid %}
-                                        <a href="http://discordapp.com/users/{{ post.extra.discord_userid }}">
-                                    {% endif %}
-                                    <svg class="card-social-icon">
-                                        <title>{{ post.extra.discord }} on Discord</title>
-                                        <use href="#discord" />
-                                    </svg>
-                                    {% if post.extra.discord_userid %}
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                            {% if post.extra.mastodon_user %}
-                                <div>
-                                    <a href="https://{{ post.extra.mastodon_instance }}/@{{ post.extra.mastodon_user }}">
-                                        <svg class="card-social-icon">
-                                            <title>@{{ post.extra.mastodon_user }}@{{ post.extra.mastodon_instance }}</title>
-                                            <use href="#mastodon" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if post.extra.twitter %}
-                                <div>
-                                    <a href="https://twitter.com/{{ post.extra.twitter }}">
-                                        <svg class="card-social-icon">
-                                            <title>{{ post.extra.twitter }} on Twitter</title>
-                                            <use href="#twitter" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if post.extra.itch_io %}
-                                <div>
-                                    <a href="https://{{ post.extra.itch_io }}.itch.io">
-                                        <svg class="card-social-icon">
-                                            <title>{{ post.extra.itch_io }} on itch.io</title>
-                                            <use href="#itch-io" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if post.extra.steam_developer %}
-                                <div>
-                                    <a href="https://store.steampowered.com/developer/{{ post.extra.steam_developer }}">
-                                        <svg class="card-social-icon">
-                                            <title>{{ post.extra.steam_developer }} on Steam</title>
-                                            <use href="#steam" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if post.extra.website %}
-                                <div>
-                                    <a href="{{ post.extra.website }}">
-                                        <svg class="card-social-icon">
-                                            <title>{{ post.extra.website }}</title>
-                                            <use href="#globe" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
-                        {% if post.extra.roles %}
-                        <div class="people-roles">
-                            {% for role in post.extra.roles %}
-                                {% if role == "Project Lead" %}
-                                    <div class="people-role people-role-card people-role-project-lead">{{ role }}</div>
-                                {% elif role == "Maintainer" %}
-                                    <div class="people-role people-role-card people-role-maintainer">{{ role }}</div>
-                                {% elif role is starting_with("SME-") %}
-                                    <div class="people-role people-role-card  people-role-sme">{{ role }}</div>
-                                {% else %}
-                                    <div class="people-role">{{ role }}</div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                        {% if post.extra.bio %}
-                            <div class="card-text-dense">
-                                {{ post.extra.bio }}
-                            </div>
-                        {% endif %}
-                        {% if post.extra.sponsor %}
-                            <div style="position: absolute; bottom: 0.4rem; right: 0.8rem;">
-                                <svg class="card-social-icon card-sponsor-icon">
-                                    <use href="#heart" />
-                                </svg>
-                                <a href="{{ post.extra.sponsor }}">Sponsor me!</a>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                </div>
-            </div>
-
-            {% endfor %}
-        </div>
-        {% endif %}
-
+        {{ members_macro::members_grid(members=members) }}
     {% endfor %}
 </div>
 {% endblock content %}

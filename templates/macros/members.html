@@ -1,0 +1,133 @@
+{% macro members_grid(members) -%}
+<div class="item-grid">
+    {% for member in members %}
+
+    <div {% if member.sponsor %}onclick="location.href='{{ member.sponsor }}';"{% endif%} class="card people-card" id="{{ member.title | slugify }}">
+        <div class="card-text media-content card-dense">
+            <div class="card-title">
+                <div style="width: 210px; font-size: {% if member.title | length > 30 %} 0.5rem; {% elif member.title | length > 20 %} 1.0rem; {% else %} 1.5rem; {% endif %}">
+                    {{ member.title }}
+                </div>
+                {% if member.profile_picture %}
+                <div class="card-profile-picture">
+                    {% if member.profile_picture is starting_with("https://") %}
+                    <img src="{{ member.profile_picture }}" />
+                    {% else %}
+                    <img src="{{ get_url(path=member.profile_picture) }}" />
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="asset-card__small_description">
+                <div class="people-links">
+                    {% if member.github %}
+                    <div>
+                        <a href="https://github.com/{{ member.github }}">
+                            <svg class="card-social-icon">
+                                <title>{{ member.github }} on GitHub</title>
+                                <use href="#github" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if member.discord %}
+                    <div>
+                        {% if member.discord_userid %}
+                        <a href="http://discordapp.com/users/{{ member.discord_userid }}">
+                            {% endif %}
+                            <svg class="card-social-icon">
+                                <title>{{ member.discord }} on Discord</title>
+                                <use href="#discord" />
+                            </svg>
+                            {% if member.discord_userid %}
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% if member.mastodon_user %}
+                    <div>
+                        <a href="https://{{ member.mastodon_instance }}/@{{ member.mastodon_user }}">
+                            <svg class="card-social-icon">
+                                <title>@{{ member.mastodon_user }}@{{ member.mastodon_instance }}</title>
+                                <use href="#mastodon" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if member.twitter %}
+                    <div>
+                        <a href="https://twitter.com/{{ member.twitter }}">
+                            <svg class="card-social-icon">
+                                <title>{{ member.twitter }} on Twitter</title>
+                                <use href="#twitter" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if member.itch_io %}
+                    <div>
+                        <a href="https://{{ member.itch_io }}.itch.io">
+                            <svg class="card-social-icon">
+                                <title>{{ member.itch_io }} on itch.io</title>
+                                <use href="#itch-io" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if member.steam_developer %}
+                    <div>
+                        <a href="https://store.steampowered.com/developer/{{ member.steam_developer }}">
+                            <svg class="card-social-icon">
+                                <title>{{ member.steam_developer }} on Steam</title>
+                                <use href="#steam" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if member.website %}
+                    <div>
+                        <a href="{{ member.website }}">
+                            <svg class="card-social-icon">
+                                <title>{{ member.website }}</title>
+                                <use href="#globe" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if member.roles %}
+                <div class="people-roles">
+                    {% for role in member.roles %}
+                    {% if role == "Project Lead" %}
+                    <div class="people-role people-role-card people-role-project-lead">{{ role }}</div>
+                    {% elif role == "Maintainer" %}
+                    <div class="people-role people-role-card people-role-maintainer">{{ role }}</div>
+                    {% elif role is starting_with("SME-") %}
+                    <div class="people-role people-role-card people-role-sme">{{ role }}</div>
+                    {% else %}
+                    <div class="people-role">{{ role }}</div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if member.bio %}
+                <div class="card-text-dense">
+                    {{ member.bio }}
+                </div>
+                {% endif %}
+                {% if member.sponsor %}
+                <div style="position: absolute; bottom: 0.4rem; right: 0.8rem;">
+                    <svg class="card-social-icon card-sponsor-icon">
+                        <use href="#heart" />
+                    </svg>
+                    <a href="{{ member.sponsor }}">Sponsor me!</a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+{% endmacro %}

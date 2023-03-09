@@ -1,5 +1,6 @@
 use serde::Deserialize;
-use std::{collections::HashMap, fs, io, path::PathBuf, str::FromStr};
+use std::path::Path;
+use std::{collections::HashMap, fs, io, path::PathBuf};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -76,7 +77,7 @@ where
     let buf = String::deserialize(deserializer)?;
     match buf.as_str() {
         "GitHub" => Ok(Some(ProfilePicture::GitHub)),
-        _ => Ok(Some(ProfilePicture::File(buf))),
+        _ => Ok(Some(ProfilePicture::File(buf.replace("./", "")))),
     }
 }
 
@@ -99,137 +100,20 @@ where
     }))
 }
 
-#[derive(Debug, Clone)]
-pub struct Section {
-    pub name: String,
-    pub filename: Option<String>,
-    pub content: Vec<CommunityNode>,
-    pub template: Option<String>,
-    pub header: Option<String>,
-    pub order: Option<usize>,
-    pub sort_order_reversed: bool,
-}
-
-impl Section {
-    pub fn apply_roles(&mut self, roles: &HashMap<String, Vec<String>>) {
-        for content in &mut self.content {
-            match content {
-                CommunityNode::Section(section) => section.apply_roles(roles),
-                CommunityNode::Member(member) => {
-                    member.roles = member
-                        .github
-                        .as_ref()
-                        .and_then(|github| roles.get(github).cloned());
-                }
-            }
+pub fn parse_members(dir: &Path) -> io::Result<Vec<Member>> {
+    let mut members = Vec::new();
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.file_name().unwrap() == "_category.toml"
+            || path.extension().expect("file must have an extension") != "toml"
+        {
+            continue;
         }
+        let mut member: Member = toml::de::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
+        // Do we even use that
+        member.original_path = Some(path);
+        members.push(member);
     }
-}
-
-#[derive(Debug, Clone)]
-pub enum CommunityNode {
-    Section(Section),
-    Member(Member),
-}
-impl CommunityNode {
-    pub fn name(&self) -> String {
-        match self {
-            CommunityNode::Section(content) => content.name.clone(),
-            CommunityNode::Member(content) => content.name.clone(),
-        }
-    }
-    pub fn order(&self) -> usize {
-        match self {
-            CommunityNode::Section(content) => content.order.unwrap_or(99999),
-            CommunityNode::Member(content) => {
-                if let Some(roles) = &content.roles {
-                    if roles.iter().find(|p| *p == "Project Lead").is_some() {
-                        0
-                    } else if roles.iter().find(|p| *p == "Maintainer").is_some() {
-                        1
-                    } else if !roles.is_empty() {
-                        2
-                    } else {
-                        99999
-                    }
-                } else {
-                    99999
-                }
-            }
-        }
-    }
-}
-
-fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
-    if dir.is_dir() {
-        for entry in fs::read_dir(dir)? {
-            let entry = entry?;
-            let path = entry.path();
-            if path.file_name().unwrap() == ".git" || path.file_name().unwrap() == ".github" {
-                continue;
-            }
-            if path.is_dir() {
-                let folder = path.file_name().unwrap();
-                let (order, sort_order_reversed) = if path.join("_category.toml").exists() {
-                    let from_file: toml::Value = toml::de::from_str(
-                        &fs::read_to_string(path.join("_category.toml")).unwrap(),
-                    )
-                    .unwrap();
-                    (
-                        from_file
-                            .get("order")
-                            .and_then(|v| v.as_integer())
-                            .map(|v| v as usize),
-                        from_file
-                            .get("sort_order_reversed")
-                            .and_then(|v| v.as_bool())
-                            .unwrap_or(false),
-                    )
-                } else {
-                    (None, false)
-                };
-                let mut new_section = Section {
-                    name: folder.to_str().unwrap().to_string(),
-                    filename: None,
-                    content: vec![],
-                    template: None,
-                    header: None,
-                    order,
-                    sort_order_reversed,
-                };
-                visit_dirs(path.clone(), &mut new_section)?;
-                section.content.push(CommunityNode::Section(new_section));
-            } else {
-                if path.file_name().unwrap() == "_category.toml"
-                    || path.file_name().unwrap() == "_roles.toml"
-                    || path.extension().expect("file must have an extension") != "toml"
-                {
-                    continue;
-                }
-                let mut member: Member =
-                    toml::de::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
-                member.original_path = Some(path);
-                section.content.push(CommunityNode::Member(member));
-            }
-        }
-    }
-    Ok(())
-}
-
-pub fn parse_members(community_dir: &str) -> io::Result<Section> {
-    let mut people_root_section = Section {
-        name: "People".to_string(),
-        filename: None,
-        content: vec![],
-        template: Some("people.html".to_string()),
-        header: Some("People".to_string()),
-        order: None,
-        sort_order_reversed: false,
-    };
-
-    visit_dirs(
-        PathBuf::from_str(&community_dir).unwrap(),
-        &mut people_root_section,
-    )?;
-    Ok(people_root_section)
+    Ok(members)
 }
