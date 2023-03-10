@@ -16,6 +16,22 @@ function navigateBookNext(e) {
     }
 }
 
+function navigateQuickStartNext(e) {
+    if (e.key == 'ArrowLeft') {
+        var previous = document.querySelector("[data-quick-start-nav-previous]");
+        if (previous) {
+            previous.click();
+        }
+
+    } else if (e.key == 'ArrowRight') {
+        var next = document.querySelector("[data-quick-start-nav-next]");
+        if (next) {
+            next.click();
+        }
+    }
+}
+
 window.addEventListener('load', function () {
     window.addEventListener('keydown', navigateBookNext);
+    window.addEventListener('keydown', navigateQuickStartNext);
 });
