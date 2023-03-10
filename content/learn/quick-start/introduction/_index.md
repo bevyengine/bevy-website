@@ -26,7 +26,7 @@ Bevy has the following design goals:
 * **Fast**: App logic should run quickly, and when possible, in parallel
 * **Productive**: Changes should compile quickly ... waiting isn't fun
 
-Bevy is [built in the open by volunteers](/learn/book/contributing) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
+Bevy is [built in the open by volunteers](/learn/quick-start/contributing) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
 
 For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
 
@@ -36,6 +36,6 @@ For a more in-depth introduction, check out the [Introducing Bevy](/news/introdu
 
 Bevy aims to be a general purpose game engine capable of handling any 2D or 3D workload. However Bevy is still in its infancy. <span class="warning">We are currently in the <i>prototyping</i> phase: important features are missing and APIs will change constantly.</span> If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out [Godot Engine](https://godotengine.org). It is currently much more feature-complete and stable. And it is also free, open-source, and [scriptable with Rust](https://github.com/GodotNativeTools/godot-rust)!
 
-This official book is still very incomplete. It will help you get started with the setup and learning the basics, but it does not yet cover most of Bevy's features. See the [Next Steps](/learn/book/next-steps/) page for links to other, more exhaustive, learning resources you can use.
+This official book is still very incomplete. It will help you get started with the setup and learning the basics, but it does not yet cover most of Bevy's features. See the [Next Steps](/learn/quick-start/next-steps/) page for links to other, more exhaustive, learning resources you can use.
 
 Phew! If you haven't been scared away yet, let's move on to learning some Bevy!

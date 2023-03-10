@@ -17,7 +17,7 @@
 {% endif %}
 
 {% if section %}
-    {% if section.path is starting_with("/learn/book/") %}
+    {% if section.path is starting_with("/learn/quick-start/") %}
         {% set show_nav_toggle = true %}
     {% elif section.path is starting_with("/assets/") %}
         {% set show_nav_toggle = true %}
@@ -59,7 +59,7 @@
                                 {{section.extra.header_message}}
                             {% elif page and page.extra.header_message %}
                                 {{page.extra.header_message}}
-                            {% elif section and section.path is starting_with("/learn/book/") %}
+                            {% elif section and section.path is starting_with("/learn/quick-start/") %}
                                 The Book
                             {% elif section and section.path is starting_with("/news/") %}
                                 News
@@ -99,7 +99,7 @@
                     </nav>
                     <div class="header__cta-container">
                         <a class="button button--pink header__cta" href="/community/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
-                        <a class="button header__cta" href="/learn/book/getting-started/">Get Started</a>
+                        <a class="button header__cta" href="/learn/quick-start/getting-started/">Get Started</a>
                     </div>
                 </div>
             </header>

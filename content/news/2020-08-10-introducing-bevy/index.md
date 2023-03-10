@@ -50,7 +50,7 @@ It also has many features most people expect from a modern, general purpose engi
 
 That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. <span class="warning">I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability</span>.
 
-Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
+Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/quick-start/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
 
 **Quick note to the reader**: in this article you will find text formatted like this: {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="texture" name="Texture" no_mod=true)}}
 
@@ -1151,14 +1151,14 @@ There are plenty of areas that need more design work or features. For example, I
 
 ### Documentation
 
-Bevy's APIs are still very unstable, so I haven't spent much time documenting anything yet. [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is still small and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
+Bevy's APIs are still very unstable, so I haven't spent much time documenting anything yet. [The Bevy Book](https://bevyengine.org/learn/quick-start/introduction/) is still small and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
 
 ## Join the Bevy!
 
-If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Bevy Book](https://bevyengine.org/learn/book/introduction/), and [join the Bevy community](https://bevyengine.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
+If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Bevy Book](https://bevyengine.org/learn/quick-start/introduction/), and [join the Bevy community](https://bevyengine.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
 
-* <b class="fun-list">Software Developer</b>: check out the [Contributing Code](/learn/book/contributing/code) section of The Bevy Book.
-* <b class="fun-list">Technical Writer</b>: check out the [Contributing Docs](/learn/book/contributing/docs) section of The Bevy Book.
+* <b class="fun-list">Software Developer</b>: check out the [Contributing Code](/learn/quick-start/contributing/code) section of The Bevy Book.
+* <b class="fun-list">Technical Writer</b>: check out the [Contributing Docs](/learn/quick-start/contributing/docs) section of The Bevy Book.
 
 I want Bevy to become a vibrant developer community ... thats actually why I chose the name! A Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 

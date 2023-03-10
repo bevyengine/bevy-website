@@ -14,7 +14,7 @@ image_subtitle_link = "https://github.com/indiv0/colonize/"
 
 A little over a month after releasing Bevy 0.3, and thanks to **66** contributors, **178** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.4** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/quick-start/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
 
 Here are some of the highlights from this release:
 
@@ -445,7 +445,7 @@ By spawning beneath a parent, this enables you to do things like translate/rotat
 
 @bjorn3 discovered that you can force Bevy to dynamically link.
 
-This _significantly_ reduces iterative compile times. Check out how long it takes to compile a change made to the `3d_scene.rs` example with the [Fast Compiles Config](https://bevyengine.org/learn/book/getting-started/setup/) _and_ dynamic linking:
+This _significantly_ reduces iterative compile times. Check out how long it takes to compile a change made to the `3d_scene.rs` example with the [Fast Compiles Config](https://bevyengine.org/learn/quick-start/getting-started/setup/) _and_ dynamic linking:
 
 ![fast dynamic](dynamic_fast.png)
 

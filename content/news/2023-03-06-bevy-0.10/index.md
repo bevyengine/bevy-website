@@ -11,9 +11,9 @@ image_subtitle_link = "https://github.com/coreh/bevy-demo-ruins"
 
 Thanks to **173** contributors, **689** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.10** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
-To update an existing Bevy App or Plugin to **Bevy 0.10**, check out our [0.9 to 0.10 Migration Guide](/learn/book/migration-guides/0.9-0.10/).
+To update an existing Bevy App or Plugin to **Bevy 0.10**, check out our [0.9 to 0.10 Migration Guide](/learn/quick-start/migration-guides/0.9-0.10/).
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
@@ -43,7 +43,7 @@ Thanks to the fantastic work of our ECS team, the hotly awaited ["stageless" sch
 
 **Schedule v3** is the culmination of significant design and implementation work. Scheduling APIs are a central and defining part of the Bevy developer experience, so we had to be very thoughtful and meticulous about this next evolution of the API. In addition to the [RFC PR](https://github.com/bevyengine/rfcs/pull/45), the [initial implementation PR](https://github.com/bevyengine/bevy/pull/6587) by `@maniwani` and the [Bevy Engine internals port PR](https://github.com/bevyengine/bevy/pull/7267) by `@alice-i-cecile` are great places to start if you would like a view into our process and rationale. As we all know, plans and implementations are two different things. Our final implementation is a bit different from the initial RFC (in a good way).
 
-There are a ton of changes, but we've put a lot of care into ensuring the [migration path](/learn/book/migration-guides/0.9-0.10/#migrate-engine-to-schedule-v3-stageless) for existing applications is relatively straightforward. Don't sweat it!
+There are a ton of changes, but we've put a lot of care into ensuring the [migration path](/learn/quick-start/migration-guides/0.9-0.10/#migrate-engine-to-schedule-v3-stageless) for existing applications is relatively straightforward. Don't sweat it!
 
 Let's take a look at what shipped in 0.10!
 

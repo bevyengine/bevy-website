@@ -14,9 +14,9 @@ image_subtitle_link = ""
 
 Thanks to **170** contributors, **623** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.6** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/quick-start/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
-To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 0.6 Migration Guide](/learn/book/migration-guides/0.5-0.6/).
+To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 0.6 Migration Guide](/learn/quick-start/migration-guides/0.5-0.6/).
 
 There are a _ton_ of improvements, bug fixes and quality of life tweaks in this release. Here are some of the highlights:
 
@@ -1037,7 +1037,7 @@ Nested scenes, property overrides, inline assets, and nicer syntax are all on th
 
 ### The New Bevy Book
 
-The [current Bevy Book](/learn/book/) is a great way to learn how to set up Bevy and dip your toes into writing Bevy Apps. But it barely scratches the surface of what Bevy can do.
+The [current Bevy Book](/learn/quick-start/) is a great way to learn how to set up Bevy and dip your toes into writing Bevy Apps. But it barely scratches the surface of what Bevy can do.
 
 To solve this problem @alice-i-cecile has [started working](https://github.com/bevyengine/bevy-website/pull/182) on a new Bevy Book, with the goal of being a complete learning resource for Bevy. If you are interested in helping out, please reach out to them!
 

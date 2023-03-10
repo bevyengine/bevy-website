@@ -14,9 +14,9 @@ image_subtitle_link = ""
 
 Thanks to **88** contributors, **283** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.5** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Awesome Bevy](https://github.com/bevyengine/awesome-bevy) for a list of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/quick-start/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Awesome Bevy](https://github.com/bevyengine/awesome-bevy) for a list of community-developed plugins, games, and learning resources.
 
-**Bevy 0.5** is quite a bit bigger than our past few releases (and took a bit longer) as we have made a number of foundational changes. If you plan on updating your App or Plugin to **Bevy 0.5**, check out our [0.4 to 0.5 Migration Guide](/learn/book/migration-guides/0.4-0.5/).
+**Bevy 0.5** is quite a bit bigger than our past few releases (and took a bit longer) as we have made a number of foundational changes. If you plan on updating your App or Plugin to **Bevy 0.5**, check out our [0.4 to 0.5 Migration Guide](/learn/quick-start/migration-guides/0.4-0.5/).
 
 Here are some of the highlights from this release:
 
