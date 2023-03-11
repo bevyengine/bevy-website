@@ -191,7 +191,9 @@ app.add_stage_after(
 After:
 
 ```rust
+// This will affect the update frequency of fixed time for your entire app
 app.insert_resource(FixedTime::new_from_secs(0.5))
+
     // This schedule is automatically added with DefaultPlugins
     .add_system(fixed_update.in_schedule(CoreSchedule::FixedUpdate));
 ```
