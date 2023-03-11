@@ -208,9 +208,14 @@ Before:
 
 ```rust
 app.add_system_set(
-    SystemSet::new().with_run_criteria(FixedTimestep::step(0.5)).with_system(update_pathfinding)
-).add_system_set(
-    SystemSet::new().with_run_criteria(FixedTimestep::step(0.1)).with_system(apply_damage_over_time)
+    SystemSet::new()
+        .with_run_criteria(FixedTimestep::step(0.5))
+        .with_system(update_pathfinding),
+)
+.add_system_set(
+    SystemSet::new()
+        .with_run_criteria(FixedTimestep::step(0.1))
+        .with_system(apply_damage_over_time),
 );
 ```
 
@@ -250,7 +255,8 @@ By contrast, `OnUpdate` is now a system set which is nested within `CoreSet::Upd
 Before:
 
 ```rust
-#[derive(Debug, Clone, Copy Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
+
 enum AppState {
     Menu,
     InGame,
