@@ -117,6 +117,20 @@ After:
 app.add_systems((a, b).run_if(my_run_condition));
 ```
 
+#### Ambiguity detection
+
+The `ReportExecutionOrderAmbiguities` resource has been removed.
+Instead, this is configured on a per-schedule basis.
+
+```rust
+app.edit_schedule(CoreSchedule::Main, |schedule| {
+    schedule.set_build_settings(ScheduleBuildSettings {
+        ambiguity_detection: LogLevel::Warn,
+        ..default()
+    });
+})
+```
+
 #### Multiple fixed timesteps
 
 Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
