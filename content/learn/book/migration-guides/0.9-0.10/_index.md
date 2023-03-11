@@ -100,6 +100,23 @@ enum MySystem {
 }
 ```
 
+#### System sets (Bevy 0.9)
+
+In Bevy 0.9, you could use the `SystemSet` type and various methods to configure many systems at once.
+Additionally, this was the *only* way to interact with various scheduling APIs like run criteria.
+
+Before:
+
+```rust
+app.add_system_set(SystemSet::new().with_system(a).with_system(b).with_run_criteria(my_run_criteria));
+```
+
+After:
+
+```rust
+app.add_systems((a, b).run_if(my_run_condition));
+```
+
 #### Multiple fixed timesteps
 
 Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
