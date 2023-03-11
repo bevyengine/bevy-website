@@ -98,7 +98,8 @@ app.configure_sets(
         AfterUpdate::CommandFlush,
         CoreSet::PostUpdate,
     ).chain()
-).add_system(apply_system_buffers.in_set(AfterUpdate::CommandFlush));
+).add_system(apply_system_buffers.in_base_set(AfterUpdate::CommandFlush));
+
 ```
 
 #### Label types
