@@ -38,6 +38,31 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 - States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
 - Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
 
+#### Stages
+
+Stages had two key elements: they ran one after another, and they applied commands at their end.
+
+The former can be replaced by system sets (unless you need branching or looping scheduling logic, in which case you should use a schedule), and the latter can be controlled manually via `apply_system_buffers`.
+
+To migrate from Bevy's built-in stages, we've provided the [`CoreSet`](https://docs.rs/bevy/latest/bevy/app/enum.CoreSet.html), [`StartupSet`](https://docs.rs/bevy/latest/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://docs.rs/bevy/latest/bevy/render/enum.RenderSet.html) system sets.
+Command flushes have already been added to these, but if you have added custom stages you may need to add your own if you were relying on that behavior.
+
+Before:
+
+```rust
+app
+    .add_system_to_stage(CoreStage::PostUpdate, my_system)
+    .add_startup_system_to_stage(StartupStage::PostStartup, my_startup_system);
+```
+
+After:
+
+```rust
+app
+    .add_system(my_system.in_base_set(CoreSet::PostUpdate))
+    .add_startup_system(my_startup_system.in_base_set(StartupSet::PostStartup));
+```
+
 #### Multiple fixed timesteps
 
 Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
