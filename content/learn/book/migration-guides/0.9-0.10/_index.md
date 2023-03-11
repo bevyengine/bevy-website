@@ -103,7 +103,7 @@ enum MySystem {
 #### System sets (Bevy 0.9)
 
 In Bevy 0.9, you could use the `SystemSet` type and various methods to configure many systems at once.
-Additionally, this was the *only* way to interact with various scheduling APIs like run criteria.
+Additionally, this was the _only_ way to interact with various scheduling APIs like run criteria.
 
 Before:
 
