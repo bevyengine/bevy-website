@@ -63,6 +63,44 @@ app
     .add_startup_system(my_startup_system.in_base_set(StartupSet::PostStartup));
 ```
 
+If you had your own stage:
+
+```rust
+// Bevy 0.9
+#[derive(Debug, Hash, PartialEq, Eq, Clone, StageLabel)]
+pub struct AfterUpdate;
+
+app.add_stage_after(CoreStage::Update, AfterUpdate, SystemStage::parallel());
+
+// Bevy 0.10, no command flush
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+#[system_set(base)]
+pub struct AfterUpdate;
+
+app.configure_set(
+    AfterUpdate
+        .after(CoreSet::UpdateFlush)
+        .before(CoreSet::PostUpdate),
+);
+
+// Bevy 0.10, with a command flush
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+#[system_set(base)]
+pub enum AfterUpdate {
+    Parallel,
+    CommandFlush
+}
+
+app.configure_sets(
+    (
+        CoreSet::UpdateFlush,
+        AfterUpdate::Parallel,
+        AfterUpdate::CommandFlush,
+        CoreSet::PostUpdate,
+    ).chain()
+).add_system(apply_system_buffers.in_set(AfterUpdate::CommandFlush));
+```
+
 #### Label types
 
 System labels have been renamed to systems sets and unified with stage labels.
