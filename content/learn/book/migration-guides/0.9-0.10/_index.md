@@ -131,9 +131,55 @@ app.edit_schedule(CoreSchedule::Main, |schedule| {
 })
 ```
 
-#### Multiple fixed timesteps
+#### Fixed timesteps
 
-Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
+The `FixedTimestep` run criteria has been removed, and is now handled by either a schedule or the `on_timer` / `on_fixed_timer` run conditions.
+
+Before:
+
+```rust
+app.add_stage_after(
+    CoreStage::Update,
+    FixedUpdateStage,
+    SystemStage::parallel()
+        .with_run_criteria(
+            FixedTimestep::step(0.5)
+        )
+        .with_system(fixed_update),
+);
+```
+
+After:
+
+```rust
+app.insert_resource(FixedTime::new_from_secs(0.5))
+    // This schedule is automatically added with DefaultPlugins
+    .add_system(fixed_update.in_schedule(CoreSchedule::FixedUpdate));
+```
+
+Apps may now only have one unified fixed timestep. `CoreSchedule::FixedTimestep` is intended to be used for determinism and stability during networks, physics and game mechanics.
+Unlike timers, it will run repeatedly if more than a single period of time has elapsed since it was last run.
+
+It is _not_ intended to serve as a looping timer to regularly perform work or poll.
+If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
+
+Before:
+
+```rust
+app.add_system_set(
+    SystemSet::new().with_run_criteria(FixedTimestep::step(0.5)).with_system(update_pathfinding)
+).add_system_set(
+    SystemSet::new().with_run_criteria(FixedTimestep::step(0.1)).with_system(apply_damage_over_time)
+);
+```
+
+After:
+
+```rust
+app
+.add_system(update_pathfinding.run_if(on_timer(Duration::from_secs_f32(0.5))))
+.add_system(apply_damage_over_time.run_if(on_timer(Duration::from_secs_f32(0.1))));
+```
 
 ### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
 
