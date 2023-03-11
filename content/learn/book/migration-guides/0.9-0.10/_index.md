@@ -38,9 +38,253 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 - States have been dramatically simplified: there is no longer a “state stack”. To queue a transition to the next state, call `NextState::set`
 - Strings can no longer be used as a `SystemLabel` or `SystemSet`. Use a type, or use the system function instead.
 
-#### Multiple fixed timesteps
+#### Stages
 
-Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
+Stages had two key elements: they ran one after another, and they applied commands at their end.
+
+The former can be replaced by system sets (unless you need branching or looping scheduling logic, in which case you should use a schedule), and the latter can be controlled manually via `apply_system_buffers`.
+
+To migrate from Bevy's built-in stages, we've provided the [`CoreSet`](https://docs.rs/bevy/0.10/bevy/app/enum.CoreSet.html), [`StartupSet`](https://docs.rs/bevy/0.10/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://docs.rs/bevy/latest/0.10/render/enum.RenderSet.html) system sets.
+Command flushes have already been added to these, but if you have added custom stages you may need to add your own if you were relying on that behavior.
+
+Before:
+
+```rust
+app
+    .add_system_to_stage(CoreStage::PostUpdate, my_system)
+    .add_startup_system_to_stage(StartupStage::PostStartup, my_startup_system);
+```
+
+After:
+
+```rust
+app
+    .add_system(my_system.in_base_set(CoreSet::PostUpdate))
+    .add_startup_system(my_startup_system.in_base_set(StartupSet::PostStartup));
+```
+
+If you had your own stage:
+
+```rust
+// Bevy 0.9
+#[derive(Debug, Hash, PartialEq, Eq, Clone, StageLabel)]
+pub struct AfterUpdate;
+
+app.add_stage_after(CoreStage::Update, AfterUpdate, SystemStage::parallel());
+
+// Bevy 0.10, no command flush
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+#[system_set(base)]
+pub struct AfterUpdate;
+
+app.configure_set(
+    AfterUpdate
+        .after(CoreSet::UpdateFlush)
+        .before(CoreSet::PostUpdate),
+);
+
+// Bevy 0.10, with a command flush
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+#[system_set(base)]
+pub enum AfterUpdate {
+    Parallel,
+    CommandFlush
+}
+
+app.configure_sets(
+    (
+        CoreSet::UpdateFlush,
+        AfterUpdate::Parallel,
+        AfterUpdate::CommandFlush,
+        CoreSet::PostUpdate,
+    ).chain()
+).add_system(apply_system_buffers.in_base_set(AfterUpdate::CommandFlush));
+
+```
+
+#### Label types
+
+System labels have been renamed to systems sets and unified with stage labels.
+The `StageLabel` trait should be replaced by a system set, using the `SystemSet` trait as dicussed immediately below.
+
+Before:
+
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, StageLabel)]
+enum MyStage {
+    BeforeRound,
+    AfterRound,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemLabel)]
+enum MySystem {
+    ComputeForces,
+    FindCollisions,
+}
+```
+
+After:
+
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+enum MySet {
+    BeforeRound,
+    AfterRound,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+enum MySystem {
+    ComputeForces,
+    FindCollisions,
+}
+```
+
+#### System sets (Bevy 0.9)
+
+In Bevy 0.9, you could use the `SystemSet` type and various methods to configure many systems at once.
+Additionally, this was the _only_ way to interact with various scheduling APIs like run criteria.
+
+Before:
+
+```rust
+app.add_system_set(SystemSet::new().with_system(a).with_system(b).with_run_criteria(my_run_criteria));
+```
+
+After:
+
+```rust
+app.add_systems((a, b).run_if(my_run_condition));
+```
+
+#### Ambiguity detection
+
+The `ReportExecutionOrderAmbiguities` resource has been removed.
+Instead, this is configured on a per-schedule basis.
+
+```rust
+app.edit_schedule(CoreSchedule::Main, |schedule| {
+    schedule.set_build_settings(ScheduleBuildSettings {
+        ambiguity_detection: LogLevel::Warn,
+        ..default()
+    });
+})
+```
+
+#### Fixed timesteps
+
+The `FixedTimestep` run criteria has been removed, and is now handled by either a schedule or the `on_timer` / `on_fixed_timer` run conditions.
+
+Before:
+
+```rust
+app.add_stage_after(
+    CoreStage::Update,
+    FixedUpdateStage,
+    SystemStage::parallel()
+        .with_run_criteria(
+            FixedTimestep::step(0.5)
+        )
+        .with_system(fixed_update),
+);
+```
+
+After:
+
+```rust
+// This will affect the update frequency of fixed time for your entire app
+app.insert_resource(FixedTime::new_from_secs(0.5))
+
+    // This schedule is automatically added with DefaultPlugins
+    .add_system(fixed_update.in_schedule(CoreSchedule::FixedUpdate));
+```
+
+Apps may now only have one unified fixed timestep. `CoreSchedule::FixedTimestep` is intended to be used for determinism and stability during networks, physics and game mechanics.
+Unlike timers, it will run repeatedly if more than a single period of time has elapsed since it was last run.
+
+It is _not_ intended to serve as a looping timer to regularly perform work or poll.
+If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
+
+Before:
+
+```rust
+app.add_system_set(
+    SystemSet::new()
+        .with_run_criteria(FixedTimestep::step(0.5))
+        .with_system(update_pathfinding),
+)
+.add_system_set(
+    SystemSet::new()
+        .with_run_criteria(FixedTimestep::step(0.1))
+        .with_system(apply_damage_over_time),
+);
+```
+
+After:
+
+```rust
+app
+.add_system(update_pathfinding.run_if(on_timer(Duration::from_secs_f32(0.5))))
+.add_system(apply_damage_over_time.run_if(on_timer(Duration::from_secs_f32(0.1))));
+```
+
+#### States
+
+States have been significantly simplied and no longer have a state stack. Each state type (usually an enum), requires the [`States`](https://docs.rs/bevy/0.10/bevy/ecs/schedule/trait.States.html) trait, typically implemented via the derive macro.
+
+For example:
+
+```rust
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+enum AppState {
+    #[default]
+    Menu,
+    InGame,
+}
+```
+
+`App::add_state` no longer takes an argument: the starting state is now controlled via the `Default` impl for your state type.
+
+To access the current state of the the `States` type above, use `Res<State<AppState>`, and access the tuple field via `.0`.
+To queue up a state transition, use `ResMut<NextState<AppState>>` and call [`.set(AppState::Menu)`](https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.NextState.html#method.set).
+
+State transitions are now applied via the `apply_state_transitions` exclusive system, a copy of which is added [`CoreSet::StateTransitions`](https://docs.rs/bevy/latest/bevy/app/enum.CoreSet.html) when you call `App::add_state`. You can add more copies as needed, specific to the state being applied.
+
+`OnEnter` and `OnExit` systems now live in schedules, run on the `World` via the `apply_state_transitions` system.
+By contrast, `OnUpdate` is now a system set which is nested within `CoreSet::Update`.
+
+Before:
+
+```rust
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
+
+enum AppState {
+    Menu,
+    InGame,
+}
+
+app.add_state(AppState::Menu)
+    .add_system_set(SystemSet::on_enter(AppState::Menu).with_system(setup_menu))
+    .add_system_set(SystemSet::on_update(AppState::Menu).with_system(menu))
+    .add_system_set(SystemSet::on_exit(AppState::Menu).with_system(cleanup_menu))
+```
+
+After:
+
+```rust
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+enum AppState {
+    #[default]
+    Menu,
+    InGame,
+}
+
+app.add_state::<AppState>()
+    .add_system(setup_menu.in_schedule(OnEnter(AppState::Menu)))
+    .add_system(menu.in_set(OnUpdate(AppState::Menu)))
+    .add_system(cleanup_menu.in_schedule(OnExit(AppState::Menu)));
+```
+
+When you need to run your state-speciifc systems outside of `CoreSet::Update`, you can use the built-in [`in_state`](https://docs.rs/bevy/latest/bevy/ecs/prelude/fn.in_state.html) run condition.
 
 ### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
 
