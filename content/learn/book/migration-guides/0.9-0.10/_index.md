@@ -63,6 +63,43 @@ app
     .add_startup_system(my_startup_system.in_base_set(StartupSet::PostStartup));
 ```
 
+#### Label types
+
+System labels have been renamed to systems sets and unified with stage labels.
+The `StageLabel` trait should be replaced by a system set, using the `SystemSet` trait as dicussed immediately below.
+
+Before:
+
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, StageLabel)]
+enum MyStage {
+    BeforeRound,
+    AfterRound,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemLabel)]
+enum MySystem {
+    ComputeForces,
+    FindCollisions,
+}
+```
+
+After:
+
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+enum MySet {
+    BeforeRound,
+    AfterRound,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
+enum MySystem {
+    ComputeForces,
+    FindCollisions,
+}
+```
+
 #### Multiple fixed timesteps
 
 Apps may now only have one unified fixed timestep. If you were relying on multiple `FixedTimestep` run criteria with distinct periods, you should swap to using timers, via the `on_timer(MY_PERIOD)` or `on_fixed_timer(MY_PERIOD)` run conditions.
