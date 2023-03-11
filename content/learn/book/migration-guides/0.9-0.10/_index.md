@@ -44,7 +44,7 @@ Stages had two key elements: they ran one after another, and they applied comman
 
 The former can be replaced by system sets (unless you need branching or looping scheduling logic, in which case you should use a schedule), and the latter can be controlled manually via `apply_system_buffers`.
 
-To migrate from Bevy's built-in stages, we've provided the [`CoreSet`](https://docs.rs/bevy/latest/bevy/app/enum.CoreSet.html), [`StartupSet`](https://docs.rs/bevy/latest/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://docs.rs/bevy/latest/bevy/render/enum.RenderSet.html) system sets.
+To migrate from Bevy's built-in stages, we've provided the [`CoreSet`](https://docs.rs/bevy/0.10/bevy/app/enum.CoreSet.html), [`StartupSet`](https://docs.rs/bevy/0.10/bevy/app/enum.StartupSet.html) and [`RenderSet`](https://docs.rs/bevy/latest/0.10/render/enum.RenderSet.html) system sets.
 Command flushes have already been added to these, but if you have added custom stages you may need to add your own if you were relying on that behavior.
 
 Before:
@@ -180,6 +180,64 @@ app
 .add_system(update_pathfinding.run_if(on_timer(Duration::from_secs_f32(0.5))))
 .add_system(apply_damage_over_time.run_if(on_timer(Duration::from_secs_f32(0.1))));
 ```
+
+#### States
+
+States have been significantly simplied and no longer have a state stack. Each state type (usually an enum), requires the [`States`](https://docs.rs/bevy/0.10/bevy/ecs/schedule/trait.States.html) trait, typically implemented via the derive macro.
+
+For example:
+
+```rust
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+enum AppState {
+    #[default]
+    Menu,
+    InGame,
+}
+```
+
+`App::add_state` no longer takes an argument: the starting state is now controlled via the `Default` impl for your state type.
+
+To access the current state of the the `States` type above, use `Res<State<AppState>`, and access the tuple field via `.0`.
+To queue up a state transition, use `ResMut<NextState<AppState>>` and call [`.set(AppState::Menu)`](https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.NextState.html#method.set).
+
+State transitions are now applied via the `apply_state_transitions` exclusive system, a copy of which is added [`CoreSet::StateTransitions`](https://docs.rs/bevy/latest/bevy/app/enum.CoreSet.html) when you call `App::add_state`. You can add more copies as needed, specific to the state being applied.
+
+`OnEnter` and `OnExit` systems now live in schedules, run on the `World` via the `apply_state_transitions` system.
+By contrast, `OnUpdate` is now a system set which is nested within `CoreSet::Update`.
+
+Before:
+
+```rust
+#[derive(Debug, Clone, Copy Eq, PartialEq, Hash)]
+enum AppState {
+    Menu,
+    InGame,
+}
+
+app.add_state(AppState::Menu)
+    .add_system_set(SystemSet::on_enter(AppState::Menu).with_system(setup_menu))
+    .add_system_set(SystemSet::on_update(AppState::Menu).with_system(menu))
+    .add_system_set(SystemSet::on_exit(AppState::Menu).with_system(cleanup_menu))
+```
+
+After:
+
+```rust
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+enum AppState {
+    #[default]
+    Menu,
+    InGame,
+}
+
+app.add_state::<AppState>()
+    .add_system(setup_menu.in_schedule(OnEnter(AppState::Menu)))
+    .add_system(menu.in_set(OnUpdate(AppState::Menu)))
+    .add_system(cleanup_menu.in_schedule(OnExit(AppState::Menu)));
+```
+
+When you need to run your state-speciifc systems outside of `CoreSet::Update`, you can use the built-in [`in_state`](https://docs.rs/bevy/latest/bevy/ecs/prelude/fn.in_state.html) run condition.
 
 ### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
 
