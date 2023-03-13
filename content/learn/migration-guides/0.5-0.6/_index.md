@@ -1,6 +1,6 @@
 +++
 title = "0.5 to 0.6"
-weight = 3
+weight = 6
 sort_by = "weight"
 template = "migration-guide-section.html"
 page_template = "migration-guide-section.html"
