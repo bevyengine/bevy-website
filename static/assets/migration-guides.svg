@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="600"
+   height="200"
+   viewBox="0 0 600 200"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
+   sodipodi:docname="migration-guides.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#000000"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="421.9661"
+     inkscape:cy="113.89831"
+     inkscape:window-width="1680"
+     inkscape:window-height="919"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="15.186441"
+       y="15.186441"
+       width="533.69489"
+       height="143.18643"
+       id="rect113" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-32.543398,-212.507)">
+    <text
+       xml:space="preserve"
+       id="text111"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:122px;font-family:'Fira Sans ExtraBold';-inkscape-font-specification:'Fira Sans ExtraBold, ';white-space:pre;shape-inside:url(#rect113);display:inline;fill:#999999"
+       x="184.10364"
+       y="0"
+       transform="translate(306.37965,226.14063)"><tspan
+         x="22.295704"
+         y="125.49388"
+         id="tspan1903"><tspan
+           style="text-align:center;text-anchor:middle;fill:#696969"
+           id="tspan1895">0.</tspan><tspan
+           style="fill:#d3d3d3"
+           id="tspan1897">X</tspan><tspan
+           style="text-align:center;text-anchor:middle;fill:#696969"
+           id="tspan1899"> -&gt; 0.</tspan><tspan
+           style="fill:#ffffff"
+           id="tspan1901">Y</tspan></tspan></text>
+  </g>
+</svg>
