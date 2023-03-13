@@ -1,8 +1,8 @@
 +++
 title = "Migration Guides"
 sort_by = "weight"
-template = "book-section.html"
-page_template = "book-section.html"
-redirect_to = "learn/book/index"
+template = "migration-guide-section.html"
+page_template = "migration-guide-section.html"
+redirect_to = "learn/migration-guides/index"
 insert_anchor_links = "right"
 +++

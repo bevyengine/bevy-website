@@ -1,5 +1,5 @@
 +++
-title = "Faq"
+title = "FAQ"
 weight = 6
 sort_by = "weight"
 template = "book-section.html"
