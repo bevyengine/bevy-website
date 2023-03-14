@@ -1,18 +1,18 @@
-.book-footer {
+.docs-footer {
     $border-color: #2f3033;
 
-    --book-footer-gap: 12px;
+    --docs-footer-gap: 12px;
 
     margin: 32px 0;
 
     @media #{$bp-tablet-portrait-up} {
-        --book-footer-gap: 20px;
+        --docs-footer-gap: 20px;
     }
 
     &__nav {
         display: grid;
-        gap: var(--book-footer-gap);
-        padding: var(--book-footer-gap) 0;
+        gap: var(--docs-footer-gap);
+        padding: var(--docs-footer-gap) 0;
         grid-template-columns: 1fr;
         grid-template-areas:
             'next'
@@ -39,7 +39,7 @@
             background-color: rgba($color-white, 0.01);
             color: $color-white;
 
-            .book-footer__dir {
+            .docs-footer__dir {
                 color: #999;
             }
         }
@@ -49,7 +49,7 @@
             flex-direction: row-reverse;
             padding-left: 16px;
 
-            .book-footer__label {
+            .docs-footer__label {
                 padding: 0 8px 0 12px;
             }
         }
@@ -59,7 +59,7 @@
             text-align: right;
             padding-right: 16px;
 
-            .book-footer__label {
+            .docs-footer__label {
                 padding: 0 12px 0 8px;
             }
         }
@@ -87,7 +87,7 @@
     &__edit-wrapper {
         border-top: 2px solid $border-color;
         text-align: center;
-        padding-top: var(--book-footer-gap);
+        padding-top: var(--docs-footer-gap);
     }
 
     &__edit {

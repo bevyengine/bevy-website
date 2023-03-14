@@ -1,4 +1,4 @@
-{% macro book_menu_row(prefix, section_path) %}
+{% macro docs_menu_row(prefix, section_path) %}
     {% set section = get_section(path=section_path) %}
     {% set is_in_branch = section.path in current_path %}
     {% set is_active = current_path == section.path %}
@@ -27,17 +27,17 @@
         {% if section.subsections %}
             <ul class="tree-menu">
                 {% for s in section.subsections %}
-                    {{ self::book_menu_row(prefix=prefix, section_path=s) }}
+                    {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
                 {% endfor %}
             </ul>
         {% endif %}
     </li>
-{% endmacro book_menu_row %}
+{% endmacro docs_menu_row %}
 
-{% macro book_menu(root, prefix) %}
+{% macro docs_menu(root, prefix) %}
     <ul class="tree-menu">
         {% for s in root.subsections %}
-            {{ self::book_menu_row(prefix=prefix, section_path=s) }}
+            {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
         {% endfor %}
     </ul>
 {% endmacro %}

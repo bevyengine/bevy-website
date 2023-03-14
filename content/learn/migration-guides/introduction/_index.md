@@ -1,9 +1,7 @@
 +++
 title = "Introduction"
 weight = 1
-sort_by = "weight"
-template = "migration-guide-section.html"
-page_template = "migration-guide-section.html"
+template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 

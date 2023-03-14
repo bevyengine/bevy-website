@@ -1,9 +1,7 @@
 +++
 title = "0.8 to 0.9"
 weight = 3
-sort_by = "weight"
-template = "migration-guide-section.html"
-page_template = "migration-guide-section.html"
+template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
 long_title = "Migration Guide: 0.8 to 0.9"
