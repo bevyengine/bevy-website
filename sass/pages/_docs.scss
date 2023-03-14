@@ -1,10 +1,10 @@
-.book-page {
+.docs-page {
     display: flex;
     width: 100%;
     min-height: 500px;
 }
 
-.book-page-subtitle {
+.docs-page-subtitle {
     font-size: 1.3rem;
     font-weight: 800;
     color: #999999;
@@ -12,7 +12,7 @@
     vertical-align: middle;
 }
 
-.book-content {
+.docs-content {
     position: relative;
     width: 100%;
     min-width: 0;
@@ -39,7 +39,7 @@
 }
 
 
-.book-whats-a-bevy {
+.docs-whats-a-bevy {
     background-color: #00000000 !important;
     height: 2.4rem !important;
     border-radius: unset !important;

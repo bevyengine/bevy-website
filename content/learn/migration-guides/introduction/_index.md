@@ -1,9 +1,7 @@
 +++
-title = "Migration Guides"
-weight = 7
-sort_by = "weight"
-template = "book-section.html"
-page_template = "book-section.html"
+title = "Introduction"
+weight = 1
+template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 

@@ -1,25 +1,34 @@
 {% extends "layouts/page-with-menu.html" %}
-{% import "macros/book.html" as book_macros %}
+{% import "macros/docs.html" as docs_macros %}
 
 {% block head_extensions %}
     <script src="/optional-helpers.js"></script>
 {% endblock %}
 
-{% block page_name %}Book{% endblock %}
+{% block page_name %}
+    {% if section and section.path is starting_with("/learn/book/") %}
+        The Book
+    {% else %}
+        Migration Guides
+    {% endif %}
+{% endblock %}
 
 {% block mobile_page_menu %}
-    {{book_macros::book_menu(prefix="mobile-menu", root=get_section(path="learn/book/_index.md"))}}
+    {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
+    {{docs_macros::docs_menu(prefix="mobile-menu", root=get_section(path=root_section_path))}}
 {% endblock %}
 
 {% block page_menu %}
-    {{book_macros::book_menu(prefix="page-menu", root=get_section(path="learn/book/_index.md"))}}
+    {% set root_section_path = section.components | slice(end=2) | concat(with="/_index.md") | join(sep="/") %}
+    {{docs_macros::docs_menu(prefix="page-menu", root=get_section(path=root_section_path))}}
 {% endblock %}
 
 {% block page_content %}
-<div class="book-page">
-    <div class="book-content">
+<div class="docs-page">
+    <div class="docs-content">
         {# Create an array of sections, in reading order #}
-        {% set root_section = get_section(path="learn/book/_index.md") %}
+        {% set root_section_path = section.components | slice(end=2) | concat(with="/_index.md") | join(sep="/") %}
+        {% set root_section = get_section(path=root_section_path) %}
         {% set all_sections = [] %}
 
         {% for p in root_section.subsections %}
@@ -64,33 +73,33 @@
                 {{ section.title }}
             {% endif %}
             {% if section.extra.subtitle %}
-                <span class="book-page-subtitle">({{section.extra.subtitle}})</span>
+                <span class="docs-page-subtitle">({{section.extra.subtitle}})</span>
             {% endif %}
         </h1>
         <div class="media-content">{{ section.content | safe }}</div>
-        <div class="book-footer">
-            <nav class="book-footer__nav">
+        <div class="docs-footer">
+            <nav class="docs-footer__nav">
                 {% if next_section %}
-                    <a class="book-footer__link book-footer__link--next" href="{{next_section.path}}" data-book-nav-next>
-                        <div class="book-footer__label">
-                            <div class="book-footer__dir">Next</div>
+                    <a class="docs-footer__link docs-footer__link--next" href="{{next_section.path}}" data-docs-nav-next>
+                        <div class="docs-footer__label">
+                            <div class="docs-footer__dir">Next</div>
                             {{next_section.title}}
                         </div>
-                        <i class="book-footer__chevron icon icon--chevron-right"></i>
+                        <i class="docs-footer__chevron icon icon--chevron-right"></i>
                     </a>
                 {% endif %}
                 {% if prev_section %}
-                    <a class="book-footer__link book-footer__link--prev" href="{{prev_section.path}}" data-book-nav-previous>
-                        <div class="book-footer__label">
-                            <div class="book-footer__dir">Previous</div>
+                    <a class="docs-footer__link docs-footer__link--prev" href="{{prev_section.path}}" data-docs-nav-previous>
+                        <div class="docs-footer__label">
+                            <div class="docs-footer__dir">Previous</div>
                             {{prev_section.title}}
                         </div>
-                        <i class="book-footer__chevron icon icon--chevron-left"></i>
+                        <i class="docs-footer__chevron icon icon--chevron-left"></i>
                     </a>
                 {% endif %}
             </nav>
-            <div class="book-footer__edit-wrapper">
-                <a class="book-footer__edit" href="https://github.com/bevyengine/bevy-website/edit/main/content/{{ section.relative_path }}">
+            <div class="docs-footer__edit-wrapper">
+                <a class="docs-footer__edit" href="https://github.com/bevyengine/bevy-website/edit/main/content/{{ section.relative_path }}">
                     <i class="icon icon--pencil"></i>
                     Improve this page
                 </a>

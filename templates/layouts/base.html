@@ -19,6 +19,8 @@
 {% if section %}
     {% if section.path is starting_with("/learn/book/") %}
         {% set show_nav_toggle = true %}
+    {% elif section.path is starting_with("/learn/migration-guides/") %}
+        {% set show_nav_toggle = true %}
     {% elif section.path is starting_with("/assets/") %}
         {% set show_nav_toggle = true %}
     {% endif %}
@@ -61,6 +63,8 @@
                                 {{page.extra.header_message}}
                             {% elif section and section.path is starting_with("/learn/book/") %}
                                 The Book
+                            {% elif section and section.path is starting_with("/learn/migration-guides/") %}
+                                Migration Guides
                             {% elif section and section.path is starting_with("/news/") %}
                                 News
                             {% elif page and page.path is starting_with("/news/") %}
