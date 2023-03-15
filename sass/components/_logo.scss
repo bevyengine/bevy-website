@@ -21,3 +21,12 @@
         }
     }
 }
+
+.github-mark {
+    display: inline-flex;
+    height: 40px;
+
+    &:hover {
+        filter: brightness(80%)
+    }
+}
