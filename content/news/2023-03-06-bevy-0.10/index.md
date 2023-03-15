@@ -311,7 +311,7 @@ Bevy 0.10 is shipping with a lovely collection of built-in [common run condition
 You define [`States`] like this:
 
 ```rust
-#[derive(States, PartialEq, Eq, Debug, Default)]
+#[derive(States, PartialEq, Eq, Debug, Clone, Hash, Default)]
 enum AppState {
     #[default]
     MainMenu,

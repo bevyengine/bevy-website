@@ -254,7 +254,6 @@ Before:
 
 ```rust
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
-
 enum AppState {
     Menu,
     InGame,
