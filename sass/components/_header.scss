@@ -36,17 +36,18 @@
 
     &__message {
         display: none;
-        font-size: 1.4rem;
+        font-size: 1.28rem;
         font-weight: 500;
         color: #797979;
         margin-left: 12px;
+        white-space: nowrap;
 
         @media (min-width: 550px) {
             display: block;
         }
 
         @media #{$bp-desktop-up} {
-            font-size: 1.625rem;
+            font-size: 1.3rem;
         }
 
         &:empty {
