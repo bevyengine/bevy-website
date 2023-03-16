@@ -36,17 +36,18 @@
 
     &__message {
         display: none;
-        font-size: 1.4rem;
+        font-size: 1.28rem;
         font-weight: 500;
         color: #797979;
         margin-left: 12px;
+        white-space: nowrap;
 
         @media (min-width: 550px) {
             display: block;
         }
 
         @media #{$bp-desktop-up} {
-            font-size: 1.625rem;
+            font-size: 1.3rem;
         }
 
         &:empty {
@@ -56,6 +57,7 @@
 
     &__cta-container {
         display: flex;
+        align-items: center;
         margin-left: 16px;
     }
 
@@ -64,6 +66,22 @@
 
         &:not(:last-child) {
             margin-right: 8px;
+        }
+
+        &--github {
+            @include flex-center;
+
+            img {
+                height: 30px;
+                
+                @media #{$bp-tablet-portrait-up} {
+                    height: 35px;
+                }
+            }
+        
+            &:hover {
+                filter: brightness(80%)
+            }
         }
     }
 }

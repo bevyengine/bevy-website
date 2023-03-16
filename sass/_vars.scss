@@ -5,7 +5,7 @@ $size-body-mobile: 14px; // Size for mobile
 // Breakpoints
 $bp-phone-landscape: 480px; // Mobile-landscape (and larger)
 $bp-tablet-portrait: 768px; // Tablet-portrait (and larger)
-$bp-tablet-landscape: 1040px; // Tablet-landscape (and larger)
+$bp-tablet-landscape: 992px; // Tablet-landscape (and larger)
 $bp-desktop: 1200px; // Laptops (and langer)
 
 $bp-phone-portrait-only: '(max-width: #{$bp-phone-landscape - 1})';
