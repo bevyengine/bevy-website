@@ -16,7 +16,7 @@ Thanks to **130** contributors, **461** pull requests, community reviewers, and 
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
-To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/book/migration-guides/0.7-0.8/).
+To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/migration-guides/0.7-0.8/).
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 

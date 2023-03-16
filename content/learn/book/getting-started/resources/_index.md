@@ -2,8 +2,8 @@
 title = "Resources"
 weight = 5
 sort_by = "weight"
-template = "book-section.html"
-page_template = "book-section.html"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
@@ -25,7 +25,7 @@ Resources are accessed in much the same way that we access components. You can a
 
 ```rs
 fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
-    for name in query.iter() {
+    for name in &query {
         println!("hello {}!", name.0);
     }
 }
@@ -44,7 +44,7 @@ fn greet_people(
     // update our timer with the time elapsed since the last update
     // if that caused the timer to finish, we say hello to everyone
     if timer.0.tick(time.delta()).just_finished() {
-        for name in query.iter() {
+        for name in &query {
             println!("hello {}!", name.0);
         }
     }

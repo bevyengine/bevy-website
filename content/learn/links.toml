@@ -6,6 +6,13 @@ image_alt = "Bevy book"
 description = "Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here."
 
 [[links]]
+title = "Migration Guides"
+url = "/learn/migration-guides/introduction"
+image = "/assets/migration-guides.svg"
+image_alt = "Versions diff"
+description = "Every Bevy update brings new functionality and improvements. Follow these guides to migrate your project to the latest Bevy has to offer!"
+
+[[links]]
 title = "Bevy Rust API Docs"
 url = "https://docs.rs/bevy"
 image = "/assets/rust-logo-light.svg"
