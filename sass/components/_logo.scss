@@ -6,27 +6,4 @@
     @media #{$bp-tablet-landscape-up} {
         height: 40px;
     }
-
-    &--icon {
-        @media #{$bp-icon} {
-            display: none;
-        }
-    }
-
-    &--full {
-        display: none;
-
-        @media #{$bp-icon} {
-            display: block;
-        }
-    }
-}
-
-.github-mark {
-    display: inline-flex;
-    height: 40px;
-
-    &:hover {
-        filter: brightness(80%)
-    }
 }
