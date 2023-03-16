@@ -1,3 +1,17 @@
+@mixin card() {
+    display: block;
+    overflow: hidden;
+    border-radius: $border-radius;
+    border: 2px solid #383838;
+    background-color: $syntax-theme-background;
+    text-decoration: none;
+
+    &:hover {
+        background-color: $card-hover-background;
+        border: 2px solid #6b6b6b;
+    }
+}
+
 @mixin flex-center() {
     display: flex;
     align-items: center;

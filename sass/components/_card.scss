@@ -92,22 +92,13 @@
 }
 
 .card {
-    display: block;
+    @include card;
+
     flex-direction: left;
-    overflow: hidden;
     height: 12rem;
-    border-radius: $border-radius;
-    background-color: $syntax-theme-background;
     margin-bottom: $card-list-gap;
     font-style: normal;
-    text-decoration: none;
-    border: 2px solid #383838;
     position: relative;
-
-    &:hover {
-        background-color: $card-hover-background;
-        border: 2px solid #6b6b6b;
-    }
 }
 
 .card-profile-picture {
