@@ -3,6 +3,7 @@ title = "0.6 to 0.7"
 weight = 5
 template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/book/migration-guides/0.6-0.7"]
 [extra]
 long_title = "Migration Guide: 0.6 to 0.7"
 +++
