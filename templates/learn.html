@@ -1,85 +1,21 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="padded-content">
-  <a class="card-nu" href="/learn/book/introduction">
-    <div class="card-nu__img-wrapper">
-      <img class="card-nu__img" src="/assets/book.svg" alt="Bevy book" />
-    </div>
-    <div class="card-nu__content">
-      <h2 class="card-nu__title">
-        The Bevy Book
-      </h2>
-      <p class="card-nu__description">
-        Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here.
-      </p>
-    </div>
-  </a>
-  <a class="card-nu" href="https://docs.rs/bevy">
-    <div class="card-nu__img-wrapper">
-      <img class="card-nu__img" src="/assets/rust-logo-light.svg" alt="Rust logo" />
-    </div>
-    <div class="card-nu__content">
-      <h2 class="card-nu__title">
-        Bevy Rust API Docs
-      </h2>
-      <p class="card-nu__description">
-        Learn how to use Bevy's types, traits and methods using the in-depth reference documentation, complete with inline examples.
-      </p>
-    </div>
-  </a>
-  <a class="card-nu" href="https://github.com/bevyengine/bevy/tree/latest/examples#examples">
-    <div class="card-nu__img-wrapper">
-      <img class="card-nu__img" src="/assets/github.svg" alt="Github logo" />
-    </div>
-    <div class="card-nu__content">
-      <h2 class="card-nu__title">
-        Official Examples
-      </h2>
-      <p class="card-nu__description">
-        Examples that show how to use the various features of Bevy.
-      </p>
-    </div>
-  </a>
-  <a class="card-nu" href="/assets">
-    <div class="card-nu__img-wrapper">
-      <img class="card-nu__img" src="/assets/bevy_icon_dark.svg" alt="Bevy logo" />
-    </div>
-    <div class="card-nu__content">
-      <h2 class="card-nu__title">
-        Bevy Assets
-      </h2>
-      <p class="card-nu__description">
-        Find Assets to use in your games. Learn by example with a list of cool Bevy projects. Read community-made
-        tutorials and documentation.
-      </p>
-    </div>
-  </a>
-  <a class="card-nu" href="/examples">
-    <div class="card-nu__img-wrapper">
-      <img class="card-nu__img" src="/assets/bevy_icon_dark.svg" alt="Bevy logo" />
-    </div>
-    <div class="card-nu__content">
-      <h2 class="card-nu__title">
-        Bevy Web Examples
-      </h2>
-      <p class="card-nu__description">
-        Browse bevy examples compiled to wasm and running directly in your browser!
-      </p>
-    </div>
-  </a>
-  <a class="card-nu" href="/faq">
-    <div class="card-nu__img-wrapper">
-      <img class="card-nu__img" src="/assets/bevy_icon_dark.svg" alt="Bevy logo" />
-    </div>
-    <div class="card-nu__content">
-      <h2 class="card-nu__title">
-        Frequently Asked Questions
-      </h2>
-      <p class="card-nu__description">
-        A curated list of answers to questions Bevy users frequently ask.
-      </p>
-    </div>
-  </a>
+{% set learn_links = load_data(path="content/learn/links.toml") %}
+<div class="padded-content item-grid item-grid--two-cols">
+    {% for link in learn_links.links %}
+      <a class="card-nu" href="{{ link.url }}">
+          <div class="card-nu__img-wrapper">
+              <img class="card-nu__img" src="{{ link.image }}" alt="{{ link.image_alt }}" />
+          </div>
+          <div class="card-nu__content">
+              <h2 class="card-nu__title">{{ link.title }}</h2>
+              {% if link.subtitle %}
+                  <div class="card-nu__subtitle">{{ link.subtitle }}</div>
+              {% endif %}
+              <p class="card-nu__description">{{ link.description }}</p>
+          </div>
+      </a>
+    {% endfor %}
 </div>
 {% endblock content %}
