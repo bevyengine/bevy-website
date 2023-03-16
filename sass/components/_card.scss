@@ -8,8 +8,6 @@
     background-color: $syntax-theme-background;
     text-decoration: none;
 
-    margin-bottom: 15px;
-
     @media #{$bp-phone-landscape-up} {
         min-height: $desktop-height;
         position: relative;
