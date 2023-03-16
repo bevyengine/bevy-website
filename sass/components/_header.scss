@@ -67,6 +67,16 @@
             margin-right: 8px;
         }
 
+        &--donate {
+            .button__icon {
+                display: none;
+
+                @media #{$bp-phone-landscape-up} {
+                    display: block;
+                }
+            }
+        }
+
         &--github {
             @include flex-center;
 
