@@ -111,7 +111,7 @@
         {% endif %}
 
         {% if section.pages %}
-        <div class="item-grid">
+        <div class="item-grid item-grid--multi-cols">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}

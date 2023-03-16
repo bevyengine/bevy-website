@@ -28,7 +28,7 @@
         </h1>
 
         {% if section.pages %}
-        <div class="item-grid">
+        <div class="item-grid item-grid--multi-cols">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
@@ -49,7 +49,7 @@
         <h3 class="asset-subsection" id="{{ section.title | slugify }}">
             {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
         </h3>
-        <div class="item-grid">
+        <div class="item-grid item-grid--multi-cols">
             {% set pages = section.pages %}
             {% if section.extra.sort_order_reversed %}
             {% set pages = section.pages | reverse %}
