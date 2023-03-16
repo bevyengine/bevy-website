@@ -65,5 +65,21 @@
         &:not(:last-child) {
             margin-right: 8px;
         }
+
+        &--github {
+            @include flex-center;
+
+            img {
+                height: 30px;
+                
+                @media #{$bp-tablet-portrait-up} {
+                    height: 35px;
+                }
+            }
+        
+            &:hover {
+                filter: brightness(80%)
+            }
+        }
     }
 }
