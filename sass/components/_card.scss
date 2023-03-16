@@ -45,6 +45,10 @@
         @media #{$bp-phone-landscape-up} {
             max-height: 100%;
         }
+
+        &--small {
+            max-width: calc(min(100%, 80px));
+        }
     }
 
     &__content {
