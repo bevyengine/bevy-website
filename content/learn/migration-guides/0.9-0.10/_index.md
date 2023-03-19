@@ -282,7 +282,7 @@ app.add_state::<AppState>()
     .add_system(cleanup_menu.in_schedule(OnExit(AppState::Menu)));
 ```
 
-When you need to run your state-speciifc systems outside of `CoreSet::Update`, you can use the built-in [`in_state`](https://docs.rs/bevy/latest/bevy/ecs/prelude/fn.in_state.html) run condition.
+When you need to run your state-specific systems outside of `CoreSet::Update`, you can use the built-in [`in_state`](https://docs.rs/bevy/latest/bevy/ecs/prelude/fn.in_state.html) run condition.
 
 ### [Windows as Entities](https://github.com/bevyengine/bevy/pull/5589)
 
