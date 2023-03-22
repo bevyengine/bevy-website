@@ -2,31 +2,29 @@
 {% import "macros/images.html" as image_macros %}
 
 {% block content %}
-<div class="padded-content">
-  {% for page in section.pages %}
-  <a class="card" href="{{ page.path }}">
-    {% if page.extra.image %}
-    {% set image_parent = page.path | replace(from="_index.md", to="") %}
-    <div class="card-image">
-      <img src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=580, height=326) }}"  class="centered-card-image" loading="lazy" />
-    </div>
-    {% else %}
-    <div class="card-image">
-      <img src="/assets/bevy_logo_dark.svg" class="centered-card-image" style="max-width: 15rem;" loading="lazy" />
-    </div>
-    {% endif %}
-    <div class="card-text">
-      <div class="card-title">
-        {{ page.title }}
-      </div>
-      <div class="card-subtitle">
-        Written {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
-      </div>
-      <div class="card-description">
-        {{ page.summary | striptags | truncate(length=180) | safe}}
-      </div>
-    </div>
-  </a>
-  {% endfor %}
+<div class="padded-content item-grid">
+    {% for page in section.pages %}
+        <a class="link-card" href="{{ page.path }}">
+            <div class="link-card__img-wrapper">
+                {% if page.extra.image %}
+                    {% set image_parent = page.path | replace(from="_index.md", to="") %}
+                    <img class="link-card__img" src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=580, height=326) }}" loading="lazy">
+                {% else %}
+                    <img class="link-card__img" src="/assets/bevy_logo_dark.svg" loading="lazy" />
+                {% endif %}
+            </div>
+            <div class="link-card__content">
+                <h2 class="link-card__title">
+                    {{ page.title }}
+                </h2>
+                <div class="link-card__subtitle">
+                    Written {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
+                </div>
+                <p class="link-card__description link-card__description--ellipsis">
+                    {{ page.summary | striptags | truncate(length=350) | safe}}
+                </p>
+            </div>
+        </a>
+    {% endfor %}
 </div>
 {% endblock content %}
