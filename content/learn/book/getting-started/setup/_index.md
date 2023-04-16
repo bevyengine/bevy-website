@@ -35,8 +35,8 @@ Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/be
 * For a mimimal setup, follow these steps:
     1. In the installer, navigate to ```Individual components```
     2. Select the latest ```MSVC``` for your architecture and version of Windows
-    4. Select the latest ```Windows SDK``` for your version of Windows
-    5. Select the ```C++ CMake tools``` for Windows component
+    3. Select the latest ```Windows SDK``` for your version of Windows
+    4. Select the ```C++ CMake tools``` for Windows component
     5. Install the components
 
 #### MacOS
