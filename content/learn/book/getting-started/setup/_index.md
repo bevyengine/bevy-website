@@ -25,9 +25,11 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
 ### Install OS dependencies
 
 #### Linux
+
 Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)
 
 #### Windows
+
 * Run the [Visual Studio 2019 build tools installer](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 * For easy setup, select the ```Desktop development with C++``` workload in the installer.
 * For a mimimal setup, follow these steps:
@@ -38,6 +40,7 @@ Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/be
     5. Install the components
 
 #### MacOS
+
 Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835)
 
 ### Code Editor / IDE
