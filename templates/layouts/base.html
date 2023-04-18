@@ -60,6 +60,8 @@
                                 {{section.extra.header_message}}
                             {% elif page and page.extra.header_message %}
                                 {{page.extra.header_message}}
+                            {% elif section and section.path is starting_with("/learn/quick-start/") %}
+                                Quick Start
                             {% elif section and section.path is starting_with("/learn/book/") %}
                                 The Book
                             {% elif section and section.path is starting_with("/learn/migration-guides/") %}

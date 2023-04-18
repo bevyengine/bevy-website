@@ -1,9 +1,17 @@
 [[links]]
-title = "The Bevy Book"
-url = "/learn/book/introduction"
+title = "Quick Start"
+url = "/learn/quick-start/introduction"
 image = "/assets/book.svg"
-image_alt = "Bevy book"
+image_alt = "Bevy Book Icon"
 description = "Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here."
+
+[[links]]
+title = "Bevy Book"
+url = "/learn/book/v0.11.0/getting-started/why-bevy"
+image = "/assets/book.svg"
+image_alt = "Bevy Book Icon"
+hidden = true # TODO remove this line once book is ready to be published
+description = "TODO to fill"
 
 [[links]]
 title = "Migration Guides"

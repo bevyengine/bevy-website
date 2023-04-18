@@ -1,8 +1,4 @@
 +++
-title = "Book"
-sort_by = "weight"
-template = "docs-section.html"
-page_template = "docs-section.html"
-redirect_to = "learn/book/introduction"
+redirect_to = "learn/book/v0.11.0/getting-started/why-bevy"
 insert_anchor_links = "right"
 +++

@@ -4,6 +4,7 @@
 {% set learn_links = load_data(path="content/learn/links.toml") %}
 <div class="padded-content item-grid item-grid--two-cols">
     {% for link in learn_links.links %}
+        {% if not link.hidden %}
         <a class="link-card" href="{{ link.url }}">
             <div class="link-card__img-wrapper">
                 <img class="link-card__img" src="{{ link.image }}" alt="{{ link.image_alt }}" />
@@ -16,6 +17,7 @@
                 <p class="link-card__description">{{ link.description }}</p>
             </div>
         </a>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock content %}
