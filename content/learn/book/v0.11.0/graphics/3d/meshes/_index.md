@@ -1,10 +1,12 @@
 +++
-title = "Bevy Book v0.11.0"
+title = "Meshes"
+weight = 1
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
-redirect_to = "learn/book/v0.11.0/welcome"
 insert_anchor_links = "right"
-[extra]
-header_message = "v0.11.0"
 +++
+
+TODO: Demonstrate how to import and use a mesh
+
+TODO: Discuss mesh importing pitfalls

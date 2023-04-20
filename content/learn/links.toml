@@ -7,7 +7,7 @@ description = "Learn how to use Bevy using this step-by-step guide. If you are n
 
 [[links]]
 title = "Bevy Book"
-url = "/learn/book/v0.11.0/getting-started/why-bevy"
+url = "/learn/book/v0.11.0"
 image = "/assets/book.svg"
 image_alt = "Bevy Book Icon"
 hidden = true # TODO remove this line once book is ready to be published
