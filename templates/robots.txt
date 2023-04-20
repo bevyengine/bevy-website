@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+Allow: /
+Sitemap: {{ get_url(path="sitemap.xml") }}
+
+# Disallow indexing of new Bevy book until finish
+Disallow: /learn/book/v0.11.0/*
