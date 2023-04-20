@@ -37,41 +37,41 @@ A local server should start and you should be able to access a local version of 
 As outlined in a [discussion on GitHub](https://github.com/bevyengine/bevy-website/issues/623), contributions to the book should adhere to following guidelines:
 
 - The version-specific Bevy Book is locked to versions of Bevy. No retroactive changes can be made to the Bevy Book for previous versions.
-    - Meaning that once Bevy 0.11.0 and Bevy Book 0.11.0 has been released to the public, it can no longer change. Next version that will contain any updates is either 0.12.0 or 0.11.1.
+  - Meaning that once Bevy 0.11.0 and Bevy Book 0.11.0 has been released to the public, it can no longer change. Next version that will contain any updates is either 0.12.0 or 0.11.1.
 - Shortcodes used in the version-specific Bevy Book should not change after a version has been finalized, except for adding paramaters while retaining the same behaviour for existing usages
-    - Example: A `youtube` shortcode defaults to not being full-screen and is being used in version `0.11.0`. If this shortcode for `0.12.0` has to change the default behaviour, it should now start to accept a new parameter to set it to be fullscreen or not, which defaults to false, in order to have it work the same way in `0.11.0` forever.
+  - Example: A `youtube` shortcode defaults to not being full-screen and is being used in version `0.11.0`. If this shortcode for `0.12.0` has to change the default behaviour, it should now start to accept a new parameter to set it to be fullscreen or not, which defaults to false, in order to have it work the same way in `0.11.0` forever.
 - Assets used for a specific version lives in a version-specific directory in `static/assets`,
-    - Example: `static/assets/v0.11.0` for assets created/edited for `0.11.0` of Bevy.
+  - Example: `static/assets/v0.11.0` for assets created/edited for `0.11.0` of Bevy.
 - Once version been finalized, the versioned asset directory can no longer change.
-    - Assets that don't change between versions, should remain from the old version's asset directory.
+  - Assets that don't change between versions, should remain from the old version's asset directory.
 - In order to create a new version of the book, copy previous version into its own directory
-    - Previous version was v0.11.0 and we want to create version v0.12.0
-        - Copy `/content/learn/book/v0.11.0` to `/content/learn/book/v0.12.0`
-        - Change all references from `/content/learn/book/v0.11.0/*` to `/content/learn/book/v0.12.0/*`
-        - Create empty asset directory for images in `/static/assets/v0.12.0`
-    - Any new assets added should be added to this asset directory, otherwise reference assets in `/static/assets/v0.11.0`
-        - If a asset has to be modified in any way, copy it from `/static/assets/v0.11.0` to `/static/assets/v0.12.0` and then modify it, changing the reference only in the current version and not in previous versions
-    - Once the version is ready to be available to the public and published visible on the website:
-        - Prepend the version to `/content/learn/book/versions.toml`
-        - Change reference in `/content/learn/links.toml` to link to current new version
+  - Previous version was v0.11.0 and we want to create version v0.12.0
+    - Copy `/content/learn/book/v0.11.0` to `/content/learn/book/v0.12.0`
+    - Change all references from `/content/learn/book/v0.11.0/*` to `/content/learn/book/v0.12.0/*`
+    - Create empty asset directory for images in `/static/assets/v0.12.0`
+  - Any new assets added should be added to this asset directory, otherwise reference assets in `/static/assets/v0.11.0`
+    - If a asset has to be modified in any way, copy it from `/static/assets/v0.11.0` to `/static/assets/v0.12.0` and then modify it, changing the reference only in the current version and not in previous versions
+  - Once the version is ready to be available to the public and published visible on the website:
+    - Prepend the version to `/content/learn/book/versions.toml`
+    - Change reference in `/content/learn/links.toml` to link to current new version
 
 ### Rust API Doc Syntax
 
 We made an extension to the markdown syntax that makes linking to Rust API docs nicer. It also gives the links special formatting. Here are some examples:
 
-* Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap")}}
+- Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap")}}
 
     ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
-* Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap", no_mod=true)}}
+- Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap", no_mod=true)}}
 
     ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true)}{{curly_close()}}```
-* Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true plural=true)}}
+- Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true plural=true)}}
 
     ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true, plural=true)}{{curly_close()}}```
-* Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}}
+- Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}}
 
     ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}{{curly_close()}}```
-* Module: {{rust_mod(crate="std" mod="collections")}}
+- Module: {{rust_mod(crate="std" mod="collections")}}
 
     ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```
 
