@@ -13,6 +13,7 @@
 
 {% block page_menu %}
     {{book_macros::book_menu(prefix="page-menu", root=get_section(path="learn/book/_index.md"))}}
+    {{book_macros::version_menu()}}
 {% endblock %}
 
 {% block page_content %}
