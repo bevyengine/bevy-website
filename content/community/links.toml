@@ -67,3 +67,4 @@ url = "https://mastodon.social/@bevy"
 image = "/assets/mastodon-logo-purple.svg"
 image_alt = "Mastodon logo"
 description = "News, boosted community creations and chatter on the short-form Fediverse network."
+rel_me = true

@@ -4,7 +4,11 @@
 {% set community_links = load_data(path="content/community/links.toml") %}
 <div class="padded-content item-grid item-grid--two-cols">
     {% for link in community_links.links %}
+        {% if link.rel_me %}
+        <a rel="me" class="link-card" href="{{ link.url }}">
+        {% else %}
         <a class="link-card" href="{{ link.url }}">
+        {% endif %}
             <div class="link-card__img-wrapper">
                 <img class="link-card__img link-card__img--small" src="{{ link.image }}" alt="{{ link.image_alt }}" />
             </div>
