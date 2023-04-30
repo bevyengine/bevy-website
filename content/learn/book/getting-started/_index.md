@@ -43,6 +43,8 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     ```sh
     cargo run --example breakout
     ```
+   
+   1. If the command above fails with an error along the lines of `... only allowed on the nightly channel ...` then update rust to atleast version 1.60 with `rustup upgrade` and retry step #4.
 
 ### Add Bevy as a Dependency
 
