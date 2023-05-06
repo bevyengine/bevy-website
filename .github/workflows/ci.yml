@@ -109,6 +109,40 @@ jobs:
           path: content/examples
           retention-days: 1
 
+  generate-wasm-examples-webgpu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: "Clone Bevy"
+        run: >
+          cd generate-wasm-examples &&
+          ./clone_bevy.sh
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            generate-wasm-examples/bevy/target/
+            content/examples/**/*.wasm
+          key: ${{ runner.os }}-generate-wasm-examples-webgpu-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: "Build Bevy Examples"
+        run: >
+          cd generate-wasm-examples &&
+          ./generate_wasm_examples-webgpu.sh
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-wasm-examples-webgpu
+          path: content/examples-webgpu
+          retention-days: 1
+
   generate-community:
     runs-on: ubuntu-latest
     steps:
@@ -151,7 +185,7 @@ jobs:
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-wasm-examples-webgpu, generate-community]
 
     steps:
       - uses: actions/checkout@master
@@ -169,6 +203,11 @@ jobs:
         with:
           name: generated-wasm-examples
           path: content/examples
+
+      - uses: actions/download-artifact@master
+        with:
+          name: generated-wasm-examples-webgpu
+          path: content/examples-webgpu
 
       - uses: actions/download-artifact@master
         with:

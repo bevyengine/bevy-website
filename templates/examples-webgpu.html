@@ -1,0 +1,67 @@
+{% extends "layouts/page-with-menu.html" %}
+{% import "macros/assets.html" as assets_macros %}
+
+{% block page_name %}Examples{% endblock %}
+
+{% block mobile_page_menu %}
+    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
+{% endblock %}
+
+{% block page_menu %}
+    {{assets_macros::assets_menu(prefix="page-menu", root=section)}}
+{% endblock %}
+
+{% block page_content %}
+<div class="assets">
+    <div class="assets-intro media-content">
+        These examples demonstrate how to use Bevy's features in a minimal, easy to understand way. Click an example below to run it in
+        your browser (using WASM + WebGPU) and view the source code. You can also view these examples (and others) in the
+        <a href="https://github.com/bevyengine/bevy/tree/main/examples#examples">Bevy repo</a>.
+
+        <h2 class="warning">
+            Support Warning
+        </h2>
+        
+        WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If they don't work on your configuration, you can check the WebGL2 examples <a href="/examples">here</a>.
+        <br />
+
+        Support for WebGPU in Bevy hasn't beeen released yet, examples on this page are compiled using the main branch.
+        
+    </div>
+    {% for subsection in section.subsections %}
+        {% set section = get_section(path=subsection) %}
+
+        <h1 class="asset-section" id="{{ section.title | slugify }}">
+            {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
+        </h1>
+
+        {% if section.pages %}
+        <div class="item-grid item-grid--multi-cols">
+            {% set pages = section.pages %}
+            {% if section.extra.sort_order_reversed %}
+            {% set pages = section.pages | reverse %}
+            {% endif %}
+            {% for post in pages %}
+
+                {{ assets_macros::card(post=post) }}
+
+            <!-- <a class="card" href="/examples/{{ section.title | slugify }}/{{ post.title | slugify }}/"
+                id="{{ post.title | slugify }}">
+                {% if post.extra.image %}
+                <div class="card-image card-image-default">
+                    <img src="{{ get_url(path=post.extra.image) }}" />
+                </div>
+                {% endif %}
+                <div class="card-text">
+                    <div class="card-title">{{ post.title }}</div>
+                </div>
+            </a> -->
+
+
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    {% endfor %}
+</div>
+{% endblock content %}
