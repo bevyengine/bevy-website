@@ -50,7 +50,7 @@
     // https://github.com/bevyengine/bevy-website/pull/355
     #}
     import { progressiveFetch } from '/tools.js';
-    // import init from './{{ page.title }}.js';
+    import '/restart-audio-context.js'
     import init from 'https://wasm-examples.pages.dev/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
 
     const canvasEl = document.getElementById('bevy');
