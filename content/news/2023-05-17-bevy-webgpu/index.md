@@ -14,7 +14,7 @@ I'm excited to announce that Bevy's main branch now supports WebGPU rendering on
 
 ## What is WebGPU?
 
-WebGPU is an [exciting new web standard](https://github.com/gpuweb/gpuweb) for doing modern GPU graphics and compute. It takes inspiration from Vulkan, Direct3D 12, and Metal. In fact, it is generally implemented on top of these APIs under the hood. It uses the new [WGSL shader language](https://www.w3.org/TR/WGSL). We're very happy with how WGSL has evolved over time and Bevy uses it internally for our shaders. We also added usability features like imports! But with Bevy you still have the option to use GLSL if you prefer.
+WebGPU is an [exciting new web standard](https://github.com/gpuweb/gpuweb) for doing modern GPU graphics and compute. It takes inspiration from Vulkan, Direct3D 12, and Metal. In fact, it is generally implemented on top of these APIs under the hood. WebGPU gives us access to more GPU features than WebGL2 (such as compute shaders) and also has the potential to be much faster. It means that more of Bevy's native renderer features are now also available on the web. It also uses the new [WGSL shader language](https://www.w3.org/TR/WGSL). We're very happy with how WGSL has evolved over time and Bevy uses it internally for our shaders. We also added usability features like imports! But with Bevy you still have the option to use GLSL if you prefer.
 
 WebGPU has started making waves because [Chrome just shipped WebGPU support in Chrome 113](https://developer.chrome.com/blog/webgpu-release/), which means people with normal Chrome releases can start testing it. Firefox and Safari also have implementations in the works!
 
@@ -36,7 +36,7 @@ Bevy's native examples can also run right in your browser. This already [worked 
 
 ## How it Works
 
-Bevy is built on top of the [wgpu] library, which is a modern low-level GPU API that can target pretty much every popular API: Vulkan, Direct3D 12, Metal, OpenGL, WebGL2, and WebGPU. The best backend API is selected for a given platform. It is a "native" rendering API, but it generally follows the WebGPU terminology and API design. Unlike WebGPU, it can provide direct access to the native APIs, which means Bevy enjoy's a "best of all worlds" situation:
+Bevy is built on top of the [wgpu] library, which is a modern low-level GPU API that can target pretty much every popular API: Vulkan, Direct3D 12, Metal, OpenGL, WebGL2, and WebGPU. The best backend API is selected for a given platform. It is a "native" rendering API, but it generally follows the WebGPU terminology and API design. Unlike WebGPU, it can provide direct access to the native APIs, which means Bevy enjoys a "best of all worlds" situation:
 
 * Fast and low level rendering backed by the best API for a given operating system + hardware combination
 * A much more approachable API than Vulkan, which means Bevy Plugin developers can easily build powerful cross platform renderer features
