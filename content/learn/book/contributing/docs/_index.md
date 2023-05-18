@@ -38,19 +38,19 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
 
 * Full Type Path: {{rust_type(type="struct" crate="std", mod="collections", name="HashMap")}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap")}{{curly_close()}}```
+    ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap")*/}}```
 * Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap", no_mod=true)}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true)}{{curly_close()}}```
+    ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true)*/}}```
 * Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true plural=true)}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true, plural=true)}{{curly_close()}}```
+    ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true, plural=true)*/}}```
 * Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}}
 
-    ```{{curly_open()}}{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}{{curly_close()}}```
+    ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")*/}}```
 * Module: {{rust_mod(crate="std" mod="collections")}}
 
-    ```{{curly_open()}}{rust_mod(crate="std" mod="collections")}{{curly_close()}}```
+    ```{{/*rust_mod(crate="std" mod="collections")*/}}```
 
 Modules from {{rust_mod(crate="std")}} will link to [https://doc.rust-lang.org](https://doc.rust-lang.org/std/index.html). Other modules (like {{rust_mod(crate="bevy_render" mod="render_graph")}} ) will link to [https://docs.rs](https://docs.rs).
 
