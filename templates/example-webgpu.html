@@ -8,7 +8,7 @@
         {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
         <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
         <a class="example__back" href="/examples-webgpu"><i class="icon icon--chevron-left"></i> Back to examples</a>
-        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
+        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/main/{{ page.extra.github_code_path }}">
             <i class="icon icon--github"></i> View in GitHub
         </a>
     </div>
@@ -21,8 +21,10 @@
         WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If they don't work on your configuration, you can check the WebGL2 examples <a href="/examples">here</a>.
         <br />
 
-        Support for WebGPU in Bevy hasn't beeen released yet, this example has been compiled using the main branch.
+        Support for WebGPU in Bevy hasn't been released yet, this example has been compiled using the main branch.
     </div>    
+
+    <br />  
 
     <div class="example__canvas bevy-instance">
         <div class="bevy-instance__progress-status" data-progress-status>
