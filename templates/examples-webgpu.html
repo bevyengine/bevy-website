@@ -45,19 +45,6 @@
 
                 {{ assets_macros::card(post=post) }}
 
-            <!-- <a class="card" href="/examples/{{ section.title | slugify }}/{{ post.title | slugify }}/"
-                id="{{ post.title | slugify }}">
-                {% if post.extra.image %}
-                <div class="card-image card-image-default">
-                    <img src="{{ get_url(path=post.extra.image) }}" />
-                </div>
-                {% endif %}
-                <div class="card-text">
-                    <div class="card-title">{{ post.title }}</div>
-                </div>
-            </a> -->
-
-
             {% endfor %}
         </div>
         {% endif %}
