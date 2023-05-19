@@ -54,6 +54,22 @@
     import init from 'https://wasm-examples.pages.dev/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
 
     const canvasEl = document.getElementById('bevy');
+
+    let once = false;
+    const observer_callback = (_mutations, _observer) => {
+        if (!once) {
+            // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+            canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+            once = true;
+        }
+    };
+
+    const observer = new MutationObserver(observer_callback);
+
+    const config = { attributeFilter: ['width', 'height'] };
+
+    observer.observe(canvasEl, config);
+
     const progressStatusEl = document.querySelector('[data-progress-status]');
     const progressFileEl = document.querySelector('[data-progress-file]');
     const progressBarEl = document.querySelector('[data-progress-bar]');
