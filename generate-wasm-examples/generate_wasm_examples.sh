@@ -81,7 +81,7 @@ weight = $category_weight
 cp -r assets/ ../../static/assets/examples/
 
 echo "+++
-title = \"Bevy Examples in WebGL2\"
+title = \"Examples in WebGL2\"
 template = \"examples.html\"
 sort_by = \"weight\"
 
