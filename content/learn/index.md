@@ -1,5 +1,5 @@
 +++
-title = "Learn"
+title = "Bevy Learn"
 template = "learn.html"
 [extra]
 header_message = "Learn"

@@ -1,11 +1,17 @@
 {% import "macros/header.html" as header_macros %}
 
 {% if section and section.title %}
-    {% set page_title = "Bevy - " ~ section.title %}
+    {% if section.path is starting_with("/learn/book/") %}
+        {% set page_title = "Bevy Book: " ~ section.title %}
+    {% elif section.path is starting_with("/assets") %}
+        {% set page_title = "Bevy Assets" %}
+    {% else %}
+        {% set page_title = section.title %}
+    {% endif %}
 {% elif page and page.title %}
-    {% set page_title = "Bevy - " ~ page.title %}
+        {% set page_title = page.title %}
 {% else %}
-    {% set page_title = "Bevy - A data-driven game engine built in Rust "%}
+    {% set page_title = "Bevy Engine"%}
 {% endif %}
 
 {% if section and section.path %}
