@@ -106,6 +106,16 @@
         })
     }
     window.bevyLoadingBarFetch = loadingBarFetch;
-    init();
+
+    {#
+    // The following .catch() is a simple filter to remove an exception thrown by winit in
+    // its normal control flow. This exception will always be thrown and is not an error.
+    // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
+    #}
+    init().catch((error) => {
+        if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+            throw error;
+        }
+    });
 </script>
 {% endblock content %}
