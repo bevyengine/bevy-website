@@ -32,7 +32,7 @@ Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/be
 
 * Run the [Visual Studio 2019 build tools installer](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
 * For easy setup, select the ```Desktop development with C++``` workload in the installer.
-* For a mimimal setup, follow these steps:
+* For a minimal setup, follow these steps:
     1. In the installer, navigate to `Individual components`
     2. Select the latest `MSVC` for your architecture and version of Windows
     3. Select the latest `Windows SDK` for your version of Windows
