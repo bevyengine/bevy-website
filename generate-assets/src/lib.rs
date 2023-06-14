@@ -10,6 +10,53 @@ pub mod gitlab_client;
 
 type CratesIoDb = cratesio_dbdump_csvtab::rusqlite::Connection;
 
+const OFFICIAL_BEVY_CRATES: &'static [&'static str] = &[
+    // Should be sorted
+    "bevy",
+    "bevy_a11y",
+    "bevy_animation",
+    "bevy_app",
+    "bevy_asset",
+    "bevy_audio",
+    "bevy_core",
+    "bevy_core_pipeline",
+    "bevy_derive",
+    "bevy_diagnostic",
+    "bevy_dylib",
+    "bevy_dynamic_plugin",
+    "bevy_ecs",
+    "bevy_ecs_compile_fail_tests",
+    "bevy_encase_derive",
+    "bevy_gilrs",
+    "bevy_gizmos",
+    "bevy_gltf",
+    "bevy_hierarchy",
+    "bevy_input",
+    "bevy_internal",
+    "bevy_log",
+    "bevy_macros_compile_fail_tests",
+    "bevy_macro_utils",
+    "bevy_math",
+    "bevy_mikktspace",
+    "bevy_pbr",
+    "bevy_ptr",
+    "bevy_reflect",
+    "bevy_reflect_compile_fail_tests",
+    "bevy_render",
+    "bevy_scene",
+    "bevy_sprite",
+    "bevy_tasks",
+    "bevy_text",
+    "bevy_time",
+    "bevy_transform",
+    "bevy_ui",
+    "bevy_utils",
+    "bevy_window",
+    "bevy_winit",
+];
+const OFFICIAL_BEVY_CRATE_PREFIX_RANGE_START: &str = "bevy";
+const OFFICIAL_BEVY_CRATE_PREFIX_RANGE_END: &str = "bevz";
+
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct Asset {
@@ -268,28 +315,6 @@ fn get_metadata_from_gitlab(
     ))
 }
 
-/// Gets the bevy version from the dependency list
-/// Returns the version number if available.
-/// If is is a git dependency, return either "main" or "git" for anything that isn't "main".
-fn get_bevy_dependency_version(dep: &cargo_toml::Dependency) -> Option<String> {
-    match dep {
-        cargo_toml::Dependency::Simple(version) => Some(version.to_string()),
-        cargo_toml::Dependency::Detailed(detail) => {
-            if let Some(version) = &detail.version {
-                Some(version.to_string())
-            } else if detail.git.is_some() {
-                if detail.branch == Some(String::from("main")) {
-                    Some(String::from("main"))
-                } else {
-                    Some(String::from("git"))
-                }
-            } else {
-                None
-            }
-        }
-    }
-}
-
 /// Gets the license from a Cargo.toml file
 /// Tries to emulate crates.io behaviour
 fn get_license(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
@@ -310,19 +335,88 @@ fn get_license(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
     }
 }
 
-/// Find any dep that starts with bevy and get the version
+/// Find any bevy dependency and get the corresponding bevy version from an asset's manifest
 /// This makes sure to handle all the bevy_* crates
 fn get_bevy_version(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
-    cargo_manifest
-        .dependencies
-        .keys()
-        .find(|k| k.starts_with("bevy"))
-        .and_then(|key| {
-            cargo_manifest
-                .dependencies
-                .get(key)
-                .and_then(get_bevy_dependency_version)
-        })
+    get_bevy_dependency(cargo_manifest)
+        .and_then(get_bevy_dependency_version)
+}
+
+/// Find any bevy dependency from an asset's manifest
+fn get_bevy_dependency(cargo_manifest: &cargo_toml::Manifest) -> Option<&cargo_toml::Dependency> {
+    let search_range = OFFICIAL_BEVY_CRATE_PREFIX_RANGE_START.to_owned()..OFFICIAL_BEVY_CRATE_PREFIX_RANGE_END.to_owned();
+
+    // Tries to find an official bevy crate from the asset's dependencies
+    let mut dependencies = cargo_manifest.dependencies.range(search_range.clone());
+    let bevy_crates = OFFICIAL_BEVY_CRATES.iter();
+    let mut bevy_dependency = search_bevy_in_dependencies(dependencies.clone(), bevy_crates.clone());
+
+    if bevy_dependency.is_none() {
+        // Tries to find an official bevy crate from the asset's dev dependencies
+        // An asset can indirectly depend on bevy through another crate, but would probably depend on bevy directly
+        // for its examples, benchmarks or tests, in its dev dependencies 
+        let dev_dependencies = cargo_manifest.dev_dependencies.range(search_range);
+        bevy_dependency = search_bevy_in_dependencies(dev_dependencies, bevy_crates.clone());
+
+        if bevy_dependency.is_none() {
+            // If everything else fails, try to find any crate with a name starting with bevy
+            // This can happen if the asset depends only on past or future bevy sub-crates,
+            // or on third-party crates which name starts with bevy (might yield unaccurate results in that last case)
+            bevy_dependency = dependencies.next().map(|(_, d)| d);
+        }
+    }
+
+    bevy_dependency
+}
+
+/// Seach the first official bevy crate found in a collection of dependencies.
+/// If it was a bit more generic, this function could be called find_first_intersect_in_sorted_iterators.
+/// Both dependencies and bevy_crates are assumed to be sorted (by key for dependencies, they are in this context),
+/// and we find the first element that intersect both of them using that knowledge
+fn search_bevy_in_dependencies<'a>(
+    mut dependencies: std::collections::btree_map::Range<'a, String, cargo_toml::Dependency>,
+    mut bevy_crates: std::slice::Iter<&str>
+) -> Option<&'a cargo_toml::Dependency> {
+    let mut dependency = dependencies.next();
+    let mut bevy_crate = bevy_crates.next();
+
+    while !dependency.is_none() && !bevy_crate.is_none() {
+        let dependency_name = dependency.unwrap().0;
+        let bevy_crate_name = bevy_crate.unwrap();
+
+        if dependency_name.as_str() < *bevy_crate_name {
+            dependency = dependencies.next();
+        }
+        else {
+            if dependency_name == bevy_crate_name {
+                return Some(dependency.unwrap().1);
+            }
+            bevy_crate = bevy_crates.next();
+        }
+    }
+    return None;
+}
+
+/// Gets the bevy version from the bevy dependency provided
+/// Returns the version number if available.
+/// If is is a git dependency, return either "main" or "git" for anything that isn't "main".
+fn get_bevy_dependency_version(dep: &cargo_toml::Dependency) -> Option<String> {
+    match dep {
+        cargo_toml::Dependency::Simple(version) => Some(version.to_string()),
+        cargo_toml::Dependency::Detailed(detail) => {
+            if let Some(version) = &detail.version {
+                Some(version.to_string())
+            } else if detail.git.is_some() {
+                if detail.branch == Some(String::from("main")) {
+                    Some(String::from("main"))
+                } else {
+                    Some(String::from("git"))
+                }
+            } else {
+                None
+            }
+        }
+    }
 }
 
 /// Downloads the crates.io database dump and open a connection to the db
