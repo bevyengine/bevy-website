@@ -494,16 +494,6 @@ mod tests {
         use cargo_toml::{Dependency, Manifest};
         use std::collections::BTreeMap;
 
-        /*
-        fn get_manifest(
-            dependencies: Vec<String>,
-            dependencies_separated: Vec<String>,
-            dev_dependencies: Vec<String>,
-            dev_dependencies_separated: Vec<String>,
-        ) -> cargo_toml::Manifest {
-            toml::from_str::<cargo_toml::Manifest>(&content)?;
-        } */
-
         fn get_manifest(
             dependencies: BTreeMap<String, Dependency>,
             dev_dependencies: BTreeMap<String, Dependency>,
@@ -553,10 +543,20 @@ mod tests {
         fn from_other_dependencies() {
             let mut dependencies = BTreeMap::new();
             let mut dev_dependencies = BTreeMap::new();
-            let workspace_dependencies = BTreeMap::new();
+            let mut workspace_dependencies = BTreeMap::new();
 
-            dependencies.insert("other".to_string(), Dependency::Simple("0.10".to_string()));
-            dev_dependencies.insert("other".to_string(), Dependency::Simple("0.10".to_string()));
+            dependencies.insert(
+                "other_first".to_string(),
+                Dependency::Simple("0.10".to_string()),
+            );
+            dev_dependencies.insert(
+                "other_second".to_string(),
+                Dependency::Simple("0.10".to_string()),
+            );
+            workspace_dependencies.insert(
+                "other_third".to_string(),
+                Dependency::Simple("0.10".to_string()),
+            );
 
             let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
             let version = get_bevy_version(&manifest);
