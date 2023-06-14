@@ -338,23 +338,24 @@ fn get_license(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
 /// Find any bevy dependency and get the corresponding bevy version from an asset's manifest
 /// This makes sure to handle all the bevy_* crates
 fn get_bevy_version(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
-    get_bevy_dependency(cargo_manifest)
-        .and_then(get_bevy_dependency_version)
+    get_bevy_dependency(cargo_manifest).and_then(get_bevy_dependency_version)
 }
 
 /// Find any bevy dependency from an asset's manifest
 fn get_bevy_dependency(cargo_manifest: &cargo_toml::Manifest) -> Option<&cargo_toml::Dependency> {
-    let search_range = OFFICIAL_BEVY_CRATE_PREFIX_RANGE_START.to_owned()..OFFICIAL_BEVY_CRATE_PREFIX_RANGE_END.to_owned();
+    let search_range = OFFICIAL_BEVY_CRATE_PREFIX_RANGE_START.to_owned()
+        ..OFFICIAL_BEVY_CRATE_PREFIX_RANGE_END.to_owned();
 
     // Tries to find an official bevy crate from the asset's dependencies
     let mut dependencies = cargo_manifest.dependencies.range(search_range.clone());
     let bevy_crates = OFFICIAL_BEVY_CRATES.iter();
-    let mut bevy_dependency = search_bevy_in_dependencies(dependencies.clone(), bevy_crates.clone());
+    let mut bevy_dependency =
+        search_bevy_in_dependencies(dependencies.clone(), bevy_crates.clone());
 
     if bevy_dependency.is_none() {
         // Tries to find an official bevy crate from the asset's dev dependencies
         // An asset can indirectly depend on bevy through another crate, but would probably depend on bevy directly
-        // for its examples, benchmarks or tests, in its dev dependencies 
+        // for its examples, benchmarks or tests, in its dev dependencies
         let dev_dependencies = cargo_manifest.dev_dependencies.range(search_range);
         bevy_dependency = search_bevy_in_dependencies(dev_dependencies, bevy_crates.clone());
 
@@ -375,7 +376,7 @@ fn get_bevy_dependency(cargo_manifest: &cargo_toml::Manifest) -> Option<&cargo_t
 /// and we find the first element that intersect both of them using that knowledge
 fn search_bevy_in_dependencies<'a>(
     mut dependencies: std::collections::btree_map::Range<'a, String, cargo_toml::Dependency>,
-    mut bevy_crates: std::slice::Iter<&str>
+    mut bevy_crates: std::slice::Iter<&str>,
 ) -> Option<&'a cargo_toml::Dependency> {
     let mut dependency = dependencies.next();
     let mut bevy_crate = bevy_crates.next();
@@ -386,8 +387,7 @@ fn search_bevy_in_dependencies<'a>(
 
         if dependency_name.as_str() < *bevy_crate_name {
             dependency = dependencies.next();
-        }
-        else {
+        } else {
             if dependency_name == bevy_crate_name {
                 return Some(dependency.unwrap().1);
             }
