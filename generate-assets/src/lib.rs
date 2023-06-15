@@ -182,9 +182,6 @@ pub fn parse_assets<'a>(
         PathBuf::from_str(asset_dir).unwrap(),
         &mut asset_root_section,
         &metadata_source,
-        //crates_io_db,
-        //github_client,
-        //gitlab_client,
     )?;
     Ok(asset_root_section)
 }
@@ -338,8 +335,8 @@ fn get_bevy_version(
 
             if bevy_dependency.is_none() {
                 // If everything else fails, try to find any crate with a name starting with bevy
-                // This can happen if the asset depends only on past or future bevy sub-crates,
-                // or on third-party crates which name starts with bevy (might yield unaccurate results in that last case)
+                // This can happen if the asset depends only on third-party crates
+                // which name starts with bevy (might yield unaccurate results)
                 bevy_dependency = dependencies.find_map(|(_, d)| get_bevy_dependency_version(d));
             }
         }
