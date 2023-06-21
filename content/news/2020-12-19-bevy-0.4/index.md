@@ -295,7 +295,7 @@ Check out the excellent ["Fix Your Timestep!"](https://gafferongames.com/post/fi
 
 #### Typed Stage Builders
 
-Now that stages can be any type, we need a way for {{rust_type(type="trait" crate="bevy_app" version="0.4.0" name="Plugin" no_mod=true plural=true)}} to interact with arbitrary stage types:
+Now that stages can be any type, we need a way for {{rust_type(type="trait" crate="bevy_app" version="0.4.0" name="Plugin" no_mod=true)}}s to interact with arbitrary stage types:
 
 ```rust
 app
