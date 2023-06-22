@@ -80,7 +80,7 @@ fn main() {
 
 {{rust_type(type="trait", crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
-You can also register the default {{rust_type(type="trait" name="Plugin" crate="bevy_app" version="0.1.0" plural=true)}} manually like this:
+You can also register the default {{rust_type(type="trait" name="Plugin" crate="bevy_app" version="0.1.0")}}s manually like this:
 
 ```rs
 fn main() {
@@ -829,13 +829,13 @@ fn event_consumer(mut state: Local<State>, my_events: Res<Events<MyEvent>>) {
 }
 ```
 
-`app.add_event::<MyEvent>()` adds a new {{rust_type(type="struct", crate="bevy_app" version="0.1.0" name="Events")}} resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  {{rust_type(type="struct" crate="bevy_app" version="0.1.0" name="EventReader" plural=true)}} are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
+`app.add_event::<MyEvent>()` adds a new {{rust_type(type="struct", crate="bevy_app" version="0.1.0" name="Events")}} resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  {{rust_type(type="struct" crate="bevy_app" version="0.1.0" name="EventReader")}}s are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
 
 Events are used in Bevy for features like window resizing, assets, and input. The tradeoff for being both allocation and cpu efficient is that each system only has one chance to receive an event, otherwise it will be lost on the next update. I believe this is the correct tradeoff for apps that run in a loop (ex: games).
 
 ## Assets
 
-Bevy {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Assets")}} are just typed data that can be referenced using asset {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Handle" plural=true)}} . For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
+Bevy {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Assets")}} are just typed data that can be referenced using asset {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Handle")}}s. For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
 
 ### Asset Creation
 

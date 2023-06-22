@@ -90,7 +90,7 @@ I know the lack of stability has been tough for some people, but I think this is
 
 ### The Bevy App Model
 
-This year we invested heavily in what I call The Bevy App Model. Bevy {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=true)}} are easy to understand, ergonomic to write, and modular via {{rust_type(type="trait", crate="bevy_app", name="Plugin", no_mod=true, plural=true)}}. My goal was to blur the lines between engine developers and app developers. I think we absolutely nailed it:
+This year we invested heavily in what I call The Bevy App Model. Bevy {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true)}}s are easy to understand, ergonomic to write, and modular via {{rust_type(type="trait", crate="bevy_app", name="Plugin", no_mod=true)}}s. My goal was to blur the lines between engine developers and app developers. I think we absolutely nailed it:
 
 1. There is no "scripting interface" separating "engine logic" from "app logic". We use a single language (Rust) for the whole stack. Rust feels modern with "high level" niceties while retaining low level performance and control. In my opinion, Bevy Apps are often simpler and more expressive than high level equivalents like Unity or Godot, thanks to the state-of-the-art [Bevy ECS](https://github.com/bevyengine/bevy/tree/main/crates/bevy_ecs). And under the hood Bevy Apps _are_ simpler because there are no internal translation layers between languages like C++ and scripting languages like C#:
 
