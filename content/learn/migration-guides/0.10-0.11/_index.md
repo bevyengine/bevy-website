@@ -527,14 +527,6 @@ If you were deserializing `Box<dyn Reflect>` values with multiple entries (i.e. 
 
 <!-- TODO -->
 
-### [Added Globals struct to prepass shader](https://github.com/bevyengine/bevy/pull/8070)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-<!-- TODO -->
-
 ### [Make render graph slots optional for most cases](https://github.com/bevyengine/bevy/pull/8109)
 
 <div class="migration-guide-area-tags">
@@ -643,14 +635,6 @@ fn view_logical_camera_rect(camera_query: Query<&Camera>) {
 
 - If you want to use shaders in `spirv`, enable the `shader_format_spirv` feature
 - If you want to use shaders in `glsl`, enable the `shader_format_glsl` feature
-
-### [Updated to wgpu 0.16.0, wgpu-hal 0.16.0 and naga 0.12.0](https://github.com/bevyengine/bevy/pull/8446)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-<!-- TODO -->
 
 ### [Change default tonemapping method](https://github.com/bevyengine/bevy/pull/8685)
 
@@ -802,11 +786,4 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
 
 - If you were using hashes to an asset or using one of the fixed hasher exposed by Bevy with a previous version, you will have to update the hashes
 
-### [Move bevy_ui accessibility systems to `PostUpdate`.](https://github.com/bevyengine/bevy/pull/8653)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">No area label</div>
-</div>
-
-<!-- TODO -->
 </div>
