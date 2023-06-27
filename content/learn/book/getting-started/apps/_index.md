@@ -7,7 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-Bevy programs are referred to as {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true, plural=true)}}. The simplest Bevy app looks like this:
+Bevy programs are referred to as {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true)}}s. The simplest Bevy app looks like this:
 
 ```rs
 use bevy::prelude::*;

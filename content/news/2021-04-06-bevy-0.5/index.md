@@ -166,7 +166,7 @@ for (a, mut b) in query.iter_mut(&mut world) {
 }
 ```
 
-However for {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.5.0" name="System" no_mod=true plural=true)}}  this is a non-breaking change. Query state management is done internally by the relevant SystemParam.
+However for {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.5.0" name="System" no_mod=true)}}s this is a non-breaking change. Query state management is done internally by the relevant SystemParam.
 
 We have achieved some pretty significant performance wins as a result of the new Query system.
 
@@ -223,7 +223,7 @@ Fortunately @Ratysz has been [doing](https://ratysz.github.io/article/scheduling
 
 <div class="release-feature-authors">authors: @Ratysz, @TheRawMeatball</div>
 
-Systems can now be assigned one or more {{rust_type(type="trait" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemLabel" no_mod=true plural=true)}}. These labels can then be referenced by other systems (within a stage) to run before or after systems with that label:
+Systems can now be assigned one or more {{rust_type(type="trait" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemLabel" no_mod=true)}}s. These labels can then be referenced by other systems (within a stage) to run before or after systems with that label:
 
 ```rust
 app
@@ -289,7 +289,7 @@ Bevy plugin authors should export labels like this in their public APIs to enabl
 
 ### System Sets
 
-{{rust_type(type="struct" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemSet" no_mod=true plural=true)}} are a new way to apply the same configuration to a group of systems, which significantly cuts down on boilerplate. The "physics" example above could be rephrased like this:
+{{rust_type(type="struct" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemSet" no_mod=true)}}s are a new way to apply the same configuration to a group of systems, which significantly cuts down on boilerplate. The "physics" example above could be rephrased like this:
 
 ```rust
 app
@@ -767,7 +767,7 @@ This example serves as a quick introduction to building 3D games in Bevy. It sho
 
 <div class="release-feature-authors">authors: @kokounet</div>
 
-The {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} struct now internally uses {{rust_type(type="struct" crate="std" mod="time" name="Duration" no_mod=true plural=true)}} instead of using `f32` representations of seconds. This both increases precision and makes the api a bit nicer to look at.
+The {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} struct now internally uses {{rust_type(type="struct" crate="std" mod="time" name="Duration" no_mod=true)}}s instead of using `f32` representations of seconds. This both increases precision and makes the api a bit nicer to look at.
 
 ```rust
 fn system(mut timer: ResMut<Timer>, time: Res<Time>) {

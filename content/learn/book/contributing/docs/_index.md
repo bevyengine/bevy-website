@@ -42,9 +42,6 @@ We made an extension to the markdown syntax that makes linking to Rust API docs 
 * Short Type: {{rust_type(type="struct", crate="std" mod="collections", name="HashMap", no_mod=true)}}
 
     ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true)*/}}```
-* Plural Type: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true plural=true)}}
-
-    ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true, plural=true)*/}}```
 * Function: {{rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")}}
 
     ```{{/*rust_type(type="struct" crate="std" mod="collections" name="HashMap" no_mod=true method="insert")*/}}```
