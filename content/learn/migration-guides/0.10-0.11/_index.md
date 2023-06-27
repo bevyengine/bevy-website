@@ -467,7 +467,7 @@ let entity_ref = world.entity(id);
     <div class="migration-guide-area-tag">App</div>
 </div>
 
-If you were not using a `prelude::*` to import `AppTypeRegistry`, you should update your imports:
+If you were **not** using a `prelude::*` to import `AppTypeRegistry`, you should update your imports:
 
 ```rust
 // 0.10
