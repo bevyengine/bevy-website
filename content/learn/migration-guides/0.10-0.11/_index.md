@@ -447,7 +447,17 @@ type MyFetchReadOnly<'w> = <<MyQuery as WorldQuery>::ReadOnly as WorldQuery>::Fe
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-TODO
+`EntityRef::world` has been removed to make `EntityRef` sound to use as a query result. If you were retrieving `EntityRef` via `World::entity` or `World::get_entity`. Save a copy of the reference to the `World` before calling `World::entity`.
+
+```rust
+// In 0.10
+let entity_ref = world.entity(id);
+let world_2 = entity_ref.world();
+
+// In 0.11
+let world_2 = &world;
+let entity_ref = world.entity(id);
+```
 
 ### [Move AppTypeRegistry to bevy_ecs](https://github.com/bevyengine/bevy/pull/8901)
 
