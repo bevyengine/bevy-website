@@ -403,16 +403,12 @@ The type `ComponentIdFor<T>` now implements `SystemParam` instead of `FromWorld`
 
 ```rust
 // 0.10
-fn my_system(
-    component_id: Local<ComponentIdFor<MyComponent>>,
-) {
+fn my_system(component_id: Local<ComponentIdFor<MyComponent>>) {
     let component_id = **component_id;
 }
 
 // 0.11
-fn my_system(
-    component_id: ComponentIdFor<MyComponent>,
-) {
+fn my_system(component_id: ComponentIdFor<MyComponent>) {
     let component_id = component_id.get();
 }
 ```
@@ -463,9 +459,11 @@ TODO
 
 If you were not using a `prelude::*` to import `AppTypeRegistry`, you should update your imports:
 
-```diff
-- use bevy::app::AppTypeRegistry;
-+ use bevy::ecs::reflect::AppTypeRegistry
+```rust
+// 0.10
+use bevy::app::AppTypeRegistry;
+// 0.11
+use bevy::ecs::reflect::AppTypeRegistry
 ```
 
 ### [Make scene handling of entity references robust](https://github.com/bevyengine/bevy/pull/7335)
