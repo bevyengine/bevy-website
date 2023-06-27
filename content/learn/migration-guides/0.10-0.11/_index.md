@@ -133,21 +133,21 @@ The attributes `#[system_param(ignore)]` and `#[world_query]` ignore have been r
 #[derive(SystemParam)]
 struct MyParam<'w, 's, Marker> {
     ...
-    // Before:
+    // 0.10
     #[system_param(ignore)
     _marker: PhantomData<Marker>,
 
-    // After:
+    // 0.11
     _marker: PhantomData<Marker>,
 }
 #[derive(WorldQuery)]
 struct MyQuery<Marker> {
     ...
-    // Before:
+    // 0.10
     #[world_query(ignore)
     _marker: PhantomData<Marker>,
 
-    // After:
+    // 0.11
     _marker: PhantomData<Marker>,
 }
 ```
@@ -157,11 +157,11 @@ If you were using this for another type that implements `Default`, consider wrap
 ```rust
 #[derive(SystemParam)]
 struct MyParam<'w, 's> {
-    // Before:
+    // 0.10
     #[system_param(ignore)]
     value: MyDefaultType, // This will be initialized using `Default` each time `MyParam` is created.
 
-    // After:
+    // 0.11
     value: Local<MyDefaultType>, // This will be initialized using `Default` the first time `MyParam` is created.
 }
 ```
@@ -169,7 +169,7 @@ struct MyParam<'w, 's> {
 If you are implementing either trait and need to preserve the exact behavior of the old `ignore` attributes, consider manually implementing `SystemParam` or `WorldQuery` for a wrapper struct that uses the `Default` trait:
 
 ```rust
-// Before:
+// 0.10
 
 #[derive(WorldQuery)
 struct MyQuery {
@@ -177,7 +177,7 @@ struct MyQuery {
     str: String,
 }
 
-// After:
+// 0.11
 
 #[derive(WorldQuery)
 struct MyQuery {
@@ -248,11 +248,11 @@ The `IntoPipeSystem` trait has been removed, and the `pipe` method has been move
 
 ```rust
 
-// Before:
+// 0.10
 use bevy_ecs::system::IntoPipeSystem;
 schedule.add_systems(first.pipe(second));
 
-// After:
+// 0.11
 use bevy_ecs::system::IntoSystem;
 schedule.add_systems(first.pipe(second));
 ```
@@ -288,11 +288,11 @@ The `System` trait now uses `UnsafeWorldCell` instead of `&World`. This type pro
 let mut system = IntoSystem::into_system(my_system);
 system.initialize(&mut world);
 
-// Before:
+// 0.10
 system.update_archetype_component_access(&world);
 unsafe { system.run_unsafe(&world) }
 
-// After:
+// 0.11
 system.update_archetype_component_access(world.as_unsafe_world_cell_readonly());
 unsafe { system.run_unsafe(world.as_unsafe_world_cell()) }
 ```
@@ -306,19 +306,19 @@ unsafe { system.run_unsafe(world.as_unsafe_world_cell()) }
 The `Command` types `Remove` and `RemoveResource` may no longer be constructed manually.
 
 ```rust
-// Before:
+// 0.10
 commands.add(Remove::<T> {
     entity: id,
     phantom: PhantomData,
 });
 
-// After:
+// 0.11
 commands.add(Remove::<T>::new(id));
 
-// Before:
+// 0.10
 commands.add(RemoveResource::<T> { phantom: PhantomData });
 
-// After:
+// 0.11
 commands.add(RemoveResource::<T>::new());
 ```
 
@@ -368,11 +368,11 @@ Mutating any world data using `&World` is now considered unsound – the type `U
 let mut world = World::new();
 let mut query = world.query::<&mut T>();
 
-// Before:
+// 0.10
 let t1 = query.get_unchecked(&world, entity_1);
 let t2 = query.get_unchecked(&world, entity_2);
 
-// After:
+// 0.11
 let world_cell = world.as_unsafe_world_cell();
 let t1 = query.get_unchecked(world_cell, entity_1);
 let t2 = query.get_unchecked(world_cell, entity_2);
@@ -381,20 +381,20 @@ let t2 = query.get_unchecked(world_cell, entity_2);
 The methods `QueryState::validate_world` and `SystemState::matches_world` now take a `WorldId` instead of `&World`:
 
 ```rust
-// Before:
+// 0.10
 query_state.validate_world(&world);
 
-// After:
+// 0.11
 query_state.validate_world(world.id());
 ```
 
 The methods `QueryState::update_archetypes` and `SystemState::update_archetypes` now take `UnsafeWorldCell` instead of `&World`:
 
 ```rust
-// Before:
+// 0.10
 query_state.update_archetypes(&world);
 
-// After:
+// 0.11
 query_state.update_archetypes(world.as_unsafe_world_cell_readonly());
 ```
 
@@ -407,14 +407,14 @@ query_state.update_archetypes(world.as_unsafe_world_cell_readonly());
 The type `ComponentIdFor<T>` now implements `SystemParam` instead of `FromWorld` – this means it should be used as the parameter for a system directly instead of being used in a `Local`.
 
 ```rust
-// Before:
+// 0.10
 fn my_system(
     component_id: Local<ComponentIdFor<MyComponent>>,
 ) {
     let component_id = **component_id;
 }
 
-// After:
+// 0.11
 fn my_system(
     component_id: ComponentIdFor<MyComponent>,
 ) {
@@ -441,11 +441,11 @@ If you have a use-case for `for_each_unchecked` that you believe is sound, pleas
 The type aliases `bevy_ecs::query::QueryFetch` and `ROQueryFetch` have been deprecated. If you need to refer to a `WorldQuery` struct’s fetch type, refer to the associated type defined on `WorldQuery` directly:
 
 ```rust
-// Before:
+// 0.10
 type MyFetch<'w> = QueryFetch<'w, MyQuery>;
 type MyFetchReadOnly<'w> = ROQueryFetch<'w, MyQuery>;
 
-// After:
+// 0.11
 type MyFetch<'w> = <MyQuery as WorldQuery>::Fetch;
 type MyFetchReadOnly<'w> = <<MyQuery as WorldQuery>::ReadOnly as WorldQuery>::Fetch;
 ```
@@ -619,19 +619,15 @@ graph.add_node(FooNode::NAME, node);
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Before:
-
 ```rust
+// 0.10
 fn view_logical_camera_rect(camera_query: Query<&Camera>) {
     let camera = camera_query.single();
     let Some((min, max)) = camera.logical_viewport_rect() else { return };
     dbg!(min, max);
 }
-```
 
-After:
-
-```rust
+// 0.11
 fn view_logical_camera_rect(camera_query: Query<&Camera>) {
     let camera = camera_query.single();
     let Some(Rect { min, max }) = camera.logical_viewport_rect() else { return };
