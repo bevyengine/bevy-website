@@ -252,17 +252,127 @@ fn get_extra_metadata(
     Ok(())
 }
 
+// Merge two licenses, get the combination of both of them
+fn merge_license(license1: Option<String>, license2: Option<String>) -> Option<String> {
+    if license1.is_none() {
+        return license2;
+    }
+    if license2.is_none() {
+        return license1;
+    }
+
+    let license1 = license1.unwrap();
+    let license2 = license2.unwrap();
+    if license1.contains(&license2) {
+        return Some(license1);
+    }
+    if license2.contains(&license1) {
+        return Some(license2);
+    }
+
+    Some(license1 + " " + &license2)
+}
+
+// Merge two versions, get the maximum of the two
+// TODO: normalize versions to be able to compare them
+// In the mean time this just returns version1 if it's Some
+fn merge_version(version1: Option<String>, version2: Option<String>) -> Option<String> {
+    if version1.is_some() {
+        return version1;
+    }
+    version2
+}
+
 fn get_metadata_from_github(
     client: &GithubClient,
     username: &str,
     repository_name: &str,
     bevy_crates: &Option<Vec<String>>,
 ) -> anyhow::Result<(Option<String>, Option<String>)> {
+    let result = get_metadata_from_github_manifest(
+        client,
+        username,
+        repository_name,
+        bevy_crates,
+        "Cargo.toml",
+    );
+
+    let (mut license, mut version) = match result {
+        Ok(lic_ver) => lic_ver,
+        Err(err) => {
+            println!(
+                "Error getting metadata from root cargo file from github: {}",
+                err
+            );
+            (None, None)
+        }
+    };
+
+    if license.is_none() {
+        license = client.get_license(username, repository_name).ok();
+    }
+
+    if license == None || version == None {
+        let cargo_files = match client.search_file(username, repository_name, "Cargo.toml") {
+            Ok(cargo_files) => cargo_files,
+            Err(err) => {
+                println!("Error fetching cargo files from github: {:#}", err);
+                return Ok((license, version));
+            }
+        };
+
+        let mut cargo_files = cargo_files
+            .iter()
+            //Exclude the root Cargo.toml, we already searched in it
+            .filter(|f| f != &"Cargo.toml");
+
+        let mut cargo_file = cargo_files.next();
+        while (license == None || version == None) && cargo_file.is_some() {
+            let cargo_file_path = cargo_file.unwrap();
+
+            let result = get_metadata_from_github_manifest(
+                client,
+                username,
+                repository_name,
+                bevy_crates,
+                cargo_file_path,
+            );
+            match result {
+                Ok((new_license, new_version)) => {
+                    (license, version) = (
+                        merge_license(license, new_license),
+                        merge_version(version, new_version),
+                    );
+                }
+                Err(err) => {
+                    println!(
+                        "Error getting metadata from other cargo file from github: {}",
+                        err
+                    );
+                    return Ok((license, version));
+                }
+            }
+
+            cargo_file = cargo_files.next();
+        }
+    }
+
+    Ok((license, version))
+}
+
+fn get_metadata_from_github_manifest(
+    client: &GithubClient,
+    username: &str,
+    repository_name: &str,
+    bevy_crates: &Option<Vec<String>>,
+    path: &str,
+) -> anyhow::Result<(Option<String>, Option<String>)> {
     let content = client
-        .get_content(username, repository_name, "Cargo.toml")
+        .get_content(username, repository_name, path)
         .context("Failed to get Cargo.toml from github")?;
 
     let cargo_manifest = toml::from_str::<cargo_toml::Manifest>(&content)?;
+
     Ok((
         get_license(&cargo_manifest),
         get_bevy_version_from_manifest(&cargo_manifest, bevy_crates),

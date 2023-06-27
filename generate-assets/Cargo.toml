@@ -19,7 +19,6 @@ cargo_toml = "0.15"
 url = "2.2.2"
 anyhow = "1.0.58"
 base64 = "0.13.0"
-cratesio-dbdump-lookup = "0.1.1"
 cratesio-dbdump-csvtab = "0.2.2"
 ureq = { version = "2.5.0", features = ["json"] }
 dotenv = "0.15.0"
