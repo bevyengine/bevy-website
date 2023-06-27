@@ -119,7 +119,7 @@ The functions `assert_is_system` and `assert_is_read_only_system` (in `bevy_ecs:
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-<!-- TODO -->
+Remove the now unused variants of `ScheduleBuildError`
 
 ### [Remove `#[system_param(ignore)]` and `#[world_query(ignore)]`](https://github.com/bevyengine/bevy/pull/8265)
 
