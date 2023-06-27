@@ -101,6 +101,7 @@ fn write_markdown_event(
         Event::Start(Tag::CodeBlock(CodeBlockKind::Indented)) => writeln!(output, "\n```",)?,
         Event::End(Tag::CodeBlock(CodeBlockKind::Indented)) => writeln!(output, "```")?,
         Event::Start(Tag::Emphasis) | Event::End(Tag::Emphasis) => write!(output, "_")?,
+        Event::Start(Tag::Strong) | Event::End(Tag::Strong) => write!(output, "**",)?,
         Event::Start(Tag::Heading(_, _, _)) => {
             // A few guides used headings for emphasis,
             // since we use headings for the actual header of the guide, we need to use a different way to convey emphasis
