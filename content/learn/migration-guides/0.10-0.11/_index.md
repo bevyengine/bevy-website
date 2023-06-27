@@ -19,7 +19,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">App</div>
 </div>
 
-- instead of inserting the `ScheduleRunnerSettings` resource, configure the `ScheduleRunnerPlugin`
+Instead of inserting the `ScheduleRunnerSettings` resource, configure the `ScheduleRunnerPlugin`
 
 ### [Allow tuples and single plugins in `add_plugins`, deprecate `add_plugin`](https://github.com/bevyengine/bevy/pull/8097)
 
@@ -27,7 +27,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">App</div>
 </div>
 
-- Replace `app.add_plugin(plugin)` calls with `app.add_plugins(plugin)`.
+Replace `app.add_plugin(plugin)` calls with `app.add_plugins(plugin)`.
 
 ### [Add support for custom glTF vertex attributes.](https://github.com/bevyengine/bevy/pull/5370)
 
@@ -35,7 +35,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-- If you were instantiating `GltfPlugin` using the unit-like struct syntax, you must instead use `GltfPlugin::default()` as the type is no longer unit-like.
+If you were instantiating `GltfPlugin` using the unit-like struct syntax, you must instead use `GltfPlugin::default()` as the type is no longer unit-like.
 
 ### [Delay asset hot reloading](https://github.com/bevyengine/bevy/pull/8503)
 
@@ -43,7 +43,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-- Replace `AssetPlugin::watch_for_changes: true` with e.g. `ChangeWatcher::with_delay(Duration::from_millis(200))`
+Replace `AssetPlugin::watch_for_changes: true` with e.g. `ChangeWatcher::with_delay(Duration::from_millis(200))`
 
 ### [Allow systems using Diagnostics to run in parallel](https://github.com/bevyengine/bevy/pull/8677)
 
@@ -61,8 +61,9 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">Diagnostics</div>
 </div>
 
-- Capture logs from `stderr` instead of from `stdout`
-  - Use `2> output.log` on the command line to save `stderr` to a file
+Capture logs from `stderr` instead of from `stdout`
+
+- Use `2> output.log` on the command line to save `stderr` to a file
 
 ### [Make `WorldQuery` meta types unnameable](https://github.com/bevyengine/bevy/pull/7964)
 
@@ -134,19 +135,18 @@ The attributes `#[system_param(ignore)]` and `#[world_query]` ignore have been r
 struct MyParam<'w, 's, Marker> {
     ...
     // 0.10
-    #[system_param(ignore)
+    #[system_param(ignore)]
     _marker: PhantomData<Marker>,
-
     // 0.11
     _marker: PhantomData<Marker>,
 }
+
 #[derive(WorldQuery)]
 struct MyQuery<Marker> {
     ...
     // 0.10
-    #[world_query(ignore)
+    #[world_query(ignore)]
     _marker: PhantomData<Marker>,
-
     // 0.11
     _marker: PhantomData<Marker>,
 }
@@ -160,7 +160,6 @@ struct MyParam<'w, 's> {
     // 0.10
     #[system_param(ignore)]
     value: MyDefaultType, // This will be initialized using `Default` each time `MyParam` is created.
-
     // 0.11
     value: Local<MyDefaultType>, // This will be initialized using `Default` the first time `MyParam` is created.
 }
@@ -170,16 +169,13 @@ If you are implementing either trait and need to preserve the exact behavior of 
 
 ```rust
 // 0.10
-
-#[derive(WorldQuery)
+#[derive(WorldQuery)]
 struct MyQuery {
    #[world_query(ignore)]
     str: String,
 }
-
 // 0.11
-
-#[derive(WorldQuery)
+#[derive(WorldQuery)]
 struct MyQuery {
     str: DefaultQuery<String>,
 }
@@ -228,7 +224,7 @@ The function `UnsafeWorldCell::increment_change_tick` is now strongly-typed, ret
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-- Use `State::get` instead of accessing the tuple field directly.
+Use `State::get` instead of accessing the tuple field directly.
 
 ### [Only trigger state transitons if `next_state != old_state`](https://github.com/bevyengine/bevy/pull/8359)
 
@@ -247,7 +243,6 @@ State transitions are now only triggered when the exited and entered state diffe
 The `IntoPipeSystem` trait has been removed, and the `pipe` method has been moved to the `IntoSystem` trait.
 
 ```rust
-
 // 0.10
 use bevy_ecs::system::IntoPipeSystem;
 schedule.add_systems(first.pipe(second));
@@ -311,13 +306,13 @@ commands.add(Remove::<T> {
     entity: id,
     phantom: PhantomData,
 });
-
 // 0.11
 commands.add(Remove::<T>::new(id));
+```
 
+```rust
 // 0.10
 commands.add(RemoveResource::<T> { phantom: PhantomData });
-
 // 0.11
 commands.add(RemoveResource::<T>::new());
 ```
@@ -466,7 +461,7 @@ TODO
     <div class="migration-guide-area-tag">App</div>
 </div>
 
-- If you were not using a `prelude::*` to import `AppTypeRegistry`, you should update your imports:
+If you were not using a `prelude::*` to import `AppTypeRegistry`, you should update your imports:
 
 ```diff
 - use bevy::app::AppTypeRegistry;
@@ -480,7 +475,7 @@ TODO
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-- `MapEntities` implementations must change from a `&EntityMap` parameter to a `&mut EntityMapper` parameter and can no longer return a `Result`. Finally, they should switch from calling `EntityMap::get` to calling `EntityMapper::get_or_reserve`.
+`MapEntities` implementations must change from a `&EntityMap` parameter to a `&mut EntityMapper` parameter and can no longer return a `Result`. Finally, they should switch from calling `EntityMap::get` to calling `EntityMapper::get_or_reserve`.
 
 ### [Rename map_entities and map_specific_entities](https://github.com/bevyengine/bevy/pull/7570)
 
@@ -489,7 +484,7 @@ TODO
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-- In `bevy_ecs`, `ReflectMapEntities::map_entites` now requires an additional `entities` parameter to specify which entities it applies to. To keep the old behavior, use the new `ReflectMapEntities::map_all_entities`, but consider if passing the entities in specifically might be better for your use case to avoid bugs.
+In `bevy_ecs`, `ReflectMapEntities::map_entites` now requires an additional `entities` parameter to specify which entities it applies to. To keep the old behavior, use the new `ReflectMapEntities::map_all_entities`, but consider if passing the entities in specifically might be better for your use case to avoid bugs.
 
 ### [Rename keys like `LAlt` to `AltLeft`](https://github.com/bevyengine/bevy/pull/8792)
 
@@ -680,7 +675,7 @@ fn view_logical_camera_rect(camera_query: Query<&Camera>) {
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- The default tonemapper has been changed from ReinhardLuminance to TonyMcMapface. Explicitly set ReinhardLuminance on your cameras to get back the previous look.
+The default tonemapper has been changed from ReinhardLuminance to TonyMcMapface. Explicitly set ReinhardLuminance on your cameras to get back the previous look.
 
 ### [Apply codebase changes in preparation for `StandardMaterial` transmission](https://github.com/bevyengine/bevy/pull/8704)
 
@@ -755,7 +750,7 @@ If you were passing `Window::cursor_position` to `viewport_to_world` or `viewpor
     <div class="migration-guide-area-tag">Transform</div>
 </div>
 
-- `Transform::look_to` method changed default value of `direction.try_normalize()` from `Vec3::Z` to `Vec3::NEG_Z`
+`Transform::look_to` method changed default value of `direction.try_normalize()` from `Vec3::Z` to `Vec3::NEG_Z`
 
 ### [Fix transform propagation of orphaned entities](https://github.com/bevyengine/bevy/pull/7264)
 
@@ -795,7 +790,7 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
--The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
+The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
 
 ### [`MeasureFunc` improvements](https://github.com/bevyengine/bevy/pull/8402)
 
@@ -814,7 +809,7 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-- The `size`, `min_size`, `max_size`, and `gap` properties have been replaced by the `width`, `height`, `min_width`, `min_height`, `max_width`, `max_height`, `row_gap`, and `column_gap` properties. Use the new properties instead.
+The `size`, `min_size`, `max_size`, and `gap` properties have been replaced by the `width`, `height`, `min_width`, `min_height`, `max_width`, `max_height`, `row_gap`, and `column_gap` properties. Use the new properties instead.
 
 ### [update ahash and hashbrown](https://github.com/bevyengine/bevy/pull/8623)
 
@@ -822,6 +817,6 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
     <div class="migration-guide-area-tag">No area label</div>
 </div>
 
-- If you were using hashes to an asset or using one of the fixed hasher exposed by Bevy with a previous version, you will have to update the hashes
+If you were using hashes to an asset or using one of the fixed hasher exposed by Bevy with a previous version, you will have to update the hashes
 
 </div>
