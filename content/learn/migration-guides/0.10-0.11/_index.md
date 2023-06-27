@@ -527,6 +527,44 @@ If you were deserializing `Box<dyn Reflect>` values with multiple entries (i.e. 
 
 <!-- TODO -->
 
+### [improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Shaders that don't use #import directives should work without changes.
+
+The most notable user-facing difference is that imported functions/variables/etc need to be qualified at point of use, and there's no "leakage" of visible stuff into your shader scope from the imports of your imports, so if you used things imported by your imports, you now need to import them directly and qualify them.
+
+The current strategy of including/'spreading' mesh_vertex_output directly into a struct doesn't work any more, so these need to be modified as per the examples (e.g. color_material.wgsl, or many others). mesh data is assumed to be in bindgroup 2 by default, if mesh data is bound into bindgroup 1 instead then the shader def MESH_BINDGROUP_1 needs to be added to the pipeline shader_defs.
+
+```rust
+// 0.10
+struct FragmentInput {
+    #import bevy_pbr::mesh_vertex_output
+}
+@fragment
+fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {}
+
+// 0.11
+#import bevy_pbr::mesh_vertex_output MeshVertexOutput
+@fragment
+fn fragment(in: MeshVertexOutput) -> @location(0) vec4<f32> {}
+```
+
+If you were importing something like `mesh_view_bindings` but only for the `globals` uniform buffer you can now import it directly.
+
+```rust
+// 0.10
+#import bevy_pbr::mesh_view_bindings
+// use globals.time after this
+
+// 0.11
+#import bevy_pbr::mesh_view_bindings globals
+// globals is now in scope, but nothing else is imported
+```
+
 ### [Make render graph slots optional for most cases](https://github.com/bevyengine/bevy/pull/8109)
 
 <div class="migration-guide-area-tags">
