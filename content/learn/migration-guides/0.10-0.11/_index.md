@@ -55,7 +55,7 @@ Replace `AssetPlugin::watch_for_changes: true` with e.g. `ChangeWatcher::with_de
 - In systems for writing new measurements, change `mut diagnostics: ResMut<Diagnostics>` to `mut diagnostics: Diagnostics` to allow the systems to run in parallel.
 - In systems for reading measurements, change `diagnostics: Res<Diagnostics>` to `diagnostics: Res<DiagnosticsStore>`.
 
-### [log to stderr instead of stdout](https://github.com/bevyengine/bevy/pull/8886)
+### [Log to stderr instead of stdout](https://github.com/bevyengine/bevy/pull/8886)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Diagnostics</div>
@@ -522,7 +522,7 @@ If you were deserializing `Box<dyn Reflect>` values with multiple entries (i.e. 
 
 <!-- TODO -->
 
-### [improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
+### [Improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -660,7 +660,7 @@ fn view_logical_camera_rect(camera_query: Query<&Camera>) {
 }
 ```
 
-### [make glsl and spirv support optional](https://github.com/bevyengine/bevy/pull/8491)
+### [Make glsl and spirv support optional](https://github.com/bevyengine/bevy/pull/8491)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -811,7 +811,7 @@ The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
 
 The `size`, `min_size`, `max_size`, and `gap` properties have been replaced by the `width`, `height`, `min_width`, `min_height`, `max_width`, `max_height`, `row_gap`, and `column_gap` properties. Use the new properties instead.
 
-### [update ahash and hashbrown](https://github.com/bevyengine/bevy/pull/8623)
+### [Update ahash and hashbrown](https://github.com/bevyengine/bevy/pull/8623)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">No area label</div>
