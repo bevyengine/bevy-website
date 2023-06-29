@@ -17,11 +17,30 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **Feature**: description
 
-## Feature
+## WebGPU Support
 
-<div class="release-feature-authors">authors: @todo</div>
+<div class="release-feature-authors">authors: @mockersf, many others throughout Bevy's development</div>
 
-Description
+![webgpu](webgpu.svg)
+
+Bevy now supports WebGPU rendering on the web (in addition to WebGL 2). WebGPU support is still rolling out, but if you have [a supported web browser][webgpu-support] you can explore our new [live WebGPU examples](/examples-webgpu) page.
+
+### What is WebGPU?
+
+WebGPU is an [exciting new web standard](https://github.com/gpuweb/gpuweb) for doing modern GPU graphics and compute. It takes inspiration from Vulkan, Direct3D 12, and Metal. In fact, it is generally implemented on top of these APIs under the hood. WebGPU gives us access to more GPU features than WebGL2 (such as compute shaders) and also has the potential to be much faster. It means that more of Bevy's native renderer features are now also available on the web. It also uses the new [WGSL shader language](https://www.w3.org/TR/WGSL). We're very happy with how WGSL has evolved over time and Bevy uses it internally for our shaders. We also added usability features like imports! But with Bevy you still have the option to use GLSL if you prefer.
+
+### How it Works
+
+Bevy is built on top of the [wgpu] library, which is a modern low-level GPU API that can target pretty much every popular API: Vulkan, Direct3D 12, Metal, OpenGL, WebGL2, and WebGPU. The best backend API is selected for a given platform. It is a "native" rendering API, but it generally follows the WebGPU terminology and API design. Unlike WebGPU, it can provide direct access to the native APIs, which means Bevy [enjoys a "best of all worlds" situation](/news/bevy-webgpu/#how-it-works).
+
+### WebGPU Examples
+
+Click one of the images below to check out our live WebGPU examples (if your [browser supports it][webgpu-support]):
+
+[![webgpu examples](webgpu_examples.png)](examples-webgpu)
+
+[wgpu]: https://github.com/gfx-rs/wgpu
+[webgpu-support]: https://caniuse.com/webgpu
 
 ## <a name="what-s-next"></a>What's Next?
 
