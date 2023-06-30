@@ -15,7 +15,8 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Feature**: description
+* **Parallax mapping**: Materials now support an optional depth map, giving
+  flat surfaces a feel of depth through parallaxing the material's textures.
 
 ## Parallax Mapping
 
@@ -27,7 +28,7 @@ maps to shame when it comes to giving "illusion of depth" to a material.
 
 <video controls loop><source  src="earth-parallax.webm" type="video/webm"/></video>
 
-Notice how it is not merely the light shading of pixel that changes, but their
+Notice how it is not merely the shading of pixels that changes, but their
 actual position on screen. Notice how mountaintops hide mountain ridges behind
 themselves. Notice how mountaintops move faster than coastal areas.
 
