@@ -25,7 +25,6 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 Bevy now supports parallax mapping and depth maps. Parallax mapping puts normal
 maps to shame when it comes to giving "illusion of depth" to a material.
 
-
 <video controls loop><source  src="earth-parallax.webm" type="video/webm"/></video>
 
 Notice how it is not merely the shading of pixels that changes, but their
