@@ -17,11 +17,31 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **Feature**: description
 
-## Feature
+## Deref Derive Attribute
 
-<div class="release-feature-authors">authors: @todo</div>
+<div class="release-feature-authors">authors: @MrGVSV</div>
 
-Description
+Bevy code tends to make heavy use of the [newtype](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) pattern,
+which is why we have dedicated derives for [`Deref`](https://docs.rs/bevy/latest/bevy/prelude/derive.Deref.html) and [`DerefMut`](https://docs.rs/bevy/latest/bevy/prelude/derive.DerefMut.html).
+
+This previously only worked for structs with a single field:
+
+```rust
+#[derive(Resource, Deref, DerefMut)]
+struct Score(i32);
+```
+
+For 0.11, we've improved these derives by adding the `#[deref]` attribute, which allows them to be used on structs with multiple fields.
+This makes working with generic newtypes much easier:
+
+```rust
+#[derive(Component, Deref, DerefMut)]
+struct Health<T: Character> {
+    #[deref] // <- use the `health` field as the `Deref` and `DerefMut` target
+    health: u16,
+    _character_type: PhantomData<T>,
+}
+```
 
 ## <a name="what-s-next"></a>What's Next?
 
