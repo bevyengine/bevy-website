@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="132mm" height="100mm" version="1.1" viewBox="0 0 132 100" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<marker id="a" overflow="visible" markerHeight="6.7071061" markerWidth="4.0606599" orient="auto-start-reverse" preserveAspectRatio="xMidYMid" viewBox="0 0 4.0606602 6.7071068">
+			<path transform="rotate(180 .125 0)" d="m3-3-3 3 3 3" fill="none" stroke="context-stroke"/>
+		</marker>
+	</defs>
+	<g transform="translate(-31.8 -60.9)" style="paint-order:markers fill stroke">
+		<path d="m33.8 112h50l11.4 19.3 11.4-19.3h55.2" fill="none" stop-color="#d2d2d2" stroke="#444" stroke-linecap="round" stroke-width="4" />
+		<path d="m162 144h-128" stop-color="#d2d2d2" stroke="#444" stroke-linecap="round" stroke-width="4"/>
+		<g transform="translate(.141)">
+			<g stroke="#c7bf49" stroke-linecap="round" stroke-width="2">
+				<circle cx="51.6" cy="80.8" r="8.74" fill="none" />
+				<g>
+					<path d="m51.6 91.5v8.31" />
+					<path d="m57.1 90 4.23 7.15" />
+					<path d="m60.9 86.1 7.22 4.12" />
+					<path d="m62.3 80.8h8.31" />
+					<path d="m60.8 75.4 7.15-4.23" />
+					<path d="m56.9 71.6 4.12-7.22" />
+					<path d="m51.6 70.2v-8.31" />
+					<path d="m46.2 71.7-4.23-7.15" />
+					<path d="m42.4 75.6-7.22-4.12" />
+					<path d="m41 80.8h-8.31" />
+					<path d="m42.5 86.3-7.15 4.23" />
+					<path d="m46.4 90.1-4.12 7.22" />
+				</g>
+			</g>
+		</g>
+		<g fill="none" stroke-linecap="round">
+			<g stroke-width="2">
+				<path d="m33.8 114h50l11.4 19.8 11.4-19.8h55.2" stroke="#444" />
+				<path d="m95.3 131 11.4-19.3" stroke="#fff" />
+				<path d="m83.8 112 11.4 19.3" stroke="#585858" />
+				<path d="m33.8 112h50" stroke="#aaa" />
+			</g>
+			<path d="m90.5 119 30.1-24.6" marker-start="url(#a)" stroke="#882a2a" stroke-dasharray="1, 2" />
+		</g>
+		<path d="m60.7 88.3 38.6 30.6" marker-end="url(#a)" stroke="#c7bf49" stroke-dasharray="1, 2" stroke-linecap="round" />
+		<g fill="none" stroke-linecap="round" stroke-width="2" >
+			<path d="m95.3 144h11.4" stroke="#fff" />
+			<path d="m83.8 144h11.4" stroke="#585858" />
+			<g stroke="#aaa">
+				<path d="m107 144h55.2" />
+				<path d="m107 112h55.2" />
+				<path d="m33.8 144h50" />
+			</g>
+		</g>
+		<path d="m162 159h-128" stroke="#444" stroke-linecap="round" stroke-width="4" />
+		<g fill="none" stroke-linecap="round" stroke-width="2">
+			<path d="m83.8 159h11.4" stroke="#585858" />
+			<path d="m95.3 159h66.7" stroke="#aaa" />
+			<path d="m33.8 159h50" stroke="#aaa" />
+		</g>
+		<g>
+			<text x="33.745827" y="155.26875" dominant-baseline="auto" fill="#d2d2d2" font-family="sans-serif" font-size="7.58px" letter-spacing="0px" stroke-width=".188" word-spacing="0px" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;line-height:1.25;shape-padding:0;text-decoration-color:#d2d2d2;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" xml:space="preserve"><tspan x="33.745827" y="155.26875" stroke-width=".188">Parallax mapping</tspan></text>
+			<text x="33.745827" y="139.50822" dominant-baseline="auto" fill="#d2d2d2" font-family="sans-serif" font-size="7.58px" letter-spacing="0px" stroke-width=".188" word-spacing="0px" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;line-height:1.25;shape-padding:0;text-decoration-color:#d2d2d2;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" xml:space="preserve"><tspan x="33.745827" y="139.50822" stroke-width=".188">Normal mapping</tspan></text>
+			<g transform="matrix(-.684 0 0 .684 198 55.4)" stroke="#882a2a" stroke-width="2.19">
+				<g transform="rotate(43.8 76.1 62.3)" stroke-width="2.19">
+					<g transform="rotate(-6.3 94.3 32)" fill="none" stroke="#882a2a" stroke-linecap="round" stroke-width="2.19">
+						<rect x="57.6" y="25.2" width="29.3" height="18.1" style="paint-order:markers fill stroke"/>
+						<path d="m87.2 38.4 15.5 4.87v-18.1l-15.5 4.28" style="paint-order:markers fill stroke"/>
+						<circle cx="65.2" cy="18.9" r="10.4" style="paint-order:markers fill stroke"/>
+						<circle cx="77.6" cy="18.9" r="10.4" style="paint-order:markers fill stroke"/>
+					</g>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>
