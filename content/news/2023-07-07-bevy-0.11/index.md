@@ -19,7 +19,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Feature
 
-<div class="release-feature-authors">authors: @nicopap, @james7132, @cart, @superdump</div>
+<div class="release-feature-authors">authors: @nicopap, @cart</div>
 
 Bevy, since the 0.7 release, supports 3D animations.
 
