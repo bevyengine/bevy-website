@@ -54,10 +54,26 @@ vertex position, move the vertices around to create several poses:
 <div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Smirk</b></p><img alt="Wireframe rendering of a smirking character" src="smirk-pose-bw.png"></div>
 </div>
 
-Then, at runtime, we _mix_ each pose. We basically add. A single array of weights (`f32`)
-controls how much a poses affect the final vertices positions.
+Store those poses as a difference between the default base mesh and the variant
+pose.
 
-In bevy, this array is part of the `MorphWeights` component.
+Then, at runtime, _mix_ each pose. Now that we have the difference with the
+base mesh, we can get the variant pose by a simple addition.
+
+We add to that an individual weight per pose, and we have fully functioning
+morph targets:
+
+```rust
+fn morph_vertex(vertex: Vertex) {
+    for (var i: u32 = 0u; i < pose_count(); i ++) {
+        let weight = weight_for_pose(i);
+        vertex.position += weight * get_difference(vertex.index, position_offset, i);
+        vertex.normal += weight * get_difference(vertex.index, normal_offset, i);
+    }
+}
+```
+
+In bevy, we store the weights per pose in the `MorphWeights` component.
 
 ```rust
 fn set_weights_system(mut morph_weights: Query<&mut MorphWeights>) {
