@@ -578,14 +578,22 @@ struct Foo;
 impl FromReflect for Foo {/* ... */}
 ```
 
-### [Construct Box<dyn Reflect> from world for ReflectComponent](https://github.com/bevyengine/bevy/pull/7407)
+### [Construct `Box<dyn Reflect>` from world for `ReflectComponent`](https://github.com/bevyengine/bevy/pull/7407)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Reflection</div>
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-<!-- TODO -->
+If you were manually creating `ReflectComponentFns` you now need to add a `from_world` function pointer.
+
+```rust
+ReflectComponentFns {
+  from_world: |world| Box::new(MyComponent::from_world(world)),
+  // where `from_world: fn(&mut World) -> Box<dyn Reflect>`
+  // ...
+}
+```
 
 ### [Added Globals struct to prepass shader](https://github.com/bevyengine/bevy/pull/8070)
 
