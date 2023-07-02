@@ -671,7 +671,7 @@ graph.add_node(FooNode::NAME, node);
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-<!-- TODO -->
+The `len()` accessor has been removed because internal changes made it non-trivial to compute. If you were using it and don't have a workaround, please create an issue.
 
 ### [Changed (Vec2, Vec2) to Rect in Camera::logical_viewport_rect](https://github.com/bevyengine/bevy/pull/7867)
 
@@ -898,6 +898,6 @@ If you were using hashes to an asset or using one of the fixed hasher exposed by
     <div class="migration-guide-area-tag">No area label</div>
 </div>
 
-<!-- TODO -->
+`bevy_ui` accessibility systems have been moved to `PostUpdate`, if you were scheduling systems relative to these, make sure you now do it in `PostUpdate`.
 
 </div>
