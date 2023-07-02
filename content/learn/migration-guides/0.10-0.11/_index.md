@@ -93,7 +93,7 @@ The engine now uses the type `Tick` for dealing with change ticks, instead of `u
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-`ChangeTrackers` has been removed .Use `Ref<T>` queries instead.
+`ChangeTrackers` has been removed. Use `Ref<T>` queries instead.
 
 ### [Check for conflicting accesses in `assert_is_system`](https://github.com/bevyengine/bevy/pull/8154)
 
@@ -128,7 +128,7 @@ Remove the now unused variants of `ScheduleBuildError`
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-The attributes `#[system_param(ignore)]` and `#[world_query]` ignore have been removed. If you were using either of these with `PhantomData` fields, you can simply remove the attribute:
+The attributes `#[system_param(ignore)]` and `#[world_query(ignore)]` have been removed. If you were using either of these with `PhantomData` fields, you can simply remove the attribute:
 
 ```rust
 #[derive(SystemParam)]
