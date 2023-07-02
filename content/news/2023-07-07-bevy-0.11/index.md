@@ -82,7 +82,7 @@ pose, while the second is the weight of the smirk pose:
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[1.0, 0.0]</b></p>
   <p style="margin:0;font-size:75%">frown only</p>
-  <img alt="Frowing" src="morph_target_frown-0.png">
+  <img alt="Frowning" src="morph_target_frown-0.png">
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[0.0, 1.0]</b></p>
@@ -102,7 +102,7 @@ pose, while the second is the weight of the smirk pose:
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[0.5, 0.25]</b></p>
   <p style="margin:0;font-size:75%">bit of both</p>
-  <img alt="Slightly frowing/smirking" src="morph_target_smirk-quarter-frown-half-0.png">
+  <img alt="Slightly frowning/smirking" src="morph_target_smirk-quarter-frown-half-0.png">
 </div>
 </div>
 
