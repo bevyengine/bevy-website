@@ -20,7 +20,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Parallax Mapping
 
-<div class="release-feature-authors">authors: @nicopap, @superdump</div>
+<div class="release-feature-authors">authors: @nicopap</div>
 
 Bevy now supports parallax mapping and depth maps. Parallax mapping puts normal
 maps to shame when it comes to giving "illusion of depth" to a material.
