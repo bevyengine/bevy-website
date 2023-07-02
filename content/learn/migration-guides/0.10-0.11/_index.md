@@ -21,6 +21,15 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
 Instead of inserting the `ScheduleRunnerSettings` resource, configure the `ScheduleRunnerPlugin`
 
+```rust
+// 0.10
+.insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs(5)))
+.add_plugin(ScheduleRunnerPlugin::default())
+
+// 0.11
+.add_plugin(ScheduleRunnerPlugin::run_loop(Duration::from_secs(5)))
+```
+
 ### [Allow tuples and single plugins in `add_plugins`, deprecate `add_plugin`](https://github.com/bevyengine/bevy/pull/8097)
 
 <div class="migration-guide-area-tags">
@@ -43,7 +52,20 @@ If you were instantiating `GltfPlugin` using the unit-like struct syntax, you mu
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-Replace `AssetPlugin::watch_for_changes: true` with e.g. `ChangeWatcher::with_delay(Duration::from_millis(200))`
+```rust
+// 0.10
+.add_plugins(DefaultPlugins.set(AssetPlugin {
+    watch_for_changes: true,
+    ..default()
+}))
+
+// 0.11
+.add_plugins(DefaultPlugins.set(AssetPlugin {
+    // You can now give it a configurable delay. This is a safe default.
+    watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
+    ..default()
+}))
+```
 
 ### [Allow systems using Diagnostics to run in parallel](https://github.com/bevyengine/bevy/pull/8677)
 
