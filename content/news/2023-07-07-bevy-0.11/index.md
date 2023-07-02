@@ -26,6 +26,7 @@ Bevy now supports parallax mapping and depth maps. Parallax mapping puts normal
 maps to shame when it comes to giving "illusion of depth" to a material.
 
 <video controls loop><source  src="earth-parallax.webm" type="video/webm"/></video>
+<div style="font-size: 1.0rem" class="release-feature-authors">earth view, elevation & night view by NASA (public domain)</div>
 
 Notice how it is not merely the shading of pixels that changes, but their
 actual position on screen. Notice how mountaintops hide mountain ridges behind
