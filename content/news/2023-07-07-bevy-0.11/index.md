@@ -15,13 +15,112 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Feature**: description
+* **Morph targets**: Vertex-based animations
 
 ## Feature
 
-<div class="release-feature-authors">authors: @todo</div>
+<div class="release-feature-authors">authors: @nicopap, @james7132, @cart, @superdump</div>
 
-Description
+Bevy, since the 0.7 release, supports 3D animations.
+
+But it only supported *skeletal* animations. Leaving on the sidewalk a common
+animation type called *morph targets* (aka blendshapes, aka keyshapes, and a slew
+of other name). This is the grandparent of all 3D character animation!
+[Crash Bandicoot]'s run cycle used morph targets.
+
+<video controls><source src="morph_targets_video.mp4" type="video/mp4"/></video>
+<div style="font-size: 1.0rem" class="release-feature-authors">Character model by <a href="https://www.artstation.com/zambrah">Samuel Rosario</a> (© all rights reserved), used with permission. Modified by nicopap, using the <a href="https://studio.blender.org/characters/snow/v2/">Snow</a> character texture by Demeter Dzadik for Blender Studios <a href="https://creativecommons.org/licenses/by/4.0/">(🅯 CC-BY)</a>.
+</div>
+<!-- The previous paragraph requires the <a href> tags, since zola doesn't
+process markdown markup within tags -->
+
+Nowadays, an animation artist will typically use a skeleton rig for wide
+moves and morph targets to clean up the detailed movements.
+
+When it comes to game assets, however, the complex skeleton rigs used by
+artists for faces and hands are too heavy. Usually, the poses are
+"backed" into morph poses, and facial expression transitions are handled
+in the engine through morph targets.
+
+Beyond animating hands and faces, morph targets are also used for character
+editors.
+
+Morph targets is a very simple animation method. Take a model, have a base
+vertex position, move the vertices around to create several poses:
+
+<div style="flex-direction:row;display:flex;justify-content:space-evenly">
+<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Default</b></p><img src="default-pose-bw.png"></div>
+<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Frown</b></p><img src="frown-pose-bw.png"></div>
+<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Smirk</b></p><img src="smirk-pose-bw.png"></div>
+</div>
+
+Then, at runtime, we _mix_ each pose. We basically add. A single array of weights (`f32`)
+controls how much a poses affect the final vertices positions.
+
+In bevy, this array is part of the `MorphWeights` component.
+
+```rust
+fn set_weights_system(mut morph_weights: Query<&mut MorphWeights>) {
+    for mut entity_weights in &mut morph_weights {
+        let weights = entity_weights.weights_mut();
+
+        weights[0] = 0.5;
+        weights[1] = 0.25;
+    }
+}
+```
+
+Now assuming that we have two targets, the first is the weight of the frown
+pose, while the second is the weight of the smirk pose:
+
+<div style="flex-direction:row;display:flex;justify-content:space-evenly">
+<div style="display:flex;flex-direction:column;align-items:center;width:12%">
+  <p><b>[0.0, 0.0]</b></p>
+  <p style="margin:0;font-size:75%">default pose</p>
+  <img src="morph_target_default-0.png">
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;width:12%">
+  <p><b>[1.0, 0.0]</b></p>
+  <p style="margin:0;font-size:75%">frown only</p>
+  <img src="morph_target_frown-0.png">
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;width:12%">
+  <p><b>[0.0, 1.0]</b></p>
+  <p style="margin:0;font-size:75%">smirk only</p>
+  <img src="morph_target_smirk.png">
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;width:12%">
+  <p><b>[0.5, 0.0]</b></p>
+  <p style="margin:0;font-size:75%">half frown</p>
+  <img src="morph_target_frown-half-0.png">
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;width:12%">
+  <p><b>[1.0, 1.0]</b></p>
+  <p style="margin:0;font-size:75%">both at max</p>
+  <img src="morph_target_both-0.png">
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;width:12%">
+  <p><b>[0.5, 0.25]</b></p>
+  <p style="margin:0;font-size:75%">bit of both</p>
+  <img src="morph_target_smirk-quarter-frown-half-0.png">
+</div>
+</div>
+
+While conceptually simple, it requires communicating to the GPU a tremendous
+amount of data. Thousand of vertices, each 288 bits, several model variations,
+sometimes a hundred.
+
+Bevy's morph target implementation is similar to BabyloneJS's. We store the
+vertex data as pixels in a 3D texture. Each layer of the texture represents a
+single pose. This allows morph targets to not only run on WebGPU, but also on the
+WebGL2 wgpu backend.
+
+This could be improved in a number of ways, but it is sufficient for an
+initial implementation.
+
+<video controls><source src="morph_target_smirk.mp4" type="video/mp4"/></video>
+
+[Crash Bandicoot]: https://en.wikipedia.org/wiki/Crash_Bandicoot_(video_game)#Gameplay
 
 ## <a name="what-s-next"></a>What's Next?
 
