@@ -23,8 +23,8 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 Bevy, since the 0.7 release, supports 3D animations.
 
-But it only supported *skeletal* animations. Leaving on the sidewalk a common
-animation type called *morph targets* (aka blendshapes, aka keyshapes, and a slew
+But it only supported _skeletal_ animations. Leaving on the sidewalk a common
+animation type called _morph targets_ (aka blendshapes, aka keyshapes, and a slew
 of other name). This is the grandparent of all 3D character animation!
 [Crash Bandicoot]'s run cycle used morph targets.
 
