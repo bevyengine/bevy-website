@@ -163,7 +163,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install lld`
   * **Arch**: `sudo pacman -S lld`
-  * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils)
+  * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
 
     ```sh
     cargo install -f cargo-binutils
