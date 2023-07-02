@@ -49,9 +49,9 @@ Morph targets is a very simple animation method. Take a model, have a base
 vertex position, move the vertices around to create several poses:
 
 <div style="flex-direction:row;display:flex;justify-content:space-evenly">
-<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Default</b></p><img src="default-pose-bw.png"></div>
-<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Frown</b></p><img src="frown-pose-bw.png"></div>
-<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Smirk</b></p><img src="smirk-pose-bw.png"></div>
+<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Default</b></p><img alt="A wireframe rendering of a character's face with a neutral expression" src="default-pose-bw.png"></div>
+<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Frown</b></p><img alt="Wireframe rendering of a frowning character" src="frown-pose-bw.png"></div>
+<div style="display:flex;flex-direction:column;align-items:center;width:20%"><p><b>Smirk</b></p><img alt="Wireframe rendering of a smirking character" src="smirk-pose-bw.png"></div>
 </div>
 
 Then, at runtime, we _mix_ each pose. We basically add. A single array of weights (`f32`)
@@ -77,32 +77,32 @@ pose, while the second is the weight of the smirk pose:
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[0.0, 0.0]</b></p>
   <p style="margin:0;font-size:75%">default pose</p>
-  <img src="morph_target_default-0.png">
+  <img alt="Neutral face expression" src="morph_target_default-0.png">
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[1.0, 0.0]</b></p>
   <p style="margin:0;font-size:75%">frown only</p>
-  <img src="morph_target_frown-0.png">
+  <img alt="Frowing" src="morph_target_frown-0.png">
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[0.0, 1.0]</b></p>
   <p style="margin:0;font-size:75%">smirk only</p>
-  <img src="morph_target_smirk.png">
+  <img alt="Smirking" src="morph_target_smirk.png">
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[0.5, 0.0]</b></p>
   <p style="margin:0;font-size:75%">half frown</p>
-  <img src="morph_target_frown-half-0.png">
+  <img alt="Slightly frowning" src="morph_target_frown-half-0.png">
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[1.0, 1.0]</b></p>
   <p style="margin:0;font-size:75%">both at max</p>
-  <img src="morph_target_both-0.png">
+  <img alt="Making faces" src="morph_target_both-0.png">
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
   <p><b>[0.5, 0.25]</b></p>
   <p style="margin:0;font-size:75%">bit of both</p>
-  <img src="morph_target_smirk-quarter-frown-half-0.png">
+  <img alt="Slightly frowing/smirking" src="morph_target_smirk-quarter-frown-half-0.png">
 </div>
 </div>
 
