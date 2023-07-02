@@ -543,6 +543,41 @@ Migrate by replacing:
 
 If you were deserializing `Box<dyn Reflect>` values with multiple entries (i.e. entries other than `"type": { /* fields */ }`) you should remove them or deserialization will fail.
 
+### [`FromReflect` Ergonomics Implementation](https://github.com/bevyengine/bevy/pull/6056)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Reflection</div>
+</div>
+
+`FromReflect` is now automatically derived within the `Reflect` derive macro. Items with both derives will need to remove the `FromReflect` one.
+
+```rust
+// 0.10
+#[derive(Reflect, FromReflect)]
+struct Foo;
+
+// 0.11
+#[derive(Reflect)]
+struct Foo;
+```
+
+If using a manual implementation of `FromReflect` and the `Reflect` derive, users will need to opt-out of the automatic implementation.
+
+```rust
+// 0.10
+#[derive(Reflect)]
+struct Foo;
+
+impl FromReflect for Foo {/* ... */}
+
+// 0.11
+#[derive(Reflect)]
+#[reflect(from_reflect = false)]
+struct Foo;
+
+impl FromReflect for Foo {/* ... */}
+```
+
 ### [Construct Box<dyn Reflect> from world for ReflectComponent](https://github.com/bevyengine/bevy/pull/7407)
 
 <div class="migration-guide-area-tags">
@@ -552,43 +587,13 @@ If you were deserializing `Box<dyn Reflect>` values with multiple entries (i.e. 
 
 <!-- TODO -->
 
-### [Improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
+### [Added Globals struct to prepass shader](https://github.com/bevyengine/bevy/pull/8070)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Shaders that don't use #import directives should work without changes.
-
-The most notable user-facing difference is that imported functions/variables/etc need to be qualified at point of use, and there's no "leakage" of visible stuff into your shader scope from the imports of your imports, so if you used things imported by your imports, you now need to import them directly and qualify them.
-
-The current strategy of including/'spreading' mesh_vertex_output directly into a struct doesn't work any more, so these need to be modified as per the examples (e.g. color_material.wgsl, or many others). mesh data is assumed to be in bindgroup 2 by default, if mesh data is bound into bindgroup 1 instead then the shader def MESH_BINDGROUP_1 needs to be added to the pipeline shader_defs.
-
-```rust
-// 0.10
-struct FragmentInput {
-    #import bevy_pbr::mesh_vertex_output
-}
-@fragment
-fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {}
-
-// 0.11
-#import bevy_pbr::mesh_vertex_output MeshVertexOutput
-@fragment
-fn fragment(in: MeshVertexOutput) -> @location(0) vec4<f32> {}
-```
-
-If you were importing something like `mesh_view_bindings` but only for the `globals` uniform buffer you can now import it directly.
-
-```rust
-// 0.10
-#import bevy_pbr::mesh_view_bindings
-// use globals.time after this
-
-// 0.11
-#import bevy_pbr::mesh_view_bindings globals
-// globals is now in scope, but nothing else is imported
-```
+The `Globals` shader struct is now accessible in prepass shaders. If you were manually binding it you can remove that code and use the globals directly.
 
 ### [Make render graph slots optional for most cases](https://github.com/bevyengine/bevy/pull/8109)
 
@@ -756,6 +761,44 @@ Then replace uses of `AlphaMode` with `MyAlphaMode`
 
 References to the `RenderTarget` enum will need to handle the additional field, ie in `match` statements.
 
+### [Improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Shaders that don't use `#import` directives should work without changes.
+
+The most notable user-facing difference is that imported functions/variables/etc need to be qualified at point of use, and there's no "leakage" of visible stuff into your shader scope from the imports of your imports, so if you used things imported by your imports, you now need to import them directly and qualify them.
+
+The current strategy of including/'spreading' `mesh_vertex_output` directly into a struct doesn't work any more, so these need to be modified as per the examples (e.g. `color_material.wgsl`, or many others). Mesh data is assumed to be in bindgroup 2 by default, if mesh data is bound into bindgroup 1 instead then the shader def `MESH_BINDGROUP_1` needs to be added to the pipeline `shader_defs`.
+
+```rust
+// 0.10
+struct FragmentInput {
+    #import bevy_pbr::mesh_vertex_output
+}
+@fragment
+fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {}
+
+// 0.11
+#import bevy_pbr::mesh_vertex_output MeshVertexOutput
+@fragment
+fn fragment(in: MeshVertexOutput) -> @location(0) vec4<f32> {}
+```
+
+If you were importing something like `mesh_view_bindings` but only for the `globals` uniform buffer you can now import it directly.
+
+```rust
+// 0.10
+#import bevy_pbr::mesh_view_bindings
+// use globals.time after this
+
+// 0.11
+#import bevy_pbr::mesh_view_bindings globals
+// globals is now in scope, but nothing else is imported
+```
+
 ### [Consistent screen-space coordinates](https://github.com/bevyengine/bevy/pull/8306)
 
 <div class="migration-guide-area-tags">
@@ -848,5 +891,13 @@ The `size`, `min_size`, `max_size`, and `gap` properties have been replaced by t
 </div>
 
 If you were using hashes to an asset or using one of the fixed hasher exposed by Bevy with a previous version, you will have to update the hashes
+
+### [Move bevy_ui accessibility systems to `PostUpdate`.](https://github.com/bevyengine/bevy/pull/8653)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">No area label</div>
+</div>
+
+<!-- TODO -->
 
 </div>
