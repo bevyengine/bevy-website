@@ -42,9 +42,6 @@ artists for faces and hands are too heavy. Usually, the poses are
 "backed" into morph poses, and facial expression transitions are handled
 in the engine through morph targets.
 
-Beyond animating hands and faces, morph targets are also used for character
-editors.
-
 Morph targets is a very simple animation method. Take a model, have a base
 vertex position, move the vertices around to create several poses:
 
@@ -55,17 +52,14 @@ vertex position, move the vertices around to create several poses:
 </div>
 
 Store those poses as a difference between the default base mesh and the variant
-pose.
+pose, then, at runtime, _mix_ each pose. Now that we have the difference with
+the base mesh, we can get the variant pose by simply adding to the base
+vertices positions.
 
-Then, at runtime, _mix_ each pose. Now that we have the difference with the
-base mesh, we can get the variant pose by a simple addition.
-
-We add to that an individual weight per pose, and we have fully functioning
-morph targets:
-
+That's it, the morph target shader looks like this:
 ```rust
 fn morph_vertex(vertex: Vertex) {
-    for (var i: u32 = 0u; i < pose_count(); i ++) {
+    for (var i: u32 = 0u; i < pose_count(); i++) {
         let weight = weight_for_pose(i);
         vertex.position += weight * get_difference(vertex.index, position_offset, i);
         vertex.normal += weight * get_difference(vertex.index, normal_offset, i);
@@ -86,8 +80,8 @@ fn set_weights_system(mut morph_weights: Query<&mut MorphWeights>) {
 }
 ```
 
-Now assuming that we have two targets, the first is the weight of the frown
-pose, while the second is the weight of the smirk pose:
+Now assuming that we have two morph targets, (1) the frown pose, (2)
+the smirk pose:
 
 <div style="flex-direction:row;display:flex;justify-content:space-evenly">
 <div style="display:flex;flex-direction:column;align-items:center;width:12%">
@@ -127,9 +121,8 @@ amount of data. Thousand of vertices, each 288 bits, several model variations,
 sometimes a hundred.
 
 Bevy's morph target implementation is similar to BabyloneJS's. We store the
-vertex data as pixels in a 3D texture. Each layer of the texture represents a
-single pose. This allows morph targets to not only run on WebGPU, but also on the
-WebGL2 wgpu backend.
+vertex data as pixels in a 3D texture. This allows morph targets to not only
+run on WebGPU, but also on the WebGL2 wgpu backend.
 
 This could be improved in a number of ways, but it is sufficient for an
 initial implementation.
