@@ -20,7 +20,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Parallax Mapping
 
-<div class="release-feature-authors">authors: @nicopap</div>
+<div class="release-feature-authors">author: @nicopap</div>
 
 Bevy now supports parallax mapping and depth maps. Parallax mapping puts normal
 maps to shame when it comes to giving "illusion of depth" to a material.
@@ -68,9 +68,6 @@ So let's add a normal map:
 This is much better. The shading changes according to the light direction too!
 However, the specular highlights on the corner are overbearing, almost noisy.
 
-On a purely physical levels, _we shouldn't see the specular highlights_,
-because the lighted part of the bricks are facing the sun (duh) not the camera.
-
 Let's see how a depth map can help:
 
 ```rust
@@ -79,13 +76,11 @@ Let's see how a depth map can help:
 
 ![The same scene with a depth texture](parallax_mapping_depth.jpg)
 
-We eliminated the noise! The ambient light color (blue) is also much more
-visible on the brick sides. There is also that sweet 3D feel reminiscent of
+We eliminated the noise! There is also that sweet 3D feel reminiscent of
 90's games pre-rendered cinematic sequences.
 
-Notice how, without parallax mapping, we always see both the shaded and lighted
-sides of the ridge between bricks. And how, with parallax mapping, the lighted
-side of the ridge is only visible for the lower bricks.
+So what's going on, why does parallax mapping eliminate the ugly specular
+lights on the wall?
 
 This is because parallax mapping insets the ridges between bricks, so that they
 are occluded by the bricks themselves.
