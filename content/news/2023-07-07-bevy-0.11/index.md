@@ -17,7 +17,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **Morph targets**: Vertex-based animations
 
-## Feature
+## Morph targets
 
 <div class="release-feature-authors">authors: @nicopap, @cart</div>
 
