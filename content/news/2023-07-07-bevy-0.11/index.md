@@ -27,13 +27,13 @@ Description
 
 <div class="release-feature-authors">authors: @IceSentry, @cart</div>
 
-Adding `Node`s to the `RenderGraph` requires a lot of boilerplate. In this release, we tried to reduce this for most common operations. No existing API have been removed, these are only helpers made to simplify working with the `RenderGraph`.
+Adding `Node`s to the `RenderGraph` requires a lot of boilerplate. In this release, we tried to reduce this for most common operations. No existing APIs have been removed, these are only helpers made to simplify working with the `RenderGraph`.
 
 We added the `RenderGraphApp` trait to the `App`. This trait contains various helper functions to reduce the boilerplate with adding nodes and edges to a graph.
 
-Another pain point of `RenderGraph` `Node`s is passing the view entity through each node and manually updating the query on that view. To fix this we added a `ViewNode` trait and `ViewNodeRunner` that will automatically take care of running the `Query` on the view entity. We also made the view entity a first party concept of the `RenderGraph`. So you can now access the view entity the graph is currently running on from anywhere in the graph without passing it around between each `Node`.
+Another pain point of `RenderGraph` `Node`s is passing the view entity through each node and manually updating the query on that view. To fix this we added a `ViewNode` trait and `ViewNodeRunner` that will automatically take care of running the `Query` on the view entity. We also made the view entity a first-class concept of the `RenderGraph`. So you can now access the view entity the graph is currently running on from anywhere in the graph without passing it around between each `Node`.
 
-All these new apis assume that your Node implements `FromWorld` or `Default`.
+All these new APIs assume that your Node implements `FromWorld` or `Default`.
 
 Here's what it looks like in practice for the `BloomNode`:
 
@@ -66,7 +66,7 @@ impl ViewNode for BloomNode {
         (camera, view_target, bloom_settings): QueryItem<Self::ViewQuery>,
         world: &World,
     ) -> Result<(), NodeRunError> {
-        // When using the ViewNode you probably won't need the view entity but here's how to get it
+        // When using the ViewNode you probably won't need the view entity but here's how to get it if you do
         let view_entity = graph.view_entity();
 
         // Run the node
