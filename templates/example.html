@@ -22,6 +22,7 @@
         <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
     </div>
     <div class="example__code media-content">
+        <button type="button" class="button-copy-to-clipboard">Copy to clipboard</button>
         {% set code = load_data(path=page.extra.code_path) %}
         {% set code_md = "```rust
 " ~ code ~ "```" %}
@@ -29,6 +30,32 @@
         {{code_md | markdown(inline=true) | safe}}
     </div>
 </div>
+<script>
+    {#
+    // This adds "copy-to-clipboard" functionality to any button element with
+    // the class "button-copy-to-clipboard".
+    //
+    // It will copy the text contents of the element immediately following the
+    // button.
+    #}
+    var clipboard_buttons = document.getElementsByClassName('button-copy-to-clipboard');
+    for (let button of clipboard_buttons) {
+        button.addEventListener('click', (event) => {
+            let text = button.nextElementSibling;
+            var range = document.createRange();
+            range.selectNodeContents(text);
+            window.getSelection().addRange(range);
+            try {
+                var success = document.execCommand('copy');
+                if (!success) throw Error();
+                console.log('Copied to clipboard');
+            } catch (err) {
+                console.log('Failed to copy to clipboard');
+            }
+            window.getSelection().removeAllRanges();
+        });
+    }
+</script>
 <script type="module">
     {#
     // Hi curious user!

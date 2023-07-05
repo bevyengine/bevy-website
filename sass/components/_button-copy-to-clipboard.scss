@@ -1,0 +1,27 @@
+.button-copy-to-clipboard {
+    float: right;
+    background-color: $color-grey-900;
+    border: 0;
+    margin-top: 3px;
+    margin-right: -5px;
+    width: 40px;
+    height: 40px;
+    mask: url('/assets/to_clipboard.svg') no-repeat;
+    mask-size: 80%;
+    -webkit-mask: url('/assets/to_clipboard.svg') no-repeat;
+    -webkit-mask-size: 80%;
+
+    // visually hide text, but leave accessible to screen readers
+    color: rgba(0, 0, 0, 0%);
+    user-select: none;
+    overflow: hidden;
+
+    &:hover {
+        background-color: darken($color-grey-900, 8%);
+    }
+
+    &:active {
+        transform: translateY(2px);
+        background-color: lighten($color-grey-900, 20%);
+    }
+}

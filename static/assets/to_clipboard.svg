@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title13370">clipboard_icon</title>
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient3550">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3546" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3548" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3519">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3517" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3457">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3455" />
+    </linearGradient>
+    <filter
+       id="mask-powermask-path-effect10176_inverse"
+       style="color-interpolation-filters:sRGB"
+       height="100"
+       width="100"
+       x="-50"
+       y="-50">
+      <feColorMatrix
+         id="mask-powermask-path-effect10176_primitive1"
+         values="1"
+         type="saturate"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         id="mask-powermask-path-effect10176_primitive2"
+         values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 "
+         in="fbSourceGraphic" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath12997">
+      <rect
+         style="display:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+         id="rect12999"
+         width="3.9040895"
+         height="2.1689386"
+         x="4.4643993"
+         y="1.1025438"
+         mask="none"
+         d="M 4.4643993,1.1025438 H 8.3684888 V 3.2714825 H 4.4643993 Z" />
+      <path
+         id="lpe_path-effect13001"
+         style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+         class="powerclip"
+         d="M -3.1141675,-3.3491359 H 15.874756 V 17.049598 H -3.1141675 Z M 4.4643993,1.1025438 V 3.2714825 H 8.3684888 V 1.1025438 Z" />
+    </clipPath>
+  </defs>
+  <g
+     id="layer1">
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 2.3858325,4.3929445 0,-2.2420804 H 10.374756 V 11.549598 H 2.403907 l -0.012781,-1.492255"
+       id="path12754"
+       clip-path="url(#clipPath12997)" />
+    <rect
+       style="display:inline;mix-blend-mode:normal;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect3463"
+       width="3.9870751"
+       height="1.8285035"
+       x="4.4409809"
+       y="1.5929186" />
+    <g
+       id="g12995"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-dasharray:none;stroke-opacity:1"
+       transform="translate(-1.635916,0.02556119)">
+      <path
+         style="display:inline;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+         d="M 4.4550955,7.3382422 C 4.0026993,7.1835186 3.009388,7.4702372 2.4678745,8.04957"
+         id="path10308" />
+      <path
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         d="M 3.6076047,5.8089678 C 4.6022479,6.3590633 5.0332468,6.307606 5.6824464,6.8314156 5.1880773,7.3345324 4.9926366,7.9951 4.5080721,8.689519 4.31626,7.7220036 4.0941302,6.7244645 3.6076047,5.8089678 Z"
+         id="path12861" />
+    </g>
+    <g
+       id="g12991"
+       style="stroke:#000000;stroke-width:0.90101075;stroke-dasharray:none;stroke-opacity:1;stroke-linecap:round"
+       transform="matrix(1.2627582,0,0,0.97548334,-2.481299,0.099664)">
+      <path
+         style="fill:#862323;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.90101075;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         d="M 5.4277468,9.686561 H 8.6462557"
+         id="path12961" />
+      <path
+         style="fill:#862323;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00886;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         d="M 6.4353832,7.464931 H 8.406384"
+         id="path12959" />
+      <path
+         style="fill:#862323;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.90101075;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="M 5.4123017,5.2053345 H 8.6908304"
+         id="path12957" />
+    </g>
+    <ellipse
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.585738;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="path13817"
+       cx="6.4158573"
+       cy="1.3291818"
+       rx="0.67284375"
+       ry="0.26386479" />
+  </g>
+  <metadata
+     id="metadata13368">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>clipboard_icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
