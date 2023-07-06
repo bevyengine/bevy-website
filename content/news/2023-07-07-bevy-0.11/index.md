@@ -57,6 +57,7 @@ the base mesh, we can get the variant pose by simply adding to the base
 vertices positions.
 
 That's it, the morph target shader looks like this:
+
 ```rust
 fn morph_vertex(vertex: Vertex) {
     for (var i: u32 = 0u; i < pose_count(); i++) {
