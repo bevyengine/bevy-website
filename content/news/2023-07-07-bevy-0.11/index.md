@@ -117,6 +117,30 @@ test(Bar); // <-- ERROR! `Bar` does not implement trait `FromReflect`
 [`ReflectFromReflect`]: https://docs.rs/bevy_reflect/latest/bevy_reflect/struct.ReflectFromReflect.html
 [from_reflect = false]: https://docs.rs/bevy_reflect/latest/bevy_reflect/derive.Reflect.html#reflectfrom_reflect--false
 
+## Resource Support in Scenes
+
+<div class="release-feature-authors">authors: @Carbonhell, @Davier</div>
+
+Bevy's scene format is a very useful tool for serializing and deserializing game state to and from scene files.
+
+Previously, the captured state was limited to only entities and their components. 
+With 0.11, scenes now support serializing resources as well.
+
+This adds a new `resources` field to the scene format:
+
+```rust
+(
+    resources: {
+        "my_game::stats::TotalScore": (
+            score: 9001,
+        ),
+    },
+    entities: {
+        // Entity scene data...
+    },
+)
+```
+
 ## Gamepad Rumble API
 
 <div class="release-feature-authors">authors: @johanhelsing, @nicopap</div>
