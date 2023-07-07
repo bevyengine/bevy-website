@@ -150,13 +150,13 @@ This allows for powerful and expressive "graph-like" ordering expressions:
 ```rust
 app.add_systems(Update,
     (
-        (a, b, c).chain(),
-        (d, e),
+        (a, (b, c, d).chain()),
+        (e, f),
     ).chain()
 )
 ```
 
-This will run a, then b, then c, then run d _and_ e in parallel.
+This will run `a` in parallel with `b->c->d`, then after those have finished running it will run `e` and `f` in parallel.
 
 ## <a name="what-s-next"></a>What's Next?
 
