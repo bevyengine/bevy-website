@@ -15,8 +15,95 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Feature**: description
-* 
+* **Parallax mapping**: Materials now support an optional depth map, giving
+  flat surfaces a feel of depth through parallaxing the material's textures.
+
+## Parallax Mapping
+
+<div class="release-feature-authors">author: @nicopap</div>
+
+Bevy now supports parallax mapping and depth maps. Parallax mapping puts normal
+maps to shame when it comes to giving "illusion of depth" to a material. The top half of this video uses parallax mapping plus a normal map, whereas the bottom half only uses a normal map:
+
+<video controls loop><source alt="a rotating view of the earth, the top half of the screen uses parallax mapping, while the bottom half does not" src="earth-parallax.webm" type="video/webm"/></video>
+<div style="font-size: 1.0rem" class="release-feature-authors">earth view, elevation & night view by NASA (public domain)</div>
+
+Notice how it is not merely the shading of pixels that changes, but their
+actual position on screen. The mountaintops hide mountain ridges behind
+themselves. High mountains move faster than coastal areas.
+
+Parallax mapping moves pixels according to the perspective and depth on the
+surface of the geometry. Adding true 3D depth to flat surfaces.
+
+All of that, without adding a single vertex to the geometry. The whole globe
+has exactly 648 vertices. Unlike a more primitive shader, such as displacement
+mapping, parallax mapping only requires an additional grayscale image, called
+the `depth_map`.
+
+Games often use parallax mapping for cobblestones or brick walls, so
+let's make a brick wall in Bevy! First, we spawn a mesh:
+
+```rust
+commands.spawn(PbrBundle {
+    mesh: meshes.add(shape::Box::new(30.0, 10.0, 1.0).into()),
+    material: materials.add(StandardMaterial {
+        base_color: Color::WHITE,
+        ..default()
+    }),
+    ..default()
+});
+```
+
+![A 3D desert scene with two flat white walls and a pebble path winding between them](parallax_mapping_none.jpg)
+
+Of course, it's just a flat white box, we didn't add any texture.
+So let's add a normal map:
+
+```rust
+normal_map_texture: Some(assets.load("normal_map.png")),
+```
+
+![The same scene with normal maps](parallax_mapping_normals.jpg)
+
+This is much better. The shading changes according to the light direction too!
+However, the specular highlights on the corner are overbearing, almost noisy.
+
+Let's see how a depth map can help:
+
+```rust
+depth_map: Some(assets.load("depth_map.png")),
+```
+
+![The same scene with a depth texture](parallax_mapping_depth.jpg)
+
+We eliminated the noise! There is also that sweet 3D feel reminiscent of
+90's games pre-rendered cinematic sequences.
+
+So what's going on, why does parallax mapping eliminate the ugly specular
+lights on the wall?
+
+This is because parallax mapping insets the ridges between bricks, so that they
+are occluded by the bricks themselves.
+
+![Illustration of the previous paragraph](ridge-light-view-1.svg)
+
+Since normal maps do not "move" the shaded areas, merely shade them
+differently, we get those awkward specular highlights. With parallax mapping,
+they are gone.
+
+![A montage of the three preceding images, contrasting each effect](parallax_mapping_compare.jpg)
+
+Parallax mapping in Bevy is still very limited. The most painful aspect is that
+it is not a standard glTF feature, meaning that the depth texture needs to be
+programmatically added to materials if they came from a GLTF file.
+
+Additionally, parallax mapping is incompatible with the temporal antialiasing
+shader, doesn't work well on curved surfaces, and doesn't affect object's
+silhouettes.
+
+However, those are not fundamental limitations of parallax mapping, and may be
+fixed in the future.
+
 ## WebGPU Support
 
 ## Deref Derive Attribute
