@@ -24,11 +24,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 You can now use the `EventWriter<GamepadRumbleRequest>` system parameter to
 trigger controllers force-feedback motors.
 
-[`gilrs`], the crate bevy uses for gamepad support, allows controlling
+[`gilrs`], the crate Bevy uses for gamepad support, allows controlling
 force-feedback motors. Sadly, there were no easy way of accessing the
-force-feedback API in bevy without tedious bookkeeping.
+force-feedback API in Bevy without tedious bookkeeping.
 
-Now bevy has the `GamepadRumbleRequest` event to do just that.
+Now Bevy has the `GamepadRumbleRequest` event to do just that.
 
 ```rust
 fn rumble_system(
@@ -47,8 +47,7 @@ fn rumble_system(
 
 The `GamepadRumbleRequest::Add` event triggers a force-feedback motor,
 controlling how long the vibration should last, the motor to activate,
-and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all
-motors.
+and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all motors.
 
 [`gilrs`]: https://crates.io/crates/gilrs
 
