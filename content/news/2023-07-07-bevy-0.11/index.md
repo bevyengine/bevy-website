@@ -472,6 +472,57 @@ app.add_systems(Update,
 
 This will run `a` in parallel with `b->c->d`, then after those have finished running it will run `e` and `f` in parallel.
 
+## Simpler RenderGraph Construction
+
+<div class="release-feature-authors">authors: @IceSentry, @cart</div>
+
+Adding `Node`s to the `RenderGraph` requires a lot of boilerplate. In this release, we tried to reduce this for most common operations. No existing APIs have been removed, these are only helpers made to simplify working with the `RenderGraph`.
+
+We added the `RenderGraphApp` trait to the `App`. This trait contains various helper functions to reduce the boilerplate with adding nodes and edges to a graph.
+
+Another pain point of `RenderGraph` `Node`s is passing the view entity through each node and manually updating the query on that view. To fix this we added a `ViewNode` trait and `ViewNodeRunner` that will automatically take care of running the `Query` on the view entity. We also made the view entity a first-class concept of the `RenderGraph`. So you can now access the view entity the graph is currently running on from anywhere in the graph without passing it around between each `Node`.
+
+All these new APIs assume that your Node implements `FromWorld` or `Default`.
+
+Here's what it looks like in practice for the `BloomNode`:
+
+```rust
+// Adding the node to the 3d graph
+render_app
+    // To run a ViewNode you need to create a ViewNodeRunner
+    .add_render_graph_node::<ViewNodeRunner<BloomNode>>(
+        CORE_3D,
+        core_3d::graph::node::BLOOM,
+    );
+
+// Defining the node
+#[derive(Default)]
+struct BloomNode;
+// This can replace your `impl Node` block of any existing `Node` that operated on a view
+impl ViewNode for BloomNode {
+    // You need to define your view query as an associated type
+    type ViewQuery = (
+        &'static ExtractedCamera,
+        &'static ViewTarget,
+        &'static BloomSettings,
+    );
+    // You don't need Node::input() or Node::update() anymore. If you still need these they are still available but they have an empty default implementation.
+    fn run(
+        &self,
+        graph: &mut RenderGraphContext,
+        render_context: &mut RenderContext,
+        // This is the result of your query. If it is empty the run function will not be called
+        (camera, view_target, bloom_settings): QueryItem<Self::ViewQuery>,
+        world: &World,
+    ) -> Result<(), NodeRunError> {
+        // When using the ViewNode you probably won't need the view entity but here's how to get it if you do
+        let view_entity = graph.view_entity();
+
+        // Run the node
+    }
+}
+```
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
