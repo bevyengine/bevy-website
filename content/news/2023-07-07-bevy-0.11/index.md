@@ -17,7 +17,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **Morph targets**: Vertex-based animations
 
-## Morph targets
+## Morph Targets
 
 <div class="release-feature-authors">authors: @nicopap, @cart</div>
 
@@ -39,7 +39,7 @@ moves and morph targets to clean up the detailed movements.
 
 When it comes to game assets, however, the complex skeleton rigs used by
 artists for faces and hands are too heavy. Usually, the poses are
-"backed" into morph poses, and facial expression transitions are handled
+"baked" into morph poses, and facial expression transitions are handled
 in the engine through morph targets.
 
 Morph targets is a very simple animation method. Take a model, have a base
@@ -68,7 +68,7 @@ fn morph_vertex(vertex: Vertex) {
 }
 ```
 
-In bevy, we store the weights per pose in the `MorphWeights` component.
+In Bevy, we store the weights per pose in the `MorphWeights` component.
 
 ```rust
 fn set_weights_system(mut morph_weights: Query<&mut MorphWeights>) {
