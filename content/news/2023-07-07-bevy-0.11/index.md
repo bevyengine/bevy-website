@@ -620,6 +620,34 @@ impl ViewNode for BloomNode {
 }
 ```
 
+## `#[reflect(default)]` on Enum Variant Fields
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When using the `FromReflect` trait, fields marked `#[reflect(default)]` will be set to their `Default` value if they don't exist on the reflected object.
+
+Previously, this was only supported on struct fields.
+Now, it is also supported on all enum variant fields.
+
+```rust
+#[derive(Reflect)]
+enum MyEnum {
+    Data {
+        #[reflect(default)]
+        a: u32,
+        b: u32,
+    },
+}
+
+let mut data = DynamicStruct::default ();
+data.insert("b", 1);
+
+let dynamic_enum = DynamicEnum::new("Data", data);
+
+let my_enum = MyEnum::from_reflect( & dynamic_enum).unwrap();
+assert_eq!(u32::default(), my_enum.a);
+```
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
