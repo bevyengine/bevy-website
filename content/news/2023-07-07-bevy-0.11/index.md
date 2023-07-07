@@ -20,6 +20,42 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
   flat surfaces a feel of depth through parallaxing the material's textures.
 * **Gamepad Rumble API**: an ECS-friendly way of making controllers rumble
 
+## Better Proxies
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy's reflection API has a handful of structs which are collectively known as "dynamic" types.
+These include [`DynamicStruct`], [`DynamicTuple`], and more, and they are used to dynamically construct types
+of any shape or form at runtime.
+These types are also used to create are commonly referred to as "proxies", which are dynamic types
+that are used to represent an actual concrete type.
+
+These proxies are what powers the [`Reflect::clone_value`] method, which generates these proxies under the hood
+in order to construct a runtime clone of the data.
+
+Unfortunately, this results in a few [subtle footguns] that could catch users by surprise,
+such as the hashes of proxies differing from the hashes of the concrete type they represent,
+proxies not being considered equivalent to their concrete counterparts, and more.
+
+While this release does not necessarily fix these issues, it does establish a solid foundation for fixing them in the future.
+The way it does this is by changing how a proxy is defined.
+
+Before 0.11, a proxy was only defined by cloning the concrete type's [`Reflect::type_name`] string
+and returning it as its own `Reflect::type_name`.
+
+Now in 0.11, a proxy is defined by copying a reference to the static [`TypeInfo`] of the concrete type.
+This will allow us to access more of the concrete type's type information dynamically, without requiring the `TypeRegistry`.
+In a [future release], we will make use of this to store hashing and comparison strategies in the `TypeInfo` directly
+in order to mitigate the proxy issues mentioned above.
+
+[`DynamicStruct`]: https://docs.rs/bevy/0.11.0/bevy/reflect/struct.DynamicStruct.html
+[`DynamicTuple`]: https://docs.rs/bevy/0.11.0/bevy/reflect/struct.DynamicTuple.html
+[`Reflect::clone_value`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html#tymethod.clone_value
+[subtle footguns]: https://github.com/bevyengine/bevy/issues/6601
+[`Reflect::type_name`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html#tymethod.type_name
+[`TypeInfo`]: https://docs.rs/bevy/0.11.0/bevy/reflect/enum.TypeInfo.html
+[future release]: https://github.com/bevyengine/bevy/pull/8695
+
 ## `FromReflect` Ergonomics
 
 <div class="release-feature-authors">authors: @MrGVSV</div>
