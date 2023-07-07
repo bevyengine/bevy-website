@@ -18,6 +18,41 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Morph targets**: Vertex-based animations
 * **Parallax mapping**: Materials now support an optional depth map, giving
   flat surfaces a feel of depth through parallaxing the material's textures.
+* **Gamepad Rumble API**: an ECS-friendly way of making controllers rumble
+
+## Gamepad Rumble API
+
+<div class="release-feature-authors">authors: @johanhelsing, @nicopap</div>
+
+You can now use the `EventWriter<GamepadRumbleRequest>` system parameter to
+trigger controllers force-feedback motors.
+
+[`gilrs`], the crate Bevy uses for gamepad support, allows controlling
+force-feedback motors. Sadly, there were no easy way of accessing the
+force-feedback API in Bevy without tedious bookkeeping.
+
+Now Bevy has the `GamepadRumbleRequest` event to do just that.
+
+```rust
+fn rumble_system(
+    gamepads: Res<Gamepads>,
+    mut rumble_requests: EventWriter<GamepadRumbleRequest>,
+) {
+    for gamepad in gamepads.iter() {
+        rumble_requests.send(GamepadRumbleRequest::Add {
+            gamepad,
+            duration: Duration::from_secs(5),
+            intensity: GamepadRumbleIntensity::MAX,
+        });
+    }
+}
+```
+
+The `GamepadRumbleRequest::Add` event triggers a force-feedback motor,
+controlling how long the vibration should last, the motor to activate,
+and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all motors.
+
+[`gilrs`]: https://crates.io/crates/gilrs
 
 ## Morph Targets
 
