@@ -677,7 +677,7 @@ fn system(players: Query<(&Transform, &Handle<Mesh>), With<Player>>) {
 
 <div class="release-feature-authors">authors: @TheRawMeatball</div>
 
-Bevy now has a simple "screenshot" API that can save a screenshot of a given window to the disk:
+Bevy now has a simple screenshot API that can save a screenshot of a given window to the disk:
 
 ```rust
 fn take_screenshot(
