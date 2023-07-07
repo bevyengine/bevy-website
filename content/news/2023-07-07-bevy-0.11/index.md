@@ -117,6 +117,38 @@ test(Bar); // <-- ERROR! `Bar` does not implement trait `FromReflect`
 [`ReflectFromReflect`]: https://docs.rs/bevy_reflect/latest/bevy_reflect/struct.ReflectFromReflect.html
 [from_reflect = false]: https://docs.rs/bevy_reflect/latest/bevy_reflect/derive.Reflect.html#reflectfrom_reflect--false
 
+## Scene Filtering
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When serializing data to a scene, all components and [resources](#resource-support-in-scenes) are serialized by default.
+In previous versions, you had to use the given `TypeRegistry` to act as a filter, leaving out the types you don't want included.
+
+In 0.11, there's now a dedicated `SceneFilter` type to make filtering easier, cleaner, and more intuitive.
+This can be used with [`DynamicSceneBuilder`](https://docs.rs/bevy/0.11.0/bevy/prelude/struct.DynamicSceneBuilder.html) to have fine-grained control over what actually gets serialized.
+
+We can `allow` a subset of types:
+
+```rust
+let mut builder = DynamicSceneBuilder::from_world(&world);
+let scene = builder
+    .allow::<ComponentA>()
+    .allow::<ComponentB>()
+    .extract_entity(entity)
+    .build();
+```
+
+Or `deny` them:
+
+```rust
+let mut builder = DynamicSceneBuilder::from_world(&world);
+let scene = builder
+    .deny::<ComponentA>()
+    .deny::<ComponentB>()
+    .extract_entity(entity)
+    .build();
+```
+
 ## Gamepad Rumble API
 
 <div class="release-feature-authors">authors: @johanhelsing, @nicopap</div>
