@@ -880,6 +880,71 @@ In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
+## UI Node Borders
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+UI nodes now draws borders, whose color can be configured with the new [`BorderColor`] component:
+
+![borders](borders.png)
+
+```rust
+commands.spawn(ButtonBundle {
+    style: Style {
+        border: UiRect::all(Val::Px(5.0)),
+        ..default()
+    },
+    border_color: BorderColor(Color::rgb(0.9, 0.9, 0.9)),
+    ..default()
+})
+```
+
+Each side of the border is configurable:
+
+![border sides](border-sides.png)
+
+## Grid UI Layout
+
+<div class="release-feature-authors">authors: @nicoburns</div>
+
+We wired up the new `grid` feature in the layout library we use ([Taffy](https://github.com/DioxusLabs/taffy)) to Bevy UI. This enables CSS-style grid layouts:
+
+![grid](grid.png)
+
+This can be configured on the [`Style`] component:
+
+```rust
+Style {
+    /// Use grid layout for this node
+    display: Display::Grid,
+    /// Make the grid have a 1:1 aspect ratio
+    /// This means the width will adjust to match the height
+    aspect_ratio: Some(1.0),
+    // Add 24px of padding around the grid
+    padding: UiRect::all(Val::Px(24.0)),
+    /// Set the grid to have 4 columns all with sizes minmax(0, 1fr)
+    /// This creates 4 exactly evenly sized columns
+    grid_template_columns: RepeatedGridTrack::flex(4, 1.0),
+    /// Set the grid to have 4 rows all with sizes minmax(0, 1fr)
+    /// This creates 4 exactly evenly sized rows
+    grid_template_rows: RepeatedGridTrack::flex(4, 1.0),
+    /// Set a 12px gap/gutter between rows and columns
+    row_gap: Val::Px(12.0),
+    column_gap: Val::Px(12.0),
+    ..default()
+},
+```
+
+[`Style`]: https://docs.rs/bevy/0.11.0/bevy/ui/struct.Style.html
+
+## Default Font
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy now supports a configurable default font and embeds a tiny default font (a minimal version of [Fira Mono](https://fonts.google.com/specimen/Fira+Mono)). This is useful if you use a common font throughout your project. And it makes it easier to prototype new changes with a "placeholder font" without worrying about setting it on each node.
+
+![default font](default_font.png)
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
