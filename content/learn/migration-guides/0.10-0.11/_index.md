@@ -73,11 +73,8 @@ If you were instantiating `GltfPlugin` using the unit-like struct syntax, you mu
     <div class="migration-guide-area-tag">Audio</div>
 </div>
 
-// TODO: write a more detailed migration guide, after the “unsolved questions” are answered and this PR is finalized.
-
-Before:
-
 ```rust
+// 0.10
 
 /// Need to store handles somewhere
 #[derive(Resource)]
@@ -111,11 +108,9 @@ fn toggle_pause_music(
         }
     }
 }
-```
 
-Now:
+// 0.11
 
-```rust
 /// Marker component for our music entity
 #[derive(Component)]
 struct MyMusic;
@@ -204,83 +199,83 @@ We have [unified adding systems to schedules under a single API](https://github.
 This removes a ton of redundant APIs, removes implicit defaults entirely, and clears up a lot of the confusion introduced by base sets. We believe the consistency and ergonomics of the new `add_systems` API speaks for itself:
 
 ```rust
-// Before
+// 0.10
 app.add_system(a)
-// After
+// 0.11
 app.add_systems(Update, a)
 
-// Before
+// 0.10
 app.add_systems((a, b).in_schedule(CoreSchedule::Startup))
-// After
+// 0.11
 app.add_systems(Startup, (a, b))
 
-// Before
+// 0.10
 app.add_systems((a, b).in_schedule(CoreSchedule::Startup).in_base_set(StartupSet::PreStartup))
-// After
+// 0.11
 app.add_systems(PreStartup, (a, b))
 
-// Before
+// 0.10
 app.add_startup_systems((a, b))
-// After
+// 0.11
 app.add_systems(Startup, (a, b))
 
-// Before
+// 0.10
 app.add_systems((a, b).on_startup())
-// After
+// 0.11
 app.add_systems(Startup, (a, b))
 
-// Before
+// 0.10
 app.add_systems((c, d, e))
-// After (Update is no longer implied by default)
+// 0.11 (Update is no longer implied by default)
 app.add_systems(Update, (c, d, e))
 
-// Before
+// 0.10
 app.add_systems((f, g).in_schedule(CoreSchedule::FixedUpdate))
-// After
+// 0.11
 app.add_systems(FixedUpdate, (f, g))
 
-// Before
+// 0.10
 app.add_systems(h.in_base_set(CoreSet::PostUpdate))
-// After
+// 0.11
 app.add_systems(PostUpdate, h)
 
-// Before
+// 0.10
 app.add_systems(enter_menu.in_schedule(OnEnter(AppState::Menu)))
-// After
+// 0.11
 app.add_systems(OnEnter(AppState::Menu), enter_menu)
 
-// Before
+// 0.10
 app.add_systems(exit_menu.in_schedule(OnExit(AppState::Menu)))
-// After
+// 0.11
 app.add_systems(OnExit(AppState::Menu), exit_menu)
 
-// Before
+// 0.10
 render_app.add_systems((a, b).in_set(RenderSet::Queue))
-// After
+// 0.11
 render_app.add_systems(Render, (a, b).in_set(RenderSet::Queue))
 ```
 
 Set configuration now also accepts a schedule:
 
 ```rust
-// Before
+// 0.10
 app.configure_set(A.in_schedule(PostUpdate).after(B))
-// After
+// 0.11
 app.configure_set(PostUpdate, A.after(B))
 
-// Before
+// 0.10
 app.configure_set(A.after(B))
-// After (Update is no longer implied by default)
+// 0.11 (Update is no longer implied by default)
 app.configure_set(Update, A.after(B))
 
-// Before
+// 0.10
 app.configure_sets((A, B).in_schedule(PostUpdate).after(C))
-// After
+// 0.11
 app.configure_sets(PostUpdate, (A, B).after(C))
 
-// Before
+// 0.10
 app.configure_sets((A, B).after(C))
-// After (Update is no longer implied by default)
+// 0.11 (Update is no longer implied by default)
 app.configure_sets(Update, (A, B).after(C))
 ```
 
@@ -709,7 +704,7 @@ Migrate by replacing:
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-- Rename all instances of Interaction::Clicked -> Interaction::Pressed
+Rename all instances of Interaction::Clicked -> Interaction::Pressed
 
 ### [Don't ignore additional entries in `UntypedReflectDeserializerVisitor`](https://github.com/bevyengine/bevy/pull/7112)
 
@@ -1007,8 +1002,6 @@ If you were passing `Window::cursor_position` to `viewport_to_world` or `viewpor
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
--
-
 `DynamicScene::from_scene` and `DynamicScene::from_world` no longer require an `AppTypeRegistry` reference:
 
 ```rust
@@ -1021,8 +1014,6 @@ let dynamic_scene = DynamicScene::from_world(&world, registry);
 let dynamic_scene = DynamicScene::from_world(&world);
 // let dynamic_scene = DynamicScene::from_scene(&scene);
 ```
-
--
 
 Removed `DynamicSceneBuilder::from_world_with_type_registry`. Now the registry is automatically taken from the given world:
 
