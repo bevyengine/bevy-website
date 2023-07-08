@@ -880,6 +880,16 @@ In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
+## Robust Contrast Adaptive Sharpening
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
+
+![taa rcas](taa_rcas.png)
+
+Notice that the texture on the leather part of the helmet is much crisper!
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
