@@ -25,9 +25,13 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 Bevy now has built-in support for displaying an HDRI environment as your scene background.
 
-Simply attach the new `Skybox(your_hdri_asset)` component to your camera. It pairs well with the existing `EnvironmentMapLight`.
+Simply attach the new [`Skybox`] component to your [`Camera`]. It pairs well with the existing [`EnvironmentMapLight`].
 
-We hope to have support for built-in procedural skyboxes sometime in the future!
+We also plan to have support for built-in procedural skyboxes sometime in the future!
+
+[`Skybox`]: https://docs.rs/bevy/0.11.0/bevy/core_pipeline/struct.Skybox.html
+[`Camera`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/struct.Camera.html
+[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
 
 ## <a name="what-s-next"></a>What's Next?
 
