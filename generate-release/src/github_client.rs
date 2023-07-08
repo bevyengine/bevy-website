@@ -78,11 +78,6 @@ pub struct GithubUserSearchResponse {
 }
 
 #[derive(Deserialize, Clone, Debug)]
-pub struct GithubIssuesResponsePullRequest {
-    pub merged_at: Option<String>,
-}
-
-#[derive(Deserialize, Clone, Debug)]
 pub struct GithubIssuesResponse {
     pub title: String,
     pub number: i32,
@@ -90,7 +85,6 @@ pub struct GithubIssuesResponse {
     pub labels: Vec<GithubLabel>,
     pub user: GithubUser,
     pub closed_at: DateTime<Utc>,
-    pub pull_request: Option<GithubIssuesResponsePullRequest>,
 }
 
 pub struct GithubClient {
@@ -225,12 +219,7 @@ impl GithubClient {
         Ok(response
             .iter()
             // Make sure to only get the PRs that were merged by bors
-            .filter(|pr| {
-                pr.pull_request
-                    .as_ref()
-                    .map(|pr| pr.merged_at.is_some())
-                    .unwrap_or(false)
-            })
+            .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
             .cloned()
             .collect())
     }
