@@ -21,24 +21,29 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @JMS55</div>
 
-> Without SSAO
+**Without SSAO**
 ![no_ssao](no_ssao.png)
-> SSAO
-![ssao_only](ssao_only.png)
-> With SSAO
+
+**With SSAO**
 ![with_ssao](with_ssao.png)
 
-Bevy now supports Screen Space Ambient Occlusion (SSAO). While Bevy already supports shadows from direct lights
-(`DirectionalLight`, `PointLight`, `SpotLight`) via shadow mapping, Bevy now supports shadows for _indirect_ diffuse
-lighting such as `AmbientLight` or `EnvironmentMapLight`.
+**SSAO Only**
+![ssao_only](ssao_only.png)
 
-These shadows give scenes a more "grounded" feel, by estimating how much surrounding geometry blocks incoming light
-via the screen-space depth and normal prepasses. Try it out in the new `ssao` example.
+Bevy now supports Screen Space Ambient Occlusion (SSAO). While Bevy already supported shadows from direct lights
+([`DirectionalLight`], [`PointLight`], [`SpotLight`]) via shadow mapping, Bevy now supports shadows from _indirect_ diffuse lighting such as [`AmbientLight`] or [`EnvironmentMapLight`].
 
-Note that using SSAO with Temporal Antialiasing leads to a _large_ increase in quality and noise reduction, and is highly reccomended.
+These shadows give scenes a more "grounded" feel, by estimating how much surrounding geometry blocks incoming light via the screen-space depth and normal prepasses. You can try it out in the new [SSAO example](https://github.com/bevyengine/bevy/blob/v0.11.0/examples/3d/ssao.rs).
 
-Platform support is currently limited - Only Vulkan and Metal are currently supported. DirectX12 will be supported via
-an upcoming patch release of `wgpu`, and WebGPU support will come at a later date.
+Note that using SSAO with the newly added Temporal Anti-Aliasing leads to a _large_ increase in quality and noise reduction.
+
+Platform support is currently limited - Only Vulkan and Metal are currently supported. DirectX12 will be supported via an upcoming patch release of `wgpu`, and WebGPU support will come at a later date.
+
+[`DirectionalLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.DirectionalLight.html
+[`PointLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.PointLight.html
+[`SpotLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.SpotLight.html
+[`AmbientLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.AmbientLight.html
+[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
 
 ## <a name="what-s-next"></a>What's Next?
 
