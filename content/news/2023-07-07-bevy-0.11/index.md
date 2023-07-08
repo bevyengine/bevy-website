@@ -20,6 +20,22 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
   flat surfaces a feel of depth through parallaxing the material's textures.
 * **Gamepad Rumble API**: an ECS-friendly way of making controllers rumble
 
+## Skybox
+
+<div class="release-feature-authors">authors: @JMS55, @superdump</div>
+
+![skybox](skybox.png)
+
+Bevy now has built-in support for displaying an HDRI environment as your scene background.
+
+Simply attach the new [`Skybox`] component to your [`Camera`]. It pairs well with the existing [`EnvironmentMapLight`].
+
+We also plan to have support for built-in procedural skyboxes sometime in the future!
+
+[`Skybox`]: https://docs.rs/bevy/0.11.0/bevy/core_pipeline/struct.Skybox.html
+[`Camera`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/struct.Camera.html
+[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
+
 ## Screen Space Ambient Occlusion
 
 <div class="release-feature-authors">authors: @JMS55</div>
@@ -46,7 +62,6 @@ Platform support is currently limited - Only Vulkan and Metal are currently supp
 [`PointLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.PointLight.html
 [`SpotLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.SpotLight.html
 [`AmbientLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.AmbientLight.html
-[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
 
 ## Temporal Antialiasing
 
@@ -850,7 +865,6 @@ fn take_screenshot(
 
 The [`Camera`] [`RenderTarget`] can now be set to a wgpu [`TextureView`]. This allows 3rd party Bevy Plugins to manage a [`Camera`]'s texture. One particularly interesting use case that this enables is XR/VR support. A few community members have already [proven this out!](https://github.com/bevyengine/bevy/issues/115#issuecomment-1436749201)
 
-[`Camera`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/struct.Camera.html
 [`RenderTarget`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/enum.RenderTarget.html
 [`TextureView`]: https://docs.rs/bevy/0.11.0/bevy/render/render_resource/struct.TextureView.html
 
