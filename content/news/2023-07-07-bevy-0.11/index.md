@@ -212,7 +212,7 @@ let scene = builder
 
 Bevy's scene format is a very useful tool for serializing and deserializing game state to and from scene files.
 
-Previously, the captured state was limited to only entities and their components. 
+Previously, the captured state was limited to only entities and their components.
 With 0.11, scenes now support serializing resources as well.
 
 This adds a new `resources` field to the scene format:
