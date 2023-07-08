@@ -620,6 +620,16 @@ impl ViewNode for BloomNode {
 }
 ```
 
+## UI Texture Atlas Support
+
+<div class="release-feature-authors">authors: @mwbryant</div>
+
+Previously UI `ImageBundle` Nodes could only use handles to full images without an ergonomic way to use `TextureAtlases` in UI.  In this release we add support for an `AtlasImageBundle` UI Node which brings the existing `TextureAtlas` support into UI.  
+
+This was achieved by merging the existing mechanisms that allows text rendering to select which glyph to use and the mechanisms that allow for `TextureAtlasSprite`.
+
+<video controls><source src="texture_atlas_ui.mp4" type="video/mp4"/></video>
+
 ## EntityRef Queries
 
 <div class="release-feature-authors">authors: @james7132</div>
