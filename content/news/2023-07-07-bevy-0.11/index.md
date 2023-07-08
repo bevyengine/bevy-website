@@ -24,17 +24,8 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 Alongside MSAA and FXAA, Bevy now supports Temporal Antialiasing (TAA) as an antialiasing option. Try it out in
 Bevy's improved antialiasing example.
 
-TODO: Picture of AA example using TAA
-
-TAA works by blending the newly rendered frame with past frames in order to smooth out aliasing artifacts in the image.
-
-This could take the form of geometric aliasing:
-
-TODO: Picture
-
-Or specular aliasing:
-
-TODO: Picture
+TAA works by blending the newly rendered frame with past frames in order to smooth out aliasing artifacts in the image,
+particularly specular aliasing of light on reflective surfaces.
 
 Here's a quick rundown of the following advantages and disadvantages of each antialiasing method that Bevy supports:
 
@@ -42,6 +33,7 @@ Here's a quick rundown of the following advantages and disadvantages of each ant
   * Pro: Does a good job at smoothing the edges of meshes (anti geometric aliasing)
   * Con: Does not help with specular aliasing
   * Con: Performance cost scales with triangle count, and performs very poorly on scenes with many triangles
+![msaa](msaa.png)
 * Fast Approximate Antialiasing (FXAA)
   * Pro: Does a decent job of dealing with both geometric and specular aliasing
   * Pro: Very little performance cost in all scenes
@@ -56,6 +48,7 @@ Here's a quick rundown of the following advantages and disadvantages of each ant
   especially on thin geometry or texture detail rendered at a distance
   * Con: Requires 2 view's worth of additional GPU memory, as well as enabling the motion vector and depth prepasses
   * Con: Requires accurate motion vector and depth prepasses, which complicates custom materials
+![taa](taa.png)
 
 TAA implementations are a series of tradeoffs and rely on heuristics that are easy to get wrong. Currently, these heuristics are not
 user-configurable. For this reason, along with the below limitations in Bevy 0.11, TAA is marked as an experimental feature. We will
