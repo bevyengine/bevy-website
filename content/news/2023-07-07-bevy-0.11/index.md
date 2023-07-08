@@ -149,6 +149,30 @@ let scene = builder
     .build();
 ```
 
+## Resource Support in Scenes
+
+<div class="release-feature-authors">authors: @Carbonhell, @Davier</div>
+
+Bevy's scene format is a very useful tool for serializing and deserializing game state to and from scene files.
+
+Previously, the captured state was limited to only entities and their components. 
+With 0.11, scenes now support serializing resources as well.
+
+This adds a new `resources` field to the scene format:
+
+```rust
+(
+    resources: {
+        "my_game::stats::TotalScore": (
+            score: 9001,
+        ),
+    },
+    entities: {
+        // Entity scene data...
+    },
+)
+```
+
 ## Gamepad Rumble API
 
 <div class="release-feature-authors">authors: @johanhelsing, @nicopap</div>
@@ -384,8 +408,6 @@ silhouettes.
 However, those are not fundamental limitations of parallax mapping, and may be
 fixed in the future.
 
-## WebGPU Support
-
 ## Deref Derive Attribute
 
 <div class="release-feature-authors">authors: @MrGVSV</div>
@@ -411,6 +433,8 @@ struct Health<T: Character> {
     _character_type: PhantomData<T>,
 }
 ```
+
+## WebGPU Support
 
 <div class="release-feature-authors">authors: @mockersf, many others throughout Bevy's development</div>
 
@@ -651,6 +675,139 @@ impl ViewNode for BloomNode {
     }
 }
 ```
+
+## `#[reflect(default)]` on Enum Variant Fields
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When using the `FromReflect` trait, fields marked `#[reflect(default)]` will be set to their `Default` value if they don't exist on the reflected object.
+
+Previously, this was only supported on struct fields.
+Now, it is also supported on all enum variant fields.
+
+```rust
+#[derive(Reflect)]
+enum MyEnum {
+    Data {
+        #[reflect(default)]
+        a: u32,
+        b: u32,
+    },
+}
+
+let mut data = DynamicStruct::default ();
+data.insert("b", 1);
+
+let dynamic_enum = DynamicEnum::new("Data", data);
+
+let my_enum = MyEnum::from_reflect( & dynamic_enum).unwrap();
+assert_eq!(u32::default(), my_enum.a);
+```
+
+## UI Texture Atlas Support
+
+<div class="release-feature-authors">authors: @mwbryant</div>
+
+Previously UI `ImageBundle` Nodes could only use handles to full images without an ergonomic way to use `TextureAtlases` in UI.  In this release we add support for an `AtlasImageBundle` UI Node which brings the existing `TextureAtlas` support into UI.  
+
+This was achieved by merging the existing mechanisms that allows text rendering to select which glyph to use and the mechanisms that allow for `TextureAtlasSprite`.
+
+<video controls><source src="texture_atlas_ui.mp4" type="video/mp4"/></video>
+
+## EntityRef Queries
+
+<div class="release-feature-authors">authors: @james7132</div>
+
+[`EntityRef`] now implements [`WorldQuery`], which makes it easier to query for arbitrary components in your ECS systems:
+
+```rust
+fn system(query: Query<EntityRef>) {
+    for entity in &query {
+        if let Some(mesh) = entity.get::<Handle<Mesh>>() {
+            let transform = entity.get::<Transform>().unwrap();
+        }
+    }
+}
+```
+
+Note that [`EntityRef`] queries access every entity and every component in the entire [`World`] by default. This means that they will conflict with any "mutable" query:
+
+```rust
+/// These queries will conflict, making this system invalid
+fn system(query: Query<EntityRef>, mut enemies: Query<&mut Enemy>) { }
+```
+
+To resolve conflicts (or reduce the number of entities accessed), you can add filters:
+
+```rust
+/// These queries will not conflict
+fn system(
+    players: Query<EntityRef, With<Player>>,
+    mut enemies: Query<&mut Enemy, Without<Player>>
+) {
+    // only iterates players
+    for entity in &players {
+        if let Some(mesh) = entity.get::<Handle<Mesh>>() {
+            let transform = entity.get::<Transform>().unwrap();
+        }
+    }
+}
+```
+
+Note that it will generally still be more ergonomic (and more efficient) to query for the components you want directly:
+
+```rust
+fn system(players: Query<(&Transform, &Handle<Mesh>), With<Player>>) {
+    for (transform, mesh) in &players {
+    }
+}
+```
+
+[`EntityRef`]: https://docs.rs/bevy/0.11.0/bevy/ecs/world/struct.EntityRef.html
+[`WorldQuery`]: https://docs.rs/bevy/0.11.0/bevy/ecs/query/trait.WorldQuery.html
+[`World`]: https://docs.rs/bevy/0.11.0/bevy/ecs/world/struct.World.html
+
+## Screenshot API
+
+<div class="release-feature-authors">authors: @TheRawMeatball</div>
+
+Bevy now has a simple screenshot API that can save a screenshot of a given window to the disk:
+
+```rust
+fn take_screenshot(
+    mut screenshot_manager: ResMut<ScreenshotManager>,
+    input: Res<Input<KeyCode>>,
+    primary_window: Query<Entity, With<PrimaryWindow>>,
+) {
+    if input.just_pressed(KeyCode::Space) {
+        screenshot_manager
+            .save_screenshot_to_disk(primary_window.single(), "screenshot.png")
+            .unwrap();
+    }
+}
+```
+
+## RenderTarget::TextureView
+
+<div class="release-feature-authors">authors: @mrchantey</div>
+
+The [`Camera`] [`RenderTarget`] can now be set to a wgpu [`TextureView`]. This allows 3rd party Bevy Plugins to manage a [`Camera`]'s texture. One particularly interesting use case that this enables is XR/VR support. A few community members have already [proven this out!](https://github.com/bevyengine/bevy/issues/115#issuecomment-1436749201)
+
+[`Camera`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/struct.Camera.html
+[`RenderTarget`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/enum.RenderTarget.html
+[`TextureView`]: https://docs.rs/bevy/0.11.0/bevy/render/render_resource/struct.TextureView.html
+
+## New Default Tonemapping Method
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
+
+![reinhard luminance](tm_reinhard_luminance.png)
+
+![tonymcmapface](./tm_tonymcmapface.png)
+
+TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
 ## <a name="what-s-next"></a>What's Next?
 
