@@ -17,11 +17,28 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **Feature**: description
 
-## Feature
+## Screen Space Ambient Occlusion
 
-<div class="release-feature-authors">authors: @todo</div>
+<div class="release-feature-authors">authors: @JMS55</div>
 
-Description
+> Without SSAO
+![no_ssao](no_ssao.png)
+> SSAO
+![ssao_only](ssao_only.png)
+> With SSAO
+![with_ssao](with_ssao.png)
+
+Bevy now supports Screen Space Ambient Occlusion (SSAO). While Bevy already supports shadows from direct lights
+(`DirectionalLight`, `PointLight`, `SpotLight`) via shadow mapping, Bevy now supports shadows for _indirect_ diffuse
+lighting such as `AmbientLight` or `EnvironmentMapLight`.
+
+These shadows give scenes a more "grounded" feel, by estimating how much surrounding geometry blocks incoming light
+via the screen-space depth and normal prepasses. Try it out in the new `ssao` example.
+
+Note that using SSAO with Temporal Antialiasing leads to a _large_ increase in quality and noise reduction, and is highly reccomended.
+
+Platform support is currently limited - Only Vulkan and Metal are currently supported. DirectX12 will be supported via
+an upcoming patch release of `wgpu`, and WebGPU support will come at a later date.
 
 ## <a name="what-s-next"></a>What's Next?
 
