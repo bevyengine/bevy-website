@@ -20,6 +20,34 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
   flat surfaces a feel of depth through parallaxing the material's textures.
 * **Gamepad Rumble API**: an ECS-friendly way of making controllers rumble
 
+## Screen Space Ambient Occlusion
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+**Without SSAO**
+![no_ssao](no_ssao.png)
+
+**With SSAO**
+![with_ssao](with_ssao.png)
+
+**SSAO Only**
+![ssao_only](ssao_only.png)
+
+Bevy now supports Screen Space Ambient Occlusion (SSAO). While Bevy already supported shadows from direct lights
+([`DirectionalLight`], [`PointLight`], [`SpotLight`]) via shadow mapping, Bevy now supports shadows from _indirect_ diffuse lighting such as [`AmbientLight`] or [`EnvironmentMapLight`].
+
+These shadows give scenes a more "grounded" feel, by estimating how much surrounding geometry blocks incoming light via the screen-space depth and normal prepasses. You can try it out in the new [SSAO example](https://github.com/bevyengine/bevy/blob/v0.11.0/examples/3d/ssao.rs).
+
+Note that using SSAO with the newly added Temporal Anti-Aliasing leads to a _large_ increase in quality and noise reduction.
+
+Platform support is currently limited - Only Vulkan and Metal are currently supported. DirectX12 will be supported via an upcoming patch release of `wgpu`, and WebGPU support will come at a later date.
+
+[`DirectionalLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.DirectionalLight.html
+[`PointLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.PointLight.html
+[`SpotLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.SpotLight.html
+[`AmbientLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.AmbientLight.html
+[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
+
 ## Temporal Antialiasing
 
 <div class="release-feature-authors">authors: @JMS55, @DGriffin91</div>
@@ -184,7 +212,7 @@ let scene = builder
 
 Bevy's scene format is a very useful tool for serializing and deserializing game state to and from scene files.
 
-Previously, the captured state was limited to only entities and their components. 
+Previously, the captured state was limited to only entities and their components.
 With 0.11, scenes now support serializing resources as well.
 
 This adds a new `resources` field to the scene format:
