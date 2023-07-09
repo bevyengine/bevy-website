@@ -1241,7 +1241,7 @@ An example that shows how to draw a 3D curve and move an object along the path:
 
 ## Size Constraints Example
 
-<div class="release-feature-authors">authors: @Kjolnyr</div>
+<div class="release-feature-authors">authors: @ickshonpe</div>
 
 An interactive example that shows how the various [`Style`] size constraints affect UI nodes.
 
@@ -1249,7 +1249,7 @@ An interactive example that shows how the various [`Style`] size constraints aff
 
 ## Display and Visibility Example
 
-<div class="release-feature-authors">authors: @Kjolnyr</div>
+<div class="release-feature-authors">authors: @ickshonpe</div>
 
 An example that shows how display and visibility settings affect UI nodes.
 
