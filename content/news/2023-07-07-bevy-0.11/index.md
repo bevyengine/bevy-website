@@ -880,6 +880,39 @@ In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
+## Gizmos
+
+<div class="release-feature-authors">authors: @devil-ira, @jannik4, @lassade, @The5-1, @Toqozz, @nicopap</div>
+
+It is often helpful to be able to draw simple shapes and lines in 2D and 3D for things like editor controls, and debug views. Game development is a very "spatial" thing and being able to quickly draw shapes is the visual equivalent of "print line debugging". It helps answer questions like "is this ray casting in the right direction?" and "is this collider big enough?"
+
+In **Bevy 0.11** we've added an "immediate mode" [`Gizmos`] drawing API that makes these things easy and efficient. In 2D and 3D you can draw lines, rects, circles, arcs, spheres, cubes, line strips, and more!
+
+**2D Gizmos**
+![2d gizmos](2d_gizmos.png)
+**3D Gizmos**
+![3d gizmos](3d_gizmos.png)
+
+From any system you can spawn shapes into existence (for both 2D and 3D):
+
+```rust
+fn system(mut gizmos: Gizmos) {
+    // 2D
+    gizmos.line_2d(Vec2::new(0., 0.), Vec2::new(0., 10.), Color::RED);
+    gizmos.circle_2d(Vec2::new(0., 0.), 40., Color::BLUE);
+    // 3D
+    gizmos.circle(Vec3::ZERO, Vec3::Y, 3., Color::BLACK);
+    gizmos.ray(Vec3::new(0., 0., 0.), Vec3::new(5., 5., 5.), Color::BLUE);
+    gizmos.sphere(Vec3::ZERO, Quat::IDENTITY, 3.2, Color::BLACK)
+}
+```
+
+Because the API is "immediate mode", gizmos will only be drawn on frames where they are "queued up", which means you don't need to worry about cleaning up gizmo state!
+
+Gizmos are drawn in batches, which means they are very cheap. You can have hundreds of thousands of them!
+
+[`Gizmos`]: https://docs.rs/bevy/0.11.0/bevy/gizmos/gizmos/struct.Gizmos.html
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
