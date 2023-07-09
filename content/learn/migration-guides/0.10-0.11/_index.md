@@ -13,190 +13,6 @@ Bevy relies heavily on improvements in the Rust language and compiler.
 As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
 <div class="migration-guide">
 
-### [Merge ScheduleRunnerSettings into ScheduleRunnerPlugin](https://github.com/bevyengine/bevy/pull/8585)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">App</div>
-</div>
-
-Instead of inserting the `ScheduleRunnerSettings` resource, configure the `ScheduleRunnerPlugin`
-
-```rust
-// 0.10
-.insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs(5)))
-.add_plugin(ScheduleRunnerPlugin::default())
-
-// 0.11
-.add_plugin(ScheduleRunnerPlugin::run_loop(Duration::from_secs(5)))
-```
-
-### [Allow tuples and single plugins in `add_plugins`, deprecate `add_plugin`](https://github.com/bevyengine/bevy/pull/8097)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">App</div>
-</div>
-
-Replace `app.add_plugin(plugin)` calls with `app.add_plugins(plugin)`.
-
-### [Add support for custom glTF vertex attributes.](https://github.com/bevyengine/bevy/pull/5370)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Assets</div>
-</div>
-
-If you were instantiating `GltfPlugin` using the unit-like struct syntax, you must instead use `GltfPlugin::default()` as the type is no longer unit-like.
-
-### [Delay asset hot reloading](https://github.com/bevyengine/bevy/pull/8503)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Assets</div>
-</div>
-
-```rust
-// 0.10
-.add_plugins(DefaultPlugins.set(AssetPlugin {
-    watch_for_changes: true,
-    ..default()
-}))
-
-// 0.11
-.add_plugins(DefaultPlugins.set(AssetPlugin {
-    // You can now give it a configurable delay. This is a safe default.
-    watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
-    ..default()
-}))
-```
-
-### [bevy_audio: ECS-based API redesign](https://github.com/bevyengine/bevy/pull/8424)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Audio</div>
-</div>
-
-```rust
-// 0.10
-
-/// Need to store handles somewhere
-#[derive(Resource)]
-struct MyMusic {
-    sink: Handle<AudioSink>,
-}
-
-fn play_music(
-    asset_server: Res<AssetServer>,
-    audio: Res<Audio>,
-    audio_sinks: Res<Assets<AudioSink>>,
-    mut commands: Commands,
-) {
-    let weak_handle = audio.play_with_settings(
-        asset_server.load("music.ogg"),
-        PlaybackSettings::LOOP.with_volume(0.5),
-    );
-    // upgrade to strong handle and store it
-    commands.insert_resource(MyMusic {
-        sink: audio_sinks.get_handle(weak_handle),
-    });
-}
-
-fn toggle_pause_music(
-    audio_sinks: Res<Assets<AudioSink>>,
-    mymusic: Option<Res<MyMusic>>,
-) {
-    if let Some(mymusic) = &mymusic {
-        if let Some(sink) = audio_sinks.get(&mymusic.sink) {
-            sink.toggle();
-        }
-    }
-}
-
-// 0.11
-
-/// Marker component for our music entity
-#[derive(Component)]
-struct MyMusic;
-
-fn play_music(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-) {
-    commands.spawn((
-        AudioBundle::from_audio_source(asset_server.load("music.ogg"))
-            .with_settings(PlaybackSettings::LOOP.with_volume(0.5)),
-        MyMusic,
-    ));
-}
-
-fn toggle_pause_music(
-    // `AudioSink` will be inserted by Bevy when the audio starts playing
-    query_music: Query<&AudioSink, With<MyMusic>>,
-) {
-    if let Ok(sink) = query.get_single() {
-        sink.toggle();
-    }
-}
-```
-
-### [Allow systems using Diagnostics to run in parallel](https://github.com/bevyengine/bevy/pull/8677)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Diagnostics</div>
-</div>
-
-- Register `Diagnostic`’s using the new `app.register_diagnostic(Diagnostic::new(DIAGNOSTIC_ID, "diagnostic_name", 10));`
-- In systems for writing new measurements, change `mut diagnostics: ResMut<Diagnostics>` to `mut diagnostics: Diagnostics` to allow the systems to run in parallel.
-
-```diff
-- fn system(mut diagnostics: ResMut<Diagnostics>) {}
-+ fn system(mut diagnostics: Diagnostics) {}
-```
-
-- In systems for reading measurements, change `diagnostics: Res<Diagnostics>` to `diagnostics: Res<DiagnosticsStore>`.
-
-```diff
-- fn system(diagnostics: Res<Diagnostics>) {}
-+ fn system(diagnostics: Res<DiagnosticsStore>) {}
-```
-
-### [Log to stderr instead of stdout](https://github.com/bevyengine/bevy/pull/8886)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Diagnostics</div>
-</div>
-
-On unix systems, when printing logs like `info!`, `trace!`, `error!`, etc, read from `stderr` instead of from `stdout`
-
-- Use `2> output.log` on the command line to save `stderr` to a file
-
-### [Make `WorldQuery` meta types unnameable](https://github.com/bevyengine/bevy/pull/7964)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-The `State` and `Fetch` types for types created using `#[derive(WorldQuery)]` are now unnameable. If you need to refer to them, use the syntax `<T as WorldQuery>::State`, `<T as WorldQuery>::Fetch`.
-
-### [Increase type safety and clarity for change detection](https://github.com/bevyengine/bevy/pull/7905)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-The engine now uses the type `Tick` for dealing with change ticks, instead of `u32`. Any code that interfaced with engine internals will need to be updated, including:
-
-- Manual implementers of the traits `SystemParam`, `WorldQuery`, `DetectChanges`, and `DetectChangesMut`.
-- The methods `World::change_tick` and `read_change_tick`.
-- `System::set_last_change_tick` and `get_last_change_tick`. Also, these methods have been renamed to `set_last_run` and `get_last_run`, respectively.
-- The methods `SystemChangeTick::change_tick` and `last_change_tick`. These methods have been renamed to `this_run` and `last_run`, respectively.
-- The method `Tick::set_changed`, which has been renamed to just `set`.
-
-### [Remove ChangeTrackers](https://github.com/bevyengine/bevy/pull/7902)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-`ChangeTrackers` has been removed. Use `Ref<T>` queries instead.
-
 ### [Schedule-First: the new and improved add_systems](https://github.com/bevyengine/bevy/pull/8079)
 
 <div class="migration-guide-area-tags">
@@ -289,6 +105,236 @@ app.configure_sets((A, B).after(C))
 // 0.11 (Update is no longer implied by default)
 app.configure_sets(Update, (A, B).after(C))
 ```
+
+### [bevy_audio: ECS-based API redesign](https://github.com/bevyengine/bevy/pull/8424)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Audio</div>
+</div>
+
+```rust
+// 0.10
+
+/// Need to store handles somewhere
+#[derive(Resource)]
+struct MyMusic {
+    sink: Handle<AudioSink>,
+}
+
+fn play_music(
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    audio_sinks: Res<Assets<AudioSink>>,
+    mut commands: Commands,
+) {
+    let weak_handle = audio.play_with_settings(
+        asset_server.load("music.ogg"),
+        PlaybackSettings::LOOP.with_volume(0.5),
+    );
+    // upgrade to strong handle and store it
+    commands.insert_resource(MyMusic {
+        sink: audio_sinks.get_handle(weak_handle),
+    });
+}
+
+fn toggle_pause_music(
+    audio_sinks: Res<Assets<AudioSink>>,
+    mymusic: Option<Res<MyMusic>>,
+) {
+    if let Some(mymusic) = &mymusic {
+        if let Some(sink) = audio_sinks.get(&mymusic.sink) {
+            sink.toggle();
+        }
+    }
+}
+
+// 0.11
+
+/// Marker component for our music entity
+#[derive(Component)]
+struct MyMusic;
+
+fn play_music(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
+    commands.spawn((
+        AudioBundle::from_audio_source(asset_server.load("music.ogg"))
+            .with_settings(PlaybackSettings::LOOP.with_volume(0.5)),
+        MyMusic,
+    ));
+}
+
+fn toggle_pause_music(
+    // `AudioSink` will be inserted by Bevy when the audio starts playing
+    query_music: Query<&AudioSink, With<MyMusic>>,
+) {
+    if let Ok(sink) = query.get_single() {
+        sink.toggle();
+    }
+}
+```
+
+### [Allow tuples and single plugins in `add_plugins`, deprecate `add_plugin`](https://github.com/bevyengine/bevy/pull/8097)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">App</div>
+</div>
+
+Replace `app.add_plugin(plugin)` calls with `app.add_plugins(plugin)`.
+
+### [Improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Shaders that don't use `#import` directives should work without changes.
+
+The most notable user-facing difference is that imported functions/variables/etc need to be qualified at point of use, and there's no "leakage" of visible stuff into your shader scope from the imports of your imports, so if you used things imported by your imports, you now need to import them directly and qualify them.
+
+The current strategy of including/'spreading' `mesh_vertex_output` directly into a struct doesn't work any more, so these need to be modified as per the examples (e.g. `color_material.wgsl`, or many others). Mesh data is assumed to be in bindgroup 2 by default, if mesh data is bound into bindgroup 1 instead then the shader def `MESH_BINDGROUP_1` needs to be added to the pipeline `shader_defs`.
+
+```rust
+// 0.10
+struct FragmentInput {
+    #import bevy_pbr::mesh_vertex_output
+}
+@fragment
+fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {}
+
+// 0.11
+#import bevy_pbr::mesh_vertex_output MeshVertexOutput
+@fragment
+fn fragment(in: MeshVertexOutput) -> @location(0) vec4<f32> {}
+```
+
+If you were importing something like `mesh_view_bindings` but only for the `globals` uniform buffer you can now import it directly.
+
+```rust
+// 0.10
+#import bevy_pbr::mesh_view_bindings
+// use globals.time after this
+
+// 0.11
+#import bevy_pbr::mesh_view_bindings globals
+// globals is now in scope, but nothing else is imported
+```
+
+### [Flatten UI `Style` properties that use `Size` + remove `Size`](https://github.com/bevyengine/bevy/pull/8548)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+The `size`, `min_size`, `max_size`, and `gap` properties have been replaced by the `width`, `height`, `min_width`, `min_height`, `max_width`, `max_height`, `row_gap`, and `column_gap` properties. Use the new properties instead.
+
+### [Merge ScheduleRunnerSettings into ScheduleRunnerPlugin](https://github.com/bevyengine/bevy/pull/8585)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">App</div>
+</div>
+
+Instead of inserting the `ScheduleRunnerSettings` resource, configure the `ScheduleRunnerPlugin`
+
+```rust
+// 0.10
+.insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs(5)))
+.add_plugin(ScheduleRunnerPlugin::default())
+
+// 0.11
+.add_plugin(ScheduleRunnerPlugin::run_loop(Duration::from_secs(5)))
+```
+
+### [Add support for custom glTF vertex attributes.](https://github.com/bevyengine/bevy/pull/5370)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Assets</div>
+</div>
+
+If you were instantiating `GltfPlugin` using the unit-like struct syntax, you must instead use `GltfPlugin::default()` as the type is no longer unit-like.
+
+### [Delay asset hot reloading](https://github.com/bevyengine/bevy/pull/8503)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Assets</div>
+</div>
+
+```rust
+// 0.10
+.add_plugins(DefaultPlugins.set(AssetPlugin {
+    watch_for_changes: true,
+    ..default()
+}))
+
+// 0.11
+.add_plugins(DefaultPlugins.set(AssetPlugin {
+    // You can now give it a configurable delay. This is a safe default.
+    watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
+    ..default()
+}))
+```
+
+### [Allow systems using Diagnostics to run in parallel](https://github.com/bevyengine/bevy/pull/8677)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Diagnostics</div>
+</div>
+
+- Register `Diagnostic`’s using the new `app.register_diagnostic(Diagnostic::new(DIAGNOSTIC_ID, "diagnostic_name", 10));`
+- In systems for writing new measurements, change `mut diagnostics: ResMut<Diagnostics>` to `mut diagnostics: Diagnostics` to allow the systems to run in parallel.
+
+```diff
+- fn system(mut diagnostics: ResMut<Diagnostics>) {}
++ fn system(mut diagnostics: Diagnostics) {}
+```
+
+- In systems for reading measurements, change `diagnostics: Res<Diagnostics>` to `diagnostics: Res<DiagnosticsStore>`.
+
+```diff
+- fn system(diagnostics: Res<Diagnostics>) {}
++ fn system(diagnostics: Res<DiagnosticsStore>) {}
+```
+
+### [Log to stderr instead of stdout](https://github.com/bevyengine/bevy/pull/8886)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Diagnostics</div>
+</div>
+
+On unix systems, when printing logs like `info!`, `trace!`, `error!`, etc, read from `stderr` instead of from `stdout`
+
+- Use `2> output.log` on the command line to save `stderr` to a file
+
+### [Make `WorldQuery` meta types unnameable](https://github.com/bevyengine/bevy/pull/7964)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The `State` and `Fetch` types for types created using `#[derive(WorldQuery)]` are now unnameable. If you need to refer to them, use the syntax `<T as WorldQuery>::State`, `<T as WorldQuery>::Fetch`.
+
+### [Increase type safety and clarity for change detection](https://github.com/bevyengine/bevy/pull/7905)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The engine now uses the type `Tick` for dealing with change ticks, instead of `u32`. Any code that interfaced with engine internals will need to be updated, including:
+
+- Manual implementers of the traits `SystemParam`, `WorldQuery`, `DetectChanges`, and `DetectChangesMut`.
+- The methods `World::change_tick` and `read_change_tick`.
+- `System::set_last_change_tick` and `get_last_change_tick`. Also, these methods have been renamed to `set_last_run` and `get_last_run`, respectively.
+- The methods `SystemChangeTick::change_tick` and `last_change_tick`. These methods have been renamed to `this_run` and `last_run`, respectively.
+- The method `Tick::set_changed`, which has been renamed to just `set`.
+
+### [Remove ChangeTrackers](https://github.com/bevyengine/bevy/pull/7902)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+`ChangeTrackers` has been removed. Use `Ref<T>` queries instead.
 
 ### [Check for conflicting accesses in `assert_is_system`](https://github.com/bevyengine/bevy/pull/8154)
 
@@ -847,7 +893,7 @@ graph.add_node(FooNode::NAME, node);
 // add_node_edge ...
 ```
 
-### [Remove unnecesssary values Vec from DynamicUniformBuffer and DynamicStorageBuffer](https://github.com/bevyengine/bevy/pull/8299)
+### [Remove unnecessary values Vec from DynamicUniformBuffer and DynamicStorageBuffer](https://github.com/bevyengine/bevy/pull/8299)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -950,44 +996,6 @@ Flip the textures you use on `Plane` shapes.
 </div>
 
 References to the `RenderTarget` enum will need to handle the additional field, ie in `match` statements.
-
-### [Improve shader import model](https://github.com/bevyengine/bevy/pull/5703)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-Shaders that don't use `#import` directives should work without changes.
-
-The most notable user-facing difference is that imported functions/variables/etc need to be qualified at point of use, and there's no "leakage" of visible stuff into your shader scope from the imports of your imports, so if you used things imported by your imports, you now need to import them directly and qualify them.
-
-The current strategy of including/'spreading' `mesh_vertex_output` directly into a struct doesn't work any more, so these need to be modified as per the examples (e.g. `color_material.wgsl`, or many others). Mesh data is assumed to be in bindgroup 2 by default, if mesh data is bound into bindgroup 1 instead then the shader def `MESH_BINDGROUP_1` needs to be added to the pipeline `shader_defs`.
-
-```rust
-// 0.10
-struct FragmentInput {
-    #import bevy_pbr::mesh_vertex_output
-}
-@fragment
-fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {}
-
-// 0.11
-#import bevy_pbr::mesh_vertex_output MeshVertexOutput
-@fragment
-fn fragment(in: MeshVertexOutput) -> @location(0) vec4<f32> {}
-```
-
-If you were importing something like `mesh_view_bindings` but only for the `globals` uniform buffer you can now import it directly.
-
-```rust
-// 0.10
-#import bevy_pbr::mesh_view_bindings
-// use globals.time after this
-
-// 0.11
-#import bevy_pbr::mesh_view_bindings globals
-// globals is now in scope, but nothing else is imported
-```
 
 ### [Consistent screen-space coordinates](https://github.com/bevyengine/bevy/pull/8306)
 
@@ -1105,14 +1113,6 @@ The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
 Physical UI coordinates are now divided by both the `UiScale` and the window’s scale factor to compute the logical sizes and positions of UI nodes.
 
 This ensures that UI Node size and position values, held by the `Node` and `GlobalTransform` components, conform to the same logical coordinate system as the style constraints from which they are derived, irrespective of the current `scale_factor` and `UiScale`.
-
-### [Flatten UI `Style` properties that use `Size` + remove `Size`](https://github.com/bevyengine/bevy/pull/8548)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">UI</div>
-</div>
-
-The `size`, `min_size`, `max_size`, and `gap` properties have been replaced by the `width`, `height`, `min_width`, `min_height`, `max_width`, `max_height`, `row_gap`, and `column_gap` properties. Use the new properties instead.
 
 ### [Update ahash and hashbrown](https://github.com/bevyengine/bevy/pull/8623)
 
