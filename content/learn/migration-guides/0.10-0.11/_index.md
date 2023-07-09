@@ -1094,7 +1094,7 @@ Then replace uses of `AlphaMode` with `MyAlphaMode`
 - Change instances of `render::primitives::Plane` to `render::primitives::HalfSpace`
 - Change instances of the `planes` member in `render::primitives::Frustum` to `half_spaces`
 
-### [Fix Plane UVs / texture flip](https://github.com/bevyengine/bevy/pull/8878)
+### [Fix `Plane` UVs / texture flip](https://github.com/bevyengine/bevy/pull/8878)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
