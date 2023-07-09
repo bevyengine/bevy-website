@@ -801,7 +801,7 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-<div class="image-compare" style="aspect-ratio: 595 / 311" data-title-a="Reinhard-luminance" data-title-b="TonyMcMapface">
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Reinhard-luminance" data-title-b="TonyMcMapface">
   <img class="image-a" alt="Reinhard-luminance" src="tm_reinhard_luminance.png">
   <img class="image-b" alt="TonyMcMapface" src="tm_tonymcmapface.png">
 </div>
