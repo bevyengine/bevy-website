@@ -33,7 +33,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Screen Space Ambient Occlusion
 
-<div class="release-feature-authors">authors: @JMS55</div>
+<div class="release-feature-authors">authors: @JMS55, @danchia, @superdump </div>
 
 **Without SSAO**
 ![no_ssao](no_ssao.png)
