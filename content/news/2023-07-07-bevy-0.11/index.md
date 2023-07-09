@@ -880,6 +880,36 @@ In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
+## `run_if` for Tuples of Systems
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+It is now possible to add ["run conditions"](/news/bevy-0-10/#run-conditions) to tuples of systems:
+
+```rust
+app.add_systems(Update, (run, jump).run_if(in_state(GameState::Playing)))
+```
+
+This will evaluate the "run condition" exactly once and use the result for each system in the tuple.
+
+This allowed us to remove the `OnUpdate` system set for states (which was previously used to run groups of systems when they are in a given state).
+
+## `Has` Queries
+
+<div class="release-feature-authors">authors: @wainwrightmark</div>
+
+You can now use `Has<Component>` in queries, which will return true if that component exists and false if it does not:
+
+```rust
+fn system(query: Query<Has<Player>>) {
+    for has_player in &query {
+        if has_player {
+            // do something
+        }
+    }
+} 
+```
+
 ## Robust Contrast Adaptive Sharpening
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
@@ -959,6 +989,24 @@ fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
 [`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
 [`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
 [`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
+
+## Derive `Event`
+
+<div class="release-feature-authors">authors: @CatThingy</div>
+
+The Bevy [`Event`] trait is now derived instead of being auto-impled for everything:
+
+```rust
+#[derive(Event)]
+struct Collision {
+    a: Entity,
+    b: Entity,
+}
+```
+
+This prevents some classes of error, makes [`Event`] types more self-documenting, and provides consistency with other Bevy ECS traits like Components and Resources. It also opens the doors to configuring the [`Event`] storage type, which we plan to do in future releases.
+
+[`Event`]: https://docs.rs/bevy/0.11.0/bevy/ecs/event/trait.Event.html
 
 ## <a name="what-s-next"></a>What's Next?
 
