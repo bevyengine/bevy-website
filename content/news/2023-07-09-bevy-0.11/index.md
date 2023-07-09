@@ -35,11 +35,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @JMS55</div>
 
-**Without SSAO**
-![no_ssao](no_ssao.png)
-
-**With SSAO**
-![with_ssao](with_ssao.png)
+**Without SSAO vs With SSAO**
+<div class="image-compare" style="aspect-ratio: 16 / 9">
+  <img class="image-a" alt="no_ssao" src="no_ssao.png">
+  <img class="image-b" alt="with_ssao" src="with_ssao.png">
+</div>
 
 **SSAO Only**
 ![ssao_only](ssao_only.png)
