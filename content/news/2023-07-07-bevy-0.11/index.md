@@ -945,6 +945,134 @@ Bevy now supports a configurable default font and embeds a tiny default font (a 
 
 ![default font](default_font.png)
 
+## `run_if` for Tuples of Systems
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+It is now possible to add ["run conditions"](/news/bevy-0-10/#run-conditions) to tuples of systems:
+
+```rust
+app.add_systems(Update, (run, jump).run_if(in_state(GameState::Playing)))
+```
+
+This will evaluate the "run condition" exactly once and use the result for each system in the tuple.
+
+This allowed us to remove the `OnUpdate` system set for states (which was previously used to run groups of systems when they are in a given state).
+
+## `Has` Queries
+
+<div class="release-feature-authors">authors: @wainwrightmark</div>
+
+You can now use `Has<Component>` in queries, which will return true if that component exists and false if it does not:
+
+```rust
+fn system(query: Query<Has<Player>>) {
+    for has_player in &query {
+        if has_player {
+            // do something
+        }
+    }
+} 
+```
+
+## Robust Contrast Adaptive Sharpening
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
+
+![taa rcas](taa_rcas.png)
+
+Notice that the texture on the leather part of the helmet is much crisper!
+
+## ECS Audio APIs
+
+<div class="release-feature-authors">authors: @inodentry</div>
+
+Bevy's audio playback APIs have been reworked to integrate more cleanly with Bevy's ECS.
+
+In previous versions of Bevy you would play back audio like this:
+
+```rust
+#[derive(Resource)]
+struct MyMusic {
+    sink: Handle<AudioSink>,
+}
+
+fn play_music(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    audio_sinks: Res<Assets<AudioSink>>
+) {
+    let weak_handle = audio.play(asset_server.load("my_music.ogg"));
+    let strong_handle = audio_sinks.get_handle(weak_handle);
+    commands.insert_resource(MyMusic {
+        sink: strong_handle,
+    });
+}
+```
+
+That is a lot of boilerplate just to play a sound! Then to adjust playback you would access the [`AudioSink`] like this:
+
+```rust
+
+fn pause_music(mymusic: Res<MyMusic>, audio_sinks: Res<Assets<AudioSink>>) {
+    if let Some(sink) = audio_sinks.get(&mymusic.sink) {
+        sink.pause();
+    }
+}
+```
+
+Treating audio playback as a resource created a number of problems and notably didn't play well with things like Bevy Scenes. In **Bevy 0.11**, audio playback is represented as an [`Entity`] with [`AudioBundle`] components:
+
+```rust
+#[derive(Component)]
+struct MyMusic;
+
+fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((
+        AudioBundle {
+            source: asset_server.load("my_music.ogg"),
+            ..default()
+        },
+        MyMusic,
+    ));
+}
+```
+
+Much simpler! To adjust playback you can query for the [`AudioSink`] component:
+
+```rust
+fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
+    if let Ok(sink) = query.get_single() {
+        sink.pause();
+    }
+}
+```
+
+[`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
+[`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
+[`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
+
+## Derive `Event`
+
+<div class="release-feature-authors">authors: @CatThingy</div>
+
+The Bevy [`Event`] trait is now derived instead of being auto-impled for everything:
+
+```rust
+#[derive(Event)]
+struct Collision {
+    a: Entity,
+    b: Entity,
+}
+```
+
+This prevents some classes of error, makes [`Event`] types more self-documenting, and provides consistency with other Bevy ECS traits like Components and Resources. It also opens the doors to configuring the [`Event`] storage type, which we plan to do in future releases.
+
+[`Event`]: https://docs.rs/bevy/0.11.0/bevy/ecs/event/trait.Event.html
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
