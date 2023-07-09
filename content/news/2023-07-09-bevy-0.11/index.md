@@ -284,10 +284,10 @@ Since normal maps do not "move" the shaded areas, merely shade them
 differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
-**Parallax & Normal Mapping vs Normal Mapping Only**
+**normal mapping only** vs **parallax and normal mapping**
 <div class="image-compare" style="aspect-ratio: 16 / 9">
-  <img class="image-b" alt="normal_mapping" src="parallax_mapping_normals.jpg"/>
-  <img class="image-a" alt="parallax_and_normal_mapping" src="parallax_mapping_depth.jpg"/>
+  <img class="image-a" alt="normal_mapping" src="parallax_mapping_normals.jpg"/>
+  <img class="image-b" alt="parallax_and_normal_mapping" src="parallax_mapping_depth.jpg"/>
 </div>
 
 Parallax mapping in Bevy is still very limited. The most painful aspect is that
