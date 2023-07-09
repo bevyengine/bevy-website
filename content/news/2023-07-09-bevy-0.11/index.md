@@ -1491,6 +1491,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Fix crash when enabling HDR on 2d cameras][8151]
 * [Dither fix][7977]
 * [Compute `vertex_count` for indexed meshes on `GpuMesh`][8460]
+* [Run update_previous_view_projections in PreUpdate schedule][9024]
 * [Added `WebP` image format support][8220]
 * [Add support for pnm textures][8601]
 * [fix invalid bone weights][8316]
@@ -1504,14 +1505,23 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Remove capacity fields from all Buffer wrapper types][8301]
 * [Sync pbr_types.wgsl StandardMaterial values][8380]
 * [Avoid spawning gizmo meshes when no gizmos are being drawn][8180]
+* [Use a consistent seed for AABB gizmo colors][9030]
 * [bevy_pbr: Do not cull meshes without Aabbs from cascades][8444]
 * [Handle vertex_uvs if they are present in default prepass fragment shader][8330]
 * [Changed (Vec2, Vec2) to Rect in Camera::logical_viewport_rect][7867]
 * [make glsl and spirv support optional][8491]
+* [fix prepass normal_mapping][8978]
 * [conversions between [u8; 4] and Color][8564]
+* [Add option to disable gizmo rendering for specific cameras][8952]
+* [Fix morph target prepass shader][9013] 
 * [Fix bloom wasm support][8631]
+* [Fix black spots appearing due to NANs when SSAO is enabled][8926]
 * [fix normal prepass][8890]
+* [Refs #8975 -- Add return to RenderDevice::poll()][8977]
+* [Fix WebGL mode for Adreno GPUs][8508]
+* [Fix parallax mapping][9003]
 * [Added Vec append to BufferVec - Issue #3531][8575]
+* [Fix CAS shader with explicit FullscreenVertexOutput import][8993]
 * [Make `TextureAtlas::texture_handles` `pub` instead of `pub(crate)` (#8633)][8643]
 * [Make Material2d pipeline systems public][8642]
 * [Fix screenshots on Wayland + Nvidia][8701]
@@ -1532,6 +1542,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 ### Audio
 
+* [ECS-based API redesign][8424]
 * [Ability to set a Global Volume][7706]
 * [Expose `AudioSink::empty()`][8145]
 
@@ -1544,6 +1555,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 ### Scenes
 
+* [bevy_scene: Add SceneFilter][6793] 
 * [(De) serialize resources in scenes][6846]
 * [add position to scene errors][8065]
 * [Bugfix: Scene reload fix (nonbreaking)][7951]
@@ -1564,6 +1576,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 * [reflect: stable type path v2][7184]
 * [bevy_reflect: Better proxies][6971]
+* [bevy_reflect: FromReflect Ergonomics Implementation][6056]
 * [bevy_reflect: Allow `#[reflect(default)]` on enum variant fields][8514]
 * [Add FromReflect where Reflect is used][8776]
 * [Add get_at_mut to bevy_reflect::Map trait][8691]
@@ -1580,6 +1593,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Reflect UUID][8905]
 * [Don't ignore additional entries in `UntypedReflectDeserializerVisitor`][7112]
 * [Construct Box<dyn Reflect> from world for ReflectComponent][7407]
+* [reflect: avoid deadlock in GenericTypeCell][8957]
 
 ### App
 
@@ -1587,6 +1601,9 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Merge ScheduleRunnerSettings into ScheduleRunnerPlugin][8585]
 * [correctly setup everything in the default run_once runner][8740]
 * [Fix `Plugin::build` detection][8103]
+* [Fix not calling App::finish and App::cleanup in `ScheduleRunnerPlugin`][9054]
+* [Relaxed runner type from Fn to FnOnce][8961]
+* [Relax FnMut to FnOnce in app::edit_schedule][8982]
 
 ### Windowing + Reflection
 
@@ -1620,6 +1637,11 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Support to set window theme and expose system window theme changed event][8593]
 * [Touchpad magnify and rotate events][8791]
 * [Fix windows not being centered properly when system interface is scaled][8903]
+* [Expose WindowDestroyed events][9016]
+
+### Animation
+
+* [Register bevy_animation::PlayingAnimation][9023]
 
 ### UI
 
@@ -1637,11 +1659,13 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Fix size of clipped text glyphs.][8197]
 * [Apply scale factor to  `ImageMeasure` sizes][8545]
 * [Fix WebGPU error in "ui_pipeline" by adding a flat interpolate attribute][8933]
+* [Rename Interaction::Clicked -> Interaction::Pressed][9027]
 * [Flatten UI `Style` properties that use `Size` + remove `Size`][8548]
 * [Split UI `Overflow` by axis][8095]
 * [Add methods for calculating the size and postion of UI nodes][7930]
 * [Skip the UV calculations for untextured UI nodes][7809]
 * [Fix text measurement algorithm][8425]
+* [Divide by UiScale when converting UI coordinates from physical to logical][8720]
 * [`MeasureFunc` improvements][8402]
 * [Expose sorting methods in `Children`][8522]
 * [Fix min and max size using size value][7948]
@@ -1692,12 +1716,14 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Make the `Condition` trait generic][8721]
 * [Add or_else combinator to run_conditions.rs][8714]
 * [Add iter_many_manual QueryState method][8772]
+* [Provide access to world storages via UnsafeWorldCell][8987]
 * [Added Has<T> WorldQuery type][8844]
 * [Add/fix `track_caller` attribute on panicking entity accessor methods][8951]
 * [Increase type safety and clarity for change detection][7905]
 * [Make `WorldQuery` meta types unnameable][7964]
 * [Add a public constructor for `Mut<T>`][7931]
 * [Remove ChangeTrackers][7902]
+* [Derive Eq, PartialEq for Tick][9020]
 * [Initialize empty schedules when calling `.in_schedule` if they do not already exist][7911]
 * [Replace multiple calls to `add_system` with `add_systems`][8001]
 * [don't panic on unknown ambiguity][7950]
@@ -1748,6 +1774,10 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 * [fix: register Cascade in the TypeRegistry][8088]
 
+### Tasks
+
+* [Add optional single-threaded feature to bevy_ecs/bevy_tasks][6690]
+
 ### Math
 
 * [Re-export glam_assert feature][8232]
@@ -1789,6 +1819,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Update notify requirement from 5.0.0 to 6.0.0][8757]
 * [Bump hashbrown to 0.14][8904]
 * [update ahash and hashbrown][8623]
+* [Bump accesskit and accesskit_winit][8655]
 
 ### Examples
 
@@ -2077,3 +2108,28 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 [8947]: https://github.com/bevyengine/bevy/pull/8947
 [8951]: https://github.com/bevyengine/bevy/pull/8951
 [8960]: https://github.com/bevyengine/bevy/pull/8960
+[8957]: https://github.com/bevyengine/bevy/pull/8957
+[9054]: https://github.com/bevyengine/bevy/pull/9054
+[6690]: https://github.com/bevyengine/bevy/pull/6690
+[8424]: https://github.com/bevyengine/bevy/pull/8424
+[8655]: https://github.com/bevyengine/bevy/pull/8655
+[6793]: https://github.com/bevyengine/bevy/pull/6793
+[8720]: https://github.com/bevyengine/bevy/pull/8720
+[9024]: https://github.com/bevyengine/bevy/pull/9024
+[9027]: https://github.com/bevyengine/bevy/pull/9027
+[9016]: https://github.com/bevyengine/bevy/pull/9016
+[9023]: https://github.com/bevyengine/bevy/pull/9023
+[9020]: https://github.com/bevyengine/bevy/pull/9020
+[9030]: https://github.com/bevyengine/bevy/pull/9030
+[9013]: https://github.com/bevyengine/bevy/pull/9013
+[8926]: https://github.com/bevyengine/bevy/pull/8926
+[9003]: https://github.com/bevyengine/bevy/pull/9003
+[8993]: https://github.com/bevyengine/bevy/pull/8993
+[8508]: https://github.com/bevyengine/bevy/pull/8508
+[6056]: https://github.com/bevyengine/bevy/pull/6056
+[8987]: https://github.com/bevyengine/bevy/pull/8987
+[8952]: https://github.com/bevyengine/bevy/pull/8952
+[8961]: https://github.com/bevyengine/bevy/pull/8961
+[8978]: https://github.com/bevyengine/bevy/pull/8978
+[8982]: https://github.com/bevyengine/bevy/pull/8982
+[8977]: https://github.com/bevyengine/bevy/pull/8977
