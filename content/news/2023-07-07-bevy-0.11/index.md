@@ -907,8 +907,88 @@ fn system(query: Query<Has<Player>>) {
             // do something
         }
     }
+} 
+```
+
+## Robust Contrast Adaptive Sharpening
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
+
+![taa rcas](taa_rcas.png)
+
+Notice that the texture on the leather part of the helmet is much crisper!
+
+## ECS Audio APIs
+
+<div class="release-feature-authors">authors: @inodentry</div>
+
+Bevy's audio playback APIs have been reworked to integrate more cleanly with Bevy's ECS.
+
+In previous versions of Bevy you would play back audio like this:
+
+```rust
+#[derive(Resource)]
+struct MyMusic {
+    sink: Handle<AudioSink>,
+}
+
+fn play_music(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    audio_sinks: Res<Assets<AudioSink>>
+) {
+    let weak_handle = audio.play(asset_server.load("my_music.ogg"));
+    let strong_handle = audio_sinks.get_handle(weak_handle);
+    commands.insert_resource(MyMusic {
+        sink: strong_handle,
+    });
 }
 ```
+
+That is a lot of boilerplate just to play a sound! Then to adjust playback you would access the [`AudioSink`] like this:
+
+```rust
+
+fn pause_music(mymusic: Res<MyMusic>, audio_sinks: Res<Assets<AudioSink>>) {
+    if let Some(sink) = audio_sinks.get(&mymusic.sink) {
+        sink.pause();
+    }
+}
+```
+
+Treating audio playback as a resource created a number of problems and notably didn't play well with things like Bevy Scenes. In **Bevy 0.11**, audio playback is represented as an [`Entity`] with [`AudioBundle`] components:
+
+```rust
+#[derive(Component)]
+struct MyMusic;
+
+fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((
+        AudioBundle {
+            source: asset_server.load("my_music.ogg"),
+            ..default()
+        },
+        MyMusic,
+    ));
+}
+```
+
+Much simpler! To adjust playback you can query for the [`AudioSink`] component:
+
+```rust
+fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
+    if let Ok(sink) = query.get_single() {
+        sink.pause();
+    }
+}
+```
+
+[`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
+[`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
+[`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
 
 ## Derive `Event`
 
