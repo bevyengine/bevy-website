@@ -876,6 +876,7 @@ Implementor of the `Map` trait now need to implement `get_at_mut`.
 </div>
 
 - The Dynamic types no longer take a string type name. Instead, they require a static reference to `TypeInfo`:
+
 ```rust
 #[derive(Reflect)]
 struct MyTupleStruct(f32, f32);
@@ -892,14 +893,18 @@ dyn_tuple_struct.set_name(type_name);
 let type_info = <MyTupleStruct as Typed>::type_info();
 dyn_tuple_struct.set_represented_type(Some(type_info));
 ```
+
 - `Reflect::get_type_info` has been renamed to `Reflect::represented_type_info` and now also returns an `Option<&'static TypeInfo>` (instead of just `&'static TypeInfo`):
+
 ```rust
 // 0.10
 let info: &'static TypeInfo = value.get_type_info();
 // 0.11
 let info: &'static TypeInfo = value.represented_type_info().unwrap();
 ```
+
 - `TypeInfo::Dynamic` and `DynamicInfo` has been removed. Use `Reflect::is_dynamic instead`:
+
 ```rust
 // 0.10
 if matches!(value.get_type_info(), TypeInfo::Dynamic) {
@@ -1226,7 +1231,6 @@ When sampling from the point light shadow cubemap, use the (expected) light to f
 - You should also handle properly the new `MORPH_TARGETS` shader def and mesh pipeline key. A new function is exposed to make this easier: `setup_moprh_and_skinning_defs`
 - The `MeshBindGroup` is now `MeshBindGroups`, cached bind groups are now accessed through the `get` method.
 
-
 ### [bevy_scene: Add `SceneFilter`](https://github.com/bevyengine/bevy/pull/6793)
 
 <div class="migration-guide-area-tags">
@@ -1360,6 +1364,7 @@ Text wrapping can also be disabled using the `with_no_wrap` method of `TextBundl
 The `Style` property `Overflow` is now a struct with `x` and `y` fields, that allow for per-axis overflow control.
 
 Use these helper functions to replace the variants of `Overflow`:
+
 - Replace `Overflow::Visible` with `Overflow::visible()`
 - Replace `Overflow::Hidden` with `Overflow::clip()`
 
