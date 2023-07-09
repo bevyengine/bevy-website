@@ -1,6 +1,6 @@
 +++
 title = "0.4 to 0.5"
-weight = 7
+weight = 8
 template = "docs-section.html"
 insert_anchor_links = "right"
 aliases = ["learn/book/migration-guides/0.4-0.5"]
@@ -64,11 +64,11 @@ Similarly, rather than using `with(some_component)` to spawn an object with mult
 // 0.4
 commands.spawn(some_bundle)
     .with(some_component);
-    
+
 // 0.5
 commands.spawn_bundle(some_bundle)
     .insert(some_component);
-    
+
 // or...
 commands.spawn()
     .insert_bundle(some_bundle)
