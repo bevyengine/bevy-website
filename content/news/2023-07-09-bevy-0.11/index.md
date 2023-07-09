@@ -35,11 +35,10 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @JMS55, @danchia, @superdump </div>
 
-**Without SSAO**
-![no_ssao](no_ssao.png)
-
-**With SSAO**
-![with_ssao](with_ssao.png)
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Without SSAO" data-title-b="With SSAO">
+  <img class="image-a" alt="Without SSAO" src="no_ssao.png">
+  <img class="image-b" alt="With SSAO" src="with_ssao.png">
+</div>
 
 **SSAO Only**
 ![ssao_only](ssao_only.png)
@@ -249,7 +248,7 @@ commands.spawn(PbrBundle {
 });
 ```
 
-![A 3D desert scene with two flat white walls and a pebble path winding between them](parallax_mapping_none.jpg)
+![A 3D desert scene with two flat white walls and a pebble path winding between them](parallax_mapping_none_mini.jpg)
 
 Of course, it's just a flat white box, we didn't add any texture.
 So let's add a normal map:
@@ -258,7 +257,7 @@ So let's add a normal map:
 normal_map_texture: Some(assets.load("normal_map.png")),
 ```
 
-![The same scene with normal maps](parallax_mapping_normals.jpg)
+![The same scene with normal maps](parallax_mapping_normals_mini.jpg)
 
 This is much better. The shading changes according to the light direction too!
 However, the specular highlights on the corner are overbearing, almost noisy.
@@ -269,7 +268,7 @@ Let's see how a depth map can help:
 depth_map: Some(assets.load("depth_map.png")),
 ```
 
-![The same scene with a depth texture](parallax_mapping_depth.jpg)
+![The same scene with a depth texture](parallax_mapping_depth_mini.jpg)
 
 We eliminated the noise! There is also that sweet 3D feel reminiscent of
 90's games pre-rendered cinematic sequences.
@@ -286,7 +285,10 @@ Since normal maps do not "move" the shaded areas, merely shade them
 differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
-![A montage of the three preceding images, contrasting each effect](parallax_mapping_compare.jpg)
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Normal Mapping Only" data-title-b="Parallax & Normal Mapping">
+  <img class="image-a" alt="Normal Mapping Only" src="parallax_mapping_normals.jpg">
+  <img class="image-b" alt="Parallax & Normal Mapping" src="parallax_mapping_depth.jpg">
+</div>
 
 Parallax mapping in Bevy is still very limited. The most painful aspect is that
 it is not a standard glTF feature, meaning that the depth texture needs to be
@@ -746,7 +748,7 @@ Bevy now supports a configurable default font and embeds a tiny default font (a 
 
 <div class="release-feature-authors">authors: @mwbryant</div>
 
-Previously UI `ImageBundle` Nodes could only use handles to full images without an ergonomic way to use `TextureAtlases` in UI.  In this release we add support for an `AtlasImageBundle` UI Node which brings the existing `TextureAtlas` support into UI.  
+Previously UI `ImageBundle` Nodes could only use handles to full images without an ergonomic way to use `TextureAtlases` in UI.  In this release we add support for an `AtlasImageBundle` UI Node which brings the existing `TextureAtlas` support into UI.
 
 This was achieved by merging the existing mechanisms that allows text rendering to select which glyph to use and the mechanisms that allow for `TextureAtlasSprite`.
 
@@ -792,9 +794,10 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
-![reinhard luminance](tm_reinhard_luminance.png)
-
-![tonymcmapface](./tm_tonymcmapface.png)
+<div class="image-compare" style="aspect-ratio: 595 / 311" data-title-a="Reinhard-luminance" data-title-b="TonyMcMapface">
+  <img class="image-a" alt="Reinhard-luminance" src="tm_reinhard_luminance.png">
+  <img class="image-b" alt="TonyMcMapface" src="tm_tonymcmapface.png">
+</div>
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
@@ -1167,7 +1170,7 @@ println!("{}", Option::<MyType>::type_ident().unwrap());
 struct MyType;
 ```
 
-We are in the process of porting Bevy's internal [`type_name`] usage over to [`TypePath`], which should land in **Bevy 0.12**.  
+We are in the process of porting Bevy's internal [`type_name`] usage over to [`TypePath`], which should land in **Bevy 0.12**.
 
 [`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
 [`TypePath`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.TypePath.html
@@ -1200,7 +1203,7 @@ fn system(query: Query<Has<Player>>) {
             // do something
         }
     }
-} 
+}
 ```
 
 ## Derive `Event`
