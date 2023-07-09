@@ -53,6 +53,8 @@ Note that using SSAO with the newly added Temporal Anti-Aliasing leads to a _lar
 
 Platform support is currently limited - Only Vulkan, DirectX12, and Metal are currently supported. WebGPU support will come at a later date. WebGL likely won't be supported because it doesn't have compute shaders.
 
+Special thanks to Intel for their open source [XeGTAO](https://github.com/GameTechDev/XeGTAO) project, which was a huge help in developing this feature.
+
 [`DirectionalLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.DirectionalLight.html
 [`PointLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.PointLight.html
 [`SpotLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.SpotLight.html
