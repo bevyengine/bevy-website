@@ -1687,6 +1687,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Add `UiRect::px()` and `UiRect::percent()` utils][8866]
 * [Add missing dependencies to `bevy_text` feature][8920]
 * [Remove "bevy_text" feature attributes on imports used by non-text systems][8907]
+* [Growing UI nodes Fix][8931]
 
 ### ECS
 
@@ -2133,3 +2134,4 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 [8978]: https://github.com/bevyengine/bevy/pull/8978
 [8982]: https://github.com/bevyengine/bevy/pull/8982
 [8977]: https://github.com/bevyengine/bevy/pull/8977
+[8931]: https://github.com/bevyengine/bevy/pull/8931
