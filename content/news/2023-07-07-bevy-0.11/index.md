@@ -3,6 +3,8 @@ title = "Bevy 0.11"
 date = 2023-07-07
 [extra]
 author = "Bevy Contributors"
+image = "with_ssao.png"
+show_image = true
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.11** release on [crates.io](https://crates.io/crates/bevy)!
@@ -1262,7 +1264,16 @@ We've added a number of new CI jobs that improve the Bevy development experience
 
 ## <a name="what-s-next"></a>What's Next?
 
-* **X**: Y
+We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.12**:
+
+* **Bevy Asset V2**: A brand new asset system that adds "asset preprocessing", optional asset .meta files, recursive asset dependency tracking and events, async asset IO, better asset handles, more efficient asset storage, and a variety of usability improvements! The work here is [pretty much finished](https://github.com/bevyengine/bevy/pull/8624). It _almost_ made it in to Bevy 0.10 but it needed a bit more time to cook.
+* **PBR Material Light Transmission**: Transmission / screen space refractions allows for simulating materials like glass, plastics, liquids and gels, gemstones, wax, etc. This one is also pretty much [ready to go](https://github.com/bevyengine/bevy/pull/8015)!
+* **TAA Improvements**: We have a number of changes in the works for TAA that will improve its quality, speed, and support within the engine.
+* **GPU Picking**: Efficiently and correctly [select assets on the GPU](https://github.com/bevyengine/bevy/pull/8784) by using color ids to identify meshes in renders.
+* **PCF For Directional and Spotlight Shadows**: [Reduce aliasing on the edges of shadows](https://github.com/bevyengine/bevy/pull/8006)
+* **UI Node Border Radius and Shadows**: Add [curvature and "drop shadows"](https://github.com/bevyengine/bevy/pull/8973) to your UI nodes!
+
+From a high level, we plan to focus on the Asset System, UI, Render Features, and Scenes during the next cycle.
 
 Check out the [**Bevy 0.12 Milestone**](https://github.com/bevyengine/bevy/milestone/14) for an up-to-date list of current work being considered for **Bevy 0.12**.
 
