@@ -1,0 +1,46 @@
+div.image-compare {
+  display: block;
+  position: relative;
+  border-radius: 10px;
+  width: 100%;
+  aspect-ratio: 16 / 9; // fallback
+  background-color: black;
+  --slider-value: 50%;
+
+  & img {
+    width: 100%;
+  }
+
+  & .image-a {
+    position: absolute;
+    -webkit-clip-path: inset(0 calc(100% - var(--slider-value) + 1.5px) 0 0);
+    clip-path: inset(0 calc(100% - var(--slider-value) + 1.5px) 0 0);
+  }
+
+  & .image-b {
+    float: right;
+    -webkit-clip-path: inset(0 0 0 calc(var(--slider-value) + 1.5px));
+    clip-path: inset(0 0 0 calc(var(--slider-value) + 1.5px));
+  }
+
+  & input[type="range"] {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    width: inherit;
+    height: 100%;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+
+    &::-moz-range-thumb {
+      border: none;
+      background-color: transparent;
+    }
+    &::-webkit-slider-thumb {
+      width: 0; // no clue why this is required, but it is
+      -webkit-appearance: none;
+      appearance: none;
+    }
+  }
+}

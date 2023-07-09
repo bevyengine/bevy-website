@@ -56,4 +56,11 @@
   </div>
   {% endif %}
   <div class="media-content news-content">{{ page.content | safe }}</div>
+  <script type="module">
+    import { enable_image_compare } from '/components.js';
+
+    document.addEventListener("DOMContentLoaded", function() {
+      enable_image_compare();
+    });
+  </script>
 {% endblock content %}
