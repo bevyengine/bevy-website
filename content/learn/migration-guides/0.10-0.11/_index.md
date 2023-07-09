@@ -144,13 +144,26 @@ fn toggle_pause_music(
 
 - Register `Diagnostic`’s using the new `app.register_diagnostic(Diagnostic::new(DIAGNOSTIC_ID, "diagnostic_name", 10));`
 - In systems for writing new measurements, change `mut diagnostics: ResMut<Diagnostics>` to `mut diagnostics: Diagnostics` to allow the systems to run in parallel.
+
+```diff
+- fn system(mut diagnostics: ResMut<Diagnostics>) {}
++ fn system(mut diagnostics: Diagnostics) {}
+```
+
 - In systems for reading measurements, change `diagnostics: Res<Diagnostics>` to `diagnostics: Res<DiagnosticsStore>`.
+
+```diff
+- fn system(diagnostics: Res<Diagnostics>) {}
++ fn system(diagnostics: Res<DiagnosticsStore>) {}
+```
 
 ### [Log to stderr instead of stdout](https://github.com/bevyengine/bevy/pull/8886)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Diagnostics</div>
 </div>
+
+<!-- TODO this really isn't clear -->
 
 Capture logs from `stderr` instead of from `stdout`
 
@@ -410,7 +423,7 @@ The function `UnsafeWorldCell::increment_change_tick` is now strongly-typed, ret
 
 Use `State::get` instead of accessing the tuple field directly.
 
-### [Only trigger state transitons if `next_state != old_state`](https://github.com/bevyengine/bevy/pull/8359)
+### [Only trigger state transitions if `next_state != old_state`](https://github.com/bevyengine/bevy/pull/8359)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
@@ -697,7 +710,7 @@ Migrate by replacing:
 - `LWin` → `SuperLeft`
 - `RWin` → `SuperRight`
 
-### [Rename Interaction::Clicked -> Interaction::Pressed (#8989)](https://github.com/bevyengine/bevy/pull/9027)
+### [Rename Interaction::Clicked -> Interaction::Pressed](https://github.com/bevyengine/bevy/pull/9027)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Input</div>
