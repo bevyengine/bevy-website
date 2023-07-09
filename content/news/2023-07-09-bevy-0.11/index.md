@@ -1513,7 +1513,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [fix prepass normal_mapping][8978]
 * [conversions between [u8; 4] and Color][8564]
 * [Add option to disable gizmo rendering for specific cameras][8952]
-* [Fix morph target prepass shader][9013] 
+* [Fix morph target prepass shader][9013]
 * [Fix bloom wasm support][8631]
 * [Fix black spots appearing due to NANs when SSAO is enabled][8926]
 * [fix normal prepass][8890]
@@ -1555,7 +1555,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 ### Scenes
 
-* [bevy_scene: Add SceneFilter][6793] 
+* [bevy_scene: Add SceneFilter][6793]
 * [(De) serialize resources in scenes][6846]
 * [add position to scene errors][8065]
 * [Bugfix: Scene reload fix (nonbreaking)][7951]
