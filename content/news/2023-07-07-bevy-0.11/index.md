@@ -1266,7 +1266,7 @@ We've added a number of new CI jobs that improve the Bevy development experience
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.12**:
 
-* **Bevy Asset V2**: A brand new asset system that adds "asset preprocessing", optional asset .meta files, recursive asset dependency tracking and events, async asset IO, better asset handles, more efficient asset storage, and a variety of usability improvements! The work here is [pretty much finished](https://github.com/bevyengine/bevy/pull/8624). It _almost_ made it in to Bevy 0.10 but it needed a bit more time to cook.
+* **Bevy Asset V2**: A brand new asset system that adds "asset preprocessing", optional asset .meta files, recursive asset dependency tracking and events, async asset IO, better asset handles, more efficient asset storage, and a variety of usability improvements! The work here is [pretty much finished](https://github.com/bevyengine/bevy/pull/8624). It _almost_ made it in to Bevy 0.11 but it needed a bit more time to cook.
 * **PBR Material Light Transmission**: Transmission / screen space refractions allows for simulating materials like glass, plastics, liquids and gels, gemstones, wax, etc. This one is also pretty much [ready to go](https://github.com/bevyengine/bevy/pull/8015)!
 * **TAA Improvements**: We have a number of changes in the works for TAA that will improve its quality, speed, and support within the engine.
 * **GPU Picking**: Efficiently and correctly [select assets on the GPU](https://github.com/bevyengine/bevy/pull/8784) by using color ids to identify meshes in renders.
