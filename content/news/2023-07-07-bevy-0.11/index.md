@@ -913,6 +913,342 @@ Gizmos are drawn in batches, which means they are very cheap. You can have hundr
 
 [`Gizmos`]: https://docs.rs/bevy/0.11.0/bevy/gizmos/gizmos/struct.Gizmos.html
 
+## Global Audio Volume
+
+<div class="release-feature-authors">authors: @mrchantey</div>
+
+Bevy now has a global volume level which can be configured via the [`GlobalVolume`] resource:
+
+```rust
+app.insert_resource(GlobalVolume::new(0.2));
+```
+
+## Cubic Curve Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An example that shows how to draw a 3D curve and move an object along the path:
+
+![cubic_curve](cubic_curve.png)
+
+## Size Constraints Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An interactive example that shows how the various [`Style`] size constraints affect UI nodes.
+
+![size constraints](size_constraints.png)
+
+## Display and Visibility Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An example that shows how display and visibility settings affect UI nodes.
+
+![display and visibiltiy](display_and_visibility.png)
+
+## No More Bors!
+
+<div class="release-feature-authors">authors: @cart, @mockersf</div>
+
+Bevy has historically used the Bors merge system to ensure we never merge a pull request on GitHub that breaks our CI validation. This was a critical piece of infrastructure that ensured we could collaborate safely and effectively. Fortunately GitHub has _finally_ rolled out [Merge Queues](https://github.blog/changelog/2023-02-08-pull-request-merge-queue-public-beta/), which solve the same problems as Bors, with the benefit of being more tightly integrated with GitHub.
+
+For this release cycle we migrated to Merge Queues and we're very happy with the experience!
+
+## New CI Jobs
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+We've added a number of new CI jobs that improve the Bevy development experience:
+
+* A daily job that runs Bevy's mobile examples on real Android and iOS devices! This helps protect against regressions that might not be caught by the compiler
+* Added the ability to take screenshots in CI, which can be used to validate the results of Bevy example runs
+* A job that leaves a GitHub comment on PRs that are missing a feature or example doc update
+
+## Improved Text Wrapping
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+Previous versions of Bevy didn't properly wrap text because it calculated the actual text prior to calculating layout. **Bevy 0.11** adds a "text measurement step" that calculates the text size prior to layout, then computes the actual text _after_ layout.
+
+![text wrap](text_wrap.png)
+
+There is also a new `NoWrap` variant on the [`BreakLineOn`] setting, which can disable text wrapping entirely when that is desirable.
+
+[`BreakLineOn`]: https://docs.rs/bevy/0.11.0/bevy/text/enum.BreakLineOn.html
+
+## Faster UI Render Batching
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+We got a huge UI performance win for some cases by avoiding breaking up UI batches when the texture changes but the next node is untextured.
+
+Here is a profile of our "many buttons" stress test. Red is before the optimization and Yellow is after:
+
+![ui profile](ui_profile.png)
+
+## Delayed Asset Hot Reloading
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Bevy now waits 50 milliseconds after an "asset changed on filesystem" event before reloading an asset. Reloading without a delay resulted in reading invalid asset contents on some systems. The wait time is configurable.
+
+## Custom glTF Vertex Attributes
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+It is now possible to load meshes with custom vertex attributes from glTF files. Custom attributes can be mapped to Bevy's [`MeshVertexAttribute`] format used by the [`Mesh`] type in the [`GltfPlugin`] settings. These attrtibutes can then be used in Bevy shaders. For an example, check out our [new example](https://github.com/bevyengine/bevy/blob/v0.11.0/examples/2d/custom_gltf_vertex_attribute.rs).
+
+![custom vertex attribute](custom_vertex.png)
+
+[`MeshVertexAttribute`]: https://docs.rs/bevy/0.11.0/bevy/render/mesh/struct.MeshVertexAttribute.html
+[`Mesh`]: https://docs.rs/bevy/0.11.0/bevy/render/mesh/struct.Mesh.html
+[`GltfPlugin`]: https://docs.rs/bevy/0.11.0/bevy/gltf/struct.GltfPlugin.html
+
+## Stable TypePath
+
+<div class="release-feature-authors">authors: @soqb, @tguichaoua</div>
+
+Bevy has historically used [`std::any::type_name`][`type_name`] to identify Rust types with friendly names in a number of places: Bevy Reflect, Bevy Scenes, Bevy Assets, Bevy ECS, and others. Unfortunately, Rust makes no guarantees about the stability or format of [`type_name`], which makes it theoretically shakey ground to build on (although in practice it has been stable so far).
+
+There is also no built in way to retrieve "parts" of a type name. If you want the short name, the name of a generic type without its inner types, the module name, or the crate name, you must do string operations on the [`type_name`] (which can be error prone / nontrivial).
+
+Additionally, [`type_name`] cannot be customized. In some cases an author might choose to identify a type with something other than its full module path (ex: if they prefer a shorter path or want to abstract out private / internal modules).
+
+For these reasons, we've developed a new stable [`TypePath`], which is automatically implemented for any type deriving [`Reflect`]. Additionally, it can be manually derived in cases where [`Reflect`] isn't derived.
+
+```rust
+mod my_mod {
+    #[derive(Reflect)]
+    struct MyType;
+}
+
+/// prints: "my_crate::my_mod::MyType"
+println!("{}", MyType::type_path());
+/// prints: "MyType"
+println!("{}", MyType::short_type_path());
+/// prints: "my_crate"
+println!("{}", MyType::crate_name().unwrap());
+/// prints: "my_crate::my_mod"
+println!("{}", MyType::module_path().unwrap());
+```
+
+This also works for generics, which can come in handy:
+
+```rust
+// prints: "Option<MyType>"
+println!("{}", Option::<MyType>::short_type_path());
+// prints: "Option"
+println!("{}", Option::<MyType>::type_ident().unwrap());
+```
+
+[`TypePath`] can be customized by type authors:
+
+```rust
+#[derive(TypePath)]
+#[type_path = "some_crate::some_module"]
+struct MyType;
+```
+
+We are in the process of porting Bevy's internal [`type_name`] usage over to [`TypePath`], which should land in **Bevy 0.12**.  
+
+[`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
+[`TypePath`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.TypePath.html
+[`Reflect`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html
+
+## UI Node Borders
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+UI nodes now draws borders, whose color can be configured with the new [`BorderColor`] component:
+
+![borders](borders.png)
+
+```rust
+commands.spawn(ButtonBundle {
+    style: Style {
+        border: UiRect::all(Val::Px(5.0)),
+        ..default()
+    },
+    border_color: BorderColor(Color::rgb(0.9, 0.9, 0.9)),
+    ..default()
+})
+```
+
+Each side of the border is configurable:
+
+![border sides](border-sides.png)
+
+## Grid UI Layout
+
+<div class="release-feature-authors">authors: @nicoburns</div>
+
+We wired up the new `grid` feature in the layout library we use ([Taffy](https://github.com/DioxusLabs/taffy)) to Bevy UI. This enables CSS-style grid layouts:
+
+![grid](grid.png)
+
+This can be configured on the [`Style`] component:
+
+```rust
+Style {
+    /// Use grid layout for this node
+    display: Display::Grid,
+    /// Make the grid have a 1:1 aspect ratio
+    /// This means the width will adjust to match the height
+    aspect_ratio: Some(1.0),
+    // Add 24px of padding around the grid
+    padding: UiRect::all(Val::Px(24.0)),
+    /// Set the grid to have 4 columns all with sizes minmax(0, 1fr)
+    /// This creates 4 exactly evenly sized columns
+    grid_template_columns: RepeatedGridTrack::flex(4, 1.0),
+    /// Set the grid to have 4 rows all with sizes minmax(0, 1fr)
+    /// This creates 4 exactly evenly sized rows
+    grid_template_rows: RepeatedGridTrack::flex(4, 1.0),
+    /// Set a 12px gap/gutter between rows and columns
+    row_gap: Val::Px(12.0),
+    column_gap: Val::Px(12.0),
+    ..default()
+},
+```
+
+[`Style`]: https://docs.rs/bevy/0.11.0/bevy/ui/struct.Style.html
+
+## Default Font
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy now supports a configurable default font and embeds a tiny default font (a minimal version of [Fira Mono](https://fonts.google.com/specimen/Fira+Mono)). This is useful if you use a common font throughout your project. And it makes it easier to prototype new changes with a "placeholder font" without worrying about setting it on each node.
+
+![default font](default_font.png)
+
+## `run_if` for Tuples of Systems
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+It is now possible to add ["run conditions"](/news/bevy-0-10/#run-conditions) to tuples of systems:
+
+```rust
+app.add_systems(Update, (run, jump).run_if(in_state(GameState::Playing)))
+```
+
+This will evaluate the "run condition" exactly once and use the result for each system in the tuple.
+
+This allowed us to remove the `OnUpdate` system set for states (which was previously used to run groups of systems when they are in a given state).
+
+## `Has` Queries
+
+<div class="release-feature-authors">authors: @wainwrightmark</div>
+
+You can now use `Has<Component>` in queries, which will return true if that component exists and false if it does not:
+
+```rust
+fn system(query: Query<Has<Player>>) {
+    for has_player in &query {
+        if has_player {
+            // do something
+        }
+    }
+} 
+```
+
+## Robust Contrast Adaptive Sharpening
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
+
+![taa rcas](taa_rcas.png)
+
+Notice that the texture on the leather part of the helmet is much crisper!
+
+## ECS Audio APIs
+
+<div class="release-feature-authors">authors: @inodentry</div>
+
+Bevy's audio playback APIs have been reworked to integrate more cleanly with Bevy's ECS.
+
+In previous versions of Bevy you would play back audio like this:
+
+```rust
+#[derive(Resource)]
+struct MyMusic {
+    sink: Handle<AudioSink>,
+}
+
+fn play_music(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    audio_sinks: Res<Assets<AudioSink>>
+) {
+    let weak_handle = audio.play(asset_server.load("my_music.ogg"));
+    let strong_handle = audio_sinks.get_handle(weak_handle);
+    commands.insert_resource(MyMusic {
+        sink: strong_handle,
+    });
+}
+```
+
+That is a lot of boilerplate just to play a sound! Then to adjust playback you would access the [`AudioSink`] like this:
+
+```rust
+
+fn pause_music(mymusic: Res<MyMusic>, audio_sinks: Res<Assets<AudioSink>>) {
+    if let Some(sink) = audio_sinks.get(&mymusic.sink) {
+        sink.pause();
+    }
+}
+```
+
+Treating audio playback as a resource created a number of problems and notably didn't play well with things like Bevy Scenes. In **Bevy 0.11**, audio playback is represented as an [`Entity`] with [`AudioBundle`] components:
+
+```rust
+#[derive(Component)]
+struct MyMusic;
+
+fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((
+        AudioBundle {
+            source: asset_server.load("my_music.ogg"),
+            ..default()
+        },
+        MyMusic,
+    ));
+}
+```
+
+Much simpler! To adjust playback you can query for the [`AudioSink`] component:
+
+```rust
+fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
+    if let Ok(sink) = query.get_single() {
+        sink.pause();
+    }
+}
+```
+
+[`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
+[`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
+[`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
+
+## Derive `Event`
+
+<div class="release-feature-authors">authors: @CatThingy</div>
+
+The Bevy [`Event`] trait is now derived instead of being auto-impled for everything:
+
+```rust
+#[derive(Event)]
+struct Collision {
+    a: Entity,
+    b: Entity,
+}
+```
+
+This prevents some classes of error, makes [`Event`] types more self-documenting, and provides consistency with other Bevy ECS traits like Components and Resources. It also opens the doors to configuring the [`Event`] storage type, which we plan to do in future releases.
+
+[`Event`]: https://docs.rs/bevy/0.11.0/bevy/ecs/event/trait.Event.html
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
