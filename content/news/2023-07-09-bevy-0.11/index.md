@@ -224,7 +224,7 @@ initial implementation.
 Bevy now supports parallax mapping and depth maps. Parallax mapping puts normal
 maps to shame when it comes to giving "illusion of depth" to a material. The top half of this video uses parallax mapping plus a normal map, whereas the bottom half only uses a normal map:
 
-<video controls loop><source alt="a rotating view of the earth, the top half of the screen uses parallax mapping, while the bottom half does not" src="earth-parallax.webm" type="video/webm"/></video>
+<video controls loop><source alt="a rotating view of the earth, the top half of the screen uses parallax mapping, while the bottom half does not" src="earth-parallax.mp4" type="video/mp4"/></video>
 <div style="font-size: 1.0rem" class="release-feature-authors">earth view, elevation & night view by NASA (public domain)</div>
 
 Notice how it is not merely the shading of pixels that changes, but their
