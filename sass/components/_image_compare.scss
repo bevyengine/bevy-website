@@ -1,6 +1,6 @@
 div.image-compare {
-  display: flex;
-  align-items: center;
+  // display: flex;
+  // align-items: center;
   position: relative;
   border-radius: 10px;
   width: 100%;
@@ -12,15 +12,21 @@ div.image-compare {
   &::after {
     position: absolute;
     font-weight: bolder;
-    font-size: 175%;
-    writing-mode: vertical-rl;
+    font-size: 1.8rem;
+    width: 100%;
   }
   &::before {
     content: attr(data-title-a);
     z-index: 1;
+    -webkit-clip-path: inset(0 calc(100% - var(--slider-value) + 1.5px) 0 0);
+    clip-path: inset(0 calc(100% - var(--slider-value) + 1.5px) 0 0);
+    width: 100%;
   }
   &::after {
     content: attr(data-title-b);
+    text-align: end;
+    -webkit-clip-path: inset(0 0 0 calc(var(--slider-value) + 1.5px));
+    clip-path: inset(0 0 0 calc(var(--slider-value) + 1.5px));
     width: 100%;
   }
 
