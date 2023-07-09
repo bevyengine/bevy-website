@@ -35,6 +35,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @JMS55, @danchia, @superdump </div>
 
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Without SSAO" data-title-b="With SSAO">
   <img class="image-a" alt="Without SSAO" src="no_ssao.png">
   <img class="image-b" alt="With SSAO" src="with_ssao.png">
@@ -94,7 +95,11 @@ You can compare all of our anti-aliasing methods in Bevy's improved [anti-aliasi
 
 Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
 
-![taa rcas](taa_rcas.png)
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="TAA" data-title-b="TAA+RCAS">
+  <img class="image-a" alt="TAA" src="rcas_off.png">
+  <img class="image-b" alt="TAA+RCAS" src="rcas_on.png">
+</div>
 
 Notice that the texture on the leather part of the helmet is much crisper!
 
@@ -285,7 +290,8 @@ Since normal maps do not "move" the shaded areas, merely shade them
 differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Normal Mapping Only" data-title-b="Parallax & Normal Mapping">
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Normals Only" data-title-b="Parallax+Normals">
   <img class="image-a" alt="Normal Mapping Only" src="parallax_mapping_normals.jpg">
   <img class="image-b" alt="Parallax & Normal Mapping" src="parallax_mapping_depth.jpg">
 </div>
@@ -794,6 +800,7 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 <div class="image-compare" style="aspect-ratio: 595 / 311" data-title-a="Reinhard-luminance" data-title-b="TonyMcMapface">
   <img class="image-a" alt="Reinhard-luminance" src="tm_reinhard_luminance.png">
   <img class="image-b" alt="TonyMcMapface" src="tm_tonymcmapface.png">
