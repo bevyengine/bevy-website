@@ -1122,7 +1122,7 @@ Bevy now waits 50 milliseconds after an "asset changed on filesystem" event befo
 
 ## Custom glTF Vertex Attributes
 
-<div class="release-feature-authors">authors: @JMS55</div>
+<div class="release-feature-authors">authors: @komadori</div>
 
 It is now possible to load meshes with custom vertex attributes from glTF files. Custom attributes can be mapped to Bevy's [`MeshVertexAttribute`] format used by the [`Mesh`] type in the [`GltfPlugin`] settings. These attrtibutes can then be used in Bevy shaders. For an example, check out our [new example](https://github.com/bevyengine/bevy/blob/v0.11.0/examples/2d/custom_gltf_vertex_attribute.rs).
 
