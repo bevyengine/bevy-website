@@ -1271,6 +1271,7 @@ We have plenty of work that is pretty much finished and is therefore very likely
 * **GPU Picking**: Efficiently and correctly [select assets on the GPU](https://github.com/bevyengine/bevy/pull/8784) by using color ids to identify meshes in renders.
 * **PCF For Directional and Spotlight Shadows**: [Reduce aliasing on the edges of shadows](https://github.com/bevyengine/bevy/pull/8006)
 * **UI Node Border Radius and Shadows**: Add [curvature and "drop shadows"](https://github.com/bevyengine/bevy/pull/8973) to your UI nodes!
+* **Deferred Rendering**: Bevy already does "mixed mode" forward rendering by having optional separate passes for depth and normals. We are currently experimenting with supporting "fully deferred" rendering as well, which opens the doors to new effects and different performance tradeoffs.
 
 From a high level, we plan to focus on the Asset System, UI, Render Features, and Scenes during the next cycle.
 
