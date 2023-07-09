@@ -880,6 +880,97 @@ In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
+## Improved Text Wrapping
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+Previous versions of Bevy didn't properly wrap text because it calculated the actual text prior to calculating layout. **Bevy 0.11** adds a "text measurement step" that calculates the text size prior to layout, then computes the actual text _after_ layout.
+
+![text wrap](text_wrap.png)
+
+There is also a new `NoWrap` variant on the [`BreakLineOn`] setting, which can disable text wrapping entirely when that is desirable.
+
+[`BreakLineOn`]: https://docs.rs/bevy/0.11.0/bevy/text/enum.BreakLineOn.html
+
+## Faster UI Render Batching
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+We got a huge UI performance win for some cases by avoiding breaking up UI batches when the texture changes but the next node is untextured.
+
+Here is a profile of our "many buttons" stress test. Red is before the optimization and Yellow is after:
+
+![ui profile](ui_profile.png)
+
+## Delayed Asset Hot Reloading
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Bevy now waits 50 milliseconds after an "asset changed on filesystem" event before reloading an asset. Reloading without a delay resulted in reading invalid asset contents on some systems. The wait time is configurable.
+
+## Custom glTF Vertex Attributes
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+It is now possible to load meshes with custom vertex attributes from glTF files. Custom attributes can be mapped to Bevy's [`MeshVertexAttribute`] format used by the [`Mesh`] type in the [`GltfPlugin`] settings. These attrtibutes can then be used in Bevy shaders. For an example, check out our [new example](https://github.com/bevyengine/bevy/blob/v0.11.0/examples/2d/custom_gltf_vertex_attribute.rs).
+
+![custom vertex attribute](custom_vertex.png)
+
+[`MeshVertexAttribute`]: https://docs.rs/bevy/0.11.0/bevy/render/mesh/struct.MeshVertexAttribute.html
+[`Mesh`]: https://docs.rs/bevy/0.11.0/bevy/render/mesh/struct.Mesh.html
+[`GltfPlugin`]: https://docs.rs/bevy/0.11.0/bevy/gltf/struct.GltfPlugin.html
+
+## Stable TypePath
+
+<div class="release-feature-authors">authors: @soqb, @tguichaoua</div>
+
+Bevy has historically used [`std::any::type_name`][`type_name`] to identify Rust types with friendly names in a number of places: Bevy Reflect, Bevy Scenes, Bevy Assets, Bevy ECS, and others. Unfortunately, Rust makes no guarantees about the stability or format of [`type_name`], which makes it theoretically shakey ground to build on (although in practice it has been stable so far).
+
+There is also no built in way to retrieve "parts" of a type name. If you want the short name, the name of a generic type without its inner types, the module name, or the crate name, you must do string operations on the [`type_name`] (which can be error prone / nontrivial).
+
+Additionally, [`type_name`] cannot be customized. In some cases an author might choose to identify a type with something other than its full module path (ex: if they prefer a shorter path or want to abstract out private / internal modules).
+
+For these reasons, we've developed a new stable [`TypePath`], which is automatically implemented for any type deriving [`Reflect`]. Additionally, it can be manually derived in cases where [`Reflect`] isn't derived.
+
+```rust
+mod my_mod {
+    #[derive(Reflect)]
+    struct MyType;
+}
+
+/// prints: "my_crate::my_mod::MyType"
+println!("{}", MyType::type_path());
+/// prints: "MyType"
+println!("{}", MyType::short_type_path());
+/// prints: "my_crate"
+println!("{}", MyType::crate_name().unwrap());
+/// prints: "my_crate::my_mod"
+println!("{}", MyType::module_path().unwrap());
+```
+
+This also works for generics, which can come in handy:
+
+```rust
+// prints: "Option<MyType>"
+println!("{}", Option::<MyType>::short_type_path());
+// prints: "Option"
+println!("{}", Option::<MyType>::type_ident().unwrap());
+```
+
+[`TypePath`] can be customized by type authors:
+
+```rust
+#[derive(TypePath)]
+#[type_path = "some_crate::some_module"]
+struct MyType;
+```
+
+We are in the process of porting Bevy's internal [`type_name`] usage over to [`TypePath`], which should land in **Bevy 0.12**.  
+
+[`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
+[`TypePath`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.TypePath.html
+[`Reflect`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html
+
 ## <a name="what-s-next"></a>What's Next?
 
 * **X**: Y
