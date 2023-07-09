@@ -17,7 +17,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Screen Space Ambient Occlusion (SSAO)**: Increase scene render quality by simulating "indirect" diffuse light
+* **Screen Space Ambient Occlusion (SSAO)**: Increase scene render quality by simulating occlusion of "indirect" diffuse light
 * **Temporal Anti-Aliasing (TAA)**: A popular anti-aliasing technique that blends the current frame with past frames using motion vectors to smooth out artifacts
 * **Morph Targets**: Animate vertex positions on meshes between predefined states. Great for things like character customization!
 * **Robust Constrast Adaptive Sharpening (RCAS)**: Intelligently sharpens renders, which pairs nicely with TAA
