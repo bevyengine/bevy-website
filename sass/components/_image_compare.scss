@@ -1,5 +1,6 @@
 div.image-compare {
-  display: block;
+  display: flex;
+  align-items: center;
   position: relative;
   border-radius: 10px;
   width: 100%;
@@ -7,16 +8,30 @@ div.image-compare {
   background-color: black;
   --slider-value: 50%;
 
-  & img {
+  &::before,
+  &::after {
+    position: absolute;
+    font-weight: bolder;
+    font-size: 175%;
+    writing-mode: vertical-rl;
+  }
+  &::before {
+    content: attr(data-title-a);
+    z-index: 1;
+  }
+  &::after {
+    content: attr(data-title-b);
     width: 100%;
   }
 
+  & img {
+    width: 100%;
+  }
   & .image-a {
     position: absolute;
     -webkit-clip-path: inset(0 calc(100% - var(--slider-value) + 1.5px) 0 0);
     clip-path: inset(0 calc(100% - var(--slider-value) + 1.5px) 0 0);
   }
-
   & .image-b {
     float: right;
     -webkit-clip-path: inset(0 0 0 calc(var(--slider-value) + 1.5px));
@@ -32,6 +47,7 @@ div.image-compare {
     background-color: transparent;
     -webkit-appearance: none;
     appearance: none;
+    z-index: 2;
 
     &::-moz-range-thumb {
       border: none;

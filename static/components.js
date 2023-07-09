@@ -9,9 +9,10 @@ function clamp(val, min, max) {
 // Usage in a document should look like:
 // ```html
 // <main>
-//   <div class="image-compare" style="aspect-ratio: 16 / 9">
-//     <img class="image-a" src="$url" />
-//     <img class="image-b" src="$url" />
+//   <div class="image-compare" style="aspect-ratio: 16 / 9"
+//   data-title-a="Apples" data-title-b="Oranges">
+//     <img class="image-a" alt="Apples" src="apples.png" />
+//     <img class="image-b" alt="Oranges" src="oranges.png" />
 //   </div>
 // </main>
 // ```
