@@ -880,6 +880,58 @@ In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
+## Global Audio Volume
+
+<div class="release-feature-authors">authors: @mrchantey</div>
+
+Bevy now has a global volume level which can be configured via the [`GlobalVolume`] resource:
+
+```rust
+app.insert_resource(GlobalVolume::new(0.2));
+```
+
+## Cubic Curve Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An example that shows how to draw a 3D curve and move an object along the path:
+
+![cubic_curve](cubic_curve.png)
+
+## Size Constraints Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An interactive example that shows how the various [`Style`] size constraints affect UI nodes.
+
+![size constraints](size_constraints.png)
+
+## Display and Visibility Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An example that shows how display and visibility settings affect UI nodes.
+
+![display and visibiltiy](display_and_visibility.png)
+
+## No More Bors!
+
+<div class="release-feature-authors">authors: @cart, @mockersf</div>
+
+Bevy has historically used the Bors merge system to ensure we never merge a pull request on GitHub that breaks our CI validation. This was a critical piece of infrastructure that ensured we could collaborate safely and effectively. Fortunately GitHub has _finally_ rolled out [Merge Queues](https://github.blog/changelog/2023-02-08-pull-request-merge-queue-public-beta/), which solve the same problems as Bors, with the benefit of being more tightly integrated with GitHub.
+
+For this release cycle we migrated to Merge Queues and we're very happy with the experience!
+
+## New CI Jobs
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+We've added a number of new CI jobs that improve the Bevy development experience:
+
+* A daily job that runs Bevy's mobile examples on real Android and iOS devices! This helps protect against regressions that might not be caught by the compiler
+* Added the ability to take screenshots in CI, which can be used to validate the results of Bevy example runs
+* A job that leaves a GitHub comment on PRs that are missing a feature or example doc update
+
 ## Improved Text Wrapping
 
 <div class="release-feature-authors">authors: @ickshonpe</div>
