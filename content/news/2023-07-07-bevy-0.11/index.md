@@ -51,7 +51,7 @@ These shadows give scenes a more "grounded" feel, by estimating how much surroun
 
 Note that using SSAO with the newly added Temporal Anti-Aliasing leads to a _large_ increase in quality and noise reduction.
 
-Platform support is currently limited - Only Vulkan and Metal are currently supported. DirectX12 will be supported via an upcoming patch release of `wgpu`, and WebGPU support will come at a later date.
+Platform support is currently limited - Only Vulkan, DirectX12, and Metal are currently supported. WebGPU support will come at a later date. WebGL likely won't be supported because it doesn't have compute shaders.
 
 [`DirectionalLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.DirectionalLight.html
 [`PointLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.PointLight.html
@@ -201,8 +201,7 @@ While conceptually simple, it requires communicating to the GPU a tremendous
 amount of data. Thousand of vertices, each 288 bits, several model variations,
 sometimes a hundred.
 
-Bevy's morph target implementation is similar to BabyloneJS's. We store the
-vertex data as pixels in a 3D texture. This allows morph targets to not only
+We store the vertex data as pixels in a 3D texture. This allows morph targets to not only
 run on WebGPU, but also on the WebGL2 wgpu backend.
 
 This could be improved in a number of ways, but it is sufficient for an
