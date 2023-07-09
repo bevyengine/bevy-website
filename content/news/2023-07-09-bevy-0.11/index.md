@@ -794,9 +794,11 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
-![reinhard luminance](tm_reinhard_luminance.png)
-
-![tonymcmapface](./tm_tonymcmapface.png)
+**Reinhard-luminance vs Tonymcmapface**
+<div class="image-compare" style="aspect-ratio: 595 / 311">
+  <img class="image-a" alt="reinhard luminance" src="tm_reinhard_luminance.png">
+  <img class="image-b" alt="tonymcmapface" src="tm_tonymcmapface.png">
+</div>
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
