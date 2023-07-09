@@ -727,6 +727,60 @@ use bevy::ecs::reflect::AppTypeRegistry
 
 In `bevy_ecs`, `ReflectMapEntities::map_entites` now requires an additional `entities` parameter to specify which entities it applies to. To keep the old behavior, use the new `ReflectMapEntities::map_all_entities`, but consider if passing the entities in specifically might be better for your use case to avoid bugs.
 
+### [Require `#[derive(Event)]` on all Events](https://github.com/bevyengine/bevy/pull/7086)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+Add the `#[derive(Event)]` macro for events. Third-party types used as events should be wrapped in a newtype.
+
+### [Fix boxed labels](https://github.com/bevyengine/bevy/pull/8436)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The `ScheduleLabel` trait has been refactored to no longer depend on the traits `std::any::Any`, `bevy_utils::DynEq`, and `bevy_utils::DynHash`.
+Any manual implementations will need to implement new trait methods instead.
+
+```rust
+impl ScheduleLabel for MyType {
+    // 0.10
+    fn dyn_clone(&self) -> Box<dyn ScheduleLabel> { ... }
+
+    // 0.11
+    fn dyn_clone(&self) -> Box<dyn ScheduleLabel> { ... }
+
+    fn as_dyn_eq(&self) -> &dyn DynEq {
+        self
+    }
+
+    // No, `mut state: &mut` is not a typo.
+    fn dyn_hash(&self, mut state: &mut dyn Hasher) {
+        self.hash(&mut state);
+        // Hashing the TypeId isn't strictly necessary, but it prevents collisions.
+        TypeId::of::<Self>().hash(&mut state);
+    }
+}
+```
+
+### [Remove `OnUpdate` system set](https://github.com/bevyengine/bevy/pull/8260)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+Replace `OnUpdate` with `run_if(in_state(xxx))`.
+
+### [Document query errors](https://github.com/bevyengine/bevy/pull/8692)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+`QueryEntityError::QueryDoesNotMatch`'s display message changed from "The given entity does not have the requested component." to "The given entity's components do not match the query.".
+
 ### [Rename keys like `LAlt` to `AltLeft`](https://github.com/bevyengine/bevy/pull/8792)
 
 <div class="migration-guide-area-tags">
@@ -796,6 +850,65 @@ impl FromReflect for Foo {/* ... */}
 struct Foo;
 
 impl FromReflect for Foo {/* ... */}
+```
+
+### [bevy_reflect: stable type path v2](https://github.com/bevyengine/bevy/pull/7184)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Reflection</div>
+</div>
+
+- Implementors of `Asset`, `Material` and `Material2d` now also need to derive `TypePath`.
+- Manual implementors of `Reflect` will need to implement the new `get_type_path` method.
+
+### [Add `get_at_mut` to `bevy_reflect::Map` trait](https://github.com/bevyengine/bevy/pull/8691)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Reflection</div>
+</div>
+
+Implementor of the `Map` trait now need to implement `get_at_mut`.
+
+### [bevy_reflect: Better proxies](https://github.com/bevyengine/bevy/pull/6971)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Reflection</div>
+</div>
+
+- The Dynamic types no longer take a string type name. Instead, they require a static reference to `TypeInfo`:
+```rust
+#[derive(Reflect)]
+struct MyTupleStruct(f32, f32);
+
+let mut dyn_tuple_struct = DynamicTupleStruct::default();
+dyn_tuple_struct.insert(1.23_f32);
+dyn_tuple_struct.insert(3.21_f32);
+
+// 0.10
+let type_name = std::any::type_name::<MyTupleStruct>();
+dyn_tuple_struct.set_name(type_name);
+
+// 0.11
+let type_info = <MyTupleStruct as Typed>::type_info();
+dyn_tuple_struct.set_represented_type(Some(type_info));
+```
+- `Reflect::get_type_info` has been renamed to `Reflect::represented_type_info` and now also returns an `Option<&'static TypeInfo>` (instead of just `&'static TypeInfo`):
+```rust
+// 0.10
+let info: &'static TypeInfo = value.get_type_info();
+// 0.11
+let info: &'static TypeInfo = value.represented_type_info().unwrap();
+```
+- `TypeInfo::Dynamic` and `DynamicInfo` has been removed. Use `Reflect::is_dynamic instead`:
+```rust
+// 0.10
+if matches!(value.get_type_info(), TypeInfo::Dynamic) {
+  // ...
+}
+// 0.11
+if value.is_dynamic() {
+  // ...
+}
 ```
 
 ### [Construct `Box<dyn Reflect>` from world for `ReflectComponent`](https://github.com/bevyengine/bevy/pull/7407)
@@ -1015,6 +1128,105 @@ Note that this might shift the position of the UI node as it is now anchored at 
 
 If you were passing `Window::cursor_position` to `viewport_to_world` or `viewport_to_world_2d` no change is necessary.
 
+### [Webgpu support](https://github.com/bevyengine/bevy/pull/8336)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">App</div>
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- `Plugin::setup` has been renamed `Plugin::cleanup`
+- `Plugin::finish` has been added, and plugins adding pipelines should do it in this function instead of `Plugin::build`
+
+```rust
+// 0.10
+impl Plugin for MyPlugin {
+    fn build(&self, app: &mut App) {
+        app.insert_resource::<MyResource>
+            .add_systems(Update, my_system);
+
+        let render_app = match app.get_sub_app_mut(RenderApp) {
+            Ok(render_app) => render_app,
+            Err(_) => return,
+        };
+
+        render_app
+            .init_resource::<RenderResourceNeedingDevice>()
+            .init_resource::<OtherRenderResource>();
+    }
+}
+
+// 0.11
+impl Plugin for MyPlugin {
+    fn build(&self, app: &mut App) {
+        app.insert_resource::<MyResource>
+            .add_systems(Update, my_system);
+    
+        let render_app = match app.get_sub_app_mut(RenderApp) {
+            Ok(render_app) => render_app,
+            Err(_) => return,
+        };
+    
+        render_app
+            .init_resource::<OtherRenderResource>();
+    }
+
+    fn finish(&self, app: &mut App) {
+        let render_app = match app.get_sub_app_mut(RenderApp) {
+            Ok(render_app) => render_app,
+            Err(_) => return,
+        };
+    
+        render_app
+            .init_resource::<RenderResourceNeedingDevice>();
+    }
+}
+```
+
+### [Take example screenshots in CI](https://github.com/bevyengine/bevy/pull/8488)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+`TimeUpdateStrategy::ManualDuration`'s meaning has changed. Instead of setting time to `Instant::now()` plus the given duration, it sets time to last update plus the given duration.
+
+### [Compute `vertex_count` for indexed meshes on `GpuMesh`](https://github.com/bevyengine/bevy/pull/8460)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+`vertex_count` is now stored directly on `GpuMesh` instead of `GpuBufferInfo::NonIndexed`.
+
+### [Built-in skybox](https://github.com/bevyengine/bevy/pull/8275)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Flip `EnvironmentMapLight` maps if needed to match how they previously rendered (which was backwards).
+
+### [Left-handed y-up cubemap coordinates](https://github.com/bevyengine/bevy/pull/8122)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+When sampling from the point light shadow cubemap, use the (expected) light to fragment direction vector but negate the z coordinate. Previously, you would have used the fragment to light direction vector.
+
+### [Add morph targets](https://github.com/bevyengine/bevy/pull/8158)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Animation</div>
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- `MeshPipeline` now has a single `mesh_layouts` field rather than separate `mesh_layout` and `skinned_mesh_layout` fields. You should handle all possible mesh bind group layouts in your implementation
+- You should also handle properly the new `MORPH_TARGETS` shader def and mesh pipeline key. A new function is exposed to make this easier: `setup_moprh_and_skinning_defs`
+- The `MeshBindGroup` is now `MeshBindGroups`, cached bind groups are now accessed through the `get` method.
+
+
 ### [bevy_scene: Add `SceneFilter`](https://github.com/bevyengine/bevy/pull/6793)
 
 <div class="migration-guide-area-tags">
@@ -1044,6 +1256,14 @@ let builder = DynamicSceneBuilder::from_world_with_type_registry(&world, registr
 // 0.11
 let builder = DynamicSceneBuilder::from_world(&world);
 ```
+
+### [(De) serialize resources in scenes](https://github.com/bevyengine/bevy/pull/6846)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Scenes</div>
+</div>
+
+The scene format has been changed, the user may not be able to use scenes saved prior to this version due to the resources scene field being missing.
 
 ### [Fix look_to variable naming](https://github.com/bevyengine/bevy/pull/8627)
 
@@ -1114,6 +1334,43 @@ Physical UI coordinates are now divided by both the `UiScale` and the window’s
 
 This ensures that UI Node size and position values, held by the `Node` and `GlobalTransform` components, conform to the same logical coordinate system as the style constraints from which they are derived, irrespective of the current `scale_factor` and `UiScale`.
 
+### [`NoWrap` `Text` feature](https://github.com/bevyengine/bevy/pull/8947)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+`bevy_text::text::BreakLineOn` has a new variant `NoWrap` that disables text wrapping for the `Text`.
+Text wrapping can also be disabled using the `with_no_wrap` method of `TextBundle`.
+
+### [Replace the local text queues in the text systems with flags stored in a component](https://github.com/bevyengine/bevy/pull/8549)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+`TextBundle` has a new field `text_flag` of type `TextFlags`.
+
+### [Split UI `Overflow` by axis](https://github.com/bevyengine/bevy/pull/8095)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+The `Style` property `Overflow` is now a struct with `x` and `y` fields, that allow for per-axis overflow control.
+
+Use these helper functions to replace the variants of `Overflow`:
+- Replace `Overflow::Visible` with `Overflow::visible()`
+- Replace `Overflow::Hidden` with `Overflow::clip()`
+
+### [`text_system` split](https://github.com/bevyengine/bevy/pull/7779)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+`ImageBundle` has a new field `image_size` of type `UiImageSize` which contains the size of the image bundle's texture and is updated automatically by `update_image_calculated_size_system`.
+
 ### [Update ahash and hashbrown](https://github.com/bevyengine/bevy/pull/8623)
 
 <div class="migration-guide-area-tags">
@@ -1122,7 +1379,7 @@ This ensures that UI Node size and position values, held by the `Node` and `Glob
 
 If you were using hashes to an asset or using one of the fixed hasher exposed by Bevy with a previous version, you will have to update the hashes
 
-### [Move bevy_ui accessibility systems to `PostUpdate`.](https://github.com/bevyengine/bevy/pull/8653)
+### [Move bevy_ui accessibility systems to `PostUpdate`](https://github.com/bevyengine/bevy/pull/8653)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">No area label</div>
