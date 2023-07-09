@@ -15,26 +15,19 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **Morph targets**: Vertex-based animations
-* **Parallax mapping**: Materials now support an optional depth map, giving
-  flat surfaces a feel of depth through parallaxing the material's textures.
-* **Gamepad Rumble API**: an ECS-friendly way of making controllers rumble
-
-## Skybox
-
-<div class="release-feature-authors">authors: @JMS55, @superdump</div>
-
-![skybox](skybox.png)
-
-Bevy now has built-in support for displaying an HDRI environment as your scene background.
-
-Simply attach the new [`Skybox`] component to your [`Camera`]. It pairs well with the existing [`EnvironmentMapLight`].
-
-We also plan to have support for built-in procedural skyboxes sometime in the future!
-
-[`Skybox`]: https://docs.rs/bevy/0.11.0/bevy/core_pipeline/struct.Skybox.html
-[`Camera`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/struct.Camera.html
-[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
+* **Screen Space Ambient Occlusion (SSAO)**: Increase scene render quality by simulating "indirect" diffuse light
+* **Temporal Anti-Aliasing (TAA)**: A popular anti-aliasing technique that blends the current frame with past frames using motion vectors to smooth out artifacts
+* **Morph Targets**: Animate vertex positions on meshes between predefined states. Great for things like character customization!
+* **Robust Constrast Adaptive Sharpening (RCAS)**: Intelligently sharpens renders, which pairs nicely with TAA
+* **WebGPU Support**: Bevy can now render on the web faster and with more features using the modern WebGPU web API
+* **Improved Shader Imports**: Bevy shaders now support granular imports and other new features
+* **Parallax Mapping**: Materials now support an optional depth map, giving flat surfaces a feel of depth through parallaxing the material's textures
+* **Schedule-First ECS APIs**: A simpler and more ergonomic ECS system scheduling API
+* **Immediate Mode Gizmo Rendering**: Easily and efficiently render 2D and 3D shapes for debugging and editor scenarios
+* **ECS Audio APIs**: A more intuitive and idiomatic way to play back audio
+* **UI Borders**: UI nodes can now have configurable borders!
+* **Grid UI Layout**: Bevy UI now supports CSS-style grid layout
+* **UI Performance Improvements**: The UI batching algorithm was changed, yielding significant performance wins
 
 ## Screen Space Ambient Occlusion
 
@@ -63,7 +56,7 @@ Platform support is currently limited - Only Vulkan and Metal are currently supp
 [`SpotLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.SpotLight.html
 [`AmbientLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.AmbientLight.html
 
-## Temporal Antialiasing
+## Temporal Anti-Aliasing
 
 <div class="release-feature-authors">authors: @JMS55, @DGriffin91</div>
 
@@ -92,192 +85,15 @@ We will continue to improve quality, compatibility, and performance in future re
 
 You can compare all of our anti-aliasing methods in Bevy's improved [anti-aliasing example](https://github.com/bevyengine/bevy/blob/v0.11.0/examples/3d/anti_aliasing.rs).
 
-## Better Proxies
+## Robust Contrast Adaptive Sharpening
 
-<div class="release-feature-authors">authors: @MrGVSV</div>
+<div class="release-feature-authors">authors: @Elabajaba</div>
 
-Bevy's reflection API has a handful of structs which are collectively known as "dynamic" types.
-These include [`DynamicStruct`], [`DynamicTuple`], and more, and they are used to dynamically construct types
-of any shape or form at runtime.
-These types are also used to create are commonly referred to as "proxies", which are dynamic types
-that are used to represent an actual concrete type.
+Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
 
-These proxies are what powers the [`Reflect::clone_value`] method, which generates these proxies under the hood
-in order to construct a runtime clone of the data.
+![taa rcas](taa_rcas.png)
 
-Unfortunately, this results in a few [subtle footguns] that could catch users by surprise,
-such as the hashes of proxies differing from the hashes of the concrete type they represent,
-proxies not being considered equivalent to their concrete counterparts, and more.
-
-While this release does not necessarily fix these issues, it does establish a solid foundation for fixing them in the future.
-The way it does this is by changing how a proxy is defined.
-
-Before 0.11, a proxy was only defined by cloning the concrete type's [`Reflect::type_name`] string
-and returning it as its own `Reflect::type_name`.
-
-Now in 0.11, a proxy is defined by copying a reference to the static [`TypeInfo`] of the concrete type.
-This will allow us to access more of the concrete type's type information dynamically, without requiring the `TypeRegistry`.
-In a [future release], we will make use of this to store hashing and comparison strategies in the `TypeInfo` directly
-in order to mitigate the proxy issues mentioned above.
-
-[`DynamicStruct`]: https://docs.rs/bevy/0.11.0/bevy/reflect/struct.DynamicStruct.html
-[`DynamicTuple`]: https://docs.rs/bevy/0.11.0/bevy/reflect/struct.DynamicTuple.html
-[`Reflect::clone_value`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html#tymethod.clone_value
-[subtle footguns]: https://github.com/bevyengine/bevy/issues/6601
-[`Reflect::type_name`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html#tymethod.type_name
-[`TypeInfo`]: https://docs.rs/bevy/0.11.0/bevy/reflect/enum.TypeInfo.html
-[future release]: https://github.com/bevyengine/bevy/pull/8695
-
-## `FromReflect` Ergonomics
-
-<div class="release-feature-authors">authors: @MrGVSV</div>
-
-Bevy's [reflection API] commonly passes around data using type-erased `dyn Reflect` trait objects.
-This can usually be downcast back to its concrete type using `<dyn Reflect>::downcast_ref::<T>`;
-however, this doesn't work if the underlying data has been converted to a "dynamic" representation
-(e.g. `DynamicStruct` for struct types, `DynamicList` for list types, etc.).
-
-```rust
-let data: Vec<i32> = vec![1, 2, 3];
-
-let reflect: &dyn Reflect = &data;
-let cloned: Box<dyn Reflect> = reflect.clone_value();
-
-// `reflect` really is a `Vec<i32>`
-assert!(reflect.is::<Vec<i32>>());
-assert!(reflect.represents::<Vec<i32>>());
-
-// `cloned` is a `DynamicList`, but represents a `Vec<i32>`
-assert!(cloned.is::<DynamicList>());
-assert!(cloned.represents::<Vec<i32>>());
-
-// `cloned` is equivalent to the original `reflect`, despite not being a `Vec<i32>`
-assert!(cloned.reflect_partial_eq(reflect).unwrap_or_default());
-```
-
-To account for this, the [`FromReflect`] trait can be used to convert any `dyn Reflect` trait object
-back into its concrete type— whether it is actually that type or a dynamic representation of it.
-And it can even be called dynamically using the [`ReflectFromReflect`] type data.
-
-Before 0.11, users had to be manually derive `FromReflect` for every type that needed it,
-as well as manually register the `ReflectFromReflect` type data.
-This made it cumbersome to use and also meant that it was often forgotten about,
-resulting in reflection conversions difficulties for users downstream.
-
-Now in 0.11, `FromReflect` is automatically derived and `ReflectFromReflect` is automatically registered for all types that derive `Reflect`.
-This means most types will be `FromReflect`-capable by default,
-thus reducing boilerplate and empowering logic centered around `FromReflect`.
-
-Users can still opt out of this behavior by adding the [`#[reflect(from_reflect = false)]`][from_reflect = false] attribute to their type.
-
-```rust
-#[derive(Reflect)]
-struct Foo;
-
-#[derive(Reflect)]
-#[reflect(from_reflect = false)]
-struct Bar;
-
-fn test<T: FromReflect>(value: T) {}
-
-test(Foo); // <-- OK!
-test(Bar); // <-- ERROR! `Bar` does not implement trait `FromReflect`
-```
-
-[reflection API]: https://docs.rs/bevy_reflect/latest/bevy_reflect/index.html
-[`FromReflect`]: https://docs.rs/bevy_reflect/latest/bevy_reflect/trait.FromReflect.html
-[`ReflectFromReflect`]: https://docs.rs/bevy_reflect/latest/bevy_reflect/struct.ReflectFromReflect.html
-[from_reflect = false]: https://docs.rs/bevy_reflect/latest/bevy_reflect/derive.Reflect.html#reflectfrom_reflect--false
-
-## Scene Filtering
-
-<div class="release-feature-authors">authors: @MrGVSV</div>
-
-When serializing data to a scene, all components and [resources](#resource-support-in-scenes) are serialized by default.
-In previous versions, you had to use the given `TypeRegistry` to act as a filter, leaving out the types you don't want included.
-
-In 0.11, there's now a dedicated `SceneFilter` type to make filtering easier, cleaner, and more intuitive.
-This can be used with [`DynamicSceneBuilder`](https://docs.rs/bevy/0.11.0/bevy/prelude/struct.DynamicSceneBuilder.html) to have fine-grained control over what actually gets serialized.
-
-We can `allow` a subset of types:
-
-```rust
-let mut builder = DynamicSceneBuilder::from_world(&world);
-let scene = builder
-    .allow::<ComponentA>()
-    .allow::<ComponentB>()
-    .extract_entity(entity)
-    .build();
-```
-
-Or `deny` them:
-
-```rust
-let mut builder = DynamicSceneBuilder::from_world(&world);
-let scene = builder
-    .deny::<ComponentA>()
-    .deny::<ComponentB>()
-    .extract_entity(entity)
-    .build();
-```
-
-## Resource Support in Scenes
-
-<div class="release-feature-authors">authors: @Carbonhell, @Davier</div>
-
-Bevy's scene format is a very useful tool for serializing and deserializing game state to and from scene files.
-
-Previously, the captured state was limited to only entities and their components.
-With 0.11, scenes now support serializing resources as well.
-
-This adds a new `resources` field to the scene format:
-
-```rust
-(
-    resources: {
-        "my_game::stats::TotalScore": (
-            score: 9001,
-        ),
-    },
-    entities: {
-        // Entity scene data...
-    },
-)
-```
-
-## Gamepad Rumble API
-
-<div class="release-feature-authors">authors: @johanhelsing, @nicopap</div>
-
-You can now use the `EventWriter<GamepadRumbleRequest>` system parameter to
-trigger controllers force-feedback motors.
-
-[`gilrs`], the crate Bevy uses for gamepad support, allows controlling
-force-feedback motors. Sadly, there were no easy way of accessing the
-force-feedback API in Bevy without tedious bookkeeping.
-
-Now Bevy has the `GamepadRumbleRequest` event to do just that.
-
-```rust
-fn rumble_system(
-    gamepads: Res<Gamepads>,
-    mut rumble_requests: EventWriter<GamepadRumbleRequest>,
-) {
-    for gamepad in gamepads.iter() {
-        rumble_requests.send(GamepadRumbleRequest::Add {
-            gamepad,
-            duration: Duration::from_secs(5),
-            intensity: GamepadRumbleIntensity::MAX,
-        });
-    }
-}
-```
-
-The `GamepadRumbleRequest::Add` event triggers a force-feedback motor,
-controlling how long the vibration should last, the motor to activate,
-and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all motors.
-
-[`gilrs`]: https://crates.io/crates/gilrs
+Notice that the texture on the leather part of the helmet is much crisper!
 
 ## Morph Targets
 
@@ -480,31 +296,21 @@ silhouettes.
 However, those are not fundamental limitations of parallax mapping, and may be
 fixed in the future.
 
-## Deref Derive Attribute
+## Skyboxes
 
-<div class="release-feature-authors">authors: @MrGVSV</div>
+<div class="release-feature-authors">authors: @JMS55, @superdump</div>
 
-Bevy code tends to make heavy use of the [newtype](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) pattern,
-which is why we have dedicated derives for [`Deref`](https://docs.rs/bevy/latest/bevy/prelude/derive.Deref.html) and [`DerefMut`](https://docs.rs/bevy/latest/bevy/prelude/derive.DerefMut.html).
+![skybox](skybox.png)
 
-This previously only worked for structs with a single field:
+Bevy now has built-in support for displaying an HDRI environment as your scene background.
 
-```rust
-#[derive(Resource, Deref, DerefMut)]
-struct Score(i32);
-```
+Simply attach the new [`Skybox`] component to your [`Camera`]. It pairs well with the existing [`EnvironmentMapLight`], which will use the environment map to light the scene.
 
-For 0.11, we've improved these derives by adding the `#[deref]` attribute, which allows them to be used on structs with multiple fields.
-This makes working with generic newtypes much easier:
+We also plan to add support for built-in procedural skyboxes sometime in the future!
 
-```rust
-#[derive(Component, Deref, DerefMut)]
-struct Health<T: Character> {
-    #[deref] // <- use the `health` field as the `Deref` and `DerefMut` target
-    health: u16,
-    _character_type: PhantomData<T>,
-}
-```
+[`Skybox`]: https://docs.rs/bevy/0.11.0/bevy/core_pipeline/struct.Skybox.html
+[`Camera`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/struct.Camera.html
+[`EnvironmentMapLight`]: https://docs.rs/bevy/0.11.0/bevy/pbr/struct.EnvironmentMapLight.html
 
 ## WebGPU Support
 
@@ -556,6 +362,65 @@ The future possibilities are more exciting. Using naga IR opens the door to a bu
 * Language interop: mix and match glsl and wgsl, so bevy's pbr pipeline features could be accessed from your glsl material shader, or utils written for glsl could be used in wgsl code. We're hopeful that this can extend to spirv (and rust-gpu) as well
 * More cool stuff we haven't thought of yet. Being able to inspect and modify shaders at runtime is very powerful and makes a lot of things possible!
 
+## UI Node Borders
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+UI nodes now draws borders, whose color can be configured with the new [`BorderColor`] component:
+
+![borders](borders.png)
+
+```rust
+commands.spawn(ButtonBundle {
+    style: Style {
+        border: UiRect::all(Val::Px(5.0)),
+        ..default()
+    },
+    border_color: BorderColor(Color::rgb(0.9, 0.9, 0.9)),
+    ..default()
+})
+```
+
+Each side of the border is configurable:
+
+![border sides](border-sides.png)
+
+[`BorderColor`]: https://docs.rs/bevy/0.11.0/bevy/ui/struct.BorderColor.html
+
+## Grid UI Layout
+
+<div class="release-feature-authors">authors: @nicoburns</div>
+
+In Bevy UI we wired up the new `grid` feature in the layout library we use ([Taffy](https://github.com/DioxusLabs/taffy)). This enables CSS-style grid layouts:
+
+![grid](grid.png)
+
+This can be configured on the [`Style`] component:
+
+```rust
+Style {
+    /// Use grid layout for this node
+    display: Display::Grid,
+    /// Make the grid have a 1:1 aspect ratio
+    /// This means the width will adjust to match the height
+    aspect_ratio: Some(1.0),
+    // Add 24px of padding around the grid
+    padding: UiRect::all(Val::Px(24.0)),
+    /// Set the grid to have 4 columns all with sizes minmax(0, 1fr)
+    /// This creates 4 exactly evenly sized columns
+    grid_template_columns: RepeatedGridTrack::flex(4, 1.0),
+    /// Set the grid to have 4 rows all with sizes minmax(0, 1fr)
+    /// This creates 4 exactly evenly sized rows
+    grid_template_rows: RepeatedGridTrack::flex(4, 1.0),
+    /// Set a 12px gap/gutter between rows and columns
+    row_gap: Val::Px(12.0),
+    column_gap: Val::Px(12.0),
+    ..default()
+},
+```
+
+[`Style`]: https://docs.rs/bevy/0.11.0/bevy/ui/struct.Style.html
+
 ## Schedule-First ECS APIs
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -571,7 +436,7 @@ However it pretty quickly became clear that the new system still had some areas 
 
 ### Unraveling the Complexity
 
-If your eyes started to glaze over as you tried to wrap your head around this, or phrases like "implicitly added to the `Update` Base Set" filled you with dread ... don't worry. After [a lot of careful thought](https://github.com/bevyengine/bevy/pull/8079) we've unraveled the complexity and built something clear and simple.
+If your eyes started to glaze over as you tried to wrap your head around this, or phrases like "implicitly added to the `CoreSet::Update` Base Set" filled you with dread ... don't worry. After [a lot of careful thought](https://github.com/bevyengine/bevy/pull/8079) we've unraveled the complexity and built something clear and simple.
 
 In **Bevy 0.11** the "scheduling mental model" is _much_ simpler thanks to **Schedule-First ECS APIs**:
 
@@ -640,9 +505,9 @@ app.add_systems(Update, (
 The `configure_set` API has also been adjusted for parity:
 
 ```rust
-// before
+// Bevy 0.10
 app.configure_set(Foo.after(Bar).in_schedule(PostUpdate))
-// after
+// Bevy 0.11
 app.configure_set(PostUpdate, Foo.after(Bar))
 ```
 
@@ -697,84 +562,182 @@ app.add_systems(Update,
 
 This will run `a` in parallel with `b->c->d`, then after those have finished running it will run `e` and `f` in parallel.
 
-## Simpler RenderGraph Construction
+## Gizmos
 
-<div class="release-feature-authors">authors: @IceSentry, @cart</div>
+<div class="release-feature-authors">authors: @devil-ira, @jannik4, @lassade, @The5-1, @Toqozz, @nicopap</div>
 
-Adding `Node`s to the `RenderGraph` requires a lot of boilerplate. In this release, we tried to reduce this for most common operations. No existing APIs have been removed, these are only helpers made to simplify working with the `RenderGraph`.
+It is often helpful to be able to draw simple shapes and lines in 2D and 3D for things like editor controls, and debug views. Game development is a very "spatial" thing and being able to quickly draw shapes is the visual equivalent of "print line debugging". It helps answer questions like "is this ray casting in the right direction?" and "is this collider big enough?"
 
-We added the `RenderGraphApp` trait to the `App`. This trait contains various helper functions to reduce the boilerplate with adding nodes and edges to a graph.
+In **Bevy 0.11** we've added an "immediate mode" [`Gizmos`] drawing API that makes these things easy and efficient. In 2D and 3D you can draw lines, rects, circles, arcs, spheres, cubes, line strips, and more!
 
-Another pain point of `RenderGraph` `Node`s is passing the view entity through each node and manually updating the query on that view. To fix this we added a `ViewNode` trait and `ViewNodeRunner` that will automatically take care of running the `Query` on the view entity. We also made the view entity a first-class concept of the `RenderGraph`. So you can now access the view entity the graph is currently running on from anywhere in the graph without passing it around between each `Node`.
+**2D Gizmos**
+![2d gizmos](2d_gizmos.png)
+**3D Gizmos**
+![3d gizmos](3d_gizmos.png)
 
-All these new APIs assume that your Node implements `FromWorld` or `Default`.
-
-Here's what it looks like in practice for the `BloomNode`:
+From any system you can spawn shapes into existence (for both 2D and 3D):
 
 ```rust
-// Adding the node to the 3d graph
-render_app
-    // To run a ViewNode you need to create a ViewNodeRunner
-    .add_render_graph_node::<ViewNodeRunner<BloomNode>>(
-        CORE_3D,
-        core_3d::graph::node::BLOOM,
-    );
+fn system(mut gizmos: Gizmos) {
+    // 2D
+    gizmos.line_2d(Vec2::new(0., 0.), Vec2::new(0., 10.), Color::RED);
+    gizmos.circle_2d(Vec2::new(0., 0.), 40., Color::BLUE);
+    // 3D
+    gizmos.circle(Vec3::ZERO, Vec3::Y, 3., Color::BLACK);
+    gizmos.ray(Vec3::new(0., 0., 0.), Vec3::new(5., 5., 5.), Color::BLUE);
+    gizmos.sphere(Vec3::ZERO, Quat::IDENTITY, 3.2, Color::BLACK)
+}
+```
 
-// Defining the node
-#[derive(Default)]
-struct BloomNode;
-// This can replace your `impl Node` block of any existing `Node` that operated on a view
-impl ViewNode for BloomNode {
-    // You need to define your view query as an associated type
-    type ViewQuery = (
-        &'static ExtractedCamera,
-        &'static ViewTarget,
-        &'static BloomSettings,
-    );
-    // You don't need Node::input() or Node::update() anymore. If you still need these they are still available but they have an empty default implementation.
-    fn run(
-        &self,
-        graph: &mut RenderGraphContext,
-        render_context: &mut RenderContext,
-        // This is the result of your query. If it is empty the run function will not be called
-        (camera, view_target, bloom_settings): QueryItem<Self::ViewQuery>,
-        world: &World,
-    ) -> Result<(), NodeRunError> {
-        // When using the ViewNode you probably won't need the view entity but here's how to get it if you do
-        let view_entity = graph.view_entity();
+Because the API is "immediate mode", gizmos will only be drawn on frames where they are "queued up", which means you don't need to worry about cleaning up gizmo state!
 
-        // Run the node
+Gizmos are drawn in batches, which means they are very cheap. You can have hundreds of thousands of them!
+
+[`Gizmos`]: https://docs.rs/bevy/0.11.0/bevy/gizmos/gizmos/struct.Gizmos.html
+
+## ECS Audio APIs
+
+<div class="release-feature-authors">authors: @inodentry</div>
+
+Bevy's audio playback APIs have been reworked to integrate more cleanly with Bevy's ECS.
+
+In previous versions of Bevy you would play back audio like this:
+
+```rust
+#[derive(Resource)]
+struct MyMusic {
+    sink: Handle<AudioSink>,
+}
+
+fn play_music(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    audio_sinks: Res<Assets<AudioSink>>
+) {
+    let weak_handle = audio.play(asset_server.load("my_music.ogg"));
+    let strong_handle = audio_sinks.get_handle(weak_handle);
+    commands.insert_resource(MyMusic {
+        sink: strong_handle,
+    });
+}
+```
+
+That is a lot of boilerplate just to play a sound! Then to adjust playback you would access the [`AudioSink`] like this:
+
+```rust
+
+fn pause_music(my_music: Res<MyMusic>, audio_sinks: Res<Assets<AudioSink>>) {
+    if let Some(sink) = audio_sinks.get(&my_music.sink) {
+        sink.pause();
     }
 }
 ```
 
-## `#[reflect(default)]` on Enum Variant Fields
+Treating audio playback as a resource created a number of problems and notably didn't play well with things like Bevy Scenes. In **Bevy 0.11**, audio playback is represented as an [`Entity`] with [`AudioBundle`] components:
+
+```rust
+#[derive(Component)]
+struct MyMusic;
+
+fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((
+        AudioBundle {
+            source: asset_server.load("my_music.ogg"),
+            ..default()
+        },
+        MyMusic,
+    ));
+}
+```
+
+Much simpler! To adjust playback you can query for the [`AudioSink`] component:
+
+```rust
+fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
+    if let Ok(sink) = query.get_single() {
+        sink.pause();
+    }
+}
+```
+
+[`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
+[`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
+[`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
+
+## Global Audio Volume
+
+<div class="release-feature-authors">authors: @mrchantey</div>
+
+Bevy now has a global volume level which can be configured via the [`GlobalVolume`] resource:
+
+```rust
+app.insert_resource(GlobalVolume::new(0.2));
+```
+
+## Resource Support in Scenes
+
+<div class="release-feature-authors">authors: @Carbonhell, @Davier</div>
+
+Bevy's scene format is a very useful tool for serializing and deserializing game state to and from scene files.
+
+Previously, the captured state was limited to only entities and their components.
+With **Bevy 0.11**, scenes now support serializing resources as well.
+
+This adds a new `resources` field to the scene format:
+
+```rust
+(
+    resources: {
+        "my_game::stats::TotalScore": (
+            score: 9001,
+        ),
+    },
+    entities: {
+        // Entity scene data...
+    },
+)
+```
+
+## Scene Filtering
 
 <div class="release-feature-authors">authors: @MrGVSV</div>
 
-When using the `FromReflect` trait, fields marked `#[reflect(default)]` will be set to their `Default` value if they don't exist on the reflected object.
+When serializing data to a scene, all components and [resources](#resource-support-in-scenes) are serialized by default.
+In previous versions, you had to use the given `TypeRegistry` to act as a filter, leaving out the types you don't want included.
 
-Previously, this was only supported on struct fields.
-Now, it is also supported on all enum variant fields.
+In 0.11, there's now a dedicated `SceneFilter` type to make filtering easier, cleaner, and more intuitive.
+This can be used with [`DynamicSceneBuilder`](https://docs.rs/bevy/0.11.0/bevy/prelude/struct.DynamicSceneBuilder.html) to have fine-grained control over what actually gets serialized.
+
+We can `allow` a subset of types:
 
 ```rust
-#[derive(Reflect)]
-enum MyEnum {
-    Data {
-        #[reflect(default)]
-        a: u32,
-        b: u32,
-    },
-}
-
-let mut data = DynamicStruct::default ();
-data.insert("b", 1);
-
-let dynamic_enum = DynamicEnum::new("Data", data);
-
-let my_enum = MyEnum::from_reflect( & dynamic_enum).unwrap();
-assert_eq!(u32::default(), my_enum.a);
+let mut builder = DynamicSceneBuilder::from_world(&world);
+let scene = builder
+    .allow::<ComponentA>()
+    .allow::<ComponentB>()
+    .extract_entity(entity)
+    .build();
 ```
+
+Or `deny` them:
+
+```rust
+let mut builder = DynamicSceneBuilder::from_world(&world);
+let scene = builder
+    .deny::<ComponentA>()
+    .deny::<ComponentB>()
+    .extract_entity(entity)
+    .build();
+```
+
+## Default Font
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Bevy now supports a configurable default font and embeds a tiny default font (a minimal version of [Fira Mono](https://fonts.google.com/specimen/Fira+Mono)). This is useful if you use a common font throughout your project. And it makes it easier to prototype new changes with a "placeholder font" without worrying about setting it on each node.
+
+![default font](default_font.png)
 
 ## UI Texture Atlas Support
 
@@ -785,6 +748,52 @@ Previously UI `ImageBundle` Nodes could only use handles to full images without 
 This was achieved by merging the existing mechanisms that allows text rendering to select which glyph to use and the mechanisms that allow for `TextureAtlasSprite`.
 
 <video controls><source src="texture_atlas_ui.mp4" type="video/mp4"/></video>
+
+## Gamepad Rumble API
+
+<div class="release-feature-authors">authors: @johanhelsing, @nicopap</div>
+
+You can now use the `EventWriter<GamepadRumbleRequest>` system parameter to
+trigger controllers force-feedback motors.
+
+[`gilrs`], the crate Bevy uses for gamepad support, allows controlling
+force-feedback motors. Sadly, there were no easy way of accessing the
+force-feedback API in Bevy without tedious bookkeeping.
+
+Now Bevy has the `GamepadRumbleRequest` event to do just that.
+
+```rust
+fn rumble_system(
+    gamepads: Res<Gamepads>,
+    mut rumble_requests: EventWriter<GamepadRumbleRequest>,
+) {
+    for gamepad in gamepads.iter() {
+        rumble_requests.send(GamepadRumbleRequest::Add {
+            gamepad,
+            duration: Duration::from_secs(5),
+            intensity: GamepadRumbleIntensity::MAX,
+        });
+    }
+}
+```
+
+The `GamepadRumbleRequest::Add` event triggers a force-feedback motor,
+controlling how long the vibration should last, the motor to activate,
+and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all motors.
+
+[`gilrs`]: https://crates.io/crates/gilrs
+
+## New Default Tonemapping Method
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
+
+![reinhard luminance](tm_reinhard_luminance.png)
+
+![tonymcmapface](./tm_tonymcmapface.png)
+
+TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 
 ## EntityRef Queries
 
@@ -868,103 +877,6 @@ The [`Camera`] [`RenderTarget`] can now be set to a wgpu [`TextureView`]. This a
 [`RenderTarget`]: https://docs.rs/bevy/0.11.0/bevy/render/camera/enum.RenderTarget.html
 [`TextureView`]: https://docs.rs/bevy/0.11.0/bevy/render/render_resource/struct.TextureView.html
 
-## New Default Tonemapping Method
-
-<div class="release-feature-authors">authors: @JMS55</div>
-
-In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
-
-![reinhard luminance](tm_reinhard_luminance.png)
-
-![tonymcmapface](./tm_tonymcmapface.png)
-
-TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
-
-## Gizmos
-
-<div class="release-feature-authors">authors: @devil-ira, @jannik4, @lassade, @The5-1, @Toqozz, @nicopap</div>
-
-It is often helpful to be able to draw simple shapes and lines in 2D and 3D for things like editor controls, and debug views. Game development is a very "spatial" thing and being able to quickly draw shapes is the visual equivalent of "print line debugging". It helps answer questions like "is this ray casting in the right direction?" and "is this collider big enough?"
-
-In **Bevy 0.11** we've added an "immediate mode" [`Gizmos`] drawing API that makes these things easy and efficient. In 2D and 3D you can draw lines, rects, circles, arcs, spheres, cubes, line strips, and more!
-
-**2D Gizmos**
-![2d gizmos](2d_gizmos.png)
-**3D Gizmos**
-![3d gizmos](3d_gizmos.png)
-
-From any system you can spawn shapes into existence (for both 2D and 3D):
-
-```rust
-fn system(mut gizmos: Gizmos) {
-    // 2D
-    gizmos.line_2d(Vec2::new(0., 0.), Vec2::new(0., 10.), Color::RED);
-    gizmos.circle_2d(Vec2::new(0., 0.), 40., Color::BLUE);
-    // 3D
-    gizmos.circle(Vec3::ZERO, Vec3::Y, 3., Color::BLACK);
-    gizmos.ray(Vec3::new(0., 0., 0.), Vec3::new(5., 5., 5.), Color::BLUE);
-    gizmos.sphere(Vec3::ZERO, Quat::IDENTITY, 3.2, Color::BLACK)
-}
-```
-
-Because the API is "immediate mode", gizmos will only be drawn on frames where they are "queued up", which means you don't need to worry about cleaning up gizmo state!
-
-Gizmos are drawn in batches, which means they are very cheap. You can have hundreds of thousands of them!
-
-[`Gizmos`]: https://docs.rs/bevy/0.11.0/bevy/gizmos/gizmos/struct.Gizmos.html
-
-## Global Audio Volume
-
-<div class="release-feature-authors">authors: @mrchantey</div>
-
-Bevy now has a global volume level which can be configured via the [`GlobalVolume`] resource:
-
-```rust
-app.insert_resource(GlobalVolume::new(0.2));
-```
-
-## Cubic Curve Example
-
-<div class="release-feature-authors">authors: @Kjolnyr</div>
-
-An example that shows how to draw a 3D curve and move an object along the path:
-
-![cubic_curve](cubic_curve.png)
-
-## Size Constraints Example
-
-<div class="release-feature-authors">authors: @Kjolnyr</div>
-
-An interactive example that shows how the various [`Style`] size constraints affect UI nodes.
-
-![size constraints](size_constraints.png)
-
-## Display and Visibility Example
-
-<div class="release-feature-authors">authors: @Kjolnyr</div>
-
-An example that shows how display and visibility settings affect UI nodes.
-
-![display and visibiltiy](display_and_visibility.png)
-
-## No More Bors!
-
-<div class="release-feature-authors">authors: @cart, @mockersf</div>
-
-Bevy has historically used the Bors merge system to ensure we never merge a pull request on GitHub that breaks our CI validation. This was a critical piece of infrastructure that ensured we could collaborate safely and effectively. Fortunately GitHub has _finally_ rolled out [Merge Queues](https://github.blog/changelog/2023-02-08-pull-request-merge-queue-public-beta/), which solve the same problems as Bors, with the benefit of being more tightly integrated with GitHub.
-
-For this release cycle we migrated to Merge Queues and we're very happy with the experience!
-
-## New CI Jobs
-
-<div class="release-feature-authors">authors: @mockersf</div>
-
-We've added a number of new CI jobs that improve the Bevy development experience:
-
-* A daily job that runs Bevy's mobile examples on real Android and iOS devices! This helps protect against regressions that might not be caught by the compiler
-* Added the ability to take screenshots in CI, which can be used to validate the results of Bevy example runs
-* A job that leaves a GitHub comment on PRs that are missing a feature or example doc update
-
 ## Improved Text Wrapping
 
 <div class="release-feature-authors">authors: @ickshonpe</div>
@@ -986,6 +898,208 @@ We got a huge UI performance win for some cases by avoiding breaking up UI batch
 Here is a profile of our "many buttons" stress test. Red is before the optimization and Yellow is after:
 
 ![ui profile](ui_profile.png)
+
+## Better Reflect Proxies
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy's reflection API has a handful of structs which are collectively known as "dynamic" types.
+These include [`DynamicStruct`], [`DynamicTuple`], and more, and they are used to dynamically construct types
+of any shape or form at runtime.
+These types are also used to create are commonly referred to as "proxies", which are dynamic types
+that are used to represent an actual concrete type.
+
+These proxies are what powers the [`Reflect::clone_value`] method, which generates these proxies under the hood
+in order to construct a runtime clone of the data.
+
+Unfortunately, this results in a few [subtle footguns] that could catch users by surprise,
+such as the hashes of proxies differing from the hashes of the concrete type they represent,
+proxies not being considered equivalent to their concrete counterparts, and more.
+
+While this release does not necessarily fix these issues, it does establish a solid foundation for fixing them in the future.
+The way it does this is by changing how a proxy is defined.
+
+Before 0.11, a proxy was only defined by cloning the concrete type's [`Reflect::type_name`] string
+and returning it as its own `Reflect::type_name`.
+
+Now in 0.11, a proxy is defined by copying a reference to the static [`TypeInfo`] of the concrete type.
+This will allow us to access more of the concrete type's type information dynamically, without requiring the `TypeRegistry`.
+In a [future release], we will make use of this to store hashing and comparison strategies in the `TypeInfo` directly
+in order to mitigate the proxy issues mentioned above.
+
+[`DynamicStruct`]: https://docs.rs/bevy/0.11.0/bevy/reflect/struct.DynamicStruct.html
+[`DynamicTuple`]: https://docs.rs/bevy/0.11.0/bevy/reflect/struct.DynamicTuple.html
+[`Reflect::clone_value`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html#tymethod.clone_value
+[subtle footguns]: https://github.com/bevyengine/bevy/issues/6601
+[`Reflect::type_name`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html#tymethod.type_name
+[`TypeInfo`]: https://docs.rs/bevy/0.11.0/bevy/reflect/enum.TypeInfo.html
+[future release]: https://github.com/bevyengine/bevy/pull/8695
+
+## `FromReflect` Ergonomics
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy's [reflection API] commonly passes around data using type-erased `dyn Reflect` trait objects.
+This can usually be downcast back to its concrete type using `<dyn Reflect>::downcast_ref::<T>`;
+however, this doesn't work if the underlying data has been converted to a "dynamic" representation
+(e.g. `DynamicStruct` for struct types, `DynamicList` for list types, etc.).
+
+```rust
+let data: Vec<i32> = vec![1, 2, 3];
+
+let reflect: &dyn Reflect = &data;
+let cloned: Box<dyn Reflect> = reflect.clone_value();
+
+// `reflect` really is a `Vec<i32>`
+assert!(reflect.is::<Vec<i32>>());
+assert!(reflect.represents::<Vec<i32>>());
+
+// `cloned` is a `DynamicList`, but represents a `Vec<i32>`
+assert!(cloned.is::<DynamicList>());
+assert!(cloned.represents::<Vec<i32>>());
+
+// `cloned` is equivalent to the original `reflect`, despite not being a `Vec<i32>`
+assert!(cloned.reflect_partial_eq(reflect).unwrap_or_default());
+```
+
+To account for this, the [`FromReflect`] trait can be used to convert any `dyn Reflect` trait object
+back into its concrete type— whether it is actually that type or a dynamic representation of it.
+And it can even be called dynamically using the [`ReflectFromReflect`] type data.
+
+Before 0.11, users had to be manually derive `FromReflect` for every type that needed it,
+as well as manually register the `ReflectFromReflect` type data.
+This made it cumbersome to use and also meant that it was often forgotten about,
+resulting in reflection conversions difficulties for users downstream.
+
+Now in 0.11, `FromReflect` is automatically derived and `ReflectFromReflect` is automatically registered for all types that derive `Reflect`.
+This means most types will be `FromReflect`-capable by default,
+thus reducing boilerplate and empowering logic centered around `FromReflect`.
+
+Users can still opt out of this behavior by adding the [`#[reflect(from_reflect = false)]`][from_reflect = false] attribute to their type.
+
+```rust
+#[derive(Reflect)]
+struct Foo;
+
+#[derive(Reflect)]
+#[reflect(from_reflect = false)]
+struct Bar;
+
+fn test<T: FromReflect>(value: T) {}
+
+test(Foo); // <-- OK!
+test(Bar); // <-- ERROR! `Bar` does not implement trait `FromReflect`
+```
+
+[reflection API]: https://docs.rs/bevy_reflect/latest/bevy_reflect/index.html
+[`FromReflect`]: https://docs.rs/bevy_reflect/latest/bevy_reflect/trait.FromReflect.html
+[`ReflectFromReflect`]: https://docs.rs/bevy_reflect/latest/bevy_reflect/struct.ReflectFromReflect.html
+[from_reflect = false]: https://docs.rs/bevy_reflect/latest/bevy_reflect/derive.Reflect.html#reflectfrom_reflect--false
+
+## Deref Derive Attribute
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+Bevy code tends to make heavy use of the [newtype](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) pattern,
+which is why we have dedicated derives for [`Deref`](https://docs.rs/bevy/latest/bevy/prelude/derive.Deref.html) and [`DerefMut`](https://docs.rs/bevy/latest/bevy/prelude/derive.DerefMut.html).
+
+This previously only worked for structs with a single field:
+
+```rust
+#[derive(Resource, Deref, DerefMut)]
+struct Score(i32);
+```
+
+For 0.11, we've improved these derives by adding the `#[deref]` attribute, which allows them to be used on structs with multiple fields.
+This makes working with generic newtypes much easier:
+
+```rust
+#[derive(Component, Deref, DerefMut)]
+struct Health<T: Character> {
+    #[deref] // <- use the `health` field as the `Deref` and `DerefMut` target
+    health: u16,
+    _character_type: PhantomData<T>,
+}
+```
+
+## Simpler RenderGraph Construction
+
+<div class="release-feature-authors">authors: @IceSentry, @cart</div>
+
+Adding `Node`s to the `RenderGraph` requires a lot of boilerplate. In this release, we tried to reduce this for most common operations. No existing APIs have been removed, these are only helpers made to simplify working with the `RenderGraph`.
+
+We added the `RenderGraphApp` trait to the `App`. This trait contains various helper functions to reduce the boilerplate with adding nodes and edges to a graph.
+
+Another pain point of `RenderGraph` `Node`s is passing the view entity through each node and manually updating the query on that view. To fix this we added a `ViewNode` trait and `ViewNodeRunner` that will automatically take care of running the `Query` on the view entity. We also made the view entity a first-class concept of the `RenderGraph`. So you can now access the view entity the graph is currently running on from anywhere in the graph without passing it around between each `Node`.
+
+All these new APIs assume that your Node implements `FromWorld` or `Default`.
+
+Here's what it looks like in practice for the `BloomNode`:
+
+```rust
+// Adding the node to the 3d graph
+render_app
+    // To run a ViewNode you need to create a ViewNodeRunner
+    .add_render_graph_node::<ViewNodeRunner<BloomNode>>(
+        CORE_3D,
+        core_3d::graph::node::BLOOM,
+    );
+
+// Defining the node
+#[derive(Default)]
+struct BloomNode;
+// This can replace your `impl Node` block of any existing `Node` that operated on a view
+impl ViewNode for BloomNode {
+    // You need to define your view query as an associated type
+    type ViewQuery = (
+        &'static ExtractedCamera,
+        &'static ViewTarget,
+        &'static BloomSettings,
+    );
+    // You don't need Node::input() or Node::update() anymore. If you still need these they are still available but they have an empty default implementation.
+    fn run(
+        &self,
+        graph: &mut RenderGraphContext,
+        render_context: &mut RenderContext,
+        // This is the result of your query. If it is empty the run function will not be called
+        (camera, view_target, bloom_settings): QueryItem<Self::ViewQuery>,
+        world: &World,
+    ) -> Result<(), NodeRunError> {
+        // When using the ViewNode you probably won't need the view entity but here's how to get it if you do
+        let view_entity = graph.view_entity();
+
+        // Run the node
+    }
+}
+```
+
+## `#[reflect(default)]` on Enum Variant Fields
+
+<div class="release-feature-authors">authors: @MrGVSV</div>
+
+When using the `FromReflect` trait, fields marked `#[reflect(default)]` will be set to their `Default` value if they don't exist on the reflected object.
+
+Previously, this was only supported on struct fields.
+Now, it is also supported on all enum variant fields.
+
+```rust
+#[derive(Reflect)]
+enum MyEnum {
+    Data {
+        #[reflect(default)]
+        a: u32,
+        b: u32,
+    },
+}
+
+let mut data = DynamicStruct::default ();
+data.insert("b", 1);
+
+let dynamic_enum = DynamicEnum::new("Data", data);
+
+let my_enum = MyEnum::from_reflect( & dynamic_enum).unwrap();
+assert_eq!(u32::default(), my_enum.a);
+```
 
 ## Delayed Asset Hot Reloading
 
@@ -1056,71 +1170,6 @@ We are in the process of porting Bevy's internal [`type_name`] usage over to [`T
 [`TypePath`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.TypePath.html
 [`Reflect`]: https://docs.rs/bevy/0.11.0/bevy/reflect/trait.Reflect.html
 
-## UI Node Borders
-
-<div class="release-feature-authors">authors: @ickshonpe</div>
-
-UI nodes now draws borders, whose color can be configured with the new [`BorderColor`] component:
-
-![borders](borders.png)
-
-```rust
-commands.spawn(ButtonBundle {
-    style: Style {
-        border: UiRect::all(Val::Px(5.0)),
-        ..default()
-    },
-    border_color: BorderColor(Color::rgb(0.9, 0.9, 0.9)),
-    ..default()
-})
-```
-
-Each side of the border is configurable:
-
-![border sides](border-sides.png)
-
-## Grid UI Layout
-
-<div class="release-feature-authors">authors: @nicoburns</div>
-
-We wired up the new `grid` feature in the layout library we use ([Taffy](https://github.com/DioxusLabs/taffy)) to Bevy UI. This enables CSS-style grid layouts:
-
-![grid](grid.png)
-
-This can be configured on the [`Style`] component:
-
-```rust
-Style {
-    /// Use grid layout for this node
-    display: Display::Grid,
-    /// Make the grid have a 1:1 aspect ratio
-    /// This means the width will adjust to match the height
-    aspect_ratio: Some(1.0),
-    // Add 24px of padding around the grid
-    padding: UiRect::all(Val::Px(24.0)),
-    /// Set the grid to have 4 columns all with sizes minmax(0, 1fr)
-    /// This creates 4 exactly evenly sized columns
-    grid_template_columns: RepeatedGridTrack::flex(4, 1.0),
-    /// Set the grid to have 4 rows all with sizes minmax(0, 1fr)
-    /// This creates 4 exactly evenly sized rows
-    grid_template_rows: RepeatedGridTrack::flex(4, 1.0),
-    /// Set a 12px gap/gutter between rows and columns
-    row_gap: Val::Px(12.0),
-    column_gap: Val::Px(12.0),
-    ..default()
-},
-```
-
-[`Style`]: https://docs.rs/bevy/0.11.0/bevy/ui/struct.Style.html
-
-## Default Font
-
-<div class="release-feature-authors">authors: @mockersf</div>
-
-Bevy now supports a configurable default font and embeds a tiny default font (a minimal version of [Fira Mono](https://fonts.google.com/specimen/Fira+Mono)). This is useful if you use a common font throughout your project. And it makes it easier to prototype new changes with a "placeholder font" without worrying about setting it on each node.
-
-![default font](default_font.png)
-
 ## `run_if` for Tuples of Systems
 
 <div class="release-feature-authors">authors: @geieredgar</div>
@@ -1151,86 +1200,6 @@ fn system(query: Query<Has<Player>>) {
 } 
 ```
 
-## Robust Contrast Adaptive Sharpening
-
-<div class="release-feature-authors">authors: @Elabajaba</div>
-
-Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
-
-![taa rcas](taa_rcas.png)
-
-Notice that the texture on the leather part of the helmet is much crisper!
-
-## ECS Audio APIs
-
-<div class="release-feature-authors">authors: @inodentry</div>
-
-Bevy's audio playback APIs have been reworked to integrate more cleanly with Bevy's ECS.
-
-In previous versions of Bevy you would play back audio like this:
-
-```rust
-#[derive(Resource)]
-struct MyMusic {
-    sink: Handle<AudioSink>,
-}
-
-fn play_music(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    audio: Res<Audio>,
-    audio_sinks: Res<Assets<AudioSink>>
-) {
-    let weak_handle = audio.play(asset_server.load("my_music.ogg"));
-    let strong_handle = audio_sinks.get_handle(weak_handle);
-    commands.insert_resource(MyMusic {
-        sink: strong_handle,
-    });
-}
-```
-
-That is a lot of boilerplate just to play a sound! Then to adjust playback you would access the [`AudioSink`] like this:
-
-```rust
-
-fn pause_music(mymusic: Res<MyMusic>, audio_sinks: Res<Assets<AudioSink>>) {
-    if let Some(sink) = audio_sinks.get(&mymusic.sink) {
-        sink.pause();
-    }
-}
-```
-
-Treating audio playback as a resource created a number of problems and notably didn't play well with things like Bevy Scenes. In **Bevy 0.11**, audio playback is represented as an [`Entity`] with [`AudioBundle`] components:
-
-```rust
-#[derive(Component)]
-struct MyMusic;
-
-fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn((
-        AudioBundle {
-            source: asset_server.load("my_music.ogg"),
-            ..default()
-        },
-        MyMusic,
-    ));
-}
-```
-
-Much simpler! To adjust playback you can query for the [`AudioSink`] component:
-
-```rust
-fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
-    if let Ok(sink) = query.get_single() {
-        sink.pause();
-    }
-}
-```
-
-[`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
-[`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
-[`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
-
 ## Derive `Event`
 
 <div class="release-feature-authors">authors: @CatThingy</div>
@@ -1248,6 +1217,48 @@ struct Collision {
 This prevents some classes of error, makes [`Event`] types more self-documenting, and provides consistency with other Bevy ECS traits like Components and Resources. It also opens the doors to configuring the [`Event`] storage type, which we plan to do in future releases.
 
 [`Event`]: https://docs.rs/bevy/0.11.0/bevy/ecs/event/trait.Event.html
+
+## Cubic Curve Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An example that shows how to draw a 3D curve and move an object along the path:
+
+![cubic_curve](cubic_curve.png)
+
+## Size Constraints Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An interactive example that shows how the various [`Style`] size constraints affect UI nodes.
+
+![size constraints](size_constraints.png)
+
+## Display and Visibility Example
+
+<div class="release-feature-authors">authors: @Kjolnyr</div>
+
+An example that shows how display and visibility settings affect UI nodes.
+
+![display and visibiltiy](display_and_visibility.png)
+
+## No More Bors!
+
+<div class="release-feature-authors">authors: @cart, @mockersf</div>
+
+Bevy has historically used the Bors merge system to ensure we never merge a pull request on GitHub that breaks our CI validation. This was a critical piece of infrastructure that ensured we could collaborate safely and effectively. Fortunately GitHub has _finally_ rolled out [Merge Queues](https://github.blog/changelog/2023-02-08-pull-request-merge-queue-public-beta/), which solve the same problems as Bors, with the benefit of being more tightly integrated with GitHub.
+
+For this release cycle we migrated to Merge Queues and we're very happy with the experience!
+
+## New CI Jobs
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+We've added a number of new CI jobs that improve the Bevy development experience:
+
+* A daily job that runs Bevy's mobile examples on real Android and iOS devices! This helps protect against regressions that might not be caught by the compiler
+* Added the ability to take screenshots in CI, which can be used to validate the results of Bevy example runs
+* A job that leaves a GitHub comment on PRs that are missing a feature or example doc update
 
 ## <a name="what-s-next"></a>What's Next?
 
