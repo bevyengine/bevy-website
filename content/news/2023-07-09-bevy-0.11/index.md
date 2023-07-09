@@ -343,7 +343,7 @@ Bevy is built on top of the [wgpu] library, which is a modern low-level GPU API 
 
 Click one of the images below to check out our live WebGPU examples (if your [browser supports it][webgpu-support]):
 
-[![webgpu examples](webgpu_examples.png)](examples-webgpu)
+[![webgpu examples](webgpu_examples.png)](/examples-webgpu)
 
 [wgpu]: https://github.com/gfx-rs/wgpu
 [webgpu-support]: https://caniuse.com/webgpu
