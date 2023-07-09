@@ -163,9 +163,7 @@ fn toggle_pause_music(
     <div class="migration-guide-area-tag">Diagnostics</div>
 </div>
 
-<!-- TODO this really isn't clear -->
-
-Capture logs from `stderr` instead of from `stdout`
+On unix systems, when printing logs like `info!`, `trace!`, `error!`, etc, read from `stderr` instead of from `stdout`
 
 - Use `2> output.log` on the command line to save `stderr` to a file
 
@@ -302,14 +300,6 @@ The functions `assert_is_system` and `assert_is_read_only_system` (in `bevy_ecs:
 
 - For regular tests (that is, functions annotated with `#[test]`), add the `#[should_panic]` attribute to the function.
 - For documentation tests, add `should_panic` to the start of the code block: ` ```should_panic`
-
-### [`Or<T>` should be a new type of `PhantomData<T>`](https://github.com/bevyengine/bevy/pull/8212)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">ECS</div>
-</div>
-
-`Or<T>` is just used as a type annotation and shouldn’t be constructed.
 
 ### [Remove base set error variants of `ScheduleBuildError`](https://github.com/bevyengine/bevy/pull/8269)
 
