@@ -35,10 +35,9 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @JMS55</div>
 
-**Without SSAO vs With SSAO**
-<div class="image-compare" style="aspect-ratio: 16 / 9">
-  <img class="image-a" alt="no_ssao" src="no_ssao.png">
-  <img class="image-b" alt="with_ssao" src="with_ssao.png">
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Without SSAO" data-title-b="With SSAO">
+  <img class="image-a" alt="Without SSAO" src="no_ssao.png">
+  <img class="image-b" alt="With SSAO" src="with_ssao.png">
 </div>
 
 **SSAO Only**
@@ -284,10 +283,9 @@ Since normal maps do not "move" the shaded areas, merely shade them
 differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
-**normal mapping only** vs **parallax and normal mapping**
-<div class="image-compare" style="aspect-ratio: 16 / 9">
-  <img class="image-a" alt="normal_mapping" src="parallax_mapping_normals.jpg"/>
-  <img class="image-b" alt="parallax_and_normal_mapping" src="parallax_mapping_depth.jpg"/>
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Normal Mapping Only" data-title-b="Parallax & Normal Mapping">
+  <img class="image-a" alt="Normal Mapping Only" src="parallax_mapping_normals.jpg">
+  <img class="image-b" alt="Parallax & Normal Mapping" src="parallax_mapping_depth.jpg">
 </div>
 
 Parallax mapping in Bevy is still very limited. The most painful aspect is that
@@ -794,10 +792,9 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
-**Reinhard-luminance vs Tonymcmapface**
-<div class="image-compare" style="aspect-ratio: 595 / 311">
-  <img class="image-a" alt="reinhard luminance" src="tm_reinhard_luminance.png">
-  <img class="image-b" alt="tonymcmapface" src="tm_tonymcmapface.png">
+<div class="image-compare" style="aspect-ratio: 595 / 311" data-title-a="Reinhard-luminance" data-title-b="TonyMcMapface">
+  <img class="image-a" alt="Reinhard-luminance" src="tm_reinhard_luminance.png">
+  <img class="image-b" alt="TonyMcMapface" src="tm_tonymcmapface.png">
 </div>
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
