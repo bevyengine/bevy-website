@@ -932,6 +932,14 @@ Then replace uses of `AlphaMode` with `MyAlphaMode`
 - Change instances of `render::primitives::Plane` to `render::primitives::HalfSpace`
 - Change instances of the `planes` member in `render::primitives::Frustum` to `half_spaces`
 
+### [Fix Plane UVs / texture flip](https://github.com/bevyengine/bevy/pull/8878)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Flip the textures you use on `Plane` shapes.
+
 ### [Add `RenderTarget::TextureView`](https://github.com/bevyengine/bevy/pull/8042)
 
 <div class="migration-guide-area-tags">
@@ -1084,6 +1092,16 @@ The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
 - The `upsert_leaf` function has been removed from `UiSurface` and replaced with `update_measure` which updates the `MeasureFunc` without node insertion.
 - The `dyn_clone` method has been removed from the `Measure` trait.
 - The new function of `CalculatedSize` has been replaced with the method `set`.
+
+### [Divide by `UiScale` when converting UI coordinates from physical to logical](https://github.com/bevyengine/bevy/pull/8720)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+Physical UI coordinates are now divided by both the `UiScale` and the window’s scale factor to compute the logical sizes and positions of UI nodes.
+
+This ensures that UI Node size and position values, held by the `Node` and `GlobalTransform` components, conform to the same logical coordinate system as the style constraints from which they are derived, irrespective of the current `scale_factor` and `UiScale`.
 
 ### [Flatten UI `Style` properties that use `Size` + remove `Size`](https://github.com/bevyengine/bevy/pull/8548)
 
