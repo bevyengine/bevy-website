@@ -540,7 +540,7 @@ At first glance, this might not seem very useful. But in combination with per-tu
 
 ```rust
 app.add_systems(Update, (
-    (attack, defend).in_set(Combat).before(check_health)
+    (attack, defend).in_set(Combat).before(check_health),
     check_health,
     (handle_death, respawn).after(check_health)
 ))
@@ -551,7 +551,7 @@ app.add_systems(Update, (
 ```rust
 app.add_systems(Update,
     (
-        (attack, defend).in_set(Combat)
+        (attack, defend).in_set(Combat),
         check_health,
         (handle_death, respawn)
     ).chain()
