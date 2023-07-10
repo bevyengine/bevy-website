@@ -781,7 +781,6 @@ Replace `OnUpdate` with `run_if(in_state(xxx))`.
 
 `QueryEntityError::QueryDoesNotMatch`'s display message changed from "The given entity does not have the requested component." to "The given entity's components do not match the query.".
 
-
 ### [Update syn, encase, glam and hexasphere](https://github.com/bevyengine/bevy/pull/8573)
 
 <div class="migration-guide-area-tags">
