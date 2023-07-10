@@ -781,6 +781,24 @@ Replace `OnUpdate` with `run_if(in_state(xxx))`.
 
 `QueryEntityError::QueryDoesNotMatch`'s display message changed from "The given entity does not have the requested component." to "The given entity's components do not match the query.".
 
+
+### [Update syn, encase, glam and hexasphere](https://github.com/bevyengine/bevy/pull/8573)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+Using `#[bundle]` attribute when deriving `Bundle` for nested bundles now throws an error. It was already not required since version 0.9, see [the migration guide](https://bevyengine.org/learn/migration-guides/0.8-0.9/#implement-bundle-for-component-use-bundle-tuples-for-insertion).
+
+```rust
+#[derive(Bundle)]
+struct PlayerBundle {
+    #[bundle] // Remove this line
+    sprite_bundle: SpriteBundle,
+    collider: Collider,
+}
+```
+
 ### [Rename keys like `LAlt` to `AltLeft`](https://github.com/bevyengine/bevy/pull/8792)
 
 <div class="migration-guide-area-tags">
