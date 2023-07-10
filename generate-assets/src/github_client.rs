@@ -3,7 +3,7 @@ use serde::Deserialize;
 
 const BASE_URL: &str = "https://api.github.com";
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct GithubContentResponse {
     encoding: String,
     content: String,
@@ -17,6 +17,18 @@ struct GithubLicenseResponse {
 #[derive(Deserialize)]
 struct GithubLicenseLicense {
     spdx_id: String,
+}
+
+#[derive(Deserialize, Debug)]
+struct GithubSearchFile {
+    total_count: u32,
+    incomplete_results: bool,
+    items: Vec<GithubSearchFileItem>,
+}
+
+#[derive(Deserialize, Debug)]
+struct GithubSearchFileItem {
+    path: std::path::PathBuf,
 }
 
 pub struct GithubClient {
@@ -72,6 +84,52 @@ impl GithubClient {
             .call()?
             .into_json()?;
 
-        Ok(response.license.spdx_id)
+        let license = response.license.spdx_id;
+
+        if license != "NOASSERTION" {
+            Ok(license)
+        } else {
+            bail!("No spdx license assertion")
+        }
+    }
+
+    /// Search file by name
+    pub fn search_file(
+        &self,
+        username: &str,
+        repository_name: &str,
+        file_name: &str,
+    ) -> anyhow::Result<Vec<String>> {
+        let response: GithubSearchFile = self
+            .agent
+            .get(&format!(
+                "{BASE_URL}/search/code?q=repo:{username}/{repository_name}+filename:{file_name}"
+            ))
+            .set("Accept", "application/json")
+            .set("Authorization", &format!("Bearer {}", self.token))
+            .call()?
+            .into_json()?;
+
+        if response.incomplete_results {
+            println!(
+                "Too many {} files in repository, checking only the first {} ones.",
+                file_name, response.total_count,
+            );
+        }
+
+        let paths = response
+            .items
+            .iter()
+            .filter_map(|i| {
+                if let Some(path_string) = i.path.to_str() {
+                    Some(path_string.to_string())
+                } else {
+                    println!("Path.to_str failed for {}", i.path.to_string_lossy());
+                    None
+                }
+            })
+            .collect();
+
+        Ok(paths)
     }
 }
