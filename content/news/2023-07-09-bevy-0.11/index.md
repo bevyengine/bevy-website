@@ -111,7 +111,7 @@ Bevy, since the 0.7 release, supports 3D animations.
 
 But it only supported _skeletal_ animations. Leaving on the sidewalk a common
 animation type called _morph targets_ (aka blendshapes, aka keyshapes, and a slew
-of other name). This is the grandparent of all 3D character animation!
+of other names). This is the grandparent of all 3D character animation!
 [Crash Bandicoot]'s run cycle used morph targets.
 
 <video controls><source src="morph_targets_video.mp4" type="video/mp4"/></video>
