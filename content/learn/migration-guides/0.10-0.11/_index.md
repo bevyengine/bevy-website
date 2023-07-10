@@ -159,8 +159,10 @@ fn play_music(
     asset_server: Res<AssetServer>,
 ) {
     commands.spawn((
-        AudioBundle::from_audio_source(asset_server.load("music.ogg"))
-            .with_settings(PlaybackSettings::LOOP.with_volume(0.5)),
+        AudioBundle {
+            source: asset_server.load("music.ogg"),
+            settings: PlaybackSettings::LOOP.with_volume(Volume::new_relative(0.5)),
+        },
         MyMusic,
     ));
 }
@@ -169,7 +171,7 @@ fn toggle_pause_music(
     // `AudioSink` will be inserted by Bevy when the audio starts playing
     query_music: Query<&AudioSink, With<MyMusic>>,
 ) {
-    if let Ok(sink) = query.get_single() {
+    if let Ok(sink) = query_music.get_single() {
         sink.toggle();
     }
 }
