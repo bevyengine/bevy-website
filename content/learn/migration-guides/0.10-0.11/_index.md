@@ -1315,7 +1315,19 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
+- The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`.
+- It is not possible to use the struct literal update syntax in const time with `Style` anymore, since one of its field implements `Drop`, doing so would raise a "the destructor for this type cannot be evaluated in constants" error. Implement all the fields or don't use `Style` in a `const` variable. See [this issue](https://github.com/bevyengine/bevy/issues/9095).
+
+```rust
+// 0.10
+pub const ABSOLUTE_STYLE: Style = Style {
+    position_type: PositionType::Absolute,
+    ..Style::DEFAULT
+};
+
+// 0.11
+// Implement all the fields or don't use const
+```
 
 ### [`MeasureFunc` improvements](https://github.com/bevyengine/bevy/pull/8402)
 
@@ -1327,6 +1339,33 @@ The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`
 - The `upsert_leaf` function has been removed from `UiSurface` and replaced with `update_measure` which updates the `MeasureFunc` without node insertion.
 - The `dyn_clone` method has been removed from the `Measure` trait.
 - The new function of `CalculatedSize` has been replaced with the method `set`.
+- `ImageBundle` and `TextBundle` don't implement `Clone` anymore. [You can either](https://github.com/bevyengine/bevy-website/issues/699):
+    - Wrap yourself the bundle type and implement `Clone` by skipping cloning the `ContentSize` field.
+    - Use a closure instead of `clone`:
+
+    ```rust
+    // 0.10
+    let circle = ImageBundle {
+        style: image_style,
+        image: materials.circle.clone(),
+        ..Default::default()
+    };
+    commands.spawn(circle.clone());
+    commands.spawn(circle.clone());
+    commands.spawn(circle.clone());
+    commands.spawn(circle.clone());
+
+    // 0.11
+    let circle = || ImageBundle {
+        style: image_style,
+        image: materials.circle.clone(),
+        ..Default::default()
+    };
+    commands.spawn(circle());
+    commands.spawn(circle());
+    commands.spawn(circle());
+    commands.spawn(circle());
+    ```
 
 ### [Divide by `UiScale` when converting UI coordinates from physical to logical](https://github.com/bevyengine/bevy/pull/8720)
 
