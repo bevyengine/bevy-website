@@ -291,7 +291,7 @@ differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Normals Only" data-title-b="Parallax+Normals">
+<div class="image-compare" style="aspect-ratio: 16 / 9; --slider-value: 39%" data-title-a="Normals Only" data-title-b="Parallax+Normals">
   <img class="image-a" alt="Normal Mapping Only" src="parallax_mapping_normals.jpg">
   <img class="image-b" alt="Parallax & Normal Mapping" src="parallax_mapping_depth.jpg">
 </div>
