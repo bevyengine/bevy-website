@@ -1340,8 +1340,9 @@ pub const ABSOLUTE_STYLE: Style = Style {
 - The `dyn_clone` method has been removed from the `Measure` trait.
 - The new function of `CalculatedSize` has been replaced with the method `set`.
 - `ImageBundle` and `TextBundle` don't implement `Clone` anymore. [You can either](https://github.com/bevyengine/bevy-website/issues/699):
-    - Wrap yourself the bundle type and implement `Clone` by skipping cloning the `ContentSize` field.
-    - Use a closure instead of `clone`:
+
+    1. Wrap yourself the bundle type and implement `Clone` by skipping cloning the `ContentSize` field.
+    2. Use a closure instead of `clone`:
 
     ```rust
     // 0.10
