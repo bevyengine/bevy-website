@@ -860,73 +860,76 @@ impl FromReflect for Foo {/* ... */}
 
 - Implementors of `Asset`, `Material` and `Material2d` now also need to derive `TypePath`.
 - Manual implementors of `Reflect` will need to implement the new `get_type_path` method.
-- To register types with generic parameters with the type registry, generic parameters must also implement `TypePath` even if they are only used for a `#[reflect(ignore)]` field. 
+- To register types with generic parameters with the type registry, generic parameters must also implement `TypePath` even if they are only used for a `#[reflect(ignore)]` field.
+
   ```rust
   // 0.10
   struct MyType {}
-  
+
   #[derive(Reflect)]
   struct MyTypeWithGeneric<A>{
       #[reflect(ignore)]
       _phantom: PhantomData<A>
   }
-  
+
   fn main() {
       App::new().add_plugins(DefaultPlugins)
           .register_type::<MyTypeWithGeneric<MyType>>() // in 0.11 this would error
           .run();
   }
-  
+
   // 0.11
   #[derive(TypePath)] // New. Can also just use #[derive(Reflect)]
   struct MyType {}
-  
+
   #[derive(Reflect)]
   struct MyTypeWithGeneric<A: TypePath>{ // changed
       #[reflect(ignore)]
       _phantom: PhantomData<A>
   }
-  
+
   fn main() {
       App::new().add_plugins(DefaultPlugins)
           .register_type::<MyTypeWithGeneric<MyType>>()
           .run();
   }
   ```
+
   If you don't own a type you may need to wrap it in a newtype and manually implement `TypePath` for the newtype.
-  ```rust 
+
+  ```rust
   // 0.10
   use other_crate::RemoteType;
-  
+
   #[derive(Reflect, Default)]
   struct MyTypeWithGeneric<A>{
       #[reflect(ignore)]
       _phantom: PhantomData<A>
   }
-  
+
   fn main() {
       App::new().add_plugins(DefaultPlugins)
           .register_type::<MyTypeWithGeneric<RemoteType>>()
           .run();
   }
-  
+
   // 0.11
   use other_crate::RemoteType;
-  
+
   #[derive(Default)]
   struct MyType(RemoteType);
-  
+
   impl TypePath for MyType {
       fn type_path() -> &'static str {
           "my_crate::my_module::MyType"
       }
-      fn short_type_path() -> &'static str{
+      fn short_type_path() -> &'static str {
           "MyType"
       }
   }
-  
+
   #[derive(Reflect, Default)]
-  struct MyTypeWithGeneric<A: TypePath>{
+  struct MyTypeWithGeneric<A: TypePath> {
       #[reflect(ignore)]
       _phantom: PhantomData<A>
   }
