@@ -1430,6 +1430,10 @@ pub const ABSOLUTE_STYLE: Style = Style {
 
 ### `CalculatedSize` split
 
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
 `CalculatedSize` doesn't exist anymore.
 
 The data from the `CalculatedSize` `size` field still exists. But it has been
