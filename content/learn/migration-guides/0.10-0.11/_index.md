@@ -1435,8 +1435,8 @@ pub const ABSOLUTE_STYLE: Style = Style {
 The data from the `CalculatedSize` `size` field still exists. But it has been
 split between the two following components:
 
-* the new component `bevy::ui::widget::UiImageSize::size`'s method
-* the new component `bevy::text::TextLayoutInfo::size`'s field
+- the new component `bevy::ui::widget::UiImageSize::size`'s method
+- the new component `bevy::text::TextLayoutInfo::size`'s field
 
 ```rust
 // before: 0.10.1
