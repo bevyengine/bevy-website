@@ -1428,45 +1428,6 @@ pub const ABSOLUTE_STYLE: Style = Style {
 // Implement all the fields or don't use const
 ```
 
-### `CalculatedSize` split
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">UI</div>
-</div>
-
-`CalculatedSize` doesn't exist anymore.
-
-The data from the `CalculatedSize` `size` field still exists. But it has been
-split between the two following components:
-
-- the new component `bevy::ui::widget::UiImageSize::size`'s method
-- the new component `bevy::text::TextLayoutInfo::size`'s field
-
-```rust
-// before: 0.10.1
-fn evaluate_size(query: Query<&CalculatedSize>) {
-    for calculated in &query {
-        let size = calculated.size;
-        // do things with size
-    }
-}
-// after: 0.11.0
-use bevy::{
-    ui::widget::UiImageSize,
-    text::TextLayoutInfo,
-};
-fn evaluate_size(query: Query<AnyOf<(&UiImageSize, &TextLayoutInfo)>>) {
-    for calculated in &query {
-        let size = match calculated {
-            (Some(image), None) => image.size(),
-            (None, Some(text)) => text.size,
-            _ => unreachable!(),
-        };
-        // do things with size
-    }
-}
-```
-
 ### [`MeasureFunc` improvements](https://github.com/bevyengine/bevy/pull/8402)
 
 <div class="migration-guide-area-tags">
@@ -1550,7 +1511,39 @@ Use these helper functions to replace the variants of `Overflow`:
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-`ImageBundle` has a new field `image_size` of type `UiImageSize` which contains the size of the image bundle's texture and is updated automatically by `update_image_calculated_size_system`.
+`CalculatedSize` doesn't exist anymore.
+
+The data from the `CalculatedSize` `size` field still exists. But it has been
+split between the two following components:
+
+- the new component `bevy::ui::widget::UiImageSize::size`'s method. It is
+    updated in the `update_image_calculated_size_system` system.
+- the new component `bevy::text::TextLayoutInfo::size`'s field
+
+```rust
+// before: 0.10.1
+fn evaluate_size(query: Query<&CalculatedSize>) {
+    for calculated in &query {
+        let size = calculated.size;
+        // do things with size
+    }
+}
+// after: 0.11.0
+use bevy::{
+    ui::widget::UiImageSize,
+    text::TextLayoutInfo,
+};
+fn evaluate_size(query: Query<AnyOf<(&UiImageSize, &TextLayoutInfo)>>) {
+    for calculated in &query {
+        let size = match calculated {
+            (Some(image), None) => image.size(),
+            (None, Some(text)) => text.size,
+            _ => unreachable!(),
+        };
+        // do things with size
+    }
+}
+```
 
 ### [Update ahash and hashbrown](https://github.com/bevyengine/bevy/pull/8623)
 
