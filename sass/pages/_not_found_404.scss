@@ -1,0 +1,34 @@
+.new_item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom:20%;
+}
+.new_item > p{
+    text-align: center;
+    font-size: 10vh;
+    font-weight: bold;
+    color: #6e6e6e;
+}
+
+
+
+@media (max-width: 800px) {
+    .new_item{
+        display: flex;
+        flex-flow: column;
+        position: absolute;
+        bottom:0;
+    }
+    .new_item > p{
+        text-align: center;
+        font-size: 8vh;
+        font-weight: bold;
+        color: #6e6e6e;
+    }
+    
+    .new_img{
+        width: 300px;
+    }
+}

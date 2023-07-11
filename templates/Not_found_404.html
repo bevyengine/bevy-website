@@ -1,3 +1,4 @@
+{% extends "layouts/base.html" %}
 {% import "macros/header.html" as header_macros %}
 
 {% if section and section.title %}
@@ -116,8 +117,9 @@
                 </div>
             </header>
             <main class="layout__content">
-                <div class="container">
-                    {% block content %}{% endblock %}
+                <div class="new_item">
+                    <p>404<br> Whoops, this page doesn't exist.</p>
+                    <img class="new_img" src="assets/rust_lang_logo.png" alt="Image cant be loaded">
                 </div>
             </main>
         </div>
