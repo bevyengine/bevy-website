@@ -1428,16 +1428,49 @@ pub const ABSOLUTE_STYLE: Style = Style {
 // Implement all the fields or don't use const
 ```
 
+### `CalculatedSize` split
+
+`CalculatedSize` doesn't exist anymore.
+
+The data from the `CalculatedSize` `size` field still exists. But it has been
+split between the two following components:
+
+* the new component `bevy::ui::widget::UiImageSize::size`'s method
+* the new component `bevy::text::TextLayoutInfo::size`'s field
+
+```rust
+// before: 0.10.1
+fn evaluate_size(query: Query<&CalculatedSize>) {
+    for calculated in &query {
+        let size = calculated.size;
+        // do things with size
+    }
+}
+// after: 0.11.0
+use bevy::{
+    ui::widget::UiImageSize,
+    text::TextLayoutInfo,
+};
+fn evaluate_size(query: Query<AnyOf<(&UiImageSize, &TextLayoutInfo)>>) {
+    for calculated in &query {
+        let size = match calculated {
+            (Some(image), None) => image.size(),
+            (None, Some(text)) => text.size,
+            _ => unreachable!(),
+        };
+        // do things with size
+    }
+}
+```
+
 ### [`MeasureFunc` improvements](https://github.com/bevyengine/bevy/pull/8402)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-- `CalculatedSize` has been renamed to `ContentSize`.
 - The `upsert_leaf` function has been removed from `UiSurface` and replaced with `update_measure` which updates the `MeasureFunc` without node insertion.
 - The `dyn_clone` method has been removed from the `Measure` trait.
-- The new function of `CalculatedSize` has been replaced with the method `set`.
 - `ImageBundle` and `TextBundle` don't implement `Clone` anymore. [You can either](https://github.com/bevyengine/bevy-website/issues/699):
 
     1. Wrap yourself the bundle type and implement `Clone` by skipping cloning the `ContentSize` field.
