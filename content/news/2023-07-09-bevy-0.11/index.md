@@ -575,7 +575,7 @@ This will run `a` in parallel with `b->c->d`, then after those have finished run
 
 ## Gizmos
 
-<div class="release-feature-authors">authors: @devil-ira, @jannik4, @lassade, @The5-1, @Toqozz, @nicopap</div>
+<div class="release-feature-authors">authors: @devil-ira, @mtsr, @aevyrie, @jannik4, @lassade, @The5-1, @Toqozz, @nicopap</div>
 
 It is often helpful to be able to draw simple shapes and lines in 2D and 3D for things like editor controls, and debug views. Game development is a very "spatial" thing and being able to quickly draw shapes is the visual equivalent of "print line debugging". It helps answer questions like "is this ray casting in the right direction?" and "is this collider big enough?"
 
