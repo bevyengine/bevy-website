@@ -35,11 +35,12 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @JMS55, @danchia, @superdump </div>
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Without SSAO" data-title-b="With SSAO">
-  <img class="image-a" alt="Without SSAO" src="no_ssao.png">
-  <img class="image-b" alt="With SSAO" src="with_ssao.png">
-</div>
+{{ compare_slider(
+    before_title="Without SSAO",
+    before_image="no_ssao.png",
+    after_title="With SSAO",
+    after_image="with_ssao.png"
+) }}
 
 **SSAO Only**
 ![ssao_only](ssao_only.png)
@@ -95,11 +96,12 @@ You can compare all of our anti-aliasing methods in Bevy's improved [anti-aliasi
 
 Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Contrast Adaptive Sharpening (RCAS).
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="TAA" data-title-b="TAA+RCAS">
-  <img class="image-a" alt="TAA" src="rcas_off.png">
-  <img class="image-b" alt="TAA+RCAS" src="rcas_on.png">
-</div>
+{{ compare_slider(
+    before_title="TAA",
+    before_image="rcas_off.png",
+    after_title="TAA+RCAS",
+    after_image="rcas_on.png"
+) }}
 
 Notice that the texture on the leather part of the helmet is much crisper!
 
@@ -290,11 +292,13 @@ Since normal maps do not "move" the shaded areas, merely shade them
 differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-<div class="image-compare" style="aspect-ratio: 16 / 9; --slider-value: 39%" data-title-a="Normals Only" data-title-b="Parallax+Normals">
-  <img class="image-a" alt="Normal Mapping Only" src="parallax_mapping_normals.jpg">
-  <img class="image-b" alt="Parallax & Normal Mapping" src="parallax_mapping_depth.jpg">
-</div>
+{{ compare_slider(
+    before_title="Normals Only",
+    before_image="parallax_mapping_normals.jpg",
+    after_title="Parallax & Normal Mapping",
+    after_image="parallax_mapping_depth.jpg",
+    start_slider_at="40%"
+) }}
 
 Parallax mapping in Bevy is still very limited. The most painful aspect is that
 it is not a standard glTF feature, meaning that the depth texture needs to be
@@ -816,11 +820,12 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Reinhard-luminance" data-title-b="TonyMcMapface">
-  <img class="image-a" alt="Reinhard-luminance" src="tm_reinhard_luminance.png">
-  <img class="image-b" alt="TonyMcMapface" src="tm_tonymcmapface.png">
-</div>
+{{ compare_slider(
+    before_title="Reinhard-luminance",
+    before_image="tm_reinhard_luminance.png",
+    after_title="TonyMcMapface",
+    after_image="tm_tonymcmapface.png"
+) }}
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.
 

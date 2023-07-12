@@ -1,0 +1,10 @@
+<p class="image-compare-instruction">Drag this image to compare</p>
+<div
+    {% if start_slider_at %}style="--slider-value: {{start_slider_at}}"{% endif %}
+    class="image-compare"
+    data-title-a="{{before_title}}"
+    data-title-b="{{after_title}}"
+>
+  <img class="image-a" alt="{{before_title}}" src="{{before_image}}">
+  <img class="image-b" alt="{{after_title}}" src="{{after_image}}">
+</div>
