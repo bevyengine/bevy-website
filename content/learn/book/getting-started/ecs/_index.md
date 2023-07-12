@@ -59,12 +59,12 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()
-        .add_system(hello_world)
+        .add_systems(Update, hello_world)
         .run();
 }
 ```
 
-The {{rust_type(type="struct" crate="bevy_app", name="App" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
+The {{rust_type(type="struct" crate="bevy_app", name="App" method="add_systems" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_app", name="Update")}} {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
 
 Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
 
@@ -101,8 +101,8 @@ Now register the startup system like this:
 ```rs
 fn main() {
     App::new()
-        .add_startup_system(add_people)
-        .add_system(hello_world)
+        .add_systems(Startup, add_people)
+        .add_systems(Update, hello_world)
         .run();
 }
 ```
@@ -121,14 +121,13 @@ The parameters we pass in to a "system function" define what data the system run
 
 You can interpret the Query above as: "iterate over every Name component for entities that also have a Person component"
 
-Now we just register the system in our App:
+Now we just register the system in our App. Note that you can pass more than one system into an `add_systems` call by using a tuple!
 
 ```rs
 fn main() {
     App::new()
-        .add_startup_system(add_people)
-        .add_system(hello_world)
-        .add_system(greet_people)
+        .add_systems(Startup, add_people)
+        .add_systems(Update, (hello_world, greet people))
         .run();
 }
 ```

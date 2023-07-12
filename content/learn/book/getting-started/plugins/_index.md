@@ -22,9 +22,8 @@ Let's make our app more interesting by adding the "default Bevy plugins".
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_startup_system(add_people)
-        .add_system(hello_world)
-        .add_system(greet_people)
+        .add_systems(Startup, add_people)
+        .add_systems(Update, (hello_world, greet_people))
         .run();
 }
 ```
@@ -41,10 +40,12 @@ Note that `add_plugins(DefaultPlugins)` is equivalent to the following:
 ```rs
 fn main() {
     App::new()
-        .add_plugin(CorePlugin::default())
-        .add_plugin(InputPlugin::default())
-        .add_plugin(WindowPlugin::default())
-        /* more plugins omitted for brevity */
+        .add_plugins((
+            CorePlugin::default(),
+            InputPlugin::default(),
+            WindowPlugin::default(),
+            /* more plugins omitted for brevity */
+        ))
         .run();
 }
 ```
@@ -70,30 +71,26 @@ Then register the plugin in your App like this:
 ```rs
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(HelloPlugin)
-        .add_startup_system(add_people)
-        .add_system(hello_world)
-        .add_system(greet_people)
+        .add_plugins((DefaultPlugins, HelloPlugin))
+        .add_systems(Startup, add_people)
+        .add_systems(Update, (hello_world, greet_people))
         .run();
 }
 ```
 
-Now all that's left is to move our systems into `HelloPlugin`, which is just a matter of cut and paste. The `app` variable in our plugin's `build()` function is the same builder type we use in our `main()` function:
+Note `add_plugins` can add any number of plugins (or plugin groups like `DefaultPlugins`) by passing in a tuple of them. Now all that's left is to move our systems into `HelloPlugin`, which is just a matter of cut and paste. The `app` variable in our plugin's `build()` function is the same builder type we use in our `main()` function:
 
 ```rs
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(add_people)
-            .add_system(hello_world)
-            .add_system(greet_people);
+        app.add_systems(Startup, add_people)
+            .add_systems(Update, (hello_world, greet_people));
     }
 }
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(HelloPlugin)
+        .add_plugins((DefaultPlugins, HelloPlugin))
         .run();
 }
 ```
