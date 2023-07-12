@@ -36,10 +36,10 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 <div class="release-feature-authors">authors: @JMS55, @danchia, @superdump </div>
 
 {{ compare_slider(
-    before_title="Without SSAO",
-    before_image="no_ssao.png",
-    after_title="With SSAO",
-    after_image="with_ssao.png"
+    left_title="Without SSAO",
+    left_image="no_ssao.png",
+    right_title="With SSAO",
+    right_image="with_ssao.png"
 ) }}
 
 **SSAO Only**
@@ -97,10 +97,10 @@ You can compare all of our anti-aliasing methods in Bevy's improved [anti-aliasi
 Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Contrast Adaptive Sharpening (RCAS).
 
 {{ compare_slider(
-    before_title="TAA",
-    before_image="rcas_off.png",
-    after_title="TAA+RCAS",
-    after_image="rcas_on.png"
+    left_title="TAA",
+    left_image="rcas_off.png",
+    right_title="TAA+RCAS",
+    right_image="rcas_on.png"
 ) }}
 
 Notice that the texture on the leather part of the helmet is much crisper!
@@ -293,10 +293,10 @@ differently, we get those awkward specular highlights. With parallax mapping,
 they are gone.
 
 {{ compare_slider(
-    before_title="Normals Only",
-    before_image="parallax_mapping_normals.jpg",
-    after_title="Parallax & Normal Mapping",
-    after_image="parallax_mapping_depth.jpg",
+    left_title="Normals Only",
+    left_image="parallax_mapping_normals.jpg",
+    right_title="Parallax & Normal Mapping",
+    right_image="parallax_mapping_depth.jpg",
     start_slider_at="40%"
 ) }}
 
@@ -821,10 +821,10 @@ and the vibration strength. `GamepadRumbleRequest::Stop` immediately stops all m
 In **Bevy 0.10** we [made tonemapping configurable with a ton of new tonemapping options](/news/bevy-0-10/#more-tonemapping-choices). In **Bevy 0.11** we've switched the default tonemapping method from "Reinhard luminance" tonemapping to "TonyMcMapface":
 
 {{ compare_slider(
-    before_title="Reinhard-luminance",
-    before_image="tm_reinhard_luminance.png",
-    after_title="TonyMcMapface",
-    after_image="tm_tonymcmapface.png"
+    left_title="Reinhard-luminance",
+    left_image="tm_reinhard_luminance.png",
+    right_title="TonyMcMapface",
+    right_image="tm_tonymcmapface.png"
 ) }}
 
 TonyMcMapface ([created by Tomasz Stachowiak](https://github.com/h3r2tic/tony-mc-mapface)) is a much more neutral display transform that tries to stay as close to the input "light" as possible. This helps retain artistic choices in the scene. Notably, brights desaturate across the entire spectrum (unlike Reinhard luminance). It also works much better with bloom when compared to Reinhard luminance.

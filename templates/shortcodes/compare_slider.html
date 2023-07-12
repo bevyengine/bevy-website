@@ -1,10 +1,11 @@
+{% set img = get_image_metadata(path=page.colocated_path ~ left_image) %}
 <p class="image-compare-instruction">Drag this image to compare</p>
 <div
-    {% if start_slider_at %}style="--slider-value: {{start_slider_at}}"{% endif %}
+    style="aspect-ratio: {{img.width}} / {{img.height}}{% if start_slider_at %}; --slider-value: {{start_slider_at}}{% endif %}"
     class="image-compare"
-    data-title-a="{{before_title}}"
-    data-title-b="{{after_title}}"
+    data-title-a="{{left_title}}"
+    data-title-b="{{right_title}}"
 >
-  <img class="image-a" alt="{{before_title}}" src="{{before_image}}">
-  <img class="image-b" alt="{{after_title}}" src="{{after_image}}">
+  <img class="image-a" alt="{{left_title}}" src="{{left_image}}">
+  <img class="image-b" alt="{{right_title}}" src="{{right_image}}">
 </div>
