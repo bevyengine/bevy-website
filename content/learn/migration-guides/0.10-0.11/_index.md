@@ -1319,6 +1319,15 @@ Flip `EnvironmentMapLight` maps if needed to match how they previously rendered 
 
 When sampling from the point light shadow cubemap, use the (expected) light to fragment direction vector but negate the z coordinate. Previously, you would have used the fragment to light direction vector.
 
+### [Add `Aabb` calculation for `Sprite`, `TextureAtlasSprite` and `Mesh2d`](https://github.com/bevyengine/bevy/pull/7885)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- 2D entities with negative z values are now culled by frustum culling.
+- This will get fixed by the next patch release.
+
 ### [Add morph targets](https://github.com/bevyengine/bevy/pull/8158)
 
 <div class="migration-guide-area-tags">
