@@ -1157,6 +1157,10 @@ fn view_logical_camera_rect(camera_query: Query<&Camera>) {
 
 The default tonemapper has been changed from ReinhardLuminance to TonyMcMapface. Explicitly set ReinhardLuminance on your cameras to get back the previous look.
 
+TonyMcMapface requires the `ktx2`, `tonemapping_luts`, and `zstd` features, which are enabled by default. If you disable the default features and notice that your scene is pink, you can either add the `ktx2`, `tonemapping_luts`, and `zstd` features, or use a different tonemapper.
+
+Of the tonemappers that don't require a lookup table (LUT), SomewhatBoringDisplayTransform is the closest to TonyMcMapface. LUT based tonemappers are preferable as they tend to be faster.
+
 ### [Apply codebase changes in preparation for `StandardMaterial` transmission](https://github.com/bevyengine/bevy/pull/8704)
 
 <div class="migration-guide-area-tags">
