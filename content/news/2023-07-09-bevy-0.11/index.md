@@ -67,7 +67,16 @@ Special thanks to Intel for their open source [XeGTAO](https://github.com/GameTe
 
 <div class="release-feature-authors">authors: @JMS55, @DGriffin91</div>
 
-![aa](aa.png)
+{{ compare_slider(
+    left_title="MSAA",
+    left_alt="The Helmet model with MSAA, anti-aliasing. The edge between meshes are well aliased, but crenellation is noticeable on sharp shadows and specular highlights",
+    left_image="msaa_helmet.png",
+    right_title="TAA",
+    right_alt="With TAA, little crenellation is visible, but it feels a bit 'smudgy'",
+    right_image="taa_helmet.png",
+    start_slider_at="39%",
+    height="619px"
+) }}
 
 Alongside MSAA and FXAA, Bevy now supports Temporal Anti-aliasing (TAA) as an anti-aliasing option.
 
