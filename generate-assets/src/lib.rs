@@ -97,7 +97,7 @@ pub struct MetadataSource<'a> {
     /// Official bevy crates names from crates.io DB dump, in lexigographic order.
     pub bevy_crates_names: Option<Vec<String>>,
     /// Prepared statement to retrieve metadata from crates.io.
-    /// 
+    ///
     /// Initialized with [`get_metadata_from_cratesio_statement`] at the begining
     /// of the algorithm, used by [`get_metadata_from_cratesio`] for each asset.
     pub get_metadata_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
@@ -105,7 +105,7 @@ pub struct MetadataSource<'a> {
 
 /// Entry point the algorithm to find [`Asset`] files inside [`Section`] folders,
 /// parse asset files, and gather metadata information about assets from various external sources.
-/// 
+///
 /// This initialises the root [`Section`], and initialize [`MetadataSource`] with
 /// crates.io's database dump connection and information about official bevy crates.
 pub fn parse_assets<'a>(
@@ -301,13 +301,13 @@ fn merge_version(version1: Option<String>, version2: Option<String>) -> Option<S
 }
 
 /// Gets metadata from a Github project.
-/// 
+///
 /// This algorithm, in order :
 /// - tries to get metadata from the root `Cargo.toml` file,
 /// - if the license is missing, search the license of the project on Github,
 /// - if metadata is missing, search all `Cargo.toml` files, then tries to get metadata
 /// from all of them, until we have the information we need.
-/// 
+///
 /// Note:
 /// - The search call of the API has a tendency to return 403 errors after a few number
 /// of calls. Assets that are at the "end" might not have correct metadata because of that.
@@ -414,7 +414,7 @@ fn get_metadata_from_github_manifest(
 }
 
 /// Gets metadata from a Gitlab project.
-/// 
+///
 /// This algorithm only looks into the root `Cargo.toml` file.
 fn get_metadata_from_gitlab(
     client: &GitlabClient,
@@ -459,7 +459,7 @@ fn get_license(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
 }
 
 /// Find any bevy dependency and get the corresponding bevy version from a `Cargo.toml` file.
-/// 
+///
 /// This algorithm checks if a dependency to an official bevy crate is found, in order :
 /// - in the (regular) dependencies,
 /// - in the dev dependencies (used for examples, tests and benchmarks),
@@ -486,7 +486,8 @@ fn get_bevy_version_from_manifest(
             // but would probably depend on bevy directly for its examples,
             // benchmarks or tests, in its dev dependencies.
             let dev_dependencies = cargo_manifest.dev_dependencies.range(search_range.clone());
-            bevy_dependency = search_bevy_in_manifest_dependencies(dev_dependencies, bevy_crates.clone());
+            bevy_dependency =
+                search_bevy_in_manifest_dependencies(dev_dependencies, bevy_crates.clone());
 
             if bevy_dependency.is_none() {
                 // Tries to find an official bevy crate from the asset's workspace dependencies.
@@ -506,7 +507,7 @@ fn get_bevy_version_from_manifest(
 
 /// Search the first official bevy crate found in a collection of `Cargo.toml`
 /// dependencies and return its version.
-/// 
+///
 /// If it was a bit more generic, this function could be called "find_first_intersect_in_sorted_iterators".
 /// Both dependencies and bevy_crates are assumed to be sorted (by key for dependencies, they are in this context),
 /// and we find the first element that intersect both of them using that knowledge.
@@ -525,7 +526,8 @@ fn search_bevy_in_manifest_dependencies<'a>(
             dependency = dependencies.next();
         } else {
             if dependency_name == bevy_crate_name {
-                let dependency_version = get_bevy_manifest_dependency_version(dependency.unwrap().1);
+                let dependency_version =
+                    get_bevy_manifest_dependency_version(dependency.unwrap().1);
                 if dependency_version.is_some() {
                     return dependency_version;
                 } else {
@@ -542,7 +544,7 @@ fn search_bevy_in_manifest_dependencies<'a>(
 }
 
 /// Gets the bevy version from the `Cargo.toml` bevy dependency provided.
-/// 
+///
 /// Returns the version number if available.
 /// If is is a git dependency, return either "main" or "git" for anything that isn't "main".
 fn get_bevy_manifest_dependency_version(dep: &cargo_toml::Dependency) -> Option<String> {
@@ -587,7 +589,7 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
 }
 
 /// Gets metadata of a crate from the crates.io database dump.
-/// 
+///
 /// If the crate is not found, retries with `-` instead of `_`.
 fn get_metadata_from_crates_db(
     crate_name: &str,
@@ -663,7 +665,7 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
 
 /// Get a prepared statement to get license and version for a crate from the
 /// crates.io database dump.
-/// 
+///
 /// To be used later by [`get_metadata_from_cratesio`].
 pub fn get_metadata_from_cratesio_statement<'a>(
     db: &'a CratesIoDb,
