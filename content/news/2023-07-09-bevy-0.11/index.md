@@ -37,8 +37,10 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 {{ compare_slider(
     left_title="Without SSAO",
+    left_alt = "The Sponza scene without SSAO, it contains a lot of persian-style velvet curtains, they look awkward.",
     left_image="no_ssao.png",
     right_title="With SSAO",
+    right_alt = "The Sponza scene with SSAO, the curtains look much more realistic and sculptued. SSAO darkens the ridges between the folds, making the curtains much more interesting to look at",
     right_image="with_ssao.png"
 ) }}
 
@@ -100,7 +102,8 @@ Effects like TAA and FXAA can cause the final render to become blurry. Sharpenin
     left_title="TAA",
     left_image="rcas_off.png",
     right_title="TAA+RCAS",
-    right_image="rcas_on.png"
+    right_image="rcas_on.png",
+    start_slider_at="55%"
 ) }}
 
 Notice that the texture on the leather part of the helmet is much crisper!

@@ -6,6 +6,6 @@
     data-title-a="{{left_title}}"
     data-title-b="{{right_title}}"
 >
-  <img class="image-a" alt="{{left_title}}" src="{{left_image}}">
-  <img class="image-b" alt="{{right_title}}" src="{{right_image}}">
+  <img class="image-a" alt="{% if left_alt %}{{left_alt}}{% else %}{{left_title}}{% endif %}" src="{{left_image}}">
+  <img class="image-b" alt="{% if right_alt %}{{right_alt}}{% else %}{{right_title}}{% endif %}" src="{{right_image}}">
 </div>
