@@ -127,7 +127,7 @@ Now we just register the system in our App. Note that you can pass more than one
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, greet people))
+        .add_systems(Update, (hello_world, greet_people))
         .run();
 }
 ```
