@@ -1326,8 +1326,7 @@ When sampling from the point light shadow cubemap, use the (expected) light to f
 </div>
 
 - 2D entities are now subject to frustum culling, check your 2D camera's z coordinate and projection `far` if some of them are not rendered anymore
-- In particular, 2D entities with negative z values are now culled by frustum culling with the `default` `Camera2dBundle`.
-- That last point will get fixed in version `0.11.1`.
+- In particular, 2D entities with negative z values are now culled by frustum culling with the `default` `Camera2dBundle`. We plan on re-adding support for negative values with the default 2D camera in version `0.11.1`.
 
 ### [Add morph targets](https://github.com/bevyengine/bevy/pull/8158)
 
