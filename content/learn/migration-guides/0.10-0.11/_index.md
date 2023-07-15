@@ -1544,4 +1544,32 @@ If you were using hashes to an asset or using one of the fixed hasher exposed by
 
 `bevy_ui` accessibility systems have been moved to `PostUpdate`, if you were scheduling systems relative to these, make sure you now do it in `PostUpdate`.
 
+### [Constructing const `Style`s](https://github.com/bevyengine/bevy/issues/9095)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+`Style`'s destructor can no longer run in a const context, which causes struct update syntax to fail. If you need to create const `Style`s, replace
+```rust
+const BUTTON_STYLE: Style = Style {
+    justify_content: JustifyContent::Center,
+    align_items: AlignItems::Center,
+    width: Val::Px(200.0),
+    height: Val::Px(80.0),
+    ..Style::DEFAULT
+}
+```
+with
+```rust
+const BUTTON_STYLE: Style = {
+    let mut style = Style::DEFAULT;
+    style.justify_content = JustifyContent::Center;
+    style.align_items = AlignItems::Center;
+    style.width = Val::Px(200.0);
+    style.height = Val::Px(80.0);
+    style
+};
+```
+
 </div>
