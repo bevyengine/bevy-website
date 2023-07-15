@@ -39,7 +39,7 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
-        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh && ./generate_wasm_examples-webgpu.sh
+        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh
 
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'

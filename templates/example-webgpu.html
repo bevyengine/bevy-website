@@ -8,7 +8,7 @@
         {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
         <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
         <a class="example__back" href="/examples-webgpu"><i class="icon icon--chevron-left"></i> Back to examples</a>
-        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/main/{{ page.extra.github_code_path }}">
+        <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
             <i class="icon icon--github"></i> View in GitHub
         </a>
     </div>
@@ -50,7 +50,7 @@
     #}
     import { progressiveFetch } from '/tools.js';
     import '/restart-audio-context.js'
-    import init from 'https://wasm-examples.pages.dev/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
+    import init from 'https://bevy-wasm-webgpu.pages.dev/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
 
     const canvasEl = document.getElementById('bevy');
 
