@@ -3,10 +3,11 @@
 ./clone_bevy.sh
 
 # temporary: fetch tools from main branch
-cd ..
 git init bevy-tools
+cd bevy-tools
 git remote add origin https://github.com/bevyengine/bevy
 git pull --depth=1 origin main
+cd ..
 rm -rf bevy/tools
 cp -r bevy-tools/tools bevy
 rm -rf bevy-tools
