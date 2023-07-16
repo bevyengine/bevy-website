@@ -1551,6 +1551,7 @@ If you were using hashes to an asset or using one of the fixed hasher exposed by
 </div>
 
 `Style`'s destructor can no longer run in a const context, which causes struct update syntax to fail. If you need to create const `Style`s, replace
+
 ```rust
 const BUTTON_STYLE: Style = Style {
     justify_content: JustifyContent::Center,
@@ -1560,7 +1561,9 @@ const BUTTON_STYLE: Style = Style {
     ..Style::DEFAULT
 }
 ```
+
 with
+
 ```rust
 const BUTTON_STYLE: Style = {
     let mut style = Style::DEFAULT;
