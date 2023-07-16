@@ -77,11 +77,6 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: "Clone Bevy"
-        run: >
-          cd generate-wasm-examples &&
-          ./clone_bevy.sh
-
       - uses: actions/cache@v3
         with:
           path: |
@@ -89,8 +84,6 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            generate-wasm-examples/bevy/target/
-            content/examples/**/*.wasm
           key: ${{ runner.os }}-generate-wasm-examples-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
 
       - uses: dtolnay/rust-toolchain@stable
