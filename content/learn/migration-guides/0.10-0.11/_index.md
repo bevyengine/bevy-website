@@ -1428,7 +1428,7 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
 </div>
 
 - The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`.
-- It is not possible to use the struct literal update syntax in const time with `Style` anymore, since one of its field implements `Drop`, doing so would raise a "the destructor for this type cannot be evaluated in constants" error. Implement all the fields or don't use `Style` in a `const` variable. See [this issue](https://github.com/bevyengine/bevy/issues/9095).
+- It is not possible to use the struct literal update syntax in const time with `Style` anymore, since one of its field implements `Drop`, doing so would raise a "the destructor for this type cannot be evaluated in constants" error (see [this issue](https://github.com/bevyengine/bevy/issues/9095)).
 
 ```rust
 // 0.10
@@ -1438,7 +1438,11 @@ pub const ABSOLUTE_STYLE: Style = Style {
 };
 
 // 0.11
-// Implement all the fields or don't use const
+pub const ABSOLUTE_STYLE: Style = {
+    let mut style = Style::DEFAULT;
+    style.position_type = PositionType::Absolute;
+    style
+};
 ```
 
 ### [`MeasureFunc` improvements](https://github.com/bevyengine/bevy/pull/8402)
@@ -1543,36 +1547,5 @@ If you were using hashes to an asset or using one of the fixed hasher exposed by
 </div>
 
 `bevy_ui` accessibility systems have been moved to `PostUpdate`, if you were scheduling systems relative to these, make sure you now do it in `PostUpdate`.
-
-### [Constructing const `Style`s](https://github.com/bevyengine/bevy/issues/9095)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">UI</div>
-</div>
-
-`Style`'s destructor can no longer run in a const context, which causes struct update syntax to fail. If you need to create const `Style`s, replace
-
-```rust
-const BUTTON_STYLE: Style = Style {
-    justify_content: JustifyContent::Center,
-    align_items: AlignItems::Center,
-    width: Val::Px(200.0),
-    height: Val::Px(80.0),
-    ..Style::DEFAULT
-}
-```
-
-with
-
-```rust
-const BUTTON_STYLE: Style = {
-    let mut style = Style::DEFAULT;
-    style.justify_content = JustifyContent::Center;
-    style.align_items = AlignItems::Center;
-    style.width = Val::Px(200.0);
-    style.height = Val::Px(80.0);
-    style
-};
-```
 
 </div>
