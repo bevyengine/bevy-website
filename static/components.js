@@ -1,3 +1,8 @@
+// clamp a number to the given range
+function clamp(val, min, max) {
+  return Math.min(Math.max(val, min), max)
+}
+
 // inserts the input element required to activate image_compare components
 //
 // Usage in a document should look like:
@@ -30,7 +35,7 @@ function enable_image_compare() {
     img_cmp.appendChild(slider);
     // setup callback
     slider.addEventListener("input", (event) => {
-      img_cmp.style.setProperty('--slider-value', slider.value + "%");
+      img_cmp.style.setProperty('--slider-value', clamp(slider.value, slider.min, slider.max) + "%");
     });
   }
 }
