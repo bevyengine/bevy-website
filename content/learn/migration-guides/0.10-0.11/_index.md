@@ -1428,7 +1428,7 @@ The event `TouchPhase::Cancelled` is now called `TouchPhase::Canceled`
 </div>
 
 - The `UiSystem::Flex` system set has been renamed to `UiSystem::Layout`.
-- It is not possible to use the struct literal update syntax in const time with `Style` anymore, since one of its field implements `Drop`, doing so would raise a "the destructor for this type cannot be evaluated in constants" error. Implement all the fields or don't use `Style` in a `const` variable. See [this issue](https://github.com/bevyengine/bevy/issues/9095).
+- It is not possible to use the struct literal update syntax in const time with `Style` anymore, since one of its field implements `Drop`, doing so would raise a "the destructor for this type cannot be evaluated in constants" error (see [this issue](https://github.com/bevyengine/bevy/issues/9095)).
 
 ```rust
 // 0.10
@@ -1438,7 +1438,11 @@ pub const ABSOLUTE_STYLE: Style = Style {
 };
 
 // 0.11
-// Implement all the fields or don't use const
+pub const ABSOLUTE_STYLE: Style = {
+    let mut style = Style::DEFAULT;
+    style.position_type = PositionType::Absolute;
+    style
+};
 ```
 
 ### [`MeasureFunc` improvements](https://github.com/bevyengine/bevy/pull/8402)
