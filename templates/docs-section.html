@@ -52,8 +52,15 @@
 
         {% for p in all_sections %}
             {% set section_obj = get_section(path=p) %}
+            {% set parent_section_path = section_obj.components | slice(end=-1) | concat(with="_index.md") | join(sep="/") %}
+            {% set parent_section = get_section(path=parent_section_path) %}
 
             {% if found_current %}
+                {% if section_obj.extra and section_obj.extra.public_draft %}
+                    {% continue %}
+                {% elif parent_section.extra and parent_section.extra.public_draft %}
+                    {% continue %}
+                {% endif %}
                 {% set_global next_section = section_obj %}
                 {% break %}
             {% endif %}
@@ -63,6 +70,11 @@
                 {% continue %}
             {% endif %}
 
+            {% if section_obj.extra and section_obj.extra.public_draft %}
+                {% continue %}
+            {% elif parent_section.extra and parent_section.extra.public_draft %}
+                {% continue %}
+            {% endif %}
             {% set_global prev_section = section_obj %}
         {% endfor %}
 
