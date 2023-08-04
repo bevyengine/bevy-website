@@ -10,12 +10,12 @@
         {% set class = class ~ " tree-menu__item--active" %}
     {% endif %}
 
-    {% set warn_class = "" %}
-    {% if section and section.extra and section.extra.public_draft %}
+    {% set warn_class="" %}
+    {% if section.extra and section.extra.public_draft %}
         {% set warn_class="warning" %}
     {% endif %}
 
-    {% if is_in_branch or not section or not section.extra or not section.extra.public_draft %}
+    {% if is_in_branch or not warn_class %}
         {% if section.subsections %}
             {% set label_class = label_class ~ " tree-menu__label--with-chevron" %}
             <input id="{{id}}" class="tree-menu__state" type="checkbox" {% if is_in_branch %}checked{% endif %}>
