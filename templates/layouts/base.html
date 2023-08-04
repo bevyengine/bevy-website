@@ -1,4 +1,5 @@
 {% import "macros/header.html" as header_macros %}
+{% import "macros/public_draft.html" as public_draft %}
 
 {% if section and section.title %}
     {% if section.path is starting_with("/learn/book/") %}
@@ -117,6 +118,9 @@
             </header>
             <main class="layout__content">
                 <div class="container">
+                    {% if section %}
+                        {{ public_draft::warning(section=section) }}
+                    {% endif %}
                     {% block content %}{% endblock %}
                 </div>
             </main>

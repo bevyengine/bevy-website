@@ -10,28 +10,35 @@
         {% set class = class ~ " tree-menu__item--active" %}
     {% endif %}
 
-    {% if section.subsections %}
-        {% set label_class = label_class ~ " tree-menu__label--with-chevron" %}
-        <input id="{{id}}" class="tree-menu__state" type="checkbox" {% if is_in_branch %}checked{% endif %}>
+    {% set warn_class = "" %}
+    {% if section and section.extra and section.extra.public_draft %}
+        {% set warn_class="warning" %}
     {% endif %}
 
-    <li class="{{class}}">
-        <div class="{{label_class}}">
-            <a class="tree-menu__link" href="{{section.path}}">{{ section.title }}</a>
-            {% if section.subsections %}
-                <label class="tree-menu__toggle" for="{{id}}">
-                    <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg">
-                </label>
-            {% endif %}
-        </div>
+    {% if is_in_branch or not section or not section.extra or not section.extra.public_draft %}
         {% if section.subsections %}
-            <ul class="tree-menu">
-                {% for s in section.subsections %}
-                    {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
-                {% endfor %}
-            </ul>
+            {% set label_class = label_class ~ " tree-menu__label--with-chevron" %}
+            <input id="{{id}}" class="tree-menu__state" type="checkbox" {% if is_in_branch %}checked{% endif %}>
         {% endif %}
-    </li>
+
+        <li class="{{class}}">
+            <div class="{{label_class}}">
+                <a class="tree-menu__link {{warn_class}}" href="{{section.path}}">{{ section.title }}</a>
+                {% if section.subsections %}
+                    <label class="tree-menu__toggle" for="{{id}}">
+                        <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg">
+                    </label>
+                {% endif %}
+            </div>
+            {% if section.subsections %}
+                <ul class="tree-menu">
+                    {% for s in section.subsections %}
+                        {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endif %}
 {% endmacro docs_menu_row %}
 
 {% macro docs_menu(root, prefix) %}

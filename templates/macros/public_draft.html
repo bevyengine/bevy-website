@@ -1,0 +1,18 @@
+{% macro warning(current=true, section) %}
+    {% if section and section.extra.public_draft %}
+        {% if current %}
+            <h1 class="warning">Looks like this page is still under development</h1>
+            <p>The page is still under development. This page and all pages under it will be hidden from search engines and menus!</p>
+            {% if section.extra.issue %}
+                <p>See <a href="https://github.com/bevyengine/bevy-website/issues/{{section.extra.issue}}">this issue</a> for more info</p>
+            {% else %}
+                <p class="warning">Additionally, whoever wrote it didn't provide an issue number which explains why it is hidden</p>
+            {% endif %}
+        {% else %}
+            <h1 class="warning">This page is hidden because an ancestor is hidden</h1>
+        {% endif %}
+    {% elif section.components %}
+        {% set next_path = section.components | slice(end=-1) | concat(with="_index.md") | join(sep="/") %}
+        {{ public_draft::warning(current=false, section=get_section(path=next_path)) }}
+    {% endif %}
+{% endmacro warning %}
