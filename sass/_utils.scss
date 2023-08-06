@@ -23,6 +23,14 @@
 }
 
 .warning {
+    color: #c8c864;
+}
+
+body:not(.show_drafts) .public_draft:not(.active_draft) {
+    display: none !important;
+}
+
+.public_draft > div > a {
     color: #c8c864 !important;
 }
 
