@@ -34,6 +34,10 @@ body:not(.show_drafts) .public_draft:not(.active_draft) {
     color: #c8c864 !important;
 }
 
+.draft-header {
+    margin-bottom: 0.5rem;
+}
+
 .anchor-link, .anchor-link:focus, .anchor-link:hover, .anchor-link:active, .anchor-link:hover, .anchor-link:link, .anchor-link:visited {
     margin-left: 0.3rem;
     color: #505050;

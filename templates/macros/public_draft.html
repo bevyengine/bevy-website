@@ -3,9 +3,8 @@
         {% set public_draft = section.extra.public_draft %}
         {% set issue = public_draft / 1 %}
         {% if current %}
-            <h1 class="warning">Looks like this page is still under development</h1>
-            <p>The page is still under development. This page and all pages under it will be hidden from search engines and menus!</p>
-            <p>See <a href="https://github.com/bevyengine/bevy-website/issues/{{issue}}">this issue</a> for more info</p>
+            <h1 class="warning draft-header">Draft Page</h1>
+            <div>The page is still under development (Tracking Issue: <a href="https://github.com/bevyengine/bevy-website/issues/{{issue}}">{{issue}}</a>). This page and all pages under it will be hidden from search engines and menus!</div>
         {% else %}
             <h1 class="warning">This page is hidden because an ancestor is hidden</h1>
         {% endif %}
