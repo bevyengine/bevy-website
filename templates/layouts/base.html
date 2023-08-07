@@ -1,4 +1,5 @@
 {% import "macros/header.html" as header_macros %}
+{% import "macros/public_draft.html" as public_draft %}
 
 {% if section and section.title %}
     {% if section.path is starting_with("/learn/book/") %}
@@ -117,9 +118,23 @@
             </header>
             <main class="layout__content">
                 <div class="container">
+                    {% if section %}
+                        {{ public_draft::warning(section=section) }}
+                    {% endif %}
                     {% block content %}{% endblock %}
                 </div>
             </main>
         </div>
+        <script>
+            const search_params = new URLSearchParams(window.location.search);
+            if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+                if (search_params.get("show_drafts") === "0") {
+                    document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+                } else {
+                    document.cookie = "show_drafts=1;path=/"
+                    document.body.classList.add('show_drafts');
+                }
+            }
+        </script>
     </body>
 </html>
