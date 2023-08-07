@@ -5,8 +5,6 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
-[extra]
-public_draft=true
 +++
 
 Is something in Bevy not working as expected? Maybe one of these will resolve your problem:

@@ -127,7 +127,6 @@
         </div>
         <script>
             const search_params = new URLSearchParams(window.location.search);
-            console.log(document.cookie);
             if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
                 if (search_params.get("show_drafts") === "0") {
                     document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
