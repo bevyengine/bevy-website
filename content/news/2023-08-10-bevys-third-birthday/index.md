@@ -159,7 +159,7 @@ In the early days, I was the only person meaningfully working on Bevy. It made s
 
 However this is still suboptimal. How does a company or individual pick who to sponsor? It takes insider knowledge to know where the money would be "best spent". In the end I'm certain most people will opt for name recognition. And when I am often the public face of the project, that likely often means me. Bevy's funding should not be a popularity contest.
 
-I've also noticed that new sponsorships have gone way down since we moved to this system. I no longer have a global view of sponsorships with this system (I can only see my own), but I strongly suspect that perspective sponsors "bounce off" the complexity of the current system. The old system of "click donate and give money to `@cart`", despite its flaws, was at least straightforward.
+I've also noticed that new sponsorships have gone way down since we moved to this system. I no longer have a global view of sponsorships with this system (I can only see my own), but I strongly suspect that prospective sponsors "bounce off" the complexity of the current system. The old system of "click donate and give money to `@cart`", despite its flaws, was at least straightforward.
 
 We need a new system that is:
 
