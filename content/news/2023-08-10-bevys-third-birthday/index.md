@@ -25,7 +25,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 ![milestones](milestones.svg)
 
 * **August 19**: [Bevy Jam #2: Combine](https://itch.io/jam/bevy-jam-3)
-  * The third official Bevy game jam! 404 people joined, 85 people submitted games, and people left 2,674 ratings. [USA Football League Scouting Combine XLV](https://ramirezmike2.itch.io/usa-football-league-scouting-combine-xlv) won!
+  * The second official Bevy game jam! 404 people joined, 85 people submitted games, and people left 2,674 ratings. [USA Football League Scouting Combine XLV](https://ramirezmike2.itch.io/usa-football-league-scouting-combine-xlv) won!
 * **October 18**: Bevy hits 20,000 stars on GitHub!
 * **November 12**: [Bevy 0.9](/news/bevy-0-9/)
   * We added HDR Post Processing, Tonemapping, and Bloom, FXAA, Deband Dithering, Post Processing API Improvements, a New Scene Format, Code Driven Scene Construction, Improved Entity/Component APIs, Exclusive System Rework, Enum Reflection, Time Shader Globals, Plugin Settings, Bevy UI Z-Indices, and more!
