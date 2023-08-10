@@ -65,6 +65,20 @@ $content-font-size: 1.22rem;
         text-decoration: none;
     }
 
+    blockquote {
+        font-size: 1.1rem;
+        color: #b1b1b1;
+        background-color: $syntax-theme-background;
+        border-radius: $border-radius;
+        padding: 8px;
+        margin: 0px;
+    }
+
+    blockquote p {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
     ol, ul {
         padding-left: 2.5rem;
     }
