@@ -24,7 +24,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ![milestones](milestones.svg)
 
-* **August 19**: [Bevy Jam #2: Combine](https://itch.io/jam/bevy-jam-3)
+* **August 19**: [Bevy Jam #2: Combine](https://itch.io/jam/bevy-jam-2)
   * The second official Bevy game jam! 404 people joined, 85 people submitted games, and people left 2,674 ratings. [USA Football League Scouting Combine XLV](https://ramirezmike2.itch.io/usa-football-league-scouting-combine-xlv) won!
 * **October 18**: Bevy hits 20,000 stars on GitHub!
 * **November 12**: [Bevy 0.9](/news/bevy-0-9/)
