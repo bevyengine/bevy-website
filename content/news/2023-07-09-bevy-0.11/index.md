@@ -662,6 +662,21 @@ fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 ```
 
+The `mode` field in the [`PlaybackSettings`] struct offers a straightforward way to manage the lifecycle of these audio entities.
+
+By passing a [`PlaybackMode`], you are able to choose whether it plays once or repeatedly, using `Once` and `Loop` respectively. If you anticipate that the audio might be played again, you can save resources by temporarily unloading audio using `Despawn` or free up its memory immediately if it is a one-time effect using `Remove`.
+
+```rust
+AudioBundle {
+    source: asset_server.load("hit_sound.ogg"),
+    settings: PlaybackSettings {
+        mode: PlaybackMode::Despawn,
+        ..default()
+    }
+}
+```
+
+
 Much simpler! To adjust playback you can query for the [`AudioSink`] component:
 
 ```rust
@@ -675,6 +690,8 @@ fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
 [`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
 [`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
 [`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
+[`PlaybackSettings`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.PlaybackSettings.html 
+[`PlaybackMode`]: https://docs.rs/bevy/0.11.0/bevy/audio/enum.PlaybackMode.html 
 
 ## Global Audio Volume
 
