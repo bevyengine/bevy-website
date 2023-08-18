@@ -664,7 +664,7 @@ fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 The `mode` field in the [`PlaybackSettings`] struct offers a straightforward way to manage the lifecycle of these audio entities.
 
-By passing a [`PlaybackMode`], you are able to choose whether it plays once or repeatedly, using `Once` and `Loop` respectively. If you anticipate that the audio might be played again, you can save resources by temporarily unloading audio using `Despawn` or free up its memory immediately if it is a one-time effect using `Remove`.
+By passing a [`PlaybackMode`], you are able to choose whether it plays once or repeatedly, using `Once` and `Loop` respectively. If you anticipate that the audio might be played again, you can save resources by temporarily unloading it using `Despawn`, or free up its memory immediately if it is a one-time effect using `Remove`.
 
 ```rust
 AudioBundle {
