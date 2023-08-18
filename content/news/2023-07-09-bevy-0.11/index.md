@@ -674,7 +674,6 @@ AudioBundle {
         ..default()
     }
 }
-```
 Much simpler! To adjust playback you can query for the [`AudioSink`] component:
 
 ```rust
