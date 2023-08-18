@@ -687,7 +687,7 @@ fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
 [`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
 [`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
 [`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
-[`PlaybackSettings`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.PlaybackSettings.html 
+[`PlaybackSettings`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.PlaybackSettings.html
 [`PlaybackMode`]: https://docs.rs/bevy/0.11.0/bevy/audio/enum.PlaybackMode.html 
 
 ## Global Audio Volume
