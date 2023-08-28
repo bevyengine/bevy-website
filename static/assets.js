@@ -1,9 +1,13 @@
 const searchElement = document.querySelector('#assets-search')
 
 searchElement.addEventListener("input", (_) => {
+    // TODO add timer
+    // TODO rename methods
     filterSearchTerms()
     hideEmptySubSections()
     hideEmptySections()
+    updateSuggestionLinks()
+    // TODO apps section does not disappear beause added one last element that isn't empty
 })
 
 function filterSearchTerms() {
@@ -36,4 +40,18 @@ function hideEmptySections() {
         }
         section.style.display = 'none'
     })
+}
+
+const suggestionsUrls = {
+    '#suggestion-github': 'https://github.com/bevyengine/bevy/discussions?discussions_q=',
+    '#suggestion-cheatbook': 'https://bevy-cheatbook.github.io/?search=',
+    '#suggestion-docs': 'https://dev-docs.bevyengine.org/bevy/index.html?search=',
+}
+
+function updateSuggestionLinks() {
+    const searchValue = searchElement.value.toLowerCase();
+    document.querySelector('#suggestions-footer').style.display = searchValue === "" ? 'none' : 'block'
+    for (const [linkId, uriBase] of Object.entries(suggestionsUrls)) {
+        document.querySelector(linkId).href=uriBase + encodeURIComponent(searchValue)
+    }
 }
