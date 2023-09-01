@@ -1,6 +1,8 @@
 {% import "macros/header.html" as header_macros %}
 {% import "macros/public_draft.html" as public_draft %}
 
+{% set current_path = current_path | default(value="/") %}
+
 {% if section and section.title %}
     {% if section.path is starting_with("/learn/book/") %}
         {% set page_title = "Bevy Book: " ~ section.title %}
