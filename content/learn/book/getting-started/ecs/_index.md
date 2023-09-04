@@ -27,9 +27,9 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 * **Systems**: normal Rust functions
 
     ```rs
-    fn print_position_system(query: Query<&Transform>) {
-        for transform in &query {
-            println!("position: {:?}", transform.translation);
+    fn print_position_system(query: Query<&Position>) {
+        for position in &query {
+            println!("position: {} {}", position.x, position.y);
         }
     }
     ```
