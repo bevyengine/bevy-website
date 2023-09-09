@@ -21,6 +21,9 @@
             If you would like to try WASM + WebGPU, you can explore our <a href="/examples-webgpu">live WebGPU examples</a> page. 
         </p>
     </div>
+    <div class="assets-search">
+        <input class="assets-search__input" type="text" id="assets-search" placeholder="Search Example">
+    </div>
     {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
@@ -44,4 +47,7 @@
 
     {% endfor %}
 </div>
+<script type="module">
+    import '/assets.js'
+</script>
 {% endblock content %}
