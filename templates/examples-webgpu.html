@@ -25,6 +25,9 @@
         WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If they don't work on your configuration, you can check the WebGL2 examples <a href="/examples">here</a>.
         
     </div>
+    <div class="assets-search">
+        <input class="assets-search__input" type="text" id="assets-search" placeholder="Search Example">
+    </div>
     {% for subsection in section.subsections %}
         {% set section = get_section(path=subsection) %}
 
@@ -48,4 +51,7 @@
 
     {% endfor %}
 </div>
+<script type="module">
+    import '/assets.js'
+</script>
 {% endblock content %}
