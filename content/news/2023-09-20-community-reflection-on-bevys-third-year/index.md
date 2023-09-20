@@ -1,6 +1,6 @@
 +++
 title = "Community Reflection on Bevy's Third Year"
-date = 2023-09-19
+date = 2023-09-20
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"
@@ -8,7 +8,7 @@ github = "cart"
 youtube = "cartdev"
 +++
 
-[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A month ago was Bevy's Third Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Third Birthday](https://bevyengine.org/news/bevys-third-birthday/) post.
+[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A little over a month ago was Bevy's Third Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Third Birthday](https://bevyengine.org/news/bevys-third-birthday/) post.
 
 This year for the first time I also encouraged the Bevy community to write their own reflections on Bevy's third year in a similar style, and to [post them here](https://github.com/bevyengine/bevy-website/issues/728).
 
