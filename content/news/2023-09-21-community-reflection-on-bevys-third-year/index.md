@@ -1,6 +1,6 @@
 +++
 title = "Community Reflection on Bevy's Third Year"
-date = 2023-09-20
+date = 2023-09-21
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"
@@ -48,7 +48,7 @@ Here are some things we have coming up!
 * [PCF for Shadows](https://github.com/bevyengine/bevy/pull/8006): Shadows will have nice PCF filters that will drastically increase their quality.
 * [Light Transmission for Materials](https://github.com/bevyengine/bevy/pull/8015): We're adding support for simulating light penetrating our PBR material, which lets us render things like glass, wax, rubber, etc with higher quality.
 * [UI Node Borders and Shadows](https://github.com/bevyengine/bevy/pull/8973): This will improve the ability to express UIs by giving additional style options to users.
-* [System Stepping](https://github.com/bevyengine/bevy/pull/8453): We are considering merging "system stepping", which would give users the ability to pause execution and run systems step-by step. This should make some debugging scenarios much easier! 
+* [System Stepping](https://github.com/bevyengine/bevy/pull/8453): We are considering merging "system stepping", which would give users the ability to pause execution and run systems step-by step. This should make some debugging scenarios much easier!
 * [And plenty more!](https://github.com/bevyengine/bevy/pulls)
 
 **Bevy 0.12** will be released mid-October and some of these (including Bevy Asset V2) will be included!
