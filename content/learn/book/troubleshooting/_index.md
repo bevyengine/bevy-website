@@ -33,6 +33,7 @@ that the required libraries were not loaded correctly (likely due to a pathing q
 Edit your launch configurations in `.vscode/launch.json` so that the rust libraries are found correctly.
 
 For `cppvsdbg`:
+
 ```json
 "environment": [
     {"name":"PATH", "value":"%USERPROFILE%/.rustup/toolchains/nightly-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;%PATH%"}
@@ -41,6 +42,7 @@ For `cppvsdbg`:
 ```
 
 Or for `codelldb`:
+
 ```json
 "env": {
     "PATH": "${env:USERPROFILE}/.rustup/toolchains/nightly-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;${env:PATH}",
