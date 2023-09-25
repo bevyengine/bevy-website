@@ -43,7 +43,7 @@ For `cppvsdbg`:
 Or for `codelldb`:
 ```json
 "env": {
-    "PATH": "${env:RUSTUP_HOME}/toolchains/nightly-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;${env:PATH}",
+    "PATH": "${env:USERPROFILE}/.rustup/toolchains/nightly-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;${env:PATH}",
     // Switch `nightly` to `stable` if you're using Rust stable
-}
+},
 ```
