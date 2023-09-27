@@ -175,7 +175,7 @@ impl GithubClient {
 
         let mut prs = vec![];
         let mut page = 1;
-        // The github rest api is limited to 100 prs per page,
+        // The github rest API is limited to 100 prs per page,
         // so to get all the prs we need to iterate on every page available.
         loop {
             let mut prs_in_page = self.get_merged_prs_by_page(since, page, label)?;

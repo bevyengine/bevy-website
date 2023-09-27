@@ -68,7 +68,7 @@ fn system(pool: Res<ComputeTaskPool>, mut query: Query<&mut Transform>) {
 }
 ```
 
-This provides a nice functional api (similar to Rayon) that runs on top of the new `bevy_tasks` system. It breaks the query up into 32 "batches" and runs each batch as a different task in the bevy task system.
+This provides a nice functional API (similar to Rayon) that runs on top of the new `bevy_tasks` system. It breaks the query up into 32 "batches" and runs each batch as a different task in the bevy task system.
 
 ## Transform System Rewrite
 
@@ -97,7 +97,7 @@ However this approach also has some pretty serious downsides:
 * Very hard to reason about. There are 5 components users need to think about and they all interact with each other differently.
 * Setting a Transform to a specific matrix value (ex: `Mat4::look_at()`) was extremely cumbersome, and the value would be immediately overwritten unless the user explicitly disabled component syncing.
 
-Given these issues, we decided to move to a single unified local-to-parent `Transform` component as the source of truth, and a computed `GlobalTransform` component for world-space transforms. We think this api will be much easier to use and to reason about. [Unity is also considering a similar Transform rework for their ECS](https://gist.github.com/joeante/79d25ec3a0e86436e53eb74f3ac82c0c) and a lot of discussion on this topic happened in this [Amethyst Forum Thread](https://community.amethyst.rs/t/legion-transform-design-discussion).
+Given these issues, we decided to move to a single unified local-to-parent `Transform` component as the source of truth, and a computed `GlobalTransform` component for world-space transforms. We think this API will be much easier to use and to reason about. [Unity is also considering a similar Transform rework for their ECS](https://gist.github.com/joeante/79d25ec3a0e86436e53eb74f3ac82c0c) and a lot of discussion on this topic happened in this [Amethyst Forum Thread](https://community.amethyst.rs/t/legion-transform-design-discussion).
 
 ## Joystick/Gamepad Input
 

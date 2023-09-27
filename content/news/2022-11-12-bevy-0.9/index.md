@@ -897,7 +897,7 @@ if let ReflectOwned::Struct(owned) = value.reflect_owned() {
 }
 ```
 
-Arrays in the "reflection path api" can now use list syntax:
+Arrays in the "reflection path API" can now use list syntax:
 
 ```rust
 #[derive(Reflect)]
