@@ -21,14 +21,14 @@ Causes include:
 1. Vulkan-compatible drivers not installed. To fix this, install/update the drivers. On Linux this may be `vulkan-intel` or `vulkan-radeon`.
 2. Trying to run an example on a headless machine. To fix this, install a GPU!
 
-## Unable to debug dynamically linked Bevy application in VSCode
+## Unable to debug dynamically linked Bevy application in VSCode on Windows
 
 ```txt
 The program '[10184] my-game.exe' has exited with code -1073741515 (0xc0000135).
 ```
 
 Whilst `cargo run` may load the application successfully, running via the debugging UI in VSCode may yield the above error. This error means
-that the required libraries were not loaded correctly (likely due to a pathing quirk with VSCode debug extensions).
+that the required libraries were not loaded correctly (likely due to a pathing quirk with VSCode debug extensions on Windows).
 
 Edit your launch configurations in `.vscode/launch.json` so that the rust libraries are found correctly.
 
