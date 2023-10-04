@@ -2182,7 +2182,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [ECS: Make `Query` fields private][7149]
 * [ECS: make `ScheduleGraph::initialize` public][7723]
 * [ECS: Make boxed conditions read-only][7786]
-* [ECS: Make RemovedComponents mirror EventReaders api surface][7713]
+* [ECS: Make RemovedComponents mirror EventReaders API surface][7713]
 * [ECS: Mark TableRow and TableId as repr(transparent)][7166]
 * [ECS: Most APIs returning `&UnsafeCell<ComponentTicks>` now returns `TickCells` instead, which contains two separate `&UnsafeCell<Tick>` for either component ticks.][6547]
 * [ECS: Move MainThreadExecutor for stageless migration.][7444]

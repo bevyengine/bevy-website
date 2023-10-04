@@ -65,7 +65,7 @@ fn start_dancing(mut query: Query<(&Animations, &mut AnimationPlayer)>) {
 
 This critical feature has been a long time coming, but we wanted to build it in a way that meshed nicely with the [new Bevy renderer](/news/bevy-0-6/#the-new-bevy-renderer) and didn't just "hack things in". This builds on our new [Flexible Mesh Vertex Layouts](/news/bevy-0-7/#flexible-mesh-vertex-layouts), [Shader Imports](/news/bevy-0-6/#shader-imports), and [Material](/news/bevy-0-6/#materials) systems, which ensures that this logic is flexible and reusable, even with non-standard meshes and custom render pipelines.
 
-And we're just getting started! Multi-track animation blending and higher level animation state management should arrive in the very near future. Now is a great time to start contributing animation features to Bevy. We've smashed through most of the foundational technical hurdles and what remains is largely high level api design choices. We already have a couple of draft RFCs open in these areas: [Animation Composition](https://github.com/bevyengine/rfcs/pull/51) and [Animation Primitives](https://github.com/bevyengine/rfcs/pull/49). Feel free to join the conversation!
+And we're just getting started! Multi-track animation blending and higher level animation state management should arrive in the very near future. Now is a great time to start contributing animation features to Bevy. We've smashed through most of the foundational technical hurdles and what remains is largely high level API design choices. We already have a couple of draft RFCs open in these areas: [Animation Composition](https://github.com/bevyengine/rfcs/pull/51) and [Animation Primitives](https://github.com/bevyengine/rfcs/pull/49). Feel free to join the conversation!
 
 [`AnimationPlayer`]: https://docs.rs/bevy/0.7.0/bevy/animation/struct.AnimationPlayer.html
 [`AnimationClip`]: https://docs.rs/bevy/0.7.0/bevy/animation/struct.AnimationClip.html
@@ -970,7 +970,7 @@ A huge thanks to the **123 contributors** that made this release (and associated
 * [Increment last event count on next instead of iter][2382]
 * [Obviate the need for `RunSystem`, and remove it][3817]
 * [Cleanup some things which shouldn't be components][2982]
-* [Remove the config api][3633]
+* [Remove the config API][3633]
 * [Deprecate `.system`][3302]
 * [Hide docs for concrete impls of Fetch, FetchState, and SystemParamState][4250]
 * [Move the CoreStage::Startup to a seperate StartupSchedule label][2434]

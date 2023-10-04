@@ -506,7 +506,7 @@ fn clear_events(mut reader: EventReader<SomeEvent>) {
 
 `Archetype` indices and `Table` rows have been newtyped as `ArchetypeRow` and `TableRow`.
 
-### [Round out the untyped api s](https://github.com/bevyengine/bevy/pull/7009)
+### [Round out the untyped APIs](https://github.com/bevyengine/bevy/pull/7009)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
@@ -1059,7 +1059,7 @@ Removed `SetShadowViewBindGroup`, `queue_shadow_view_bind_group()`, and `LightMe
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-No api changes are required, but it's possible that your gltf meshes look different
+No API changes are required, but it's possible that your gltf meshes look different
 
 ### [Send emissive color to uniform as linear instead of sRGB](https://github.com/bevyengine/bevy/pull/7897)
 

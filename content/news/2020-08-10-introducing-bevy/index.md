@@ -1127,7 +1127,7 @@ Right now Bevy can render plenty fast for most use cases, but when it comes to r
 
 ### Canvas
 
-Right now the only way to draw UI and 2D scenes is via sprites and rectangles. Bevy needs an immediate-mode drawing api capable of drawing anti-aliased curves and shapes. This can then be used to do code-driven drawing of things like rounded corners in Bevy UI, performance graphs in the editor, etc. It's very possible that we will integrate projects like [pathfinder](https://github.com/servo/pathfinder) or [lyon](https://github.com/nical/lyon) for this.  
+Right now the only way to draw UI and 2D scenes is via sprites and rectangles. Bevy needs an immediate-mode drawing API capable of drawing anti-aliased curves and shapes. This can then be used to do code-driven drawing of things like rounded corners in Bevy UI, performance graphs in the editor, etc. It's very possible that we will integrate projects like [pathfinder](https://github.com/servo/pathfinder) or [lyon](https://github.com/nical/lyon) for this.  
 
 ### Animation
 

@@ -71,7 +71,7 @@ impl GithubClient {
     }
 
     /// Gets the license from a github repo
-    /// Technically, github supports multiple licenses, but the api only returns one
+    /// Technically, github supports multiple licenses, but the API only returns one
     #[allow(unused)]
     pub fn get_license(&self, username: &str, repository_name: &str) -> anyhow::Result<String> {
         let response: GithubLicenseResponse = self

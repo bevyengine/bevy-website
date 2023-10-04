@@ -206,7 +206,7 @@ fn camera_system(cameras: Query<&Camera, With<FirstPassCamera>>) {
 }
 ```
 
-### [Remove the config api](https://github.com/bevyengine/bevy/pull/3633)
+### [Remove the config API](https://github.com/bevyengine/bevy/pull/3633)
 
 ```rs
 // 0.6

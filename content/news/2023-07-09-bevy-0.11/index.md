@@ -1497,7 +1497,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Add parallax mapping to bevy PBR][5928]
 * [Add port of AMD's Robust Contrast Adaptive Sharpening][7422]
 * [Add RenderGraphApp to simplify adding render nodes][8007]
-* [Add screenshot api][7163]
+* [Add screenshot API][7163]
 * [Add morph targets][8158]
 * [Screenshots in wasm][8455]
 * [Add ViewNode to simplify render node management][8118]
