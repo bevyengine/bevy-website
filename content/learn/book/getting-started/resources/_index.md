@@ -17,7 +17,7 @@ Here are some examples of data that could be encoded as **Resources**:
 
 ## Tracking Time with Resources
 
-Let's solve our App's "hello spam" problem by only printing "hello" once every two seconds. We'll do this by using the {{rust_type(type="struct" crate="bevy_core" name="Time")}} resource, which is automatically added to our App via `add_plugins(DefaultPlugins)`.
+Let's solve our App's "hello spam" problem by only printing "hello" once every two seconds. We'll do this by using the {{rust_type(type="struct" crate="bevy_time" name="Time")}} resource, which is automatically added to our App via `add_plugins(DefaultPlugins)`.
 
 For simplicity, remove the `hello_world` system from your App. This way we only need to adapt the `greet_people` system.
 
