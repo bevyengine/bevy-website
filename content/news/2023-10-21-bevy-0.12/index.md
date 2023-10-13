@@ -23,7 +23,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @idedary</div>
 
-You can now use `h()`, `s()`, `l()` together with their `set_h()`, `set_s()`, `set_l()` and `with_h()`, `with_s()`, `with_l()` variants to manipulate *Hue*, *Saturation* and *Lightness* values of a `Color` struct without cloning. Previously you could do that only with RGBA values.
+You can now use `h()`, `s()`, `l()` together with their `set_h()`, `set_s()`, `set_l()` and `with_h()`, `with_s()`, `with_l()` variants to manipulate *Hue*, *Saturation* and *Lightness* values of a `Color` struct without cloning. Previously you could do that with only RGBA values.
 
 ```rust
 // Returns HSL component values
