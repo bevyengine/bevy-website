@@ -29,13 +29,16 @@ You can now use `h()`, `s()`, `l()` together with their `set_h()`, `set_s()`, `s
 // Returns HSL component values
 let color = Color::ORANGE;
 let hue = color.h();
+// ...
 
 // Changes the HSL component values
 let mut color = Color::PINK;
 color.set_s(0.5);
+// ...
 
 // Modifies existing colors and returns them
 let color = Color::VIOLET.with_l(0.7);
+// ...
 ```
 
 ## <a name="what-s-next"></a>What's Next?
