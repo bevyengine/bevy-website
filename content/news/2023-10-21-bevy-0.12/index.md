@@ -159,14 +159,15 @@ We can batch draws into a single instanced draw in some situations now that per-
 
 DEMO PERFORMANCE IMPROVEMENT.
 
-#### What is next for rendering performance?
+#### What is next for batching/instancing and beyond?
 
 * Put material data into GpuArrayBuffer per material type (e.g. all StandardMaterial instances will be stored in one GpuArrayBuffer) - this enables batching of draws for entities with the same mesh, same material type and textures, but different material data! This is implemented on a branch.
 * Put material textures into bindless texture arrays - this enables batching of draws for entities with the same mesh and same material type!
 * Put mesh data into one big buffer per mesh attribute layout - this removes the need to rebind the index/vertex buffers per-draw, instead only vertex/index range needs to be passed to the draw command. A simple version of this is implemented on a branch.
+* Put skinned mesh data into storage buffers if possible to enable instanced drawing of skinned mesh entities using the same mesh, skin, and material!
 * GPU-driven rendering
-  * @JMS55 is working on GPU-driven rendering already, using a meshlet approach
-  * Rob Swain (@superdump) also intends to implement an alternative method similar to what is done in rend3.
+  * @JMS55 is working on GPU-driven rendering already, using a meshlet approach.
+  * Rob Swain (@superdump) intends to implement an alternative method similar to what is done in rend3.
 
 ## Rendering Performance Improvements
 
@@ -211,7 +212,19 @@ The options, for component data `T`:
 
 However, `SparseSet` has the downside that the dense `Vec<usize>` has to be as large as the largest contained `Entity.index`. If you spawn a million entities, then despawn 999,999, leaving the millionth entity still spawned, every `SparseSet<Entity, T>` for different `T` will have to have a `Vec<usize>` that is one million items large.
 
-`HashMap<Entity, T>` is similar to `SparseSet`, and more familiar. It has good space complexity, with performance depending a lot on the hash function. Fast hash functions from the wild were tested AHash, FNV, FxHasher, SeaHasher, but all had quite a big performance drop compared to `SparseSet`. Ultimately, a hash function designed by @SkiFire13, inspired by `rustc-hash` was chosen that has strong performance and is robust enough for this usage.
+`HashMap<Entity, T>` is similar to `SparseSet`, and more familiar. It has good space complexity, with performance depending a lot on the hash function.
+
+Fast hash functions from the wild were tested AHash, FNV, FxHasher, SeaHasher, but all had quite a big performance drop compared to `SparseSet`. Ultimately, a hash function designed by @SkiFire13, and inspired by `rustc-hash`, was chosen that has strong performance and is robust enough for this usage. This combination is called `EntityHashMap` and is the new way to store component data in the render world.
+
+The worst case performance with random Z-order spawning of 2D meshes/sprites in `bevymark` is similar to `SparseSet`. The best case performance with 2D meshes/sprites spawned in draw order
+
+#### EntityHashMap Helpers
+
+A helper plugin was added to make it simple and quick to extract main world data for use in the render world in the form of `ExtractInstancesPlugin`. You can extract all entities matching a query, or only those that are visible, extracting multiple components at once into one target type.
+
+It is a good idea to group component data that will be accessed together into one target type to avoid having to do multiple lookups.
+
+DEMO CODE
 
 ### Sprite Instancing
 
@@ -238,6 +251,11 @@ This retains all the functionality of the previous method, enables the additiona
 Sprites
 
 UI
+
+### What's next for rendering performance?
+
+* `EntityHashMap` is good, but imagine a world with only `Vec<T>`, no lookups in hot loops, only in-order iteration, and maximum performance!
+* Batching code already compares previous draw state (pipeline, bind groups, index/vertex buffers, etc) to current draw state. This is then repeated by `TrackedRenderPass` when encoding draws. This cost can be removed with a new API called `DrawStream`.
 
 ## <a name="what-s-next"></a>What's Next?
 
