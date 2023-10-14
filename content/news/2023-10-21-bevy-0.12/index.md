@@ -25,13 +25,13 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 Ambiguity Reporting is an optional feature of Bevy's scheduler. When enabled it reports conflicts between systems that modify the same data, but are not ordered in relation to each other. While some reported conflicts can cause subtle bugs, many do not. Bevy has a couple existing methods and two new ones for ignoring these.
 
-The existing API's, `ambiguous_with` ignores conflicts between specific sets, and `ambigous_with_all` ignores all conflicts with the set it's applied to. In addition, there are now 2 new API's that let you ignore conflicts on a type of data, `allow_ambiguous_component` and `allow_ambiguous_resource`. These ignore all conflicts between systems on that specific type, component or resource, in a world.
+The existing APIs: `ambiguous_with`, which ignores conflicts between specific sets, and `ambiguous_with_all`, which ignores all conflicts with the set it's applied to. In addition, there are now 2 new APIs that let you ignore conflicts on a type of data, `allow_ambiguous_component` and `allow_ambiguous_resource`. These ignore all conflicts between systems on that specific type, component or resource, in a world.
 
 ```rust
 #[derive(Resource)]
 struct R;
 
-// Rhese systems are ambiguous on R
+// These systems are ambiguous on R
 fn system_1(_: ResMut<R>) {}
 fn system_2(_: Res<R>) {}
 
