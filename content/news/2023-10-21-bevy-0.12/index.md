@@ -23,18 +23,18 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump), @james-j-obrien, @JMS55, @inodentry, @robtfm, @nicopap, @teoxoy, @IceSentry, @Elabajaba</div>
 
-Bevy's renderer performance for 2D and 3D meshes can improve a lot. Both CPU and graphics API / GPU bottlenecks can be removed to give significantly higher frame rates. As always with Bevy, we want to make the most of the platforms you use, from the constraints of WebGL2, through WebGPU, to the highest-end native discrete graphics cards. A solid foundation can support all of this.
+Bevy's renderer performance for 2D and 3D meshes can improve a lot. Both CPU and graphics API / GPU bottlenecks can be removed to give significantly higher frame rates. As always with Bevy, we want to make the most of the platforms you use, from the constraints of WebGL2 and mobile devices, to the highest-end native discrete graphics cards. A solid foundation can support all of this.
 
 ### What are the bottlenecks?
 
 One major bottleneck is the structure of the data used for rendering.
 
-* Mesh entity data is stored in one uniform buffer, but has to be rebound at different dynamic offsets per draw.
-* Material type data (e.g. StandardMaterial uniform properties) are stored in individual uniform buffers that have to be rebound per draw if the material changes.
-* Material textures are stored individually and have to be rebound per draw if the texture changes.
+* Mesh entity data is stored in one uniform buffer, but has to be rebound at different dynamic offsets for every single draw.
+* Material type data (e.g. `StandardMaterial` uniform properties, but not textures) are stored in individual uniform buffers that have to be rebound per draw if the material changes.
+* Material textures are stored individually and have to be rebound per draw if a mesh texture changes.
 * Mesh index / vertex buffers are stored individually per-mesh and have to be rebound per draw.
 
-All of this rebinding has both CPU and graphics API / GPU performance impact. On the CPU, it means encoding of draw commands has many more steps and takes more time than necessary. In the graphics API and on the GPU, it means issuing many more rebinding and separate draw commands.
+All of this rebinding has both CPU and graphics API / GPU performance impact. On the CPU, it means encoding of draw commands has many more steps to process and so takes more time than necessary. In the graphics API and on the GPU, it means many more rebinds, and separate draw commands.
 
 Avoiding rebinding is both a big performance benefit for CPU-driven rendering, and is necessary to enable GPU-driven rendering.
 
@@ -60,6 +60,8 @@ The render set order before 0.12 caused some problems with this as data had to b
 
 This constraint was most visible in the sprite batching implementation that skipped Prepare, sorted and prepared data in Queue, and then after being sorted again alongside 2D meshes and other entities in the Transparent2d render phase, possibly had its batches split to enable drawing of those other entities.
 
+The ordering of the sets also created some confusion about when bind groups should be created. Bind groups were meant to be created in Prepare, but sometimes they had to be created in Queue to ensure that some preparation had completed.
+
 The new render set order in 0.12 is:
 
 * Extract
@@ -67,9 +69,11 @@ The new render set order in 0.12 is:
 * Queue
 * Sort
 * Prepare/Batch
+  * PrepareResources
+  * PrepareBindGroups
 * Render
 
-PrepareAssets was introduced because we only want to queue entities for drawing once their assets have been prepared. Per-frame data preparation still happens in the Prepare set, but that is now after Queue and Sort, so the order of draws is known. This also made a lot more sense for batching, as it is now known at the point of batching whether an entity that is of another type in the render phase needs to be drawn.
+PrepareAssets was introduced because we only want to queue entities for drawing if their assets have been prepared. Per-frame data preparation still happens in the Prepare set, specifically in its PrepareResources subset. That is now after Queue and Sort, so the order of draws is known. This also made a lot more sense for batching, as it is now known at the point of batching whether an entity that is of another type in the render phase needs to be drawn. Bind groups now have a clear subset where they should be created - PrepareBindGroups.
 
 ### BatchedUniformBuffer and GpuArrayBuffer
 
@@ -77,13 +81,13 @@ OK, so we need to put many pieces of data of the same type into buffers in a way
 
 Instance-rate vertex buffers are one way, but they are very constrained to having a specific order. They are/may be suitable for per-instance data like mesh entity transforms, but they can't be used for material data.
 
-The other main options are uniform and storage buffers. WebGL2 does not support storage buffers, only uniform buffers. Uniform buffers have a minimum guaranteed size per binding of 16kB on WebGL2. Storage buffers, where available, have a minimum guaranteed size of 128MB. Data textures are also an option, but are far more awkward for structured data and without support for linear data layouts on some platforms, they will perform less well. So, support uniform buffers on WebGL2 or where storage buffers are not supported, and use storage buffers everywhere else.
+The other main options are uniform and storage buffers. WebGL2 does not support storage buffers, only uniform buffers. Uniform buffers have a minimum guaranteed size per binding of 16kB on WebGL2. Storage buffers, where available, have a minimum guaranteed size of 128MB. Data textures are also an option, but are far more awkward for structured data, and without support for linear data layouts on some platforms, they will perform worse. We want to support uniform buffers on WebGL2 or where storage buffers are not supported, and use storage buffers everywhere else.
 
 #### BatchedUniformBuffer
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump), @JMS55, @teoxoy, @robtfm, @konsolas</div>
 
-We have to assume that on WebGL2, we may only be able to access 16kB of data at a time. Taking an example, MeshUniform requires 144 bytes per instance, which means 113 instances per 16kB binding. If we want to draw more than 113 entities, we need a way of managing a uniform buffer of data that can be bound at a dynamic offset per batch of instances. This is what BatchedUniformBuffer is designed to solve.
+We have to assume that on WebGL2, we may only be able to access 16kB of data at a time. Taking an example, MeshUniform requires 144 bytes per instance, which means 113 instances per 16kB binding. If we want to draw more than 113 entities, we need a way of managing a uniform buffer of data that can be bound at a dynamic offset per batch of instances. This is what `BatchedUniformBuffer` is designed to solve.
 
 DEMO RUST CODE.
 
