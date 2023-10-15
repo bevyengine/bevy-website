@@ -35,23 +35,6 @@ You should hopefully notice two things:
 * **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window API.
 * **Your console is now full of "hello" messages**: This is because {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
-Note that `add_plugins(DefaultPlugins)` is equivalent to the following:
-
-```rs
-fn main() {
-    App::new()
-        .add_plugins((
-            CorePlugin::default(),
-            InputPlugin::default(),
-            WindowPlugin::default(),
-            /* more plugins omitted for brevity */
-        ))
-        .run();
-}
-```
-
-You are free to use whatever approach suits you!
-
 ## Creating your first plugin
 
 For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app" no_mod=true)}} interface. Add the following code to your `main.rs` file:
