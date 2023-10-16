@@ -19,6 +19,65 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @author</div>
 
+## Reflect Commands
+
+<div class="release-feature-authors">authors: @NoahShomette</div>
+
+It is now possible to insert and remove reflect components from an entity in a normal system via new functions on [`Commands`]!
+
+```rust
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+struct Component(u32);
+
+fn reflect_commands(mut commands: Commands) {
+    let boxed_reflect_component: Box<dyn Reflect> = Box::new(Component(916));
+
+    let entity = commands
+        .spawn_empty()
+        .insert_reflect(boxed_reflect_component.clone_value()).id();
+
+    commands.entity(entity).remove_reflect(boxed_reflect_component.type_name().to_owned());
+
+}
+```
+
+The above commands use the [`AppTypeRegistry`] by default. If you use a different TypeRegistry then you can use the ...`with_registry` commands instead.
+
+```rust
+ #[derive(Resource)]
+ struct TypeRegistryResource {
+     type_registry: TypeRegistry,
+ }
+
+ impl AsRef<TypeRegistry> for TypeRegistryResource {
+     fn as_ref(&self) -> &TypeRegistry {
+         &self.type_registry
+     }
+ }
+
+ fn reflect_commands_with_registry(mut commands: Commands) {
+    let boxed_reflect_component: Box<dyn Reflect> = Box::new(Component(916));
+
+    let entity = commands
+        .spawn_empty()
+        .insert_reflect_with_registry::<TypeRegistryResource>(boxed_reflect_component.clone_value()).id();
+
+    commands.entity(entity).remove_reflect_with_registry::<TypeRegistryResource>(boxed_reflect_component.type_name().to_owned());
+
+}
+```
+
+See [`ReflectCommandExt`] for more examples and documentation
+
+
+[`Commands`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/struct.Commands.html
+
+[`AppTypeRegistry`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/struct.AppTypeRegistry.html
+
+[`ReflectCommandExt`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/trait.ReflectCommandExt.html
+
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
