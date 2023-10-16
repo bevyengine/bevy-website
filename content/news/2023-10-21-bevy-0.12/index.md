@@ -19,6 +19,18 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @author</div>
 
+## Limit Background FPS
+
+<div class="release-feature-authors">authors: @maniwani</div>
+
+If an app has no window in focus, Bevy will now limit its update rate (to 60Hz by default).
+
+Before, many Bevy apps running on desktop operating systems (particularly macOS) would see spikes in CPU usage whenever their windows were minimized or completely covered, even with VSync enabled. The reason for this is that many desktop window managers ignore VSync for windows that aren't visible. As VSync normally limits how often an app updates, that speed limit vanishes while it's effectively disabled.
+
+Now, apps running in the background will sleep in between updates to limit their FPS.
+
+The one caveat is that most operating systems will not report if a window is visible, only if it has focus. So the throttle is based on focus, not visibility. 60Hz was then chosen as the default to maintain high FPS in cases where the window is not focused but still visible.
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
