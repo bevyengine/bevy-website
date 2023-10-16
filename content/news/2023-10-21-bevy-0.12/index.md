@@ -108,10 +108,11 @@ let mut buffer = GpuArrayBuffer::<MyType>::new(&render_device.limits());
 
 // Push some items into it
 for i in 0..N {
-    // indices is a GpuArrayBufferIndex<MyType> which contains a NonMaxU32 index into the array
-    // and an Option<NonMaxU32> dynamic offset. If storage buffers are supported, it will be None,
-    // else Some with te dynamic offset that needs to be used when binding the bind group. indices
-    // should be stored somewhere for later lookup, often associated with an Entity.
+    // indices is a GpuArrayBufferIndex<MyType> which contains a NonMaxU32
+    // index into the array and an Option<NonMaxU32> dynamic offset. If storage
+    // buffers are supported, it will be None, else Some with the dynamic
+    // offset that needs to be used when binding the bind group. indices should
+    // be stored somewhere for later lookup, often associated with an Entity.
     let indices = buffer.push(MyType { x: i as f32 });
 }
 
@@ -127,11 +128,12 @@ let bind_group_layout_entry = buffer.binding_layout(
     &render_device,
 );
 
-// Get the binding resource to make a bind group entry to use when creating the bind group
+// Get the binding resource to make a bind group entry to use when creating the
+// bind group
 let buffer_binding_resource = buffer.binding()?;
 
-// Get the batch size. This will be None if storage buffers are supported, else it is the
-// maximum number of elements that could fit in a batch
+// Get the batch size. This will be None if storage buffers are supported, else
+// it is the maximum number of elements that could fit in a batch
 let buffer_batch_size = GpuArrayBuffer::<MyType>::batch_size(&render_device.limits());
 
 // Set a shader def with the buffer batch size
