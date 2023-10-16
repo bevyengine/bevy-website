@@ -36,7 +36,7 @@ One major bottleneck is the structure of the data used for rendering.
 
 All of this rebinding has both CPU and graphics API / GPU performance impact. On the CPU, it means encoding of draw commands has many more steps to process and so takes more time than necessary. In the graphics API and on the GPU, it means many more rebinds, and separate draw commands.
 
-Avoiding rebinding is both a big performance benefit for CPU-driven rendering, and is necessary to enable GPU-driven rendering.
+Avoiding rebinding is both a big performance benefit for CPU-driven rendering, including WebGL2, and is necessary to enable GPU-driven rendering.
 
 ### What are CPU- and GPU-driven rendering?
 
@@ -89,37 +89,85 @@ The other main options are uniform and storage buffers. WebGL2 does not support 
 
 We have to assume that on WebGL2, we may only be able to access 16kB of data at a time. Taking an example, MeshUniform requires 144 bytes per instance, which means 113 instances per 16kB binding. If we want to draw more than 113 entities, we need a way of managing a uniform buffer of data that can be bound at a dynamic offset per batch of instances. This is what `BatchedUniformBuffer` is designed to solve.
 
-DEMO RUST CODE.
-
-DEMO SHADER CODE.
-
-PERFORMANCE IMPROVEMENT.
-
 #### GpuArrayBuffer
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump), @JMS55, @IceSentry, @mockersf</div>
 
 If users have to care about supporting both batched uniform and storage buffers to store arrays of data for use in shaders, many may choose not to because their priority is not WebGL2. We want to make it simple and easy to support all users.
 
-GpuArrayBuffer was designed and implemented as an abstraction over BatchedUniformBuffer and using a StorageBuffer to store an array of T.
+`GpuArrayBuffer` was designed and implemented as an abstraction over `BatchedUniformBuffer` and using a `StorageBuffer` to store an array of `T`.
 
-DEMO RUST CODE.
+```rust
+#[derive(Clone, ShaderType)]
+struct MyType {
+    x: f32,
+}
 
-DEMO SHADER CODE.
+// Create a GPU array buffer
+let mut buffer = GpuArrayBuffer::<MyType>::new(&render_device.limits());
 
-PERFORMANCE IMPROVEMENT.
+// Push some items into it
+for i in 0..N {
+    // indices is a GpuArrayBufferIndex<MyType> which contains a NonMaxU32 index into the array
+    // and an Option<NonMaxU32> dynamic offset. If storage buffers are supported, it will be None,
+    // else Some with te dynamic offset that needs to be used when binding the bind group. indices
+    // should be stored somewhere for later lookup, often associated with an Entity.
+    let indices = buffer.push(MyType { x: i as f32 });
+}
+
+// Queue writing the buffer contents to VRAM
+buffer.write_buffer(&render_device, &render_queue);
+
+// The bind group layout entry to use when creating the pipeline
+let binding = 0;
+let visibility = ShaderStages::VERTEX;
+let bind_group_layout_entry = buffer.binding_layout(
+    binding,
+    visibility,
+    &render_device,
+);
+
+// Get the binding resource to make a bind group entry to use when creating the bind group
+let buffer_binding_resource = buffer.binding()?;
+
+// Get the batch size. This will be None if storage buffers are supported, else it is the
+// maximum number of elements that could fit in a batch
+let buffer_batch_size = GpuArrayBuffer::<MyType>::batch_size(&render_device.limits());
+
+// Set a shader def with the buffer batch size
+if let Some(buffer_batch_size) = buffer_batch_size {
+    shader_defs.push(ShaderDefVal::UInt(
+        "BUFFER_BATCH_SIZE".into(),
+        buffer_batch_size,
+    ));
+}
+```
+
+```rust
+#import bevy_render::instance_index get_instance_index
+
+struct MyType {
+    x: f32,
+}
+
+// Declare the buffer binding
+#ifdef BUFFER_BATCH_SIZE
+@group(2) @binding(0) var<uniform> data: array<MyType, #{BUFFER_BATCH_SIZE}u>;
+#else
+@group(2) @binding(0) var<storage> data: array<MyType>;
+#endif
+
+// Access an instance
+let my_type = data[get_instance_index(in.instance_index)];
+```
 
 ### 2D / 3D Mesh Entities using GpuArrayBuffer
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump), @robtfm, @Elabajaba</div>
 
-The 2D and 3D mesh entity rendering was migrated to use GpuArrayBuffer for the mesh uniform data.
+The 2D and 3D mesh entity rendering was migrated to use `GpuArrayBuffer` for the mesh uniform data.
 
-DEMO RUST CODE
-
-DEMO SHADER CODE
-
-PERFORMANCE IMPROVEMENT.
+Just avoiding the rebinding of the mesh uniform data buffer gives about a 6% increase in frame rates.
 
 ### Improved bevymark Example
 
@@ -127,9 +175,10 @@ PERFORMANCE IMPROVEMENT.
 
 The bevymark example needed to be improved to enable benchmarking the batching / instanced draw changes. Modes were added to:
 
-* draw 2D quad meshes instead of sprites
-* vary the per-instance color data instead of only varying the colour per wave of birds
-* generate a number of material / sprite textures and randomly choose from them either per wave or per instance depending on the vary per instance setting
+* draw 2D quad meshes instead of sprites: `--mode mesh2d`
+* vary the per-instance color data instead of only varying the colour per wave of birds: `--vary-per-instance`
+* generate a number of material / sprite textures and randomly choose from them either per wave or per instance depending on the vary per instance setting: `--material-texture-count 10`
+* spawn the birds in random z order (new default), or in draw order: `--ordered-z`
 
 This allows benchmarking of different situations for batching / instancing in the next section.
 
@@ -157,21 +206,29 @@ The design of the automatic batching/instanced draws in Bevy makes some assumpti
 
 If these assumptions do not work for your use case, then you can add the `NoAutomaticBatching` component to your entities to opt-out and do your own thing. Note that mesh uniform data will still be written to the GpuArrayBuffer and can be used in your own mesh bind groups.
 
-#### What 0.12 Enables
+#### Instanced Draw Performance
 
-We can batch draws into a single instanced draw in some situations now that per-instance mesh uniform data is in a GpuArrayBuffer. If the mesh entity is using the same mesh asset, and same material asset, then it can be batched!
+We can batch draws into a single instanced draw in some situations now that per-instance mesh uniform data is in a `GpuArrayBuffer`. If the mesh entity is using the same mesh asset, and same material asset, then it can be batched!
 
-DEMO PERFORMANCE IMPROVEMENT.
+Using the same approach as 0.11 with one dynamic offset binding per mesh entity, and comparing to either storage buffers or batched uniform buffers:
+
+2D meshes: `bevymark --benchmark --waves 160 --per-wave 1000 --mode mesh2d --ordered-z` which spawns 160 waves of 1000 2D quad meshes, producing 160 instanced draws of 1000 instances per draw enables up to a **160% increase in frame rate (2.6x)!**
+
+3D meshes: `many_cubes` which spawn 160,000 cubes, of which ~11,700 are visible in the view. These are drawn using a single instanced draw of all visible cubes which enables up to **100% increase in frame rate (2x)**!
+
+These performance benefits can be leveraged on all platforms, including WebGL2!
 
 #### What is next for batching/instancing and beyond?
 
-* Put material data into GpuArrayBuffer per material type (e.g. all StandardMaterial instances will be stored in one GpuArrayBuffer) - this enables batching of draws for entities with the same mesh, same material type and textures, but different material data! This is implemented on a branch.
+* Put material data into GpuArrayBuffer per material type (e.g. all StandardMaterial instances will be stored in one GpuArrayBuffer) - this enables batching of draws for entities with the same mesh, same material type and textures, but different material data!
+  * A prototype implementation of this shows enormous benefits because materials are currently always _one uniform buffer per material instance_ which means we can't just update the dynamic offset, rather the entire bind group has to be rebound!
 * Put material textures into bindless texture arrays - this enables batching of draws for entities with the same mesh and same material type!
-* Put mesh data into one big buffer per mesh attribute layout - this removes the need to rebind the index/vertex buffers per-draw, instead only vertex/index range needs to be passed to the draw command. A simple version of this is implemented on a branch.
-* Put skinned mesh data into storage buffers if possible to enable instanced drawing of skinned mesh entities using the same mesh, skin, and material!
-* GPU-driven rendering
+* Where bindless texture arrays are not supported (WebGL2, WebGPU, some native) we can leverage asset preprocessing to pack textures into texture atlas textures, and use array textures where each layer is a texture atlas. This is an alternative way of avoiding rebinding for changing textures.
+* Put mesh data into one big buffer per mesh attribute layout - this removes the need to rebind the index/vertex buffers per-draw, instead only vertex/index range needs to be passed to the draw command. Prototypes showed this didn't give much/any improvement for CPU-drive rendering, but it does unlock GPU-driven nonetheless.
+* Put skinned mesh data into storage buffers if possible to enable instanced drawing of skinned mesh entities using the same mesh, skin, and material! This was prototyped and enabled drawing about 25% more (1.25x) foxes!
+* GPU-driven rendering for WebGPU and native
   * @JMS55 is working on GPU-driven rendering already, using a meshlet approach.
-  * Rob Swain (@superdump) intends to implement an alternative method similar to what is done in rend3.
+  * Rob Swain (@superdump) intends to implement an alternative method that does not require processing meshes into meshlets but that limits to drawing up to 256 instances per draw.
 
 ## Rendering Performance Improvements
 
@@ -200,27 +257,7 @@ As can be seen, this was unfortunately leaving a lot of performance on the table
 
 We have decided to explore option 2 for Bevy 0.12 as persisting entities involves solving other problems that have no simple and satisfactory answers.
 
-#### Data Structures
-
-Ideally we would only ever need to iterate over dense arrays of data (e.g. `Vec<T>`). CPUs are very good at this as it enables predictable data access that increases the cache hit rate and makes for very fast processing.
-
-The options, for component data `T`:
-
-* `Vec<T>`
-* `SparseSet<Entity, T>` - contains a 'sparse' `Vec<T>` and a dense `Vec<usize>` that is indexed by `Entity.index` and the `usize` value is the index into the sparse `Vec`.
-* `HashMap<Entity, T>`
-
-`Vec<T>` cannot be used with the current renderer architecture. Mesh entities are extracted in extraction query iteration order. They are then queued to a render phase and sorted. They are iterated in phase order to prepare and batch into instanced draws. The renderer can be rearchitected to enable use of `Vec<T>` but that is more intrusive than there was time to finalize for 0.12.
-
-`SparseSet<Entity, T>` is a good option and performs well. Lookups for batching involve indexing into two `Vec`s, which for lookups are fast. It has the benefit that the dense `Vec<T>` can be iterated directly if `Entity` order is irrelevant.
-
-However, `SparseSet` has the downside that the dense `Vec<usize>` has to be as large as the largest contained `Entity.index`. If you spawn a million entities, then despawn 999,999, leaving the millionth entity still spawned, every `SparseSet<Entity, T>` for different `T` will have to have a `Vec<usize>` that is one million items large.
-
-`HashMap<Entity, T>` is similar to `SparseSet`, and more familiar. It has good space complexity, with performance depending a lot on the hash function.
-
-Fast hash functions from the wild were tested AHash, FNV, FxHasher, SeaHasher, but all had quite a big performance drop compared to `SparseSet`. Ultimately, a hash function designed by @SkiFire13, and inspired by `rustc-hash`, was chosen that has strong performance and is robust enough for this usage. This combination is called `EntityHashMap` and is the new way to store component data in the render world.
-
-The worst case performance with random Z-order spawning of 2D meshes/sprites in `bevymark` is similar to `SparseSet`. The best case performance with 2D meshes/sprites spawned in draw order
+After consideration, we landed on using `HashMap<Entity, T>` with a hash function designed by @SkiFire13, and inspired by `rustc-hash`. This configuration is called `EntityHashMap` and is the new way to store component data in the render world.
 
 #### EntityHashMap Helpers
 
@@ -228,21 +265,34 @@ A helper plugin was added to make it simple and quick to extract main world data
 
 It is a good idea to group component data that will be accessed together into one target type to avoid having to do multiple lookups.
 
-DEMO CODE
+To extract two components from visible entities:
+
+```rust
+struct MyType {
+    a: ComponentA,
+    b: ComponentB,
+}
+
+impl ExtractInstance for MyType {
+    type Query = (Read<ComponentA>, Read<ComponentB>);
+    type Filter = ();
+
+    fn extract((a, b): QueryItem<'_, Self::Query>) -> Option<Self> {
+        Some(MyType {
+          a: a.clone(),
+          b: b.clone(),
+        })
+    }
+}
+
+app.add_plugins(ExtractInstancesPlugin::<MyType>::extract_visible());
+```
 
 ### Sprite Instancing
 
-Sprites were being rendered by generating a vertex buffer containing 4 vertices per sprite with position, UV, and possibly color data. This has proven to be very effective, but having to split batches of sprites into multiple draws because they use a different color is suboptimal.
+Sprites were being rendered by generating a vertex buffer containing 4 vertices per sprite with position, UV, and possibly color data. This has proven to be very effective. However, having to split batches of sprites into multiple draws because they use a different color is suboptimal.
 
-Sprite rendering now uses an instance-rate vertex buffer to store the per-instance data. It contains an affine transformation matrix that enables translation, scaling, and rotation in one transform. It contains per-instance color, and UV offset and scale.
-
-A quad is drawn by leveraging a rendering industry trick that leverages a special index buffer containing 6 indices. The indices encode the vertex position in their bits - the least significant bit is x, the next least significant bit is y. The vertices of the quad are then:
-
-```text
-10   11
-
-00   01
-```
+Sprite rendering now uses an instance-rate vertex buffer to store the per-instance data. Instance-rate vertex buffers are stepped when the instance index changes, rather than when the vertex index changes. The new buffer contains an affine transformation matrix that enables translation, scaling, and rotation in one transform. It contains per-instance color, and UV offset and scale.
 
 This retains all the functionality of the previous method, enables the additional flexibility of any sprite being able to have a color tint and all still be drawn in the same batch, and uses a total of 80 bytes per sprite, versus 144 bytes previously. The practical result is a performance improvement of up to 40% versus the previous method!
 
@@ -258,7 +308,8 @@ UI
 
 ### What's next for rendering performance?
 
-* `EntityHashMap` is good, but imagine a world with only `Vec<T>`, no lookups in hot loops, only in-order iteration, and maximum performance!
+* Rearchitecting the renderer data flow to enable use of `Vec<T>`
+  * Ideally we would only ever need to iterate in-order over dense arrays of data and never do any random-access lookups. CPUs are very good at this as it enables predictable data access that increases the cache hit rate and makes for very fast processing. Ideas have come up for possible ways to rearchitect the renderer a little to enable dense arrays and no unnecessary lookups!
 * Batching code already compares previous draw state (pipeline, bind groups, index/vertex buffers, etc) to current draw state. This is then repeated by `TrackedRenderPass` when encoding draws. This cost can be removed with a new API called `DrawStream`.
 
 ## <a name="what-s-next"></a>What's Next?
