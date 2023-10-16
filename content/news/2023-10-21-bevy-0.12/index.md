@@ -70,13 +70,11 @@ The above commands use the [`AppTypeRegistry`] by default. If you use a differen
 
 See [`ReflectCommandExt`] for more examples and documentation
 
-
 [`Commands`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/struct.Commands.html
 
 [`AppTypeRegistry`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/struct.AppTypeRegistry.html
 
 [`ReflectCommandExt`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/trait.ReflectCommandExt.html
-
 
 ## <a name="what-s-next"></a>What's Next?
 
