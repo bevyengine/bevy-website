@@ -67,7 +67,11 @@ Currently, exclusive systems and systems designed for system piping (with either
 Additionally, one-shot systems are always evaluated sequentially, rather than in parallel.
 While this reduces both complexity and overhead, this can be meaningfully slower than using a schedule with a parallel executor if you want to run a large number of heavy systems at once.
 
-Registering and running systems is useful and allows for a great degree of control. However, if you _just_ want to run a system - sans registration - there's `RunSystemOnce`, a new trait that does just that.
+Registering and running systems offers improved performance and correctness: you can have multiple copies of a single system, each with their own `Local` values and cached system state. 
+It also plays nice with asset-driven workflows: recording a mapping from a string to an identifier in a serialized callback is much nicer than trying to do so with Rust functions!
+
+However, when you're just prototyping or writing a unit test, it can be a real hassle: who wants all that boilerplate and indirection!
+When those caveats don't bother you, just use the `World::run_system_once` method.
 
 ```rust
 use bevy::ecs::system::RunSystemOnce;
