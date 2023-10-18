@@ -61,7 +61,7 @@ fn call_all(query: Query<&Callback>, mut commands: Commands) {
 
 Currently, there are some drawbacks and limitations. Most importantly, one-shot systems are not ran in parallel, so running slow systems like this can become a bottleneck. Additionally, exclusive systems, systems with `In` arguments, and systems that return values, are not supported.
 
-Registering and running systems is useful and allows for a great degree of control. However, if you __just_ want to run a system - sans registration - there's `RunSystemOnce`, a new trait that does just that.
+Registering and running systems is useful and allows for a great degree of control. However, if you _just_ want to run a system - sans registration - there's `RunSystemOnce`, a new trait that does just that.
 
 ```rust
 use bevy::ecs::system::RunSystemOnce;
