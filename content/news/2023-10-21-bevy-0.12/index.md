@@ -62,7 +62,10 @@ fn call_all(query: Query<&Callback>, mut commands: Commands) {
 }
 ```
 
-Currently, there are some drawbacks and limitations. Most importantly, one-shot systems are not ran in parallel, so running slow systems like this can become a bottleneck. Additionally, exclusive systems, systems with `In` arguments, and systems that return values, are not supported.
+One-shot systems are not without their limitations.
+Currently, exclusive systems and systems designed for system piping (with either an `In` parameter or a return type) can't be used at all.
+Additionally, one-shot systems are always evaluated sequentially, rather than in parallel.
+While this reduces both complexity and overhead, this can be meaningfully slower than using a schedule with a parallel executor if you want to run a large number of heavy systems at once.
 
 Registering and running systems is useful and allows for a great degree of control. However, if you _just_ want to run a system - sans registration - there's `RunSystemOnce`, a new trait that does just that.
 
