@@ -44,7 +44,7 @@ let _ = world.run_system(id); // prints 1
 let _ = world.run_system(id); // prints 2
 ```
 
-There is now a new way to run systems. First you need to register a system within a world, by calling `world.register_system(your_system)`. The `SystemId` that is returned can then be used to run that system, either within an exclusive system via `world.run_system(id)` or via a command `commands.run_system(id)`.
+There is now a new way to run systems. First you need to register a system within a world, by calling `world.register_system(your_system)`. The returned `SystemId` can then be used to run that system, either within an exclusive system via `world.run_system(id)` or via a command `commands.run_system(id)`.
 
 One-shot systems are very flexible. For example, you can have multiple instances of one system registered at the same time. One-shot systems can be nested (although not recursive), and you can also wrap `SystemId`s into components, making it possible to treat registered systems like entities.
 
@@ -86,7 +86,7 @@ world.run_system_once(increment); // prints 1
 world.run_system_once(increment); // prints 2
 ```
 
-This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments or change detection, which will *always* detect data as added/changed. This state isn't saved between two `run_system_once` calls, this may create some unexpected behavior. Be careful and you should be fine.
+This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments or change detection. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`'s reset every run, while change detection will *always* detect data as added/changed. Be careful and you'll be alright.
 
 ## <a name="what-s-next"></a>What's Next?
 
