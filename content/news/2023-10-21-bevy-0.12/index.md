@@ -80,7 +80,7 @@ world.run_system_once(increment); // prints 1
 world.run_system_once(increment); // prints 2
 ```
 
-This is great for unit testing systems and queries, and it's a lot simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments or change detection (`Changed`, `Added`). This state isn't saved between two `run_system_once` calls, this may create some unexpected behavior. Be careful and you should be fine.
+This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments or change detection, which will *always* detect data as added/changed. This state isn't saved between two `run_system_once` calls, this may create some unexpected behavior. Be careful and you should be fine.
 
 ## <a name="what-s-next"></a>What's Next?
 
