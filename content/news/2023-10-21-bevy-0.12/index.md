@@ -23,7 +23,10 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @alice-i-cecile @pascualex, @Trashtalk217, @Zeenobit</div>
 
-Previously, in order to run a system you'd have to add it to a schedule. But while schedules are very useful, not every system needs that sort of overhead. Hence the introduction of one-shot systems.
+Ordinarily, systems run once per frame, as part of a schedule.
+But what if you don't want to poll for them regularly?
+Maybe you're responding to a very rare event like in a complex turn-based game, or simply don't want to clutter your schedule with a new system for every single button.
+One-shot systems flip that logic on its head, and provide you the ability to run arbitrary logic on demand, using the powerful and familiar system syntax.
 
 ```rust
 #[derive(Resource, Default, Debug)]
