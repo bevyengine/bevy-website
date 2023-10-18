@@ -44,7 +44,7 @@ let _ = world.run_system(id); // prints 1
 let _ = world.run_system(id); // prints 2
 ```
 
-There is now a new way to run systems. First you need to register a system within a world, by calling `world.register_system(your_system)`. The returned `SystemId` can then be used to run that system, either within an exclusive system via `world.run_system(id)` or via a command `commands.run_system(id)`.
+There are three simple steps to using one-shot systems: register a system, store its `SystemId` somewhere, and then use either exclusive world access or commands to run the system corresponding to that id. 
 
 One-shot systems are very flexible. For example, you can have multiple instances of one system registered at the same time. One-shot systems can be nested (although not recursive), and you can also wrap `SystemId`s into components, making it possible to treat registered systems like entities.
 
