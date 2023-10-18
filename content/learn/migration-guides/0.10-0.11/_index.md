@@ -1,6 +1,6 @@
 +++
 title = "0.10 to 0.11"
-weight = 2
+weight = 6
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
@@ -1269,12 +1269,12 @@ impl Plugin for MyPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource::<MyResource>
             .add_systems(Update, my_system);
-    
+
         let render_app = match app.get_sub_app_mut(RenderApp) {
             Ok(render_app) => render_app,
             Err(_) => return,
         };
-    
+
         render_app
             .init_resource::<OtherRenderResource>();
     }
@@ -1284,7 +1284,7 @@ impl Plugin for MyPlugin {
             Ok(render_app) => render_app,
             Err(_) => return,
         };
-    
+
         render_app
             .init_resource::<RenderResourceNeedingDevice>();
     }
