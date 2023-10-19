@@ -57,7 +57,7 @@ Most systems should continue to use `Time`, but behind the scenes, the methods f
 
 Try the new `time` example to get a better feel for these resources.
 
-The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but entities moving in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
+The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
 
 ## <a name="what-s-next"></a>What's Next?
 
