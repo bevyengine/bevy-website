@@ -45,7 +45,7 @@ fn foo(world: &mut World) {
 }
 ```
 
-There are three simple steps to using one-shot systems: register a system, store its `SystemId`, and then use either exclusive world access or commands to run the corresponding system. 
+There are three simple steps to using one-shot systems: register a system, store its `SystemId`, and then use either exclusive world access or commands to run the corresponding system.
 
 A lot becomes possible with just that, however `SystemId`s really start showing their power, when they're wrapped into components.
 
@@ -65,8 +65,8 @@ fn call_all(query: Query<&Callback>, mut commands: Commands) {
 
 One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and aery (let us know how that goes, by the way).
 
-One-shot systems are very flexible. 
-They can be nested, so you can call `run_system` from within a one-shot system. 
+One-shot systems are very flexible.
+They can be nested, so you can call `run_system` from within a one-shot system.
 It's possible to have multiple instances of one system registered at a time, each with their own `Local` variables and cached system state.
 It also plays nice with asset-driven workflows: recording a mapping from a string to an identifier in a serialized callback is much nicer than trying to do so with Rust functions!
 
@@ -96,7 +96,7 @@ world.run_system_once(increment); // prints 1
 world.run_system_once(increment); // prints 2
 ```
 
-This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments, change detection, or `EventReader`s. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`s reset every run, while change detection will *always* detect data as added/changed. Be careful and you'll be alright.
+This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments, change detection, or `EventReader`s. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`s reset every run, while change detection will _always_ detect data as added/changed. Be careful and you'll be alright.
 
 ## <a name="what-s-next"></a>What's Next?
 
