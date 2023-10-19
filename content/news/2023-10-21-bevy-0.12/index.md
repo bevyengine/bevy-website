@@ -37,11 +37,12 @@ fn increment(mut counter: ResMut<Counter>) {
     println!("{}", counter.0);
 }
 
-let mut world = World::new();
-world.init_resource::<Counter>();
-let id = world.register_system(increment);
-let _ = world.run_system(id); // prints 1
-let _ = world.run_system(id); // prints 2
+fn foo(world: &mut World) {
+    world.init_resource::<Counter>();
+    let id = world.register_system(increment);
+    let _ = world.run_system(id); // prints 1
+    let _ = world.run_system(id); // prints 2
+}
 ```
 
 There are three simple steps to using one-shot systems: register a system, store its `SystemId`, and then use either exclusive world access or commands to run the corresponding system. 
