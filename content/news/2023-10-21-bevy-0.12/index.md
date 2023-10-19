@@ -28,7 +28,7 @@ Bevy 0.12 brings two major QoL improvements to `FixedUpdate`.
 - `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
 - `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
 
-The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking compared to `Time`. For example, `FixedTime` didn't track "total time elapsed" like `Time` does. Having two different APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
+The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking. It had completely different methods and it didn't track "total time elapsed" like `Time` did, to name a few examples. Having two different APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
 
 Now, you can just write systems that read `Time` and schedule them in either context.
 
@@ -53,7 +53,7 @@ Most systems should continue to use `Time`, but behind the scenes, the methods f
 - `Time<Fixed>`
 - `Time<()>`
 
-`Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` follows `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate` (and will update their value on the next swap). When a system borrows `Time`, it actually borrows `Time<()>`.
+`Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` chases `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate` (and will update their value on the next swap). When a system borrows `Time`, it actually borrows `Time<()>`.
 
 Try the new `time` example to get a better feel for these resources.
 
