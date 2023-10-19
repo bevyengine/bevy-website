@@ -28,7 +28,7 @@ Bevy 0.12 brings two major QoL improvements to `FixedUpdate`.
 - `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
 - `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
 
-The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking compared to `Time`. On top of that, having two different APIs meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and could not do both. It was also desirable to avoid this split leading to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
+The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking compared to `Time`. On top of that, having two different APIs meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not do both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
 
 Now, you can just write systems that read `Time` and schedule them in either context.
 
