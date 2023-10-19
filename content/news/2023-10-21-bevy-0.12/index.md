@@ -23,7 +23,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @nakedible @maniwani @alice-i-cecile</div>
 
-Bevy 0.12 brings two major QoL improvements to `FixedUpdate`.
+Bevy 0.12 brings two major quality of life improvements to `FixedUpdate`.
 
 - `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
 - `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
