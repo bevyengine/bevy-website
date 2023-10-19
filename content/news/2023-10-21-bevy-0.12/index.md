@@ -44,9 +44,9 @@ let _ = world.run_system(id); // prints 1
 let _ = world.run_system(id); // prints 2
 ```
 
-There are three simple steps to using one-shot systems: register a system, store its `SystemId` somewhere, and then use either exclusive world access or commands to run the system corresponding to that id. 
+There are three simple steps to using one-shot systems: register a system, store its `SystemId`, and then use either exclusive world access or commands to run the corresponding system. 
 
-One-shot systems are very flexible. For example, you can have multiple instances of one system registered at the same time. One-shot systems can be nested (although not recursive), and you can also wrap `SystemId`s into components, making it possible to treat registered systems like entities.
+A lot becomes possible with just that, however `SystemId`s really start showing their power, when they're wrapped into components.
 
 ```rust
 use bevy::ecs::system::SystemId;
@@ -62,16 +62,21 @@ fn call_all(query: Query<&Callback>, mut commands: Commands) {
 }
 ```
 
-One-shot systems are not without their limitations.
-Currently, exclusive systems and systems designed for system piping (with either an `In` parameter or a return type) can't be used at all.
-Additionally, one-shot systems are always evaluated sequentially, rather than in parallel.
-While this reduces both complexity and overhead, this can be meaningfully slower than using a schedule with a parallel executor if you want to run a large number of heavy systems at once.
+One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and aery (let us know how that goes, by the way).
 
-Registering and running systems offers improved performance and correctness: you can have multiple copies of a single system, each with their own `Local` values and cached system state. 
+One-shot systems are very flexible. 
+They can be nested, so you can call `run_system` from within a one-shot system. 
+It's possible to have multiple instances of one system registered at a time, each with their own `Local` variables and cached system state.
 It also plays nice with asset-driven workflows: recording a mapping from a string to an identifier in a serialized callback is much nicer than trying to do so with Rust functions!
 
-However, when you're just prototyping or writing a unit test, it can be a real hassle: who wants all that boilerplate and indirection!
-When those caveats don't bother you, just use the `World::run_system_once` method.
+Still, one-shot systems are not without their limitations.
+Currently, exclusive systems and systems designed for system piping (with either an `In` parameter or a return type) can't be used at all.
+You also can't call a one-shot systems from itself, recursion isn't possible.
+Lastly, one-shot systems are always evaluated sequentially, rather than in parallel.
+While this reduces both complexity and overhead, for certain workloads this can be meaningfully slower than using a schedule with a parallel executor.
+
+However, when you're just prototyping or writing a unit test, it can be a real hassle: two whole functions and some weird identifier?
+For these situations, you can use the `World::run_system_once` method.
 
 ```rust
 use bevy::ecs::system::RunSystemOnce;
@@ -90,7 +95,7 @@ world.run_system_once(increment); // prints 1
 world.run_system_once(increment); // prints 2
 ```
 
-This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments or change detection. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`'s reset every run, while change detection will *always* detect data as added/changed. Be careful and you'll be alright.
+This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments, change detection, or `EventReader`s. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`s reset every run, while change detection will *always* detect data as added/changed. Be careful and you'll be alright.
 
 ## <a name="what-s-next"></a>What's Next?
 
