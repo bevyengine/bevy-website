@@ -28,7 +28,7 @@ Bevy 0.12 brings two major QoL improvements to `FixedUpdate`.
 - `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
 - `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
 
-The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking compared to `Time`. On top of that, having two different APIs meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not do both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
+The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking compared to `Time`. For example, `FixedTime` didn't track "total time elapsed" like `Time` does. Having two different APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
 
 Now, you can just write systems that read `Time` and schedule them in either context.
 
@@ -57,7 +57,7 @@ Most systems should continue to use `Time`, but behind the scenes, the methods f
 
 Try the new `time` example to get a better feel for these resources.
 
-The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued in a given frame, and so things like frame lag or your computer waking up from a long sleep will no longer cause a death spiral. So now, the app won't freeze, but entities moving in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
+The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but entities moving in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
 
 ## <a name="what-s-next"></a>What's Next?
 
