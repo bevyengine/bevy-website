@@ -24,7 +24,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 <div class="release-feature-authors">authors: @alice-i-cecile @pascualex, @Trashtalk217, @Zeenobit</div>
 
 Ordinarily, systems run once per frame, as part of a schedule.
-But what if you don't want to poll for them regularly?
+But this isn't always the right fit.
 Maybe you're responding to a very rare event like in a complex turn-based game, or simply don't want to clutter your schedule with a new system for every single button.
 One-shot systems flip that logic on its head, and provide you the ability to run arbitrary logic on demand, using the powerful and familiar system syntax.
 
