@@ -51,7 +51,6 @@ fn handle_lifetime_events(
 [`onStop()`]: https://developer.android.com/reference/android/app/Activity#onStop()
 [`onRestart()`]: https://developer.android.com/reference/android/app/Activity#onRestart()
 
-
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
