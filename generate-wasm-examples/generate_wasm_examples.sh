@@ -7,12 +7,10 @@ cd bevy
 
 # build examples for webgl2
 cargo run -p example-showcase -- build-website-list --content-folder content --api webgl2
-ls -R content
 mv content ../../content/examples
 
 # build examples for webgpu
 cargo run -p example-showcase -- build-website-list --content-folder content --api webgpu
-ls -R content
 mv content ../../content/examples-webgpu
 
 # remove markdown files from assets so that they don't get picked up by Zola
