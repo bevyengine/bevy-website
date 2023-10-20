@@ -1,24 +1,18 @@
 #!/bin/sh
+set -x
 
-./clone_bevy.sh
-
-# temporary: fetch tools from main branch
-git init bevy-tools
-cd bevy-tools
-git remote add origin https://github.com/bevyengine/bevy
-git pull --depth=1 origin main
-cd ..
-rm -rf bevy/tools
-cp -r bevy-tools/tools bevy
-rm -rf bevy-tools
+# fetch bevy, just for bevyengine/tools
+git clone https://github.com/bevyengine/bevy --depth 1
 cd bevy
 
+# build examples for webgl2
 cargo run -p example-showcase -- build-website-list --content-folder content --api webgl2
+ls -R content
 mv content ../../content/examples
 
-rm -rf content
-
+# build examples for webgpu
 cargo run -p example-showcase -- build-website-list --content-folder content --api webgpu
+ls -R content
 mv content ../../content/examples-webgpu
 
 # remove markdown files from assets so that they don't get picked up by Zola
