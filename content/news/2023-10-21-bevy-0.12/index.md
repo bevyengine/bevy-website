@@ -63,7 +63,7 @@ fn call_all(query: Query<&Callback>, mut commands: Commands) {
 }
 ```
 
-One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and aery (let us know how that goes, by the way).
+One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and [`aery`](https://docs.rs/aery/latest/aery/) (let us know how that goes, by the way).
 
 One-shot systems are very flexible.
 They can be nested, so you can call `run_system` from within a one-shot system.
