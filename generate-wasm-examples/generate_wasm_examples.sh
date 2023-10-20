@@ -1,5 +1,4 @@
 #!/bin/sh
-set -x
 
 # fetch bevy, just for bevyengine/tools
 git clone https://github.com/bevyengine/bevy --depth 1
