@@ -19,11 +19,21 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @author</div>
 
+
+## Reduced Tracing Overhead
+
+<div class="release-feature-authors">authors: @hymm, @james7132</div>
+
+Bevy uses the tracing library to measure systems running time among other things. This is useful for determining where bottlenecks in frametime are and measuring performance improvements. However using tracy has significant overhead to it. A large part of the per span overhead was due to allocating the string description of the span. By caching the spans for systems, commands, and parallel iteration, we have significantly reduced the overhead when using tracing. In the PR caching the system spans the many foxes stress test went from 5.35 ms to 4.54 ms. In the PR caching the parallel iteration spans, the many cubes stress test went from 8.89 ms to 6.8 ms.
+
+![tracing overhead](tracing-overhead-reduction.png)
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
 
 Check out the [**Bevy 0.13 Milestone**](https://github.com/bevyengine/bevy/milestone/17) for an up-to-date list of current work being considered for **Bevy 0.13**.
+
 
 ## Support Bevy
 
