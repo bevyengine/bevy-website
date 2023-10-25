@@ -44,9 +44,9 @@ If you are building an app that tests the limits of your hardware with optimal f
 
 For an in-depth technical breakdown of the implementation we chose, check out the [Bevy Asset V2 pull request](https://github.com/bevyengine/bevy/pull/8624).
 
-### Enabling Processing
+### Enabling Pre-Processing
 
-To enable processing, just configure your [`AssetPlugin`] like this:
+To enable asset pre-processing, just configure your [`AssetPlugin`] like this:
 
 ```rust
 app.add_plugins(DefaultPlugins.set(
