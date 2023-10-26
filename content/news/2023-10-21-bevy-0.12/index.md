@@ -20,7 +20,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 <div class="release-feature-authors">authors: @ameknite, @mockersf</div>
 
 To help ensure examples are reusable outside of Bevy repository, CI will now fail if an example
-uses an import from `bevy_internal` instead if `bevy`.
+uses an import from `bevy_internal` instead of `bevy`.
 
 The daily mobile check job will build on more iOS and Android devices:
 
