@@ -50,7 +50,7 @@ cargo run -p example-showcase -- run --screenshot
 Some options are available to help with the execution, you can check them with `--help`.
 
 Those screenshots are displayed on the example pages on the website, and can be used to check that
-a PR didn't introduce a rendering regression.
+a PR didn't introduce a visible regression.
 
 ## Example execution in CI
 
