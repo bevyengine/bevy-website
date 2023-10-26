@@ -25,22 +25,24 @@ are running until the application is resumed.
 <video controls><source src="suspend-resume.mp4" type="video/mp4"/></video>
 
 Background tasks working in other threads, like playing audio, won't be stopped. When the
-application will be suspended, a [`Lifetime`] event `Lifetime::Suspended` is sent, corresponding to
-the [`onStop()`] callback. You should take care to pause tasks that shouldn't run in the background,
-and resume them when receiving the `Lifetime::Resumed` event (corresponding to the [`onRestart()`]
-callback).
+application will be suspended, a [`Lifetime`] event `ApplicationLifetime::Suspended` is sent,
+corresponding to the [`onStop()`] callback. You should take care to pause tasks that shouldn't
+run in the background, and resume them when receiving the `ApplicationLifetime::Resumed` event
+(corresponding to the [`onRestart()`] callback).
 
 ```rust
 fn handle_lifetime_events(
-    mut lifetime_events: EventReader<Lifetime>,
+    mut lifetime_events: EventReader<ApplicationLifetime>,
     music_controller: Query<&AudioSink>,
 ) {
     for event in lifetime_events.read() {
         match event {
-            // Upon receiving the `Lifetime::Suspended` event, the application has 1 frame before it is paused
-            Lifetime::Suspended => music_controller.single().pause(),
-            Lifetime::Resumed => music_controller.single().play(),
-            // `Lifetime::Started` is the only other event for now, more to come in the next Bevy version
+            // Upon receiving the `Suspended` event, the application has 1 frame before it is paused
+            // As audio happens in an independent thread, it needs to be stopped
+            ApplicationLifetime::Suspended => music_controller.single().pause(),
+            // On `Resumed``, audio can continue playing
+            ApplicationLifetime::Resumed => music_controller.single().play(),
+            // `Started` is the only other event for now, more to come in the next Bevy version
             _ => (),
         }
     }
