@@ -20,7 +20,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 <div class="release-feature-authors">authors: @mockersf</div>
 
 On Android, applications no longer crash on suspend. Instead, they are paused, and no systems
-are running until the application is resumed.
+will run until the application is resumed.
 
 <video controls><source src="suspend-resume.mp4" type="video/mp4"/></video>
 
