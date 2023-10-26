@@ -19,7 +19,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @author</div>
 
-## AnimationPlayer API Improvements
+## `AnimationPlayer` API Improvements
 
 <div class="release-feature-authors">authors: @devinleamy</div>
 
