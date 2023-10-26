@@ -23,6 +23,7 @@ To help ensure examples are reusable outside of Bevy repository, CI will now fai
 uses an import from `bevy_internal` instead if `bevy`.
 
 The daily mobile check job will build on more iOS and Android devices:
+
 * iPhone 13 on iOS 15
 * iPhone 14 on iOS 16
 * iPhone 15 on iOS 17
