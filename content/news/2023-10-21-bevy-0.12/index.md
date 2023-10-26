@@ -59,8 +59,8 @@ All examples are now executed in CI on Windows with DX12, and on Linux with Vulk
 a screenshot is taken and compared to the last execution. If an example crashes, the log is saved.
 The mobile example is also executed on the same devices as the daily mobile check job.
 
-A report of all those executions is built, and available at
-https://thebevyflock.github.io/bevy-example-runner/.
+A report of all those executions is built and available
+[here](https://thebevyflock.github.io/bevy-example-runner/).
 
 [![Example Report](example-report.png)](https://thebevyflock.github.io/bevy-example-runner/)
 
