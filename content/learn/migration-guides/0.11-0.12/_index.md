@@ -49,7 +49,7 @@ The GLTF asset loader will now factor in `emissiveStrength` when converting to B
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-__Migrating a custom asset loader__
+#### Migrating a custom asset loader
 
 Existing asset loaders will need a few small changes to get them to work with Bevy Assets V2.
 
@@ -117,7 +117,7 @@ app.register_asset_loader(MyAssetLoader)
     .init_asset::<MyAsset>()
 ```
 
-__Labeled assets__
+#### Labeled assets
 
 If your loader allows labeled assets, there are a couple of different ways to handle them. The simplest is to call `load_context.labeled_asset_scope`:
 
@@ -136,7 +136,7 @@ asset.children.drain().for_each(|(label, mut item)| {
 
 You can use the provided load context (`lc`) to load additional assets. These will automatically be registered as dependencies of the labeled asset.
 
-__Using assets__
+#### Using assets
 
 The actual call to `load` hasn’t changed:
 
@@ -148,7 +148,7 @@ let handle = server.load("path/to/my/asset.json");
 let data = assets.get(&handle).unwrap();
 ```
 
-__Asset events__
+#### Asset events
 
 There are a few changes to asset events. The event no longer contains a `handle` field, instead the event contains a field called `id`:
 
