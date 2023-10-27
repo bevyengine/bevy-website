@@ -39,7 +39,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-- The GLTF asset loader will now factor in `emissiveStrength` when converting to Bevy’s `StandardMaterial::emissive`. Blender will export emissive materials using this field. Remove the field from your GLTF files or manually modify your materials post-asset-load to match how Bevy would load these files in previous versions.
+The GLTF asset loader will now factor in `emissiveStrength` when converting to Bevy’s `StandardMaterial::emissive`. Blender will export emissive materials using this field. Remove the field from your GLTF files or manually modify your materials post-asset-load to match how Bevy would load these files in previous versions.
 
 ### [Bevy Asset V2](https://github.com/bevyengine/bevy/pull/8624)
 
@@ -156,15 +156,12 @@ for ev in ev_template.read() {
         AssetEvent::Added { id } => {
             println!("Asset added");
         }
-
         AssetEvent::LoadedWithDependencies { id } => {
             println!("Asset loaded");
         }
-
         AssetEvent::Modified { id } => {
             println!("Asset modified");
         }
-
         AssetEvent::Removed { id } => {
             println!("Asset removed");
         }
@@ -234,25 +231,13 @@ Whenever possible use the typed API in order to directly get a handle to your as
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
--
-
-Rely on `TypePath` instead of `std::any::type_name` for all stability guarantees and for use in all reflection contexts, this is used through with one of the following APIs:
-
-- `TypePath::type_path` if you have a concrete type and not a value.
-- `DynamicTypePath::reflect_type_path` if you have an `dyn Reflect` value without a concrete type.
-- `TypeInfo::type_path` for use through the registry or if you want to work with the represented type of a `DynamicFoo`.
-
--
-
-Remove `type_name` from manual `Reflect` implementations.
-
--
-
-Use `type_path` and `type_path_table` in place of `type_name` on `TypeInfo`-like structs.
-
--
-
-Use `get_with_type_path(_mut)` over `get_with_type_name(_mut)`.
+- Rely on `TypePath` instead of `std::any::type_name` for all stability guarantees and for use in all reflection contexts, this is used through with one of the following APIs:
+  - `TypePath::type_path` if you have a concrete type and not a value.
+  - `DynamicTypePath::reflect_type_path` if you have an `dyn Reflect` value without a concrete type.
+  - `TypeInfo::type_path` for use through the registry or if you want to work with the represented type of a `DynamicFoo`.
+- Remove `type_name` from manual `Reflect` implementations.
+- Use `type_path` and `type_path_table` in place of `type_name` on `TypeInfo`-like structs.
+- Use `get_with_type_path(_mut)` over `get_with_type_name(_mut)`.
 
 ### [More ergonomic spatial audio](https://github.com/bevyengine/bevy/pull/9800)
 
@@ -310,17 +295,17 @@ commands.spawn((
 The method `QueryParIter::for_each_mut` has been deprecated and is no longer functional. Use `for_each` instead, which now supports mutable queries.
 
 ```rust
-// 0.11:
+// 0.11
 query.par_iter_mut().for_each_mut(|x| ...);
 
-// 0.12:
+// 0.12
 query.par_iter_mut().for_each(|x| ...);
 ```
 
 The method `QueryParIter::for_each` now takes ownership of the `QueryParIter`, rather than taking a shared reference.
 
 ```rust
-// 0.11:
+// 0.11
 let par_iter = my_query.par_iter().batching_strategy(my_batching_strategy);
 par_iter.for_each(|x| {
     // ...Do stuff with x...
@@ -329,7 +314,7 @@ par_iter.for_each(|x| {
     });
 });
 
-// 0.12:
+// 0.12
 my_query.par_iter().batching_strategy(my_batching_strategy).for_each(|x| {
     // ...Do stuff with x...
     my_query.par_iter().batching_strategy(my_batching_strategy).for_each(|y| {
@@ -409,23 +394,23 @@ The `multi-threaded` feature in `bevy_ecs` and `bevy_tasks` is no longer enabled
 The `system_adapter` functions have been deprecated: use `.map` instead, which is a lightweight alternative to `.pipe`.
 
 ```rust
-// Before:
+// 0.11
 my_system.pipe(system_adapter::ignore)
 my_system.pipe(system_adapter::unwrap)
 my_system.pipe(system_adapter::new(T::from))
 
-// After:
+// 0.12
 my_system.map(std::mem::drop)
 my_system.map(Result::unwrap)
 my_system.map(T::from)
 
-// Before:
+// 0.11
 my_system.pipe(system_adapter::info)
 my_system.pipe(system_adapter::dbg)
 my_system.pipe(system_adapter::warn)
 my_system.pipe(system_adapter::error)
 
-// After:
+// 0.12
 my_system.map(bevy_utils::info)
 my_system.map(bevy_utils::dbg)
 my_system.map(bevy_utils::warn)
@@ -642,12 +627,12 @@ Replace IntoIterator iteration (&mut <RemovedComponents>) with .read()
 - Can replaced manual configuration of all schedules:
 
 ```rust
-// Old
+// 0.11
 for (_, schedule) in app.world.resource_mut::<Schedules>().iter_mut() {
     schedule.set_build_settings(build_settings);
 }
 
-// New
+// 0.l2
 app.configure_schedules(build_settings);
 ```
 
@@ -717,7 +702,7 @@ Replace `Rect::as_urect` with `Rect::as_irect`, `Rect::as_rect` with `Rect::as_u
     <div class="migration-guide-area-tag">Math</div>
 </div>
 
-- Change all `Bezier` references to `CubicBezier`
+Change all `Bezier` references to `CubicBezier`
 
 ### [Remove the bevy_dylib feature](https://github.com/bevyengine/bevy/pull/9516)
 
@@ -926,15 +911,11 @@ Note that using the instance_index is the default way to pass the per-object ind
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Shader code before:
-
 ```rust
+// 0.11
 var model = mesh[instance_index].model;
-```
 
-Shader code after:
-
-```rust
+// 0.12
 #import bevy_pbr::mesh_functions affine_to_square
 
 var model = affine_to_square(mesh[instance_index].model);
@@ -1022,22 +1003,6 @@ fn my_system(mut q: Query<&mut ViewVisibility>) {
 
 The `check_visibility` system’s `Option<&NoFrustumCulling>` parameter has been replaced by  `Has<NoFrustumCulling>`, if you were calling it manually, you should change the type to match it
 
-### [Update defaults for OrthographicProjection](https://github.com/bevyengine/bevy/pull/9878)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-- Migration guide steps from #9537 should be removed for next release.
-
-### [Revert "Update defaults for OrthographicProjection (#9537)"](https://github.com/bevyengine/bevy/pull/9878)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-- Migration guide steps from #9537 should be removed for next release.
-
 ### [Allow other plugins to create renderer resources](https://github.com/bevyengine/bevy/pull/9925)
 
 <div class="migration-guide-area-tags">
@@ -1047,14 +1012,14 @@ The `check_visibility` system’s `Option<&NoFrustumCulling>` parameter has been
 The `RenderPlugin` now takes a `RenderCreation` enum instead of `WgpuSettings`. `RenderSettings::default()` returns `RenderSettings::Automatic(WgpuSettings::default())`. `RenderSettings` also implements `From<WgpuSettings>`.
 
 ```rust
-// before
+// 0.11
 RenderPlugin {
     wgpu_settings: WgpuSettings {
     ...
     },
 }
 
-// now
+// 0.12
 RenderPlugin {
     render_creation: RenderCreation::Automatic(WgpuSettings {
     ...
@@ -1076,9 +1041,8 @@ RenderPlugin {
 
 Previously the render app extracted mesh entities and their component data from the main world and stored them as entities and components in the render world. Now they are extracted into essentially `EntityHashMap<Entity, T>` where `T` are structs containing an appropriate group of data. This means that while extract set systems will continue to run extract queries against the main world they will store their data in hash maps. Also, systems in later sets will either need to look up entities in the available resources such as `RenderMeshInstances`, or maintain their own `EntityHashMap<Entity, T>` for their own data.
 
-Before:
-
 ```rust
+// 0.11
 fn queue_custom(
     material_meshes: Query<(Entity, &MeshTransforms, &Handle<Mesh>), With<InstanceMaterialData>>,
 ) {
@@ -1087,11 +1051,8 @@ fn queue_custom(
         ...
     }
 }
-```
 
-After:
-
-```rust
+// 0.12
 fn queue_custom(
     render_mesh_instances: Res<RenderMeshInstances>,
     instance_entities: Query<Entity, With<InstanceMaterialData>>,
@@ -1105,14 +1066,6 @@ fn queue_custom(
     }
 }
 ```
-
-### [Allow overriding global wireframe setting.](https://github.com/bevyengine/bevy/pull/7328)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-<!-- TODO -->
 
 ### [PCF For DirectionalLight/SpotLight Shadows](https://github.com/bevyengine/bevy/pull/8006)
 
@@ -1162,21 +1115,13 @@ in custom material prepass shaders:
 
 When using functions from `bevy_pbr::prepass_utils` (`prepass_depth()`, `prepass_normal()`, `prepass_motion_vector()`) in contexts where these prepasses might be disabled, you should now wrap your calls with the appropriate `#ifdef` guards, (`#ifdef DEPTH_PREPASS`, `#ifdef NORMAL_PREPASS`, `#ifdef MOTION_VECTOR_PREPASS`) providing fallback logic where applicable.
 
-### [allow extensions to StandardMaterial](https://github.com/bevyengine/bevy/pull/7820)
+### [Allow extensions to StandardMaterial](https://github.com/bevyengine/bevy/pull/7820)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-manual implementations of `AsBindGroup` will need to be adjusted, the changes are pretty straightforward and can be seen in the diff for e.g. the `texture_binding_array` example.
-
-### [chore: use ExtractComponent derive macro for EnvironmentMapLight and FogSettings](https://github.com/bevyengine/bevy/pull/10191)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-No migration needed
+Manual implementations of `AsBindGroup` will need to be adjusted, the changes are pretty straightforward and can be seen in the diff for e.g. the `texture_binding_array` example.
 
 ### [Variable `MeshPipeline` View Bind Group Layout](https://github.com/bevyengine/bevy/pull/10156)
 
@@ -1184,9 +1129,9 @@ No migration needed
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- `MeshPipeline::view_layout` and `MeshPipeline::view_layout_multisampled` have been replaced with a private array to accomodate for variable view bind group layouts. To obtain a view bind group layout for the current pipeline state, use the new `MeshPipeline::get_view_layout()` or `MeshPipeline::get_view_layout_from_key()` methods.
+`MeshPipeline::view_layout` and `MeshPipeline::view_layout_multisampled` have been replaced with a private array to accomodate for variable view bind group layouts. To obtain a view bind group layout for the current pipeline state, use the new `MeshPipeline::get_view_layout()` or `MeshPipeline::get_view_layout_from_key()` methods.
 
-### [update shader imports](https://github.com/bevyengine/bevy/pull/10180)
+### [Update shader imports](https://github.com/bevyengine/bevy/pull/10180)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -1207,7 +1152,7 @@ naga_oil 0.10 reworks the import mechanism to support more syntax to make it mor
 
 ```rust
 #import part::of::path
-...
+// ...
 path::remainder::function();
 ```
 
@@ -1226,21 +1171,13 @@ bevy_pbr::pbr_functions::pbr()
 #import bevy_pbr::pbr_functions::pbr
 // for backwards compatibility the old style is still supported:
 // #import bevy_pbr::pbr_functions pbr
-...
+// ...
 pbr()
 ```
 
--
-
-allows most imported items to end with `_` and numbers (naga_oil#30). still doesn’t allow struct members to end with `_` or numbers but it’s progress.
-
--
-
-the vast majority of existing shader code will work without changes, but will emit “deprecated” warnings for old-style imports. these can be suppressed with the `allow-deprecated` feature.
-
--
-
-partly breaks overrides (as far as i’m aware nobody uses these yet) - now overrides will only be applied if the overriding module is added as an additional import in the arguments to `Composer::make_naga_module` or `Composer::add_composable_module`. this is necessary to support determining whether imports are modules or items.
+- allows most imported items to end with `_` and numbers (naga_oil#30). still doesn’t allow struct members to end with `_` or numbers but it’s progress.
+- the vast majority of existing shader code will work without changes, but will emit “deprecated” warnings for old-style imports. these can be suppressed with the `allow-deprecated` feature.
+- partly breaks overrides (as far as i’m aware nobody uses these yet) - now overrides will only be applied if the overriding module is added as an additional import in the arguments to `Composer::make_naga_module` or `Composer::add_composable_module`. this is necessary to support determining whether imports are modules or items.
 
 ### [Bind group entries](https://github.com/bevyengine/bevy/pull/9694)
 
@@ -1438,22 +1375,18 @@ The `num_font_atlases` method of `FontAtlasSet` has been renamed to `len`.
     <div class="migration-guide-area-tag">UI</div>
 </div>
 
-__Change direct accesses of `AccessibilityRequested` to use `AccessibilityRequested.::get()`/`AccessibilityRequested::set()`__
-
-__Before__
+Change direct accesses of `AccessibilityRequested` to use `AccessibilityRequested.::get()`/`AccessibilityRequested::set()`
 
 ```rust
+// 0.11
 use std::sync::atomic::Ordering;
 
 // To access
 accessibility_requested.load(Ordering::SeqCst)
 // To update
 accessibility_requested.store(true, Ordering::SeqCst);
-```
 
-__After__
-
-```rust
+// 0.12
 // To access
 accessibility_requested.get()
 // To update
@@ -1501,9 +1434,9 @@ struct Vertex {
 
 @vertex
 fn vertex(vertex_no_morph: Vertex) -> VertexOutput {
-...
-
+    // ...
     var model = mesh[vertex_no_morph.instance_index].model;
+}
 ```
 
 After:
@@ -1513,14 +1446,15 @@ After:
 
 struct Vertex {
     @builtin(instance_index) instance_index: u32,
-...
+    // ...
 }
 
 @vertex
 fn vertex(vertex_no_morph: Vertex) -> VertexOutput {
-...
-
-    var model = mesh[bevy_render::instance_index::get_instance_index(vertex_no_morph.instance_index)].model;
+    // ...
+    let instance_index = bevy_render::instance_index::get_instance_index(vertex_no_morph.instance_index);
+    var model = mesh[instance_index].model;
+}
 ```
 
 ### [Remove `IntoIterator` impl for `&mut EventReader`](https://github.com/bevyengine/bevy/pull/9583)
