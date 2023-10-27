@@ -15,6 +15,58 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## CI Improvements
+
+<div class="release-feature-authors">authors: @ameknite, @mockersf</div>
+
+To help ensure examples are reusable outside of the Bevy repository, CI will now fail if an example
+uses an import from `bevy_internal` instead of `bevy`.
+
+Additionally, the daily mobile check job now builds on more iOS and Android devices:
+
+* iPhone 13 on iOS 15
+* iPhone 14 on iOS 16
+* iPhone 15 on iOS 17
+* Xiaomi Redmi Note 11 on Android 11
+* Google Pixel 6 on Android 12
+* Samsung Galaxy S23 on Android 13
+* Google Pixel 8 on Android 14
+
+## Example tooling improvements
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+The example showcase tool can now build all examples for WebGL2 or WebGPU. This is used to update
+the website with all Wasm-compatible examples, which you can find
+[here](https://bevyengine.org/examples/) for WebGL2, or
+[here](https://bevyengine.org/examples-webgpu/) for WebGPU.
+
+It is now also capable of capturing a screenshot while running all examples:
+
+```sh
+cargo run -p example-showcase -- run --screenshot
+```
+
+Some options are available to help with the execution, you can check them with `--help`.
+
+Those screenshots are displayed on the example pages on the website, and can be used to check that
+a PR didn't introduce a visible regression.
+
+## Example execution in CI
+
+<div class="release-feature-authors">authors: @mockersf, @rparrett</div>
+
+All examples are now executed in CI on Windows with DX12, and on Linux with Vulkan. When possible,
+a screenshot is taken and compared to the last execution. If an example crashes, the log is saved.
+The mobile example is also executed on the same devices as the daily mobile check job.
+
+A report of all those executions is built and available
+[here](https://thebevyflock.github.io/bevy-example-runner/).
+
+[![Example Report](example-report.png)](https://thebevyflock.github.io/bevy-example-runner/)
+
+If you want to help sponsor tests on more platforms, get in touch!
+
 ## Suspend and Resume on Android
 
 <div class="release-feature-authors">authors: @mockersf</div>
