@@ -29,7 +29,7 @@ One "solution" is to bump up the resolution. Here is what it looks like with a 4
 
 ![no pcf high resolution](no_pcf_high.png)
 
-Looking better! However this still isn't a perfect solution. Large shadowmaps aren't feasible on all hardware. And even if they are, you can still encounter this issue if you place an object in the wrong place, or point you light in the wrong direction. You can use Bevy's [Cascaded Shadow Maps](/news/bevy-0-10/#cascaded-shadow-maps) (which are enabled by default) to cover a larger area, with higher detail close to the camera and less detail farther away. However even under these conditions, you will still probably encounter these aliasing issues.
+Looking better! However this still isn't a perfect solution. Large shadowmaps aren't feasible on all hardware. And even if they are, you can still encounter this issue if you place an object in the wrong place, or point your light in the wrong direction. You can use Bevy's [Cascaded Shadow Maps](/news/bevy-0-10/#cascaded-shadow-maps) (which are enabled by default) to cover a larger area, with higher detail close to the camera and less detail farther away. However even under these conditions, you will still probably encounter these aliasing issues.
 
 **PCF Shadow Filtering** is a popular technique that takes multiple samples from the shadow map and compares with an interpolated mesh surface depth projected into the frame of reference of the light. It then calculates the percentage of samples in the depth buffer that are closer to the light than the mesh surface. In short, this creates a "blur" effect that improves shadow quality, which is especially evident when a given shadow doesn't have enough "shadow map detail".
 
