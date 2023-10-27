@@ -31,9 +31,9 @@ One "solution" is to bump up the resolution. Here is what it looks like with a 4
 
 Looking better! However this still isn't a perfect solution. Large shadowmaps aren't feasible on all hardware. And even if they are, you can still encounter this issue if you place an object in the wrong place, or point your light in the wrong direction. You can use Bevy's [Cascaded Shadow Maps](/news/bevy-0-10/#cascaded-shadow-maps) (which are enabled by default) to cover a larger area, with higher detail close to the camera and less detail farther away. However even under these conditions, you will still probably encounter these aliasing issues.
 
-**PCF Shadow Filtering** is a popular technique that takes multiple samples from the shadow map and compares with an interpolated mesh surface depth projected into the frame of reference of the light. It then calculates the percentage of samples in the depth buffer that are closer to the light than the mesh surface. In short, this creates a "blur" effect that improves shadow quality, which is especially evident when a given shadow doesn't have enough "shadow map detail".
+**Bevy 0.12** introduces **PCF Shadow Filtering**, which is a popular technique that takes multiple samples from the shadow map and compares with an interpolated mesh surface depth projected into the frame of reference of the light. It then calculates the percentage of samples in the depth buffer that are closer to the light than the mesh surface. In short, this creates a "blur" effect that improves shadow quality, which is especially evident when a given shadow doesn't have enough "shadow map detail".
 
-Bevy's default PCF approach is the [`ShadowMapFilter::Castano13`] method by Ignacio Castaño (used in The Witness). Here it is with a 512x512 shadow map:
+**Bevy 0.12**'s default PCF approach is the [`ShadowMapFilter::Castano13`] method by Ignacio Castaño (used in The Witness). Here it is with a 512x512 shadow map:
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare (Castano)</b>
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
