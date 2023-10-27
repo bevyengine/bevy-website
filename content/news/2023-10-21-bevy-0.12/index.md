@@ -15,6 +15,45 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## PCF Shadow Filtering
+
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55</div>
+
+Shadow aliasing is a very common problem in 3D apps:
+
+![no pcf](no_pcf.png)
+
+Those "jagged lines" in the shadow are the result of the shadow map being "too small" to accurately represent the shadow from this perspective. The shadow map above is stored in a 512x512 texture, which is a lower resolution than most people will use for most of their shadows. This was selected to show a "bad" case of jaggies. Note that Bevy defaults to 2048x2048 shadowmaps.
+
+One "solution" is to bump up the resolution. Here is what it looks like with a 4096x4096 shadow map.
+
+![no pcf high resolution](no_pcf_high.png)
+
+Looking better! However this still isn't a perfect solution. Large shadowmaps aren't feasible on all hardware. They are significantly more expensive. And even if you can afford super high resolution shadows, you can still encounter this issue if you place an object in the wrong place, or point your light in the wrong direction. You can use Bevy's [Cascaded Shadow Maps](/news/bevy-0-10/#cascaded-shadow-maps) (which are enabled by default) to cover a larger area, with higher detail close to the camera and less detail farther away. However even under these conditions, you will still probably encounter these aliasing issues.
+
+**Bevy 0.12** introduces **PCF Shadow Filtering** (Percentage-Closer Filtering), which is a popular technique that takes multiple samples from the shadow map and compares with an interpolated mesh surface depth-projected into the frame of reference of the light. It then calculates the percentage of samples in the depth buffer that are closer to the light than the mesh surface. In short, this creates a "blur" effect that improves shadow quality, which is especially evident when a given shadow doesn't have enough "shadow map detail".
+
+**Bevy 0.12**'s default PCF approach is the [`ShadowMapFilter::Castano13`] method by Ignacio Castaño (used in The Witness). Here it is with a 512x512 shadow map:
+
+<b style="display:block; margin-bottom: -18px">Drag this image to compare (Castano)</b>
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
+  <img class="image-a" alt="PCF Off" src="no_pcf.png">
+  <img class="image-b" alt="PCF On" src="pcf_castano.png">
+</div>
+
+Much better!
+
+We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (used in Call of Duty Advanced Warfare). This can be slightly cheaper than Castano, but it can flicker. It benefits from [Temporal Anti-Aliasing (TAA)](/news/bevy-0-11/#temporal-anti-aliasing) which can reduce the flickering. It can also blend shadow cascades a bit more smoothly than Castano.
+
+<b style="display:block; margin-bottom: -18px">Drag this image to compare (Jimenez)</b>
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
+  <img class="image-a" alt="PCF Off" src="no_pcf.png">
+  <img class="image-b" alt="PCF On" src="pcf_jimenez.png">
+</div>
+
+[`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
+[`ShadowMapFilter::Jimenez14`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
+
 ## Bevy Asset V2
 
 <div class="release-feature-authors">authors: @cart</div>
