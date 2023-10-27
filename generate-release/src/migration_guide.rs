@@ -51,6 +51,8 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             .iter()
             .any(|l| l.name.contains("C-Breaking-Change"));
 
+        // We want to check for PRs with the breaking label but without the guide section
+        // to make it easier to track down missing guides
         if has_migration_guide_section || has_breaking_label {
             let area = get_pr_area(pr);
             areas
