@@ -216,7 +216,7 @@ AssetPath::new("scene.gltf").with_label("Mesh0");
 - `anyhow` is no longer exported by `bevy_asset`; Add it to your own project (if required).
 - `AssetLoader` and `AssetSaver` have an associated type `Error`; Define an appropriate error type (e.g., using `thiserror`), or use a pre-made error type (e.g., `anyhow::Error`). Note that using `anyhow::Error` is a drop-in replacement.
 - `AssetLoaderError` has been removed; Define a new error type, or use an alternative (e.g., `anyhow::Error`)
-- All the first-party `AssetLoader`’s and `AssetSaver`’s now return relevant (and narrow) error types instead of a single ambiguous type; Match over the specific error type, or encapsulate (`Box<dyn>`, `thiserror`, `anyhow`, etc.)
+- All the first-party `AssetLoader`s and `AssetSaver`s now return relevant (and narrow) error types instead of a single ambiguous type; Match over the specific error type, or encapsulate (`Box<dyn>`, `thiserror`, `anyhow`, etc.)
 
 ### [Non-blocking load_untyped using a wrapper asset](https://github.com/bevyengine/bevy/pull/10198)
 
