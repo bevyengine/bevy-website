@@ -42,7 +42,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         let area = get_pr_area(pr);
         areas
             .entry(area)
-            .or_insert(Vec::new())
+            .or_default()
             .push((title.clone(), pr.clone()));
     }
 
