@@ -43,8 +43,16 @@
 
 {% macro docs_menu(root, prefix) %}
     <ul class="tree-menu">
-        {% for s in root.subsections %}
-            {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
-        {% endfor %}
+        {# Migration Guides #}
+        {% if section and section.path is starting_with("/learn/migration-guides") %}
+            {% for s in root.subsections | reverse %}
+                {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+            {% endfor %}
+        {# Other #}
+        {% else %}
+            {% for s in root.subsections %}
+                {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+            {% endfor %}
+        {% endif %}
     </ul>
 {% endmacro %}
