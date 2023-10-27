@@ -1262,7 +1262,9 @@ Renamed skinning systems, resources and components:
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-Move scene spawner systems to a new SpawnScene schedule which is after Update and before PostUpdate (schedule order: [PreUpdate] [Update] [SpawnScene] [PostUpdate]), you might remove system ordering code related to scene spawning as the execution order has been guaranteed by bevy engine.
+`scene_spawner_system` was moved to a new `SpawnScene` schedule which is run between `Update` and `PostUpdate`.
+
+If you were ordering your own systems to run before `scene_spawner_system` in `Update`, that might no longer be necessary. If your system needs to run after `scene_spawner_system`, it should be moved to the `SpawnScene` or `PostUpdate` schedule.
 
 ### [Remove Resource and add Debug to TaskPoolOptions](https://github.com/bevyengine/bevy/pull/9485)
 
