@@ -19,11 +19,13 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">Animation</div>
 </div>
 
-- Removed `set_elapsed`.
-- Removed `stop_repeating` in favour of `AnimationPlayer::set_repeat(RepeatAnimation::Never)`.
-- Introduced `seek_to` to seek to a given timestamp inside of the animation.
-- Introduced `seek_time` accessor for the `PlayingAnimation::seek_to`.
-- Introduced `AnimationPlayer::replay` to reset the `PlayingAnimation` to a state where no time has elapsed.
+Some methods on [`AnimationPlayer`](https://docs.rs/bevy/0.12.0/bevy/animation/struct.AnimationPlayer.html) have changed.
+
+- `elapsed` was removed. Use `seek_time`.
+- `set_elapsed` was removed. Use `seek_to`.
+- `stop_repeating` was removed. Use `set_repeat(RepeatAnimation::Never)`.
+
+If you were manually resetting animation state, you can use the new `replay` method instead.
 
 ### [Fix run-once runners](https://github.com/bevyengine/bevy/pull/10195)
 
