@@ -43,7 +43,7 @@ Looking better! However this still isn't a perfect solution. Large shadowmaps ar
 
 Much better!
 
-We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (used in Call of Duty Advanced Warfare). This pairs nicely with [Temporal Anti-Aliasing (TAA)](/news/bevy-0-11/#temporal-anti-aliasing).
+We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (used in Call of Duty Advanced Warfare). This can be slightly cheaper than Castano, but it can flicker. It benefits from [Temporal Anti-Aliasing (TAA)](/news/bevy-0-11/#temporal-anti-aliasing) which can reduce the flickering. It can also blend shadow cascades a bit more smoothly than Castano.
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare (Jimenez)</b>
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
