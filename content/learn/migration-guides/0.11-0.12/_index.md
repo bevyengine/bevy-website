@@ -747,7 +747,7 @@ bevy = { version = "0.12", features = ["dynamic_linking"] }
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-Renamed NamedTypePathDef::Primtive to NamedTypePathDef::Primitive
+Renamed `NamedTypePathDef::Primtive` to `NamedTypePathDef::Primitive`
 
 ```rust
 // 0.11
