@@ -511,7 +511,7 @@ let schedule = Schedule::default();
 schedule.run(world);
 ```
 
-`Schedules:insert`
+`Schedules::insert`
 
 ```rust
 // 0.11
