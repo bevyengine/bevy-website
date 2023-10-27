@@ -102,7 +102,8 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     }
     writeln!(&mut output, "</div>")?;
 
-    println!("\nFound {} breaking PRs merged by bors", count);
+    println!("\nFound {} breaking PRs merged", count);
+
 
     std::fs::write(path, output)?;
 
