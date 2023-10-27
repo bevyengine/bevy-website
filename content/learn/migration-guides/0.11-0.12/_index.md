@@ -33,6 +33,159 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
 `app.ready()` has been replaced by `app.plugins_state()` which will return more details on the current state of plugins in the app
 
+### [Add support for KHR_materials_emissive_strength](https://github.com/bevyengine/bevy/pull/9553)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Assets</div>
+</div>
+
+- The GLTF asset loader will now factor in `emissiveStrength` when converting to Bevy’s `StandardMaterial::emissive`. Blender will export emissive materials using this field. Remove the field from your GLTF files or manually modify your materials post-asset-load to match how Bevy would load these files in previous versions.
+
+### [Bevy Asset V2](https://github.com/bevyengine/bevy/pull/8624)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Assets</div>
+</div>
+
+__Migrating a custom asset loader__
+
+Existing asset loaders will need a few small changes to get them to work with Bevy Assets V2.
+
+First, you’ll need to add the asset type as an associated type of the loader. This type is called `Asset` and represents the type of the “default asset” produced by the loader.
+
+You’ll also need to add a `Settings` type which represents options that can be passed to the loader when you request an asset. If your asset has no settings, then you can just set it to the unit type.
+
+```rust
+pub struct MyAssetLoader;
+
+impl AssetLoader for MyAssetLoader {
+    type Asset = MyAsset;
+    type Settings = ();
+```
+
+You’ll need to make a couple small changes to the `load` function as well. The load function now takes a `settings` parameter whose type is, you guessed it, `Settings`:
+
+```rust
+    fn load<'a>(
+        &'a self,
+        reader: &'a mut Reader,
+        settings: &'a Self::Settings,
+        load_context: &'a mut LoadContext,
+    ) -> BoxedFuture<'a, Result<Self::Asset, anyhow::Error>> {
+```
+
+Again, if you are not using settings, then you can just ignore the parameter (prefix it with “_”).
+
+Also, the second argument is now a reader rather than vector of bytes. If your existing code expects bytes, you can simply read the entire stream:
+
+```rust
+    fn load<'a>(
+        &'a self,
+        reader: &'a mut Reader,
+        _settings: &'a Self::Settings,
+        load_context: &'a mut LoadContext,
+    ) -> BoxedFuture<'a, Result<Self::Asset, anyhow::Error>> {
+        Box::pin(async move {
+            let mut bytes = Vec::new();
+            reader.read_to_end(&mut bytes).await?;
+```
+
+Finally, you’ll need to write the code which returns the default asset. This used to be done via a call to `load_context.set_default_asset()`, however in V2 you simply return the asset from the `load` function:
+
+```rust
+    fn load<'a>(
+        &'a self,
+        reader: &'a mut Reader,
+        _settings: &'a Self::Settings,
+        load_context: &'a mut LoadContext,
+    ) -> BoxedFuture<'a, Result<Self::Asset, anyhow::Error>> {
+        Box::pin(async move {
+            let mut bytes = Vec::new();
+            reader.read_to_end(&mut bytes).await?;
+        let mut asset: MyAsset =
+            serde_json::from_slice(&bytes).expect("unable to decode asset");
+        Ok(asset)
+    }
+```
+
+To use the new loader, make sure you register both the loader and the asset type:
+
+```rust
+app.register_asset_loader(MyAssetLoader)
+    .init_asset::<MyAsset>()
+```
+
+__Labeled assets__
+
+If your loader allows labeled assets, there are a couple of different ways to handle them. The simplest is to call `load_context.labeled_asset_scope`:
+
+```rust
+// Assume `asset.children` is a HashMap or something.
+// Using `drain` here so that we take ownership and don't end up with
+// multiple references to the same asset.
+asset.children.drain().for_each(|(label, mut item)| {
+    load_context.labeled_asset_scope(label, |lc| {
+        // Do any additional processing on the item
+        // Use 'lc' to load dependencies
+        item
+    });
+});
+```
+
+You can use the provided load context (`lc`) to load additional assets. These will automatically be registered as dependencies of the labeled asset.
+
+__Using assets__
+
+The actual call to `load` hasn’t changed:
+
+```rust
+let handle = server.load("path/to/my/asset.json");
+
+// ...
+
+let data = assets.get(&handle).unwrap();
+```
+
+__Asset events__
+
+There are a few changes to asset events. The event no longer contains a `handle` field, instead the event contains a field called `id`:
+
+```rust
+for ev in ev_template.read() {
+    match ev {
+        AssetEvent::Added { id } => {
+            println!("Asset added");
+        }
+
+        AssetEvent::LoadedWithDependencies { id } => {
+            println!("Asset loaded");
+        }
+
+        AssetEvent::Modified { id } => {
+            println!("Asset modified");
+        }
+
+        AssetEvent::Removed { id } => {
+            println!("Asset removed");
+        }
+    }
+}
+```
+
+The `id` can be used to get access to the asset data, the asset’s path or load status. Asset handles also contain an `id` field which can be used to compare for equality:
+
+```rust
+AssetEvent::Modified { id } => {
+    for cmp in query.iter() {
+       if cmp.handle.id() == id {
+           println!("Found it!");
+       }
+    }
+}
+```
+
+Also, as you may have noticed, the set of events has changed. The most important of these is `LoadedWithDependencies` which tells you that the asset and all its dependencies have finished loading into memory.
+
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
 <div class="migration-guide-area-tags">
@@ -65,6 +218,41 @@ AssetPath::new("scene.gltf").with_label("Mesh0");
 - `AssetLoader` and `AssetSaver` have an associated type `Error`; Define an appropriate error type (e.g., using `thiserror`), or use a pre-made error type (e.g., `anyhow::Error`). Note that using `anyhow::Error` is a drop-in replacement.
 - `AssetLoaderError` has been removed; Define a new error type, or use an alternative (e.g., `anyhow::Error`)
 - All the first-party `AssetLoader`’s and `AssetSaver`’s now return relevant (and narrow) error types instead of a single ambiguous type; Match over the specific error type, or encapsulate (`Box<dyn>`, `thiserror`, `anyhow`, etc.)
+
+### [Non-blocking load_untyped using a wrapper asset](https://github.com/bevyengine/bevy/pull/10198)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Assets</div>
+</div>
+
+Whenever possible use the typed API in order to directly get a handle to your asset. If you do not know the type or need to use `load_untyped` for a different reason, Bevy 0.12 introduces an additional layer of indirection. The asset server will return a handle to a `LoadedUntypedAsset`, which will load in the background. Once it is loaded, the untyped handle to the asset file can be retrieved from the `LoadedUntypedAsset`s field `handle`.
+
+### [reflect: `TypePath` part 2](https://github.com/bevyengine/bevy/pull/8768)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Assets</div>
+    <div class="migration-guide-area-tag">Reflection</div>
+</div>
+
+-
+
+Rely on `TypePath` instead of `std::any::type_name` for all stability guarantees and for use in all reflection contexts, this is used through with one of the following APIs:
+
+- `TypePath::type_path` if you have a concrete type and not a value.
+- `DynamicTypePath::reflect_type_path` if you have an `dyn Reflect` value without a concrete type.
+- `TypeInfo::type_path` for use through the registry or if you want to work with the represented type of a `DynamicFoo`.
+
+-
+
+Remove `type_name` from manual `Reflect` implementations.
+
+-
+
+Use `type_path` and `type_path_table` in place of `type_name` on `TypeInfo`-like structs.
+
+-
+
+Use `get_with_type_path(_mut)` over `get_with_type_name(_mut)`.
 
 ### [More ergonomic spatial audio](https://github.com/bevyengine/bevy/pull/9800)
 
@@ -211,6 +399,38 @@ The `multi-threaded` feature in `bevy_ecs` and `bevy_tasks` is no longer enabled
 </div>
 
 `ScheduleBuildError` now has strings in more of its variants. You may need to adjust code that is handling these variants.
+
+### [Add `system.map(...)` for transforming the output of a system](https://github.com/bevyengine/bevy/pull/8526)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+</div>
+
+The `system_adapter` functions have been deprecated: use `.map` instead, which is a lightweight alternative to `.pipe`.
+
+```rust
+// Before:
+my_system.pipe(system_adapter::ignore)
+my_system.pipe(system_adapter::unwrap)
+my_system.pipe(system_adapter::new(T::from))
+
+// After:
+my_system.map(std::mem::drop)
+my_system.map(Result::unwrap)
+my_system.map(T::from)
+
+// Before:
+my_system.pipe(system_adapter::info)
+my_system.pipe(system_adapter::dbg)
+my_system.pipe(system_adapter::warn)
+my_system.pipe(system_adapter::error)
+
+// After:
+my_system.map(bevy_utils::info)
+my_system.map(bevy_utils::dbg)
+my_system.map(bevy_utils::warn)
+my_system.map(bevy_utils::error)
+```
 
 ### [Replaced EntityMap with HashMap](https://github.com/bevyengine/bevy/pull/9461)
 
@@ -410,6 +630,27 @@ Replace IntoIterator iteration (&mut <RemovedComponents>) with .read()
 
 - Pass labels to `World::try_schedule_scope`, `World::schedule_scope`, `World::try_run_schedule`. `World::run_schedule`, `Schedules::remove`, `Schedules::remove_entry`, `Schedules::contains`, `Schedules::get` and `Schedules::get_mut` by value instead of by reference.
 
+### [Add configure_schedules to App and Schedules to apply `ScheduleBuildSettings` to all schedules](https://github.com/bevyengine/bevy/pull/9514)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">ECS</div>
+    <div class="migration-guide-area-tag">App</div>
+</div>
+
+- No breaking changes.
+- Adds `Schedule::get_build_settings()` getter for the schedule’s `ScheduleBuildSettings`.
+- Can replaced manual configuration of all schedules:
+
+```rust
+// Old
+for (_, schedule) in app.world.resource_mut::<Schedules>().iter_mut() {
+    schedule.set_build_settings(build_settings);
+}
+
+// New
+app.configure_schedules(build_settings);
+```
+
 ### [Only run event systems if they have tangible work to do](https://github.com/bevyengine/bevy/pull/7728)
 
 <div class="migration-guide-area-tags">
@@ -469,6 +710,14 @@ If the default 0.05 was relied on, the default or gamepad `AxisSettings` on the 
 </div>
 
 Replace `Rect::as_urect` with `Rect::as_irect`, `Rect::as_rect` with `Rect::as_urect`, and `URect::as_urect` with `URect::as_irect`.
+
+### [Rename `Bezier` to `CubicBezier` for clarity](https://github.com/bevyengine/bevy/pull/9554)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Math</div>
+</div>
+
+- Change all `Bezier` references to `CubicBezier`
 
 ### [Remove the bevy_dylib feature](https://github.com/bevyengine/bevy/pull/9516)
 
@@ -628,6 +877,81 @@ fn view_physical_camera_rect(camera_query: Query<&Camera>) {
 
 Handle `bevy_window::PresentMode::FifoRelaxed` when tweaking window present mode manually.
 
+### [Use GpuArrayBuffer for MeshUniform](https://github.com/bevyengine/bevy/pull/9254)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Accessing the `model` member of an individual mesh object’s shader `Mesh` struct the old way where each `MeshUniform` was stored at its own dynamic offset:
+
+```rust
+struct Vertex {
+    @location(0) position: vec3<f32>,
+};
+
+fn vertex(vertex: Vertex) -> VertexOutput {
+    var out: VertexOutput;
+    out.clip_position = mesh_position_local_to_clip(
+        mesh.model,
+        vec4<f32>(vertex.position, 1.0)
+    );
+    return out;
+}
+```
+
+The new way where one needs to index into the array of `Mesh`es for the batch:
+
+```rust
+struct Vertex {
+    @builtin(instance_index) instance_index: u32,
+    @location(0) position: vec3<f32>,
+};
+
+fn vertex(vertex: Vertex) -> VertexOutput {
+    var out: VertexOutput;
+    out.clip_position = mesh_position_local_to_clip(
+        mesh[vertex.instance_index].model,
+        vec4<f32>(vertex.position, 1.0)
+    );
+    return out;
+}
+```
+
+Note that using the instance_index is the default way to pass the per-object index into the shader, but if you wish to do custom rendering approaches you can pass it in however you like.
+
+### [Reduce the size of MeshUniform to improve performance](https://github.com/bevyengine/bevy/pull/9416)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Shader code before:
+
+```rust
+var model = mesh[instance_index].model;
+```
+
+Shader code after:
+
+```rust
+#import bevy_pbr::mesh_functions affine_to_square
+
+var model = affine_to_square(mesh[instance_index].model);
+```
+
+### [Reorder render sets, refactor bevy_sprite to take advantage](https://github.com/bevyengine/bevy/pull/9236)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- Assets such as materials and meshes should now be created in `PrepareAssets` e.g. `prepare_assets<Mesh>`
+- Queueing entities to `RenderPhase`s continues to be done in `Queue` e.g. `queue_sprites`
+- Preparing resources (textures, buffers, etc.) should now be done in `PrepareResources`, e.g. `prepare_prepass_textures`, `prepare_mesh_uniforms`
+- Prepare bind groups should now be done in `PrepareBindGroups` e.g. `prepare_mesh_bind_group`
+- Any batching or instancing can now be done in `Prepare` where the order of the phase items is known e.g. `prepare_sprites`
+
 ### [Split `ComputedVisibility` into two components to allow for accurate change detection and speed up visibility propagation](https://github.com/bevyengine/bevy/pull/9497)
 
 <div class="migration-guide-area-tags">
@@ -698,6 +1022,98 @@ fn my_system(mut q: Query<&mut ViewVisibility>) {
 
 The `check_visibility` system’s `Option<&NoFrustumCulling>` parameter has been replaced by  `Has<NoFrustumCulling>`, if you were calling it manually, you should change the type to match it
 
+### [Update defaults for OrthographicProjection](https://github.com/bevyengine/bevy/pull/9878)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- Migration guide steps from #9537 should be removed for next release.
+
+### [Revert "Update defaults for OrthographicProjection (#9537)"](https://github.com/bevyengine/bevy/pull/9878)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- Migration guide steps from #9537 should be removed for next release.
+
+### [Allow other plugins to create renderer resources](https://github.com/bevyengine/bevy/pull/9925)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+The `RenderPlugin` now takes a `RenderCreation` enum instead of `WgpuSettings`. `RenderSettings::default()` returns `RenderSettings::Automatic(WgpuSettings::default())`. `RenderSettings` also implements `From<WgpuSettings>`.
+
+```rust
+// before
+RenderPlugin {
+    wgpu_settings: WgpuSettings {
+    ...
+    },
+}
+
+// now
+RenderPlugin {
+    render_creation: RenderCreation::Automatic(WgpuSettings {
+    ...
+    }),
+}
+// or
+RenderPlugin {
+    render_creation: WgpuSettings {
+    ...
+    }.into(),
+}
+```
+
+### [Use EntityHashMap<Entity, T> for render world entity storage for better performance](https://github.com/bevyengine/bevy/pull/9903)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+Previously the render app extracted mesh entities and their component data from the main world and stored them as entities and components in the render world. Now they are extracted into essentially `EntityHashMap<Entity, T>` where `T` are structs containing an appropriate group of data. This means that while extract set systems will continue to run extract queries against the main world they will store their data in hash maps. Also, systems in later sets will either need to look up entities in the available resources such as `RenderMeshInstances`, or maintain their own `EntityHashMap<Entity, T>` for their own data.
+
+Before:
+
+```rust
+fn queue_custom(
+    material_meshes: Query<(Entity, &MeshTransforms, &Handle<Mesh>), With<InstanceMaterialData>>,
+) {
+    ...
+    for (entity, mesh_transforms, mesh_handle) in &material_meshes {
+        ...
+    }
+}
+```
+
+After:
+
+```rust
+fn queue_custom(
+    render_mesh_instances: Res<RenderMeshInstances>,
+    instance_entities: Query<Entity, With<InstanceMaterialData>>,
+) {
+    ...
+    for entity in &instance_entities {
+        let Some(mesh_instance) = render_mesh_instances.get(&entity) else { continue; };
+        // The mesh handle in `AssetId<Mesh>` form, and the `MeshTransforms` can now
+        // be found in `mesh_instance` which is a `RenderMeshInstance`
+        ...
+    }
+}
+```
+
+### [Allow overriding global wireframe setting.](https://github.com/bevyengine/bevy/pull/7328)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+<!-- TODO -->
+
 ### [PCF For DirectionalLight/SpotLight Shadows](https://github.com/bevyengine/bevy/pull/8006)
 
 <div class="migration-guide-area-tags">
@@ -705,6 +1121,14 @@ The `check_visibility` system’s `Option<&NoFrustumCulling>` parameter has been
 </div>
 
 Shadows cast by directional lights or spotlights now have smoother edges. To revert to the old behavior, add `ShadowFilteringMethod::Hardware2x2` to your cameras.
+
+### [use `Material` for wireframes](https://github.com/bevyengine/bevy/pull/5314)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+`WireframePipeline` was removed. If you were using it directly, please create an issue explaining your use case.
 
 ### [Deferred Renderer](https://github.com/bevyengine/bevy/pull/9258)
 
@@ -714,6 +1138,22 @@ Shadows cast by directional lights or spotlights now have smoother edges. To rev
 
 <!-- TODO -->
 
+### [pbr shader cleanup](https://github.com/bevyengine/bevy/pull/10105)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+in custom material shaders:
+
+- `pbr_functions::pbr` no longer calls to `pbr_functions::alpha_discard`. if you were using the `pbr` function in a custom shader with alpha mask mode you now also need to call alpha_discard manually
+- rename imports of `bevy_pbr::mesh_vertex_output` to `bevy_pbr::forward_io`
+- rename instances of `MeshVertexOutput` to `VertexOutput`
+
+in custom material prepass shaders:
+
+- rename instances of `VertexOutput::clip_position` to `VertexOutput::position`
+
 ### [`*_PREPASS` Shader Def Cleanup](https://github.com/bevyengine/bevy/pull/10136)
 
 <div class="migration-guide-area-tags">
@@ -722,13 +1162,94 @@ Shadows cast by directional lights or spotlights now have smoother edges. To rev
 
 When using functions from `bevy_pbr::prepass_utils` (`prepass_depth()`, `prepass_normal()`, `prepass_motion_vector()`) in contexts where these prepasses might be disabled, you should now wrap your calls with the appropriate `#ifdef` guards, (`#ifdef DEPTH_PREPASS`, `#ifdef NORMAL_PREPASS`, `#ifdef MOTION_VECTOR_PREPASS`) providing fallback logic where applicable.
 
-### [Allow extensions to StandardMaterial](https://github.com/bevyengine/bevy/pull/7820)
+### [allow extensions to StandardMaterial](https://github.com/bevyengine/bevy/pull/7820)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Manual implementations of `AsBindGroup` will need to be adjusted, the changes are pretty straightforward and can be seen in the diff for e.g. the `texture_binding_array` example.
+manual implementations of `AsBindGroup` will need to be adjusted, the changes are pretty straightforward and can be seen in the diff for e.g. the `texture_binding_array` example.
+
+### [chore: use ExtractComponent derive macro for EnvironmentMapLight and FogSettings](https://github.com/bevyengine/bevy/pull/10191)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+No migration needed
+
+### [Variable `MeshPipeline` View Bind Group Layout](https://github.com/bevyengine/bevy/pull/10156)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- `MeshPipeline::view_layout` and `MeshPipeline::view_layout_multisampled` have been replaced with a private array to accomodate for variable view bind group layouts. To obtain a view bind group layout for the current pipeline state, use the new `MeshPipeline::get_view_layout()` or `MeshPipeline::get_view_layout_from_key()` methods.
+
+### [update shader imports](https://github.com/bevyengine/bevy/pull/10180)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+naga_oil 0.10 reworks the import mechanism to support more syntax to make it more rusty, and test for item use before importing to determine which imports are modules and which are items, which allows:
+
+- use rust-style imports
+
+```rust
+#import bevy_pbr::{
+    pbr_functions::{alpha_discard as discard, apply_pbr_lighting},
+    mesh_bindings,
+}
+```
+
+- import partial paths:
+
+```rust
+#import part::of::path
+...
+path::remainder::function();
+```
+
+which will call to `part::of::path::remainder::function`
+
+- use fully qualified paths without importing:
+
+```rust
+// #import bevy_pbr::pbr_functions
+bevy_pbr::pbr_functions::pbr()
+```
+
+- use imported items without qualifying
+
+```rust
+#import bevy_pbr::pbr_functions::pbr
+// for backwards compatibility the old style is still supported:
+// #import bevy_pbr::pbr_functions pbr
+...
+pbr()
+```
+
+-
+
+allows most imported items to end with `_` and numbers (naga_oil#30). still doesn’t allow struct members to end with `_` or numbers but it’s progress.
+
+-
+
+the vast majority of existing shader code will work without changes, but will emit “deprecated” warnings for old-style imports. these can be suppressed with the `allow-deprecated` feature.
+
+-
+
+partly breaks overrides (as far as i’m aware nobody uses these yet) - now overrides will only be applied if the overriding module is added as an additional import in the arguments to `Composer::make_naga_module` or `Composer::add_composable_module`. this is necessary to support determining whether imports are modules or items.
+
+### [Bind group entries](https://github.com/bevyengine/bevy/pull/9694)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- Calls to `RenderDevice::create_bind_group({BindGroupDescriptor { label, layout, entries })` must be amended to `RenderDevice::create_bind_group(label, layout, entries)`.
+- If `label`s have been specified as `"bind_group_name".into()`, they need to change to just `"bind_group_name"`. `Some("bind_group_name")` and `None` will still work, but `Some("bind_group_name")` can optionally be simplified to just `"bind_group_name"`.
 
 ### [Detect cubemap for dds textures](https://github.com/bevyengine/bevy/pull/10222)
 
@@ -747,6 +1268,14 @@ If you are matching on a `TextureError`, you will need to add a new branch to ha
 Replace calls to the `Image::size()` method with `size_f32()`.
 Replace calls to the `Image::aspect_2d()` method with `aspect_ratio()`.
 
+### [Use “specular occlusion” term to consistently extinguish fresnel on Ambient and Environment Map lights](https://github.com/bevyengine/bevy/pull/10182)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- If Fresnel highlights from Ambient and Environment Map lights are no longer visible in your materials, make sure you’re using a higher, physically plausible value of `reflectance` (⪆ 0.35).
+
 ### [Fix fog color being inaccurate](https://github.com/bevyengine/bevy/pull/10226)
 
 <div class="migration-guide-area-tags">
@@ -754,6 +1283,15 @@ Replace calls to the `Image::aspect_2d()` method with `aspect_ratio()`.
 </div>
 
 Colors in `FogSettings` struct (`color` and `directional_light_color`) are now sent to the GPU in linear space. If you were using `Color::rgb()`/`Color::rgba()` and would like to retain the previous colors, you can quickly fix it by switching to `Color::rgb_linear()`/`Color::rgba_linear()`.
+
+### [Image Sampler Improvements](https://github.com/bevyengine/bevy/pull/10254)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- When using the `Image` API, use `ImageSamplerDescriptor` instead of `wgpu::SamplerDescriptor`
+- If writing custom wgpu renderer features that work with `Image`, call `&image_sampler.as_wgpu()` to convert to a wgpu descriptor.
 
 ### [Move skin code to a separate module](https://github.com/bevyengine/bevy/pull/9899)
 
@@ -840,6 +1378,14 @@ Replace initialization of `UiScale` like `UiScale { scale: 1.0 }` with `UiScale(
 - Other changes to `TextMeasureInfo` may also break your code if you were manually building it. Please consider using the new `TextMeasureInfo::from_text` to build one instead.
 - `TextPipeline::create_text_measure` has been removed in favor of `TextMeasureInfo::from_text`
 
+### [Make `GridPlacement`'s fields non-zero and add accessor functions.](https://github.com/bevyengine/bevy/pull/9486)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+`GridPlacement`’s constructor functions no longer accept values of `0`. Given any argument of `0` they will panic with a `GridPlacementError`.
+
 ### [Remove `Val`'s `try_*` arithmetic methods](https://github.com/bevyengine/bevy/pull/9609)
 
 <div class="migration-guide-area-tags">
@@ -886,6 +1432,34 @@ The `size` value of `TextLayoutInfo` is stored in logical pixels and has been re
 
 The `num_font_atlases` method of `FontAtlasSet` has been renamed to `len`.
 
+### [Various accessibility API updates.](https://github.com/bevyengine/bevy/pull/9989)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+__Change direct accesses of `AccessibilityRequested` to use `AccessibilityRequested.::get()`/`AccessibilityRequested::set()`__
+
+__Before__
+
+```rust
+use std::sync::atomic::Ordering;
+
+// To access
+accessibility_requested.load(Ordering::SeqCst)
+// To update
+accessibility_requested.store(true, Ordering::SeqCst);
+```
+
+__After__
+
+```rust
+// To access
+accessibility_requested.get()
+// To update
+accessibility_requested.set(true);
+```
+
 ### [Add option to toggle window control buttons](https://github.com/bevyengine/bevy/pull/9083)
 
 <div class="migration-guide-area-tags">
@@ -902,6 +1476,52 @@ Added an `enabled_buttons` member to the `Window` struct through which users can
 
 - `UpdateMode::Reactive { max_wait: .. }` -> `UpdateMode::Reactive { wait: .. }`
 - `UpdateMode::ReactiveLowPower { max_wait: .. }` -> `UpdateMode::ReactiveLowPower { wait: .. }`
+
+### [Prevent black frames during startup](https://github.com/bevyengine/bevy/pull/9826)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Windowing</div>
+</div>
+
+Because of this change, the timing of the first few frames might have changed, and I think it could be that some things one may expect to be initialized in a system may no longer be. To be honest, I feel out of my depth to judge the exact impact here.
+
+### [Work around naga/wgpu WGSL instance_index -> GLSL gl_InstanceID bug on WebGL2](https://github.com/bevyengine/bevy/pull/9383)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">No area label</div>
+</div>
+
+Shader code before:
+
+```rust
+struct Vertex {
+    @builtin(instance_index) instance_index: u32,
+...
+}
+
+@vertex
+fn vertex(vertex_no_morph: Vertex) -> VertexOutput {
+...
+
+    var model = mesh[vertex_no_morph.instance_index].model;
+```
+
+After:
+
+```rust
+#import bevy_render::instance_index
+
+struct Vertex {
+    @builtin(instance_index) instance_index: u32,
+...
+}
+
+@vertex
+fn vertex(vertex_no_morph: Vertex) -> VertexOutput {
+...
+
+    var model = mesh[bevy_render::instance_index::get_instance_index(vertex_no_morph.instance_index)].model;
+```
 
 ### [Remove `IntoIterator` impl for `&mut EventReader`](https://github.com/bevyengine/bevy/pull/9583)
 
