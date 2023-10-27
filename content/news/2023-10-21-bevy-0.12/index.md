@@ -15,6 +15,43 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## Suspend and Resume on Android
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+On Android, applications no longer crash on suspend. Instead, they are paused, and no systems
+will run until the application is resumed.
+
+<video controls><source src="suspend-resume.mp4" type="video/mp4"/></video>
+
+Background tasks working in other threads, like playing audio, won't be stopped. When the
+application will be suspended, a [`Lifetime`] event `ApplicationLifetime::Suspended` is sent,
+corresponding to the [`onStop()`] callback. You should take care to pause tasks that shouldn't
+run in the background, and resume them when receiving the `ApplicationLifetime::Resumed` event
+(corresponding to the [`onRestart()`] callback).
+
+```rust
+fn handle_lifetime_events(
+    mut lifetime_events: EventReader<ApplicationLifetime>,
+    music_controller: Query<&AudioSink>,
+) {
+    for event in lifetime_events.read() {
+        match event {
+            // Upon receiving the `Suspended` event, the application has 1 frame before it is paused
+            // As audio happens in an independent thread, it needs to be stopped
+            ApplicationLifetime::Suspended => music_controller.single().pause(),
+            // On `Resumed``, audio can continue playing
+            ApplicationLifetime::Resumed => music_controller.single().play(),
+            // `Started` is the only other event for now, more to come in the next Bevy version
+            _ => (),
+        }
+    }
+}
+```
+[`Lifetime`]: https://docs.rs/bevy/0.12.0/bevy/window/enum.Lifetime.html
+[`onStop()`]: https://developer.android.com/reference/android/app/Activity#onStop()
+[`onRestart()`]: https://developer.android.com/reference/android/app/Activity#onRestart()
+
 ## AccessKit Integration Improvements
 
 <div class="release-feature-authors">authors: @ndarilek</div>
