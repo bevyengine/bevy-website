@@ -91,7 +91,10 @@ If a Bevy App asks to load an asset that is currently being processed (or re-pro
 Assets now support (optional) `.meta` files. This enables configuring things like:
 
 * **The asset "action"**
-  * `Load`, `Process`, `Ignore`, etc
+  * This configures how Bevy's asset system should handle the asset:
+    * `Load`: Load the asset without processing
+    * `Process`: Pre-process the asset prior to loading
+    * `Ignore`: Do not process or load the asset
 * **[`AssetLoader`] settings**
   * You can use meta files to set any [`AssetLoader`] you want
   * Configure loader settings like "how to filter an image", "adjusting the up axis in 3D scenes", etc
@@ -170,7 +173,7 @@ The final processed asset and metadata files can be viewed and interacted with l
 ![processed sponza](processed_sponza.png)
 <div style="font-size: 1.0rem" class="release-feature-authors">Sponza scene with textures processed into Basis Universal (with mipmaps) using Bevy Asset V2</div>
 
-**Bevy 0.12** ships with a barebones [`CompressedImageSaver`] that writes images to [Basis Universal](https://github.com/BinomialLLC/basis_universal) (a GPU-friendly image interchange format) and generates mipmaps. This can be enabled with the `basis-universal` cargo feature.
+**Bevy 0.12** ships with a barebones [`CompressedImageSaver`] that writes images to [Basis Universal](https://github.com/BinomialLLC/basis_universal) (a GPU-friendly image interchange format) and generates [mipmaps](https://en.wikipedia.org/wiki/Mipmap). Importantly, mipmaps reduce aliasing artifacts when sampling images from different distances. This fills an important gap, as Bevy previously had no way to generate mipmaps on its own (it relied on external tooling). This can be enabled with the `basis-universal` cargo feature.
 
 [`CompressedImageSaver`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.CompressedImageSaver.html
 
@@ -347,7 +350,7 @@ Handles now also use a smaller / cheaper-to-look-up [`AssetIndex`] internally, w
 [`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
 [`AssetIndex`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetIndex.html
 
-### True Copy on Write Asset Paths
+### True Copy-on-Write Asset Paths
 
 The [`AssetServer`] and [`AssetProcessor`] do a lot of [`AssetPath`] cloning (across many threads). In previous versions of Bevy, [`AssetPath`] was backed by Rust's [`Cow`] type. However in Rust, cloning an "owned" [`Cow`] results in a clone of the internal value. This is _not_ the "clone on write" behavior we want for [`AssetPath`]. We use [`AssetPath`] across threads, so we _need_ to start with an "owned" value.
 
