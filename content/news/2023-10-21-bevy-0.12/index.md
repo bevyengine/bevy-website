@@ -19,6 +19,24 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @author</div>
 
+## Spatial Audio API Ergonomics
+
+<div class="release-feature-authors">authors: @rparrett, @hymm, @mockersf</div>
+
+A simple "stereo" (non-HRTF) spatial audio implementation was heroically [put together](https://bevyengine.org/news/bevy-0-10/#spatial-audio) at the last minute for Bevy 0.10, but the implementation was somewhat bare-bones and not very user-friendly. Users needed to write their own systems to update audio sinks with emitter and listener positions.
+
+Now users can just add a `TransformBundle` to their `AudioBundle`s and Bevy will take care of the rest!
+
+```rust
+commands.spawn((
+    TransformBundle::default(),
+    AudioBundle {
+        source: asset_server.load("sounds/bonk.ogg"),
+        settings: PlaybackSettings::DESPAWN.with_spatial(true),
+    },
+));
+```
+
 ## Added HSL methods to `Color` struct
 
 <div class="release-feature-authors">authors: @idedary</div>
