@@ -25,13 +25,13 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 - Introduced `seek_time` accessor for the `PlayingAnimation::seek_to`.
 - Introduced `AnimationPlayer::replay` to reset the `PlayingAnimation` to a state where no time has elapsed.
 
-### [fix run-once runners](https://github.com/bevyengine/bevy/pull/10195)
+### [Fix run-once runners](https://github.com/bevyengine/bevy/pull/10195)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">App</div>
 </div>
 
-- `app.ready()` has been replaced by `app.plugins_state()` which will return more details on the current state of plugins in the app
+`app.ready()` has been replaced by `app.plugins_state()` which will return more details on the current state of plugins in the app
 
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
@@ -40,16 +40,16 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 </div>
 
 ```rust
-// Old
+// 0.11
 AssetPath::new("logo.png", None);
 
-// New
+// 0.12
 AssetPath::new("logo.png");
 
-// Old
-AssetPath::new("scene.gltf", Some("Mesh0");
+// 0.11
+AssetPath::new("scene.gltf", Some("Mesh0"));
 
-// New
+// 0.12
 AssetPath::new("scene.gltf").with_label("Mesh0");
 ```
 
@@ -77,9 +77,7 @@ Spatial audio now automatically uses the transform of the `AudioBundle` and of a
 If you were manually scaling emitter/listener positions, you can use the `spatial_scale` field of `AudioPlugin` instead.
 
 ```rust
-
-// Old
-
+// 0.11
 commands.spawn(
     SpatialAudioBundle {
         source: asset_server.load("sounds/Windless Slopes.ogg"),
@@ -100,8 +98,7 @@ fn update(
     }
 }
 
-// New
-
+// 0.12
 commands.spawn((
     SpatialBundle::from_transform(Transform::from_translation(emitter_position)),
     AudioBundle {
@@ -125,17 +122,17 @@ commands.spawn((
 The method `QueryParIter::for_each_mut` has been deprecated and is no longer functional. Use `for_each` instead, which now supports mutable queries.
 
 ```rust
-// Before:
+// 0.11:
 query.par_iter_mut().for_each_mut(|x| ...);
 
-// After:
+// 0.12:
 query.par_iter_mut().for_each(|x| ...);
 ```
 
 The method `QueryParIter::for_each` now takes ownership of the `QueryParIter`, rather than taking a shared reference.
 
 ```rust
-// Before:
+// 0.11:
 let par_iter = my_query.par_iter().batching_strategy(my_batching_strategy);
 par_iter.for_each(|x| {
     // ...Do stuff with x...
@@ -144,7 +141,7 @@ par_iter.for_each(|x| {
     });
 });
 
-// After:
+// 0.12:
 my_query.par_iter().batching_strategy(my_batching_strategy).for_each(|x| {
     // ...Do stuff with x...
     my_query.par_iter().batching_strategy(my_batching_strategy).for_each(|y| {
@@ -163,9 +160,9 @@ __`fetch` invariants__
 
 The function `WorldQuery::fetch` has had the following safety invariant added:
 
->
-If `update_component_access` includes any mutable accesses, then the caller must ensure that `fetch` is called no more than once for each `entity`/`table_row` in each archetype.
-If `Self` implements `ReadOnlyWorldQuery`, then this can safely be called multiple times.
+> If `update_component_access` includes any mutable accesses, then the caller must ensure that `fetch` is called no more than once for each `entity`/`table_row` in each archetype.
+> </br>
+> If `Self` implements `ReadOnlyWorldQuery`, then this can safely be called multiple times.
 
 This invariant was always required for soundness, but was previously undocumented. If you called this function manually anywhere, you should check to make sure that this invariant is not violated.
 
@@ -173,9 +170,8 @@ __Removed `clone_fetch`__
 
 The function `WorldQuery::clone_fetch` has been removed. The associated type `WorldQuery::Fetch` now has the bound `Clone`.
 
-Before:
-
 ```rust
+// 0.11
 struct MyFetch<'w> { ... }
 
 unsafe impl WorldQuery for MyQuery {
@@ -189,11 +185,8 @@ unsafe impl WorldQuery for MyQuery {
         }
     }
 }
-```
 
-After:
-
-```rust
+// 0.12
 #[derive(Clone)]
 struct MyFetch<'w> { ... }
 
@@ -203,7 +196,7 @@ unsafe impl WorldQuery for MyQuery {
 }
 ```
 
-### [opt-out `multi-threaded` feature flag](https://github.com/bevyengine/bevy/pull/9269)
+### [Opt-out `multi-threaded` feature flag](https://github.com/bevyengine/bevy/pull/9269)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">ECS</div>
@@ -290,11 +283,11 @@ let new = |mut entity: EntityMut| {
 `Schedule::new` and `App::add_schedule`
 
 ```rust
-// old
+// 0.11
 let schedule = Schedule::new();
 app.add_schedule(MyLabel, schedule);
 
-// new
+// 0.12
 let schedule = Schedule::new(MyLabel);
 app.add_schedule(schedule);
 ```
@@ -302,11 +295,11 @@ app.add_schedule(schedule);
 if you aren’t inserting the schedule into the world and are using the schedule directly you can use the default constructor which reuses a default label.
 
 ```rust
-// old
+// 0.11
 let schedule = Schedule::new();
 schedule.run(world);
 
-// new
+// 0.12
 let schedule = Schedule::default();
 schedule.run(world);
 ```
@@ -314,11 +307,11 @@ schedule.run(world);
 `Schedules:insert`
 
 ```rust
-// old
+// 0.11
 let schedule = Schedule::new();
 schedules.insert(MyLabel, schedule);
 
-// new
+// 0.12
 let schedule = Schedule::new(MyLabel);
 schedules.insert(schedule);
 ```
@@ -326,11 +319,11 @@ schedules.insert(schedule);
 `World::add_schedule`
 
 ```rust
-// old
+// 0.11
 let schedule = Schedule::new();
 world.add_schedule(MyLabel, schedule);
 
-// new
+// 0.12
 let schedule = Schedule::new(MyLabel);
 world.add_schedule(schedule);
 ```
@@ -449,16 +442,12 @@ Instead, use the newly-added type `EntityWorldMut`, which is a helper type for w
 
 When using `bevy_ecs::DynamicSceneBuilder` and `bevy_ecs::SceneBuilder`, instead of binding the builder to a variable, directly use it. Methods on those types now consume `Self`, so you will need to re-bind the builder if you don’t `build` it immediately.
 
-Before:
-
 ```rust
+// 0.11
 let mut scene_builder = DynamicSceneBuilder::from_world(&world);
 let scene = scene_builder.extract_entity(a).extract_entity(b).build();
-```
 
-After:
-
-```rust
+// 0.12
 let scene = DynamicSceneBuilder::from_world(&world)
    .extract_entity(a)
    .extract_entity(b)
@@ -512,17 +501,12 @@ bevy = { version = "0.12", features = ["dynamic_linking"] }
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-- Renamed NamedTypePathDef::Primtive to NamedTypePathDef::Primitive
-
-Before:
+Renamed NamedTypePathDef::Primtive to NamedTypePathDef::Primitive
 
 ```rust
+// 0.11
 let type_path = NamedTypePathDef::Primtive(ident);
-```
-
-After:
-
-```rust
+// 0.12
 let type_path = NamedTypePathDef::Primitive(ident);
 ```
 
@@ -548,8 +532,8 @@ If you were matching on the `Err(ReflectPathError)` value returned by `GetPath` 
 -use bevy::reflect::ParsedPath;
 +use bevy::reflect::{ParsedPath, ReflectPath};
 
- parsed_path.element(reflect_type).unwrap()
- parsed_path.element(reflect_type).unwrap()```
+parsed_path.element(reflect_type).unwrap()
+```
 
 ### [Remove TypeRegistry re-export rename](https://github.com/bevyengine/bevy/pull/9807)
 
@@ -576,6 +560,7 @@ If you were matching on the `Err(ReflectPathError)` value returned by `GetPath` 
 </div>
 
 - Fields marked `#[reflect(skip_serializing)]` now must implement `Default` or specify a custom default function with `#[reflect(default = "path::to::some_func")]`
+
 ```rust
 #[derive(Reflect)]
 struct MyStruct {
@@ -600,10 +585,10 @@ fn get_foo_default() -> Foo {
 - `SerializationData::new` has been changed to expect an iterator of `(usize, SkippedField)` rather than one of just `usize`
 
 ```rust
-// BEFORE
+// 0.11
 SerializationData::new([0, 3].into_iter());
 
-// AFTER
+// 0.12
 SerializationData::new([
   (0, SkippedField::new(field_0_default_fn)),
   (3, SkippedField::new(field_3_default_fn)),
@@ -619,19 +604,15 @@ SerializationData::new([
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-Before:
-
 ```rust
+// 0.11
 fn view_physical_camera_rect(camera_query: Query<&Camera>) {
     let camera = camera_query.single();
     let Some((min, max)) = camera.physical_viewport_rect() else { return };
     dbg!(min, max);
 }
-```
 
-After:
-
-```rust
+// 0.12
 fn view_physical_camera_rect(camera_query: Query<&Camera>) {
     let camera = camera_query.single();
     let Some(URect { min, max }) = camera.physical_viewport_rect() else { return };
@@ -645,7 +626,7 @@ fn view_physical_camera_rect(camera_query: Query<&Camera>) {
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- Handle `bevy_window::PresentMode::FifoRelaxed` when tweaking window present mode manually.
+Handle `bevy_window::PresentMode::FifoRelaxed` when tweaking window present mode manually.
 
 ### [Split `ComputedVisibility` into two components to allow for accurate change detection and speed up visibility propagation](https://github.com/bevyengine/bevy/pull/9497)
 
@@ -659,13 +640,13 @@ with `InheritedVisibility::get`, and replace `ComputedVisibility::is_visible_in_
 with `ViewVisibility::get`.
 
 ```rust
-// Before:
+// 0.11:
 commands.spawn(VisibilityBundle {
     visibility: Visibility::Inherited,
     computed_visibility: ComputedVisibility::default(),
 });
 
-// After:
+// 0.12:
 commands.spawn(VisibilityBundle {
     visibility: Visibility::Inherited,
     inherited_visibility: InheritedVisibility::default(),
@@ -674,36 +655,36 @@ commands.spawn(VisibilityBundle {
 ```
 
 ```rust
-// Before:
+// 0.11:
 fn my_system(q: Query<&ComputedVisibilty>) {
     for vis in &q {
         if vis.is_visible_in_hierarchy() {
 
-// After:
+// 0.12:
 fn my_system(q: Query<&InheritedVisibility>) {
     for inherited_visibility in &q {
         if inherited_visibility.get() {
 ```
 
 ```rust
-// Before:
+// 0.11:
 fn my_system(q: Query<&ComputedVisibilty>) {
     for vis in &q {
         if vis.is_visible_in_view() {
 
-// After:
+// 0.12:
 fn my_system(q: Query<&ViewVisibility>) {
     for view_visibility in &q {
         if view_visibility.get() {
 ```
 
 ```rust
-// Before:
+// 0.11:
 fn my_system(mut q: Query<&mut ComputedVisibilty>) {
     for vis in &mut q {
         vis.set_visible_in_view();
 
-// After:
+// 0.12:
 fn my_system(mut q: Query<&mut ViewVisibility>) {
     for view_visibility in &mut q {
         view_visibility.set();
@@ -732,14 +713,6 @@ fn my_system(mut q: Query<&mut ViewVisibility>) {
 </div>
 
 - Migration guide steps from #9537 should be removed for next release.
-
-### [Allow overriding global wireframe setting.](https://github.com/bevyengine/bevy/pull/7328)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-<!-- TODO -->
 
 ### [PCF For DirectionalLight/SpotLight Shadows](https://github.com/bevyengine/bevy/pull/8006)
 
