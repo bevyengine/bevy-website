@@ -590,9 +590,19 @@ The trait method `DetectChangesMut::set_if_neq` now returns a boolean value indi
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-Rename calls of RemovedComponents::iter/iter_with_id to  read/read_with_id
+```rust
+fn react_on_removal(mut removed: RemovedComponents<MyComponent>) {
+    // 0.11
+    for entity in removed.iter() { /* ... */ }
+    for (entity, id) in removed.iter_with_id() { /* ... */ }
+    for entity in &mut removed { /* ... */ }
 
-Replace IntoIterator iteration (&mut <RemovedComponents>) with .read()
+    // 0.12
+    for entity in removed.read() { /* ... */ }
+    for (entity, id) in removed.read_with_id() { /* ... */ }
+    for entity in removed.read() { /* ... */ }
+}
+```
 
 ### [Remove States::variants and remove enum-only restriction its derive](https://github.com/bevyengine/bevy/pull/9945)
 
