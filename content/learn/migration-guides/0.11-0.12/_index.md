@@ -1435,7 +1435,7 @@ Because of this change, the timing of the first few frames might have changed, a
 ### [Work around naga/wgpu WGSL instance_index -> GLSL gl_InstanceID bug on WebGL2](https://github.com/bevyengine/bevy/pull/9383)
 
 <div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">No area label</div>
+    <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
 Shader code before:
