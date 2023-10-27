@@ -37,6 +37,28 @@ commands.spawn((
 ));
 ```
 
+## Added HSL methods to `Color` struct
+
+<div class="release-feature-authors">authors: @idedary</div>
+
+You can now use `h()`, `s()`, `l()` together with their `set_h()`, `set_s()`, `set_l()` and `with_h()`, `with_s()`, `with_l()` variants to manipulate _Hue_, _Saturation_ and _Lightness_ values of a `Color` struct without cloning. Previously you could do that with only RGBA values.
+
+```rust
+// Returns HSL component values
+let color = Color::ORANGE;
+let hue = color.h();
+// ...
+
+// Changes the HSL component values
+let mut color = Color::PINK;
+color.set_s(0.5);
+// ...
+
+// Modifies existing colors and returns them
+let color = Color::VIOLET.with_l(0.7);
+// ...
+```
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
