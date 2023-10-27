@@ -728,7 +728,7 @@ When using functions from `bevy_pbr::prepass_utils` (`prepass_depth()`, `prepass
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-manual implementations of `AsBindGroup` will need to be adjusted, the changes are pretty straightforward and can be seen in the diff for e.g. the `texture_binding_array` example.
+Manual implementations of `AsBindGroup` will need to be adjusted, the changes are pretty straightforward and can be seen in the diff for e.g. the `texture_binding_array` example.
 
 ### [Detect cubemap for dds textures](https://github.com/bevyengine/bevy/pull/10222)
 
