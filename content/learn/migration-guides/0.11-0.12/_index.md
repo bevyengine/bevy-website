@@ -698,7 +698,7 @@ let scene = DynamicSceneBuilder::from_world(&world)
     <div class="migration-guide-area-tag">Input</div>
 </div>
 
-If the default 0.05 was relied on, the default or gamepad `AxisSettings` on the resource `GamepadSettings` will have to be changed.
+The default live zone bounds have been changed from `-0.95..=0.95` to `-1.0..=1.0` to align with more common usage. If you were relying on the old default, you can change change this by modifying [`GamepadSettings::default_axis_settings`](https://docs.rs/bevy/0.12.0/bevy/input/gamepad/struct.GamepadSettings.html#structfield.default_axis_settings).
 
 ### [Rename bevy_math::rects conversion methods](https://github.com/bevyengine/bevy/pull/9159)
 
