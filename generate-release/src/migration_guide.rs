@@ -37,13 +37,28 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
     let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
 
-    let merged_breaking_prs = get_merged_prs(client, from, to, Some("C-Breaking-Change"))?;
-    for (pr, _, title) in &merged_breaking_prs {
-        let area = get_pr_area(pr);
-        areas
-            .entry(area)
-            .or_insert(Vec::new())
-            .push((title.clone(), pr.clone()));
+    let merged_prs = get_merged_prs(client, from, to, None)?;
+    let mut count = 0;
+    for (pr, _, title) in &merged_prs {
+        let Some(body) = pr.body.as_ref() else {
+            // If the body is empty then there's no migration guide so we can safely skip it
+            continue;
+        };
+
+        let has_migration_guide_section = body.to_lowercase().contains("## migration guide");
+        let has_breaking_label = pr
+            .labels
+            .iter()
+            .any(|l| l.name.contains("C-Breaking-Change"));
+
+        if has_migration_guide_section || has_breaking_label {
+            let area = get_pr_area(pr);
+            areas
+                .entry(area)
+                .or_default()
+                .push((title.clone(), pr.clone()));
+            count += 1;
+        }
     }
 
     for (area, prs) in areas {
@@ -85,10 +100,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     }
     writeln!(&mut output, "</div>")?;
 
-    println!(
-        "\nFound {} breaking PRs merged by bors",
-        merged_breaking_prs.len()
-    );
+    println!("\nFound {} breaking PRs merged by bors", count);
 
     std::fs::write(path, output)?;
 
