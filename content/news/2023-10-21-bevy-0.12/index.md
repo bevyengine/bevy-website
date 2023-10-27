@@ -15,9 +15,13 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-## Feature Name
+## Wireframe Improvements
 
-<div class="release-feature-authors">authors: @author</div>
+<div class="release-feature-authors">authors: @IceSentry</div>
+
+The wireframes now use bevy's Material abstraction. This means it will automatically use the new batching and instancing features while being easier to maintain. This change also made it easier to add support for colored wireframe. You can configure the color globally or per mesh using the `WireframeColor` component. It's also now possible to disable wireframe rendering by using the `NeverRenderWireframe` component.
+
+![wireframe](wireframe.png)
 
 ## Reflect Commands
 
