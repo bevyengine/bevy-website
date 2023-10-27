@@ -352,7 +352,7 @@ world.add_schedule(schedule);
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-- `use bevy_ecs::system::QueryComponentError;` -> `use bevy_ecs::query::QueryComponentError;`
+`use bevy_ecs::system::QueryComponentError;` -> `use bevy_ecs::query::QueryComponentError;`
 
 ### [Fix naming on "tick" Column and ComponentSparseSet methods](https://github.com/bevyengine/bevy/pull/9744)
 
@@ -393,7 +393,7 @@ Replace IntoIterator iteration (&mut <RemovedComponents>) with .read()
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-- `States::variants` no longer exists. If you relied on this function, consider using a library that provides enum iterators.
+`States::variants` no longer exists. If you relied on this function, consider using a library that provides enum iterators.
 
 ### [Replace all labels with interned labels](https://github.com/bevyengine/bevy/pull/7762)
 
@@ -696,23 +696,7 @@ fn my_system(mut q: Query<&mut ViewVisibility>) {
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- The `check_visibility` system’s `Option<&NoFrustumCulling>` parameter has been replaced by  `Has<NoFrustumCulling>`, if you were calling it manually, you should change the type to match it
-
-### [Update defaults for OrthographicProjection](https://github.com/bevyengine/bevy/pull/9878)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-- Migration guide steps from #9537 should be removed for next release.
-
-### [Revert "Update defaults for OrthographicProjection (#9537)"](https://github.com/bevyengine/bevy/pull/9878)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Rendering</div>
-</div>
-
-- Migration guide steps from #9537 should be removed for next release.
+The `check_visibility` system’s `Option<&NoFrustumCulling>` parameter has been replaced by  `Has<NoFrustumCulling>`, if you were calling it manually, you should change the type to match it
 
 ### [PCF For DirectionalLight/SpotLight Shadows](https://github.com/bevyengine/bevy/pull/8006)
 
@@ -720,7 +704,7 @@ fn my_system(mut q: Query<&mut ViewVisibility>) {
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- Shadows cast by directional lights or spotlights now have smoother edges. To revert to the old behavior, add `ShadowFilteringMethod::Hardware2x2` to your cameras.
+Shadows cast by directional lights or spotlights now have smoother edges. To revert to the old behavior, add `ShadowFilteringMethod::Hardware2x2` to your cameras.
 
 ### [Deferred Renderer](https://github.com/bevyengine/bevy/pull/9258)
 
@@ -736,9 +720,9 @@ fn my_system(mut q: Query<&mut ViewVisibility>) {
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- When using functions from `bevy_pbr::prepass_utils` (`prepass_depth()`, `prepass_normal()`, `prepass_motion_vector()`) in contexts where these prepasses might be disabled, you should now wrap your calls with the appropriate `#ifdef` guards, (`#ifdef DEPTH_PREPASS`, `#ifdef NORMAL_PREPASS`, `#ifdef MOTION_VECTOR_PREPASS`) providing fallback logic where applicable.
+When using functions from `bevy_pbr::prepass_utils` (`prepass_depth()`, `prepass_normal()`, `prepass_motion_vector()`) in contexts where these prepasses might be disabled, you should now wrap your calls with the appropriate `#ifdef` guards, (`#ifdef DEPTH_PREPASS`, `#ifdef NORMAL_PREPASS`, `#ifdef MOTION_VECTOR_PREPASS`) providing fallback logic where applicable.
 
-### [allow extensions to StandardMaterial](https://github.com/bevyengine/bevy/pull/7820)
+### [Allow extensions to StandardMaterial](https://github.com/bevyengine/bevy/pull/7820)
 
 <div class="migration-guide-area-tags">
     <div class="migration-guide-area-tag">Rendering</div>
@@ -769,7 +753,7 @@ Replace calls to the `Image::aspect_2d()` method with `aspect_ratio()`.
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-- Colors in `FogSettings` struct (`color` and `directional_light_color`) are now sent to the GPU in linear space. If you were using `Color::rgb()`/`Color::rgba()` and would like to retain the previous colors, you can quickly fix it by switching to `Color::rgb_linear()`/`Color::rgba_linear()`.
+Colors in `FogSettings` struct (`color` and `directional_light_color`) are now sent to the GPU in linear space. If you were using `Color::rgb()`/`Color::rgba()` and would like to retain the previous colors, you can quickly fix it by switching to `Color::rgb_linear()`/`Color::rgba_linear()`.
 
 ### [Move skin code to a separate module](https://github.com/bevyengine/bevy/pull/9899)
 
@@ -791,7 +775,7 @@ Renamed skinning systems, resources and components:
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-- Move scene spawner systems to a new SpawnScene schedule which is after Update and before PostUpdate (schedule order: [PreUpdate] [Update] [SpawnScene] [PostUpdate]), you might remove system ordering code related to scene spawning as the execution order has been guaranteed by bevy engine.
+Move scene spawner systems to a new SpawnScene schedule which is after Update and before PostUpdate (schedule order: [PreUpdate] [Update] [SpawnScene] [PostUpdate]), you might remove system ordering code related to scene spawning as the execution order has been guaranteed by bevy engine.
 
 ### [Remove Resource and add Debug to TaskPoolOptions](https://github.com/bevyengine/bevy/pull/9485)
 
@@ -812,7 +796,7 @@ pub struct MyTaskPoolOptions(pub TaskPoolOptions);
     <div class="migration-guide-area-tag">Tasks</div>
 </div>
 
-- Uses of `ComputeTaskPool::init`, `AsyncComputeTaskPool::init` and `IoTaskPool::init` should be changed to `::get_or_init`.
+Uses of `ComputeTaskPool::init`, `AsyncComputeTaskPool::init` and `IoTaskPool::init` should be changed to `::get_or_init`.
 
 ### [Unify `FixedTime` and `Time` while fixing several problems](https://github.com/bevyengine/bevy/pull/8964)
 
@@ -908,7 +892,7 @@ The `num_font_atlases` method of `FontAtlasSet` has been renamed to `len`.
     <div class="migration-guide-area-tag">Windowing</div>
 </div>
 
-- Added an `enabled_buttons` member to the `Window` struct through which users can enable or disable specific window control buttons.
+Added an `enabled_buttons` member to the `Window` struct through which users can enable or disable specific window control buttons.
 
 ### [Improve `bevy_winit` documentation](https://github.com/bevyengine/bevy/pull/7609)
 
@@ -925,6 +909,6 @@ The `num_font_atlases` method of `FontAtlasSet` has been renamed to `len`.
     <div class="migration-guide-area-tag">No area label</div>
 </div>
 
-- `&mut EventReader` does not implement `IntoIterator` anymore. replace `for foo in &mut events` by `for foo in events.iter()`
+`&mut EventReader` does not implement `IntoIterator` anymore. replace `for foo in &mut events` by `for foo in events.iter()`
 
 </div>
