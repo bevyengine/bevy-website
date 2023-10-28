@@ -162,6 +162,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install lld`
+  * **Fedora**: `sudo dnf install lld`
   * **Arch**: `sudo pacman -S lld`
   * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
 
@@ -173,6 +174,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
   * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install mold`
+  * **Fedora**: `sudo dnf install mold`
   * **Arch**: `sudo pacman -S mold`
   * **Windows**: mold does not yet support Windows. [See this tracking issue](https://github.com/rui314/mold/issues/190) for more information.
   * **MacOS**: mold does not yet support MacOS. [See this tracking issue](https://github.com/rui314/mold/issues/189) for more information.
