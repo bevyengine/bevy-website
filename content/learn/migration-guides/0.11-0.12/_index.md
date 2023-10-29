@@ -19,11 +19,13 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     <div class="migration-guide-area-tag">Animation</div>
 </div>
 
-- Removed `set_elapsed`.
-- Removed `stop_repeating` in favour of `AnimationPlayer::set_repeat(RepeatAnimation::Never)`.
-- Introduced `seek_to` to seek to a given timestamp inside of the animation.
-- Introduced `seek_time` accessor for the `PlayingAnimation::seek_to`.
-- Introduced `AnimationPlayer::replay` to reset the `PlayingAnimation` to a state where no time has elapsed.
+Some methods on [`AnimationPlayer`](https://docs.rs/bevy/0.12.0/bevy/animation/struct.AnimationPlayer.html) have changed.
+
+- `elapsed` was removed. Use `seek_time`.
+- `set_elapsed` was removed. Use `seek_to`.
+- `stop_repeating` was removed. Use `set_repeat(RepeatAnimation::Never)`.
+
+If you were manually resetting animation state, you can use the new `replay` method instead.
 
 ### [Fix run-once runners](https://github.com/bevyengine/bevy/pull/10195)
 
@@ -47,7 +49,7 @@ The GLTF asset loader will now factor in `emissiveStrength` when converting to B
     <div class="migration-guide-area-tag">Assets</div>
 </div>
 
-__Migrating a custom asset loader__
+#### Migrating a custom asset loader
 
 Existing asset loaders will need a few small changes to get them to work with Bevy Assets V2.
 
@@ -115,7 +117,7 @@ app.register_asset_loader(MyAssetLoader)
     .init_asset::<MyAsset>()
 ```
 
-__Labeled assets__
+#### Labeled assets
 
 If your loader allows labeled assets, there are a couple of different ways to handle them. The simplest is to call `load_context.labeled_asset_scope`:
 
@@ -134,7 +136,7 @@ asset.children.drain().for_each(|(label, mut item)| {
 
 You can use the provided load context (`lc`) to load additional assets. These will automatically be registered as dependencies of the labeled asset.
 
-__Using assets__
+#### Using assets
 
 The actual call to `load` hasn’t changed:
 
@@ -146,7 +148,7 @@ let handle = server.load("path/to/my/asset.json");
 let data = assets.get(&handle).unwrap();
 ```
 
-__Asset events__
+#### Asset events
 
 There are a few changes to asset events. The event no longer contains a `handle` field, instead the event contains a field called `id`:
 
@@ -214,7 +216,7 @@ AssetPath::new("scene.gltf").with_label("Mesh0");
 - `anyhow` is no longer exported by `bevy_asset`; Add it to your own project (if required).
 - `AssetLoader` and `AssetSaver` have an associated type `Error`; Define an appropriate error type (e.g., using `thiserror`), or use a pre-made error type (e.g., `anyhow::Error`). Note that using `anyhow::Error` is a drop-in replacement.
 - `AssetLoaderError` has been removed; Define a new error type, or use an alternative (e.g., `anyhow::Error`)
-- All the first-party `AssetLoader`’s and `AssetSaver`’s now return relevant (and narrow) error types instead of a single ambiguous type; Match over the specific error type, or encapsulate (`Box<dyn>`, `thiserror`, `anyhow`, etc.)
+- All the first-party `AssetLoader`s and `AssetSaver`s now return relevant (and narrow) error types instead of a single ambiguous type; Match over the specific error type, or encapsulate (`Box<dyn>`, `thiserror`, `anyhow`, etc.)
 
 ### [Non-blocking load_untyped using a wrapper asset](https://github.com/bevyengine/bevy/pull/10198)
 
@@ -509,7 +511,7 @@ let schedule = Schedule::default();
 schedule.run(world);
 ```
 
-`Schedules:insert`
+`Schedules::insert`
 
 ```rust
 // 0.11
@@ -588,9 +590,19 @@ The trait method `DetectChangesMut::set_if_neq` now returns a boolean value indi
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-Rename calls of RemovedComponents::iter/iter_with_id to  read/read_with_id
+```rust
+fn react_on_removal(mut removed: RemovedComponents<MyComponent>) {
+    // 0.11
+    for entity in removed.iter() { /* ... */ }
+    for (entity, id) in removed.iter_with_id() { /* ... */ }
+    for entity in &mut removed { /* ... */ }
 
-Replace IntoIterator iteration (&mut <RemovedComponents>) with .read()
+    // 0.12
+    for entity in removed.read() { /* ... */ }
+    for (entity, id) in removed.read_with_id() { /* ... */ }
+    for entity in removed.read() { /* ... */ }
+}
+```
 
 ### [Remove States::variants and remove enum-only restriction its derive](https://github.com/bevyengine/bevy/pull/9945)
 
@@ -686,7 +698,7 @@ let scene = DynamicSceneBuilder::from_world(&world)
     <div class="migration-guide-area-tag">Input</div>
 </div>
 
-If the default 0.05 was relied on, the default or gamepad `AxisSettings` on the resource `GamepadSettings` will have to be changed.
+The default live zone bounds have been changed from `-0.95..=0.95` to `-1.0..=1.0` to align with more common usage. If you were relying on the old default, you can change change this by modifying [`GamepadSettings::default_axis_settings`](https://docs.rs/bevy/0.12.0/bevy/input/gamepad/struct.GamepadSettings.html#structfield.default_axis_settings).
 
 ### [Rename bevy_math::rects conversion methods](https://github.com/bevyengine/bevy/pull/9159)
 
@@ -735,7 +747,7 @@ bevy = { version = "0.12", features = ["dynamic_linking"] }
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-Renamed NamedTypePathDef::Primtive to NamedTypePathDef::Primitive
+Renamed `NamedTypePathDef::Primtive` to `NamedTypePathDef::Primitive`
 
 ```rust
 // 0.11
@@ -1250,7 +1262,9 @@ Renamed skinning systems, resources and components:
     <div class="migration-guide-area-tag">Scenes</div>
 </div>
 
-Move scene spawner systems to a new SpawnScene schedule which is after Update and before PostUpdate (schedule order: [PreUpdate] [Update] [SpawnScene] [PostUpdate]), you might remove system ordering code related to scene spawning as the execution order has been guaranteed by bevy engine.
+`scene_spawner_system` was moved to a new `SpawnScene` schedule which is run between `Update` and `PostUpdate`.
+
+If you were ordering your own systems to run before `scene_spawner_system` in `Update`, that might no longer be necessary. If your system needs to run after `scene_spawner_system`, it should be moved to the `SpawnScene` or `PostUpdate` schedule.
 
 ### [Remove Resource and add Debug to TaskPoolOptions](https://github.com/bevyengine/bevy/pull/9485)
 
@@ -1421,7 +1435,7 @@ Because of this change, the timing of the first few frames might have changed, a
 ### [Work around naga/wgpu WGSL instance_index -> GLSL gl_InstanceID bug on WebGL2](https://github.com/bevyengine/bevy/pull/9383)
 
 <div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">No area label</div>
+    <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
 Shader code before:
