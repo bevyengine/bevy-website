@@ -488,6 +488,7 @@ fn handle_lifetime_events(
     }
 }
 ```
+
 [`Lifetime`]: https://docs.rs/bevy/0.12.0/bevy/window/enum.Lifetime.html
 [`onStop()`]: https://developer.android.com/reference/android/app/Activity#onStop()
 [`onRestart()`]: https://developer.android.com/reference/android/app/Activity#onRestart()
@@ -762,8 +763,8 @@ This is great for unit testing systems and queries, and it's both lower overhead
 
 Bevy 0.12 brings two major quality of life improvements to `FixedUpdate`.
 
-- `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
-- `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
+* `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
+* `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
 
 The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking. Its methods were different from `Time` and it didn't even track "total time elapsed" like `Time` did, to name a few examples. Having two different "time" APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
 
@@ -785,17 +786,16 @@ fn integrate_velocity(
 
 Most systems should continue to use `Time`, but behind the scenes, the methods from previous APIs have been refactored into four clocks:
 
-- `Time<Real>`
-- `Time<Virtual>`
-- `Time<Fixed>`
-- `Time<()>`
+* `Time<Real>`
+* `Time<Virtual>`
+* `Time<Fixed>`
+* `Time<()>`
 
 `Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` chases `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate`. When a system borrows `Time`, it actually borrows `Time<()>`.
 
 Try the new `time` example to get a better feel for these resources.
 
 The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
-
 
 ## Reduced Tracing Overhead
 
@@ -835,7 +835,6 @@ Audio is generated at the given frequency using a [sine wave](https://en.wikiped
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
 
 Check out the [**Bevy 0.13 Milestone**](https://github.com/bevyengine/bevy/milestone/17) for an up-to-date list of current work being considered for **Bevy 0.13**.
-
 
 ## Support Bevy
 
