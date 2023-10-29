@@ -805,6 +805,31 @@ Bevy uses the [tracing](https://crates.io/crates/tracing) library to measure sys
 
 ![tracing overhead](tracing-overhead-reduction.png)
 
+## Pitch Audio Source
+
+<div class="release-feature-authors">authors: @basilefff</div>
+
+Audio can now be played by pitch, which is useful to debug audio issues, use as a placeholder or for programmatic audio.
+
+A `Pitch` audio source can be created from its frequency and its duration, and then be used as a source in a `PitchBundle`.
+
+```rust
+fn play_pitch(
+    mut pitch_assets: ResMut<Assets<Pitch>>,
+    mut commands: Commands,
+) {
+    // This is a A for 1 second
+    let pitch_handle = pitch_assets.add(Pitch::new(440.0, Duration::new(1, 0)));
+    // Play it now
+    commands.spawn(PitchBundle {
+        source: pitch_handle,
+        ..default()
+    });
+}
+```
+
+Audio is generated at the given frequency using a [sine wave](https://en.wikipedia.org/wiki/Sine_wave#Audio_example). More complex sounds can be created by playing several pitch audio sources at the same time, like chords or hamonics.
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
