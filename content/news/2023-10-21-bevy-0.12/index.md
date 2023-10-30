@@ -809,7 +809,7 @@ Bevy uses the [tracing](https://crates.io/crates/tracing) library to measure sys
 
 <div class="release-feature-authors">authors: @basilefff</div>
 
-Audio can now be played by pitch, which is useful to debug audio issues, use as a placeholder or for programmatic audio.
+Audio can now be played by pitch, which is useful to debug audio issues, to use as a placeholder, or for programmatic audio.
 
 A `Pitch` audio source can be created from its frequency and its duration, and then be used as a source in a `PitchBundle`.
 
