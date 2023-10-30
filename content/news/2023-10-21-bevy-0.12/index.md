@@ -15,6 +15,48 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## Deferred Rendering
+
+<div class="release-feature-authors">authors: @DGriffin91</div>
+
+The two most popular "rendering styles" are:
+
+* **Forward Rendering**: do all material/lighting calculations in a single render pass
+  * **Pros**: Simpler to work with. Works on / performs better on more hardware. Supports MSAA. Handles transparency nicely.
+  * **Cons**: Lighting is more expensive / fewer lights supported in a scene, some rendering effects are impossible (or harder) without a prepass
+* **Deferred Rendering**: do one or more pre-passes that collect relevant information about a scene, then do material/lighting calculations in _screen space_ in a final pass after that.
+  * **Pros**: Enables some rendering effects that are not possible in forward rendering. This is especially important for GI techniques. Can support more lights in a scene
+  * **Cons**: More complicated to work with. Requires doing prepasses, which can be more expensive than an equivalent forward renderer in some situations (although the reverse can also be true), doesn't support MSAA, transparency is harder / less straightforward.
+
+Bevy's renderer has historically been a "forward renderer". More specifically, it is a [Clustered Forward / Forward+](/news/bevy-0-7/#unlimited-point-lights) renderer, which means we break the view frustum up into clusters and assign lights to those clusters, allowing us to render many more lights than a traditional forward renderer.
+
+However, as Bevy has grown, it has slowly moved into "hybrid renderer" territory. In previous releases, we added a [Depth and Normal Prepass](/news/bevy-0-10/#depth-and-normal-prepass) to enable [TAA](/news/bevy-0-11/#temporal-anti-aliasing), [SSAO](/news/bevy-0-11/#screen-space-ambient-occlusion), and [Alpha Texture Shadow Maps](/news/bevy-0-10/#shadow-mapping-using-prepass-shaders). We also added a Motion Vector Prepass to enable TAA.
+
+In **Bevy 0.12** we added support for Deferred Rendering (building on the existing prepass work). Each material can choose whether it will go through the forward or deferred path, and this can be configured per-material-instance.
+
+For the PBR [`StandardMaterial`], the deferred prepass packs PBR information into the Gbuffer, which looks like this:
+
+![pbr gbuffer](deferred_pass1.png)
+
+The deferred prepass also produces a "deferred lighting pass ID" texture, which determines what lighting shader to run for the fragment:
+
+![lighting pass ID texture](deferred_pass2.png)
+
+A depth texture is also produced:
+
+![deferred depth](deferred_depth.png)
+
+These are passed into the final deferred lighting shader. The final render looks like this:
+
+![deferred](deferred.png)
+
+Note that the cube in front of the flight helmet model is using forward rendering, which is why it is black in both of the deferred lighting textures above. This illustrates that you can use both forward and deferred materials in the same scene!
+
+The default approach to use for materials can be configured using the new [`DefaultOpaqueRendererMethod`] resource.
+
+[`StandardMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html
+[`DefaultOpaqueRendererMethod`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.DefaultOpaqueRendererMethod.html
+
 ## PCF Shadow Filtering
 
 <div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55</div>
@@ -53,7 +95,7 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 [`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
 [`ShadowMapFilter::Jimenez14`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
-
+`
 ## Bevy Asset V2
 
 <div class="release-feature-authors">authors: @cart</div>
