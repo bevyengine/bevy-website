@@ -33,7 +33,7 @@ We had a number of responses! Here is a central collection of **Bevy's Third Bir
 * **Trent ([@tbillington](https://github.com/tbillington))**
   * [Three Years of Bevy 🎉](https://trent.kiwi/bevy-three-years)
 * **JMS55 ([@JMS55](https://github.com/JMS55))**
-  * [Bevy's Third Birthday - Reflections on Rendering](https://jms55.github.io/posts/2023-12-09-bevy-third-birthday/)
+  * [Bevy's Third Birthday - Reflections on Rendering](https://jms55.github.io/posts/2023-09-12-bevy-third-birthday/)
 
 ## What are we working on right now?
 
