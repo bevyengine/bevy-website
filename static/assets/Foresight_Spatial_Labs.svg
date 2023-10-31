@@ -2,35 +2,13 @@
 <svg
    id="a"
    data-name="Layer 1"
-   viewBox="0 0 445.59 64.010001"
+   viewBox="0 0 465 83.999999"
    version="1.1"
-   sodipodi:docname="FSL_Logo_B5.svg"
-   width="445.59"
-   height="64.010002"
-   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   width="465"
+   height="84"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview30"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="4.088042"
-     inkscape:cx="276.53826"
-     inkscape:cy="50.51318"
-     inkscape:window-width="3440"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="a" />
   <defs
      id="defs4">
     <style
@@ -96,7 +74,6 @@
        y2="62.41"
        xlink:href="#b" />
     <linearGradient
-       inkscape:collect="always"
        xlink:href="#b"
        id="linearGradient30"
        gradientUnits="userSpaceOnUse"
@@ -105,7 +82,6 @@
        x2="52.82"
        y2="60.029999" />
     <linearGradient
-       inkscape:collect="always"
        xlink:href="#c"
        id="linearGradient31"
        gradientUnits="userSpaceOnUse"
@@ -116,7 +92,7 @@
   </defs>
   <g
      id="g9"
-     transform="translate(-30,-29.32)">
+     transform="translate(-20,-19.32)">
     <path
        class="m"
        d="m 32,63.33 h 26 c 1.1,0 2,0.9 2,2 v 13 c 0,8.28 -6.72,15 -15,15 H 32 c -1.1,0 -2,-0.9 -2,-2 v -26 c 0,-1.1 0.9,-2 2,-2 z"
@@ -150,7 +126,7 @@
   </g>
   <g
      id="g30"
-     transform="translate(-30,-29.32)">
+     transform="translate(-20,-19.32)">
     <g
        id="g18">
       <path
@@ -238,4 +214,11 @@
          id="path29" />
     </g>
   </g>
+  <rect
+     style="fill:none;stroke-width:0.9941"
+     id="rect8"
+     width="465"
+     height="84"
+     x="0"
+     y="0" />
 </svg>
