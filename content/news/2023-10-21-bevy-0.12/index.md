@@ -15,6 +15,51 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## Rusty Shader Imports
+
+<div class="release-feature-authors">authors: @robtfm</div>
+
+Bevy shaders now use Rust-like shader imports:
+
+```rust
+// old
+#import bevy_pbr::forward_io VertexOutput
+
+// new
+#import bevy_pbr::forward_io::VertexOutput
+```
+
+Like Rust imports, you can use curly braces to import multiple items. Multi-level nesting is also now supported!
+
+```rust
+// old
+#import bevy_pbr::pbr_functions alpha_discard, apply_pbr_lighting 
+#import bevy_pbr                mesh_bindings
+
+// new
+#import bevy_pbr::{
+    pbr_functions::{alpha_discard, apply_pbr_lighting}, 
+    mesh_bindings,
+}
+```
+
+Like Rust modules, you can now import partial paths:
+
+```rust
+#import part::of::path
+
+// later in the shader
+path::remainder::function();
+```
+
+You can also now use fully qualified paths without importing:
+
+```rust
+bevy_pbr::pbr_functions::pbr()
+```
+
+Rusty Imports remove a number of "API weirdness" gotchas from the old system and expand the capabilities of the import system. And by reusing Rust syntax and semantics, we remove the need for Bevy users to learn a new system.
+
 ## PCF Shadow Filtering
 
 <div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55</div>
