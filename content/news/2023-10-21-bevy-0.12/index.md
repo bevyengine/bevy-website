@@ -238,18 +238,6 @@ Using the same approach as 0.11 with one dynamic offset binding per mesh entity,
 
 These performance benefits can be leveraged on all platforms, including WebGL2!
 
-#### What is next for batching/instancing and beyond?
-
-* Put material data into GpuArrayBuffer per material type (e.g. all StandardMaterial instances will be stored in one GpuArrayBuffer) - this enables batching of draws for entities with the same mesh, same material type and textures, but different material data!
-  * A prototype implementation of this shows enormous benefits because materials are currently always _one uniform buffer per material instance_ which means we can't just update the dynamic offset, rather the entire bind group has to be rebound!
-* Put material textures into bindless texture arrays - this enables batching of draws for entities with the same mesh and same material type!
-* Where bindless texture arrays are not supported (WebGL2, WebGPU, some native) we can leverage asset preprocessing to pack textures into texture atlas textures, and use array textures where each layer is a texture atlas. This is an alternative way of avoiding rebinding for changing textures.
-* Put mesh data into one big buffer per mesh attribute layout - this removes the need to rebind the index/vertex buffers per-draw, instead only vertex/index range needs to be passed to the draw command. Prototypes showed this didn't give much/any improvement for CPU-drive rendering, but it does unlock GPU-driven nonetheless.
-* Put skinned mesh data into storage buffers if possible to enable instanced drawing of skinned mesh entities using the same mesh, skin, and material! This was prototyped and enabled drawing about 25% more (1.25x) foxes!
-* GPU-driven rendering for WebGPU and native
-  * @JMS55 is working on GPU-driven rendering already, using a meshlet approach.
-  * Rob Swain (@superdump) intends to implement an alternative method that does not require processing meshes into meshlets but that limits to drawing up to 256 instances per draw.
-
 ## Rendering Performance Improvements
 
 ### EntityHashMap
@@ -326,17 +314,14 @@ Sprites
 
 UI
 
-### What's next for rendering performance?
-
-* Rearchitecting the renderer data flow to enable use of `Vec<T>`
-  * Ideally we would only ever need to iterate in-order over dense arrays of data and never do any random-access lookups. CPUs are very good at this as it enables predictable data access that increases the cache hit rate and makes for very fast processing. Ideas have come up for possible ways to rearchitect the renderer a little to enable dense arrays and no unnecessary lookups!
-* Batching code already compares previous draw state (pipeline, bind groups, index/vertex buffers, etc) to current draw state. This is then repeated by `TrackedRenderPass` when encoding draws. This cost can be removed with a new API called `DrawStream`.
-
 ## <a name="what-s-next"></a>What's Next?
 
-We have plenty of work that is pretty much finished and is therefore very likely to land in **Bevy 0.13**:
+We have plenty of work in progress! Some of this will likely land in **Bevy 0.13**.
 
 Check out the [**Bevy 0.13 Milestone**](https://github.com/bevyengine/bevy/milestone/17) for an up-to-date list of current work being considered for **Bevy 0.13**.
+
+* **More Batching/Instancing Improvements**: Put skinned mesh data into storage buffers to enable instanced drawing of skinned mesh entities with the same mesh/skin/material. Put material data in the new GpuArrayBuffer to enable batching of draws of entities with the same mesh, material type, and textures, but different material data.
+* **GPU driven rendering**: We plan on driving rendering via the GPU by creating draw calls in compute shaders (on platforms that support it). We have [experiments using meshlets](https://github.com/bevyengine/bevy/pull/10164) and plan to explore other approaches as well. This will involve putting textures into bindless texture arrays and putting meshes in one big buffer to avoid rebinds.
 
 ## Support Bevy
 
