@@ -40,9 +40,9 @@ Avoiding rebinding is both a big performance benefit for CPU-driven rendering, i
 
 ### What are CPU- and GPU-driven rendering?
 
-CPU-driven rendering is where draw commands are created on the CPU, in Bevy this means in Rust code, more specifically in render graph nodes.
+CPU-driven rendering is where draw commands are created on the CPU. In Bevy this means in Rust code, more specifically in render graph nodes.
 
-In GPU-driven rendering, the draw commands are encoded on the GPU by compute shaders. This leverages GPU parallelism, and unlocks more advanced culling optimisations that are infeasible to do on the CPU, among many other methods that bring large performance benefits.
+In GPU-driven rendering, the draw commands are encoded on the GPU by [compute shaders](https://www.khronos.org/opengl/wiki/Compute_Shader). This leverages GPU parallelism, and unlocks more advanced culling optimizations that are infeasible to do on the CPU, among many other methods that bring large performance benefits.
 
 ### Reorder Render Sets
 
@@ -79,7 +79,7 @@ WebGL2 does not support storage buffers, only uniform buffers. Uniform buffers h
 
 Data textures are far more awkward for structured data, and without support for linear data layouts on some platforms, they will perform worse.
 
-We want to support uniform buffers on WebGL2 or where storage buffers are not supported, and use storage buffers everywhere else.
+We want to support uniform buffers where storage buffers are not supported (like WebGL2) and use storage buffers everywhere else.
 
 #### BatchedUniformBuffer
 
