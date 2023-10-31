@@ -553,7 +553,7 @@ Finally, importer support for the following glTF extensions has been added:
 
 Both specular and diffuse transmission are compatible with all supported platforms, including mobile and Web.
 
-The optional `pbr_transmission_textures` Cargo feature allows using textures to modulate the `specular_transmission`, `diffuse_transmission` and `thickness` properties. It's disabled by default in order to constain the number of texture bindings used by the standard material. (These are
+The optional `pbr_transmission_textures` Cargo feature allows using textures to modulate the `specular_transmission`, `diffuse_transmission` and `thickness` properties. It's disabled by default in order to reduce the number of texture bindings used by the standard material. (These are
 severely constrained on lower-end platforms and older GPUs!)
 
 `DepthPrepass` and TAA can greatly improve the quality of the screen-space specular transmission effect, and are recommended to be used with it, on the platforms where they are supported.
