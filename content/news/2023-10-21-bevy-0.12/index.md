@@ -142,7 +142,7 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 [`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
 [`ShadowMapFilter::Jimenez14`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
-`
+
 ## Bevy Asset V2
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -164,9 +164,9 @@ Asset preprocessing is the ability to take an input asset of a given type, proce
 
 This enables a number of scenarios:
 
-- **Reduce Work In Released Apps**: Many assets aren't _composed_ in their ideal form for release. Scenes might be defined in a human-readable text format that is slower to load. Images might be defined in formats that require more work to decode and upload to the GPU, or take up more space on the GPU when compared to GPU-friendly formats (ex: PNG images vs Basis Universal). Preprocessing enables developers to convert to release-optimal formats ahead of time, making apps start up faster, take up fewer resources, and perform better. It also enables moving computation work that _would_ have been done at runtime to development time. For example, generating mipmaps for images.
-- **Compression**: Minimize the disk space and/or bandwidth that an asset takes up in deployed apps
-- **Transformation**: Some "asset source files" aren't in the right format by default. You can have an asset of type `A` and transform it into type `B`.
+* **Reduce Work In Released Apps**: Many assets aren't _composed_ in their ideal form for release. Scenes might be defined in a human-readable text format that is slower to load. Images might be defined in formats that require more work to decode and upload to the GPU, or take up more space on the GPU when compared to GPU-friendly formats (ex: PNG images vs Basis Universal). Preprocessing enables developers to convert to release-optimal formats ahead of time, making apps start up faster, take up fewer resources, and perform better. It also enables moving computation work that _would_ have been done at runtime to development time. For example, generating mipmaps for images.
+* **Compression**: Minimize the disk space and/or bandwidth that an asset takes up in deployed apps
+* **Transformation**: Some "asset source files" aren't in the right format by default. You can have an asset of type `A` and transform it into type `B`.
 
 If you are building an app that tests the limits of your hardware with optimal formats ... or you just want to cut down on startup / loading times, asset preprocessing is for you.
 
@@ -218,17 +218,17 @@ If a Bevy App asks to load an asset that is currently being processed (or re-pro
 
 Assets now support (optional) `.meta` files. This enables configuring things like:
 
-- **The asset "action"**
-  - This configures how Bevy's asset system should handle the asset:
-    - `Load`: Load the asset without processing
-    - `Process`: Pre-process the asset prior to loading
-    - `Ignore`: Do not process or load the asset
-- **[`AssetLoader`] settings**
-  - You can use meta files to set any [`AssetLoader`] you want
-  - Configure loader settings like "how to filter an image", "adjusting the up axis in 3D scenes", etc
-- **[`Process`] settings** (if using the `Process` action)
-  - You can use meta files to set any [`Process`] implementation you want
-  - Configure processor settings like "what type of compression to use", "whether or not to generate mipmaps", etc
+* **The asset "action"**
+  * This configures how Bevy's asset system should handle the asset:
+    * `Load`: Load the asset without processing
+    * `Process`: Pre-process the asset prior to loading
+    * `Ignore`: Do not process or load the asset
+* **[`AssetLoader`] settings**
+  * You can use meta files to set any [`AssetLoader`] you want
+  * Configure loader settings like "how to filter an image", "adjusting the up axis in 3D scenes", etc
+* **[`Process`] settings** (if using the `Process` action)
+  * You can use meta files to set any [`Process`] implementation you want
+  * Configure processor settings like "what type of compression to use", "whether or not to generate mipmaps", etc
 
 A meta file for an unprocessed image looks like this:
 
@@ -318,8 +318,8 @@ Despite (eventually) recommending that most people enable asset processing, we a
 
 This is why Bevy offers two asset modes:
 
-- [`AssetMode::Unprocessed`]: Assets will be loaded directly from the asset source folder (defaults to `assets`) without any preprocessing. They are assumed to be in their "final format". This is the mode/workflow Bevy users are currently used to.
-- [`AssetMode::Processed`]: Assets will be pre-processed at development time. They will be read from their source folder (defaults to `assets`) and then written to their destination folder (defaults to `imported_assets`).
+* [`AssetMode::Unprocessed`]: Assets will be loaded directly from the asset source folder (defaults to `assets`) without any preprocessing. They are assumed to be in their "final format". This is the mode/workflow Bevy users are currently used to.
+* [`AssetMode::Processed`]: Assets will be pre-processed at development time. They will be read from their source folder (defaults to `assets`) and then written to their destination folder (defaults to `imported_assets`).
 
 To enable this, Bevy uses a novel approach to assets: the difference between a processed and unprocessed asset is perspective. They both use the same `.meta` format and they use the same [`AssetLoader`] interface.
 
@@ -416,13 +416,13 @@ Much better!
 
 Almost everything in **Bevy Asset V2** can be extended with trait impls:
 
-- **[`Asset`]**: Define new asset types
-- **[`AssetReader`]**: Define custom [`AssetSource`] read logic
-- **[`AssetWriter`]**: Define custom [`AssetSource`] write logic
-- **[`AssetWatcher`]**: Define custom [`AssetSource`] watching / hot-reloading logic
-- **[`AssetLoader`]**: Define custom load logic for a given [`Asset`] type
-- **[`AssetSaver`]**: Define custom save logic for a given [`Asset`] type
-- **[`Process`]**: Define fully bespoke processor logic (or use the more opinionated [`LoadAndSave`] [`Process`] impl)
+* **[`Asset`]**: Define new asset types
+* **[`AssetReader`]**: Define custom [`AssetSource`] read logic
+* **[`AssetWriter`]**: Define custom [`AssetSource`] write logic
+* **[`AssetWatcher`]**: Define custom [`AssetSource`] watching / hot-reloading logic
+* **[`AssetLoader`]**: Define custom load logic for a given [`Asset`] type
+* **[`AssetSaver`]**: Define custom save logic for a given [`Asset`] type
+* **[`Process`]**: Define fully bespoke processor logic (or use the more opinionated [`LoadAndSave`] [`Process`] impl)
 
 [`Asset`]: https://dev-docs.bevyengine.org/bevy/asset/trait.Asset.html
 [`AssetWatcher`]: https://dev-docs.bevyengine.org/bevy/asset/io/trait.AssetWatcher.html
@@ -502,13 +502,13 @@ uses an import from `bevy_internal` instead of `bevy`.
 
 Additionally, the daily mobile check job now builds on more iOS and Android devices:
 
-- iPhone 13 on iOS 15
-- iPhone 14 on iOS 16
-- iPhone 15 on iOS 17
-- Xiaomi Redmi Note 11 on Android 11
-- Google Pixel 6 on Android 12
-- Samsung Galaxy S23 on Android 13
-- Google Pixel 8 on Android 14
+* iPhone 13 on iOS 15
+* iPhone 14 on iOS 16
+* iPhone 15 on iOS 17
+* Xiaomi Redmi Note 11 on Android 11
+* Google Pixel 6 on Android 12
+* Samsung Galaxy S23 on Android 13
+* Google Pixel 8 on Android 14
 
 ## Example tooling improvements
 
@@ -607,12 +607,12 @@ The wireframes now use bevy's Material abstraction. This means it will automatic
 
 The `StandardMaterial` now supports a number of light transmission-related properties:
 
-- `specular_transmission`
-- `diffuse_transmission`
-- `thickness`
-- `ior`
-- `attenuation_color`
-- `attenuation_distance`
+* `specular_transmission`
+* `diffuse_transmission`
+* `thickness`
+* `ior`
+* `attenuation_color`
+* `attenuation_distance`
 
 These allow you to more realistically represent a wide variety of physical materials, including **clear and frosted glass, water, plastic, foliage, paper, wax, marble, porcelain and more**.
 
@@ -632,9 +632,9 @@ Additionally, two extra fields have been added to the `Camera3d` component: `scr
 
 Finally, importer support for the following glTF extensions has been added:
 
-- `KHR_materials_transmission`
-- `KHR_materials_ior`
-- `KHR_materials_volume`
+* `KHR_materials_transmission`
+* `KHR_materials_ior`
+* `KHR_materials_volume`
 
 ### Compatibility
 
