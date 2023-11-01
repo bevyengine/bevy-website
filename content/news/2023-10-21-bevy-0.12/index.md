@@ -47,7 +47,7 @@ These performance benefits can be leveraged on all platforms, including WebGL2!
 
 ### What can be batched?
 
-Batching/Instancing can only happen for GPU data that doesn't require "rebinding". This means if something like a pipeline (shaders), bind group (shader-accessible bound data), vertex / index buffer (mesh) is different, it cannot be batched.
+Batching/Instancing can only happen for GPU data that doesn't require "rebinding" (binding is making data available to shaders / pipelines, which incurs a runtime cost). This means if something like a pipeline (shaders), bind group (shader-accessible bound data), vertex / index buffer (mesh) is different, it cannot be batched.
 
 From a high level, currently entities with the same material and mesh can be batched.
 
