@@ -15,6 +15,50 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## ImageLoader Settings
+
+<div class="release-feature-authors">authors: @cart, @Kanabenki</div>
+
+To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've given [`ImageLoader`] [`ImageLoaderSettings`].
+
+This means that you can now configure the sampler, SRGB-ness, and the format, on a per-image basis. These are the defaults, as they appear in **Bevy Asset V2** meta files:
+
+```rust
+(
+    format: FromExtension,
+    is_srgb: true,
+    sampler: Default,
+)
+```
+
+When set to `Default`, the image will use whatever is configured in [`ImagePlugin::default_sampler`].
+
+However, you can set these values to whatever you want!
+
+```rust
+(
+    format: Format(Basis),
+    is_srgb: true,
+    sampler: Descriptor((
+        label: None,
+        address_mode_u: ClampToEdge,
+        address_mode_v: ClampToEdge,
+        address_mode_w: ClampToEdge,
+        mag_filter: Nearest,
+        min_filter: Nearest,
+        mipmap_filter: Nearest,
+        lod_min_clamp: 0.0,
+        lod_max_clamp: 32.0,
+        compare: None,
+        anisotropy_clamp: 1,
+        border_color: None,
+    )),
+)
+```
+
+[`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
+[`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
+
 ## Rusty Shader Imports
 
 <div class="release-feature-authors">authors: @robtfm</div>
@@ -240,6 +284,7 @@ A meta file for an unprocessed image looks like this:
         settings: (
             format: FromExtension,
             is_srgb: true,
+            sampler: Default,
         ),
     ),
 )
@@ -256,6 +301,7 @@ A meta file for an image configured to be processed looks like this:
             loader_settings: (
                 format: FromExtension,
                 is_srgb: true,
+                sampler: Default,
             ),
             saver_settings: (),
         ),
@@ -280,6 +326,7 @@ The final "output" metadata for the processed image looks like this:
         settings: (
             format: Format(Basis),
             is_srgb: true,
+            sampler: Default,
         ),
     ),
 )
