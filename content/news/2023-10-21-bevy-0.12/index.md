@@ -77,7 +77,7 @@ In GPU-driven rendering, the draw commands are encoded on the GPU by [compute sh
 
 ### What needs to change?
 
-Historically Bevy's general GPU data pattern has been to bind each piece of data per-entity and issue a draw call per-entity. We did store data in arrays and accessed with dynamic offsets in some cases, but this still resulted in rebinding at each offset.
+Historically Bevy's general GPU data pattern has been to bind each piece of data per-entity and issue a draw call per-entity. In some cases we did store data in uniform buffers in "array style" and accessed with dynamic offsets, but this still resulted in rebinding at each offset.
 
 All of this rebinding has performance implications, both on the CPU and the GPU. On the CPU, it means encoding draw commands has many more steps to process and so takes more time than necessary. In the graphics API and on the GPU, it means many more rebinds and separate draw commands.
 
