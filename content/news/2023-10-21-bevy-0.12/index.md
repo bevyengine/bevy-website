@@ -60,6 +60,48 @@ bevy_pbr::pbr_functions::pbr()
 
 Rusty Imports remove a number of "API weirdness" gotchas from the old system and expand the capabilities of the import system. And by reusing Rust syntax and semantics, we remove the need for Bevy users to learn a new system.
 
+## Deferred Rendering
+
+<div class="release-feature-authors">authors: @DGriffin91</div>
+
+The two most popular "rendering styles" are:
+
+* **Forward Rendering**: do all material/lighting calculations in a single render pass
+  * **Pros**: Simpler to work with. Works on / performs better on more hardware. Supports MSAA. Handles transparency nicely.
+  * **Cons**: Lighting is more expensive / fewer lights supported in a scene, some rendering effects are impossible (or harder) without a prepass
+* **Deferred Rendering**: do one or more pre-passes that collect relevant information about a scene, then do material/lighting calculations in _screen space_ in a final pass after that.
+  * **Pros**: Enables some rendering effects that are not possible in forward rendering. This is especially important for GI techniques, cuts down on shading cost by only shading visible fragments, can support more lights in a scene
+  * **Cons**: More complicated to work with. Requires doing prepasses, which can be more expensive than an equivalent forward renderer in some situations (although the reverse can also be true), uses more texture bandwidth (which can be prohibitive on some devices), doesn't support MSAA, transparency is harder / less straightforward.
+
+Bevy's renderer has historically been a "forward renderer". More specifically, it is a [Clustered Forward / Forward+](/news/bevy-0-7/#unlimited-point-lights) renderer, which means we break the view frustum up into clusters and assign lights to those clusters, allowing us to render many more lights than a traditional forward renderer.
+
+However, as Bevy has grown, it has slowly moved into "hybrid renderer" territory. In previous releases, we added a [Depth and Normal Prepass](/news/bevy-0-10/#depth-and-normal-prepass) to enable [TAA](/news/bevy-0-11/#temporal-anti-aliasing), [SSAO](/news/bevy-0-11/#screen-space-ambient-occlusion), and [Alpha Texture Shadow Maps](/news/bevy-0-10/#shadow-mapping-using-prepass-shaders). We also added a Motion Vector Prepass to enable TAA.
+
+In **Bevy 0.12** we added support for Deferred Rendering (building on the existing prepass work). Each material can choose whether it will go through the forward or deferred path, and this can be configured per-material-instance. Bevy also has a new [`DefaultOpaqueRendererMethod`] resource, which configures the global default, which is set to "forward" by default. The global default can be overridden per-material.
+
+When deferred is enabled for the PBR [`StandardMaterial`], the deferred prepass packs PBR information into the Gbuffer, which looks like this:
+
+![pbr gbuffer](deferred_pass1.png)
+
+The deferred prepass also produces a "deferred lighting pass ID" texture, which determines what lighting shader to run for the fragment:
+
+![lighting pass ID texture](deferred_pass2.png)
+
+A depth texture is also produced:
+
+![deferred depth](deferred_depth.png)
+
+These are passed into the final deferred lighting shader. The final render looks like this:
+
+![deferred](deferred.png)
+
+Note that the cube in front of the flight helmet model is using forward rendering, which is why it is black in both of the deferred lighting textures above. This illustrates that you can use both forward and deferred materials in the same scene!
+
+Note that for most use cases, we recommend using forward by default, unless a feature explicitly needs deferred or your rendering conditions benefit from deferred style. Forward has the fewest surprises and will work better on more devices.
+
+[`StandardMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html
+[`DefaultOpaqueRendererMethod`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.DefaultOpaqueRendererMethod.html
+
 ## PCF Shadow Filtering
 
 <div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55</div>
@@ -81,6 +123,7 @@ Looking better! However this still isn't a perfect solution. Large shadowmaps ar
 **Bevy 0.12**'s default PCF approach is the [`ShadowMapFilter::Castano13`] method by Ignacio Castaño (used in The Witness). Here it is with a 512x512 shadow map:
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare (Castano)</b>
+
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
   <img class="image-a" alt="PCF Off" src="no_pcf.png">
   <img class="image-b" alt="PCF On" src="pcf_castano.png">
@@ -91,6 +134,7 @@ Much better!
 We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (used in Call of Duty Advanced Warfare). This can be slightly cheaper than Castano, but it can flicker. It benefits from [Temporal Anti-Aliasing (TAA)](/news/bevy-0-11/#temporal-anti-aliasing) which can reduce the flickering. It can also blend shadow cascades a bit more smoothly than Castano.
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare (Jimenez)</b>
+
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
   <img class="image-a" alt="PCF Off" src="no_pcf.png">
   <img class="image-b" alt="PCF On" src="pcf_jimenez.png">
@@ -98,7 +142,7 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 [`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
 [`ShadowMapFilter::Jimenez14`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
-
+`
 ## Bevy Asset V2
 
 <div class="release-feature-authors">authors: @cart</div>
@@ -120,9 +164,9 @@ Asset preprocessing is the ability to take an input asset of a given type, proce
 
 This enables a number of scenarios:
 
-* **Reduce Work In Released Apps**: Many assets aren't _composed_ in their ideal form for release. Scenes might be defined in a human-readable text format that is slower to load. Images might be defined in formats that require more work to decode and upload to the GPU, or take up more space on the GPU when compared to GPU-friendly formats (ex: PNG images vs Basis Universal). Preprocessing enables developers to convert to release-optimal formats ahead of time, making apps start up faster, take up fewer resources, and perform better. It also enables moving computation work that _would_ have been done at runtime to development time. For example, generating mipmaps for images.
-* **Compression**: Minimize the disk space and/or bandwidth that an asset takes up in deployed apps
-* **Transformation**: Some "asset source files" aren't in the right format by default. You can have an asset of type `A` and transform it into type `B`.
+- **Reduce Work In Released Apps**: Many assets aren't _composed_ in their ideal form for release. Scenes might be defined in a human-readable text format that is slower to load. Images might be defined in formats that require more work to decode and upload to the GPU, or take up more space on the GPU when compared to GPU-friendly formats (ex: PNG images vs Basis Universal). Preprocessing enables developers to convert to release-optimal formats ahead of time, making apps start up faster, take up fewer resources, and perform better. It also enables moving computation work that _would_ have been done at runtime to development time. For example, generating mipmaps for images.
+- **Compression**: Minimize the disk space and/or bandwidth that an asset takes up in deployed apps
+- **Transformation**: Some "asset source files" aren't in the right format by default. You can have an asset of type `A` and transform it into type `B`.
 
 If you are building an app that tests the limits of your hardware with optimal formats ... or you just want to cut down on startup / loading times, asset preprocessing is for you.
 
@@ -174,17 +218,17 @@ If a Bevy App asks to load an asset that is currently being processed (or re-pro
 
 Assets now support (optional) `.meta` files. This enables configuring things like:
 
-* **The asset "action"**
-  * This configures how Bevy's asset system should handle the asset:
-    * `Load`: Load the asset without processing
-    * `Process`: Pre-process the asset prior to loading
-    * `Ignore`: Do not process or load the asset
-* **[`AssetLoader`] settings**
-  * You can use meta files to set any [`AssetLoader`] you want
-  * Configure loader settings like "how to filter an image", "adjusting the up axis in 3D scenes", etc
-* **[`Process`] settings** (if using the `Process` action)
-  * You can use meta files to set any [`Process`] implementation you want
-  * Configure processor settings like "what type of compression to use", "whether or not to generate mipmaps", etc
+- **The asset "action"**
+  - This configures how Bevy's asset system should handle the asset:
+    - `Load`: Load the asset without processing
+    - `Process`: Pre-process the asset prior to loading
+    - `Ignore`: Do not process or load the asset
+- **[`AssetLoader`] settings**
+  - You can use meta files to set any [`AssetLoader`] you want
+  - Configure loader settings like "how to filter an image", "adjusting the up axis in 3D scenes", etc
+- **[`Process`] settings** (if using the `Process` action)
+  - You can use meta files to set any [`Process`] implementation you want
+  - Configure processor settings like "what type of compression to use", "whether or not to generate mipmaps", etc
 
 A meta file for an unprocessed image looks like this:
 
@@ -255,6 +299,7 @@ The final processed asset and metadata files can be viewed and interacted with l
 ### `CompressedImageSaver`
 
 ![processed sponza](processed_sponza.png)
+
 <div style="font-size: 1.0rem" class="release-feature-authors">Sponza scene with textures processed into Basis Universal (with mipmaps) using Bevy Asset V2</div>
 
 **Bevy 0.12** ships with a barebones [`CompressedImageSaver`] that writes images to [Basis Universal](https://github.com/BinomialLLC/basis_universal) (a GPU-friendly image interchange format) and generates [mipmaps](https://en.wikipedia.org/wiki/Mipmap). Importantly, mipmaps reduce aliasing artifacts when sampling images from different distances. This fills an important gap, as Bevy previously had no way to generate mipmaps on its own (it relied on external tooling). This can be enabled with the `basis-universal` cargo feature.
@@ -273,8 +318,8 @@ Despite (eventually) recommending that most people enable asset processing, we a
 
 This is why Bevy offers two asset modes:
 
-* [`AssetMode::Unprocessed`]: Assets will be loaded directly from the asset source folder (defaults to `assets`) without any preprocessing. They are assumed to be in their "final format". This is the mode/workflow Bevy users are currently used to.
-* [`AssetMode::Processed`]: Assets will be pre-processed at development time. They will be read from their source folder (defaults to `assets`) and then written to their destination folder (defaults to `imported_assets`).
+- [`AssetMode::Unprocessed`]: Assets will be loaded directly from the asset source folder (defaults to `assets`) without any preprocessing. They are assumed to be in their "final format". This is the mode/workflow Bevy users are currently used to.
+- [`AssetMode::Processed`]: Assets will be pre-processed at development time. They will be read from their source folder (defaults to `assets`) and then written to their destination folder (defaults to `imported_assets`).
 
 To enable this, Bevy uses a novel approach to assets: the difference between a processed and unprocessed asset is perspective. They both use the same `.meta` format and they use the same [`AssetLoader`] interface.
 
@@ -371,13 +416,13 @@ Much better!
 
 Almost everything in **Bevy Asset V2** can be extended with trait impls:
 
-* **[`Asset`]**: Define new asset types
-* **[`AssetReader`]**: Define custom [`AssetSource`] read logic
-* **[`AssetWriter`]**: Define custom [`AssetSource`] write logic
-* **[`AssetWatcher`]**: Define custom [`AssetSource`] watching / hot-reloading logic
-* **[`AssetLoader`]**: Define custom load logic for a given [`Asset`] type
-* **[`AssetSaver`]**: Define custom save logic for a given [`Asset`] type
-* **[`Process`]**: Define fully bespoke processor logic (or use the more opinionated [`LoadAndSave`] [`Process`] impl)
+- **[`Asset`]**: Define new asset types
+- **[`AssetReader`]**: Define custom [`AssetSource`] read logic
+- **[`AssetWriter`]**: Define custom [`AssetSource`] write logic
+- **[`AssetWatcher`]**: Define custom [`AssetSource`] watching / hot-reloading logic
+- **[`AssetLoader`]**: Define custom load logic for a given [`Asset`] type
+- **[`AssetSaver`]**: Define custom save logic for a given [`Asset`] type
+- **[`Process`]**: Define fully bespoke processor logic (or use the more opinionated [`LoadAndSave`] [`Process`] impl)
 
 [`Asset`]: https://dev-docs.bevyengine.org/bevy/asset/trait.Asset.html
 [`AssetWatcher`]: https://dev-docs.bevyengine.org/bevy/asset/io/trait.AssetWatcher.html
@@ -457,13 +502,13 @@ uses an import from `bevy_internal` instead of `bevy`.
 
 Additionally, the daily mobile check job now builds on more iOS and Android devices:
 
-* iPhone 13 on iOS 15
-* iPhone 14 on iOS 16
-* iPhone 15 on iOS 17
-* Xiaomi Redmi Note 11 on Android 11
-* Google Pixel 6 on Android 12
-* Samsung Galaxy S23 on Android 13
-* Google Pixel 8 on Android 14
+- iPhone 13 on iOS 15
+- iPhone 14 on iOS 16
+- iPhone 15 on iOS 17
+- Xiaomi Redmi Note 11 on Android 11
+- Google Pixel 6 on Android 12
+- Samsung Galaxy S23 on Android 13
+- Google Pixel 8 on Android 14
 
 ## Example tooling improvements
 
@@ -556,6 +601,60 @@ The wireframes now use bevy's Material abstraction. This means it will automatic
 
 ![wireframe](wireframe.png)
 
+## `StandardMaterial` Light Transmission
+
+<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
+
+The `StandardMaterial` now supports a number of light transmission-related properties:
+
+- `specular_transmission`
+- `diffuse_transmission`
+- `thickness`
+- `ior`
+- `attenuation_color`
+- `attenuation_distance`
+
+These allow you to more realistically represent a wide variety of physical materials, including **clear and frosted glass, water, plastic, foliage, paper, wax, marble, porcelain and more**.
+
+Diffuse transmission is an inexpensive addition to the PBR lighting model, while specular transmission is a somewhat more resource-intensive screen-space effect, that can accurately model refraction and blur effects.
+
+![transmission](transmission.jpg)
+
+<div style="font-size: 1.0rem" class="release-feature-authors">
+    Different light transmission properties and their interactions with existing PBR properties.
+</div>
+
+To complement the new transmission properties, a new `TransmittedShadowReceiver` component has been introduced, which can be added to entities with diffuse transmissive materials to receive shadows cast from the opposite side of the mesh. This is most useful for rendering thin, two-sided translucent objects like tree leaves or paper.
+
+Additionally, two extra fields have been added to the `Camera3d` component: `screen_space_specular_transmission_quality` and `screen_space_specular_transmission_steps`. These are used to control the quality of the screen-space specular transmission effect (number of taps), and how many “layers of transparency” are supported when multiple transmissive objects are in front of each other.
+
+> **Important:** Each additional “layer of transparency” incurs in a texture copy behind the scenes, adding to the bandwidth cost, so it's recommended to keep this value as low as possible.
+
+Finally, importer support for the following glTF extensions has been added:
+
+- `KHR_materials_transmission`
+- `KHR_materials_ior`
+- `KHR_materials_volume`
+
+### Compatibility
+
+Both specular and diffuse transmission are compatible with all supported platforms, including mobile and Web.
+
+The optional `pbr_transmission_textures` Cargo feature allows using textures to modulate the `specular_transmission`, `diffuse_transmission` and `thickness` properties. It's disabled by default in order to reduce the number of texture bindings used by the standard material. (These are
+severely constrained on lower-end platforms and older GPUs!)
+
+`DepthPrepass` and TAA can greatly improve the quality of the screen-space specular transmission effect, and are recommended to be used with it, on the platforms where they are supported.
+
+### Implementation Details
+
+Specular transmission is implemented via a new `Transmissive3d` screen space refraction phase, which joins the existing `Opaque3d`, `AlphaMask3d` and `Transparent3d` phases. During this phase, one or more snapshots of the main texture are taken, which are used as “backgrounds” for the refraction effects.
+
+Each fragment's surface normal and IOR used along with the view direction to calculate a refracted ray. (Via Snell's law.)
+This ray is then propagated through the mesh's volume (by a distance controlled by the `thickness` property), producing an exit point.
+The “background” texture is then sampled at that point. Perceptual roughness is used along with interleaved gradient noise and multiple spiral taps, to produce a blur effect.
+
+Diffuse transmission is implemented via a second, reversed and displaced fully-diffuse Lambertian lobe, which is added to the existing PBR lighting calculations. This is a simple and relatively cheap approximation, but works reasonably well.
+
 ## Reflect Commands
 
 <div class="release-feature-authors">authors: @NoahShomette</div>
@@ -608,9 +707,7 @@ The above commands use the [`AppTypeRegistry`] by default. If you use a differen
 See [`ReflectCommandExt`] for more examples and documentation
 
 [`Commands`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/struct.Commands.html
-
 [`AppTypeRegistry`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/struct.AppTypeRegistry.html
-
 [`ReflectCommandExt`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/trait.ReflectCommandExt.html
 
 ## Limit Background FPS
