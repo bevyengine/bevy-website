@@ -59,6 +59,53 @@ However, you can set these values to whatever you want!
 [`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
 [`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
 
+## Bind Group Ergonomics
+
+<div class="release-feature-authors">authors: @robtfm, @JMS55</div>
+
+When defining "bind groups" for low-level renderer features, we use the following API api:
+
+```rust
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &[
+        BindGroupEntry {
+            binding: 0,
+            resource: BindingResource::Sampler(&my_sampler),
+        },
+        BindGroupEntry {
+            binding: 1,
+            resource: my_uniform,
+        },
+    ],
+);
+```
+
+This works reasonably well, but for large numbers of bind groups, the `BindGroupEntry` boilerplate makes it harder than necessary to read and write everything (and keep the indices up to date).
+
+**Bevy 0.12** adds additional options:
+
+```rust
+// Sets the indices automatically using the index of the tuple item
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::sequential((&my_sampler, my_uniform)),
+);
+```
+```rust
+// Manually sets the indices, but without the BindGroupEntry boilerplate!
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::with_indexes((
+        (2, &my_sampler),
+        (3, my_uniform),
+    )),
+);
+```
+
 ## Rusty Shader Imports
 
 <div class="release-feature-authors">authors: @robtfm</div>
