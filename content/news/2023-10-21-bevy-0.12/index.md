@@ -66,9 +66,10 @@ for mut entity in world.iter_entities_mut() {
 }
 ```
 
-This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access).
+This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access). Use [`EntityWorldMut`] for an equivalent to the old "global access" approach.
 
 [`EntityMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityMut.html
+[`EntityWorldMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityWorldMut.html
 [`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
 
 ## Unified configure_sets API
