@@ -15,6 +15,81 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## UI Node Outlines
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+Bevy's UI nodes now support outlines "outside the borders" of UI nodes via the new [`Outline`] component. [`Outline`] does not occupy any space in the layout. This is different than [`Style::border`], which exists "as part of" the node in the layout:
+
+![ui outlines](ui_outlines.png)
+
+```rust
+commands.spawn((
+    NodeBundle::default(),
+    Outline {
+        width: Val::Px(6.),
+        offset: Val::Px(6.),
+        color: Color::WHITE,
+    },
+))
+```
+
+[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
+[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
+
+## Disjoint Mutable World Access Via EntityMut
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** supports safely accessing multiple [`EntityMut`] values at once, meaning you can mutate multiple entities (with access to _all of their components_) at the same time.
+
+```rust
+let [entity1, entity2] = world.many_entities_mut([id1, id2]);
+*entity1.get_mut::<Transform>().unwrap() = *entity2.get::<Transform>().unwrap();
+```
+
+This also works in queries:
+
+```rust
+// This would not have been expressible in previous Bevy versions
+// Now it is totally valid!
+fn system(q1: Query<&mut A>, q2: Query<EntityMut, Without<A>>) {
+}
+```
+
+You can now mutably iterate all entities and access arbitrary components within them:
+
+```rust
+for mut entity in world.iter_entities_mut() {
+    let mut transform = entity.get_mut::<Transform>().unwrap();
+    transform.translation.x += 2.0;
+}
+```
+
+This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access). Use [`EntityWorldMut`] for an equivalent to the old "global access" approach.
+
+[`EntityMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityMut.html
+[`EntityWorldMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityWorldMut.html
+[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
+
+## Unified configure_sets API
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+Bevy's [Schedule-First API](/news/bevy-0-11/#schedule-first-ecs-apis) introduced in **Bevy 0.11** unified most of the ECS scheduler API surface under a single `add_systems` API. However, we didn't do a unified API for `configure_sets`, meaning there were two different APIs:
+
+```rust
+app.configure_set(Update, A.after(B));
+app.configure_sets(Update, (A.after(B), B.after(C));
+```
+
+In **Bevy 0.12**, we have unified these under a single API to align with the patterns we've used elsewhere and cut down on unnecessary API surface:
+
+```rust
+app.configure_sets(Update, A.after(B));
+app.configure_sets(Update, (A.after(B), B.after(C));
+```
+
 ## Rusty Shader Imports
 
 <div class="release-feature-authors">authors: @robtfm</div>
