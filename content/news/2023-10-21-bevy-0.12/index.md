@@ -64,7 +64,7 @@ Rusty Imports remove a number of "API weirdness" gotchas from the old system and
 
 <div class="release-feature-authors">authors: @robtfm</div>
 
-Bevy has a powerful shader import system, allowing modular (and granular) shader code reuse. This meant that in theory, you could import Bevy's PBR shader logic and use it in your own shaders. However in practice this was challenging, as you had to re-wire everything up yourself, which required intimate knowledge of the base material. For complicated materials like Bevy's PBR [`StandardMaterial`], this was full of boilerplate, resulted in code duplication, and was prone to errors.
+Bevy has a powerful shader import system, allowing modular (and granular) shader code reuse. In previous versions of Bevy, this meant that in theory, you could import Bevy's PBR shader logic and use it in your own shaders. However in practice this was challenging, as you had to re-wire everything up yourself, which required intimate knowledge of the base material. For complicated materials like Bevy's PBR [`StandardMaterial`], this was full of boilerplate, resulted in code duplication, and was prone to errors.
 
 In **Bevy 0.12**, we've built a **Material Extensions** system, which enables defining new materials that build on existing materials:
 
