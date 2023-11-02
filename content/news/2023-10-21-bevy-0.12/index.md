@@ -94,6 +94,7 @@ render_device.create_bind_group(
     &BindGroupEntries::sequential((&my_sampler, my_uniform)),
 );
 ```
+
 ```rust
 // Manually sets the indices, but without the BindGroupEntry boilerplate!
 render_device.create_bind_group(
