@@ -15,6 +15,106 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## Split Computed Visibility
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+The `ComputedVisibility` component has now been split into [`InheritedVisibility`] (visible in the hierarchy) and [`ViewVisibility`] (visible from a view), making it possible to use Bevy's built-in change detection on both sets of data separately.
+
+[`InheritedVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.InheritedVisibility.html
+[`ViewVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.ViewVisibility.html
+
+## system.map
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** adds a new [`system.map()`] function, which is a cheaper and more ergonomic alternative to [`system.pipe()`].
+
+Unlike [`system.pipe()`], [`system.map()`] just takes a normal closure (instead of another system) that accepts the output of the system as its parameter:
+
+```rust
+app.add_systems(Update, my_system.map(error));
+
+fn my_system(res: Res<T>) -> Result<(), Err> {
+    // do something that might fail here
+}
+
+// An adapter that logs errors 
+pub fn error<E: Debug>(result: Result<(), E>) {
+    if let Err(warn) = result {
+        error!("{:?}", warn);
+    }
+}
+```
+
+Bevy provides built in `error`, `warn`, `debug`, and `info` adapters that can be used with [`system.map()`] to log errors at each of these levels.
+
+[`system.map()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.map
+[`system.pipe()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.pipe
+
+## External Renderer Context
+
+<div class="release-feature-authors">authors: @awtterpip</div>
+
+Historically Bevy's [`RenderPlugin`] has been fully responsible for initializing the [`wgpu`] render context. However some 3rd party Bevy Plugins, such as this work-in-progress [`bevy_openxr`](https://github.com/awtterpip/bevy_openxr) plugin, require more control over renderer initialization.
+
+Therefore in **Bevy 0.12**, we've made it possible to pass in the [`wgpu`] render context at startup. This means the 3rd party [`bevy_openxr`] plugin can be a "normal" Bevy plugin without needing to fork Bevy!
+
+Here is a quick video of Bevy VR, courtesy of [`bevy_openxr`]!
+
+<video controls><source src="bevy_openxr.mp4" type="video/mp4"/></video>
+
+[`bevy_openxr`]: https://github.com/awtterpip/bevy_openxr/
+[`wgpu`]: https://github.com/gfx-rs/wgpu
+[`RenderPlugin`]: https://dev-docs.bevyengine.org/bevy/render/struct.RenderPlugin.html
+
+## SceneInstanceReady Event
+
+<div class="release-feature-authors">authors: @Shatur</div>
+
+**Bevy 0.12** adds a new [`SceneInstanceReady`] event, which makes it easy to listen for a specific scene instance to be ready. "Ready" in this case means "fully spawned as an entity".
+
+```rust
+#[derive(Resource)]
+struct MyScene(Entity);
+
+fn setup(mut commands: Commands, assets: Res<AssetServer>) {
+    let scene = SceneBundle {
+        scene: assets.load("some.gltf#MyScene"),
+        ..default()
+    };
+    let entity = commands.spawn(scene).id();
+    commands.insert_resource(MyScene(entity));
+}
+
+fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
+    for event in events.read() {
+        if event.parent == my_scene.0 {
+            // the scene instance is "ready"
+        }
+    }
+}
+```
+
+## ReflectBundle
+
+<div class="release-feature-authors">authors: @Shatur</div>
+
+Bevy now supports "Bundle reflection" via [`ReflectBundle`]:
+
+```rust
+#[derive(Bundle, Reflect)]
+#[reflect(Bundle)]
+struct SpriteBundle {
+    image: Handle<Image>,
+    // other components here
+}
+```
+
+This makes it possible to create and interact with ECS bundles using Bevy Reflect, meaning you can do these operations dynamically at runtime. This is useful for scripting and asset scenarios.
+
+[`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
+
 ## UI Node Outlines
 
 <div class="release-feature-authors">authors: @ickshonpe</div>
