@@ -96,6 +96,8 @@ fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
 }
 ```
 
+[`SceneInstanceReady`]: https://dev-docs.bevyengine.org/bevy/scene/struct.SceneInstanceReady.html
+
 ## ReflectBundle
 
 <div class="release-feature-authors">authors: @Shatur</div>
