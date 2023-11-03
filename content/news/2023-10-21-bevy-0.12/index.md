@@ -19,7 +19,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @cart, @Kanabenki</div>
 
-To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've given [`ImageLoader`] [`ImageLoaderSettings`].
+To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've added [`ImageLoaderSettings`] to  [`ImageLoader`].
 
 This means that you can now configure the sampler, SRGB-ness, and the format, on a per-image basis. These are the defaults, as they appear in **Bevy Asset V2** meta files:
 
