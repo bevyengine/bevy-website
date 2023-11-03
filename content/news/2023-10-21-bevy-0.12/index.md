@@ -51,23 +51,34 @@ However, as Bevy has grown, it has slowly moved into "hybrid renderer" territory
 
 In **Bevy 0.12** we added optional support for Deferred Rendering (building on the existing prepass work). Each material can choose whether it will go through the forward or deferred path, and this can be configured per-material-instance. Bevy also has a new [`DefaultOpaqueRendererMethod`] resource, which configures the global default. This is set to "forward" by default. The global default can be overridden per-material.
 
-When deferred is enabled for the PBR [`StandardMaterial`], the deferred prepass packs PBR information into the Gbuffer, which looks like this:
+Lets break down the components of this deferred render:
 
-![pbr gbuffer](deferred_pass1.png)
+![deferred](deferred.png)
+
+When deferred is enabled for the PBR [`StandardMaterial`], the deferred prepass packs PBR information into the Gbuffer, which can be broken up into:
+
+**Base Color**
+![base color](base_color.png)
+
+**Depth**
+![depth](depth.png)
+
+**Normals**
+![normals](normals.png)
+
+**Perceptual Roughness**
+![perceptual roughness](perceptual_roughness.png)
+
+**Metallic**
+![metallic](metallic.png)
 
 The deferred prepass also produces a "deferred lighting pass ID" texture, which determines what lighting shader to run for the fragment:
 
 ![lighting pass ID texture](deferred_pass2.png)
 
-A depth texture is also produced:
+These are passed into the final deferred lighting shader.
 
-![deferred depth](deferred_depth.png)
-
-These are passed into the final deferred lighting shader. The final render looks like this:
-
-![deferred](deferred.png)
-
-Note that the cube in front of the flight helmet model is using forward rendering, which is why it is black in both of the deferred lighting textures above. This illustrates that you can use both forward and deferred materials in the same scene!
+Note that the cube in front of the flight helmet model and the ground plane are using forward rendering, which is why they are black in both of the deferred lighting textures above. This illustrates that you can use both forward and deferred materials in the same scene!
 
 Note that for most use cases, we recommend using forward by default, unless a feature explicitly needs deferred or your rendering conditions benefit from deferred style. Forward has the fewest surprises and will work better on more devices.
 
