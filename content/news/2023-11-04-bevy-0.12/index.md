@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.12"
-date = 2023-10-21
+date = 2023-11-04
 [extra]
 author = "Bevy Contributors"
 image = "cover.gif"
