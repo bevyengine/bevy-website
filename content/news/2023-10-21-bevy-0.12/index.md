@@ -15,6 +15,51 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## glTF Emissive Strength
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Bevy now reads and uses the `KHR_materials_emissive_strength` glTF material extension when loading glTF assets. This adds support for emissive materials when importing glTF from programs like Blender. Each of these cubes has increasing emissive strength:
+
+![gltf emissive](gltf_emissive.png)
+
+## Import Second UV Map In glTF Files
+
+<div class="release-feature-authors">authors: @pcwalton</div>
+
+**Bevy 0.12** now imports the second UV map (`TEXCOORD1` or `UV1`) if it is defined in glTF files and exposes it to shaders. Conventionally this is often used for lightmap UVs. This was an often requested feature and it unlocks lightmapping scenarios (both in custom user shaders and in future Bevy releases).
+
+## Simplify Parallel Iteration Method
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** makes the parallel Query iterator [`for_each()`] compatible with both mutable and immutable queries, reducing API surface and removing the need to write `mut` twice:
+
+```rust
+// Before:
+query.par_iter_mut().for_each_mut(|x| ...);
+
+// After:
+query.par_iter_mut().for_each(|x| ...);
+```
+
+[`for_each()`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryParIter.html#method.for_each
+
+## GamepadButtonInput
+
+<div class="release-feature-authors">authors: @bravely-beep</div>
+
+Bevy generally provides two ways to handle input of a given type:
+
+* Events: receive a stream of input events in the order they occur
+* The [`Input`] Resource: read the _current_ state of the input
+
+One notable exception was [`GamepadButton`], which was only available via the [`Input`] resource. **Bevy 0.12** adds a new [`GamepadButtonInput`] event, filling this gap.
+
+[`Input`]: https://dev-docs.bevyengine.org/bevy/input/struct.Input.html
+[`GamepadButton`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButton.html
+[`GamepadButtonInput`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButtonInput.html
+
 ## Split Computed Visibility
 
 <div class="release-feature-authors">authors: @JoJoJet</div>
