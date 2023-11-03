@@ -716,6 +716,16 @@ Replace `Rect::as_urect` with `Rect::as_irect`, `Rect::as_rect` with `Rect::as_u
 
 Change all `Bezier` references to `CubicBezier`
 
+### [Add `Cubic` prefix to all cubic curve generators](https://github.com/bevyengine/bevy/pull/10299)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Math</div>
+</div>
+
+- Rename: `BSpline` -> `CubicBSpline`
+- Rename: `CardinalSpline` -> `CubicCardinalSpline`
+- Rename: `Hermite` -> `CubicHermite`
+
 ### [Remove the bevy_dylib feature](https://github.com/bevyengine/bevy/pull/9516)
 
 <div class="migration-guide-area-tags">
@@ -1242,6 +1252,36 @@ Colors in `FogSettings` struct (`color` and `directional_light_color`) are now s
 - When using the `Image` API, use `ImageSamplerDescriptor` instead of `wgpu::SamplerDescriptor`
 - If writing custom wgpu renderer features that work with `Image`, call `&image_sampler.as_wgpu()` to convert to a wgpu descriptor.
 
+### [`StandardMaterial` Light Transmission](https://github.com/bevyengine/bevy/pull/8015)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+- `SsaoPipelineKey::temporal_noise` has been renamed to `SsaoPipelineKey::temporal_jitter`
+- The `TAA` shader def (controlled by the presence of the `TemporalAntiAliasSettings` component in the camera) has been replaced with the `TEMPORAL_JITTER` shader def (controlled by the presence of the `TemporalJitter` component in the camera)
+- `MeshPipelineKey::TAA` has been replaced by `MeshPipelineKey::TEMPORAL_JITTER`
+- The `TEMPORAL_NOISE` shader def has been consolidated with `TEMPORAL_JITTER`
+
+### [Increase default normal bias to avoid common artifacts](https://github.com/bevyengine/bevy/pull/10346)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+The default `shadow_normal_bias` value for `DirectionalLight` and `SpotLight` has changed to accommodate artifacts introduced with the new shadow PCF changes. It is unlikely (especially given the new PCF shadow behaviors with these values), but you might need to manually tweak this value if your scene requires a lower bias and it relied on the previous default value.
+
+### [Make `DirectionalLight` `Cascades` computation generic over `CameraProjection`](https://github.com/bevyengine/bevy/pull/9226)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+If you have a component `MyCustomProjection` that implements `CameraProjection`:
+
+- You need to implement a new required associated method, `get_frustum_corners`, returning an array of the corners of a subset of the frustum with given `z_near` and `z_far`, in local camera space.
+- You can now add the `build_directional_light_cascades::<MyCustomProjection>` system in `SimulationLightSystems::UpdateDirectionalLightCascades` after `clear_directional_light_cascades` for your projection to work with directional lights.
+
 ### [Move skin code to a separate module](https://github.com/bevyengine/bevy/pull/9899)
 
 <div class="migration-guide-area-tags">
@@ -1406,6 +1446,22 @@ accessibility_requested.get()
 // To update
 accessibility_requested.set(true);
 ```
+
+### [Add some more docs for bevy_text.](https://github.com/bevyengine/bevy/pull/9873)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+Usages of `TextSettings.max_font_atlases` from `bevy_text` must be changed to `TextSettings.soft_max_font_atlases`.
+
+### [Update UI alignment docs](https://github.com/bevyengine/bevy/pull/10303)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">UI</div>
+</div>
+
+The `JustifyContents` enum has been expanded to include `JustifyContents::Stretch`.
 
 ### [Add option to toggle window control buttons](https://github.com/bevyengine/bevy/pull/9083)
 
