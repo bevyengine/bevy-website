@@ -52,7 +52,7 @@ fn hello_world() {
 }
 ```
 
-This will be our first system. The only remaining step is to add it to our App!
+This will be our first system. The only remaining step is to add it to our `App`!
 
 ```rs
 use bevy::prelude::*;
@@ -66,7 +66,7 @@ fn main() {
 
 The {{rust_type(type="struct" crate="bevy_app", name="App" method="add_systems" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_app", name="Update")}} {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
 
-Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
+Now run your app again using `cargo run`. You should see `hello world!` printed once in your terminal.
 
 ## Your First Components
 
@@ -86,7 +86,7 @@ But what if we want our people to have a name? In a more traditional design, we 
 struct Name(String);
 ```
 
-We can then add `People` to our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" mod="system" no_mod=true name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
+We can then add people to our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}} using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use {{rust_type(type="struct" crate="bevy_ecs" mod="system" no_mod=true name="Commands")}} to spawn some entities into our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
 ```rs
 fn add_people(mut commands: Commands) {
@@ -107,7 +107,7 @@ fn main() {
 }
 ```
 
-We could run this App now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
+We could run this now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
 ```rs
 fn greet_people(query: Query<&Name, With<Person>>) {
@@ -117,11 +117,11 @@ fn greet_people(query: Query<&Name, With<Person>>) {
 }
 ```
 
-The parameters we pass in to a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
+The parameters we pass into a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
 
-You can interpret the Query above as: "iterate over every Name component for entities that also have a Person component"
+You can interpret the `Query` above as: "iterate over every `Name` component for entities that also have a `Person` component".
 
-Now we just register the system in our App. Note that you can pass more than one system into an `add_systems` call by using a tuple!
+Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
 
 ```rs
 fn main() {
