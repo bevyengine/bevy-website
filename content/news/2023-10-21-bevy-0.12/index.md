@@ -27,7 +27,7 @@ Bevy now reads and uses the `KHR_materials_emissive_strength` glTF material exte
 
 <div class="release-feature-authors">authors: @pcwalton</div>
 
-**Bevy 0.12** now imports the second UV map (`TEXCOORD1` or `UV1`) if it is defined in glTF files and exposes it to shaders. Conventionally this is often used for lightmap UVs. This was an often requested feature and it unlocks lightmapping scenarios (both in custom user shaders and in upstream Bevy).
+**Bevy 0.12** now imports the second UV map (`TEXCOORD1` or `UV1`) if it is defined in glTF files and exposes it to shaders. Conventionally this is often used for lightmap UVs. This was an often requested feature and it unlocks lightmapping scenarios (both in custom user shaders and in future Bevy releases).
 
 ## Simplify Parallel Iteration Method
 
