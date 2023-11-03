@@ -331,7 +331,7 @@ my_query.par_iter().batching_strategy(my_batching_strategy).for_each(|x| {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-__`fetch` invariants__
+**`fetch` invariants**
 
 The function `WorldQuery::fetch` has had the following safety invariant added:
 
@@ -341,7 +341,7 @@ The function `WorldQuery::fetch` has had the following safety invariant added:
 
 This invariant was always required for soundness, but was previously undocumented. If you called this function manually anywhere, you should check to make sure that this invariant is not violated.
 
-__Removed `clone_fetch`__
+**Removed `clone_fetch`**
 
 The function `WorldQuery::clone_fetch` has been removed. The associated type `WorldQuery::Fetch` now has the bound `Clone`.
 
@@ -444,7 +444,7 @@ The type `ManualEventIterator` has been renamed to `EventIterator`. Additonally,
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-__1. New-Type `FnOnce`__
+**1. New-Type `FnOnce`**
 
 Create an `EntityCommand` type which implements the method you previously wrote:
 
@@ -465,7 +465,7 @@ commands.add(ClassicEntityCommand(|id: Entity, world: &mut World| {
 }));
 ```
 
-__2. Extract `(Entity, &mut World)` from `EntityMut`__
+**2. Extract `(Entity, &mut World)` from `EntityMut`**
 
 The method `into_world_mut` can be used to gain access to the `World` from an `EntityMut`.
 
