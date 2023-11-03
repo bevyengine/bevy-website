@@ -107,6 +107,81 @@ render_device.create_bind_group(
 );
 ```
 
+## UI Node Outlines
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+Bevy's UI nodes now support outlines "outside the borders" of UI nodes via the new [`Outline`] component. [`Outline`] does not occupy any space in the layout. This is different than [`Style::border`], which exists "as part of" the node in the layout:
+
+![ui outlines](ui_outlines.png)
+
+```rust
+commands.spawn((
+    NodeBundle::default(),
+    Outline {
+        width: Val::Px(6.),
+        offset: Val::Px(6.),
+        color: Color::WHITE,
+    },
+))
+```
+
+[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
+[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
+
+## Disjoint Mutable World Access Via EntityMut
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** supports safely accessing multiple [`EntityMut`] values at once, meaning you can mutate multiple entities (with access to _all of their components_) at the same time.
+
+```rust
+let [entity1, entity2] = world.many_entities_mut([id1, id2]);
+*entity1.get_mut::<Transform>().unwrap() = *entity2.get::<Transform>().unwrap();
+```
+
+This also works in queries:
+
+```rust
+// This would not have been expressible in previous Bevy versions
+// Now it is totally valid!
+fn system(q1: Query<&mut A>, q2: Query<EntityMut, Without<A>>) {
+}
+```
+
+You can now mutably iterate all entities and access arbitrary components within them:
+
+```rust
+for mut entity in world.iter_entities_mut() {
+    let mut transform = entity.get_mut::<Transform>().unwrap();
+    transform.translation.x += 2.0;
+}
+```
+
+This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access). Use [`EntityWorldMut`] for an equivalent to the old "global access" approach.
+
+[`EntityMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityMut.html
+[`EntityWorldMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityWorldMut.html
+[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
+
+## Unified configure_sets API
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+Bevy's [Schedule-First API](/news/bevy-0-11/#schedule-first-ecs-apis) introduced in **Bevy 0.11** unified most of the ECS scheduler API surface under a single `add_systems` API. However, we didn't do a unified API for `configure_sets`, meaning there were two different APIs:
+
+```rust
+app.configure_set(Update, A.after(B));
+app.configure_sets(Update, (A.after(B), B.after(C));
+```
+
+In **Bevy 0.12**, we have unified these under a single API to align with the patterns we've used elsewhere and cut down on unnecessary API surface:
+
+```rust
+app.configure_sets(Update, A.after(B));
+app.configure_sets(Update, (A.after(B), B.after(C));
+```
+
 ## Rusty Shader Imports
 
 <div class="release-feature-authors">authors: @robtfm</div>
@@ -151,6 +226,89 @@ bevy_pbr::pbr_functions::pbr()
 ```
 
 Rusty Imports remove a number of "API weirdness" gotchas from the old system and expand the capabilities of the import system. And by reusing Rust syntax and semantics, we remove the need for Bevy users to learn a new system.
+
+## Material Extensions
+
+<div class="release-feature-authors">authors: @robtfm</div>
+
+Bevy has a powerful shader import system, allowing modular (and granular) shader code reuse. In previous versions of Bevy, this meant that in theory, you could import Bevy's PBR shader logic and use it in your own shaders. However in practice this was challenging, as you had to re-wire everything up yourself, which required intimate knowledge of the base material. For complicated materials like Bevy's PBR [`StandardMaterial`], this was full of boilerplate, resulted in code duplication, and was prone to errors.
+
+In **Bevy 0.12**, we've built a **Material Extensions** system, which enables defining new materials that build on existing materials:
+
+![material extension](material_extension.png)
+
+This is accomplished via a new [`ExtendedMaterial`] type:
+
+```rust
+app.add_plugin(
+    MaterialPlugin::<ExtendedMaterial<StandardMaterial, QuantizedMaterial>>::default()
+);
+
+#[derive(Asset, AsBindGroup, TypePath, Debug, Clone)]
+struct QuantizedMaterial {
+    // Start at a high binding number to ensure bindings don't conflict
+    // with the base material
+    #[uniform(100)]
+    quantize_steps: u32,
+}
+
+impl MaterialExtension for QuantizedMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "quantized_material.wgsl".into()
+    }
+}
+
+let material = ExtendedMaterial<StandardMaterial, QuantizedMaterial> {
+    base: StandardMaterial::from(Color::rgb(0.1, 0.1, 0.8)),
+    extension: QuantizedMaterial { quantize_steps: 2 },
+};
+```
+
+We also paired this with some [`StandardMaterial`] shader refactors to make it much easier to pick and choose which parts you want:
+
+```rust
+// quantized_material.wgsl
+
+struct QuantizedMaterial {
+    quantize_steps: u32,
+}
+
+@group(1) @binding(100)
+var<uniform> my_extended_material: QuantizedMaterial;
+
+@fragment
+fn fragment(
+    input: VertexOutput,
+    @builtin(front_facing) is_front: bool,
+) -> FragmentOutput {
+    // Generate a PbrInput struct from the StandardMaterial bindings
+    var pbr_input = pbr_input_from_standard_material(input, is_front);
+
+    // Alpha discard
+    pbr_input.material.base_color = alpha_discard(
+        pbr_input.material,
+        pbr_input.material.base_color
+    );
+
+    var out: FragmentOutput;
+
+    // Apply lighting
+    out.color = apply_pbr_lighting(pbr_input);
+
+    // Our "quantize" effect
+    out.color = vec4<f32>(vec4<u32>(out.color * f32(my_extended_material.quantize_steps))) / f32(my_extended_material.quantize_steps);
+
+    // Apply in-shader post processing.
+    // Ex: fog, alpha-premultiply, etc. For non-hdr cameras: tonemapping and debanding
+    out.color = main_pass_post_lighting_processing(pbr_input, out.color);
+
+    return out;
+}
+```
+
+This _vastly_ simplifies writing custom PBR materials, making it accessible to pretty much everyone!
+
+[`ExtendedMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ExtendedMaterial.html
 
 ## Deferred Rendering
 
