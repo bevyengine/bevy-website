@@ -10,7 +10,7 @@ image_subtitle_link = "https://twitter.com/i_am_feenster"
 
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.12** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **185** contributors, **567** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.12** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -29,7 +29,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Renderer Optimizations**: Bevy's renderer dataflow has been reworked to squeeze out more performance and prepare the way for future GPU-driven rendering.
 * **One Shot Systems**: ECS Systems can now be run on-demand from other systems!
 
-<!-- more -->
+<!-* more -->
 
 ## Deferred Rendering
 
@@ -711,7 +711,7 @@ Bevy's renderer performance for 2D and 3D meshes can improve a lot. There are bo
 
 In **Bevy 0.12** we have started reworking rendering data structures, data flow, and draw patterns to unlock new optimizations. This enabled the **Automatic Batching/Instancing** we landed in **Bevy 0.12** and also helps pave the way for other significant wins in the future, such as GPU-driven rendering. We aren't quite ready for GPU-driven rendering, but we've started down that path in **Bevy 0.12**!
 
-### What are CPU- and GPU-driven rendering?
+### What are CPU* and GPU-driven rendering?
 
 CPU-driven rendering is where draw commands are created on the CPU. In Bevy this means "in Rust code", more specifically in render graph nodes. This is how Bevy currently kicks off draws.
 
@@ -1632,7 +1632,7 @@ the website with all Wasm-compatible examples, which you can find
 It is now also capable of capturing a screenshot while running all examples:
 
 ```sh
-cargo run -p example-showcase -- run --screenshot
+cargo run -p example-showcase -* run --screenshot
 ```
 
 Some options are available to help with the execution, you can check them with `--help`.
@@ -1680,4 +1680,190 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 
 ## Contributors
 
-Bevy is made by a [large group of people](/community/people/). A huge thanks to the X contributors that made this release (and associated docs) possible! In random order:
+Bevy is made by a [large group of people](/community/people/). A huge thanks to the 185 contributors that made this release (and associated docs) possible! In random order:
+
+* @100-TomatoJuice
+* @525c1e21-bd67-4735-ac99-b4b0e5262290
+* @66OJ66
+* @A-Walrus
+* @Aceeri
+* @aevyrie
+* @aleksa2808
+* @alexmadeathing
+* @alice-i-cecile
+* @ameknite
+* @anarelion
+* @arendjr
+* @arsmilitaris
+* @awtterpip
+* @basilefff
+* @BeastLe9enD
+* @BrandonDyer64
+* @bravely-beep
+* @Braymatter
+* @bushrat011899
+* @Cactus-man
+* @cart
+* @cBournhonesque
+* @cbournhonesque-sc
+* @cevans-uk
+* @CGMossa
+* @ChristopherBiscardi
+* @ClayenKitten
+* @CleanCut
+* @coreh
+* @Cptn-Sherman
+* @CrumbsTrace
+* @cyqsimon
+* @d-bucur
+* @danchia
+* @denshika
+* @devil-ira
+* @DevinLeamy
+* @DGriffin91
+* @djeedai
+* @dmyyy
+* @doonv
+* @Dot32IsCool
+* @Dworv
+* @Elabajaba
+* @EmiOnGit
+* @ethereumdegen
+* @Feilkin
+* @fgrust
+* @FlippinBerger
+* @flisky
+* @floppyhammer
+* @floreal
+* @fornwall
+* @gardengim
+* @geieredgar
+* @GitGhillie
+* @HaNaK0
+* @hate
+* @hesiod
+* @hmeine
+* @horazont
+* @hymm
+* @IceSentry
+* @ickk
+* @ickshonpe
+* @IDEDARY
+* @iiYese
+* @ItsDoot
+* @jakobhellermann
+* @james-j-obrien
+* @james7132
+* @jancespivo
+* @jfaz1
+* @jimmcnulty41
+* @JMS55
+* @jnhyatt
+* @johanhelsing
+* @JoJoJet
+* @jpsikstus
+* @kamirr
+* @Kanabenki
+* @killercup
+* @konsolas
+* @kshitijaucharmal
+* @lewiszlw
+* @louis-le-cam
+* @Malax
+* @MalekiRe
+* @mamekoro
+* @ManevilleF
+* @maniwani
+* @MarkusTheOrt
+* @mattdm
+* @maxheyer
+* @mdickopp
+* @miketwenty1
+* @MinerSebas
+* @MJohnson459
+* @mnmaita
+* @mockersf
+* @MrGunflame
+* @MrGVSV
+* @nakedible
+* @ndarilek
+* @Neo-Zhixing
+* @nickrart
+* @nicoburns
+* @nicopap
+* @NiklasEi
+* @Nilirad
+* @NiseVoid
+* @NoahShomette
+* @nxsaken
+* @okwilkins
+* @OneFourth
+* @opstic
+* @ottah
+* @pablo-lua
+* @papow65
+* @pascualex
+* @paul-hansen
+* @pcwalton
+* @photex
+* @Pixelstormer
+* @PortalRising
+* @ptxmac
+* @Quicksticks-oss
+* @rafalh
+* @raffaeleragni
+* @RCoder01
+* @rdrpenguin04
+* @regnarock
+* @ricky26
+* @rj00a
+* @rlidwka
+* @robojeb
+* @robtfm
+* @rodolphito
+* @rparrett
+* @ryand67
+* @s-puig
+* @sadikkuzu
+* @sebosp
+* @SecretPocketCat
+* @Selene-Amanita
+* @Serverator
+* @ShadowMitia
+* @Shatur
+* @SIGSTACKFAULT
+* @SkiFire13
+* @skindstrom
+* @SludgePhD
+* @softmoth
+* @soqb
+* @SpecificProtagonist
+* @st0rmbtw
+* @StaffEngineer
+* @stepancheg
+* @superdump
+* @suravshresth
+* @SykikXO
+* @tadeohepperle
+* @tbillington
+* @teoxoy
+* @Testare
+* @tguichaoua
+* @TimJentzsch
+* @tormeh
+* @torsteingrindvik
+* @Trashtalk217
+* @tsujp
+* @Unarmed
+* @urben1680
+* @viridia
+* @VitalyAnkh
+* @Vrixyz
+* @wackbyte
+* @waywardmonkeys
+* @Wcubed
+* @wpederzoli
+* @ycysdf
+* @yrns
+* @ZacHarroldC5
+* @Zeenobit
