@@ -15,6 +15,98 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+## ImageLoader Settings
+
+<div class="release-feature-authors">authors: @cart, @Kanabenki</div>
+
+To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've added [`ImageLoaderSettings`] to  [`ImageLoader`].
+
+This means that you can now configure the sampler, SRGB-ness, and the format, on a per-image basis. These are the defaults, as they appear in **Bevy Asset V2** meta files:
+
+```rust
+(
+    format: FromExtension,
+    is_srgb: true,
+    sampler: Default,
+)
+```
+
+When set to `Default`, the image will use whatever is configured in [`ImagePlugin::default_sampler`].
+
+However, you can set these values to whatever you want!
+
+```rust
+(
+    format: Format(Basis),
+    is_srgb: true,
+    sampler: Descriptor((
+        label: None,
+        address_mode_u: ClampToEdge,
+        address_mode_v: ClampToEdge,
+        address_mode_w: ClampToEdge,
+        mag_filter: Nearest,
+        min_filter: Nearest,
+        mipmap_filter: Nearest,
+        lod_min_clamp: 0.0,
+        lod_max_clamp: 32.0,
+        compare: None,
+        anisotropy_clamp: 1,
+        border_color: None,
+    )),
+)
+```
+
+[`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
+[`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
+
+## Bind Group Ergonomics
+
+<div class="release-feature-authors">authors: @robtfm, @JMS55</div>
+
+When defining "bind groups" for low-level renderer features, we use the following API api:
+
+```rust
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &[
+        BindGroupEntry {
+            binding: 0,
+            resource: BindingResource::Sampler(&my_sampler),
+        },
+        BindGroupEntry {
+            binding: 1,
+            resource: my_uniform,
+        },
+    ],
+);
+```
+
+This works reasonably well, but for large numbers of bind groups, the `BindGroupEntry` boilerplate makes it harder than necessary to read and write everything (and keep the indices up to date).
+
+**Bevy 0.12** adds additional options:
+
+```rust
+// Sets the indices automatically using the index of the tuple item
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::sequential((&my_sampler, my_uniform)),
+);
+```
+
+```rust
+// Manually sets the indices, but without the BindGroupEntry boilerplate!
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::with_indexes((
+        (2, &my_sampler),
+        (3, my_uniform),
+    )),
+);
+```
+
 ## UI Node Outlines
 
 <div class="release-feature-authors">authors: @ickshonpe</div>
@@ -398,6 +490,7 @@ A meta file for an unprocessed image looks like this:
         settings: (
             format: FromExtension,
             is_srgb: true,
+            sampler: Default,
         ),
     ),
 )
@@ -414,6 +507,7 @@ A meta file for an image configured to be processed looks like this:
             loader_settings: (
                 format: FromExtension,
                 is_srgb: true,
+                sampler: Default,
             ),
             saver_settings: (),
         ),
@@ -438,6 +532,7 @@ The final "output" metadata for the processed image looks like this:
         settings: (
             format: Format(Basis),
             is_srgb: true,
+            sampler: Default,
         ),
     ),
 )
