@@ -18,449 +18,19 @@ To update an existing Bevy App or Plugin to **Bevy 0.12**, check out our [0.11 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
+* **Deferred Rendering**
+* **Bevy Asset V2**
+* **PCF Shadow Filtering**
+* **StandardMaterial Light Transmission**
+* **Material Extensions**
+* **Rusty Shader Imports**
+* **Suspend and Resume on Android**
+* **Automatic Batching and Instancing of Draw Commands**
+* **Renderer Optimizations**
+* **Sprite Instancing**
+* **One Shot Systems**
+
 <!-- more -->
-
-## glTF Emissive Strength
-
-<div class="release-feature-authors">authors: @JMS55</div>
-
-Bevy now reads and uses the `KHR_materials_emissive_strength` glTF material extension when loading glTF assets. This adds support for emissive materials when importing glTF from programs like Blender. Each of these cubes has increasing emissive strength:
-
-![gltf emissive](gltf_emissive.png)
-
-## Import Second UV Map In glTF Files
-
-<div class="release-feature-authors">authors: @pcwalton</div>
-
-**Bevy 0.12** now imports the second UV map (`TEXCOORD1` or `UV1`) if it is defined in glTF files and exposes it to shaders. Conventionally this is often used for lightmap UVs. This was an often requested feature and it unlocks lightmapping scenarios (both in custom user shaders and in future Bevy releases).
-
-## Simplify Parallel Iteration Method
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-**Bevy 0.12** makes the parallel Query iterator [`for_each()`] compatible with both mutable and immutable queries, reducing API surface and removing the need to write `mut` twice:
-
-```rust
-// Before:
-query.par_iter_mut().for_each_mut(|x| ...);
-
-// After:
-query.par_iter_mut().for_each(|x| ...);
-```
-
-[`for_each()`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryParIter.html#method.for_each
-
-## GamepadButtonInput
-
-<div class="release-feature-authors">authors: @bravely-beep</div>
-
-Bevy generally provides two ways to handle input of a given type:
-
-* Events: receive a stream of input events in the order they occur
-* The [`Input`] Resource: read the _current_ state of the input
-
-One notable exception was [`GamepadButton`], which was only available via the [`Input`] resource. **Bevy 0.12** adds a new [`GamepadButtonInput`] event, filling this gap.
-
-[`Input`]: https://dev-docs.bevyengine.org/bevy/input/struct.Input.html
-[`GamepadButton`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButton.html
-[`GamepadButtonInput`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButtonInput.html
-
-## Split Computed Visibility
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-The `ComputedVisibility` component has now been split into [`InheritedVisibility`] (visible in the hierarchy) and [`ViewVisibility`] (visible from a view), making it possible to use Bevy's built-in change detection on both sets of data separately.
-
-[`InheritedVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.InheritedVisibility.html
-[`ViewVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.ViewVisibility.html
-
-## system.map
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-**Bevy 0.12** adds a new [`system.map()`] function, which is a cheaper and more ergonomic alternative to [`system.pipe()`].
-
-Unlike [`system.pipe()`], [`system.map()`] just takes a normal closure (instead of another system) that accepts the output of the system as its parameter:
-
-```rust
-app.add_systems(Update, my_system.map(error));
-
-fn my_system(res: Res<T>) -> Result<(), Err> {
-    // do something that might fail here
-}
-
-// An adapter that logs errors 
-pub fn error<E: Debug>(result: Result<(), E>) {
-    if let Err(warn) = result {
-        error!("{:?}", warn);
-    }
-}
-```
-
-Bevy provides built in `error`, `warn`, `debug`, and `info` adapters that can be used with [`system.map()`] to log errors at each of these levels.
-
-[`system.map()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.map
-[`system.pipe()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.pipe
-
-## External Renderer Context
-
-<div class="release-feature-authors">authors: @awtterpip</div>
-
-Historically Bevy's [`RenderPlugin`] has been fully responsible for initializing the [`wgpu`] render context. However some 3rd party Bevy Plugins, such as this work-in-progress [`bevy_openxr`](https://github.com/awtterpip/bevy_openxr) plugin, require more control over renderer initialization.
-
-Therefore in **Bevy 0.12**, we've made it possible to pass in the [`wgpu`] render context at startup. This means the 3rd party [`bevy_openxr`] plugin can be a "normal" Bevy plugin without needing to fork Bevy!
-
-Here is a quick video of Bevy VR, courtesy of [`bevy_openxr`]!
-
-<video controls><source src="bevy_openxr.mp4" type="video/mp4"/></video>
-
-[`bevy_openxr`]: https://github.com/awtterpip/bevy_openxr/
-[`wgpu`]: https://github.com/gfx-rs/wgpu
-[`RenderPlugin`]: https://dev-docs.bevyengine.org/bevy/render/struct.RenderPlugin.html
-
-## SceneInstanceReady Event
-
-<div class="release-feature-authors">authors: @Shatur</div>
-
-**Bevy 0.12** adds a new [`SceneInstanceReady`] event, which makes it easy to listen for a specific scene instance to be ready. "Ready" in this case means "fully spawned as an entity".
-
-```rust
-#[derive(Resource)]
-struct MyScene(Entity);
-
-fn setup(mut commands: Commands, assets: Res<AssetServer>) {
-    let scene = SceneBundle {
-        scene: assets.load("some.gltf#MyScene"),
-        ..default()
-    };
-    let entity = commands.spawn(scene).id();
-    commands.insert_resource(MyScene(entity));
-}
-
-fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
-    for event in events.read() {
-        if event.parent == my_scene.0 {
-            // the scene instance is "ready"
-        }
-    }
-}
-```
-
-[`SceneInstanceReady`]: https://dev-docs.bevyengine.org/bevy/scene/struct.SceneInstanceReady.html
-
-## ReflectBundle
-
-<div class="release-feature-authors">authors: @Shatur</div>
-
-Bevy now supports "Bundle reflection" via [`ReflectBundle`]:
-
-```rust
-#[derive(Bundle, Reflect)]
-#[reflect(Bundle)]
-struct SpriteBundle {
-    image: Handle<Image>,
-    // other components here
-}
-```
-
-This makes it possible to create and interact with ECS bundles using Bevy Reflect, meaning you can do these operations dynamically at runtime. This is useful for scripting and asset scenarios.
-
-[`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
-
-## ImageLoader Settings
-
-<div class="release-feature-authors">authors: @cart, @Kanabenki</div>
-
-To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've added [`ImageLoaderSettings`] to  [`ImageLoader`].
-
-This means that you can now configure the sampler, SRGB-ness, and the format, on a per-image basis. These are the defaults, as they appear in **Bevy Asset V2** meta files:
-
-```rust
-(
-    format: FromExtension,
-    is_srgb: true,
-    sampler: Default,
-)
-```
-
-When set to `Default`, the image will use whatever is configured in [`ImagePlugin::default_sampler`].
-
-However, you can set these values to whatever you want!
-
-```rust
-(
-    format: Format(Basis),
-    is_srgb: true,
-    sampler: Descriptor((
-        label: None,
-        address_mode_u: ClampToEdge,
-        address_mode_v: ClampToEdge,
-        address_mode_w: ClampToEdge,
-        mag_filter: Nearest,
-        min_filter: Nearest,
-        mipmap_filter: Nearest,
-        lod_min_clamp: 0.0,
-        lod_max_clamp: 32.0,
-        compare: None,
-        anisotropy_clamp: 1,
-        border_color: None,
-    )),
-)
-```
-
-[`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
-[`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
-
-## Bind Group Ergonomics
-
-<div class="release-feature-authors">authors: @robtfm, @JMS55</div>
-
-When defining "bind groups" for low-level renderer features, we use the following API api:
-
-```rust
-render_device.create_bind_group(
-    "my_bind_group",
-    &my_layout,
-    &[
-        BindGroupEntry {
-            binding: 0,
-            resource: BindingResource::Sampler(&my_sampler),
-        },
-        BindGroupEntry {
-            binding: 1,
-            resource: my_uniform,
-        },
-    ],
-);
-```
-
-This works reasonably well, but for large numbers of bind groups, the `BindGroupEntry` boilerplate makes it harder than necessary to read and write everything (and keep the indices up to date).
-
-**Bevy 0.12** adds additional options:
-
-```rust
-// Sets the indices automatically using the index of the tuple item
-render_device.create_bind_group(
-    "my_bind_group",
-    &my_layout,
-    &BindGroupEntries::sequential((&my_sampler, my_uniform)),
-);
-```
-
-```rust
-// Manually sets the indices, but without the BindGroupEntry boilerplate!
-render_device.create_bind_group(
-    "my_bind_group",
-    &my_layout,
-    &BindGroupEntries::with_indexes((
-        (2, &my_sampler),
-        (3, my_uniform),
-    )),
-);
-```
-
-## UI Node Outlines
-
-<div class="release-feature-authors">authors: @ickshonpe</div>
-
-Bevy's UI nodes now support outlines "outside the borders" of UI nodes via the new [`Outline`] component. [`Outline`] does not occupy any space in the layout. This is different than [`Style::border`], which exists "as part of" the node in the layout:
-
-![ui outlines](ui_outlines.png)
-
-```rust
-commands.spawn((
-    NodeBundle::default(),
-    Outline {
-        width: Val::Px(6.),
-        offset: Val::Px(6.),
-        color: Color::WHITE,
-    },
-))
-```
-
-[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
-[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
-
-## Disjoint Mutable World Access Via EntityMut
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-**Bevy 0.12** supports safely accessing multiple [`EntityMut`] values at once, meaning you can mutate multiple entities (with access to _all of their components_) at the same time.
-
-```rust
-let [entity1, entity2] = world.many_entities_mut([id1, id2]);
-*entity1.get_mut::<Transform>().unwrap() = *entity2.get::<Transform>().unwrap();
-```
-
-This also works in queries:
-
-```rust
-// This would not have been expressible in previous Bevy versions
-// Now it is totally valid!
-fn system(q1: Query<&mut A>, q2: Query<EntityMut, Without<A>>) {
-}
-```
-
-You can now mutably iterate all entities and access arbitrary components within them:
-
-```rust
-for mut entity in world.iter_entities_mut() {
-    let mut transform = entity.get_mut::<Transform>().unwrap();
-    transform.translation.x += 2.0;
-}
-```
-
-This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access). Use [`EntityWorldMut`] for an equivalent to the old "global access" approach.
-
-[`EntityMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityMut.html
-[`EntityWorldMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityWorldMut.html
-[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
-
-## Unified configure_sets API
-
-<div class="release-feature-authors">authors: @geieredgar</div>
-
-Bevy's [Schedule-First API](/news/bevy-0-11/#schedule-first-ecs-apis) introduced in **Bevy 0.11** unified most of the ECS scheduler API surface under a single `add_systems` API. However, we didn't do a unified API for `configure_sets`, meaning there were two different APIs:
-
-```rust
-app.configure_set(Update, A.after(B));
-app.configure_sets(Update, (A.after(B), B.after(C));
-```
-
-In **Bevy 0.12**, we have unified these under a single API to align with the patterns we've used elsewhere and cut down on unnecessary API surface:
-
-```rust
-app.configure_sets(Update, A.after(B));
-app.configure_sets(Update, (A.after(B), B.after(C));
-```
-
-## Rusty Shader Imports
-
-<div class="release-feature-authors">authors: @robtfm</div>
-
-Bevy shaders now use Rust-like shader imports:
-
-```rust
-// old
-#import bevy_pbr::forward_io VertexOutput
-
-// new
-#import bevy_pbr::forward_io::VertexOutput
-```
-
-Like Rust imports, you can use curly braces to import multiple items. Multi-level nesting is also now supported!
-
-```rust
-// old
-#import bevy_pbr::pbr_functions alpha_discard, apply_pbr_lighting 
-#import bevy_pbr                mesh_bindings
-
-// new
-#import bevy_pbr::{
-    pbr_functions::{alpha_discard, apply_pbr_lighting}, 
-    mesh_bindings,
-}
-```
-
-Like Rust modules, you can now import partial paths:
-
-```rust
-#import part::of::path
-
-// later in the shader
-path::remainder::function();
-```
-
-You can also now use fully qualified paths without importing:
-
-```rust
-bevy_pbr::pbr_functions::pbr()
-```
-
-Rusty Imports remove a number of "API weirdness" gotchas from the old system and expand the capabilities of the import system. And by reusing Rust syntax and semantics, we remove the need for Bevy users to learn a new system.
-
-## Material Extensions
-
-<div class="release-feature-authors">authors: @robtfm</div>
-
-Bevy has a powerful shader import system, allowing modular (and granular) shader code reuse. In previous versions of Bevy, this meant that in theory, you could import Bevy's PBR shader logic and use it in your own shaders. However in practice this was challenging, as you had to re-wire everything up yourself, which required intimate knowledge of the base material. For complicated materials like Bevy's PBR [`StandardMaterial`], this was full of boilerplate, resulted in code duplication, and was prone to errors.
-
-In **Bevy 0.12**, we've built a **Material Extensions** system, which enables defining new materials that build on existing materials:
-
-![material extension](material_extension.png)
-
-This is accomplished via a new [`ExtendedMaterial`] type:
-
-```rust
-app.add_plugin(
-    MaterialPlugin::<ExtendedMaterial<StandardMaterial, QuantizedMaterial>>::default()
-);
-
-#[derive(Asset, AsBindGroup, TypePath, Debug, Clone)]
-struct QuantizedMaterial {
-    // Start at a high binding number to ensure bindings don't conflict
-    // with the base material
-    #[uniform(100)]
-    quantize_steps: u32,
-}
-
-impl MaterialExtension for QuantizedMaterial {
-    fn fragment_shader() -> ShaderRef {
-        "quantized_material.wgsl".into()
-    }
-}
-
-let material = ExtendedMaterial<StandardMaterial, QuantizedMaterial> {
-    base: StandardMaterial::from(Color::rgb(0.1, 0.1, 0.8)),
-    extension: QuantizedMaterial { quantize_steps: 2 },
-};
-```
-
-We also paired this with some [`StandardMaterial`] shader refactors to make it much easier to pick and choose which parts you want:
-
-```rust
-// quantized_material.wgsl
-
-struct QuantizedMaterial {
-    quantize_steps: u32,
-}
-
-@group(1) @binding(100)
-var<uniform> my_extended_material: QuantizedMaterial;
-
-@fragment
-fn fragment(
-    input: VertexOutput,
-    @builtin(front_facing) is_front: bool,
-) -> FragmentOutput {
-    // Generate a PbrInput struct from the StandardMaterial bindings
-    var pbr_input = pbr_input_from_standard_material(input, is_front);
-
-    // Alpha discard
-    pbr_input.material.base_color = alpha_discard(
-        pbr_input.material,
-        pbr_input.material.base_color
-    );
-
-    var out: FragmentOutput;
-
-    // Apply lighting
-    out.color = apply_pbr_lighting(pbr_input);
-
-    // Our "quantize" effect
-    out.color = vec4<f32>(vec4<u32>(out.color * f32(my_extended_material.quantize_steps))) / f32(my_extended_material.quantize_steps);
-
-    // Apply in-shader post processing.
-    // Ex: fog, alpha-premultiply, etc. For non-hdr cameras: tonemapping and debanding
-    out.color = main_pass_post_lighting_processing(pbr_input, out.color);
-
-    return out;
-}
-```
-
-This _vastly_ simplifies writing custom PBR materials, making it accessible to pretty much everyone!
-
-[`ExtendedMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ExtendedMaterial.html
 
 ## Deferred Rendering
 
@@ -544,6 +114,60 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 [`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
 [`ShadowMapFilter::Jimenez14`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
+
+## `StandardMaterial` Light Transmission
+
+<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
+
+The `StandardMaterial` now supports a number of light transmission-related properties:
+
+* `specular_transmission`
+* `diffuse_transmission`
+* `thickness`
+* `ior`
+* `attenuation_color`
+* `attenuation_distance`
+
+These allow you to more realistically represent a wide variety of physical materials, including **clear and frosted glass, water, plastic, foliage, paper, wax, marble, porcelain and more**.
+
+Diffuse transmission is an inexpensive addition to the PBR lighting model, while specular transmission is a somewhat more resource-intensive screen-space effect, that can accurately model refraction and blur effects.
+
+![transmission](transmission.jpg)
+
+<div style="font-size: 1.0rem" class="release-feature-authors">
+    Different light transmission properties and their interactions with existing PBR properties.
+</div>
+
+To complement the new transmission properties, a new `TransmittedShadowReceiver` component has been introduced, which can be added to entities with diffuse transmissive materials to receive shadows cast from the opposite side of the mesh. This is most useful for rendering thin, two-sided translucent objects like tree leaves or paper.
+
+Additionally, two extra fields have been added to the `Camera3d` component: `screen_space_specular_transmission_quality` and `screen_space_specular_transmission_steps`. These are used to control the quality of the screen-space specular transmission effect (number of taps), and how many “layers of transparency” are supported when multiple transmissive objects are in front of each other.
+
+> **Important:** Each additional “layer of transparency” incurs in a texture copy behind the scenes, adding to the bandwidth cost, so it's recommended to keep this value as low as possible.
+
+Finally, importer support for the following glTF extensions has been added:
+
+* `KHR_materials_transmission`
+* `KHR_materials_ior`
+* `KHR_materials_volume`
+
+### Compatibility
+
+Both specular and diffuse transmission are compatible with all supported platforms, including mobile and Web.
+
+The optional `pbr_transmission_textures` Cargo feature allows using textures to modulate the `specular_transmission`, `diffuse_transmission` and `thickness` properties. It's disabled by default in order to reduce the number of texture bindings used by the standard material. (These are
+severely constrained on lower-end platforms and older GPUs!)
+
+`DepthPrepass` and TAA can greatly improve the quality of the screen-space specular transmission effect, and are recommended to be used with it, on the platforms where they are supported.
+
+### Implementation Details
+
+Specular transmission is implemented via a new `Transmissive3d` screen space refraction phase, which joins the existing `Opaque3d`, `AlphaMask3d` and `Transparent3d` phases. During this phase, one or more snapshots of the main texture are taken, which are used as “backgrounds” for the refraction effects.
+
+Each fragment's surface normal and IOR used along with the view direction to calculate a refracted ray. (Via Snell's law.)
+This ray is then propagated through the mesh's volume (by a distance controlled by the `thickness` property), producing an exit point.
+The “background” texture is then sampled at that point. Perceptual roughness is used along with interleaved gradient noise and multiple spiral taps, to produce a blur effect.
+
+Diffuse transmission is implemented via a second, reversed and displaced fully-diffuse Lambertian lobe, which is added to the existing PBR lighting calculations. This is a simple and relatively cheap approximation, but works reasonably well.
 
 ## Bevy Asset V2
 
@@ -898,58 +522,6 @@ To prevent all of this cloning and re-allocating of strings, we've built our own
 [`CowArc`]: https://dev-docs.bevyengine.org/bevy/utils/enum.CowArc.html
 [`CowArc::Static`]: https://dev-docs.bevyengine.org/bevy/utils/enum.CowArc.html#variant.Static
 
-## CI Improvements
-
-<div class="release-feature-authors">authors: @ameknite, @mockersf</div>
-
-To help ensure examples are reusable outside of the Bevy repository, CI will now fail if an example
-uses an import from `bevy_internal` instead of `bevy`.
-
-Additionally, the daily mobile check job now builds on more iOS and Android devices:
-
-* iPhone 13 on iOS 15
-* iPhone 14 on iOS 16
-* iPhone 15 on iOS 17
-* Xiaomi Redmi Note 11 on Android 11
-* Google Pixel 6 on Android 12
-* Samsung Galaxy S23 on Android 13
-* Google Pixel 8 on Android 14
-
-## Example tooling improvements
-
-<div class="release-feature-authors">authors: @mockersf</div>
-
-The example showcase tool can now build all examples for WebGL2 or WebGPU. This is used to update
-the website with all Wasm-compatible examples, which you can find
-[here](https://bevyengine.org/examples/) for WebGL2, or
-[here](https://bevyengine.org/examples-webgpu/) for WebGPU.
-
-It is now also capable of capturing a screenshot while running all examples:
-
-```sh
-cargo run -p example-showcase -- run --screenshot
-```
-
-Some options are available to help with the execution, you can check them with `--help`.
-
-Those screenshots are displayed on the example pages on the website, and can be used to check that
-a PR didn't introduce a visible regression.
-
-## Example execution in CI
-
-<div class="release-feature-authors">authors: @mockersf, @rparrett</div>
-
-All examples are now executed in CI on Windows with DX12, and on Linux with Vulkan. When possible,
-a screenshot is taken and compared to the last execution. If an example crashes, the log is saved.
-The mobile example is also executed on the same devices as the daily mobile check job.
-
-A report of all those executions is built and available
-[here](https://thebevyflock.github.io/bevy-example-runner/).
-
-[![Example Report](example-report.png)](https://thebevyflock.github.io/bevy-example-runner/)
-
-If you want to help sponsor tests on more platforms, get in touch!
-
 ## Suspend and Resume on Android
 
 <div class="release-feature-authors">authors: @mockersf</div>
@@ -988,394 +560,88 @@ fn handle_lifetime_events(
 [`onStop()`]: https://developer.android.com/reference/android/app/Activity#onStop()
 [`onRestart()`]: https://developer.android.com/reference/android/app/Activity#onRestart()
 
-## AccessKit Integration Improvements
+## Material Extensions
 
-<div class="release-feature-authors">authors: @ndarilek</div>
+<div class="release-feature-authors">authors: @robtfm</div>
 
-Bevy 0.10's [AccessKit](https://accesskit.dev) integration made it incredibly easy for the engine to take the lead and push updates to the accessibility tree. But as any good dance partner knows, sometimes it's best not to lead but to follow.
+Bevy has a powerful shader import system, allowing modular (and granular) shader code reuse. In previous versions of Bevy, this meant that in theory, you could import Bevy's PBR shader logic and use it in your own shaders. However in practice this was challenging, as you had to re-wire everything up yourself, which required intimate knowledge of the base material. For complicated materials like Bevy's PBR [`StandardMaterial`], this was full of boilerplate, resulted in code duplication, and was prone to errors.
 
-This release adds the `ManageAccessibilityUpdates` resource which, when set to `false`, stops the engine from updating the tree on its own. This paves the way for third-party UIs with Bevy and AccessKit integration to send updates directly to Bevy. When the UI is ready to return control, `ManageAccessibilityUpdates` is set to `true` Bevy picks up where it left off and starts sending updates again.
+In **Bevy 0.12**, we've built a **Material Extensions** system, which enables defining new materials that build on existing materials:
 
-AccessKit itself was also simplified, and this release capitalizes on that to shrink the surface area of our integration. If you're curious about how things work internally or want to help, the `bevy_a11y` crate is now more approachable than ever.
+![material extension](material_extension.png)
 
-## Wireframe Improvements
-
-<div class="release-feature-authors">authors: @IceSentry</div>
-
-The wireframes now use bevy's Material abstraction. This means it will automatically use the new batching and instancing features while being easier to maintain. This change also made it easier to add support for colored wireframe. You can configure the color globally or per mesh using the `WireframeColor` component. It's also now possible to disable wireframe rendering by using the `NeverRenderWireframe` component.
-
-![wireframe](wireframe.png)
-
-## `StandardMaterial` Light Transmission
-
-<div class="release-feature-authors">author: Marco Buono (@coreh)</div>
-
-The `StandardMaterial` now supports a number of light transmission-related properties:
-
-* `specular_transmission`
-* `diffuse_transmission`
-* `thickness`
-* `ior`
-* `attenuation_color`
-* `attenuation_distance`
-
-These allow you to more realistically represent a wide variety of physical materials, including **clear and frosted glass, water, plastic, foliage, paper, wax, marble, porcelain and more**.
-
-Diffuse transmission is an inexpensive addition to the PBR lighting model, while specular transmission is a somewhat more resource-intensive screen-space effect, that can accurately model refraction and blur effects.
-
-![transmission](transmission.jpg)
-
-<div style="font-size: 1.0rem" class="release-feature-authors">
-    Different light transmission properties and their interactions with existing PBR properties.
-</div>
-
-To complement the new transmission properties, a new `TransmittedShadowReceiver` component has been introduced, which can be added to entities with diffuse transmissive materials to receive shadows cast from the opposite side of the mesh. This is most useful for rendering thin, two-sided translucent objects like tree leaves or paper.
-
-Additionally, two extra fields have been added to the `Camera3d` component: `screen_space_specular_transmission_quality` and `screen_space_specular_transmission_steps`. These are used to control the quality of the screen-space specular transmission effect (number of taps), and how many “layers of transparency” are supported when multiple transmissive objects are in front of each other.
-
-> **Important:** Each additional “layer of transparency” incurs in a texture copy behind the scenes, adding to the bandwidth cost, so it's recommended to keep this value as low as possible.
-
-Finally, importer support for the following glTF extensions has been added:
-
-* `KHR_materials_transmission`
-* `KHR_materials_ior`
-* `KHR_materials_volume`
-
-### Compatibility
-
-Both specular and diffuse transmission are compatible with all supported platforms, including mobile and Web.
-
-The optional `pbr_transmission_textures` Cargo feature allows using textures to modulate the `specular_transmission`, `diffuse_transmission` and `thickness` properties. It's disabled by default in order to reduce the number of texture bindings used by the standard material. (These are
-severely constrained on lower-end platforms and older GPUs!)
-
-`DepthPrepass` and TAA can greatly improve the quality of the screen-space specular transmission effect, and are recommended to be used with it, on the platforms where they are supported.
-
-### Implementation Details
-
-Specular transmission is implemented via a new `Transmissive3d` screen space refraction phase, which joins the existing `Opaque3d`, `AlphaMask3d` and `Transparent3d` phases. During this phase, one or more snapshots of the main texture are taken, which are used as “backgrounds” for the refraction effects.
-
-Each fragment's surface normal and IOR used along with the view direction to calculate a refracted ray. (Via Snell's law.)
-This ray is then propagated through the mesh's volume (by a distance controlled by the `thickness` property), producing an exit point.
-The “background” texture is then sampled at that point. Perceptual roughness is used along with interleaved gradient noise and multiple spiral taps, to produce a blur effect.
-
-Diffuse transmission is implemented via a second, reversed and displaced fully-diffuse Lambertian lobe, which is added to the existing PBR lighting calculations. This is a simple and relatively cheap approximation, but works reasonably well.
-
-## Reflect Commands
-
-<div class="release-feature-authors">authors: @NoahShomette</div>
-
-It is now possible to insert and remove reflect components from an entity in a normal system via new functions on [`Commands`]!
+This is accomplished via a new [`ExtendedMaterial`] type:
 
 ```rust
-#[derive(Component, Reflect, Default)]
-#[reflect(Component)]
-struct Component(u32);
+app.add_plugin(
+    MaterialPlugin::<ExtendedMaterial<StandardMaterial, QuantizedMaterial>>::default()
+);
 
-fn reflect_commands(mut commands: Commands) {
-    let boxed_reflect_component: Box<dyn Reflect> = Box::new(Component(916));
-
-    let entity = commands
-        .spawn_empty()
-        .insert_reflect(boxed_reflect_component.clone_value()).id();
-
-    commands.entity(entity).remove_reflect(boxed_reflect_component.type_name().to_owned());
-
-}
-```
-
-The above commands use the [`AppTypeRegistry`] by default. If you use a different TypeRegistry then you can use the ...`with_registry` commands instead.
-
-```rust
- #[derive(Resource)]
- struct TypeRegistryResource {
-     type_registry: TypeRegistry,
- }
-
- impl AsRef<TypeRegistry> for TypeRegistryResource {
-     fn as_ref(&self) -> &TypeRegistry {
-         &self.type_registry
-     }
- }
-
- fn reflect_commands_with_registry(mut commands: Commands) {
-    let boxed_reflect_component: Box<dyn Reflect> = Box::new(Component(916));
-
-    let entity = commands
-        .spawn_empty()
-        .insert_reflect_with_registry::<TypeRegistryResource>(boxed_reflect_component.clone_value()).id();
-
-    commands.entity(entity).remove_reflect_with_registry::<TypeRegistryResource>(boxed_reflect_component.type_name().to_owned());
-
-}
-```
-
-See [`ReflectCommandExt`] for more examples and documentation
-
-[`Commands`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/struct.Commands.html
-[`AppTypeRegistry`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/struct.AppTypeRegistry.html
-[`ReflectCommandExt`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/trait.ReflectCommandExt.html
-
-## Limit Background FPS
-
-<div class="release-feature-authors">authors: @maniwani</div>
-
-If an app has no window in focus, Bevy will now limit its update rate (to 60Hz by default).
-
-Before, many Bevy apps running on desktop operating systems (particularly macOS) would see spikes in CPU usage whenever their windows were minimized or completely covered, even with VSync enabled. The reason for this is that many desktop window managers ignore VSync for windows that aren't visible. As VSync normally limits how often an app updates, that speed limit vanishes while it's effectively disabled.
-
-Now, apps running in the background will sleep in between updates to limit their FPS.
-
-The one caveat is that most operating systems will not report if a window is visible, only if it has focus. So the throttle is based on focus, not visibility. 60Hz was then chosen as the default to maintain high FPS in cases where the window is not focused but still visible.
-
-## `AnimationPlayer` API Improvements
-
-<div class="release-feature-authors">authors: @devinleamy</div>
-
-The `AnimationPlayer` now has new methods for controlling playback, and utilities for checking
-if an animation is playing or completed, and getting its `AnimationClip` handle.
-
-`set_elapsed` and has been removed in favor of `seek_to`. `elapsed` now
-returns the actual elapsed time and is not affected by the animation speed. `stop_repeating` have been removed
-in favor of `set_repeat(RepeatAnimation::Never)`.
-
-```rust
-let mut player = q_animation_player.single_mut();
-// Check if an animation is complete.
-if player.is_finished() {
-    // Set the playback mode.
-    player.set_repeat(RepeatAnimation::Forever);
-    player.set_repeat(RepeatAnimation::Never);
-    player.set_repeat(RepeatAnimation::Count(4));
-}
-// Get a handle to the playing AnimationClip.
-let clip_handle = player.animation_clip();
-// Seek to 1s in the current clip.
-player.seek_to(1.0);
-```
-
-## Ignore Ambiguous Components and Resources
-
-<div class="release-feature-authors">authors: @hymm</div>
-
-Ambiguity Reporting is an optional feature of Bevy's scheduler. When enabled it reports conflicts between systems that modify the same data, but are not ordered in relation to each other. While some reported conflicts can cause subtle bugs, many do not. Bevy has a couple existing methods and two new ones for ignoring these.
-
-The existing APIs: `ambiguous_with`, which ignores conflicts between specific sets, and `ambiguous_with_all`, which ignores all conflicts with the set it's applied to. In addition, there are now 2 new APIs that let you ignore conflicts on a type of data, `allow_ambiguous_component` and `allow_ambiguous_resource`. These ignore all conflicts between systems on that specific type, component or resource, in a world.
-
-```rust
-#[derive(Resource)]
-struct R;
-
-// These systems are ambiguous on R
-fn system_1(_: ResMut<R>) {}
-fn system_2(_: Res<R>) {}
-
-let mut app = App::new();
-app.configure_schedules(ScheduleBuildSettings {
-  ambiguity_detection: LogLevel::Error,
-  ..default()
-});
-app.insert_resource(R);
-
-app.add_systems(Update, ( system_1, system_2 ));
-app.allow_ambiguous_resource::<R>();
-
-// Running the app does not error.
-app.update();
-```
-
-Bevy is now using this to ignore conflicts between the `Assets<T>` resources. Most of these ambiguities are modifying different assets and thus do not matter.
-
-## Spatial Audio API Ergonomics
-
-<div class="release-feature-authors">authors: @rparrett, @hymm, @mockersf</div>
-
-A simple "stereo" (non-HRTF) spatial audio implementation was heroically [put together](https://bevyengine.org/news/bevy-0-10/#spatial-audio) at the last minute for Bevy 0.10, but the implementation was somewhat bare-bones and not very user-friendly. Users needed to write their own systems to update audio sinks with emitter and listener positions.
-
-Now users can just add a `TransformBundle` to their `AudioBundle`s and Bevy will take care of the rest!
-
-```rust
-commands.spawn((
-    TransformBundle::default(),
-    AudioBundle {
-        source: asset_server.load("sounds/bonk.ogg"),
-        settings: PlaybackSettings::DESPAWN.with_spatial(true),
-    },
-));
-```
-
-## Added HSL methods to `Color` struct
-
-<div class="release-feature-authors">authors: @idedary</div>
-
-You can now use `h()`, `s()`, `l()` together with their `set_h()`, `set_s()`, `set_l()` and `with_h()`, `with_s()`, `with_l()` variants to manipulate _Hue_, _Saturation_ and _Lightness_ values of a `Color` struct without cloning. Previously you could do that with only RGBA values.
-
-```rust
-// Returns HSL component values
-let color = Color::ORANGE;
-let hue = color.h();
-// ...
-
-// Changes the HSL component values
-let mut color = Color::PINK;
-color.set_s(0.5);
-// ...
-
-// Modifies existing colors and returns them
-let color = Color::VIOLET.with_l(0.7);
-// ...
-```
-
-## One-Shot Systems
-
-<div class="release-feature-authors">authors: @alice-i-cecile @pascualex, @Trashtalk217, @Zeenobit</div>
-
-Ordinarily, systems run once per frame, as part of a schedule.
-But this isn't always the right fit.
-Maybe you're responding to a very rare event like in a complex turn-based game, or simply don't want to clutter your schedule with a new system for every single button.
-One-shot systems flip that logic on its head, and provide you the ability to run arbitrary logic on demand, using the powerful and familiar system syntax.
-
-```rust
-#[derive(Resource, Default, Debug)]
-struct Counter(u8);
-
-fn increment(mut counter: ResMut<Counter>) {
-    counter.0 += 1;
-    println!("{}", counter.0);
+#[derive(Asset, AsBindGroup, TypePath, Debug, Clone)]
+struct QuantizedMaterial {
+    // Start at a high binding number to ensure bindings don't conflict
+    // with the base material
+    #[uniform(100)]
+    quantize_steps: u32,
 }
 
-fn foo(world: &mut World) {
-    world.init_resource::<Counter>();
-    let id = world.register_system(increment);
-    let _ = world.run_system(id); // prints 1
-    let _ = world.run_system(id); // prints 2
-}
-```
-
-There are three simple steps to using one-shot systems: register a system, store its `SystemId`, and then use either exclusive world access or commands to run the corresponding system.
-
-A lot becomes possible with just that, however `SystemId`s really start showing their power, when they're wrapped into components.
-
-```rust
-use bevy::ecs::system::SystemId;
-
-#[derive(Component)]
-struct Callback(SystemId);
-
-// calling all callbacks!
-fn call_all(query: Query<&Callback>, mut commands: Commands) {
-    for callback in query.iter() {
-        commands.run_system(callback.0);
+impl MaterialExtension for QuantizedMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "quantized_material.wgsl".into()
     }
 }
+
+let material = ExtendedMaterial<StandardMaterial, QuantizedMaterial> {
+    base: StandardMaterial::from(Color::rgb(0.1, 0.1, 0.8)),
+    extension: QuantizedMaterial { quantize_steps: 2 },
+};
 ```
 
-One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and [`aery`](https://docs.rs/aery/latest/aery/) (let us know how that goes, by the way).
-
-One-shot systems are very flexible.
-They can be nested, so you can call `run_system` from within a one-shot system.
-It's possible to have multiple instances of one system registered at a time, each with their own `Local` variables and cached system state.
-It also plays nice with asset-driven workflows: recording a mapping from a string to an identifier in a serialized callback is much nicer than trying to do so with Rust functions!
-
-Still, one-shot systems are not without their limitations.
-Currently, exclusive systems and systems designed for system piping (with either an `In` parameter or a return type) can't be used at all.
-You also can't call a one-shot systems from itself, recursion isn't possible.
-Lastly, one-shot systems are always evaluated sequentially, rather than in parallel.
-While this reduces both complexity and overhead, for certain workloads this can be meaningfully slower than using a schedule with a parallel executor.
-
-However, when you're just prototyping or writing a unit test, it can be a real hassle: two whole functions and some weird identifier?
-For these situations, you can use the `World::run_system_once` method.
+We also paired this with some [`StandardMaterial`] shader refactors to make it much easier to pick and choose which parts you want:
 
 ```rust
-use bevy::ecs::system::RunSystemOnce;
+// quantized_material.wgsl
 
-#[derive(Resource, Default, Debug)]
-struct Counter(u8);
-
-fn increment(mut counter: ResMut<Counter>) {
-    counter.0 += 1;
-    println!("{}", counter.0);
+struct QuantizedMaterial {
+    quantize_steps: u32,
 }
 
-let mut world = World::new();
-world.init_resource::<Counter>();
-world.run_system_once(increment); // prints 1
-world.run_system_once(increment); // prints 2
-```
+@group(1) @binding(100)
+var<uniform> my_extended_material: QuantizedMaterial;
 
-This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments, change detection, or `EventReader`s. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`s reset every run, while change detection will _always_ detect data as added/changed. Be careful and you'll be alright.
+@fragment
+fn fragment(
+    input: VertexOutput,
+    @builtin(front_facing) is_front: bool,
+) -> FragmentOutput {
+    // Generate a PbrInput struct from the StandardMaterial bindings
+    var pbr_input = pbr_input_from_standard_material(input, is_front);
 
-## Unified `Time`
+    // Alpha discard
+    pbr_input.material.base_color = alpha_discard(
+        pbr_input.material,
+        pbr_input.material.base_color
+    );
 
-<div class="release-feature-authors">authors: @nakedible @maniwani @alice-i-cecile</div>
+    var out: FragmentOutput;
 
-Bevy 0.12 brings two major quality of life improvements to `FixedUpdate`.
+    // Apply lighting
+    out.color = apply_pbr_lighting(pbr_input);
 
-* `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
-* `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
+    // Our "quantize" effect
+    out.color = vec4<f32>(vec4<u32>(out.color * f32(my_extended_material.quantize_steps))) / f32(my_extended_material.quantize_steps);
 
-The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking. Its methods were different from `Time` and it didn't even track "total time elapsed" like `Time` did, to name a few examples. Having two different "time" APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
+    // Apply in-shader post processing.
+    // Ex: fog, alpha-premultiply, etc. For non-hdr cameras: tonemapping and debanding
+    out.color = main_pass_post_lighting_processing(pbr_input, out.color);
 
-Now, you can just write systems that read `Time` and schedule them in either context.
-
-```rust
-// This system will see a constant delta time if scheduled in `FixedUpdate` or
-// a variable delta time if scheduled in `Update`.
-fn integrate_velocity(
-    mut query: Query<(&mut Transfrom, &Velocity)>,
-    time: Res<Time>,
-) {
-    for (mut transform, velocity) in &mut query {
-        transform.translation.x += velocity.x * time.delta_seconds();
-        transform.translation.y += velocity.y * time.delta_seconds();
-    }
+    return out;
 }
 ```
 
-Most systems should continue to use `Time`, but behind the scenes, the methods from previous APIs have been refactored into four clocks:
+This _vastly_ simplifies writing custom PBR materials, making it accessible to pretty much everyone!
 
-* `Time<Real>`
-* `Time<Virtual>`
-* `Time<Fixed>`
-* `Time<()>`
-
-`Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` chases `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate`. When a system borrows `Time`, it actually borrows `Time<()>`.
-
-Try the new `time` example to get a better feel for these resources.
-
-The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
-
-## Reduced Tracing Overhead
-
-<div class="release-feature-authors">authors: @hymm, @james7132</div>
-
-Bevy uses the [tracing](https://crates.io/crates/tracing) library to measure system running time (among other things). This is useful for determining where bottlenecks in frame time are and measuring performance improvements. These traces can be visualized using the [tracy](https://github.com/wolfpld/tracy) tool. However, using tracing's spans has a significant overhead to it. A large part of the per-span overhead is due to allocating the string description of the span. By caching the spans for systems, commands, and parallel iteration, we have significantly reduced the CPU time overhead when using tracing. In the PR that introduced system span caching, our "many foxes" stress test went from 5.35 ms to 4.54 ms. In the PR that added caching for the parallel iteration spans, our "many cubes" stress test went from 8.89 ms to 6.8 ms.
-
-![tracing overhead](tracing-overhead-reduction.png)
-
-## Pitch Audio Source
-
-<div class="release-feature-authors">authors: @basilefff</div>
-
-Audio can now be played by pitch, which is useful to debug audio issues, to use as a placeholder, or for programmatic audio.
-
-A `Pitch` audio source can be created from its frequency and its duration, and then be used as a source in a `PitchBundle`.
-
-```rust
-fn play_pitch(
-    mut pitch_assets: ResMut<Assets<Pitch>>,
-    mut commands: Commands,
-) {
-    // This is a A for 1 second
-    let pitch_handle = pitch_assets.add(Pitch::new(440.0, Duration::new(1, 0)));
-    // Play it now
-    commands.spawn(PitchBundle {
-        source: pitch_handle,
-        ..default()
-    });
-}
-```
-
-Audio is generated at the given frequency using a [sine wave](https://en.wikipedia.org/wiki/Sine_wave#Audio_example). More complex sounds can be created by playing several pitch audio sources at the same time, like chords or hamonics.
+[`ExtendedMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ExtendedMaterial.html
 
 ## Automatic Batching/Instancing of Draw Commands
 
@@ -1594,6 +860,711 @@ This retains all the functionality of the previous method, enables the additiona
 
 This resulted in a performance improvement of up to **40%** versus the previous method!
 
+## Rusty Shader Imports
+
+<div class="release-feature-authors">authors: @robtfm</div>
+
+Bevy shaders now use Rust-like shader imports:
+
+```rust
+// old
+#import bevy_pbr::forward_io VertexOutput
+
+// new
+#import bevy_pbr::forward_io::VertexOutput
+```
+
+Like Rust imports, you can use curly braces to import multiple items. Multi-level nesting is also now supported!
+
+```rust
+// old
+#import bevy_pbr::pbr_functions alpha_discard, apply_pbr_lighting 
+#import bevy_pbr                mesh_bindings
+
+// new
+#import bevy_pbr::{
+    pbr_functions::{alpha_discard, apply_pbr_lighting}, 
+    mesh_bindings,
+}
+```
+
+Like Rust modules, you can now import partial paths:
+
+```rust
+#import part::of::path
+
+// later in the shader
+path::remainder::function();
+```
+
+You can also now use fully qualified paths without importing:
+
+```rust
+bevy_pbr::pbr_functions::pbr()
+```
+
+Rusty Imports remove a number of "API weirdness" gotchas from the old system and expand the capabilities of the import system. And by reusing Rust syntax and semantics, we remove the need for Bevy users to learn a new system.
+
+## glTF Emissive Strength
+
+<div class="release-feature-authors">authors: @JMS55</div>
+
+Bevy now reads and uses the `KHR_materials_emissive_strength` glTF material extension when loading glTF assets. This adds support for emissive materials when importing glTF from programs like Blender. Each of these cubes has increasing emissive strength:
+
+![gltf emissive](gltf_emissive.png)
+
+## Import Second UV Map In glTF Files
+
+<div class="release-feature-authors">authors: @pcwalton</div>
+
+**Bevy 0.12** now imports the second UV map (`TEXCOORD1` or `UV1`) if it is defined in glTF files and exposes it to shaders. Conventionally this is often used for lightmap UVs. This was an often requested feature and it unlocks lightmapping scenarios (both in custom user shaders and in future Bevy releases).
+
+## Wireframe Improvements
+
+<div class="release-feature-authors">authors: @IceSentry</div>
+
+The wireframes now use bevy's Material abstraction. This means it will automatically use the new batching and instancing features while being easier to maintain. This change also made it easier to add support for colored wireframe. You can configure the color globally or per mesh using the `WireframeColor` component. It's also now possible to disable wireframe rendering by using the `NeverRenderWireframe` component.
+
+![wireframe](wireframe.png)
+
+## External Renderer Context
+
+<div class="release-feature-authors">authors: @awtterpip</div>
+
+Historically Bevy's [`RenderPlugin`] has been fully responsible for initializing the [`wgpu`] render context. However some 3rd party Bevy Plugins, such as this work-in-progress [`bevy_openxr`](https://github.com/awtterpip/bevy_openxr) plugin, require more control over renderer initialization.
+
+Therefore in **Bevy 0.12**, we've made it possible to pass in the [`wgpu`] render context at startup. This means the 3rd party [`bevy_openxr`] plugin can be a "normal" Bevy plugin without needing to fork Bevy!
+
+Here is a quick video of Bevy VR, courtesy of [`bevy_openxr`]!
+
+<video controls><source src="bevy_openxr.mp4" type="video/mp4"/></video>
+
+[`bevy_openxr`]: https://github.com/awtterpip/bevy_openxr/
+[`wgpu`]: https://github.com/gfx-rs/wgpu
+[`RenderPlugin`]: https://dev-docs.bevyengine.org/bevy/render/struct.RenderPlugin.html
+
+## Bind Group Ergonomics
+
+<div class="release-feature-authors">authors: @robtfm, @JMS55</div>
+
+When defining "bind groups" for low-level renderer features, we use the following API api:
+
+```rust
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &[
+        BindGroupEntry {
+            binding: 0,
+            resource: BindingResource::Sampler(&my_sampler),
+        },
+        BindGroupEntry {
+            binding: 1,
+            resource: my_uniform,
+        },
+    ],
+);
+```
+
+This works reasonably well, but for large numbers of bind groups, the `BindGroupEntry` boilerplate makes it harder than necessary to read and write everything (and keep the indices up to date).
+
+**Bevy 0.12** adds additional options:
+
+```rust
+// Sets the indices automatically using the index of the tuple item
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::sequential((&my_sampler, my_uniform)),
+);
+```
+
+```rust
+// Manually sets the indices, but without the BindGroupEntry boilerplate!
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::with_indexes((
+        (2, &my_sampler),
+        (3, my_uniform),
+    )),
+);
+```
+
+## One-Shot Systems
+
+<div class="release-feature-authors">authors: @alice-i-cecile @pascualex, @Trashtalk217, @Zeenobit</div>
+
+Ordinarily, systems run once per frame, as part of a schedule.
+But this isn't always the right fit.
+Maybe you're responding to a very rare event like in a complex turn-based game, or simply don't want to clutter your schedule with a new system for every single button.
+One-shot systems flip that logic on its head, and provide you the ability to run arbitrary logic on demand, using the powerful and familiar system syntax.
+
+```rust
+#[derive(Resource, Default, Debug)]
+struct Counter(u8);
+
+fn increment(mut counter: ResMut<Counter>) {
+    counter.0 += 1;
+    println!("{}", counter.0);
+}
+
+fn foo(world: &mut World) {
+    world.init_resource::<Counter>();
+    let id = world.register_system(increment);
+    let _ = world.run_system(id); // prints 1
+    let _ = world.run_system(id); // prints 2
+}
+```
+
+There are three simple steps to using one-shot systems: register a system, store its `SystemId`, and then use either exclusive world access or commands to run the corresponding system.
+
+A lot becomes possible with just that, however `SystemId`s really start showing their power, when they're wrapped into components.
+
+```rust
+use bevy::ecs::system::SystemId;
+
+#[derive(Component)]
+struct Callback(SystemId);
+
+// calling all callbacks!
+fn call_all(query: Query<&Callback>, mut commands: Commands) {
+    for callback in query.iter() {
+        commands.run_system(callback.0);
+    }
+}
+```
+
+One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and [`aery`](https://docs.rs/aery/latest/aery/) (let us know how that goes, by the way).
+
+One-shot systems are very flexible.
+They can be nested, so you can call `run_system` from within a one-shot system.
+It's possible to have multiple instances of one system registered at a time, each with their own `Local` variables and cached system state.
+It also plays nice with asset-driven workflows: recording a mapping from a string to an identifier in a serialized callback is much nicer than trying to do so with Rust functions!
+
+Still, one-shot systems are not without their limitations.
+Currently, exclusive systems and systems designed for system piping (with either an `In` parameter or a return type) can't be used at all.
+You also can't call a one-shot systems from itself, recursion isn't possible.
+Lastly, one-shot systems are always evaluated sequentially, rather than in parallel.
+While this reduces both complexity and overhead, for certain workloads this can be meaningfully slower than using a schedule with a parallel executor.
+
+However, when you're just prototyping or writing a unit test, it can be a real hassle: two whole functions and some weird identifier?
+For these situations, you can use the `World::run_system_once` method.
+
+```rust
+use bevy::ecs::system::RunSystemOnce;
+
+#[derive(Resource, Default, Debug)]
+struct Counter(u8);
+
+fn increment(mut counter: ResMut<Counter>) {
+    counter.0 += 1;
+    println!("{}", counter.0);
+}
+
+let mut world = World::new();
+world.init_resource::<Counter>();
+world.run_system_once(increment); // prints 1
+world.run_system_once(increment); // prints 2
+```
+
+This is great for unit testing systems and queries, and it's both lower overhead and simpler to use. However, there is one caveat. Some systems have state, either in the form of `Local` arguments, change detection, or `EventReader`s. This state isn't saved between two `run_system_once` calls, creating odd behavior. The `Local`s reset every run, while change detection will _always_ detect data as added/changed. Be careful and you'll be alright.
+
+## system.map
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** adds a new [`system.map()`] function, which is a cheaper and more ergonomic alternative to [`system.pipe()`].
+
+Unlike [`system.pipe()`], [`system.map()`] just takes a normal closure (instead of another system) that accepts the output of the system as its parameter:
+
+```rust
+app.add_systems(Update, my_system.map(error));
+
+fn my_system(res: Res<T>) -> Result<(), Err> {
+    // do something that might fail here
+}
+
+// An adapter that logs errors 
+pub fn error<E: Debug>(result: Result<(), E>) {
+    if let Err(warn) = result {
+        error!("{:?}", warn);
+    }
+}
+```
+
+Bevy provides built in `error`, `warn`, `debug`, and `info` adapters that can be used with [`system.map()`] to log errors at each of these levels.
+
+[`system.map()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.map
+[`system.pipe()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.pipe
+
+## Simplify Parallel Iteration Method
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** makes the parallel Query iterator [`for_each()`] compatible with both mutable and immutable queries, reducing API surface and removing the need to write `mut` twice:
+
+```rust
+// Before:
+query.par_iter_mut().for_each_mut(|x| ...);
+
+// After:
+query.par_iter_mut().for_each(|x| ...);
+```
+
+[`for_each()`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryParIter.html#method.for_each
+
+## Disjoint Mutable World Access Via EntityMut
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+**Bevy 0.12** supports safely accessing multiple [`EntityMut`] values at once, meaning you can mutate multiple entities (with access to _all of their components_) at the same time.
+
+```rust
+let [entity1, entity2] = world.many_entities_mut([id1, id2]);
+*entity1.get_mut::<Transform>().unwrap() = *entity2.get::<Transform>().unwrap();
+```
+
+This also works in queries:
+
+```rust
+// This would not have been expressible in previous Bevy versions
+// Now it is totally valid!
+fn system(q1: Query<&mut A>, q2: Query<EntityMut, Without<A>>) {
+}
+```
+
+You can now mutably iterate all entities and access arbitrary components within them:
+
+```rust
+for mut entity in world.iter_entities_mut() {
+    let mut transform = entity.get_mut::<Transform>().unwrap();
+    transform.translation.x += 2.0;
+}
+```
+
+This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access). Use [`EntityWorldMut`] for an equivalent to the old "global access" approach.
+
+[`EntityMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityMut.html
+[`EntityWorldMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityWorldMut.html
+[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
+
+## Unified configure_sets API
+
+<div class="release-feature-authors">authors: @geieredgar</div>
+
+Bevy's [Schedule-First API](/news/bevy-0-11/#schedule-first-ecs-apis) introduced in **Bevy 0.11** unified most of the ECS scheduler API surface under a single `add_systems` API. However, we didn't do a unified API for `configure_sets`, meaning there were two different APIs:
+
+```rust
+app.configure_set(Update, A.after(B));
+app.configure_sets(Update, (A.after(B), B.after(C));
+```
+
+In **Bevy 0.12**, we have unified these under a single API to align with the patterns we've used elsewhere and cut down on unnecessary API surface:
+
+```rust
+app.configure_sets(Update, A.after(B));
+app.configure_sets(Update, (A.after(B), B.after(C));
+```
+
+## GamepadButtonInput
+
+<div class="release-feature-authors">authors: @bravely-beep</div>
+
+Bevy generally provides two ways to handle input of a given type:
+
+* Events: receive a stream of input events in the order they occur
+* The [`Input`] Resource: read the _current_ state of the input
+
+One notable exception was [`GamepadButton`], which was only available via the [`Input`] resource. **Bevy 0.12** adds a new [`GamepadButtonInput`] event, filling this gap.
+
+[`Input`]: https://dev-docs.bevyengine.org/bevy/input/struct.Input.html
+[`GamepadButton`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButton.html
+[`GamepadButtonInput`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButtonInput.html
+
+## Split Computed Visibility
+
+<div class="release-feature-authors">authors: @JoJoJet</div>
+
+The `ComputedVisibility` component has now been split into [`InheritedVisibility`] (visible in the hierarchy) and [`ViewVisibility`] (visible from a view), making it possible to use Bevy's built-in change detection on both sets of data separately.
+
+[`InheritedVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.InheritedVisibility.html
+[`ViewVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.ViewVisibility.html
+
+## SceneInstanceReady Event
+
+<div class="release-feature-authors">authors: @Shatur</div>
+
+**Bevy 0.12** adds a new [`SceneInstanceReady`] event, which makes it easy to listen for a specific scene instance to be ready. "Ready" in this case means "fully spawned as an entity".
+
+```rust
+#[derive(Resource)]
+struct MyScene(Entity);
+
+fn setup(mut commands: Commands, assets: Res<AssetServer>) {
+    let scene = SceneBundle {
+        scene: assets.load("some.gltf#MyScene"),
+        ..default()
+    };
+    let entity = commands.spawn(scene).id();
+    commands.insert_resource(MyScene(entity));
+}
+
+fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
+    for event in events.read() {
+        if event.parent == my_scene.0 {
+            // the scene instance is "ready"
+        }
+    }
+}
+```
+
+[`SceneInstanceReady`]: https://dev-docs.bevyengine.org/bevy/scene/struct.SceneInstanceReady.html
+
+## ReflectBundle
+
+<div class="release-feature-authors">authors: @Shatur</div>
+
+Bevy now supports "Bundle reflection" via [`ReflectBundle`]:
+
+```rust
+#[derive(Bundle, Reflect)]
+#[reflect(Bundle)]
+struct SpriteBundle {
+    image: Handle<Image>,
+    // other components here
+}
+```
+
+This makes it possible to create and interact with ECS bundles using Bevy Reflect, meaning you can do these operations dynamically at runtime. This is useful for scripting and asset scenarios.
+
+[`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
+
+## ImageLoader Settings
+
+<div class="release-feature-authors">authors: @cart, @Kanabenki</div>
+
+To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've added [`ImageLoaderSettings`] to  [`ImageLoader`].
+
+This means that you can now configure the sampler, SRGB-ness, and the format, on a per-image basis. These are the defaults, as they appear in **Bevy Asset V2** meta files:
+
+```rust
+(
+    format: FromExtension,
+    is_srgb: true,
+    sampler: Default,
+)
+```
+
+When set to `Default`, the image will use whatever is configured in [`ImagePlugin::default_sampler`].
+
+However, you can set these values to whatever you want!
+
+```rust
+(
+    format: Format(Basis),
+    is_srgb: true,
+    sampler: Descriptor((
+        label: None,
+        address_mode_u: ClampToEdge,
+        address_mode_v: ClampToEdge,
+        address_mode_w: ClampToEdge,
+        mag_filter: Nearest,
+        min_filter: Nearest,
+        mipmap_filter: Nearest,
+        lod_min_clamp: 0.0,
+        lod_max_clamp: 32.0,
+        compare: None,
+        anisotropy_clamp: 1,
+        border_color: None,
+    )),
+)
+```
+
+[`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
+[`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
+
+## UI Node Outlines
+
+<div class="release-feature-authors">authors: @ickshonpe</div>
+
+Bevy's UI nodes now support outlines "outside the borders" of UI nodes via the new [`Outline`] component. [`Outline`] does not occupy any space in the layout. This is different than [`Style::border`], which exists "as part of" the node in the layout:
+
+![ui outlines](ui_outlines.png)
+
+```rust
+commands.spawn((
+    NodeBundle::default(),
+    Outline {
+        width: Val::Px(6.),
+        offset: Val::Px(6.),
+        color: Color::WHITE,
+    },
+))
+```
+
+[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
+[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
+
+## AccessKit Integration Improvements
+
+<div class="release-feature-authors">authors: @ndarilek</div>
+
+Bevy 0.10's [AccessKit](https://accesskit.dev) integration made it incredibly easy for the engine to take the lead and push updates to the accessibility tree. But as any good dance partner knows, sometimes it's best not to lead but to follow.
+
+This release adds the `ManageAccessibilityUpdates` resource which, when set to `false`, stops the engine from updating the tree on its own. This paves the way for third-party UIs with Bevy and AccessKit integration to send updates directly to Bevy. When the UI is ready to return control, `ManageAccessibilityUpdates` is set to `true` Bevy picks up where it left off and starts sending updates again.
+
+AccessKit itself was also simplified, and this release capitalizes on that to shrink the surface area of our integration. If you're curious about how things work internally or want to help, the `bevy_a11y` crate is now more approachable than ever.
+
+## Reflect Commands
+
+<div class="release-feature-authors">authors: @NoahShomette</div>
+
+It is now possible to insert and remove reflect components from an entity in a normal system via new functions on [`Commands`]!
+
+```rust
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+struct Component(u32);
+
+fn reflect_commands(mut commands: Commands) {
+    let boxed_reflect_component: Box<dyn Reflect> = Box::new(Component(916));
+
+    let entity = commands
+        .spawn_empty()
+        .insert_reflect(boxed_reflect_component.clone_value()).id();
+
+    commands.entity(entity).remove_reflect(boxed_reflect_component.type_name().to_owned());
+
+}
+```
+
+The above commands use the [`AppTypeRegistry`] by default. If you use a different TypeRegistry then you can use the ...`with_registry` commands instead.
+
+```rust
+ #[derive(Resource)]
+ struct TypeRegistryResource {
+     type_registry: TypeRegistry,
+ }
+
+ impl AsRef<TypeRegistry> for TypeRegistryResource {
+     fn as_ref(&self) -> &TypeRegistry {
+         &self.type_registry
+     }
+ }
+
+ fn reflect_commands_with_registry(mut commands: Commands) {
+    let boxed_reflect_component: Box<dyn Reflect> = Box::new(Component(916));
+
+    let entity = commands
+        .spawn_empty()
+        .insert_reflect_with_registry::<TypeRegistryResource>(boxed_reflect_component.clone_value()).id();
+
+    commands.entity(entity).remove_reflect_with_registry::<TypeRegistryResource>(boxed_reflect_component.type_name().to_owned());
+
+}
+```
+
+See [`ReflectCommandExt`] for more examples and documentation
+
+[`Commands`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/struct.Commands.html
+[`AppTypeRegistry`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/struct.AppTypeRegistry.html
+[`ReflectCommandExt`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/trait.ReflectCommandExt.html
+
+## Limit Background FPS
+
+<div class="release-feature-authors">authors: @maniwani</div>
+
+If an app has no window in focus, Bevy will now limit its update rate (to 60Hz by default).
+
+Before, many Bevy apps running on desktop operating systems (particularly macOS) would see spikes in CPU usage whenever their windows were minimized or completely covered, even with VSync enabled. The reason for this is that many desktop window managers ignore VSync for windows that aren't visible. As VSync normally limits how often an app updates, that speed limit vanishes while it's effectively disabled.
+
+Now, apps running in the background will sleep in between updates to limit their FPS.
+
+The one caveat is that most operating systems will not report if a window is visible, only if it has focus. So the throttle is based on focus, not visibility. 60Hz was then chosen as the default to maintain high FPS in cases where the window is not focused but still visible.
+
+## `AnimationPlayer` API Improvements
+
+<div class="release-feature-authors">authors: @devinleamy</div>
+
+The `AnimationPlayer` now has new methods for controlling playback, and utilities for checking
+if an animation is playing or completed, and getting its `AnimationClip` handle.
+
+`set_elapsed` and has been removed in favor of `seek_to`. `elapsed` now
+returns the actual elapsed time and is not affected by the animation speed. `stop_repeating` have been removed
+in favor of `set_repeat(RepeatAnimation::Never)`.
+
+```rust
+let mut player = q_animation_player.single_mut();
+// Check if an animation is complete.
+if player.is_finished() {
+    // Set the playback mode.
+    player.set_repeat(RepeatAnimation::Forever);
+    player.set_repeat(RepeatAnimation::Never);
+    player.set_repeat(RepeatAnimation::Count(4));
+}
+// Get a handle to the playing AnimationClip.
+let clip_handle = player.animation_clip();
+// Seek to 1s in the current clip.
+player.seek_to(1.0);
+```
+
+## Ignore Ambiguous Components and Resources
+
+<div class="release-feature-authors">authors: @hymm</div>
+
+Ambiguity Reporting is an optional feature of Bevy's scheduler. When enabled it reports conflicts between systems that modify the same data, but are not ordered in relation to each other. While some reported conflicts can cause subtle bugs, many do not. Bevy has a couple existing methods and two new ones for ignoring these.
+
+The existing APIs: `ambiguous_with`, which ignores conflicts between specific sets, and `ambiguous_with_all`, which ignores all conflicts with the set it's applied to. In addition, there are now 2 new APIs that let you ignore conflicts on a type of data, `allow_ambiguous_component` and `allow_ambiguous_resource`. These ignore all conflicts between systems on that specific type, component or resource, in a world.
+
+```rust
+#[derive(Resource)]
+struct R;
+
+// These systems are ambiguous on R
+fn system_1(_: ResMut<R>) {}
+fn system_2(_: Res<R>) {}
+
+let mut app = App::new();
+app.configure_schedules(ScheduleBuildSettings {
+  ambiguity_detection: LogLevel::Error,
+  ..default()
+});
+app.insert_resource(R);
+
+app.add_systems(Update, ( system_1, system_2 ));
+app.allow_ambiguous_resource::<R>();
+
+// Running the app does not error.
+app.update();
+```
+
+Bevy is now using this to ignore conflicts between the `Assets<T>` resources. Most of these ambiguities are modifying different assets and thus do not matter.
+
+## Spatial Audio API Ergonomics
+
+<div class="release-feature-authors">authors: @rparrett, @hymm, @mockersf</div>
+
+A simple "stereo" (non-HRTF) spatial audio implementation was heroically [put together](https://bevyengine.org/news/bevy-0-10/#spatial-audio) at the last minute for Bevy 0.10, but the implementation was somewhat bare-bones and not very user-friendly. Users needed to write their own systems to update audio sinks with emitter and listener positions.
+
+Now users can just add a `TransformBundle` to their `AudioBundle`s and Bevy will take care of the rest!
+
+```rust
+commands.spawn((
+    TransformBundle::default(),
+    AudioBundle {
+        source: asset_server.load("sounds/bonk.ogg"),
+        settings: PlaybackSettings::DESPAWN.with_spatial(true),
+    },
+));
+```
+
+## Pitch Audio Source
+
+<div class="release-feature-authors">authors: @basilefff</div>
+
+Audio can now be played by pitch, which is useful to debug audio issues, to use as a placeholder, or for programmatic audio.
+
+A `Pitch` audio source can be created from its frequency and its duration, and then be used as a source in a `PitchBundle`.
+
+```rust
+fn play_pitch(
+    mut pitch_assets: ResMut<Assets<Pitch>>,
+    mut commands: Commands,
+) {
+    // This is a A for 1 second
+    let pitch_handle = pitch_assets.add(Pitch::new(440.0, Duration::new(1, 0)));
+    // Play it now
+    commands.spawn(PitchBundle {
+        source: pitch_handle,
+        ..default()
+    });
+}
+```
+
+Audio is generated at the given frequency using a [sine wave](https://en.wikipedia.org/wiki/Sine_wave#Audio_example). More complex sounds can be created by playing several pitch audio sources at the same time, like chords or hamonics.
+
+## Added HSL methods to `Color` struct
+
+<div class="release-feature-authors">authors: @idedary</div>
+
+You can now use `h()`, `s()`, `l()` together with their `set_h()`, `set_s()`, `set_l()` and `with_h()`, `with_s()`, `with_l()` variants to manipulate _Hue_, _Saturation_ and _Lightness_ values of a `Color` struct without cloning. Previously you could do that with only RGBA values.
+
+```rust
+// Returns HSL component values
+let color = Color::ORANGE;
+let hue = color.h();
+// ...
+
+// Changes the HSL component values
+let mut color = Color::PINK;
+color.set_s(0.5);
+// ...
+
+// Modifies existing colors and returns them
+let color = Color::VIOLET.with_l(0.7);
+// ...
+```
+
+## Unified `Time`
+
+<div class="release-feature-authors">authors: @nakedible @maniwani @alice-i-cecile</div>
+
+Bevy 0.12 brings two major quality of life improvements to `FixedUpdate`.
+
+* `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
+* `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
+
+The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking. Its methods were different from `Time` and it didn't even track "total time elapsed" like `Time` did, to name a few examples. Having two different "time" APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
+
+Now, you can just write systems that read `Time` and schedule them in either context.
+
+```rust
+// This system will see a constant delta time if scheduled in `FixedUpdate` or
+// a variable delta time if scheduled in `Update`.
+fn integrate_velocity(
+    mut query: Query<(&mut Transfrom, &Velocity)>,
+    time: Res<Time>,
+) {
+    for (mut transform, velocity) in &mut query {
+        transform.translation.x += velocity.x * time.delta_seconds();
+        transform.translation.y += velocity.y * time.delta_seconds();
+    }
+}
+```
+
+Most systems should continue to use `Time`, but behind the scenes, the methods from previous APIs have been refactored into four clocks:
+
+* `Time<Real>`
+* `Time<Virtual>`
+* `Time<Fixed>`
+* `Time<()>`
+
+`Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` chases `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate`. When a system borrows `Time`, it actually borrows `Time<()>`.
+
+Try the new `time` example to get a better feel for these resources.
+
+The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
+
+## Reduced Tracing Overhead
+
+<div class="release-feature-authors">authors: @hymm, @james7132</div>
+
+Bevy uses the [tracing](https://crates.io/crates/tracing) library to measure system running time (among other things). This is useful for determining where bottlenecks in frame time are and measuring performance improvements. These traces can be visualized using the [tracy](https://github.com/wolfpld/tracy) tool. However, using tracing's spans has a significant overhead to it. A large part of the per-span overhead is due to allocating the string description of the span. By caching the spans for systems, commands, and parallel iteration, we have significantly reduced the CPU time overhead when using tracing. In the PR that introduced system span caching, our "many foxes" stress test went from 5.35 ms to 4.54 ms. In the PR that added caching for the parallel iteration spans, our "many cubes" stress test went from 8.89 ms to 6.8 ms.
+
+![tracing overhead](tracing-overhead-reduction.png)
+
+## TypePath Migration
+
+<div class="release-feature-authors">authors: @soqb</div>
+
+As a followup to the introduction of [Stable TypePath](/news/bevy-0-11/#stable-typepath) in **Bevy 0.11**, Bevy Reflect now uses [`TypePath`] instead of [`type_name`]. A reflected type's [`TypePath`] is now accessible via [`TypeInfo`] and [`DynamicTypePath`] and [`type_name`] methods have been removed.
+
+[`TypeInfo`]: https://dev-docs.bevyengine.org/bevy/reflect/enum.TypeInfo.html
+[`TypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.TypePath.html
+[`DynamicTypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.DynamicTypePath.html
+[`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
+
 ## Improved bevymark Example
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump), @IceSentry</div>
@@ -1607,16 +1578,57 @@ The bevymark example needed to be improved to enable benchmarking the batching /
 
 This allows benchmarking of different situations for batching / instancing in the next section.
 
-## TypePath Migration
+## CI Improvements
 
-<div class="release-feature-authors">authors: @soqb</div>
+<div class="release-feature-authors">authors: @ameknite, @mockersf</div>
 
-As a followup to the introduction of [Stable TypePath](/news/bevy-0-11/#stable-typepath) in **Bevy 0.11**, Bevy Reflect now uses [`TypePath`] instead of [`type_name`]. A reflected type's [`TypePath`] is now accessible via [`TypeInfo`] and [`DynamicTypePath`] and [`type_name`] methods have been removed.
+To help ensure examples are reusable outside of the Bevy repository, CI will now fail if an example
+uses an import from `bevy_internal` instead of `bevy`.
 
-[`TypeInfo`]: https://dev-docs.bevyengine.org/bevy/reflect/enum.TypeInfo.html
-[`TypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.TypePath.html
-[`DynamicTypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.DynamicTypePath.html
-[`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
+Additionally, the daily mobile check job now builds on more iOS and Android devices:
+
+* iPhone 13 on iOS 15
+* iPhone 14 on iOS 16
+* iPhone 15 on iOS 17
+* Xiaomi Redmi Note 11 on Android 11
+* Google Pixel 6 on Android 12
+* Samsung Galaxy S23 on Android 13
+* Google Pixel 8 on Android 14
+
+## Example tooling improvements
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+The example showcase tool can now build all examples for WebGL2 or WebGPU. This is used to update
+the website with all Wasm-compatible examples, which you can find
+[here](https://bevyengine.org/examples/) for WebGL2, or
+[here](https://bevyengine.org/examples-webgpu/) for WebGPU.
+
+It is now also capable of capturing a screenshot while running all examples:
+
+```sh
+cargo run -p example-showcase -- run --screenshot
+```
+
+Some options are available to help with the execution, you can check them with `--help`.
+
+Those screenshots are displayed on the example pages on the website, and can be used to check that
+a PR didn't introduce a visible regression.
+
+## Example execution in CI
+
+<div class="release-feature-authors">authors: @mockersf, @rparrett</div>
+
+All examples are now executed in CI on Windows with DX12, and on Linux with Vulkan. When possible,
+a screenshot is taken and compared to the last execution. If an example crashes, the log is saved.
+The mobile example is also executed on the same devices as the daily mobile check job.
+
+A report of all those executions is built and available
+[here](https://thebevyflock.github.io/bevy-example-runner/).
+
+[![Example Report](example-report.png)](https://thebevyflock.github.io/bevy-example-runner/)
+
+If you want to help sponsor tests on more platforms, get in touch!
 
 ## <a name="what-s-next"></a>What's Next?
 
