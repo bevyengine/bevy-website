@@ -47,6 +47,7 @@
     $tiers: (
         ('tier': 'patron', 'color': $color-white, 'height': 190px),
         ('tier': 'platinum', 'color': $color-white, 'height': 100px),
+        ('tier': 'gold', 'color': $color-gold, 'height': 90px),
         ('tier': 'silver', 'color': #bbb, 'height': 80px),
         ('tier': 'bronze', 'color': #9f7d6c, 'height': 60px),
     );
