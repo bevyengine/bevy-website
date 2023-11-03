@@ -18,17 +18,16 @@ To update an existing Bevy App or Plugin to **Bevy 0.12**, check out our [0.11 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-* **Deferred Rendering**
-* **Bevy Asset V2**
-* **PCF Shadow Filtering**
-* **StandardMaterial Light Transmission**
-* **Material Extensions**
-* **Rusty Shader Imports**
-* **Suspend and Resume on Android**
-* **Automatic Batching and Instancing of Draw Commands**
-* **Renderer Optimizations**
-* **Sprite Instancing**
-* **One Shot Systems**
+* **Deferred Rendering**: (Optional) support for rendering in a Deferred style, which complements Bevy's existing Forward+ renderer by adding support for new effects and different performance tradeoffs. Bevy is now a "hybrid" renderer, meaning you can use both at the same time!
+* **Bevy Asset V2**: A brand new asset system that adds support for asset preprocessing, asset configuration (via .meta files), multiple asset sources, recursive dependency load tracking, and more!
+* **PCF Shadow Filtering**: Bevy now has smoother shadows thanks to Percentage-Closer Filtering.
+* **StandardMaterial Light Transmission**: Bevy's PBR material now supports light transmission, making it possible to simulate materials like glass, water, plastic, foliage, paper, wax, marble, etc.  
+* **Material Extensions**: Materials can now build on other materials. You can now easily write shaders that build on existing materials, such as Bevy's PBR StandardMaterial.
+* **Rusty Shader Imports**: Bevy's granular shader import system now uses Rust-style imports, expanding the capabilities and usability of the import system.
+* **Suspend and Resume on Android**: Bevy now supports suspend and resume events on Android, which was the last big missing piece in our Android story. Bevy now supports Android!
+* **Automatic Batching and Instancing of Draw Commands**: Draw commands are now automatically batched / instanced when possible, yielding significant render performance wins.
+* **Renderer Optimizations**: Bevy's renderer dataflow has been reworked to squeeze out more performance and prepare the way for future GPU-driven rendering.
+* **One Shot Systems**: ECS Systems can now be run on-demand from other systems!
 
 <!-- more -->
 
@@ -1662,8 +1661,16 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.13
 
 Check out the [**Bevy 0.13 Milestone**](https://github.com/bevyengine/bevy/milestone/17) for an up-to-date list of current work being considered for **Bevy 0.13**.
 
+* **Bevy Scene and UI Evolution**: We are hard at work building out a new Scene and UI system for Bevy. We're experimenting with a brand new [holistic Scene / UI system](https://github.com/bevyengine/bevy/discussions/9538) that will hopefully serve as the foundation for the Bevy Editor and make defining scenes in Bevy much more flexible, capabable, and ergonomic.  
 * **More Batching/Instancing Improvements**: Put skinned mesh data into storage buffers to enable instanced drawing of skinned mesh entities with the same mesh/skin/material. Put material data in the new GpuArrayBuffer to enable batching of draws of entities with the same mesh, material type, and textures, but different material data.
-* **GPU driven rendering**: We plan on driving rendering via the GPU by creating draw calls in compute shaders (on platforms that support it). We have [experiments using meshlets](https://github.com/bevyengine/bevy/pull/10164) and plan to explore other approaches as well. This will involve putting textures into bindless texture arrays and putting meshes in one big buffer to avoid rebinds.
+* **GPU-Driven Rendering**: We plan on driving rendering via the GPU by creating draw calls in compute shaders (on platforms that support it). We have [experiments using meshlets](https://github.com/bevyengine/bevy/pull/10164) and plan to explore other approaches as well. This will involve putting textures into bindless texture arrays and putting meshes in one big buffer to avoid rebinds.
+* **Exposure Settings**: Control [camera exposure settings](https://github.com/bevyengine/bevy/pull/8407) to change the feel and mood of your renders!
+* **GPU Picking**: [Efficiently select objects](https://github.com/bevyengine/bevy/pull/8784) with pixel perfect accuracy on the GPU!
+* **Per-Object Motion Blur**: [Blur objects as they move](https://github.com/bevyengine/bevy/pull/9924) using their motion vectors
+* **UI Node Border Radius and Shadows**: Support for [border radius and shadows](https://github.com/bevyengine/bevy/pull/8973) in Bevy UI
+* **System Stepping**: Debug your app by [running systems step by step](https://github.com/bevyengine/bevy/pull/8453) for a given frame
+* **Automatic Sync Points**: Support for [automatically inserting sync points](https://github.com/bevyengine/bevy/pull/9822) between systems with dependencies, removing the need for manual insertion and resolving a common source of errors.
+* **Lightmap Support**: Support for [rendering pre-baked lightmaps](https://github.com/bevyengine/bevy/pull/10231)
 
 ## Support Bevy
 
