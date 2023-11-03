@@ -3,6 +3,11 @@ title = "Bevy 0.12"
 date = 2023-10-21
 [extra]
 author = "Bevy Contributors"
+image = "cover.gif"
+show_image = true
+image_subtitle = "A relaxing 'tiny planet' city builder by Jos Feenstra (made with Bevy)"
+image_subtitle_link = "https://twitter.com/i_am_feenster"
+
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.12** release on [crates.io](https://crates.io/crates/bevy)!
