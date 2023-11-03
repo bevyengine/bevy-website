@@ -49,7 +49,7 @@ Bevy's renderer has historically been a "forward renderer". More specifically, i
 
 However, as Bevy has grown, it has slowly moved into "hybrid renderer" territory. In previous releases, we added a [Depth and Normal Prepass](/news/bevy-0-10/#depth-and-normal-prepass) to enable [TAA](/news/bevy-0-11/#temporal-anti-aliasing), [SSAO](/news/bevy-0-11/#screen-space-ambient-occlusion), and [Alpha Texture Shadow Maps](/news/bevy-0-10/#shadow-mapping-using-prepass-shaders). We also added a Motion Vector Prepass to enable TAA.
 
-In **Bevy 0.12** we added support for Deferred Rendering (building on the existing prepass work). Each material can choose whether it will go through the forward or deferred path, and this can be configured per-material-instance. Bevy also has a new [`DefaultOpaqueRendererMethod`] resource, which configures the global default, which is set to "forward" by default. The global default can be overridden per-material.
+In **Bevy 0.12** we added optional support for Deferred Rendering (building on the existing prepass work). Each material can choose whether it will go through the forward or deferred path, and this can be configured per-material-instance. Bevy also has a new [`DefaultOpaqueRendererMethod`] resource, which configures the global default. This is set to "forward" by default. The global default can be overridden per-material.
 
 When deferred is enabled for the PBR [`StandardMaterial`], the deferred prepass packs PBR information into the Gbuffer, which looks like this:
 
@@ -96,9 +96,9 @@ Looking better! However this still isn't a perfect solution. Large shadowmaps ar
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare (Castano)</b>
 
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
-  <img class="image-a" alt="PCF Off" src="no_pcf.png">
-  <img class="image-b" alt="PCF On" src="pcf_castano.png">
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF On" data-title-b="PCF Off">
+  <img class="image-a" alt="PCF On" src="pcf_castano.png">
+  <img class="image-b" alt="PCF Off" src="no_pcf.png">
 </div>
 
 Much better!
@@ -107,9 +107,9 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare (Jimenez)</b>
 
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF Off" data-title-b="PCF On">
-  <img class="image-a" alt="PCF Off" src="no_pcf.png">
-  <img class="image-b" alt="PCF On" src="pcf_jimenez.png">
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF On" data-title-b="PCF Off">
+  <img class="image-a" alt="PCF On" src="pcf_jimenez.png">
+  <img class="image-b" alt="PCF Off" src="no_pcf.png">
 </div>
 
 [`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
@@ -119,7 +119,7 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 <div class="release-feature-authors">author: Marco Buono (@coreh)</div>
 
-The `StandardMaterial` now supports a number of light transmission-related properties:
+The [`StandardMaterial`] now supports a number of light transmission-related properties:
 
 * `specular_transmission`
 * `diffuse_transmission`
@@ -138,9 +138,9 @@ Diffuse transmission is an inexpensive addition to the PBR lighting model, while
     Different light transmission properties and their interactions with existing PBR properties.
 </div>
 
-To complement the new transmission properties, a new `TransmittedShadowReceiver` component has been introduced, which can be added to entities with diffuse transmissive materials to receive shadows cast from the opposite side of the mesh. This is most useful for rendering thin, two-sided translucent objects like tree leaves or paper.
+To complement the new transmission properties, a new [`TransmittedShadowReceiver`] component has been introduced, which can be added to entities with diffuse transmissive materials to receive shadows cast from the opposite side of the mesh. This is most useful for rendering thin, two-sided translucent objects like tree leaves or paper.
 
-Additionally, two extra fields have been added to the `Camera3d` component: `screen_space_specular_transmission_quality` and `screen_space_specular_transmission_steps`. These are used to control the quality of the screen-space specular transmission effect (number of taps), and how many “layers of transparency” are supported when multiple transmissive objects are in front of each other.
+Additionally, two extra fields have been added to the [`Camera3d`] component: `screen_space_specular_transmission_quality` and `screen_space_specular_transmission_steps`. These are used to control the quality of the screen-space specular transmission effect (number of taps), and how many “layers of transparency” are supported when multiple transmissive objects are in front of each other.
 
 > **Important:** Each additional “layer of transparency” incurs in a texture copy behind the scenes, adding to the bandwidth cost, so it's recommended to keep this value as low as possible.
 
@@ -168,6 +168,10 @@ This ray is then propagated through the mesh's volume (by a distance controlled 
 The “background” texture is then sampled at that point. Perceptual roughness is used along with interleaved gradient noise and multiple spiral taps, to produce a blur effect.
 
 Diffuse transmission is implemented via a second, reversed and displaced fully-diffuse Lambertian lobe, which is added to the existing PBR lighting calculations. This is a simple and relatively cheap approximation, but works reasonably well.
+
+[`TransmittedShadowReceiver`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.TransmittedShadowReceiver.html
+[`Camera3d`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/core_3d/struct.Camera3d.html
+[`DepthPrepass`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/prepass/struct.DepthPrepass.html
 
 ## Bevy Asset V2
 
@@ -221,6 +225,14 @@ This will start the [`AssetProcessor`] in parallel with your app. It will run un
 
 [`AssetPlugin`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetPlugin.html
 [`AssetProcessor`]: https://dev-docs.bevyengine.org/bevy/asset/processor/struct.AssetProcessor.html
+
+### Should You Enable Pre-Processing Today?
+
+In future Bevy releases we will recommended enabling processing for the majority of apps. We don't _yet_ recommend it for most use cases for a few reasons:
+
+1. Most of our built-in assets don't have processors implemented for them yet. The [`CompressedImageSaver`] is the only built-in processor and it has a bare-minimum set of features.
+2. We have not implemented "asset migrations" yet. Whenever an asset changes its settings format (which is used in meta files), we need to be able to automatically migrate existing asset meta files to the new version.
+3. As people adopt processing, we expect some flux as we respond to feedback.
 
 ### Incremental and Dependency Aware
 
@@ -316,9 +328,7 @@ The final "output" metadata for the processed image looks like this:
 
 This is what is written to the `imported_assets` folder.
 
-Note that the `Process` asset mode has changed to `Load`. This is because in the released app, we will load the final processed image "normally" like any other image asset. Note that in this case, the input and the output asset _both_ use [`ImageLoader`]. However the processed asset _can_ use a different loader if the context demands it.
-
-Also note the addition of the `processed_info` metadata. This is used to determine if an asset needs to be reprocessed. `hash` is a combined hash of the asset source file and the asset meta file. This can be used to detect if the asset has changed. `process_dependencies` contains information (and hashes) of any asset dependencies used to produce the final processed asset. `full_hash` is a combination of `hash` and `processed_info` data to quickly determine if an asset has changed.
+Note that the `Process` asset mode has changed to `Load`. This is because in the released app, we will load the final processed image "normally" like any other image asset. Note that in this case, the input and the output asset _both_ use [`ImageLoader`]. However the processed asset _can_ use a different loader if the context demands it. Also note the addition of the `processed_info` metadata, which is used to determine if an asset needs to be reprocessed.
 
 The final processed asset and metadata files can be viewed and interacted with like any other file. However they are intended to be read-only. Configuration should happen on the _source asset_, not the _final processed asset_.
 
@@ -331,19 +341,13 @@ The final processed asset and metadata files can be viewed and interacted with l
 
 <div style="font-size: 1.0rem" class="release-feature-authors">Sponza scene with textures processed into Basis Universal (with mipmaps) using Bevy Asset V2</div>
 
-**Bevy 0.12** ships with a barebones [`CompressedImageSaver`] that writes images to [Basis Universal](https://github.com/BinomialLLC/basis_universal) (a GPU-friendly image interchange format) and generates [mipmaps](https://en.wikipedia.org/wiki/Mipmap). Importantly, mipmaps reduce aliasing artifacts when sampling images from different distances. This fills an important gap, as Bevy previously had no way to generate mipmaps on its own (it relied on external tooling). This can be enabled with the `basis-universal` cargo feature.
+**Bevy 0.12** ships with a barebones [`CompressedImageSaver`] that writes images to [Basis Universal](https://github.com/BinomialLLC/basis_universal) (a GPU-friendly image interchange format) and generates [mipmaps](https://en.wikipedia.org/wiki/Mipmap). Mipmaps reduce aliasing artifacts when sampling images from different distances. This fills an important gap, as Bevy previously had no way to generate mipmaps on its own (it relied on external tooling). This can be enabled with the `basis-universal` cargo feature.
 
 [`CompressedImageSaver`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.CompressedImageSaver.html
 
 ### Preprocessing is Optional!
 
-In future Bevy releases we will likely recommended enabling processing for the majority of apps. We don't _yet_ recommend it for most use cases for a few reasons:
-
-1. Most of our built-in assets don't have processors implemented for them yet. The [`CompressedImageSaver`] is the only built-in processor and it has a bare-minimum set of features.
-2. We have not implemented "asset migrations" yet. Whenever an asset changes its settings format (which is used in meta files), we need to be able to automatically migrate existing asset meta files to the new version.
-3. As people adopt processing, we expect some flux as we respond to feedback.
-
-Despite (eventually) recommending that most people enable asset processing, we also acknowledge that Bevy is used in a variety of applications. Asset processing introduces additional complexity and workflow changes that some people will not want!
+Despite eventually ([in future Bevy releases](#should-you-enable-pre-processing-today)) recommending that most people enable asset processing, we also acknowledge that Bevy is used in a variety of applications. Asset processing introduces additional complexity and workflow changes that some people will not want!
 
 This is why Bevy offers two asset modes:
 
@@ -363,7 +367,7 @@ That means if you already have an [`ImageLoader`], which loads images, all you n
 
 ### Built To Run Anywhere
 
-Unlike many other asset processors in this space, Bevy Asset V2's [`AssetProcessor`] is intentionally architected to run on any platform. It doesn't use platform-limited databases or require the ability/permission to run a networked server. It can be deployed alongside a released app if your application logic requires processing at runtime.
+Unlike many other asset processors in the gamedev space, Bevy Asset V2's [`AssetProcessor`] is intentionally architected to run on any platform. It doesn't use platform-limited databases or require the ability/permission to run a networked server. It can be deployed alongside a released app if your application logic requires processing at runtime.
 
 One notable exception: we still need to make a few changes before it can run on the web, but it was built with web support in mind.
 
@@ -374,6 +378,7 @@ The [`AssetEvent`] enum now has an [`AssetEvent::LoadedWithDependencies`] varian
 This makes it easy to wait until an [`Asset`] is "fully loaded" before doing something.
 
 [`AssetEvent`]: https://dev-docs.bevyengine.org/bevy/asset/enum.AssetEvent.html
+[`AssetEvent::LoadedWithDependencies`]: https://dev-docs.bevyengine.org/bevy/asset/enum.AssetEvent.html
 
 ### Multiple Asset Sources
 
@@ -490,7 +495,7 @@ cargo build --release
 
 ### Better Asset Handles
 
-Asset handles now use a single `Arc` at their core to manage the lifetime of an asset. This simplifies the internals significantly and also enables us to make more asset information available directly from handles.
+Asset handles now use a single [`Arc`] at their core to manage the lifetime of an asset. This simplifies the internals significantly and also enables us to make more asset information available directly from handles.
 
 Notably, in **Bevy 0.12** we use this to provide direct [`AssetPath`] access from the [`Handle`]:
 
@@ -504,6 +509,7 @@ let path = handle.path();
 
 Handles now also use a smaller / cheaper-to-look-up [`AssetIndex`] internally, which uses generational indices to look up assets in dense storage.
 
+[`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
 [`AssetPath`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetPath.html
 [`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
 [`AssetIndex`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetIndex.html
@@ -528,6 +534,8 @@ To prevent all of this cloning and re-allocating of strings, we've built our own
 
 On Android, applications no longer crash on suspend. Instead, they are paused, and no systems
 will run until the application is resumed.
+
+This resolves the last "big" showstopper for Android apps! Bevy now supports Android!
 
 <video controls><source src="suspend-resume.mp4" type="video/mp4"/></video>
 
@@ -645,7 +653,7 @@ This _vastly_ simplifies writing custom PBR materials, making it accessible to p
 
 ## Automatic Batching/Instancing of Draw Commands
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain)</div>
 
 **Bevy 0.12** now automatically batches/instances draw commands where possible. This cuts down the number of draw calls, which yields significant performance wins!
 
@@ -687,11 +695,11 @@ This is generally for cases where you are doing custom, non-standard renderer fe
 
 ## The Road to GPU-driven Rendering
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @james-j-obrien, @JMS55, @inodentry, @robtfm, @nicopap, @teoxoy, @IceSentry, @Elabajaba</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @james-j-obrien, @JMS55, @inodentry, @robtfm, @nicopap, @teoxoy, @IceSentry, @Elabajaba</div>
 
 Bevy's renderer performance for 2D and 3D meshes can improve a lot. There are bottlenecks on both the CPU and GPU side, which can be lessened to give significantly higher frame rates. As always with Bevy, we want to make the most of the platforms you use, from the constraints of WebGL2 and mobile devices, to the highest-end native discrete graphics cards. A solid foundation can support all of this.
 
-In **Bevy 0.12** we have started reworking rendering data structures, data flow, and draw patterns to unlock new optimizations. This enabled the Automatic Batching/Instancing we landed in **Bevy 0.12** and also helps pave the way for other significant wins in the future, such as GPU-driven rendering.
+In **Bevy 0.12** we have started reworking rendering data structures, data flow, and draw patterns to unlock new optimizations. This enabled the **Automatic Batching/Instancing** we landed in **Bevy 0.12** and also helps pave the way for other significant wins in the future, such as GPU-driven rendering. We aren't quite ready for GPU-driven rendering, but we've started down that path in **Bevy 0.12**!
 
 ### What are CPU- and GPU-driven rendering?
 
@@ -703,7 +711,7 @@ In GPU-driven rendering, the draw commands are encoded on the GPU by [compute sh
 
 Historically Bevy's general GPU data pattern has been to bind each piece of data per-entity and issue a draw call per-entity. In some cases we did store data in uniform buffers in "array style" and accessed with dynamic offsets, but this still resulted in rebinding at each offset.
 
-All of this rebinding has performance implications, both on the CPU and the GPU. On the CPU, it means encoding draw commands has many more steps to process and so takes more time than necessary. In the graphics API and on the GPU, it means many more rebinds and separate draw commands.
+All of this rebinding has performance implications, both on the CPU and the GPU. On the CPU, it means encoding draw commands has many more steps to process, taking more time than necessary. On the GPU (and in the graphics API), it means many more rebinds and separate draw commands.
 
 Avoiding rebinding is both a big performance benefit for CPU-driven rendering and is necessary to enable GPU-driven rendering.
 
@@ -716,7 +724,7 @@ In **Bevy 0.12** we've started this process in earnest! We've made a number of a
 
 ### Reorder Render Sets
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @james-j-obrien, @inodentry</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @james-j-obrien, @inodentry</div>
 
 The order of draws needs to be known for some methods of instanced draws so that the data can be laid out, and looked up in order. For example, when per-instance data is stored in an instance-rate vertex buffer.
 
@@ -751,7 +759,7 @@ Given these constraints, we want to use storage buffers on platforms where they 
 
 #### BatchedUniformBuffer
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @JMS55, @teoxoy, @robtfm, @konsolas</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @teoxoy, @robtfm, @konsolas</div>
 
 For uniform buffers, we have to assume that on WebGL2 we may only be able to access 16kB of data at a time. Taking an example, `MeshUniform` requires 144 bytes per instance, which means we can have a batch of 113 instances per 16kB binding. If we want to draw more than 113 entities in total, we need a way of managing a uniform buffer of data that can be bound at a dynamic offset per batch of instances. This is what `BatchedUniformBuffer` is designed to solve.
 
@@ -764,7 +772,7 @@ Notice how the instance data can be packed much more tightly, fitting the same a
 
 #### GpuArrayBuffer
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @JMS55, @IceSentry, @mockersf</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @IceSentry, @mockersf</div>
 
 Given that we need to support both uniform and storage buffers for a given data type, this increases the level of complexity required to implement new low-level renderer features (both in Rust code and in shaders). When confronted with this complexity, some developers might choose instead only use storage buffers (effectively dropping support for WebGL 2).
 
@@ -784,7 +792,7 @@ All the instance data can be placed directly one after the other, and we only ha
 
 ### 2D / 3D Mesh Entities using GpuArrayBuffer
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @robtfm, @Elabajaba</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @robtfm, @Elabajaba</div>
 
 The 2D and 3D mesh entity rendering was migrated to use [`GpuArrayBuffer`] for the mesh uniform data.
 
@@ -792,7 +800,7 @@ Just avoiding the rebinding of the mesh uniform data buffer gives about a 6% inc
 
 ## EntityHashMap Renderer Optimization
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @robtfm, @pcwalton, @jancespivo, @SkiFire13, @nicopap</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @robtfm, @pcwalton, @jancespivo, @SkiFire13, @nicopap</div>
 
 Since **Bevy 0.6**, Bevy's renderer has extracted data from the "main world" into a separate "render world". This enables [Pipelined Rendering](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render), which renders frame N in the render app, while the main app simulates frame N+1.
 
@@ -850,7 +858,7 @@ app.add_plugins(ExtractInstancesPlugin::<MyType>::extract_visible());
 
 ## Sprite Instancing
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain)</div>
 
 In previous versions of Bevy, Sprites were rendered by generating a vertex buffer containing 4 vertices per sprite with position, UV, and possibly color data. This has proven to be very effective. However, having to split batches of sprites into multiple draws because they use a different color is suboptimal.
 
@@ -923,9 +931,13 @@ Bevy now reads and uses the `KHR_materials_emissive_strength` glTF material exte
 
 <div class="release-feature-authors">authors: @IceSentry</div>
 
-The wireframes now use bevy's Material abstraction. This means it will automatically use the new batching and instancing features while being easier to maintain. This change also made it easier to add support for colored wireframe. You can configure the color globally or per mesh using the `WireframeColor` component. It's also now possible to disable wireframe rendering by using the `NeverRenderWireframe` component.
+The wireframes now use Bevy's [`Material`] abstraction. This means it will automatically use the new batching and instancing features while being easier to maintain. This change also made it easier to add support for colored wireframe. You can configure the color globally or per mesh using the [`WireframeColor`] component. It's also now possible to disable wireframe rendering by using the [`NoWireframe`] component.
 
 ![wireframe](wireframe.png)
+
+[`Material`]: https://dev-docs.bevyengine.org/bevy/pbr/trait.Material.html
+[`WireframeColor`]: https://dev-docs.bevyengine.org/bevy/pbr/wireframe/struct.WireframeColor.html
+[`NoWireframe`]: https://dev-docs.bevyengine.org/bevy/pbr/wireframe/struct.NoWireframe.html
 
 ## External Renderer Context
 
@@ -1035,7 +1047,7 @@ fn call_all(query: Query<&Callback>, mut commands: Commands) {
 }
 ```
 
-One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the bevy scheduling graph with one-shot systems and [`aery`](https://docs.rs/aery/latest/aery/) (let us know how that goes, by the way).
+One-shot systems can then be attached to UI elements, like buttons, actions in an RPG, or any other entity. You might even feel inspired to implement the Bevy scheduling graph with one-shot systems and [`aery`](https://docs.rs/aery/latest/aery/) (let us know how that goes, by the way).
 
 One-shot systems are very flexible.
 They can be nested, so you can call `run_system` from within a one-shot system.
@@ -1167,78 +1179,70 @@ app.configure_sets(Update, A.after(B));
 app.configure_sets(Update, (A.after(B), B.after(C));
 ```
 
-## GamepadButtonInput
+## UI Node Outlines
 
-<div class="release-feature-authors">authors: @bravely-beep</div>
+<div class="release-feature-authors">authors: @ickshonpe</div>
 
-Bevy generally provides two ways to handle input of a given type:
+Bevy's UI nodes now support outlines "outside the borders" of UI nodes via the new [`Outline`] component. [`Outline`] does not occupy any space in the layout. This is different than [`Style::border`], which exists "as part of" the node in the layout:
 
-* Events: receive a stream of input events in the order they occur
-* The [`Input`] Resource: read the _current_ state of the input
-
-One notable exception was [`GamepadButton`], which was only available via the [`Input`] resource. **Bevy 0.12** adds a new [`GamepadButtonInput`] event, filling this gap.
-
-[`Input`]: https://dev-docs.bevyengine.org/bevy/input/struct.Input.html
-[`GamepadButton`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButton.html
-[`GamepadButtonInput`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButtonInput.html
-
-## Split Computed Visibility
-
-<div class="release-feature-authors">authors: @JoJoJet</div>
-
-The `ComputedVisibility` component has now been split into [`InheritedVisibility`] (visible in the hierarchy) and [`ViewVisibility`] (visible from a view), making it possible to use Bevy's built-in change detection on both sets of data separately.
-
-[`InheritedVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.InheritedVisibility.html
-[`ViewVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.ViewVisibility.html
-
-## SceneInstanceReady Event
-
-<div class="release-feature-authors">authors: @Shatur</div>
-
-**Bevy 0.12** adds a new [`SceneInstanceReady`] event, which makes it easy to listen for a specific scene instance to be ready. "Ready" in this case means "fully spawned as an entity".
+![ui outlines](ui_outlines.png)
 
 ```rust
-#[derive(Resource)]
-struct MyScene(Entity);
+commands.spawn((
+    NodeBundle::default(),
+    Outline {
+        width: Val::Px(6.),
+        offset: Val::Px(6.),
+        color: Color::WHITE,
+    },
+))
+```
 
-fn setup(mut commands: Commands, assets: Res<AssetServer>) {
-    let scene = SceneBundle {
-        scene: assets.load("some.gltf#MyScene"),
-        ..default()
-    };
-    let entity = commands.spawn(scene).id();
-    commands.insert_resource(MyScene(entity));
-}
+[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
+[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
 
-fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
-    for event in events.read() {
-        if event.parent == my_scene.0 {
-            // the scene instance is "ready"
-        }
+## Unified `Time`
+
+<div class="release-feature-authors">authors: @nakedible @maniwani @alice-i-cecile</div>
+
+Bevy 0.12 brings two major quality of life improvements to [`FixedUpdate`].
+
+* [`Time`] now returns the contextually correct values for systems running in [`FixedUpdate`]. (As such, `FixedTime` has been removed.)
+* [`FixedUpdate`] can no longer snowball into a "death spiral" (where the app freezes because [`FixedUpdate`] steps are enqueued faster than it can run them).
+
+The [`FixedUpdate`] schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking. Its methods were different from [`Time`] and it didn't even track "total time elapsed" like [`Time`] did, to name a few examples. Having two different "time" APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
+
+Now, you can just write systems that read [`Time`] and schedule them in either context.
+
+```rust
+// This system will see a constant delta time if scheduled in `FixedUpdate` or
+// a variable delta time if scheduled in `Update`.
+fn integrate_velocity(
+    mut query: Query<(&mut Transfrom, &Velocity)>,
+    time: Res<Time>,
+) {
+    for (mut transform, velocity) in &mut query {
+        transform.translation.x += velocity.x * time.delta_seconds();
+        transform.translation.y += velocity.y * time.delta_seconds();
     }
 }
 ```
 
-[`SceneInstanceReady`]: https://dev-docs.bevyengine.org/bevy/scene/struct.SceneInstanceReady.html
+Most systems should continue to use [`Time`], but behind the scenes, the methods from previous APIs have been refactored into four clocks:
 
-## ReflectBundle
+* `Time<Real>`
+* `Time<Virtual>`
+* `Time<Fixed>`
+* `Time<()>`
 
-<div class="release-feature-authors">authors: @Shatur</div>
+`Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` chases `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate`. When a system borrows `Time`, it actually borrows `Time<()>`.
 
-Bevy now supports "Bundle reflection" via [`ReflectBundle`]:
+Try the new [time example](https://github.com/bevyengine/bevy/blob/main/examples/time/time.rs) to get a better feel for these resources.
 
-```rust
-#[derive(Bundle, Reflect)]
-#[reflect(Bundle)]
-struct SpriteBundle {
-    image: Handle<Image>,
-    // other components here
-}
-```
+The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times [`FixedUpdate`] can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in [`FixedUpdate`] will appear to slow down since it'll be running at a temporarily reduced rate.
 
-This makes it possible to create and interact with ECS bundles using Bevy Reflect, meaning you can do these operations dynamically at runtime. This is useful for scripting and asset scenarios.
-
-[`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
+[`FixedUpdate`]: https://dev-docs.bevyengine.org/bevy/app/struct.FixedUpdate.html
+[`Time`]: https://dev-docs.bevyengine.org/bevy/time/struct.Time.html
 
 ## ImageLoader Settings
 
@@ -1284,37 +1288,78 @@ However, you can set these values to whatever you want!
 [`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
 [`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
 
-## UI Node Outlines
+## GamepadButtonInput
 
-<div class="release-feature-authors">authors: @ickshonpe</div>
+<div class="release-feature-authors">authors: @bravely-beep</div>
 
-Bevy's UI nodes now support outlines "outside the borders" of UI nodes via the new [`Outline`] component. [`Outline`] does not occupy any space in the layout. This is different than [`Style::border`], which exists "as part of" the node in the layout:
+Bevy generally provides two ways to handle input of a given type:
 
-![ui outlines](ui_outlines.png)
+* Events: receive a stream of input events in the order they occur
+* The [`Input`] Resource: read the _current_ state of the input
+
+One notable exception was [`GamepadButton`], which was only available via the [`Input`] resource. **Bevy 0.12** adds a new [`GamepadButtonInput`] event, filling this gap.
+
+[`Input`]: https://dev-docs.bevyengine.org/bevy/input/struct.Input.html
+[`GamepadButton`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButton.html
+[`GamepadButtonInput`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButtonInput.html
+
+## SceneInstanceReady Event
+
+<div class="release-feature-authors">authors: @Shatur</div>
+
+**Bevy 0.12** adds a new [`SceneInstanceReady`] event, which makes it easy to listen for a specific scene instance to be ready. "Ready" in this case means "fully spawned as an entity".
 
 ```rust
-commands.spawn((
-    NodeBundle::default(),
-    Outline {
-        width: Val::Px(6.),
-        offset: Val::Px(6.),
-        color: Color::WHITE,
-    },
-))
+#[derive(Resource)]
+struct MyScene(Entity);
+
+fn setup(mut commands: Commands, assets: Res<AssetServer>) {
+    let scene = SceneBundle {
+        scene: assets.load("some.gltf#MyScene"),
+        ..default()
+    };
+    let entity = commands.spawn(scene).id();
+    commands.insert_resource(MyScene(entity));
+}
+
+fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
+    for event in events.read() {
+        if event.parent == my_scene.0 {
+            // the scene instance is "ready"
+        }
+    }
+}
 ```
 
-[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
-[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
+[`SceneInstanceReady`]: https://dev-docs.bevyengine.org/bevy/scene/struct.SceneInstanceReady.html
 
-## AccessKit Integration Improvements
+## Split Computed Visibility
 
-<div class="release-feature-authors">authors: @ndarilek</div>
+<div class="release-feature-authors">authors: @JoJoJet</div>
 
-Bevy 0.10's [AccessKit](https://accesskit.dev) integration made it incredibly easy for the engine to take the lead and push updates to the accessibility tree. But as any good dance partner knows, sometimes it's best not to lead but to follow.
+The `ComputedVisibility` component has now been split into [`InheritedVisibility`] (visible in the hierarchy) and [`ViewVisibility`] (visible from a view), making it possible to use Bevy's built-in change detection on both sets of data separately.
 
-This release adds the `ManageAccessibilityUpdates` resource which, when set to `false`, stops the engine from updating the tree on its own. This paves the way for third-party UIs with Bevy and AccessKit integration to send updates directly to Bevy. When the UI is ready to return control, `ManageAccessibilityUpdates` is set to `true` Bevy picks up where it left off and starts sending updates again.
+[`InheritedVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.InheritedVisibility.html
+[`ViewVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.ViewVisibility.html
 
-AccessKit itself was also simplified, and this release capitalizes on that to shrink the surface area of our integration. If you're curious about how things work internally or want to help, the `bevy_a11y` crate is now more approachable than ever.
+## ReflectBundle
+
+<div class="release-feature-authors">authors: @Shatur</div>
+
+Bevy now supports "Bundle reflection" via [`ReflectBundle`]:
+
+```rust
+#[derive(Bundle, Reflect)]
+#[reflect(Bundle)]
+struct SpriteBundle {
+    image: Handle<Image>,
+    // other components here
+}
+```
+
+This makes it possible to create and interact with ECS bundles using Bevy Reflect, meaning you can do these operations dynamically at runtime. This is useful for scripting and asset scenarios.
+
+[`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
 
 ## Reflect Commands
 
@@ -1506,46 +1551,6 @@ let color = Color::VIOLET.with_l(0.7);
 // ...
 ```
 
-## Unified `Time`
-
-<div class="release-feature-authors">authors: @nakedible @maniwani @alice-i-cecile</div>
-
-Bevy 0.12 brings two major quality of life improvements to `FixedUpdate`.
-
-* `Time` now returns the contextually correct values for systems running in `FixedUpdate`. (As such, `FixedTime` has been removed.)
-* `FixedUpdate` can no longer snowball into a "death spiral" (where the app freezes because `FixedUpdate` steps are enqueued faster than it can run them).
-
-The `FixedUpdate` schedule and its companion `FixedTime` resource were introduced in Bevy 0.10, and it soon became apparent that `FixedTime` was lacking. Its methods were different from `Time` and it didn't even track "total time elapsed" like `Time` did, to name a few examples. Having two different "time" APIs also meant you had to write systems to specifically support "fixed timestep" or "variable timestep" and not both. It was desirable to not have this split as it can lead to incompatibilities between plugins down the road (which is sometimes the case with plugins in other game engines).
-
-Now, you can just write systems that read `Time` and schedule them in either context.
-
-```rust
-// This system will see a constant delta time if scheduled in `FixedUpdate` or
-// a variable delta time if scheduled in `Update`.
-fn integrate_velocity(
-    mut query: Query<(&mut Transfrom, &Velocity)>,
-    time: Res<Time>,
-) {
-    for (mut transform, velocity) in &mut query {
-        transform.translation.x += velocity.x * time.delta_seconds();
-        transform.translation.y += velocity.y * time.delta_seconds();
-    }
-}
-```
-
-Most systems should continue to use `Time`, but behind the scenes, the methods from previous APIs have been refactored into four clocks:
-
-* `Time<Real>`
-* `Time<Virtual>`
-* `Time<Fixed>`
-* `Time<()>`
-
-`Time<Real>` measures the true, unedited frame and app durations. For diagnostics/profiling, use that one. It's also used to derive the others. `Time<Virtual>` can be sped up, slowed down, and paused, and `Time<Fixed>` chases `Time<Virtual>` in fixed increments. Lastly, `Time<()>` is automatically overwritten with the current value of `Time<Fixed>` or `Time<Virtual>` upon entering or exiting `FixedUpdate`. When a system borrows `Time`, it actually borrows `Time<()>`.
-
-Try the new `time` example to get a better feel for these resources.
-
-The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times `FixedUpdate` can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in `FixedUpdate` will appear to slow down since it'll be running at a temporarily reduced rate.
-
 ## Reduced Tracing Overhead
 
 <div class="release-feature-authors">authors: @hymm, @james7132</div>
@@ -1553,6 +1558,16 @@ The fix for the windup problem was limiting how much `Time<Virtual>` can advance
 Bevy uses the [tracing](https://crates.io/crates/tracing) library to measure system running time (among other things). This is useful for determining where bottlenecks in frame time are and measuring performance improvements. These traces can be visualized using the [tracy](https://github.com/wolfpld/tracy) tool. However, using tracing's spans has a significant overhead to it. A large part of the per-span overhead is due to allocating the string description of the span. By caching the spans for systems, commands, and parallel iteration, we have significantly reduced the CPU time overhead when using tracing. In the PR that introduced system span caching, our "many foxes" stress test went from 5.35 ms to 4.54 ms. In the PR that added caching for the parallel iteration spans, our "many cubes" stress test went from 8.89 ms to 6.8 ms.
 
 ![tracing overhead](tracing-overhead-reduction.png)
+
+## AccessKit Integration Improvements
+
+<div class="release-feature-authors">authors: @ndarilek</div>
+
+Bevy 0.10's [AccessKit](https://accesskit.dev) integration made it incredibly easy for the engine to take the lead and push updates to the accessibility tree. But as any good dance partner knows, sometimes it's best not to lead but to follow.
+
+This release adds the `ManageAccessibilityUpdates` resource which, when set to `false`, stops the engine from updating the tree on its own. This paves the way for third-party UIs with Bevy and AccessKit integration to send updates directly to Bevy. When the UI is ready to return control, `ManageAccessibilityUpdates` is set to `true` Bevy picks up where it left off and starts sending updates again.
+
+AccessKit itself was also simplified, and this release capitalizes on that to shrink the surface area of our integration. If you're curious about how things work internally or want to help, the `bevy_a11y` crate is now more approachable than ever.
 
 ## TypePath Migration
 
@@ -1567,7 +1582,7 @@ As a followup to the introduction of [Stable TypePath](/news/bevy-0-11/#stable-t
 
 ## Improved bevymark Example
 
-<div class="release-feature-authors">authors: Rob Swain (@superdump), @IceSentry</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @IceSentry</div>
 
 The bevymark example needed to be improved to enable benchmarking the batching / instanced draw changes. Modes were added to:
 
