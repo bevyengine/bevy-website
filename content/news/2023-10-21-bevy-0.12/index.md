@@ -49,7 +49,7 @@ query.par_iter_mut().for_each(|x| ...);
 
 <div class="release-feature-authors">authors: @bravely-beep</div>
 
-Bevy generally provides to ways to handle input of a given type:
+Bevy generally provides two ways to handle input of a given type:
 
 * Events: receive a stream of input events in the order they occur
 * The [`Input`] Resource: read the _current_ state of the input
