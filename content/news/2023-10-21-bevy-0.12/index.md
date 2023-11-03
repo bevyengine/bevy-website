@@ -1277,6 +1277,17 @@ The bevymark example needed to be improved to enable benchmarking the batching /
 
 This allows benchmarking of different situations for batching / instancing in the next section.
 
+## TypePath Migration
+
+<div class="release-feature-authors">authors: @soqb</div>
+
+As a followup to the introduction of [Stable TypePath](/news/bevy-0-11/#stable-typepath) in **Bevy 0.11**, Bevy Reflect now uses [`TypePath`] instead of [`type_name`]. A reflected type's [`TypePath`] is now accessible via [`TypeInfo`] and [`DynamicTypePath`] and [`type_name`] methods have been removed.
+
+[`TypeInfo`]: https://dev-docs.bevyengine.org/bevy/reflect/enum.TypeInfo.html
+[`TypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.TypePath.html
+[`DynamicTypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.DynamicTypePath.html
+[`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work in progress! Some of this will likely land in **Bevy 0.13**.
