@@ -167,7 +167,7 @@ Both specular and diffuse transmission are compatible with all supported platfor
 The optional `pbr_transmission_textures` Cargo feature allows using textures to modulate the `specular_transmission`, `diffuse_transmission` and `thickness` properties. It's disabled by default in order to reduce the number of texture bindings used by the standard material. (These are
 severely constrained on lower-end platforms and older GPUs!)
 
-`DepthPrepass` and TAA can greatly improve the quality of the screen-space specular transmission effect, and are recommended to be used with it, on the platforms where they are supported.
+[`DepthPrepass`] and TAA can greatly improve the quality of the screen-space specular transmission effect, and are recommended to be used with it, on the platforms where they are supported.
 
 ### Implementation Details
 
@@ -661,7 +661,7 @@ This _vastly_ simplifies writing custom PBR materials, making it accessible to p
 
 [`ExtendedMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ExtendedMaterial.html
 
-## Automatic Batching/Instancing of Draw Commands
+## Automatic Batching and Instancing of Draw Commands
 
 <div class="release-feature-authors">authors: @superdump (Rob Swain)</div>
 
@@ -709,7 +709,7 @@ This is generally for cases where you are doing custom, non-standard renderer fe
 
 Bevy's renderer performance for 2D and 3D meshes can improve a lot. There are bottlenecks on both the CPU and GPU side, which can be lessened to give significantly higher frame rates. As always with Bevy, we want to make the most of the platforms you use, from the constraints of WebGL2 and mobile devices, to the highest-end native discrete graphics cards. A solid foundation can support all of this.
 
-In **Bevy 0.12** we have started reworking rendering data structures, data flow, and draw patterns to unlock new optimizations. This enabled the **Automatic Batching/Instancing** we landed in **Bevy 0.12** and also helps pave the way for other significant wins in the future, such as GPU-driven rendering. We aren't quite ready for GPU-driven rendering, but we've started down that path in **Bevy 0.12**!
+In **Bevy 0.12** we have started reworking rendering data structures, data flow, and draw patterns to unlock new optimizations. This enabled the **Automatic Batching and Instancing** we landed in **Bevy 0.12** and also helps pave the way for other significant wins in the future, such as GPU-driven rendering. We aren't quite ready for GPU-driven rendering, but we've started down that path in **Bevy 0.12**!
 
 ### What are CPU* and GPU-driven rendering?
 
@@ -730,7 +730,7 @@ To avoid rebinds, the general data pattern we are aiming for is:
 * For each data type (meshes, materials, transforms, textures), create a single array (or a small number of arrays) containing all of the items of that data type
 * Bind these arrays a small number of times (ideally once), avoiding per-entity/per-draw rebinds
 
-In **Bevy 0.12** we've started this process in earnest! We've made a number of architectural changes that are already yielding fruit. Thanks to these changes, we can now [automatically batch and instance draws](#automatic-batching-instancing-of-draw-commands) for entities with the exact same mesh and material. And as we progress further down this path, we can batch/instance across a wider variety of cases, cutting out more and more CPU work until eventually we are "fully GPU-driven".
+In **Bevy 0.12** we've started this process in earnest! We've made a number of architectural changes that are already yielding fruit. Thanks to these changes, we can now [automatically batch and instance draws](#automatic-batching-and-instancing-of-draw-commands) for entities with the exact same mesh and material. And as we progress further down this path, we can batch/instance across a wider variety of cases, cutting out more and more CPU work until eventually we are "fully GPU-driven".
 
 ### Reorder Render Sets
 
