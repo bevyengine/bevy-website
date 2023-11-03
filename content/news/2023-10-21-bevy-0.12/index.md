@@ -117,6 +117,98 @@ This makes it possible to create and interact with ECS bundles using Bevy Reflec
 
 [`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
 
+## ImageLoader Settings
+
+<div class="release-feature-authors">authors: @cart, @Kanabenki</div>
+
+To take advantage of the new [`AssetLoader`] settings in **Bevy Asset V2**, we've added [`ImageLoaderSettings`] to  [`ImageLoader`].
+
+This means that you can now configure the sampler, SRGB-ness, and the format, on a per-image basis. These are the defaults, as they appear in **Bevy Asset V2** meta files:
+
+```rust
+(
+    format: FromExtension,
+    is_srgb: true,
+    sampler: Default,
+)
+```
+
+When set to `Default`, the image will use whatever is configured in [`ImagePlugin::default_sampler`].
+
+However, you can set these values to whatever you want!
+
+```rust
+(
+    format: Format(Basis),
+    is_srgb: true,
+    sampler: Descriptor((
+        label: None,
+        address_mode_u: ClampToEdge,
+        address_mode_v: ClampToEdge,
+        address_mode_w: ClampToEdge,
+        mag_filter: Nearest,
+        min_filter: Nearest,
+        mipmap_filter: Nearest,
+        lod_min_clamp: 0.0,
+        lod_max_clamp: 32.0,
+        compare: None,
+        anisotropy_clamp: 1,
+        border_color: None,
+    )),
+)
+```
+
+[`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
+[`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
+
+## Bind Group Ergonomics
+
+<div class="release-feature-authors">authors: @robtfm, @JMS55</div>
+
+When defining "bind groups" for low-level renderer features, we use the following API api:
+
+```rust
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &[
+        BindGroupEntry {
+            binding: 0,
+            resource: BindingResource::Sampler(&my_sampler),
+        },
+        BindGroupEntry {
+            binding: 1,
+            resource: my_uniform,
+        },
+    ],
+);
+```
+
+This works reasonably well, but for large numbers of bind groups, the `BindGroupEntry` boilerplate makes it harder than necessary to read and write everything (and keep the indices up to date).
+
+**Bevy 0.12** adds additional options:
+
+```rust
+// Sets the indices automatically using the index of the tuple item
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::sequential((&my_sampler, my_uniform)),
+);
+```
+
+```rust
+// Manually sets the indices, but without the BindGroupEntry boilerplate!
+render_device.create_bind_group(
+    "my_bind_group",
+    &my_layout,
+    &BindGroupEntries::with_indexes((
+        (2, &my_sampler),
+        (3, my_uniform),
+    )),
+);
+```
+
 ## UI Node Outlines
 
 <div class="release-feature-authors">authors: @ickshonpe</div>
@@ -236,6 +328,89 @@ bevy_pbr::pbr_functions::pbr()
 ```
 
 Rusty Imports remove a number of "API weirdness" gotchas from the old system and expand the capabilities of the import system. And by reusing Rust syntax and semantics, we remove the need for Bevy users to learn a new system.
+
+## Material Extensions
+
+<div class="release-feature-authors">authors: @robtfm</div>
+
+Bevy has a powerful shader import system, allowing modular (and granular) shader code reuse. In previous versions of Bevy, this meant that in theory, you could import Bevy's PBR shader logic and use it in your own shaders. However in practice this was challenging, as you had to re-wire everything up yourself, which required intimate knowledge of the base material. For complicated materials like Bevy's PBR [`StandardMaterial`], this was full of boilerplate, resulted in code duplication, and was prone to errors.
+
+In **Bevy 0.12**, we've built a **Material Extensions** system, which enables defining new materials that build on existing materials:
+
+![material extension](material_extension.png)
+
+This is accomplished via a new [`ExtendedMaterial`] type:
+
+```rust
+app.add_plugin(
+    MaterialPlugin::<ExtendedMaterial<StandardMaterial, QuantizedMaterial>>::default()
+);
+
+#[derive(Asset, AsBindGroup, TypePath, Debug, Clone)]
+struct QuantizedMaterial {
+    // Start at a high binding number to ensure bindings don't conflict
+    // with the base material
+    #[uniform(100)]
+    quantize_steps: u32,
+}
+
+impl MaterialExtension for QuantizedMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "quantized_material.wgsl".into()
+    }
+}
+
+let material = ExtendedMaterial<StandardMaterial, QuantizedMaterial> {
+    base: StandardMaterial::from(Color::rgb(0.1, 0.1, 0.8)),
+    extension: QuantizedMaterial { quantize_steps: 2 },
+};
+```
+
+We also paired this with some [`StandardMaterial`] shader refactors to make it much easier to pick and choose which parts you want:
+
+```rust
+// quantized_material.wgsl
+
+struct QuantizedMaterial {
+    quantize_steps: u32,
+}
+
+@group(1) @binding(100)
+var<uniform> my_extended_material: QuantizedMaterial;
+
+@fragment
+fn fragment(
+    input: VertexOutput,
+    @builtin(front_facing) is_front: bool,
+) -> FragmentOutput {
+    // Generate a PbrInput struct from the StandardMaterial bindings
+    var pbr_input = pbr_input_from_standard_material(input, is_front);
+
+    // Alpha discard
+    pbr_input.material.base_color = alpha_discard(
+        pbr_input.material,
+        pbr_input.material.base_color
+    );
+
+    var out: FragmentOutput;
+
+    // Apply lighting
+    out.color = apply_pbr_lighting(pbr_input);
+
+    // Our "quantize" effect
+    out.color = vec4<f32>(vec4<u32>(out.color * f32(my_extended_material.quantize_steps))) / f32(my_extended_material.quantize_steps);
+
+    // Apply in-shader post processing.
+    // Ex: fog, alpha-premultiply, etc. For non-hdr cameras: tonemapping and debanding
+    out.color = main_pass_post_lighting_processing(pbr_input, out.color);
+
+    return out;
+}
+```
+
+This _vastly_ simplifies writing custom PBR materials, making it accessible to pretty much everyone!
+
+[`ExtendedMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ExtendedMaterial.html
 
 ## Deferred Rendering
 
@@ -417,6 +592,7 @@ A meta file for an unprocessed image looks like this:
         settings: (
             format: FromExtension,
             is_srgb: true,
+            sampler: Default,
         ),
     ),
 )
@@ -433,6 +609,7 @@ A meta file for an image configured to be processed looks like this:
             loader_settings: (
                 format: FromExtension,
                 is_srgb: true,
+                sampler: Default,
             ),
             saver_settings: (),
         ),
@@ -457,6 +634,7 @@ The final "output" metadata for the processed image looks like this:
         settings: (
             format: Format(Basis),
             is_srgb: true,
+            sampler: Default,
         ),
     ),
 )
