@@ -161,6 +161,8 @@ Finally, importer support for the following glTF extensions has been added:
 * `KHR_materials_ior`
 * `KHR_materials_volume`
 
+[Check out this video](https://www.youtube.com/watch?v=t1XdxZKZ-us) to see it in action!
+
 ### Compatibility
 
 Both specular and diffuse transmission are compatible with all supported platforms, including mobile and Web.
