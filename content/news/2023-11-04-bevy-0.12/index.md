@@ -101,7 +101,7 @@ One "solution" is to bump up the resolution. Here is what it looks like with a 4
 
 Looking better! However this still isn't a perfect solution. Large shadowmaps aren't feasible on all hardware. They are significantly more expensive. And even if you can afford super high resolution shadows, you can still encounter this issue if you place an object in the wrong place, or point your light in the wrong direction. You can use Bevy's [Cascaded Shadow Maps](/news/bevy-0-10/#cascaded-shadow-maps) (which are enabled by default) to cover a larger area, with higher detail close to the camera and less detail farther away. However even under these conditions, you will still probably encounter these aliasing issues.
 
-**Bevy 0.12** introduces **PCF Shadow Filtering** (Percentage-Closer Filtering), which is a popular technique that takes multiple samples from the shadow map and compares with an interpolated mesh surface depth-projected into the frame of reference of the light. It then calculates the percentage of samples in the depth buffer that are closer to the light than the mesh surface. In short, this creates a "blur" effect that improves shadow quality, which is especially evident when a given shadow doesn't have enough "shadow map detail".
+**Bevy 0.12** introduces **PCF Shadow Filtering** (Percentage-Closer Filtering), which is a popular technique that takes multiple samples from the shadow map and compares with an interpolated mesh surface depth-projected into the frame of reference of the light. It then calculates the percentage of samples in the depth buffer that are closer to the light than the mesh surface. In short, this creates a "blur" effect that improves shadow quality, which is especially evident when a given shadow doesn't have enough "shadow map detail". Note that PCF is currently only supported for [`DirectionalLight`] and [`SpotLight`].
 
 **Bevy 0.12**'s default PCF approach is the [`ShadowMapFilter::Castano13`] method by Ignacio Castaño (used in The Witness). Here it is with a 512x512 shadow map:
 
@@ -125,6 +125,8 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
 
 [`ShadowMapFilter::Castano13`]: https://docs.rs/bevy/0.12.0/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
 [`ShadowMapFilter::Jimenez14`]: https://docs.rs/bevy/0.12.0/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
+[`DirectionalLight`]: https://docs.rs/bevy/0.12.0/bevy/pbr/struct.DirectionalLight.html
+[`SpotLight`]: https://docs.rs/bevy/0.12.0/bevy/pbr/struct.SpotLight.html
 
 ## `StandardMaterial` Light Transmission
 
@@ -176,7 +178,7 @@ severely constrained on lower-end platforms and older GPUs!)
 
 Specular transmission is implemented via a new `Transmissive3d` screen space refraction phase, which joins the existing `Opaque3d`, `AlphaMask3d` and `Transparent3d` phases. During this phase, one or more snapshots of the main texture are taken, which are used as “backgrounds” for the refraction effects.
 
-Each fragment's surface normal and IOR used along with the view direction to calculate a refracted ray. (Via Snell's law.)
+Each fragment's surface normal and IOR (index of refraction) used along with the view direction to calculate a refracted ray. (Via Snell's law.)
 This ray is then propagated through the mesh's volume (by a distance controlled by the `thickness` property), producing an exit point.
 The “background” texture is then sampled at that point. Perceptual roughness is used along with interleaved gradient noise and multiple spiral taps, to produce a blur effect.
 
