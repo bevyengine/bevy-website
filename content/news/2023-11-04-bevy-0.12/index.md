@@ -1870,9 +1870,78 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 
 ## Full Changelog
 
+### A-ECS + A-Diagnostics
+
+* [Cache parallel iteration spans][9950]
+
+### A-ECS + A-Scenes
+
+* [Make builder types take and return `Self`][10001]
+
+### A-Scenes
+
+* [Move scene spawner systems to SpawnScene schedule][9260]
+* [Add `SceneInstanceReady`][9313]
+* [Add `SpawnScene` to prelude][9451]
+* [Finish documenting `bevy_scene`][9949]
+* [Only attempt to copy resources that still exist from scenes][9984]
+* [Correct Scene loader error description][10161]
+
+### A-Tasks + A-Diagnostics
+
+* [Fix doc warning in bevy_tasks][9348]
+
+### A-Tasks
+
+* [elaborate on TaskPool and bevy tasks][8750]
+* [Remove Resource and add Debug to TaskPoolOptions][9485]
+* [Fix clippy lint in single_threaded_task_pool][9851]
+* [Remove dependecies from bevy_tasks' README][9881]
+* [Allow using async_io::block_on in bevy_tasks][9626]
+* [add test for nested scopes][10026]
+* [Global TaskPool API improvements][10008]
+
 ### A-Audio + A-Windowing
 
 * [Application lifetime events (suspend audio on Android)][10158]
+
+### A-Animation + A-Transform
+
+* [Add system parameter for computing up-to-date `GlobalTransform`s][8603]
+
+### A-Transform
+
+* [Update `GlobalTransform` on insertion][9081]
+* [Add `Without<Parent>` filter to `sync_simple_transforms`' orphaned entities query][9518]
+* [Fix ambiguities in transform example][9845]
+
+### A-App
+
+* [Add `track_caller` to `App::add_plugins`][9174]
+* [Remove redundant check for `AppExit` events in `ScheduleRunnerPlugin`][9421]
+* [fix typos in crates/bevy_app/src/app.rs][10173]
+* [fix typos in crates/bevy_app/src/app.rs][10173]
+* [fix run-once runners][10195]
+
+### A-ECS + A-App
+
+* [Add configure_schedules to App and Schedules to apply `ScheduleBuildSettings` to all schedules][9514]
+* [Only run event systems if they have tangible work to do][7728]
+
+### A-Rendering + A-Gizmos
+
+* [Fix gizmo draw order in 2D][9129]
+* [Fix gizmo line width issue when using perspective][9067]
+
+### A-Rendering + A-Diagnostics
+
+* [Include note of common profiling issue][9484]
+* [Enhance many_cubes stress test use cases][9596]
+* [GLTF loader: handle warning NODE_SKINNED_MESH_WITHOUT_SKIN][9360]
+
+### A-Rendering + A-Reflection
+
+* [Register `AlphaMode` type][9222]
 
 ### A-Windowing
 
@@ -1894,21 +1963,247 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Slightly improve `CursorIcon` doc.][10289]
 * [Fix typo in window.rs][10358]
 
+### A-Gizmos
+
+* [Replace AHash with a good sequence for entity AABB colors][9175]
+* [gizmo plugin lag bugfix][9166]
+* [Clarify immediate mode in `Gizmos` documentation][9183]
+* [Fix crash when drawing line gizmo with less than 2 vertices][9101]
+* [Document that gizmo `depth_bias` has no effect in 2D][10074]
+
+### A-Utils
+
+* [change 'collapse_type_name' to retain enum types][9587]
+* [bevy_derive: Fix `#[deref]` breaking other attributes][9551]
+* [Move default docs][9638]
+
+### A-Rendering + A-Assets
+
+* [Import the second UV map if present in glTF files.][9992]
+* [fix custom shader imports][10030]
+* [Add `ImageSamplerDescriptor` as an image loader setting][9982]
+
+### A-ECS
+
+* [Add the Has world query to bevy_ecs::prelude][9204]
+* [Simplify parallel iteration methods][8854]
+* [Fix safety invariants for `WorldQuery::fetch` and simplify cloning][8246]
+* [Derive debug for ManualEventIterator][9293]
+* [Add `EntityMap::clear`][9291]
+* [Add a paragraph to the lifetimeless module doc][9312]
+* [opt-out `multi-threaded` feature flag][9269]
+* [Fix `ambiguous_with` breaking run conditions][9253]
+* [Add `RunSystem`][9366]
+* [Add `replace_if_neq` to `DetectChangesMut`][9418]
+* [Adding `Copy, Clone, Debug` to derived traits of `ExecutorKind`][9385]
+* [Fix incorrect documentation link in `DetectChangesMut`][9431]
+* [Implement `Debug` for `UnsafeWorldCell`][9460]
+* [Relax In/Out bounds on impl Debug for dyn System][9581]
+* [Improve various `Debug` implementations][9588]
+* [Make `run_if_inner` public and rename to `run_if_dyn`][9576]
+* [Refactor build_schedule and related errors][9579]
+* [Add `system.map(...)` for transforming the output of a system][8526]
+* [Reorganize `Events` and `EventSequence` code][9306]
+* [Replaced EntityMap with HashMap][9461]
+* [clean up configure_set(s) erroring][9577]
+* [Relax more `Sync` bounds on `Local`][9589]
+* [Rename `ManualEventIterator`][9592]
+* [Replaced `EntityCommand` Implementation for `FnOnce`][9604]
+* [Add a variant of `Events::update` that returns the removed events][9542]
+* [Move schedule name into `Schedule`][9600]
+* [port old ambiguity tests over][9617]
+* [Refactor `EventReader::iter` to `read`][9631]
+* [fix ambiguity reporting][9648]
+* [Fix anonymous set name stack overflow][9650]
+* [Fix unsoundness in `QueryState::is_empty`][9463]
+* [Add panicking helpers for getting components from `Query`][9659]
+* [Replace `IntoSystemSetConfig` with `IntoSystemSetConfigs`][9247]
+* [Moved `get_component(_unchecked_mut)` from `Query` to `QueryState`][9686]
+* [Fix naming on "tick" Column and ComponentSparseSet methods][9744]
+* [Clarify a comment in Option WorldQuery impl][9749]
+* [Return a boolean from `set_if_neq`][9801]
+* [Rename RemovedComponents::iter/iter_with_id to read/read_with_id][9778]
+* [Remove some old references to CoreSet][9833]
+* [Use single threaded executor for archetype benches][9835]
+* [docs: Improve some `ComponentId` doc cross-linking.][9839]
+* [One Shot Systems][8963]
+* [Add mutual exclusion safety info on filter_fetch][9836]
+* [add try_insert to entity commands][9844]
+* [Improve codegen for world validation][9464]
+* [docs: Use intradoc links for method references.][9958]
+* [Remove States::variants and remove enum-only restriction its derive][9945]
+* [`as_deref_mut()` method for Mut-like types][9912]
+* [refactor: Change Option<With<T>> query params to Has<T>][9959]
+* [Hide `UnsafeWorldCell::unsafe_world`][9741]
+* [Add a public API to ArchetypeGeneration/Id][9825]
+* [Ignore ambiguous components or resources][9895]
+* [Use chain in breakout example][10124]
+* [`ParamSet`s containing non-send parameters should also be non-send][10211]
+* [Replace all labels with interned labels][7762]
+* [Fix outdated comment referencing CoreSet][10294]
+
+### A-Rendering + A-Math
+
+* [derive Clone/Copy/Debug trio for shape::Cylinder][9705]
+
+### A-UI
+
+* [Fix for vertical text bounds and alignment][9133]
+* [UI extraction order fix][9099]
+* [Update text example using default font][9259]
+* [bevy_ui: fix doc formatting for some Style fields][9295]
+* [Remove the `With<Parent>` query filter from `bevy_ui::render::extract_uinode_borders`][9285]
+* [Fix incorrent doc comment for the set method of `ContentSize`][9345]
+* [Improved text widget doc comments][9344]
+* [Change the default for the `measure_func` field of `ContentSize` to None.][9346]
+* [Unnecessary line in game_menu example][9406]
+* [Change `UiScale` to a tuple struct][9444]
+* [Remove unnecessary doc string][9481]
+* [Add some missing pub in ui_node][9529]
+* [UI examples clean up][9479]
+* [`round_ties_up` fix][9548]
+* [fix incorrect docs for `JustifyItems` and `JustifySelf`][9539]
+* [Added `Val::ZERO` Constant][9566]
+* [Cleanup some bevy_text pipeline.rs][9111]
+* [Make `GridPlacement`'s fields non-zero and add accessor functions.][9486]
+* [Remove `Val`'s `try_*` arithmetic methods][9609]
+* [UI node bundle comment fix][9404]
+* [Do not panic on non-UI child of UI entity][9621]
+* [Rename `Val` `evaluate` to `resolve` and implement viewport variant support][9568]
+* [Change `Urect::width` & `Urect::height` to be const][9640]
+* [`TextLayoutInfo::size` should hold the drawn size of the text, and not a scaled value.][7794]
+* [`impl From<String>` and `From<&str>` for `TextSection`][8856]
+* [Remove z-axis scaling in `extract_text2d_sprite`][9733]
+* [Fix doc comments for align items][9739]
+* [Add tests to `bevy_ui::Layout`][9781]
+* [examples: Remove unused doc comments.][9795]
+* [Add missing `bevy_text` feature attribute to `TextBundle` from impl][9785]
+* [Move `Val` into `geometry`][9818]
+* [Derive Serialize and Deserialize for UiRect][9820]
+* [`ContentSize` replacement fix][9753]
+* [Round UI coordinates after scaling][9784]
+* [Have a separate implicit viewport node per root node + make viewport node `Display::Grid`][9637]
+* [Rename `num_font_atlases`  to `len`.][9879]
+* [Fix documentation for ui node Style][9935]
+* [`text_wrap_debug` scale factor commandline args][9951]
+* [Store both the rounded and unrounded node size in Node][9923]
+* [Various accessibility API updates.][9989]
+* [UI node outlines][9931]
+* [Implement serialize and deserialize for some UI types][10044]
+* [Tidy up UI node docs][10189]
+* [Remove unused import warning when default_font feature is disabled][10230]
+* [Fix crash with certain right-aligned text][10271]
+* [Add some more docs for bevy_text.][9873]
+* [Implement `Neg` for `Val`][10295]
+* [`normalize` method for `Rect`][10297]
+* [don't Implement `Display` for `Val`][10345]
+* [[bevy_text] Document what happens when font is not specified][10252]
+* [Update UI alignment docs][10303]
+* [Add stack index to `Node`][9853]
+* [don't Implement `Display` for `Val`][10345]
+
+### A-Animation
+
+* [Fix doc typo][9162]
+* [Expose `animation_clip` paths][9392]
+* [animations: convert skinning weights from unorm8x4 to float32x4][9338]
+* [API updates to the AnimationPlayer][9002]
+* [only take up to the max number of joints][9351]
+* [check root node for animations][9407]
+* [Fix morph interpolation][9927]
+
+### A-Pointers
+
+* [Put `#[repr(transparent)]` attr to bevy_ptr types][9068]
+
+### A-Assets + A-Reflection
+
+* [reflect: `TypePath` part 2][8768]
+
+### A-Rendering + A-Hierarchy
+
+* [default inherited visibility when parent has invalid components][10275]
+
+### A-ECS + A-Tasks
+
+* [Round up for the batch size to improve par_iter performance][9814]
+
+### A-Reflection + A-Utils
+
+* [Moved `fq_std` from `bevy_reflect_derive` to `bevy_macro_utils`][9956]
+
+### A-Reflection + A-Math
+
+* [Add reflect impls to IRect and URect][9191]
+* [Implement reflect trait on new glam types (I64Vec and U64Vec)][9281]
+
+### A-Hierarchy
+
+* [Prevent setting parent as itself][8980]
+* [Add as_slice to parent][9871]
+
+### A-Input
+
+* [input: allow multiple gamepad inputs to be registered for one button in one frame][9446]
+* [Bevy Input Docs : lib.rs][9468]
+* [Bevy Input Docs : gamepad.rs][9469]
+* [Add `GamepadButtonInput` event][9008]
+* [Bevy Input Docs : the modules][9467]
+* [Finish documenting `bevy_gilrs`][10010]
+* [Change `AxisSettings` livezone default][10090]
+* [docs: Update input_toggle_active example][9913]
+
 ### A-Input + A-Windowing
 
 * [Fix `Window::set_cursor_position`][9456]
 * [Change `Window::physical_cursor_position` to use the physical size of the window][9657]
 * [Fix check that cursor position is within window bounds][9662]
 
-### A-Rendering + A-Diagnostics
+### A-ECS + A-Reflection
 
-* [Include note of common profiling issue][9484]
-* [Enhance many_cubes stress test use cases][9596]
-* [GLTF loader: handle warning NODE_SKINNED_MESH_WITHOUT_SKIN][9360]
+* [implement insert and remove reflected entity commands][8895]
+* [Allow disjoint mutable world access via `EntityMut`][9419]
+* [Implement `Reflect` for `State<S>` and `NextState<S>`][9742]
+* [`#[derive(Clone)]` on `Component{Info,Descriptor}`][9812]
 
-### A-Pointers
+### A-Math
 
-* [Put `#[repr(transparent)]` attr to bevy_ptr types][9068]
+* [Rename bevy_math::rects conversion methods][9159]
+* [Add glam swizzles traits to prelude][9387]
+* [Rename `Bezier` to `CubicBezier` for clarity][9554]
+* [Add a method to compute a bounding box enclosing a set of points][9630]
+* [re-export `debug_glam_assert` feature][10206]
+* [Add `Cubic` prefix to all cubic curve generators][10299]
+
+### A-Build-System
+
+* [only check for bans if the dependency tree changed][9252]
+* [Slightly better message when contributor modifies examples template][9372]
+* [switch CI jobs between windows and linux for example execution][9489]
+* [Check for bevy_internal imports in CI][9612]
+* [Fix running examples on linux in CI][9665]
+* [Bump actions/checkout from 2 to 4][9759]
+* [doc: Remove reference to `clippy::manual-strip`.][9794]
+* [Only run some workflows on the bevy repo (not forks)][9872]
+* [run mobile tests on more devices / OS versions][9936]
+* [Allow `clippy::type_complexity` in more places.][9796]
+* [hacks for running (and screenshotting) the examples in CI on a github runner][9220]
+* [make CI less failing on cargo deny bans][10151]
+* [add test on Android 14 / Pixel 8][10148]
+* [Use `clippy::doc_markdown` more.][10286]
+
+### A-Diagnostics
+
+* [Cache System Tracing Spans][9390]
+
+### A-Rendering + A-Animation
+
+* [Use a seeded rng for custom_skinned_mesh example][9846]
+* [Move skin code to a separate module][9899]
+
+### A-Core
+
+* [Change visibility of `bevy::core::update_frame_count` to `pub`][10111]
 
 ### A-Reflection
 
@@ -1930,27 +2225,153 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [bevy_reflect: Fix dynamic type serialization][10103]
 * [bevy_reflect: Fix ignored/skipped field order][7575]
 
-### A-Rendering + A-Gizmos
+### A-Rendering + A-Assets + A-Reflection
 
-* [Fix gizmo draw order in 2D][9129]
-* [Fix gizmo line width issue when using perspective][9067]
+* [Implement `Reflect` for `Mesh`][9779]
 
-### A-Reflection + A-Utils
+### A-ECS + A-Time
 
-* [Moved `fq_std` from `bevy_reflect_derive` to `bevy_macro_utils`][9956]
+* [add on_real_time_timer run condition][10179]
 
-### A-Rendering + A-Animation
+### A-ECS + A-Hierarchy
 
-* [Use a seeded rng for custom_skinned_mesh example][9846]
-* [Move skin code to a separate module][9899]
+* [Added 'clear_children' and 'replace_children' methods to BuildWorldChildren to be consistent with BuildChildren.][10311]
 
-### A-Rendering + A-Math
+### A-Audio
 
-* [derive Clone/Copy/Debug trio for shape::Cylinder][9705]
+* [Added Pitch as an alternative sound source][9225]
+* [update documentation on AudioSink][9332]
+* [audio sinks don't need their custom drop anymore][9336]
+* [Clarify what happens when setting the audio volume][9480]
+* [More ergonomic spatial audio][9800]
 
-### A-ECS + A-Scenes
+### A-Rendering + A-UI
 
-* [Make builder types take and return `Self`][10001]
+* [Remove out-of-date paragraph in `Style::border`][9103]
+* [Revert "Fix UI corruption for AMD gpus with Vulkan (#9169)"][9237]
+* [Revert "Fix UI corruption for AMD gpus with Vulkan (#9169)"][9237]
+* [`many_buttons` enhancements][9712]
+* [Fix UI borders][10078]
+* [UI batching Fix][9610]
+* [Add UI Materials][9506]
+
+### A-ECS + A-Reflection + A-Pointers
+
+* [add `MutUntyped::map_unchanged`][9194]
+
+### No area label
+
+* [Fix typos throughout the project][9090]
+* [Bump Version after Release][9106]
+* [fix `clippy::default_constructed_unit_structs` and trybuild errors][9144]
+* [delete code deprecated in 0.11][9128]
+* [Drain `ExtractedUiNodes` in `prepare_uinodes`][9142]
+* [example showcase - pagination and can build for WebGL2][9168]
+* [example showcase: switch default api to webgpu][9193]
+* [Add some more helpful errors to BevyManifest when it doesn't find Cargo.toml][9207]
+* [Fix path reference to contributors example][9219]
+* [replace parens with square brackets when referencing _mut on `Query` docs #9200][9223]
+* [use AutoNoVsync in stress tests][9229]
+* [bevy_render: Remove direct dep on wgpu-hal.][9249]
+* [Fixed typo in line 322][9276]
+* [custom_material.vert: gl_InstanceIndex includes gl_BaseInstance][9326]
+* [fix typo in a link - Mesh docs][9329]
+* [Improve font size related docs][9320]
+* [Fix gamepad viewer being marked as a non-wasm example][9399]
+* [Rustdoc: Scrape examples][9154]
+* [enable multithreading on benches][9388]
+* [webgl feature renamed to webgl2][9370]
+* [Example Comment Typo Fix][9427]
+* [Fix shader_instancing example][9448]
+* [Update tracy-client requirement from 0.15 to 0.16][9436]
+* [fix bevy imports. windows_settings.rs example][9547]
+* [Fix CI for Rust 1.72][9562]
+* [Swap TransparentUi to use a stable sort][9598]
+* [Replace uses of `entity.insert` with tuple bundles in `game_menu` example][9619]
+* [Remove `IntoIterator` impl for `&mut EventReader`][9583]
+* [remove VecSwizzles imports][9629]
+* [Fix erronenous glam version][9653]
+* [Fixing some doc comments][9646]
+* [Explicitly make instance_index vertex output @interpolate(flat)][9675]
+* [Fix some nightly warnings][9672]
+* [Use default resolution for viewport_debug example][9666]
+* [Refer to "macOS", not "macOS X".][9704]
+* [Remove useless single tuples and trailing commas][9720]
+* [Fix some warnings shown in nightly][10012]
+* [Fix animate_scale scaling z value in text2d example][9769]
+* ["serialize" feature no longer enables the optional "bevy_scene" feature if it's not enabled from elsewhere][9803]
+* [fix deprecation warning in bench][9823]
+* [don't enable filesystem_watcher when building for WebGPU][9829]
+* [Improve doc formatting.][9840]
+* [Fix the `clippy::explicit_iter_loop` lint][9834]
+* [Wslg docs][9842]
+* [skybox.wgsl: Fix precision issues][9909]
+* [Fix typos.][9922]
+* [Add link to `Text2dBundle` in `TextBundle` docs.][9900]
+* [Fix some typos][9934]
+* [Fix typos][9965]
+* [Replaced `parking_lot` with `std::sync`][9545]
+* [Add inline(never) to bench systems][9824]
+* [Android: handle suspend / resume][9937]
+* [Fix some warnings shown in nightly][10012]
+* [Updates for rust 1.73][10035]
+* [Improve selection of iOS device in mobile example][9282]
+* [Update toml_edit requirement from 0.19 to 0.20][10058]
+* [foxes shouldn't march in sync][10070]
+* [Fix tonemapping test patten][10092]
+* [Removed `once_cell`][10079]
+* [Improve WebGPU unstable flags docs][10163]
+* [shadow_biases: Support different PCF methods][10184]
+* [shadow_biases: Support moving the light position and resetting biases][10185]
+* [Update async-io requirement from 1.13.0 to 2.0.0][10238]
+* [few fmt tweaks][10264]
+* [Derive Error for more error types][10240]
+* [Allow AccessKit to react to WindowEvents before they reach the engine][10356]
+
+### A-Rendering + A-Build-System
+
+* [Improve execution of examples in CI][9331]
+* [make deferred_rendering simpler to render for CI][10150]
+
+### A-Meta
+
+* [Remove the bevy_dylib feature][9516]
+* [add and fix shields in Readmes][9993]
+* [Added section for contributing and links for issues and PRs][10171]
+* [Fix orphaned contributing paragraph][10174]
+
+### A-Assets + A-Animation
+
+* [Handle empty morph weights when loading gltf][9867]
+* [Finish documenting `bevy_gltf`][9998]
+
+### A-Editor + A-Diagnostics
+
+* [Add `DiagnosticsStore::iter_mut`][9679]
+
+### A-Time
+
+* [Fix timers.rs documentation][9290]
+* [Add missing documentation to `bevy_time`][9428]
+* [Clarify behaviour of `Timer::finished()` for repeating timers][9939]
+* [ignore time channel error][9981]
+* [Unify `FixedTime` and `Time` while fixing several problems][8964]
+* [Time: demote delta time clamping warning to debug][10145]
+* [fix typo in time.rs example][10152]
+* [Example time api][10204]
+
+### A-Rendering + A-ECS
+
+* [Update `Camera`'s `Frustum` only when its `GlobalTransform` or `CameraProjection` changed][9092]
+
+### A-UI + A-Reflection
+
+* [bevy_ui: reflect missing types][9677]
+* [register `TextLayoutInfo` and `TextFlags` type.][9919]
+
+### A-Build-System + A-Assets
+
+* [Increase iteration count for asset tests][9737]
 
 ### A-Rendering
 
@@ -2078,282 +2499,11 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Increase default normal bias to avoid common artifacts][10346]
 * [Make `DirectionalLight` `Cascades` computation generic over `CameraProjection`][9226]
 * [Update default `ClearColor` to better match Bevy's branding][10339]
+* [Fix gizmo crash when prepass enabled][10360]
 
-### A-ECS + A-Time
+### A-Build-System + A-Meta
 
-* [add on_real_time_timer run condition][10179]
-
-### A-Reflection + A-Math
-
-* [Add reflect impls to IRect and URect][9191]
-* [Implement reflect trait on new glam types (I64Vec and U64Vec)][9281]
-
-### No area label
-
-* [Fix typos throughout the project][9090]
-* [Bump Version after Release][9106]
-* [fix `clippy::default_constructed_unit_structs` and trybuild errors][9144]
-* [delete code deprecated in 0.11][9128]
-* [Drain `ExtractedUiNodes` in `prepare_uinodes`][9142]
-* [example showcase - pagination and can build for WebGL2][9168]
-* [example showcase: switch default api to webgpu][9193]
-* [Add some more helpful errors to BevyManifest when it doesn't find Cargo.toml][9207]
-* [Fix path reference to contributors example][9219]
-* [replace parens with square brackets when referencing _mut on `Query` docs #9200][9223]
-* [use AutoNoVsync in stress tests][9229]
-* [bevy_render: Remove direct dep on wgpu-hal.][9249]
-* [Fixed typo in line 322][9276]
-* [custom_material.vert: gl_InstanceIndex includes gl_BaseInstance][9326]
-* [fix typo in a link - Mesh docs][9329]
-* [Improve font size related docs][9320]
-* [Fix gamepad viewer being marked as a non-wasm example][9399]
-* [Rustdoc: Scrape examples][9154]
-* [enable multithreading on benches][9388]
-* [webgl feature renamed to webgl2][9370]
-* [Example Comment Typo Fix][9427]
-* [Fix shader_instancing example][9448]
-* [Update tracy-client requirement from 0.15 to 0.16][9436]
-* [fix bevy imports. windows_settings.rs example][9547]
-* [Fix CI for Rust 1.72][9562]
-* [Swap TransparentUi to use a stable sort][9598]
-* [Replace uses of `entity.insert` with tuple bundles in `game_menu` example][9619]
-* [Remove `IntoIterator` impl for `&mut EventReader`][9583]
-* [remove VecSwizzles imports][9629]
-* [Fix erronenous glam version][9653]
-* [Fixing some doc comments][9646]
-* [Explicitly make instance_index vertex output @interpolate(flat)][9675]
-* [Fix some nightly warnings][9672]
-* [Use default resolution for viewport_debug example][9666]
-* [Refer to "macOS", not "macOS X".][9704]
-* [Remove useless single tuples and trailing commas][9720]
-* [Fix some warnings shown in nightly][10012]
-* [Fix animate_scale scaling z value in text2d example][9769]
-* ["serialize" feature no longer enables the optional "bevy_scene" feature if it's not enabled from elsewhere][9803]
-* [fix deprecation warning in bench][9823]
-* [don't enable filesystem_watcher when building for WebGPU][9829]
-* [Improve doc formatting.][9840]
-* [Fix the `clippy::explicit_iter_loop` lint][9834]
-* [Wslg docs][9842]
-* [skybox.wgsl: Fix precision issues][9909]
-* [Fix typos.][9922]
-* [Add link to `Text2dBundle` in `TextBundle` docs.][9900]
-* [Fix some typos][9934]
-* [Fix typos][9965]
-* [Replaced `parking_lot` with `std::sync`][9545]
-* [Add inline(never) to bench systems][9824]
-* [Android: handle suspend / resume][9937]
-* [Fix some warnings shown in nightly][10012]
-* [Updates for rust 1.73][10035]
-* [Improve selection of iOS device in mobile example][9282]
-* [Update toml_edit requirement from 0.19 to 0.20][10058]
-* [foxes shouldn't march in sync][10070]
-* [Fix tonemapping test patten][10092]
-* [Removed `once_cell`][10079]
-* [Improve WebGPU unstable flags docs][10163]
-* [shadow_biases: Support different PCF methods][10184]
-* [shadow_biases: Support moving the light position and resetting biases][10185]
-* [Update async-io requirement from 1.13.0 to 2.0.0][10238]
-* [few fmt tweaks][10264]
-* [Derive Error for more error types][10240]
-* [Allow AccessKit to react to WindowEvents before they reach the engine][10356]
-
-### A-ECS + A-Hierarchy
-
-* [Added 'clear_children' and 'replace_children' methods to BuildWorldChildren to be consistent with BuildChildren.][10311]
-
-### A-Time
-
-* [Fix timers.rs documentation][9290]
-* [Add missing documentation to `bevy_time`][9428]
-* [Clarify behaviour of `Timer::finished()` for repeating timers][9939]
-* [ignore time channel error][9981]
-* [Unify `FixedTime` and `Time` while fixing several problems][8964]
-* [Time: demote delta time clamping warning to debug][10145]
-* [fix typo in time.rs example][10152]
-* [Example time api][10204]
-
-### A-UI + A-Reflection
-
-* [bevy_ui: reflect missing types][9677]
-* [register `TextLayoutInfo` and `TextFlags` type.][9919]
-
-### A-App
-
-* [Add `track_caller` to `App::add_plugins`][9174]
-* [Remove redundant check for `AppExit` events in `ScheduleRunnerPlugin`][9421]
-* [fix typos in crates/bevy_app/src/app.rs][10173]
-* [fix typos in crates/bevy_app/src/app.rs][10173]
-* [fix run-once runners][10195]
-
-### A-Assets + A-Animation
-
-* [Handle empty morph weights when loading gltf][9867]
-* [Finish documenting `bevy_gltf`][9998]
-
-### A-ECS + A-Diagnostics
-
-* [Cache parallel iteration spans][9950]
-
-### A-Animation
-
-* [Fix doc typo][9162]
-* [Expose `animation_clip` paths][9392]
-* [animations: convert skinning weights from unorm8x4 to float32x4][9338]
-* [API updates to the AnimationPlayer][9002]
-* [only take up to the max number of joints][9351]
-* [check root node for animations][9407]
-* [Fix morph interpolation][9927]
-
-### A-Rendering + A-Build-System
-
-* [Improve execution of examples in CI][9331]
-* [make deferred_rendering simpler to render for CI][10150]
-
-### A-Assets + A-Reflection
-
-* [reflect: `TypePath` part 2][8768]
-
-### A-Core
-
-* [Change visibility of `bevy::core::update_frame_count` to `pub`][10111]
-
-### A-Animation + A-Transform
-
-* [Add system parameter for computing up-to-date `GlobalTransform`s][8603]
-
-### A-Rendering + A-Assets
-
-* [Import the second UV map if present in glTF files.][9992]
-* [fix custom shader imports][10030]
-* [Add `ImageSamplerDescriptor` as an image loader setting][9982]
-
-### A-Rendering + A-UI
-
-* [Remove out-of-date paragraph in `Style::border`][9103]
-* [Revert "Fix UI corruption for AMD gpus with Vulkan (#9169)"][9237]
-* [Revert "Fix UI corruption for AMD gpus with Vulkan (#9169)"][9237]
-* [`many_buttons` enhancements][9712]
-* [Fix UI borders][10078]
-* [UI batching Fix][9610]
-* [Add UI Materials][9506]
-
-### A-Audio
-
-* [Added Pitch as an alternative sound source][9225]
-* [update documentation on AudioSink][9332]
-* [audio sinks don't need their custom drop anymore][9336]
-* [Clarify what happens when setting the audio volume][9480]
-* [More ergonomic spatial audio][9800]
-
-### A-Rendering + A-Reflection
-
-* [Register `AlphaMode` type][9222]
-
-### A-Math
-
-* [Rename bevy_math::rects conversion methods][9159]
-* [Add glam swizzles traits to prelude][9387]
-* [Rename `Bezier` to `CubicBezier` for clarity][9554]
-* [Add a method to compute a bounding box enclosing a set of points][9630]
-* [re-export `debug_glam_assert` feature][10206]
-* [Add `Cubic` prefix to all cubic curve generators][10299]
-
-### A-Diagnostics
-
-* [Cache System Tracing Spans][9390]
-
-### A-ECS + A-Reflection + A-Pointers
-
-* [add `MutUntyped::map_unchanged`][9194]
-
-### A-UI
-
-* [Fix for vertical text bounds and alignment][9133]
-* [UI extraction order fix][9099]
-* [Update text example using default font][9259]
-* [bevy_ui: fix doc formatting for some Style fields][9295]
-* [Remove the `With<Parent>` query filter from `bevy_ui::render::extract_uinode_borders`][9285]
-* [Fix incorrent doc comment for the set method of `ContentSize`][9345]
-* [Improved text widget doc comments][9344]
-* [Change the default for the `measure_func` field of `ContentSize` to None.][9346]
-* [Unnecessary line in game_menu example][9406]
-* [Change `UiScale` to a tuple struct][9444]
-* [Remove unnecessary doc string][9481]
-* [Add some missing pub in ui_node][9529]
-* [UI examples clean up][9479]
-* [`round_ties_up` fix][9548]
-* [fix incorrect docs for `JustifyItems` and `JustifySelf`][9539]
-* [Added `Val::ZERO` Constant][9566]
-* [Cleanup some bevy_text pipeline.rs][9111]
-* [Make `GridPlacement`'s fields non-zero and add accessor functions.][9486]
-* [Remove `Val`'s `try_*` arithmetic methods][9609]
-* [UI node bundle comment fix][9404]
-* [Do not panic on non-UI child of UI entity][9621]
-* [Rename `Val` `evaluate` to `resolve` and implement viewport variant support][9568]
-* [Change `Urect::width` & `Urect::height` to be const][9640]
-* [`TextLayoutInfo::size` should hold the drawn size of the text, and not a scaled value.][7794]
-* [`impl From<String>` and `From<&str>` for `TextSection`][8856]
-* [Remove z-axis scaling in `extract_text2d_sprite`][9733]
-* [Fix doc comments for align items][9739]
-* [Add tests to `bevy_ui::Layout`][9781]
-* [examples: Remove unused doc comments.][9795]
-* [Add missing `bevy_text` feature attribute to `TextBundle` from impl][9785]
-* [Move `Val` into `geometry`][9818]
-* [Derive Serialize and Deserialize for UiRect][9820]
-* [`ContentSize` replacement fix][9753]
-* [Round UI coordinates after scaling][9784]
-* [Have a separate implicit viewport node per root node + make viewport node `Display::Grid`][9637]
-* [Rename `num_font_atlases`  to `len`.][9879]
-* [Fix documentation for ui node Style][9935]
-* [`text_wrap_debug` scale factor commandline args][9951]
-* [Store both the rounded and unrounded node size in Node][9923]
-* [Various accessibility API updates.][9989]
-* [UI node outlines][9931]
-* [Implement serialize and deserialize for some UI types][10044]
-* [Tidy up UI node docs][10189]
-* [Remove unused import warning when default_font feature is disabled][10230]
-* [Fix crash with certain right-aligned text][10271]
-* [Add some more docs for bevy_text.][9873]
-* [Implement `Neg` for `Val`][10295]
-* [`normalize` method for `Rect`][10297]
-* [don't Implement `Display` for `Val`][10345]
-* [[bevy_text] Document what happens when font is not specified][10252]
-* [Update UI alignment docs][10303]
-* [Add stack index to `Node`][9853]
-* [don't Implement `Display` for `Val`][10345]
-
-### A-Transform
-
-* [Update `GlobalTransform` on insertion][9081]
-* [Add `Without<Parent>` filter to `sync_simple_transforms`' orphaned entities query][9518]
-* [Fix ambiguities in transform example][9845]
-
-### A-Build-System
-
-* [only check for bans if the dependency tree changed][9252]
-* [Slightly better message when contributor modifies examples template][9372]
-* [switch CI jobs between windows and linux for example execution][9489]
-* [Check for bevy_internal imports in CI][9612]
-* [Fix running examples on linux in CI][9665]
-* [Bump actions/checkout from 2 to 4][9759]
-* [doc: Remove reference to `clippy::manual-strip`.][9794]
-* [Only run some workflows on the bevy repo (not forks)][9872]
-* [run mobile tests on more devices / OS versions][9936]
-* [Allow `clippy::type_complexity` in more places.][9796]
-* [hacks for running (and screenshotting) the examples in CI on a github runner][9220]
-* [make CI less failing on cargo deny bans][10151]
-* [add test on Android 14 / Pixel 8][10148]
-* [Use `clippy::doc_markdown` more.][10286]
-
-### A-Tasks
-
-* [elaborate on TaskPool and bevy tasks][8750]
-* [Remove Resource and add Debug to TaskPoolOptions][9485]
-* [Fix clippy lint in single_threaded_task_pool][9851]
-* [Remove dependecies from bevy_tasks' README][9881]
-* [Allow using async_io::block_on in bevy_tasks][9626]
-* [add test for nested scopes][10026]
-* [Global TaskPool API improvements][10008]
+* [Fixed: README.md][9994]
 
 ### A-Assets
 
@@ -2395,155 +2545,6 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Additional AssetPath unit tests.][10279]
 * [Corrected incorrect doc comment on read_asset_bytes][10352]
 * [support file operations in single threaded context][10312]
-
-### A-Meta
-
-* [Remove the bevy_dylib feature][9516]
-* [add and fix shields in Readmes][9993]
-* [Added section for contributing and links for issues and PRs][10171]
-* [Fix orphaned contributing paragraph][10174]
-
-### A-ECS + A-Reflection
-
-* [implement insert and remove reflected entity commands][8895]
-* [Allow disjoint mutable world access via `EntityMut`][9419]
-* [Implement `Reflect` for `State<S>` and `NextState<S>`][9742]
-* [`#[derive(Clone)]` on `Component{Info,Descriptor}`][9812]
-
-### A-Utils
-
-* [change 'collapse_type_name' to retain enum types][9587]
-* [bevy_derive: Fix `#[deref]` breaking other attributes][9551]
-* [Move default docs][9638]
-
-### A-Build-System + A-Meta
-
-* [Fixed: README.md][9994]
-
-### A-Input
-
-* [input: allow multiple gamepad inputs to be registered for one button in one frame][9446]
-* [Bevy Input Docs : lib.rs][9468]
-* [Bevy Input Docs : gamepad.rs][9469]
-* [Add `GamepadButtonInput` event][9008]
-* [Bevy Input Docs : the modules][9467]
-* [Finish documenting `bevy_gilrs`][10010]
-* [Change `AxisSettings` livezone default][10090]
-* [docs: Update input_toggle_active example][9913]
-
-### A-Rendering + A-Hierarchy
-
-* [default inherited visibility when parent has invalid components][10275]
-
-### A-Editor + A-Diagnostics
-
-* [Add `DiagnosticsStore::iter_mut`][9679]
-
-### A-ECS + A-Tasks
-
-* [Round up for the batch size to improve par_iter performance][9814]
-
-### A-ECS
-
-* [Add the Has world query to bevy_ecs::prelude][9204]
-* [Simplify parallel iteration methods][8854]
-* [Fix safety invariants for `WorldQuery::fetch` and simplify cloning][8246]
-* [Derive debug for ManualEventIterator][9293]
-* [Add `EntityMap::clear`][9291]
-* [Add a paragraph to the lifetimeless module doc][9312]
-* [opt-out `multi-threaded` feature flag][9269]
-* [Fix `ambiguous_with` breaking run conditions][9253]
-* [Add `RunSystem`][9366]
-* [Add `replace_if_neq` to `DetectChangesMut`][9418]
-* [Adding `Copy, Clone, Debug` to derived traits of `ExecutorKind`][9385]
-* [Fix incorrect documentation link in `DetectChangesMut`][9431]
-* [Implement `Debug` for `UnsafeWorldCell`][9460]
-* [Relax In/Out bounds on impl Debug for dyn System][9581]
-* [Improve various `Debug` implementations][9588]
-* [Make `run_if_inner` public and rename to `run_if_dyn`][9576]
-* [Refactor build_schedule and related errors][9579]
-* [Add `system.map(...)` for transforming the output of a system][8526]
-* [Reorganize `Events` and `EventSequence` code][9306]
-* [Replaced EntityMap with HashMap][9461]
-* [clean up configure_set(s) erroring][9577]
-* [Relax more `Sync` bounds on `Local`][9589]
-* [Rename `ManualEventIterator`][9592]
-* [Replaced `EntityCommand` Implementation for `FnOnce`][9604]
-* [Add a variant of `Events::update` that returns the removed events][9542]
-* [Move schedule name into `Schedule`][9600]
-* [port old ambiguity tests over][9617]
-* [Refactor `EventReader::iter` to `read`][9631]
-* [fix ambiguity reporting][9648]
-* [Fix anonymous set name stack overflow][9650]
-* [Fix unsoundness in `QueryState::is_empty`][9463]
-* [Add panicking helpers for getting components from `Query`][9659]
-* [Replace `IntoSystemSetConfig` with `IntoSystemSetConfigs`][9247]
-* [Moved `get_component(_unchecked_mut)` from `Query` to `QueryState`][9686]
-* [Fix naming on "tick" Column and ComponentSparseSet methods][9744]
-* [Clarify a comment in Option WorldQuery impl][9749]
-* [Return a boolean from `set_if_neq`][9801]
-* [Rename RemovedComponents::iter/iter_with_id to read/read_with_id][9778]
-* [Remove some old references to CoreSet][9833]
-* [Use single threaded executor for archetype benches][9835]
-* [docs: Improve some `ComponentId` doc cross-linking.][9839]
-* [One Shot Systems][8963]
-* [Add mutual exclusion safety info on filter_fetch][9836]
-* [add try_insert to entity commands][9844]
-* [Improve codegen for world validation][9464]
-* [docs: Use intradoc links for method references.][9958]
-* [Remove States::variants and remove enum-only restriction its derive][9945]
-* [`as_deref_mut()` method for Mut-like types][9912]
-* [refactor: Change Option<With<T>> query params to Has<T>][9959]
-* [Hide `UnsafeWorldCell::unsafe_world`][9741]
-* [Add a public API to ArchetypeGeneration/Id][9825]
-* [Ignore ambiguous components or resources][9895]
-* [Use chain in breakout example][10124]
-* [`ParamSet`s containing non-send parameters should also be non-send][10211]
-* [Replace all labels with interned labels][7762]
-* [Fix outdated comment referencing CoreSet][10294]
-
-### A-Tasks + A-Diagnostics
-
-* [Fix doc warning in bevy_tasks][9348]
-
-### A-ECS + A-App
-
-* [Add configure_schedules to App and Schedules to apply `ScheduleBuildSettings` to all schedules][9514]
-* [Only run event systems if they have tangible work to do][7728]
-
-### A-Scenes
-
-* [Move scene spawner systems to SpawnScene schedule][9260]
-* [Add `SceneInstanceReady`][9313]
-* [Add `SpawnScene` to prelude][9451]
-* [Finish documenting `bevy_scene`][9949]
-* [Only attempt to copy resources that still exist from scenes][9984]
-* [Correct Scene loader error description][10161]
-
-### A-Gizmos
-
-* [Replace AHash with a good sequence for entity AABB colors][9175]
-* [gizmo plugin lag bugfix][9166]
-* [Clarify immediate mode in `Gizmos` documentation][9183]
-* [Fix crash when drawing line gizmo with less than 2 vertices][9101]
-* [Document that gizmo `depth_bias` has no effect in 2D][10074]
-
-### A-Hierarchy
-
-* [Prevent setting parent as itself][8980]
-* [Add as_slice to parent][9871]
-
-### A-Build-System + A-Assets
-
-* [Increase iteration count for asset tests][9737]
-
-### A-Rendering + A-Assets + A-Reflection
-
-* [Implement `Reflect` for `Mesh`][9779]
-
-### A-Rendering + A-ECS
-
-* [Update `Camera`'s `Frustum` only when its `GlobalTransform` or `CameraProjection` changed][9092]
 
 [5303]: https://github.com/bevyengine/bevy/pull/5303
 [5314]: https://github.com/bevyengine/bevy/pull/5314
@@ -3048,3 +3049,4 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 [10352]: https://github.com/bevyengine/bevy/pull/10352
 [10356]: https://github.com/bevyengine/bevy/pull/10356
 [10358]: https://github.com/bevyengine/bevy/pull/10358
+[10360]: https://github.com/bevyengine/bevy/pull/10360
