@@ -30,6 +30,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Automatic Batching and Instancing of Draw Commands**: Draw commands are now automatically batched / instanced when possible, yielding significant render performance wins.
 * **Renderer Optimizations**: Bevy's renderer dataflow has been reworked to squeeze out more performance and prepare the way for future GPU-driven rendering.
 * **One Shot Systems**: ECS Systems can now be run on-demand from other systems!
+* **UI Materials**: Add custom material shaders to Bevy UI nodes
 
 ## Deferred Rendering
 
@@ -81,8 +82,8 @@ Note that the cube in front of the flight helmet model and the ground plane are 
 
 Note that for most use cases, we recommend using forward by default, unless a feature explicitly needs deferred or your rendering conditions benefit from deferred style. Forward has the fewest surprises and will work better on more devices.
 
-[`StandardMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html
-[`DefaultOpaqueRendererMethod`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.DefaultOpaqueRendererMethod.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.12.0/bevy/pbr/struct.StandardMaterial.html
+[`DefaultOpaqueRendererMethod`]: https://docs.rs/bevy/0.12.0/bevy/pbr/struct.DefaultOpaqueRendererMethod.html
 
 ## PCF Shadow Filtering
 
@@ -122,8 +123,8 @@ We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (
   <img class="image-b" alt="PCF Off" src="no_pcf.png">
 </div>
 
-[`ShadowMapFilter::Castano13`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
-[`ShadowMapFilter::Jimenez14`]: https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
+[`ShadowMapFilter::Castano13`]: https://docs.rs/bevy/0.12.0/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
+[`ShadowMapFilter::Jimenez14`]: https://docs.rs/bevy/0.12.0/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
 
 ## `StandardMaterial` Light Transmission
 
@@ -179,9 +180,9 @@ The “background” texture is then sampled at that point. Perceptual roughness
 
 Diffuse transmission is implemented via a second, reversed and displaced fully-diffuse Lambertian lobe, which is added to the existing PBR lighting calculations. This is a simple and relatively cheap approximation, but works reasonably well.
 
-[`TransmittedShadowReceiver`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.TransmittedShadowReceiver.html
-[`Camera3d`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/core_3d/struct.Camera3d.html
-[`DepthPrepass`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/prepass/struct.DepthPrepass.html
+[`TransmittedShadowReceiver`]: https://docs.rs/bevy/0.12.0/bevy/pbr/struct.TransmittedShadowReceiver.html
+[`Camera3d`]: https://docs.rs/bevy/0.12.0/bevy/core_pipeline/core_3d/struct.Camera3d.html
+[`DepthPrepass`]: https://docs.rs/bevy/0.12.0/bevy/core_pipeline/prepass/struct.DepthPrepass.html
 
 ## Bevy Asset V2
 
@@ -193,8 +194,8 @@ Bevy Asset V2 is a completely new asset system that learns from the best parts o
 
 Most existing user-facing asset code will either require no changes at all, or minimal changes. Custom [`AssetLoader`] or [`AssetReader`] code will need to change slightly, but generally the changes should be very minimal. Bevy Asset V2 (despite being a completely new implementation) largely just expands what Bevy is capable of.
 
-[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
-[`AssetReader`]: https://dev-docs.bevyengine.org/bevy/asset/io/trait.AssetReader.html
+[`AssetLoader`]: https://docs.rs/bevy/0.12.0/bevy/asset/trait.AssetLoader.html
+[`AssetReader`]: https://docs.rs/bevy/0.12.0/bevy/asset/io/trait.AssetReader.html
 
 ### Asset Preprocessing
 
@@ -233,8 +234,8 @@ cargo run --features bevy/asset_processor
 
 This will start the [`AssetProcessor`] in parallel with your app. It will run until all assets are read from their source (defaults to the `assets` folder), processed, and the results have been written to their destination (defaults to the `imported_assets` folder). This pairs with asset hot-reloading. If you make a change, this will be detected by the [`AssetProcessor`], the asset will be reprocessed, and the result will be hot-reloaded in your app.
 
-[`AssetPlugin`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetPlugin.html
-[`AssetProcessor`]: https://dev-docs.bevyengine.org/bevy/asset/processor/struct.AssetProcessor.html
+[`AssetPlugin`]: https://docs.rs/bevy/0.12.0/bevy/asset/struct.AssetPlugin.html
+[`AssetProcessor`]: https://docs.rs/bevy/0.12.0/bevy/asset/processor/struct.AssetProcessor.html
 
 ### Should You Enable Pre-Processing Today?
 
@@ -342,8 +343,8 @@ Note that the `Process` asset mode has changed to `Load`. This is because in the
 
 The final processed asset and metadata files can be viewed and interacted with like any other file. However they are intended to be read-only. Configuration should happen on the _source asset_, not the _final processed asset_.
 
-[`Process`]: https://dev-docs.bevyengine.org/bevy/asset/processor/trait.Process.html
-[`ImageLoader`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoader.html
+[`Process`]: https://docs.rs/bevy/0.12.0/bevy/asset/processor/trait.Process.html
+[`ImageLoader`]: https://docs.rs/bevy/0.12.0/bevy/render/texture/struct.ImageLoader.html
 
 ### `CompressedImageSaver`
 
@@ -353,7 +354,7 @@ The final processed asset and metadata files can be viewed and interacted with l
 
 **Bevy 0.12** ships with a barebones [`CompressedImageSaver`] that writes images to [Basis Universal](https://github.com/BinomialLLC/basis_universal) (a GPU-friendly image interchange format) and generates [mipmaps](https://en.wikipedia.org/wiki/Mipmap). Mipmaps reduce aliasing artifacts when sampling images from different distances. This fills an important gap, as Bevy previously had no way to generate mipmaps on its own (it relied on external tooling). This can be enabled with the `basis-universal` cargo feature.
 
-[`CompressedImageSaver`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.CompressedImageSaver.html
+[`CompressedImageSaver`]: https://docs.rs/bevy/0.12.0/bevy/render/texture/struct.CompressedImageSaver.html
 
 ### Preprocessing is Optional!
 
@@ -370,10 +371,10 @@ A [`Process`] implementation can be defined using arbitrary logic, but we heavil
 
 That means if you already have an [`ImageLoader`], which loads images, all you need to do is write some `ImageSaver` which will write the image in some optimized format. This both saves development work and makes it easy to support both processed and unprocessed scenarios.
 
-[`AssetMode::Unprocessed`]: https://dev-docs.bevyengine.org/bevy/asset/enum.AssetMode.html
-[`AssetMode::Processed`]: https://dev-docs.bevyengine.org/bevy/asset/enum.AssetMode.html
-[`LoadAndSave`]: https://dev-docs.bevyengine.org/bevy/asset/processor/struct.LoadAndSave.html
-[`AssetSaver`]: https://dev-docs.bevyengine.org/bevy/asset/saver/trait.AssetSaver.html
+[`AssetMode::Unprocessed`]: https://docs.rs/bevy/0.12.0/bevy/asset/enum.AssetMode.html
+[`AssetMode::Processed`]: https://docs.rs/bevy/0.12.0/bevy/asset/enum.AssetMode.html
+[`LoadAndSave`]: https://docs.rs/bevy/0.12.0/bevy/asset/processor/struct.LoadAndSave.html
+[`AssetSaver`]: https://docs.rs/bevy/0.12.0/bevy/asset/saver/trait.AssetSaver.html
 
 ### Built To Run Anywhere
 
@@ -387,8 +388,8 @@ The [`AssetEvent`] enum now has an [`AssetEvent::LoadedWithDependencies`] varian
 
 This makes it easy to wait until an [`Asset`] is "fully loaded" before doing something.
 
-[`AssetEvent`]: https://dev-docs.bevyengine.org/bevy/asset/enum.AssetEvent.html
-[`AssetEvent::LoadedWithDependencies`]: https://dev-docs.bevyengine.org/bevy/asset/enum.AssetEvent.html
+[`AssetEvent`]: https://docs.rs/bevy/0.12.0/bevy/asset/enum.AssetEvent.html
+[`AssetEvent::LoadedWithDependencies`]: https://docs.rs/bevy/0.12.0/bevy/asset/enum.AssetEvent.html
 
 ### Multiple Asset Sources
 
@@ -424,7 +425,7 @@ app.register_asset_source(
 )
 ```
 
-[`AssetSource`]: https://dev-docs.bevyengine.org/bevy/asset/io/struct.AssetSource.html
+[`AssetSource`]: https://docs.rs/bevy/0.12.0/bevy/asset/io/struct.AssetSource.html
 
 ### Embedded Assets
 
@@ -468,8 +469,8 @@ Almost everything in **Bevy Asset V2** can be extended with trait impls:
 * **[`AssetSaver`]**: Define custom save logic for a given [`Asset`] type
 * **[`Process`]**: Define fully bespoke processor logic (or use the more opinionated [`LoadAndSave`] [`Process`] impl)
 
-[`Asset`]: https://dev-docs.bevyengine.org/bevy/asset/trait.Asset.html
-[`AssetWatcher`]: https://dev-docs.bevyengine.org/bevy/asset/io/trait.AssetWatcher.html
+[`Asset`]: https://docs.rs/bevy/0.12.0/bevy/asset/trait.Asset.html
+[`AssetWatcher`]: https://docs.rs/bevy/0.12.0/bevy/asset/io/trait.AssetWatcher.html
 
 ### Async Asset I/O
 
@@ -477,8 +478,8 @@ The new [`AssetReader`] and [`AssetWriter`] APIs are async! This means naturally
 
 The filesystem impls (such as [`FileAssetReader`]) offload file IO to a separate thread and the future resolves when the file operation has finished.
 
-[`AssetWriter`]: https://dev-docs.bevyengine.org/bevy/asset/io/trait.AssetWriter.html
-[`FileAssetReader`]: https://dev-docs.bevyengine.org/bevy/asset/io/file/struct.FileAssetReader.html
+[`AssetWriter`]: https://docs.rs/bevy/0.12.0/bevy/asset/io/trait.AssetWriter.html
+[`FileAssetReader`]: https://docs.rs/bevy/0.12.0/bevy/asset/io/file/struct.FileAssetReader.html
 
 ### Improved Hot-Reloading Workflow
 
@@ -520,9 +521,9 @@ let path = handle.path();
 Handles now also use a smaller / cheaper-to-look-up [`AssetIndex`] internally, which uses generational indices to look up assets in dense storage.
 
 [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
-[`AssetPath`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetPath.html
-[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
-[`AssetIndex`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetIndex.html
+[`AssetPath`]: https://docs.rs/bevy/0.12.0/bevy/asset/struct.AssetPath.html
+[`Handle`]: https://docs.rs/bevy/0.12.0/bevy/asset/enum.Handle.html
+[`AssetIndex`]: https://docs.rs/bevy/0.12.0/bevy/asset/struct.AssetIndex.html
 
 ### True Copy-on-Write Asset Paths
 
@@ -534,9 +535,9 @@ To prevent all of this cloning and re-allocating of strings, we've built our own
 2. Almost _all_ [`AssetPath`] values defined in code come from a `&'static str`. We've created a special [`CowArc::Static`] variant that retains this static-ness, meaning we do _zero_ allocations even when turning a borrow into an "owned [`AssetPath`]".
 
 [`Cow`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html
-[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
-[`CowArc`]: https://dev-docs.bevyengine.org/bevy/utils/enum.CowArc.html
-[`CowArc::Static`]: https://dev-docs.bevyengine.org/bevy/utils/enum.CowArc.html#variant.Static
+[`AssetServer`]: https://docs.rs/bevy/0.12.0/bevy/asset/struct.AssetServer.html
+[`CowArc`]: https://docs.rs/bevy/0.12.0/bevy/utils/enum.CowArc.html
+[`CowArc::Static`]: https://docs.rs/bevy/0.12.0/bevy/utils/enum.CowArc.html#variant.Static
 
 ## Suspend and Resume on Android
 
@@ -659,7 +660,7 @@ fn fragment(
 
 This _vastly_ simplifies writing custom PBR materials, making it accessible to pretty much everyone!
 
-[`ExtendedMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ExtendedMaterial.html
+[`ExtendedMaterial`]: https://docs.rs/bevy/0.12.0/bevy/pbr/struct.ExtendedMaterial.html
 
 ## Automatic Batching and Instancing of Draw Commands
 
@@ -701,7 +702,7 @@ If you would like to opt out an entity from automatic batching, you can add the 
 
 This is generally for cases where you are doing custom, non-standard renderer features that don't play nicely with batching's assumptions. For example, it assumes view bindings are constant across draws and that Bevy's-built-in entity batching logic is used.
 
-[`NoAutomaticBatching`]: https://dev-docs.bevyengine.org/bevy/render/batching/struct.NoAutomaticBatching.html
+[`NoAutomaticBatching`]: https://docs.rs/bevy/0.12.0/bevy/render/batching/struct.NoAutomaticBatching.html
 
 ## The Road to GPU-driven Rendering
 
@@ -797,8 +798,8 @@ All the instance data can be placed directly one after the other, and we only ha
 
 [Check out this annotated code example](https://gist.github.com/cart/3a9f190bd5e789a7d42317c28843ffca) that illustrates using [`GpuArrayBuffer`] to support both uniform and storage buffer bindings.
 
-[`GpuArrayBuffer`]: https://dev-docs.bevyengine.org/bevy/render/render_resource/enum.GpuArrayBuffer.html
-[`StorageBuffer`]: https://dev-docs.bevyengine.org/bevy/render/render_resource/struct.StorageBuffer.html
+[`GpuArrayBuffer`]: https://docs.rs/bevy/0.12.0/bevy/render/render_resource/enum.GpuArrayBuffer.html
+[`StorageBuffer`]: https://docs.rs/bevy/0.12.0/bevy/render/render_resource/struct.StorageBuffer.html
 
 ### 2D / 3D Mesh Entities using GpuArrayBuffer
 
@@ -833,7 +834,7 @@ We landed on using `HashMap<Entity, T>` with an optimized hash function designed
 
 This [yielded significant performance wins](https://github.com/bevyengine/bevy/pull/9903).
 
-[`EntityHashMap`]: https://dev-docs.bevyengine.org/bevy/utils/type.EntityHashMap.html
+[`EntityHashMap`]: https://docs.rs/bevy/0.12.0/bevy/utils/type.EntityHashMap.html
 
 ### Usage
 
@@ -864,7 +865,7 @@ impl ExtractInstance for MyType {
 app.add_plugins(ExtractInstancesPlugin::<MyType>::extract_visible());
 ```
 
-[`ExtractInstancesPlugin`]: https://dev-docs.bevyengine.org/bevy/render/extract_instances/struct.ExtractInstancesPlugin.html
+[`ExtractInstancesPlugin`]: https://docs.rs/bevy/0.12.0/bevy/render/extract_instances/struct.ExtractInstancesPlugin.html
 
 ## Sprite Instancing
 
@@ -945,9 +946,9 @@ The wireframes now use Bevy's [`Material`] abstraction. This means it will autom
 
 ![wireframe](wireframe.png)
 
-[`Material`]: https://dev-docs.bevyengine.org/bevy/pbr/trait.Material.html
-[`WireframeColor`]: https://dev-docs.bevyengine.org/bevy/pbr/wireframe/struct.WireframeColor.html
-[`NoWireframe`]: https://dev-docs.bevyengine.org/bevy/pbr/wireframe/struct.NoWireframe.html
+[`Material`]: https://docs.rs/bevy/0.12.0/bevy/pbr/trait.Material.html
+[`WireframeColor`]: https://docs.rs/bevy/0.12.0/bevy/pbr/wireframe/struct.WireframeColor.html
+[`NoWireframe`]: https://docs.rs/bevy/0.12.0/bevy/pbr/wireframe/struct.NoWireframe.html
 
 ## External Renderer Context
 
@@ -963,7 +964,7 @@ Here is a quick video of Bevy VR, courtesy of [`bevy_openxr`]!
 
 [`bevy_openxr`]: https://github.com/awtterpip/bevy_openxr/
 [`wgpu`]: https://github.com/gfx-rs/wgpu
-[`RenderPlugin`]: https://dev-docs.bevyengine.org/bevy/render/struct.RenderPlugin.html
+[`RenderPlugin`]: https://docs.rs/bevy/0.12.0/bevy/render/struct.RenderPlugin.html
 
 ## Bind Group Ergonomics
 
@@ -1117,8 +1118,8 @@ pub fn error<E: Debug>(result: Result<(), E>) {
 
 Bevy provides built in `error`, `warn`, `debug`, and `info` adapters that can be used with [`system.map()`] to log errors at each of these levels.
 
-[`system.map()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.map
-[`system.pipe()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/trait.IntoSystem.html#method.pipe
+[`system.map()`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/trait.IntoSystem.html#method.map
+[`system.pipe()`]: https://docs.rs/bevy/0.12.0/bevy/ecs/system/trait.IntoSystem.html#method.pipe
 
 ## Simplify Parallel Iteration Method
 
@@ -1134,7 +1135,7 @@ query.par_iter_mut().for_each_mut(|x| ...);
 query.par_iter_mut().for_each(|x| ...);
 ```
 
-[`for_each()`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryParIter.html#method.for_each
+[`for_each()`]: https://docs.rs/bevy/0.12.0/bevy/ecs/query/struct.QueryParIter.html#method.for_each
 
 ## Disjoint Mutable World Access Via EntityMut
 
@@ -1167,9 +1168,9 @@ for mut entity in world.iter_entities_mut() {
 
 This required reducing the access scope of [`EntityMut`] to _only_ the entity it accesses (previously it had escape hatches that allowed direct [`World`] access). Use [`EntityWorldMut`] for an equivalent to the old "global access" approach.
 
-[`EntityMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityMut.html
-[`EntityWorldMut`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.EntityWorldMut.html
-[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
+[`EntityMut`]: https://docs.rs/bevy/0.12.0/bevy/ecs/world/struct.EntityMut.html
+[`EntityWorldMut`]: https://docs.rs/bevy/0.12.0/bevy/ecs/world/struct.EntityWorldMut.html
+[`World`]: https://docs.rs/bevy/0.12.0/bevy/ecs/world/struct.World.html
 
 ## Unified configure_sets API
 
@@ -1250,7 +1251,7 @@ commands.spawn(MaterialNodeBundle {
 });
 ```
 
-[`UiMaterial`]: https://dev-docs.bevyengine.org/bevy/ui/trait.UiMaterial.html
+[`UiMaterial`]: https://docs.rs/bevy/0.12.0/bevy/ui/trait.UiMaterial.html
 
 ## UI Node Outlines
 
@@ -1271,8 +1272,8 @@ commands.spawn((
 ))
 ```
 
-[`Outline`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Outline.html
-[`Style::border`]: https://dev-docs.bevyengine.org/bevy/ui/struct.Style.html
+[`Outline`]: https://docs.rs/bevy/0.12.0/bevy/ui/struct.Outline.html
+[`Style::border`]: https://docs.rs/bevy/0.12.0/bevy/ui/struct.Style.html
 
 ## Unified `Time`
 
@@ -1314,8 +1315,8 @@ Try the new [time example](https://github.com/bevyengine/bevy/blob/main/examples
 
 The fix for the windup problem was limiting how much `Time<Virtual>` can advance from a single frame. This then limits how many times [`FixedUpdate`] can be queued for the next frame, and so things like frame lag or your computer waking up from a long sleep can no longer cause a death spiral. So now, the app won't freeze, but things happening in [`FixedUpdate`] will appear to slow down since it'll be running at a temporarily reduced rate.
 
-[`FixedUpdate`]: https://dev-docs.bevyengine.org/bevy/app/struct.FixedUpdate.html
-[`Time`]: https://dev-docs.bevyengine.org/bevy/time/struct.Time.html
+[`FixedUpdate`]: https://docs.rs/bevy/0.12.0/bevy/app/struct.FixedUpdate.html
+[`Time`]: https://docs.rs/bevy/0.12.0/bevy/time/struct.Time.html
 
 ## ImageLoader Settings
 
@@ -1358,8 +1359,8 @@ However, you can set these values to whatever you want!
 )
 ```
 
-[`ImagePlugin::default_sampler`]: https://dev-docs.bevyengine.org/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
-[`ImageLoaderSettings`]: https://dev-docs.bevyengine.org/bevy/render/texture/struct.ImageLoaderSettings.html
+[`ImagePlugin::default_sampler`]: https://docs.rs/bevy/0.12.0/bevy/render/prelude/struct.ImagePlugin.html#structfield.default_sampler
+[`ImageLoaderSettings`]: https://docs.rs/bevy/0.12.0/bevy/render/texture/struct.ImageLoaderSettings.html
 
 ## GamepadButtonInput
 
@@ -1372,9 +1373,9 @@ Bevy generally provides two ways to handle input of a given type:
 
 One notable exception was [`GamepadButton`], which was only available via the [`Input`] resource. **Bevy 0.12** adds a new [`GamepadButtonInput`] event, filling this gap.
 
-[`Input`]: https://dev-docs.bevyengine.org/bevy/input/struct.Input.html
-[`GamepadButton`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButton.html
-[`GamepadButtonInput`]: https://dev-docs.bevyengine.org/bevy/input/gamepad/struct.GamepadButtonInput.html
+[`Input`]: https://docs.rs/bevy/0.12.0/bevy/input/struct.Input.html
+[`GamepadButton`]: https://docs.rs/bevy/0.12.0/bevy/input/gamepad/struct.GamepadButton.html
+[`GamepadButtonInput`]: https://docs.rs/bevy/0.12.0/bevy/input/gamepad/struct.GamepadButtonInput.html
 
 ## SceneInstanceReady Event
 
@@ -1404,7 +1405,7 @@ fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
 }
 ```
 
-[`SceneInstanceReady`]: https://dev-docs.bevyengine.org/bevy/scene/struct.SceneInstanceReady.html
+[`SceneInstanceReady`]: https://docs.rs/bevy/0.12.0/bevy/scene/struct.SceneInstanceReady.html
 
 ## Split Computed Visibility
 
@@ -1412,8 +1413,8 @@ fn system(mut events: EventReader<SceneInstanceReady>, my_scene: Res<MyScene>) {
 
 The `ComputedVisibility` component has now been split into [`InheritedVisibility`] (visible in the hierarchy) and [`ViewVisibility`] (visible from a view), making it possible to use Bevy's built-in change detection on both sets of data separately.
 
-[`InheritedVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.InheritedVisibility.html
-[`ViewVisibility`]: https://dev-docs.bevyengine.org/bevy/render/view/struct.ViewVisibility.html
+[`InheritedVisibility`]: https://docs.rs/bevy/0.12.0/bevy/render/view/struct.InheritedVisibility.html
+[`ViewVisibility`]: https://docs.rs/bevy/0.12.0/bevy/render/view/struct.ViewVisibility.html
 
 ## ReflectBundle
 
@@ -1432,7 +1433,7 @@ struct SpriteBundle {
 
 This makes it possible to create and interact with ECS bundles using Bevy Reflect, meaning you can do these operations dynamically at runtime. This is useful for scripting and asset scenarios.
 
-[`ReflectBundle`]: https://dev-docs.bevyengine.org/bevy/ecs/reflect/struct.ReflectBundle.html
+[`ReflectBundle`]: https://docs.rs/bevy/0.12.0/bevy/ecs/reflect/struct.ReflectBundle.html
 
 ## Reflect Commands
 
@@ -1648,9 +1649,9 @@ AccessKit itself was also simplified, and this release capitalizes on that to sh
 
 As a followup to the introduction of [Stable TypePath](/news/bevy-0-11/#stable-typepath) in **Bevy 0.11**, Bevy Reflect now uses [`TypePath`] instead of [`type_name`]. A reflected type's [`TypePath`] is now accessible via [`TypeInfo`] and [`DynamicTypePath`] and [`type_name`] methods have been removed.
 
-[`TypeInfo`]: https://dev-docs.bevyengine.org/bevy/reflect/enum.TypeInfo.html
-[`TypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.TypePath.html
-[`DynamicTypePath`]: https://dev-docs.bevyengine.org/bevy/reflect/trait.DynamicTypePath.html
+[`TypeInfo`]: https://docs.rs/bevy/0.12.0/bevy/reflect/enum.TypeInfo.html
+[`TypePath`]: https://docs.rs/bevy/0.12.0/bevy/reflect/trait.TypePath.html
+[`DynamicTypePath`]: https://docs.rs/bevy/0.12.0/bevy/reflect/trait.DynamicTypePath.html
 [`type_name`]: https://doc.rust-lang.org/std/any/fn.type_name.html
 
 ## Improved bevymark Example
