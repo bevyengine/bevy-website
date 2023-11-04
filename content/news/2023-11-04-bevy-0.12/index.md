@@ -1189,6 +1189,69 @@ app.configure_sets(Update, A.after(B));
 app.configure_sets(Update, (A.after(B), B.after(C));
 ```
 
+## UI Materials
+
+<div class="release-feature-authors">authors: @MarkusTheOrt</div>
+
+Bevy's material system has been brought to Bevy UI thanks to the new [`UiMaterial`]:
+
+![ui material](ui_material.png)
+
+This "circle" UI Node is drawn with a custom shader:
+
+```rust
+#import bevy_ui::ui_vertex_output::UiVertexOutput
+
+struct CircleMaterial {
+    @location(0) color: vec4<f32>
+}
+
+@group(1) @binding(0)
+var<uniform> input: CircleMaterial;
+
+@fragment
+fn fragment(in: UiVertexOutput) -> @location(0) vec4<f32> {
+    let uv = in.uv * 2.0 - 1.0;
+    let alpha = 1.0 - pow(sqrt(dot(uv, uv)), 100.0);
+    return vec4<f32>(input.color.rgb, alpha);
+}
+```
+
+And just like other Bevy material types, it is simple to set up in code!
+
+```rust
+#[derive(AsBindGroup, Asset, TypePath, Debug, Clone)]
+struct CircleMaterial {
+    #[uniform(0)]
+    color: Vec4,
+}
+
+impl UiMaterial for CircleMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "shaders/circle_shader.wgsl".into()
+    }
+}
+
+// Register the material plugin in your App
+app.add_plugins(UiMaterialPlugin::<CircleMaterial>::default())
+
+// Later in your app, spawn the UI node with your material!
+commands.spawn(MaterialNodeBundle {
+    style: Style {
+        position_type: PositionType::Absolute,
+        width: Val::Px(250.0),
+        height: Val::Px(250.0),
+        ..default()
+    },
+    material: materials.add(CircleMaterial {
+        color: Color::WHITE.into(),
+    }),
+    ..default()
+});
+```
+
+[`UiMaterial`]: https://dev-docs.bevyengine.org/bevy/ui/trait.UiMaterial.html
+
 ## UI Node Outlines
 
 <div class="release-feature-authors">authors: @ickshonpe</div>
