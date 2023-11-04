@@ -30,7 +30,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Automatic Batching and Instancing of Draw Commands**: Draw commands are now automatically batched / instanced when possible, yielding significant render performance wins.
 * **Renderer Optimizations**: Bevy's renderer dataflow has been reworked to squeeze out more performance and prepare the way for future GPU-driven rendering.
 * **One Shot Systems**: ECS Systems can now be run on-demand from other systems!
-* **UI Materials**: Add custom material shaders to Bevy UI nodes
+* **UI Materials**: Add custom material shaders to Bevy UI nodes.
 
 ## Deferred Rendering
 
