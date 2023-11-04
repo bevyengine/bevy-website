@@ -751,21 +751,6 @@ bevy = { version = "0.11", features = ["bevy_dylib"] }
 bevy = { version = "0.12", features = ["dynamic_linking"] }
 ```
 
-### [Fix typo in NamedTypePathDef](https://github.com/bevyengine/bevy/pull/9102)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Reflection</div>
-</div>
-
-Renamed `NamedTypePathDef::Primtive` to `NamedTypePathDef::Primitive`
-
-```rust
-// 0.11
-let type_path = NamedTypePathDef::Primtive(ident);
-// 0.12
-let type_path = NamedTypePathDef::Primitive(ident);
-```
-
 ### [Refactor `path` module of `bevy_reflect`](https://github.com/bevyengine/bevy/pull/8887)
 
 <div class="migration-guide-area-tags">
