@@ -711,7 +711,7 @@ Bevy's renderer performance for 2D and 3D meshes can improve a lot. There are bo
 
 In **Bevy 0.12** we have started reworking rendering data structures, data flow, and draw patterns to unlock new optimizations. This enabled the **Automatic Batching and Instancing** we landed in **Bevy 0.12** and also helps pave the way for other significant wins in the future, such as GPU-driven rendering. We aren't quite ready for GPU-driven rendering, but we've started down that path in **Bevy 0.12**!
 
-### What are CPU* and GPU-driven rendering?
+### What are CPU and GPU-driven rendering?
 
 CPU-driven rendering is where draw commands are created on the CPU. In Bevy this means "in Rust code", more specifically in render graph nodes. This is how Bevy currently kicks off draws.
 
