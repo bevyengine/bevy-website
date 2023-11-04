@@ -7,7 +7,7 @@
             {%- set image = resize_image(path=path, width=width, height=height, op="fit") -%}
             {{- image.url -}}
         {%- else -%}
-            assets/bevy_icon_dark.svg
+            /assets/bevy_icon_dark.svg
         {%- endif -%}
     {%- endif -%}
 {%- endmacro card %}
