@@ -2,12 +2,12 @@
     {%- if path is ending_with(".svg") or path is ending_with(".gif") or path is ending_with(".webp") -%}
         {{- get_url(path=path) -}}
     {%- else -%}
-        {% set metadata = get_image_metadata(path=path, allow_missing=true) %}
-        {% if metadata %}
+        {%- set metadata = get_image_metadata(path=path, allow_missing=true) -%}
+        {%- if metadata -%}
             {%- set image = resize_image(path=path, width=width, height=height, op="fit") -%}
             {{- image.url -}}
-        {% else %}
-            assets/bevy_icon_dark.svg
-        {% endif %}
+        {%- else -%}
+            /assets/bevy_icon_dark.svg
+        {%- endif -%}
     {%- endif -%}
 {%- endmacro card %}
