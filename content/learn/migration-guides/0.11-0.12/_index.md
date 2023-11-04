@@ -436,7 +436,7 @@ my_system.map(bevy_utils::error)
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-The type `ManualEventIterator` has been renamed to `EventIterator`. Additonally, `ManualEventIteratorWithId` has been renamed to `EventIteratorWithId`.
+The type `ManualEventIterator` has been renamed to `EventIterator`. Additionally, `ManualEventIteratorWithId` has been renamed to `EventIteratorWithId`.
 
 ### [Replaced `EntityCommand` Implementation for `FnOnce`](https://github.com/bevyengine/bevy/pull/9604)
 
@@ -961,7 +961,7 @@ var model = affine_to_square(mesh[instance_index].model);
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-The `ComputedVisibilty` component has been split into `InheritedVisiblity` and
+The `ComputedVisibility` component has been split into `InheritedVisibility` and
 `ViewVisibility`. Replace any usages of `ComputedVisibility::is_visible_in_hierarchy`
 with `InheritedVisibility::get`, and replace `ComputedVisibility::is_visible_in_view`
 with `ViewVisibility::get`.
@@ -983,7 +983,7 @@ commands.spawn(VisibilityBundle {
 
 ```rust
 // 0.11:
-fn my_system(q: Query<&ComputedVisibilty>) {
+fn my_system(q: Query<&ComputedVisibility>) {
     for vis in &q {
         if vis.is_visible_in_hierarchy() {
 
@@ -995,7 +995,7 @@ fn my_system(q: Query<&InheritedVisibility>) {
 
 ```rust
 // 0.11:
-fn my_system(q: Query<&ComputedVisibilty>) {
+fn my_system(q: Query<&ComputedVisibility>) {
     for vis in &q {
         if vis.is_visible_in_view() {
 
@@ -1007,7 +1007,7 @@ fn my_system(q: Query<&ViewVisibility>) {
 
 ```rust
 // 0.11:
-fn my_system(mut q: Query<&mut ComputedVisibilty>) {
+fn my_system(mut q: Query<&mut ComputedVisibility>) {
     for vis in &mut q {
         vis.set_visible_in_view();
 
@@ -1151,7 +1151,7 @@ Manual implementations of `AsBindGroup` will need to be adjusted, the changes ar
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
-`MeshPipeline::view_layout` and `MeshPipeline::view_layout_multisampled` have been replaced with a private array to accomodate for variable view bind group layouts. To obtain a view bind group layout for the current pipeline state, use the new `MeshPipeline::get_view_layout()` or `MeshPipeline::get_view_layout_from_key()` methods.
+`MeshPipeline::view_layout` and `MeshPipeline::view_layout_multisampled` have been replaced with a private array to accommodate for variable view bind group layouts. To obtain a view bind group layout for the current pipeline state, use the new `MeshPipeline::get_view_layout()` or `MeshPipeline::get_view_layout_from_key()` methods.
 
 ### [Update shader imports](https://github.com/bevyengine/bevy/pull/10180)
 
