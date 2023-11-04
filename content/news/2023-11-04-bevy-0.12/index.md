@@ -1247,7 +1247,7 @@ commands.spawn(MaterialNodeBundle {
         ..default()
     },
     material: materials.add(CircleMaterial {
-        color: Color::WHITE.into(),
+        color: Color::rgb(0.0, 1.0, 0.5803921568627451).into(),
     }),
     ..default()
 });
