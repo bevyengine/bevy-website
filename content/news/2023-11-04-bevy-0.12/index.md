@@ -1632,7 +1632,7 @@ the website with all Wasm-compatible examples, which you can find
 It is now also capable of capturing a screenshot while running all examples:
 
 ```sh
-cargo run -p example-showcase -* run --screenshot
+cargo run -p example-showcase -- run --screenshot
 ```
 
 Some options are available to help with the execution, you can check them with `--help`.
