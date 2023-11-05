@@ -196,13 +196,13 @@ Also, as you may have noticed, the set of events has changed. The most important
 AssetPath::new("logo.png", None);
 
 // 0.12
-AssetPath::new("logo.png");
+AssetPath::from("logo.png");
 
 // 0.11
 AssetPath::new("scene.gltf", Some("Mesh0"));
 
 // 0.12
-AssetPath::new("scene.gltf").with_label("Mesh0");
+AssetPath::from("scene.gltf").with_label("Mesh0");
 ```
 
 `AssetPath` now serializes as `AssetPath("some_path.extension#Label")` instead of as `AssetPath { path: "some_path.extension", label: Some("Label) }`
