@@ -1465,14 +1465,6 @@ Added an `enabled_buttons` member to the `Window` struct through which users can
 - `UpdateMode::Reactive { max_wait: .. }` -> `UpdateMode::Reactive { wait: .. }`
 - `UpdateMode::ReactiveLowPower { max_wait: .. }` -> `UpdateMode::ReactiveLowPower { wait: .. }`
 
-### [Prevent black frames during startup](https://github.com/bevyengine/bevy/pull/9826)
-
-<div class="migration-guide-area-tags">
-    <div class="migration-guide-area-tag">Windowing</div>
-</div>
-
-Because of this change, the timing of the first few frames might have changed, and I think it could be that some things one may expect to be initialized in a system may no longer be. To be honest, I feel out of my depth to judge the exact impact here.
-
 ### [Work around naga/wgpu WGSL instance_index -> GLSL gl_InstanceID bug on WebGL2](https://github.com/bevyengine/bevy/pull/9383)
 
 <div class="migration-guide-area-tags">
