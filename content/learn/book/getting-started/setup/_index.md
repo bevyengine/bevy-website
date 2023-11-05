@@ -173,9 +173,9 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
   * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
-  * **Ubuntu**: `sudo apt-get install mold`
-  * **Fedora**: `sudo dnf install mold`
-  * **Arch**: `sudo pacman -S mold`
+  * **Ubuntu**: `sudo apt-get install mold clang`
+  * **Fedora**: `sudo dnf install mold clang`
+  * **Arch**: `sudo pacman -S mold clang`
   * **Windows**: currently not planned for support [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
   * **MacOS**: is available commercially with [sold](https://github.com/bluewhalesystems/sold)
 
