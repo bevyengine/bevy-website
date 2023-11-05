@@ -678,17 +678,17 @@ Here are some benches of the old unbatched approach (0.11) to the new batched ap
 
 ### 2D Mesh Bevymark (frames per second, more is better)
 
-This renders 160,000 entities with textured quad meshes (160 groups of 1,000 entities each, each group sharing a material). This means we can batch each group, resulting in only 160 instanced draw calls when batching is enabled.
+This renders 160,000 entities with textured quad meshes (160 groups of 1,000 entities each, each group sharing a material). This means we can batch each group, resulting in only 160 instanced draw calls when batching is enabled. This gives a **200% increase in frame rate (3x)**!
 
 ![0.12-2DMeshes](0.12-2DMeshes.svg)
-<div style="font-size: 1.0rem" class="release-feature-authors">Tested on an M1 Max, limiting the BatchedUniformBuffer batch size to 1 versus how it works in 0.12.</div>
+<div style="font-size: 1.0rem" class="release-feature-authors">Tested on an M1 Max at 1080p.</div>
 
 ### 3D Mesh "Many Cubes" (frames per second, more is better)
 
 This renders 160,000 cubes, of which ~11,700 are visible in the view. These are drawn using a single instanced draw of all visible cubes which enables up to **100% increase in frame rate (2x)**!
 
 ![0.12-3DMeshes](0.12-3DMeshes.svg)
-<div style="font-size: 1.0rem" class="release-feature-authors">Tested on an M1 Max, limiting the BatchedUniformBuffer batch size to 1 versus how it works in 0.12.</div>
+<div style="font-size: 1.0rem" class="release-feature-authors">Tested on an M1 Max at 1080p.</div>
 
 These performance benefits can be leveraged on all platforms, including WebGL2!
 
