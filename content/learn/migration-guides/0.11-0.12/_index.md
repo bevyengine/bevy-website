@@ -117,6 +117,11 @@ app.register_asset_loader(MyAssetLoader)
     .init_asset::<MyAsset>()
 ```
 
+#### Asset hot-reloading
+
+The feature `filesystem_watcher` has been renamed to `file_watcher`.
+In addition, you no longer need to manually configure the `ChangeWatcher` in the `AssetPlugin` as it is now configured automatically when the feature is enabled.
+
 #### Labeled assets
 
 If your loader allows labeled assets, there are a couple of different ways to handle them. The simplest is to call `load_context.labeled_asset_scope`:
