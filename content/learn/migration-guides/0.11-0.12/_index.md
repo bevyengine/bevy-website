@@ -1516,4 +1516,18 @@ fn vertex(vertex_no_morph: Vertex) -> VertexOutput {
 
 `&mut EventReader` does not implement `IntoIterator` anymore. replace `for foo in &mut events` by `for foo in events.iter()`
 
+### [Update default `ClearColor`` to better match Bevy's branding](https://github.com/bevyengine/bevy/pull/10339)
+
+<div class="migration-guide-area-tags">
+    <div class="migration-guide-area-tag">Rendering</div>
+</div>
+
+The default app background color has changed. To use the old default, add a `ClearColor` resource.
+
+```rust
+App::new()
+    .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
+    .add_plugins(DefaultPlugins)
+```
+
 </div>
