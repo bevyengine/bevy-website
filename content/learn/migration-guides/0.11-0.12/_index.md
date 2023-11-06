@@ -918,12 +918,16 @@ Note that using the instance_index is the default way to pass the per-object ind
     <div class="migration-guide-area-tag">Rendering</div>
 </div>
 
+`Sphere::intersects_obb` and `Frustum::intersects_obb` now take an `Affine3A` instead of a `Mat4`. You can use `Affine3A::from_mat4` or `Transform::compute_affine` to get an `Affine3A`.
+
+`MeshUniform` now stores its current and previous model transforms as 4x3 matrices. Helper functions were added to bevy_pbr::mesh_functions to unpack the data.
+
 ```rust
 // 0.11
 var model = mesh[instance_index].model;
 
 // 0.12
-#import bevy_pbr::mesh_functions affine_to_square
+#import bevy_pbr::mesh_functions::affine_to_square
 
 var model = affine_to_square(mesh[instance_index].model);
 ```
