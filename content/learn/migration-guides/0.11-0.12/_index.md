@@ -474,7 +474,7 @@ let old = |id: Entity, world: &mut World| {
     /* ... */
 };
 
-let new = |mut entity: EntityMut| {
+let new = |mut entity: EntityWorldMut| {
     let id = entity.id();
     let world = entity.into_world_mut();
     /* ... */
@@ -664,11 +664,9 @@ app.configure_schedules(build_settings);
     <div class="migration-guide-area-tag">Reflection</div>
 </div>
 
-**Note for maintainers: ensure that the guide for #9604 is updated accordingly.**
-
 Removed the method `EntityRef::world`, to fix a soundness issue with queries. If you need access to `&World` while using an `EntityRef`, consider passing the world as a separate parameter.
 
-`EntityMut` can no longer perform ‘structural’ world mutations, such as adding or removing components, or despawning the entity. Additionally, `EntityMut::world`, `EntityMut::world_mut` , and `EntityMut::world_scope` have been removed.
+`EntityMut` can no longer perform ‘structural’ world mutations, such as adding or removing components, or despawning the entity. Additionally, `EntityMut::world`, `EntityMut::world_mut`, `EntityMut::into_world_mut`, and `EntityMut::world_scope` have been removed.
 Instead, use the newly-added type `EntityWorldMut`, which is a helper type for working with `&mut World`.
 
 ### [Make builder types take and return `Self`](https://github.com/bevyengine/bevy/pull/10001)
