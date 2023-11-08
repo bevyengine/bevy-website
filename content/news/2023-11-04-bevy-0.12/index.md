@@ -1513,8 +1513,8 @@ The one caveat is that most operating systems will not report if a window is vis
 The `AnimationPlayer` now has new methods for controlling playback, and utilities for checking
 if an animation is playing or completed, and getting its `AnimationClip` handle.
 
-`set_elapsed` and has been removed in favor of `seek_to`. `elapsed` now
-returns the actual elapsed time and is not affected by the animation speed. `stop_repeating` have been removed
+`set_elapsed` has been removed in favor of `seek_to`. `elapsed` now
+returns the actual elapsed time and is not affected by the animation speed. `stop_repeating` has been removed
 in favor of `set_repeat(RepeatAnimation::Never)`.
 
 ```rust
