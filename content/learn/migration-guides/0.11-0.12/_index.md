@@ -1534,10 +1534,20 @@ App::new()
 
 ### [View Transformations](https://github.com/bevyengine/bevy/pull/9726)
 
-`mesh_functions::mesh_position_world_to_clip` was moved and renamed to `view_transformations::position_world_to_clip`.
-
-You can import it like this:
+`mesh_functions::mesh_position_world_to_clip` was moved and renamed to `view_transformations::position_world_to_clip`. It now also takes a `vec3` instead of a `vec4` so you will need to use `vec4.xyz` to get a `vec3`.
 
 ```rust
+// 0.11
+#import bevy_pbr::mesh_functions::mesh_position_world_to_clip
+fn mesh_position_local_to_clip(model: mat4x4<f32>, vertex_position: vec4<f32>) -> vec4<f32> {
+    let world_position = mesh_position_local_to_world(model, vertex_position);
+    return mesh_position_world_to_clip(world_position);
+}
+
+// 0.12
 #import bevy_pbr::view_transformations::position_world_to_clip;
+fn mesh_position_local_to_clip(model: mat4x4<f32>, vertex_position: vec4<f32>) -> vec4<f32> {
+    let world_position = mesh_position_local_to_world(model, vertex_position);
+    return position_world_to_clip(world_position.xyz);
+}
 ```
