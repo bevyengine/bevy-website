@@ -1531,3 +1531,13 @@ App::new()
 ```
 
 </div>
+
+### [View Transformations](https://github.com/bevyengine/bevy/pull/9726)
+
+`mesh_functions::mesh_position_world_to_clip` was moved and renamed to `view_transformations::position_world_to_clip`.
+
+You can import it like this:
+
+```rust
+#import bevy_pbr::view_transformations::position_world_to_clip;
+```
