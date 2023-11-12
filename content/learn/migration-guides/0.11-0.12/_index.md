@@ -382,7 +382,9 @@ unsafe impl WorldQuery for MyQuery {
     <div class="migration-guide-area-tag">ECS</div>
 </div>
 
-The `multi-threaded` feature in `bevy_ecs` and `bevy_tasks` is no longer enabled by default. However, this remains a default feature for the umbrella `bevy` crate. If you depend on `bevy_ecs` or `bevy_tasks` directly, you should consider enabling this to allow systems to run in parallel.
+The `multi-threaded` feature in `bevy_ecs` and `bevy_tasks` is no longer enabled by default. However, this remains a default feature for the umbrella `bevy` crate.
+
+if you are using `bevy` without `default-features`, or if you depend on `bevy_ecs` or `bevy_tasks` directly, you most likely want to enable this to allow systems to run in parallel.
 
 ### [Refactor build_schedule and related errors](https://github.com/bevyengine/bevy/pull/9579)
 
