@@ -1,0 +1,275 @@
+{% extends "layouts/base.html" %}
+{% block head_extensions %}
+<meta name="description"
+    content="使用 Rust 构建的数据驱动型游戏引擎，简单易用，令人耳目一新。永远免费且开源！" />
+<link href="https://mastodon.social/@bevy" rel="me" />
+{% endblock head_extensions %}
+
+{% block content %}
+<div>
+    <img src="/assets/bevy_logo_dark.svg" class="bevy-logo-header" alt="Bevy 徽标" />
+    <div class="bevy-description">
+        使用 Rust 构建的数据驱动型游戏引擎，简单易用，令人耳目一新
+        <br />
+        永远免费且开源！
+        <br />
+        <a class="button button--big" href="/learn/book/getting-started/">立即开始</a>
+    </div>
+    <div class="feature-list">
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2 class="feature-title">数据驱动</h2>
+                <div class="feature-description">
+                    所有引擎和游戏逻辑都使用定制的实体组件系统 Bevy ECS
+                    <ul class="feature-sublist">
+                        <li><b>快：</b>大规模并行和高速缓存友好，并且是最快的 ECS（基于某些基准测试）</li>
+                        <li><b>简：</b>Component 都是 Rust 结构体, System 都是 Rust 函数</li>
+                        <li><b>强：</b>查询、全局资源、本地资源、变更检测、无锁并行调度器</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="/assets/ecs.svg" class="feature-img" style="width: 100%; max-width: 90%; max-height: 90%;"
+                    alt="ECS 代码" />
+            </div>
+        </div>
+        <div class="feature-container feature-container-reverse">
+            <div class="feature-image">
+                <img src="/assets/sprite.png" class="feature-img" alt="一个人的像素艺术 Sprite" />
+            </div>
+            <div class="feature-text">
+                <h2 class="feature-title">2D 渲染器</h2>
+                <div class="feature-description">
+                    为游戏和应用程序渲染实时 2D 图形
+                    <ul class="feature-sublist">
+                        <li><b>特性：</b>精灵表、动态纹理图集、相机、纹理、材质
+                        </li>
+                        <li><b>可扩展：</b>自定义着色器、材质、渲染管道</li>
+                        <li><b>通用核心：</b>构建于 Bevy 的 Render Graph 之上</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2 class="feature-title">3D 渲染器</h2>
+                <div class="feature-description">
+                    现代且灵活的 3D 渲染器
+                    <ul class="feature-sublist">
+                        <li><b>特性：</b>光照、阴影、相机、网格、纹理、材质、gltf 加载</li>
+                        <li><b>可扩展：</b>自定义着色器、材质、渲染管道</li>
+                        <li><b>通用核心：</b>构建于 Bevy 的 Render Graph 之上</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="/assets/boat.png" class="feature-img" style="max-height: 95%; max-width: 95%;"
+                    alt="3D 的木船模型" />
+            </div>
+        </div>
+        <div class="feature-container feature-container-reverse">
+            <div class="feature-image">
+                <img src="/assets/render_graph.svg" class="feature-img" alt="Render Graph" />
+            </div>
+            <div class="feature-text">
+                <h2 class="feature-title">Render Graph</h2>
+                <div class="feature-description">
+                    使用 Graph 结构组成自定义渲染管道
+                    <ul class="feature-sublist">
+                        <li><b>并行：</b>Render Graphs 自动并行渲染</li>
+                        <li><b>模块化：</b>使用 Render Graph 节点构建可组合且可重用的渲染逻辑 </li>
+                        <li><b>后端无关性：</b>不绑定于特定的图形 API </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2 class="feature-title">跨平台</h2>
+                <div class="feature-description">
+                    支持所有主流平台
+                    <ul class="feature-sublist">
+                        <li>Windows, MacOS, Linux, Web, iOS, Android</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="/assets/platform-icons.svg" class="feature-img" alt="Microsoft、Apple、Linux 的徽标" />
+            </div>
+        </div>
+        <div class="feature-container feature-container-reverse">
+            <div class="feature-image">
+                <img src="/assets/bevy_ui.svg" class="feature-img" alt="UI 对话框窗口示意图" />
+            </div>
+            <div class="feature-text">
+                <h2 class="feature-title">Bevy UI</h2>
+                <div class="feature-description">
+                    专门为 Bevy 构建的自定义 ECS 驱动的 UI 框架
+                    <ul class="feature-sublist">
+                        <li>直接构建在 Bevy 的 ECS、渲染器和场景插件之上</li>
+                        <li>使用代码动态编写 UI，或是使用 Bevy Scene 格式声明式地编写 UI</li>
+                        <li>使用熟悉的 "flex box" 模型布局你的 UI</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2 class="feature-title">场景</h2>
+                <div class="feature-description">
+                    使用 Bevy 的场景系统创建、保存和加载 ECS 世界
+                    <ul class="feature-sublist">
+                        <li><b>加载：</b>加载场景时保留 Entity ID（对保存游戏非常有用）</li>
+                        <li><b>实例化：</b>实例化使用新的 Entity ID 创建场景的链接副本</li>
+                        <li><b>热重载：</b>对场景文件的更改会自动应用于正在运行的应用程序</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="/assets/scene.svg" class="feature-img" alt="阳光下草地上的广场的 2D 场景" />
+            </div>
+        </div>
+        <div class="feature-container feature-container-reverse">
+            <div class="feature-image">
+                <img src="/assets/sound.svg" class="feature-img" alt="音符" />
+            </div>
+            <div class="feature-text">
+                <h2 class="feature-title">声音</h2>
+                <div class="feature-description">
+                    加载音频文件并按需播放
+                    <ul class="feature-sublist">
+                        <li>将音频文件加载为资产</li>
+                        <li>使用音频资源播放音频资产</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2 class="feature-title">热重载</h2>
+                <div class="feature-description">
+                    无需重启应用或重新编译，即可获得有关更改的即时反馈
+                    <ul class="feature-sublist">
+                        <li>资产变动会立即反映在运行中的 Bevy 应用程序中</li>
+                        <li>目前可以热加载场景、纹理和网格</li>
+                        <li>可整合任何资产类型</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="/assets/hot_reloading.svg" class="feature-img" alt="热重载示意图" />
+            </div>
+        </div>
+        <div class="feature-container feature-container-reverse">
+            <div class="feature-image">
+                <img src="/assets/progressbar.svg" class="feature-img" alt="编译进度条" />
+            </div>
+            <div class="feature-text">
+                <h2 class="feature-title">高效编译时间</h2>
+                <div class="feature-description">
+                    游戏开发是一个迭代过程，你不能一直等待编译
+                    <ul class="feature-sublist">
+                        <li>使用 Bevy，在 "快速编译 "配置下，编译时间预计为 0.8~3.0 秒。</li>
+                        <li>与其他流行的 Rust 游戏引擎相比，后者可能需要 30 秒以上才能编译一个换行符的插入！</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2 class="feature-title">免费且开源</h2>
+                <div class="feature-description">
+                    由开发者社区制作并为其服务的引擎
+                    <ul class="feature-sublist">
+                        <li>100% 免费，并将永远如此</li>
+                        <li>根据宽松的 MIT 或 Apache 2.0 许可开放源代码</li>
+                        <li>无合同</li>
+                        <li>无许可费</li>
+                        <li>不削减销售额</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="/assets/opensource.svg" class="feature-img" alt="开源图标" />
+            </div>
+        </div>
+    </div>
+    <div class="media-content features-whats-next">
+        准备好开始构建 Bevy 应用程序了吗？从 <a href="learn/book/introduction/">The Bevy Book</a> 开始快速入门！
+    </div>
+    <img src="/assets/bevy_logo_dark.svg" class="bevy-logo-header" alt="Bevy 徽标" />
+    <div class="features-sponsors">
+        <h3 class="media-content">在此，我们衷心感谢那些对 Bevy 慷慨解囊的<a
+                href="https://github.com/sponsors/cart/">赞助商们</a>，是他们使得我们的工作得以持续开展。
+                请注意，所有接受赞助的 Bevy 领导者都签署了此<a
+                href="/sponsorship-pledge">赞助承诺书</a>，以确保 Bevy 始终是一个社区优先的项目。 
+        </h3>
+        <!-- <div class="sponsors sponsors--patron">
+            <h2 class="sponsors__title">Patron Sponsors</h2>
+            <h3 class="sponsors__amount">Over $100,000 / year</h3>
+            <div class="sponsors__content">
+            </div>
+        </div> -->
+        <div class="sponsors sponsors--platinum">
+            <h2 class="sponsors__title">铂金赞助商</h2>
+            <h3 class="sponsors__amount">$1,000 / 月</h3>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://www.foresightmining.com">
+                    <img class="sponsors__logo" style="height: 140px" src="/assets/Foresight_Spatial_Labs.svg"
+                        alt="Foresight Spatial Labs 徽标" />
+                </a>
+                <a class="sponsors__link" href="https://www.embark-studios.com">
+                    <img class="sponsors__logo" src="/assets/embark.png" alt="Embark Studios 徽标" />
+                </a>
+                <a class="sponsors__link" href="https://meetkai.com/careers">
+                    <img class="sponsors__logo" style="max-height: 120px" src="/assets/meetkai.png" alt="MeetKai 徽标" />
+                </a>
+                <a class="sponsors__link" href="https://www.encultured.ai/">
+                    <img class="sponsors__logo" style="max-height: 60px" src="/assets/Encultured.png"
+                        alt="Encultured AI 徽标" />
+                </a>
+            </div>
+        </div>
+        <div class="sponsors sponsors--gold">
+            <h2 class="sponsors__title">黄金赞助商</h2>
+            <h3 class="sponsors__amount">$300 / 月</h3>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://playroids.com">
+                    <img class="sponsors__logo" src="/assets/roids_logo.png" alt="Roids 徽标" style="max-height: 130px" />
+                </a>
+            </div>
+        </div>
+        <div class="sponsors sponsors--silver">
+            <h2 class="sponsors__title">白银赞助商</h2>
+            <h3 class="sponsors__amount">$200 / 月</h3>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://agileperception.com">
+                    <img class="sponsors__logo" src="/assets/agile_perception.png" alt="Agile Perception 徽标" />
+                </a>
+            </div>
+        </div>
+        <div class="sponsors sponsors--bronze">
+            <h2 class="sponsors__title">青铜赞助商</h2>
+            <h3 class="sponsors__amount">$100 / 月</h3>
+            <div class="sponsors__content">
+                <a class="sponsors__link" href="https://vertexstudio.co">
+                    <img class="sponsors__logo" src="/assets/vertex_studio.png" alt="Vertex Studio 徽标" />
+                </a>
+                <a class="sponsors__link" href="https://keygen.sh">
+                    <img class="sponsors__logo" src="/assets/keygen.png" alt="Keygen 徽标" />
+                </a>
+                <a class="sponsors__link" href="https://www.vpsserver.com">
+                    <img class="sponsors__logo" src="/assets/VPSServer.png" alt="VPSServer 徽标" />
+                </a>
+                <a class="sponsors__link" href="https://wunder.software">
+                    <img class="sponsors__logo" src="/assets/Wunder_Software_GmbH.png" alt="Wunder Software GmbH 徽标" />
+                </a>
+            </div>
+        </div>
+        <h2 class="past-sponsors-title">过往赞助商</h2>
+        <div>
+            Futurewei, Legion Labs, Striked, Metabuild
+        </div>
+    </div>
+</div>
+{% endblock content %}
