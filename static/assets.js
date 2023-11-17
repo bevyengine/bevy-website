@@ -69,7 +69,10 @@ document
 
         for (const asset of document.querySelectorAll('.asset-card')) {
             let tag = asset.querySelector('.asset-card__tags .asset-card__bevy-versions .asset-card__tag');
-            if (tag) {
+            if (item.target.value === 'all_versions') {
+                asset.parentElement.style.display = 'block'
+            }
+            else if (tag) {
                 const searchMatch = item.target.value === normalize_version(tag.innerText);
                 asset.parentElement.style.display = searchMatch ? 'block' : 'none'
             } else {
