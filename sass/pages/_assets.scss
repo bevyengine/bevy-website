@@ -35,4 +35,17 @@
             }
         }
     }
+
+    .asset-version-select {
+        border-radius: $border-radius;
+        border: 2px solid #383838;
+        background-color: $syntax-theme-background;
+        font-size: 1.0rem;
+        padding: .4rem;
+        
+        &:hover {
+            background-color: $card-hover-background;
+            border: 2px solid #6b6b6b;
+        }
+    }
 }
