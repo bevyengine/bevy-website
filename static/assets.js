@@ -37,3 +37,43 @@ function hideEmptySections() {
         section.style.display = 'none'
     })
 }
+
+//  ------------    Version Filtering
+function normalize_version(raw_version) {
+    let version = raw_version
+        .replace(/^[^\d]+/, '')
+        .replace(/[^\d]+$/, '');
+    return version ? Array.from({ ...version.split('.'), length: 3 }, (v, i) => v ?? 0).join('.') : null;
+}
+
+let versionsQuery = document.querySelectorAll('.asset-card .asset-card__tags .asset-card__bevy-versions .asset-card__tag');
+let versions = [...new Set([...versionsQuery]
+    .map(item => normalize_version(item.innerText))
+    .filter(i => i)
+)];
+
+
+let versionsSelect = document.querySelector('#assets-filter');
+if (versionsSelect) {
+    versions.map(i => {
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.innerHTML = i;
+        versionsSelect.appendChild(opt);
+    })
+}
+
+document
+    .querySelector('#assets-filter')
+    .addEventListener("change", (item) => {
+
+        for (const asset of document.querySelectorAll('.asset-card')) {
+            let tag = asset.querySelector('.asset-card__tags .asset-card__bevy-versions .asset-card__tag');
+            if (tag) {
+                const searchMatch = item.target.value === normalize_version(tag.innerText);
+                asset.parentElement.style.display = searchMatch ? 'block' : 'none'
+            } else {
+                asset.parentElement.style.display = 'none'
+            }
+        }
+    })
