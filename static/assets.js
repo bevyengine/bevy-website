@@ -50,6 +50,11 @@ let versionsQuery = document.querySelectorAll('.asset-card .asset-card__tags .as
 let versions = [...new Set([...versionsQuery]
     .map(item => normalize_version(item.innerText))
     .filter(i => i)
+    .sort((a, b) => {
+        let a1 = a.split('.').map(i => i.padStart(3, '0')).join('');
+        let b1 = b.split('.').map(i => i.padStart(3, '0')).join('');;
+        return b1 - a1;
+    })
 )];
 
 
