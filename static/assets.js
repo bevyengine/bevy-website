@@ -52,7 +52,7 @@ let versions = [...new Set([...versionsQuery]
     .filter(i => i)
     .sort((a, b) => {
         let a1 = a.split('.').map(i => i.padStart(3, '0')).join('');
-        let b1 = b.split('.').map(i => i.padStart(3, '0')).join('');;
+        let b1 = b.split('.').map(i => i.padStart(3, '0')).join('');
         return b1 - a1;
     })
 )];
