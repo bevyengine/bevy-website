@@ -71,14 +71,16 @@ if (versionsSelect) {
 document
     .querySelector('#assets-filter')
     .addEventListener("change", (item) => {
-
+        let selected_value = item.target.value;
         for (const asset of document.querySelectorAll('.asset-card')) {
             let tag = asset.querySelector('.asset-card__tags .asset-card__bevy-versions .asset-card__tag');
-            if (item.target.value === 'all_versions') {
+            if (selected_value === 'all_versions') {
                 asset.parentElement.style.display = 'block'
             }
             else if (tag) {
-                const searchMatch = item.target.value === normalize_version(tag.innerText);
+                let raw_item_value = tag.innerText;
+                let normalized_version = normalize_version(raw_item_value);
+                const searchMatch = ['*', 'master'].includes(raw_item_value) || selected_value == normalized_version;
                 asset.parentElement.style.display = searchMatch ? 'block' : 'none'
             } else {
                 asset.parentElement.style.display = 'none'
