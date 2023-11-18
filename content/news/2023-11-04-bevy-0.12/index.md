@@ -974,7 +974,7 @@ Here is a quick video of Bevy VR, courtesy of [`bevy_openxr`]!
 
 <div class="release-feature-authors">authors: @robtfm, @JMS55</div>
 
-When defining "bind groups" for low-level renderer features, we use the following API api:
+When defining "bind groups" for low-level renderer features, we use the following API:
 
 ```rust
 render_device.create_bind_group(
