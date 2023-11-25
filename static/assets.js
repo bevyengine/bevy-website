@@ -1,18 +1,38 @@
+let filters_state = {
+    search_terms: [''],
+    version: '*'
+}
+
+const check_filters = (filters) => (node) => {
+    let results = filters.map(filter => filter(node));
+    return results.every(val => val)
+}
+
+const pass_filters = check_filters([
+    filter_search_terms,
+    filter_version
+]);
+
+function filter_assets() {
+    document.querySelectorAll('.asset-card').forEach(asset => {
+        asset.parentElement.style.display = pass_filters(asset) ? 'block' : 'none'
+    })
+}
+
+//  ------------    Search terms Filtering
+
 const searchElement = document.querySelector('#assets-search')
 
 searchElement.addEventListener("input", (_) => {
-    filterSearchTerms()
+    filters_state.search_terms = searchElement.value.toLowerCase().split(' ');
+    filter_assets()
     hideEmptySubSections()
     hideEmptySections()
 })
 
-function filterSearchTerms() {
-    const searchTerms = searchElement.value.toLowerCase().split(' ')
-    for (const asset of document.querySelectorAll('.asset-card')) {
-        const fullText = asset.text.toLowerCase()
-        const searchMatch = searchTerms.every((term) => fullText.includes(term))
-        asset.parentElement.style.display = searchMatch ? 'block' : 'none'
-    }
+function filter_search_terms(asset_node) {
+    const fullText = asset_node.text.toLowerCase()
+    return filters_state.search_terms.every((term) => fullText.includes(term))
 }
 
 function hideEmptySubSections() {
@@ -50,8 +70,21 @@ function sort_versions(a, b) {
 function normalize_version(raw_version) {
     let version = raw_version?.replace(/^[^\d]+/, '').replace(/[^\d]+$/, '');
     let normalized_version = version ? Array.from({ ...version.split('.'), length: 3 }, (v, i) => v ?? 0).join('.') : '*'
-
     return normalized_version;
+}
+
+function filter_version(asset_node) {
+    let name = asset_node.querySelector('.asset-card__title').innerHTML;
+
+    let tag = asset_node.querySelector('.asset-card__tags .asset-card__bevy-versions .asset-card__tag');
+    if (filters_state.version === 'all_versions') {
+        return true
+    }
+    else if (tag) {
+        let raw_item_value = tag.innerText;
+        let normalized_version = normalize_version(raw_item_value);
+        return [filters_state.version, ...version_always_show].includes(normalized_version);
+    } else return true
 }
 
 let versionsSelect = document.querySelector('#assets-filter');
@@ -78,20 +111,6 @@ if (versionsSelect) {
 document
     .querySelector('#assets-filter')
     .addEventListener("change", (item) => {
-        let selected_value = item.target.value;
-        for (const asset of document.querySelectorAll('.asset-card')) {
-            // let name = asset.querySelector('.asset-card__title').innerHTML;
-
-            let tag = asset.querySelector('.asset-card__tags .asset-card__bevy-versions .asset-card__tag');
-            if (selected_value === 'all_versions') {
-                asset.parentElement.style.display = 'block'
-            }
-            else if (tag) {
-                let raw_item_value = tag.innerText;
-                let normalized_version = normalize_version(raw_item_value);
-                // console.debug("<<<<", { name, normalized_version, selected_value }, [selected_value, ...version_always_show]);
-                const searchMatch = [selected_value, ...version_always_show].includes(normalized_version);
-                asset.parentElement.style.display = searchMatch ? 'block' : 'none'
-            }
-        }
+        filters_state.version = item.target.value;
+        filter_assets();
     })
