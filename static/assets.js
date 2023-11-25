@@ -39,33 +39,40 @@ function hideEmptySections() {
 }
 
 //  ------------    Version Filtering
-function normalize_version(raw_version) {
-    let version = raw_version
-        .replace(/^[^\d]+/, '')
-        .replace(/[^\d]+$/, '');
-    return version ? Array.from({ ...version.split('.'), length: 3 }, (v, i) => v ?? 0).join('.') : null;
+const version_always_show = ['*', 'main', '']
+
+function sort_versions(a, b) {
+    let a1 = a.split('.').map(i => i.padStart(3, '0')).join('');
+    let b1 = b.split('.').map(i => i.padStart(3, '0')).join('');
+    return b1 - a1;
 }
 
-let versionsQuery = document.querySelectorAll('.asset-card .asset-card__tags .asset-card__bevy-versions .asset-card__tag');
-let versions = [...new Set([...versionsQuery]
-    .map(item => normalize_version(item.innerText))
-    .filter(i => i)
-    .sort((a, b) => {
-        let a1 = a.split('.').map(i => i.padStart(3, '0')).join('');
-        let b1 = b.split('.').map(i => i.padStart(3, '0')).join('');
-        return b1 - a1;
-    })
-)];
+function normalize_version(raw_version) {
+    let version = raw_version?.replace(/^[^\d]+/, '').replace(/[^\d]+$/, '');
+    let normalized_version = version ? Array.from({ ...version.split('.'), length: 3 }, (v, i) => v ?? 0).join('.') : '*'
 
+    return normalized_version;
+}
 
 let versionsSelect = document.querySelector('#assets-filter');
 if (versionsSelect) {
-    versions.map(i => {
+    let versionsQuery = document.querySelectorAll('.asset-card .asset-card__bevy-versions .asset-card__tag');
+    [...new Set([...versionsQuery]
+        .map((item) => {
+            let raw_version = item?.innerText;
+            let normalized_version = normalize_version(raw_version);
+            return normalized_version
+        })
+        .filter(i => i)
+        .filter(i => !version_always_show.includes(i))
+        .sort(sort_versions)
+    )].forEach(i => {
         var opt = document.createElement('option');
         opt.value = i;
         opt.innerHTML = i;
         versionsSelect.appendChild(opt);
     })
+
 }
 
 document
@@ -73,6 +80,8 @@ document
     .addEventListener("change", (item) => {
         let selected_value = item.target.value;
         for (const asset of document.querySelectorAll('.asset-card')) {
+            // let name = asset.querySelector('.asset-card__title').innerHTML;
+
             let tag = asset.querySelector('.asset-card__tags .asset-card__bevy-versions .asset-card__tag');
             if (selected_value === 'all_versions') {
                 asset.parentElement.style.display = 'block'
@@ -80,10 +89,9 @@ document
             else if (tag) {
                 let raw_item_value = tag.innerText;
                 let normalized_version = normalize_version(raw_item_value);
-                const searchMatch = ['*', 'master'].includes(raw_item_value) || selected_value == normalized_version;
+                // console.debug("<<<<", { name, normalized_version, selected_value }, [selected_value, ...version_always_show]);
+                const searchMatch = [selected_value, ...version_always_show].includes(normalized_version);
                 asset.parentElement.style.display = searchMatch ? 'block' : 'none'
-            } else {
-                asset.parentElement.style.display = 'none'
             }
         }
     })
