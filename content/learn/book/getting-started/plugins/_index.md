@@ -35,6 +35,37 @@ You should hopefully notice two things:
 * **A window should pop up**. This is because we now have {{rust_type(type="struct" crate="bevy_window" name="WindowPlugin")}}, which defines the window interface (but doesn't actually know how to make windows), and {{rust_type(type="struct" crate="bevy_winit" name="WinitPlugin")}} which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window API.
 * **Your console is now full of "hello" messages**: This is because {{rust_type(type="struct" crate="bevy" name="DefaultPlugins")}} adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
+## Rendering a window
+The output of everything done to this point was only on console. But ofcourse bevy isn't restricted to that so, let's render a window. Change your importations to this:
+
+```rs
+use bevy::{prelude::*, window::*};
+```
+
+Then edit your `main` function with the following:
+
+```rs
+fn main() {
+    let window_plugin = WindowPlugin {
+        primary_window: Some(Window {
+            title: "I-Love-Bevy".into(),
+            //resolution of the window
+            resolution: WindowResolution::new(800.0, 600.0),
+            //set all others to default
+            ..default()
+    }),
+    ..default()
+    };
+    App::new()
+        .add_plugins(DefaultPlugins.set(window_plugin))
+        .add_systems(Startup, add_people)
+        .add_systems(Update, (hello_world, greet_people))
+        .run();
+}
+```
+
+We use the `DefaultPlugins.set` method to load in the `window_plugin` that renders a window. With this a black window with title `I-Love-Bevy` should open on your screen.
+
 ## Creating your first plugin
 
 For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the {{rust_type(type="trait" name="Plugin" crate="bevy_app" no_mod=true)}} interface. Add the following code to your `main.rs` file:
