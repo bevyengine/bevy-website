@@ -3,6 +3,10 @@
         margin-bottom: 20px;
     }
 
+    .assets-filters {
+        margin-bottom: 20px;
+    }
+
     .asset-section {
         font-size: 2.4rem;
         margin: 0 0 20px;
@@ -29,6 +33,19 @@
             &:focus-visible {
                 outline: none;
             }
+        }
+    }
+
+    .asset-version-select {
+        border-radius: $border-radius;
+        border: 2px solid #383838;
+        background-color: $syntax-theme-background;
+        font-size: 1.0rem;
+        padding: .4rem;
+        
+        &:hover {
+            background-color: $card-hover-background;
+            border: 2px solid #6b6b6b;
         }
     }
 }
