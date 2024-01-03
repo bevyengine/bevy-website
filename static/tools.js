@@ -24,6 +24,11 @@ async function progressiveFetch(resource, callbacks={}) {
     const lengthBytes = response.headers.get('content-length');
     let loadedBytes = 0;
 
+    // don't hang on error
+    if (response.status !== 200) {
+        cb.finish({ filename, lengthBytes: 0 });
+    }
+
     function update() {
         const loaded = Math.min(1.0, loadedBytes / lengthBytes);
         const loadedPercent = loaded * 100.0;
