@@ -134,6 +134,8 @@ fn main() {
 
 Running our app will result in the following output:
 
+**Quick Note**: "hello world!" might show up in a different order than it does below. This is because systems run in parallel by default whenever possible.
+
 ```txt
 hello world!
 hello Elaina Proctor!
@@ -143,4 +145,3 @@ hello Zayna Nieves!
 
 Marvelous!
 
-**Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
