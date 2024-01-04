@@ -145,7 +145,7 @@ Marvelous!
 
 **Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
 
-If we want to change the names of some people because they get married, for example, we can do this using a mutable query:
+If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
 
 ```rs
 fn update_people(mut query: Query<&mut Name, With<Person>> {
