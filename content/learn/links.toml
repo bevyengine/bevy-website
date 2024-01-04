@@ -41,6 +41,13 @@ image_alt = "Bevy logo"
 description = "Browse bevy examples compiled to wasm and running directly in your browser!"
 
 [[links]]
+title = "Bevy Errors"
+url = "/learn/errors"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy Logo"
+description = "List of Bevy's error codes for the current release."
+
+[[links]]
 title = "Frequently Asked Questions"
 url = "/faq"
 image = "/assets/bevy_icon_dark.svg"
