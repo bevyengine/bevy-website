@@ -158,7 +158,7 @@ fn update_people(mut query: Query<&mut Name, With<Person>> {
 }
 ```
 
-The query parameter must be mutable and the components we want to change have to be a mutable reference for this to work.
+The `query` argument must be mutable and the components we want to change have to be a mutable reference (`&mut`) for this to work.
 
 Don’t forget to add the system to the {{rust_type(type="struct", crate="bevy_app", name="Update")}} schedule:
 
