@@ -144,3 +144,32 @@ hello Zayna Nieves!
 Marvelous!
 
 **Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
+
+If we want to change the names of some people because they get married, for example, we can do this using a mutable query:
+
+```rs
+fn update_people(mut query: Query<&mut Name, With<Person>> {
+    for mut name in &mut query {
+        if name.0 == "Elaine Proctor" {
+            name.0 = "Elaine Hume".to_string();
+            break; // We break out of the loop here, because we don’t need to change any other names
+        }
+    }
+}
+```
+
+The query parameter must be mutable and the components we want to change have to be a mutable reference for this to work.
+
+Don’t forget to add the system to the Update schedule:
+
+```rs
+fn main() {
+    App::new()
+        .add_systems(Startup, add_people)
+        .add_systems(Update, hello_world)
+        .add_systems(Update, (update_people, greet_people).chain())
+        .run();
+}
+```
+
+Note that we have used `chain()` on the two systems. This is because we want them two to run in exactly that order. If they weren’t, the name might change after we greet the people. But we don’t add the `hello_world` system to this chain, because it doesn’t matter when it runs.
