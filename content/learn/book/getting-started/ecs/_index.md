@@ -172,4 +172,6 @@ fn main() {
 }
 ```
 
-Note that we have used `chain()` on the two systems. This is because we want them two to run in exactly that order. If they weren’t, the name might change after we greet the people. But we don’t add the `hello_world` system to this chain, because it doesn’t matter when it runs.
+Note that we have used `chain()` on the two systems. This is because we want them two to run in exactly that order: with `update_people` occurring before `greet_people`.
+If they weren’t, the name might change after we greet the people.
+But we don’t add the `hello_world` system to this chain, because it doesn’t matter when it runs.
