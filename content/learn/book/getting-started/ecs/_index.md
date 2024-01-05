@@ -107,6 +107,8 @@ fn main() {
 }
 ```
 
+## Your First Query
+
 We could run this now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
 ```rs
@@ -144,3 +146,35 @@ hello Zayna Nieves!
 Marvelous!
 
 **Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
+
+### Your First mutable Query
+
+If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
+
+```rs
+fn update_people(mut query: Query<&mut Name, With<Person>> {
+    for mut name in &mut query {
+        if name.0 == "Elaina Proctor" {
+            name.0 = "Elaina Hume".to_string();
+            break; // We break out of the loop here, because we don’t need to change any other names
+        }
+    }
+}
+```
+
+We need to make `query` mutable, and use a mutable reference (`&mut`) to the components we want to change.
+
+Don’t forget to add the system to the {{rust_type(type="struct", crate="bevy_app", name="Update")}} schedule:
+
+```rs
+fn main() {
+    App::new()
+        .add_systems(Startup, add_people)
+        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
+        .run();
+}
+```
+
+Note that we have used `.chain()` on the two systems. This is because we want them two to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
+If they weren’t, the name might change after we greet the people.
+But we don’t add the `hello_world` system to the chain, because it doesn’t matter when it runs. This way, Bevy can run `hello_world` in parallel while the other systems are running.
