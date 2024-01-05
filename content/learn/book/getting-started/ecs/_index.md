@@ -153,7 +153,6 @@ If we want to change the names of some people (perhaps they got married!), for e
 
 ```rs
 fn update_people(mut query: Query<&mut Name, With<Person>>) {
-
     for mut name in &mut query {
         if name.0 == "Elaina Proctor" {
             name.0 = "Elaina Hume".to_string();
