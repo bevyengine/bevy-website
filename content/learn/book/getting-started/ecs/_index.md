@@ -107,6 +107,8 @@ fn main() {
 }
 ```
 
+## Your First Query
+
 We could run this now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our {{rust_type(type="struct" crate="bevy_ecs" mod="world" no_mod=true name="World")}}:
 
 ```rs
@@ -144,6 +146,8 @@ hello Zayna Nieves!
 Marvelous!
 
 **Quick Note**: "hello world!" might show up in a different order than it does above. This is because systems run in parallel by default whenever possible.
+
+### Your First mutable Query
 
 If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
 
