@@ -40,7 +40,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     struct Entity(u64);
     ```
 
-**Note**: You may have noticed that in the above examples, and throughout this tutorial, we use `info!()` from Bevy rather than `println!()` to output text to the console. Why? `info!()` when used in a debug scenario reduces blocking behavior and runs faster compared to `println!()`.
+**Note**: You may have noticed that in the above examples, and throughout this tutorial, we use {{rust_type(type="macro", crate="bevy_log",name="info", no_mod=true)}} from Bevy rather than {{rust_type(type="macro", crate="std", name="println", no_mod=true)}} to output text to the console. Why? Well, `info` when used in a debug scenario reduces blocking behavior and runs faster compared to `println`.
 
 Now let's see how this works in practice!
 
