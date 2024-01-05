@@ -29,7 +29,7 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     ```rs
     fn print_position_system(query: Query<&Position>) {
         for position in &query {
-            println!("position: {} {}", position.x, position.y);
+            info!("position: {} {}", position.x, position.y);
         }
     }
     ```
@@ -40,6 +40,8 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
     struct Entity(u64);
     ```
 
+**Note**: You may have noticed that in the above examples, and throughout this tutorial, we use `info!()` from Bevy rather than `println!()` to output text to the console. Why? `info!()` when used in a debug scenario reduces blocking behavior and runs faster compared to `println!()`.
+
 Now let's see how this works in practice!
 
 ## Your First System
@@ -48,7 +50,7 @@ Paste the following function into your `main.rs` file:
 
 ```rs
 fn hello_world() {
-    println!("hello world!");
+    info!("hello world!");
 }
 ```
 
@@ -112,7 +114,7 @@ We could run this now and the `add_people` system would run first, followed by `
 ```rs
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}!", name.0);
+        info!("hello {}!", name.0);
     }
 }
 ```

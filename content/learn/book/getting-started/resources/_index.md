@@ -26,7 +26,7 @@ Resources are accessed in much the same way that we access components. You can a
 ```rs
 fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}!", name.0);
+        info!("hello {}!", name.0);
     }
 }
 ```
@@ -45,7 +45,7 @@ fn greet_people(
     // if that caused the timer to finish, we say hello to everyone
     if timer.0.tick(time.delta()).just_finished() {
         for name in &query {
-            println!("hello {}!", name.0);
+            info!("hello {}!", name.0);
         }
     }
 }
