@@ -153,6 +153,7 @@ If we want to change the names of some people (perhaps they got married!), for e
 
 ```rs
 fn update_people(mut query: Query<&mut Name, With<Person>>) {
+
     for mut name in &mut query {
         if name.0 == "Elaina Proctor" {
             name.0 = "Elaina Hume".to_string();
@@ -175,7 +176,7 @@ fn main() {
 }
 ```
 
-Note that we have used `.chain()` on the two systems. This is because we want them to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
-If they weren’t, the name might change after we've greeted the people.
+Note that we have used `.chain()` on the two systems. This is because we want them two to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
+If they weren’t, the name might change after we greet the people.
 
 But we don’t add the `hello_world` system to the chain, because it doesn’t matter when it runs. This way, Bevy can run `hello_world` in parallel while the other systems are running.
