@@ -150,8 +150,8 @@ If we want to change the names of some people (perhaps they got married!), for e
 ```rs
 fn update_people(mut query: Query<&mut Name, With<Person>> {
     for mut name in &mut query {
-        if name.0 == "Elaine Proctor" {
-            name.0 = "Elaine Hume".to_string();
+        if name.0 == "Elaina Proctor" {
+            name.0 = "Elaina Hume".to_string();
             break; // We break out of the loop here, because we don’t need to change any other names
         }
     }
@@ -166,8 +166,7 @@ Don’t forget to add the system to the {{rust_type(type="struct", crate="bevy_a
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
-        .add_systems(Update, hello_world)
-        .add_systems(Update, (update_people, greet_people).chain())
+        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
         .run();
 }
 ```
