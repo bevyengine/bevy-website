@@ -21,6 +21,10 @@ Bevy is dual licensed under [MIT or Apache 2.0](https://www.rust-lang.org/polici
 - Including the Apache 2.0 license option significantly reduces the difficulty and boilerplate of proper license compliance in published games because you only need to include one copy of the Apache 2.0 license.
 - Provides maximum compatibility with Bevy and Rust, making it easier to upstream your changes.
 
+## Rust API and Cargo SemVer Guidelines
+
+While they are only guidelines, it can be useful for you to look at and consider the [Rust API guidelines](https://rust-lang.github.io/api-guidelines/) and [Cargo SemVer compatibility conventions](https://doc.rust-lang.org/cargo/reference/semver.html) for recommendations on how to write your API and what to consider a breaking or compatible change.
+
 ## Small Crate Size
 
 To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:
