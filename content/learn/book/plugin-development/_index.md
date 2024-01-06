@@ -14,6 +14,36 @@ This document targets plugin authors.
 
 You are free to use a `bevy_xxx` name for your plugin, but please be reasonable. If you are about to claim a generic name like `bevy_animation`, `bevy_color`, or `bevy_editor`, please ask first. The rationale is explained [here](https://github.com/bevyengine/bevy/discussions/1202#discussioncomment-258907)
 
+## Licensing
+
+Bevy is dual licensed under [MIT or Apache 2.0](https://www.rust-lang.org/policies/licenses), at your option. Most other Rust projects (including Rust itself) also use this dual-license approach. MIT-only is very popular and you might be tempted to just use that (Bevy also used to be MIT-only), but there are [very good reasons](https://github.com/bevyengine/bevy/issues/2373) to include both licenses. We highly recommend using the dual MIT / Apache 2.0 license. for your Bevy Plugins and crates:
+
+- Including the Apache 2.0 license option significantly reduces the difficulty and boilerplate of proper license compliance in published games because you only need to include one copy of the Apache 2.0 license.
+- Provides maximum compatibility with Bevy and Rust, making it easier to upstream your changes.
+
+## Small Crate Size
+
+To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:
+
+- Disable Bevy features that you don't use:
+  - Features are additive => Bevy features enabled in your plugin cannot be disabled by someone using your plugin
+  - You can find Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
+- Avoid large dependencies.
+- Put optional functionality and dependencies behind a feature.
+
+## Tests and CI
+
+Tests are always good! For CI, you can check [this example](https://github.com/actions-rs/meta/blob/master/recipes/quickstart.md) for a quick start using GitHub Actions. As Bevy has additional Linux dependencies, you should install them before building your project ([here is how Bevy is doing it](https://github.com/bevyengine/bevy/blob/9788b386c7846c99978ab5c1a33698ec5a471d84/.github/workflows/ci.yml#L40)). Even if you don't have many (or any) tests, setting up CI will compile check your plugin and ensure a basic level of quality.
+
+## Indicate Compatible Versions
+
+Indicating which version of your plugin works with which version of Bevy can be helpful for your users. Some of your users maybe using an older version of Bevy for any number of reasons. You can help them find which version of your plugin they should use. This can be shwon as a simple table in your readme with each version of Bevy and the corresponding compatible version of your plugin.
+
+| bevy | bevy_awesome_plugin |
+|------|---------------------|
+| 0.5  | 0.3                 |
+| 0.4  | 0.1                 |
+
 ## Main Branch Tracking
 
 Bevy is evolving very fast. Regularly new features are working on the main branch, but are not yet released. Your plugin might depend on Bevy main or the latest release. You can also do both on different branches (e.g. have a `bevy_main` branch).
@@ -35,23 +65,6 @@ You can use one of these badges to communicate to your users how closely you int
 |[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-main-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)|I intend to track main as much as I can|`[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-main-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)`|
 |[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)|I will only follow released Bevy versions|`[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)`|
 
-## Licensing
-
-Bevy is dual licensed under [MIT or Apache 2.0](https://www.rust-lang.org/policies/licenses), at your option. Most other Rust projects (including Rust itself) also use this dual-license approach. MIT-only is very popular and you might be tempted to just use that (Bevy also used to be MIT-only), but there are [very good reasons](https://github.com/bevyengine/bevy/issues/2373) to include both licenses. We highly recommend using the dual MIT / Apache 2.0 license. for your Bevy Plugins and crates:
-
-- Including the Apache 2.0 license option significantly reduces the difficulty and boilerplate of proper license compliance in published games because you only need to include one copy of the Apache 2.0 license.
-- Provides maximum compatibility with Bevy and Rust, making it easier to upstream your changes.
-
-## Small Crate Size
-
-To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:
-
-- Disable Bevy features that you don't use:
-  - Features are additive => Bevy features enabled in your plugin cannot be disabled by someone using your plugin
-  - You can find Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
-- Avoid large dependencies.
-- Put optional functionality and dependencies behind a feature.
-
 ## Documentation and Examples
 
 Documentation and examples are very useful for a crate.
@@ -63,19 +76,6 @@ Additionally, it can be helpful to list:
 - SystemSets available from your plugin.
   - (If important, also mention their execution order.)
 - Components available from your plugin.
-
-## Indicate Compatible Versions
-
-Indicating which version of your plugin works with which version of Bevy can be helpful for your users. Some of your users maybe using an older version of Bevy for any number of reasons. You can help them find which version of your plugin they should use. This can be shwon as a simple table in your readme with each version of Bevy and the corresponding compatible version of your plugin.
-
-| bevy | bevy_awesome_plugin |
-|------|---------------------|
-| 0.5  | 0.3                 |
-| 0.4  | 0.1                 |
-
-## Tests and CI
-
-Tests are always good! For CI, you can check [this example](https://github.com/actions-rs/meta/blob/master/recipes/quickstart.md) for a quick start using GitHub Actions. As Bevy has additional Linux dependencies, you should install them before building your project ([here is how Bevy is doing it](https://github.com/bevyengine/bevy/blob/9788b386c7846c99978ab5c1a33698ec5a471d84/.github/workflows/ci.yml#L40)). Even if you don't have many (or any) tests, setting up CI will compile check your plugin and ensure a basic level of quality.
 
 ## Publishing Your Plugin
 
