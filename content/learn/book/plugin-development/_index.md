@@ -25,6 +25,38 @@ Bevy is dual licensed under [MIT or Apache 2.0](https://www.rust-lang.org/polici
 
 While they are only guidelines, it can be useful for you to look at and consider the [Rust API guidelines](https://rust-lang.github.io/api-guidelines/) and [Cargo SemVer compatibility conventions](https://doc.rust-lang.org/cargo/reference/semver.html) for recommendations on how to write your API and what to consider a breaking or compatible change.
 
+## Generic Plugin Types
+
+Sometimes you want your users to be able to choose the types your plugin uses so that they can implement the logic unique to their needs in a component type they pass. Choose events that the plugin should react to. Even choose the resources that the plugin could use (which is useful if you want multiple of the same resource used in a plugin via redefining the type).
+
+That's where generic plugin types come in. They'll allow you to grant to your users the ability to choose what types they want used with your plugin.
+
+Like generic structs or functions you can define a generic plugin like so:
+
+```rust
+// example with a generic type that implements Component
+
+pub struct YourPlugin<T: Component> {
+  pub phantom_t: PhantomData<T>,
+}
+
+impl<T: Component> Plugin for YourPlugin<T> {
+  fn build(&self, app: &mut App) {
+    app.add_systems(Startup, example_function::<T>);
+  }
+  
+  // ... your other logic ...
+}
+
+// example function using your generics
+pub fn example_function<T: Component>(mut commands: Commands) {
+  commands.spawn(T);
+  // ... any other logic here ...
+}
+```
+
+A prime example of generic plugins in use is [Bevy Cellular Automaton Plugin](https://github.com/ManevilleF/bevy_life).
+
 ## Small Crate Size
 
 To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:
