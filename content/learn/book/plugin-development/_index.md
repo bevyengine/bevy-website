@@ -1,5 +1,5 @@
 +++
-title = "Plugin Development"
+title = "Building Bevy's Ecosystem"
 weight = 3
 sort_by = "weight"
 template = "docs-section.html"
