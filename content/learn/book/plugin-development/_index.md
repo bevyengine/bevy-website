@@ -16,7 +16,7 @@ You are free to use a `bevy_xxx` name for your plugin, but please be reasonable.
 
 ## Licensing
 
-Bevy is dual licensed under [MIT or Apache 2.0](https://www.rust-lang.org/policies/licenses), at your option. Most other Rust projects (including Rust itself) also use this dual-license approach. MIT-only is very popular, and you might be tempted to just use that (Bevy also used to be MIT-only), but there are [very good reasons](https://github.com/bevyengine/bevy/issues/2373) to include both licenses. We highly recommend using the dual MIT / Apache 2.0 license. For your Bevy Plugins and crates:
+Bevy is dual licensed under [MIT or Apache 2.0](https://www.rust-lang.org/policies/licenses), at your option. Most other Rust projects (including Rust itself) also use this dual-license approach. MIT-only is very popular, and you might be tempted to just use that (Bevy also used to be MIT-only), but there are [very good reasons](https://github.com/bevyengine/bevy/issues/2373) to include both licenses. We highly recommend using the dual MIT / Apache 2.0 license for your Bevy Plugins and crates:
 
 - Including the Apache 2.0 license option significantly reduces the difficulty and boilerplate of proper license compliance in published games because you only need to include one copy of the Apache 2.0 license.
 - Provides maximum compatibility with Bevy and Rust, making it easier to upstream your changes.
@@ -27,7 +27,7 @@ While they are only guidelines, it can be useful for you to look at and consider
 
 ## Generic Plugin Types
 
-It can be useful to allow your users to supply generic types to your plugins. It can enable them to write custom logic for components to be used; give your plugin a marker component to note an entity it should do some logic to; add events that your plugin should listen for; or a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of same type via type aliases.)
+It can be useful to allow your users to supply generic types to your plugins. It can enable them to write custom logic for components to be used; give your plugin a marker component to note an entity it should do some logic to; add events that your plugin should listen for; or a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of the same type via type aliases.)
 
 You can define a generic plugin like so:
 
