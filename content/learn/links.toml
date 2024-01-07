@@ -20,6 +20,13 @@ image_alt = "Rust logo"
 description = "Learn how to use Bevy's types, traits and methods using the in-depth reference documentation, complete with inline examples."
 
 [[links]]
+title = "Bevy Pre-Release (git) API Docs"
+url = "https://dev-docs.bevyengine.org/"
+image = "/assets/icon-docs-dev.svg"
+image_alt = "Rust logo"
+description ="Documentation for developers of the Bevy engine and any other bleeding-edge users."
+
+[[links]]
 title = "Official Examples"
 url = "https://github.com/bevyengine/bevy/tree/latest/examples#examples"
 image = "/assets/github.svg"
