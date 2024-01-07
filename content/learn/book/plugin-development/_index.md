@@ -6,9 +6,9 @@ template = "docs-section.html"
 page_template = "docs-section.html"
 +++
 
-Bevy has a plug and play architecture, where you can easily add plugins for new features, or replace built-in plugins with your own.
+Bevy has a plug and play architecture, where you can easily add plugins for new features, or use your own plugins instead of the built-in ones. You can also create third party plugins that others may use in their applications.
 
-This document targets plugin authors.
+With that in mind, this page provides some basic info that can be useful when authoring third party plugins.
 
 ## Naming
 
