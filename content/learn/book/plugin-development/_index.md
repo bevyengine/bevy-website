@@ -27,11 +27,9 @@ While they are only guidelines, it can be useful for you to look at and consider
 
 ## Generic Plugin Types
 
-Sometimes you want your users to be able to choose the types your plugin uses so that they can implement the logic unique to their needs in a component type they pass. Choose events that the plugin should react to. Even choose the resources that the plugin could use (which is useful if you want multiple of the same resource used in a plugin via redefining the type).
+It can be useful to allow your users to supply generic types to your plugins. It can enable them to write custom logic for components to be used; give your plugin a marker component to note an entity it should do some logic to; add events that your plugin should listen for; or a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of same type via type aliases.)
 
-That's where generic plugin types come in. They'll allow you to grant to your users the ability to choose what types they want used with your plugin.
-
-Like generic structs or functions you can define a generic plugin like so:
+You can define a generic plugin like so:
 
 ```rust
 // example with a generic type that implements Component
