@@ -24,7 +24,7 @@ title = "Bevy Pre-Release (git) API Docs"
 url = "https://dev-docs.bevyengine.org/"
 image = "/assets/icon-docs-dev.svg"
 image_alt = "Bevy docs in development logo"
-description ="Documentation for developers of the Bevy engine and any other bleeding-edge users."
+description ="Documentation for developers of the Bevy engine and other bleeding-edge users."
 
 [[links]]
 title = "Official Examples"
