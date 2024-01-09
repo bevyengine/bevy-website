@@ -1,6 +1,6 @@
 +++
 title = "Next Steps"
-weight = 3
+weight = 4
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
