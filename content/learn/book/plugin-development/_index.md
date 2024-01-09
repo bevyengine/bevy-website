@@ -1,6 +1,6 @@
 +++
 title = "Building Bevy's Ecosystem"
-weight = 3
+weight = 5
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
