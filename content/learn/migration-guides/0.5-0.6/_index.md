@@ -6,6 +6,7 @@ insert_anchor_links = "right"
 aliases = ["learn/book/migration-guides/0.5-0.6"]
 [extra]
 long_title = "Migration Guide: 0.5 to 0.6"
+weight = 1
 +++
 
 ### Rust 2021 now required

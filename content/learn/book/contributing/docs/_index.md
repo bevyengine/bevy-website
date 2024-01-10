@@ -7,6 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
 long_title = "Contributing Docs"
+weight = 2
 +++
 
 ## The Bevy Book

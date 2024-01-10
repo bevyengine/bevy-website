@@ -5,6 +5,8 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+[extra]
+weight = 1
 +++
 
 I know you are itching to start making games, but we need to do a _small_ amount of setup first.

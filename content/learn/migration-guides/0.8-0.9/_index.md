@@ -6,6 +6,7 @@ insert_anchor_links = "right"
 aliases = ["learn/book/migration-guides/0.8-0.9"]
 [extra]
 long_title = "Migration Guide: 0.8 to 0.9"
+weight = 4
 +++
 
 Before migrating make sure to run rustup update

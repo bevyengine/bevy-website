@@ -7,6 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
 long_title = "Contributing Code"
+weight = 1
 +++
 
 Would you like to contribute code to Bevy?  Here's how!

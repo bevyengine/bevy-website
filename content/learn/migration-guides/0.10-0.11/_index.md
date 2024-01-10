@@ -7,6 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
 long_title = "Migration Guide: 0.10 to 0.11"
+weight = 6
 +++
 
 Bevy relies heavily on improvements in the Rust language and compiler.

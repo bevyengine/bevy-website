@@ -5,6 +5,8 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+[extra]
+weight = 4
 +++
 
 You have reached the end of The Bevy Book! And unfortunately, we haven't even scratched the surface of Bevy's features! Eventually this book will cover almost every facet of Bevy, but until then we recommend checking out:

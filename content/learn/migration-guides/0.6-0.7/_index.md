@@ -6,6 +6,7 @@ insert_anchor_links = "right"
 aliases = ["learn/book/migration-guides/0.6-0.7"]
 [extra]
 long_title = "Migration Guide: 0.6 to 0.7"
+weight = 2
 +++
 
 <!-- Github filter used to find the relevant PRs "is:pr label:C-Breaking-Change closed:>2022-02-01 [Merged by Bors]" -->

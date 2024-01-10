@@ -5,6 +5,8 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+[extra]
+weight = 1
 +++
 
 If you came here because you wanted to learn how to make 2D / 3D games, visualizations, user interfaces, or other graphical applications with Bevy ... you came to the right place! If not, stick around anyway. I promise it will be fun.
