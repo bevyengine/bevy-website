@@ -3,7 +3,7 @@ title = "Contributing"
 weight = 5
 sort_by = "weight"
 template = "docs-section.html"
-page_template = "docs-section.html"
+page_template = "docs-page.html"
 insert_anchor_links = "right"
 [extra]
 subtitle = "join the bevy"
