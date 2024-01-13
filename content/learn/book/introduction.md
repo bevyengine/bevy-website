@@ -35,7 +35,7 @@ For a more in-depth introduction, check out the [Introducing Bevy](/news/introdu
 
 Bevy is still in the early stages of development. Important features are missing. Documentation is sparse. A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevyengine.org/news/bevy-0-6/#the-train-release-schedule). We provide [migration guides](https://bevyengine.org/learn/book/migration-guides/), but we can't guarantee migrations will always be easy. Use only if you are willing to work in this environment.
 
-If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out [Godot Engine](https://godotengine.org). It is currently much more feature-complete and stable. And it is also free, open-source, and [scriptable with Rust](https://github.com/GodotNativeTools/godot-rust)!
+If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out [Godot Engine](https://godotengine.org). It is currently much more feature-complete and stable. And it is also free, open-source, and [scriptable with Rust](https://github.com/godot-rust/gdext)!
 
 This official book is still very incomplete. It will help you get started with the setup and learning the basics, but it does not yet cover most of Bevy's features. See the [Next Steps](/learn/book/next-steps/) page for links to other, more exhaustive, learning resources you can use.
 
