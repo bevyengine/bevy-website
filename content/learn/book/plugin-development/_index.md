@@ -63,7 +63,7 @@ To avoid long build times in your plugin and in projects using it, you should ai
 
   Features are additive — Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
 
-  You can add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
+  You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
 
   You can find a list of Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
 
