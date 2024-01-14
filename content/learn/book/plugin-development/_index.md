@@ -1,6 +1,6 @@
 +++
 title = "Building Bevy's Ecosystem"
-weight = 3
+weight = 5
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
@@ -12,7 +12,7 @@ With that in mind, this page provides some basic info that can be useful when au
 
 ## Naming
 
-You are free to use a `bevy_xxx` name for your plugin, but please be reasonable. If you are about to claim a generic name like `bevy_animation`, `bevy_color`, or `bevy_editor`, please ask first. The rationale is explained [here](https://github.com/bevyengine/bevy/discussions/1202#discussioncomment-258907)
+You are free to use a `bevy_xxx` name for your plugin, but please be reasonable. If you are about to claim a generic name like `bevy_animation`, `bevy_color`, or `bevy_editor`, please ask first. The rationale is explained [here](https://github.com/bevyengine/bevy/discussions/1202#discussioncomment-258907).
 
 ## Licensing
 
@@ -42,7 +42,7 @@ impl<T: Component> Plugin for YourPlugin<T> {
   fn build(&self, app: &mut App) {
     app.add_systems(Startup, example_function::<T>);
   }
-  
+
   // ... your other logic ...
 }
 
@@ -59,11 +59,17 @@ A prime example of generic plugins in use is the [Bevy Cellular Automaton Plugin
 
 To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:
 
-- Disable Bevy features that you don't use:
-  - Features are additive => Bevy features enabled in your plugin cannot be disabled by someone using your plugin
-  - You can find Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
-- Avoid large dependencies.
-- Put optional functionality and dependencies behind a feature.
+- Only include the Bevy features you absolutely need.
+
+  Features are additive — Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
+
+  You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
+
+  You can find a list of Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
+
+- Avoid large new dependencies.
+- Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
+- Put optional functionality and dependencies behind a [cargo feature](https://doc.rust-lang.org/cargo/reference/features.html).
 
 ## Tests and CI
 
@@ -73,31 +79,38 @@ Tests are always good! For CI, you can check out [this example](https://github.c
 
 Indicating which version of your plugin works with which version of Bevy can be helpful for your users. Some of your users may be using an older version of Bevy for any number of reasons. You can help them find which version of your plugin they should use. This can be shown as a simple table in your README with each version of Bevy and the corresponding compatible version of your plugin.
 
-| bevy | bevy_awesome_plugin |
-|------|---------------------|
-| 0.5  | 0.3                 |
-| 0.4  | 0.1                 |
+```markdown
+| bevy  | bevy_awesome_plugin |
+|-------|---------------------|
+| 0.12  | 0.3                 |
+| 0.11  | 0.1                 |
+```
 
 ## Main Branch Tracking
 
-Bevy is evolving very fast. Regularly, new features are functioning on the main branch but have not yet been released. Your plugin might depend on Bevy Main or the latest release. You can also do both on different branches (e.g., have a `bevy_main` branch).
+Bevy is evolving very fast. There are often new features on the main branch but have not yet been released. Your plugin might depend on Bevy Main or the latest release. You can also do both on different branches (e.g., have a `bevy_main` branch).
 
 If you intend to track Bevy's main branch, you can specify the latest commit you support in your `Cargo.toml` file:
 
 ```toml
-bevy = { version = "0.5", git = "https://github.com/bevyengine/bevy", rev="9788b386c7846c99978ab5c1a33698ec5a471d84", default-features = false }
+bevy = { version = "0.5", git = "https://github.com/bevyengine/bevy", rev = "9788b386c7846c99978ab5c1a33698ec5a471d84", default-features = false }
 ```
 
 You can specify the dependency [both as a version and with git](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#multiple-locations). The version will be used if the dependency is pulled from [crates.io](https://crates.io/). Otherwise, the git dependency will be used.
 
 You can use one of these badges to communicate to your users how closely you intend to track Bevy's main branch.
 
-<!-- MD033 - The Badges could be downsized, without the inline HTML due to the large code column -->
-<!-- markdownlint-disable-next-line MD033 -->
-|<div style="width:100px">badge</div>|<div style="width:200px">description</div>|code|
-|-|-|-|
-|[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-main-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)|I intend to track main as much as I can|`[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-main-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)`|
-|[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)|I will only follow released Bevy versions|`[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)`|
+[![Following released Bevy versions](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://bevyengine.org/learn/book/plugin-development/#main-branch-tracking)
+
+```markdown
+[![Following released Bevy versions](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://bevyengine.org/learn/book/plugin-development/#main-branch-tracking)
+```
+
+[![Following Bevy's main branch](https://img.shields.io/badge/Bevy%20tracking-main-lightblue)](https://bevyengine.org/learn/book/plugin-development/#main-branch-tracking)
+
+```markdown
+[![Following Bevy's main branch](https://img.shields.io/badge/Bevy%20tracking-main-lightblue)](https://bevyengine.org/learn/book/plugin-development/#main-branch-tracking)
+```
 
 ## Documentation and Examples
 
@@ -107,29 +120,33 @@ In the case of a Bevy plugin, a few screenshots or movies / animated GIFs from y
 
 Additionally, it can be helpful to list:
 
-- SystemSets available from your plugin.
-  - (If important, also mention their execution order.)
+- SystemSets available from your plugin, and their execution order if that's important.
 - Components available from your plugin.
 
 ## Publishing Your Plugin
 
 There are some [extra fields](https://doc.rust-lang.org/cargo/reference/manifest.html) that you can add to your `Cargo.toml` manifest in the `[package]` section:
 
-|field|description|
-|-|-|
-|[`description`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-description-field)|a description of the plugin|
-|[`repository`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-repository-field)|URL of the plugin source repository|
-|[`license`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields)|the plugin license|
-|[`keywords`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-keywords-field)|keywords for the plugin - `"bevy"` at least is a good idea here|
-|[`categories`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-categories-field)|categories of the plugin - see [the full list on crates.io](https://crates.io/categories)|
-|[`exclude`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-exclude-and-include-fields)|files to exclude from the released package - excluding the `assets` folder that you may have is a good idea, as well as any large files that are not needed by the plugin|
+- [`description`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-description-field) — A description of the plugin
+- [`repository`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-repository-field) — URL of the plugin source repository
+- [`license`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields) — The plugin license
+- [`keywords`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-keywords-field) — Keywords for the plugin. `"bevy"` at least is a good idea here
+- [`categories`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-categories-field) — Categories of the plugin. See [the full list on crates.io](https://crates.io/categories).
+- [`exclude`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-exclude-and-include-fields) — Files to exclude from the released package. Excluding the `assets` folder that you may have is a good idea, as well as any large files that are not needed by the plugin.
 
 Once a crate is published to [crates.io](https://crates.io), there are two badges that you can add to your `README.md` for easy links:
 
-|badge|code|
-|-|-|
-|[![crates.io](https://img.shields.io/crates/v/bevy)](https://crates.io/crates/bevy)|`[![crates.io](https://img.shields.io/crates/v/bevy_awesome_plugin)](https://crates.io/crates/bevy_awesome_plugin)`|
-|[![docs.rs](https://docs.rs/bevy/badge.svg)](https://docs.rs/bevy)|`[![docs.rs](https://docs.rs/bevy_awesome_plugin/badge.svg)](https://docs.rs/bevy_awesome_plugin)`|
+[![crates.io](https://img.shields.io/crates/v/bevy)](https://crates.io/crates/bevy)
+
+```markdown
+[![crates.io](https://img.shields.io/crates/v/bevy_awesome_plugin)](https://crates.io/crates/bevy_awesome_plugin)
+```
+
+[![docs.rs](https://docs.rs/bevy/badge.svg)](https://docs.rs/bevy)
+
+```markdown
+[![docs.rs](https://docs.rs/bevy_awesome_plugin/badge.svg)](https://docs.rs/bevy_awesome_plugin)`
+```
 
 ## Promotion
 
