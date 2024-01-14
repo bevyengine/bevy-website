@@ -77,7 +77,7 @@
 
 {% macro docs_menu(root, prefix) %}
     <ul class="tree-menu">
-        {% set is_migration_guide = section and section.path is starting_with("/learn/migration-guides") %}
+        {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %}
 
         {% set subsections = [] %}
         {% for subsection in root.subsections %}
