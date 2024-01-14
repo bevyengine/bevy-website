@@ -67,7 +67,8 @@ To avoid long build times in your plugin and in projects using it, you should ai
 
   You can find a list of Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
 
-- Avoid large dependencies.
+- Avoid large new dependencies.
+- Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
 - Put optional functionality and dependencies behind a [cargo feature](https://doc.rust-lang.org/cargo/reference/features.html).
 
 ## Tests and CI
