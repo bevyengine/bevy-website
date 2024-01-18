@@ -35,11 +35,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-<<<<<<< HEAD
-    git checkout v0.9.0
-=======
     git checkout v0.11.0
->>>>>>> main
     ```
 
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
@@ -62,11 +58,7 @@ Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-<<<<<<< HEAD
-bevy = "0.9" # make sure this is the latest version
-=======
 bevy = "0.12" # make sure this is the latest version
->>>>>>> main
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
