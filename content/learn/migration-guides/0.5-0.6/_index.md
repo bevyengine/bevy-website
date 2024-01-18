@@ -243,13 +243,9 @@ struct SystemParamDerive<'w, 's> {
 
 ### QuerySet declare "QueryState" instead of "Query"
 
-<<<<<<< HEAD:content/learn/book/migration-guides/0.5-0.6/_index.md
-Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`] system parameters now need to specify their Queries with [`QuerySet`] instead of [`Query`].
-=======
 <!-- Adapt for ParamSet instead, if https://github.com/bevyengine/bevy/pull/2765 is merged -->
 
-Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`]s now need to specify their Queries with [`QueryState`] instead of [`Query`].
->>>>>>> main:content/learn/migration-guides/0.5-0.6/_index.md
+Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`] system parameters now need to specify their Queries with [`QuerySet`] instead of [`Query`].
 
 ```rust
 // 0.5
@@ -264,7 +260,6 @@ fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Tran
 ```
 
 [`QuerySet`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.QuerySet.html
-[`QueryState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/query/struct.QueryState.html
 [`Query`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html
 
 ### "Input\<T\>.update()" is renamed to "Input\<T\>.clear()"
@@ -278,14 +273,10 @@ The [`Input::update`] function was renamed to [`Input::clear`].
 
 The struct formerly known as [`SystemState`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.SystemState.html), which stores the metadata of a System, was renamed to [`SystemMeta`].
 
-<<<<<<< HEAD:content/learn/book/migration-guides/0.5-0.6/_index.md
 This was done to accommodate the new [`SystemState`] which allows easier cached access to [`SystemParam`] outside of a regular System.
 
 [`SystemState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemState.html
 [`SystemMeta`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemMeta.html
-=======
-This was done to accommodate the new [`SystemState`] which allows easier cached access to [`SystemParam`]s outside of a regular System.
->>>>>>> main:content/learn/migration-guides/0.5-0.6/_index.md
 
 <!-- TODO: Link to entry for SystemState in the release blog post. -->
 
