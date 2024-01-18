@@ -493,7 +493,7 @@ The new text layout system uses glyph_brush_layout, which fixes the layout bugs 
 
 <div class="release-feature-authors">authors: @cart</div>
 
-Bevy's render api was built to be easy to use and extend. I wanted to nail down a good api first, but that resulted in a number of performance TODOs that caused some pretty serious overhead.
+Bevy's render API was built to be easy to use and extend. I wanted to nail down a good API first, but that resulted in a number of performance TODOs that caused some pretty serious overhead.
 
 For **Bevy 0.4** I decided to resolve as many of those TODOs as I could. There is still plenty more to do (like instancing and batching), but Bevy already performs _much_ better than it did before.
 
@@ -753,7 +753,7 @@ There is still a bit more work to be done here. While Bevy UI renders images and
 
 Bevy's Timer component/resource got a number of quality-of-life improvements: pausing, field accessor methods, ergonomics improvements, and internal refactoring / code quality improvements. Timer Components also no longer tick by default. Timer resources and newtyped Timer components couldn't tick by default, so it was a bit inconsistent to have the (relatively uncommon) "unwrapped component Timer" auto-tick.
 
-The timer api now looks like this:
+The timer API now looks like this:
 
 ```rust
 
@@ -793,7 +793,7 @@ Bevy now runs on Apple silicon thanks to upstream work on winit (@scoopr) and co
 
 ## New Examples
 
-### Contributors Visualization
+### Bevy Contributors
 
 <div class="release-feature-authors">author: @karroffel</div>
 

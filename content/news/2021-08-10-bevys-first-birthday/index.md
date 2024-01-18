@@ -39,7 +39,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 * **December 19**: [Bevy 0.4](/news/bevy-0-4/)
   * We somehow still managed to keep up the "approximately once a month" release cadence. We added a WebGL2 render backend, cross platform main functions, live shader reloading, flexible ECS parameter orders, simplified query filters, system inputs, outputs, and chaining, a more featureful and flexible ECS schedule implementation, "fixed timesteps", states, gltf improvements, spawning scenes as children, dynamic linking for _drastically_ faster iterative compile times, a new text layout implementation, renderer optimizations, a new rust reflection crate (filling a major gap in the rust ecosystem), 3d texture assets, logging and profiling, hidpi rendering, timer improvements, task system improvements, and apple silicon support.
 * **April 6**: [Bevy 0.5](/news/bevy-0-5/)
-  * The almost-one-release-a-month streak finally ended. But thats not because we slowed down our pace! This release was a big one. It added Physically Based Rendering (PBR), GLTF asset improvements, Bevy ECS V2: a complete from-scratch rewrite with a novel archetype/sparse-set hybrid storage model, an "archetype graph" for faster archetype changes, query caching, uber fast for-each iterators, a new system executor with system labels, explicit system ordering/dependencies, system sets, and increased parallelism, "reliable" change detection, and a full rewrite of the State system). We also added a rich text api, hidpi and 2d-world space text, world-to-screen coordinate conversions, a 3d orthographic camera and new scaling modes, flexible camera bindings in shaders, render layers, sprite flipping, color spaces, wireframe rendering, and more smaller tweaks that I don't have room for here.
+  * The almost-one-release-a-month streak finally ended. But thats not because we slowed down our pace! This release was a big one. It added Physically Based Rendering (PBR), GLTF asset improvements, Bevy ECS V2: a complete from-scratch rewrite with a novel archetype/sparse-set hybrid storage model, an "archetype graph" for faster archetype changes, query caching, uber fast for-each iterators, a new system executor with system labels, explicit system ordering/dependencies, system sets, and increased parallelism, "reliable" change detection, and a full rewrite of the State system). We also added a rich text API, hidpi and 2d-world space text, world-to-screen coordinate conversions, a 3d orthographic camera and new scaling modes, flexible camera bindings in shaders, render layers, sprite flipping, color spaces, wireframe rendering, and more smaller tweaks that I don't have room for here.
 * **April 14**: [The Bevy RFC process is unveiled](https://github.com/bevyengine/rfcs)
   * Inspired by the Rust RFC process, we added a way to collaboratively design and review Bevy APIs prior to implementing them. This generally isn't required, but for bigger changes it ensures we think deeply about what we are building, mitigates risk, and encodes designs and intents for future Bevy developers.
 * **June 1**: [First public release of Bevy Assets](https://twitter.com/BevyEngine/status/1399891316939448320)
@@ -134,7 +134,7 @@ As a result of (1), (2), and Bevy being free and open source, we foster a feelin
 
 ### Bevy ECS
 
-**Content Warning:** I'm going to boast a lot here and make some hard-to-verify claims, which might offend some peoples' sensibilities :)
+**Content Warning**: I'm going to boast a lot here and make some hard-to-verify claims, which might offend some peoples' sensibilities :)
 
 Bevy ECS is the interface we use to build both engine features and apps, so it was natural to give it focus last year. I honestly don't think it is controversial to say that Bevy ECS has pushed the envelope of what an ECS can be. Bevy ECS is the "secret sauce" (well ... \*\*cough\*\* ... "open sauce") that I believe uniquely positions us in the engine market. This is a result of meticulous experimentation, benchmarking, collaboration with other experts in the field, and unification of a lot of good ideas in the wider ECS ecosystem.
 
@@ -176,7 +176,7 @@ Immediately after the initial Bevy release, I [said we needed to focus](https://
 
 * [**Scenes**](https://github.com/bevyengine/bevy/issues/255): better scene format, inline assets, enabling / disabling systems
 * [**PBR / Clustered Forward Rendering**](https://github.com/bevyengine/bevy/issues/179): PBR shaders, HDR, bloom, shadowing, all using clustered-forward rendering
-* [**Editor-Ready UI**](https://github.com/bevyengine/bevy/issues/254): iterate on the current Bevy UI, add a canvas style drawing api, implement core widgets, theme-ability
+* [**Editor-Ready UI**](https://github.com/bevyengine/bevy/issues/254): iterate on the current Bevy UI, add a canvas style drawing API, implement core widgets, theme-ability
 
 If you have been paying any attention to what we've built over the past year, we clearly _haven't_ focused exclusively on these things, and in some cases chose to go in completely different directions. Here is what we _actually_ focused on (at various points during the year):
 
@@ -201,12 +201,12 @@ Going forward I plan on changing my approach to focus areas in the following way
 
 The old renderer (pre Bevy 0.6) did a number of things right:
 
-* User-friendly ECS-driven high level apis for custom shaders with very little boilerplate. For example, check out this ["custom shader material" app](https://github.com/bevyengine/bevy/blob/main/examples/shader/shader_custom_material.rs)
+* User-friendly ECS-driven high level APIs for custom shaders with very little boilerplate. For example, check out this ["custom shader material" app](https://github.com/bevyengine/bevy/blob/main/examples/shader/shader_custom_material.rs)
 * A modular "low level" Render Graph that enabled developers to easily slot new features into the render pipeline without centralized top-level orchestration, or to create entirely new render pipelines.
 
-However the mid-level apis between the render graph and the high level apis were complicated, full of abstractions and jargon, and in some cases, inefficient. As a result, this made the system hard to reason about and new developers struggled to understand it. I attribute this largely to focusing on making the high level and low level apis "good UX" and treating the mid level apis as "glue".
+However the mid-level APIs between the render graph and the high level APIs were complicated, full of abstractions and jargon, and in some cases, inefficient. As a result, this made the system hard to reason about and new developers struggled to understand it. I attribute this largely to focusing on making the high level and low level APIs "good UX" and treating the mid level APIs as "glue".
 
-I consider the old design of the mid-level apis to be a pretty costly "mistake". The new renderer will solve these problems, largely by flattening out abstractions and clarifying dataflow. I'm really excited about it. Live and learn I guess. Things are rarely perfect on your first try.
+I consider the old design of the mid-level APIs to be a pretty costly "mistake". The new renderer will solve these problems, largely by flattening out abstractions and clarifying dataflow. I'm really excited about it. Live and learn I guess. Things are rarely perfect on your first try.
 
 ### Issue and Pull Request Response Times
 
@@ -241,7 +241,7 @@ Here are some of my plans for the next year:
 * **Animation**: We will build a unified animation system that makes 2D and 3D animation easier and integrates naturally with the Bevy Editor
 * **2D Features**: Sprite batching, more tileset features, layers, visual / interactive tooling in the Bevy Editor
 * **3D Features**: Skeletal animation (that integrates with the Animation system), configurable / flexible / good looking shadows, at least one form of global illumination, more PBR properties, and visual / interactive tooling in the Bevy Editor
-* **Bevy Game Jam**: We will have at least one official Bevy Game Jam to promote Bevy, battle test apis, and give users more examples to build off of.
+* **Bevy Game Jam**: We will have at least one official Bevy Game Jam to promote Bevy, battle test APIs, and give users more examples to build off of.
 
 I am relatively confident that we can make these things happen. We already have working prototypes for many of the features above and have started reaching consensus in a number of areas.
 
@@ -252,7 +252,7 @@ Here are some predictions about Bevy's trajectory over the next year:
 * By the end of the year, I expect people to start taking us seriously for 3D applications, thanks to a solid set of built in "advanced rendering features" and our extremely competitive renderer modularity.
 * I expect the number of people getting paid to develop Bevy Engine, build Bevy apps, and make Bevy content to go way up.
 * If the "Next Generation Bevy UI" effort is successful, people wanting to build "Rust GUI apps" will start reaching for Bevy.
-* We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable apis.
+* We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable APIs.
 
 If any of this excites you, we would love your help! Check out our code on [Github](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
 

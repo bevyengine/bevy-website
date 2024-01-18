@@ -82,6 +82,7 @@ fn main() {
 
 [`AddDefaultPlugins::add_default_plugins`] adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
+
 You can also register the default [`Plugins`] manually like this:
 
 ```rs
@@ -886,6 +887,7 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 
 ### Asset Events
 
+
 The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed [`Events`]. These events can also be consumed as a system resource, just like any other [`Events`]:
 
 ```rs
@@ -1163,7 +1165,7 @@ Right now Bevy can render plenty fast for most use cases, but when it comes to r
 
 ### Canvas
 
-Right now the only way to draw UI and 2D scenes is via sprites and rectangles. Bevy needs an immediate-mode drawing api capable of drawing anti-aliased curves and shapes. This can then be used to do code-driven drawing of things like rounded corners in Bevy UI, performance graphs in the editor, etc. It's very possible that we will integrate projects like [pathfinder](https://github.com/servo/pathfinder) or [lyon](https://github.com/nical/lyon) for this.  
+Right now the only way to draw UI and 2D scenes is via sprites and rectangles. Bevy needs an immediate-mode drawing API capable of drawing anti-aliased curves and shapes. This can then be used to do code-driven drawing of things like rounded corners in Bevy UI, performance graphs in the editor, etc. It's very possible that we will integrate projects like [pathfinder](https://github.com/servo/pathfinder) or [lyon](https://github.com/nical/lyon) for this.  
 
 ### Animation
 

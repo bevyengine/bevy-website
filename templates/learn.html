@@ -1,85 +1,21 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="padded-content">
-  <a class="card" href="/learn/book/welcome">
-    <div class="card-image">
-      <img src="/assets/book.svg" class="centered-card-image" alt="Bevy book" />
-    </div>
-    <div class="card-text">
-      <div class="card-title">
-        The Bevy Book
-      </div>
-      <div class="card-description">
-        Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here.
-      </div>
-    </div>
-  </a>
-  <a class="card" href="https://docs.rs/bevy">
-    <div class="card-image">
-      <img src="/assets/rust-logo-light.svg" class="centered-card-image" alt="Rust logo" />
-    </div>
-    <div class="card-text">
-      <div class="card-title">
-        Bevy Rust API Docs
-      </div>
-      <div class="card-description">
-        Learn how to use Bevy's types, traits and methods using the in-depth reference documentation, complete with inline examples.
-      </div>
-    </div>
-  </a>
-  <a class="card" href="https://github.com/bevyengine/bevy/tree/latest/examples#examples">
-    <div class="card-image">
-      <img src="/assets/github.svg" class="centered-card-image" alt="Github logo" />
-    </div>
-    <div class="card-text">
-      <div class="card-title">
-        Official Examples
-      </div>
-      <div class="card-description">
-        Examples that show how to use the various features of Bevy.
-      </div>
-    </div>
-  </a>
-  <a class="card" href="/assets">
-    <div class="card-image">
-      <img src="/assets/bevy_icon_dark.svg" class="centered-card-image" alt="Bevy logo" />
-    </div>
-    <div class="card-text">
-      <div class="card-title">
-        Bevy Assets
-      </div>
-      <div class="card-description">
-        Find Assets to use in your games. Learn by example with a list of cool Bevy projects. Read community-made
-        tutorials and documentation.
-      </div>
-    </div>
-  </a>
-  <a class="card" href="/examples">
-    <div class="card-image">
-      <img src="/assets/bevy_icon_dark.svg" class="centered-card-image" alt="Bevy logo" />
-    </div>
-    <div class="card-text">
-      <div class="card-title">
-        Bevy Web Examples
-      </div>
-      <div class="card-description">
-        Browse bevy examples compiled to wasm and running directly in your browser!
-      </div>
-    </div>
-  </a>
-  <a class="card" href="/faq">
-    <div class="card-image">
-      <img src="/assets/bevy_icon_dark.svg" class="centered-card-image" alt="Bevy logo" />
-    </div>
-    <div class="card-text">
-      <div class="card-title">
-        Frequently Asked Questions
-      </div>
-      <div class="card-description">
-        A curated list of answers to questions Bevy users frequently ask.
-      </div>
-    </div>
-  </a>
+{% set learn_links = load_data(path="content/learn/links.toml") %}
+<div class="padded-content item-grid item-grid--two-cols">
+    {% for link in learn_links.links %}
+        <a class="link-card" href="{{ link.url }}">
+            <div class="link-card__img-wrapper">
+                <img class="link-card__img" src="{{ link.image }}" alt="{{ link.image_alt }}" />
+            </div>
+            <div class="link-card__content">
+                <h2 class="link-card__title">{{ link.title }}</h2>
+                {% if link.subtitle %}
+                    <div class="link-card__subtitle">{{ link.subtitle }}</div>
+                {% endif %}
+                <p class="link-card__description">{{ link.description }}</p>
+            </div>
+        </a>
+    {% endfor %}
 </div>
 {% endblock content %}

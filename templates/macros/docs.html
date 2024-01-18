@@ -1,0 +1,58 @@
+{% macro docs_menu_row(prefix, section_path) %}
+    {% set menu_section = get_section(path=section_path, metadata_only=true) %}
+    {% set is_in_branch = menu_section.path in current_path %}
+    {% set is_active = current_path == menu_section.path %}
+    {% set id = prefix ~ '-' ~ menu_section.path | slugify %}
+    {% set class = "tree-menu__item" %}
+    {% set label_class = "tree-menu__label" %}
+
+    {% if is_active %}
+        {% set class = class ~ " tree-menu__item--active" %}
+    {% endif %}
+
+    {% if menu_section.extra and menu_section.extra.public_draft %}
+        {% set class = class ~ " public_draft" %}
+        {% if is_in_branch %}
+            {% set class = class ~ " active_draft" %}
+        {% endif %}
+    {% endif %}
+
+    {% if menu_section.subsections %}
+        {% set label_class = label_class ~ " tree-menu__label--with-chevron" %}
+        <input id="{{id}}" class="tree-menu__state" type="checkbox" {% if is_in_branch %}checked{% endif %}>
+    {% endif %}
+
+    <li class="{{class}}">
+        <div class="{{label_class}}">
+            <a class="tree-menu__link" href="{{menu_section.path}}">{{ menu_section.title }}</a>
+            {% if menu_section.subsections %}
+                <label class="tree-menu__toggle" for="{{id}}">
+                    <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg">
+                </label>
+            {% endif %}
+        </div>
+        {% if menu_section.subsections %}
+            <ul class="tree-menu">
+                {% for s in menu_section.subsections %}
+                    {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro docs_menu_row %}
+
+{% macro docs_menu(root, prefix) %}
+    <ul class="tree-menu">
+        {# Migration Guides #}
+        {% if section and section.path is starting_with("/learn/migration-guides") %}
+            {% for s in root.subsections | reverse %}
+                {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+            {% endfor %}
+        {# Other #}
+        {% else %}
+            {% for s in root.subsections %}
+                {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+            {% endfor %}
+        {% endif %}
+    </ul>
+{% endmacro %}

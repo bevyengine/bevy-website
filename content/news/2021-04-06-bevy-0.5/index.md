@@ -16,7 +16,7 @@ Thanks to **88** contributors, **283** pull requests, and our [**generous sponso
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Awesome Bevy](https://github.com/bevyengine/awesome-bevy) for a list of community-developed plugins, games, and learning resources.
 
-**Bevy 0.5** is quite a bit bigger than our past few releases (and took a bit longer) as we have made a number of foundational changes. If you plan on updating your App or Plugin to **Bevy 0.5**, check out our [0.4 to 0.5 Migration Guide](/learn/book/migration-guides/0.4-0.5/).
+**Bevy 0.5** is quite a bit bigger than our past few releases (and took a bit longer) as we have made a number of foundational changes. If you plan on updating your App or Plugin to **Bevy 0.5**, check out our [0.4 to 0.5 Migration Guide](/learn/migration-guides/0.4-0.5/).
 
 Here are some of the highlights from this release:
 
@@ -162,7 +162,7 @@ You may have noticed that **Bevy 0.5 (Table)** is also _way_ faster than **Bevy 
 3. Incrementally build up state
     * When new archetypes are added, we only process the new archetypes (no need to rebuild state for old archetypes)
 
-As a result, the direct [`World`] query api now looks like this:
+As a result, the direct [`World`] query API now looks like this:
 
 ```rust
 let mut query = world.query::<(&A, &mut B)>();
@@ -449,7 +449,7 @@ We are also actively seeking feedback on the new executor. We believe that the n
 Global change detection, the ability to run queries on the Changed/Added status of any ECS component or resource, just got a major usability boost: changes are now detected across frames/updates:
 
 ```rust
-// This is still the same change detection api we all know and love,
+// This is still the same change detection API we all know and love,
 // the only difference is that it "just works" in every situation.
 fn system(query: Query<Entity, Changed<A>>) {
     // iterates all entities whose A component has changed since
@@ -473,7 +473,7 @@ The [last Bevy release](https://bevyengine.org/news/bevy-0-4) added States, whic
 
 The old implementation largely worked, but it had a number of quirks and limitations. First and foremost, it required adding a new `StateStage`, which cut down on parallelism, increased boilerplate, and forced ordering where it wasn't required. Additionally, some of the lifecycle events didn't always behave as expected.
 
-The new [`State`] implementation is built on top of the new parallel executor's SystemSet and RunCriteria features, for a much more natural, flexible, and parallel api that builds on existing concepts instead of creating new ones:
+The new [`State`] implementation is built on top of the new parallel executor's SystemSet and RunCriteria features, for a much more natural, flexible, and parallel API that builds on existing concepts instead of creating new ones:
 
 ```rust
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -543,7 +543,7 @@ fn system(mut reader: EventReader<SomeEvent>) {
 }
 ```
 
-There is also now a symmetrical `EventWriter` api:
+There is also now a symmetrical `EventWriter` API:
 
 ```rust
 fn system(mut writer: EventWriter<SomeEvent>) {
@@ -568,7 +568,7 @@ Text can now have "sections", each with their own style / formatting. This makes
 
 ![rich_text](rich_text.png)
 
-This is accomplished using the new "text section" api:
+This is accomplished using the new "text section" API:
 
 ```rust
 commands
@@ -788,7 +788,7 @@ This example serves as a quick introduction to building 3D games in Bevy. It sho
 
 <div class="release-feature-authors">authors: @kokounet</div>
 
-The [`Timer`] struct now internally uses [`Duration`] instead of using `f32` representations of seconds. This both increases precision and makes the api a bit nicer to look at.
+The [`Timer`] struct now internally uses [`Duration`] instead of using `f32` representations of seconds. This both increases precision and makes the API a bit nicer to look at.
 
 ```rust
 fn system(mut timer: ResMut<Timer>, time: Res<Time>) {
@@ -975,7 +975,7 @@ commands
     .insert(A);
 ```
 
-This allows us to make things like "entity id retrieval" infallible and opens the doors to future api improvements.
+This allows us to make things like "entity id retrieval" infallible and opens the doors to future API improvements.
 
 ### Query::single
 
@@ -1099,9 +1099,9 @@ let b = world_cell.get_resource_mut::<f64>().unwrap();
 
 This adds cheap runtime checks to ensure that world accesses do not conflict with each other.
 
-We made this a separate api to enable users to decide what tradeoffs they want. Direct World access has stricter lifetimes, but it is more efficient and does compile time access control. `WorldCell` has looser lifetimes, but incurs a _small_ runtime penalty as a result.
+We made this a separate API to enable users to decide what tradeoffs they want. Direct World access has stricter lifetimes, but it is more efficient and does compile time access control. `WorldCell` has looser lifetimes, but incurs a _small_ runtime penalty as a result.
 
-The api is currently limited to resource access, but it will be extended to queries / entity component access in the future.
+The API is currently limited to resource access, but it will be extended to queries / entity component access in the future.
 
 ### Resource Scopes
 
@@ -1118,7 +1118,7 @@ world.resource_scope(|world: &mut World, mut a: Mut<A>| {
 
 This temporarily removes the `A` resource from `World`, provides mutable pointers to both, and re-adds A to World when finished. Thanks to the move to ComponentIds/sparse sets, this is a cheap operation.
 
-If multiple resources are required, scopes can be nested. We could also consider adding a "resource tuple" to the api if this pattern becomes common and the boilerplate gets nasty.
+If multiple resources are required, scopes can be nested. We could also consider adding a "resource tuple" to the API if this pattern becomes common and the boilerplate gets nasty.
 
 ### Query Conflicts Use ComponentId Instead of ArchetypeComponentId
 
@@ -1311,7 +1311,7 @@ A huge thanks to the **88 contributors** that made this release (and associated 
 * [add scene instance entity iteration][1058]
 * [Make Commands and World apis consistent][1703]
 * [Add `insert_children` and `push_children` to EntityMut][1728]
-* [Extend AppBuilder api with `add_system_set` and similar methods][1453]
+* [Extend AppBuilder API with `add_system_set` and similar methods][1453]
 * [add labels and ordering for transform and parent systems in POST_UPDATE stage][1456]
 * [Explicit execution order ambiguities API][1469]
 * [Resolve (most) internal system ambiguities][1606]

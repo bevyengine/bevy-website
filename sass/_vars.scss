@@ -23,6 +23,7 @@ $color-white: #ececec;
 $color-grey-800: #232326;
 $color-grey-900: #1e1e22;
 $color-pink: #bb799c;
+$color-gold: #d2be4a;
 
 $headerbar-color: #1e1e22;
 $hover-color: #ececec;
@@ -50,16 +51,15 @@ $max-width: 1200px;
 $mobile-menu-width: 300px;
 $content-top-margin: 30px;
 $border-radius: 10px;
-$card-list-gap: 15px;
 
 // CSS Vars
 :root {
-    --header-height: 60px;
-    --scroll-padding-top: calc(var(--header-height) + 16px);
+  --header-height: 60px;
+  --scroll-padding-top: calc(var(--header-height) + 16px);
 
-    @media #{$bp-tablet-landscape-up} {
-        --header-height: 72px;
-    }
+  @media #{$bp-tablet-landscape-up} {
+    --header-height: 72px;
+  }
 }
 
 // Accessibility
