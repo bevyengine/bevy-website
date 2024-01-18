@@ -82,7 +82,6 @@ fn main() {
 
 [`AddDefaultPlugins::add_default_plugins`] adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
-
 You can also register the default [`Plugins`] manually like this:
 
 ```rs
@@ -886,7 +885,6 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 ```
 
 ### Asset Events
-
 
 The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed [`Events`]. These events can also be consumed as a system resource, just like any other [`Events`]:
 
