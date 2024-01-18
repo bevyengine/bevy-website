@@ -245,7 +245,7 @@ struct SystemParamDerive<'w, 's> {
 
 <!-- Adapt for ParamSet instead, if https://github.com/bevyengine/bevy/pull/2765 is merged -->
 
-Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`] system parameters now need to specify their Queries with [`QuerySet`] instead of [`Query`].
+Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`] system parameters now need to specify their Queries with [`QueryState`] instead of [`Query`].
 
 ```rust
 // 0.5
@@ -260,6 +260,7 @@ fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Tran
 ```
 
 [`QuerySet`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.QuerySet.html
+[`QueryState`]: https://docs.rs/bevy_ecs/0.6.0/bevy_ecs/query/struct.QueryState.html
 [`Query`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html
 
 ### "Input\<T\>.update()" is renamed to "Input\<T\>.clear()"
