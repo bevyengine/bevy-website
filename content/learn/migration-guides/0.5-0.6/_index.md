@@ -248,7 +248,7 @@ Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QueryS
 =======
 <!-- Adapt for ParamSet instead, if https://github.com/bevyengine/bevy/pull/2765 is merged -->
 
-Due to the [System Param Lifetime Split](#system-param-lifetime-split), {{rust_type(type="struct" crate="bevy_ecs" mod="system" name="QuerySet" version="0.6.0" no_mod=true)}}s now need to specify their Queries with {{rust_type(type="struct" crate="bevy_ecs" mod="query" version="0.6.0" name="QueryState" no_mod=true)}} instead of {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true)}}.
+Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`]s now need to specify their Queries with [`QueryState`] instead of [`Query`].
 >>>>>>> main:content/learn/migration-guides/0.5-0.6/_index.md
 
 ```rust
@@ -264,6 +264,7 @@ fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Tran
 ```
 
 [`QuerySet`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.QuerySet.html
+[`QueryState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/query/struct.QueryState.html
 [`Query`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html
 
 ### "Input\<T\>.update()" is renamed to "Input\<T\>.clear()"
@@ -283,7 +284,7 @@ This was done to accommodate the new [`SystemState`] which allows easier cached 
 [`SystemState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemState.html
 [`SystemMeta`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemMeta.html
 =======
-This was done to accommodate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true)}}s outside of a regular System.
+This was done to accommodate the new [`SystemState`] which allows easier cached access to [`SystemParam`]s outside of a regular System.
 >>>>>>> main:content/learn/migration-guides/0.5-0.6/_index.md
 
 <!-- TODO: Link to entry for SystemState in the release blog post. -->
