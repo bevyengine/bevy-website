@@ -18,7 +18,7 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()
-        .add_system(hello)
+        .add_systems(Update, hello)
         .run();
 }
 
@@ -54,7 +54,7 @@ fn main() {
         // Resources are global singleton data stored in the `World`
         .insert_resource(Message {string: "Welcome to Bevy!".to_string()})
         // Systems run every pass of the game loop and perform logic
-        .add_system(read_message_system)
+        .add_systems(Update, read_message_system)
         .run();
 }
 

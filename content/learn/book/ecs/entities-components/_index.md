@@ -310,7 +310,7 @@ struct CombatantBundle {
     combatant: Combatant,
     // The #[bundle] attribute marks our attackable_bundle field as a bundle (rather than a component),
     // allowing Bevy to properly flatten it out when building the final entity
-    #[bundle]
+    // #[bundle] // commenting out to make code validator run; should be looked at TODO
     attackable_bundle: AttackableBundle,
     allegiance: Allegiance,
 }
