@@ -141,9 +141,9 @@ opt-level = 3
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
 
-### Enable Fast Compiles (Optional)
+### Advanced: Optimize your compilation times
 
-Bevy can be built just fine using Rust's default configuration. However, if you know your way around a compiler and find that Bevy's iterative compilation times are still too slow for you, try fine-tuning the following options:
+Bevy works great using Rust's default configuration. However, if you know your way around a compiler and find that Bevy's iterative compilation times are still too slow for you, try fine-tuning the following options:
 
 * **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking). **Important!** On Windows you _must_ also enable the [perfomance optimizations](#compile-with-performance-optimizations) or you will get a [`too many exported symbols`](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 
