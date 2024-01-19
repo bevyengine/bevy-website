@@ -141,9 +141,9 @@ opt-level = 3
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
 
-### Enable Fast Compiles (Optional)
+### Advanced: Optimize your compilation times
 
-Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
+Bevy works great using Rust's default configuration. However, if you know your way around a compiler and find that Bevy's iterative compilation times are still too slow for you, try fine-tuning the following options:
 
 * **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking). **Important!** On Windows you _must_ also enable the [perfomance optimizations](#compile-with-performance-optimizations) or you will get a [`too many exported symbols`](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 
@@ -189,20 +189,9 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
     NOTE: Disabling `bevy/dynamic` may improve the performance of this linker.
 
-* **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
-
-    Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
-
-    ```toml
-    [toolchain]
-    channel = "nightly"
-    ```
-
-    For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
-
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
-To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
+To enable generic sharing, first install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
 If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph).
 
