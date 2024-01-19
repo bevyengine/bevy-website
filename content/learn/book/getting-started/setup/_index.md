@@ -189,17 +189,6 @@ Bevy can be built just fine using Rust's default configuration. However, if you 
 
     NOTE: Disabling `bevy/dynamic` may improve the performance of this linker.
 
-* **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
-
-    Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
-
-    ```toml
-    [toolchain]
-    channel = "nightly"
-    ```
-
-    For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
-
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
