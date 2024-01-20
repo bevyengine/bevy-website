@@ -1,7 +1,7 @@
 +++
 title = "Commands queue up work"
 weight = 5
-template = "book-section.html"
-page_template = "book-section.html"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++

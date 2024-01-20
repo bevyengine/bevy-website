@@ -4,6 +4,11 @@
 //! The modules represents the folder structure of the website.
 
 mod learn {
+    #[doc = include_str!("../../content/learn/quick-start/_index.md")]
+    mod quick_start {
+        #[doc = include_str!("../../content/learn/quick-start/next-steps/_index.md")]
+        mod next_steps {}
+    }
     #[doc = include_str!("../../content/learn/book/_index.md")]
     mod book {
         #[doc = include_str!("../../content/learn/book/assets/_index.md")]
@@ -125,9 +130,6 @@ mod learn {
 
         // Not testing migration guides, because of breaking api changes.
         mod migration_guides {}
-
-        #[doc = include_str!("../../content/learn/book/next-steps/_index.md")]
-        mod next_steps {}
 
         #[doc = include_str!("../../content/learn/book/performance-optimizations/_index.md")]
         mod performance_optimizations {

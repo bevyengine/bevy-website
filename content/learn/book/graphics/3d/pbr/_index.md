@@ -2,8 +2,8 @@
 title = "Physically-based rendering"
 weight = 2
 sort_by = "weight"
-template = "book-section.html"
-page_template = "book-section.html"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 

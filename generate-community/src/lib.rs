@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::{fs, io, path::PathBuf, str::FromStr};
+use std::{collections::HashMap, fs, io, path::PathBuf, str::FromStr};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -26,6 +26,42 @@ pub struct Member {
     // this field is not read from the toml file
     #[serde(skip)]
     pub original_path: Option<PathBuf>,
+    pub roles: Option<Vec<String>>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub struct Roles {
+    pub project_lead: Vec<String>,
+    pub maintainer: Vec<String>,
+    pub sme: Vec<Sme>,
+}
+
+impl Roles {
+    pub fn into_map(self) -> HashMap<String, Vec<String>> {
+        let mut map: HashMap<String, Vec<String>> = HashMap::default();
+        for id in self.project_lead {
+            let roles = map.entry(id).or_default();
+            roles.push("Project Lead".to_string());
+        }
+        for id in self.maintainer {
+            let roles = map.entry(id).or_default();
+            roles.push("Maintainer".to_string());
+        }
+
+        for sme in self.sme {
+            let roles = map.entry(sme.id).or_default();
+            roles.push(format!("SME-{}", sme.area));
+        }
+        map
+    }
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub struct Sme {
+    pub area: String,
+    pub id: String,
 }
 
 #[derive(Debug, Clone)]
@@ -67,11 +103,28 @@ where
 #[derive(Debug, Clone)]
 pub struct Section {
     pub name: String,
+    pub filename: Option<String>,
     pub content: Vec<CommunityNode>,
     pub template: Option<String>,
     pub header: Option<String>,
     pub order: Option<usize>,
     pub sort_order_reversed: bool,
+}
+
+impl Section {
+    pub fn apply_roles(&mut self, roles: &HashMap<String, Vec<String>>) {
+        for content in &mut self.content {
+            match content {
+                CommunityNode::Section(section) => section.apply_roles(roles),
+                CommunityNode::Member(member) => {
+                    member.roles = member
+                        .github
+                        .as_ref()
+                        .and_then(|github| roles.get(github).cloned());
+                }
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -89,7 +142,21 @@ impl CommunityNode {
     pub fn order(&self) -> usize {
         match self {
             CommunityNode::Section(content) => content.order.unwrap_or(99999),
-            CommunityNode::Member(content) => content.order.unwrap_or(99999),
+            CommunityNode::Member(content) => {
+                if let Some(roles) = &content.roles {
+                    if roles.iter().find(|p| *p == "Project Lead").is_some() {
+                        0
+                    } else if roles.iter().find(|p| *p == "Maintainer").is_some() {
+                        1
+                    } else if !roles.is_empty() {
+                        2
+                    } else {
+                        99999
+                    }
+                } else {
+                    99999
+                }
+            }
         }
     }
 }
@@ -124,6 +191,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 };
                 let mut new_section = Section {
                     name: folder.to_str().unwrap().to_string(),
+                    filename: None,
                     content: vec![],
                     template: None,
                     header: None,
@@ -134,6 +202,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 section.content.push(CommunityNode::Section(new_section));
             } else {
                 if path.file_name().unwrap() == "_category.toml"
+                    || path.file_name().unwrap() == "_roles.toml"
                     || path.extension().expect("file must have an extension") != "toml"
                 {
                     continue;
@@ -151,12 +220,14 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
 pub fn parse_members(community_dir: &str) -> io::Result<Section> {
     let mut people_root_section = Section {
         name: "People".to_string(),
+        filename: None,
         content: vec![],
         template: Some("people.html".to_string()),
         header: Some("People".to_string()),
         order: None,
         sort_order_reversed: false,
     };
+
     visit_dirs(
         PathBuf::from_str(&community_dir).unwrap(),
         &mut people_root_section,

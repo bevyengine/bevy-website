@@ -59,6 +59,10 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
                     Err(format!("Bio is longer than the maximum allowed length of {}. It is currently {} characters long.", MAX_BIO_LENGTH, grapheme_count))?;
                 }
             }
+
+            if member.roles.is_some() {
+                Err(format!("Roles must be defined in the roles.toml file"))?;
+            }
         }
     }
     Ok(())

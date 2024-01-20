@@ -1,8 +1,8 @@
 +++
 title = "Plugins"
 weight = 3
-template = "book-section.html"
-page_template = "book-section.html"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
@@ -27,7 +27,7 @@ fn main(){
     // We'll cover this in the next section.
     .add_plugins(DefaultPlugins)
     // Adds our new `Plugin` to the `App`
-    .add_plugin(ScorePlugin)
+    .add_plugins(ScorePlugin)
     .run();
 }
 
@@ -40,9 +40,9 @@ impl Plugin for ScorePlugin {
       // beginning at the default value of 0
       .init_resource::<Score>()
       // Increments the score by 1 every pass of the game loop
-      .add_system(increment_score)
+      .add_systems(Update, increment_score)
       // Prints the current value of the score
-      .add_system(report_score);
+      .add_systems(Update, report_score);
   }
 }
 

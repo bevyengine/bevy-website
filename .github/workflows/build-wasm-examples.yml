@@ -1,0 +1,86 @@
+name: Build WASM Examples
+
+on:
+  workflow_dispatch:
+
+env:
+  PER_PAGE: 50
+
+jobs:
+  wasm-examples:
+    name: Build WASM Examples
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        # if all examples are not built, add a new page here
+        page: [0, 1, 2]
+        api: [webgl2, webgpu]
+    steps:
+
+      - name: Checkout Bevy latest tag
+        uses: actions/checkout@master
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'latest'
+
+      # temporary: fetch tools from main branch
+      - name: Checkout Bevy Tools
+        uses: actions/checkout@master
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'main'
+          path: 'bevy-tools'
+      - name: Copy Bevy tools to latest
+        run: |
+          cp -r bevy-tools/tools/ tools
+          rm -rf bevy-tools
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: wasm32-unknown-unknown,x86_64-apple-darwin
+
+      - name: Install WASM tooling
+        run: |
+          cargo install --force wasm-bindgen-cli
+          mkdir ./binaryen
+          wget -qO- https://github.com/WebAssembly/binaryen/releases/download/version_114/binaryen-version_114-x86_64-macos.tar.gz | tar xvz --strip-components 1 -C ./binaryen binaryen-version_114
+
+      - name: Build WASM Examples
+        run: |
+          export PATH=$PATH:`pwd`/binaryen/bin
+          cargo run -p example-showcase -- --per-page ${{ env.PER_PAGE }} --page ${{ matrix.page }} build-wasm-examples --content-folder wasm-examples --api ${{ matrix.api }} --website-hacks --optimize-size
+
+      - name: Upload Generated Files
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.api }}-examples-${{ matrix.page }}
+          path: wasm-examples
+
+  cloudflare-upload:
+      name: Upload to Cloudflare
+      runs-on: ubuntu-latest
+      needs: wasm-examples
+      strategy:
+        matrix:
+          api: [webgl2, webgpu]  
+      steps:
+        
+        - name: Download all artifacts
+          uses: actions/download-artifact@v3
+
+        - name: Group examples in one folder
+          run: |
+            mkdir ${{ matrix.api }}
+            for file in ${{ matrix.api }}-examples-*
+            do
+              rsync -a $file/* ${{ matrix.api }}/
+            done
+
+        - name: Publish to Cloudflare Pages
+          uses: cloudflare/pages-action@v1
+          with:
+            apiToken: ${{ secrets.CLOUDFLARE_PAGES }}
+            accountId: 0e862a54d5c283c78d8d56adb6159df8
+            projectName: bevy-${{ matrix.api }}-examples
+            directory: ${{ matrix.api }}

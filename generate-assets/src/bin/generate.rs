@@ -40,9 +40,12 @@ fn main() -> anyhow::Result<()> {
     let _ = fs::create_dir(content_dir.clone());
     let asset_root_section = parse_assets(
         &asset_dir,
-        Some(&db),
-        github_client.as_ref(),
-        gitlab_client.as_ref(),
+        MetadataSource {
+            crates_io_db: Some(&db),
+            github_client: github_client.as_ref(),
+            gitlab_client: gitlab_client.as_ref(),
+            ..Default::default()
+        },
     )?;
 
     asset_root_section

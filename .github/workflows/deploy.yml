@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:
@@ -34,17 +34,16 @@ jobs:
       - name: "Build Bevy Community"
         run: cd generate-community && ./generate_community.sh
 
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
-        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh
+        run: cd generate-wasm-examples && ./generate_wasm_examples.sh
 
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
-        uses: shalzz/zola-deploy-action@master
+        uses: shalzz/zola-deploy-action@v0.16.1-1
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .

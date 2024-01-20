@@ -16,7 +16,7 @@ Thanks to **123** contributors, **349** pull requests, and our [**generous spons
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
-To update an existing Bevy App or Plugin to **Bevy 0.7**, check out our [0.6 to 0.7 Migration Guide](/learn/book/migration-guides/0.6-0.7/).
+To update an existing Bevy App or Plugin to **Bevy 0.7**, check out our [0.6 to 0.7 Migration Guide](/learn/migration-guides/0.6-0.7/).
 
 As always, there are a _ton_ of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights:
 
@@ -65,7 +65,7 @@ fn start_dancing(mut query: Query<(&Animations, &mut AnimationPlayer)>) {
 
 This critical feature has been a long time coming, but we wanted to build it in a way that meshed nicely with the [new Bevy renderer](/news/bevy-0-6/#the-new-bevy-renderer) and didn't just "hack things in". This builds on our new [Flexible Mesh Vertex Layouts](/news/bevy-0-7/#flexible-mesh-vertex-layouts), [Shader Imports](/news/bevy-0-6/#shader-imports), and [Material](/news/bevy-0-6/#materials) systems, which ensures that this logic is flexible and reusable, even with non-standard meshes and custom render pipelines.
 
-And we're just getting started! Multi-track animation blending and higher level animation state management should arrive in the very near future. Now is a great time to start contributing animation features to Bevy. We've smashed through most of the foundational technical hurdles and what remains is largely high level api design choices. We already have a couple of draft RFCs open in these areas: [Animation Composition](https://github.com/bevyengine/rfcs/pull/51) and [Animation Primitives](https://github.com/bevyengine/rfcs/pull/49). Feel free to join the conversation!
+And we're just getting started! Multi-track animation blending and higher level animation state management should arrive in the very near future. Now is a great time to start contributing animation features to Bevy. We've smashed through most of the foundational technical hurdles and what remains is largely high level API design choices. We already have a couple of draft RFCs open in these areas: [Animation Composition](https://github.com/bevyengine/rfcs/pull/51) and [Animation Primitives](https://github.com/bevyengine/rfcs/pull/49). Feel free to join the conversation!
 
 [`AnimationPlayer`]: https://docs.rs/bevy/0.7.0/bevy/animation/struct.AnimationPlayer.html
 [`AnimationClip`]: https://docs.rs/bevy/0.7.0/bevy/animation/struct.AnimationClip.html
@@ -342,7 +342,7 @@ fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
 }
 ```
 
-However, to respect Rust's mutability rules, we need to disallow apis that might produce "aliased mutability". Seasoned Bevy users will probably recognize this Rust borrow checker error:
+However, to respect Rust's mutability rules, we need to disallow APIs that might produce "aliased mutability". Seasoned Bevy users will probably recognize this Rust borrow checker error:
 
 ```rust
 fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
@@ -354,7 +354,7 @@ fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
 
 _You_ know Entity A and Entity B are different entities at runtime. But Rust's borrow checker has no way to know that at compile time! I'm sure you can imagine game development scenarios that would benefit from having mutable access to multiple components at the same time. This borrow checker restriction was a common pain point and the workarounds were ... not fun (using scopes to ensure conflicting accesses are dropped, copying data, re-querying things, etc).
 
-Fortunately, **Bevy 0.7** introduces a brand new set of apis to save the day!
+Fortunately, **Bevy 0.7** introduces a brand new set of APIs to save the day!
 
 ```rust
 fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
@@ -436,9 +436,9 @@ fn give_sword(mut query: Query<&mut Items>) {
 }
 ```
 
-This works just fine, but that `0` at the end of `items.0` sticks out like a sore thumb. Many of us in the Bevy Org think `.0` has no place in public apis. But the newtype pattern is still useful! Ideally, Rust would provide a way to express that `Items` is a new type, while transparently provided access to the `Vec<Item>` stored within. There are designs being discussed by the Rust team, but we don't want to wait for nice things!
+This works just fine, but that `0` at the end of `items.0` sticks out like a sore thumb. Many of us in the Bevy Org think `.0` has no place in public APIs. But the newtype pattern is still useful! Ideally, Rust would provide a way to express that `Items` is a new type, while transparently provided access to the `Vec<Item>` stored within. There are designs being discussed by the Rust team, but we don't want to wait for nice things!
 
-Fortunately, the Deref / DerefMut traits in std provide the behavior we want. Users can already manually implement these traits, but for such a common pattern, we decided that providing our own trait derives was worth it. In **Bevy 0.7**, you can now derive Deref and DerefMut, enabling much nicer public apis:
+Fortunately, the Deref / DerefMut traits in std provide the behavior we want. Users can already manually implement these traits, but for such a common pattern, we decided that providing our own trait derives was worth it. In **Bevy 0.7**, you can now derive Deref and DerefMut, enabling much nicer public APIs:
 
 ```rust
 #[derive(Component, Deref, DerefMut)]
@@ -970,7 +970,7 @@ A huge thanks to the **123 contributors** that made this release (and associated
 * [Increment last event count on next instead of iter][2382]
 * [Obviate the need for `RunSystem`, and remove it][3817]
 * [Cleanup some things which shouldn't be components][2982]
-* [Remove the config api][3633]
+* [Remove the config API][3633]
 * [Deprecate `.system`][3302]
 * [Hide docs for concrete impls of Fetch, FetchState, and SystemParamState][4250]
 * [Move the CoreStage::Startup to a seperate StartupSchedule label][2434]

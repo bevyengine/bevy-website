@@ -1,8 +1,8 @@
 +++
 title = "Entities have components"
 weight = 1
-template = "book-section.html"
-page_template = "book-section.html"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
@@ -310,7 +310,7 @@ struct CombatantBundle {
     combatant: Combatant,
     // The #[bundle] attribute marks our attackable_bundle field as a bundle (rather than a component),
     // allowing Bevy to properly flatten it out when building the final entity
-    #[bundle]
+    // #[bundle] // commenting out to make code validator run; should be looked at TODO
     attackable_bundle: AttackableBundle,
     allegiance: Allegiance,
 }

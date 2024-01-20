@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, path::Path};
 
 use anyhow::{anyhow, Context, Result};
 use regex::Regex;
@@ -6,6 +6,8 @@ use regex::Regex;
 use generate_assets::*;
 
 const MAX_DESCRIPTION_LENGTH: usize = 100;
+const MAX_IMAGE_BYTES: u64 = 2_097_152; // keep in sync with docs in bevy-assets
+const ALLOWED_IMAGE_EXTENSIONS: &[&str] = &["gif", "jpg", "jpeg", "png", "webp"];
 
 fn main() -> Result<()> {
     let asset_dir = std::env::args()
@@ -13,7 +15,7 @@ fn main() -> Result<()> {
         .ok_or_else(|| anyhow!("Please specify the path to bevy-assets"))?;
 
     let asset_root_section =
-        parse_assets(&asset_dir, None, None, None).with_context(|| "Parsing assets")?;
+        parse_assets(&asset_dir, MetadataSource::default()).with_context(|| "Parsing assets")?;
 
     let results = asset_root_section.validate();
 
@@ -40,7 +42,7 @@ impl Display for AssetError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "{}", self.asset_name)?;
         for error in &self.errors {
-            writeln!(f, "  {:?}", error)?;
+            writeln!(f, "  {}", error)?;
         }
         Ok(())
     }
@@ -52,6 +54,34 @@ enum ValidationError {
     DescriptionWithFormatting,
     ImageInvalidLink,
     ImageInvalidExtension,
+    ImageFileSizeTooLarge(u64),
+}
+impl Display for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ValidationError::DescriptionTooLong => write!(
+                f,
+                "Description must be at most {} chars in length.",
+                MAX_DESCRIPTION_LENGTH
+            ),
+            ValidationError::DescriptionWithFormatting => {
+                write!(f, "Description must not contain formatting.")
+            }
+            ValidationError::ImageInvalidLink => write!(f, "Image file not found."),
+            ValidationError::ImageInvalidExtension => write!(
+                f,
+                "Image extension not allowed. Must be one of: {}",
+                ALLOWED_IMAGE_EXTENSIONS.join(", ")
+            ),
+            ValidationError::ImageFileSizeTooLarge(size) => {
+                write!(
+                    f,
+                    "Image file size {} exceeds maximum {} bytes.",
+                    size, MAX_IMAGE_BYTES
+                )
+            }
+        }
+    }
 }
 
 trait AssetValidator {
@@ -93,16 +123,16 @@ impl AssetValidator for Asset {
             image_path.pop();
             image_path.push(image);
 
-            if !image_path.is_file() {
-                errors.push(ValidationError::ImageInvalidLink);
-            }
-
             if let Some(extension) = image_path.extension().and_then(|ext| ext.to_str()) {
-                if !["gif", "jpg", "jpeg", "png", "webp"].contains(&extension) {
+                if !ALLOWED_IMAGE_EXTENSIONS.contains(&extension) {
                     errors.push(ValidationError::ImageInvalidExtension);
                 }
             } else {
                 errors.push(ValidationError::ImageInvalidExtension)
+            }
+
+            if let Err(err) = validate_image(&image_path) {
+                errors.push(err);
             }
         }
 
@@ -130,4 +160,17 @@ fn has_forbidden_formatting(string: &str) -> bool {
     }
 
     false
+}
+
+fn validate_image(path: &Path) -> Result<(), ValidationError> {
+    let size = path
+        .metadata()
+        .map_err(|_| ValidationError::ImageInvalidLink)?
+        .len();
+
+    if size > MAX_IMAGE_BYTES {
+        return Err(ValidationError::ImageFileSizeTooLarge(size));
+    }
+
+    Ok(())
 }

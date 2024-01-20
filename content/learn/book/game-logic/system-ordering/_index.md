@@ -1,8 +1,8 @@
 +++
 title = "System ordering"
 weight = 1
-template = "book-section.html"
-page_template = "book-section.html"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
