@@ -38,6 +38,6 @@ Bevy is still in the early stages of development. Important features are missing
 
 If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out [Godot Engine](https://godotengine.org). It is currently much more feature-complete and stable. And it is also free, open-source, and [scriptable with Rust](https://github.com/godot-rust/gdext)!
 
-This official book is still very incomplete. It will help you get started with the setup and learning the basics, but it does not yet cover most of Bevy's features. See the [Next Steps](/learn/book/next-steps/) page for links to other, more exhaustive, learning resources you can use.
+The Quick Start Guide is not a comprehensive guide to Bevy and the next section [Getting Started](/learn/quick-start/getting-started/) will help you with the setup of Bevy and learning the basics, but it does not cover most of Bevy's features. In the future you can use the Bevy Book to gain a better understanding, until then see the last page [Next Steps](/learn/quick-start/next-steps) for more exhaustive and complex resources on Bevy.
 
 Phew! If you haven't been scared away yet, let's move on to learning some Bevy!
