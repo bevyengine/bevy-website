@@ -1,5 +1,5 @@
 +++
-title = "Fast compiles"
+title = "Fast Compiles"
 weight = 2
 sort_by = "weight"
 template = "docs-section.html"

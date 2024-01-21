@@ -1,5 +1,5 @@
 +++
-title = "Component storage"
+title = "Component Storage Types"
 weight = 4
 template = "docs-section.html"
 page_template = "docs-section.html"

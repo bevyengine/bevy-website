@@ -1,5 +1,5 @@
 +++
-title = "Entities, components and systems"
+title = "Entities, Components and Systems"
 weight = 2
 sort_by = "weight"
 template = "docs-section.html"

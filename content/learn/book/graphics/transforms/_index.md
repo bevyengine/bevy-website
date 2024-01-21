@@ -1,5 +1,5 @@
 +++
-title = "Transforms"
+title = "The Transform Component Controls Position"
 weight = 1
 sort_by = "weight"
 template = "docs-section.html"

@@ -1,6 +1,6 @@
 +++
 title = "Platforms"
-weight = 11
+weight = 12
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"

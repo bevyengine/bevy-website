@@ -1,5 +1,5 @@
 +++
-title = "Working with handles"
+title = "Working With Handles"
 weight = 2
 sort_by = "weight"
 template = "docs-section.html"

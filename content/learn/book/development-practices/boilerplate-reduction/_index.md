@@ -1,5 +1,5 @@
 +++
-title = "Boilerplate reduction"
+title = "Boilerplate Reduction"
 weight = 5
 sort_by = "weight"
 template = "docs-section.html"

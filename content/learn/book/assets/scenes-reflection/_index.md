@@ -1,5 +1,5 @@
 +++
-title = "Scenes and reflection"
+title = "Scenes and Reflection"
 weight = 5
 sort_by = "weight"
 template = "docs-section.html"

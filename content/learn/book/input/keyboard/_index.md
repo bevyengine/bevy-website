@@ -1,5 +1,5 @@
 +++
-title = "Keyboard"
+title = "Keyboard Input"
 weight = 2
 sort_by = "weight"
 template = "docs-section.html"

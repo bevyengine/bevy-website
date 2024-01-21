@@ -1,5 +1,5 @@
 +++
-title = "Physically-based rendering"
+title = "Physically-Based Rendering"
 weight = 2
 sort_by = "weight"
 template = "docs-section.html"

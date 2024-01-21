@@ -1,5 +1,5 @@
 +++
-title = "Touch"
+title = "Touch Input"
 weight = 4
 sort_by = "weight"
 template = "docs-section.html"

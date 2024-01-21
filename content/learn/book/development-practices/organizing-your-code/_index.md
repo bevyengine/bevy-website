@@ -1,5 +1,5 @@
 +++
-title = "Organizing your code"
+title = "Organizing Your Code"
 weight = 1
 sort_by = "weight"
 template = "docs-section.html"

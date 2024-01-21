@@ -1,5 +1,5 @@
 +++
-title = "Custom assets"
+title = "Custom Assets"
 weight = 3
 sort_by = "weight"
 template = "docs-section.html"
