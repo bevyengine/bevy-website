@@ -190,6 +190,10 @@ AssetEvent::Modified { id } => {
 
 Also, as you may have noticed, the set of events has changed. The most important of these is `LoadedWithDependencies` which tells you that the asset and all its dependencies have finished loading into memory.
 
+#### `UntypedHandle`
+
+`HandleUntyped` has been renamed to `UntypedHandle`.
+
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
 <div class="migration-guide-area-tags">
