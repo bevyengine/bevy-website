@@ -26,3 +26,5 @@ highlight_theme = "css"
 
 [extra]
 # Put all your custom variables here
+
+[languages.zh_cn]
