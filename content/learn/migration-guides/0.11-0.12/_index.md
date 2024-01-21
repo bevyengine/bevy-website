@@ -192,7 +192,16 @@ Also, as you may have noticed, the set of events has changed. The most important
 
 #### `UntypedHandle`
 
-`HandleUntyped` has been renamed to `UntypedHandle`.
+Replace `UntypedHandle` usage with the corresponding `Handle<T>`:
+```rust
+// 0.11
+const MESH_HANDLE: UntypedHandle =
+    UntypedHandle::weak_from_u64(Mesh::TYPE_UUID, 0x1f40128bac02a9b);
+// 0.12
+const MESH_HANDLE: Handle<Mesh> = Handle::weak_from_u128(0x1f40128bac02a9b);
+```
+
+Additionally, `HandleId` has been renamed to `UntypedAssetId`
 
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
