@@ -6,6 +6,13 @@ image_alt = "Bevy book"
 description = "Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here."
 
 [[links]]
+title = "The Quick Start Guide"
+url = "/learn/book/quick-start"
+image = "/assets/book.svg"
+image_alt = "Bevy book"
+description = "Learn the basics of how to use Bevy by following a quick tutorial. If you like learning by examples, you should probably start here."
+
+[[links]]
 title = "Migration Guides"
 url = "/learn/migration-guides/introduction"
 image = "/assets/migration-guides.svg"
