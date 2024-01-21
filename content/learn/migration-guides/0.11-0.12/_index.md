@@ -192,7 +192,7 @@ Also, as you may have noticed, the set of events has changed. The most important
 
 #### `UntypedHandle`
 
-`HandleUntyped` has been renamed to `UntypedHandle`.
+`HandleUntyped` and `AssetId` have been renamed to `UntypedHandle` and `UntypedAssetId`.
 
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
