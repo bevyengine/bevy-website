@@ -1,5 +1,5 @@
 +++
-title = "Configuring your window(s)"
+title = "Configuring Your Window(s)"
 weight = 4
 sort_by = "weight"
 template = "docs-section.html"

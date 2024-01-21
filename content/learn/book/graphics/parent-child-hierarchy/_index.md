@@ -1,5 +1,5 @@
 +++
-title = "Parent-child hierarchy"
+title = "Parent-Child Hierarchy"
 weight = 3
 sort_by = "weight"
 template = "docs-section.html"

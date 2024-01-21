@@ -1,5 +1,5 @@
 +++
-title = "Resources are global singletons"
+title = "Resources Are Global Singletons"
 weight = 3
 template = "docs-section.html"
 page_template = "docs-section.html"

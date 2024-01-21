@@ -1,5 +1,5 @@
 +++
-title = "Error handling"
+title = "Error Handling"
 weight = 4
 sort_by = "weight"
 template = "docs-section.html"

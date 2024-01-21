@@ -1,5 +1,5 @@
 +++
-title = "3d"
+title = "3D"
 weight = 6
 sort_by = "weight"
 template = "docs-section.html"

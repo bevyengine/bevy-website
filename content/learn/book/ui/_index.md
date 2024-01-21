@@ -1,6 +1,6 @@
 +++
-title = "User interfaces"
-weight = 8
+title = "User Interfaces"
+weight = 9
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"

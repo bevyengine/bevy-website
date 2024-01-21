@@ -1,5 +1,5 @@
 +++
-title = "System ordering"
+title = "Stages and System Ordering"
 weight = 1
 template = "docs-section.html"
 page_template = "docs-section.html"

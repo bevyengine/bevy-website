@@ -1,5 +1,5 @@
 +++
-title = "UI basics"
+title = "User Interface Basics"
 weight = 1
 sort_by = "weight"
 template = "docs-section.html"

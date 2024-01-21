@@ -1,5 +1,5 @@
 +++
-title = "Indexes"
+title = "Custom \"Indexing\" Patterns"
 weight = 3
 template = "docs-section.html"
 page_template = "docs-section.html"

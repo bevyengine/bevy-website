@@ -1,5 +1,5 @@
 +++
-title = "Loading assets"
+title = "Loading Assets"
 weight = 1
 sort_by = "weight"
 template = "docs-section.html"

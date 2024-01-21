@@ -1,5 +1,5 @@
 +++
-title = "Async tasks"
+title = "Async Tasks"
 weight = 6
 sort_by = "weight"
 template = "docs-section.html"

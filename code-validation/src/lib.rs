@@ -19,8 +19,8 @@ mod learn {
             mod hot_reloading {}
             #[doc = include_str!("../../content/learn/book/assets/loading-assets/_index.md")]
             mod loading_assets {}
-            #[doc = include_str!("../../content/learn/book/assets/scenes/_index.md")]
-            mod scenes {}
+            #[doc = include_str!("../../content/learn/book/assets/scenes-reflection/_index.md")]
+            mod scenes_reflection {}
             #[doc = include_str!("../../content/learn/book/assets/working-with-handles/_index.md")]
             mod working_with_handles {}
         }
@@ -49,28 +49,24 @@ mod learn {
         mod ecs {
             #[doc = include_str!("../../content/learn/book/ecs/commands/_index.md")]
             mod commands {}
-            #[doc = include_str!("../../content/learn/book/ecs/detecting-changes/_index.md")]
-            mod detecting_changes {}
-            #[doc = include_str!("../../content/learn/book/ecs/ecs-magic/_index.md")]
-            mod ecs_magic {}
+            #[doc = include_str!("../../content/learn/book/ecs/change-detection/_index.md")]
+            mod change_detection {}
             #[doc = include_str!("../../content/learn/book/ecs/entities-components/_index.md")]
             mod entities_components {}
             #[doc = include_str!("../../content/learn/book/ecs/exclusive-world-access/_index.md")]
             mod exclusive_world_access {}
-            #[doc = include_str!("../../content/learn/book/ecs/queries/_index.md")]
-            mod queries {}
+            #[doc = include_str!("../../content/learn/book/ecs/systems-queries/_index.md")]
+            mod systems_queries {}
             #[doc = include_str!("../../content/learn/book/ecs/resources/_index.md")]
             mod resources {}
-            #[doc = include_str!("../../content/learn/book/ecs/systems/_index.md")]
-            mod systems {}
         }
 
         #[doc = include_str!("../../content/learn/book/game-logic/_index.md")]
         mod game_logic {
             #[doc = include_str!("../../content/learn/book/game-logic/async-tasks/_index.md")]
             mod async_tasks {}
-            #[doc = include_str!("../../content/learn/book/game-logic/custom-execution/_index.md")]
-            mod custom_execution {}
+            #[doc = include_str!("../../content/learn/book/game-logic/custom-runners-headless-operations/_index.md")]
+            mod custom_runners_headless_operation {}
             #[doc = include_str!("../../content/learn/book/game-logic/events/_index.md")]
             mod events {}
             #[doc = include_str!("../../content/learn/book/game-logic/run-criteria/_index.md")]
@@ -79,8 +75,8 @@ mod learn {
             mod states {}
             #[doc = include_str!("../../content/learn/book/game-logic/system-ordering/_index.md")]
             mod system_ordering {}
-            #[doc = include_str!("../../content/learn/book/game-logic/time/_index.md")]
-            mod time {}
+            #[doc = include_str!("../../content/learn/book/game-logic/time-timers/_index.md")]
+            mod time_timers {}
         }
 
         #[doc = include_str!("../../content/learn/book/graphics/_index.md")]
@@ -110,16 +106,16 @@ mod learn {
             }
             #[doc = include_str!("../../content/learn/book/graphics/transforms/_index.md")]
             mod transforms {}
-            #[doc = include_str!("../../content/learn/book/graphics/windowing/_index.md")]
-            mod windowing {}
+            #[doc = include_str!("../../content/learn/book/graphics/windows/_index.md")]
+            mod windows {}
         }
 
         #[doc = include_str!("../../content/learn/book/input/_index.md")]
         mod input {
             #[doc = include_str!("../../content/learn/book/input/gamepad/_index.md")]
             mod gamepad {}
-            #[doc = include_str!("../../content/learn/book/input/input-basics/_index.md")]
-            mod input_basics {}
+            #[doc = include_str!("../../content/learn/book/input/basics/_index.md")]
+            mod basics {}
             #[doc = include_str!("../../content/learn/book/input/keyboard/_index.md")]
             mod keyboard {}
             #[doc = include_str!("../../content/learn/book/input/mouse/_index.md")]
@@ -155,8 +151,8 @@ mod learn {
 
         #[doc = include_str!("../../content/learn/book/ui/_index.md")]
         mod ui {
-            #[doc = include_str!("../../content/learn/book/ui/ui-basics/_index.md")]
-            mod ui_basics {}
+            #[doc = include_str!("../../content/learn/book/ui/basics/_index.md")]
+            mod basics {}
         }
 
         #[doc = include_str!("../../content/learn/book/welcome/_index.md")]

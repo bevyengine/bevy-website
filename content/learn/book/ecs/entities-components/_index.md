@@ -1,5 +1,5 @@
 +++
-title = "Entities have components"
+title = "Entities Have Components"
 weight = 1
 template = "docs-section.html"
 page_template = "docs-section.html"
@@ -17,7 +17,7 @@ If you're an experienced programmer, you can reason about the [`World`] as somet
 [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 
-## Spawning and despawning entities
+## Spawning and Despawning Entities
 
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
@@ -42,14 +42,14 @@ fn spawning_system(mut commands: Commands){
 
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
-## Working with components
+## Working With Components
 
 Spawning an entity doesn't add any behavior or create a "physical object" in our game like it might in other engines.
 Instead, all it does is provide us an [`Entity`] identifer for a collection of component data.
 
 In order to make this useful, we need to be able to add, remove and modify component data for each entity.
 
-### Defining components
+### Defining Components
 
 To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
 You will almost always want to use the `#[derive(Component)]` [macro](https://doc.rust-lang.org/reference/attributes/derive.html) to do this for you; which quickly and reliably generates the correct trait implementation.
@@ -85,7 +85,7 @@ enum Allegiance {
 
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 
-### Spawning entities with components
+### Spawning Entities With Components
 
 Now that we have some components defined, let's try adding them to our entities using [`Commands`].
 
@@ -144,7 +144,7 @@ fn spawn_combatants_system(mut commands: Commands) {
 }
 ```
 
-### Adding and removing components
+### Adding and Removing Components
 
 Once an entity is spawned, you can use [`Commands`] to add and remove components from them dynamically.
 
@@ -268,7 +268,7 @@ fn spawn_combatants_system(mut commands: Commands) {
 
 [`Bundle`]: https://docs.rs/bevy/latest/bevy/ecs/bundle/trait.Bundle.html
 
-### Nested bundles
+### Nested Bundles
 
 As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
 One of the tools you can use to do so is **nested bundles**; embedding one bundle of components within another.
@@ -330,7 +330,7 @@ impl Default for CombatantBundle {
 }
 ```
 
-## Component design
+## Component Design
 
 Over time, the Bevy community has converged on a few standard pieces of advice for how to structure and define component data:
 

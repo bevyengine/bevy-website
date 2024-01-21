@@ -1,5 +1,5 @@
 +++
-title = "Diagnostics and benchmarking"
+title = "Diagnostics and Benchmarking"
 weight = 1
 template = "docs-section.html"
 page_template = "docs-section.html"

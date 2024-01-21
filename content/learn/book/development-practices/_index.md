@@ -1,6 +1,6 @@
 +++
-title = "Development practices"
-weight = 9
+title = "Development Practices"
+weight = 10
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"

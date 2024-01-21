@@ -1,5 +1,5 @@
 +++
-title = "Time and timers"
+title = "Time and Timers"
 weight = 4
 sort_by = "weight"
 template = "docs-section.html"

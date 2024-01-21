@@ -1,5 +1,5 @@
 +++
-title = "Rendering internals"
+title = "Rendering Internals"
 weight = 7
 sort_by = "weight"
 template = "docs-section.html"
