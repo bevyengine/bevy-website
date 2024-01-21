@@ -193,6 +193,7 @@ Also, as you may have noticed, the set of events has changed. The most important
 #### `UntypedHandle`
 
 Replace `UntypedHandle` usage with the corresponding `Handle<T>`:
+
 ```rust
 // 0.11
 const MESH_HANDLE: UntypedHandle =
