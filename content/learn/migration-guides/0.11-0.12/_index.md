@@ -201,7 +201,7 @@ const MESH_HANDLE: UntypedHandle =
 const MESH_HANDLE: Handle<Mesh> = Handle::weak_from_u128(0x1f40128bac02a9b);
 ```
 
-Additionally, `HandleId` has been renamed to `UntypedAssetId`
+Accordingly, use `AssetId<T>` instead of `UntypedAssetId`.
 
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
