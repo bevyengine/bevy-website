@@ -7,8 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Explain why you might want to inherit Transforms
+{% todo() %}
 
-TODO: explain what's inherited, and how
-
-TODO: demonstrate how to manipulate these hierarchies
+* Explain why you might want to inherit Transforms
+* Explain what's inherited, and how
+* Demonstrate how to manipulate these hierarchies
+{% end %}

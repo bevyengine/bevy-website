@@ -7,10 +7,10 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: discuss how to find the mouse's position
+{% todo() %}
 
-TODO: demonstrate how to use mouse input
-
-TODO: demonstrate how to convert between screen space and world space coordinates
-
-TODO: point to UI chapter
+* Discuss how to find the mouse's position
+* Demonstrate how to use mouse input
+* Demonstrate how to convert between screen space and world space coordinates
+* Point to UI chapter
+{% end %}

@@ -7,8 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: point to `gilrs` docs
+{% todo() %}
 
-TODO: demonstrate how to use gamepad input
-
-TODO: explain gamepad axes
+* Point to `gilrs` docs
+* Demonstrate how to use gamepad input
+* Explain gamepad axes
+{% end %}

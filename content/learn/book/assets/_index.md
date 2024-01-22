@@ -7,6 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain what an asset is.
+{% todo() %}
 
-TODO: Give a high-level overview of asset loading in Bevy. Make sure to describe how handles work.
+* Explain what an asset is.
+* Give a high-level overview of asset loading in Bevy. Make sure to describe how handles work.
+{% end %}

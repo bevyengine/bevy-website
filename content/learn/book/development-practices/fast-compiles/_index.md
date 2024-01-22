@@ -7,7 +7,10 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain why you might want faster compiles
+{% todo() %}
+
+* Explain why you might want faster compiles
+{% end %}
 
 * **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
 

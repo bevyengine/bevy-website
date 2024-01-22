@@ -7,8 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: refresh on Rust modules, link to official docs
+{% todo() %}
 
-TODO: discuss plugins as a code organization tool
-
-TODO discuss how to split your code out into libraries
+* Refresh on Rust modules, link to official docs
+* Discuss plugins as a code organization tool
+* Discuss how to split your code out into libraries
+{% end %}

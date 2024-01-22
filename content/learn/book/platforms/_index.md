@@ -6,6 +6,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain that things Just Work on Windows / Mac and Linux
+{% todo() %}
 
-TODO: discuss which platforms we have tier 2 support for
+* Explain that things Just Work on Windows / Mac and Linux
+* Discuss which platforms we have tier 2 support for
+{% end %}

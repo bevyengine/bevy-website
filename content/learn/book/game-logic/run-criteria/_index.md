@@ -7,10 +7,10 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain what a run criteria is
+{% todo() %}
 
-TODO: discuss evaluation model
-
-TODO: discuss FixedTimestep run criteria
-
-TODO: explain how to use .pipe
+* Explain what a run criteria is
+* Discuss evaluation model
+* Discuss FixedTimestep run criteria
+* Explain how to use .pipe
+{% end %}

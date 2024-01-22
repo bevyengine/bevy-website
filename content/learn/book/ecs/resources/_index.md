@@ -6,12 +6,11 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Explain what a resource is
+{% todo() %}
 
-TODO: Explain why you might want a resource
-
-TODO: Show how to create and access Resources
-
-TODO: Show how to modify resources
-
-TODO: Compare and contrast with `query.single()`
+* Explain what a resource is
+* Explain why you might want a resource
+* Show how to create and access Resources
+* Show how to modify resources
+* Compare and contrast with `query.single()`
+{% end %}

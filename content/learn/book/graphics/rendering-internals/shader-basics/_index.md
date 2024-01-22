@@ -7,6 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Explain what a shader is
+{% todo() %}
 
-TODO: Demonstrate how to write a simple shader in Bevy
+* Explain what a shader is
+* Demonstrate how to write a simple shader in Bevy
+{% end %}

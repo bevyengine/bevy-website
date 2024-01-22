@@ -7,6 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Tiny blurb about input handling
+{% todo() %}
 
-TODO: point to `winit` docs.
+* Tiny blurb about input handling
+* Point to `winit` docs.
+{% end %}

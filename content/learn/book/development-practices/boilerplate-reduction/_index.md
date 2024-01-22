@@ -7,6 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: link to resources on macros
+{% todo() %}
 
-TODO: discuss custom system parameters
+* Link to resources on macros
+* Discuss custom system parameters
+{% end %}

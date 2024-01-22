@@ -7,14 +7,12 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain Time resource
+{% todo() %}
 
-TODO: demonstrate how to access the Time resource
-
-TODO: discuss Duration and instant in Rust
-
-TODO: demonstrate how to use a timers
-
-TODO: demonstrate how to store timers in components
-
-TODO: mention FixedTimestep run criteria
+* Explain Time resource
+* Demonstrate how to access the Time resource
+* Discuss Duration and instant in Rust
+* Demonstrate how to use a timers
+* Demonstrate how to store timers in components
+* Mention FixedTimestep run criteria
+{% end %}

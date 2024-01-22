@@ -7,6 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Tiny blurb about audio
+{% todo() %}
 
-TODO: disclaim WIP status, point to `bevy_kira_audio` and competing community crates
+* Tiny blurb about audio
+* Disclaim WIP status, point to `bevy_kira_audio` and competing community crates
+{% end %}

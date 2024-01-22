@@ -7,8 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Explain the UI camera / main camera distinction
+{% todo() %}
 
-TODO: explain camera view matrixes
-
-TODO: explain the different types of camera presets and how 2D works in Bevy
+* Explain the UI camera / main camera distinction
+* Explain camera view matrixes
+* Explain the different types of camera presets and how 2D works in Bevy
+{% end %}

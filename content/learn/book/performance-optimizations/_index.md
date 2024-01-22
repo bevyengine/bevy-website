@@ -6,6 +6,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Bevy go brrr
+{% todo() %}
 
-TODO: make extremely clear that `cargo run --release` is an order of magnitude faster
+* Bevy go brrr
+* Make extremely clear that `cargo run --release` is an order of magnitude faster
+{% end %}

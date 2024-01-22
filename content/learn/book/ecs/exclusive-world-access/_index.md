@@ -6,10 +6,10 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: show how to work with a raw world
+{% todo() %}
 
-TODO: discuss and demonstrate custom commands
-
-TODO: discuss and demonstrate exclusive systems
-
-TOD: discuss and demonstrate `NonSend` resources
+* Show how to work with a raw world
+* Discuss and demonstrate custom commands
+* Discuss and demonstrate exclusive systems
+* Discuss and demonstrate `NonSend` resources
+{% end %}

@@ -6,8 +6,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain that this works via compilation to wasm
+{% todo() %}
 
-TODO: link to or/ borrow from the [Bevy Cheatbook chapter](https://bevy-cheatbook.github.io/platforms/wasm.html)
-
-TODO: discuss limitations
+* Explain that this works via compilation to wasm
+* Link to or/ borrow from the [Bevy Cheatbook chapter](https://bevy-cheatbook.github.io/platforms/wasm.html)
+* Discuss limitations
+{% end %}

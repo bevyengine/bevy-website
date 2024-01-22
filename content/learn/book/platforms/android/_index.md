@@ -6,6 +6,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: demonstrate how to get to hello world on Android
 
-TODO: discuss limitations
+{% todo() %}
+
+* Demonstrate how to get to hello world on Android
+* Discuss limitations
+{% end %}

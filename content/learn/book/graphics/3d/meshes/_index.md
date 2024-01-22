@@ -7,6 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Demonstrate how to import and use a mesh
+{% todo() %}
 
-TODO: Discuss mesh importing pitfalls
+* Demonstrate how to import and use a mesh
+* Discuss mesh importing pitfalls
+{% end %}

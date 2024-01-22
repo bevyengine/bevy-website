@@ -7,4 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Demonstrate how to write a custom asset loader.
+{% todo() %}
+
+* Demonstrate how to write a custom asset loader.
+{% end %}

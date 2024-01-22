@@ -6,8 +6,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: demonstrate how to turn on diagnostics
+{% todo() %}
 
-TODO: demonstrate how to turn on system traces
-
-TODO: demonstrate how to write benchmarks with `criterion`
+* Demonstrate how to turn on diagnostics
+* Demonstrate how to turn on system traces
+* Demonstrate how to write benchmarks with `criterion`
+{% end %}
