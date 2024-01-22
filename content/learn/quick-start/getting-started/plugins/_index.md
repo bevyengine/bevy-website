@@ -7,15 +7,22 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the [`UiPlugin`]. Want to build a headless server? Don't register the [`RenderPlugin`].
+One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins---collections of code that modify [`App`]s. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the [`UiPlugin`]. Want to build a headless server? Don't register the [`RenderPlugin`].
 
-This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own [`UiPlugin`], but consider [contributing it back to Bevy](/learn/book/contributing) if you think it would be useful!
+This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own [`UiPlugin`], but consider [contributing it back to Bevy](/learn/quick-start/contributing) if you think it would be useful!
 
-However, most developers don't need a custom experience and just want the "full engine" experience with no hassle. For this, Bevy provides a set of "default plugins".  
+Those not contributed back into Bevy and instead released separately are third-party plugins. These are useful and easy to use additons created by fellow developers that can help you avoid re-inventing the wheel. To use them all you have to do is:
+
+1. Find a third party Bevy plugin (like those at the [Assets page](/assets)).
+2. Add it to your `Cargo.toml` as a crate under `[dependencies]`.
+3. Import the code definitions (like `use third_party::prelude::*;`) from the crate to add the items to your workspace.
+4. Add the plugin to your app (like `app.add_plugins(third_party_plugin)`).
+
+However, most developers don't need a custom experience and just want the "full engine" experience with no hassle. For this, Bevy provides a set of [`DefaultPlugins`].  
 
 ## Bevy's Default Plugins
 
-Let's make our app more interesting by adding the "default Bevy plugins".
+Let's make our app more interesting by adding Bevy's [`DefaultPlugins`] which are a [`PluginGroup`] containing core engine features. (For those needing minimal features, [`MinimalPlugins`] exists).
 `add_plugins(DefaultPlugins)` adds the features most people expect from an engine, such as a 2D / 3D renderer, asset loading, a UI system, windows, and input.
 
 ```rs
@@ -80,9 +87,12 @@ fn main() {
 
 Try running the app again. It should do exactly what it did before. In the next section, we'll fix the "hello" spam using Resources.
 
+[`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`UiPlugin`]: https://docs.rs/bevy/latest/bevy/ui/struct.UiPlugin.html
 [`RenderPlugin`]: https://docs.rs/bevy/latest/bevy/render/struct.RenderPlugin.html
 [`WindowPlugin`]: https://docs.rs/bevy/latest/bevy/window/struct.WindowPlugin.html
 [`WininitPlugin`]: https://docs.rs/bevy/latest/bevy/winit/struct.WinitPlugin.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
+[`PluginGroup`]: https://docs.rs/bevy/latest/bevy/app/trait.PluginGroup.html
+[`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
 [`Plugin`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html

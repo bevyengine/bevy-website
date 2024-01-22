@@ -154,15 +154,5 @@ mod learn {
             #[doc = include_str!("../../content/learn/book/ui/basics/_index.md")]
             mod basics {}
         }
-
-        #[doc = include_str!("../../content/learn/book/welcome/_index.md")]
-        mod welcome {
-            #[doc = include_str!("../../content/learn/book/welcome/apps/_index.md")]
-            mod apps {}
-            #[doc = include_str!("../../content/learn/book/welcome/plugins/_index.md")]
-            mod plugins {}
-            #[doc = include_str!("../../content/learn/book/welcome/setup/_index.md")]
-            mod setup {}
-        }
     }
 }

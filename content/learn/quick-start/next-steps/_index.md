@@ -1,5 +1,5 @@
 +++
-title = "Next steps"
+title = "Next Steps"
 weight = 12
 sort_by = "weight"
 template = "docs-section.html"
@@ -7,7 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-You have reached the end of The Bevy Book! If you're hungry for more learning materials, we recommend checking out:
+You have reached the end of The Quick Start Guide! If you're hungry for more learning materials, we recommend checking out:
 
 * **[The Bevy Examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples)**: We create an example for every major Bevy feature. This is currently the best way to learn Bevy's features and how to use them.
   * **[The Bevy Web Examples](https://bevyengine.org/examples)**: We also try to make most of these examples available directly in your browser.
