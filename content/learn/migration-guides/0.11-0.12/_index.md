@@ -190,6 +190,22 @@ AssetEvent::Modified { id } => {
 
 Also, as you may have noticed, the set of events has changed. The most important of these is `LoadedWithDependencies` which tells you that the asset and all its dependencies have finished loading into memory.
 
+#### `UntypedHandle`
+
+`HandleUntyped` has been renamed to `UntypedHandle`.
+`HandleId` has been replaced with `UntypedAssetId` and its typed equivalent `AssetId<T>`.
+
+The new way to construct an untyped handle looks like this:
+
+```rust
+// 0.11
+const MESH_HANDLE: HandleUntyped =
+    HandleUntyped::weak_from_u64(Mesh::TYPE_UUID, 0x1f40128bac02a9b);
+// 0.12
+const MESH_HANDLE: UntypedHandle =
+    UntypedHandle::Weak(UntypedAssetId::Uuid { type_id: TypeId::of::<Mesh>(), uuid: Uuid::from_u128(0x1f40128bac02a9b) });
+```
+
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
 <div class="migration-guide-area-tags">

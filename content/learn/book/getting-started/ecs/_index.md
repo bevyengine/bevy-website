@@ -175,7 +175,7 @@ fn main() {
 }
 ```
 
-Note that we have used `.chain()` on the two systems. This is because we want them two to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
+Note that we have used `.chain()` on the two systems. This is because we want both of them to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
 If they weren’t, the name might change after we greet the people.
 
 But we don’t add the `hello_world` system to the chain, because it doesn’t matter when it runs. This way, Bevy can run `hello_world` in parallel while the other systems are running.
