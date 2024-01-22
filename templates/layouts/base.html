@@ -74,6 +74,8 @@
             {{page.extra.header_message}}
             {% elif section and section.path is starting_with("/learn/book/") %}
             The Book
+            {% elif section and section.path is starting_with("/learn/quick-start/") %}
+            Quick Start
             {% elif section and section.path is starting_with("/learn/migration-guides/") %}
             Migration Guides
             {% elif section and section.path is starting_with("/news/") %}

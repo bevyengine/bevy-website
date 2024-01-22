@@ -47,7 +47,7 @@ You can use any code editor you want, but we highly recommend one that has a [ru
 
 ### Rust Learning Resources
 
-The goal of this book is to learn Bevy, so it won't serve as a full Rust education. If you would like to learn more about the Rust language, check out the following resources:
+The goal of this guide is to get started learning Bevy quickly, so it won't serve as a full Rust education. If you would like to learn more about the Rust language, check out the following resources:
 
 * [**The Rust Book**](https://doc.rust-lang.org/book/): the best place to learn Rust from scratch
 * [**Rust by Example**](https://doc.rust-lang.org/rust-by-example/): learn Rust by working through live coding examples
@@ -202,7 +202,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
 To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
-If something went wrong, check out our [troubleshooting section](/learn/book/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph).
+If something went wrong, check out our [troubleshooting section](/learn/quick-start/troubleshooting/) or [ask for help on our Discord](https://discord.com/invite/gMUk5Ph).
 
 ### Build Bevy
 
