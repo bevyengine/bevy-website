@@ -192,7 +192,7 @@ Also, as you may have noticed, the set of events has changed. The most important
 
 #### `UntypedHandle`
 
-`HandleUntyped` and `HandleId` have been renamed to `UntypedHandle` and `UntypedAssetId`. 
+`HandleUntyped` and `HandleId` have been renamed to `UntypedHandle` and `UntypedAssetId`.
 The new way to construct an untyped handle looks like this:
 
 ```rust
@@ -200,7 +200,7 @@ The new way to construct an untyped handle looks like this:
 const MESH_HANDLE: HandleUntyped =
     HandleUntyped::weak_from_u64(Mesh::TYPE_UUID, 0x1f40128bac02a9b);
 // 0.12
-const MESH_HANDLE: UntypedHandle = 
+const MESH_HANDLE: UntypedHandle =
     UntypedHandle::Weak(UntypedAssetId::Uuid { type_id: TypeId::of::<Mesh>(), uuid: Uuid::from_u128(0x1f40128bac02a9b) });
 ```
 
