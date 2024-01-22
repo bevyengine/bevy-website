@@ -204,8 +204,6 @@ const MESH_HANDLE: UntypedHandle =
     UntypedHandle::Weak(UntypedAssetId::Uuid { type_id: TypeId::of::<Mesh>(), uuid: Uuid::from_u128(0x1f40128bac02a9b) });
 ```
 
-Accordingly, use 
-
 ### [Copy on Write AssetPaths](https://github.com/bevyengine/bevy/pull/9729)
 
 <div class="migration-guide-area-tags">
