@@ -8,5 +8,6 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Explain how the graphics in Bevy works, pointing to docs of our dependencies
 {% end %}

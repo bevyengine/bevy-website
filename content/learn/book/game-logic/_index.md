@@ -8,5 +8,6 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Discuss what's in this chapter
 {% end %}

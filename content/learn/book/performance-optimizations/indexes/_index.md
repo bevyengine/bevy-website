@@ -7,6 +7,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Discuss problem of iterating through every single value
 * Describe and demonstrate indexing pattern where resources are used to store lookup resource using HashMaps
 * Caution about perf trade-offs: look-ups aren't very fast

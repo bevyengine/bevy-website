@@ -7,6 +7,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Discuss how Bevy ECS stores data
 * Compare and contrast sparse set and table storage
 * Show how to swap component storage in a mini-benchmark

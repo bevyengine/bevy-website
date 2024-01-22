@@ -7,6 +7,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Explain what a resource is
 * Explain why you might want a resource
 * Show how to create and access Resources

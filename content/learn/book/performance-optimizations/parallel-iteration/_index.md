@@ -7,6 +7,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Remind users that systems run in parallel automatically, advise to make systems smaller
 * Explain that `.for_each` is faster, and link to an explainer on why
 * Demonstrate how to use `.par_for_each`

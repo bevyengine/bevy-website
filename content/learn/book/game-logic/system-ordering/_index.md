@@ -7,6 +7,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Explain stages
 * Explain startup stages
 * Explain explicit system ordering
@@ -14,4 +15,3 @@ insert_anchor_links = "right"
 * Explain ambiguities
 * Steal from [ECS Guide](https://github.com/bevyengine/bevy/blob/main/examples/ecs/ecs_guide.rs#L282)
 {% end %}
-

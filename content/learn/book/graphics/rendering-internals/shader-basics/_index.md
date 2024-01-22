@@ -8,6 +8,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Explain what a shader is
 * Demonstrate how to write a simple shader in Bevy
 {% end %}

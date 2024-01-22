@@ -8,6 +8,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Explain Time resource
 * Demonstrate how to access the Time resource
 * Discuss Duration and instant in Rust

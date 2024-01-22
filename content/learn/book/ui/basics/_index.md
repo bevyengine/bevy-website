@@ -8,6 +8,7 @@ insert_anchor_links = "right"
 +++
 
 {% todo() %}
+
 * Explain UI coordinates and camera
 * Explain hierarchy model
 * Explain that layout algorithm is labeled after flexbox, link to [css-tricks.com](https://css-tricks.com/snippets/css/a-guide-to-flexbox/#flexbox-properties).
