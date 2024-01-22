@@ -192,7 +192,9 @@ Also, as you may have noticed, the set of events has changed. The most important
 
 #### `UntypedHandle`
 
-`HandleUntyped` and `HandleId` have been renamed to `UntypedHandle` and `UntypedAssetId`.
+`HandleUntyped` has been renamed to `UntypedHandle`.
+`HandleId` has been replaced with `UntypedAssetId` and its typed equivalent `AssetId<T>`.
+
 The new way to construct an untyped handle looks like this:
 
 ```rust
