@@ -7,6 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Explain how 2D graphics in Bevy is actually 3D with a weird camera projection
-
-TODO: define the relevant abstractions
+{% todo() %}
+* Explain how 2D graphics in Bevy is actually 3D with a weird camera projection
+* Define the relevant abstractions
+{% end %}

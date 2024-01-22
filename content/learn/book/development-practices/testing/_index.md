@@ -7,10 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: discuss unit testing using the examples framework
-
-TODO: discuss strategies for integration testing
-
-TODO: discuss input mocking
-
-TODO: discuss setting up CI
+{% todo() %}
+* Discuss unit testing using the examples framework
+* Discuss strategies for integration testing
+* Discuss input mocking
+* Discuss setting up CI
+{% end %}

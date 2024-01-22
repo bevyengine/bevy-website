@@ -7,10 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain the windowing abstraction and link to `winit` docs
-
-TODO: demonstrate how to change window background material
-
-TODO: demonstrate how to change window size
-
-TODO: demonstrate how to have multiple windows
+{% todo() %}
+* Explain the windowing abstraction and link to `winit` docs
+* Demonstrate how to change window background material
+* Demonstrate how to change window size
+* Demonstrate how to have multiple windows
+{% end %}

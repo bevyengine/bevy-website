@@ -7,8 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Demonstrate how to load assets.
-
-TODO: Discuss how to change the asset loading folder.
-
-TODO: Discuss asset loading patterns to deal with async nature.
+{% todo() %}
+* Demonstrate how to load assets.
+* Discuss how to change the asset loading folder.
+* Discuss asset loading patterns to deal with async nature.
+{% end %}

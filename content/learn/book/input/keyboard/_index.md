@@ -7,8 +7,8 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: discuss keycodes
-
-TODO: demonstrate how to use keyboard inputs
-
-TODO: demonstrate how to use keyboard combinations
+{% todo() %}
+* Discuss keycodes
+* Demonstrate how to use keyboard inputs
+* Demonstrate how to use keyboard combinations
+{% end %}

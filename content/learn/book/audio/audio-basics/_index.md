@@ -7,6 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: demonstrate how to load and play sounds
-
-TODO: discuss compatible file formats
+{% todo() %}
+* Demonstrate how to load and play sounds
+* Discuss compatible file formats
+{% end %}

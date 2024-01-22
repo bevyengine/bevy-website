@@ -7,6 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: discuss how PBR works
-
-TODO: demonstrate each of the implemented PBR features
+{% todo() %}
+* Discuss how PBR works
+* Demonstrate each of the implemented PBR features
+{% end %}

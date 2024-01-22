@@ -7,10 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: explain what a state is, and why you might want to use it
-
-TODO: demonstrate how to use simple state
-
-TODO: discuss queue model, and demonstrate how to use it
-
-TODO: discuss state caveats: implemented as a run criteria, can't use across stages
+{% todo() %}
+* Explain what a state is, and why you might want to use it
+* Demonstrate how to use simple state
+* Discuss queue model, and demonstrate how to use it
+* Discuss state caveats: implemented as a run criteria, can't use across stages
+{% end %}

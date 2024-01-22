@@ -7,4 +7,6 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: discuss what's in this chapter
+{% todo() %}
+* Discuss what's in this chapter
+{% end %}

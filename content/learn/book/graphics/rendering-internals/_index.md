@@ -7,4 +7,6 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Explain how the graphics in Bevy works, pointing to docs of our dependencies
+{% todo() %}
+* Explain how the graphics in Bevy works, pointing to docs of our dependencies
+{% end %}

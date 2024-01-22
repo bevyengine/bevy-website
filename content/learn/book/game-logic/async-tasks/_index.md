@@ -7,10 +7,9 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: motivate why you may want to do things asynchronously
-
-TODO: refresh on async, point to other resources
-
-TODO: explain how bevy_tasks works
-
-TODO: demonstrate how to use async tasks
+{% todo() %}
+* Motivate why you may want to do things asynchronously
+* Refresh on async, point to other resources
+* Explain how bevy_tasks works
+* Demonstrate how to use async tasks
+{% end %}

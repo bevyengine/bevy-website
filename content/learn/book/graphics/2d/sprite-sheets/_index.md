@@ -7,4 +7,6 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-TODO: Demonstrate how to import and use a sprite sheet for basic animations
+{% todo() %}
+* Demonstrate how to import and use a sprite sheet for basic animations
+{% end %}
