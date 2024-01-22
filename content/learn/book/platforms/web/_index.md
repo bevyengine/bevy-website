@@ -1,6 +1,6 @@
 +++
 title = "Web"
-weight = 1
+weight = 3
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
