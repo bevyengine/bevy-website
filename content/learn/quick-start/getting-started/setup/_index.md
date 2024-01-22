@@ -51,6 +51,7 @@ The goal of this guide is to get started learning Bevy quickly, so it won't serv
 
 * [**The Rust Book**](https://doc.rust-lang.org/book/): the best place to learn Rust from scratch
 * [**Rust by Example**](https://doc.rust-lang.org/rust-by-example/): learn Rust by working through live coding examples
+* [**Rustlings**](https://github.com/rust-lang/rustlings): learn Rust through a series of fun and interactive exercises
 
 ## Create a new Bevy Project
 
