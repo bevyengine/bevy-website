@@ -153,7 +153,7 @@ Once a crate is published to [crates.io](https://crates.io), there are two badge
 
 ## Promotion
 
-You can promote your plugin in Bevy's [communities](https://github.com/bevyengine/bevy#community):
+You can promote your plugin in Bevy's [communities](/community):
 
 - Add it as an [Asset on the official website](https://github.com/bevyengine/bevy-assets).
 - Announce it on [Discord](https://discord.gg/bevy), in the `#crates` channel.
