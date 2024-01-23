@@ -173,10 +173,12 @@ These may be appropriate to link in "next steps" however at the end of the examp
 9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
 10. To validate if local code changes are compiling you can `cd` into the `code-validation` folder and test your code using `cargo test`.
 11. To make sure your markdown files are formatted correctly run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of your local Bevy website repository.
-12. If you want to reference rust types, structs, traits, etc. at the bevy docs then you can use reference links like so:
+12. To reference Rust API docs you can use markdown's reference-style links like so:
    [`HashMap`]
 
    ```md
+   [`HashMap`]
+
    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
    ```
 
