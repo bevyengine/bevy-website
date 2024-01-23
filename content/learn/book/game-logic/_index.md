@@ -1,6 +1,6 @@
 +++
 title = "Game Logic"
-weight = 4
+weight = 3
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"

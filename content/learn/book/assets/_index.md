@@ -1,6 +1,6 @@
 +++
 title = "Assets"
-weight = 6
+weight = 5
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"

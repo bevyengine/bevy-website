@@ -1,6 +1,6 @@
 +++
 title = "Audio"
-weight = 8
+weight = 7
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
