@@ -175,6 +175,8 @@ These may be appropriate to link in "next steps" however at the end of the examp
 11. To make sure your markdown files are formatted correctly run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of your local Bevy website repository.
 12. If you want to reference rust types, structs, traits, etc. at the bevy docs then you can use reference links like so:
    [`HashMap`]
-   `\[\`HashMap\`\]: https://doc.rust-lang.org/std/collections/struct.HashMap.html`
+   ```md
+   [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+   ```
 
    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
