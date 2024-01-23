@@ -1,6 +1,5 @@
 +++
 title = "ECS"
-weight = 3
 insert_anchor_links = "right"
 [extra]
 weight = 3

@@ -1,6 +1,5 @@
 +++
 title = "Introduction"
-weight = 8
 insert_anchor_links = "right"
 aliases = ["learn/book/migration-guides/introduction"]
 [extra]

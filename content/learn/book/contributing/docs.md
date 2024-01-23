@@ -1,6 +1,5 @@
 +++
 title = "Docs"
-weight = 2
 insert_anchor_links = "right"
 [extra]
 long_title = "Contributing Docs"

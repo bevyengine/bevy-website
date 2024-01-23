@@ -1,6 +1,5 @@
 +++
 title = "Book"
-sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-page.html"
 redirect_to = "learn/book/introduction"

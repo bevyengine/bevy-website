@@ -1,7 +1,5 @@
 +++
 title = "Getting Started"
-weight = 2
-sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-page.html"
 insert_anchor_links = "right"

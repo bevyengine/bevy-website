@@ -1,6 +1,5 @@
 +++
 title = "Troubleshooting"
-weight = 6
 insert_anchor_links = "right"
 [extra]
 weight = 6

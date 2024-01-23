@@ -1,6 +1,5 @@
 +++
 title = "Building Bevy's Ecosystem"
-weight = 5
 [extra]
 weight = 5
 +++

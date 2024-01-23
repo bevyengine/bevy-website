@@ -1,6 +1,5 @@
 +++
 title = "Code"
-weight = 1
 insert_anchor_links = "right"
 [extra]
 long_title = "Contributing Code"

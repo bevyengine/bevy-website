@@ -1,6 +1,5 @@
 +++
 title = "Introduction"
-weight = 1
 insert_anchor_links = "right"
 [extra]
 weight = 1
