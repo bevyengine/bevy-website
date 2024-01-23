@@ -17,7 +17,7 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
 
-* **Components**: Rust structs that implement the `Component` trait
+* **Components**: Rust structs that implement the [`Component`] trait
 
     ```rs
     # use bevy::prelude::*;
@@ -48,6 +48,8 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 
 Now let's see how this works in practice!
 
+[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
+
 ## Your First System
 
 Paste the following function into your `main.rs` file:
@@ -60,7 +62,7 @@ fn hello_world() {
 }
 ```
 
-This will be our first system. The only remaining step is to add it to our `App`!
+This will be our first system. The only remaining step is to add it to our [`App`]!
 
 ```rs
 use bevy::prelude::*;
@@ -79,6 +81,7 @@ Now run your app again using `cargo run`. You should see `hello world!` printed 
 [`add_system`]: https://docs.rs/bevy_app/latest/bevy_app/struct.App.html#method.add_system
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`Schedule`]: https://docs.rs/bevy_ecs/latest/bevy_ecs/schedule/struct.Schedule.html
+[`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 
 ## Your First Components
 
