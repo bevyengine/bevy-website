@@ -20,6 +20,8 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 * **Components**: Rust structs that implement the `Component` trait
 
     ```rs
+    # use bevy::prelude::*;
+
     #[derive(Component)]
     struct Position { x: f32, y: f32 }
     ```
@@ -27,6 +29,8 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 * **Systems**: normal Rust functions
 
     ```rs
+    # use bevy::prelude::*;
+
     fn print_position_system(query: Query<&Position>) {
         for position in &query {
             println!("position: {} {}", position.x, position.y);
@@ -37,6 +41,8 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 * **Entities**: a simple type containing a unique integer
 
     ```rs
+    # use bevy::prelude::*;
+
     struct Entity(u64);
     ```
 
@@ -47,6 +53,8 @@ Now let's see how this works in practice!
 Paste the following function into your `main.rs` file:
 
 ```rs
+# use bevy::prelude::*;
+
 fn hello_world() {
     println!("hello world!");
 }
@@ -79,6 +87,8 @@ Greeting the whole world is great, but what if we want to greet specific people?
 Add this struct to your `main.rs` file:
 
 ```rs
+# use bevy::prelude::*;
+
 #[derive(Component)]
 struct Person;
 ```
@@ -86,6 +96,8 @@ struct Person;
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
 ```rs
+# use bevy::prelude::*;
+
 #[derive(Component)]
 struct Name(String);
 ```
@@ -93,6 +105,8 @@ struct Name(String);
 We can then add people to our [`World`] using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use [`Commands`] to spawn some entities into our [`World`]\:
 
 ```rs
+# use bevy::prelude::*;
+
 fn add_people(mut commands: Commands) {
     commands.spawn((Person, Name("Elaina Proctor".to_string())));
     commands.spawn((Person, Name("Renzo Hume".to_string())));
@@ -103,6 +117,8 @@ fn add_people(mut commands: Commands) {
 Now register the startup system like this:
 
 ```rs
+# use bevy::prelude::*;
+
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
@@ -119,6 +135,8 @@ fn main() {
 We could run this now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our [`World`]:
 
 ```rs
+# use bevy::prelude::*;
+
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
         println!("hello {}!", name.0);
@@ -133,6 +151,8 @@ You can interpret the `Query` above as: "iterate over every `Name` component for
 Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
 
 ```rs
+# use bevy::prelude::*;
+
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
@@ -159,6 +179,8 @@ Marvelous!
 If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
 
 ```rs
+# use bevy::prelude::*;
+
 fn update_people(mut query: Query<&mut Name, With<Person>>) {
     for mut name in &mut query {
         if name.0 == "Elaina Proctor" {
@@ -174,6 +196,8 @@ We need to make `query` mutable, and use a mutable reference (`&mut`) to the com
 Don’t forget to add the system to the [`Update`] schedule:
 
 ```rs
+# use bevy::prelude::*;
+
 fn main() {
     App::new()
         .add_systems(Startup, add_people)

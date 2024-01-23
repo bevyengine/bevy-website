@@ -6,8 +6,46 @@
 mod learn {
     #[doc = include_str!("../../content/learn/quick-start/_index.md")]
     mod quick_start {
+        #[doc = include_str!("../../content/learn/quick-start/introduction/_index.md")]
+        mod introduction {}
+        #[doc = include_str!("../../content/learn/quick-start/getting-started/_index.md")]
+        mod getting_started {
+            #[doc = include_str!("../../content/learn/quick-start/getting-started/apps/_index.md")]
+            mod apps {}
+            #[doc = include_str!("../../content/learn/quick-start/getting-started/ecs/_index.md")]
+            mod ecs {}
+            #[doc = include_str!("../../content/learn/quick-start/getting-started/plugins/_index.md")]
+            mod plugins {}
+            #[doc = include_str!("../../content/learn/quick-start/getting-started/resources/_index.md")]
+            mod resources {}
+        }
+        #[doc = include_str!("../../content/learn/quick-start/contributing/_index.md")]
+        mod contributing {
+            #[doc = include_str!("../../content/learn/quick-start/contributing/docs/_index.md")]
+            mod docs {}
+            #[doc = include_str!("../../content/learn/quick-start/contributing/code/_index.md")]
+            mod code {}
+        }
+        #[doc = include_str!("../../content/learn/quick-start/plugin-development/_index.md")]
+        mod plugin_development {}
+        #[doc = include_str!("../../content/learn/quick-start/troubleshooting/_index.md")]
+        mod troubleshooting {}
         #[doc = include_str!("../../content/learn/quick-start/next-steps/_index.md")]
         mod next_steps {}
+
+        #[doc = include_str!("../../content/learn/quick-start/breakout/_index.md")]
+        mod breakout {}
+        #[doc = include_str!("../../content/learn/quick-start/3d-puzzle-game/_index.md")]
+        mod three_dimensional_puzzle_game {}
+        #[doc = include_str!("../../content/learn/quick-start/falling-sand/_index.md")]
+        mod falling_sand {}
+    }
+    #[doc = include_str!("../../content/learn/advanced-examples/_index.md")]
+    mod advanced_examples {
+        #[doc = include_str!("../../content/learn/advanced-examples/sudoku/_index.md")]
+        mod sudoku {}
+        #[doc = include_str!("../../content/learn/advanced-examples/text-adventure/_index.md")]
+        mod text_adventure {}
     }
     #[doc = include_str!("../../content/learn/book/_index.md")]
     mod book {
@@ -47,18 +85,22 @@ mod learn {
 
         #[doc = include_str!("../../content/learn/book/ecs/_index.md")]
         mod ecs {
-            #[doc = include_str!("../../content/learn/book/ecs/commands/_index.md")]
-            mod commands {}
             #[doc = include_str!("../../content/learn/book/ecs/change-detection/_index.md")]
             mod change_detection {}
+            #[doc = include_str!("../../content/learn/book/ecs/commands/_index.md")]
+            mod commands {}
             #[doc = include_str!("../../content/learn/book/ecs/entities-components/_index.md")]
             mod entities_components {}
             #[doc = include_str!("../../content/learn/book/ecs/exclusive-world-access/_index.md")]
             mod exclusive_world_access {}
-            #[doc = include_str!("../../content/learn/book/ecs/systems-queries/_index.md")]
-            mod systems_queries {}
+            #[doc = include_str!("../../content/learn/book/ecs/filtering-queries/_index.md")]
+            mod filtering_queries {}
+            #[doc = include_str!("../../content/learn/book/ecs/generic-systems/_index.md")]
+            mod generic_systems {}
             #[doc = include_str!("../../content/learn/book/ecs/resources/_index.md")]
             mod resources {}
+            #[doc = include_str!("../../content/learn/book/ecs/systems-queries/_index.md")]
+            mod systems_queries {}
         }
 
         #[doc = include_str!("../../content/learn/book/game-logic/_index.md")]
@@ -77,6 +119,20 @@ mod learn {
             mod system_ordering {}
             #[doc = include_str!("../../content/learn/book/game-logic/time-timers/_index.md")]
             mod time_timers {}
+        }
+
+        #[doc = include_str!("../../content/learn/book/getting-started/_index.md")]
+        mod getting_started {
+            #[doc = include_str!("../../content/learn/book/getting-started/app-appbuilder-world/_index.md")]
+            mod app_appbuilder_world {}
+            #[doc = include_str!("../../content/learn/book/getting-started/bevy-community/_index.md")]
+            mod bevy_community {}
+            #[doc = include_str!("../../content/learn/book/getting-started/installation/_index.md")]
+            mod installation {}
+            #[doc = include_str!("../../content/learn/book/getting-started/modular-plugins/_index.md")]
+            mod modular_plugins {}
+            #[doc = include_str!("../../content/learn/book/getting-started/why-bevy/_index.md")]
+            mod why_bevy {}
         }
 
         #[doc = include_str!("../../content/learn/book/graphics/_index.md")]
@@ -124,7 +180,7 @@ mod learn {
             mod touch {}
         }
 
-        // Not testing migration guides, because of breaking api changes.
+        // Not testing migration guides, because of breaking API changes.
         mod migration_guides {}
 
         #[doc = include_str!("../../content/learn/book/performance-optimizations/_index.md")]

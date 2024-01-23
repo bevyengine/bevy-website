@@ -32,13 +32,15 @@ It can be useful to allow your users to supply generic types to your plugins. It
 You can define a generic plugin like so:
 
 ```rust
+# use bevy::prelude::*;
+# use std::marker::PhantomData;
 // example with a generic type that implements Component
 
-pub struct YourPlugin<T: Component> {
+pub struct YourPlugin<T: Component + Default> {
   pub phantom_t: PhantomData<T>,
 }
 
-impl<T: Component> Plugin for YourPlugin<T> {
+impl<T: Component + Default> Plugin for YourPlugin<T> {
   fn build(&self, app: &mut App) {
     app.add_systems(Startup, example_function::<T>);
   }
@@ -47,8 +49,9 @@ impl<T: Component> Plugin for YourPlugin<T> {
 }
 
 // example function using your generics
-pub fn example_function<T: Component>(mut commands: Commands) {
-  commands.spawn(T);
+// the default stuff is so that it can compile
+pub fn example_function<T: Component + Default>(mut commands: Commands) {
+  commands.spawn(T::default());
   // ... any other logic here ...
 }
 ```
