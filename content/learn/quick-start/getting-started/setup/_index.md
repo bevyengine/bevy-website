@@ -22,6 +22,8 @@ Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang
 
 Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
 
+### Installing OS Dependencies
+
 #### Linux
 
 Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)

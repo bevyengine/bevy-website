@@ -1,6 +1,7 @@
 # Contributing
 
 So, you want to help with the [Bevy website](https://bevyengine.org/)?
+(If you want to help with the [Bevy engine](https://github.com/bevyengine/bevy), then see the engine [CONTRIBUTING.md](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md)).
 
 ## Building the website
 
@@ -171,3 +172,14 @@ These may be appropriate to link in "next steps" however at the end of the examp
    1. Third-party crates should be limited to the most essential, such as `rand`.
 9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
 10. To validate if local code changes are compiling you can `cd` into the `code-validation` folder and test your code using `cargo test`.
+11. To make sure your markdown files are formatted correctly run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of your local Bevy website repository.
+12. To reference Rust API docs you can use markdown's reference-style links like so:
+   [`HashMap`]
+
+   ```md
+   [`HashMap`]
+
+   [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+   ```
+
+   [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html

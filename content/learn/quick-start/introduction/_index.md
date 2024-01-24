@@ -7,7 +7,7 @@ page_template = "docs-section.html"
 insert_anchor_links = "right"
 +++
 
-If you came here because you wanted to learn how to make 2D / 3D games, visualizations, user interfaces, or other graphical applications with Bevy ... you came to the right place! If not, stick around anyway. I promise it will be fun.
+If you came here because you wanted to learn how to make 2D / 3D games, visualizations, user interfaces, or other graphical applications with Bevy... you came to the right place! If not, stick around anyway. I promise it will be fun.
 
 <h2>
     <img src="/assets/whats_a_bevy.svg" class="docs-whats-a-bevy" alt="What's a BEVY?"/>
@@ -24,7 +24,7 @@ Bevy has the following design goals:
 * **Data Focused**: Data-oriented architecture using the Entity Component System paradigm
 * **Modular**: Use only what you need. Replace what you don't like
 * **Fast**: App logic should run quickly, and when possible, in parallel
-* **Productive**: Changes should compile quickly ... waiting isn't fun
+* **Productive**: Changes should compile quickly... waiting isn't fun
 
 Bevy is [built in the open by volunteers](/learn/quick-start/contributing) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
 

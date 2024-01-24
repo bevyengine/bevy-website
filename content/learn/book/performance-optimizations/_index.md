@@ -1,6 +1,6 @@
 +++
 title = "Performance Optimizations"
-weight = 11
+weight = 10
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"

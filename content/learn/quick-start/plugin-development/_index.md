@@ -32,7 +32,9 @@ It can be useful to allow your users to supply generic types to your plugins. It
 You can define a generic plugin like so:
 
 ```rust
-// example with a generic type that implements Component
+# use bevy::prelude::*;
+# use std::marker::PhantomData;
+// Example with a generic type that implements `Component`
 
 pub struct YourPlugin<T: Component> {
   pub phantom_t: PhantomData<T>,
@@ -40,15 +42,16 @@ pub struct YourPlugin<T: Component> {
 
 impl<T: Component> Plugin for YourPlugin<T> {
   fn build(&self, app: &mut App) {
-    app.add_systems(Startup, example_function::<T>);
+    app.add_systems(Startup, example_system::<T>);
   }
 
   // ... your other logic ...
 }
 
-// example function using your generics
-pub fn example_function<T: Component>(mut commands: Commands) {
-  commands.spawn(T);
+// Example system using your generics
+pub fn example_system<T: Component>(query: Query<Entity, With<T>>) {
+  let entity = query.single();
+
   // ... any other logic here ...
 }
 ```
@@ -150,7 +153,7 @@ Once a crate is published to [crates.io](https://crates.io), there are two badge
 
 ## Promotion
 
-You can promote your plugin in Bevy's [communities](https://github.com/bevyengine/bevy#community):
+You can promote your plugin in Bevy's [communities](/community):
 
 - Add it as an [Asset on the official website](https://github.com/bevyengine/bevy-assets).
 - Announce it on [Discord](https://discord.gg/bevy), in the `#crates` channel.
