@@ -2,54 +2,55 @@
 
 {% macro init_svg() %}
 <svg style="display: none" version="2.0">
-    <defs>
-        <symbol id="asset-card__scale-balanced-svg" viewBox="0 0 640 512">
-            <!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
-            <path d="M554.9 154.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 128 80s127.1-35.88 127.1-80C639.1 319.9 641.4 327.3 554.9 154.5zM439.1 320l71.96-144l72.17 144H439.1zM256 336c0-16.12 1.375-8.75-85.12-181.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 127.1 80S256 380.1 256 336zM127.9 176L200.1 320H55.96L127.9 176zM495.1 448h-143.1V153.3C375.5 143 393.1 121.8 398.4 96h113.6c17.67 0 31.1-14.33 31.1-32s-14.33-32-31.1-32h-128.4c-14.62-19.38-37.5-32-63.62-32S270.1 12.62 256.4 32H128C110.3 32 96 46.33 96 64S110.3 96 127.1 96h113.6c5.25 25.75 22.87 47 46.37 57.25V448H144c-26.51 0-48.01 21.49-48.01 48c0 8.836 7.165 16 16 16h416c8.836 0 16-7.164 16-16C544 469.5 522.5 448 495.1 448z"/><
-        </symbol>
-    </defs>
-    <use href="#asset-card__scale-balanced-svg"/>
+  <defs>
+    <symbol id="asset-card__scale-balanced-svg" viewBox="0 0 640 512">
+      <!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+      <path
+        d="M554.9 154.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 128 80s127.1-35.88 127.1-80C639.1 319.9 641.4 327.3 554.9 154.5zM439.1 320l71.96-144l72.17 144H439.1zM256 336c0-16.12 1.375-8.75-85.12-181.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 127.1 80S256 380.1 256 336zM127.9 176L200.1 320H55.96L127.9 176zM495.1 448h-143.1V153.3C375.5 143 393.1 121.8 398.4 96h113.6c17.67 0 31.1-14.33 31.1-32s-14.33-32-31.1-32h-128.4c-14.62-19.38-37.5-32-63.62-32S270.1 12.62 256.4 32H128C110.3 32 96 46.33 96 64S110.3 96 127.1 96h113.6c5.25 25.75 22.87 47 46.37 57.25V448H144c-26.51 0-48.01 21.49-48.01 48c0 8.836 7.165 16 16 16h416c8.836 0 16-7.164 16-16C544 469.5 522.5 448 495.1 448z" />
+      < </symbol>
+  </defs>
+  <use href="#asset-card__scale-balanced-svg" />
 </svg>
 {% endmacro init_svg %}
 
 {% macro card(post) %}
 <div id="{{ post.title | slugify }}">
-    <a class="asset-card" href="{{ post.extra.link }}">
-        <div class="asset-card__banner">
-            <div class="asset-card__title">{{post.title}}</div>
-            {% if post.extra.image %}
-            <img src="{{ image_macros::resize_image(path=post.extra.image, width=370, height=370) }}"
-                alt="Showcase image" title="Showcase image" loading="lazy"/>
-            {% endif %}
+  <a class="asset-card" href="{{ post.extra.link }}">
+    <div class="asset-card__banner">
+      <div class="asset-card__title">{{post.title}}</div>
+      {% if post.extra.image %}
+      <img src="{{ image_macros::resize_image(path=post.extra.image, width=370, height=370) }}" alt="Showcase image"
+        title="Showcase image" loading="lazy" />
+      {% endif %}
+    </div>
+    <div class="asset-card__description">
+      {{ post.description | striptags | safe }}
+    </div>
+    <div class="asset-card__tags">
+      {% if post.extra.bevy_versions %}
+      <div class="asset-card__tag-list asset-card__bevy-versions">
+        <div class="asset-card__tag-icon">
+          <img src="/assets/bevy_icon_dark.svg" title="Supported bevy versions" alt="Supported bevy versions">
         </div>
-        <div class="asset-card__description">
-            {{ post.description | striptags | safe }}
+        {% for version in post.extra.bevy_versions %}
+        <span class="asset-card__tag">{{version}}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if post.extra.licenses %}
+      <div class="asset-card__tag-list asset-card__licenses">
+        <div class="asset-card__tag-icon" title="Licenses" alt="Licenses">
+          <svg version="2.0">
+            <use href="#asset-card__scale-balanced-svg" />
+          </svg>
         </div>
-        <div class="asset-card__tags">
-            {% if post.extra.bevy_versions %}
-            <div class="asset-card__tag-list asset-card__bevy-versions">
-                <div class="asset-card__tag-icon">
-                    <img src="/assets/bevy_icon_dark.svg" title="Supported bevy versions" alt="Supported bevy versions">
-                </div>
-                {% for version in post.extra.bevy_versions %}
-                <span class="asset-card__tag">{{version}}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% if post.extra.licenses %}
-            <div class="asset-card__tag-list asset-card__licenses">
-                <div class="asset-card__tag-icon" title="Licenses" alt="Licenses">
-                    <svg version="2.0">
-                        <use href="#asset-card__scale-balanced-svg" />
-                    </svg>
-                </div>
-                {% for license in post.extra.licenses %}
-                <span class="asset-card__tag">{{license}}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-    </a>
+        {% for license in post.extra.licenses %}
+        <span class="asset-card__tag">{{license}}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </a>
 </div>
 {% endmacro card %}
 
@@ -64,30 +65,29 @@
 {% endif %}
 
 <li class="tree-menu__item">
-    <div class="{{label_class}}">
-        <a class="tree-menu__link" href="#{{section.title | slugify}}">{{ section.title }}</a>
-        {% if section.subsections %}
-        <label class="tree-menu__toggle" for="{{id}}">
-            <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg"
-                alt="Toggle {{section.title}} section"
-                title="Toggle {{section.title}} section">
-        </label>
-        {% endif %}
-    </div>
+  <div class="{{label_class}}">
+    <a class="tree-menu__link" href="#{{section.title | slugify}}">{{ section.title }}</a>
     {% if section.subsections %}
-    <ul class="tree-menu">
-        {% for s in section.subsections %}
-        {{ self::assets_menu_row(prefix=prefix, section_path=s) }}
-        {% endfor %}
-    </ul>
+    <label class="tree-menu__toggle" for="{{id}}">
+      <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg" alt="Toggle {{section.title}} section"
+        title="Toggle {{section.title}} section">
+    </label>
     {% endif %}
+  </div>
+  {% if section.subsections %}
+  <ul class="tree-menu">
+    {% for s in section.subsections %}
+    {{ self::assets_menu_row(prefix=prefix, section_path=s) }}
+    {% endfor %}
+  </ul>
+  {% endif %}
 </li>
 {% endmacro %}
 
 {% macro assets_menu(root, prefix) %}
 <ul class="tree-menu">
-    {% for s in root.subsections %}
-    {{ self::assets_menu_row(prefix=prefix, section_path=s)}}
-    {% endfor %}
+  {% for s in root.subsections %}
+  {{ self::assets_menu_row(prefix=prefix, section_path=s)}}
+  {% endfor %}
 </ul>
 {% endmacro %}

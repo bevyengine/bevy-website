@@ -5,6 +5,7 @@ status = [
     "generate-errors",
     "generate-community",
     "markdownlint",
+    "test-code",
 ]
 
 use_squash_merge = true

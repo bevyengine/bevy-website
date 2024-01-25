@@ -4,139 +4,148 @@
 {% set current_path = current_path | default(value="/") %}
 
 {% if section and section.title %}
-    {% if section.path is starting_with("/learn/book/") %}
-        {% set page_title = "Bevy Book: " ~ section.title %}
-    {% elif section.path is starting_with("/assets") %}
-        {% set page_title = "Bevy Assets" %}
-    {% else %}
-        {% set page_title = section.title %}
-    {% endif %}
+  {% if section.path is starting_with("/learn/book/") %}
+    {% set page_title = "Bevy Book: " ~ section.title %}
+  {% elif section.path is starting_with("/assets") %}
+    {% set page_title = "Bevy Assets" %}
+  {% else %}
+    {% set page_title = section.title %}
+  {% endif %}
 {% elif page and page.title %}
-        {% set page_title = page.title %}
+  {% set page_title = page.title %}
 {% else %}
-    {% set page_title = "Bevy Engine"%}
+  {% set page_title = "Bevy Engine"%}
 {% endif %}
 
 {% if section and section.path %}
-    {% set path = "/" ~ section.path %}
+  {% set path = "/" ~ section.path %}
 {% elif page and page.path %}
-    {% set path = "/" ~ page.path %}
+  {% set path = "/" ~ page.path %}
 {% else %}
-    {% set path = ""%}
+  {% set path = ""%}
 {% endif %}
 
 {% if section %}
-    {% if section.path is starting_with("/learn/book/") %}
-        {% set show_nav_toggle = true %}
-    {% elif section.path is starting_with("/learn/migration-guides/") %}
-        {% set show_nav_toggle = true %}
-    {% elif section.path is starting_with("/assets/") %}
-        {% set show_nav_toggle = true %}
-    {% endif %}
+  {% if section.path is starting_with("/learn/book/") %}
+    {% set show_nav_toggle = true %}
+  {% elif section.path is starting_with("/learn/migration-guides/") %}
+    {% set show_nav_toggle = true %}
+  {% elif section.path is starting_with("/assets/") %}
+    {% set show_nav_toggle = true %}
+  {% endif %}
 {% endif %}
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name='viewport' content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="{{page_title}}" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://bevyengine.org{{path}}" />
-        <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
-        <meta property="og:description" content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
-        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
-        <link rel="stylesheet" href="/site.css" />
-        <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
-        <title>{{page_title}}</title>
-        {% block head_extensions %} {% endblock %}
-    </head>
-    <body>
-        <div class="layout">
-            <input id="mobile-menu-state" class="hidden" type="checkbox">
-            <header class="layout__header header" data-mobile-menu-state-container>
-                <div class="header__content">
-                    <label class="main-menu-backdrop" for="mobile-menu-state"></label>
-                    <label class="header__hamburger button-square button-square--header" for="mobile-menu-state">
-                        <img src="/assets/icon-hamburger.svg">
-                    </label>
-                    <div class="header__left-block">
-                        <a class="header__logo" href="/">
-                            <img class="logo" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
-                        </a>
-                        <div class="header__message">
-                            {% if section and section.extra.header_message %}
-                                {{section.extra.header_message}}
-                            {% elif page and page.extra.header_message %}
-                                {{page.extra.header_message}}
-                            {% elif section and section.path is starting_with("/learn/book/") %}
-                                The Book
-                            {% elif section and section.path is starting_with("/learn/migration-guides/") %}
-                                Migration Guides
-                            {% elif section and section.path is starting_with("/news/") %}
-                                News
-                            {% elif page and page.path is starting_with("/news/") %}
-                                News
-                            {% else %}
-                                Features
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% block mobile_page_menu_state %}{% endblock %}
-                    <nav class="header__menu main-menu {% block main_menu_extra_class %}{% endblock %}" role="navigation" data-page-menu-switch-state-container>
-                        <div class="main-menu__header">
-                            <a href="/">
-                                <img class="logo" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
-                            </a>
-                            <label class="button-square button-square--header" for="mobile-menu-state">
-                                <img src="/assets/icon-times.svg">
-                            </label>
-                        </div>
-                        {% block mobile_page_menu_switch %}{% endblock %}
-                        <div class="main-menu__content">
-                            <div class="main-menu__page-menu">
-                                {% block mobile_page_menu %}{% endblock %}
-                            </div>
-                            <ul class="main-menu__menu">
-                                {{header_macros::header_item(name="Getting Started", path="/learn/book/getting-started/", extra_class="main-menu__entry--getting-started", current_path=current_path)}}
-                                {{header_macros::header_item(name="Learn", current_path=current_path)}}
-                                {{header_macros::header_item(name="News", current_path=current_path)}}
-                                {{header_macros::header_item(name="Community", current_path=current_path)}}
-                                {{header_macros::header_item(name="Assets", current_path=current_path)}}
-                                {{header_macros::header_item(name="Examples", current_path=current_path)}}
-                                {# <li class="main-menu__entry">
-                                    <a class="main-menu__link" href="https://merch.bevyengine.org">Merch</a>
-                                </li> #}
-                            </ul>
-                        </div>
-                    </nav>
-                    <div class="header__cta-container">
-                        <a class="button button--pink header__cta" href="/community/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"/></a>
-                        <a class="header__cta header__cta--github" href="https://github.com/bevyengine/bevy">
-                            <img src="/assets/github-mark-white.svg" alt="GitHub repo">
-                        </a>
-                    </div>
-                </div>
-            </header>
-            <main class="layout__content">
-                <div class="container">
-                    {% if section %}
-                        {{ public_draft::warning(section=section) }}
-                    {% endif %}
-                    {% block content %}{% endblock %}
-                </div>
-            </main>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name='viewport' content="width=device-width, initial-scale=1" />
+  <meta property="og:title" content="{{page_title}}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bevyengine.org{{path}}" />
+  <meta property="og:image" content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+  <meta property="og:description"
+    content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/site.css" />
+  <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+  <title>{{page_title}}</title>
+  {% block head_extensions %} {% endblock %}
+</head>
+
+<body>
+  <div class="layout">
+    <input id="mobile-menu-state" class="hidden" type="checkbox">
+    <header class="layout__header header" data-mobile-menu-state-container>
+      <div class="header__content">
+        <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+        <label class="header__hamburger button-square button-square--header" for="mobile-menu-state">
+          <img src="/assets/icon-hamburger.svg">
+        </label>
+        <div class="header__left-block">
+          <a class="header__logo" href="/">
+            <img class="logo" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
+          </a>
+          <div class="header__message">
+            {% if section and section.extra.header_message %}
+              {{section.extra.header_message}}
+            {% elif page and page.extra.header_message %}
+              {{page.extra.header_message}}
+            {% elif section and section.path is starting_with("/learn/book/") %}
+              The Book
+            {% elif section and section.path is starting_with("/learn/quick-start/") %}
+              Quick Start
+            {% elif section and section.path is starting_with("/learn/migration-guides/") %}
+              Migration Guides
+            {% elif section and section.path is starting_with("/news/") %}
+              News
+            {% elif page and page.path is starting_with("/news/") %}
+              News
+            {% else %}
+              Features
+            {% endif %}
+          </div>
         </div>
-        <script>
-            const search_params = new URLSearchParams(window.location.search);
-            if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
-                if (search_params.get("show_drafts") === "0") {
-                    document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
-                } else {
-                    document.cookie = "show_drafts=1;path=/"
-                    document.body.classList.add('show_drafts');
-                }
-            }
-        </script>
-    </body>
+        {% block mobile_page_menu_state %}{% endblock %}
+        <nav class="header__menu main-menu {% block main_menu_extra_class %}{% endblock %}" role="navigation"
+          data-page-menu-switch-state-container>
+          <div class="main-menu__header">
+            <a href="/">
+              <img class="logo" src="/assets/bevy_logo_dark.svg" alt="Bevy Engine">
+            </a>
+            <label class="button-square button-square--header" for="mobile-menu-state">
+              <img src="/assets/icon-times.svg">
+            </label>
+          </div>
+          {% block mobile_page_menu_switch %}{% endblock %}
+          <div class="main-menu__content">
+            <div class="main-menu__page-menu">
+              {% block mobile_page_menu %}{% endblock %}
+            </div>
+            <ul class="main-menu__menu">
+              {{header_macros::header_item(name="Getting Started", path="/learn/book/getting-started/",
+              extra_class="main-menu__entry--getting-started", current_path=current_path)}}
+              {{header_macros::header_item(name="Learn", current_path=current_path)}}
+              {{header_macros::header_item(name="News", current_path=current_path)}}
+              {{header_macros::header_item(name="Community", current_path=current_path)}}
+              {{header_macros::header_item(name="Assets", current_path=current_path)}}
+              {{header_macros::header_item(name="Examples", current_path=current_path)}}
+              {# <li class="main-menu__entry">
+                <a class="main-menu__link" href="https://merch.bevyengine.org">Merch</a>
+              </li> #}
+            </ul>
+          </div>
+        </nav>
+        <div class="header__cta-container">
+          <a class="button button--pink header__cta" href="/community/donate">Donate <img class="button__icon"
+              src="/assets/heart.svg" alt="heart icon" /></a>
+          <a class="header__cta header__cta--github" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg" alt="GitHub repo">
+          </a>
+        </div>
+      </div>
+    </header>
+    <main class="layout__content">
+      <div class="container">
+        {% if section %}
+          {{ public_draft::warning(section=section) }}
+        {% endif %}
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+  <script>
+    const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }
+  </script>
+</body>
+
 </html>

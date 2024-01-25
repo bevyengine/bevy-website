@@ -24,15 +24,17 @@ fn foo(mut commands: Commands) {
 
 Systems using the old `commands: &mut Commands` syntax in 0.5 will fail to compile when calling `foo.system()`.
 
-This change was made because {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Commands" no_mod=true)}}
-now holds an internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}}
+This change was made because [`Commands`] now holds an internal [`World`]
 reference to enable safe entity allocations.
 
-Note: The internal {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} reference requires two lifetime parameters to pass Commands into a non-system function: `commands: &'a mut Commands<'b>`
+Note: The internal [`World`] reference requires two lifetime parameters to pass Commands into a non-system function: `commands: &'a mut Commands<'b>`
+
+[`Commands`]: https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Commands.html
+[`World`]: https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html
 
 ### Commands API
 
-The {{rust_type(type="struct" crate="bevy_ecs" version="0.5.0" mod="system" name="Commands" no_mod=true)}} API has been completely reworked for consistency with the {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} API.
+The [`Commands`] API has been completely reworked for consistency with the [`World`] API.
 
 ```rust
 // 0.4
@@ -99,12 +101,15 @@ if timer.tick(time.delta()).finished() { /* do stuff */ }
 timer.elapsed() // returns a `Duration`
 ```
 
-Most of the methods of {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}}
-now use `Duration` instead of `f32`.
+Most of the methods of [`Timer`]
+now use [`Duration`] instead of `f32`.
 
 This change allows timers to have consistent, high precision. For convenience, there is also an
 `elapsed_secs` method that returns `f32`.  Otherwise, when you need an `f32`, use the
-`as_secs_f32()` method on `Duration` to make the conversion.
+`as_secs_f32()` method on [`Duration`] to make the conversion.
+
+[`Timer`]: https://docs.rs/bevy/0.5.0/bevy/core/struct.Timer.html
+[`Duration`]: https://docs.rs/bevy/0.5.0/bevy/utils/struct.Duration.html
 
 ### Simplified Events
 

@@ -29,9 +29,9 @@ members = [ "my_crate1", "my_crate2" ]
 
 ### "AppBuilder" was merged into "App"
 
-All functions of {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="AppBuilder" no_mod=true)}} were merged into {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}}.
+All functions of [`AppBuilder`] were merged into [`App`].
 
-In practice this means that you start constructing an {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}} by calling {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true method="new")}} instead of {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="App" no_mod=true method="build")}} and {{rust_type(type="trait" crate="bevy_app" mod="" version="0.5.0" name="Plugin" no_mod=true method="build")}} takes a {{rust_type(type="struct" crate="bevy_app" mod="" version="0.6.0" name="App" no_mod=true)}} instead of a {{rust_type(type="struct" crate="bevy_app" mod="" version="0.5.0" name="AppBuilder" no_mod=true)}}
+In practice this means that you start constructing an [`App`] by calling [`App::new`] instead of [`App::build`] and [`Plugin::build`] takes a [`App`] instead of a [`AppBuilder`].
 
 ```rs
 // 0.5
@@ -61,9 +61,15 @@ impl Plugin for SomePlugin {
 }
 ```
 
+[`AppBuilder`]: https://docs.rs/bevy/0.5.0/bevy/app/struct.AppBuilder.html
+[`App`]: https://docs.rs/bevy/0.6.0/bevy/app/struct.App.html
+[`App::new`]: https://docs.rs/bevy/0.6.0/bevy/app/struct.App.html#method.new
+[`App::build`]: https://docs.rs/bevy/0.5.0/bevy/app/struct.App.html#method.build
+[`Plugin::build`]: https://docs.rs/bevy/0.6.0/bevy/app/trait.Plugin.html#tymethod.build
+
 ### The "Component" trait now needs to be derived
 
-Bevy no longer has a blanket implementation for the {{rust_type(type="trait" crate="bevy_ecs" mod="component" version="0.6.0" name="Component" no_mod=true)}} trait.
+Bevy no longer has a blanket implementation for the [`Component`] trait.
 Instead you need to derive (or manualy implement) the trait for every Type that needs it.
 
 ```rust
@@ -82,9 +88,11 @@ In order to use foreign types as components, wrap them using the newtype pattern
 struct Cooldown(std::time::Duration);
 ```
 
+[`Component`]: https://docs.rs/bevy/0.6.0/bevy/ecs/component/trait.Component.html
+
 ### Setting the Component Storage is now done in "Component" Trait
 
-The change to deriving {{rust_type(type="trait" crate="bevy_ecs" mod="component" version="0.6.0" name="Component" no_mod=true)}}, enabled setting the Component Storage at compiletime instead of runtime.
+The change to deriving [`Component`], enabled setting the Component Storage at compiletime instead of runtime.
 
 ```rust
 // 0.5
@@ -145,9 +153,9 @@ fn main() {
 
 ### ".single()" and ".single_mut()" are now infallible
 
-The functions {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="single")}} and {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="single_mut")}} no longer return a {{rust_type(type="enum", crate="std" mod="result", name="Result", no_mod=true)}} and Panic instead, if not exactly one Entity was found.
+The functions [`Query::single()`] and [`Query::single_mut()`] no longer return a `Result` and instead panic unless exactly one entity was found.
 
-If you need the old behavior you can use the fallible {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="get_single")}} and {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true method="get_single_mut")}} instead.
+If you need the old behavior you can use the fallible [`Query::get_single()`] and [`Query_get_single_mut()`] instead.
 
 ```rs
 // 0.5
@@ -167,6 +175,9 @@ fn player_system_fallible(query: Query<&Transform, With<Player>>) {
     // do something with player_position
 }
 ```
+
+[`Query::single()`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html#method.single
+[`Query::single_mut()`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html#method.single_mut
 
 ### "Light" and "LightBundle" are now "PointLight" and "PointLightBundle"
 
@@ -194,18 +205,17 @@ commands.spawn_bundle(PointLightBundle {
 });
 ```
 
-The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.5.0" name="Light" no_mod=true)}} and {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.5.0" name="LightBundle" no_mod=true)}} were renamed to {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="PointLight" no_mod=true)}} and {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="PointLightBundle" no_mod=true)}} to more clearly communicate the behavior of the Light Source.
-At the same time the `fov` and `depth` fields were removed from the {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="PointLight" no_mod=true)}} as they were unused.
+The [`Light`] and [`LightBundle`] types were renamed to [`PointLight`] and [`PointLightBundle`] to more clearly communicate the behavior of the Light Source.
+At the same time the `fov` and `depth` fields were removed from [`PointLight`] as they were unused.
 
-<!-- TODO: Remove this comment if https://github.com/bevyengine/bevy/pull/2367 is merged.
-
-In addition the {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="DirectionalLight" no_mod=true)}} and {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="DirectionalLightBundle" no_mod=true)}} were introduced with `0.6`.
-
--->
+[`Light`]: https://docs.rs/bevy/0.5.0/bevy/pbr/struct.Light.html
+[`LightBundle`]: https://docs.rs/bevy/0.5.0/bevy/pbr/struct.LightBundle.html
+[`PointLight`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.PointLight.html
+[`PointLightBundle`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.PointLightBundle.html
 
 ### System Param Lifetime Split
 
-The Lifetime of {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemParam" no_mod=true)}} was split in two separate Lifetimes.
+The Lifetime of [`SystemParam`] was split in two separate Lifetimes.
 
 ```rust
 // 0.5
@@ -229,11 +239,13 @@ struct SystemParamDerive<'w, 's> {
 }
 ```
 
+[`SystemParam`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/trait.SystemParam.html
+
 ### QuerySet declare "QueryState" instead of "Query"
 
 <!-- Adapt for ParamSet instead, if https://github.com/bevyengine/bevy/pull/2765 is merged -->
 
-Due to the [System Param Lifetime Split](#system-param-lifetime-split), {{rust_type(type="struct" crate="bevy_ecs" mod="system" name="QuerySet" version="0.6.0" no_mod=true)}}s now need to specify their Queries with {{rust_type(type="struct" crate="bevy_ecs" mod="query" version="0.6.0" name="QueryState" no_mod=true)}} instead of {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="Query" no_mod=true)}}.
+Due to the [System Param Lifetime Split](#system-param-lifetime-split), [`QuerySet`] system parameters now need to specify their Queries with [`QueryState`] instead of [`Query`].
 
 ```rust
 // 0.5
@@ -247,21 +259,31 @@ fn query_set(mut queries: QuerySet<(QueryState<&mut Transform>, QueryState<&Tran
 }
 ```
 
+[`QuerySet`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.QuerySet.html
+[`QueryState`]: https://docs.rs/bevy_ecs/0.6.0/bevy_ecs/query/struct.QueryState.html
+[`Query`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.Query.html
+
 ### "Input\<T\>.update()" is renamed to "Input\<T\>.clear()"
 
-The {{rust_type(type="struct" crate="bevy_input" mod="" version="0.5.0" name="Input" no_mod=true method="update")}} function was renamed to {{rust_type(type="struct" crate="bevy_input" mod="" version="0.6.0" name="Input" no_mod=true method="clear")}}.
+The [`Input::update`] function was renamed to [`Input::clear`].
+
+[`Input::update`]: https://docs.rs/bevy/0.5.0/bevy/input/struct.Input.html#method.update
+[`Input::clear`]: https://docs.rs/bevy/0.6.0/bevy/input/struct.Input.html#method.clear
 
 ### "SystemState" is now "SystemMeta"
 
-The {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="SystemState" no_mod=true)}} struct, which stores the metadata of a System, was renamed to {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemMeta" no_mod=true)}}.
+The struct formerly known as [`SystemState`](https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.SystemState.html), which stores the metadata of a System, was renamed to [`SystemMeta`].
 
-This was done to accommodate the new {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemState" no_mod=true)}} which allows easier cached access to {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.6.0" name="SystemParam" no_mod=true)}}s outside of a regular System.
+This was done to accommodate the new [`SystemState`] which allows easier cached access to [`SystemParam`] outside of a regular System.
+
+[`SystemState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemState.html
+[`SystemMeta`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemMeta.html
 
 <!-- TODO: Link to entry for SystemState in the release blog post. -->
 
 ### Vector casting functions are now named to match return type
 
-The casting functions for {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="IVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="DVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="UVec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec2" no_mod=true)}} have all been changed from being named after their inner elements' cast target to what the entire "Vec" is being casted into. This affects all the different dimensions of the math vectors (i.e., {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec2" no_mod=true)}}, {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec3" no_mod=true)}} and {{rust_type(type="struct" crate="bevy" mod="math" version="0.6.0" name="Vec4" no_mod=true)}}).
+The casting functions for [`IVec2`], [`DVec2`], [`UVec2`], and [`Vec2`] have all been changed from being named after their inner elements' cast target to what the entire "Vec" is being casted into. This affects all the different dimensions of the math vectors (i.e., [`Vec2`], [`Vec3`] and [`Vec4`]).
 
 ```rust
 // 0.5
@@ -273,13 +295,22 @@ let xyz: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 let xyz: IVec3 = xyz.as_ivec3();
 ```
 
+ [`IVec2`]: https://docs.rs/bevy/0.6.0/bevy/math/struct.IVec2.html
+ [`DVec2`]: https://docs.rs/bevy/0.6.0/bevy/math/struct.DVec2.html
+ [`UVec2`]: https://docs.rs/bevy/0.6.0/bevy/math/struct.UVec2.html
+ [`Vec2`]: https://docs.rs/bevy/0.6.0/bevy/math/struct.Vec2.html
+ [`Vec3`]: https://docs.rs/bevy/0.6.0/bevy/math/struct.Vec3.html
+ [`Vec4`]: https://docs.rs/bevy/0.6.0/bevy/math/struct.Vec4.html
+
 ### StandardMaterial's "roughness" is renamed to "perceptual_roughness"
 
-The {{rust_type(type="struct" crate="bevy_pbr" mod="" version="0.6.0" name="StandardMaterial" no_mod=true)}} field `roughness` was renamed to `perceptual_roughness`.
+The [`StandardMaterial`] field `roughness` was renamed to `perceptual_roughness`.
+
+[`StandardMaterial`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.StandardMaterial.html
 
 ### SpriteBundle and Sprite
 
-The {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="SpriteBundle" no_mod=true)}} now uses a `texture` handle rather than a `material`. The `color` field of the material is now directly available inside of the {{rust_type(type="struct" crate="bevy_sprite" mod="" version="0.6.0" name="Sprite" no_mod=true)}} struct, which also had its `resize_mode` field replaced with a `custom_size`. The following example shows how to spawn a tinted sprite at a particular size. For simpler cases, check out the updated [sprite](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/sprite.rs) and [rect](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/rect.rs) examples.
+The [`SpriteBundle`] bundle type now uses a `texture` handle rather than a `material`. The `color` field of the material is now directly available inside of the [`Sprite`] struct, which also had its `resize_mode` field replaced with a `custom_size`. The following example shows how to spawn a tinted sprite at a particular size. For simpler cases, check out the updated [sprite](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/sprite.rs) and [rect](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/2d/rect.rs) examples.
 
 ```rust
 // 0.5
@@ -308,9 +339,12 @@ SpriteBundle {
 }
 ```
 
+[`SpriteBundle`]: https://docs.rs/bevy/0.6.0/bevy/sprite/struct.SpriteBundle.html
+[`Sprite`]: https://docs.rs/bevy/0.6.0/bevy/sprite/struct.Sprite.html
+
 ### Visible is now Visibility
 
-The {{rust_type(type="struct" crate="bevy" mod="render::draw" version="0.5.0" name="Visible" no_mod=true)}} struct, which is used in a number of components to set visibility, was renamed to {{rust_type(type="struct" crate="bevy" mod="render::view" version="0.6.0" name="Visibility" no_mod=true)}}. Additionally, the field `is_transparent` was removed from the struct. For 3D, transparency can be set using the `alpha_mode` field on a material. Transparency is now automatically enabled for all objects in 2D.
+The [`Visible`] struct, which is used in a number of components to set visibility, was renamed to [`Visibility`]. Additionally, the field `is_transparent` was removed from the struct. For 3D, transparency can be set using the `alpha_mode` field on a material. Transparency is now automatically enabled for all objects in 2D.
 
 ```rust
 // 0.5
@@ -343,3 +377,6 @@ commands.spawn_bundle(PbrBundle {
     ..Default::default()
 });
 ```
+
+[`Visible`]: https://docs.rs/bevy/0.5.0/bevy/prelude/struct.Visible.html
+[`Visibility`]: https://docs.rs/bevy/0.6.0/bevy/prelude/struct.Visibility.html#
