@@ -983,7 +983,6 @@ Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderRes
 
 Components and Assets can derive the [`RenderResources`] trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
 
-
 Binding uniforms to a custom shader is literally as simple as deriving [`RenderResources`] on your component or asset:
 
 ```rs
