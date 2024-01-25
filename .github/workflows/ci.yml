@@ -169,32 +169,6 @@ jobs:
           path: content/learn/errors
           retention-days: 1
 
-  generate-wasm-examples:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-          key: ${{ runner.os }}-generate-wasm-examples-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
-          override: true
-
-      - name: Install alsa and udev
-        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-
-      - name: Build & run tests
-        run: cd code-validation && cargo test
-
   build-website:
     runs-on: ubuntu-latest
     needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
