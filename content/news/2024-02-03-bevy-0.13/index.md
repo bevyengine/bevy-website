@@ -21,9 +21,131 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **TODO:** Fancy feature
 * **TODO:** More cool stuff
 
-## TODO: Fancy feature
+## Winit upgrade
 
-## TODO: More cool stuff
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## WGPU upgrade
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Primitive shapes
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Dynamic queries
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Entity optimizations
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## WorldQuery trait split
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Automatically inserted sync points
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Input for one-shot systems
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Minimal reflection probes
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Exposure settings
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Light maps
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Sprite slicing and tiling
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Texture atlas rework
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Light renderlayers
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Approximate indirect specular occlusion
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Unload render assets from RAM
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Bind group layout entries
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Camera-driven UI
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Gizmo configuration
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## gltF extensions
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Animation interpolation
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
 
 ## Support Bevy
 
