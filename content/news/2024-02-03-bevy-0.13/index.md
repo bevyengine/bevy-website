@@ -151,6 +151,20 @@ TODO.
 
 TODO.
 
+## <a name="what-s-next"></a>What's Next?
+
+We have plenty of work in progress! Some of this will likely land in **Bevy 0.14**.
+
+Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
+
+* **More editor experimentation:** TODO
+* **bevy_dev_tools:** TODO
+* **A revised scene format:** TODO
+* **bevy_ui improvements:** TODO
+* **The steady march towards relations:** TODO
+* **Animation blending:** TODO
+* **Irradiance volumes:** TODO
+
 ## Support Bevy
 
 Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](/community/donate) ... every bit helps!
