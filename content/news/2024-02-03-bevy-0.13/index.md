@@ -21,18 +21,6 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **TODO:** Fancy feature
 * **TODO:** More cool stuff
 
-## Winit upgrade
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## WGPU upgrade
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
 ## Primitive shapes
 
 <div class="release-feature-authors">authors: @TODO</div>
@@ -69,25 +57,7 @@ TODO.
 
 TODO.
 
-## Minimal reflection probes
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## Exposure settings
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## Light maps
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## Sprite slicing and tiling
+## WGPU upgrade
 
 <div class="release-feature-authors">authors: @TODO</div>
 
@@ -99,7 +69,31 @@ TODO.
 
 TODO.
 
-## Light renderlayers
+## Sprite slicing and tiling
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Exposure settings
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Minimal reflection probes
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Light maps
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Light RenderLayers
 
 <div class="release-feature-authors">authors: @TODO</div>
 
@@ -129,7 +123,13 @@ TODO.
 
 TODO.
 
-## Gizmo configuration
+## Winit upgrade
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Animation interpolation
 
 <div class="release-feature-authors">authors: @TODO</div>
 
@@ -141,7 +141,7 @@ TODO.
 
 TODO.
 
-## Animation interpolation
+## Gizmo configuration
 
 <div class="release-feature-authors">authors: @TODO</div>
 
