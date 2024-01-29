@@ -23,7 +23,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Automatically inferred command flush points:** tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
 * **Slicing, tiling and ninepatch sprites and UI:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
 * **Lightmaps:** the first step towards baked global illumination: a fast, popular and pretty lighting technique.
-* **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported gltF animations.
+* **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
 
 ## Primitive shapes
 
