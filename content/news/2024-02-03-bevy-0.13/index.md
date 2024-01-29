@@ -165,4 +165,8 @@ TODO: add contributors
 
 ## Full Changelog
 
+The changes mentioned above are only the most appealing, highest impact changes that we've made this cycle.
+Innumerable bug fixes, documentation changes and API usability tweaks made it in too.
+For a complete list of changes, check out the PRs listed below.
+
 TODO: add full changelog, sorting by area.
