@@ -21,7 +21,7 @@
                     Written {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
                 </div>
                 <p class="link-card__description link-card__description--ellipsis">
-                    {{ page.summary | striptags | truncate(length=350) | safe}}
+                    {{ page.content | striptags | truncate(length=350) | safe}}
                 </p>
             </div>
         </a>
