@@ -173,7 +173,7 @@ commands
     );
 ```
 
-With this change, we also remove `UiCameraConfig` component. If you were using it to hide UI nodes, you can achieve the same outcome by setting `Visibility` component on the root node.
+With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
 
 ```rust
 commands.spawn(Camera3dBundle::default());
