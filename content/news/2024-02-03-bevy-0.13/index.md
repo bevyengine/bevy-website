@@ -121,6 +121,12 @@ TODO.
 
 TODO.
 
+## Type-safe labels for the `RenderGraph`
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
 ## Camera-driven UI
 
 <div class="release-feature-authors">authors: @TODO</div>
@@ -140,6 +146,12 @@ TODO.
 TODO.
 
 ## gltF extensions
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Extensionless asset support
 
 <div class="release-feature-authors">authors: @TODO</div>
 
