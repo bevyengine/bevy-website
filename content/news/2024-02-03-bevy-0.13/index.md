@@ -145,11 +145,109 @@ TODO.
 
 TODO.
 
-## Gizmo configuration
+## Multiple gizmo configurations
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @jeliag</div>
 
-TODO.
+Since [the 0.11 release], bevy supports gizmos. Gizmos allow drawing shapes using
+an immediate mode API. Here is how you use them:
+
+```rust
+// bevy 0.12.1
+fn set_gizmo_width(mut config: ResMut<GizmoConfig>) {
+    // set the line width of every gizmos with this global configuration resource.
+    config.line_width = 5.0;
+}
+
+fn draw_circles(mut gizmos: Gizmos) {
+    // Draw two circles with a 5 pixels outline
+    gizmos.circle_2d(vec2(100., 0.), 120., Color::NAVY);
+    gizmos.circle_2d(vec2(-100., 0.), 120., Color::ORANGE);
+}
+```
+
+Add a [`Gizmos`] system param and call a few methods, nothing more. Cool!
+
+Gizmos are also great for crate authors, they can use the same API.
+For example, the [`oxidized_navigation`] navmesh library uses gizmos for its debug overlay.
+Great!
+
+This is why gizmos were quickly adopted by the community.
+
+But after quick adoption, the community quickly found their limitations.
+
+Remember: crate authors, as well as game devs, can use gizmos and set their config globally.
+However, there is only one global configuration. Therefore,
+a dependency could very well affect the game's gizmos.
+It could even make them completely unusable.
+
+Not so great.
+
+How to solve this? Gizmo groups.
+
+Now, [`Gizmos`] comes with an optional parameter.
+By default, it uses a global configuration:
+
+```rust
+fn draw_circles(mut default_gizmos: Gizmos) {
+    default_gizmos.circle_2d(vec2(100., 0.), 120., Color::NAVY);
+}
+```
+
+But with a [`GizmoConfigGroup`] parameter, `Gizmos` can choose a distinct configuration:
+
+```rust
+fn draw_circles(
+    mut default_gizmos: Gizmos,
+    // this uses a distinct configvvvvvvvvvvvvvvv
+    mut navigation_gizmos: Gizmos<NavigationGroup>,
+) {
+    // Two circles with different outline width
+    default_gizmos.circle_2d(vec2(100., 0.), 120., Color::NAVY);
+    navigation_gizmos.circle_2d(vec2(-100., 0.), 120., Color::ORANGE);
+}
+```
+
+Create your own gizmo config group by deriving `GizmoConfigGroup`,
+and registering it to the `App`:
+
+```rust
+#[derive(Default, Reflect, GizmoConfigGroup)]
+pub struct NavigationGroup;
+
+impl Plugin for NavigationPlugin {
+    fn build(&mut self, app: &mut App) {
+        app
+            .init_gizmo_group::<NavigationGroup>()
+            // ... rest of plugin initialization.
+    }
+}
+```
+
+And this is how you set the configuration of gizmo groups to different values:
+
+```rust
+// bevy 0.13.0
+set_gizmo_width(mut config_store: ResMut<GizmoConfigStore>) {
+    let config = config_store.config_mut::<DefaultGizmoConfigGroup>().0;
+    config.line_width = 20.0;
+
+    let navigation_config = config_store.config_mut::<NavigationGroup>().0;
+    navigation_config.line_width = 10.0;
+}
+```
+
+Now, the navigation gizmos have a fully separate configuration and don't conflict
+with the game's gizmos.
+
+Not only that, but the game dev can integrate the navigation gizmos with their
+own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
+an RPC call. The world is your oyster.
+
+[`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
+[`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/gizmos/struct.Gizmos.html
+[the 0.11 release]: https://bevyengine.org/news/bevy-0-11/#gizmos
+[`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
 
 ## <a name="what-s-next"></a>What's Next?
 
