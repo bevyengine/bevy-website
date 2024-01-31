@@ -154,9 +154,157 @@ TODO.
 
 ## Extensionless asset support
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @bushrat011899</div>
 
-TODO.
+### Some background
+
+In Bevy 0.12 and earlier, all assets needed a file extension which uniquely mapped to a single asset type. Conceptually, this makes sense: a `.json` file should be loaded by the `JsonLoader` as a `JsonFile` asset.
+
+```rust
+let settings = asset_server.load("data/settings.json");
+```
+
+Peeking behind the curtain, this is achieved by passing the **path** to the `AssetServer`, which selects an `AssetLoader` based on the file extension. This is possible because every `AssetLoader` is required to declare up-front what file types it supports.
+
+```rust
+impl AssetLoader for JsonAssetLoader {
+    /* snip */
+
+    fn extensions(&self) -> &[&str] {
+        &["json"]
+    }
+}
+```
+
+But, what happens when you have two different asset types use the same extension? Consider an `AudioSettings` asset and a `GraphicsSettings` asset: both will be stored as JSON files, but they need to parsed as different asset types.
+
+```rust
+impl AssetLoader for AudioSettingsAssetLoader {
+    type Asset = AudioSettings;
+
+    /* snip */
+
+    fn extensions(&self) -> &[&str] {
+        &["json"]
+    }
+}
+
+impl AssetLoader for GraphicsSettingsAssetLoader {
+    type Asset = GraphicsSettings;
+
+    /* snip */
+
+    fn extensions(&self) -> &[&str] {
+        &["json"]
+    }
+}
+```
+
+Previously, Bevy would pick one of the above asset loaders to be the canonical `json` loader based on registration order.
+
+```rust
+app.init_asset_loader::<AudioSettingsAssetLoader>();
+
+// All JSON files will be loaded by AudioSettingsAssetLoader
+
+app.init_asset_loader::<GraphicsSettingsAssetLoader>();
+
+// All JSON files will now be loaded by GraphicsSettingsAssetLoader
+```
+
+The workaround for this is to create a compound file extension for each unique asset type, such as `.audio.json` and `.graphics.json`.
+
+### Relaxing constraints
+
+But we can do better! In Bevy 0.13, the asset type can now used to infer the `AssetLoader`.
+
+```rust
+// Uses AudioSettingsAssetLoader
+let audio_settings = asset_server.load("data/audio.json");
+
+// Uses GraphicsSettingsAssetLoader
+let graphics_settings = asset_server.load("data/graphics.json");
+```
+
+This is possible because every `AssetLoader` is also required to declare what **type** of asset it loads, not just the extensions it supports. Since the `load` method on `AssetServer` was already generic over the type of asset to return, this information was already available to the `AssetServer`. All that was missing was connecting this type information that was available on both sides of the `AssetServer` together!
+
+```rust
+let audio_settings = asset_server.load("data/audio.json");
+//  ^^^^^^^^^^^^^^                ^^^^
+//  | This has the type           |
+//  | Handle<AudioSettings>       |
+//                                | Which is passed into load...
+
+impl AssetLoader for AudioSettingsAssetLoader {
+    type Asset = AudioSettings;
+//               ^^^^^^^^^^^^^
+//               | ...and checked against AssetLoader::Asset
+
+    /* snip */
+}
+```
+
+Now, when loading, first the `AssetServer` attempts to infer type of asset by the type of `Handle` to return. If that can't be done (for example, labelled paths are permitted to return different asset types), then as a fallback the file extension is checked just like before.
+
+```rust
+// This will be inferred from context to be a Gltf asset, ignoring the file extension
+let gltf_handle = asset_server.load("models/cube/cube.gltf");
+
+// This still relies on file extension due to the label
+let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
+```
+
+### File extensions are now optional
+
+Since the asset type can be used to infer the loader, neither the file to be loaded nor the `AssetLoader` need to have file extensions.
+
+```rust
+pub trait AssetLoader: Send + Sync + 'static {
+    /* snip */
+
+    /// Returns a list of extensions supported by this [`AssetLoader`], without the preceding dot.
+    fn extensions(&self) -> &[&str] {
+        // A default implementation is now provided
+        &[]
+    }
+}
+```
+
+Previously, an asset loader with no extensions was very cumbersome to use. Now, they can be used just as easily as any other loader. Likewise, if a file is missing its extension, Bevy can now choose the appropriate loader.
+
+```rust
+let license = asset_server.load::<Text>("LICENSE");
+```
+
+Appropriate file extensions are still recommended for good project management, but this is now a recommendation rather than a hard requirement.
+
+### Multiple `AssetLoader`'s can be selected for the same asset
+
+Now, a single path can be used by multiple asset handles as long as they are distinct asset types.
+
+```rust
+// Load the sound effect for playback
+let bang = asset_server.load::<AudioSource>("sound/bang.ogg");
+
+// Load the raw bytes of the same sound effect (e.g, to send over the network)
+let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
+
+// Returns the bang handle since it was already loaded
+let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
+```
+
+Note that the above example uses turbofish syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
+
+```rust
+fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
+    effects.bang = asset_server.load("sound/bang.ogg");
+    effects.bang_blob = asset_server.load("sound/bang.ogg");
+}
+```
+
+### More information
+
+The `custom_asset` example has been updated to demonstrate these new features.
 
 ## Gizmo configuration
 
