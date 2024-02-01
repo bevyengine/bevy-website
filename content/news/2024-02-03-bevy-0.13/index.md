@@ -164,7 +164,7 @@ In Bevy 0.12 and earlier, all assets needed a file extension which uniquely mapp
 let settings = asset_server.load("data/settings.json");
 ```
 
-Peeking behind the curtain, this is achieved by passing the **path** to the `AssetServer`, which selects an `AssetLoader` based on the file extension. This is possible because every `AssetLoader` is required to declare up-front what file types it supports.
+Peeking behind the curtain, this is achieved by passing the **path** to the [`AssetServer`], which selects an [`AssetLoader`] based on the file extension. This is possible because every [`AssetLoader`] is required to declare up-front what file types it supports.
 
 ```rust
 impl AssetLoader for JsonAssetLoader {
@@ -216,7 +216,7 @@ The workaround for this is to create a compound file extension for each unique a
 
 ### Relaxing constraints
 
-But we can do better! In Bevy 0.13, the asset type can now used to infer the `AssetLoader`.
+But we can do better! In Bevy 0.13, the asset type can now used to infer the [`AssetLoader`].
 
 ```rust
 // Uses AudioSettingsAssetLoader
@@ -226,7 +226,7 @@ let audio_settings = asset_server.load("data/audio.json");
 let graphics_settings = asset_server.load("data/graphics.json");
 ```
 
-This is possible because every `AssetLoader` is also required to declare what **type** of asset it loads, not just the extensions it supports. Since the `load` method on `AssetServer` was already generic over the type of asset to return, this information was already available to the `AssetServer`. All that was missing was connecting this type information that was available on both sides of the `AssetServer` together!
+This is possible because every [`AssetLoader`] is also required to declare what **type** of asset it loads, not just the extensions it supports. Since the [`load`] method on [`AssetServer`] was already generic over the type of asset to return, this information was already available to the [`AssetServer`]. All that was missing was connecting this type information that was available on both sides of the [`AssetServer`] together!
 
 ```rust
 let audio_settings = asset_server.load("data/audio.json");
@@ -244,7 +244,7 @@ impl AssetLoader for AudioSettingsAssetLoader {
 }
 ```
 
-Now, when loading, first the `AssetServer` attempts to infer type of asset by the type of `Handle` to return. If that can't be done (for example, labelled paths are permitted to return different asset types), then as a fallback the file extension is checked just like before.
+Now, when loading, first the [`AssetServer`] attempts to infer type of asset by the type of [`Handle`] to return. If that can't be done (for example, labelled paths are permitted to return different asset types), then as a fallback the file extension is checked just like before.
 
 ```rust
 // This will be inferred from context to be a Gltf asset, ignoring the file extension
@@ -256,7 +256,7 @@ let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
 
 ### File extensions are now optional
 
-Since the asset type can be used to infer the loader, neither the file to be loaded nor the `AssetLoader` need to have file extensions.
+Since the asset type can be used to infer the loader, neither the file to be loaded nor the [`AssetLoader`] need to have file extensions.
 
 ```rust
 pub trait AssetLoader: Send + Sync + 'static {
@@ -293,7 +293,7 @@ let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
 let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
 ```
 
-Note that the above example uses turbofish syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
+Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
 
 ```rust
 fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
@@ -304,7 +304,14 @@ fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
 
 ### More information
 
-The `custom_asset` example has been updated to demonstrate these new features.
+The [`custom_asset` example] has been updated to demonstrate these new features.
+
+[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
+[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
+[`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
+[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
+[turbofish]: https://turbo.fish/
+[`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
 
 ## Gizmo configuration
 
