@@ -296,6 +296,12 @@ let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
 Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
 
 ```rust
+#[derive(Resource)]
+struct SoundEffects {
+    bang: AudioSource,
+    bang_blog: Blob,
+}
+
 fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
     effects.bang = asset_server.load("sound/bang.ogg");
     effects.bang_blob = asset_server.load("sound/bang.ogg");
