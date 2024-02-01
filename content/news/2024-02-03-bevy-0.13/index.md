@@ -48,7 +48,7 @@ They are now possible thanks to dynamic queries.
 The standard way of defining a `Query` is by using them as system parameters:
 
 ```rust
-fn take_damange(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
+fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
     // ...
 }
 ```
