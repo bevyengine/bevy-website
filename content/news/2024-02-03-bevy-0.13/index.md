@@ -126,9 +126,61 @@ TODO.
 
 ## Type-safe labels for the `RenderGraph`
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @DasLixou</div>
 
-TODO.
+Bevy uses rusts type system at many points like for SystemSets which gives it a modern feel.
+But this didn't apply to its render graph. Here, hardcoded potentially overlapping strings were used to define nodes and sub-graphs.
+
+```rust
+// Before 0.13
+impl MyRenderNode {
+    pub const NAME: &'static str = "my_render_node"
+}
+```
+
+We are now introducing a more robust way to name rendernodes and -graphs with the help of rusts type system and bevys label system.
+
+```rust
+// After 0.13
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct MyRenderLabel;
+```
+
+With those, the long paths for const-values also get shortened and cleaner which results into this
+
+```rust
+// Before 0.13
+render_app
+    .add_render_graph_node::<ViewNodeRunner<MyRenderNode>>(
+        core_3d::graph::NAME,
+        MyRenderNode::NAME,
+    )
+    .add_render_graph_edges(
+        core_3d::graph::NAME,
+        &[
+            core_3d::graph::node::TONEMAPPING,
+            MyRenderNode::NAME,
+            core_3d::graph::node::END_MAIN_PASS_POST_PROCESSING,
+        ],
+    );
+
+// After 0.13
+use bevy::core_pipeline::core_3d::graph::{Labels3d, SubGraph3d};
+
+render_app
+    .add_render_graph_node::<ViewNodeRunner<MyRenderNode>>(
+        SubGraph3d,
+        MyRenderLabel,
+    )
+    .add_render_graph_edges(
+        SubGraph3d,
+        (
+            Labels3d::Tonemapping,
+            MyRenderLabel,
+            Labels3d::EndMainPassPostProcessing,
+        ),
+    );
+```
 
 ## Camera-driven UI
 
