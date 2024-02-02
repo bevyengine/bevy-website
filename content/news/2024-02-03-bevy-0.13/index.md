@@ -38,7 +38,29 @@ TODO.
 
 <div class="release-feature-authors">authors: @TODO</div>
 
-TODO.
+## Transmute Queries
+
+<div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
+
+You might have a function that takes a `Query<&Transform>`, but in your system you have a `Query<&Transform, With<Enemy>`. You can now transmute your queries from one type to another query with the same access. This won't allow the query to return Entities that were weren't matched from the source query and you can't get parameters that weren't part of the source query. You can transmute in a limited way between different pointer types i.e. &mut -> &. See the documentation for more details. https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens
+
+```rust
+fn reusable_function(lens: &mut QueryLens<&A>) {
+    assert_eq!(lens.query().single().0, 10);
+}
+
+// We can use the function in a system that takes the exact query.
+fn system_1(mut query: Query<&A>) {
+    reusable_function(&mut query.as_query_lens());
+}
+
+// We can also use it with a query that does not match exactly
+// by transmuting it.
+fn system_2(mut query: Query<(&mut A, &B)>) {
+    let mut lens = query.transmute_lens::<&A>();
+    reusable_function(&mut lens);
+}
+```
 
 ## Entity optimizations
 
