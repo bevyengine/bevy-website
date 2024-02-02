@@ -61,9 +61,9 @@ TODO.
 
 <div class="release-feature-authors">authors: @hymm</div>
 
-A common scheduling issue is that one system needs to see the effects of the 
-commands of another. Before 0.13, you would have to manually insert an 
-`apply_deferred` system between the two. Bevy now detects when a system with commands 
+A common scheduling issue is that one system needs to see the effects of the
+commands of another. Before 0.13, you would have to manually insert an
+`apply_deferred` system between the two. Bevy now detects when a system with commands
 is ordered relative to another and inserts the `apply_deferred` for you.
 
 ```rust
@@ -89,9 +89,9 @@ app.add_systems(
 );
 ```
 
-It also optimizes the automatically inserted `apply_deferred` systems by merging them if 
-possible. In most cases, it is recommended to remove all manually inserted 
-`apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will 
+It also optimizes the automatically inserted `apply_deferred` systems by merging them if
+possible. In most cases, it is recommended to remove all manually inserted
+`apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will
 usually be faster.
 
 ```rust
@@ -105,7 +105,7 @@ app.add_systems(
 );
 ```
 
-If this new behavior does not work for you, please consult the migration guide. 
+If this new behavior does not work for you, please consult the migration guide.
 There are several new APIs for opting out of this.
 
 ## Input for one-shot systems
