@@ -20,9 +20,9 @@ pub fn generate_migration_guide(
         &mut output,
         r#"+++
 title = "{title}"
-weight = {weight}
 insert_anchor_links = "right"
 [extra]
+weight = {weight}
 long_title = "Migration Guide: {title}"
 +++
 
