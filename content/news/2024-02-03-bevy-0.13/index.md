@@ -52,7 +52,7 @@ This is a story told in two parts, with part one dealing with two PRs: The "Unif
 
 What [#9797](https://github.com/bevyengine/bevy/pull/9797) changed was by creating a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
 
-```
+```text
 |F| High value / Generation       | Low value / Index              |
 |-|-------------------------------|--------------------------------|
 |1| 31 bits                       | 32 bits                        |
