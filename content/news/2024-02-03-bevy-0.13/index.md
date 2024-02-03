@@ -20,9 +20,10 @@ To update an existing Bevy App or Plugin to **Bevy 0.13**, check out our [0.12 t
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
 * **First-party primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished collection of them for you to use!
+* **System stepping:** completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
 * **Dynamic queries:** refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
 * **Automatically inferred command flush points:** tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
-* **Slicing, tiling and ninepatch sprites and UI:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
+* **Slicing, tiling and nine-patch sprites:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
 * **Lightmaps:** the first step towards baked global illumination: a fast, popular and pretty lighting technique.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
 
@@ -31,6 +32,10 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
+
+## System Stepping
+
+<div class="release-feature-authors">authors: @TODO</div>
 
 ## Dynamic queries
 
@@ -141,6 +146,12 @@ TODO.
 TODO.
 
 ## Animation interpolation
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## `Animatible` trait
 
 <div class="release-feature-authors">authors: @TODO</div>
 
