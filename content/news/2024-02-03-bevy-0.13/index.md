@@ -29,7 +29,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Lightmaps:** the first step towards baked global illumination: a fast, popular and pretty lighting technique.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
 
-## Primitive shapes
+## Primitive Shapes
 
 <div class="release-feature-authors">authors: @TODO</div>
 
@@ -39,139 +39,139 @@ TODO.
 
 <div class="release-feature-authors">authors: @TODO</div>
 
-## Dynamic queries
+## Dynamic Queries
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Entity optimizations
+## Entity Optimizations
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## WorldQuery trait split
+## `WorldQuery` Trait Split
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Automatically inserted sync points
+## Automatically Inserted Sync Points
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Input for one-shot systems
+## Input for One-Shot Systems
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## WGPU upgrade
+## WGPU Upgrade
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Texture atlas rework
+## Texture Atlas Rework
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Sprite slicing and tiling
+## Sprite Slicing and Tiling
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Exposure settings
+## Exposure Settings
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Minimal reflection probes
+## Minimal Reflection Probes
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Light maps
+## Light Maps
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Light RenderLayers
+## Light `RenderLayers`
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Approximate indirect specular occlusion
+## Approximate Indirect Specular Occlusion
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Unload render assets from RAM
+## Unload Render Assets From RAM
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Bind group layout entries
+## Bind Group Layout Entries
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Type-safe labels for the `RenderGraph`
+## Type-Safe Labels for the `RenderGraph`
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Camera-driven UI
+## Camera-Driven UI
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Winit upgrade
+## Winit Upgrade
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Animation interpolation
+## Animation Interpolation
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## `Animatible` trait
+## `Animatable` Trait
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## gltF extensions
+## glTF Extensions
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Extensionless asset support
+## Extensionless Asset Support
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Gizmo configuration
+## Gizmo Configuration
 
 <div class="release-feature-authors">authors: @TODO</div>
 
