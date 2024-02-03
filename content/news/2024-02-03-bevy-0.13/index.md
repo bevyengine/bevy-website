@@ -39,55 +39,62 @@ TODO.
 
 <div class="release-feature-authors">authors: @dmlary</div>
 
-System stepping is a new feature that adds debugger-style step/break/continue
-facilities for controlling the execution of systems in a schedule.   This
-facility is exposed via a new [`Stepping`] resource.  This feature is enabled
-by default, but can be explicitly enabled with the `bevy_debug_stepping`
-feature flag.
+The new system stepping feature (`bevy_debug_stepping`) adds debugger-style
+execution control for systems.  The [`Stepping`] resource can control which
+systems within a schedule execute each frame, and provides step, break, and
+continue facilities to enable live debugging.  This feature is enabled by
+default in the bevy crate.
 
+The `Stepping` resource is configured with a list of schedules that it will
+control execution of when stepping is enabled.  The collection of systems
+within those schedules can be thought of as the stepping frame.  It can take
+multiple step or continue calls to traverse through the entire stepping frame.
+During this time, all schedules that have not been added to `Stepping` are
+executing each frame.  This allows rendering & input handling to continue while
+stepping through systems.
+
+### Configuration
 To get started the [`Stepping`] resource must be configured with the schedules
 it will be controlling, then added to the world:
+
 ```rust
-// configure the stepping resource with the schedules you want to be able to
-// step through
+// create a new Stepping resource, and add schedules to debug
 let mut stepping = Stepping::new();
 stepping.add_schedule(Update);
 stepping.add_schedule(FixedUpdate);
+
+// add the Stepping resource to the world
 app.insert_resource(stepping);
 ```
+
 The [`Stepping`] resource has no effect until it is enabled with a call to 
-`Stepping::enable()`.
+`Stepping::enable()`. When the `Stepping` resource is present and enabled,
+systems within the added schedules will not be run unless we're performing
+a system step, continuing the stepping frame, or the system has been exempt
+from stepping.
 
-Once stepping is enabled, systems within schedules that have been added to
-`Stepping` will not run unless:
-* `Stepping::step_frame()` or `Stepping::continue_frame()` has been called
-    during the previous frame
-* The system has been configured to always run with `Stepping::always_run()` or
-    `Stepping::always_run_node()`
-* Stepping is disabled with `Stepping::disable()`
-* The Stepping resource is removed
+### Execution Control: System Step & Continue Frame
+While stepping is enabled, the `Stepping` resource tracks its location within
+the stepping frame, maintaining a stepping cursor pointing at the next system
+to be executed.
+There are two ways systems get executed while stepping is enabled: system step,
+and continue frame.
 
-Systems in other schedules will execute every frame.
-
-### Execution Control: Step & Continue
-Controlling execution of systems while stepping is provided by
-`Stepping::step_frame()`, and `Stepping::continue_frame()`.
-The `Stepping` resource tracks the execution of systems and maintains a
-cursor of which schedule & system will execute next.
-
-Calling `Stepping::step_frame()` will execute only the system at the cursor
-during the next frame.  This is useful to see individual changes made by
+System step (`Stepping::step_frame()`) runs the system at the stepping
+cursor, and advances the cursor during the next render frame.
+This is useful to see individual changes made by
 systems, and see the state of the world prior to executing a system
 
-Calling `Stepping::continue_frame()` will execute all
-systems from the current cursor to the end of the frame during the next frame.
-This is useful for advancing quickly through an entire frame, getting to the
-start of the next frame, or in combination with breakpoints.
+Continue frame (`Stepping::continue_frame()`) will execute systems starting
+from the stepping cursor to the end of the stepping frame during the next frame.
+It may stop before the end of the stepping frame if it encounters a system with
+a breakpoint. This is useful for advancing quickly through an entire frame,
+getting to the start of the next frame, or in combination with breakpoints.
 
-In this video we demonstrate stepping & continue on the breakout example with
-an egui interface.  The cursor can be seen moving through the systems list as
-we click the `step` button.  When the `continue` button is clicked, you can see
-the game progress one frame for each click.
+In this video we demonstrate system step & continue frame on the breakout
+example with an egui interface.  The stepping cursor can be seen moving through
+the systems list as we click the `step` button.  When the `continue` button is
+clicked, you can see the game progress one stepping frame for each click.
 
 <video controls><source src="stepping-step-continue.mp4" type="video/mp4"/></video>
 
