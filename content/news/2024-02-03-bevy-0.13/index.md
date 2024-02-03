@@ -108,7 +108,7 @@ By defining the struct with a `repr(C)`, we could tell the compiler the layout o
 
 Before:
 
-```
+```asm
 to_bits:
     shl     rdi, 32
     mov     eax, esi
@@ -118,7 +118,7 @@ to_bits:
 
 After:
 
-```
+```asm
 to_bits:
     mov     rax, rdi
     ret
@@ -128,7 +128,7 @@ _But it doesn't stop there_. This had the effect of making hashing `Entity` even
 
 For example, this was the codegen for `Entity > Entity` before the various changes:
 
-```
+```asm
 greater_than:
     cmp     edi, edx
     jae     .LBB3_2
@@ -145,7 +145,7 @@ greater_than:
 
 Afterwards, it compiles to this:
 
-```
+```asm
 greater_than:
     cmp     rdi, rsi
     seta    al
