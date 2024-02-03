@@ -31,9 +31,73 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Primitive shapes
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
 
-TODO.
+Geometric shapes are used all across game development, from primitive mesh shapes and debug gizmos to physics colliders and raycasting. Despite being so commonly used across several domains, Bevy hasn't really had reusable shape representations other than the rendering-specific mesh shapes like the [`UVSphere`] in [`bevy_render`].
+
+This is changing in Bevy 0.13 with the introduction of first-party **primitive shapes**! They are lightweight geometric primitives designed for maximal interoperability and reusability, allowing Bevy and third-party plugins to use the same set of basic shapes and increase cohesion within the ecosystem. See the original [RFC][Primitive RFC] for more details.
+
+The built-in [collection of primitives] is already quite sizeable:
+
+| 2D                              | 3D                              |
+| ------------------------------- | ------------------------------- |
+| `Rectangle`                     | `Cuboid`                        |
+| `Circle`                        | `Sphere`                        |
+| `Ellipse`                       | -                               |
+| `Triangle2d`                    | -                               |
+| `Plane2d`                       | `Plane3d`                       |
+| `Line2d`                        | `Line3d`                        |
+| `Segment2d`                     | `Segment3d`                     |
+| `Polyline2d`, `BoxedPolyline2d` | `Polyline3d`, `BoxedPolyline3d` |
+| `Polygon`, `BoxedPolygon`       | -                               |
+| `RegularPolygon`                | -                               |
+| `Capsule2d`                     | `Capsule3d`                     |
+| -                               | `Cylinder`                      |
+| -                               | `Cone`                          |
+| -                               | `ConicalFrustum`                |
+| -                               | `Torus`                         |
+
+More primitives will be added in future releases.
+
+Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and raycasting functionality. Several of these have landed in 0.13 already!
+
+[`UVSphere`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.UVSphere.html
+[`bevy_render`]: https://dev-docs.bevyengine.org/bevy/render/index.html
+[Primitive RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/12-primitive-shapes.md
+[collection of primitives]: https://dev-docs.bevyengine.org/bevy/math/primitives/index.html
+
+### Meshing
+
+<div class="release-feature-authors">authors: @Jondolf</div>
+
+TODO
+
+* Explain current meshing
+* Show primitive meshing API
+* Screenshot of `2d_shapes` example
+* Mention 2D polygon meshing and 3D meshing not being implemented yet
+
+### Gizmos
+
+<div class="release-feature-authors">authors: @RobWalt</div>
+
+TODO
+
+* Show primitive gizmo API
+* Screenshot or video of primitive shapes drawn using gizmos
+
+### Bounding Volumes
+
+<div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
+
+TODO
+
+* Explain what bounding volumes are and what they're used for
+* Show basic API
+* Mention `Ray` being split into `Ray2d` and `Ray3d`
+* Explain ray casts and volume casts
+* Show casting API
+* Video clip of bounding volume example
 
 ## System Stepping
 
