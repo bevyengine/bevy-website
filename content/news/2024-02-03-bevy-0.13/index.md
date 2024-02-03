@@ -182,6 +182,13 @@ render_app
     );
 ```
 
+When you need dynamic labels for render nodes, those can still be achieved via e.g. tuple structs:
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct MyDynamicLabel(&'static str);
+```
+The nice thing is, that this don't has to be a string, it can be any time, also numbers etc.
+
 ## Camera-driven UI
 
 <div class="release-feature-authors">authors: @TODO</div>
