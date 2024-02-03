@@ -37,7 +37,128 @@ TODO.
 
 ## System Stepping
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @dmlary</div>
+
+System stepping is a new feature that adds debugger-style step/break/continue
+facilities for controlling the execution of systems in a schedule.   This
+facility is exposed via a new [`Stepping`] resource.  This feature is enabled
+by default, but can be explicitly enabled with the `bevy_debug_stepping`
+feature flag.
+
+To get started the [`Stepping`] resource must be configured with the schedules
+it will be controlling, then added to the world:
+```rust
+// configure the stepping resource with the schedules you want to be able to
+// step through
+let mut stepping = Stepping::new();
+stepping.add_schedule(Update);
+stepping.add_schedule(FixedUpdate);
+app.insert_resource(stepping);
+```
+The [`Stepping`] resource has no effect until it is enabled with a call to 
+`Stepping::enable()`.
+
+Once stepping is enabled, systems within schedules that have been added to
+`Stepping` will not run unless:
+* `Stepping::step_frame()` or `Stepping::continue_frame()` has been called
+    during the previous frame
+* The system has been configured to always run with `Stepping::always_run()` or
+    `Stepping::always_run_node()`
+* Stepping is disabled with `Stepping::disable()`
+* The Stepping resource is removed
+
+Systems in other schedules will execute every frame.
+
+### Execution Control: Step & Continue
+Controlling execution of systems while stepping is provided by
+`Stepping::step_frame()`, and `Stepping::continue_frame()`.
+The `Stepping` resource tracks the execution of systems and maintains a
+cursor of which schedule & system will execute next.
+
+Calling `Stepping::step_frame()` will execute only the system at the cursor
+during the next frame.  This is useful to see individual changes made by
+systems, and see the state of the world prior to executing a system
+
+Calling `Stepping::continue_frame()` will execute all
+systems from the current cursor to the end of the frame during the next frame.
+This is useful for advancing quickly through an entire frame, getting to the
+start of the next frame, or in combination with breakpoints.
+
+In this video we demonstrate stepping & continue on the breakout example with
+an egui interface.  The cursor can be seen moving through the systems list as
+we click the `step` button.  When the `continue` button is clicked, you can see
+the game progress one frame for each click.
+
+<video controls><source src="stepping-step-continue.mp4" type="video/mp4"/></video>
+
+### Breakpoints
+When a schedule has dozens of systems, but you're only interested in the effects
+of a few of them, breakpoints can be added with `Stepping::break()` can be used
+to add a breakpoint for a given system:
+
+```rust
+stepping.set_breakpoint(FixedUpdate, check_for_collisions);
+```
+
+Continuing will resume execution of the frame, but will stop if it encounters a
+system with a breakpoint.  If the stepping cursor is at a breakpoint when
+`Stepping::continue_frame()` is called, then stepping will execute that system
+and any following systems until another breakpoint is encountered, or all
+systems have been run.
+
+In this video of the breakout example, we add a breakpoint to
+`check_for_collisions()` so we can verify the behavior of the system
+each frame without stepping through all the other systems.  The stepping
+cursor moves from the start of the frame to `check_for_collisions()` the first
+time we click `continue` in the ui.  On the next click, `check_for_collisions()`
+and all remaining systems are run, moving the cursor back up to the start of
+the system list.
+
+<video controls><source src="stepping-breakpoint.mp4" type="video/mp4"/></video>
+
+### Disabling Systems
+During debugging it may be necessary to disable systems to eliminate them as the
+source of the problem.  This can be done in stepping with `Stepping::never_run()`
+or `Stepping::never_run_node()`.  Note that systems are only disabled while
+stepping is enabled; when stepping is disabled, disabled systems will run as
+normal.
+
+In this video of the breakout example, we disable the `check_for_collisions()`
+system and use continue to move the ball into the center of the blocks, then
+re-enable the system to have fun destroying all the blocks from the inside.
+
+<video controls><source src="stepping-disable-system.mp4" type="video/mp4"/></video>
+
+### Excluding Systems from Stepping
+There are cases where a system should run when stepping is enabled.  Good
+examples of this are input handling functions.  To exclude a system from being
+controlled by stepping use `Stepping::always_run()` or
+`Stepping::always_run_node()`.  When a system is set to always run, it will run
+each rendered frame regardless of stepping state.
+
+In this video of the breakout example, set `move_paddle()` to always run, and
+then use the keys to move the paddle while the rest of the game appears to be
+paused as the other systems are not running.
+
+<video controls><source src="stepping-run-always.mp4" type="video/mp4"/></video>
+
+### Limitations
+In this initial implementation of stepping there are some limitations:
+* Any system that reads events likely will not step properly
+    * Frames still advance normally while stepping is enabled
+    * Events can be cleared before a stepped system can read them
+    * Best approach here is to configure event-based systems to always run
+    * Continue with breakpoints may also work in this scenario
+* Conditional systems may not run as expected when stepping
+    * Similar to event-based systems, if the condition is true for only a short
+      time, system may not run when stepped
+
+### Further Reading
+* [Text-based stepping example](https://github.com/bevyengine/bevy/blob/main/examples/ecs/system_stepping.rs)
+* Non-interactive [bevy UI example stepping plugin](https://github.com/bevyengine/bevy/blob/examples/games/stepping.rs) used in the breakout example
+* Interactive [egui stepping plugin](https://gist.github.com/dmlary/3fd57ebf1f88bb9afa8a6604737dac97) used in demo videos
+
+[`Stepping`]: https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/stepping/Stepping.html
 
 ## Dynamic queries
 
