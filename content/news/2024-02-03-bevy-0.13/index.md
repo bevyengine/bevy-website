@@ -42,25 +42,44 @@ TODO.
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
-You might have a function that takes a `Query<&Transform>`, but in your system you have a `Query<&Transform, With<Enemy>`. You can now transmute your queries from one type to another query with the same access. This won't allow the query to return Entities that were weren't matched from the source query and you can't get parameters that weren't part of the source query. You can transmute in a limited way between different pointer types i.e. &mut -> &. See the documentation for more details. https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens
+Have you every wanted to pass a query to a function, but instead of having a
+`Query<&Transform>` you have a `Query<(&Transform, &Velocity)With<Enemy>`?
+Well now you can by using the `Query::transmute_lens` method. Query transmutes
+allow you to change a query into different query types as long as the
+componenets accessed are a subset of the original query.
 
 ```rust
-fn reusable_function(lens: &mut QueryLens<&A>) {
-    assert_eq!(lens.query().single().0, 10);
+fn reusable_function(lens: &mut QueryLens<&Transform>) {
+    let query = lens.query();
+    // do something with the query...
 }
 
 // We can use the function in a system that takes the exact query.
-fn system_1(mut query: Query<&A>) {
+fn system_1(mut query: Query<&Transform>) {
     reusable_function(&mut query.as_query_lens());
 }
 
 // We can also use it with a query that does not match exactly
 // by transmuting it.
-fn system_2(mut query: Query<(&mut A, &B)>) {
-    let mut lens = query.transmute_lens::<&A>();
+fn system_2(mut query: Query<(&mut Transform, &Velocity), With<Enemy>>) {
+    let mut lens = query.transmute_lens::<&Transform>();
     reusable_function(&mut lens);
 }
 ```
+
+Note that transmuting the query will not allow you to access entities that
+the original query did not access. It will still iterate over that same
+entity data.
+
+Besides removing paramters you can also change them in limited ways to the
+different smart pointer types. One of the more useful is to change a
+`& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
+for more details.
+
+One thing to take into consideration is the transmutation is not free.
+It works by recreating a new state and copys a bunch of the cached data
+inside the original query. It's not a expensive operation, but you should
+probably avoid doing it inside a hot loop.
 
 ## Entity optimizations
 
