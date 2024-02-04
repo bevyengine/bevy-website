@@ -44,13 +44,13 @@ TODO.
 
 <div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @bushrat011899, @james7132</div>
 
-`Entity` received a number of changes this cycle, combining laying some more groundwork for relations along with _related_ but nice to have performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with significant benchmarking and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This section is perhaps the most "micro-optimization" part of the changes so far for Bevy 0.13.
+`Entity` received a number of changes this cycle, combining laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This section is perhaps the most "micro-optimization" oriented part of the changes so far in Bevy 0.13.
 
 ### Changing `Entity`'s Layout
 
 This is a story told in two parts, with part one dealing with two PRs: The "Unified Identifier for entities & relations" PR ([#9797](https://github.com/bevyengine/bevy/pull/9797) by @Bluefinger) and "Change Entity::generation from u32 to NonZeroU32 for niche optimization" ([#9907](https://github.com/bevyengine/bevy/pull/9907) by @notverymoe). Fundamentally, they both involved changing the layout and assumptions of `Entity`, unlocking both a needed building block for the Relations feature being worked towards, as well as gaining a needed memory/codegen optimization for `Entity`.
 
-What [#9797](https://github.com/bevyengine/bevy/pull/9797) changed was by creating a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
+What [#9797](https://github.com/bevyengine/bevy/pull/9797) changed was create a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
 
 ```text
 |F| High value / Generation       | Low value / Index              |
