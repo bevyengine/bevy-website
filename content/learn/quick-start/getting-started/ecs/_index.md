@@ -153,7 +153,8 @@ The parameters we pass into a "system function" define what data the system runs
 You can interpret the [`Query`] above as: "iterate over every `Name` component for entities that also have a `Person` component".
 
 Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
-[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
+[`Query`]: <https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html>
+
 ```rs
 # use bevy::prelude::*;
 
