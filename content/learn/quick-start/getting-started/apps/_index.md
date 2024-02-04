@@ -18,7 +18,7 @@ fn main() {
 }
 ```
 
-Nice and simple right? Copy the code above into your ```main.rs``` file, then run:
+Nice and simple right? Copy the code above into your `main.rs` file, then run:
 
 ```sh
 cargo run
