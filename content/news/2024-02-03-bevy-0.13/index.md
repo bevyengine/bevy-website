@@ -189,7 +189,7 @@ When you need dynamic labels for render nodes, those can still be achieved via e
 pub struct MyDynamicLabel(&'static str);
 ```
 
-The nice thing is, that this don't has to be a string, it can be any time, also numbers etc.
+The nice thing is, that this don't has to be a string, it can be any type, also numbers etc.
 
 ## Camera-driven UI
 
