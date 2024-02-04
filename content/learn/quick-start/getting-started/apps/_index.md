@@ -5,6 +5,7 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/book/getting-started/apps"]
 +++
 
 Bevy programs are referred to as [`App`]s. The simplest Bevy app looks like this:
@@ -17,7 +18,7 @@ fn main() {
 }
 ```
 
-Nice and simple right? Copy the code above into your ```main.rs``` file, then run:
+Nice and simple right? Copy the code above into your `main.rs` file, then run:
 
 ```sh
 cargo run

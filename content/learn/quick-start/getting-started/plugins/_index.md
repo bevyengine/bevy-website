@@ -5,6 +5,7 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/book/getting-started/plugins"]
 +++
 
 One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins---collections of code that modify [`App`]s. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the [`UiPlugin`]. Want to build a headless server? Don't register the [`RenderPlugin`].

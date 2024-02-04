@@ -5,6 +5,7 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/book/next-steps"]
 +++
 
 You have reached the end of The Quick Start Guide! If you're hungry for more learning materials, we recommend checking out:

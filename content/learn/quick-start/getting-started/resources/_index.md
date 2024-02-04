@@ -5,6 +5,7 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/book/getting-started/resources"]
 +++
 
 **[`Entities`]** and **[`Component`]s** are great for representing complex, query-able groups of data. But most Apps will also require "globally unique" data of some kind. In Bevy ECS, we represent globally unique data using **[`Resource`]s**.
@@ -48,7 +49,10 @@ The `delta` field on [`Time`] gives us the time that has passed since the last u
 struct GreetTimer(Timer);
 
 fn greet_people(
-    time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
+    time: Res<Time>,
+    mut timer: ResMut<GreetTimer>,
+    query: Query<&Name, With<Person>>
+) {
     // update our timer with the time elapsed since the last update
     // if that caused the timer to finish, we say hello to everyone
     if timer.0.tick(time.delta()).just_finished() {

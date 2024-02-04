@@ -5,6 +5,7 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/migration-guides/0.11-0.12"]
 [extra]
 long_title = "Migration Guide: 0.11 to 0.12"
 +++

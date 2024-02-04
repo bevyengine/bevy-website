@@ -14,7 +14,7 @@ image_subtitle_link = "https://twitter.com/schneckerstein/status/130949112155541
 
 A little over a month after releasing Bevy 0.2, and thanks to **59** contributors, **122** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.3** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/book/quick-start) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
 
 Here are some of the highlights from this release:
 

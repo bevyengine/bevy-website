@@ -5,6 +5,7 @@ sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
+aliases = ["learn/book/getting-started/ecs"]
 +++
 
 All app logic in Bevy uses the Entity Component System paradigm, which is often shortened to ECS. ECS is a software pattern that involves breaking your program up into **Entities**, **Components**, and **Systems**. **Entities** are unique "things" that are assigned groups of **Components**, which are then processed using **Systems**.
@@ -74,11 +75,11 @@ fn main() {
 }
 ```
 
-The [`add_system`] function adds the system to your App's [`Update`] [`Schedule`], but we'll cover that more later.
+The [`add_systems`] function adds the system to your App's [`Update`] [`Schedule`], but we'll cover that more later.
 
 Now run your app again using `cargo run`. You should see `hello world!` printed once in your terminal.
 
-[`add_system`]: https://docs.rs/bevy_app/latest/bevy_app/struct.App.html#method.add_system
+[`add_systems`]: https://docs.rs/bevy_app/latest/bevy_app/struct.App.html#method.add_systems
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`Schedule`]: https://docs.rs/bevy_ecs/latest/bevy_ecs/schedule/struct.Schedule.html
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
@@ -149,10 +150,10 @@ fn greet_people(query: Query<&Name, With<Person>>) {
 
 The parameters we pass into a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
 
-You can interpret the `Query` above as: "iterate over every `Name` component for entities that also have a `Person` component".
+You can interpret the [`Query`] above as: "iterate over every `Name` component for entities that also have a `Person` component".
 
 Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
-
+[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
 ```rs
 # use bevy::prelude::*;
 
