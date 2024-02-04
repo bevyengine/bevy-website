@@ -164,6 +164,55 @@ This had a detectable improvement in benchmarks, ranging from 3-6% improvement i
 
 The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks with the "Optimise Eq" feature) to where we are now with all the optimisations in place (`optimised_entity`). Improvements across the whole board, with clear performance benefits that should impact multiple areas of the codebase, not just with entity hashing.
 
+#### Further Reading
+
+- [Making the most of ECS identifiers](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)
+- [`Option` representation](https://doc.rust-lang.org/core/option/index.html#representation)
+
+### Porting `Query::for_each` to `QueryIter::fold` override
+
+Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not *every* iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This approach is the same used within `std` code.
+
+The result was deduplication of code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
+
+```rust
+fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
+    q_transform.for_each_mut(|transform| {
+        // Do something...
+    });
+}
+```
+
+Becomes:
+
+```rust
+fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
+    q_transform.iter_mut().for_each(|transform| {
+        // Do something...
+    });
+}
+```
+
+The assembly output was compared as well between what was on main branch versus the PR, with no tangible differences being seen between the old `Query::for_each` and the new `QueryIter::for_each()` output, validating the approach and ensuring the internal iteration optimizations were being applied.
+
+As a plus, the same iternal iteration optimizations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
+
+#### Further Reading
+
+- [Assembly Sanity check for bevyengine/bevy#6773](https://github.com/james7132/bevy_asm_tests/commit/309947cd078086b7edc4b8b5f29b1d04255b1b9a#diff-4c4b34cf83f523fced3bd396ad7ab8e228b4d35bf65c1f0457f7e4e58b14ccc5)
+- [rustc bug for autovectorising internal iteration](https://github.com/rust-lang/rust/issues/104914)
+- [std `Iter::fold` overriding for perf gains](https://github.com/rust-lang/rust/blob/master/library/core/src/array/iter.rs#L265-L277)
+
+### Reducing `TableRow` `as` casting
+
+Not all improvements were focused around performance. Some small changes were done to improve type safety and tidy-up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
+
+Naturally, _adding_ asserts in potentially hot codepaths were cause for some concern, necessitating considerable benchmarking efforts to confirm there were regressions and to what level. With careful placing of the new `assert`s, the detected regression for these cases was in the region of 0.1%, but such regressions could easily be masked by compiler randomness, optimizations, etc. But the benefit was a less error-prone API and more robust code, which for a complex codebase such as Bevy's ECS code, every little helps.
+
+#### Further Reading
+
+- [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
+
 ## WorldQuery trait split
 
 <div class="release-feature-authors">authors: @TODO</div>
