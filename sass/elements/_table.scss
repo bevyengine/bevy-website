@@ -13,6 +13,6 @@ tr td {
     border-top: 2px solid $subtitle-color;
 }
 
-tr td:last-child {
+tr td:not(:first-child) {
     border-left: 2px solid $subtitle-color;
 }
