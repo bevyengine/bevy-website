@@ -198,7 +198,7 @@ Not all improvements were focused around performance. Some small changes were do
 
 Naturally, _adding_ asserts in potentially hot codepaths were cause for some concern, necessitating considerable benchmarking efforts to confirm there were regressions and to what level. With careful placing of the new `assert`s, the detected regression for these cases was in the region of 0.1%, but such regressions could easily be masked by compiler randomness, optimizations, etc. But the benefit was a less error-prone API and more robust code, which for a complex codebase such as Bevy's ECS code, every little helps.
 
-### Entity optimizations Further Reading
+### Entity optimizations notes
 
 * [Making the most of ECS identifiers](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)
 * [`Option` representation](https://doc.rust-lang.org/core/option/index.html#representation)
@@ -209,7 +209,7 @@ Naturally, _adding_ asserts in potentially hot codepaths were cause for some con
 * [rustc bug for autovectorising internal iteration](https://github.com/rust-lang/rust/issues/104914)
 * [std `Iter::fold` overriding for perf gains](https://github.com/rust-lang/rust/blob/master/library/core/src/array/iter.rs#L265-L277)
 
-#### Casting notes
+#### `TableRow` Casting notes
 
 * [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
 
