@@ -13,69 +13,69 @@
 
 {% block page_content %}
 <div class="assets">
-    {{ assets_macros::init_svg() }}
+  {{ assets_macros::init_svg() }}
 
-    <div class="assets-search">
-        <input class="assets-search__input" type="text" id="assets-search" placeholder="Search (ie: 0.11 MIT)">
-    </div>
+  <div class="assets-search">
+    <input class="assets-search__input" type="text" id="assets-search" placeholder="Search (ie: 0.11 MIT)">
+  </div>
 
-    <div class="assets-filters">
-        <label>Bevy last supported version</label>
-        <select class="asset-version-select" id="assets-filter">
-            <option value="all_versions">All</option>
-        </select>
-    </div>
+  <div class="assets-filters">
+    <label>Bevy last supported version</label>
+    <select class="asset-version-select" id="assets-filter">
+      <option value="all_versions">All</option>
+    </select>
+  </div>
 
-    <div class="assets-intro media-content">
-        A collection of third-party Bevy assets, plugins, learning resources, and apps made by the community. If you
-        would like to
-        share what you're working on, <a href="https://github.com/bevyengine/bevy-assets">submit a pull request</a>!
-    </div>
+  <div class="assets-intro media-content">
+    A collection of third-party Bevy assets, plugins, learning resources, and apps made by the community. If you
+    would like to
+    share what you're working on, <a href="https://github.com/bevyengine/bevy-assets">submit a pull request</a>!
+  </div>
 
-    {% for subsection in section.subsections %}
-    {% set section = get_section(path=subsection) %}
+  {% for subsection in section.subsections %}
+  {% set section = get_section(path=subsection) %}
 
-    <h1 class="asset-section" id="{{ section.title | slugify }}">
-        {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
-    </h1>
+  <h1 class="asset-section" id="{{ section.title | slugify }}">
+    {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
+  </h1>
 
-    {% if section.pages %}
-    <div class="item-grid item-grid--multi-cols">
-        {% set pages = section.pages %}
-        {% if section.extra.sort_order_reversed %}
-        {% set pages = section.pages | reverse %}
-        {% endif %}
-        {% for post in pages %}
-        {{ assets_macros::card(post=post) }}
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    {% set subsections = section.subsections %}
+  {% if section.pages %}
+  <div class="item-grid item-grid--multi-cols">
+    {% set pages = section.pages %}
     {% if section.extra.sort_order_reversed %}
-    {% set subsections = section.subsections | reverse %}
+    {% set pages = section.pages | reverse %}
     {% endif %}
-    {% for subsection in subsections %}
-    {% set section = get_section(path=subsection) %}
-
-    <h3 class="asset-subsection" id="{{ section.title | slugify }}">
-        {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
-    </h3>
-    <div class="item-grid item-grid--multi-cols">
-        {% set pages = section.pages %}
-        {% if section.extra.sort_order_reversed %}
-        {% set pages = section.pages | reverse %}
-        {% endif %}
-        {% for post in pages %}
-        {{ assets_macros::card(post=post) }}
-        {% endfor %}
-    </div>
-
+    {% for post in pages %}
+    {{ assets_macros::card(post=post) }}
     {% endfor %}
+  </div>
+  {% endif %}
+
+  {% set subsections = section.subsections %}
+  {% if section.extra.sort_order_reversed %}
+  {% set subsections = section.subsections | reverse %}
+  {% endif %}
+  {% for subsection in subsections %}
+  {% set section = get_section(path=subsection) %}
+
+  <h3 class="asset-subsection" id="{{ section.title | slugify }}">
+    {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
+  </h3>
+  <div class="item-grid item-grid--multi-cols">
+    {% set pages = section.pages %}
+    {% if section.extra.sort_order_reversed %}
+    {% set pages = section.pages | reverse %}
+    {% endif %}
+    {% for post in pages %}
+    {{ assets_macros::card(post=post) }}
     {% endfor %}
+  </div>
+
+  {% endfor %}
+  {% endfor %}
 </div>
 
 <script type="module">
-    import '/assets.js'
+  import '/assets.js'
 </script>
 {% endblock %}

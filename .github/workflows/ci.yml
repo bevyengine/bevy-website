@@ -10,6 +10,7 @@ on:
 
 jobs:
   generate-assets:
+    needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -47,6 +48,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
+    needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -73,9 +75,15 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
+    needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+
+      - name: "Clone Bevy"
+        run: >
+          cd generate-wasm-examples &&
+          ./clone_bevy.sh
 
       - uses: actions/cache@v3
         with:
@@ -84,6 +92,8 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
+            generate-wasm-examples/bevy/target/
+            content/examples/**/*.wasm
           key: ${{ runner.os }}-generate-wasm-examples-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
 
       - uses: dtolnay/rust-toolchain@stable
@@ -108,6 +118,7 @@ jobs:
           retention-days: 1
 
   generate-community:
+    needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -146,6 +157,17 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_MARKDOWN: true
           DEFAULT_BRANCH: main
+
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: generated-errors
+          path: content/learn/errors
+          retention-days: 1
 
   build-website:
     runs-on: ubuntu-latest

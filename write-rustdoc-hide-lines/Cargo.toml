@@ -1,0 +1,10 @@
+[package]
+name = "write-rustdoc-hide-lines"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+
+[dev-dependencies]
+indoc = "1.0"
