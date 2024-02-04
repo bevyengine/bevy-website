@@ -63,11 +63,35 @@ TODO.
 
 TODO.
 
-## Input for One-Shot Systems
+## One-Shot Systems Improvements
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @Nathan-Fenner</div>
 
-TODO.
+In 0.12, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
+The initial implementation had some restrictions which have been resolved for this release.
+The most glaring of which, was the lack of support for one-shot systems with in- and output. 
+This has been resolved for 0.13.
+
+```rust
+
+fn increment_sys(In(NonCopy(increment_by)): In<i32>, mut counter: ResMut<Counter>) -> i32 {
+    counter.0 += increment_by;
+    counter.0
+}
+
+let mut world = World::new();
+let id = world.register_system(increment_sys);
+
+world.insert_resource(Counter(1));
+let output_1 = world.run_system_with_input(id, 5).unwrap(); // increment counter by 5 and returns 6
+let output_2 = world.run_system_with_input(id, 2).unwrap(); // increment counter by 2 and returns 8
+```
+
+Using either `world.run_system_with_input(system_id, input)` or `commands.run_system_with_input(system_id, input)`, you can now supply input parameters to systems that accept them. Additionally, both `world.run_system` and `world.run_system_with_input` now return system output as `Ok(output)`. Do note that output cannot be returned when calling the system through commands, because of their deferred nature.
+
+Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (12.1) and it being possible to register exclusive systems as one-shot systems.
+
+All these changes combined, round out the capability of one-shot systems and they should now behave normally in any Bevy context.
 
 ## WGPU Upgrade
 
