@@ -4,6 +4,7 @@ weight = 5
 sort_by = "weight"
 template = "docs-section.html"
 page_template = "docs-section.html"
+aliases = ["learn/book/plugin-development"]
 +++
 
 Bevy has a plug-and-play architecture, where you can easily add plugins for new features or use your own plugins instead of the built-in ones. You can also create third-party plugins that others may use in their applications.
