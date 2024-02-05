@@ -43,7 +43,7 @@ TODO.
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
 Have you every wanted to pass a query to a function, but instead of having a
-`Query<&Transform>` you have a `Query<(&Transform, &Velocity)With<Enemy>`?
+`Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
 Well now you can by using the `Query::transmute_lens` method. Query transmutes
 allow you to change a query into different query types as long as the
 componenets accessed are a subset of the original query.
@@ -67,17 +67,20 @@ fn system_2(mut query: Query<(&mut Transform, &Velocity), With<Enemy>>) {
 }
 ```
 
-Note that transmuting the query will not allow you to access entities that
-the original query did not access. It will still iterate over that same
-entity data.
+Note that the `QueryLens` will still iterate over the same entities as the
+original `Query` it is derived from.
 
-Besides removing paramters you can also change them in limited ways to the
+A `QueryLens<&Transform>` taken from a `Query<(&Transform, &Velocity)>`, will
+only include the `Transform` of entities with both `Transform` and `Velocity`
+components.
+
+Besides removing parameters you can also change them in limited ways to the
 different smart pointer types. One of the more useful is to change a
 `& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
 for more details.
 
 One thing to take into consideration is the transmutation is not free.
-It works by recreating a new state and copys a bunch of the cached data
+It works by creating a new state and copying a bunch of the cached data
 inside the original query. It's not a expensive operation, but you should
 probably avoid doing it inside a hot loop.
 
