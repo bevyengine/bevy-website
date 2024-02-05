@@ -10,7 +10,8 @@ pub fn get_hidden_ranges<T: AsRef<str>>(code: &[T]) -> HiddenRanges {
     let mut ranges = vec![];
     let mut curr_range: Option<Range<usize>> = None;
 
-    let Ok(is_hidden_re) = Regex::new(r"\s*#") else {
+    // Match lines starting with a potentially indented `#` followed by a space or EOL.
+    let Ok(is_hidden_re) = Regex::new(r"^\s*#(?: |$)") else {
         return ranges;
     };
 
