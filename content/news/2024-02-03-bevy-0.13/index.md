@@ -178,7 +178,7 @@ In this initial implementation of stepping there are some limitations:
 ### Detailed Examples
 
 * [Text-based stepping example](https://github.com/bevyengine/bevy/blob/main/examples/ecs/system_stepping.rs)
-* Non-interactive [bevy UI example stepping plugin](https://github.com/bevyengine/bevy/blob/examples/games/stepping.rs) used in the breakout example
+* Non-interactive [bevy UI example stepping plugin](https://github.com/bevyengine/bevy/blob/main/examples/games/stepping.rs) used in the breakout example
 * Interactive [egui stepping plugin](https://gist.github.com/dmlary/3fd57ebf1f88bb9afa8a6604737dac97) used in demo videos
 
 [`Stepping`]: https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/stepping/Stepping.html
