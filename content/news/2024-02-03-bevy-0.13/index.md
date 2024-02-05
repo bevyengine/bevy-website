@@ -90,14 +90,56 @@ TODO
 
 <div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
 
-TODO
+In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
-* Explain what bounding volumes are and what they're used for
-* Show basic API
-* Mention `Ray` being split into `Ray2d` and `Ray3d`
-* Explain ray casts and volume casts
-* Show casting API
-* Video clip of bounding volume example
+Bevy 0.13 adds some new publicly available bounding volumes: `Aabb2d`, `Aabb3d`, `BoundingCircle`, and `BoundingSphere`. These can be created manually, or generated from primitives shapes.
+
+Each bounding volume implements the `BoundingVolume` trait, providing some general functionality and helpers. The `IntersectsVolume` trait can be used to test for intersections with these volumes. This trait is implemented for bounding volumes themselves, so you can test for intersections between them. This is supported between all existing bounding volume types, but only those in the same dimension.
+
+Here is an example of how bounding volumes are constructed, and how an intersection test is performed:
+```rust
+// We create an axis-aligned bounding box that is centered at position
+let position = Vec2::new(100., 50.);
+let half_size = Vec2::splat(20.);
+let aabb = Aabb2d::new(position, half_size);
+
+// We create a bounding circle that is centered at position
+let position = Vec2::new(80., 70.);
+let radius = 30.;
+let bounding_circle = BoundingCircle::new(position, radius);
+
+// We check if the volumes are intersecting
+let intersects = bounding_circle.intersects(&aabb);
+```
+
+There are also two traits for the generation of bounding volumes: `Bounded2d` and `Bounded3d`. These are implemented for the new primitive shapes, so you can easily compute bounding volumes for them:
+
+```rust
+// We create a primitive, a hexagon in this case
+let hexagon = RegularPolygon::new(50., 6);
+
+let translation = Vec2::new(50., 200.);
+let rotation = PI / 2.; // Rotation in radians
+
+// Now we can get an Aabb2d or BoundingCircle from this primitive.
+// These methods are part of the Bounded2d trait.
+let aabb = hexagon.aabb_2d(translation, rotation);
+let circle = hexagon.bounding_circle(translation, rotation);
+```
+
+[TODO: video of intersection tests]
+<div style="font-size: 1.0rem" class="release-feature-authors">
+    The new example (bounding_2d) that showcases various intersection tests.
+</div>
+
+#### Ray casting and volume casting
+
+The bounding volumes also support basic ray casting and volume casting. Ray casting tests if a bounding volume intersects with a given ray, cast from an origin in a direction, until a maximum distance. Volume casts work similarly, but function as if moving a volume along the ray.
+
+This functionality is provided through the new `RayCast2d`, `RayCast3d`, `AabbCast2d`, `AabbCast3d`, `CircleCast`, and `SphereCast` types. They can be used to check for intersections against bounding volumes, and to compute the distance from the origin of the cast to the point of intersection.
+
+To make it easier to reason about ray casts in different dimensions, the old `Ray` type has also been split into `Ray2d` and `Ray3d`. The new `Direction2d` and `Direction3d` types are used to ensure that the ray direction remains normalized, providing a type-level guarantee that the vector is always unit-length. These are already in use in some other APIs as well, such as for some primitives and gizmo methods.
+
 
 ## System Stepping
 
