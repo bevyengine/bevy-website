@@ -43,7 +43,7 @@ The new system stepping feature (`bevy_debug_stepping`) adds debugger-style
 execution control for systems. The [`Stepping`] resource can control which
 systems within a schedule execute each frame, and provides step, break, and
 continue facilities to enable live debugging. This feature is enabled by
-default in the bevy crate.
+default in the `bevy` crate.
 
 The `Stepping` resource is configured with a list of schedules that it will
 control execution of when stepping is enabled. The collection of systems
