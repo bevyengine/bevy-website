@@ -43,7 +43,50 @@ TODO.
 
 <div class="release-feature-authors">authors: @TODO</div>
 
-TODO.
+## Transmute Queries
+
+<div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
+
+Have you every wanted to pass a query to a function, but instead of having a
+`Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
+Well now you can by using the `Query::transmute_lens` method. Query transmutes
+allow you to change a query into different query types as long as the
+componenets accessed are a subset of the original query. If you do try to access
+data that is not in the original query, this method will panic.
+
+```rust
+fn reusable_function(lens: &mut QueryLens<&Transform>) {
+    let query = lens.query();
+    // do something with the query...
+}
+
+// We can use the function in a system that takes the exact query.
+fn system_1(mut query: Query<&Transform>) {
+    reusable_function(&mut query.as_query_lens());
+}
+
+// We can also use it with a query that does not match exactly
+// by transmuting it.
+fn system_2(mut query: Query<(&mut Transform, &Velocity), With<Enemy>>) {
+    let mut lens = query.transmute_lens::<&Transform>();
+    reusable_function(&mut lens);
+}
+```
+
+Note that the `QueryLens` will still iterate over the same entities as the
+original `Query` it is derived from. A `QueryLens<&Transform>` taken from
+a `Query<(&Transform, &Velocity)>`, will only include the `Transform` of
+entities with both `Transform` and `Velocity` components.
+
+Besides removing parameters you can also change them in limited ways to the
+different smart pointer types. One of the more useful is to change a
+`& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
+for more details.
+
+One thing to take into consideration is the transmutation is not free.
+It works by creating a new state and copying a bunch of the cached data
+inside the original query. It's not a expensive operation, but you should
+probably avoid doing it inside a hot loop.
 
 ## Entity Optimizations
 
