@@ -90,9 +90,11 @@ TODO
 
 <div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
 
-In game development there are many use cases for fast spatial checks. For example: getting all entities that are in the camera's view frustum, getting all entities near the player, or finding pairs of physics objects that might collide. To speed up such checks, bounding volumes are used to approximate more complex shapes. This version of bevy adds a public API for bounding volumes. The volumes can be created manually, or generated from primitives shapes.
+In game development, spatial checks have several highly valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
-There are two traits for working with bounding volumes: `BoundingVolume` and `IntersectsVolume`. These traits can be used by crates to generalize over multiple bounding volume types and intersection tests. The `BoundingVolume` trait has two implementations per dimension, one for axis-aligned bounding boxes and one for bounding balls. The `IntersectsVolume` trait takes a `BoundingVolume` as argument, and allows you to test for intersections against your bounding volumes.
+Bevy 0.13 adds some new publicly available bounding volumes: `Aabb2d`, `Aabb3d`, `BoundingCircle`, and `BoundingSphere`. These can be created manually, or generated from primitives shapes.
+
+Each bounding volume implements the `BoundingVolume` trait, providing some general functionality and helpers. By implementing the `IntersectsVolume` trait between two types of bounding volumes, you can test for intersections between them. This is supported by all existing bounding volume types, but only between volumes that have the same dimension.
 
 Here is an example of how bounding volumes are constructed, and how an intersection test is performed:
 ```rust
@@ -106,11 +108,11 @@ let position = Vec2::new(80., 70.);
 let radius = 30.;
 let bounding_circle = BoundingCircle::new(position, radius);
 
-// `BoundingCircle` and `Aabb2d` implement `IntersectsVolume` against both theirselves and eachother
+// `BoundingCircle` and `Aabb2d` implement `IntersectsVolume` against both themselves and each other
 let intersects = bounding_circle.intersects(&aabb);
 ```
 
-There are also two traits for the generation of bounding volumes: `Bounded2d` and `Bounded3d`. An example of these in action:
+There are also two traits for the generation of bounding volumes: `Bounded2d` and `Bounded3d`. These are implemented for the new primitive shapes, so you can easily compute bounding volumes for them:
 
 ```rust
 // We create a primitive, a hexagon in this case
@@ -132,9 +134,11 @@ let circle = hexagon.bounding_circle(translation, rotation);
 
 #### Ray casting and volume casting
 
-The bounding volumes also supports ray casting and volume casting. Ray casting tests if the bounding volumes intersect with the ray. Rays are cast from an origin, towards a direction until a maximum distance. Volume casts work in a similar way, but function as if moving a volume along the ray. This support is provided trough the new `RayCast2d`, `RayCast3d`, `AabbCast2d`, `AabbCast3d`, `CircleCast`, and `SphereCast` types.
+The bounding volumes also support basic ray casting and volume casting. Ray casting tests if a bounding volume intersects with a given ray, cast from an origin in a direction, until a maximum distance. Volume casts work similarly, but function as if moving a volume along the ray.
 
-Some newly introduced types can be very useful when reasoning about ray casts. The old `Ray` type has been split into `Ray2d` and `Ray3d`, these types are defined by an origin and a direction. New `Direction2d` and `Direction3d` types have been added, these are normalized vectors pointing in a direction.
+This functionality is provided through the new `RayCast2d`, `RayCast3d`, `AabbCast2d`, `AabbCast3d`, `CircleCast`, and `SphereCast` types. They can be used to check for intersections against bounding volumes, and to compute the distance from the origin of the cast to the point of intersection.
+
+To make it easier to reason about ray casts in different dimensions, the old `Ray` type has also been split into `Ray2d` and `Ray3d`. To ensure that the ray direction remains normalized, new `Direction2d` and `Direction3d` types have also been introduced, providing a type-level guarantee that the vector is always unit-length. These are already in use in some other APIs as well, such as for some primitives and gizmo methods.
 
 
 ## System Stepping
