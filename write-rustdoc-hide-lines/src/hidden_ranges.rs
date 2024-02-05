@@ -17,7 +17,7 @@ pub fn get_hidden_ranges<T: AsRef<str>>(code: &[T]) -> HiddenRanges {
     for (idx, line) in code.iter().enumerate() {
         let n = idx + 1;
         let line = line.as_ref();
-        let is_hidden = is_hidden_re.is_match(&line);
+        let is_hidden = is_hidden_re.is_match(line);
 
         if is_hidden {
             if let Some(range) = curr_range.as_mut() {
@@ -47,7 +47,7 @@ mod tests {
     use indoc::indoc;
 
     fn split_lines(code: &str) -> Vec<&str> {
-        code.split("\n").collect::<Vec<_>>()
+        code.split('\n').collect::<Vec<_>>()
     }
 
     #[test]

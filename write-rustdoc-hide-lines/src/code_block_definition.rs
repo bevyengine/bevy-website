@@ -79,10 +79,10 @@ pub struct CodeBlockDefinition {
 impl CodeBlockDefinition {
     pub fn new(line: &str) -> Option<CodeBlockDefinition> {
         let lang_re = Regex::new(r"(\s*)```(.+)").ok()?;
-        let captures = lang_re.captures(&line)?;
+        let captures = lang_re.captures(line)?;
 
-        let whitespace = captures.get(1).and_then(|mat| Some(mat.as_str()))?;
-        let lang = captures.get(2).and_then(|mat| Some(mat.as_str()))?;
+        let whitespace = captures.get(1).map(|mat| mat.as_str())?;
+        let lang = captures.get(2).map(|mat| mat.as_str())?;
 
         let mut hide_lines_idx = None;
 
@@ -142,12 +142,9 @@ impl CodeBlockDefinition {
     pub fn set_hidden_ranges(&mut self, hidden_ranges: HiddenRanges) {
         if hidden_ranges.is_empty() {
             // Remove
-            match self.hide_lines_idx {
-                Some(idx) => {
-                    self.annotations.remove(idx);
-                    self.hide_lines_idx = None;
-                }
-                None => (),
+            if let Some(idx) = self.hide_lines_idx {
+                self.annotations.remove(idx);
+                self.hide_lines_idx = None;
             }
         } else {
             // Add

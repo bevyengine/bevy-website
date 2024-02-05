@@ -129,7 +129,7 @@ mod tests {
     use indoc::indoc;
 
     fn lines_iter(code: &str) -> impl Iterator<Item = Result<String>> + '_ {
-        code.split("\n").map(|line| Ok(String::from(line)))
+        code.split('\n').map(|line| Ok(String::from(line)))
     }
 
     #[test]
