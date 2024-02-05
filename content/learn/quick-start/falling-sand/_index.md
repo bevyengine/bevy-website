@@ -1,7 +1,9 @@
 +++
 title = "Falling Sand"
-weight = 2
 template = "docs-section.html"
+page_template = "docs-page.html"
 [extra]
+weight = 2
 public_draft = 877
+status = "hidden"
 +++

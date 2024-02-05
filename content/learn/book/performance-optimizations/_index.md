@@ -1,10 +1,10 @@
 +++
 title = "Performance Optimizations"
-weight = 10
 template = "docs-section.html"
-page_template = "docs-section.html"
+page_template = "docs-page.html"
 insert_anchor_links = "right"
 [extra]
+weight = 10
 status = 'hidden'
 +++
 
