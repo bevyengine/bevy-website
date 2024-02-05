@@ -94,7 +94,7 @@ a breakpoint. This is useful for advancing quickly through an entire frame,
 getting to the start of the next frame, or in combination with breakpoints.
 
 In this video we demonstrate system step & continue frame on the breakout
-example with an egui interface.  The stepping cursor can be seen moving through
+example with a custom `egui` interface.  The stepping cursor can be seen moving through
 the systems list as we click the `step` button.  When the `continue` button is
 clicked, you can see the game progress one stepping frame for each click.
 
