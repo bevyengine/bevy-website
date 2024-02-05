@@ -57,7 +57,7 @@ TODO.
 
 TODO.
 
-## Automatically insert `apply_deferred` systems
+## Automatically Insert `apply_deferred` Systems
 
 <div class="release-feature-authors">authors: @hymm</div>
 
