@@ -267,7 +267,7 @@ Naturally, _adding_ asserts in potentially hot codepaths were cause for some con
 
 A [`Query`] has two type parameters: one for the the data to be fetched, and a second optional one for the filters.
 
-In previous versions of Bevy both parameters had to implement [`WorldQuery`] but there was nothing stopping you from using types intended as filters in the data position.
+In previous versions of Bevy both parameters had to implement [`WorldQuery`] but there was nothing stopping you from using types intended as filters in the data position (or vice versa).
 
 Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behaviour in either position.
 
