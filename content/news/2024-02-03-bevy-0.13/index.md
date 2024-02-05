@@ -69,7 +69,7 @@ TODO.
 
 In 0.12, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
 The initial implementation had some limitations with regards to what systems could and could not be used as one-shot systems.
-These limitations have since been resolved, starting with one-shot systems with in- and output.
+These limitations have since been resolved, starting with one-shot systems with input and output.
 
 ```rust
 
