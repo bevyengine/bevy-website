@@ -13,9 +13,9 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -30,7 +30,7 @@ jobs:
         run: echo "::set-output name=key::$(date +'%Y-%m-%d')"
 
       - name: Get crates.io datadump from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.cache-key.outputs.key }}
@@ -41,7 +41,7 @@ jobs:
           export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} &&
           ./generate_assets.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-assets
           path: content/assets
@@ -51,9 +51,9 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -68,7 +68,7 @@ jobs:
           cd generate-errors &&
           ./generate_errors.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-errors
           path: content/learn/errors
@@ -78,14 +78,14 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: "Clone Bevy"
         run: >
           cd generate-wasm-examples &&
           ./clone_bevy.sh
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -105,13 +105,13 @@ jobs:
           cd generate-wasm-examples &&
           ./generate_wasm_examples.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-wasm-examples
           path: content/examples
           retention-days: 1
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
@@ -121,9 +121,9 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -138,7 +138,7 @@ jobs:
           cd generate-community &&
           ./generate_community.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-community
           path: content/community/people
@@ -147,7 +147,7 @@ jobs:
   markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -161,7 +161,7 @@ jobs:
   test-code:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -177,28 +177,28 @@ jobs:
     needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/download-artifact@master
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
           name: generated-assets
           path: content/assets
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-errors
           path: content/learn/errors
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-wasm-examples
           path: content/examples
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-community
           path: content/community/people
