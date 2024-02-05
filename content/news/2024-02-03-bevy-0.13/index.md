@@ -227,9 +227,132 @@ TODO.
 
 ## Extensionless Asset Support
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @bushrat011899</div>
 
-TODO.
+In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The recent addition of [`meta` files] allowed for specifying more granular loading behavior, but file extensions were still required. In Bevy 0.13, the asset type can now be used to infer the [`AssetLoader`].
+
+```rust
+// Uses AudioSettingsAssetLoader
+let audio = asset_server.load("data/audio.json");
+
+// Uses GraphicsSettingsAssetLoader
+let graphics = asset_server.load("data/graphics.json");
+```
+
+This is possible because every [`AssetLoader`] is required to declare what **type** of asset it loads, not just the extensions it supports. Since the [`load`] method on [`AssetServer`] was already generic over the type of asset to return, this information is already available to the [`AssetServer`] so that the appropriate [`Handle`] type is returned.
+
+```rust
+// The above example with types shown
+let audio: Handle<AudioSettings> = asset_server.load::<AudioSettings>("data/audio.json");
+let graphics: Handle<GraphicsSettings> = asset_server.load::<GraphicsSettings>("data/graphics.json");
+```
+
+Now we can also use it to choose the [`AssetLoader`] itself.
+
+```rust
+#[derive(Resource)]
+struct Settings {
+    audio: Handle<AudioSettings>,
+//                ^^^^^^^^^^^^^
+//                | This type...
+}
+
+fn setup(mut settings: ResMut<Settings>, asset_server: Res<AssetServer>) {
+    settings.audio = asset_server.load("data/audio.json");
+//                                ^^^^
+//                                | ...is passed here...
+}
+
+impl AssetLoader for AudioSettingsAssetLoader {
+    type Asset = AudioSettings;
+//               ^^^^^^^^^^^^^
+//               | ...and checked against AssetLoader::Asset
+
+    /* snip */
+}
+```
+
+When loading an asset, the loader is chosen by checking (in order):
+
+1. The asset `meta` file
+2. The type of `Handle<A>` to return
+3. The file extension
+
+```rust
+// This will be inferred from context to be a glTF asset, ignoring the file extension
+let gltf_handle = asset_server.load("models/cube/cube.gltf");
+
+// This still relies on file extension due to the label
+let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
+//                                                        ^^^^^^^^^^^^^^^^^
+//                                                        | Asset path label
+```
+
+### File extensions are now optional
+
+Since the asset type can be used to infer the loader, neither the file to be loaded nor the [`AssetLoader`] need to have file extensions.
+
+```rust
+pub trait AssetLoader: Send + Sync + 'static {
+    /* snip */
+
+    /// Returns a list of extensions supported by this [`AssetLoader`], without the preceding dot.
+    fn extensions(&self) -> &[&str] {
+        // A default implementation is now provided
+        &[]
+    }
+}
+```
+
+Previously, an asset loader with no extensions was very cumbersome to use. Now, they can be used just as easily as any other loader. Likewise, if a file is missing its extension, Bevy can now choose the appropriate loader.
+
+```rust
+let license = asset_server.load::<Text>("LICENSE");
+```
+
+Appropriate file extensions are still recommended for good project management, but this is now a recommendation rather than a hard requirement.
+
+### Multiple `AssetLoader`'s can be selected for the same asset
+
+Now, a single path can be used by multiple asset handles as long as they are distinct asset types.
+
+```rust
+// Load the sound effect for playback
+let bang = asset_server.load::<AudioSource>("sound/bang.ogg");
+
+// Load the raw bytes of the same sound effect (e.g, to send over the network)
+let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
+
+// Returns the bang handle since it was already loaded
+let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
+```
+
+Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
+
+```rust
+#[derive(Resource)]
+struct SoundEffects {
+    bang: Handle<AudioSource>,
+    bang_blog: Handle<Blob>,
+}
+
+fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
+    effects.bang = asset_server.load("sound/bang.ogg");
+    effects.bang_blob = asset_server.load("sound/bang.ogg");
+}
+```
+
+### More information
+
+The [`custom_asset` example] has been updated to demonstrate these new features.
+
+[`meta` files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
+[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
+[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
+[`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
+[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
+[turbofish]: https://turbo.fish/
+[`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
 
 ## Gizmo Configuration
 
