@@ -57,11 +57,56 @@ TODO.
 
 TODO.
 
-## Automatically Inserted Sync Points
+## Automatically Insert `apply_deferred` Systems
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @hymm</div>
 
-TODO.
+A common scheduling issue is that one system needs to see the effects of commands
+queued in another system. Before 0.13, you would have to manually insert an
+`apply_deferred` system between the two. Bevy now detects when a system with commands
+is ordered relative to other systems and inserts the `apply_deferred` for you.
+
+```rust
+// Before 0.13
+app.add_systems(
+    Update,
+    (
+        system_with_commands,
+        apply_deferred,
+        another_system,
+    ).chain()
+);
+```
+
+```rust
+// After 0.13
+app.add_systems(
+    Update,
+    (
+        system_with_commands,
+        another_system,
+    ).chain()
+);
+```
+
+It also optimizes the automatically inserted `apply_deferred` systems by merging them if
+possible. In most cases, it is recommended to remove all manually inserted
+`apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will
+usually be faster.
+
+```rust
+// This will only add one apply_deferred system.
+app.add_systems(
+    Update,
+    (
+        (system_1_with_commands, system_2).chain(),
+        (system_3_with_commands, system_4).chain(),
+    )
+);
+```
+
+If this new behavior does not work for you, please consult the migration guide.
+There are several new APIs that allow you to opt-out.
 
 ## Input for One-Shot Systems
 
