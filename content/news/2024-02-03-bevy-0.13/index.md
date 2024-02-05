@@ -68,7 +68,6 @@ stepping.add_schedule(FixedUpdate);
 app.insert_resource(stepping);
 ```
 
-
 The [`Stepping`] resource has no effect until it is enabled with a call to
 `Stepping::enable()`. When the `Stepping` resource is present and enabled,
 systems within the added schedules will not be run unless we're performing
