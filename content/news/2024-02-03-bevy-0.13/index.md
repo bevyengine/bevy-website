@@ -40,17 +40,17 @@ TODO.
 <div class="release-feature-authors">authors: @dmlary</div>
 
 The new system stepping feature (`bevy_debug_stepping`) adds debugger-style
-execution control for systems.  The [`Stepping`] resource can control which
+execution control for systems. The [`Stepping`] resource can control which
 systems within a schedule execute each frame, and provides step, break, and
-continue facilities to enable live debugging.  This feature is enabled by
+continue facilities to enable live debugging. This feature is enabled by
 default in the bevy crate.
 
 The `Stepping` resource is configured with a list of schedules that it will
-control execution of when stepping is enabled.  The collection of systems
-within those schedules can be thought of as the stepping frame.  It can take
+control execution of when stepping is enabled. The collection of systems
+within those schedules can be thought of as the stepping frame. It can take
 multiple step or continue calls to traverse through the entire stepping frame.
 During this time, all schedules that have not been added to `Stepping` are
-executing each frame.  This allows rendering & input handling to continue while
+executing each frame. This allows rendering & input handling to continue while
 stepping through systems.
 
 ### Configuration
@@ -128,9 +128,9 @@ moving the cursor back up to the start of the stepping frame.
 ### Disabling Systems
 
 During debugging, it can be helpful to disable systems to narrow down the
-source of the problem.  `Stepping::never_run()` and `Stepping::never_run_node()`
-can be used to disable systems while stepping is enabled.  Note that disabling
-systems in this manner only has an effect while stepping is enabled.  When
+source of the problem. `Stepping::never_run()` and `Stepping::never_run_node()`
+can be used to disable systems while stepping is enabled. Note that disabling
+systems in this manner only has an effect while stepping is enabled. When
 stepping is disabled, all disabled systems will resume executing.
 
 In this video of the breakout example, we disable the `check_for_collisions()`
@@ -145,7 +145,7 @@ inside.
 It may be necessary to ensure some systems still run while stepping is enabled.
 While best-practice is to have them in a schedule that has not been added to
 the `Stepping` resource, it is possible to configure systems to always run
-while stepping is enabled.  This is primarily useful for event & input handling
+while stepping is enabled. This is primarily useful for event & input handling
 systems.
 
 Systems can be configured to always run by calling
