@@ -128,7 +128,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @DasLixou</div>
 
-Bevy uses Rust's type system at many points like for `SystemSets` which gives it a modern feel.
+Bevy uses Rust's type system extensively when defining labels, letting developers lean on tooling to catch typos and ease refactors.
 But this didn't apply to Bevy's render graph. In the render graph, hard-coded—and potentially overlapping—strings were used to define nodes and sub-graphs.
 
 ```rust
