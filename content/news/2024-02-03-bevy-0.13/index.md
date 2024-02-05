@@ -91,7 +91,7 @@ Using either `world.run_system_with_input(system_id, input)` or `commands.run_sy
 Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (which was already possible since 0.12.1, but didn't get a blog post) and it being possible to register exclusive systems as one-shot systems.
 
 ```rust
-world.system_register(|world: &mut World| { /* do anything */ });
+world.register_system(|world: &mut World| { /* do anything */ });
 ```
 
 All these improvements round out one-shot systems significantly and they should now behave normally in any Bevy context.
