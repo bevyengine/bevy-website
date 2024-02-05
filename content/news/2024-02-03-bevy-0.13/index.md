@@ -88,7 +88,7 @@ let count_two = world.run_system_with_input(id, 2).unwrap(); // increment counte
 
 Using either `world.run_system_with_input(system_id, input)` or `commands.run_system_with_input(system_id, input)`, you can now supply input parameters to systems that accept them. Additionally, both `world.run_system` and `world.run_system_with_input` now return system output as `Ok(output)`. Note that output cannot be returned when calling the system through commands, because of their deferred nature.
 
-Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (which was already possible since 0.12.1, but didn't get a blog post) and it being possible to register exclusive systems as one-shot systems.
+Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (which was already possible since 0.12.1, but didn't get a blog post) and the ability to register exclusive systems as one-shot systems.
 
 ```rust
 world.register_system(|world: &mut World| { /* do anything */ });
