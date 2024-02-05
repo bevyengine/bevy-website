@@ -234,12 +234,6 @@ probably avoid doing it inside a hot loop.
 
 ## Entity Optimizations
 
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## `WorldQuery` Trait Split
-
 <div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @bushrat011899, @james7132</div>
 
 `Entity` received a number of changes this cycle, combining laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
@@ -410,6 +404,46 @@ Naturally, _adding_ asserts in potentially hot codepaths were cause for some con
 #### `TableRow` Casting notes
 
 * [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
+
+## `WorldQuery` Trait Split
+
+<div class="release-feature-authors">authors: @wainwrightmark @taizu-jin</div>
+
+A [`Query`] has two type parameters: one for the the data to be fetched, and a second optional one for the filters.
+
+In previous versions of Bevy both parameters had to implement [`WorldQuery`] but there was nothing stopping you from using types intended as filters in the data position (or vice versa).
+
+Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behaviour in either position.
+
+Unfortunately this was not the case for [`Changed`] and [`Added`] which had different (and undocumented) behaviour in the data position and this could lead to bugs in user code.
+
+To allow us to prevent this type of bug at compile time, the [`WorldQuery`] trait has been replaced by two traits: [`QueryData`] and [`QueryFilter`]. The data parameter of a [`Query`] must now be [`QueryData`] and the filter parameter must be [`QueryFilter`].
+
+Most user code should be unaffected or easy to migrate.
+
+```rust
+// `With` filter in the data position - will not compile in 0.13
+fn my_system(query: Query<(Entity, With<ComponentA>)>)
+{
+  for (entity, ()) in query.iter(){
+    // The type signature of the query items is `(Entity, ())`, which is usable but unwieldy
+  }
+}
+
+// Still compiles as in 0.12
+fn my_system(query: Query<Entity, With<ComponentA>>)
+{
+  for entity in query.iter(){
+  }
+}
+```
+
+[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.Query.html
+[`WorldQuery`]: https://docs.rs/bevy/0.12.0/bevy/ecs/query/trait.WorldQuery.html
+[`Changed`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Changed.html
+[`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Added.html
+[`QueryData`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryData.html
+[`QueryFilter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryFilter.html
 
 ## Automatically Insert `apply_deferred` Systems
 
