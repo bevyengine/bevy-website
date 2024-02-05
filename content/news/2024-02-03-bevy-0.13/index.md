@@ -138,7 +138,7 @@ impl MyRenderNode {
 }
 ```
 
-We are now introducing a more robust way to name rendernodes and -graphs with the help of Rust's type system and Bevy's label system.
+In Bevy 0.13, we're using a more robust way to name render nodes and render graphs with the help of Rust's type system and Bevy's label system.
 
 ```rust
 // After 0.13
