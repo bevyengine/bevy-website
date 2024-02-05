@@ -156,7 +156,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @bushrat011899</div>
 
-In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The recent addition of [`meta` files] allowed for specifying more granular loading behavior, but file extensions were still required. In Bevy 0.13, the asset type can now used to infer the [`AssetLoader`].
+In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The recent addition of [`meta` files] allowed for specifying more granular loading behavior, but file extensions were still required. In Bevy 0.13, the asset type can now be used to infer the [`AssetLoader`].
 
 ```rust
 // Uses AudioSettingsAssetLoader
@@ -206,11 +206,13 @@ When loading an asset, the loader is chosen by checking (in order):
 3. The file extension
 
 ```rust
-// This will be inferred from context to be a Gltf asset, ignoring the file extension
+// This will be inferred from context to be a glTF asset, ignoring the file extension
 let gltf_handle = asset_server.load("models/cube/cube.gltf");
 
 // This still relies on file extension due to the label
 let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
+//                                                        ^^^^^^^^^^^^^^^^^
+//                                                        | Asset path label
 ```
 
 ### File extensions are now optional
