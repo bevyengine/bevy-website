@@ -13,7 +13,7 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - uses: actions/cache@v3
         with:
@@ -51,7 +51,7 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - uses: actions/cache@v3
         with:
@@ -78,7 +78,7 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: "Clone Bevy"
         run: >
@@ -121,7 +121,7 @@ jobs:
     needs: [markdownlint, test-code]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - uses: actions/cache@v3
         with:
@@ -147,7 +147,7 @@ jobs:
   markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -161,7 +161,7 @@ jobs:
   test-code:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - uses: actions/upload-artifact@master
         with:
@@ -174,7 +174,7 @@ jobs:
     needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@master
         with:
           name: generated-assets

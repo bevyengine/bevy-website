@@ -18,14 +18,14 @@ jobs:
     steps:
 
       - name: Checkout Bevy latest tag
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
 
       # temporary: fetch tools from main branch
       - name: Checkout Bevy Tools
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
           ref: 'main'
