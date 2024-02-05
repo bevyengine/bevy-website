@@ -47,7 +47,7 @@ We use Markdown reference-style links to nicely link to the Rust API docs:
 
 ## Rust API Docs
 
-Bevy's Rust API Docs are automatically generated from the latest Bevy source code. If you add [Rust documentation comments](https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments) to the Bevy codebase, the API docs will be automatically updated.
+Bevy's Rust API Docs are automatically generated from the latest Bevy source code. If you add [Rust documentation comments](https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments) to the Bevy codebase, the API docs will be automatically updated. You can view the unstable developer documentation [here](https://dev-docs.bevyengine.org), generated from the main branch.
 
 ## Bevy Markdown Docs
 

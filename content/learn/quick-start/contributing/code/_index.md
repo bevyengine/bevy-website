@@ -16,6 +16,7 @@ Would you like to contribute code to Bevy?  Here's how!
 
 1. Fork the [`bevyengine/bevy` repository on GitHub][bevy], you'll need to create a GitHub account if you don't have one already.*
 2. Make your changes in a local clone of your fork
+   - You can view the unstable developer documentation [here](https://dev-docs.bevyengine.org), generated from the main branch on Github.
 3. For a higher chance of CI passing the first time, consider locally running `cargo run -p ci`. You can run the commands manually:
    1. `cargo fmt --all -- --check`  (remove `--check` to let the command fix found problems)
    2. `cargo clippy --workspace --all-targets --all-features -- -D warnings -A clippy::type_complexity -A clippy::manual-strip`
