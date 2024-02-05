@@ -163,11 +163,14 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - uses: actions/upload-artifact@master
-        with:
-          name: generated-errors
-          path: content/learn/errors
-          retention-days: 1
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      - name: Build & run doc tests
+        run: cd code-validation && cargo test
 
   build-website:
     runs-on: ubuntu-latest
