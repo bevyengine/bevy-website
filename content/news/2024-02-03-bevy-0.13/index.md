@@ -108,7 +108,6 @@ app.add_systems(
 If this new behavior does not work for you, please consult the migration guide.
 There are several new APIs for opting out of this.
 
-## Input for one-shot systems
 ## Input for One-Shot Systems
 
 <div class="release-feature-authors">authors: @TODO</div>
