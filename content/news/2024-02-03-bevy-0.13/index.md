@@ -61,8 +61,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @hymm</div>
 
-A common scheduling issue is that one system needs to see the effects of the
-commands of another. Before 0.13, you would have to manually insert an
+A common scheduling issue is that one system needs to see the effects of commands executed in another system. Before 0.13, you would have to manually insert an
 `apply_deferred` system between the two. Bevy now detects when a system with commands
 is ordered relative to another and inserts the `apply_deferred` for you.
 
