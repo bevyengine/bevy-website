@@ -29,7 +29,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Lightmaps:** the first step towards baked global illumination: a fast, popular and pretty lighting technique.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
 
-## Primitive shapes
+## Primitive Shapes
 
 <div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
 
@@ -145,139 +145,665 @@ To make it easier to reason about ray casts in different dimensions, the old `Ra
 
 <div class="release-feature-authors">authors: @TODO</div>
 
-## Dynamic queries
+## Dynamic Queries
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+## Transmute Queries
+
+<div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
+
+Have you every wanted to pass a query to a function, but instead of having a
+`Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
+Well now you can by using the `Query::transmute_lens` method. Query transmutes
+allow you to change a query into different query types as long as the
+componenets accessed are a subset of the original query. If you do try to access
+data that is not in the original query, this method will panic.
+
+```rust
+fn reusable_function(lens: &mut QueryLens<&Transform>) {
+    let query = lens.query();
+    // do something with the query...
+}
+
+// We can use the function in a system that takes the exact query.
+fn system_1(mut query: Query<&Transform>) {
+    reusable_function(&mut query.as_query_lens());
+}
+
+// We can also use it with a query that does not match exactly
+// by transmuting it.
+fn system_2(mut query: Query<(&mut Transform, &Velocity), With<Enemy>>) {
+    let mut lens = query.transmute_lens::<&Transform>();
+    reusable_function(&mut lens);
+}
+```
+
+Note that the `QueryLens` will still iterate over the same entities as the
+original `Query` it is derived from. A `QueryLens<&Transform>` taken from
+a `Query<(&Transform, &Velocity)>`, will only include the `Transform` of
+entities with both `Transform` and `Velocity` components.
+
+Besides removing parameters you can also change them in limited ways to the
+different smart pointer types. One of the more useful is to change a
+`& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
+for more details.
+
+One thing to take into consideration is the transmutation is not free.
+It works by creating a new state and copying a bunch of the cached data
+inside the original query. It's not a expensive operation, but you should
+probably avoid doing it inside a hot loop.
+
+## Entity Optimizations
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Entity optimizations
+## `WorldQuery` Trait Split
+
+<div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @bushrat011899, @james7132</div>
+
+`Entity` received a number of changes this cycle, combining laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
+
+### Changing `Entity`'s Layout
+
+This is a story told in two parts, with part one dealing with two PRs: The "Unified Identifier for entities & relations" PR ([#9797](https://github.com/bevyengine/bevy/pull/9797) by @Bluefinger) and "Change Entity::generation from u32 to NonZeroU32 for niche optimization" ([#9907](https://github.com/bevyengine/bevy/pull/9907) by @notverymoe). Fundamentally, they both involved changing the layout and assumptions of `Entity`, unlocking both a needed building block for the Relations feature being worked towards, as well as gaining a needed memory/codegen optimization for `Entity`.
+
+What [#9797](https://github.com/bevyengine/bevy/pull/9797) changed was create a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
+
+```text
+|F| High value / Generation       | Low value / Index              |
+|-|-------------------------------|--------------------------------|
+|1| 31 bits                       | 32 bits                        |
+
+F = Bit Flags
+```
+
+```rust
+#[derive(Clone, Copy)]
+struct Identifier {
+    low: u32,
+    high: u32,
+}
+```
+
+The low part can be used as a full `u32` value, but the high part consists of a packed `u32` structure, with the most significant bit reserved as a flag, and the remaining 31-bits to be used as a value. _How_ the low segment and the value part of the high segment are used is not specified by the `Identifer`, only that there are reserved bits in the high segment. This bit is reserved for the purposes of a future `Pair` identifier, which would represent a different _kind_ of identifier with separate semantics/usage compared to an `Entity`. The work here is basically an implementation of the prior art established by Flecs ([citation](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)), as eventually, these new entities and entity kinds will be used to describe special component types needed for relations. In the future, more flag bits will be reserved at the cost of less available value bits in the high segment.
+
+But on top of this came [#9907](https://github.com/bevyengine/bevy/pull/9907). This PR had the effect of changing both `Entity`/`Identifier` to have a high segment that was `NonZeroU32`:
+
+```rust
+#[derive(Clone, Copy)]
+struct Identifier {
+    low: u32,
+    high: NonZeroU32,
+}
+```
+
+By including a non-zero property within `Entity`/`Identifier`, it allowed the compiler to be able to optimise `Option<Entity>` and so forth to take 8 bytes instead of 12 bytes, as it could now use invalid representations of `Entity`/`Identifier` as the `None` equivalent. The benefit here was reduced memory/cache usage for storing `Option<Entity>` as well as better codegen around methods that use or return `Option<Entity>`. The choice to modify the generation/high segment to be non-zero had the following benefits: It allowed the low/index portion of `Entity` to be zero, so index access of `Entity` from storages/archetypes/buffers in hot code paths remained untouched. Code that touched the high segment or the generation in `Entity` was in less performance sensitive sections, and when spawning, most of that code would be exactly the same, but with initialising generation with a constant `1` instead of a `0`. For `Entity` however, incrementing a generation meant it needed to ensure that if an overflow occurred, it overflowed at 31-bits **and** also overflowed to `1` instead of `0`.
+
+More over, this choice _did not interfere_ with the unified `Identifier` approach. While for `Entity`, the generation would have to be initialised with `1`; for other ID types, the high segment would always be _non-zero_ due to flag bits being set. That means a `Pair` type (which would have an ID in both high and low segments) would be unaffected as it could reference an `Entity` id in the low segment, and have its own id in the high segment.
+
+### Optimizing `Entity`'s Representation and Codegen further
+
+Part two of the `Entity` optimization story continues with initial work on improving `Entity`'s `PartialEq` implementation ([#10519](https://github.com/bevyengine/bevy/pull/10519) by @scottmcm). With `Entity`'s structure, the standard `PartialEq` derive was yielding poor codegen and leaving performance on the table as the compiler was unable to make the correct inferences on how to load `Entity` for comparisons. By removing the short-circuiting implementation that is the default for `PartialEq` derivation, the compiler could output much less assembly for the same operation, yielding some performance improvements in some areas of the codebase.
+
+However, work in this area did not stop with [#10519](https://github.com/bevyengine/bevy/pull/10519). There was further optimization potential still on the table, culminating with the PR "Optimise Entity with repr align & manual PartialOrd/Ord" ([#10558](https://github.com/bevyengine/bevy/pull/10558) by @Bluefinger). There was prior art with this PR that attempted to land similar improvements previously ([#2372](https://github.com/bevyengine/bevy/pull/2372) & [#3788](https://github.com/bevyengine/bevy/pull/3788)) but these didn't get merged due to problems at the time that didn't justify performance gains at the expense of regressions elsewhere or from complicating the `Entity` codebase.
+
+By default, `Entity`/`Identifier`'s representation had two `u32` segments, so the struct had an alignment of 4 bytes for a structure that was 8 bytes in size. Though the same size as a `u64` value, these structs were _under-aligned_ and as such, the compiler could not treat `Entity` as if it were a `u64` value. For reference, a `u64` value has a size and alignment of 8 bytes. Certain optimizations were being left out as the necessary assumptions could not be made at compile time regarding `Entity`. So `Entity`/`Identifier` were changed to have a manually defined layout and alignment, making it clearer to the compiler to treat these structs as if it were a `u64` value:
+
+```rust
+#[derive(Clone, Copy)]
+#[repr(C, align(8))]
+struct Identifier {
+    #[cfg(target_endian = "little")]
+    low: u32,
+    high: NonZeroU32,
+    #[cfg(target_endian = "big")]
+    low: u32,
+}
+```
+
+By defining the struct with a `repr(C)`, we could tell the compiler the layout of the struct exactly for both little endian and big endian platforms. By also defining the alignment of the struct to be 8 bytes, `Entity`/`Identifier` both appear to the compiler as if it were a `u64` value. The effect of this is that the `to_bits` method for `Entity`/`Identifier` becomes a simple `mov` operation which could be completely optimised away with LTO and inlining.
+
+Before:
+
+```asm
+to_bits:
+    shl     rdi, 32
+    mov     eax, esi
+    or      rax, rdi
+    ret
+```
+
+After:
+
+```asm
+to_bits:
+    mov     rax, rdi
+    ret
+```
+
+_But it doesn't stop there_. This had the effect of making hashing `Entity` even _faster_, yielding further gains on top of [#9903](https://github.com/bevyengine/bevy/pull/9903) (which landed in 0.12). It turned out that the `PartialEq` implementation could be made even quicker, by comparing directly against the bits of one `Entity` with another. With manual implementations of `PartialOrd`/`Ord`, the codegen around `Entity` was improved considerably as the compiler was now being able to treat `Entity` as a pseudo-`u64` value.
+
+For example, this was the codegen for `Entity > Entity` before the various changes:
+
+```asm
+greater_than:
+    cmp     edi, edx
+    jae     .LBB3_2
+    xor     eax, eax
+    ret
+
+.LBB3_2:
+    setne   dl
+    cmp     esi, ecx
+    seta    al
+    or      al, dl
+    ret
+```
+
+Afterwards, it compiles to this:
+
+```asm
+greater_than:
+    cmp     rdi, rsi
+    seta    al
+    ret
+```
+
+But why didn't this land before? It turned out that imposing an alignment of 8 bytes on `Entity` made `Option<Entity>` increase in size from the original 12 bytes to 16 bytes. As such, some code paths _suffered_ performance regressions in needing to load and move around 16 byte values. But with niching now possible, the new representation could stay at 8 bytes in size even as an `Option`, preventing the regressions from occurring in the first place.
+
+The micro-optimizations around `EntityHasher` did not end here though, as there was a PR made to "Save an instruction in `EntityHasher`" ([#10648](https://github.com/bevyengine/bevy/pull/10648) by @scottmcm). As [#10558](https://github.com/bevyengine/bevy/pull/10558) provided a significant improvement already to `EntityHasher` performance, the hashing algorithm was revised in a way that allowed LLVM to remove one further instruction in the compiled output. The compiler was already being clever enough to combine a multiply-shift-or operation into a single multiplication, but by expressing the algorithm with slight changes, an `or` instruction could be removed while retaining the desired hashing behaviour for `EntityHasher`.
+
+![EntityHasher assemply output diff](entityhasher_output.png)
+
+This had a detectable improvement in benchmarks, ranging from 3-6% improvement in lookups for `EntityHashMap`. These small optimizations may not amount to much on their own, but together they can provide meaningful improvements downstream.
+
+![Benchmark results of optimisation work](entity_hash_optimsation_benches.png)
+
+The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks with the "Optimise Eq" feature) to where we are now with all the optimisations in place (`optimised_entity`). Improvements across the whole board, with clear performance benefits that should impact multiple areas of the codebase, not just with entity hashing.
+
+### Porting `Query::for_each` to `QueryIter::fold` override
+
+Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This approach is the same used within `std` code.
+
+The result was deduplication of code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
+
+```rust
+fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
+    q_transform.for_each_mut(|transform| {
+        // Do something...
+    });
+}
+```
+
+Becomes:
+
+```rust
+fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
+    q_transform.iter_mut().for_each(|transform| {
+        // Do something...
+    });
+}
+```
+
+The assembly output was compared as well between what was on main branch versus the PR, with no tangible differences being seen between the old `Query::for_each` and the new `QueryIter::for_each()` output, validating the approach and ensuring the internal iteration optimizations were being applied.
+
+As a plus, the same iternal iteration optimizations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
+
+### Reducing `TableRow` `as` casting
+
+Not all improvements were focused around performance. Some small changes were done to improve type safety and tidy-up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
+
+Naturally, _adding_ asserts in potentially hot codepaths were cause for some concern, necessitating considerable benchmarking efforts to confirm there were regressions and to what level. With careful placing of the new `assert`s, the detected regression for these cases was in the region of 0.1%, but such regressions could easily be masked by compiler randomness, optimizations, etc. But the benefit was a less error-prone API and more robust code, which for a complex codebase such as Bevy's ECS code, every little helps.
+
+### Entity optimizations notes
+
+* [Making the most of ECS identifiers](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)
+* [`Option` representation](https://doc.rust-lang.org/core/option/index.html#representation)
+
+#### QueryIter::fold` override notes
+
+* [Assembly Sanity check for bevyengine/bevy#6773](https://github.com/james7132/bevy_asm_tests/commit/309947cd078086b7edc4b8b5f29b1d04255b1b9a#diff-4c4b34cf83f523fced3bd396ad7ab8e228b4d35bf65c1f0457f7e4e58b14ccc5)
+* [rustc bug for autovectorising internal iteration](https://github.com/rust-lang/rust/issues/104914)
+* [std `Iter::fold` overriding for perf gains](https://github.com/rust-lang/rust/blob/master/library/core/src/array/iter.rs#L265-L277)
+
+#### `TableRow` Casting notes
+
+* [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
+
+## Automatically Insert `apply_deferred` Systems
+
+<div class="release-feature-authors">authors: @hymm</div>
+
+A common scheduling issue is that one system needs to see the effects of commands
+queued in another system. Before 0.13, you would have to manually insert an
+`apply_deferred` system between the two. Bevy now detects when a system with commands
+is ordered relative to other systems and inserts the `apply_deferred` for you.
+
+```rust
+// Before 0.13
+app.add_systems(
+    Update,
+    (
+        system_with_commands,
+        apply_deferred,
+        another_system,
+    ).chain()
+);
+```
+
+```rust
+// After 0.13
+app.add_systems(
+    Update,
+    (
+        system_with_commands,
+        another_system,
+    ).chain()
+);
+```
+
+It also optimizes the automatically inserted `apply_deferred` systems by merging them if
+possible. In most cases, it is recommended to remove all manually inserted
+`apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will
+usually be faster.
+
+```rust
+// This will only add one apply_deferred system.
+app.add_systems(
+    Update,
+    (
+        (system_1_with_commands, system_2).chain(),
+        (system_3_with_commands, system_4).chain(),
+    )
+);
+```
+
+If this new behavior does not work for you, please consult the migration guide.
+There are several new APIs that allow you to opt-out.
+
+## One-Shot Systems Improvements
+
+<div class="release-feature-authors">authors: @Nathan-Fenner</div>
+
+In 0.12, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
+The initial implementation had some limitations with regards to what systems could and could not be used as one-shot systems.
+These limitations have since been resolved, starting with one-shot systems with input and output.
+
+```rust
+
+fn increment_sys(In(increment_by): In<i32>, mut counter: ResMut<Counter>) -> i32 {
+    counter.0 += increment_by;
+    counter.0
+}
+
+let mut world = World::new();
+let id = world.register_system(increment_sys);
+
+world.insert_resource(Counter(1));
+let count_one = world.run_system_with_input(id, 5).unwrap(); // increment counter by 5 and return 6
+let count_two = world.run_system_with_input(id, 2).unwrap(); // increment counter by 2 and return 8
+```
+
+Using either `world.run_system_with_input(system_id, input)` or `commands.run_system_with_input(system_id, input)`, you can now supply input parameters to systems that accept them. Additionally, both `world.run_system` and `world.run_system_with_input` now return system output as `Ok(output)`. Note that output cannot be returned when calling the system through commands, because of their deferred nature.
+
+Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (which was already possible since 0.12.1, but didn't get a blog post) and the ability to register exclusive systems as one-shot systems.
+
+```rust
+world.register_system(|world: &mut World| { /* do anything */ });
+```
+
+All these improvements round out one-shot systems significantly and they should now behave normally in any Bevy context.
+
+## WGPU Upgrade
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## WorldQuery trait split
+## Texture Atlas Rework
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Automatically inserted sync points
+## Sprite Slicing and Tiling
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Input for one-shot systems
+## Exposure Settings
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## WGPU upgrade
+## Minimal Reflection Probes
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Texture atlas rework
+## Light Maps
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Sprite slicing and tiling
+## Light `RenderLayers`
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Exposure settings
+## Approximate Indirect Specular Occlusion
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Minimal reflection probes
+## Unload Render Assets From RAM
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Light maps
+## Bind Group Layout Entries
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Light RenderLayers
+## Type-Safe Labels for the `RenderGraph`
+
+<div class="release-feature-authors">authors: @bardt, @oceantume</div>
+
+Historically, Bevy's UI elements have been scaled and positioned in the context of the primary window, regardless of the camera settings. This approach made some UI experiences like split-screen multiplayer difficult to implement, and others such as having UI in multiple windows impossible.
+
+We are now introducing a more flexible way of rendering the user interface: Camera-driven UI. Each camera can now have its own UI root, rendering according to its viewport, scale factor, and a target which can be a secondary window or even a texture.
+
+This change unlocks a variety of new UI experiences, including split-screen multiplayer, UI in multiple windows, displaying non-interactive UI in a 3D world, and more.
+
+![Split-screen with independent UI roots](split-screen.png)
+
+If there is one camera in the world, you don't need to do anything; your UI will be displayed in that camera's viewport.
+
+```rust
+commands.spawn(Camera3dBundle {
+    // Camera can have custom viewport, target, etc.
+});
+commands.spawn(NodeBundle {
+    // UI will be rendered to the singular camera's viewport
+});
+```
+
+For when more control is desirable, or there are multiple cameras, we introduce [`TargetCamera`] component. This component can be added to a root UI node to specify which camera it should be rendered to.
+
+```rust
+// For split-screen multiplayer, we set up 2 cameras and 2 UI roots
+let left_camera = commands.spawn(Camera3dBundle {
+    // Viewport is set to left half of the screen
+}).id();
+
+commands
+    .spawn((
+        TargetCamera(left_camera),
+        NodeBundle {
+            //...
+        }
+    ));
+
+let right_camera = commands.spawn(Camera3dBundle {
+    // Viewport is set to right half of the screen
+}).id();
+
+commands
+    .spawn((
+        TargetCamera(right_camera),
+        NodeBundle {
+            //...
+        })
+    );
+```
+
+With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
+
+```rust
+commands.spawn(Camera3dBundle::default());
+commands.spawn(NodeBundle {
+    visibility: Visibility::Hidden, // UI will be hidden
+    // ...
+});
+```
+
+[`TargetCamera`]: https://docs.rs/bevy/0.13.0/bevy/ui/struct.TargetCamera.html
+[`Visibility`]: https://docs.rs/bevy/0.13.0/bevy/render/view/enum.Visibility.html
+[`UiCameraConfig`]: https://docs.rs/bevy/0.12.1/bevy/ui/camera_config/struct.UiCameraConfig.html
+
+## Camera-Driven UI
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Approximate indirect specular occlusion
+## Winit Upgrade
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Unload render assets from RAM
+## Animation Interpolation
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Bind group layout entries
+## `Animatable` Trait
 
 <div class="release-feature-authors">authors: @TODO</div>
 
 TODO.
 
-## Type-safe labels for the `RenderGraph`
+## glTF Extensions
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @DasLixou</div>
 
-TODO.
+Bevy uses Rust's type system extensively when defining labels, letting developers lean on tooling to catch typos and ease refactors.
+But this didn't apply to Bevy's render graph. In the render graph, hard-coded—and potentially overlapping—strings were used to define nodes and sub-graphs.
 
-## Camera-driven UI
+```rust
+// Before 0.13
+impl MyRenderNode {
+    pub const NAME: &'static str = "my_render_node"
+}
+```
 
-<div class="release-feature-authors">authors: @TODO</div>
+In Bevy 0.13, we're using a more robust way to name render nodes and render graphs with the help of Rust's type system and Bevy's label system.
 
-TODO.
+```rust
+// After 0.13
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct MyRenderLabel;
+```
 
-## Winit upgrade
+With those, the long paths for const-values also get shortened and cleaner which results into this
 
-<div class="release-feature-authors">authors: @TODO</div>
+```rust
+// Before 0.13
+render_app
+    .add_render_graph_node::<ViewNodeRunner<MyRenderNode>>(
+        core_3d::graph::NAME,
+        MyRenderNode::NAME,
+    )
+    .add_render_graph_edges(
+        core_3d::graph::NAME,
+        &[
+            core_3d::graph::node::TONEMAPPING,
+            MyRenderNode::NAME,
+            core_3d::graph::node::END_MAIN_PASS_POST_PROCESSING,
+        ],
+    );
 
-TODO.
+// After 0.13
+use bevy::core_pipeline::core_3d::graph::{Labels3d, SubGraph3d};
 
-## Animation interpolation
+render_app
+    .add_render_graph_node::<ViewNodeRunner<MyRenderNode>>(
+        SubGraph3d,
+        MyRenderLabel,
+    )
+    .add_render_graph_edges(
+        SubGraph3d,
+        (
+            Labels3d::Tonemapping,
+            MyRenderLabel,
+            Labels3d::EndMainPassPostProcessing,
+        ),
+    );
+```
 
-<div class="release-feature-authors">authors: @TODO</div>
+When you need dynamic labels for render nodes, those can still be achieved via e.g. tuple structs:
 
-TODO.
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct MyDynamicLabel(&'static str);
+```
 
-## `Animatible` trait
+This is particularly nice because we don't have to store strings in here: we can use integers, custom enums or any other hashable type.
 
-<div class="release-feature-authors">authors: @TODO</div>
+## Extensionless Asset Support
 
-TODO.
+<div class="release-feature-authors">authors: @bushrat011899</div>
 
-## gltF extensions
+In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The recent addition of [`meta` files] allowed for specifying more granular loading behavior, but file extensions were still required. In Bevy 0.13, the asset type can now be used to infer the [`AssetLoader`].
 
-<div class="release-feature-authors">authors: @TODO</div>
+```rust
+// Uses AudioSettingsAssetLoader
+let audio = asset_server.load("data/audio.json");
 
-TODO.
+// Uses GraphicsSettingsAssetLoader
+let graphics = asset_server.load("data/graphics.json");
+```
 
-## Extensionless asset support
+This is possible because every [`AssetLoader`] is required to declare what **type** of asset it loads, not just the extensions it supports. Since the [`load`] method on [`AssetServer`] was already generic over the type of asset to return, this information is already available to the [`AssetServer`] so that the appropriate [`Handle`] type is returned.
 
-<div class="release-feature-authors">authors: @TODO</div>
+```rust
+// The above example with types shown
+let audio: Handle<AudioSettings> = asset_server.load::<AudioSettings>("data/audio.json");
+let graphics: Handle<GraphicsSettings> = asset_server.load::<GraphicsSettings>("data/graphics.json");
+```
 
-TODO.
+Now we can also use it to choose the [`AssetLoader`] itself.
 
-## Gizmo configuration
+```rust
+#[derive(Resource)]
+struct Settings {
+    audio: Handle<AudioSettings>,
+//                ^^^^^^^^^^^^^
+//                | This type...
+}
+
+fn setup(mut settings: ResMut<Settings>, asset_server: Res<AssetServer>) {
+    settings.audio = asset_server.load("data/audio.json");
+//                                ^^^^
+//                                | ...is passed here...
+}
+
+impl AssetLoader for AudioSettingsAssetLoader {
+    type Asset = AudioSettings;
+//               ^^^^^^^^^^^^^
+//               | ...and checked against AssetLoader::Asset
+
+    /* snip */
+}
+```
+
+When loading an asset, the loader is chosen by checking (in order):
+
+1. The asset `meta` file
+2. The type of `Handle<A>` to return
+3. The file extension
+
+```rust
+// This will be inferred from context to be a glTF asset, ignoring the file extension
+let gltf_handle = asset_server.load("models/cube/cube.gltf");
+
+// This still relies on file extension due to the label
+let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
+//                                                        ^^^^^^^^^^^^^^^^^
+//                                                        | Asset path label
+```
+
+### File extensions are now optional
+
+Since the asset type can be used to infer the loader, neither the file to be loaded nor the [`AssetLoader`] need to have file extensions.
+
+```rust
+pub trait AssetLoader: Send + Sync + 'static {
+    /* snip */
+
+    /// Returns a list of extensions supported by this [`AssetLoader`], without the preceding dot.
+    fn extensions(&self) -> &[&str] {
+        // A default implementation is now provided
+        &[]
+    }
+}
+```
+
+Previously, an asset loader with no extensions was very cumbersome to use. Now, they can be used just as easily as any other loader. Likewise, if a file is missing its extension, Bevy can now choose the appropriate loader.
+
+```rust
+let license = asset_server.load::<Text>("LICENSE");
+```
+
+Appropriate file extensions are still recommended for good project management, but this is now a recommendation rather than a hard requirement.
+
+### Multiple `AssetLoader`'s can be selected for the same asset
+
+Now, a single path can be used by multiple asset handles as long as they are distinct asset types.
+
+```rust
+// Load the sound effect for playback
+let bang = asset_server.load::<AudioSource>("sound/bang.ogg");
+
+// Load the raw bytes of the same sound effect (e.g, to send over the network)
+let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
+
+// Returns the bang handle since it was already loaded
+let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
+```
+
+Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
+
+```rust
+#[derive(Resource)]
+struct SoundEffects {
+    bang: Handle<AudioSource>,
+    bang_blog: Handle<Blob>,
+}
+
+fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
+    effects.bang = asset_server.load("sound/bang.ogg");
+    effects.bang_blob = asset_server.load("sound/bang.ogg");
+}
+```
+
+### More information
+
+The [`custom_asset` example] has been updated to demonstrate these new features.
+
+[`meta` files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
+[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
+[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
+[`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
+[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
+[turbofish]: https://turbo.fish/
+[`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
+
+## Gizmo Configuration
 
 <div class="release-feature-authors">authors: @TODO</div>
 
