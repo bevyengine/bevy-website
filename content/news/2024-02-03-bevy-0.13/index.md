@@ -54,6 +54,7 @@ executing each frame.  This allows rendering & input handling to continue while
 stepping through systems.
 
 ### Configuration
+
 To get started the [`Stepping`] resource must be configured with the schedules
 it will be controlling, then added to the world:
 
@@ -67,13 +68,15 @@ stepping.add_schedule(FixedUpdate);
 app.insert_resource(stepping);
 ```
 
-The [`Stepping`] resource has no effect until it is enabled with a call to 
+
+The [`Stepping`] resource has no effect until it is enabled with a call to
 `Stepping::enable()`. When the `Stepping` resource is present and enabled,
 systems within the added schedules will not be run unless we're performing
 a system step, continuing the stepping frame, or the system has been exempt
 from stepping.
 
 ### Execution Control: System Step & Continue Frame
+
 While stepping is enabled, the `Stepping` resource tracks its location within
 the stepping frame, maintaining a stepping cursor pointing at the next system
 to be executed.
@@ -99,68 +102,82 @@ clicked, you can see the game progress one stepping frame for each click.
 <video controls><source src="stepping-step-continue.mp4" type="video/mp4"/></video>
 
 ### Breakpoints
-When a schedule has dozens of systems, but you're only interested in the effects
-of a few of them, breakpoints can be added with `Stepping::break()` can be used
-to add a breakpoint for a given system:
 
-```rust
-stepping.set_breakpoint(FixedUpdate, check_for_collisions);
-```
+When a schedule grows to a certain point, it can take a long time to step
+through every system in the schedule just to see the effects of a few systems.
+In this case, stepping provides system breakpoints.
 
-Continuing will resume execution of the frame, but will stop if it encounters a
-system with a breakpoint.  If the stepping cursor is at a breakpoint when
-`Stepping::continue_frame()` is called, then stepping will execute that system
-and any following systems until another breakpoint is encountered, or all
-systems have been run.
+You can set a breakpoint on those systems you care about, then use
+`Stepping::continue_frame()` to run systems starting at the stepping cursor
+until a breakpoint is encountered, or the end of the stepping frame.
+If the stepping cursor points at a system with a breakpoint when you call
+`Stepping::continue_frame()` that system will run.  This allows you to set
+breakpoints through a system, and repeatedly continue the frame to stop prior
+to each system of interest.
 
 In this video of the breakout example, we add a breakpoint to
-`check_for_collisions()` so we can verify the behavior of the system
-each frame without stepping through all the other systems.  The stepping
-cursor moves from the start of the frame to `check_for_collisions()` the first
-time we click `continue` in the ui.  On the next click, `check_for_collisions()`
-and all remaining systems are run, moving the cursor back up to the start of
-the system list.
+`check_for_collisions()` so we can verify the collision detection & handling
+behavior each frame without stepping through all the other systems.
+
+The video shows the stepping cursor moves from the start of the stepping frame
+to `check_for_collisions()` the first time we click `continue` in the ui.  On
+the next click, `check_for_collisions()` and all remaining systems are run,
+moving the cursor back up to the start of the stepping frame.
 
 <video controls><source src="stepping-breakpoint.mp4" type="video/mp4"/></video>
 
 ### Disabling Systems
-During debugging it may be necessary to disable systems to eliminate them as the
-source of the problem.  This can be done in stepping with `Stepping::never_run()`
-or `Stepping::never_run_node()`.  Note that systems are only disabled while
-stepping is enabled; when stepping is disabled, disabled systems will run as
-normal.
+
+During debugging, it can be helpful to disable systems to narrow down the
+source of the problem.  `Stepping::never_run()` and `Stepping::never_run_node()`
+can be used to disable systems while stepping is enabled.  Note that disabling
+systems in this manner only has an effect while stepping is enabled.  When
+stepping is disabled, all disabled systems will resume executing.
 
 In this video of the breakout example, we disable the `check_for_collisions()`
-system and use continue to move the ball into the center of the blocks, then
-re-enable the system to have fun destroying all the blocks from the inside.
+system and use continue frame to move the ball into the center of the blocks,
+then re-enable the system to have fun destroying all the blocks from the
+inside.
 
 <video controls><source src="stepping-disable-system.mp4" type="video/mp4"/></video>
 
 ### Excluding Systems from Stepping
-There are cases where a system should run when stepping is enabled.  Good
-examples of this are input handling functions.  To exclude a system from being
-controlled by stepping use `Stepping::always_run()` or
-`Stepping::always_run_node()`.  When a system is set to always run, it will run
-each rendered frame regardless of stepping state.
 
-In this video of the breakout example, set `move_paddle()` to always run, and
-then use the keys to move the paddle while the rest of the game appears to be
-paused as the other systems are not running.
+It may be necessary to ensure some systems still run while stepping is enabled.
+While best-practice is to have them in a schedule that has not been added to
+the `Stepping` resource, it is possible to configure systems to always run
+while stepping is enabled.  This is primarily useful for event & input handling
+systems.
+
+Systems can be configured to always run by calling
+`Stepping::always_run()`, or `Stepping::always_run_node()`.
+When a system is configured to always run, it will run each rendering frame
+even when stepping is enabled.
+
+In this video of the breakout example the `move_paddle()` system is configured
+to always run.  We then use the arrow keys to move the paddle while the rest
+of the game systems are stopped by stepping.  This allows us to position the
+paddle precisely before continuing frame-by-frame as the ball impacts the
+paddle.
 
 <video controls><source src="stepping-run-always.mp4" type="video/mp4"/></video>
 
 ### Limitations
-In this initial implementation of stepping there are some limitations:
-* Any system that reads events likely will not step properly
-    * Frames still advance normally while stepping is enabled
-    * Events can be cleared before a stepped system can read them
-    * Best approach here is to configure event-based systems to always run
-    * Continue with breakpoints may also work in this scenario
-* Conditional systems may not run as expected when stepping
-    * Similar to event-based systems, if the condition is true for only a short
-      time, system may not run when stepped
 
-### Further Reading
+In this initial implementation of stepping there are some limitations:
+
+* Any system that reads events likely will not step properly
+  * Frames still advance normally while stepping is enabled
+  * Events can be cleared before a stepped system can read them
+  * Best approach here is to configure event-based systems to always run,
+    or put them in a schedule not added to `Stepping`
+  * Continue with breakpoints may also work in this scenario
+* Conditional systems may not run as expected when stepping
+  * Similar to event-based systems, if the condition is true for only a short
+    time, system may not run when stepped
+
+### Detailed Examples
+
 * [Text-based stepping example](https://github.com/bevyengine/bevy/blob/main/examples/ecs/system_stepping.rs)
 * Non-interactive [bevy UI example stepping plugin](https://github.com/bevyengine/bevy/blob/examples/games/stepping.rs) used in the breakout example
 * Interactive [egui stepping plugin](https://gist.github.com/dmlary/3fd57ebf1f88bb9afa8a6604737dac97) used in demo videos
