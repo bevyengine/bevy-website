@@ -142,6 +142,10 @@ mod tests {
 
             }
             # test 3
+            #[derive(Component)]
+            struct A;
+            # #[derive(Component)]
+            struct B;
             ```
         "#};
 
@@ -150,13 +154,17 @@ mod tests {
         assert_eq!(
             contents.unwrap(),
             indoc! {r#"
-                ```rust,hide_lines=1-2 6
+                ```rust,hide_lines=1-2 6 9
                 # test
                 # test 2
                 fn not_hidden() {
 
                 }
                 # test 3
+                #[derive(Component)]
+                struct A;
+                # #[derive(Component)]
+                struct B;
                 ```
 
             "#}
@@ -229,6 +237,10 @@ mod tests {
 
     }
     # test 3
+    #[derive(Component)]
+    struct A;
+    # #[derive(Component)]
+    struct B;
     ```
 "#;
 
@@ -237,13 +249,17 @@ mod tests {
         assert_eq!(
             contents.unwrap(),
             r#"
-    ```rust,hide_lines=1-2 6
+    ```rust,hide_lines=1-2 6 9
     # test
     # test 2
     fn not_hidden() {
 
     }
     # test 3
+    #[derive(Component)]
+    struct A;
+    # #[derive(Component)]
+    struct B;
     ```
 
 "#
