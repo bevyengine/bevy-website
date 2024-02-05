@@ -128,8 +128,8 @@ TODO.
 
 <div class="release-feature-authors">authors: @DasLixou</div>
 
-Bevy uses rusts type system at many points like for SystemSets which gives it a modern feel.
-But this didn't apply to its render graph. Here, hardcoded potentially overlapping strings were used to define nodes and sub-graphs.
+Bevy uses Rust's type system at many points like for `SystemSets` which gives it a modern feel.
+But this didn't apply to Bevy's render graph. In the render graph, hard-coded—and potentially overlapping—strings were used to define nodes and sub-graphs.
 
 ```rust
 // Before 0.13
@@ -138,7 +138,7 @@ impl MyRenderNode {
 }
 ```
 
-We are now introducing a more robust way to name rendernodes and -graphs with the help of rusts type system and bevys label system.
+We are now introducing a more robust way to name rendernodes and -graphs with the help of Rust's type system and Bevy's label system.
 
 ```rust
 // After 0.13
