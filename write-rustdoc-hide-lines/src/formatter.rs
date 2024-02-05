@@ -69,7 +69,8 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
         let is_code_block_delim = code_block_delim_match.is_some();
 
         if !inside_code_block && is_code_block_delim {
-            if code_block_delim_match.unwrap().as_str() == "rust" {
+            let lang = code_block_delim_match.unwrap().as_str();
+            if lang == "rust" || lang == "rs" {
                 is_rust = true;
             }
 
