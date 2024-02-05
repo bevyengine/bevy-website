@@ -189,7 +189,7 @@ When you need dynamic labels for render nodes, those can still be achieved via e
 pub struct MyDynamicLabel(&'static str);
 ```
 
-The nice thing is, that this don't has to be a string, it can be any type, also numbers etc.
+This is particularly nice because we don't have to store strings in here: we can use integers, custom enums or any other hashable type.
 
 ## Camera-driven UI
 
