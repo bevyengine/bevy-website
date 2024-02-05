@@ -1,4 +1,5 @@
 use anyhow::Result;
+use regex::Regex;
 use std::{
     ffi::OsStr,
     fmt::Write,
@@ -7,9 +8,7 @@ use std::{
     path::Path,
 };
 
-use crate::{
-    code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges
-};
+use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
 pub fn run(dir: &Path) -> Result<()> {
     visit_dir_md_files(dir, &|entry| {
@@ -19,8 +18,10 @@ pub fn run(dir: &Path) -> Result<()> {
         let file = File::open(entry.path())?;
         let file_size = file.metadata().unwrap().len().try_into().unwrap();
         let contents = format_file(
-            io::BufReader::new(file).lines().map(|line| line.map_err(anyhow::Error::from)),
-            file_size
+            io::BufReader::new(file)
+                .lines()
+                .map(|line| line.map_err(anyhow::Error::from)),
+            file_size,
         )?;
 
         // Rewrite file
@@ -53,57 +54,71 @@ fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Resul
 
 fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -> Result<String> {
     let mut contents = String::with_capacity(file_size);
-    let mut is_inside_rust_code_block = false;
     let mut rust_block: Vec<String> = vec![];
+    let mut is_rust = false;
+
+    let mut inside_code_block = false;
+
+    // Find a code block delimiter and optionally the first specified language
+    let code_block_delim = Regex::new(r"\s*```(\w*)")?;
 
     for line in reader {
         let line = line?;
-        let is_code_block_open = line.starts_with("```rust");
-        let is_code_block_close = line == "```";
 
-        if is_inside_rust_code_block && is_code_block_open {
-            panic!("Nested '```rust' code block not allowed");
-        } else if is_code_block_open {
-            is_inside_rust_code_block = true;
+        let code_block_delim_match = code_block_delim.captures(&line).and_then(|cap| cap.get(1));
+        let is_code_block_delim = code_block_delim_match.is_some();
+
+        if !inside_code_block && is_code_block_delim {
+            let lang = code_block_delim_match.unwrap().as_str();
+            if lang == "rust" || lang == "rs" {
+                is_rust = true;
+            }
+
+            inside_code_block = true;
+        } else if inside_code_block && is_code_block_delim {
+            inside_code_block = false;
         }
 
-        // Skip the line, save it as is
-        if !is_inside_rust_code_block {
+        // Pass through non-rust code block contents and contents outside of code blocks.
+        if !is_rust {
             writeln!(&mut contents, "{}", &line)?;
             continue;
         }
 
         rust_block.push(line);
 
-        // Process the `rust` code block
-        if is_code_block_close {
-            let code = &rust_block[1..rust_block.len() - 1];
-            let real_hidden_ranges = get_hidden_ranges(code);
-            let mut definition = CodeBlockDefinition::new(&rust_block[0]).unwrap();
+        if inside_code_block {
+            continue;
+        }
 
-            match definition.get_hidden_ranges() {
-                Some(annotation_hidden_ranges) => {
-                    if *annotation_hidden_ranges != real_hidden_ranges {
-                        definition.set_hidden_ranges(real_hidden_ranges);
-                    }
-                }
-                None => {
-                    if !real_hidden_ranges.is_empty() {
-                        definition.set_hidden_ranges(real_hidden_ranges);
-                    }
+        // Process the `rust `code block
+        let code = &rust_block[1..rust_block.len() - 1];
+        let real_hidden_ranges = get_hidden_ranges(code);
+        let mut definition = CodeBlockDefinition::new(&rust_block[0]).unwrap();
+
+        match definition.get_hidden_ranges() {
+            Some(annotation_hidden_ranges) => {
+                if *annotation_hidden_ranges != real_hidden_ranges {
+                    definition.set_hidden_ranges(real_hidden_ranges);
                 }
             }
-
-            // Rewrite code block Zola annotations
-            rust_block[0] = definition.into_string();
-
-            // Write code block
-            writeln!(&mut contents, "{}", &rust_block.join("\n"))?;
-
-            // Reset state
-            is_inside_rust_code_block = false;
-            rust_block = vec![];
+            None => {
+                if !real_hidden_ranges.is_empty() {
+                    definition.set_hidden_ranges(real_hidden_ranges);
+                }
+            }
         }
+
+        // Rewrite code block Zola annotations
+        rust_block[0] = definition.into_string();
+
+        // Write code block
+        writeln!(&mut contents, "{}", &rust_block.join("\n"))?;
+
+        // Reset state
+        inside_code_block = false;
+        rust_block = vec![];
+        is_rust = false;
     }
 
     Ok(contents)
@@ -111,11 +126,11 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
 
 #[cfg(test)]
 mod tests {
-    use indoc::indoc;
     use super::*;
+    use indoc::indoc;
 
     fn lines_iter(code: &str) -> impl Iterator<Item = Result<String>> + '_ {
-        code.split("\n").map(|line| Ok(String::from(line)))
+        code.split('\n').map(|line| Ok(String::from(line)))
     }
 
     #[test]
@@ -128,6 +143,10 @@ mod tests {
 
             }
             # test 3
+            #[derive(Component)]
+            struct A;
+            # #[derive(Component)]
+            struct B;
             ```
         "#};
 
@@ -136,13 +155,17 @@ mod tests {
         assert_eq!(
             contents.unwrap(),
             indoc! {r#"
-                ```rust,hide_lines=1-2 6
+                ```rust,hide_lines=1-2 6 9
                 # test
                 # test 2
                 fn not_hidden() {
 
                 }
                 # test 3
+                #[derive(Component)]
+                struct A;
+                # #[derive(Component)]
+                struct B;
                 ```
 
             "#}
@@ -202,6 +225,45 @@ mod tests {
                 ```
 
             "#}
+        );
+    }
+
+    #[test]
+    fn indented() {
+        let markdown = r#"
+    ```rust
+    # test
+    # test 2
+    fn not_hidden() {
+
+    }
+    # test 3
+    #[derive(Component)]
+    struct A;
+    # #[derive(Component)]
+    struct B;
+    ```
+"#;
+
+        let contents = format_file(lines_iter(markdown), markdown.len());
+
+        assert_eq!(
+            contents.unwrap(),
+            r#"
+    ```rust,hide_lines=1-2 6 9
+    # test
+    # test 2
+    fn not_hidden() {
+
+    }
+    # test 3
+    #[derive(Component)]
+    struct A;
+    # #[derive(Component)]
+    struct B;
+    ```
+
+"#
         );
     }
 }

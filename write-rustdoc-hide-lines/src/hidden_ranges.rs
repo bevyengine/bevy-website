@@ -1,5 +1,7 @@
 use std::ops::Range;
 
+use regex::Regex;
+
 pub type HiddenRanges = Vec<Range<usize>>;
 
 // The generic is to allow both `&[String]` (slice of `Vec<String>`) and `&[&str]` (slice of `Vec<&str>`)
@@ -8,10 +10,15 @@ pub fn get_hidden_ranges<T: AsRef<str>>(code: &[T]) -> HiddenRanges {
     let mut ranges = vec![];
     let mut curr_range: Option<Range<usize>> = None;
 
+    // Match lines starting with a potentially indented `#` followed by a space or EOL.
+    let Ok(is_hidden_re) = Regex::new(r"^\s*#(?: |$)") else {
+        return ranges;
+    };
+
     for (idx, line) in code.iter().enumerate() {
         let n = idx + 1;
         let line = line.as_ref();
-        let is_hidden = line.starts_with("# ") || line == "#";
+        let is_hidden = is_hidden_re.is_match(line);
 
         if is_hidden {
             if let Some(range) = curr_range.as_mut() {
@@ -41,14 +48,14 @@ mod tests {
     use indoc::indoc;
 
     fn split_lines(code: &str) -> Vec<&str> {
-        code.split("\n").collect::<Vec<_>>()
+        code.split('\n').collect::<Vec<_>>()
     }
 
     #[test]
     fn empty_block() {
         let code = split_lines(indoc! {r#""#});
 
-        assert_eq!(get_hidden_ranges(&code), vec![]);
+        assert!(get_hidden_ranges(&code).is_empty());
     }
 
     #[test]
@@ -61,7 +68,7 @@ mod tests {
             5
         "#});
 
-        assert_eq!(get_hidden_ranges(&code), vec![]);
+        assert!(get_hidden_ranges(&code).is_empty());
     }
 
     #[test]
