@@ -318,11 +318,38 @@ app.add_systems(
 If this new behavior does not work for you, please consult the migration guide.
 There are several new APIs that allow you to opt-out.
 
-## Input for One-Shot Systems
+## One-Shot Systems Improvements
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @Nathan-Fenner</div>
 
-TODO.
+In 0.12, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
+The initial implementation had some limitations with regards to what systems could and could not be used as one-shot systems.
+These limitations have since been resolved, starting with one-shot systems with input and output.
+
+```rust
+
+fn increment_sys(In(increment_by): In<i32>, mut counter: ResMut<Counter>) -> i32 {
+    counter.0 += increment_by;
+    counter.0
+}
+
+let mut world = World::new();
+let id = world.register_system(increment_sys);
+
+world.insert_resource(Counter(1));
+let count_one = world.run_system_with_input(id, 5).unwrap(); // increment counter by 5 and return 6
+let count_two = world.run_system_with_input(id, 2).unwrap(); // increment counter by 2 and return 8
+```
+
+Using either `world.run_system_with_input(system_id, input)` or `commands.run_system_with_input(system_id, input)`, you can now supply input parameters to systems that accept them. Additionally, both `world.run_system` and `world.run_system_with_input` now return system output as `Ok(output)`. Note that output cannot be returned when calling the system through commands, because of their deferred nature.
+
+Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (which was already possible since 0.12.1, but didn't get a blog post) and the ability to register exclusive systems as one-shot systems.
+
+```rust
+world.register_system(|world: &mut World| { /* do anything */ });
+```
+
+All these improvements round out one-shot systems significantly and they should now behave normally in any Bevy context.
 
 ## WGPU Upgrade
 
