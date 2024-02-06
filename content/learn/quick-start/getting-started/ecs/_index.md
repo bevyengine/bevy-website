@@ -22,7 +22,6 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 
     ```rs
     # use bevy::prelude::*;
-
     #[derive(Component)]
     struct Position { x: f32, y: f32 }
     ```
@@ -31,7 +30,6 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 
     ```rs
     # use bevy::prelude::*;
-
     fn print_position_system(query: Query<&Position>) {
         for position in &query {
             println!("position: {} {}", position.x, position.y);
@@ -43,7 +41,6 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 
     ```rs
     # use bevy::prelude::*;
-
     struct Entity(u64);
     ```
 
@@ -57,7 +54,6 @@ Paste the following function into your `main.rs` file:
 
 ```rs
 # use bevy::prelude::*;
-
 fn hello_world() {
     println!("hello world!");
 }
@@ -66,8 +62,7 @@ fn hello_world() {
 This will be our first system. The only remaining step is to add it to our [`App`]!
 
 ```rs
-use bevy::prelude::*;
-
+# use bevy::prelude::*;
 fn main() {
     App::new()
         .add_systems(Update, hello_world)
@@ -92,7 +87,6 @@ Add this struct to your `main.rs` file:
 
 ```rs
 # use bevy::prelude::*;
-
 #[derive(Component)]
 struct Person;
 ```
@@ -101,7 +95,6 @@ But what if we want our people to have a name? In a more traditional design, we 
 
 ```rs
 # use bevy::prelude::*;
-
 #[derive(Component)]
 struct Name(String);
 ```
@@ -110,7 +103,6 @@ We can then add people to our [`World`] using a "startup system". Startup system
 
 ```rs
 # use bevy::prelude::*;
-
 fn add_people(mut commands: Commands) {
     commands.spawn((Person, Name("Elaina Proctor".to_string())));
     commands.spawn((Person, Name("Renzo Hume".to_string())));
@@ -122,7 +114,6 @@ Now register the startup system like this:
 
 ```rs
 # use bevy::prelude::*;
-
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
@@ -140,7 +131,6 @@ We could run this now and the `add_people` system would run first, followed by `
 
 ```rs
 # use bevy::prelude::*;
-
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
         println!("hello {}!", name.0);
@@ -157,7 +147,6 @@ Now we just register the system in our `App`. Note that you can pass more than o
 
 ```rs
 # use bevy::prelude::*;
-
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
@@ -185,7 +174,6 @@ If we want to change the names of some people (perhaps they got married!), for e
 
 ```rs
 # use bevy::prelude::*;
-
 fn update_people(mut query: Query<&mut Name, With<Person>>) {
     for mut name in &mut query {
         if name.0 == "Elaina Proctor" {
@@ -202,7 +190,6 @@ Don’t forget to add the system to the [`Update`] schedule:
 
 ```rs
 # use bevy::prelude::*;
-
 fn main() {
     App::new()
         .add_systems(Startup, add_people)

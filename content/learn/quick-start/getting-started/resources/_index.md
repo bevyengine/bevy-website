@@ -30,7 +30,6 @@ Resources are accessed in much the same way that we access components. You can a
 
 ```rs
 # use bevy::prelude::*;
-
 fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
     for name in &query {
         println!("hello {}!", name.0);
@@ -44,7 +43,6 @@ The `delta` field on [`Time`] gives us the time that has passed since the last u
 
 ```rs
 # use bevy::prelude::*;
-
 #[derive(Resource)]
 struct GreetTimer(Timer);
 
@@ -67,7 +65,6 @@ Now all that's left is adding a `GreetTimer` Resource to our `HelloPlugin`. Use 
 
 ```rs
 # use bevy::prelude::*;
-
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))

@@ -28,7 +28,6 @@ Let's make our app more interesting by adding Bevy's [`DefaultPlugins`] which ar
 
 ```rs
 # use bevy::prelude::*;
-
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -51,7 +50,6 @@ For better organization, let's move all of our "hello" logic to a plugin. To cre
 
 ```rs
 # use bevy::prelude::*;
-
 pub struct HelloPlugin;
 
 impl Plugin for HelloPlugin {
@@ -65,7 +63,6 @@ Then register the plugin in your App like this:
 
 ```rs
 # use bevy::prelude::*;
-
 fn main() {
     App::new()
         .add_plugins((DefaultPlugins, HelloPlugin))
@@ -79,7 +76,6 @@ Note `add_plugins` can add any number of plugins (or plugin groups like `Default
 
 ```rs
 # use bevy::prelude::*;
-
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, add_people)
