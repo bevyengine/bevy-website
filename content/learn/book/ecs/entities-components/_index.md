@@ -27,7 +27,7 @@ Once entities exist, they can likewise be despawned, deleting all of the data st
 Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system](../exclusive-world-access)).
 As a result, we must use [`Commands`], which queue up work to do later.
 
-```rust
+```rust,hide_lines=1
 # use bevy::ecs::system::Commands;
 // The `Commands` system parameter allows us to generate commands
 // which operate on the `World` once all of the current systems have finished running
@@ -57,7 +57,7 @@ You will almost always want to use the `#[derive(Component)]` [macro](https://do
 
 With the theory out of the way, let's define some components!
 
-```rust
+```rust,hide_lines=1
 # use bevy::ecs::component::Component;
 // This is a "unit struct", which holds no data of its own.
 #[derive(Component)]
@@ -89,7 +89,7 @@ enum Allegiance {
 
 Now that we have some components defined, let's try adding them to our entities using [`Commands`].
 
-```rust
+```rust,hide_lines=1-20
 # use bevy::ecs::prelude::*;
 # 
 # #[derive(Component)]
@@ -147,7 +147,7 @@ fn spawn_combatants_system(mut commands: Commands) {
 
 Once an entity is spawned, you can use [`Commands`] to add and remove components from them dynamically.
 
-```rust
+```rust,hide_lines=1-4
 # use bevy::ecs::prelude::*;
 # 
 # #[derive(Component)]
@@ -185,7 +185,7 @@ These are defined by deriving the [`Bundle`] trait for a struct; turning each of
 
 Let's try rewriting that code from above.
 
-```rust
+```rust,hide_lines=1-20
 # use bevy::prelude::*;
 #
 # #[derive(Component)]
@@ -274,7 +274,7 @@ Including duplicate components in your bundles in this way will cause a panic.
 
 With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.
 
-```rust
+```rust,hide_lines=1-19
 # use bevy::prelude::*;
 #
 # #[derive(Component)]

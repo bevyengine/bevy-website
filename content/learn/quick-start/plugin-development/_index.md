@@ -32,7 +32,7 @@ It can be useful to allow your users to supply generic types to your plugins. It
 
 You can define a generic plugin like so:
 
-```rust
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
 # use std::marker::PhantomData;
 // Example with a generic type that implements `Component`

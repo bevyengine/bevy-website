@@ -10,7 +10,7 @@ aliases = ["learn/book/getting-started/apps"]
 
 Bevy programs are referred to as [`App`]s. The simplest Bevy app looks like this:
 
-```rs
+```rs,hide_lines=1
 # use bevy::prelude::*;
 fn main() {
     App::new().run();
