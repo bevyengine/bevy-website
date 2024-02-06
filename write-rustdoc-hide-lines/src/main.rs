@@ -17,15 +17,35 @@ use write_rustdoc_hide_lines::formatter;
 /// $ cd write-rustdoc-hide-lines
 ///
 /// # Format one folder.
-/// $ cargo run -- ../content/learn/book
+/// $ cargo run -- format ../content/learn/book
 ///
 /// # Format multiple folders.
-/// $ cargo run -- ../content/learn/book ../content/learn/quick-start
+/// $ cargo run -- format ../content/learn/book ../content/learn/quick-start
+///
+/// # Check one folder, but don't overwrite it.
+/// $ cargo run -- check ../content/learn/book
 /// ```
 fn main() -> ExitCode {
     // The first argument is usually the executable path, so we skip that to just get arguments.
-    let folders = env::args().skip(1).map(PathBuf::from);
+    let mut args = env::args().skip(1);
 
+    match args.next() {
+        Some(cmd) if cmd == "format" => format(args.map(PathBuf::from)),
+        Some(cmd) if cmd == "check" => check(args.map(PathBuf::from)),
+        Some(cmd) => {
+            eprintln!(
+                "Invalid subcommand '{cmd}' specified. Please use either 'format' or 'check'."
+            );
+            ExitCode::FAILURE
+        }
+        None => {
+            eprintln!("No subcommand specified. Please use either 'format' or 'check'.");
+            ExitCode::FAILURE
+        }
+    }
+}
+
+fn format(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
     if folders.len() == 0 {
         eprintln!("Did not format any files because no folder argument was passed.");
 
@@ -46,5 +66,9 @@ fn main() -> ExitCode {
 
     println!("Done!");
 
-    return ExitCode::SUCCESS;
+    ExitCode::SUCCESS
+}
+
+fn check(_folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
+    todo!("Checking folders is not yet implemented. Come back soon! :)");
 }
