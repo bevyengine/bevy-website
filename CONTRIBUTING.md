@@ -183,3 +183,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
    ```
 
    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+13. To hide lines of code in rust code blocks of the book and assorted learning materials you should:
+   * a. Mark each line you wish to hide with a `#` with an empty space afterwards like `# ` although you were hiding lines in rustdoc.
+   * b. Run the [utility tool](write-rustdoc-hide-lines) in `<ROOT_OF_WEBSITE>/write_rustdoc-hide-lines/` named `write_rustdoc_hide_lines.sh`.
+
