@@ -28,9 +28,8 @@ For simplicity, remove the `hello_world` system from your App. This way we only 
 
 Resources are accessed in much the same way that we access components. You can access the [`Time`] resource in your system like this:
 
-```rs
+```rs,hide_lines=1
 # use bevy::prelude::*;
-
 fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
     for name in &query {
         println!("hello {}!", name.0);
@@ -42,9 +41,8 @@ fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
 
 The `delta` field on [`Time`] gives us the time that has passed since the last update. But in order to run our system once every two seconds, we must track the amount of time that has passed over a series of updates. To make this easier, Bevy provides the [`Timer`] type. Let's create a new Resource for our system to track elapsed time with a [`Timer`]:
 
-```rs
+```rs,hide_lines=1
 # use bevy::prelude::*;
-
 #[derive(Resource)]
 struct GreetTimer(Timer);
 
@@ -65,9 +63,8 @@ fn greet_people(
 
 Now all that's left is adding a `GreetTimer` Resource to our `HelloPlugin`. Use [`TimerMode::Repeating`] to make the timer repeat.
 
-```rs
+```rs,hide_lines=1
 # use bevy::prelude::*;
-
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))
