@@ -30,8 +30,8 @@ fn main() -> ExitCode {
     let mut args = env::args().skip(1);
 
     match args.next() {
-        Some(cmd) if cmd == "format" => format(args.map(PathBuf::from)),
-        Some(cmd) if cmd == "check" => check(args.map(PathBuf::from)),
+        Some(cmd) if cmd == "check" => check_or_format(args.map(PathBuf::from), false),
+        Some(cmd) if cmd == "format" => check_or_format(args.map(PathBuf::from), true),
         Some(cmd) => {
             eprintln!(
                 "Invalid subcommand '{cmd}' specified. Please use either 'format' or 'check'."
@@ -45,7 +45,11 @@ fn main() -> ExitCode {
     }
 }
 
-fn format(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
+/// Checks each file in `folders`, optionally fixing them if `format` is true.
+fn check_or_format(
+    folders: impl Iterator<Item = PathBuf> + ExactSizeIterator,
+    format: bool,
+) -> ExitCode {
     if folders.len() == 0 {
         eprintln!("Did not format any files because no folder argument was passed.");
 
@@ -55,20 +59,20 @@ fn format(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCod
     for folder in folders {
         println!("Formatting folder: {:?}", folder);
 
-        // Format the given path, printing out errors as they occur.
-        if let Err(error) = formatter::run(&folder) {
-            eprintln!("Error: {}", error);
+        if format {
+            // Format the given path, printing out errors as they occur.
+            if let Err(error) = formatter::run(&folder) {
+                eprintln!("Error: {}", error);
 
-            // Exit early if an error occurred.
-            return ExitCode::FAILURE;
+                // Exit early if an error occurred.
+                return ExitCode::FAILURE;
+            }
+        } else {
+            todo!("Checking folders is not yet implemented. Come back soon! :)");
         }
     }
 
     println!("Done!");
 
     ExitCode::SUCCESS
-}
-
-fn check(_folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
-    todo!("Checking folders is not yet implemented. Come back soon! :)");
 }
