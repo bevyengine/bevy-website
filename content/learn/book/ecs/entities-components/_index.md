@@ -5,7 +5,6 @@ template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
-status = 'hidden'
 +++
 
 **Entities** are the fundamental objects of your game world, whizzing around, storing cameras, being controlled by the player or tracking the state of a button.

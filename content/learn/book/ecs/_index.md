@@ -6,7 +6,6 @@ template = "docs-section.html"
 page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
-status = 'hidden'
 +++
 
 In Bevy, game objects are stored as **entities**, whose data is stored as **components**.
