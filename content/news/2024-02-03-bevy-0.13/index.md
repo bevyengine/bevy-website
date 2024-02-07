@@ -533,7 +533,7 @@ All these improvements round out one-shot systems significantly and they should 
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
-In Bevy 0.13 we upgraded from wgpu 0.17 to wgpu 0.19, which includes the long awaited wgpu [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to do things like compiling shaders asynchronously to avoid shader compilation stutters, and to multithread draw call creation for better performance.
+In Bevy 0.13 we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the long awaited `wgpu` [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to do things like compiling shaders asynchronously to avoid shader compilation stutters, and to multithread draw call creation for better performance.
 
 Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but it requires reworking parts of the renderer where we're relying on compile time constants when targeting `webgl2`, and adding a way to choose the renderer's backend at runtime on web.
 
