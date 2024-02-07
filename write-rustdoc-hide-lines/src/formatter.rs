@@ -3,7 +3,7 @@ use regex::Regex;
 use std::{
     ffi::OsStr,
     fmt::Write,
-    fs::{self, DirEntry, File},
+    fs::{self, File},
     io::{self, BufRead},
     path::Path,
 };
@@ -11,11 +11,11 @@ use std::{
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
 pub fn run(dir: &Path) -> Result<()> {
-    visit_dir_md_files(dir, &|entry| {
-        println!("{:?}", entry.path());
+    visit_dir_md_files(dir, &|path| {
+        println!("{:?}", path);
 
         // Load and format file annotations
-        let file = File::open(entry.path())?;
+        let file = File::open(path)?;
         let file_size = file.metadata().unwrap().len().try_into().unwrap();
         let contents = format_file(
             io::BufReader::new(file)
@@ -25,14 +25,14 @@ pub fn run(dir: &Path) -> Result<()> {
         )?;
 
         // Rewrite file
-        fs::write(entry.path(), contents)?;
+        fs::write(path, contents)?;
 
         Ok(())
     })
 }
 
 /// Calls function `cb` for every file recursively found within the folder `dir`.
-fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Result<()> {
+fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&Path) -> Result<()>) -> Result<()> {
     if !dir.is_dir() {
         bail!(
             "Tried visiting the path {:?} that was not a directory.",
@@ -41,14 +41,13 @@ fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Resul
     }
 
     for entry in fs::read_dir(dir)? {
-        let entry = entry?;
-        let path = entry.path();
+        let path = entry?.path();
 
         if path.is_dir() {
             visit_dir_md_files(&path, cb)?;
         } else if let Some(ext) = path.extension().and_then(OsStr::to_str) {
             if ext.to_lowercase() == "md" {
-                cb(&entry)?;
+                cb(&path)?;
             }
         }
     }
