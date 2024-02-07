@@ -27,7 +27,7 @@ jobs:
 
       - name: Get cache key
         id: cache-key
-        run: echo "::set-output name=key::$(date +'%Y-%m-%d')"
+        run: echo "key=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Get crates.io datadump from cache
         uses: actions/cache@v4
