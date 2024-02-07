@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
 use regex::Regex;
 use std::{
     ffi::OsStr,
@@ -31,9 +31,13 @@ pub fn run(dir: &Path) -> Result<()> {
     })
 }
 
+/// Calls function `cb` for every file recursively found within the folder `dir`.
 fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Result<()> {
     if !dir.is_dir() {
-        return Ok(());
+        bail!(
+            "Tried visiting the path {:?} that was not a directory.",
+            dir
+        );
     }
 
     for entry in fs::read_dir(dir)? {
