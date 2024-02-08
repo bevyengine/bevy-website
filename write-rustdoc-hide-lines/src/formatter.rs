@@ -11,7 +11,7 @@ use std::{
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
 pub fn run(dir: &Path) -> Result<()> {
-    visit_dir_md_files(dir, |path| {
+    visit_dir_md_files(dir, &|path| {
         println!("{:?}", path);
 
         // Load and format file annotations
@@ -32,10 +32,7 @@ pub fn run(dir: &Path) -> Result<()> {
 }
 
 /// Calls function `cb` for every file recursively found within the folder `dir`.
-fn visit_dir_md_files<F>(dir: &Path, mut cb: F) -> Result<()>
-where
-    F: FnMut(&Path) -> Result<()>
-{
+fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&Path) -> Result<()>) -> Result<()> {
     if !dir.is_dir() {
         bail!(
             "Tried visiting the path {:?} that was not a directory.",
@@ -47,7 +44,7 @@ where
         let path = entry?.path();
 
         if path.is_dir() {
-            visit_dir_md_files(&path, &mut cb)?;
+            visit_dir_md_files(&path, cb)?;
         } else if let Some(ext) = path.extension().and_then(OsStr::to_str) {
             if ext.to_lowercase() == "md" {
                 cb(&path)?;
