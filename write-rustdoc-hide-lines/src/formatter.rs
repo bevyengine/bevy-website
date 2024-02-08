@@ -5,7 +5,7 @@ use std::{ffi::OsStr, fmt::Write, fs, path::Path};
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
 pub fn run(dir: &Path, format: bool) -> Result<()> {
-    visit_dir_md_files(dir, &|path| {
+    visit_dir_md_files(dir, &mut |path| {
         println!("{:?}", path);
 
         // Load and format file annotations
@@ -25,7 +25,7 @@ pub fn run(dir: &Path, format: bool) -> Result<()> {
 }
 
 /// Calls function `cb` for every file recursively found within the folder `dir`.
-fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&Path) -> Result<()>) -> Result<()> {
+fn visit_dir_md_files(dir: &Path, cb: &mut dyn FnMut(&Path) -> Result<()>) -> Result<()> {
     if !dir.is_dir() {
         bail!(
             "Tried visiting the path {:?} that was not a directory.",
