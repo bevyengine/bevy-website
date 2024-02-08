@@ -45,6 +45,8 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     cargo run --example breakout
     ```
 
+    If you are using a Linux distro, [install the dependencies](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md) needed for bevy before trying the examples
+
 ### Add Bevy as a Dependency
 
 Bevy is [available as a library on crates.io](https://crates.io/crates/bevy).
