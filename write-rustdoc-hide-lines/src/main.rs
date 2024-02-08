@@ -59,16 +59,12 @@ fn check_or_format(
     for folder in folders {
         println!("Formatting folder: {:?}", folder);
 
-        if format {
-            // Format the given path, printing out errors as they occur.
-            if let Err(error) = formatter::run(&folder) {
-                eprintln!("Error: {}", error);
+        // Format the given path, printing out errors as they occur.
+        if let Err(error) = formatter::run(&folder, format) {
+            eprintln!("Error: {}", error);
 
-                // Exit early if an error occurred.
-                return ExitCode::FAILURE;
-            }
-        } else {
-            todo!("Checking folders is not yet implemented. Come back soon! :)");
+            // Exit early if an error occurred.
+            return ExitCode::FAILURE;
         }
     }
 

@@ -4,7 +4,7 @@ use std::{ffi::OsStr, fmt::Write, fs, path::Path};
 
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
-pub fn run(dir: &Path) -> Result<()> {
+pub fn run(dir: &Path, format: bool) -> Result<()> {
     visit_dir_md_files(dir, &|path| {
         println!("{:?}", path);
 
@@ -13,8 +13,12 @@ pub fn run(dir: &Path) -> Result<()> {
 
         let formatted = format_file(&src)?;
 
-        // Rewrite file
-        fs::write(path, formatted)?;
+        if format {
+            // Overwrite file with formatted contents.
+            fs::write(path, formatted)?;
+        } else if src != formatted {
+            bail!("File {:?} is not properly formatted.", path);
+        }
 
         Ok(())
     })
