@@ -181,7 +181,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       
       - name: Check hide-lines
-        run: cd write-rustdoc-hide-lines && cargo run --release -- ../content
+        run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
 
   build-website:
     runs-on: ubuntu-latest
