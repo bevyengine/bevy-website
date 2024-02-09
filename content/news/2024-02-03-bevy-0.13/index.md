@@ -33,7 +33,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
 
-Geometric shapes are used all across game development, from primitive mesh shapes and debug gizmos to physics colliders and raycasting. Despite being so commonly used across several domains, Bevy hasn't really had reusable shape representations other than the rendering-specific mesh shapes like the [`UVSphere`] in [`bevy_render`].
+Geometric shapes are used all across game development, from primitive mesh shapes and debug gizmos to physics colliders and raycasting. Despite being so commonly used across several domains, Bevy hasn't really had any general-purpose shape representations.
 
 This is changing in Bevy 0.13 with the introduction of first-party **primitive shapes**! They are lightweight geometric primitives designed for maximal interoperability and reusability, allowing Bevy and third-party plugins to use the same set of basic shapes and increase cohesion within the ecosystem. See the original [RFC][Primitive RFC] for more details.
 
@@ -61,8 +61,6 @@ More primitives will be added in future releases.
 
 Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and raycasting functionality. Several of these have landed in 0.13 already!
 
-[`UVSphere`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.UVSphere.html
-[`bevy_render`]: https://dev-docs.bevyengine.org/bevy/render/index.html
 [Primitive RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/12-primitive-shapes.md
 [collection of primitives]: https://dev-docs.bevyengine.org/bevy/math/primitives/index.html
 
@@ -70,12 +68,72 @@ Some use cases for primitive shapes include meshing, gizmos, bounding volumes, c
 
 <div class="release-feature-authors">authors: @Jondolf</div>
 
-TODO
+Previous versions of Bevy have had types like [`Quad`], [`Box`], and [`UVSphere`] for creating meshes from basic shapes. These have been deprecated in favor of a builder-like API using the new geometric primitives.
 
-* Explain current meshing
-* Show primitive meshing API
-* Screenshot of `2d_shapes` example
-* Mention 2D polygon meshing and 3D meshing not being implemented yet
+Primitives that support meshing implement the [`Meshable`] trait. For some shapes, the [`mesh`][`mesh` method] method returns a [`Mesh`] directly:
+
+```rust
+let before = Mesh::from(Quad::new(Vec2::new(2.0, 1.0)));
+let after = Rectangle::new(2.0, 1.0).mesh(); // Mesh::from also works
+```
+
+For most primitives however, it returns a builder for optional configuration:
+
+```rust
+// Create a circle mesh with a specified vertex count
+let before = Mesh::from(Circle {
+    radius: 1.0,
+    vertices: 64,
+};
+let after = Circle::new(1.0).mesh().resolution(64).build();
+```
+
+Below are a few more examples of meshing with the new primitives.
+
+```rust
+// Icosphere
+let before = meshes.add(
+    Mesh::try_from(Icosphere {
+        radius: 2.0,
+        subdivisions: 8,
+    })
+    .unwrap()
+);
+let after = meshes.add(Sphere::new(2.0).mesh().ico(8).unwrap());
+
+// Cuboid
+// (notice how Assets::add handles mesh convertion automatically)
+let before = meshes.add(shape::Box::new(2.0, 1.0, 1.0));
+let after = meshes.add(Cuboid::new(2.0, 1.0, 1.0));
+
+// Plane
+let before = meshes.add(Plane::from_size(5.0));
+let after = meshes.add(Plane3d::default().mesh().size(5.0, 5.0));
+```
+
+With the addition of the primitives, meshing is also supported for more shapes, like [`Ellipse`], [`Triangle2d`], and [`Capsule2d`]. However, note that meshing is not yet implemented for all primitives, such as [`Polygon`] and [`Cone`].
+
+Below you can see some meshes in the [`2d_shapes`] and [`3d_shapes`] examples.
+
+![An example with 2D mesh shapes](2d_shapes.png)
+
+![An example with 3D mesh shapes](3d_shapes.png)
+
+Some default values for mesh shape dimensions have also been changed to be more consistent.
+
+[`Quad`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.Quad.html
+[`Box`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.Box.html
+[`UVSphere`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.UVSphere.html
+[`Meshable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html
+[`mesh` method]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html#tymethod.mesh
+[`Mesh`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Mesh.html
+[`Ellipse`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Ellipse.html
+[`Triangle2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Triangle2d.html
+[`Capsule2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule2d.html
+[`Polygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polygon.html
+[`Cone`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cone.html
+[`2d_shapes`]: https://bevyengine.org/examples/2D%20Rendering/2d-shapes/
+[`3d_shapes`]: https://bevyengine.org/examples/3D%20Rendering/3d-shapes/
 
 ### Gizmos
 
