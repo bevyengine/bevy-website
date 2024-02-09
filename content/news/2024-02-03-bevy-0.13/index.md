@@ -541,15 +541,85 @@ As usual, there's been some changes that may cause issues for custom shaders. We
 
 ## Texture Atlas Rework
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @ManevilleF</div>
 
-TODO.
+We introduced a significant rework of the _texture atlas_ system in `bevy_sprite` and `bevy_ui`, reducing boilerplate and making the feature more data-oriented.
+Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components, the texture atlasing feature is now reduced to a single _additional_ component: `TextureAtlas`.
 
-## Sprite Slicing and Tiling
+### Why this change
 
-<div class="release-feature-authors">authors: @TODO</div>
+The concept of texture atlasing or sprite sheets is simply to draw a custom _section_ of the texture.
+The new `TextureAtlas` represents that behaviour, it stores:
 
-TODO.
+* a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
+* a `usize` index defining which section `Rect` of the layout we want to display
+
+With this change, atlas bundles like `SpriteSheetBundle` and `AtlasImageBundles` are now identical to their non-atlases equivalents with only one extra component, `TextureAtlas`.
+
+## Texture Slicing and Tiling
+
+<div class="release-feature-authors">authors: @ManevilleF</div>
+
+In Bevy 0.13 we introduce a new 2D feature: CPU based _Slicing and Tiling_ to both `bevy_sprite` and `bevy_ui` !
+This feature is unlocked by a new optional component: `ImageScaleMode`
+
+### 9 slicing
+
+Adding `ImageScaleMode::Sliced(_)` to your 2D bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
+keeping the image in proportions in resize, avoiding stretching of the texture.
+
+![Stretched Vs Sliced texture](sliced_vs_stretched.png)
+
+This is incredibly useful for UI, allowing any shape for your buttons and panels
+
+![Sliced Buttons](ui_slice.png)
+> Border texture by [Kenney's](https://kenney.nl/assets/fantasy-ui-borders)
+
+Configuration:
+
+```rust
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Sliced(TextureSlicer {
+        // The image borders are 20 pixels in every direction
+        border: BorderRect::square(20.0),
+        // we don't stretch the coners more than their actual size (20px)
+        max_corner_scale: 1.0,
+        ..default()
+    }),
+));
+```
+
+New associated examples:
+
+* `sprite_slice`
+* `ui_texture_slice`
+
+### Tiling
+
+Adding `ImageMode::Tiled { .. }` to your 2D enables _texture tiling_
+
+<video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
+
+Configuration:
+
+```rust
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Tiled {
+        // The image will repeat horizontally
+        tile_x: true,
+        // The image will repeat vertically
+        tile_y: true,
+        // The texture will repeat if the drawing rect is larger than the image size
+        stretch_value: 1.0,
+    },
+));
+```
+
+New associated examples:
+
+* `sprite_tile`
 
 ## Exposure Settings
 
