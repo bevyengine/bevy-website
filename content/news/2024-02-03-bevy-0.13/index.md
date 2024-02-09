@@ -593,43 +593,9 @@ TODO.
 
 We added a new api, inspired by the bind group entries api from 0.12, to declare bind group layouts. This new api is based on using builtin functions to define bind group layouts resources and automatically set the index based on it's position.
 
-Here's a short example:
+Here's a short example of how declaring a new layout looks:
 
 ```rust
-// 0.12
-let layout = render_device.create_bind_group_layout(&BindGroupLayoutDescriptor {
-    label: Some("post_process_bind_group_layout"),
-    entries: &[
-        BindGroupLayoutEntry {
-            binding: 0,
-            visibility: ShaderStages::FRAGMENT,
-            ty: BindingType::Texture {
-                sample_type: TextureSampleType::Float { filterable: true },
-                view_dimension: TextureViewDimension::D2,
-                multisampled: false,
-            },
-            count: None,
-        },
-        BindGroupLayoutEntry {
-            binding: 1,
-            visibility: ShaderStages::FRAGMENT,
-            ty: BindingType::Sampler(SamplerBindingType::Filtering),
-            count: None,
-        },
-        BindGroupLayoutEntry {
-            binding: 2,
-            visibility: ShaderStages::FRAGMENT,
-            ty: BindingType::Buffer {
-                ty: bevy::render::render_resource::BufferBindingType::Uniform,
-                has_dynamic_offset: false,
-                min_binding_size: Some(PostProcessSettings::min_size()),
-            },
-            count: None,
-        },
-    ],
-});
-
-// 0.13
 let layout = render_device.create_bind_group_layout(
     "post_process_bind_group_layout"),
     &BindGroupLayoutEntries::sequential(
