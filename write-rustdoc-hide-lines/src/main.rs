@@ -30,8 +30,8 @@ fn main() -> ExitCode {
     let mut args = env::args().skip(1);
 
     match args.next() {
-        Some(cmd) if cmd == "check" => check_or_format(args.map(PathBuf::from), false),
-        Some(cmd) if cmd == "format" => check_or_format(args.map(PathBuf::from), true),
+        Some(cmd) if cmd == "check" => check(args.map(PathBuf::from)),
+        Some(cmd) if cmd == "format" => format(args.map(PathBuf::from)),
         Some(cmd) => {
             eprintln!(
                 "Invalid subcommand '{cmd}' specified. Please use either 'format' or 'check'."
@@ -45,30 +45,65 @@ fn main() -> ExitCode {
     }
 }
 
-/// Checks each file in `folders`, optionally fixing them if `format` is true.
-fn check_or_format(
-    folders: impl Iterator<Item = PathBuf> + ExactSizeIterator,
-    format: bool,
-) -> ExitCode {
+fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
     if folders.len() == 0 {
-        eprintln!("Did not format any files because no folder argument was passed.");
+        eprintln!("Did not check any files because no folder arguments were passed.");
+
+        return ExitCode::FAILURE;
+    }
+
+    // An aggregate list of all unformatted files, empty by default.
+    let mut unformatted_files = Vec::new();
+
+    for folder in folders {
+        println!("\nChecking folder {:?}", folder);
+
+        // Checks folders, exiting early if an error occured.
+        match formatter::check(&folder) {
+            // Merge new unformatted files into existing unformatted files.
+            Ok(mut unformatted) => unformatted_files.append(&mut unformatted),
+            Err(error) => {
+                eprintln!("Error: {}", error);
+
+                return ExitCode::FAILURE;
+            }
+        }
+    }
+
+    if !unformatted_files.is_empty() {
+        eprintln!("\nThe following files are not formatted:");
+
+        for path in unformatted_files {
+            eprintln!("- {:?}", path);
+        }
+
+        ExitCode::FAILURE
+    } else {
+        println!("All files are properly formatted. :)");
+
+        ExitCode::SUCCESS
+    }
+}
+
+fn format(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
+    if folders.len() == 0 {
+        eprintln!("Did not format any files because no folder arguments were passed.");
 
         return ExitCode::FAILURE;
     }
 
     for folder in folders {
-        println!("Formatting folder: {:?}", folder);
+        println!("\nFormatting folder {:?}", folder);
 
-        // Format the given path, printing out errors as they occur.
-        if let Err(error) = formatter::run(&folder, format) {
+        // Format folders, exiting early if an error occured.
+        if let Err(error) = formatter::format(&folder) {
             eprintln!("Error: {}", error);
 
-            // Exit early if an error occurred.
             return ExitCode::FAILURE;
         }
     }
 
-    println!("Done!");
+    println!("\nAll files have been formatted successfully!");
 
     ExitCode::SUCCESS
 }

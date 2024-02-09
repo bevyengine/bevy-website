@@ -1,41 +1,53 @@
 use anyhow::{bail, Result};
 use regex::Regex;
-use std::{ffi::OsStr, fmt::Write, fs, path::Path};
+use std::{
+    ffi::OsStr,
+    fmt::Write,
+    fs,
+    path::{Path, PathBuf},
+};
 
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
-pub fn run(dir: &Path, format: bool) -> Result<()> {
-    let mut unformatted_paths = Vec::new();
+/// Checks the given directory, returning a list of unformatted files.
+pub fn check(dir: &Path) -> Result<Vec<PathBuf>> {
+    let mut unformatted_files = Vec::new();
 
     visit_dir_md_files(dir, &mut |path| {
-        println!("{:?}", path);
+        println!("- {:?}", path);
 
-        // Load and format file annotations
         let src = fs::read_to_string(path)?;
 
         let formatted = format_file(&src)?;
 
-        if format {
-            // Overwrite file with formatted contents.
-            fs::write(path, formatted)?;
-        } else if src != formatted {
-            unformatted_paths.push(path.to_path_buf());
+        // Check if the formatted version is different from the original.
+        if src != formatted {
+            // Changes were made! Write that down.
+            unformatted_files.push(path.to_path_buf());
         }
 
         Ok(())
     })?;
 
-    if !unformatted_paths.is_empty() {
-        eprintln!("The following file are not formatted:");
+    Ok(unformatted_files)
+}
 
-        for path in unformatted_paths {
-            eprintln!("- {:?}", path);
-        }
+/// Formats the given directory, automatically adding `hide_lines` annotations to code blocks.
+pub fn format(dir: &Path) -> Result<()> {
+    visit_dir_md_files(dir, &mut |path| {
+        println!("- {:?}", path);
 
-        bail!("Some files are not formatted. Please run write-rustdoc-hide-lines with the format argument to fix them.");
-    } else {
+        let src = fs::read_to_string(path)?;
+
+        let formatted = format_file(&src)?;
+
+        // Overwrite file with formatted contents.
+        fs::write(path, formatted)?;
+
         Ok(())
-    }
+    })?;
+
+    Ok(())
 }
 
 /// Calls function `cb` for every file recursively found within the folder `dir`.
