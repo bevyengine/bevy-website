@@ -561,6 +561,7 @@ With this change, atlas bundles like `SpriteSheetBundle` and `AtlasImageBundles`
 <div class="release-feature-authors">authors: @ManevilleF</div>
 
 In Bevy 0.13 we introduce a new 2D feature: CPU based _Slicing and Tiling_ to both `bevy_sprite` and `bevy_ui` !
+
 This feature is unlocked by a new optional component: `ImageScaleMode`
 
 ### 9 slicing
@@ -568,9 +569,9 @@ This feature is unlocked by a new optional component: `ImageScaleMode`
 Adding `ImageScaleMode::Sliced(_)` to your 2D bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
 keeping the image in proportions in resize, avoiding stretching of the texture.
 
-![Stretched Vs Sliced texture](sliced_vs_stretched.png)
+![Stretched Vs Sliced texture](slice_vs_stretched.png)
 
-This is incredibly useful for UI, allowing any shape for your buttons and panels
+This is very useful for UI, allowing any resolution for your buttons and panels
 
 ![Sliced Buttons](ui_slice.png)
 > Border texture by [Kenney's](https://kenney.nl/assets/fantasy-ui-borders)
