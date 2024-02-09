@@ -5,6 +5,8 @@ use std::{ffi::OsStr, fmt::Write, fs, path::Path};
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
 pub fn run(dir: &Path, format: bool) -> Result<()> {
+    let mut unformatted_paths = Vec::new();
+
     visit_dir_md_files(dir, &mut |path| {
         println!("{:?}", path);
 
@@ -17,11 +19,23 @@ pub fn run(dir: &Path, format: bool) -> Result<()> {
             // Overwrite file with formatted contents.
             fs::write(path, formatted)?;
         } else if src != formatted {
-            bail!("File {:?} is not properly formatted.", path);
+            unformatted_paths.push(path.to_path_buf());
         }
 
         Ok(())
-    })
+    })?;
+
+    if !unformatted_paths.is_empty() {
+        eprintln!("The following file are not formatted:");
+
+        for path in unformatted_paths {
+            eprintln!("- {:?}", path);
+        }
+
+        bail!("Some files are not formatted. Please run write-rustdoc-hide-lines with the format argument to fix them.");
+    } else {
+        Ok(())
+    }
 }
 
 /// Calls function `cb` for every file recursively found within the folder `dir`.
