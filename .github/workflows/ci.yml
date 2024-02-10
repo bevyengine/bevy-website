@@ -65,7 +65,7 @@ jobs:
             cd $CRATE
 
             echo Checking $CRATE
-            cargo clippy -Dwarnings
+            cargo clippy -- -Dwarnings
 
             cd ..
           done
