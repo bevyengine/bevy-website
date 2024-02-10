@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TOOLS: |
-        code-validation generate-assets generate-community generate-errors generate-release generate-wasm-examples write-rustdoc-hide-lines
+        code-validation generate-assets generate-community generate-errors generate-release write-rustdoc-hide-lines
     steps:
       - uses: actions/checkout@v4
 
