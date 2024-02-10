@@ -37,6 +37,39 @@ jobs:
       - name: Build & run doc tests
         run: cd code-validation && cargo test
 
+  lint-tools:
+    runs-on: ubuntu-latest
+    env:
+      TOOLS: |
+        code-validation generate-assets generate-community generate-errors generate-release generate-wasm-examples write-rustdoc-hide-lines
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check formatting
+        run: |
+          for CRATE in $TOOLS; do
+            cd $CRATE
+
+            echo Checking $CRATE
+            cargo fmt --check
+
+            cd ..
+          done
+
+      - name: Check clippy
+        run: |
+          for CRATE in $TOOLS; do
+            cd $CRATE
+
+            echo Checking $CRATE
+            cargo clippy -Dwarnings
+
+            cd ..
+          done
+
   generate-assets:
     needs: [markdownlint, test-code-examples]
     runs-on: ubuntu-latest
