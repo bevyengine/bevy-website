@@ -595,96 +595,6 @@ TODO.
 
 ## Type-Safe Labels for the `RenderGraph`
 
-<div class="release-feature-authors">authors: @bardt, @oceantume</div>
-
-Historically, Bevy's UI elements have been scaled and positioned in the context of the primary window, regardless of the camera settings. This approach made some UI experiences like split-screen multiplayer difficult to implement, and others such as having UI in multiple windows impossible.
-
-We are now introducing a more flexible way of rendering the user interface: Camera-driven UI. Each camera can now have its own UI root, rendering according to its viewport, scale factor, and a target which can be a secondary window or even a texture.
-
-This change unlocks a variety of new UI experiences, including split-screen multiplayer, UI in multiple windows, displaying non-interactive UI in a 3D world, and more.
-
-![Split-screen with independent UI roots](split-screen.png)
-
-If there is one camera in the world, you don't need to do anything; your UI will be displayed in that camera's viewport.
-
-```rust
-commands.spawn(Camera3dBundle {
-    // Camera can have custom viewport, target, etc.
-});
-commands.spawn(NodeBundle {
-    // UI will be rendered to the singular camera's viewport
-});
-```
-
-For when more control is desirable, or there are multiple cameras, we introduce [`TargetCamera`] component. This component can be added to a root UI node to specify which camera it should be rendered to.
-
-```rust
-// For split-screen multiplayer, we set up 2 cameras and 2 UI roots
-let left_camera = commands.spawn(Camera3dBundle {
-    // Viewport is set to left half of the screen
-}).id();
-
-commands
-    .spawn((
-        TargetCamera(left_camera),
-        NodeBundle {
-            //...
-        }
-    ));
-
-let right_camera = commands.spawn(Camera3dBundle {
-    // Viewport is set to right half of the screen
-}).id();
-
-commands
-    .spawn((
-        TargetCamera(right_camera),
-        NodeBundle {
-            //...
-        })
-    );
-```
-
-With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
-
-```rust
-commands.spawn(Camera3dBundle::default());
-commands.spawn(NodeBundle {
-    visibility: Visibility::Hidden, // UI will be hidden
-    // ...
-});
-```
-
-[`TargetCamera`]: https://docs.rs/bevy/0.13.0/bevy/ui/struct.TargetCamera.html
-[`Visibility`]: https://docs.rs/bevy/0.13.0/bevy/render/view/enum.Visibility.html
-[`UiCameraConfig`]: https://docs.rs/bevy/0.12.1/bevy/ui/camera_config/struct.UiCameraConfig.html
-
-## Camera-Driven UI
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## Winit Upgrade
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## Animation Interpolation
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## `Animatable` Trait
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## glTF Extensions
-
 <div class="release-feature-authors">authors: @DasLixou</div>
 
 Bevy uses Rust's type system extensively when defining labels, letting developers lean on tooling to catch typos and ease refactors.
@@ -749,6 +659,92 @@ pub struct MyDynamicLabel(&'static str);
 ```
 
 This is particularly nice because we don't have to store strings in here: we can use integers, custom enums or any other hashable type.
+
+## Camera-Driven UI
+
+<div class="release-feature-authors">authors: @bardt, @oceantume</div>
+
+Historically, Bevy's UI elements have been scaled and positioned in the context of the primary window, regardless of the camera settings. This approach made some UI experiences like split-screen multiplayer difficult to implement, and others such as having UI in multiple windows impossible.
+
+We are now introducing a more flexible way of rendering the user interface: Camera-driven UI. Each camera can now have its own UI root, rendering according to its viewport, scale factor, and a target which can be a secondary window or even a texture.
+
+This change unlocks a variety of new UI experiences, including split-screen multiplayer, UI in multiple windows, displaying non-interactive UI in a 3D world, and more.
+
+![Split-screen with independent UI roots](split-screen.png)
+
+If there is one camera in the world, you don't need to do anything; your UI will be displayed in that camera's viewport.
+
+```rust
+commands.spawn(Camera3dBundle {
+    // Camera can have custom viewport, target, etc.
+});
+commands.spawn(NodeBundle {
+    // UI will be rendered to the singular camera's viewport
+});
+```
+
+For when more control is desirable, or there are multiple cameras, we introduce [`TargetCamera`] component. This component can be added to a root UI node to specify which camera it should be rendered to.
+
+```rust
+// For split-screen multiplayer, we set up 2 cameras and 2 UI roots
+let left_camera = commands.spawn(Camera3dBundle {
+    // Viewport is set to left half of the screen
+}).id();
+
+commands
+    .spawn((
+        TargetCamera(left_camera),
+        NodeBundle {
+            //...
+        }
+    ));
+
+let right_camera = commands.spawn(Camera3dBundle {
+    // Viewport is set to right half of the screen
+}).id();
+
+commands
+    .spawn((
+        TargetCamera(right_camera),
+        NodeBundle {
+            //...
+        })
+    );
+```
+
+With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
+
+```rust
+commands.spawn(Camera3dBundle::default());
+commands.spawn(NodeBundle {
+    visibility: Visibility::Hidden, // UI will be hidden
+    // ...
+});
+```
+
+[`TargetCamera`]: https://docs.rs/bevy/0.13.0/bevy/ui/struct.TargetCamera.html
+[`Visibility`]: https://docs.rs/bevy/0.13.0/bevy/render/view/enum.Visibility.html
+[`UiCameraConfig`]: https://docs.rs/bevy/0.12.1/bevy/ui/camera_config/struct.UiCameraConfig.html
+
+## Winit Upgrade
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## Animation Interpolation
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## `Animatable` Trait
+
+<div class="release-feature-authors">authors: @TODO</div>
+
+TODO.
+
+## glTF Extensions
 
 ## Extensionless Asset Support
 
