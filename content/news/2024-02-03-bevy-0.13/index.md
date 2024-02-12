@@ -673,7 +673,7 @@ They have been _a long time_ coming and they are finally here!
 
 ## Events Live Longer
 
-Events are a useful tool for passing data into systems and between systems in a pub-sub way.
+Events are a useful tool for passing data into systems and between systems.
 
 Internally, Bevy events are double-buffered, so a given event will be silently dropped once the buffers have swapped twice.
 The `Events<T>` resource is setup this way so events are dropped after a predictable amount of time, preventing their queues from growing forever and causing a memory leak.
