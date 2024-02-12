@@ -713,9 +713,25 @@ TODO.
 
 ## Bind Group Layout Entries
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @IceSentry</div>
 
-TODO.
+We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using builtin functions to define bind group layouts resources and automatically set the index based on it's position.
+
+Here's a short example of how declaring a new layout looks:
+
+```rust
+let layout = render_device.create_bind_group_layout(
+    "post_process_bind_group_layout"),
+    &BindGroupLayoutEntries::sequential(
+        ShaderStages::FRAGMENT,
+        (
+            texture_2d_f32(),
+            sampler(SamplerBindingType::Filtering),
+            uniform_buffer::<PostProcessingSettings>(false),
+        ),
+    ),
+);
+```
 
 ## Type-Safe Labels for the `RenderGraph`
 
