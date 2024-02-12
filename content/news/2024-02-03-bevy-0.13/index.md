@@ -183,10 +183,6 @@ In this initial implementation of stepping there are some limitations:
 
 [`Stepping`]: https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/stepping/Stepping.html
 
-## Dynamic Queries
-
-<div class="release-feature-authors">authors: @TODO</div>
-
 ## Transmute Queries
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
@@ -245,9 +241,9 @@ This is a story told in two parts, with part one dealing with two PRs: The "Unif
 What [#9797](https://github.com/bevyengine/bevy/pull/9797) changed was create a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
 
 ```text
-|F| High value / Generation       | Low value / Index              |
-|-|-------------------------------|--------------------------------|
-|1| 31 bits                       | 32 bits                        |
+| F   | High value / Generation | Low value / Index |
+| --- | ----------------------- | ----------------- |
+| 1   | 31 bits                 | 32 bits           |
 
 F = Bit Flags
 ```
@@ -540,6 +536,7 @@ Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is 
 As usual, there's been some changes that may cause issues for custom shaders. We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
 
 ## Dynamic Queries
+
 <div class="release-feature-authors">authors: @james-j-obrien, @jakobhellermann, @Suficio</div>
 
 In Bevy's ECS, queries use a type-powered DSL. The full type of the query — meaning:
@@ -664,7 +661,6 @@ They have been _a long time_ coming and they are finally here!
 [The dynamic query pull request]: https://github.com/bevyengine/bevy/pull/9774
 [a counter-proposal]: https://github.com/bevyengine/bevy/pull/6390
 [`QueryBuilder`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.QueryBuilder.html
-[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html
 [describes in details]: https://ajmmertens.medium.com/a-roadmap-to-entity-relationships-5b1d11ebb4eb
 [Flecs]: https://www.flecs.dev/flecs/
 
@@ -987,7 +983,6 @@ Gizmos are also great for crate authors, they can use the same API.
 For example, the [`oxidized_navigation`] navmesh library uses gizmos for its debug overlay.
 Great!
 
-
 But after quick adoption, the community quickly found their limitations.
 
 Remember: crate authors, as well as game devs, can use gizmos and set their config globally.
@@ -1062,7 +1057,7 @@ an RPC call. The world is your oyster.
 [`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/gizmos/struct.Gizmos.html
 [the 0.11 release]: https://bevyengine.org/news/bevy-0-11/#gizmos
 [`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
-=======
+
 ## glTF Extensions
 
 ## Extensionless Asset Support
