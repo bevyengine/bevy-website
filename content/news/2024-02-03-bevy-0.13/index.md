@@ -42,8 +42,7 @@ TODO.
 The new system stepping feature (`bevy_debug_stepping`) adds debugger-style
 execution control for systems. The [`Stepping`] resource can control which
 systems within a schedule execute each frame, and provides step, break, and
-continue facilities to enable live debugging. This feature is enabled by
-default in the `bevy` crate.
+continue facilities to enable live debugging.
 
 The `Stepping` resource is configured with a list of schedules that it will
 control execution of when stepping is enabled. The collection of systems
@@ -55,22 +54,24 @@ stepping through systems.
 
 ### Configuration
 
-To get started the [`Stepping`] resource must be configured with the schedules
-it will be controlling, then added to the world:
+First, configure the [`Stepping`] resource and add it to the world:
 
 ```rust
-// create a new Stepping resource, and add schedules to debug
+// Create a new Stepping resource, and add schedules to debug
 let mut stepping = Stepping::new();
 stepping.add_schedule(Update);
 stepping.add_schedule(FixedUpdate);
+// Stepping is disabled by default,
+// even when the resource is inserted.
+// Feature flags, dev consoles and obscure hotkeys all work great.
+#[cfg(feature = "my_stepping_flag")]
+stepping.enable();
 
 // add the Stepping resource to the world
 app.insert_resource(stepping);
 ```
 
-The [`Stepping`] resource has no effect until it is enabled with a call to
-`Stepping::enable()`. When the `Stepping` resource is present and enabled,
-systems within the added schedules will not be run unless we're performing
+Systems within the added schedules will not be run unless we're performing
 a system step, continuing the stepping frame, or the system has been exempt
 from stepping.
 
