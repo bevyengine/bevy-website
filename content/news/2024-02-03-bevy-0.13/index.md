@@ -883,7 +883,8 @@ Asset Transformers are a small modification to the Asset processing pipeline.
 
 Asset processing, at its core, involves implementing the `Process` trait, which takes some byte data representing an asset, transforming it, and then returning the processed byte data. However, implementing the `Process` trait by hand is somewhat involved, and so a generic `LoadAndSave<L: AssetLoader, S: AssetSaver>` `Process` implementation was written to make asset processing more ergonomic.
 
-Using the `LoadAndSave` `Process` implementation, the previous Asset processing pipeline had four stages: 
+Using the `LoadAndSave` `Process` implementation, the previous Asset processing pipeline had four stages:
+
 1. An `AssetReader` reads some asset source (filesystem, http, etc) and gets the byte data of an asset.
 2. An `AssetLoader` reads the byte data and converts it to a bevy `Asset`.
 3. An `AssetSaver` takes a bevy `Asset`, processes it, and then converts it back into byte data.
@@ -892,6 +893,7 @@ Using the `LoadAndSave` `Process` implementation, the previous Asset processing 
 `AssetSaver`s were responsible for both transforming an asset and converting it into byte data. However, this posed a bit of an issue for code reusability. Every time you wanted to transform some asset, such as an image, you would need to rewrite the portion that converts the asset to byte data. To solve this, `AssetSaver`s are now solely responsible for converting an asset into byte data, and `AssetTransformer`s which are responsible for transforming an asset were introduced. A new `LoadTransformAndSave<L: AssetLoader, T: AssetTransformer, S: AssetSaver>` `Process` implementation was added to utilize the new `AssetTransformer`s.
 
 The new asset processing pipeline, using the `LoadTransformAndSave` `Process` implementation, has five stages:
+
 1. An `AssetReader` read some asset source (filesystem, http, etc) and gets the byte data of an asset.
 2. An `AssetLoader` reads the byte data and converts it to a bevy `Asset`.
 3. An `AssetTransformer` takes an asset and transforms it in some way.
