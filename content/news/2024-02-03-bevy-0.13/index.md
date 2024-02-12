@@ -1187,8 +1187,6 @@ The [`custom_asset` example] has been updated to demonstrate these new features.
 
 <div class="release-feature-authors">authors: @thepackett, @RyanSparker</div>
 
-Asset Transformers are a small modification to the asset processing pipeline.
-
 Asset processing, at its core, involves implementing the `Process` trait, which takes some byte data representing an asset, transforming it, and then returning the processed byte data. However, implementing the `Process` trait by hand is somewhat involved, and so a generic `LoadAndSave<L: AssetLoader, S: AssetSaver>` `Process` implementation was written to make asset processing more ergonomic.
 
 Using the `LoadAndSave` `Process` implementation, the previous Asset processing pipeline had four stages:
@@ -1210,7 +1208,7 @@ The new asset processing pipeline, using the `LoadTransformAndSave` `Process` im
 
 In addition to having better code reusability, this change encorages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
 
-Of note, the previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
+The previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
 
 See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main/examples/asset/processing/asset_processing.rs>) for a more detailed look into how to use `LoadTransformAndSave` to process a custom asset.
 
