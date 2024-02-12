@@ -539,17 +539,217 @@ Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is 
 
 As usual, there's been some changes that may cause issues for custom shaders. We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
 
-## Texture Atlas Rework
+## Dynamic Queries
+<div class="release-feature-authors">authors: @james-j-obrien, @jakobhellermann, @Suficio</div>
 
-<div class="release-feature-authors">authors: @TODO</div>
+In Bevy's ECS, queries use a type-powered DSL. The full type of the query — meaning:
+what component to access, which filter to use — must be specified at compile time.
 
-TODO.
+Sometimes, we can't easily know what data the query wants to access at compile time.
+A UI with a dynamic list filtering by component, bindings for a scripting language,
+_entity relationships_ (more on this later), all of those, are impossible to accomplish without
+creating queries at runtime.
 
-## Sprite Slicing and Tiling
+They are now possible thanks to dynamic queries.
 
-<div class="release-feature-authors">authors: @TODO</div>
+The standard way of defining a `Query` is by using them as system parameters:
 
-TODO.
+```rust
+fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
+    // ...
+}
+```
+
+**This won't change**. And for most — if not all — gameplay use cases, you will
+continue to happily use the [`Query`] API, which made Bevy's reputation as a delightful game
+engine.
+
+However, consider this situation: As a game or mod developer I want to list entities
+with a specific component through a text prompt. Similarly to how the Quake console works.
+What would that look like?
+
+```rust
+#[derive(Resource)]
+struct UserQuery(String);
+
+// user_query is entered as a text prompt by the user when the game is running.
+// Using a system, we quickly find out we can't use `Query`.
+fn list_entites_system(user_query: Res<UserQuery>, query: Query<TODO, With<TODO>>) {}
+
+// using the more advanced `World` API, we are still stuck.
+fn list_entities(user_query: String, world: &mut World) {
+    //      What to put here? vvv
+    let query = world.query::<TODO>();
+}
+```
+
+It's impossible to chose a type based on the value of `user_query`!
+[`QueryBuilder`] solves this problem.
+
+```rust
+fn list_entities(
+    user_query: String,
+    type_registry: &TypeRegistry,
+    world: &mut World,
+) -> Option<()> {
+    let name = user_query.split(' ').next()?;
+    let type_id = type_registry.get_with_short_type_path(name)?.type_id();
+    let component_id = world.components().get_id(type_id)?;
+
+    let query = QueryBuilder::<FilteredEntityRef>::new(&mut world)
+        .ref_id(component_id)
+        .build();
+
+    for entity_ref in query.iter(world) {
+        let ptr = entity_ref.get_by_id(component_id);
+        // Convert `ptr` into a `&dyn Reflect` and use it.
+    }
+    Some(())
+}
+```
+
+It is still an error-prone, complex, and unsafe API, but it makes something that was previously
+impossible now possible. There are more ways of using `QueryBuilder`, check out
+[The dynamic query pull request] for a detailed breakdown of the API.
+
+[`QueryBuilder`] is here for people who need queries with runtime access specification,
+maybe you need to:
+
+* Add a runtime filter to [`bevy-inspector-egui`]'s entity inspector.
+* Define queries in a scripting language such as Lua or JavaScript.
+* Define new components from a scripting language and query them.
+* Add a [Quake-style console] to modify or query components from a prompt at runtime.
+* Create an [editor with remote capabilities].
+* And these are only the plans we've heard about so far!
+
+We expect third party crates to provide convenient wrappers around the `QueryBuilder` API.
+
+### Relations
+
+I mentioned _entity relationships_ earlier. What are relations? They are a way to associate
+entities to other entities. For example, the `Parent` and `Children` components
+in `bevy_hierarchy` are relations. They describe a relation between several entities.
+
+`bevy_hierarchy` is fairly robust, but if you yourself want to create your own
+relation (say, a group of units in an RTS game), the road ahead is a tar pit of footguns
+and synchronization bugs.
+
+_Entity relationships_ encode relations in the ECS. They are a staple of the [Flecs] C
+ECS. This makes it _a pleasure_ to describe relations, as opposed to the tar pit
+of footguns that it is today in bevy.
+
+Sander Mertens, of Flecs fame, [describes in details] the prerequisites for an
+entity relationship implementation.
+One of those prerequisites is the ability to use entity ids as query parameters.
+Dynamic queries allow just that.
+
+### A long wait
+
+Given how useful dynamic queries are, you might be wondering why we added them this late.
+But dynamic queries have a long history: they date back from **November 2022**,
+when Suficio proposed [a simple change]. It was deemed too unsafe, [a counter-proposal]
+was made by Jakob Hellermann. It was stalled due to complexity and the lack of qualified and
+interested reviewers. They were finally merged in **January 2024**
+thanks to [James O'Brien's stupendous effort][The dynamic query pull request].
+
+For an in-depth technical and historical breakdown of dynamic queries, check
+out [this GitHub discussion thread](https://github.com/bevyengine/bevy/discussions/9816).
+
+They have been _a long time_ coming and they are finally here!
+
+[`bevy-inspector-egui`]: https://crates.io/crates/bevy-inspector-egui
+[Quake-style console]: https://github.com/doonv/bevy_dev_console
+[editor with remote capabilities]: https://makeshift-bevy-web-editor.vercel.app/
+[a simple change]: https://github.com/bevyengine/bevy/pull/6240
+[The dynamic query pull request]: https://github.com/bevyengine/bevy/pull/9774
+[a counter-proposal]: https://github.com/bevyengine/bevy/pull/6390
+[`QueryBuilder`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.QueryBuilder.html
+[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html
+[describes in details]: https://ajmmertens.medium.com/a-roadmap-to-entity-relationships-5b1d11ebb4eb
+[Flecs]: https://www.flecs.dev/flecs/
+
+## Texture atlas rework
+
+<div class="release-feature-authors">authors: @ManevilleF</div>
+
+We introduced a significant rework of the _texture atlas_ system in `bevy_sprite` and `bevy_ui`, reducing boilerplate and making the feature more data-oriented.
+Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components, the texture atlasing feature is now reduced to a single _additional_ component: `TextureAtlas`.
+
+### Why this change
+
+The concept of texture atlasing or sprite sheets is simply to draw a custom _section_ of the texture.
+The new `TextureAtlas` represents that behaviour, it stores:
+
+* a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
+* a `usize` index defining which section `Rect` of the layout we want to display
+
+With this change, atlas bundles like `SpriteSheetBundle` and `AtlasImageBundles` are now identical to their non-atlases equivalents with only one extra component, `TextureAtlas`.
+
+## Texture Slicing and Tiling
+
+<div class="release-feature-authors">authors: @ManevilleF</div>
+
+In Bevy 0.13 we introduce a new 2D feature: CPU based _Slicing and Tiling_ to both `bevy_sprite` and `bevy_ui` !
+
+This feature is unlocked by a new optional component: `ImageScaleMode`
+
+### 9 slicing
+
+Adding `ImageScaleMode::Sliced(_)` to your 2D bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
+keeping the image in proportions in resize, avoiding stretching of the texture.
+
+![Stretched Vs Sliced texture](slice_vs_stretched.png)
+
+This is very useful for UI, allowing any resolution for your buttons and panels
+
+![Sliced Buttons](ui_slice.png)
+> Border texture by [Kenney's](https://kenney.nl/assets/fantasy-ui-borders)
+
+Configuration:
+
+```rust
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Sliced(TextureSlicer {
+        // The image borders are 20 pixels in every direction
+        border: BorderRect::square(20.0),
+        // we don't stretch the coners more than their actual size (20px)
+        max_corner_scale: 1.0,
+        ..default()
+    }),
+));
+```
+
+New associated examples:
+
+* `sprite_slice`
+* `ui_texture_slice`
+
+### Tiling
+
+Adding `ImageMode::Tiled { .. }` to your 2D enables _texture tiling_
+
+<video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
+
+Configuration:
+
+```rust
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Tiled {
+        // The image will repeat horizontally
+        tile_x: true,
+        // The image will repeat vertically
+        tile_y: true,
+        // The texture will repeat if the drawing rect is larger than the image size
+        stretch_value: 1.0,
+    },
+));
+```
+
+New associated examples:
+
+* `sprite_tile`
 
 ## Exposure Settings
 
@@ -589,9 +789,25 @@ TODO.
 
 ## Bind Group Layout Entries
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @IceSentry</div>
 
-TODO.
+We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using builtin functions to define bind group layouts resources and automatically set the index based on it's position.
+
+Here's a short example of how declaring a new layout looks:
+
+```rust
+let layout = render_device.create_bind_group_layout(
+    "post_process_bind_group_layout"),
+    &BindGroupLayoutEntries::sequential(
+        ShaderStages::FRAGMENT,
+        (
+            texture_2d_f32(),
+            sampler(SamplerBindingType::Filtering),
+            uniform_buffer::<PostProcessingSettings>(false),
+        ),
+    ),
+);
+```
 
 ## Type-Safe Labels for the `RenderGraph`
 
@@ -744,6 +960,109 @@ TODO.
 
 TODO.
 
+## Multiple gizmo configurations
+
+<div class="release-feature-authors">authors: @jeliag</div>
+
+Since [the 0.11 release], Bevy supports gizmos. Gizmos allow drawing shapes using
+an immediate mode API. Here is how you use them:
+
+```rust
+// bevy 0.12.1
+fn set_gizmo_width(mut config: ResMut<GizmoConfig>) {
+    // set the line width of every gizmos with this global configuration resource.
+    config.line_width = 5.0;
+}
+
+fn draw_circles(mut gizmos: Gizmos) {
+    // Draw two circles with a 5 pixels outline
+    gizmos.circle_2d(vec2(100., 0.), 120., Color::NAVY);
+    gizmos.circle_2d(vec2(-100., 0.), 120., Color::ORANGE);
+}
+```
+
+Add a [`Gizmos`] system param and call a few methods, nothing more. Cool!
+
+Gizmos are also great for crate authors, they can use the same API.
+For example, the [`oxidized_navigation`] navmesh library uses gizmos for its debug overlay.
+Great!
+
+
+But after quick adoption, the community quickly found their limitations.
+
+Remember: crate authors, as well as game devs, can use gizmos and set their config globally.
+However, there is only one global configuration. Therefore,
+a dependency could very well affect the game's gizmos.
+It could even make them completely unusable.
+
+Not so great.
+
+How to solve this? Gizmo groups.
+
+Now, [`Gizmos`] comes with an optional parameter.
+By default, it uses a global configuration:
+
+```rust
+fn draw_circles(mut default_gizmos: Gizmos) {
+    default_gizmos.circle_2d(vec2(100., 0.), 120., Color::NAVY);
+}
+```
+
+But with a [`GizmoConfigGroup`] parameter, `Gizmos` can choose a distinct configuration:
+
+```rust
+fn draw_circles(
+    mut default_gizmos: Gizmos,
+    // this uses a distinct configvvvvvvvvvvvvvvv
+    mut navigation_gizmos: Gizmos<NavigationGroup>,
+) {
+    // Two circles with different outline width
+    default_gizmos.circle_2d(vec2(100., 0.), 120., Color::NAVY);
+    navigation_gizmos.circle_2d(vec2(-100., 0.), 120., Color::ORANGE);
+}
+```
+
+Create your own gizmo config group by deriving `GizmoConfigGroup`,
+and registering it to the `App`:
+
+```rust
+#[derive(Default, Reflect, GizmoConfigGroup)]
+pub struct NavigationGroup;
+
+impl Plugin for NavigationPlugin {
+    fn build(&mut self, app: &mut App) {
+        app
+            .init_gizmo_group::<NavigationGroup>()
+            // ... rest of plugin initialization.
+    }
+}
+```
+
+And this is how you set the configuration of gizmo groups to different values:
+
+```rust
+// bevy 0.13.0
+set_gizmo_width(mut config_store: ResMut<GizmoConfigStore>) {
+    let config = config_store.config_mut::<DefaultGizmoConfigGroup>().0;
+    config.line_width = 20.0;
+
+    let navigation_config = config_store.config_mut::<NavigationGroup>().0;
+    navigation_config.line_width = 10.0;
+}
+```
+
+Now, the navigation gizmos have a fully separate configuration and don't conflict
+with the game's gizmos.
+
+Not only that, but the game dev can integrate the navigation gizmos with their
+own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
+an RPC call. The world is your oyster.
+
+[`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
+[`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/gizmos/struct.Gizmos.html
+[the 0.11 release]: https://bevyengine.org/news/bevy-0-11/#gizmos
+[`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
+=======
 ## glTF Extensions
 
 ## Extensionless Asset Support
@@ -905,12 +1224,6 @@ In addition to having better code reusability, this change encorages writing `As
 Of note, the previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
 
 See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main/examples/asset/processing/asset_processing.rs>) for a more detailed look into how to use `LoadTransformAndSave` to process a custom asset.
-
-## Gizmo Configuration
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
 
 ## <a name="what-s-next"></a>What's Next?
 
