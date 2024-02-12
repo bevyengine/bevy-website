@@ -545,15 +545,15 @@ As usual, there's been some changes that may cause issues for custom shaders. We
 
 <div class="release-feature-authors">authors: @james-j-obrien, @jakobhellermann, @Suficio</div>
 
-In Bevy's ECS, queries use a type-powered DSL. The full type of the query — meaning:
-what component to access, which filter to use — must be specified at compile time.
+In Bevy's ECS, queries use a type-powered DSL. The full type of the query (
+what component to access, which filter to use) must be specified at compile time.
 
 Sometimes, we can't easily know what data the query wants to access at compile time.
 A UI with a dynamic list filtering by component, bindings for a scripting language,
 _entity relationships_ (more on this later), all of those, are impossible to accomplish without
 creating queries at runtime.
 
-They are now possible thanks to dynamic queries.
+Dynamic queries lift this restriction.
 
 The standard way of defining a `Query` is by using them as system parameters:
 
@@ -563,11 +563,10 @@ fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
 }
 ```
 
-**This won't change**. And for most — if not all — gameplay use cases, you will
-continue to happily use the [`Query`] API, which made Bevy's reputation as a delightful game
-engine.
+**This won't change.** And for most (if not all)  gameplay use cases, you will
+continue to happily use the delightfully simple [`Query`] API.
 
-However, consider this situation: As a game or mod developer I want to list entities
+However, consider this situation: as a game or mod developer I want to list entities
 with a specific component through a text prompt. Similarly to how the Quake console works.
 What would that look like?
 
@@ -576,13 +575,13 @@ What would that look like?
 struct UserQuery(String);
 
 // user_query is entered as a text prompt by the user when the game is running.
-// Using a system, we quickly find out we can't use `Query`.
-fn list_entites_system(user_query: Res<UserQuery>, query: Query<TODO, With<TODO>>) {}
+// In a system, it's quickly apparent that we can't use `Query`.
+fn list_entites_system(user_query: Res<UserQuery>, query: Query<FIXME, With<FIXME>>) {}
 
-// using the more advanced `World` API, we are still stuck.
+// Even when using the more advanced `World` API, we are stuck.
 fn list_entities(user_query: String, world: &mut World) {
-    //      What to put here? vvv
-    let query = world.query::<TODO>();
+    // FIXME: what type goes here?
+    let query = world.query::<FIXME>();
 }
 ```
 
@@ -612,8 +611,9 @@ fn list_entities(
 ```
 
 It is still an error-prone, complex, and unsafe API, but it makes something that was previously
-impossible now possible. There are more ways of using `QueryBuilder`, check out
-[The dynamic query pull request] for a detailed breakdown of the API.
+impossible possible.
+We expect third party crates to provide convenient wrappers around the `QueryBuilder` API,
+some of which will undoubtedly make their way upstream.
 
 [`QueryBuilder`] is here for people who need queries with runtime access specification,
 maybe you need to:
@@ -625,21 +625,20 @@ maybe you need to:
 * Create an [editor with remote capabilities].
 * And these are only the plans we've heard about so far!
 
-We expect third party crates to provide convenient wrappers around the `QueryBuilder` API.
-
 ### Relations
 
-I mentioned _entity relationships_ earlier. What are relations? They are a way to associate
+We mentioned _entity relationships_ earlier. What are relations? They are a way to associate
 entities to other entities. For example, the `Parent` and `Children` components
-in `bevy_hierarchy` are relations. They describe a relation between several entities.
+in `bevy_hierarchy` are primitive relations.
+By storing `Entity` inside of a component type, we can describe a link between entities.
 
 `bevy_hierarchy` is fairly robust, but if you yourself want to create your own
 relation (say, a group of units in an RTS game), the road ahead is a tar pit of footguns
 and synchronization bugs.
 
 _Entity relationships_ encode relations in the ECS. They are a staple of the [Flecs] C
-ECS. This makes it _a pleasure_ to describe relations, as opposed to the tar pit
-of footguns that it is today in bevy.
+ECS. This makes it _a pleasure_ to describe relations,
+as opposed to the endless difficulties presented in most ECS's (including Bevy).
 
 Sander Mertens, of Flecs fame, [describes in details] the prerequisites for an
 entity relationship implementation.
@@ -648,7 +647,7 @@ Dynamic queries allow just that.
 
 ### A long wait
 
-Given how useful dynamic queries are, you might be wondering why we added them this late.
+Given how useful dynamic queries are, you might be wondering why Bevy didn't have them already.
 But dynamic queries have a long history: they date back from **November 2022**,
 when Suficio proposed [a simple change]. It was deemed too unsafe, [a counter-proposal]
 was made by Jakob Hellermann. It was stalled due to complexity and the lack of qualified and
