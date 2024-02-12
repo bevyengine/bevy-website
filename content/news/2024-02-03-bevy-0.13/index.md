@@ -687,10 +687,10 @@ Users were surprised to learn some of their systems with `run_if` conditions wou
 (In hindsight, we should have considered it a breaking change and postponed it until this release.)
 The change also introduced a bug (fixed in this release) where only one type of event was actually being dropped.
 
-One proposed solution to this lingering but unintended coupling between `Update` and `FixedUpdate` is to use event timestamps to change the default range of events visible by `EventReader<T>`.
+One proposed future solution to this lingering but unintended coupling between `Update` and `FixedUpdate` is to use event timestamps to change the default range of events visible by `EventReader<T>`.
 That way systems in `Update` would skip any events older than a frame while systems in `FixedUpdate` could still see them.
 
-For now, the `<=0.12.0` cadence can be recovered by simply removing the `EventUpdateSignal` resource.
+For now, the `<=0.12.0` behavior can be recovered by simply removing the `EventUpdateSignal` resource.
 
 ```rust
 fn main() {
