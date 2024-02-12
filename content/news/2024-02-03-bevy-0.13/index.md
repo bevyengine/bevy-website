@@ -673,18 +673,19 @@ They have been _a long time_ coming and they are finally here!
 
 <div class="release-feature-authors">authors: @ManevilleF</div>
 
-We introduced a significant rework of the _texture atlas_ system in `bevy_sprite` and `bevy_ui`, reducing boilerplate and making the feature more data-oriented.
-Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components, the texture atlasing feature is now reduced to a single _additional_ component: `TextureAtlas`.
+Texture atlases are a tool used to efficiently combine multiple images into a single larger atlas.
+
+Bevy 0.13 significantly reworks them, reducing boilerplate and making the feature more data-oriented.
+Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components (and the corresponding `Bundle` types):
+texture atlasing is now enabled by adding a single _additional_ component to your sprite and image entities: `TextureAtlas`.
 
 ### Why this change
 
-The concept of texture atlasing or sprite sheets is simply to draw a custom _section_ of the texture.
-The new `TextureAtlas` represents that behaviour, it stores:
+Texture atlases (sometimes called sprite sheets) simply to draw a custom _section_ of the texture.
+The new `TextureAtlas` represents that behaviour, storing:
 
 * a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
 * a `usize` index defining which section `Rect` of the layout we want to display
-
-With this change, atlas bundles like `SpriteSheetBundle` and `AtlasImageBundles` are now identical to their non-atlases equivalents with only one extra component, `TextureAtlas`.
 
 ## Texture Slicing and Tiling
 
