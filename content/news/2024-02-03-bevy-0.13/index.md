@@ -879,7 +879,7 @@ The [`custom_asset` example] has been updated to demonstrate these new features.
 
 <div class="release-feature-authors">authors: @thepackett, @RyanSparker</div>
 
-Asset Transformers are a small modification to the Asset processing pipeline.
+Asset Transformers are a small modification to the asset processing pipeline.
 
 Asset processing, at its core, involves implementing the `Process` trait, which takes some byte data representing an asset, transforming it, and then returning the processed byte data. However, implementing the `Process` trait by hand is somewhat involved, and so a generic `LoadAndSave<L: AssetLoader, S: AssetSaver>` `Process` implementation was written to make asset processing more ergonomic.
 
