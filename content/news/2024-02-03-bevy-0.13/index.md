@@ -785,7 +785,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @IceSentry</div>
 
-We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using builtin functions to define bind group layouts resources and automatically set the index based on it's position.
+We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using built-in functions to define bind group layouts resources and automatically set the index based on its position.
 
 Here's a short example of how declaring a new layout looks:
 
