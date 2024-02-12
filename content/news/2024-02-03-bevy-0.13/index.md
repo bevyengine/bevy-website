@@ -958,7 +958,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @jeliag</div>
 
-Since [the 0.11 release], Bevy supports gizmos. Gizmos allow drawing shapes using
+Gizmos let you quickly draw shapes using
 an immediate mode API. Here is how you use them:
 
 ```rust
@@ -975,22 +975,17 @@ fn draw_circles(mut gizmos: Gizmos) {
 }
 ```
 
-Add a [`Gizmos`] system param and call a few methods, nothing more. Cool!
+Add a [`Gizmos`] system param and simply call a few methods. Cool!
 
 Gizmos are also great for crate authors, they can use the same API.
 For example, the [`oxidized_navigation`] navmesh library uses gizmos for its debug overlay.
-Great!
+Neat!
 
-But after quick adoption, the community quickly found their limitations.
-
-Remember: crate authors, as well as game devs, can use gizmos and set their config globally.
 However, there is only one global configuration. Therefore,
 a dependency could very well affect the game's gizmos.
 It could even make them completely unusable.
 
-Not so great.
-
-How to solve this? Gizmo groups.
+Not so great. How to solve this? Gizmo groups.
 
 Now, [`Gizmos`] comes with an optional parameter.
 By default, it uses a global configuration:
@@ -1047,13 +1042,12 @@ set_gizmo_width(mut config_store: ResMut<GizmoConfigStore>) {
 Now, the navigation gizmos have a fully separate configuration and don't conflict
 with the game's gizmos.
 
-Not only that, but the game dev can integrate the navigation gizmos with their
+Not only that, but the game dev can integrate and toggle the navigation gizmos with their
 own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
 an RPC call. The world is your oyster.
 
 [`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
 [`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/gizmos/struct.Gizmos.html
-[the 0.11 release]: https://bevyengine.org/news/bevy-0-11/#gizmos
 [`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
 
 ## glTF Extensions
