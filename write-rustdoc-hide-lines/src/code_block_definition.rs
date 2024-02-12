@@ -1,5 +1,7 @@
 use std::ops::Range;
 
+use regex::Regex;
+
 use crate::hidden_ranges::HiddenRanges;
 
 #[derive(Debug, PartialEq)]
@@ -74,27 +76,24 @@ pub struct CodeBlockDefinition {
     hide_lines_idx: Option<usize>,
 }
 
-const RUST_CODE_BLOCK_LONG: &str = "```rust";
-const RUST_CODE_BLOCK_SHORT: &str = "```rs";
-
 impl CodeBlockDefinition {
     pub fn new(line: &str) -> Option<CodeBlockDefinition> {
-        let tag: String;
+        let lang_re = Regex::new(r"(\s*)```(.+)").ok()?;
+        let captures = lang_re.captures(line)?;
 
-        if line.starts_with(RUST_CODE_BLOCK_LONG) {
-            tag = RUST_CODE_BLOCK_LONG.into();
-        } else if line.starts_with(RUST_CODE_BLOCK_SHORT) {
-            tag = RUST_CODE_BLOCK_SHORT.into();
-        } else {
+        let whitespace = captures.get(1).map(|mat| mat.as_str())?;
+        let lang = captures.get(2).map(|mat| mat.as_str())?;
+
+        let mut hide_lines_idx = None;
+
+        let mut parts = lang.split(',');
+        let tag = parts.next()?;
+
+        if tag != "rs" && tag != "rust" {
             return None;
         }
 
-        let mut hide_lines_idx = None;
-        let annotations = line
-            .get(tag.len()..)
-            .unwrap_or("")
-            .split(',')
-            .filter(|a| a.trim() != "")
+        let annotations = parts
             .enumerate()
             .map(|(idx, a)| {
                 let annotation = Annotation::from(a);
@@ -108,7 +107,7 @@ impl CodeBlockDefinition {
             .collect();
 
         Some(CodeBlockDefinition {
-            tag,
+            tag: format!("{}```{}", whitespace, tag),
             annotations,
             hide_lines_idx,
         })
@@ -143,12 +142,9 @@ impl CodeBlockDefinition {
     pub fn set_hidden_ranges(&mut self, hidden_ranges: HiddenRanges) {
         if hidden_ranges.is_empty() {
             // Remove
-            match self.hide_lines_idx {
-                Some(idx) => {
-                    self.annotations.remove(idx);
-                    self.hide_lines_idx = None;
-                }
-                None => (),
+            if let Some(idx) = self.hide_lines_idx {
+                self.annotations.remove(idx);
+                self.hide_lines_idx = None;
             }
         } else {
             // Add
@@ -175,7 +171,7 @@ mod tests {
 
         for case in cases {
             let definition = CodeBlockDefinition::new(case);
-            assert_eq!(definition.is_none(), true);
+            assert_eq!(definition, None);
         }
     }
 

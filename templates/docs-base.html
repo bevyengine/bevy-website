@@ -2,6 +2,28 @@
 {% import "macros/docs.html" as docs_macros %}
 
 {% block head_extensions %}
+    {% set_global ancestor_is_public_draft = false %}
+    {% if section %}
+        {% for ancestor in section.ancestors %}
+            {% set ancestor_section = get_section(path=ancestor) %}
+            {% if not ancestor_is_public_draft and ancestor_section.extra and ancestor_section.extra.public_draft %}
+                {% set_global ancestor_is_public_draft = true %}
+            {% endif %}
+        {% endfor %}
+        {% if ancestor_is_public_draft or section and section.extra and section.extra.public_draft %}
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        {% endif %}
+    {% elif page %}
+        {% for ancestor in page.ancestors %}
+            {% set ancestor_section = get_section(path=ancestor) %}
+            {% if not ancestor_is_public_draft and ancestor_section.extra and ancestor_section.extra.public_draft %}
+                {% set_global ancestor_is_public_draft = true %}
+            {% endif %}
+        {% endfor %}
+        {% if ancestor_is_public_draft or page and page.extra and page.extra.public_draft %}
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        {% endif %}
+    {% endif %}
     <script src="/optional-helpers.js"></script>
 {% endblock %}
 
