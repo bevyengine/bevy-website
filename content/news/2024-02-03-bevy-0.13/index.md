@@ -1052,6 +1052,8 @@ an RPC call. The world is your oyster.
 
 ## glTF Extensions
 
+<div class="release-feature-authors">authors: TODO GLTF AUTHORS</div>
+
 ## Extensionless Asset Support
 
 <div class="release-feature-authors">authors: @bushrat011899</div>
