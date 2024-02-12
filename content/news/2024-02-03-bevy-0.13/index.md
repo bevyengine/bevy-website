@@ -184,7 +184,7 @@ In this initial implementation of stepping there are some limitations:
 
 [`Stepping`]: https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/stepping/Stepping.html
 
-## Transmute Queries
+## Query transmutation
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
