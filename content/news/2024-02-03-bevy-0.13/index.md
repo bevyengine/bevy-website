@@ -444,13 +444,14 @@ fn my_system(query: Query<Entity, With<ComponentA>>)
 [`QueryData`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryData.html
 [`QueryFilter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryFilter.html
 
-## Automatically Insert `apply_deferred` Systems
+## Automatically insert `apply_deferred` systems
 
 <div class="release-feature-authors">authors: @hymm</div>
 
-A common scheduling issue is that one system needs to see the effects of commands
-queued in another system. Before 0.13, you would have to manually insert an
-`apply_deferred` system between the two. Bevy now detects when a system with commands
+When writing gameplay code, you might commonly have one system that wants to
+immediately see the effects of commands queued in another system.
+Before 0.13, you would have to manually insert an `apply_deferred` system between the two.
+Bevy now detects when a system with commands
 is ordered relative to other systems and inserts the `apply_deferred` for you.
 
 ```rust
@@ -476,10 +477,12 @@ app.add_systems(
 );
 ```
 
-It also optimizes the automatically inserted `apply_deferred` systems by merging them if
+This was a common beginner footgun: if two systems are ordered, shouldn't the second always see the results of the first?
+
+Automatically inserted `apply_deferred` systems are optimized by automatically merging them if
 possible. In most cases, it is recommended to remove all manually inserted
 `apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will
-usually be faster.
+usually be both faster and involve less boilerplate.
 
 ```rust
 // This will only add one apply_deferred system.
