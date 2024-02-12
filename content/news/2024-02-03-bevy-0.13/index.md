@@ -539,8 +539,7 @@ Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is 
 
 As usual, there's been some changes that may cause issues for custom shaders. We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
 
-## Texture Atlas Rework
-
+## Dynamic Queries
 <div class="release-feature-authors">authors: @james-j-obrien, @jakobhellermann, @Suficio</div>
 
 In Bevy's ECS, queries use a type-powered DSL. The full type of the query — meaning:
@@ -669,11 +668,88 @@ They have been _a long time_ coming and they are finally here!
 [describes in details]: https://ajmmertens.medium.com/a-roadmap-to-entity-relationships-5b1d11ebb4eb
 [Flecs]: https://www.flecs.dev/flecs/
 
-## Sprite Slicing and Tiling
+## Texture atlas rework
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @ManevilleF</div>
 
-TODO.
+We introduced a significant rework of the _texture atlas_ system in `bevy_sprite` and `bevy_ui`, reducing boilerplate and making the feature more data-oriented.
+Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components, the texture atlasing feature is now reduced to a single _additional_ component: `TextureAtlas`.
+
+### Why this change
+
+The concept of texture atlasing or sprite sheets is simply to draw a custom _section_ of the texture.
+The new `TextureAtlas` represents that behaviour, it stores:
+
+* a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
+* a `usize` index defining which section `Rect` of the layout we want to display
+
+With this change, atlas bundles like `SpriteSheetBundle` and `AtlasImageBundles` are now identical to their non-atlases equivalents with only one extra component, `TextureAtlas`.
+
+## Texture Slicing and Tiling
+
+<div class="release-feature-authors">authors: @ManevilleF</div>
+
+In Bevy 0.13 we introduce a new 2D feature: CPU based _Slicing and Tiling_ to both `bevy_sprite` and `bevy_ui` !
+
+This feature is unlocked by a new optional component: `ImageScaleMode`
+
+### 9 slicing
+
+Adding `ImageScaleMode::Sliced(_)` to your 2D bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
+keeping the image in proportions in resize, avoiding stretching of the texture.
+
+![Stretched Vs Sliced texture](slice_vs_stretched.png)
+
+This is very useful for UI, allowing any resolution for your buttons and panels
+
+![Sliced Buttons](ui_slice.png)
+> Border texture by [Kenney's](https://kenney.nl/assets/fantasy-ui-borders)
+
+Configuration:
+
+```rust
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Sliced(TextureSlicer {
+        // The image borders are 20 pixels in every direction
+        border: BorderRect::square(20.0),
+        // we don't stretch the coners more than their actual size (20px)
+        max_corner_scale: 1.0,
+        ..default()
+    }),
+));
+```
+
+New associated examples:
+
+* `sprite_slice`
+* `ui_texture_slice`
+
+### Tiling
+
+Adding `ImageMode::Tiled { .. }` to your 2D enables _texture tiling_
+
+<video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
+
+Configuration:
+
+```rust
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Tiled {
+        // The image will repeat horizontally
+        tile_x: true,
+        // The image will repeat vertically
+        tile_y: true,
+        // The texture will repeat if the drawing rect is larger than the image size
+        stretch_value: 1.0,
+    },
+));
+```
+
+New associated examples:
+
+* `sprite_tile`
 
 ## Exposure Settings
 
