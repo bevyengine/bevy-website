@@ -149,7 +149,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @jeliag</div>
 
-Since [the 0.11 release], bevy supports gizmos. Gizmos allow drawing shapes using
+Since [the 0.11 release], Bevy supports gizmos. Gizmos allow drawing shapes using
 an immediate mode API. Here is how you use them:
 
 ```rust
