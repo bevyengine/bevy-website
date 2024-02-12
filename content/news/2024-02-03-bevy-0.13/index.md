@@ -691,7 +691,7 @@ The new `TextureAtlas` represents that behaviour, storing:
 
 <div class="release-feature-authors">authors: @ManevilleF</div>
 
-In Bevy 0.13 we introduce a new 2D feature: CPU based _Slicing and Tiling_ to both `bevy_sprite` and `bevy_ui` !
+In Bevy 0.13 we introduce a new 2D feature: CPU-based _slicing and tiling_ to both `bevy_sprite` and `bevy_ui` !
 
 This feature is unlocked by a new optional component: `ImageScaleMode`
 
@@ -702,7 +702,7 @@ keeping the image in proportions in resize, avoiding stretching of the texture.
 
 ![Stretched Vs Sliced texture](slice_vs_stretched.png)
 
-This is very useful for UI, allowing any resolution for your buttons and panels
+This is very useful for UI, allowing your pretty textures to look right even as the size of your element changes.
 
 ![Sliced Buttons](ui_slice.png)
 > Border texture by [Kenney's](https://kenney.nl/assets/fantasy-ui-borders)
@@ -722,14 +722,10 @@ commands.spawn((
 ));
 ```
 
-New associated examples:
-
-* `sprite_slice`
-* `ui_texture_slice`
-
 ### Tiling
 
-Adding `ImageMode::Tiled { .. }` to your 2D enables _texture tiling_
+Adding `ImageMode::Tiled { .. }` to your 2D sprite entities enables _texture tiling_: repeating the image until their entire area is fulled.
+This is commonly used for backgrounds.
 
 <video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
 
@@ -748,10 +744,6 @@ commands.spawn((
     },
 ));
 ```
-
-New associated examples:
-
-* `sprite_tile`
 
 ## Exposure Settings
 
