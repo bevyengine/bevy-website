@@ -895,7 +895,6 @@ Gizmos are also great for crate authors, they can use the same API.
 For example, the [`oxidized_navigation`] navmesh library uses gizmos for its debug overlay.
 Great!
 
-This is why gizmos were quickly adopted by the community.
 
 But after quick adoption, the community quickly found their limitations.
 
