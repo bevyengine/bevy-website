@@ -35,10 +35,10 @@ TODO.
 
 <div class="release-feature-authors">authors: @james-j-obrien, @jakobhellermann, @Suficio</div>
 
-In bevy ECS, queries use a type DSL. The full type of the query — meaning:
+In Bevy's ECS, queries use a type-powered DSL. The full type of the query — meaning:
 what component to access, which filter to use — must be specified at compile time.
 
-Sometimes, we don't know what the query accesses at compile time.
+Sometimes, we can't easily know what data the query wants to access at compile time.
 A UI with a dynamic list filtering by component, bindings for a scripting language,
 _entity relationships_ (more on this later), all of those, are impossible to accomplish without
 creating queries at runtime.
@@ -54,12 +54,12 @@ fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
 ```
 
 **This won't change**. And for most — if not all — gameplay use cases, you will
-continue to happily use the [`Query`] API, which made bevy's reputation as a delightful game
+continue to happily use the [`Query`] API, which made Bevy's reputation as a delightful game
 engine.
 
-However, now, consider this: As a developer, or game modder, I want to list entities
-with a specific component, through a text prompt. Similarly to how the Quake console works.
-How does that look like?
+However, consider this situation: As a game or mod developer I want to list entities
+with a specific component through a text prompt. Similarly to how the Quake console works.
+What would that look like?
 
 ```rust
 #[derive(Resource)]
@@ -113,7 +113,7 @@ maybe you need to:
 * Define new components from a scripting language and query them.
 * Add a [Quake-style console] to modify or query components from a prompt at runtime.
 * Create an [editor with remote capabilities].
-* And those are only what people came up with _before_ the 0.13 release!
+* And these are only the plans we've heard about so far!
 
 We expect third party crates to provide convenient wrappers around the `QueryBuilder` API.
 
