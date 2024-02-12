@@ -671,6 +671,43 @@ They have been _a long time_ coming and they are finally here!
 [describes in details]: https://ajmmertens.medium.com/a-roadmap-to-entity-relationships-5b1d11ebb4eb
 [Flecs]: https://www.flecs.dev/flecs/
 
+## Events Live Longer
+
+Events are a useful tool for passing data into systems and between systems in a pub-sub way.
+
+Internally, Bevy events are double-buffered, so (by default) a given event will be silently dropped once the buffers have swapped twice.
+The `Events<T>` resource is setup this way so events are dropped after a predictable amount of time, preventing their queues from growing forever and causing a memory leak.
+
+Before 0.12.1, event queues were swapped every update (i.e. every frame).
+That was an issue for games with logic in `FixedUpdate`, since it meant events would normally disappear before systems in the next `FixedUpdate` could read them.
+
+Bevy 0.12.1 changed the swap cadence to "every update that runs `FixedUpdate` one or more times" (only if the `TimePlugin` is installed).
+This change did resolve the original problem, but it then caused problems in the other direction.
+Users were surprised to learn some of their systems with `run_if` conditions would iterate much older events than expected.
+(In hindsight, we should have considered it a breaking change and postponed it until this release.)
+The change also introduced a bug (fixed in this release) where only one type of event was actually being dropped.
+
+One proposed solution to this lingering but unintended coupling between `Update` and `FixedUpdate` is to use event timestamps to change the default range of events visible by `EventReader<T>`.
+That way systems in `Update` would skip any events older than a frame while systems in `FixedUpdate` could still see them.
+
+For now, the `<=0.12.0` cadence can be recovered by simply removing the `EventUpdateSignal` resource.
+
+```rust
+fn main() {
+    let mut app = App::new()
+        .add_plugins(DefaultPlugins);
+    
+    /* ... */
+
+    // If this resource is absent, events are dropped the same way as <=0.12.0.
+    app.world.remove_resource::<EventUpdateSignal>();
+    
+    /* ... */
+
+    app.run();
+}
+```
+
 ## Texture atlas rework
 
 <div class="release-feature-authors">authors: @ManevilleF</div>
