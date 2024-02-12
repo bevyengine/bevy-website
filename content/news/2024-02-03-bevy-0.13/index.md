@@ -237,7 +237,9 @@ probably avoid doing it inside a hot loop.
 
 ### Changing `Entity`'s Layout
 
-This is a story told in two parts, with part one dealing with two PRs: The "Unified Identifier for entities & relations" PR ([#9797](https://github.com/bevyengine/bevy/pull/9797) by @Bluefinger) and "Change Entity::generation from u32 to NonZeroU32 for niche optimization" ([#9907](https://github.com/bevyengine/bevy/pull/9907) by @notverymoe). Fundamentally, they both involved changing the layout and assumptions of `Entity`, unlocking a building blocks for relations and improving memory/codegen for `Entity`.
+The exact details of how those 64 bits get used changed repeatedly in 0.13.
+First we have two PRs: "Unified Identifier for entities & relations" PR ([#9797](https://github.com/bevyengine/bevy/pull/9797) by @Bluefinger) and "Change Entity::generation from u32 to NonZeroU32 for niche optimization" ([#9907](https://github.com/bevyengine/bevy/pull/9907) by @notverymoe).
+Fundamentally, they both involved changing the layout and assumptions of `Entity`, unlocking a building blocks for relations and improving memory/codegen for `Entity`.
 
 [#9797](https://github.com/bevyengine/bevy/pull/9797) created a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
 
