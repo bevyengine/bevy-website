@@ -410,7 +410,7 @@ With a complex unsafe codebase like `bevy_ecs`, every little bit helps.
 
 A [`Query`] has two type parameters: one for the the data to be fetched, and a second optional one for the filters.
 
-In previous versions of Bevy both parameters had to implement [`WorldQuery`] but there was nothing stopping you from using types intended as filters in the data position (or vice versa).
+In previous versions of Bevy both parameters simply required [`WorldQuery`]: there was nothing stopping you from using types intended as filters in the data position (or vice versa).
 
 Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behaviour in either position.
 
@@ -421,15 +421,15 @@ To allow us to prevent this type of bug at compile time, the [`WorldQuery`] trai
 Most user code should be unaffected or easy to migrate.
 
 ```rust
-// `With` filter in the data position - will not compile in 0.13
+// Probably a subtle bug: `With` filter in the data position - will not compile in 0.13
 fn my_system(query: Query<(Entity, With<ComponentA>)>)
 {
-  for (entity, ()) in query.iter(){
     // The type signature of the query items is `(Entity, ())`, which is usable but unwieldy
+  for (entity, _) in query.iter(){
   }
 }
 
-// Still compiles as in 0.12
+// Iidiomatic, compiles in both 0.12 and 0.13
 fn my_system(query: Query<Entity, With<ComponentA>>)
 {
   for entity in query.iter(){
