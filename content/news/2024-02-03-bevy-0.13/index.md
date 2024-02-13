@@ -828,8 +828,8 @@ specular occlusion.
 <b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Specular Occlusion On" data-title-b="Specular Occlusion Off">
-  <img class="image-a" alt="Specular Occlusion On" src="specular_occlusion_on.png">
-  <img class="image-b" alt="Specular Occlusion Off" src="specular_occlusion_off.png">
+  <img class="image-a" alt="Specular Occlusion On" src="specular_occlusion_on.jpg">
+  <img class="image-b" alt="Specular Occlusion Off" src="specular_occlusion_off.jpg">
 </div>
 
 <div style="font-size: 1.0rem" class="release-feature-authors">Model Credits: <a href="https://sketchfab.com/3d-models/bmw-r1200gs-motorcycle-6550451b0ae547039585a44286b2f530">BMW R1200GS Motorcycle</a> by Moto3D is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>.
