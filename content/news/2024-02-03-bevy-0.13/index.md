@@ -816,14 +816,24 @@ Bevy's current PBR renderer over-brightens the image, especially at grazing angl
 effect tends to make surfaces behave like mirrors. This over-brightening happens because the
 surfaces must reflect *something*, but without path traced or screen-space reflections, the renderer
 has to guess *what* is being reflected. The best guess it can make is to sample the environment cube
-map, even if light would've hit something else before reaching the environment light. This artifact
-where light occlusion is ignored is called specular light leaking.
+map, even if light would've hit something else before reaching the environment light. This artifact,
+where light occlusion is ignored, is called specular light leaking.
 
 Consider a car tire; though the rubber might be shiny, you wouldn't expect it to have bright
 specular highlights inside a wheel well, because the car itself is blocking (occluding) the light
 that would otherwise cause these reflections. Checking for occlusion can be computationally
 expensive. Instead, this change uses Bevy's existing screen space ambient occlusion to approximate
 specular occlusion.
+
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
+
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Specular Occlusion On" data-title-b="Specular Occlusion Off">
+  <img class="image-a" alt="Specular Occlusion On" src="specular_occlusion_on.png">
+  <img class="image-b" alt="Specular Occlusion Off" src="specular_occlusion_off.png">
+</div>
+
+<div style="font-size: 1.0rem" class="release-feature-authors">Model Credits: <a href="https://sketchfab.com/3d-models/bmw-r1200gs-motorcycle-6550451b0ae547039585a44286b2f530">BMW R1200GS Motorcycle</a> by Moto3D is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>.
+</div>
 
 This could be further improved with screen space reflections (SSR). However, it is recommended to
 use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
