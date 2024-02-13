@@ -822,7 +822,7 @@ where light occlusion is ignored is called specular light leaking.
 Consider a car tire; though the rubber might be shiny, you wouldn't expect it to have bright
 specular highlights inside a wheel well, because the car itself is blocking (occluding) the light
 that would otherwise cause these reflections. Checking for occlusion can be computationally
-expensive. Instead, this change uses bevy's existing screen space ambient occlusion to approximate
+expensive. Instead, this change uses Bevy's existing screen space ambient occlusion to approximate
 specular occlusion.
 
 This could be further improved with screen space reflections (SSR). However, it is recommended to
