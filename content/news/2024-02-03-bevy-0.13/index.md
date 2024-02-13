@@ -1263,7 +1263,9 @@ Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/miles
 * **bevy_ui improvements:** TODO
 * **The steady march towards relations:** TODO
 * **Animation blending:** TODO
-* **Irradiance volumes:** TODO
+* **Meshlet rendering** Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
+
+![The Stanford dragon mesh rendered as meshlet clusters](meshlet_preview.png)
 
 ## Support Bevy
 
