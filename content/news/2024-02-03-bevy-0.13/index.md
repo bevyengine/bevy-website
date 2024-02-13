@@ -192,7 +192,7 @@ Have you every wanted to pass a query to a function, but instead of having a
 `Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
 Well now you can by using the `Query::transmute_lens` method. Query transmutes
 allow you to change a query into different query types as long as the
-componenets accessed are a subset of the original query. If you do try to access
+components accessed are a subset of the original query. If you do try to access
 data that is not in the original query, this method will panic.
 
 ```rust
