@@ -810,9 +810,23 @@ TODO.
 
 ## Approximate Indirect Specular Occlusion
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @aevyrie</div>
 
-TODO.
+Bevy's current PBR renderer over-brightens the image, especially at grazing angles where the fresnel
+effect tends to make surfaces behave like mirrors. This over-brightening happens because the
+surfaces must reflect *something*, but without path traced or screen-space reflections, the renderer
+has to guess *what* is being reflected. The best guess it can make is to sample the environment cube
+map, even if light would've hit something else before reaching the environment light. This artifact
+where light occlusion is ignored is called specular light leaking.
+
+Consider a car tire; though the rubber might be shiny, you wouldn't expect it to have bright
+specular highlights inside a wheel well, because the car itself is blocking (occluding) the light
+that would otherwise cause these reflections. Checking for occlusion can be computationally
+expensive. Instead, this change uses bevy's existing screen space ambient occlusion to approximate
+specular occlusion.
+
+This could be further improved with screen space reflections (SSR). However, it is recommended to
+use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
 
 ## Unload Render Assets From RAM
 
