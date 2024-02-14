@@ -1285,7 +1285,15 @@ Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/miles
 * **bevy_dev_tools:** TODO
 * **A revised scene format:** TODO
 * **bevy_ui improvements:** TODO
-* **The steady march towards relations:** TODO
+* **The steady march towards relations:** [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
+Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations] and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks] needed to build a fast, robust and ergonomic solution.
+
+![[Entity-entity relations](https://github.com/bevyengine/bevy/issues/3742)]
+![trail blazed by `flecs`](https://ajmmertens.medium.com/building-games-in-ecs-with-entity-relationships-657275ba2c6c)
+![reshaping our internals](https://github.com/orgs/bevyengine/projects/15)
+![experimenting with external implementations](https://crates.io/crates/aery)
+[lifecycle hooks](https://github.com/bevyengine/bevy/pull/10756)
+
 * **Animation blending:** TODO
 * **Meshlet rendering** Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
 
