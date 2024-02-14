@@ -1016,8 +1016,11 @@ The simplest interpolation method is linear: just move an equal distance towards
 But this isn't always the desired effect! Both stop-motion-style and more carefully smoothed animations have their place.
 
 Bevy now supports both step and cubic spline interpolation in animations.
-Most of the time, this will just be parsed correctly from the glTF files, but when setting `VariableCurve` manually,
-there's a new `Interpolation` type.
+Most of the time, this will just be parsed correctly from the glTF files, but when setting [`VariableCurve`] manually,
+there's a new [`Interpolation`] field to set.
+
+[`VariableCurve`]: https://dev-docs.bevyengine.org/bevy/animation/struct.VariableCurve.html
+[`Interpolation`]: https://dev-docs.bevyengine.org/bevy/animation/enum.Interpolation.html
 
 ## `Animatable` Trait
 
@@ -1029,7 +1032,7 @@ But in modern game development, animation is a powerful shared set of tools and 
 Transforms are just the beginning: colors, particle effects, opacity and even boolean values like visibility can all be animated!
 
 In Bevy 0.13, we've taken the first step towards [this vision](https://github.com/bevyengine/rfcs/blob/main/rfcs/51-animation-composition.md),
-with the `Animatible` trait.
+with the [`Animatable`] trait.
 
 ```rust
 /// An animatable value type.
@@ -1053,6 +1056,8 @@ pub trait Animatable: Reflect + Sized + Send + Sync + 'static {
 This is the first step towards animation blending and an asset-driven animation graph: essential for shipping large scale 3D games in Bevy.
 But for now, this is a building block: we've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
 Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
+
+[`Animatable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Animatable.html
 
 ## Multiple gizmo configurations
 
