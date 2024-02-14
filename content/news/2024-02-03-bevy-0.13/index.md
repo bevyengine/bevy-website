@@ -1281,7 +1281,7 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
-* **More editor experimentation:** Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete rapid prototyping.
+* **More editor experimentation:** Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete prototyping.
 Should we use an in-process editor (less robust to game crashes) or an external one (more complex)?
 Should we ship an editor binary (great for non-programmers) or embed it in the game itself (very hackable)?
 Let's find out by doing!
