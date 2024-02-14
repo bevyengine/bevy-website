@@ -1007,7 +1007,7 @@ TODO.
 
 ## Animation Interpolation Methods
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @mockersf</div>
 
 Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line?
 But what happens between those keyframes? Game engines need to **interpolate** between them: smoothly transitioning from one state to the next.
@@ -1019,9 +1019,38 @@ Bevy now supports both step and cubic spline interpolation in animations, which 
 
 ## `Animatable` Trait
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @james7132</div>
 
-TODO.
+When you think of "animation": you're probably imagining moving objects through space.
+Translating them back and forth, rotating them, maybe even squashing and stretching them.
+But in modern game development, animation is a powerful shared set of tools and concepts for "changing things over time".
+Transforms are just the beginning: colors, particle effects, opacity and even boolean values like visibility can all be animated!
+
+In Bevy 0.13, we've taken the first step towards [this vision](https://github.com/bevyengine/rfcs/blob/main/rfcs/51-animation-composition.md),
+with the `Animatible` trait.
+
+```rust
+/// An animatable value type.
+pub trait Animatable: Reflect + Sized + Send + Sync + 'static {
+    /// Interpolates between `a` and `b` with  a interpolation factor of `time`.
+    ///
+    /// The `time` parameter here may not be clamped to the range `[0.0, 1.0]`.
+    fn interpolate(a: &Self, b: &Self, time: f32) -> Self;
+
+    /// Blends one or more values together.
+    ///
+    /// Implementors should return a default value when no inputs are provided here.
+    fn blend(inputs: impl Iterator<Item = BlendInput<Self>>) -> Self;
+
+    /// Post-processes the value using resources in the [`World`].
+    /// Most animatable types do not need to implement this.
+    fn post_process(&mut self, _world: &World) {}
+}
+```
+
+This is the first step towards animation blending and an asset-driven animation graph: essential for shipping large scale 3D games in Bevy.
+But for now, this is a building block: we've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
+Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
 
 ## Multiple gizmo configurations
 
