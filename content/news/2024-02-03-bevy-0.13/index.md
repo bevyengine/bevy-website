@@ -1015,7 +1015,9 @@ But what happens between those keyframes? Game engines need to **interpolate** b
 The simplest interpolation method is linear: just move an equal distance towards the next keyframe every unit of time.
 But this isn't always the desired effect! Both stop-motion-style and more carefully smoothed animations have their place.
 
-Bevy now supports both step and cubic spline interpolation in animations, which are typically loaded from glTF files along with their 3D models.
+Bevy now supports both step and cubic spline interpolation in animations.
+Most of the time, this will just be parsed correctly from the glTF files, but when setting `VariableCurve` manually,
+there's a new `Interpolation` type.
 
 ## `Animatable` Trait
 
