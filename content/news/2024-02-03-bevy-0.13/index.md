@@ -1022,6 +1022,8 @@ there's a new [`Interpolation`] field to set.
 [`VariableCurve`]: https://dev-docs.bevyengine.org/bevy/animation/struct.VariableCurve.html
 [`Interpolation`]: https://dev-docs.bevyengine.org/bevy/animation/enum.Interpolation.html
 
+![Demonstrating the different types of interpolation](interpolation_methods.gif)]
+
 ## `Animatable` Trait
 
 <div class="release-feature-authors">authors: @james7132</div>
