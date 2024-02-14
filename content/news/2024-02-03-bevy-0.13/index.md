@@ -1005,11 +1005,17 @@ commands.spawn(NodeBundle {
 
 TODO.
 
-## Animation Interpolation
+## Animation Interpolation Methods
 
 <div class="release-feature-authors">authors: @TODO</div>
 
-TODO.
+Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line?
+But what happens between those keyframes? Game engines need to **interpolate** between them: smoothly transitioning from one state to the next.
+
+The simplest interpolation method is linear: just move an equal distance towards the next keyframe every unit of time.
+But this isn't always the desired effect! Both stop-motion-style and more carefully smoothed animations have their place.
+
+Bevy now supports both step and cubic spline interpolation in animations, which are typically loaded from glTF files along with their 3D models.
 
 ## `Animatable` Trait
 
