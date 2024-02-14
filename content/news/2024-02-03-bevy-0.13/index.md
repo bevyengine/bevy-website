@@ -1287,8 +1287,8 @@ Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/miles
 However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle: changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
 Cart has been cooking up a [revised scene format] with tight IDE and code integration, that tackles these problems and makes authoring content (including UI!) in Bevy a joy, whether you're writing code, writing scene files or generating it from a GUI.
 
-![Scenes](https://github.com/bevyengine/bevy/tree/latest/examples/scene)
-![revised scene format](https://github.com/bevyengine/bevy/discussions/9538)
+[Scenes]: https://github.com/bevyengine/bevy/tree/latest/examples/scene
+[revised scene format]: https://github.com/bevyengine/bevy/discussions/9538
 
 * **bevy_ui improvements:** TODO
 * **The steady march towards relations:** TODO
