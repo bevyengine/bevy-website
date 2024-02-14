@@ -802,11 +802,17 @@ TODO.
 
 TODO.
 
-## Light `RenderLayers`
+## Lights work with `RenderLayers`
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @robftm</div>
 
-TODO.
+[`RenderLayers`] are Bevy's answer to quickly hiding and showing entities en-masse, powered by camera-driven views.
+Great for things like customizing the first-person view of what a character is hold (or making sure vampires don't show up in your mirrors!).
+
+[`RenderLayers`] [now play nice] with lights, fixing a serious limitation to make sure this awesome feature can shine appropriately!
+
+[`RenderLayers`]: https://docs.rs/bevy/latest/bevy/render/view/struct.RenderLayers.html
+[now play nice]: https://github.com/bevyengine/bevy/pull/10742
 
 ## Approximate Indirect Specular Occlusion
 
