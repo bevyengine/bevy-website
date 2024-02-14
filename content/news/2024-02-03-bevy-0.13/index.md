@@ -1284,7 +1284,17 @@ Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/miles
 * **More editor experimentation:** TODO
 * **bevy_dev_tools:** TODO
 * **A revised scene format:** TODO
-* **bevy_ui improvements:** TODO
+* **bevy_ui improvements:** `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural].
+But there are tangible things we can and are doing to improve this!
+An improved scene format offers an end to the boilerplate when defining layouts, [rounded] [corners] just need a little love from reviewers, and the powerful and beloved object picking from [`bevy_mod_picking`] is slated to be upstreamed for both UI and gameplay alike.
+A spectacular array of [third-party UI solutions] exists today, and learning from those and committing to a core architecture for UI logic and reactivity is a top priority.
+
+![both mundane and architectural](https://www.leafwing-studios.com/blog/ecs-gui-framework/)
+![rounded]((https://github.com/bevyengine/bevy/pull/8973))
+![corners](https://github.com/bevyengine/bevy/pull/11813)
+![bevy_mod_picking](https://docs.rs/bevy_mod_picking/latest/bevy_mod_picking/)
+![third-party UI solutions](https://bevyengine.org/assets/#ui)
+
 * **The steady march towards relations:** TODO
 * **Animation blending:** TODO
 * **Meshlet rendering** Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
