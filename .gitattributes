@@ -1,0 +1,32 @@
+# From: https://docs.github.com/en/github/getting-started-with-github/configuring-git-to-handle-line-endings
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.rs text eol=lf
+*.toml text eol=lf
+*.frag text eol=lf
+*.vert text eol=lf
+*.wgsl text eol=lf
+*.md text eof=lf
+*.html text eof=lf
+*.scss text eof=lf
+*.js text eof=lf
+*.mjs text eof=lf
+*.svg text eof=lf
+*.txt text eof=lf
+*.xml text eof=lf
+*.yml text eof=lf
+*.sh text eof=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.gif binary
+*.webp binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.mp4 binary
