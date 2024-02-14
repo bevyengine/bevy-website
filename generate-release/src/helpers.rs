@@ -55,11 +55,10 @@ fn get_pr_title_from_commit(commit: &GithubCommitResponse) -> Option<String> {
     // Title is always the first line of a commit message
     let title = message_lines.next().expect("Commit message empty");
 
-    // Get the pr number added by bors at the end of the title
+    // Get the pr number at the end of the title
     let re = Regex::new(r"\(#([\d]*)\)").unwrap();
     let Some(cap) = re.captures_iter(title).last() else {
         // This means there wasn't a PR associated with the commit
-        // Or bors didn't add a pr number
         return None;
     };
     // remove PR number from title
