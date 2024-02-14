@@ -1281,7 +1281,28 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
-* **More editor experimentation:** TODO
+* **More editor experimentation:** Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete rapid prototyping.
+Should we use an in-process editor (less robust to game crashes) or an external one (more complex)?
+Should we ship an editor binary (great for non-programmers) or embed it in the game itself (very hackable)?
+Let's find out by doing!
+
+There are some incredible mockups, functional prototypes and third-party editor-ajdacent projects out there. Some highlights:
+
+* [] a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor could look like
+* [] [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
+* [] [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
+* [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
+* [] `@coreh`'s experiment with reflection-powered inter-process communication, allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
+
+It's really exciting to see this progress: and we're excited to channel that energy and experience into first-party efforts.
+
+[playground]: https://github.com/bevyengine/bevy_editor_prototypes
+[key questions]: https://github.com/bevyengine/bevy_editor_prototypes/discussions/1
+[`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
+[`space_editor`]: https://github.com/rewin123/space_editor
+[`Blender_bevy_components_workflow`]: https://github.com/kaosat-dev/Blender_bevy_components_workflow
+[Try it out live]: https://makeshift-bevy-web-editor.vercel.app/
+
 * **bevy_dev_tools:** TODO
 * **A revised scene format:** TODO
 * **bevy_ui improvements:** TODO
