@@ -814,8 +814,8 @@ TODO.
 
 Bevy's current PBR renderer over-brightens the image, especially at grazing angles where the fresnel
 effect tends to make surfaces behave like mirrors. This over-brightening happens because the
-surfaces must reflect *something*, but without path traced or screen-space reflections, the renderer
-has to guess *what* is being reflected. The best guess it can make is to sample the environment cube
+surfaces must reflect _something_, but without path traced or screen-space reflections, the renderer
+has to guess _what_ is being reflected. The best guess it can make is to sample the environment cube
 map, even if light would've hit something else before reaching the environment light. This artifact,
 where light occlusion is ignored, is called specular light leaking.
 
