@@ -39,16 +39,13 @@ fn main() -> io::Result<()> {
     donate.header = Some("Supporting Bevy".to_string());
     donate.template = Some("donate.html".to_string());
 
-    donate.content = donate
-        .content
-        .into_iter()
-        .filter(|node| {
-            let CommunityNode::Member(member) = node else {
-                panic!("got an unexpected subsection");
-            };
-            member.sponsor.is_some()
-        })
-        .collect();
+    donate.content.retain(|node| {
+        let CommunityNode::Member(member) = node else {
+            panic!("got an unexpected subsection");
+        };
+
+        member.sponsor.is_some()
+    });
 
     donate.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
 
@@ -116,7 +113,7 @@ impl From<&Member> for FrontMatterMember {
 
 impl FrontMatterWriter for Member {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let path = root_path.join(&current_path);
+        let path = root_path.join(current_path);
 
         let mut frontmatter = FrontMatterMember::from(self);
         frontmatter.weight = weight;
