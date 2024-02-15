@@ -1011,7 +1011,7 @@ the critical change revolves around how [`KeyCode`] is handled.
 
 Previously, [`KeyCode`] represented the logical meaning of a key on a keyboard:
 pressing the same button on the same keyboard when swapping between QWERTY and AZERTY keyboard layouts would give a different result!
-In Bevy 0.13, the same type represents the physical location of the key.
+Now,  [`KeyCode`] represents the physical location of the key.
 Lovers of WASD games know that this is a much better default for games. For most Bevy developers, you can leave your existing code untouched
 and simply benefit from better default keybindings for users on non-QWERTY keyboards or layouts.
 
