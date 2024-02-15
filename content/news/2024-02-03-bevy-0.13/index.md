@@ -1409,7 +1409,16 @@ It's really exciting to see this progress, and we're excited to channel that ene
 [reflection-powered remote protocol]: https://github.com/coreh/bevy/pull/1
 [Try it out live]: https://makeshift-bevy-web-editor.vercel.app/
 
-* **More editor experimentation:** TODO
+* **bevy_ui improvements:** `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural];
+however, there are tangible things we can and are doing to improve this:
+an improved scene format offers an end to the boilerplate when defining layouts, [rounded] [corners] just need a little love from reviewers, and the powerful and beloved object picking from [`bevy_mod_picking`] is slated to be upstreamed for both UI and gameplay alike.
+A spectacular array of [third-party UI solutions] exists today, and learning from those and committing to a core architecture for UI logic and reactivity is a top priority.
+
+[both mundane and architectural]: https://www.leafwing-studios.com/blog/ecs-gui-framework/
+[rounded]: https://github.com/bevyengine/bevy/pull/8973
+[corners]: https://github.com/bevyengine/bevy/pull/11813
+[third-party UI solutions]: https://bevyengine.org/assets/#ui
+
 * **A revised scene format:** [Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
 However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
 Cart has been cooking up a [revised scene format] with tight IDE and code integration that tackles these problems and makes authoring content (including UI!) in Bevy a joy. Whether you're writing code, writing scene files, or generating it from a GUI.
