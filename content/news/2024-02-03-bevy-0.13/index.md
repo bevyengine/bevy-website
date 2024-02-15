@@ -1118,13 +1118,13 @@ an RPC call. The world is your oyster.
 <div class="release-feature-authors">authors: @CorneliusCornbread</div>
 
 **[glTF]** is a popular standardized open file format, used to store and share 3D models and scenes between different programs.
-The trouble with standards though, is that you eventually want to _customize_ it, just a little, to better meet your needs.
+The trouble with standards though is that you eventually want to _customize_ it, just a little, to better meet your needs.
 Khronos Group, in their wisdom, foresaw this, and defined a standardized way to customize the format, called **[extensions]**.
 
 Extensions can be readily exported from other tools (like Blender), and contain [all sorts] of other useful information: from bleeding edge physically-based material information like anisotropy to performance hints like how to instance meshes.
 
 Because Bevy parses loaded glTF's into our own entity-based hierarchy of objects, getting access to this information when you want to do new rendering things can be hard!
-With [the changes by CorneliusCornbread], you can configure the loader to store a raw copy of the glTF file itself with your loaded asset, allowing you to parse and reprocess this information however you please.
+With [the changes by CorneliusCornbread] you can configure the loader to store a raw copy of the glTF file itself with your loaded asset, allowing you to parse and reprocess this information however you please.
 
 [glTF]: https://www.khronos.org/gltf/
 [extensions]: https://kcoley.github.io/glTF/extensions/
