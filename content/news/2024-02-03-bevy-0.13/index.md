@@ -1363,10 +1363,16 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
 * **More editor experimentation:** TODO
+* **A revised scene format:** [Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
+However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
+Cart has been cooking up a [revised scene format] with tight IDE and code integration that tackles these problems and makes authoring content (including UI!) in Bevy a joy. Whether you're writing code, writing scene files, or generating it from a GUI.
+
+[Scenes]: https://github.com/bevyengine/bevy/tree/latest/examples/scene
+[revised scene format]: https://github.com/bevyengine/bevy/discussions/9538
+
 * **bevy_dev_tools:** The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
 From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
 
-* **A revised scene format:** TODO
 * **bevy_ui improvements:** TODO
 * **The steady march towards relations:** [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
 Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks] needed to build a fast, robust and ergonomic solution.
