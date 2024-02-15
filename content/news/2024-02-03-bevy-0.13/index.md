@@ -1362,7 +1362,9 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
-* **More editor experimentation:** Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete prototyping.
+### More editor experimentation
+
+Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete prototyping.
 Should we use an in-process editor (less robust to game crashes) or an external one (more complex)?
 Should we ship an editor binary (great for non-programmers) or embed it in the game itself (very hackable)?
 Let's find out by doing!
@@ -1392,7 +1394,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
   </div>
 </div>
 
-* [] a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor could look like
+* [] a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor [could look like]
 * [] [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
 * [] [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
 * [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
@@ -1409,7 +1411,9 @@ It's really exciting to see this progress, and we're excited to channel that ene
 [reflection-powered remote protocol]: https://github.com/coreh/bevy/pull/1
 [Try it out live]: https://makeshift-bevy-web-editor.vercel.app/
 
-* **bevy_ui improvements:** `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural];
+### `bevy_ui` improvements
+
+`bevy_ui` has its fair share of problems and limitations, [both mundane and architectural];
 however, there are tangible things we can and are doing to improve this:
 an improved scene format offers an end to the boilerplate when defining layouts, [rounded] [corners] just need a little love from reviewers, and the powerful and beloved object picking from [`bevy_mod_picking`] is slated to be upstreamed for both UI and gameplay alike.
 A spectacular array of [third-party UI solutions] exists today, and learning from those and committing to a core architecture for UI logic and reactivity is a top priority.
@@ -1419,17 +1423,23 @@ A spectacular array of [third-party UI solutions] exists today, and learning fro
 [corners]: https://github.com/bevyengine/bevy/pull/11813
 [third-party UI solutions]: https://bevyengine.org/assets/#ui
 
-* **A revised scene format:** [Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
+### A revised scene format
+
+[Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
 However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
 Cart has been cooking up a [revised scene format] with tight IDE and code integration that tackles these problems and makes authoring content (including UI!) in Bevy a joy. Whether you're writing code, writing scene files, or generating it from a GUI.
 
 [Scenes]: https://github.com/bevyengine/bevy/tree/latest/examples/scene
 [revised scene format]: https://github.com/bevyengine/bevy/discussions/9538
 
-* **bevy_dev_tools:** The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
+### `bevy_dev_tools`
+
+The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
 From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
 
-* **The steady march towards relations:** [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
+### The steady march towards relations
+
+[Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
 Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks] needed to build a fast, robust and ergonomic solution.
 
 [Entity-entity relations]: https://github.com/bevyengine/bevy/issues/3742
@@ -1438,7 +1448,9 @@ Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` a
 [experimenting with external implementations]: https://crates.io/crates/aery
 [lifecycle hooks]: https://github.com/bevyengine/bevy/pull/10756
 
-* **Meshlet rendering** Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
+### Meshlet rendering
+
+Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
 
 ![The Stanford dragon mesh rendered as meshlet clusters](meshlet_preview.png)
 
