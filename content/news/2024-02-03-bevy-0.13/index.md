@@ -1282,7 +1282,9 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
 * **More editor experimentation:** TODO
-* **bevy_dev_tools:** TODO
+* **bevy_dev_tools:** The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
+From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
+
 * **A revised scene format:** TODO
 * **bevy_ui improvements:** TODO
 * **The steady march towards relations:** TODO
