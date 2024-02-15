@@ -1,7 +1,6 @@
 +++
 title = "Contributing"
 template = "docs-section.html"
-page_template = "docs-page.html"
 insert_anchor_links = "right"
 aliases = ["learn/book/contributing"]
 [extra]

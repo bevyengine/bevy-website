@@ -1,7 +1,6 @@
 +++
 title = "Audio"
 template = "docs-section.html"
-page_template = "docs-page.html"
 insert_anchor_links = "right"
 [extra]
 weight = 7

@@ -1,7 +1,6 @@
 +++
 title = "Getting Started"
 template = "docs-section.html"
-page_template = "docs-page.html"
 insert_anchor_links = "right"
 aliases = ["learn/book/getting-started"]
 [extra]
