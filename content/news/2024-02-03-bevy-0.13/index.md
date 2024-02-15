@@ -911,7 +911,7 @@ On realistic scenes, this is unlikely to find many candidates for merging!
 Following [PR #11671] however, we first sort by pipeline (effectively the type of material being used), and then by mesh identity.
 This strategy results in much better batching, improving overall FPS by double digit percentages on the [realistic scene tested](https://syntystore.com/products/polygon-fantasy-kingdom)!
 
-![A graph showing batching improvements. Shadows are very expensive, and FPS improved by at least 20% in all cases tested.](better_batching.png)
+![A graph showing batching improvements. Shadows are very expensive, and FPS improved by at least 20% in all cases tested.](better_batching.svg)
 
 [PR #11671]: https://github.com/bevyengine/bevy/pull/11671
 
