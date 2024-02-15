@@ -897,6 +897,25 @@ Neat!
 [`RenderAssetUsages`]: https://dev-docs.bevyengine.org/bevy/render/render_asset/struct.RenderAssetUsages.html
 [later refined]: https://github.com/bevyengine/bevy/pull/11399
 
+## Better batching through smarter sorting
+
+<div class="release-feature-authors">authors: @Elabajaba</div>
+
+One of the core techniques used to speed up rendering is to draw many similar objects together at the same time.
+In this case, Bevy was already using a technique called "batching", which allows us to combine multiple similar operations together,
+reducing the number of expensive draw calls (instructions to the GPU) that are being made.
+
+However, our strategy for defining these batches was far from optimal.
+Previously, we were sorting by distance to the camera, and _then_ checking if multiple of the same meshes were adjacent to each other in that sorted list.
+On realistic scenes, this is unlikely to find many candidates for merging!
+
+Following [PR #11671] however, we first sort by pipeline (effectively the type of material being used), and then by mesh identity.
+This strategy results in much better batching, improving overall FPS by double digit percentages on realistic scenes!
+
+![A graph showing batching improvements. FPS improved by at least 20% in all cases tested.](better_batching.png)
+
+[PR #11671]: https://github.com/bevyengine/bevy/pull/11671
+
 ## Type-Safe Labels for the `RenderGraph`
 
 <div class="release-feature-authors">authors: @DasLixou</div>
