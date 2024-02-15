@@ -827,7 +827,17 @@ Instead for now this should be computed externally in a tool like [The Lightmapp
 
 <div class="release-feature-authors">authors: @pcwalton</div>
 
-TODO.
+**Environment maps** are 2D textures used to simulate lighting, reflection and skyboxes in a 3D scene.
+**Reflection probes** generalize environment maps to allow for multiple environment maps in the same scene, each of which has its own axis-aligned bounding box.
+This is a standard feature of physically-based renderers and was inspired by the [corresponding feature in Blender's Eevee renderer].
+
+The [reflection probes PR], we've added basic support for these, laying the groundwork for pretty, high-performance reflections in Bevy games.
+Like with the baked global illumination work discussed above, these must currently be precomputed externally, then imported into Bevy.
+As discussed in the PR, there are quite a few caveats: WebGL2 support is effectively non-existent, sharp and sudden transitions will be observed because there's no blending,
+and all cubemaps in the world of a given type (diffuse or specular) must have the same size, format, and mipmap count.
+
+[reflection probes PR]: https://github.com/bevyengine/bevy/pull/11366
+[corresponding feature in Blender's Eevee renderer]: https://docs.blender.org/manual/en/latest/render/eevee/light_probes/reflection_cubemaps.html
 
 ## Lights work with `RenderLayers`
 
