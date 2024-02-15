@@ -10,7 +10,7 @@ This utility recursively iterates over all Markdown files in a given folder. It 
 To format the entire website, you can run `write_rustdoc_hide_lines.sh` from any directory:
 
 ```shell
-$ ./write_rustdoc_hide_lines.sh
+./write_rustdoc_hide_lines.sh
 ```
 
 The script automatically handles formatting the all Markdown files in the `content` directory. It is not an alias and does not accept any arguments. In general, you will only ever need to run the above script in order to make Github Actions pass.
@@ -20,17 +20,17 @@ If you want to format a specific directory, you can run the tool using [Cargo]:
 [Cargo]: https://doc.rust-lang.org/cargo/index.html
 
 ```shell
-$ cargo run -- format ./path/to/directory
+cargo run -- format ./path/to/directory
 ```
 
 You can also tell the tool to format multiple directories:
 
 ```shell
-$ cargo run -- format ./folder1 ./folder2
+cargo run -- format ./folder1 ./folder2
 ```
 
 If you just want to check a directory and do not want to format it, you can use the check command:
 
 ```shell
-$ cargo run -- check ./folder1 ./folder2
+cargo run -- check ./folder1 ./folder2
 ```
