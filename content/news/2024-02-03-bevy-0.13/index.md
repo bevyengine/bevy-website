@@ -806,6 +806,8 @@ producing more realistic effects through the inclusion of indirect light.
 The [lightmap PR] adds preliminary support for them to Bevy.
 Like the [lightmaps example] shows, just load in your baked lightmap image, and then insert a [`Lightmap`] component on the corresponding mesh.
 
+![A simple scene rendered using baked light maps in Bevy 0.13](light_map.png)
+
 Following up on this work, the [irradiance volumes PR] added support for a second form of baked global illumination.
 **Irradiance volumes** (or voxel global illumination) is a technique used for approximating indirect light by first dividing
 a scene into cubes (voxels), then sampling the amount of light present at the center of each of those voxels.
