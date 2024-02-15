@@ -1009,7 +1009,7 @@ TODO.
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line?
+Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line.
 But what happens between those keyframes? Game engines need to **interpolate** between them: smoothly transitioning from one state to the next.
 
 The simplest interpolation method is linear: just move an equal distance towards the next keyframe every unit of time.
