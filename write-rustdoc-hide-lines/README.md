@@ -1,5 +1,6 @@
 # Write `rustdoc` `hide_lines` annotations
 
+<!-- markdownlint-disable-next-line MD038 -->
 This utility recursively iterates over all Markdown files in a given folder. It will update the [`hide_lines` Zola annotation] on all `rust` and `rs` code blocks to match [rustdoc hidden lines]. It will match all lines that start with `# `. A space after the hashtag is required, or else it would accidentally hide attributes like `#[derive(...)]`. If `hide_lines` is out of date, this tool can automatically update it.
 
 [`hide_lines` Zola annotation]: https://www.getzola.org/documentation/content/syntax-highlighting/#annotations
