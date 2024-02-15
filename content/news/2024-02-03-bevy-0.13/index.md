@@ -1010,9 +1010,9 @@ TODO.
 <div class="release-feature-authors">authors: @mockersf</div>
 
 Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line.
-But what happens between those keyframes? Game engines need to **interpolate** between them: smoothly transitioning from one state to the next.
+But what happens between those keyframes? Game engines need to **interpolate** between them, smoothly transitioning from one state to the next.
 
-The simplest interpolation method is linear: just move an equal distance towards the next keyframe every unit of time.
+The simplest interpolation method is linear: the animated object just moves an equal distance towards the next keyframe every unit of time.
 But this isn't always the desired effect! Both stop-motion-style and more carefully smoothed animations have their place.
 
 Bevy now supports both step and cubic spline interpolation in animations.
@@ -1055,8 +1055,8 @@ pub trait Animatable: Reflect + Sized + Send + Sync + 'static {
 }
 ```
 
-This is the first step towards animation blending and an asset-driven animation graph: essential for shipping large scale 3D games in Bevy.
-But for now, this is a building block: we've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
+This is the first step towards animation blending and an asset-driven animation graph which is an essential for shipping large scale 3D games in Bevy.
+But for now, this is just a building block. We've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
 Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
 
 [`Animatable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Animatable.html
