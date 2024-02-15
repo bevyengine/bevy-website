@@ -882,7 +882,7 @@ Moreover, actually transferring that data from the CPU (and RAM) to the GPU (and
 especially if you're doing it from scratch every frame.
 
 In the [initial PR] by @JMS55, Bevy added the ability to unload this data from the CPU, once it has been succesfully tranferred to the GPU.
-However, unloading the data from the CPU [can result in bugs], and make it harder to actually inspect or tweak that data from your other game systems.
+However, unloading the data from the CPU [can result in bugs], and make it harder to actually inspect or modify that data from your other game systems.
 As a result, this behavior is currently off by default.
 
 To configure this behavior for your asset, set the [`RenderAssetUsages`] field when constructing your raw asset type such as `Image` or `Mesh`,
