@@ -1290,23 +1290,23 @@ There are some incredible mockups, functional prototypes and third-party editor-
 
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: end; justify-items: center; margin: 2rem; font-size: 0.8rem; text-align: center">
   <div style="grid-column: span 2">
-    <img src="editor_mockup.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))">
+    <a href="editor_mockup.png"><img src="editor_mockup.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))"></a>
     bevy_editor_mockup
   </div>
   <div style="grid-column: span 2">
-    <img src="locomotion_graph.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))">
+    <a href="locomotion_graph.png"><img src="locomotion_graph.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))"></a>
     bevy_animation_graph
   </div>
   <div style="grid-column: span 2">
-    <img src="space_editor.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))">
+    <a href="space_editor.png"><img src="space_editor.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))"></a>
     space_editor
   </div>
   <div style="grid-column: 2 / span 2">
-    <img src="bevy_components.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))">
+    <a href="bevy_components.png"><img src="bevy_components.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))"></a>
     bevy_components
   </div>
   <div style="grid-column: span 2">
-    <img src="makeshift_web.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))">
+    <a href="makeshift_web.png"><img src="makeshift_web.png" style="border-radius: 0; filter: drop-shadow(0 0.5rem 0.5rem rgba(0, 0, 0, 0.5))"></a>
     bevy_remote
   </div>
 </div>
