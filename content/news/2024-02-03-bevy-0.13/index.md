@@ -790,15 +790,42 @@ commands.spawn((
 
 TODO.
 
+## Basic baked global illumination
+
+<div class="release-feature-authors">authors: @pcwalton</div>
+
+Computing lighting in real time is expensive!
+But for elements of a scene that never move (like rooms or terrain),
+we can get much prettier lighting and shadows for much cheaper by computing it ahead of time using **global illumination**,
+then storing the results in a "baked" form that never changes.
+Global illumination is a more sophisticated (and expensive) approach to lighting that often uses raytracing.
+Unlike Bevy's default lighting tools, it takes into account light bouncing off of other objects,
+producing more realistic effects through the inclusion of indirect light.
+
+**Lightmaps**, textures that store pre-computed results of this global illumination, have been a mainstay of real-time graphics for decades.
+The [lightmap PR] adds preliminary support for them to Bevy.
+Like the [lightmaps example] shows, just load in your baked lightmap image, and then insert a [`Lightmap`] component on the corresponding mesh.
+
+Following up on this work, the [irradiance volumes PR] added support for a second form of baked global illumination.
+**Irradiance volumes** (or voxel global illumination) is a technique used for approximating indirect light by first dividing
+a scene into cubes (voxels), then sampling the amount of light present at the center of each of those voxels.
+This light is then added to objects within that space as they move through it, changing the ambient light level on those objects appropriately.
+As the PR helpfully explains, we've chosen to use the ambient cubes algorithm for this, based on Half Life 2.
+This allows use to match Blender's [Eevee renderer], giving users a simple and free path to creating nice looking irradiance volumes for their own scenes.
+
+Note that this work does not include any Bevy-native way to precompute global illumination!
+Instead for now this should be computed externally in a tool like [The Lightmapper], and then loaded into Bevy.
+
+[lightmap PR]: https://github.com/bevyengine/bevy/pull/10231
+[`Lightmap`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.Lightmap.html
+[lightmaps example]: https://github.com/bevyengine/bevy/blob/main/examples/3d/lightmaps.rs
+[irradiance volumes PR]: https://github.com/bevyengine/bevy/pull/10268
+[The Lightmapper]: https://github.com/Naxela/The_Lightmapper
+[Eevee renderer]: https://docs.blender.org/manual/en/latest/render/eevee/index.html
+
 ## Minimal Reflection Probes
 
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
-## Light Maps
-
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @pcwalton</div>
 
 TODO.
 
