@@ -794,11 +794,11 @@ TODO.
 
 <div class="release-feature-authors">authors: @pcwalton</div>
 
-Computing lighting in real time is expensive!
-But for elements of a scene that never move (like rooms or terrain),
-we can get much prettier lighting and shadows for much cheaper by computing it ahead of time using **global illumination**,
+Computing lighting in real time is expensive;
+but for elements of a scene that never move (like rooms or terrain),
+we can get prettier lighting and shadows for cheaper by computing it ahead of time using **global illumination**,
 then storing the results in a "baked" form that never changes.
-Global illumination is a more sophisticated (and expensive) approach to lighting that often uses raytracing.
+Global illumination is a more sophisticated (and expensive) approach to lighting that often uses ray tracing.
 Unlike Bevy's default lighting tools, it takes into account light bouncing off of other objects,
 producing more realistic effects through the inclusion of indirect light.
 
@@ -829,11 +829,11 @@ Instead for now this should be computed externally in a tool like [The Lightmapp
 
 <div class="release-feature-authors">authors: @pcwalton</div>
 
-**Environment maps** are 2D textures used to simulate lighting, reflection and skyboxes in a 3D scene.
+**Environment maps** are 2D textures used to simulate lighting, reflection, and skyboxes in a 3D scene.
 **Reflection probes** generalize environment maps to allow for multiple environment maps in the same scene, each of which has its own axis-aligned bounding box.
 This is a standard feature of physically-based renderers and was inspired by the [corresponding feature in Blender's Eevee renderer].
 
-The [reflection probes PR], we've added basic support for these, laying the groundwork for pretty, high-performance reflections in Bevy games.
+In the [reflection probes PR], we've added basic support for these, laying the groundwork for pretty, high-performance reflections in Bevy games.
 Like with the baked global illumination work discussed above, these must currently be precomputed externally, then imported into Bevy.
 As discussed in the PR, there are quite a few caveats: WebGL2 support is effectively non-existent, sharp and sudden transitions will be observed because there's no blending,
 and all cubemaps in the world of a given type (diffuse or specular) must have the same size, format, and mipmap count.
