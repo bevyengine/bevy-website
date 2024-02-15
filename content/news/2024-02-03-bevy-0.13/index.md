@@ -1317,7 +1317,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 * [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
 * [] `@coreh`'s experiment on a [reflection-powered remote protocol], allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
 
-It's really exciting to see this progress: and we're excited to channel that energy and experience into first-party efforts.
+It's really exciting to see this progress, and we're excited to channel that energy and experience into first-party efforts.
 
 [playground]: https://github.com/bevyengine/bevy_editor_prototypes
 [could look like]: https://asour8.github.io/bevy_editor_mockup/editor/
