@@ -1284,9 +1284,9 @@ Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/miles
 * **More editor experimentation:** TODO
 * **bevy_dev_tools:** TODO
 * **A revised scene format:** TODO
-* **bevy_ui improvements:** `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural].
-But there are tangible things we can and are doing to improve this!
-An improved scene format offers an end to the boilerplate when defining layouts, [rounded] [corners] just need a little love from reviewers, and the powerful and beloved object picking from [`bevy_mod_picking`] is slated to be upstreamed for both UI and gameplay alike.
+* **bevy_ui improvements:** `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural];
+however, there are tangible things we can and are doing to improve this:
+an improved scene format offers an end to the boilerplate when defining layouts, [rounded] [corners] just need a little love from reviewers, and the powerful and beloved object picking from [`bevy_mod_picking`] is slated to be upstreamed for both UI and gameplay alike.
 A spectacular array of [third-party UI solutions] exists today, and learning from those and committing to a core architecture for UI logic and reactivity is a top priority.
 
 [both mundane and architectural]: https://www.leafwing-studios.com/blog/ecs-gui-framework/
