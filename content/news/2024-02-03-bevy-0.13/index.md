@@ -878,10 +878,9 @@ let layout = render_device.create_bind_group_layout(
 
 Meshes and the textures used to define their materials take up a ton of memory:
 in many games, memory usage is the biggest limitation on the resolution and polygon count of the game!
-Moreover, actually transferring that data from the CPU (and RAM) to the GPU (and VRAM) can be a real performance bottleneck,
-especially if you're doing it from scratch every frame.
+Moreover, actually transferring that data from system RAM (used by the CPU) to the VRAM (used by the GPU) can be a real performance bottleneck.
 
-In the [initial PR] by @JMS55, Bevy added the ability to unload this data from the CPU, once it has been succesfully tranferred to the GPU.
+In the [initial PR] by @JMS55, Bevy added the ability to unload this data from system RAM, once it has been succesfully tranferred to VRAM.
 However, unloading the data from the CPU [can result in bugs], and make it harder to actually inspect or modify that data from your other game systems.
 As a result, this behavior is currently off by default.
 
@@ -889,7 +888,7 @@ To configure this behavior for your asset, set the [`RenderAssetUsages`] field w
 which is a bitflag type that allows you to specify whether to retain the data in the main (CPU) world, the render (GPU) world or both.
 
 @brianreavis [later refined] this API, and used it to ensure that texture atlases and font atlases only extract data that's actually in use
-to the GPU, rather than wasting work sending _all_ possible images or characters to the GPU every frame.
+to VRAM, rather than wasting work sending _all_ possible images or characters to VRAM every frame.
 Neat!
 
 [initial PR]: https://github.com/bevyengine/bevy/pull/10520
