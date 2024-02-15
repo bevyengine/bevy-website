@@ -1119,7 +1119,7 @@ an RPC call. The world is your oyster.
 
 **[glTF]** is a popular standardized open file format, used to store and share 3D models and scenes between different programs.
 The trouble with standards though is that you eventually want to _customize_ it, just a little, to better meet your needs.
-Khronos Group, in their wisdom, foresaw this, and defined a standardized way to customize the format, called **[extensions]**.
+Khronos Group, in their wisdom, foresaw this and defined a standardized way to customize the format called **[extensions]**.
 
 Extensions can be readily exported from other tools (like Blender), and contain [all sorts] of other useful information: from bleeding edge physically-based material information like anisotropy to performance hints like how to instance meshes.
 
