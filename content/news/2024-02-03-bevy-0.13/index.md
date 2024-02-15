@@ -1362,6 +1362,53 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
+* **More editor experimentation:** Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete prototyping.
+Should we use an in-process editor (less robust to game crashes) or an external one (more complex)?
+Should we ship an editor binary (great for non-programmers) or embed it in the game itself (very hackable)?
+Let's find out by doing!
+
+There are some incredible mockups, functional prototypes and third-party editor-ajdacent projects out there. Some highlights:
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: end; justify-items: center; margin: 2rem; font-size: 0.8rem; text-align: center">
+  <div style="grid-column: span 2">
+    <a href="editor_mockup.png"><img src="editor_mockup.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_editor_mockup
+  </div>
+  <div style="grid-column: span 2">
+    <a href="locomotion_graph.png"><img src="locomotion_graph.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_animation_graph
+  </div>
+  <div style="grid-column: span 2">
+    <a href="space_editor.png"><img src="space_editor.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    space_editor
+  </div>
+  <div style="grid-column: 2 / span 2">
+    <a href="bevy_components.png"><img src="bevy_components.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_components
+  </div>
+  <div style="grid-column: span 2">
+    <a href="makeshift_web.png"><img src="makeshift_web.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_remote
+  </div>
+</div>
+
+* [] a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor could look like
+* [] [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
+* [] [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
+* [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
+* [] `@coreh`'s experiment on a [reflection-powered remote protocol], allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
+
+It's really exciting to see this progress, and we're excited to channel that energy and experience into first-party efforts.
+
+[playground]: https://github.com/bevyengine/bevy_editor_prototypes
+[could look like]: https://asour8.github.io/bevy_editor_mockup/editor/
+[key questions]: https://github.com/bevyengine/bevy_editor_prototypes/discussions/1
+[`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
+[`space_editor`]: https://github.com/rewin123/space_editor
+[`Blender_bevy_components_workflow`]: https://github.com/kaosat-dev/Blender_bevy_components_workflow
+[reflection-powered remote protocol]: https://github.com/coreh/bevy/pull/1
+[Try it out live]: https://makeshift-bevy-web-editor.vercel.app/
+
 * **More editor experimentation:** TODO
 * **A revised scene format:** [Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
 However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
@@ -1373,7 +1420,6 @@ Cart has been cooking up a [revised scene format] with tight IDE and code integr
 * **bevy_dev_tools:** The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
 From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
 
-* **bevy_ui improvements:** TODO
 * **The steady march towards relations:** [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
 Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks] needed to build a fast, robust and ergonomic solution.
 
