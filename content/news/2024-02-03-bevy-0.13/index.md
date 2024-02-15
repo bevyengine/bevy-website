@@ -813,7 +813,7 @@ Following up on this work, the [irradiance volumes PR] added support for a secon
 a scene into cubes (voxels), then sampling the amount of light present at the center of each of those voxels.
 This light is then added to objects within that space as they move through it, changing the ambient light level on those objects appropriately.
 As the PR helpfully explains, we've chosen to use the ambient cubes algorithm for this, based on Half Life 2.
-This allows use to match Blender's [Eevee renderer], giving users a simple and free path to creating nice looking irradiance volumes for their own scenes.
+This allows us to match Blender's [Eevee renderer], giving users a simple and free path to creating nice-looking irradiance volumes for their own scenes.
 
 Note that this work does not include any Bevy-native way to precompute global illumination!
 Instead for now this should be computed externally in a tool like [The Lightmapper], and then loaded into Bevy.
