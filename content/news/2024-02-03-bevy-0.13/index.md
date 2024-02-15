@@ -1301,6 +1301,7 @@ It's really exciting to see this progress: and we're excited to channel that ene
 [`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
 [`space_editor`]: https://github.com/rewin123/space_editor
 [`Blender_bevy_components_workflow`]: https://github.com/kaosat-dev/Blender_bevy_components_workflow
+[reflection-powered remote protocol]: https://github.com/coreh/bevy/pull/1
 [Try it out live]: https://makeshift-bevy-web-editor.vercel.app/
 
 * **bevy_dev_tools:** TODO
