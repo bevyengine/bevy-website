@@ -1292,7 +1292,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 * [] [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
 * [] [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
 * [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
-* [] `@coreh`'s experiment with reflection-powered inter-process communication, allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
+* [] `@coreh`'s experiment on a [reflection-powered remote protocol], allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
 
 It's really exciting to see this progress: and we're excited to channel that energy and experience into first-party efforts.
 
