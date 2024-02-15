@@ -1,7 +1,8 @@
 +++
 title = "Breakout"
-weight = 1
 template = "docs-section.html"
 [extra]
+weight = 1
 public_draft = 877
+status = "hidden"
 +++

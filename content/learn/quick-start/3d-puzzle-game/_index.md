@@ -1,7 +1,8 @@
 +++
 title = "3D Puzzle Game"
-weight = 3
 template = "docs-section.html"
 [extra]
+weight = 3
 public_draft = 877
+status = "hidden"
 +++

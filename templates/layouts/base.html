@@ -4,35 +4,46 @@
 {% set current_path = current_path | default(value="/") %}
 
 {% if section and section.title %}
-  {% if section.path is starting_with("/learn/book/") %}
-    {% set page_title = "Bevy Book: " ~ section.title %}
-  {% elif section.path is starting_with("/assets") %}
-    {% set page_title = "Bevy Assets" %}
-  {% else %}
-    {% set page_title = section.title %}
-  {% endif %}
-{% elif page and page.title %}
-  {% set page_title = page.title %}
+{% if section.path is starting_with("/learn/book/") %}
+{% set page_title = "Bevy Book: " ~ section.title %}
+{% elif section.path is starting_with("/assets") %}
+{% set page_title = "Bevy Assets" %}
 {% else %}
-  {% set page_title = "Bevy Engine"%}
+{% set page_title = section.title %}
+{% endif %}
+{% elif page and page.title %}
+{% if page.path is starting_with("/learn/book/") %}
+{% set page_title = "Bevy Book: " ~ page.title %}
+{% elif page.path is starting_with("/assets") %}
+{% set page_title = "Bevy Assets" %}
+{% else %}
+{% set page_title = page.title %}
+{% endif %}
+{% else %}
+{% set page_title = "Bevy Engine"%}
 {% endif %}
 
 {% if section and section.path %}
-  {% set path = "/" ~ section.path %}
+{% set path = "/" ~ section.path %}
 {% elif page and page.path %}
-  {% set path = "/" ~ page.path %}
+{% set path = "/" ~ page.path %}
 {% else %}
-  {% set path = ""%}
+{% set path = ""%}
 {% endif %}
 
 {% if section %}
-  {% if section.path is starting_with("/learn/book/") %}
-    {% set show_nav_toggle = true %}
-  {% elif section.path is starting_with("/learn/migration-guides/") %}
-    {% set show_nav_toggle = true %}
-  {% elif section.path is starting_with("/assets/") %}
-    {% set show_nav_toggle = true %}
-  {% endif %}
+{% if section.path is starting_with("/learn/book/") %}
+{% set show_nav_toggle = true %}
+{% elif section.path is starting_with("/learn/migration-guides/") %}
+{% set show_nav_toggle = true %}
+{% elif section.path is starting_with("/assets/") %}
+{% set show_nav_toggle = true %}
+{% endif %}
+{% elif page %}
+{% if page.path is starting_with("/learn/book/") or page.path is starting_with("/learn/migration-guides/") or page.path
+is starting_with("/assets/") %}
+{% set show_nav_toggle = true %}
+{% endif %}
 {% endif %}
 
 <!doctype html>
@@ -69,21 +80,24 @@
           </a>
           <div class="header__message">
             {% if section and section.extra.header_message %}
-              {{section.extra.header_message}}
+            {{section.extra.header_message}}
             {% elif page and page.extra.header_message %}
-              {{page.extra.header_message}}
-            {% elif section and section.path is starting_with("/learn/book/") %}
-              The Book
-            {% elif section and section.path is starting_with("/learn/quick-start/") %}
-              Quick Start
-            {% elif section and section.path is starting_with("/learn/migration-guides/") %}
-              Migration Guides
+            {{page.extra.header_message}}
+            {% elif section and section.path is starting_with("/learn/book/") or page and page.path is
+            starting_with("/learn/book/") %}
+            The Book
+            {% elif section and section.path is starting_with("/learn/quick-start/") or page and page.path is
+            starting_with("/learn/quick-start/") %}
+            Quick Start
+            {% elif section and section.path is starting_with("/learn/migration-guides/") or page and page.path is
+            starting_with("/learn/migration-guides/") %}
+            Migration Guides
             {% elif section and section.path is starting_with("/news/") %}
-              News
+            News
             {% elif page and page.path is starting_with("/news/") %}
-              News
+            News
             {% else %}
-              Features
+            Features
             {% endif %}
           </div>
         </div>
@@ -129,7 +143,9 @@
     <main class="layout__content">
       <div class="container">
         {% if section %}
-          {{ public_draft::warning(section=section) }}
+        {{ public_draft::warning(section=section) }}
+        {% elif page %}
+        {{ public_draft::warning(section=page) }}
         {% endif %}
         {% block content %}{% endblock %}
       </div>

@@ -20,12 +20,9 @@ pub fn generate_migration_guide(
         &mut output,
         r#"+++
 title = "{title}"
-weight = {weight}
-sort_by = "weight"
-template = "docs-section.html"
-page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
+weight = {weight}
 long_title = "Migration Guide: {title}"
 +++
 
