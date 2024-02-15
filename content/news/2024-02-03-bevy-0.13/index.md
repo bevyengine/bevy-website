@@ -1005,7 +1005,7 @@ commands.spawn(NodeBundle {
 
 Through the heroic efforts of our contributors and reviewers, Bevy is [now upgraded] to use `winit 0.29`.
 [`winit`] is our windowing library: it abstracts over all of the different operating systems and input devices that end users might have,
-and provides a basically uniform API to enable a write-once, run-anywhere experience.
+and provides a basically uniform API to enable a write-once run-anywhere experience.
 While this brings with it the usual litany of valuable [bug fixes and stability improvements],
 the critical change revolves around how [`KeyCode`] is handled.
 
