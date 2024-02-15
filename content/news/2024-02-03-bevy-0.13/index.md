@@ -1007,9 +1007,26 @@ commands.spawn(NodeBundle {
 
 ## Winit Upgrade
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @Thierry Berger, @mockersf</div>
 
-TODO.
+Through the heroic efforts of our contributors and reviewers, Bevy is [now upgraded] to use `winit 0.29`.
+[`winit`] is our windowing library: it abstracts over all of the different operating systems and input devices that end users might have,
+and provides a basically uniform API to enable a write-once run-anywhere experience.
+While this brings with it the usual litany of valuable [bug fixes and stability improvements],
+the critical change revolves around how [`KeyCode`] is handled.
+
+Previously, [`KeyCode`] represented the logical meaning of a key on a keyboard:
+pressing the same button on the same keyboard when swapping between QWERTY and AZERTY keyboard layouts would give a different result!
+Now,  [`KeyCode`] represents the physical location of the key.
+Lovers of WASD games know that this is a much better default for games. For most Bevy developers, you can leave your existing code untouched
+and simply benefit from better default keybindings for users on non-QWERTY keyboards or layouts.
+If you need information about the logical keys pressed, use the [`ReceivedCharacter`] event.
+
+[now upgraded]: https://github.com/bevyengine/bevy/pull/10702
+[`winit`]: https://docs.rs/winit/latest/winit/
+[bug fixes and stability improvements]: https://github.com/rust-windowing/winit/blob/master/CHANGELOG.md#0292
+[`KeyCode`]: https://docs.rs/bevy/latest/bevy/input/keyboard/enum.KeyCode.html
+[`ReceivedCharacter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.ReceivedCharacter.html
 
 ## Animation Interpolation Methods
 
