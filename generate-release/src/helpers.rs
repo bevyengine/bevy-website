@@ -30,7 +30,7 @@ pub fn get_merged_prs(
 
     let mut out = vec![];
     for commit in &commits {
-        let Some(title) = get_pr_title_from_commit(commit)else {
+        let Some(title) = get_pr_title_from_commit(commit) else {
             continue;
         };
 
@@ -39,7 +39,10 @@ pub fn get_merged_prs(
             // If there's no label, then not finding a PR is an issue because this means we want all PRs
             // If there's a label then it just means the commit is not a PR with the label
             if label.is_none() {
-                println!("\x1b[93mPR not found for {title} sha: {}\x1b[0m", commit.sha);
+                println!(
+                    "\x1b[93mPR not found for {title} sha: {}\x1b[0m",
+                    commit.sha
+                );
             }
             continue;
         };

@@ -33,7 +33,7 @@
   <div class="example__code media-content">
     {% set code = load_data(path=page.extra.code_path) %}
     {% set code_md = "```rust
-    " ~ code ~ "```" %}
+" ~ code ~ "```" %}
 
     {{code_md | markdown(inline=true) | safe}}
   </div>

@@ -9,8 +9,83 @@ on:
       - 'trying'
 
 jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+      - name: Run Markdown Lint
+        uses: docker://ghcr.io/github/super-linter:slim-v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_MARKDOWN: true
+          DEFAULT_BRANCH: main
+
+  test-code-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      - name: Build & run doc tests
+        run: cd code-validation && cargo test
+
+  check-hide-lines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Check hide-lines
+        run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
+
+  lint-tools:
+    runs-on: ubuntu-latest
+    env:
+      TOOLS: |
+        code-validation generate-assets generate-community generate-errors generate-release write-rustdoc-hide-lines
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      - name: Check formatting
+        run: |
+          for CRATE in $TOOLS; do
+            cd $CRATE
+
+            echo Checking $CRATE
+            cargo fmt --check
+
+            cd ..
+          done
+
+      - name: Check clippy
+        run: |
+          for CRATE in $TOOLS; do
+            cd $CRATE
+
+            echo Checking $CRATE
+            cargo clippy -- -Dwarnings
+
+            cd ..
+          done
+
   generate-assets:
-    needs: [markdownlint, test-code, check-hide-lines]
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +123,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [markdownlint, test-code, check-hide-lines]
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +150,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [markdownlint, test-code, check-hide-lines]
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -118,7 +193,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [markdownlint, test-code, check-hide-lines]
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -144,48 +219,9 @@ jobs:
           path: content/community/people
           retention-days: 1
 
-  markdownlint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
-      - name: Run Markdown Lint
-        uses: docker://ghcr.io/github/super-linter:slim-v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_MARKDOWN: true
-          DEFAULT_BRANCH: main
-
-  test-code:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install alsa and udev
-        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-
-      - name: Build & run doc tests
-        run: cd code-validation && cargo test
-
-  check-hide-lines:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-      
-      - name: Check hide-lines
-        run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
-
   build-website:
     runs-on: ubuntu-latest
-    needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@v4
