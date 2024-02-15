@@ -885,7 +885,7 @@ However, unloading the data from the CPU [can result in bugs], and make it harde
 As a result, this behavior is currently off by default.
 
 To configure this behavior for your asset, set the [`RenderAssetUsages`] field when constructing your raw asset type such as `Image` or `Mesh`,
-which is a bitflag type that allows you to specify whether to retain the data in the main (CPU) world, the render (GPU) world or both.
+which is a bitflag type that allows you to specify whether to retain the data in the main (CPU) world, the render (GPU) world, or both.
 
 @brianreavis [later refined] this API, and used it to ensure that texture atlases and font atlases only extract data that's actually in use
 to VRAM, rather than wasting work sending _all_ possible images or characters to VRAM every frame.
@@ -909,7 +909,7 @@ Previously, we were sorting by distance to the camera, and _then_ checking if mu
 On realistic scenes, this is unlikely to find many candidates for merging!
 
 Following [PR #11671] however, we first sort by pipeline (effectively the type of material being used), and then by mesh identity.
-This strategy results in much better batching, improving overall FPS by double digit percentages on the [realistic scene tested](https://syntystore.com/products/polygon-fantasy-kingdom)!
+This strategy results in better batching, improving overall FPS by double digit percentages on the [realistic scene tested](https://syntystore.com/products/polygon-fantasy-kingdom)!
 
 ![A graph showing batching improvements. Shadows are very expensive, and FPS improved by at least 20% in all cases tested.](better_batching.svg)
 
