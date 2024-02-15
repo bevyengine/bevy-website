@@ -802,11 +802,17 @@ TODO.
 
 TODO.
 
-## Light `RenderLayers`
+## Lights work with `RenderLayers`
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @robftm</div>
 
-TODO.
+[`RenderLayers`] are Bevy's answer to quickly hiding and showing entities en masse, powered by camera-driven views.
+Great for things like customizing the first-person view of what a character is holding (or making sure vampires don't show up in your mirrors!).
+
+[`RenderLayers`] [now play nice] with lights, fixing a serious limitation to make sure this awesome feature can shine appropriately!
+
+[`RenderLayers`]: https://docs.rs/bevy/latest/bevy/render/view/struct.RenderLayers.html
+[now play nice]: https://github.com/bevyengine/bevy/pull/10742
 
 ## Approximate Indirect Specular Occlusion
 
@@ -1001,21 +1007,82 @@ commands.spawn(NodeBundle {
 
 ## Winit Upgrade
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @Thierry Berger, @mockersf</div>
 
-TODO.
+Through the heroic efforts of our contributors and reviewers, Bevy is [now upgraded] to use `winit 0.29`.
+[`winit`] is our windowing library: it abstracts over all of the different operating systems and input devices that end users might have,
+and provides a basically uniform API to enable a write-once run-anywhere experience.
+While this brings with it the usual litany of valuable [bug fixes and stability improvements],
+the critical change revolves around how [`KeyCode`] is handled.
 
-## Animation Interpolation
+Previously, [`KeyCode`] represented the logical meaning of a key on a keyboard:
+pressing the same button on the same keyboard when swapping between QWERTY and AZERTY keyboard layouts would give a different result!
+Now,  [`KeyCode`] represents the physical location of the key.
+Lovers of WASD games know that this is a much better default for games. For most Bevy developers, you can leave your existing code untouched
+and simply benefit from better default keybindings for users on non-QWERTY keyboards or layouts.
+If you need information about the logical keys pressed, use the [`ReceivedCharacter`] event.
 
-<div class="release-feature-authors">authors: @TODO</div>
+[now upgraded]: https://github.com/bevyengine/bevy/pull/10702
+[`winit`]: https://docs.rs/winit/latest/winit/
+[bug fixes and stability improvements]: https://github.com/rust-windowing/winit/blob/master/CHANGELOG.md#0292
+[`KeyCode`]: https://docs.rs/bevy/latest/bevy/input/keyboard/enum.KeyCode.html
+[`ReceivedCharacter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.ReceivedCharacter.html
 
-TODO.
+## Animation Interpolation Methods
+
+<div class="release-feature-authors">authors: @mockersf</div>
+
+Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line.
+But what happens between those keyframes? Game engines need to **interpolate** between them, smoothly transitioning from one state to the next.
+
+The simplest interpolation method is linear: the animated object just moves an equal distance towards the next keyframe every unit of time.
+But this isn't always the desired effect! Both stop-motion-style and more carefully smoothed animations have their place.
+
+Bevy now supports both step and cubic spline interpolation in animations.
+Most of the time, this will just be parsed correctly from the glTF files, but when setting [`VariableCurve`] manually,
+there's a new [`Interpolation`] field to set.
+
+[`VariableCurve`]: https://dev-docs.bevyengine.org/bevy/animation/struct.VariableCurve.html
+[`Interpolation`]: https://dev-docs.bevyengine.org/bevy/animation/enum.Interpolation.html
+
+![Demonstrating the different types of interpolation](interpolation_methods.gif)]
 
 ## `Animatable` Trait
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @james7132</div>
 
-TODO.
+When you think of "animation": you're probably imagining moving objects through space.
+Translating them back and forth, rotating them, maybe even squashing and stretching them.
+But in modern game development, animation is a powerful shared set of tools and concepts for "changing things over time".
+Transforms are just the beginning: colors, particle effects, opacity and even boolean values like visibility can all be animated!
+
+In Bevy 0.13, we've taken the first step towards [this vision](https://github.com/bevyengine/rfcs/blob/main/rfcs/51-animation-composition.md),
+with the [`Animatable`] trait.
+
+```rust
+/// An animatable value type.
+pub trait Animatable: Reflect + Sized + Send + Sync + 'static {
+    /// Interpolates between `a` and `b` with  a interpolation factor of `time`.
+    ///
+    /// The `time` parameter here may not be clamped to the range `[0.0, 1.0]`.
+    fn interpolate(a: &Self, b: &Self, time: f32) -> Self;
+
+    /// Blends one or more values together.
+    ///
+    /// Implementors should return a default value when no inputs are provided here.
+    fn blend(inputs: impl Iterator<Item = BlendInput<Self>>) -> Self;
+
+    /// Post-processes the value using resources in the [`World`].
+    /// Most animatable types do not need to implement this.
+    fn post_process(&mut self, _world: &World) {}
+}
+```
+
+This is the first step towards animation blending and an asset-driven animation graph which is an essential for shipping large scale 3D games in Bevy.
+But for now, this is just a building block. We've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
+Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
+
+[`Animatable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Animatable.html
 
 ## Multiple gizmo configurations
 
@@ -1115,7 +1182,21 @@ an RPC call. The world is your oyster.
 
 ## glTF Extensions
 
-<div class="release-feature-authors">authors: TODO GLTF AUTHORS</div>
+<div class="release-feature-authors">authors: @CorneliusCornbread</div>
+
+**[glTF]** is a popular standardized open file format, used to store and share 3D models and scenes between different programs.
+The trouble with standards though is that you eventually want to _customize_ it, just a little, to better meet your needs.
+Khronos Group, in their wisdom, foresaw this and defined a standardized way to customize the format called **[extensions]**.
+
+Extensions can be readily exported from other tools (like Blender), and contain [all sorts] of other useful information: from bleeding edge physically-based material information like anisotropy to performance hints like how to instance meshes.
+
+Because Bevy parses loaded glTF's into our own entity-based hierarchy of objects, getting access to this information when you want to do new rendering things can be hard!
+With [the changes by CorneliusCornbread] you can configure the loader to store a raw copy of the glTF file itself with your loaded asset, allowing you to parse and reprocess this information however you please.
+
+[glTF]: https://www.khronos.org/gltf/
+[extensions]: https://kcoley.github.io/glTF/extensions/
+[all sorts]: https://github.com/KhronosGroup/glTF/blob/main/extensions/README.md
+[the changes by CorneliusCornbread]: https://github.com/bevyengine/bevy/pull/11138
 
 ## Extensionless Asset Support
 
@@ -1281,9 +1362,53 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
-* **More editor experimentation:** TODO
-* **bevy_dev_tools:** TODO
-* **A revised scene format:** TODO
+* **More editor experimentation:** Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete prototyping.
+Should we use an in-process editor (less robust to game crashes) or an external one (more complex)?
+Should we ship an editor binary (great for non-programmers) or embed it in the game itself (very hackable)?
+Let's find out by doing!
+
+There are some incredible mockups, functional prototypes and third-party editor-ajdacent projects out there. Some highlights:
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: end; justify-items: center; margin: 2rem; font-size: 0.8rem; text-align: center">
+  <div style="grid-column: span 2">
+    <a href="editor_mockup.png"><img src="editor_mockup.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_editor_mockup
+  </div>
+  <div style="grid-column: span 2">
+    <a href="locomotion_graph.png"><img src="locomotion_graph.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_animation_graph
+  </div>
+  <div style="grid-column: span 2">
+    <a href="space_editor.png"><img src="space_editor.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    space_editor
+  </div>
+  <div style="grid-column: 2 / span 2">
+    <a href="bevy_components.png"><img src="bevy_components.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_components
+  </div>
+  <div style="grid-column: span 2">
+    <a href="makeshift_web.png"><img src="makeshift_web.png" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    bevy_remote
+  </div>
+</div>
+
+* [] a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor could look like
+* [] [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
+* [] [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
+* [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
+* [] `@coreh`'s experiment on a [reflection-powered remote protocol], allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
+
+It's really exciting to see this progress, and we're excited to channel that energy and experience into first-party efforts.
+
+[playground]: https://github.com/bevyengine/bevy_editor_prototypes
+[could look like]: https://asour8.github.io/bevy_editor_mockup/editor/
+[key questions]: https://github.com/bevyengine/bevy_editor_prototypes/discussions/1
+[`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
+[`space_editor`]: https://github.com/rewin123/space_editor
+[`Blender_bevy_components_workflow`]: https://github.com/kaosat-dev/Blender_bevy_components_workflow
+[reflection-powered remote protocol]: https://github.com/coreh/bevy/pull/1
+[Try it out live]: https://makeshift-bevy-web-editor.vercel.app/
+
 * **bevy_ui improvements:** `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural];
 however, there are tangible things we can and are doing to improve this:
 an improved scene format offers an end to the boilerplate when defining layouts, [rounded] [corners] just need a little love from reviewers, and the powerful and beloved object picking from [`bevy_mod_picking`] is slated to be upstreamed for both UI and gameplay alike.
@@ -1294,8 +1419,25 @@ A spectacular array of [third-party UI solutions] exists today, and learning fro
 [corners]: https://github.com/bevyengine/bevy/pull/11813
 [third-party UI solutions]: https://bevyengine.org/assets/#ui
 
-* **The steady march towards relations:** TODO
-* **Animation blending:** TODO
+* **A revised scene format:** [Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
+However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
+Cart has been cooking up a [revised scene format] with tight IDE and code integration that tackles these problems and makes authoring content (including UI!) in Bevy a joy. Whether you're writing code, writing scene files, or generating it from a GUI.
+
+[Scenes]: https://github.com/bevyengine/bevy/tree/latest/examples/scene
+[revised scene format]: https://github.com/bevyengine/bevy/discussions/9538
+
+* **bevy_dev_tools:** The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
+From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
+
+* **The steady march towards relations:** [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
+Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks] needed to build a fast, robust and ergonomic solution.
+
+[Entity-entity relations]: https://github.com/bevyengine/bevy/issues/3742
+[trail blazed by `flecs`]: https://ajmmertens.medium.com/building-games-in-ecs-with-entity-relationships-657275ba2c6c
+[reshaping our internals]: https://github.com/orgs/bevyengine/projects/15
+[experimenting with external implementations]: https://crates.io/crates/aery
+[lifecycle hooks]: https://github.com/bevyengine/bevy/pull/10756
+
 * **Meshlet rendering** Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
 
 ![The Stanford dragon mesh rendered as meshlet clusters](meshlet_preview.png)
