@@ -955,7 +955,7 @@ let layout = render_device.create_bind_group_layout(
 );
 ```
 
-## WGPU 0.19 Upgrade
+## WGPU 0.19 Upgrade and Rendering Performance Improvements
 
 <div class="release-feature-authors">authors: @Elabajaba, @JMS55</div>
 
@@ -964,6 +964,21 @@ In Bevy 0.13 we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the lon
 Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but it requires reworking parts of the renderer where we're relying on compile time constants when targeting `webgl2`, and adding a way to choose the renderer's backend at runtime on web.
 
 As usual, there's been some changes that may cause issues for custom shaders. We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
+
+Many small changes both to Bevy and `wgpu` have made a big difference in our performance on realistic 3D scenes!
+We ran some quick tests on both Bevy 0.12 and Bevy 0.13 on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
+
+![A high polygon, realistically lit screenshot of a moped in front of a cafe.](bistro.png)
+
+As you can see, these scenes are substantially more detailed than most video game environments, but that screenshot was being rendered in Bevy at 90 FPS at 1440p resolution!
+Between Bevy 0.12 and Bevy 0.13 we saw substantial performance gains across all of the scenes. Great work!
+
+TODO: add graph from Griffin!
+
+[Bistro]: https://github.com/DGriffin91/bevy_bistro_scene
+[Sponza]: https://github.com/DGriffin91/bevy_sponza_scene
+[San Miguel]: https://github.com/DGriffin91/bevy_san_miguel_scene
+[Hidden Valley]: https://blog.polyhaven.com/hidden-alley/
 
 ## Unload rendering assets from RAM
 
