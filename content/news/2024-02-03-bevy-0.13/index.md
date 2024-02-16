@@ -59,7 +59,7 @@ The built-in [collection of primitives] is already quite sizeable:
 
 More primitives will be added in future releases.
 
-Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and raycasting functionality. Several of these have landed in 0.13 already!
+Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and ray casting functionality. Several of these have landed in 0.13 already!
 
 [Primitive RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/12-primitive-shapes.md
 [collection of primitives]: https://dev-docs.bevyengine.org/bevy/math/primitives/index.html
