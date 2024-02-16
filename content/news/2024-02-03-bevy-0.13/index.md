@@ -66,7 +66,7 @@ Some use cases for primitive shapes include meshing, gizmos, bounding volumes, c
 
 ### Rendering
 
-Primitive shapes can be rendered using both meshes and gizmos. In this section, we'll take a closer look the new APIs.
+Primitive shapes can be rendered using both meshes and gizmos. In this section, we'll take a closer look at the new APIs.
 
 Below, you can see a cuboid and a torus rendered using meshes and gizmos. You can check out at all primitives that can be rendered in the new [Rendering Primitives] example.
 
