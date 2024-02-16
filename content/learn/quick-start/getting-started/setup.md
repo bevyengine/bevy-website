@@ -147,7 +147,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
 * **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking). **Important!** On Windows you _must_ also enable the [perfomance optimizations](#compile-with-performance-optimizations) or you will get a [`too many exported symbols`](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 
-**Quick note**: Since Rust 1.60, Incremental Compilation has been enabled by default and increases your compilation speeds, however this is not a full on replacement for dynamic linking: they both work together to increase your performance. (Relevant links: [Rust 1.60 article](https://blog.rust-lang.org/2022/04/07/Rust-1.60.0.html#incremental-compilation-status) and [Speeding up incremental Rust compilation with dylibs, by Robert Krahn](https://robert.kra.hn/posts/2022-09-09-speeding-up-incremental-rust-compilation-with-dylibs/))
+  **Quick note**: Since Rust 1.60, Incremental Compilation has been enabled by default and increases your compilation speeds, however this is not a full on replacement for dynamic linking: they both work together to increase your performance. (Relevant links: [Rust 1.60 article](https://blog.rust-lang.org/2022/04/07/Rust-1.60.0.html#incremental-compilation-status) and [Speeding up incremental Rust compilation with dylibs, by Robert Krahn](https://robert.kra.hn/posts/2022-09-09-speeding-up-incremental-rust-compilation-with-dylibs/))
 
   ```sh
   cargo run --features bevy/dynamic_linking
