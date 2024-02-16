@@ -1498,7 +1498,7 @@ See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main
 * [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
 * [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
 * [#10519]: swapped us to a manually crafted `PartialEq` and `Hash` implementation for `Entity` to improve speed and save instructions in our hot loops
-* [#10558]: took the same approach, and further optimized our `PartialOrd` and `Ord` implementations!
+* [#10558]: combined the approach of [#9907] and [#10519] to optimize `Entity`'s layout further, and optimized our `PartialOrd` and `Ord` implementations!
 * [#10648]: further optimized our entity hashing, changing how we multiply inside of the hash to save one precious assembly instruction in the optimized compiler output
 
 Full credit is also due to the authors who pursued similar work in [#2372] and [#3788]: while their work was not ultimately merged, it was an incredibly valuable
