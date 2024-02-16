@@ -2,7 +2,7 @@
 title = "Building Bevy's Ecosystem"
 aliases = ["learn/book/plugin-development"]
 [extra]
-weight = 5
+weight = 4
 +++
 
 Bevy has a plug-and-play architecture, where you can easily add plugins for new features or use your own plugins instead of the built-in ones. You can also create third-party plugins that others may use in their applications.
