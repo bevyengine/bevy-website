@@ -31,7 +31,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Primitive Shapes
 
-<div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
+<div class="release-feature-authors">authors: @Jondolf, @NiseVoid, @aevyrie</div>
 
 Geometric shapes are used all across game development, from primitive mesh shapes and debug gizmos to physics colliders and raycasting. Despite being so commonly used across several domains, Bevy hasn't really had any general-purpose shape representations.
 
