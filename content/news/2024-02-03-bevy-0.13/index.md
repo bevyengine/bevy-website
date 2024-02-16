@@ -534,13 +534,13 @@ With a complex unsafe codebase like `bevy_ecs`, every little bit helps.
 * [Making the most of ECS identifiers](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)
 * [`Option` representation](https://doc.rust-lang.org/core/option/index.html#representation)
 
-#### QueryIter::fold` override notes
+### QueryIter::fold` override notes
 
 * [Assembly Sanity check for bevyengine/bevy#6773](https://github.com/james7132/bevy_asm_tests/commit/309947cd078086b7edc4b8b5f29b1d04255b1b9a#diff-4c4b34cf83f523fced3bd396ad7ab8e228b4d35bf65c1f0457f7e4e58b14ccc5)
 * [rustc bug for autovectorising internal iteration](https://github.com/rust-lang/rust/issues/104914)
 * [std `Iter::fold` overriding for perf gains](https://github.com/rust-lang/rust/blob/master/library/core/src/array/iter.rs#L265-L277)
 
-#### `TableRow` Casting notes
+### `TableRow` Casting notes
 
 * [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
 
