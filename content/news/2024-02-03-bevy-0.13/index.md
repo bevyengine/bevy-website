@@ -462,88 +462,6 @@ It works by creating a new state and copying a bunch of the cached data
 inside the original query. It's not a expensive operation, but you should
 probably avoid doing it inside a hot loop.
 
-## Entity Optimizations
-
-<div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @bushrat011899, @james7132</div>
-
-`Entity` (Bevy's 64-bit unique identifier for enitities) received a number of changes this cycle, combining laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
-
-* [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
-* [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
-* [#10519]: swapped us to a manually crafted `PartialEq` and `Hash` implementation for `Entity` to improve speed and save instructions in our hot loops
-* [#10558]: took the same approach, and further optimized our `PartialOrd` and `Ord` implementations!
-* [#10648]: further optimized our entity hashing, changing how we multiply inside of the hash to save one precious assembly instruction in the optimized compiler output
-
-Full credit is also due to the authors who pursued similar work in [#2372] and [#3788]: while their work was not ultimately merged, it was an incredibly valuable
-inspiration and source of prior art to base these more recent changes on.
-
-![Benchmark results of optimisation work](entity_hash_optimsation_benches.png)
-
-The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimisations in place (`optimised_entity`).
-There are improvements across the board, with clear performance benefits that should impact multiple areas of the codebase, not just when hashing entities.
-
-There are a ton of crunchy, well-explained details in the linked PRs, including some fascinating assembly output analysis.
-If that interests you, open some new tabs in the background!
-
-[#9797]: https://github.com/bevyengine/bevy/pull/9797
-[#9907]: https://github.com/bevyengine/bevy/pull/9907
-[#10519]: https://github.com/bevyengine/bevy/pull/10519
-[#10558]: https://github.com/bevyengine/bevy/pull/10558
-[#10648]: https://github.com/bevyengine/bevy/pull/10648
-[#2372]: https://github.com/bevyengine/bevy/pull/2372
-[#3788]: https://github.com/bevyengine/bevy/pull/3788
-
-### Porting `Query::for_each` to `QueryIter::fold` override
-
-Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
-
-This deduplicated code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
-
-```rust
-fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
-    q_transform.for_each_mut(|transform| {
-        // Do something...
-    });
-}
-```
-
-Becomes:
-
-```rust
-fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
-    q_transform.iter_mut().for_each(|transform| {
-        // Do something...
-    });
-}
-```
-
-The assembly output was compared as well between what was on main branch versus the PR, with no tangible differences being seen between the old `Query::for_each` and the new `QueryIter::for_each()` output, validating the approach and ensuring the internal iteration optimizations were being applied.
-
-As a plus, the same iternal iteration optimizations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
-
-### Reducing `TableRow` `as` casting
-
-Not all improvements were focused around performance. Some small changes were done to improve type safety and tidy-up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
-
-Naturally, _adding_ asserts in potentially hot codepaths were cause for some concern, necessitating considerable benchmarking efforts to confirm there were regressions and to what level. With careful placing of the new `assert`s, the detected regression for these cases was in the region of 0.1%, well within noise.
-But the benefit was a less error-prone API and more robust code.
-With a complex unsafe codebase like `bevy_ecs`, every little bit helps.
-
-### Entity optimizations notes
-
-* [Making the most of ECS identifiers](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)
-* [`Option` representation](https://doc.rust-lang.org/core/option/index.html#representation)
-
-### QueryIter::fold` override notes
-
-* [Assembly Sanity check for bevyengine/bevy#6773](https://github.com/james7132/bevy_asm_tests/commit/309947cd078086b7edc4b8b5f29b1d04255b1b9a#diff-4c4b34cf83f523fced3bd396ad7ab8e228b4d35bf65c1f0457f7e4e58b14ccc5)
-* [rustc bug for autovectorising internal iteration](https://github.com/rust-lang/rust/issues/104914)
-* [std `Iter::fold` overriding for perf gains](https://github.com/rust-lang/rust/blob/master/library/core/src/array/iter.rs#L265-L277)
-
-### `TableRow` Casting notes
-
-* [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
-
 ## `WorldQuery` Trait Split
 
 <div class="release-feature-authors">authors: @wainwrightmark @taizu-jin</div>
@@ -1570,6 +1488,88 @@ In addition to having better code reusability, this change encorages writing `As
 The previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
 
 See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main/examples/asset/processing/asset_processing.rs>) for a more detailed look into how to use `LoadTransformAndSave` to process a custom asset.
+
+## Entity Optimizations
+
+<div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @bushrat011899, @james7132</div>
+
+`Entity` (Bevy's 64-bit unique identifier for enitities) received a number of changes this cycle, combining laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
+
+* [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
+* [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
+* [#10519]: swapped us to a manually crafted `PartialEq` and `Hash` implementation for `Entity` to improve speed and save instructions in our hot loops
+* [#10558]: took the same approach, and further optimized our `PartialOrd` and `Ord` implementations!
+* [#10648]: further optimized our entity hashing, changing how we multiply inside of the hash to save one precious assembly instruction in the optimized compiler output
+
+Full credit is also due to the authors who pursued similar work in [#2372] and [#3788]: while their work was not ultimately merged, it was an incredibly valuable
+inspiration and source of prior art to base these more recent changes on.
+
+![Benchmark results of optimisation work](entity_hash_optimsation_benches.png)
+
+The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimisations in place (`optimised_entity`).
+There are improvements across the board, with clear performance benefits that should impact multiple areas of the codebase, not just when hashing entities.
+
+There are a ton of crunchy, well-explained details in the linked PRs, including some fascinating assembly output analysis.
+If that interests you, open some new tabs in the background!
+
+[#9797]: https://github.com/bevyengine/bevy/pull/9797
+[#9907]: https://github.com/bevyengine/bevy/pull/9907
+[#10519]: https://github.com/bevyengine/bevy/pull/10519
+[#10558]: https://github.com/bevyengine/bevy/pull/10558
+[#10648]: https://github.com/bevyengine/bevy/pull/10648
+[#2372]: https://github.com/bevyengine/bevy/pull/2372
+[#3788]: https://github.com/bevyengine/bevy/pull/3788
+
+### Porting `Query::for_each` to `QueryIter::fold` override
+
+Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
+
+This deduplicated code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
+
+```rust
+fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
+    q_transform.for_each_mut(|transform| {
+        // Do something...
+    });
+}
+```
+
+Becomes:
+
+```rust
+fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
+    q_transform.iter_mut().for_each(|transform| {
+        // Do something...
+    });
+}
+```
+
+The assembly output was compared as well between what was on main branch versus the PR, with no tangible differences being seen between the old `Query::for_each` and the new `QueryIter::for_each()` output, validating the approach and ensuring the internal iteration optimizations were being applied.
+
+As a plus, the same iternal iteration optimizations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
+
+### Reducing `TableRow` `as` casting
+
+Not all improvements were focused around performance. Some small changes were done to improve type safety and tidy-up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
+
+Naturally, _adding_ asserts in potentially hot codepaths were cause for some concern, necessitating considerable benchmarking efforts to confirm there were regressions and to what level. With careful placing of the new `assert`s, the detected regression for these cases was in the region of 0.1%, well within noise.
+But the benefit was a less error-prone API and more robust code.
+With a complex unsafe codebase like `bevy_ecs`, every little bit helps.
+
+### Entity optimizations notes
+
+* [Making the most of ECS identifiers](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)
+* [`Option` representation](https://doc.rust-lang.org/core/option/index.html#representation)
+
+### QueryIter::fold` override notes
+
+* [Assembly Sanity check for bevyengine/bevy#6773](https://github.com/james7132/bevy_asm_tests/commit/309947cd078086b7edc4b8b5f29b1d04255b1b9a#diff-4c4b34cf83f523fced3bd396ad7ab8e228b4d35bf65c1f0457f7e4e58b14ccc5)
+* [rustc bug for autovectorising internal iteration](https://github.com/rust-lang/rust/issues/104914)
+* [std `Iter::fold` overriding for perf gains](https://github.com/rust-lang/rust/blob/master/library/core/src/array/iter.rs#L265-L277)
+
+### `TableRow` Casting notes
+
+* [Rustonomicon on Casts](https://doc.rust-lang.org/nomicon/casts.html)
 
 ## <a name="what-s-next"></a>What's Next?
 
