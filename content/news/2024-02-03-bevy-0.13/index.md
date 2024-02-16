@@ -468,125 +468,30 @@ probably avoid doing it inside a hot loop.
 
 `Entity` (Bevy's 64-bit unique identifier for enitities) received a number of changes this cycle, combining laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
 
-### Changing `Entity`'s Layout
+* [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
+* [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
+* [#10519]: swapped us to a manually crafted `PartialEq` and `Hash` implementation for `Entity` to improve speed and save instructions in our hot loops
+* [#10558]: took the same approach, and further optimized our `PartialOrd` and `Ord` implementations!
+* [#10648]: further optimized our entity hashing, changing how we multiply inside of the hash to save one precious assembly instruction in the optimized compiler output
 
-The exact details of how those 64 bits get used changed repeatedly in 0.13.
-First we have two PRs: "Unified Identifier for entities & relations" PR ([#9797](https://github.com/bevyengine/bevy/pull/9797) by @Bluefinger) and "Change Entity::generation from u32 to NonZeroU32 for niche optimization" ([#9907](https://github.com/bevyengine/bevy/pull/9907) by @notverymoe).
-Fundamentally, they both involved changing the layout and assumptions of `Entity`, unlocking a building blocks for relations and improving memory/codegen for `Entity`.
-
-[#9797](https://github.com/bevyengine/bevy/pull/9797) created a new `Identifier` struct that set out a unified layout for `Entity` and future ID types. The `Identifier` spec lays out a struct with a `u32` low segment and a `u32` high segment, resulting in a struct that can be effectively represented as a special-cased `u64` value. A diagram of `Identifier` layout is as follows, going from Most Significant Bit to Lowest Significant Bit:
-
-```text
-| F   | High value / Generation | Low value / Index |
-| --- | ----------------------- | ----------------- |
-| 1   | 31 bits                 | 32 bits           |
-
-F = Bit Flags
-```
-
-```rust
-#[derive(Clone, Copy)]
-struct Identifier {
-    low: u32,
-    high: u32,
-}
-```
-
-The low part can be used as a full `u32` value, but the high part consists of a packed `u32` structure, with the most significant bit reserved as a flag, and the remaining 31-bits to be used as a value. _How_ the low segment and the value part of the high segment are used is not specified by the `Identifer`, only that there are reserved bits in the high segment. This bit is reserved for the purposes of a future `Pair` identifier, which would represent a different _kind_ of identifier with separate semantics/usage compared to an `Entity`. The work here is basically an implementation of the prior art established by Flecs ([citation](https://ajmmertens.medium.com/doing-a-lot-with-a-little-ecs-identifiers-25a72bd2647)), as eventually, these new entities and entity kinds will be used to describe special component types needed for relations. In the future, more flag bits will be reserved at the cost of bits in the high segment.
-
-But on top of this came [#9907](https://github.com/bevyengine/bevy/pull/9907). This PR had the effect of changing both `Entity`/`Identifier` to have a high segment that was `NonZeroU32`:
-
-```rust
-#[derive(Clone, Copy)]
-struct Identifier {
-    low: u32,
-    high: NonZeroU32,
-}
-```
-
-By including a non-zero property within `Entity`/`Identifier`, it allowed the compiler to be able to optimise `Option<Entity>` to take 8 bytes instead of 12 bytes, as it could now use invalid representations of `Entity`/`Identifier` as the `None` equivalent. The benefit here was reduced memory/cache usage for storing `Option<Entity>` as well as better codegen around methods that use or return `Option<Entity>`. The choice to modify the generation/high segment to be non-zero had the following benefits: It allowed the low/index portion of `Entity` to be zero, so index access of `Entity` from storages/archetypes/buffers in hot code paths remained untouched. Code that touched the high segment or the generation in `Entity` was in less performance sensitive sections, and when spawning, most of that code would be exactly the same, but with initialising generation with a constant `1` instead of a `0`. For `Entity` however, incrementing a generation meant it needed to ensure that if an overflow occurred, it overflowed at 31-bits **and** also overflowed to `1` instead of `0`.
-
-Moreover, this choice _did not interfere_ with the unified `Identifier` approach. While for `Entity`, the generation would have to be initialised with `1`; for other ID types, the high segment would always be _non-zero_ due to flag bits being set. That means a `Pair` type (which would have an ID in both high and low segments) would be unaffected as it could reference an `Entity` id in the low segment, and have its own id in the high segment.
-
-### Optimizing `Entity` further
-
-Part two of the `Entity` optimization story continues with initial work on improving `Entity`'s `PartialEq` implementation ([#10519](https://github.com/bevyengine/bevy/pull/10519) by @scottmcm). With `Entity`'s structure, the standard `PartialEq` derive was yielding poor codegen and leaving performance on the table as the compiler was unable to make the correct inferences on how to load `Entity` for comparisons. By removing the short-circuiting implementation that is the default for `PartialEq` derivation, the compiler could output much less assembly for the same operation, yielding performance improvements in both ECS and rendering code.
-
-However, work in this area did not stop with [#10519](https://github.com/bevyengine/bevy/pull/10519). Code generation was still poor, motivating "Optimise Entity with repr align & manual PartialOrd/Ord" ([#10558](https://github.com/bevyengine/bevy/pull/10558) by @Bluefinger). Similar work had been attempted before: ([#2372](https://github.com/bevyengine/bevy/pull/2372) & [#3788](https://github.com/bevyengine/bevy/pull/3788)) but these didn't get merged due to complexity, unclear performance benefits and interactions with existing PRs.
-
-By default, `Entity`/`Identifier`'s representation had two `u32` segments, so the struct had an alignment of 4 bytes for a structure that was 8 bytes in size. Though the same size as a `u64` value, these structs were _under-aligned_ and as such, the compiler could not treat `Entity` as if it were a `u64` value. For reference, a `u64` value has a size and alignment of 8 bytes. Certain optimizations were being left out as the necessary assumptions could not be made at compile time regarding `Entity`. So `Entity`/`Identifier` were changed to have a manually defined layout and alignment, making it clearer to the compiler to treat these structs as if it were a `u64` value:
-
-```rust
-#[derive(Clone, Copy)]
-#[repr(C, align(8))]
-struct Identifier {
-    #[cfg(target_endian = "little")]
-    low: u32,
-    high: NonZeroU32,
-    #[cfg(target_endian = "big")]
-    low: u32,
-}
-```
-
-By defining the struct with a `repr(C)`, we could tell the compiler the layout of the struct exactly for both little endian and big endian platforms. By also defining the alignment of the struct to be 8 bytes, `Entity`/`Identifier` both appear to the compiler as if it were a `u64` value. The effect of this is that the `to_bits` method for `Entity`/`Identifier` becomes a simple `mov` operation which could be completely optimised away by the compiler with [LTO](https://developer.arm.com/documentation/101458/2304/Optimize/Link-Time-Optimization--LTO-/What-is-Link-Time-Optimization--LTO-) and [inlining](https://en.wikipedia.org/wiki/Inline_expansion).
-
-Before:
-
-```asm
-to_bits:
-    shl     rdi, 32
-    mov     eax, esi
-    or      rax, rdi
-    ret
-```
-
-After:
-
-```asm
-to_bits:
-    mov     rax, rdi
-    ret
-```
-
-_But it doesn't stop there_. This had the effect of making hashing `Entity` even _faster_, yielding further gains on top of [#9903](https://github.com/bevyengine/bevy/pull/9903) (which landed in 0.12). It turned out that the `PartialEq` implementation could be made even quicker, by comparing directly against the bits of one `Entity` with another. With manual implementations of `PartialOrd`/`Ord`, the codegen around `Entity` was improved considerably as the compiler was now being able to treat `Entity` as a pseudo-`u64` value.
-
-For example, this was the codegen for `Entity > Entity` before the various changes:
-
-```asm
-greater_than:
-    cmp     edi, edx
-    jae     .LBB3_2
-    xor     eax, eax
-    ret
-
-.LBB3_2:
-    setne   dl
-    cmp     esi, ecx
-    seta    al
-    or      al, dl
-    ret
-```
-
-Afterwards, it compiles to this:
-
-```asm
-greater_than:
-    cmp     rdi, rsi
-    seta    al
-    ret
-```
-
-But why didn't this land before? It turned out that imposing an alignment of 8 bytes on `Entity` made `Option<Entity>` increase in size from the original 12 bytes to 16 bytes. As such, some code paths _suffered_ performance regressions in needing to load and move around 16 byte values. But with niching now possible, the new representation could stay at 8 bytes in size even as an `Option`, preventing the regressions from occurring in the first place.
-
-The micro-optimizations around `EntityHasher` did not end here though, as there was a PR made to "Save an instruction in `EntityHasher`" ([#10648](https://github.com/bevyengine/bevy/pull/10648) by @scottmcm). As [#10558](https://github.com/bevyengine/bevy/pull/10558) provided a significant improvement already to `EntityHasher` performance, the hashing algorithm was revised in a way that allowed LLVM to remove one further instruction in the compiled output. The compiler was already being clever enough to combine a multiply-shift-or operation into a single multiplication, but by expressing the algorithm with slight changes, an `or` instruction could be removed while retaining the desired hashing behaviour for `EntityHasher`.
-
-![EntityHasher assemply output diff](entityhasher_output.png)
-
-This had a detectable improvement in benchmarks, ranging from 3-6% improvement in lookups for `EntityHashMap`. These small optimizations may not amount to much on their own, but together they can provide meaningful improvements downstream.
+Full credit is also due to the authors who pursued similar work in [#2372] and [#3788]: while their work was not ultimately merged, it was an incredibly valuable
+inspiration and source of prior art to base these more recent changes on.
 
 ![Benchmark results of optimisation work](entity_hash_optimsation_benches.png)
 
-The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks with the "Optimise Eq" feature) to where we are now with all the optimisations in place (`optimised_entity`). Improvements across the whole board, with clear performance benefits that should impact multiple areas of the codebase, not just when hashing entities.
+The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimisations in place (`optimised_entity`).
+There are improvements across the board, with clear performance benefits that should impact multiple areas of the codebase, not just when hashing entities.
+
+There are a ton of crunchy, well-explained details in the linked PRs, including some fascinating assembly output analysis.
+If that interests you, open some new tabs in the background!
+
+[#9797]: https://github.com/bevyengine/bevy/pull/9797
+[#9907]: https://github.com/bevyengine/bevy/pull/9907
+[#10519]: https://github.com/bevyengine/bevy/pull/10519
+[#10558]: https://github.com/bevyengine/bevy/pull/10558
+[#10648]: https://github.com/bevyengine/bevy/pull/10648
+[#2372]: https://github.com/bevyengine/bevy/pull/2372
+[#3788]: https://github.com/bevyengine/bevy/pull/3788
 
 ### Porting `Query::for_each` to `QueryIter::fold` override
 
