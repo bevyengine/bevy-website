@@ -39,23 +39,23 @@ This is changing in Bevy 0.13 with the introduction of first-party **primitive s
 
 The built-in [collection of primitives] is already quite sizeable:
 
-| 2D                              | 3D                              |
-| ------------------------------- | ------------------------------- |
-| `Rectangle`                     | `Cuboid`                        |
-| `Circle`                        | `Sphere`                        |
-| `Ellipse`                       | -                               |
-| `Triangle2d`                    | -                               |
-| `Plane2d`                       | `Plane3d`                       |
-| `Line2d`                        | `Line3d`                        |
-| `Segment2d`                     | `Segment3d`                     |
-| `Polyline2d`, `BoxedPolyline2d` | `Polyline3d`, `BoxedPolyline3d` |
-| `Polygon`, `BoxedPolygon`       | -                               |
-| `RegularPolygon`                | -                               |
-| `Capsule2d`                     | `Capsule3d`                     |
-| -                               | `Cylinder`                      |
-| -                               | `Cone`                          |
-| -                               | `ConicalFrustum`                |
-| -                               | `Torus`                         |
+| 2D                                  | 3D                                  |
+| ----------------------------------- | ----------------------------------- |
+| [`Rectangle`]                       | [`Cuboid`]                          |
+| [`Circle`]                          | [`Sphere`]                          |
+| [`Ellipse`]                         | -                                   |
+| [`Triangle2d`]                      | -                                   |
+| [`Plane2d`]                         | [`Plane3d`]                         |
+| [`Line2d`]                          | [`Line3d`]                          |
+| [`Segment2d`]                       | [`Segment3d`]                       |
+| [`Polyline2d`], [`BoxedPolyline2d`] | [`Polyline3d`], [`BoxedPolyline3d`] |
+| [`Polygon`], [`BoxedPolygon`]       | -                                   |
+| [`RegularPolygon`]                  | -                                   |
+| [`Capsule2d`]                       | [`Capsule3d`]                       |
+| -                                   | [`Cylinder`]                        |
+| -                                   | [`Cone`]                            |
+| -                                   | [`ConicalFrustum`]                  |
+| -                                   | [`Torus`]                           |
 
 More primitives will be added in future releases.
 
@@ -63,6 +63,31 @@ Some use cases for primitive shapes include meshing, gizmos, bounding volumes, c
 
 [Primitive RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/12-primitive-shapes.md
 [collection of primitives]: https://dev-docs.bevyengine.org/bevy/math/primitives/index.html
+[`Rectangle`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Rectangle.html
+[`Cuboid`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cuboid.html
+[`Circle`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Circle.html
+[`Sphere`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Sphere.html
+[`Ellipse`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Ellipse.html
+[`Triangle2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Triangle2d.html
+[`Plane2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Plane2d.html
+[`Plane3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Plane3d.html
+[`Line2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Line2d.html
+[`Line3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Line3d.html
+[`Segment2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Segment2d.html
+[`Segment3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Segment3d.html
+[`Polyline2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polyline2d.html
+[`Polyline3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polyline3d.html
+[`BoxedPolyline2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolyline2d.html
+[`BoxedPolyline3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolyline3d.html
+[`Polygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polygon.html
+[`BoxedPolygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolygon.html
+[`RegularPolygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.RegularPolygon.html
+[`Capsule2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule2d.html
+[`Capsule3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule3d.html
+[`Cylinder`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cylinder.html
+[`Cone`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cone.html
+[`ConicalFrustum`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.ConicalFrustum.html
+[`Torus`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Torus.html
 
 ### Rendering
 
@@ -139,11 +164,6 @@ Some default values for mesh shape dimensions have also been changed to be more 
 [`Meshable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html
 [`mesh` method]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html#tymethod.mesh
 [`Mesh`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Mesh.html
-[`Ellipse`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Ellipse.html
-[`Triangle2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Triangle2d.html
-[`Capsule2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule2d.html
-[`Polygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polygon.html
-[`Cone`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cone.html
 [`2d_shapes`]: https://bevyengine.org/examples/2D%20Rendering/2d-shapes/
 [`3d_shapes`]: https://bevyengine.org/examples/3D%20Rendering/3d-shapes/
 
@@ -170,7 +190,6 @@ gizmos
 [`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/struct.Gizmos.html
 [`primitive_2d`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
 [`primitive_3d`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
-[`Sphere`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Sphere.html
 [`SphereBuilder`]: https://dev-docs.bevyengine.org/bevy/gizmos/primitives/dim3/struct.SphereBuilder.html
 
 ### Bounding Volumes
