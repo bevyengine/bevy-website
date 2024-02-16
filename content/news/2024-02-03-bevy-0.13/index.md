@@ -1452,7 +1452,6 @@ own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
 an RPC call. The world is your oyster.
 
 [`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
-[`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/gizmos/struct.Gizmos.html
 [`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
 
 ## glTF Extensions
