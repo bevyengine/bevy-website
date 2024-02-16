@@ -27,9 +27,13 @@ div.image-compare {
     width: calc(100% - var(--text-padding));
     text-shadow: 0 0 2px $color-black;
   }
+
+  $before-after-color: forestgreen;
+  
   &::before {
     @include image-title;
 
+    color: $before-after-color;
     content: attr(data-title-a);
     padding-left: var(--text-padding);
     clip-path: var(--clip-L-geo);
@@ -39,6 +43,7 @@ div.image-compare {
   &::after {
     @include image-title;
 
+    color: $before-after-color;
     content: attr(data-title-b);
     padding-right: var(--text-padding);
     clip-path: var(--clip-R-geo);
