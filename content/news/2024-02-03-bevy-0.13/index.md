@@ -968,9 +968,9 @@ As usual, there's been some changes that may cause issues for custom shaders. We
 Many small changes both to Bevy and `wgpu` have made a big difference in our performance on realistic 3D scenes!
 We ran some quick tests on both Bevy 0.12 and Bevy 0.13 on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
 
-![A high polygon, realistically lit screenshot of a moped in front of a cafe.](bistro.png)
+![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.png)
 
-As you can see, these scenes are substantially more detailed than most video game environments, but that screenshot was being rendered in Bevy at 90 FPS at 1440p resolution!
+As you can see, these scenes are substantially more detailed than most video game environments, but that screenshot was being rendered in Bevy at better than 60 FPS at 1440p resolution!
 Between Bevy 0.12 and Bevy 0.13 we saw substantial performance gains across all of the scenes. Great work!
 
 TODO: add graph from Griffin!
