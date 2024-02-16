@@ -175,7 +175,7 @@ gizmos
 
 ### Bounding Volumes
 
-<div class="release-feature-authors">authors: @Jondolf, @NiseVoid</div>
+<div class="release-feature-authors">authors: @NiseVoid, @Jondolf</div>
 
 In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
