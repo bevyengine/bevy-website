@@ -971,9 +971,9 @@ We ran some quick tests on both Bevy 0.12 and Bevy 0.13 on the same machine on f
 ![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.png)
 
 As you can see, these scenes are substantially more detailed than most video game environments, but that screenshot was being rendered in Bevy at better than 60 FPS at 1440p resolution!
-Between Bevy 0.12 and Bevy 0.13 we saw substantial performance gains across all of the scenes. Great work!
+Between Bevy 0.12 and Bevy 0.13 we saw performance gains across all of the scenes, although the magnitude varied widely. Great work!
 
-TODO: add graph from Griffin!
+![A graph showing the FPS of the different scenes. Bistro went from 90 FPS to 120 FPS, while the other scenes improved slightly. All scenes were 60-120 FPS.](rendering-perf-graph.svg)
 
 [Bistro]: https://github.com/DGriffin91/bevy_bistro_scene
 [Sponza]: https://github.com/DGriffin91/bevy_sponza_scene
