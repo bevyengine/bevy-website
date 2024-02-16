@@ -4,15 +4,16 @@
 }
 
 div.incorrect {
+    $incorrect_block_background_color: #481e21;
     position: relative;
-    background-color: #542326;
+    background-color: $incorrect_block_background_color;
     border-left: 10px solid darkred;
     border-radius: 10px;
     padding-right: 55px;
 
     .z-code,
     .z-code code {
-        background-color: #542326;
+        background-color: $incorrect_block_background_color;
     }
 }
 
