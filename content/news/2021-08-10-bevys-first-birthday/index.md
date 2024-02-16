@@ -14,7 +14,7 @@ show_image = true
 
 Today is Bevy's first birthday! And what a year it has been! Now seems like as good a time as any to look back on how far we've come, reflect a bit, and start thinking about what the next year of Bevy development will look like.
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/book/getting-started/) and a [Bevy Book](https://bevyengine.org/learn/book/introduction/). You can also check out [Bevy Assets](https://bevyengine.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/quick-start/introduction). You can also check out [Bevy Assets](https://bevyengine.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
 
 <!-- more -->
 
@@ -90,7 +90,7 @@ I know the lack of stability has been tough for some people, but I think this is
 
 ### The Bevy App Model
 
-This year we invested heavily in what I call The Bevy App Model. Bevy {{rust_type(type="struct", crate="bevy_app", name="App", no_mod=true)}}s are easy to understand, ergonomic to write, and modular via {{rust_type(type="trait", crate="bevy_app", name="Plugin", no_mod=true)}}s. My goal was to blur the lines between engine developers and app developers. I think we absolutely nailed it:
+This year we invested heavily in what I call The Bevy App Model. Bevy [`Apps`] are easy to understand, ergonomic to write, and modular via [`Plugins`]. My goal was to blur the lines between engine developers and app developers. I think we absolutely nailed it:
 
 1. There is no "scripting interface" separating "engine logic" from "app logic". We use a single language (Rust) for the whole stack. Rust feels modern with "high level" niceties while retaining low level performance and control. In my opinion, Bevy Apps are often simpler and more expressive than high level equivalents like Unity or Godot, thanks to the state-of-the-art [Bevy ECS](https://github.com/bevyengine/bevy/tree/main/crates/bevy_ecs). And under the hood Bevy Apps _are_ simpler because there are no internal translation layers between languages like C++ and scripting languages like C#:
 
@@ -125,7 +125,12 @@ This year we invested heavily in what I call The Bevy App Model. Bevy {{rust_typ
 
 2. Bevy Engine "internals" are entirely implemented using the same App Model that "app developers" use. "App developers" _are_ "engine developers". "Engine developers" _are_ "app developers".
 
-As a result of (1), (2), and Bevy being free and open source, we foster a feeling of "stack ownership" that the other major players can't. Curious app developers can dig into Bevy's internals and feel immediately at home. The [_thousands of pull requests_](https://github.com/bevyengine/bevy/pulls) are a testament to that. We've seen an [explosion of third party plugins](https://bevyengine.org/assets/#assets) being developed ranging from [realistic physics](https://rapier.rs/) to [specialized tilemap renderers](https://github.com/StarArawn/bevy_ecs_tilemap). Bevy's modular nature enables app developers to mix and match the pieces they like and "build their own engine". Bevy's core plugins like {{rust_type(type="struct", crate="bevy_asset", name="AssetPlugin", no_mod=true)}} and {{rust_type(type="struct", crate="bevy_render", name="RenderPlugin", no_mod=true)}} provide a common ground to ensure {{rust_type(type="trait", crate="bevy_app", name="Plugin", no_mod=true)}} interoperability. This composes nicely with the "modular Render Graph", which makes for an extremely pluggable engine.
+As a result of (1), (2), and Bevy being free and open source, we foster a feeling of "stack ownership" that the other major players can't. Curious app developers can dig into Bevy's internals and feel immediately at home. The [_thousands of pull requests_](https://github.com/bevyengine/bevy/pulls) are a testament to that. We've seen an [explosion of third party plugins](https://bevyengine.org/assets/#assets) being developed ranging from [realistic physics](https://rapier.rs/) to [specialized tilemap renderers](https://github.com/StarArawn/bevy_ecs_tilemap). Bevy's modular nature enables app developers to mix and match the pieces they like and "build their own engine". Bevy's core plugins like [`AssetPlugin`] and [`RenderPlugin`] provide a common ground to ensure plugin-interoperability. This composes nicely with the "modular Render Graph", which makes for an extremely pluggable engine.
+
+[`Apps`]: https://docs.rs/bevy/0.5.0/bevy/app/struct.App.html
+[`Plugins`]: https://docs.rs/bevy/0.5.0/bevy/app/trait.Plugin.html
+[`AssetPlugin`]: https://docs.rs/bevy/0.5.0/bevy/asset/struct.AssetPlugin.html
+[`RenderPlugin`]: https://docs.rs/bevy/0.5.0/bevy/render/struct.RenderPlugin.html
 
 ### Bevy ECS
 
@@ -196,12 +201,12 @@ Going forward I plan on changing my approach to focus areas in the following way
 
 The old renderer (pre Bevy 0.6) did a number of things right:
 
-* User-friendly ECS-driven high level apis for custom shaders with very little boilerplate. For example, check out this ["custom shader material" app](https://github.com/bevyengine/bevy/blob/main/examples/shader/shader_custom_material.rs)
+* User-friendly ECS-driven high level APIs for custom shaders with very little boilerplate. For example, check out this ["custom shader material" app](https://github.com/bevyengine/bevy/blob/main/examples/shader/shader_custom_material.rs)
 * A modular "low level" Render Graph that enabled developers to easily slot new features into the render pipeline without centralized top-level orchestration, or to create entirely new render pipelines.
 
-However the mid-level apis between the render graph and the high level apis were complicated, full of abstractions and jargon, and in some cases, inefficient. As a result, this made the system hard to reason about and new developers struggled to understand it. I attribute this largely to focusing on making the high level and low level apis "good UX" and treating the mid level apis as "glue".
+However the mid-level APIs between the render graph and the high level APIs were complicated, full of abstractions and jargon, and in some cases, inefficient. As a result, this made the system hard to reason about and new developers struggled to understand it. I attribute this largely to focusing on making the high level and low level APIs "good UX" and treating the mid level APIs as "glue".
 
-I consider the old design of the mid-level apis to be a pretty costly "mistake". The new renderer will solve these problems, largely by flattening out abstractions and clarifying dataflow. I'm really excited about it. Live and learn I guess. Things are rarely perfect on your first try.
+I consider the old design of the mid-level APIs to be a pretty costly "mistake". The new renderer will solve these problems, largely by flattening out abstractions and clarifying dataflow. I'm really excited about it. Live and learn I guess. Things are rarely perfect on your first try.
 
 ### Issue and Pull Request Response Times
 
@@ -236,7 +241,7 @@ Here are some of my plans for the next year:
 * **Animation**: We will build a unified animation system that makes 2D and 3D animation easier and integrates naturally with the Bevy Editor
 * **2D Features**: Sprite batching, more tileset features, layers, visual / interactive tooling in the Bevy Editor
 * **3D Features**: Skeletal animation (that integrates with the Animation system), configurable / flexible / good looking shadows, at least one form of global illumination, more PBR properties, and visual / interactive tooling in the Bevy Editor
-* **Bevy Game Jam**: We will have at least one official Bevy Game Jam to promote Bevy, battle test apis, and give users more examples to build off of.
+* **Bevy Game Jam**: We will have at least one official Bevy Game Jam to promote Bevy, battle test APIs, and give users more examples to build off of.
 
 I am relatively confident that we can make these things happen. We already have working prototypes for many of the features above and have started reaching consensus in a number of areas.
 
@@ -247,7 +252,7 @@ Here are some predictions about Bevy's trajectory over the next year:
 * By the end of the year, I expect people to start taking us seriously for 3D applications, thanks to a solid set of built in "advanced rendering features" and our extremely competitive renderer modularity.
 * I expect the number of people getting paid to develop Bevy Engine, build Bevy apps, and make Bevy content to go way up.
 * If the "Next Generation Bevy UI" effort is successful, people wanting to build "Rust GUI apps" will start reaching for Bevy.
-* We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable apis.
+* We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable APIs.
 
 If any of this excites you, we would love your help! Check out our code on [Github](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
 

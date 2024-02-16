@@ -1,9 +1,9 @@
 [[links]]
-title = "The Bevy Book"
-url = "/learn/book/introduction"
+title = "The Quick Start Guide"
+url = "/learn/quick-start/introduction"
 image = "/assets/book.svg"
 image_alt = "Bevy book"
-description = "Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here."
+description = "Learn the basics of how to use Bevy by following a quick tutorial. If you like learning by examples, you should probably start here."
 
 [[links]]
 title = "Migration Guides"

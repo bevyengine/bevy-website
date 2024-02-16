@@ -14,7 +14,7 @@ image_subtitle_link = "https://codeberg.org/rmemr/w3.terrain-texturing"
 
 Thanks to **130** contributors, **461** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/migration-guides/0.7-0.8/).
 
@@ -583,7 +583,7 @@ Bevy officially only supports Rust as the "one true way to define app logic". We
 
 When we [released Bevy ECS V2](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2), we intentionally built our internal ECS storage with these cases in mind. But we didn't expose public APIs that made it possible to interact with ECS data without normal Rust types.
 
-**Bevy 0.8** adds public "untyped" ECS apis that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types.
+**Bevy 0.8** adds public "untyped" ECS APIs that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types.
 
 ```rust
 let health_ptr: Ptr = world.entity(player).get_by_id(heath_component_id).unwrap();
@@ -835,7 +835,7 @@ Bevy's "Rust reflection" system `bevy_reflect` is a core, foundational piece of 
 
 <div class="release-feature-authors">authors: @jakobhellermann</div>
 
-The [`Reflect`] derives now automatically add a new [`ReflectFromPtr`] struct to the [`TypeRegistry`] for each reflected type. This enables using the new [untyped ECS apis](#scripting-and-modding-progress-untyped-ecs-apis) in combination with the reflection system. This helps enable things like 3rd party scripting and modding.
+The [`Reflect`] derives now automatically add a new [`ReflectFromPtr`] struct to the [`TypeRegistry`] for each reflected type. This enables using the new [untyped ECS APIs](#scripting-and-modding-progress-untyped-ecs-apis) in combination with the reflection system. This helps enable things like 3rd party scripting and modding.
 
 [`Reflect`]: https://docs.rs/bevy/0.8.0/bevy/reflect/trait.Reflect.html
 [`ReflectFromPtr`]: https://docs.rs/bevy/0.8.0/bevy/reflect/struct.ReflectFromPtr.html
@@ -1023,7 +1023,7 @@ Bevy's [new renderer](/news/bevy-0-6/#the-new-bevy-renderer) "extracts" data nee
 
 This accomplished the goal, but it:
 
-1. **Was confusing**: render feature developers had to "know" that this stage behaved differently from the other "normal" ECS stages in the schedule. Implicitly, [`Commands`] behaved differently and the ECS data access was "flipped". Using "normal" entity spawning apis _would not work as expected_ because the [`Commands`] parameter internally still used the main app's Entities collection.
+1. **Was confusing**: render feature developers had to "know" that this stage behaved differently from the other "normal" ECS stages in the schedule. Implicitly, [`Commands`] behaved differently and the ECS data access was "flipped". Using "normal" entity spawning APIs _would not work as expected_ because the [`Commands`] parameter internally still used the main app's Entities collection.
 2. **Prevented parallelism**: directly modifying existing "render world" resources required exclusive access to `ResMut<RenderWorld>`, which prevented these systems from running in parallel. Making this access parallel required unnecessary allocations using [`Commands`], which for "large" (or incrementally updated) extractions was inefficient.
 
 ```rust

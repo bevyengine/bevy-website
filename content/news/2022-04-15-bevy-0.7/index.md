@@ -14,7 +14,7 @@ image_subtitle_link = "https://sketchfab.com/3d-models/stylized-mushrooms-9d22e0
 
 Thanks to **123** contributors, **349** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.7** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.7**, check out our [0.6 to 0.7 Migration Guide](/learn/migration-guides/0.6-0.7/).
 
@@ -342,7 +342,7 @@ fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
 }
 ```
 
-However, to respect Rust's mutability rules, we need to disallow apis that might produce "aliased mutability". Seasoned Bevy users will probably recognize this Rust borrow checker error:
+However, to respect Rust's mutability rules, we need to disallow APIs that might produce "aliased mutability". Seasoned Bevy users will probably recognize this Rust borrow checker error:
 
 ```rust
 fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
@@ -354,7 +354,7 @@ fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
 
 _You_ know Entity A and Entity B are different entities at runtime. But Rust's borrow checker has no way to know that at compile time! I'm sure you can imagine game development scenarios that would benefit from having mutable access to multiple components at the same time. This borrow checker restriction was a common pain point and the workarounds were ... not fun (using scopes to ensure conflicting accesses are dropped, copying data, re-querying things, etc).
 
-Fortunately, **Bevy 0.7** introduces a brand new set of apis to save the day!
+Fortunately, **Bevy 0.7** introduces a brand new set of APIs to save the day!
 
 ```rust
 fn system(mut query: Query<&mut Transform>, entities: Res<SomeEntities>) {
@@ -436,9 +436,9 @@ fn give_sword(mut query: Query<&mut Items>) {
 }
 ```
 
-This works just fine, but that `0` at the end of `items.0` sticks out like a sore thumb. Many of us in the Bevy Org think `.0` has no place in public apis. But the newtype pattern is still useful! Ideally, Rust would provide a way to express that `Items` is a new type, while transparently provided access to the `Vec<Item>` stored within. There are designs being discussed by the Rust team, but we don't want to wait for nice things!
+This works just fine, but that `0` at the end of `items.0` sticks out like a sore thumb. Many of us in the Bevy Org think `.0` has no place in public APIs. But the newtype pattern is still useful! Ideally, Rust would provide a way to express that `Items` is a new type, while transparently provided access to the `Vec<Item>` stored within. There are designs being discussed by the Rust team, but we don't want to wait for nice things!
 
-Fortunately, the Deref / DerefMut traits in std provide the behavior we want. Users can already manually implement these traits, but for such a common pattern, we decided that providing our own trait derives was worth it. In **Bevy 0.7**, you can now derive Deref and DerefMut, enabling much nicer public apis:
+Fortunately, the Deref / DerefMut traits in std provide the behavior we want. Users can already manually implement these traits, but for such a common pattern, we decided that providing our own trait derives was worth it. In **Bevy 0.7**, you can now derive Deref and DerefMut, enabling much nicer public APIs:
 
 ```rust
 #[derive(Component, Deref, DerefMut)]
@@ -721,7 +721,7 @@ We now automatically deploy Bevy's `main` development branch to [https://dev-doc
 
 <div class="release-feature-authors">authors: @doup</div>
 
-The [Bevy Book](/learn/book) now has a much nicer pager widget that displays previous / next section names:
+The Bevy Book now has a much nicer pager widget that displays previous / next section names:
 
 ![pager](pager.png)
 

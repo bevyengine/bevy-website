@@ -14,7 +14,7 @@ image_subtitle_link = ""
 
 Thanks to **88** contributors, **283** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.5** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Awesome Bevy](https://github.com/bevyengine/awesome-bevy) for a list of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Awesome Bevy](https://github.com/bevyengine/awesome-bevy) for a list of community-developed plugins, games, and learning resources.
 
 **Bevy 0.5** is quite a bit bigger than our past few releases (and took a bit longer) as we have made a number of foundational changes. If you plan on updating your App or Plugin to **Bevy 0.5**, check out our [0.4 to 0.5 Migration Guide](/learn/migration-guides/0.4-0.5/).
 
@@ -28,11 +28,13 @@ Here are some of the highlights from this release:
 
 Bevy now uses PBR shaders when rendering. PBR is a semi-standard approach to rendering that attempts to use approximations of real-world "physically based" lighting and material properties. We largely use techniques from the [Filament](https://github.com/google/filament/) PBR implementation, but we also incorporate some ideas from [Unreal](https://www.unrealengine.com/en-US/blog/physically-based-shading-on-mobile) and [Disney](https://google.github.io/filament/Filament.html#citation-burley12).
 
-Bevy's `StandardMaterial` now has `base_color`, `roughness`, `metallic`, `reflection`, and `emissive` properties. It also now supports textures for `base_color`, `normal_map`, `metallic_roughness`, `emissive`, and `occlusion` properties.
+Bevy's [`StandardMaterial`] now has `base_color`, `roughness`, `metallic`, `reflection`, and `emissive` properties. It also now supports textures for `base_color`, `normal_map`, `metallic_roughness`, `emissive`, and `occlusion` properties.
 
 The new PBR example helps visualize these new material properties:
 
 ![pbr](pbr.png)
+
+[`StandardMaterial`]: https://docs.rs/bevy/0.5.0/bevy/pbr/prelude/struct.StandardMaterial.html
 
 ## GLTF Improvements
 
@@ -48,7 +50,7 @@ The GLTF loader now supports normal maps, metallic/roughness, occlusion, and emi
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-Previously it was hard to interact with GLTF assets because scenes / meshes / textures / and materials were only loaded as "sub assets". Thanks to the new top level {{rust_type(type="struct" crate="bevy_gltf" version="0.5.0" name="Gltf" no_mod=true)}} asset type, it is now possible to navigate the contents of the GLTF asset:
+Previously it was hard to interact with GLTF assets because scenes / meshes / textures / and materials were only loaded as "sub assets". Thanks to the new top level [`Gltf`] asset type, it is now possible to navigate the contents of the GLTF asset:
 
 ```rust
 // load GLTF asset on startup
@@ -64,6 +66,8 @@ fn system(handle: Res<Handle<Gltf>>, gltfs: Res<Assets<Gltf>>, materials: Res<As
     let material = materials.get(material_handle).unwrap();
 }
 ```
+
+[`Gltf`]: https://docs.rs/bevy/0.5.0/bevy/gltf/struct.Gltf.html
 
 ## Bevy ECS V2
 
@@ -149,7 +153,7 @@ You may have noticed that **Bevy 0.5 (Table)** is also _way_ faster than **Bevy 
 
 ### Stateful Queries and System Parameters
 
-{{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} queries (and other system parameters) are now stateful. This allows us to:
+[`World`] queries (and other system parameters) are now stateful. This allows us to:
 
 1. Cache archetype (and table) matches
     * This resolves another issue with (naive) archetypal ECS: query performance getting worse as the number of archetypes goes up (and fragmentation occurs).
@@ -158,7 +162,7 @@ You may have noticed that **Bevy 0.5 (Table)** is also _way_ faster than **Bevy 
 3. Incrementally build up state
     * When new archetypes are added, we only process the new archetypes (no need to rebuild state for old archetypes)
 
-As a result, the direct {{rust_type(type="struct" crate="bevy_ecs" mod="world" version="0.5.0" name="World" no_mod=true)}} query API now looks like this:
+As a result, the direct [`World`] query API now looks like this:
 
 ```rust
 let mut query = world.query::<(&A, &mut B)>();
@@ -166,9 +170,12 @@ for (a, mut b) in query.iter_mut(&mut world) {
 }
 ```
 
-However for {{rust_type(type="trait" crate="bevy_ecs" mod="system" version="0.5.0" name="System" no_mod=true)}}s this is a non-breaking change. Query state management is done internally by the relevant SystemParam.
+However for systems this is a non-breaking change. Query state management is done internally by the relevant [`SystemParam`].
 
-We have achieved some pretty significant performance wins as a result of the new Query system.
+We have achieved some pretty significant performance wins as a result of the new [`Query`] system.
+
+[`World`]: https://docs.rs/bevy/0.5.0/bevy/ecs/world/struct.World.html
+[`SystemParam`]: https://docs.rs/bevy/0.5.0/bevy/ecs/system/derive.SystemParam.html
 
 #### "Sparse" Fragmented Iterator Benchmark (in nanoseconds, less is better)
 
@@ -188,7 +195,7 @@ The gains here compared to the last benchmark are smaller because there aren't a
 
 ### Uber Fast "for_each" Query Iterators
 
-Developers now have the choice to use a fast {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Query" no_mod=true method="for_each")}} iterator, which yields ~1.5-3x iteration speed improvements for "fragmented iteration", and minor ~1.2x iteration speed improvements for unfragmented iteration.
+Developers now have the choice to use a fast [`Query::for_each`] iterator, which yields ~1.5-3x iteration speed improvements for "fragmented iteration", and minor ~1.2x iteration speed improvements for unfragmented iteration.
 
 ```rust
 fn system(query: Query<(&A, &mut B)>) {
@@ -203,6 +210,8 @@ fn system(query: Query<(&A, &mut B)>) {
 ```
 
 We will continue to encourage "normal" iterators as they are more flexible and more "rust idiomatic". But when that extra "oomf" is needed, `for_each` will be there ... waiting for you :)
+
+[`Query::for_each`]: https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.for_each
 
 ## New Parallel System Executor
 
@@ -223,7 +232,7 @@ Fortunately @Ratysz has been [doing](https://ratysz.github.io/article/scheduling
 
 <div class="release-feature-authors">authors: @Ratysz, @TheRawMeatball</div>
 
-Systems can now be assigned one or more {{rust_type(type="trait" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemLabel" no_mod=true)}}s. These labels can then be referenced by other systems (within a stage) to run before or after systems with that label:
+Systems can now be assigned one or more [`SystemLabels`]. These labels can then be referenced by other systems (within a stage) to run before or after systems with that label:
 
 ```rust
 app
@@ -241,7 +250,7 @@ app
     .add_system(movement.system().label("movement"));
 ```
 
-Any type that implements the {{rust_type(type="trait" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemLabel" no_mod=true)}} trait can be used. In most cases we recommend defining custom types and deriving {{rust_type(type="trait" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemLabel" no_mod=true)}} for them. This prevents typos, allows for encapsulation (when needed), and allows IDEs to autocomplete labels:
+Any type that implements the [`SystemLabel`] trait can be used. In most cases we recommend defining custom types and deriving [`SystemLabel`] for them. This prevents typos, allows for encapsulation (when needed), and allows IDEs to autocomplete labels:
 
 ```rust
 #[derive(Debug, Hash, PartialEq, Eq, Clone, SystemLabel)]
@@ -257,6 +266,9 @@ app
         .after(PhysicsSystem::UpdateVelocity)
     );
 ```
+
+[`SystemLabels`]: https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/trait.SystemLabel.html
+[`SystemLabel`]: https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/trait.SystemLabel.html
 
 ### Many-to-Many System Labels
 
@@ -289,7 +301,7 @@ Bevy plugin authors should export labels like this in their public APIs to enabl
 
 ### System Sets
 
-{{rust_type(type="struct" crate="bevy_ecs" mod="schedule" version="0.5.0" name="SystemSet" no_mod=true)}}s are a new way to apply the same configuration to a group of systems, which significantly cuts down on boilerplate. The "physics" example above could be rephrased like this:
+[`SystemSets`] are a new way to apply the same configuration to a group of systems, which significantly cuts down on boilerplate. The "physics" example above could be rephrased like this:
 
 ```rust
 app
@@ -306,7 +318,7 @@ app
 
 SystemSets can also use `before(Label)` and `after(Label)` to run all systems in the set before/after the given label.
 
-This is also very useful for groups of systems that need to run with the same {{rust_type(type="struct" crate="bevy_ecs" mod="schedule" version="0.5.0" name="RunCriteria" no_mod=true)}}.
+This is also very useful for groups of systems that need to run with the same [`RunCriteria`].
 
 ```rust
 app
@@ -317,6 +329,9 @@ app
         .with_system(bar.system())
     )
 ```
+
+[`SystemSets`]: https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/struct.SystemSet.html
+[`RunCriteria`]: https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/struct.RunCriteria.html
 
 ### Improved Run Criteria
 
@@ -458,7 +473,7 @@ The [last Bevy release](https://bevyengine.org/news/bevy-0-4) added States, whic
 
 The old implementation largely worked, but it had a number of quirks and limitations. First and foremost, it required adding a new `StateStage`, which cut down on parallelism, increased boilerplate, and forced ordering where it wasn't required. Additionally, some of the lifecycle events didn't always behave as expected.
 
-The new {{rust_type(type="struct" crate="bevy_ecs" mod="schedule" version="0.5.0" name="State" no_mod=true)}} implementation is built on top of the new parallel executor's SystemSet and RunCriteria features, for a much more natural, flexible, and parallel API that builds on existing concepts instead of creating new ones:
+The new [`State`] implementation is built on top of the new parallel executor's SystemSet and RunCriteria features, for a much more natural, flexible, and parallel API that builds on existing concepts instead of creating new ones:
 
 ```rust
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -505,6 +520,8 @@ fn system(mut state: ResMut<State<AppState>>) {
 ```
 
 Just like the old implementation, state changes are applied in the same frame. This means it is possible to transition from states `A->B->C` and run the relevant state lifecycle events without skipping frames. This builds on top of "looping run criteria", which we also use for our "fixed timestep" implementation (and which you can use for your own run criteria logic).
+
+[`State`]: https://docs.rs/bevy/0.5.0/bevy/ecs/schedule/struct.State.html
 
 ## Event Ergonomics
 
@@ -646,9 +663,9 @@ layout(set = 0, binding = 1) uniform CameraPosition {
 
 <div class="release-feature-authors">authors: @schell</div>
 
-Sometimes you don't want a camera to draw everything in a scene, or you want to temporarily hide a set of things in the scene. **Bevy 0.5** adds a `RenderLayer` system, which gives developers the ability to add entities to layers by adding the `RenderLayers` component.
+Sometimes you don't want a camera to draw everything in a scene, or you want to temporarily hide a set of things in the scene. **Bevy 0.5** adds a `RenderLayer` system, which gives developers the ability to add entities to layers by adding the [`RenderLayers`] component.
 
-Cameras can also have a {{rust_type(type="struct" crate="bevy_render" mod="camera" version="0.5.0" name="RenderLayers" no_mod=true)}} component, which determines what layers they can see.
+Cameras can also have a [`RenderLayers`] component, which determines what layers they can see.
 
 ```rust
 // spawn a sprite on layer 0
@@ -672,6 +689,8 @@ commands
     .spawn_bundle(OrthographicCameraBundle::new_2d());
     .insert(RenderLayers::layer(1));
 ```
+
+[`RenderLayers`]: https://docs.rs/bevy/0.5.0/bevy/render/camera/struct.RenderLayers.html
 
 ## Sprite Flipping
 
@@ -705,7 +724,7 @@ commands.spawn_bundle(SpriteBundle {
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-{{rust_type(type="enum" crate="bevy_render" mod="color" version="0.5.0" name="Color" no_mod=true)}} is now internally represented as an enum, which enables lossless (and correct) color representation. This is a significant improvement over the previous implementation, which internally converted all colors to linear sRGB (which could cause precision issues). Colors are now only converted to linear sRGB when they are sent to the GPU. We also took this opportunity to fix some incorrect color constants defined in the wrong color space.
+[`Color`] is now internally represented as an enum, which enables lossless (and correct) color representation. This is a significant improvement over the previous implementation, which internally converted all colors to linear sRGB (which could cause precision issues). Colors are now only converted to linear sRGB when they are sent to the GPU. We also took this opportunity to fix some incorrect color constants defined in the wrong color space.
 
 ```rust
 pub enum Color {
@@ -745,6 +764,8 @@ pub enum Color {
 }
 ```
 
+[`Color`]: https://docs.rs/bevy/0.5.0/bevy/render/color/enum.Color.html
+
 ## Wireframes
 
 <div class="release-feature-authors">authors: @Neo-Zhixing</div>
@@ -767,7 +788,7 @@ This example serves as a quick introduction to building 3D games in Bevy. It sho
 
 <div class="release-feature-authors">authors: @kokounet</div>
 
-The {{rust_type(type="struct" crate="bevy_core" version="0.5.0" name="Timer" no_mod=true)}} struct now internally uses {{rust_type(type="struct" crate="std" mod="time" name="Duration" no_mod=true)}}s instead of using `f32` representations of seconds. This both increases precision and makes the API a bit nicer to look at.
+The [`Timer`] struct now internally uses [`Duration`] instead of using `f32` representations of seconds. This both increases precision and makes the API a bit nicer to look at.
 
 ```rust
 fn system(mut timer: ResMut<Timer>, time: Res<Time>) {
@@ -776,6 +797,9 @@ fn system(mut timer: ResMut<Timer>, time: Res<Time>) {
     }
 }
 ```
+
+[`Timer`]: https://docs.rs/bevy/0.5.0/bevy/core/struct.Timer.html
+[`Duration`]: https://docs.rs/bevy/0.5.0/bevy/utils/struct.Duration.html
 
 ## Assets Improvements
 
@@ -957,7 +981,7 @@ This allows us to make things like "entity id retrieval" infallible and opens th
 
 <div class="release-feature-authors">authors: @TheRawMeatball</div>
 
-Queries now have {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Query" no_mod=true method="single")}} and {{rust_type(type="struct" crate="bevy_ecs" mod="system" version="0.5.0" name="Query" no_mod=true method="single_mut")}} methods, which return a single query result if there is _exactly_ one matching entity:
+Queries now have [`Query::single`] and [`Query::single_mut`] methods, which return a single query result if there is _exactly_ one matching entity:
 
 ```rust
 fn system(query: Query<&Player>) {
@@ -966,6 +990,9 @@ fn system(query: Query<&Player>) {
     }
 }
 ```
+
+[`Query::single`]: https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.single
+[`Query::single_mut`]: https://docs.rs/bevy/0.5.0/bevy/ecs/system/struct.Query.html#method.single_mut
 
 ### Removed ChangedRes
 

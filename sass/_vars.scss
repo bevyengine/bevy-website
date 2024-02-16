@@ -54,12 +54,12 @@ $border-radius: 10px;
 
 // CSS Vars
 :root {
-    --header-height: 60px;
-    --scroll-padding-top: calc(var(--header-height) + 16px);
+  --header-height: 60px;
+  --scroll-padding-top: calc(var(--header-height) + 16px);
 
-    @media #{$bp-tablet-landscape-up} {
-        --header-height: 72px;
-    }
+  @media #{$bp-tablet-landscape-up} {
+    --header-height: 72px;
+  }
 }
 
 // Accessibility

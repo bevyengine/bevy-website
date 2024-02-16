@@ -18,14 +18,14 @@ jobs:
     steps:
 
       - name: Checkout Bevy latest tag
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
 
       # temporary: fetch tools from main branch
       - name: Checkout Bevy Tools
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
           ref: 'main'
@@ -52,7 +52,7 @@ jobs:
           cargo run -p example-showcase -- --per-page ${{ env.PER_PAGE }} --page ${{ matrix.page }} build-wasm-examples --content-folder wasm-examples --api ${{ matrix.api }} --website-hacks --optimize-size
 
       - name: Upload Generated Files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.api }}-examples-${{ matrix.page }}
           path: wasm-examples
@@ -67,7 +67,7 @@ jobs:
       steps:
         
         - name: Download all artifacts
-          uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v4
 
         - name: Group examples in one folder
           run: |
