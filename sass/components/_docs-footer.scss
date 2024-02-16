@@ -1,6 +1,6 @@
 .docs-footer {
     $border-color: #2f3033;
-
+    $secondary-text-color: #8c8c8c;
     --docs-footer-gap: 12px;
 
     margin: 32px 0;
@@ -73,7 +73,7 @@
 
     &__dir {
         margin-bottom: 4px;
-        color: #666;
+        color: $secondary-text-color;
         text-transform: uppercase;
         font-size: 0.8rem;
         line-height: 1;
@@ -97,11 +97,11 @@
         font-size: 0.9rem;
 
         @include override-anchor {
-            color: #555;
+            color: $secondary-text-color;
         }
 
         &:hover {
-            color: #aaa;
+            color: lighten($secondary-text-color, 20%);
         }
 
         .icon {
