@@ -139,12 +139,12 @@ let before = meshes.add(
 let after = meshes.add(Sphere::new(2.0).mesh().ico(8).unwrap());
 
 // Cuboid
-// (notice how Assets::add handles mesh convertion automatically)
-let before = meshes.add(shape::Box::new(2.0, 1.0, 1.0));
+// (notice how Assets::add now also handles mesh convertion automatically)
+let before = meshes.add(Mesh::from(shape::Box::new(2.0, 1.0, 1.0)));
 let after = meshes.add(Cuboid::new(2.0, 1.0, 1.0));
 
 // Plane
-let before = meshes.add(Plane::from_size(5.0));
+let before = meshes.add(Mesh::from(Plane::from_size(5.0)));
 let after = meshes.add(Plane3d::default().mesh().size(5.0, 5.0));
 ```
 
