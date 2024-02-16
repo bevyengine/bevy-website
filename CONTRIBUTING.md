@@ -1,7 +1,10 @@
 # Contributing
 
-So, you want to help with the [Bevy website](https://bevyengine.org/)?
-(If you want to help with the [Bevy engine](https://github.com/bevyengine/bevy), then see the engine [CONTRIBUTING.md](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md)).
+So, you want to help with the [Bevy website](https://bevyengine.org/)? Then this is the right place for you! Bevy is created by volunteers; if you want to help us build the next great game engine, please reach out. We need all the help we can get.
+
+If you want to help with the [Bevy engine](https://github.com/bevyengine/bevy) itself, then see the engine's [CONTRIBUTING.md](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md).
+
+We want Bevy to be a vibrant developer community. That's actually why we chose the name; a Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 
 ## Building the website
 
