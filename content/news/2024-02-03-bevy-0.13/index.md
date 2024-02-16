@@ -1115,12 +1115,6 @@ specular occlusion.
 This could be further improved with screen space reflections (SSR). However, it is recommended to
 use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
 
-## Unload Render Assets From RAM
-
-<div class="release-feature-authors">authors: @TODO</div>
-
-TODO.
-
 ## Bind Group Layout Entries
 
 <div class="release-feature-authors">authors: @IceSentry</div>
