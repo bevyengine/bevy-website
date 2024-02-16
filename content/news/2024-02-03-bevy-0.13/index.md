@@ -96,7 +96,7 @@ For most primitives however, it returns a builder for optional configuration:
 let before = Mesh::from(Circle {
     radius: 1.0,
     vertices: 64,
-};
+});
 let after = Circle::new(1.0).mesh().resolution(64).build();
 ```
 
