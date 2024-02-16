@@ -31,9 +31,241 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Primitive Shapes
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @Jondolf, @NiseVoid, @aevyrie</div>
 
-TODO.
+Geometric shapes are used all across game development, from primitive mesh shapes and debug gizmos to physics colliders and raycasting. Despite being so commonly used across several domains, Bevy hasn't really had any general-purpose shape representations.
+
+This is changing in Bevy 0.13 with the introduction of first-party **primitive shapes**! They are lightweight geometric primitives designed for maximal interoperability and reusability, allowing Bevy and third-party plugins to use the same set of basic shapes and increase cohesion within the ecosystem. See the original [RFC][Primitive RFC] for more details.
+
+The built-in [collection of primitives] is already quite sizeable:
+
+| 2D                                  | 3D                                  |
+| ----------------------------------- | ----------------------------------- |
+| [`Rectangle`]                       | [`Cuboid`]                          |
+| [`Circle`]                          | [`Sphere`]                          |
+| [`Ellipse`]                         | -                                   |
+| [`Triangle2d`]                      | -                                   |
+| [`Plane2d`]                         | [`Plane3d`]                         |
+| [`Line2d`]                          | [`Line3d`]                          |
+| [`Segment2d`]                       | [`Segment3d`]                       |
+| [`Polyline2d`], [`BoxedPolyline2d`] | [`Polyline3d`], [`BoxedPolyline3d`] |
+| [`Polygon`], [`BoxedPolygon`]       | -                                   |
+| [`RegularPolygon`]                  | -                                   |
+| [`Capsule2d`]                       | [`Capsule3d`]                       |
+| -                                   | [`Cylinder`]                        |
+| -                                   | [`Cone`]                            |
+| -                                   | [`ConicalFrustum`]                  |
+| -                                   | [`Torus`]                           |
+
+More primitives will be added in future releases.
+
+Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and ray casting functionality. Several of these have landed in 0.13 already!
+
+[Primitive RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/12-primitive-shapes.md
+[collection of primitives]: https://dev-docs.bevyengine.org/bevy/math/primitives/index.html
+[`Rectangle`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Rectangle.html
+[`Cuboid`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cuboid.html
+[`Circle`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Circle.html
+[`Sphere`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Sphere.html
+[`Ellipse`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Ellipse.html
+[`Triangle2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Triangle2d.html
+[`Plane2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Plane2d.html
+[`Plane3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Plane3d.html
+[`Line2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Line2d.html
+[`Line3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Line3d.html
+[`Segment2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Segment2d.html
+[`Segment3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Segment3d.html
+[`Polyline2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polyline2d.html
+[`Polyline3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polyline3d.html
+[`BoxedPolyline2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolyline2d.html
+[`BoxedPolyline3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolyline3d.html
+[`Polygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polygon.html
+[`BoxedPolygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolygon.html
+[`RegularPolygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.RegularPolygon.html
+[`Capsule2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule2d.html
+[`Capsule3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule3d.html
+[`Cylinder`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cylinder.html
+[`Cone`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cone.html
+[`ConicalFrustum`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.ConicalFrustum.html
+[`Torus`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Torus.html
+
+### Rendering
+
+Primitive shapes can be rendered using both meshes and gizmos. In this section, we'll take a closer look at the new APIs.
+
+Below, you can see a cuboid and a torus rendered using meshes and gizmos. You can check out at all primitives that can be rendered in the new [Rendering Primitives] example.
+
+![On the left: A cuboid rendered with gizmos. It consists of 12 white lines. On the right: A cuboid rendered with meshes. It consists of 6 white faces.](cuboids.png)
+
+![On the left: A torus rendered with gizmos. It consists of many small rings, all connected by 4 big rings. On the right: A torus rendered with meshes. A shape that looks like a donut.](tori.png)
+
+[Rendering Primitives]: https://bevyengine.org/examples/Math/render-primitives
+
+#### Meshing
+
+<div class="release-feature-authors">authors: @Jondolf</div>
+
+Previous versions of Bevy have had types like [`Quad`], [`Box`], and [`UVSphere`] for creating meshes from basic shapes. These have been deprecated in favor of a builder-like API using the new geometric primitives.
+
+Primitives that support meshing implement the [`Meshable`] trait. For some shapes, the [`mesh`][`mesh` method] method returns a [`Mesh`] directly:
+
+```rust
+let before = Mesh::from(Quad::new(Vec2::new(2.0, 1.0)));
+let after = Rectangle::new(2.0, 1.0).mesh(); // Mesh::from also works
+```
+
+For most primitives however, it returns a builder for optional configuration:
+
+```rust
+// Create a circle mesh with a specified vertex count
+let before = Mesh::from(Circle {
+    radius: 1.0,
+    vertices: 64,
+});
+let after = Circle::new(1.0).mesh().resolution(64).build();
+```
+
+Below are a few more examples of meshing with the new primitives.
+
+```rust
+// Icosphere
+let before = meshes.add(
+    Mesh::try_from(Icosphere {
+        radius: 2.0,
+        subdivisions: 8,
+    })
+    .unwrap()
+);
+let after = meshes.add(Sphere::new(2.0).mesh().ico(8).unwrap());
+
+// Cuboid
+// (notice how Assets::add now also handles mesh convertion automatically)
+let before = meshes.add(Mesh::from(shape::Box::new(2.0, 1.0, 1.0)));
+let after = meshes.add(Cuboid::new(2.0, 1.0, 1.0));
+
+// Plane
+let before = meshes.add(Mesh::from(Plane::from_size(5.0)));
+let after = meshes.add(Plane3d::default().mesh().size(5.0, 5.0));
+```
+
+With the addition of the primitives, meshing is also supported for more shapes, like [`Ellipse`], [`Triangle2d`], and [`Capsule2d`]. However, note that meshing is not yet implemented for all primitives, such as [`Polygon`] and [`Cone`].
+
+Below you can see some meshes in the [`2d_shapes`] and [`3d_shapes`] examples.
+
+![An example with 2D mesh shapes](2d_shapes.png)
+
+![An example with 3D mesh shapes](3d_shapes.png)
+
+Some default values for mesh shape dimensions have also been changed to be more consistent.
+
+[`Quad`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.Quad.html
+[`Box`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.Box.html
+[`UVSphere`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.UVSphere.html
+[`Meshable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html
+[`mesh` method]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html#tymethod.mesh
+[`Mesh`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Mesh.html
+[`2d_shapes`]: https://bevyengine.org/examples/2D%20Rendering/2d-shapes/
+[`3d_shapes`]: https://bevyengine.org/examples/3D%20Rendering/3d-shapes/
+
+#### Gizmos
+
+<div class="release-feature-authors">authors: @RobWalt</div>
+
+Primitives can also be rendered with [`Gizmos`]. There are two new generic methods:
+
+* [`gizmos.primitive_2d(primitive, position, angle, color)`][`primitive_2d`]
+* [`gizmos.primitive_3d(primitive, position, rotation, color)`][`primitive_3d`]
+
+Some primitives can have additional configuration options similar to existing [`Gizmos`] drawing methods.
+For example, calling [`primitive_3d`] with a [`Sphere`] returns a [`SphereBuilder`], which offers a `segments` method
+to control the level of detail of the sphere.
+
+```rust
+let sphere = Sphere { radius };
+gizmos
+    .primitive_3d(sphere, center, rotation, color)
+    .segments(segments);
+```
+
+[`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/struct.Gizmos.html
+[`primitive_2d`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
+[`primitive_3d`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
+[`SphereBuilder`]: https://dev-docs.bevyengine.org/bevy/gizmos/primitives/dim3/struct.SphereBuilder.html
+
+### Bounding Volumes
+
+<div class="release-feature-authors">authors: @NiseVoid, @Jondolf</div>
+
+In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
+
+Bevy 0.13 adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitives shapes.
+
+Each bounding volume implements the [`BoundingVolume`] trait, providing some general functionality and helpers. The [`IntersectsVolume`] trait can be used to test for intersections with these volumes. This trait is implemented for bounding volumes themselves, so you can test for intersections between them. This is supported between all existing bounding volume types, but only those in the same dimension.
+
+Here is an example of how bounding volumes are constructed, and how an intersection test is performed:
+
+```rust
+// We create an axis-aligned bounding box that is centered at position
+let position = Vec2::new(100., 50.);
+let half_size = Vec2::splat(20.);
+let aabb = Aabb2d::new(position, half_size);
+
+// We create a bounding circle that is centered at position
+let position = Vec2::new(80., 70.);
+let radius = 30.;
+let bounding_circle = BoundingCircle::new(position, radius);
+
+// We check if the volumes are intersecting
+let intersects = bounding_circle.intersects(&aabb);
+```
+
+There are also two traits for the generation of bounding volumes: [`Bounded2d`] and [`Bounded3d`]. These are implemented for the new primitive shapes, so you can easily compute bounding volumes for them:
+
+```rust
+// We create a primitive, a hexagon in this case
+let hexagon = RegularPolygon::new(50., 6);
+
+let translation = Vec2::new(50., 200.);
+let rotation = PI / 2.; // Rotation in radians
+
+// Now we can get an Aabb2d or BoundingCircle from this primitive.
+// These methods are part of the Bounded2d trait.
+let aabb = hexagon.aabb_2d(translation, rotation);
+let circle = hexagon.bounding_circle(translation, rotation);
+```
+
+[`Aabb2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.Aabb2d.html
+[`Aabb3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.Aabb3d.html
+[`BoundingCircle`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingCircle.html
+[`BoundingSphere`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingSphere.html
+[`BoundingVolume`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.BoundingVolume.html
+[`IntersectsVolume`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.IntersectsVolume.html
+[`Bounded2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.Bounded2d.html
+[`Bounded3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.Bounded3d.html
+
+#### Ray Casting and Volume Casting
+
+The bounding volumes also support basic ray casting and volume casting. Ray casting tests if a bounding volume intersects with a given ray, cast from an origin in a direction, until a maximum distance. Volume casts work similarly, but function as if moving a volume along the ray.
+
+This functionality is provided through the new [`RayCast2d`], [`RayCast3d`], [`AabbCast2d`], [`AabbCast3d`], [`BoundingCircleCast`], and [`BoundingSphereCast`] types. They can be used to check for intersections against bounding volumes, and to compute the distance from the origin of the cast to the point of intersection.
+
+Below, you can see ray casting, volume casting, and intersection tests in action:
+
+<video controls><source src="bounding_intersections.mp4" type="video/mp4"/></video>
+
+To make it easier to reason about ray casts in different dimensions, the old [`Ray`] type has also been split into [`Ray2d`] and [`Ray3d`]. The new [`Direction2d`] and [`Direction3d`] types are used to ensure that the ray direction remains normalized, providing a type-level guarantee that the vector is always unit-length. These are already in use in some other APIs as well, such as for some primitives and gizmo methods.
+
+[`RayCast2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.RayCast2d.html
+[`RayCast3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.RayCast3d.html
+[`AabbCast2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.AabbCast2d.html
+[`AabbCast3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.AabbCast3d.html
+[`BoundingCircleCast`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingCircleCast.html
+[`BoundingSphereCast`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingSphereCast.html
+[`Ray`]: https://docs.rs/bevy/0.12.1/bevy/math/struct.Ray.html
+[`Ray2d`]: https://dev-docs.bevyengine.org/bevy/math/struct.Ray2d.html
+[`Ray3d`]: https://dev-docs.bevyengine.org/bevy/math/struct.Ray3d.html
+[`Direction2d`]: https://dev-docs.bevyengine.org/bevy/math/primitives/struct.Direction2d.html
+[`Direction3d`]: https://dev-docs.bevyengine.org/bevy/math/primitives/struct.Direction3d.html
 
 ## System Stepping
 
@@ -1259,7 +1491,6 @@ own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
 an RPC call. The world is your oyster.
 
 [`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
-[`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/gizmos/struct.Gizmos.html
 [`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
 
 ## glTF Extensions
