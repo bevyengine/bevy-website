@@ -50,11 +50,13 @@ It also has many features most people expect from a modern, general purpose engi
 
 That being said, Bevy is still in the very early stages. I consider it to be in the "prototyping" phase: features are missing, APIs will change, and documentation is sparse. <span class="warning">I don't yet recommend using Bevy in serious projects unless you are willing to deal with gaps and instability</span>.
 
-Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
+Hopefully at this point you are either (1) jazzed about Bevy or (2) not reading anymore. If you want to dive in right now, [The Quick Start Guide](/learn/quick-start/introduction/) is the best place to get started. You can also keep reading to find out what the current state of Bevy is and where we'd like to take it.
 
-**Quick note to the reader**: in this article you will find text formatted like this: {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="texture" name="Texture" no_mod=true)}}
+**Quick note to the reader**: in this article you will find text formatted like this: [`Texture`]
 
 This formatting indicates that the text is a Rust type that links to API documentation. I encourage you to click on anything that seems interesting to you!
+
+[`Texture`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Texture.html
 
 ## Bevy Apps
 
@@ -78,9 +80,9 @@ fn main() {
 }
 ```
 
-{{rust_type(type="trait", crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
+[`AddDefaultPlugins::add_default_plugins`] adds all of the features you probably expect from a game engine: a 2D / 3D renderer, asset loading, a UI system, windows, input, etc
 
-You can also register the default {{rust_type(type="trait" name="Plugin" crate="bevy_app" version="0.1.0")}}s manually like this:
+You can also register the default [`Plugins`] manually like this:
 
 ```rs
 fn main() {
@@ -95,7 +97,11 @@ fn main() {
 }
 ```
 
-And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to {{rust_type(type="trait" crate="bevy" version="0.1.0" name="AddDefaultPlugins" method="add_default_plugins" no_mod=true no_struct=true)}} for simplicity, at least initially.
+And of course you can also create your own plugins. In fact, all engine and game logic is built using plugins. Hopefully now you understand what we mean by modular: you are free to add/remove plugins based on your project's unique needs. However I expect that most people will stick to
+[`AddDefaultPlugins::add_default_plugins`] for simplicity, at least initially.
+
+[`AddDefaultPlugins::add_default_plugins`]: https://docs.rs/bevy/0.1.0/bevy/trait.AddDefaultPlugins.html#tymethod.add_default_plugins
+[`Plugins`]: https://docs.rs/bevy/0.1.0/bevy/prelude/trait.Plugin.html
 
 ## Bevy ECS
 
@@ -347,11 +353,13 @@ fn main() {
 }
 ```
 
-The `.system()` call takes the `some_system` function pointer and converts it to a `Box<dyn System>`. This works because we implement the {{rust_type(type="trait" crate="bevy_ecs" version="0.1.0" name="IntoQuerySystem")}} trait for all functions that match a certain set of function signatures.
+The `.system()` call takes the `some_system` function pointer and converts it to a `Box<dyn System>`. This works because we implement the [`IntoQuerySystem`] trait for all functions that match a certain set of function signatures.
+
+[`IntoQuerySystem`]: https://docs.rs/bevy/0.1.0/bevy/prelude/trait.IntoQuerySystem.html
 
 ### Good Bones
 
-Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](https://github.com/Ralith/hecs). Hecs is an efficient single-threaded archetypal ECS. It provides the core {{rust_type(type="struct" crate="bevy_ecs" version="0.1.0" name="World")}}, {{rust_type(type="struct" crate="bevy_ecs" version="0.1.0" name="Archetype")}}, and internal {{rust_type(type="trait" crate="bevy_ecs" version="0.1.0" name="Query")}} data structures. Bevy ECS adds the following on top:
+Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](https://github.com/Ralith/hecs). Hecs is an efficient single-threaded archetypal ECS. It provides the core [`World`], [`Archetype`], and internal [`Query`] data structures. Bevy ECS adds the following on top:
 
 * <b class="fun-list">Function Systems</b>: Hecs actually has no concept of a "system" at all. You just run queries directly on the World. Bevy adds the ability to define portable, schedulable systems using normal Rust functions.
 * <b class="fun-list">Resources</b>: Hecs has no concept of unique/global data. When building games, this is often needed. Bevy adds a `Resource` collection and resource queries
@@ -362,6 +370,10 @@ Bevy ECS actually uses a heavily forked version of the minimalist [Hecs ECS](htt
 * <b class="fun-list">Stable Entity IDs</b>: Almost every ECS (including Hecs) uses unstable entity ids that cannot be used for serialization (scenes / save files) or networking. In Bevy ECS, entity ids are globally unique and stable. You can use them in any context!  
 
 In the near future I will file an issue on the Hecs git repo offering to upstream whatever changes they want from Bevy ECS. I have a feeling they won't want the "high level" stuff like function systems and parallel scheduling, but I guess we'll see!
+
+[`World`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.World.html
+[`Archetype`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.World.html#method.archetypes
+[`Query`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Query.html
 
 ## Bevy UI
 
@@ -377,7 +389,7 @@ We are still in the experimental stages and I expect some things to change, but 
 
 ### Building Blocks
 
-In Bevy, a UI element is just an ECS Entity with a {{rust_type(type="struct" name="Node" crate="bevy_ui" version="0.1.0")}} component. Nodes are rectangles with a width and height, and are positioned using the same {{rust_type(type="struct" name="Transform" crate="bevy_transform" version="0.1.0" mod="components" no_mod=true)}} component used elsewhere in Bevy. The {{rust_type(type="struct" name="Style" crate="bevy_ui" version="0.1.0" no_mod=true)}} component is used to determine how the Node is rendered, sized, and positioned.
+In Bevy, a UI element is just an ECS Entity with a [`Node`] component. Nodes are rectangles with a width and height, and are positioned using the same [`Transform`] component used elsewhere in Bevy. The [`Style`] component is used to determine how the Node is rendered, sized, and positioned.
 
 The easiest way to add a new node (with all of the required components) is like this:
 
@@ -385,11 +397,16 @@ The easiest way to add a new node (with all of the required components) is like 
 commands.spawn(NodeComponents::default())
 ```
 
-{{rust_type(type="struct" name="NodeComponents" crate="bevy_ui" version="0.1.0" mod="entity" no_mod=true)}} is a "component bundle", which Bevy uses to make spawning entities of various "types" easier.
+[`NodeComponents`] is a "component bundle", which Bevy uses to make spawning entities of various "types" easier.
+
+[`Node`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Node.html
+[`Style`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Style.html
+[`Transform`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Transform.html
+[`NodeComponents`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.NodeComponents.html
 
 ### Layout
 
-For layout, Bevy uses a fantastic 100% Rust flexbox implementation called [Stretch](https://github.com/vislyhq/stretch). Stretch provides the algorithms for positioning rectangles in 2D space according to the flexbox spec. Bevy exposes flex properties inside the {{rust_type(type="struct" name="Style" version="0.1.0" crate="bevy_ui")}} component mentioned above and renders rectangles with the positions and sizes that Stretch outputs. Bevy uses its own z-layering algorithm to "stack" elements on top of each other, but its basically the same one that HTML/CSS uses.
+For layout, Bevy uses a fantastic 100% Rust flexbox implementation called [Stretch](https://github.com/vislyhq/stretch). Stretch provides the algorithms for positioning rectangles in 2D space according to the flexbox spec. Bevy exposes flex properties inside the [`Style`] component mentioned above and renders rectangles with the positions and sizes that Stretch outputs. Bevy uses its own z-layering algorithm to "stack" elements on top of each other, but its basically the same one that HTML/CSS uses.
 
 ### Relative Positioning
 
@@ -552,7 +569,7 @@ commands
 
 ### Interaction Events
 
-Nodes with the {{rust_type(type="enum" name="Interaction" crate="bevy_ui" version="0.1.0")}} component will track interaction state. You can easily build widgets like buttons this way:
+Nodes with the [`Interaction`] component will track interaction state. You can easily build widgets like buttons this way:
 
 <video controls loop><source  src="button.mp4" type="video/mp4"/></video>
 
@@ -568,11 +585,13 @@ fn system(_button: &Button, interaction: Mutated<Interaction>) {
 }
 ```
 
+[`Interaction`]: https://docs.rs/bevy/0.1.0/bevy/prelude/enum.Interaction.html
+
 ## 2D Features
 
 ### [Sprites](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/2d/sprite.rs)
 
-You can use any {{rust_type(type="struct" name="Texture" crate="bevy_render" version="0.1.0" mod="texture" no_mod=true)}} asset as a sprite directly:
+You can use any [`Texture`] asset as a sprite directly:
 
 ![sprite](sprite.png)
 
@@ -676,7 +695,7 @@ app.add_resource(Msaa { samples: 8 })
 
 ## Scenes
 
-Scenes are a way to compose pieces of your game/app ahead of time. In Bevy, Scenes are simply a collection of entities and components. A Scene can be "spawned" into a `World` any number of times. "Spawning" copies the Scene's entities and components into the given `World`.
+Scenes are a way to compose pieces of your game/app ahead of time. In Bevy, Scenes are simply a collection of entities and components. A Scene can be "spawned" into a [`World`] any number of times. "Spawning" copies the Scene's entities and components into the given [`World`].
 
 Scenes can also be saved to and loaded from "scene files". One of the primary goals of the future "Bevy Editor" will be to make it easy to compose scene files visually.
 
@@ -715,7 +734,7 @@ The numbers assigned to the `entity` fields are entity's id, which are completel
 
 ### Loading and Instancing
 
-Scenes can be added to a `World` using the {{rust_type(type="struct" name="SceneSpawner" crate="bevy_scene" version="0.1.0" no_mod=true)}} resource. Spawning can be done with either {{rust_type(type="struct" name="SceneSpawner" method="load" crate="bevy_scene" version="0.1.0" no_mod=true)}} or {{rust_type(type="struct" name="SceneSpawner" method="instance" crate="bevy_scene" version="0.1.0" no_mod=true)}}. "Loading" a Scene preserves the entity IDs in it. This is useful for something like a save file where you want entity ids to be constant and changes to be applied on top of entities already in the world. "Instancing" adds entities to the `World` with brand-new IDs, which allows multiple "instances" of a scene to exist in the same World.
+Scenes can be added to a [`World`] using the [`SceneSpawner`] resource. Spawning can be done with either [`SceneSpawner::load`] or [`SceneSpawner::instance`]. "Loading" a Scene preserves the entity IDs in it. This is useful for something like a save file where you want entity ids to be constant and changes to be applied on top of entities already in the world. "Instancing" adds entities to the [`World`] with brand-new IDs, which allows multiple "instances" of a scene to exist in the same [`World`].
 
 ```rs
 fn load_scene_system(asset_server: Res<AssetServer>, mut scene_spawner: ResMut<SceneSpawner>) {
@@ -728,9 +747,13 @@ fn load_scene_system(asset_server: Res<AssetServer>, mut scene_spawner: ResMut<S
 }
 ```
 
+[`SceneSpawner`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.SceneSpawner.html
+[`SceneSpawner::load`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.SceneSpawner.html#method.load
+[`SceneSpawner::instance`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.SceneSpawner.html#method.instance
+
 ### Saving ECS Worlds To Scenes
 
-Any ECS `World` can be converted to a scene like this:
+Any ECS [`World`] can be converted to a scene like this:
 
 ```rs
 let scene = Scene::from_world(&world, &component_type_registry);
@@ -829,13 +852,19 @@ fn event_consumer(mut state: Local<State>, my_events: Res<Events<MyEvent>>) {
 }
 ```
 
-`app.add_event::<MyEvent>()` adds a new {{rust_type(type="struct", crate="bevy_app" version="0.1.0" name="Events")}} resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update.  {{rust_type(type="struct" crate="bevy_app" version="0.1.0" name="EventReader")}}s are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
+`app.add_event::<MyEvent>()` adds a new [`Events`] resource for MyEvent and a system that swaps the ```Events<MyEvent>``` buffers every update. [`EventReaders`] are very cheap to create. They are essentially just an array index that tracks the last event that has been read.
 
 Events are used in Bevy for features like window resizing, assets, and input. The tradeoff for being both allocation and cpu efficient is that each system only has one chance to receive an event, otherwise it will be lost on the next update. I believe this is the correct tradeoff for apps that run in a loop (ex: games).
 
+[`Events`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Events.html
+[`EventReaders`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.EventReader.html
+
 ## Assets
 
-Bevy {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Assets")}} are just typed data that can be referenced using asset {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="Handle")}}s. For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
+Bevy [`Assets`] are just typed data that can be referenced using asset [`Handles`]. For example, 3d meshes, textures, fonts, materials, scenes, and sounds are assets. `Assets<T>` is a generic collection of assets of type `T`. In general asset usage looks like this:
+
+[`Assets`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Assets.html
+[`Handles`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.Handle.html
 
 ### Asset Creation
 
@@ -857,7 +886,7 @@ fn read_texture_system(textures: Res<Assets<Texture>>, texture_handle: &Handle<T
 
 ### Asset Events
 
-The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed `Events`. These events can also be consumed as a system resource, just like any other `Events`:
+The `Assets<T>` collection is basically just a map from `Handle<T>` to `T` that records created, modified, and removed [`Events`]. These events can also be consumed as a system resource, just like any other [`Events`]:
 
 ```rs
 fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
@@ -871,7 +900,7 @@ fn system(mut state: Local<State>, texture_events: Res<Events<AssetEvent>>) {
 
 ### Asset Server
 
-The ```Assets<T>``` collection doesn't know anything about filesystems or multi-threading. This is the responsibility of the {{rust_type(type="struct" crate="bevy_asset" version="0.1.0" name="AssetServer" no_mod=true)}} resource:
+The ```Assets<T>``` collection doesn't know anything about filesystems or multi-threading. This is the responsibility of the [`AssetServer`] resource:
 
 ```rs
 fn system(mut commands: Commands, asset_server: Res<AssetServer>, mut textures: ResMut<Assets<Texture>>) {
@@ -900,6 +929,8 @@ fn system(mut commands: Commands, asset_server: Res<AssetServer>, mut textures: 
 }
 ```
 
+[`AssetServer`]: https://docs.rs/bevy/0.1.0/bevy/prelude/struct.AssetServer.html
+
 ### Hot Reloading
 
 You can enable asset change detection by calling:
@@ -912,7 +943,7 @@ This will load new versions of assets whenever their files have changed.
 
 ### Adding New Asset Types
 
-To add a new asset type, implement the {{rust_type(type="trait" crate="bevy_asset" version="0.1.0" name="AssetLoader" no_mod=true)}} trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
+To add a new asset type, implement the [`AssetLoader`] trait. This tells Bevy what file formats to look for and how to translate the file bytes into the given asset type.
 
 Once you have implemented `AssetLoader<MyAsset>` for `MyAssetLoader` you can register your new loader like this:
 
@@ -921,6 +952,8 @@ app.add_asset_loader::<MyAsset, MyAssetLoader>();
 ```
 
 Then you can access the `Assets<MyAsset>` resource, listen for change events, and call `asset_server.load("something.my_asset")`
+
+[`AssetLoader`]: https://docs.rs/bevy_asset/0.1.0/bevy_asset/trait.AssetLoader.html
 
 ## Sound
 
@@ -942,15 +975,15 @@ We plan on extending the audio system with more control and features in the futu
 
 ## Render Graph
 
-All render logic is built on top of Bevy's {{rust_type(type="struct" crate="bevy_render" version="0.1.0" mod="render_graph" name="RenderGraph" no_mod=true)}}. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
+All render logic is built on top of Bevy's [`RenderGraph`]. The Render Graph is a way to encode atomic units of render logic. For example, you might create graph nodes for a 2D pass, UI pass, cameras, texture copies, swap chains, etc. Connecting a node to another node indicates that there is a dependency of some kind between them. By encoding render logic this way, the Bevy renderer is able to analyze dependencies and render the graph in parallel. It also has the benefit of encouraging developers to write modular render logic.
 
 Bevy includes a number of nodes by default: `CameraNode`, `PassNode`, `RenderResourcesNode`, `SharedBuffersNode`, `TextureCopyNode`, `WindowSwapChainNode`, and `WindowTextureNode`. It also provides subgraphs for 2d rendering, 3d rendering, and UI rendering. But you are welcome to create your own nodes, your own graphs, or extend the included graphs!
 
 ### [Data Driven Shaders](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_custom_material.rs)
 
-Components and Assets can derive the {{rust_type(type="trait" crate="bevy_render" version="0.1.0" mod="renderer" name="RenderResources" no_mod=true)}} trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
+Components and Assets can derive the [`RenderResources`] trait, which enables them to be directly copied to GPU resources and used as shader uniforms.
 
-Binding uniforms to a custom shader is literally as simple as deriving `RenderResources` on your component or asset:
+Binding uniforms to a custom shader is literally as simple as deriving [`RenderResources`] on your component or asset:
 
 ```rs
 #[derive(RenderResources, Default)]
@@ -978,6 +1011,9 @@ layout(set = 1, binding = 1) uniform MyMaterial_color {
 ```
 
 I think the simplicity of the [fully self-contained custom shader example](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_custom_material.rs) speaks for itself.
+
+[`RenderGraph`]: https://docs.rs/bevy_render/0.1.0/bevy_render/render_graph/struct.RenderGraph.html
+[`RenderResources`]: https://docs.rs/bevy_render/0.1.0/bevy_render/renderer/trait.RenderResources.html
 
 ### [Shader Defs](https://github.com/bevyengine/bevy/blob/1d68094f59b01e14f44ed7db8907dbd011b59973/examples/shader/shader_defs.rs)
 
@@ -1151,14 +1187,14 @@ There are plenty of areas that need more design work or features. For example, I
 
 ### Documentation
 
-Bevy's APIs are still very unstable, so I haven't spent much time documenting anything yet. [The Bevy Book](https://bevyengine.org/learn/book/introduction/) is still small and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
+Bevy's APIs are still quite unstable, so documentation is spotty. [The Bevy Book](https://bevyengine.org/learn/book/welcome/) only covers relatively mature areas of the engine and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
 
 ## Join the Bevy!
 
-If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Bevy Book](https://bevyengine.org/learn/book/introduction/), and [join the Bevy community](https://bevyengine.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
+If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Quick Start Guide](/learn/quick-start/introduction), and [join the Bevy community](https://bevyengine.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
 
-* <b class="fun-list">Software Developer</b>: check out the [Contributing Code](/learn/book/contributing/code) section of The Bevy Book.
-* <b class="fun-list">Technical Writer</b>: check out the [Contributing Docs](/learn/book/contributing/docs) section of The Bevy Book.
+* <b class="fun-list">Software Developer</b>: check out the [Contributing Code](/learn/quick-start/contributing/code) section of The Bevy Book.
+* <b class="fun-list">Technical Writer</b>: check out the [Contributing Docs](/learn/quick-start/contributing/docs) section of The Bevy Book.
 
 I want Bevy to become a vibrant developer community ... thats actually why I chose the name! A Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 

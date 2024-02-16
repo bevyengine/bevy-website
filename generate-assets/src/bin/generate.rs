@@ -92,7 +92,7 @@ impl From<&Asset> for FrontMatterAsset {
 
 impl FrontMatterWriter for Asset {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let path = root_path.join(&current_path);
+        let path = root_path.join(current_path);
 
         let mut frontmatter = FrontMatterAsset::from(self);
         if self.order.is_none() {

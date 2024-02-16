@@ -126,11 +126,13 @@ impl Section {
     }
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 pub enum CommunityNode {
     Section(Section),
     Member(Member),
 }
+
 impl CommunityNode {
     pub fn name(&self) -> String {
         match self {
@@ -143,9 +145,9 @@ impl CommunityNode {
             CommunityNode::Section(content) => content.order.unwrap_or(99999),
             CommunityNode::Member(content) => {
                 if let Some(roles) = &content.roles {
-                    if roles.iter().find(|p| *p == "Project Lead").is_some() {
+                    if roles.iter().any(|p| p == "Project Lead") {
                         0
-                    } else if roles.iter().find(|p| *p == "Maintainer").is_some() {
+                    } else if roles.iter().any(|p| p == "Maintainer") {
                         1
                     } else if !roles.is_empty() {
                         2
@@ -228,7 +230,7 @@ pub fn parse_members(community_dir: &str) -> io::Result<Section> {
     };
 
     visit_dirs(
-        PathBuf::from_str(&community_dir).unwrap(),
+        PathBuf::from_str(community_dir).unwrap(),
         &mut people_root_section,
     )?;
     Ok(people_root_section)

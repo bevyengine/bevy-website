@@ -1,18 +1,22 @@
 html {
-    color: $default-color;
-    color-scheme: dark;
-    font-family: 'Fira Sans', sans-serif;
-    font-size: calc-rem($size-body-mobile);
-    background-color: $color-grey-900;
-    scroll-padding-top: var(--scroll-padding-top);
+  color: $default-color;
+  color-scheme: dark;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: calc-rem($size-body-mobile);
+  background-color: $color-grey-900;
+  scroll-padding-top: var(--scroll-padding-top);
 
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        outline: none;
-    }
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
 
-    @media #{$bp-tablet-portrait-up} {
-        font-size: calc-rem($size-body);
-    }
+  @media #{$bp-tablet-portrait-up} {
+    font-size: calc-rem($size-body);
+  }
+
+  @media #{$bp-tablet-portrait-up} {
+    font-size: calc-rem($size-body);
+  }
 }

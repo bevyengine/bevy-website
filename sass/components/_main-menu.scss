@@ -1,180 +1,186 @@
 .main-menu {
-    &__menu {
-        display: flex;
-        margin: 0;
-        padding: 0;
+  &__menu {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__entry {
+    list-style: none;
+  }
+
+  &__link {
+    @include flex-center;
+
+    $color-blue: #b1d9ff;
+
+    position: relative;
+    height: var(--header-height);
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-decoration: none;
+
+    &,
+    &:visited,
+    &:active {
+      color: $color-white;
     }
 
-    &__entry {
-        list-style: none;
+    &:hover {
+      color: $color-blue;
     }
 
-    &__link {
-        @include flex-center;
+    &--active {
 
-        $color-blue: #b1d9ff;
-
-        position: relative;
-        height: var(--header-height);
-        font-size: 1.3rem;
-        font-weight: 500;
-        text-decoration: none;
-
-        &, &:visited, &:active {
-            color: $color-white;
-        }
-
-        &:hover {
-            color: $color-blue;
-        }
-
-        &--active {
-            &, &:visited, &:active {
-                color: $color-blue;
-            }
-        }
-
-        // Having the focus outline on the header link directly looks weird,
-        // because it is cut off at the top
-        &:focus-visible {
-            outline: none;
-        }
-
-        // Instead we have the outline on the text inside the link
-        &:focus-visible span {
-            border-radius: 5px;
-            outline: $focus-outline;
-        }
+      &,
+      &:visited,
+      &:active {
+        color: $color-blue;
+      }
     }
+
+    // Having the focus outline on the header link directly looks weird,
+    // because it is cut off at the top
+    &:focus-visible {
+      outline: none;
+    }
+
+    // Instead we have the outline on the text inside the link
+    &:focus-visible span {
+      border-radius: 5px;
+      outline: $focus-outline;
+    }
+  }
 }
 
 // MODE: Off-Canvas Mobile Menu
 @media #{$bp-tablet-portrait-down} {
-    .main-menu {
-        $padding: 8px;
-        $bottom-buffer: 60px; // Add extra length to compensate for address-bar
+  .main-menu {
+    $padding: 8px;
+    $bottom-buffer: 60px; // Add extra length to compensate for address-bar
 
-        --main-menu-switch-height: 0px;
+    --main-menu-switch-height: 0px;
 
-        position: fixed;
-        top: 0px;
-        left: -$mobile-menu-width;
-        width: $mobile-menu-width;
-        bottom: -$bottom-buffer;
-        padding-bottom: $bottom-buffer;
-        background-color: $color-grey-900;
-        z-index: $z-main-menu;
-        transform: translateX(0);
-        opacity: 0.0;
-        transition: transform $duration, opacity $duration;
-        box-shadow: 0px 0px 16px rgba(#000, 0.3);
+    position: fixed;
+    top: 0px;
+    left: -$mobile-menu-width;
+    width: $mobile-menu-width;
+    bottom: -$bottom-buffer;
+    padding-bottom: $bottom-buffer;
+    background-color: $color-grey-900;
+    z-index: $z-main-menu;
+    transform: translateX(0);
+    opacity: 0.0;
+    transition: transform $duration, opacity $duration;
+    box-shadow: 0px 0px 16px rgba(#000, 0.3);
 
-        &--with-page-menu {
-            --main-menu-switch-height: 56px;
+    &--with-page-menu {
+      --main-menu-switch-height: 56px;
 
-            .main-menu__page-menu-switch {
-                display: block;
-            }
-        }
-
-        &__header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: $padding;
-            height: var(--header-height);
-            background-color: $color-grey-800;
-            border-bottom: 2px solid #313131;
-
-            a {
-                display: flex;
-                align-items: center;
-            }
-        }
-
-        &__page-menu-switch {
-            display: none;
-            padding: $padding $padding 0 $padding;
-            height: var(--main-menu-switch-height);
-        }
-
-        &__content {
-            position: relative;
-            height: calc(100% - var(--header-height) - var(--main-menu-switch-height));
-            overflow-x: hidden;
-        }
-
-        &__menu,
-        &__page-menu {
-            overflow-y: auto;
-            height: 100%;
-            position: absolute;
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-            transition: transform $duration;
-        }
-
-        &__menu {
-            display: flex;
-            flex-direction: column;
-            padding: $padding;
-            transform: translateX(0px);
-        }
-
-        &__page-menu {
-            margin: 0;
-            padding: $padding;
-            transform: translateX(#{$mobile-menu-width});
-        }
-
-        &__link:hover {
-            background-color: rgba($color-white, 0.05);
-            border-radius: $border-radius;
-        }
+      .main-menu__page-menu-switch {
+        display: block;
+      }
     }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: $padding;
+      height: var(--header-height);
+      background-color: $color-grey-800;
+      border-bottom: 2px solid #313131;
+
+      a {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    &__page-menu-switch {
+      display: none;
+      padding: $padding $padding 0 $padding;
+      height: var(--main-menu-switch-height);
+    }
+
+    &__content {
+      position: relative;
+      height: calc(100% - var(--header-height) - var(--main-menu-switch-height));
+      overflow-x: hidden;
+    }
+
+    &__menu,
+    &__page-menu {
+      overflow-y: auto;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      transition: transform $duration;
+    }
+
+    &__menu {
+      display: flex;
+      flex-direction: column;
+      padding: $padding;
+      transform: translateX(0px);
+    }
+
+    &__page-menu {
+      margin: 0;
+      padding: $padding;
+      transform: translateX(#{$mobile-menu-width});
+    }
+
+    &__link:hover {
+      background-color: rgba($color-white, 0.05);
+      border-radius: $border-radius;
+    }
+  }
 }
 
 @media #{$bp-tablet-portrait-down} {
-    @include state-checked('mobile-menu') {
-        .main-menu {
-            transform: translateX($mobile-menu-width);
-            opacity: 1.0;
-        }
+  @include state-checked('mobile-menu') {
+    .main-menu {
+      transform: translateX($mobile-menu-width);
+      opacity: 1.0;
     }
+  }
 
-    @include state-checked('page-menu-switch') {
-        .main-menu {
-            &__menu {
-                transform: translateX(-#{$mobile-menu-width});
-            }
-        
-            &__page-menu {
-                transform: translateX(0px);
-            }
-        }
+  @include state-checked('page-menu-switch') {
+    .main-menu {
+      &__menu {
+        transform: translateX(-#{$mobile-menu-width});
+      }
+
+      &__page-menu {
+        transform: translateX(0px);
+      }
     }
+  }
 }
 
 // MODE: Desktop Menu
 @media #{$bp-tablet-landscape-up} {
-    .main-menu {
-        &__header,
-        &__page-menu-switch,
-        &__page-menu,
-        &__entry--getting-started {
-            display: none;
-        }
+  .main-menu {
 
-        &__link {
-            @include flex-center;
-
-            padding: 0 8px;
-            height: var(--header-height);
-            font-size: 1.3rem;
-            font-weight: 500;
-            text-decoration: none;
-        }
+    &__header,
+    &__page-menu-switch,
+    &__page-menu,
+    &__entry--getting-started {
+      display: none;
     }
+
+    &__link {
+      @include flex-center;
+
+      padding: 0 8px;
+      height: var(--header-height);
+      font-size: 1.3rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+  }
 }

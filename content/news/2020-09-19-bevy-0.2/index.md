@@ -14,7 +14,7 @@ image_subtitle_link = "https://github.com/TheNeikos/bevy_squares"
 
 A month after the initial Bevy release, and thanks to **87** contributors, **174** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.2** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
 
 Here are some of the highlights from this release:
 
@@ -129,9 +129,9 @@ By moving to generational indices (we use the hecs implementation), we can direc
 
 I implemented "read only" traits for queries that don't mutate anything. This allows us to guarantee that a query won't mutate anything.
 
-### Removed locking from World apis
+### Removed locking from World APIs
 
-This gives us a really nice speed boost. We can do this safely due to a combination of the new "read only queries" and changing World mutation apis to be a mutable World borrow.
+This gives us a really nice speed boost. We can do this safely due to a combination of the new "read only queries" and changing World mutation APIs to be a mutable World borrow.
 
 This is not yet enabled for `Queries` in systems because a system could have multiple `Queries`, which could be simultaneously accessed in a way that doesn't make mutable access unique. I think thats a solve-able problem, but it will take a bit more work. Fortunately "for-each" systems don't have any collision risk, so we now use lock-less queries there.
 
@@ -214,7 +214,7 @@ Note that this benchmark used `world.get::<T>(entity)`. `query.get::<T>(entity)`
 
 ### Internal Improvements
 
-* Many improvements to Bevy's CI [#325][325], [#349][349], [#357][357], [#373][373], [#423][423]
+Many improvements to Bevy's CI: [#325][325], [#349][349], [#357][357], [#373][373], [#423][423].
 
 [145]: https://github.com/bevyengine/bevy/pull/145
 [183]: https://github.com/bevyengine/bevy/pull/183

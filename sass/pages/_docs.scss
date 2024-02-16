@@ -1,46 +1,46 @@
 .docs-page {
-    display: flex;
-    width: 100%;
-    min-height: 500px;
+  display: flex;
+  width: 100%;
+  min-height: 500px;
 }
 
 .docs-page-subtitle {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #999999;
-    font-style: italic;
-    vertical-align: middle;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #999999;
+  font-style: italic;
+  vertical-align: middle;
 }
 
 .docs-content {
-    position: relative;
-    width: 100%;
-    min-width: 0;
+  position: relative;
+  width: 100%;
+  min-width: 0;
 
-    h1 {
-        font-size: 2.4rem;
-        margin: 0 0 16px;
-    }
+  h1 {
+    font-size: 2.4rem;
+    margin: 0 0 16px;
+  }
 
-    h2 {
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-    }
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
 
-    h3 {
-        font-size: 1.4rem;
-        font-weight: 500;
-        margin-bottom: 15px;
-    }
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
 
-    p {
-        margin-top: 5px;
-    }
+  p {
+    margin-top: 5px;
+  }
 }
 
 
 .docs-whats-a-bevy {
-    background-color: #00000000 !important;
-    height: 2.4rem !important;
-    border-radius: unset !important;
+  background-color: #00000000 !important;
+  height: 2.4rem !important;
+  border-radius: unset !important;
 }
