@@ -21,11 +21,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
-* **First-party primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished collection of them for you to use!
+* **Primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished, ready-to-use collection of them!
 * **System stepping:** completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
 * **Dynamic queries:** refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
 * **Automatically inferred command flush points:** tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
-* **Slicing, tiling and nine-patch sprites:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
+* **Slicing, tiling and nine-patch 2D images:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
 * **Lightmaps:** the first step towards baked global illumination: a fast, popular and pretty lighting technique.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
 
@@ -57,7 +57,7 @@ The built-in [collection of primitives] is already quite sizeable:
 | -                                   | [`ConicalFrustum`]                  |
 | -                                   | [`Torus`]                           |
 
-More primitives will be added in future releases.
+[More primitives] will be added in future releases.
 
 Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and ray casting functionality. Several of these have landed in 0.13 already!
 
@@ -88,6 +88,7 @@ Some use cases for primitive shapes include meshing, gizmos, bounding volumes, c
 [`Cone`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cone.html
 [`ConicalFrustum`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.ConicalFrustum.html
 [`Torus`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Torus.html
+[More primitives]: https://github.com/bevyengine/bevy/issues/10572
 
 ### Rendering
 
@@ -358,7 +359,7 @@ moving the cursor back up to the start of the stepping frame.
 
 <video controls><source src="stepping-breakpoint.mp4" type="video/mp4"/></video>
 
-### Disabling Systems
+### Disabling Systems during Stepping
 
 During debugging, it can be helpful to disable systems to narrow down the
 source of the problem. `Stepping::never_run()` and `Stepping::never_run_node()`
@@ -396,7 +397,7 @@ paddle.
 
 ### Limitations
 
-In this initial implementation of stepping there are some limitations:
+There are some limitations in this initial implementation of stepping:
 
 * Any system that reads events likely will not step properly
   * Frames still advance normally while stepping is enabled
@@ -405,7 +406,7 @@ In this initial implementation of stepping there are some limitations:
     or put them in a schedule not added to `Stepping`
   * Continue with breakpoints may also work in this scenario
 * Conditional systems may not run as expected when stepping
-  * Similar to event-based systems, if the condition is true for only a short
+  * Similar to event-based systems, if the run condition is true for only a short
     time, system may not run when stepped
 
 ### Detailed Examples
@@ -416,7 +417,7 @@ In this initial implementation of stepping there are some limitations:
 
 [`Stepping`]: https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/stepping/Stepping.html
 
-## Query transmutation
+## Query Transmutation
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
@@ -684,7 +685,8 @@ fn my_system(query: Query<Entity, With<ComponentA>>)
 
 When writing gameplay code, you might commonly have one system that wants to
 immediately see the effects of commands queued in another system.
-Before 0.13, you would have to manually insert an `apply_deferred` system between the two.
+Before 0.13, you would have to manually insert an `apply_deferred` system between the two,
+a special system which causes those commands to be applied when encountered.
 Bevy now detects when a system with commands
 is ordered relative to other systems and inserts the `apply_deferred` for you.
 
@@ -732,7 +734,7 @@ app.add_systems(
 If this new behavior does not work for you, please consult the migration guide.
 There are several new APIs that allow you to opt-out.
 
-## One-Shot Systems Improvements
+## More Flexible One-Shot Systems
 
 <div class="release-feature-authors">authors: @Nathan-Fenner</div>
 
@@ -765,7 +767,7 @@ world.register_system(|world: &mut World| { /* do anything */ });
 
 All these improvements round out one-shot systems significantly: they should now work just like any other Bevy system.
 
-## WGPU Upgrade and Renderer Improvements
+## WGPU 0.19 Upgrade
 
 <div class="release-feature-authors">authors: @Elabajaba, @JMS55</div>
 
@@ -876,7 +878,7 @@ as opposed to the endless difficulties presented in most ECS's (including Bevy).
 
 Sander Mertens, of Flecs fame, [describes in details] the prerequisites for an
 entity relationship implementation.
-One of those prerequisites is the ability to use entity ids as query parameters.
+One of those prerequisites is the ability to use specific entity ids as query parameters.
 Dynamic queries allow just that.
 
 ### A long wait
@@ -944,7 +946,7 @@ fn main() {
 
 <div class="release-feature-authors">authors: @ManevilleF</div>
 
-Texture atlases are a tool used to efficiently combine multiple images into a single larger atlas.
+Texture atlases are a tool used to efficiently combine multiple images into a single larger texture called an atlas.
 
 Bevy 0.13 significantly reworks them, reducing boilerplate and making the feature more data-oriented.
 Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components (and the corresponding `Bundle` types):
@@ -962,13 +964,16 @@ The new `TextureAtlas` represents that behaviour, storing:
 
 <div class="release-feature-authors">authors: @ManevilleF</div>
 
-In Bevy 0.13 we introduce a new 2D feature: CPU-based _slicing and tiling_ to both `bevy_sprite` and `bevy_ui` !
+3D rendering gets a lot of love, but 2D features matter too!
+We're pleased to add CPU-based _slicing and tiling_ to both `bevy_sprite` and `bevy_ui` in Bevy 0.13!
 
-This feature is unlocked by a new optional component: `ImageScaleMode`
+This behavior is controlled by a new optional component: [`ImageScaleMode`].
+
+[`ImageScaleMode`]: https://dev-docs.bevyengine.org/bevy/prelude/enum.ImageScaleMode.html
 
 ### 9 slicing
 
-Adding `ImageScaleMode::Sliced(_)` to your 2D bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
+Adding `ImageScaleMode::Sliced(_)` to an entity with a sprite or UI bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
 keeping the image in proportions in resize, avoiding stretching of the texture.
 
 ![Stretched Vs Sliced texture](slice_vs_stretched.png)
@@ -996,7 +1001,7 @@ commands.spawn((
 ### Tiling
 
 Adding `ImageMode::Tiled { .. }` to your 2D sprite entities enables _texture tiling_: repeating the image until their entire area is fulled.
-This is commonly used for backgrounds.
+This is commonly used for backgrounds and surfaces.
 
 <video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
 
@@ -1031,7 +1036,7 @@ but for elements of a scene that never move (like rooms or terrain),
 we can get prettier lighting and shadows for cheaper by computing it ahead of time using **global illumination**,
 then storing the results in a "baked" form that never changes.
 Global illumination is a more sophisticated (and expensive) approach to lighting that often uses ray tracing.
-Unlike Bevy's default lighting tools, it takes into account light bouncing off of other objects,
+Unlike Bevy's default lighting tools, it takes light bouncing off of other objects into account,
 producing more realistic effects through the inclusion of indirect light.
 
 **Lightmaps**, textures that store pre-computed results of this global illumination, have been a mainstay of real-time graphics for decades.
@@ -1112,8 +1117,8 @@ specular occlusion.
 <div style="font-size: 1.0rem" class="release-feature-authors">Model Credits: <a href="https://sketchfab.com/3d-models/bmw-r1200gs-motorcycle-6550451b0ae547039585a44286b2f530">BMW R1200GS Motorcycle</a> by Moto3D is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>.
 </div>
 
-This could be further improved with screen space reflections (SSR). However, it is recommended to
-use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
+In the future, this could be further improved with screen space reflections (SSR).
+However, conventional wisdom is that you should use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
 
 ## Bind Group Layout Entries
 
@@ -1194,7 +1199,7 @@ impl MyRenderNode {
 }
 ```
 
-In Bevy 0.13, we're using a more robust way to name render nodes and render graphs with the help of Rust's type system and Bevy's label system.
+In Bevy 0.13, we're using a more robust way to name render nodes and render graphs with the help of the type-safe label pattern already used by `bevy_ecs`.
 
 ```rust
 // After 0.13
@@ -1202,7 +1207,7 @@ In Bevy 0.13, we're using a more robust way to name render nodes and render grap
 pub struct MyRenderLabel;
 ```
 
-With those, the long paths for const-values also get shortened and cleaner which results into this
+With those, the long paths for const-values become shorter and cleaner:
 
 ```rust
 // Before 0.13
@@ -1353,7 +1358,7 @@ there's a new [`Interpolation`] field to set.
 [`VariableCurve`]: https://dev-docs.bevyengine.org/bevy/animation/struct.VariableCurve.html
 [`Interpolation`]: https://dev-docs.bevyengine.org/bevy/animation/enum.Interpolation.html
 
-![Demonstrating the different types of interpolation](interpolation_methods.gif)]
+![Demonstrating the different types of interpolation](interpolation_methods.gif)
 
 ## `Animatable` Trait
 
@@ -1622,8 +1627,6 @@ fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
 }
 ```
 
-### More information
-
 The [`custom_asset` example] has been updated to demonstrate these new features.
 
 [`meta` files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
@@ -1707,7 +1710,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 * [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
 * [] `@coreh`'s experiment on a [reflection-powered remote protocol], allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
 
-It's really exciting to see this progress, and we're excited to channel that energy and experience into first-party efforts.
+It's really exciting to see this progress, and we're keen to channel that energy and experience into official first-party efforts.
 
 [playground]: https://github.com/bevyengine/bevy_editor_prototypes
 [could look like]: https://asour8.github.io/bevy_editor_mockup/editor/
@@ -1720,7 +1723,8 @@ It's really exciting to see this progress, and we're excited to channel that ene
 
 ### `bevy_dev_tools`
 
-The secret to smooth game development is great tooling; it's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
+The secret to smooth game development is great tooling.
+It's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
 From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
 
 ### A revised scene format
@@ -1753,7 +1757,7 @@ Split meshes into clusters of triangles called meshlets, which bring many effici
 ### The steady march towards relations
 
 [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
-Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks] needed to build a fast, robust and ergonomic solution.
+Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks]) needed to build a fast, robust and ergonomic solution.
 
 [Entity-entity relations]: https://github.com/bevyengine/bevy/issues/3742
 [trail blazed by `flecs`]: https://ajmmertens.medium.com/building-games-in-ecs-with-entity-relationships-657275ba2c6c
