@@ -89,7 +89,7 @@ pub fn parse_errors(errors_dir: &str) -> io::Result<Section> {
         sort_order_reversed: false,
     };
     visit_dirs(
-        PathBuf::from_str(errors_dir).unwrap(),
+        PathBuf::from_str(&errors_dir).unwrap(),
         &mut errors_root_section,
     )?;
     Ok(errors_root_section)

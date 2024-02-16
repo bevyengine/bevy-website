@@ -90,7 +90,7 @@ impl FrontMatterWriter for Section {
 
 impl FrontMatterWriter for ErrorCode {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let path = root_path.join(current_path);
+        let path = root_path.join(&current_path);
 
         let mut frontmatter = FrontMatterErrorCode::from(self);
         frontmatter.weight = weight;

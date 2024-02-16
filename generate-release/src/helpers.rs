@@ -30,7 +30,7 @@ pub fn get_merged_prs(
 
     let mut out = vec![];
     for commit in &commits {
-        let Some(title) = get_pr_title_from_commit(commit) else {
+        let Some(title) = get_pr_title_from_commit(commit)else {
             continue;
         };
 
@@ -39,10 +39,7 @@ pub fn get_merged_prs(
             // If there's no label, then not finding a PR is an issue because this means we want all PRs
             // If there's a label then it just means the commit is not a PR with the label
             if label.is_none() {
-                println!(
-                    "\x1b[93mPR not found for {title} sha: {}\x1b[0m",
-                    commit.sha
-                );
+                println!("\x1b[93mPR not found for {title} sha: {}\x1b[0m", commit.sha);
             }
             continue;
         };
@@ -58,10 +55,11 @@ fn get_pr_title_from_commit(commit: &GithubCommitResponse) -> Option<String> {
     // Title is always the first line of a commit message
     let title = message_lines.next().expect("Commit message empty");
 
-    // Get the pr number at the end of the title
+    // Get the pr number added by bors at the end of the title
     let re = Regex::new(r"\(#([\d]*)\)").unwrap();
     let Some(cap) = re.captures_iter(title).last() else {
         // This means there wasn't a PR associated with the commit
+        // Or bors didn't add a pr number
         return None;
     };
     // remove PR number from title

@@ -37,7 +37,7 @@ pub fn generate_release_notes_website(
     }
 
     println!(
-        "Found {} merged prs from {} to {}",
+        "Found {} prs merged by bors from {} to {}",
         merged_prs.len(),
         from,
         to,

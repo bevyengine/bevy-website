@@ -25,27 +25,22 @@ fn main() -> io::Result<()> {
 
     people_root_section.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
 
-    let Some(CommunityNode::Section(org)) = people_root_section
-        .content
-        .iter()
-        .find(|node| node.name() == "The Bevy Organization")
-    else {
+    let Some(CommunityNode::Section(org)) = people_root_section.content.iter().find(|node| node.name() == "The Bevy Organization") else {
         panic!("unexpected kind of node or missing for The Bevy Organization");
     };
     let mut donate = org.clone();
-
+    
     donate.name = "Supporting Bevy Development".to_string();
     donate.filename = Some("donate".to_string());
     donate.header = Some("Supporting Bevy".to_string());
     donate.template = Some("donate.html".to_string());
 
-    donate.content.retain(|node| {
+    donate.content = donate.content.into_iter().filter(|node| {
         let CommunityNode::Member(member) = node else {
             panic!("got an unexpected subsection");
         };
-
         member.sponsor.is_some()
-    });
+    }).collect();
 
     donate.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
 
@@ -113,7 +108,7 @@ impl From<&Member> for FrontMatterMember {
 
 impl FrontMatterWriter for Member {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let path = root_path.join(current_path);
+        let path = root_path.join(&current_path);
 
         let mut frontmatter = FrontMatterMember::from(self);
         frontmatter.weight = weight;
@@ -201,11 +196,7 @@ impl From<&Section> for FrontMatterSection {
 
 impl FrontMatterWriter for Section {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let section_path = current_path.join(
-            self.filename
-                .as_ref()
-                .unwrap_or(&self.name.to_ascii_lowercase()),
-        );
+        let section_path = current_path.join(self.filename.as_ref().unwrap_or(&self.name.to_ascii_lowercase()));
         let path = root_path.join(&section_path);
         fs::create_dir(path.clone())?;
 

@@ -17,7 +17,7 @@ fn validate_section(section: &Section) -> Result<(), String> {
     section
         .content
         .iter()
-        .map(validate_node)
+        .map(|node| validate_node(node))
         .find(|valid| valid.is_err())
         .unwrap_or(Ok(()))
 }
@@ -61,7 +61,7 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
             }
 
             if member.roles.is_some() {
-                Err("Roles must be defined in the roles.toml file")?;
+                Err(format!("Roles must be defined in the roles.toml file"))?;
             }
         }
     }

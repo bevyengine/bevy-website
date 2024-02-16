@@ -16,13 +16,13 @@ mod release_notes_website;
 /// Generates markdown files used for a bevy releases.
 ///
 /// Migration Guide:
-/// * Gets all merged PRs with the `C-Breaking-Change` label.
+/// * Gets all PRs with the `C-Breaking-Change` label and that were merged by bors.
 /// * For each PR:
 ///     * Generate the title with a link to the relevant PR and
 ///     * Generate the migration guide section. This parses the markdown and generates valid makrdown that should pass markdownlint rules.
 ///
 /// Release notes:
-/// * Gets all merged PRs
+/// * Gets all PRs merged by bors
 /// * Collect each author of closed PRs (Should this just list all contributors?)
 /// * Sort each PR per area label
 /// * Generate the list of merge PR

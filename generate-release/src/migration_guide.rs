@@ -20,9 +20,12 @@ pub fn generate_migration_guide(
         &mut output,
         r#"+++
 title = "{title}"
+weight = {weight}
+sort_by = "weight"
+template = "docs-section.html"
+page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
-weight = {weight}
 long_title = "Migration Guide: {title}"
 +++
 
@@ -100,6 +103,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
     writeln!(&mut output, "</div>")?;
 
     println!("\nFound {} breaking PRs merged", count);
+
 
     std::fs::write(path, output)?;
 

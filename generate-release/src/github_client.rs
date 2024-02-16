@@ -162,8 +162,9 @@ impl GithubClient {
         Ok(request.call()?.into_json()?)
     }
 
-    /// Gets a list of all merged PRs after the given date.
-    /// The date needs to be in the YYYY-MM-DD format.
+    /// Gets a list of all PRs merged by bors after the given date.
+    /// The date needs to be in the YYYY-MM-DD format
+    /// To validate that bors merged the PR we simply check if the pr title contains "[Merged by Bors] - "
     pub fn get_merged_prs(
         &self,
         since: &str,
@@ -203,7 +204,7 @@ impl GithubClient {
             .collect())
     }
 
-    // Returns all PRs from the main branch that are merged.
+    // Returns all PRs from the main branch that are closed
     pub fn get_merged_prs_by_page(
         &self,
         date: &str,
@@ -223,7 +224,7 @@ impl GithubClient {
         let response: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
         Ok(response
             .iter()
-            // Make sure to only get the PRs that were merged
+            // Make sure to only get the PRs that were merged by bors
             .filter(|pr| {
                 pr.pull_request
                     .as_ref()

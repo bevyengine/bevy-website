@@ -4,7 +4,6 @@ use cratesio_dbdump_csvtab::CratesIODumpLoader;
 use github_client::GithubClient;
 use gitlab_client::GitlabClient;
 use serde::Deserialize;
-use std::cmp::Ordering;
 use std::{fs, path::PathBuf, str::FromStr};
 
 pub mod github_client;
@@ -109,7 +108,7 @@ pub struct MetadataSource<'a> {
 ///
 /// This initialises the root [`Section`], and initialize [`MetadataSource`] with
 /// crates.io's database dump connection and information about official bevy crates.
-pub fn parse_assets(
+pub fn parse_assets<'a>(
     asset_dir: &str,
     mut metadata_source: MetadataSource,
 ) -> anyhow::Result<Section> {
@@ -346,7 +345,7 @@ fn get_metadata_from_github(
         license = client.get_license(username, repository_name).ok();
     }
 
-    if license.is_none() || version.is_none() {
+    if license == None || version == None {
         let cargo_files = match client.search_file(username, repository_name, "Cargo.toml") {
             Ok(cargo_files) => cargo_files,
             Err(err) => {
@@ -361,7 +360,7 @@ fn get_metadata_from_github(
             .filter(|f| f != &"Cargo.toml");
 
         let mut cargo_file = cargo_files.next();
-        while (license.is_none() || version.is_none()) && cargo_file.is_some() {
+        while (license == None || version == None) && cargo_file.is_some() {
             let cargo_file_path = cargo_file.unwrap();
 
             let result = get_metadata_from_github_manifest(
@@ -512,23 +511,23 @@ fn get_bevy_version_from_manifest(
 /// If it was a bit more generic, this function could be called "find_first_intersect_in_sorted_iterators".
 /// Both dependencies and bevy_crates are assumed to be sorted (by key for dependencies, they are in this context),
 /// and we find the first element that intersect both of them using that knowledge.
-fn search_bevy_in_manifest_dependencies(
-    mut dependencies: std::collections::btree_map::Range<'_, String, cargo_toml::Dependency>,
+fn search_bevy_in_manifest_dependencies<'a>(
+    mut dependencies: std::collections::btree_map::Range<'a, String, cargo_toml::Dependency>,
     mut bevy_crates: std::slice::Iter<String>,
 ) -> Option<String> {
     let mut dependency = dependencies.next();
     let mut bevy_crate = bevy_crates.next();
 
-    while dependency.is_some() && bevy_crate.is_some() {
+    while !dependency.is_none() && !bevy_crate.is_none() {
         let dependency_name = dependency.unwrap().0;
         let bevy_crate_name = bevy_crate.unwrap();
 
-        match dependency_name.cmp(bevy_crate_name) {
-            Ordering::Less => dependency = dependencies.next(),
-            Ordering::Equal => {
+        if dependency_name < bevy_crate_name {
+            dependency = dependencies.next();
+        } else {
+            if dependency_name == bevy_crate_name {
                 let dependency_version =
                     get_bevy_manifest_dependency_version(dependency.unwrap().1);
-
                 if dependency_version.is_some() {
                     return dependency_version;
                 } else {
@@ -536,12 +535,12 @@ fn search_bevy_in_manifest_dependencies(
                     dependency = dependencies.next();
                     bevy_crate = bevy_crates.next();
                 }
+            } else {
+                bevy_crate = bevy_crates.next();
             }
-            Ordering::Greater => bevy_crate = bevy_crates.next(),
         }
     }
-
-    None
+    return None;
 }
 
 /// Gets the bevy version from the `Cargo.toml` bevy dependency provided.
@@ -619,11 +618,7 @@ fn get_metadata_from_crates_db_by_name(
     if let Ok((license, version)) =
         get_metadata_from_cratesio(crate_name, get_metadata_from_cratesio_statement)
     {
-        let license = if !license.is_empty() {
-            Some(license)
-        } else {
-            None
-        };
+        let license = if license != "" { Some(license) } else { None };
 
         Ok((license, version))
     } else {
@@ -645,7 +640,6 @@ fn get_official_bevy_crates_from_crates_io_db(
 }
 
 // Get official bevy crates name and ids from the crates.io database dump.
-#[allow(clippy::let_and_return)]
 fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::Error> {
     let mut bevy_crates_statement = db.prepare(
         "\
@@ -655,8 +649,6 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
                 AND repository = ?\
         ",
     )?;
-
-    // Required let and return due to bevy_crates_statement not living long enough.
     let bevy_crates = bevy_crates_statement
         .query_and_then(
             [
@@ -668,7 +660,6 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
             },
         )?
         .collect();
-
     bevy_crates
 }
 
@@ -676,13 +667,13 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
 /// crates.io database dump.
 ///
 /// To be used later by [`get_metadata_from_cratesio`].
-pub fn get_metadata_from_cratesio_statement(
-    db: &CratesIoDb,
+pub fn get_metadata_from_cratesio_statement<'a>(
+    db: &'a CratesIoDb,
     bevy_crates_ids: Option<Vec<String>>,
-) -> Result<rusqlite::Statement<'_>, rusqlite::Error> {
+) -> Result<rusqlite::Statement<'a>, rusqlite::Error> {
     let bevy_crates_ids = bevy_crates_ids.unwrap_or_default();
 
-    db.prepare(&format!(
+    Ok(db.prepare(&format!(
         "\
         SELECT last_version.license, dep.req \
         FROM ( \
@@ -717,7 +708,7 @@ pub fn get_metadata_from_cratesio_statement(
         LIMIT 1\
         ",
         bevy_crates_ids.join(",")
-    ))
+    ))?)
 }
 
 /// Get license and bevy version for a crate from crates.io,
@@ -726,7 +717,7 @@ pub fn get_metadata_from_cratesio(
     crate_name: &str,
     get_metadata_from_cratesio_statement: &mut rusqlite::Statement,
 ) -> Result<(String, Option<String>), rusqlite::Error> {
-    get_metadata_from_cratesio_statement.query_row(
+    Ok(get_metadata_from_cratesio_statement.query_row(
         [crate_name],
         |r| -> Result<(String, Option<String>), rusqlite::Error> {
             Ok((
@@ -734,7 +725,7 @@ pub fn get_metadata_from_cratesio(
                 r.get_unwrap::<_, Option<String>>(1),
             ))
         },
-    )
+    )?)
 }
 
 #[cfg(test)]
