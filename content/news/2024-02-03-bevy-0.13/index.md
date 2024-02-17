@@ -840,7 +840,7 @@ commands.spawn((
 
 Cameras in the "real world" control how bright an image is by adjusting "exposure settings":
 
-* **F-Stops**: The size of the aperture, which opens and closes to control how much light is allowed into the camera by physically blocking off lights from specific angles.
+* **Aperture**: Measured in F-Stops, the aperture opens and closes to control how much light is allowed into the camera's sensor or film by physically blocking off lights from specific angles, similar to the pupil of an eye.
 * **Shutter Speed**: How quickly the shutter closes, which controls the duration of time that light is allowed to enter the camera.
 * **ISO Sensitivity**: How sensitive the camera is to light. A higher value indicates a higher sensitivity to light.
 
