@@ -679,7 +679,7 @@ fn list_entities(user_query: String, world: &mut World) {
 }
 ```
 
-It's impossible to chose a type based on the value of `user_query`!
+It's impossible to choose a type based on the value of `user_query`!
 [`QueryBuilder`] solves this problem.
 
 ```rust
@@ -789,7 +789,7 @@ fn my_system(query: Query<(Entity, With<ComponentA>)>)
   }
 }
 
-// Iidiomatic, compiles in both 0.12 and 0.13
+// Idiomatic, compiles in both 0.12 and 0.13
 fn my_system(query: Query<Entity, With<ComponentA>>)
 {
   for entity in query.iter(){
@@ -1097,7 +1097,7 @@ Note that the above example uses [turbofish] syntax for clarity. In practice, it
 #[derive(Resource)]
 struct SoundEffects {
     bang: Handle<AudioSource>,
-    bang_blog: Handle<Blob>,
+    bang_blob: Handle<Blob>,
 }
 
 fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
