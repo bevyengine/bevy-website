@@ -834,11 +834,36 @@ commands.spawn((
 ));
 ```
 
-## Exposure Settings
+## Camera Exposure
 
-<div class="release-feature-authors">authors: @TODO</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @cart</div>
 
-TODO.
+In the real world, the brightness of an image captured by a camera is determined by its exposure: the amount of light that the camera's sensor or film incorporates. This is controlled by several mechanics of the camera:
+
+* **Aperture**: Measured in F-Stops, the aperture opens and closes to control how much light is allowed into the camera's sensor or film by physically blocking off lights from specific angles, similar to the pupil of an eye.
+* **Shutter Speed**: How long the camera's shutter is open, which is the duration of time that the camera's sensor or film is exposed to light.
+* **ISO Sensitivity**: How sensitive the camera's sensor or film is to light. A higher value indicates a higher sensitivity to light.
+
+Each of these plays a role in how much light the final image receives. They can be combined into a final EV number (exposure value), such as the semi-standard EV100 (the exposure value for ISO 100). Higher EV100 numbers mean that more light is required to get the same result. For example, a sunny day scene might require an EV100 of about 15, whereas a dimly lit indoor scene might require an EV100 of about 7.
+
+In **Bevy 0.13**, you can now configure the EV100 on a per-camera basis using the new [`Exposure`] component. You can set it directly using the [`Exposure::ev100`] field, or you can use the new [`PhysicalCameraParameters`] struct to calculate an ev100 using "real world" camera settings like f-stops, shutter speed, and ISO sensitivity.
+
+This is important because Bevy's "physically based" renderer (PBR) is intentionally grounded in reality. Our goal is for people to be able to use real-world units in their lights and materials and have them behave as close to reality as possible.
+
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
+
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="EV100 9.7" data-title-b="EV100 15">
+  <img class="image-a" alt="EV100 9.7" src="exposure_97.jpg">
+  <img class="image-b" alt="EV100 15" src="exposure_15.jpg">
+</div>
+
+Note that prior versions of Bevy hard-coded a static EV100 for some of its light types. In **Bevy 0.13** it is configurable _and_ consistent across all light types. We have also bumped the default EV100 to 9.7, which is a [number we chose to best match Blender's default exposure](https://github.com/bevyengine/bevy/issues/11577#issuecomment-1942873507). It also happens to be a nice "middle ground" value that sits somewhere between indoor lighting and overcast outdoor lighting.
+
+You may notice that point lights now require _significantly_ higher intensity values (in lumens). This (sometimes) million-lumen values might feel exorbitant. Just reassure yourself that (1) it actually requires a lot of light to meaningfully register in an overcast outdoor environment and (2) Blender exports lights on these scales (and we are calibrated to be as close as possible to them).
+
+[`PhysicalCameraParameters`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.PhysicalCameraParameters.html
+[`Exposure`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html
+[`Exposure::ev100`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html#structfield.ev100
 
 ## Basic baked global illumination
 
