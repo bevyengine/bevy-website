@@ -1544,7 +1544,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
   </div>
 </div>
 
-1. a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor [could look like]
+1. A Bevy-branded editor UI mockup by `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor [could look like]
 2. [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
 3. [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
 4. [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
