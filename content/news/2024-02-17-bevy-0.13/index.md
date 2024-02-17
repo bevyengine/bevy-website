@@ -1152,7 +1152,7 @@ Here's a short example of how declaring a new layout looks:
 
 ```rust
 let layout = render_device.create_bind_group_layout(
-    "post_process_bind_group_layout"),
+    "post_process_bind_group_layout",
     &BindGroupLayoutEntries::sequential(
         ShaderStages::FRAGMENT,
         (
