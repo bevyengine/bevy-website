@@ -1303,7 +1303,7 @@ But with a [`GizmoConfigGroup`] parameter, `Gizmos` can choose a distinct config
 ```rust
 fn draw_circles(
     mut default_gizmos: Gizmos,
-    // this uses a distinct config vvvvvvvvvvvvv
+    // this uses the distinct NavigationGroup config
     mut navigation_gizmos: Gizmos<NavigationGroup>,
 ) {
     // Two circles with different outline width
