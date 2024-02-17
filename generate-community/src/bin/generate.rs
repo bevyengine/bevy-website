@@ -257,7 +257,7 @@ impl FrontMatterWriter for Section {
             .chain(ordered_members.iter())
             .enumerate()
         {
-            content.write(root_path, &section_path, i)?
+            content.write(root_path, &section_path, i)?;
         }
         Ok(())
     }

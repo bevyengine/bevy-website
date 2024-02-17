@@ -509,8 +509,8 @@ fn get_bevy_version_from_manifest(
 /// Search the first official bevy crate found in a collection of `Cargo.toml`
 /// dependencies and return its version.
 ///
-/// If it was a bit more generic, this function could be called "find_first_intersect_in_sorted_iterators".
-/// Both dependencies and bevy_crates are assumed to be sorted (by key for dependencies, they are in this context),
+/// If it was a bit more generic, this function could be called `find_first_intersect_in_sorted_iterators`.
+/// Both `dependencies` and `bevy_crates` are assumed to be sorted (by key for `dependencies`, they are in this context),
 /// and we find the first element that intersect both of them using that knowledge.
 fn search_bevy_in_manifest_dependencies(
     mut dependencies: std::collections::btree_map::Range<'_, String, cargo_toml::Dependency>,
@@ -531,11 +531,11 @@ fn search_bevy_in_manifest_dependencies(
 
                 if dependency_version.is_some() {
                     return dependency_version;
-                } else {
-                    // In this case we found an official bevy crate but we couldn't get a version from it
-                    dependency = dependencies.next();
-                    bevy_crate = bevy_crates.next();
                 }
+
+                // In this case we found an official bevy crate but we couldn't get a version from it
+                dependency = dependencies.next();
+                bevy_crate = bevy_crates.next();
             }
             Ordering::Greater => bevy_crate = bevy_crates.next(),
         }
