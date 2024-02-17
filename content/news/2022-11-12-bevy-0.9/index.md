@@ -12,7 +12,7 @@ show_image = true
 
 Thanks to **159** contributors, **430** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.9** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.9**, check out our [0.8 to 0.9 Migration Guide](/learn/migration-guides/0.8-0.9/).
 
@@ -520,7 +520,7 @@ struct PlayerBundle {
 }
 ```
 
-In **Bevy 0.9**, [`Component`] types now _also_ automatically implement the [`Bundle`] trait, which allows us to consolidate all entity component operations under new `spawn`, `insert`, and `remove` apis. Previously, we had separate variants for [`Bundle`] (ex: `insert_bundle(SomeBundle)`) and [`Component`] (ex: `.insert(SomeComponent)`).
+In **Bevy 0.9**, [`Component`] types now _also_ automatically implement the [`Bundle`] trait, which allows us to consolidate all entity component operations under new `spawn`, `insert`, and `remove` APIs. Previously, we had separate variants for [`Bundle`] (ex: `insert_bundle(SomeBundle)`) and [`Component`] (ex: `.insert(SomeComponent)`).
 
 The [`Bundle`] trait is now also implemented for tuples of [`Bundles`][`Bundle`] instead of just tuples of [`Components`][`Component`]. The value of this will be made clear in a moment.
 
@@ -566,7 +566,7 @@ commands.spawn((
 
 This is _much_ easier to type and read. And on top of that, from the perspective of Bevy ECS this is a single "bundle spawn" instead of multiple operations, which cuts down on ["archetype moves"](/news/bevy-0-5/#component-storage-the-problem). This makes this single spawn operation much more efficient!
 
-These principles apply to the insert apis as well:
+These principles apply to the insert APIs as well:
 
 ```rust
 // Old
@@ -578,7 +578,7 @@ commands
 commands.insert((PlayerBundle::default(), ActivePlayer));
 ```
 
-They also apply to the remove apis:
+They also apply to the remove APIs:
 
 ```rust
 // Old
@@ -757,7 +757,7 @@ app
 We had some _huge_ performance wins in **Bevy 0.9** thanks to `@james7132`:
 
 * The Query fetch abstraction [was reworked](https://github.com/bevyengine/bevy/pull/4800) to hoist common parts out of individual iteration, improving iterator performance on some benchmarks by ~10-20%. `Query::get` performance also saw some improvements.
-* [Some unnecessary branches were removed](https://github.com/bevyengine/bevy/pull/6461) from our data access apis, improving performance across most of our ECS benchmarks by ~5-20%!
+* [Some unnecessary branches were removed](https://github.com/bevyengine/bevy/pull/6461) from our data access APIs, improving performance across most of our ECS benchmarks by ~5-20%!
 * The parallel executor [now starts running systems](https://github.com/bevyengine/bevy/pull/4919) while the `prepare_systems` step is running, cutting out a lot of delay when there are many systems with very little work to do. This cut almost 1 millisecond from our `many_foxes` animation benchmark (~12% improvement). That is a _very_ big deal!
 * Iterators now [skip empty archetypes and tables](https://github.com/bevyengine/bevy/pull/4724) when iterating over queries, which significantly reduces per-archetype iteration overhead when the archetype is empty.
 
@@ -1004,7 +1004,7 @@ In a previous release we [made it possible to make vertex attributes optional by
 
 <div class="release-feature-authors">authors: @Neo-Zhixing</div>
 
-Wgpu has opt-in support for "multi draw indirect" apis on platforms that support them, which are a key piece of implementing efficient "gpu driven rendering". Bevy now exposes these apis through its "tracked render pass" abstraction, enabling developers to build render features using these apis.
+Wgpu has opt-in support for "multi draw indirect" APIs on platforms that support them, which are a key piece of implementing efficient "gpu driven rendering". Bevy now exposes these APIs through its "tracked render pass" abstraction, enabling developers to build render features using these APIs.
 
 ## KTX2 Array / Cubemap / Cubemap Array Textures
 
@@ -1079,7 +1079,7 @@ In past versions of Bevy, "immutable" Plugin settings were represented as normal
 
 These were especially problematic and confusing for the `WindowDescriptor` resource, but it was a general problem.
 
-To resolve this, in **Bevy 0.9** we moved plugin settings onto the plugins themselves, and created new apis for overriding the default settings:
+To resolve this, in **Bevy 0.9** we moved plugin settings onto the plugins themselves, and created new APIs for overriding the default settings:
 
 ```rust
 app.add_plugins(DefaultPlugins
@@ -1313,7 +1313,7 @@ let wrapped = time.seconds_since_startup_wrapped_f32();
 
 Here are some of the things
 
-* **High Level Post Processing Stack**: Now that we have the core post processing pipeline in place, we need to make a higher level system that makes it easier for users to select, configure, and re-order post processing effects on a per-camera basis. Additionally for performance reasons we want to combine as many post processing effects into a single pass as we can, so we need an opinionated set of post processing apis that facilitate this.
+* **High Level Post Processing Stack**: Now that we have the core post processing pipeline in place, we need to make a higher level system that makes it easier for users to select, configure, and re-order post processing effects on a per-camera basis. Additionally for performance reasons we want to combine as many post processing effects into a single pass as we can, so we need an opinionated set of post processing APIs that facilitate this.
 * **More Post Processing Effects**: More anti-aliasing options (TAA, SMAA), more tonemapping algorithm options (Ex: ACES), SSAO
 * **Asset Preprocessing**: We will be investing heavily in our asset pipeline, with a focus on:
   1. Pre-processing assets to do expensive work "during development time", so Bevy Apps can be deployed with assets that are prettier, smaller, and/or faster to load.

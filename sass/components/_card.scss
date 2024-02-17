@@ -1,109 +1,113 @@
 .card {
-    @include card;
+  @include card;
 
-    flex-direction: left;
-    height: 12rem;
-    font-style: normal;
-    position: relative;
+  flex-direction: left;
+  height: 12rem;
+  font-style: normal;
+  position: relative;
 }
 
 .card-profile-picture {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    height: 2.0em;
-    width: 2.0em;
-    border-radius: 0px $border-radius 0px $border-radius;
-    overflow: hidden;
-    display: flex;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 2.0em;
+  width: 2.0em;
+  border-radius: 0px $border-radius 0px $border-radius;
+  overflow: hidden;
+  display: flex;
 }
 
 .card-social-icon {
-    position: relative;
-    top: 0.2rem;
-    width: 1rem;
-    height: 1rem;
+  position: relative;
+  top: 0.2rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .card-sponsor-icon {
-    fill: $color-pink;
+  fill: $color-pink;
 }
 
 .card-image {
-    width: 30%;
-    overflow: hidden;
-    object-fit: cover;
-    display: flex;
-    background-color: $default-image-background-color;
-    border-top-left-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
-    align-content: center;
-    justify-content: center;
-    float: left;
-    height: 100%;
-    margin-right: 0px;
+  width: 30%;
+  overflow: hidden;
+  object-fit: cover;
+  display: flex;
+  background-color: $default-image-background-color;
+  border-top-left-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
+  align-content: center;
+  justify-content: center;
+  float: left;
+  height: 100%;
+  margin-right: 0px;
 }
 
 .centered-card-image {
-    display: block;
-    align-self: center;
-    height: 85%;
-    max-width: 85%;
-    border-radius: $border-radius;
+  display: block;
+  align-self: center;
+  height: 85%;
+  max-width: 85%;
+  border-radius: $border-radius;
 }
 
 .card-text {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    padding-left: 1.2rem;
-    padding-right: 1.2rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-text-dense {
-    line-height: 1.0rem;
+  line-height: 1.0rem;
+}
+
+.card-text-dense {
+  line-height: 1.0rem;
 }
 
 .card-subtitle {
-    display: block;
-    font-weight: 200;
-    font-size: 1.4rem;
-    font-style: italic;
-    color: $subtitle-color;
-    text-decoration: none;
+  display: block;
+  font-weight: 200;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: $subtitle-color;
+  text-decoration: none;
 }
 
 .card-description {
-    display: block;
-    position: relative;
-    font-weight: 300;
-    font-size: 1.3rem;
-    color: $default-color;
-    text-decoration: none;
-    margin-top: 0.4rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 100px;
+  display: block;
+  position: relative;
+  font-weight: 300;
+  font-size: 1.3rem;
+  color: $default-color;
+  text-decoration: none;
+  margin-top: 0.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100px;
 }
 
 .card-title {
-    display: block;
-    font-weight: 500;
-    font-size: 2.0rem;
-    color: $default-color;
-    font-style: normal;
-    text-decoration: none;
+  display: block;
+  font-weight: 500;
+  font-size: 2.0rem;
+  color: $default-color;
+  font-style: normal;
+  text-decoration: none;
 }
 
 .card-image-default {
-    display: flex;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    align-items: center;
+  display: flex;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
 }
 
 .card-dense {
-    padding: 0.8rem;
+  padding: 0.8rem;
 }

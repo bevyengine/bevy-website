@@ -17,14 +17,14 @@ jobs:
     steps:
 
       - name: Checkout Bevy latest tag
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
 
       # temporary: fetch tools from main branch
       - name: Checkout Bevy Tools
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
           ref: 'main'
@@ -56,7 +56,7 @@ jobs:
           xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot --in-ci
 
       - name: Upload Generated Files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots-${{ matrix.page }}
           path: screenshots
@@ -71,10 +71,10 @@ jobs:
     steps:
       
       - name: Clone bevy-website repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Move examples to the correct folder
         run: |
@@ -87,7 +87,7 @@ jobs:
           done
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           delete-branch: true
           branch-suffix: random

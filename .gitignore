@@ -10,3 +10,5 @@ content/community/donate
 static/assets/examples
 static/processed_images
 .vscode/
+code-validation/target
+code-validation/Cargo.lock
