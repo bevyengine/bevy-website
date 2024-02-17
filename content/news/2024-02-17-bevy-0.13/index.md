@@ -239,7 +239,7 @@ let before = meshes.add(
 let after = meshes.add(Sphere::new(2.0).mesh().ico(8).unwrap());
 
 // Cuboid
-// (notice how Assets::add now also handles mesh convertion automatically)
+// (notice how Assets::add now also handles mesh conversion automatically)
 let before = meshes.add(Mesh::from(shape::Box::new(2.0, 1.0, 1.0)));
 let after = meshes.add(Cuboid::new(2.0, 1.0, 1.0));
 
@@ -298,7 +298,7 @@ gizmos
 
 In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
-**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitives shapes.
+**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitive shapes.
 
 Each bounding volume implements the [`BoundingVolume`] trait, providing some general functionality and helpers. The [`IntersectsVolume`] trait can be used to test for intersections with these volumes. This trait is implemented for bounding volumes themselves, so you can test for intersections between them. This is supported between all existing bounding volume types, but only those in the same dimension.
 
@@ -605,7 +605,7 @@ commands.spawn((
     ImageScaleMode::Sliced(TextureSlicer {
         // The image borders are 20 pixels in every direction
         border: BorderRect::square(20.0),
-        // we don't stretch the coners more than their actual size (20px)
+        // we don't stretch the corners more than their actual size (20px)
         max_corner_scale: 1.0,
         ..default()
     }),
@@ -718,7 +718,7 @@ some of which will undoubtedly make their way upstream.
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
-Have you every wanted to pass a query to a function, but instead of having a
+Have you ever wanted to pass a query to a function, but instead of having a
 `Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
 In **Bevy 0.13** you can, thanks to the new [`QueryLens`] and [`Query::transmute_lens()`] method.
 
@@ -1392,17 +1392,17 @@ The new asset processing pipeline, using the `LoadTransformAndSave` `Process` im
 4. An `AssetSaver` takes a bevy `Asset` and converts it back into byte data.
 5. An `AssetWriter` then writes the asset byte data back to the asset source.
 
-In addition to having better code reusability, this change encorages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
+In addition to having better code reusability, this change encourages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
 
 The previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
 
 See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main/examples/asset/processing/asset_processing.rs>) for a more detailed look into how to use `LoadTransformAndSave` to process a custom asset.
 
-## Entity Optimizations
+## Entity Optimisations
 
 <div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @james7132, @NathanSWard</div>
 
-`Entity` (Bevy's 64-bit unique identifier for enitities) received a number of changes this cycle, laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
+`Entity` (Bevy's 64-bit unique identifier for entities) received a number of changes this cycle, laying some more groundwork for relations alongside _related_, and nice to have, performance optimisations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimisation" oriented set of changes in Bevy 0.13.
 
 * [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
 * [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
@@ -1433,7 +1433,7 @@ If that interests you, open some new tabs in the background!
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
+Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimisations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
 
 This deduplicated code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
 
@@ -1455,9 +1455,9 @@ fn some_system(mut q_transform: Query<&mut Transform, With<Npc>>) {
 }
 ```
 
-The assembly output was compared as well between what was on main branch versus the PR, with no tangible differences being seen between the old `Query::for_each` and the new `QueryIter::for_each()` output, validating the approach and ensuring the internal iteration optimizations were being applied.
+The assembly output was compared as well between what was on main branch versus the PR, with no tangible differences being seen between the old `Query::for_each` and the new `QueryIter::for_each()` output, validating the approach and ensuring the internal iteration optimisations were being applied.
 
-As a plus, the same internal iteration optimizations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
+As a plus, the same internal iteration optimisations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
 
 ## Reducing `TableRow` `as` Casting
 
@@ -2278,7 +2278,7 @@ For a complete list of changes, check out the PRs listed below.
 * [Restore support for running `fn` `EntityCommands` on entities that might be despawned][11107]
 * [Remove apply_deferred example][11142]
 * [Minimize small allocations by dropping the tick Vecs from Resources][11226]
-* [Change Entity::generation from u32 to NonZeroU32 for niche optimization][9907]
+* [Change Entity::generation from u32 to NonZeroU32 for niche optimisation][9907]
 * [fix B0003 example and update logs][11162]
 * [Unified identifer for entities & relations][9797]
 * [Simplify conditions][11316]
