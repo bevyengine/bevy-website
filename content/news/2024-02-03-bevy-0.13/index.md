@@ -838,7 +838,7 @@ commands.spawn((
 
 <div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @cart</div>
 
-Cameras in the "real world" control how bright an image is by adjusting several "exposure settings":
+In the real world, the brightness of an image captured by a camera is determined by its exposure: the amount of light that the camera's sensor or film incorporates. This is controlled by several mechanics of the camera:
 
 * **Aperture**: Measured in F-Stops, the aperture opens and closes to control how much light is allowed into the camera's sensor or film by physically blocking off lights from specific angles, similar to the pupil of an eye.
 * **Shutter Speed**: How long the camera's shutter is open, which is the duration of time that the camera's sensor or film is exposed to light.
@@ -847,6 +847,8 @@ Cameras in the "real world" control how bright an image is by adjusting several 
 Each of these plays a role in how much light the final image receives. They can be combined into a final EV number (exposure value), such as the semi-standard EV100 (the exposure value for ISO 100). Higher EV100 numbers mean that more light is required to get the same result. For example, a sunny day scene might require an EV100 of about 15, whereas a dimly lit indoor scene might require an EV100 of about 7.
 
 In **Bevy 0.13**, you can now configure the EV100 on a per-camera basis using the new [`Exposure`] component. You can set it directly using the [`Exposure::ev100`] field, or you can use the new [`PhysicalCameraParameters`] struct to calculate an ev100 using "real world" camera settings like f-stops, shutter speed, and ISO sensitivity.
+
+This is important because Bevy's "physically based" renderer (PBR) is intentionally grounded in reality. Our goal is for people to be able to use real-world units in their lights and materials and have them behave as close to reality as possible.
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 
