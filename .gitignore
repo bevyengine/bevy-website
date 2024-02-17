@@ -1,15 +1,18 @@
 # Built website
-public
+public/
 
 # Generated content
-content/assets
-content/learn/errors
-content/examples
-content/examples-webgpu
-content/community/people
-content/community/donate
-static/assets/examples
-static/processed_images
+content/assets/
+content/learn/errors/
+content/examples/
+content/examples-webgpu/
+content/community/people/
+content/community/donate/
+static/assets/examples/
+static/processed_images/
+
+# Tools
+target/
 
 # Editor config
 .vscode/
@@ -17,7 +20,3 @@ static/processed_images
 
 # MacOS folder attributes
 **/.DS_Store
-
-# Tools
-code-validation/target
-code-validation/Cargo.lock
