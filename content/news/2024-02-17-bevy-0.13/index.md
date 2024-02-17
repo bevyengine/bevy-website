@@ -3,7 +3,7 @@ title = "Bevy 0.13"
 date = 2024-02-17
 [extra]
 author = "Bevy Contributors"
-image = "jarl-fantasy-colony-builder.gif"
+image = "jarl.webp"
 show_image = true
 image_subtitle = "Gameplay from Jarl, an in-production fantasy colony builder made with Bevy"
 image_subtitle_link = "https://www.jarl-game.com/"
@@ -906,7 +906,7 @@ We've swapped the material and mesh bind groups, so that mesh data is now in bin
 Many small changes both to Bevy and `wgpu` summed up to make a modest but measurable difference in our performance on realistic 3D scenes!
 We ran some quick tests on both **Bevy 0.12** and **Bevy 0.13** on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
 
-![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.png)
+![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.jpg)
 
 As you can see, these scenes are substantially more detailed than most video game environments, but that screenshot was being rendered in Bevy at better than 60 FPS at 1440p resolution!
 Between Bevy 0.12 and Bevy 0.13 we saw frame times decrease by about 5-10% across the scenes tested. Nice work!
@@ -1531,11 +1531,11 @@ There are some incredible mockups, functional prototypes and third-party editor-
     (3) space_editor
   </div>
   <div style="grid-column: 2 / span 2">
-    <a href="bevy_components.png"><img src="bevy_components.png" alt="A screenshot from Blender, with Blender UI modifying Bevy component values" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    <a href="bevy_components.jpg"><img src="bevy_components.jpg" alt="A screenshot from Blender, with Blender UI modifying Bevy component values" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
     (4) bevy_components
   </div>
   <div style="grid-column: span 2">
-    <a href="makeshift_web.png"><img src="makeshift_web.png" alt="A recording of a web-based editor resulting in changes to Bevy entities in real time" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
+    <a href="makeshift_web.jpg"><img src="makeshift_web.jpg" alt="A recording of a web-based editor resulting in changes to Bevy entities in real time" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
     (5) bevy_remote
   </div>
 </div>
