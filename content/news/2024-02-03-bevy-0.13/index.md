@@ -190,7 +190,7 @@ Some use cases for primitive shapes include meshing, gizmos, bounding volumes, c
 
 Primitive shapes can be rendered using both meshes and gizmos. In this section, we'll take a closer look at the new APIs.
 
-Below, you can see a cuboid and a torus rendered using meshes and gizmos. You can check out at all primitives that can be rendered in the new [Rendering Primitives] example.
+Below, you can see a cuboid and a torus rendered using meshes and gizmos. You can check out all primitives that can be rendered in the new [Rendering Primitives] example.
 
 ![On the left: A cuboid rendered with gizmos. It consists of 12 white lines. On the right: A cuboid rendered with meshes. It consists of 6 white faces.](cuboids.png)
 
@@ -368,62 +368,61 @@ To make it easier to reason about ray casts in different dimensions, the old [`R
 
 <div class="release-feature-authors">authors: @dmlary</div>
 
-The new system stepping feature (`bevy_debug_stepping`) adds debugger-style
-execution control for systems. The [`Stepping`] resource can control which
+**Bevy 0.13** adds support for **System Stepping**, which adds debugger-style
+execution control for systems.
+
+The [`Stepping`] resource controls which
 systems within a schedule execute each frame, and provides step, break, and
-continue facilities to enable live debugging.
-
-The `Stepping` resource is configured with a list of schedules that it will
-control execution of when stepping is enabled. The collection of systems
-within those schedules can be thought of as the stepping frame. It can take
-multiple step or continue calls to traverse through the entire stepping frame.
-During this time, all schedules that have not been added to `Stepping` are
-executing each frame. This allows rendering & input handling to continue while
-stepping through systems.
-
-### Configuration
-
-First, configure the [`Stepping`] resource and add it to the world:
+continue functionality to enable live debugging.
 
 ```rust
-// Create a new Stepping resource, and add schedules to debug
 let mut stepping = Stepping::new();
+```
+
+You add the schedules you want to step through to the [`Stepping`] resource. The systems in these schedules can be thought of as the "stepping frame". Systems in the "stepping frame" won't run unless a relevant step or continue action occurs. Schedules that are not added will run on every update, even while stepping. This enables core functionality like rendering to continue working.
+
+```rust
 stepping.add_schedule(Update);
 stepping.add_schedule(FixedUpdate);
-// Stepping is disabled by default,
-// even when the resource is inserted.
-// Feature flags, dev consoles and obscure hotkeys all work great.
+```
+
+Stepping is disabled by default, even when the resource is inserted. To enable it in apps, feature flags, dev consoles and obscure hotkeys all work great.
+
+```rust
 #[cfg(feature = "my_stepping_flag")]
 stepping.enable();
+```
 
-// add the Stepping resource to the world
+Finally, you add the [`Stepping`] resource to the ECS [`World`].
+
+```rust
 app.insert_resource(stepping);
 ```
 
-Systems within the added schedules will not be run unless we're performing
-a system step, continuing the stepping frame, or the system has been exempt
-from stepping.
+[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
 
-### Execution Control: System Step & Continue Frame
+### System Step & Continue Frame
 
-While stepping is enabled, the `Stepping` resource tracks its location within
-the stepping frame, maintaining a stepping cursor pointing at the next system
-to be executed.
-There are two ways systems get executed while stepping is enabled: system step,
-and continue frame.
-
-System step (`Stepping::step_frame()`) runs the system at the stepping
+The "step frame" action runs the system at the stepping
 cursor, and advances the cursor during the next render frame.
 This is useful to see individual changes made by
 systems, and see the state of the world prior to executing a system
 
-Continue frame (`Stepping::continue_frame()`) will execute systems starting
+```rust
+stepping.step_frame()
+```
+
+The "continue frame" action will execute systems starting
 from the stepping cursor to the end of the stepping frame during the next frame.
 It may stop before the end of the stepping frame if it encounters a system with
 a breakpoint. This is useful for advancing quickly through an entire frame,
 getting to the start of the next frame, or in combination with breakpoints.
 
-In this video we demonstrate system step & continue frame on the breakout
+```rust
+stepping.continue_frame()
+```
+
+This video demonstrates these actions on the breakout
 example with a custom `egui` interface.  The stepping cursor can be seen moving through
 the systems list as we click the `step` button.  When the `continue` button is
 clicked, you can see the game progress one stepping frame for each click.
@@ -436,22 +435,7 @@ When a schedule grows to a certain point, it can take a long time to step
 through every system in the schedule just to see the effects of a few systems.
 In this case, stepping provides system breakpoints.
 
-You can set a breakpoint on those systems you care about, then use
-`Stepping::continue_frame()` to run systems starting at the stepping cursor
-until a breakpoint is encountered, or the end of the stepping frame.
-If the stepping cursor points at a system with a breakpoint when you call
-`Stepping::continue_frame()` that system will run.  This allows you to set
-breakpoints through a system, and repeatedly continue the frame to stop prior
-to each system of interest.
-
-In this video of the breakout example, we add a breakpoint to
-`check_for_collisions()` so we can verify the collision detection & handling
-behavior each frame without stepping through all the other systems.
-
-The video shows the stepping cursor moves from the start of the stepping frame
-to `check_for_collisions()` the first time we click `continue` in the ui.  On
-the next click, `check_for_collisions()` and all remaining systems are run,
-moving the cursor back up to the start of the stepping frame.
+This video illustrates how a breakpoint on `check_for_collisions()` behaves with "step" and "continue" actions:
 
 <video controls><source src="stepping-breakpoint.mp4" type="video/mp4"/></video>
 
@@ -459,16 +443,7 @@ moving the cursor back up to the start of the stepping frame.
 
 During debugging, it can be helpful to disable systems to narrow down the
 source of the problem. `Stepping::never_run()` and `Stepping::never_run_node()`
-can be used to disable systems while stepping is enabled. Note that disabling
-systems in this manner only has an effect while stepping is enabled. When
-stepping is disabled, all disabled systems will resume executing.
-
-In this video of the breakout example, we disable the `check_for_collisions()`
-system and use continue frame to move the ball into the center of the blocks,
-then re-enable the system to have fun destroying all the blocks from the
-inside.
-
-<video controls><source src="stepping-disable-system.mp4" type="video/mp4"/></video>
+can be used to disable systems while stepping is enabled.
 
 ### Excluding Systems from Stepping
 
@@ -483,27 +458,12 @@ Systems can be configured to always run by calling
 When a system is configured to always run, it will run each rendering frame
 even when stepping is enabled.
 
-In this video of the breakout example the `move_paddle()` system is configured
-to always run.  We then use the arrow keys to move the paddle while the rest
-of the game systems are stopped by stepping.  This allows us to position the
-paddle precisely before continuing frame-by-frame as the ball impacts the
-paddle.
-
-<video controls><source src="stepping-run-always.mp4" type="video/mp4"/></video>
-
 ### Limitations
 
 There are some limitations in this initial implementation of stepping:
 
-* Any system that reads events likely will not step properly
-  * Frames still advance normally while stepping is enabled
-  * Events can be cleared before a stepped system can read them
-  * Best approach here is to configure event-based systems to always run,
-    or put them in a schedule not added to `Stepping`
-  * Continue with breakpoints may also work in this scenario
-* Conditional systems may not run as expected when stepping
-  * Similar to event-based systems, if the run condition is true for only a short
-    time, system may not run when stepped
+* **Systems that reads events likely will not step properly**: Because frames still advance normally while stepping is enabled, events can be cleared before a stepped system can read them. The best approach here is to configure event-based systems to always run, or put them in a schedule not added to `Stepping`. "Continue" with breakpoints may also work in this scenario.
+* **Conditional systems may not run as expected when stepping**: Similar to event-based systems, if the run condition is true for only a short time, system may not run when stepped.
 
 ### Detailed Examples
 
