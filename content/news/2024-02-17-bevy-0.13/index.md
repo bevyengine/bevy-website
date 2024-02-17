@@ -711,7 +711,6 @@ some of which will undoubtedly make their way upstream.
 [editor with remote capabilities]: https://makeshift-bevy-web-editor.vercel.app/
 [`QueryBuilder`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.QueryBuilder.html
 
-
 ## Query Transmutation
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
@@ -1111,7 +1110,6 @@ The [`custom_asset` example] has been updated to demonstrate these new features.
 [`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
 [`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
 [`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
-[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
 [turbofish]: https://turbo.fish/
 [`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
 
@@ -1541,7 +1539,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 </div>
 
 1. a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor [could look like]
-2.  [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
+2. [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
 3. [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
 4. [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
 5. `@coreh`'s experiment on a [reflection-powered remote protocol], coupled with an interactive web-based editor, allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
