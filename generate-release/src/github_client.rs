@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
 use anyhow::bail;
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
 
 #[derive(Deserialize, Clone, Debug)]
@@ -169,8 +169,10 @@ impl GithubClient {
         since: &str,
         label: Option<&str>,
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-        let naive_datetime = NaiveDate::parse_from_str(since, "%Y-%m-%d")?.and_hms(0, 0, 0);
-        let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+        let naive_datetime = NaiveDate::parse_from_str(since, "%Y-%m-%d")?
+            .and_hms_opt(0, 0, 0)
+            .expect("invalid time");
+        let datetime_utc = Utc.from_utc_datetime(&naive_datetime);
 
         let mut prs = vec![];
         let mut page = 1;

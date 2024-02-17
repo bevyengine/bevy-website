@@ -4,6 +4,7 @@
 {% block content %}
 <div class="padded-content item-grid">
   {% for page in section.pages %}
+  {% if page and not page.extra.public_draft %}
   <a class="link-card" href="{{ page.path }}">
     <div class="link-card__img-wrapper">
       {% if page.extra.image %}
@@ -27,6 +28,7 @@
       </p>
     </div>
   </a>
+  {% endif %}
   {% endfor %}
 </div>
 {% endblock content %}
