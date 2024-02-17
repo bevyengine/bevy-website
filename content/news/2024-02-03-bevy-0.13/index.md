@@ -3,10 +3,10 @@ title = "Bevy 0.13"
 date = 2024-02-03
 [extra]
 author = "Bevy Contributors"
-image = "TODO.gif"
+image = "jarl-fantasy-colony-builder.gif"
 show_image = true
-image_subtitle = "TODO"
-image_subtitle_link = "TODO"
+image_subtitle = "Gameplay from Jarl, an in-production fantasy colony builder made with Bevy"
+image_subtitle_link = "https://www.jarl-game.com/"
 
 +++
 
