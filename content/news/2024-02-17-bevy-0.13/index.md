@@ -718,7 +718,7 @@ some of which will undoubtedly make their way upstream.
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
-Have you every wanted to pass a query to a function, but instead of having a
+Have you ever wanted to pass a query to a function, but instead of having a
 `Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
 In **Bevy 0.13** you can, thanks to the new [`QueryLens`] and [`Query::transmute_lens()`] method.
 
