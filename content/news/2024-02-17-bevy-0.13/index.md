@@ -758,7 +758,7 @@ for more details.
 
 One thing to take into consideration is the transmutation is not free.
 It works by creating a new state and copying cached data
-inside the original query. It's not an expensive operation, but you should 
+inside the original query. It's not an expensive operation, but you should
 avoid doing it inside a hot loop.
 
 [`Query::transmute_lens()`]: https://docs.rs/bevy/0.13.0/bevy/ecs/system/struct.Query.html#method.transmute_lens
