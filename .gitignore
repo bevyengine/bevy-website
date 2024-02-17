@@ -18,5 +18,8 @@ target/
 .vscode/
 .idea/
 
+# Local environmental variables
+.env
+
 # MacOS folder attributes
 **/.DS_Store
