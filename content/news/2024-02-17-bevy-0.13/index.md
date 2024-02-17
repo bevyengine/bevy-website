@@ -22,13 +22,16 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 <!-- more -->
 
 * **Lightmaps:** A fast, popular baked global illumination technique for static geometry (baked externally in programs like The Lightmapper).
-* **Irradiance Volumes / Voxel Global Illumination:** Support for a baked form of global illumination that samples light at the centers of voxels within a cuboid (baked externally in programs like Blender).
+* **Irradiance Volumes / Voxel Global Illumination:** A baked form of global illumination that samples light at the centers of voxels within a cuboid (baked externally in programs like Blender).
 * **Approximate Indirect Specular Occlusion**: Improved lighting realism by reducing specular light leaking via specular occlusion.
+* **Reflection Probes**: A baked form of axis aligned environment map that allows for realistic reflections for static geometry (baked externally in programs like Blender)
 * **Primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished, ready-to-use collection of them!
 * **System stepping:** completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
 * **Dynamic queries:** refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
 * **Automatically inferred command flush points:** tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
 * **Slicing, tiling and nine-patch 2D images:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
+* **Camera-Driven UI**: UI entity trees can now be selectively added to _any_ camera, rather than being globally applied to all cameras, enabling things like split screen UIs!
+* **Camera Exposure**: Realistic / "real world" control over camera exposure via EV100, f-stops, shutter speed, and ISO sensitivity. Lights have also been adjusted to make their units more realistic.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
 
 ## Initial Baked Lighting
