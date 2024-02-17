@@ -473,194 +473,180 @@ There are some limitations in this initial implementation of stepping:
 
 [`Stepping`]: https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/stepping/Stepping.html
 
-## Query Transmutation
+## Camera Exposure
 
-<div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
+<div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @cart</div>
 
-Have you every wanted to pass a query to a function, but instead of having a
-`Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
-Well now you can by using the `Query::transmute_lens` method. Query transmutes
-allow you to change a query into different query types as long as the
-components accessed are a subset of the original query. If you do try to access
-data that is not in the original query, this method will panic.
+In the real world, the brightness of an image captured by a camera is determined by its exposure: the amount of light that the camera's sensor or film incorporates. This is controlled by several mechanics of the camera:
 
-```rust
-fn reusable_function(lens: &mut QueryLens<&Transform>) {
-    let query = lens.query();
-    // do something with the query...
-}
+* **Aperture**: Measured in F-Stops, the aperture opens and closes to control how much light is allowed into the camera's sensor or film by physically blocking off lights from specific angles, similar to the pupil of an eye.
+* **Shutter Speed**: How long the camera's shutter is open, which is the duration of time that the camera's sensor or film is exposed to light.
+* **ISO Sensitivity**: How sensitive the camera's sensor or film is to light. A higher value indicates a higher sensitivity to light.
 
-// We can use the function in a system that takes the exact query.
-fn system_1(mut query: Query<&Transform>) {
-    reusable_function(&mut query.as_query_lens());
-}
+Each of these plays a role in how much light the final image receives. They can be combined into a final EV number (exposure value), such as the semi-standard EV100 (the exposure value for ISO 100). Higher EV100 numbers mean that more light is required to get the same result. For example, a sunny day scene might require an EV100 of about 15, whereas a dimly lit indoor scene might require an EV100 of about 7.
 
-// We can also use it with a query that does not match exactly
-// by transmuting it.
-fn system_2(mut query: Query<(&mut Transform, &Velocity), With<Enemy>>) {
-    let mut lens = query.transmute_lens::<&Transform>();
-    reusable_function(&mut lens);
-}
-```
+In **Bevy 0.13**, you can now configure the EV100 on a per-camera basis using the new [`Exposure`] component. You can set it directly using the [`Exposure::ev100`] field, or you can use the new [`PhysicalCameraParameters`] struct to calculate an ev100 using "real world" camera settings like f-stops, shutter speed, and ISO sensitivity.
 
-Note that the `QueryLens` will still iterate over the same entities as the
-original `Query` it is derived from. A `QueryLens<&Transform>` taken from
-a `Query<(&Transform, &Velocity)>`, will only include the `Transform` of
-entities with both `Transform` and `Velocity` components.
+This is important because Bevy's "physically based" renderer (PBR) is intentionally grounded in reality. Our goal is for people to be able to use real-world units in their lights and materials and have them behave as close to reality as possible.
 
-Besides removing parameters you can also change them in limited ways to the
-different smart pointer types. One of the more useful is to change a
-`& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
-for more details.
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 
-One thing to take into consideration is the transmutation is not free.
-It works by creating a new state and copying a bunch of the cached data
-inside the original query. It's not a expensive operation, but you should
-probably avoid doing it inside a hot loop.
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="EV100 9.7" data-title-b="EV100 15">
+  <img class="image-a" alt="EV100 9.7" src="exposure_97.jpg">
+  <img class="image-b" alt="EV100 15" src="exposure_15.jpg">
+</div>
 
-## `WorldQuery` Trait Split
+Note that prior versions of Bevy hard-coded a static EV100 for some of its light types. In **Bevy 0.13** it is configurable _and_ consistent across all light types. We have also bumped the default EV100 to 9.7, which is a [number we chose to best match Blender's default exposure](https://github.com/bevyengine/bevy/issues/11577#issuecomment-1942873507). It also happens to be a nice "middle ground" value that sits somewhere between indoor lighting and overcast outdoor lighting.
 
-<div class="release-feature-authors">authors: @wainwrightmark @taizu-jin</div>
+You may notice that point lights now require _significantly_ higher intensity values (in lumens). This (sometimes) million-lumen values might feel exorbitant. Just reassure yourself that (1) it actually requires a lot of light to meaningfully register in an overcast outdoor environment and (2) Blender exports lights on these scales (and we are calibrated to be as close as possible to them).
 
-A [`Query`] has two type parameters: one for the the data to be fetched, and a second optional one for the filters.
+[`PhysicalCameraParameters`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.PhysicalCameraParameters.html
+[`Exposure`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html
+[`Exposure::ev100`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html#structfield.ev100
 
-In previous versions of Bevy both parameters simply required [`WorldQuery`]: there was nothing stopping you from using types intended as filters in the data position (or vice versa).
+## Camera-Driven UI
 
-Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behaviour in either position.
+<div class="release-feature-authors">authors: @bardt, @oceantume</div>
 
-Unfortunately this was not the case for [`Changed`] and [`Added`] which had different (and undocumented) behaviour in the data position and this could lead to bugs in user code.
+Historically, Bevy's UI elements have been scaled and positioned in the context of the primary window, regardless of the camera settings. This approach made some UI experiences like split-screen multiplayer difficult to implement, and others such as having UI in multiple windows impossible.
 
-To allow us to prevent this type of bug at compile time, the [`WorldQuery`] trait has been replaced by two traits: [`QueryData`] and [`QueryFilter`]. The data parameter of a [`Query`] must now be [`QueryData`] and the filter parameter must be [`QueryFilter`].
+**Bevy 0.13** introduces **Camera-Driven UI**. Each camera can now have its own UI root, rendering according to its viewport, scale factor, and a target which can be a secondary window or even a texture.
 
-Most user code should be unaffected or easy to migrate.
+This change unlocks a variety of new UI experiences, including split-screen multiplayer, UI in multiple windows, displaying non-interactive UI in a 3D world, and more.
+
+![Split-screen with independent UI roots](split-screen.png)
+
+If there is one camera in the world, you don't need to do anything; your UI will be displayed in that camera's viewport.
 
 ```rust
-// Probably a subtle bug: `With` filter in the data position - will not compile in 0.13
-fn my_system(query: Query<(Entity, With<ComponentA>)>)
-{
-    // The type signature of the query items is `(Entity, ())`, which is usable but unwieldy
-  for (entity, _) in query.iter(){
-  }
-}
-
-// Iidiomatic, compiles in both 0.12 and 0.13
-fn my_system(query: Query<Entity, With<ComponentA>>)
-{
-  for entity in query.iter(){
-  }
-}
+commands.spawn(Camera3dBundle {
+    // Camera can have custom viewport, target, etc.
+});
+commands.spawn(NodeBundle {
+    // UI will be rendered to the singular camera's viewport
+});
 ```
 
-[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.Query.html
-[`WorldQuery`]: https://docs.rs/bevy/0.12.0/bevy/ecs/query/trait.WorldQuery.html
-[`Changed`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Changed.html
-[`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Added.html
-[`QueryData`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryData.html
-[`QueryFilter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryFilter.html
-
-## Automatically insert `apply_deferred` systems
-
-<div class="release-feature-authors">authors: @hymm</div>
-
-When writing gameplay code, you might commonly have one system that wants to
-immediately see the effects of commands queued in another system.
-Before 0.13, you would have to manually insert an `apply_deferred` system between the two,
-a special system which causes those commands to be applied when encountered.
-Bevy now detects when a system with commands
-is ordered relative to other systems and inserts the `apply_deferred` for you.
+When more control is desirable, or there are multiple cameras, we introduce the [`TargetCamera`] component. This component can be added to a root UI node to specify which camera it should be rendered to.
 
 ```rust
-// Before 0.13
-app.add_systems(
-    Update,
-    (
-        system_with_commands,
-        apply_deferred,
-        another_system,
-    ).chain()
-);
+// For split-screen multiplayer, we set up 2 cameras and 2 UI roots
+let left_camera = commands.spawn(Camera3dBundle {
+    // Viewport is set to left half of the screen
+}).id();
+
+commands
+    .spawn((
+        TargetCamera(left_camera),
+        NodeBundle {
+            //...
+        }
+    ));
+
+let right_camera = commands.spawn(Camera3dBundle {
+    // Viewport is set to right half of the screen
+}).id();
+
+commands
+    .spawn((
+        TargetCamera(right_camera),
+        NodeBundle {
+            //...
+        })
+    );
 ```
+
+With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
 
 ```rust
-// After 0.13
-app.add_systems(
-    Update,
-    (
-        system_with_commands,
-        another_system,
-    ).chain()
-);
+commands.spawn(Camera3dBundle::default());
+commands.spawn(NodeBundle {
+    visibility: Visibility::Hidden, // UI will be hidden
+    // ...
+});
 ```
 
-This was a common beginner footgun: if two systems are ordered, shouldn't the second always see the results of the first?
+[`TargetCamera`]: https://docs.rs/bevy/0.13.0/bevy/ui/struct.TargetCamera.html
+[`Visibility`]: https://docs.rs/bevy/0.13.0/bevy/render/view/enum.Visibility.html
+[`UiCameraConfig`]: https://docs.rs/bevy/0.12.1/bevy/ui/camera_config/struct.UiCameraConfig.html
 
-Automatically inserted `apply_deferred` systems are optimized by automatically merging them if
-possible. In most cases, it is recommended to remove all manually inserted
-`apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will
-usually be both faster and involve less boilerplate.
+## Texture Slicing and Tiling
+
+<div class="release-feature-authors">authors: @ManevilleF</div>
+
+3D rendering gets a lot of love, but 2D features matter too!
+We're pleased to add CPU-based _slicing and tiling_ to both `bevy_sprite` and `bevy_ui` in **Bevy 0.13**!
+
+This behavior is controlled by a new optional component: [`ImageScaleMode`].
+
+[`ImageScaleMode`]: https://dev-docs.bevyengine.org/bevy/prelude/enum.ImageScaleMode.html
+
+### 9 slicing
+
+Adding `ImageScaleMode::Sliced` to an entity with a sprite or UI bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
+keeping the image proportions during resizes, avoiding stretching of the texture.
+
+![Stretched Vs Sliced texture](slice_vs_stretched.png)
+
+This is very useful for UI, allowing your pretty textures to look right even as the size of your element changes.
+
+![Sliced Buttons](ui_slice.png)
+
+<div style="font-size: 1.0rem;" class="release-feature-authors">
+Border texture by <a href="https://kenney.nl/assets/fantasy-ui-borders">Kenney</a>
+</div>
 
 ```rust
-// This will only add one apply_deferred system.
-app.add_systems(
-    Update,
-    (
-        (system_1_with_commands, system_2).chain(),
-        (system_3_with_commands, system_4).chain(),
-    )
-);
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Sliced(TextureSlicer {
+        // The image borders are 20 pixels in every direction
+        border: BorderRect::square(20.0),
+        // we don't stretch the coners more than their actual size (20px)
+        max_corner_scale: 1.0,
+        ..default()
+    }),
+));
 ```
 
-If this new behavior does not work for you, please consult the migration guide.
-There are several new APIs that allow you to opt-out.
+### Tiling
 
-## More Flexible One-Shot Systems
+Adding `ImageMode::Tiled { .. }` to your 2D sprite entities enables _texture tiling_: repeating the image until their entire area is fulled.
+This is commonly used for backgrounds and surfaces.
 
-<div class="release-feature-authors">authors: @Nathan-Fenner</div>
-
-In 0.12, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
-The initial implementation had some limitations with regards to what systems could and could not be used as one-shot systems.
-These limitations have since been resolved, starting with one-shot systems with input and output.
+<video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
 
 ```rust
-
-fn increment_sys(In(increment_by): In<i32>, mut counter: ResMut<Counter>) -> i32 {
-    counter.0 += increment_by;
-    counter.0
-}
-
-let mut world = World::new();
-let id = world.register_system(increment_sys);
-
-world.insert_resource(Counter(1));
-let count_one = world.run_system_with_input(id, 5).unwrap(); // increment counter by 5 and return 6
-let count_two = world.run_system_with_input(id, 2).unwrap(); // increment counter by 2 and return 8
+commands.spawn((
+    SpriteSheetBundle::default(),
+    ImageScaleMode::Tiled {
+        // The image will repeat horizontally
+        tile_x: true,
+        // The image will repeat vertically
+        tile_y: true,
+        // The texture will repeat if the drawing rect is larger than the image size
+        stretch_value: 1.0,
+    },
+));
 ```
-
-Using either `world.run_system_with_input(system_id, input)` or `commands.run_system_with_input(system_id, input)`, you can now supply input parameters to systems that accept them. Additionally, both `world.run_system` and `world.run_system_with_input` now return system output as `Ok(output)`. Note that output cannot be returned when calling the system through commands, because of their deferred nature.
-
-Some smaller improvements to one-shot systems include registering boxed systems with `register_boxed_system` (which was shipped in 0.12.1, but didn't get a blog post) and the ability to register exclusive systems as one-shot systems.
-
-```rust
-world.register_system(|world: &mut World| { /* do anything */ });
-```
-
-All these improvements round out one-shot systems significantly: they should now work just like any other Bevy system.
 
 ## Dynamic Queries
 
 <div class="release-feature-authors">authors: @james-j-obrien, @jakobhellermann, @Suficio</div>
 
-In Bevy's ECS, queries use a type-powered DSL. The full type of the query (
-what component to access, which filter to use) must be specified at compile time.
+In Bevy ECS, queries use a type-powered DSL. The full type of the query (what component to access, which filter to use) must be specified at compile time.
 
-Sometimes, we can't easily know what data the query wants to access at compile time.
-A UI with a dynamic list filtering by component, bindings for a scripting language,
-_entity relationships_ (more on this later), all of those, are impossible to accomplish without
-creating queries at runtime.
+Sometimes we can't know what data the query wants to access at compile time. Some scenarios just cannot be done with static queries:
 
-Dynamic queries lift this restriction.
+* Defining queries in scripting languages like Lua or JavaScript.
+* Defining new components from a scripting language and query them.
+* Adding a runtime filter to entity inspectors like [`bevy-inspector-egui`].
+* Adding a [Quake-style console] to modify or query components from a prompt at runtime.
+* Creating an [editor with remote capabilities].
 
-The standard way of defining a `Query` is by using them as system parameters:
+Dynamic queries make these all possible. And these are only the plans we've heard about so far!
+
+The standard way of defining a [`Query`] is by using them as system parameters:
 
 ```rust
 fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
@@ -668,7 +654,7 @@ fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
 }
 ```
 
-**This won't change.** And for most (if not all)  gameplay use cases, you will
+**This won't change.** And for most (if not all) gameplay use cases, you will
 continue to happily use the delightfully simple [`Query`] API.
 
 However, consider this situation: as a game or mod developer I want to list entities
@@ -720,240 +706,192 @@ impossible possible.
 We expect third party crates to provide convenient wrappers around the `QueryBuilder` API,
 some of which will undoubtedly make their way upstream.
 
-[`QueryBuilder`] is here for people who need queries with runtime access specification,
-maybe you need to:
-
-* Add a runtime filter to [`bevy-inspector-egui`]'s entity inspector.
-* Define queries in a scripting language such as Lua or JavaScript.
-* Define new components from a scripting language and query them.
-* Add a [Quake-style console] to modify or query components from a prompt at runtime.
-* Create an [editor with remote capabilities].
-* And these are only the plans we've heard about so far!
-
-### Relations
-
-We mentioned _entity relationships_ earlier. What are relations? They are a way to associate
-entities to other entities. For example, the `Parent` and `Children` components
-in `bevy_hierarchy` are primitive relations.
-By storing `Entity` inside of a component type, we can describe a link between entities.
-
-`bevy_hierarchy` is fairly robust, but if you yourself want to create your own
-relation (say, a group of units in an RTS game), the road ahead is a tar pit of footguns
-and synchronization bugs.
-
-_Entity relationships_ encode relations in the ECS. They are a staple of the [Flecs] C
-ECS. This makes it _a pleasure_ to describe relations,
-as opposed to the endless difficulties presented in most ECS's (including Bevy).
-
-Sander Mertens, of Flecs fame, [describes in details] the prerequisites for an
-entity relationship implementation.
-One of those prerequisites is the ability to use specific entity ids as query parameters.
-Dynamic queries allow just that.
-
-### A long wait
-
-Given how useful dynamic queries are, you might be wondering why Bevy didn't have them already.
-But dynamic queries have a long history: they date back from **November 2022**,
-when Suficio proposed [a simple change]. It was deemed too unsafe, [a counter-proposal]
-was made by Jakob Hellermann. It was stalled due to complexity and the lack of qualified and
-interested reviewers. They were finally merged in **January 2024**
-thanks to [James O'Brien's stupendous effort][The dynamic query pull request].
-
-For an in-depth technical and historical breakdown of dynamic queries, check
-out [this GitHub discussion thread](https://github.com/bevyengine/bevy/discussions/9816).
-
-They have been _a long time_ coming and they are finally here!
-
 [`bevy-inspector-egui`]: https://crates.io/crates/bevy-inspector-egui
 [Quake-style console]: https://github.com/doonv/bevy_dev_console
 [editor with remote capabilities]: https://makeshift-bevy-web-editor.vercel.app/
-[a simple change]: https://github.com/bevyengine/bevy/pull/6240
-[The dynamic query pull request]: https://github.com/bevyengine/bevy/pull/9774
-[a counter-proposal]: https://github.com/bevyengine/bevy/pull/6390
 [`QueryBuilder`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.QueryBuilder.html
-[describes in details]: https://ajmmertens.medium.com/a-roadmap-to-entity-relationships-5b1d11ebb4eb
-[Flecs]: https://www.flecs.dev/flecs/
 
-## Events Live Longer
 
-Events are a useful tool for passing data into systems and between systems.
+## Query Transmutation
 
-Internally, Bevy events are double-buffered, so a given event will be silently dropped once the buffers have swapped twice.
-The `Events<T>` resource is setup this way so events are dropped after a predictable amount of time, preventing their queues from growing forever and causing a memory leak.
+<div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
-Before 0.12.1, event queues were swapped every update (i.e. every frame).
-That was an issue for games with logic in `FixedUpdate`, since it meant events would normally disappear before systems in the next `FixedUpdate` could read them.
+Have you every wanted to pass a query to a function, but instead of having a
+`Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
+In **Bevy 0.13** you can, thanks to the new [`QueryLens`] and [`Query::transmute_lens()`] method.
 
-Bevy 0.12.1 changed the swap cadence to "every update that runs `FixedUpdate` one or more times" (only if the `TimePlugin` is installed).
-This change did resolve the original problem, but it then caused problems in the other direction.
-Users were surprised to learn some of their systems with `run_if` conditions would iterate much older events than expected.
-(In hindsight, we should have considered it a breaking change and postponed it until this release.)
-The change also introduced a bug (fixed in this release) where only one type of event was actually being dropped.
-
-One proposed future solution to this lingering but unintended coupling between `Update` and `FixedUpdate` is to use event timestamps to change the default range of events visible by `EventReader<T>`.
-That way systems in `Update` would skip any events older than a frame while systems in `FixedUpdate` could still see them.
-
-For now, the `<=0.12.0` behavior can be recovered by simply removing the `EventUpdateSignal` resource.
+Query transmutes
+allow you to change a query into different query types as long as the
+components accessed are a subset of the original query. If you do try to access
+data that is not in the original query, this method will panic.
 
 ```rust
-fn main() {
-    let mut app = App::new()
-        .add_plugins(DefaultPlugins);
-    
-    /* ... */
+fn reusable_function(lens: &mut QueryLens<&Transform>) {
+    let query = lens.query();
+    // do something with the query...
+}
 
-    // If this resource is absent, events are dropped the same way as <=0.12.0.
-    app.world.remove_resource::<EventUpdateSignal>();
-    
-    /* ... */
+// We can use the function in a system that takes the exact query.
+fn system_1(mut query: Query<&Transform>) {
+    reusable_function(&mut query.as_query_lens());
+}
 
-    app.run();
+// We can also use it with a query that does not match exactly
+// by transmuting it.
+fn system_2(mut query: Query<(&mut Transform, &Velocity), With<Enemy>>) {
+    let mut lens = query.transmute_lens::<&Transform>();
+    reusable_function(&mut lens);
 }
 ```
 
-## Texture Atlas Rework
+Note that the [`QueryLens`] will still iterate over the same entities as the
+original [`Query`] it is derived from. A `QueryLens<&Transform>` taken from
+a `Query<(&Transform, &Velocity)>`, will only include the `Transform` of
+entities with both `Transform` and `Velocity` components.
 
-<div class="release-feature-authors">authors: @ManevilleF</div>
+Besides removing parameters you can also change them in limited ways to the
+different smart pointer types. One of the more useful is to change a
+`& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
+for more details.
 
-Texture atlases are a tool used to efficiently combine multiple images into a single larger texture called an atlas.
+One thing to take into consideration is the transmutation is not free.
+It works by creating a new state and copying a bunch of the cached data
+inside the original query. It's not a expensive operation, but you should
+probably avoid doing it inside a hot loop.
 
-**Bevy 0.13** significantly reworks them, reducing boilerplate and making the feature more data-oriented.
-Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components (and the corresponding `Bundle` types):
-texture atlasing is now enabled by adding a single _additional_ component to your sprite and image entities: `TextureAtlas`.
+[`Query::transmute_lens()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.Query.html#method.transmute_lens
+[`QueryLens`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.QueryLens.html
 
-### Why this change
+## `WorldQuery` Trait Split
 
-Texture atlases (sometimes called sprite sheets) simply to draw a custom _section_ of the texture.
-The new `TextureAtlas` represents that behaviour, storing:
+<div class="release-feature-authors">authors: @wainwrightmark @taizu-jin</div>
 
-* a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
-* a `usize` index defining which section `Rect` of the layout we want to display
+A [`Query`] has two type parameters: one for the the data to be fetched, and a second optional one for the filters.
 
-## Texture Slicing and Tiling
+In previous versions of Bevy both parameters simply required [`WorldQuery`]: there was nothing stopping you from using types intended as filters in the data position (or vice versa).
 
-<div class="release-feature-authors">authors: @ManevilleF</div>
+Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behaviour in either position.
 
-3D rendering gets a lot of love, but 2D features matter too!
-We're pleased to add CPU-based _slicing and tiling_ to both `bevy_sprite` and `bevy_ui` in Bevy 0.13!
+Unfortunately this was not the case for [`Changed`] and [`Added`] which had different (and undocumented) behaviour in the data position and this could lead to bugs in user code.
 
-This behavior is controlled by a new optional component: [`ImageScaleMode`].
+To allow us to prevent this type of bug at compile time, the [`WorldQuery`] trait has been replaced by two traits: [`QueryData`] and [`QueryFilter`]. The data parameter of a [`Query`] must now be [`QueryData`] and the filter parameter must be [`QueryFilter`].
 
-[`ImageScaleMode`]: https://dev-docs.bevyengine.org/bevy/prelude/enum.ImageScaleMode.html
-
-### 9 slicing
-
-Adding `ImageScaleMode::Sliced(_)` to an entity with a sprite or UI bundle enables [9 slicing](https://en.wikipedia.org/wiki/9-slice_scaling),
-keeping the image in proportions in resize, avoiding stretching of the texture.
-
-![Stretched Vs Sliced texture](slice_vs_stretched.png)
-
-This is very useful for UI, allowing your pretty textures to look right even as the size of your element changes.
-
-![Sliced Buttons](ui_slice.png)
-> Border texture by [Kenney's](https://kenney.nl/assets/fantasy-ui-borders)
-
-Configuration:
+Most user code should be unaffected or easy to migrate.
 
 ```rust
-commands.spawn((
-    SpriteSheetBundle::default(),
-    ImageScaleMode::Sliced(TextureSlicer {
-        // The image borders are 20 pixels in every direction
-        border: BorderRect::square(20.0),
-        // we don't stretch the coners more than their actual size (20px)
-        max_corner_scale: 1.0,
-        ..default()
-    }),
-));
+// Probably a subtle bug: `With` filter in the data position - will not compile in 0.13
+fn my_system(query: Query<(Entity, With<ComponentA>)>)
+{
+    // The type signature of the query items is `(Entity, ())`, which is usable but unwieldy
+  for (entity, _) in query.iter(){
+  }
+}
+
+// Iidiomatic, compiles in both 0.12 and 0.13
+fn my_system(query: Query<Entity, With<ComponentA>>)
+{
+  for entity in query.iter(){
+  }
+}
 ```
 
-### Tiling
+[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.Query.html
+[`WorldQuery`]: https://docs.rs/bevy/0.12.0/bevy/ecs/query/trait.WorldQuery.html
+[`Changed`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Changed.html
+[`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Added.html
+[`QueryData`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryData.html
+[`QueryFilter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryFilter.html
 
-Adding `ImageMode::Tiled { .. }` to your 2D sprite entities enables _texture tiling_: repeating the image until their entire area is fulled.
-This is commonly used for backgrounds and surfaces.
+## Automatically Insert `apply_deferred` Systems
 
-<video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
+<div class="release-feature-authors">authors: @hymm</div>
 
-Configuration:
-
-```rust
-commands.spawn((
-    SpriteSheetBundle::default(),
-    ImageScaleMode::Tiled {
-        // The image will repeat horizontally
-        tile_x: true,
-        // The image will repeat vertically
-        tile_y: true,
-        // The texture will repeat if the drawing rect is larger than the image size
-        stretch_value: 1.0,
-    },
-));
-```
-
-## Camera Exposure
-
-<div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @cart</div>
-
-In the real world, the brightness of an image captured by a camera is determined by its exposure: the amount of light that the camera's sensor or film incorporates. This is controlled by several mechanics of the camera:
-
-* **Aperture**: Measured in F-Stops, the aperture opens and closes to control how much light is allowed into the camera's sensor or film by physically blocking off lights from specific angles, similar to the pupil of an eye.
-* **Shutter Speed**: How long the camera's shutter is open, which is the duration of time that the camera's sensor or film is exposed to light.
-* **ISO Sensitivity**: How sensitive the camera's sensor or film is to light. A higher value indicates a higher sensitivity to light.
-
-Each of these plays a role in how much light the final image receives. They can be combined into a final EV number (exposure value), such as the semi-standard EV100 (the exposure value for ISO 100). Higher EV100 numbers mean that more light is required to get the same result. For example, a sunny day scene might require an EV100 of about 15, whereas a dimly lit indoor scene might require an EV100 of about 7.
-
-In **Bevy 0.13**, you can now configure the EV100 on a per-camera basis using the new [`Exposure`] component. You can set it directly using the [`Exposure::ev100`] field, or you can use the new [`PhysicalCameraParameters`] struct to calculate an ev100 using "real world" camera settings like f-stops, shutter speed, and ISO sensitivity.
-
-This is important because Bevy's "physically based" renderer (PBR) is intentionally grounded in reality. Our goal is for people to be able to use real-world units in their lights and materials and have them behave as close to reality as possible.
-
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="EV100 9.7" data-title-b="EV100 15">
-  <img class="image-a" alt="EV100 9.7" src="exposure_97.jpg">
-  <img class="image-b" alt="EV100 15" src="exposure_15.jpg">
-</div>
-
-Note that prior versions of Bevy hard-coded a static EV100 for some of its light types. In **Bevy 0.13** it is configurable _and_ consistent across all light types. We have also bumped the default EV100 to 9.7, which is a [number we chose to best match Blender's default exposure](https://github.com/bevyengine/bevy/issues/11577#issuecomment-1942873507). It also happens to be a nice "middle ground" value that sits somewhere between indoor lighting and overcast outdoor lighting.
-
-You may notice that point lights now require _significantly_ higher intensity values (in lumens). This (sometimes) million-lumen values might feel exorbitant. Just reassure yourself that (1) it actually requires a lot of light to meaningfully register in an overcast outdoor environment and (2) Blender exports lights on these scales (and we are calibrated to be as close as possible to them).
-
-[`PhysicalCameraParameters`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.PhysicalCameraParameters.html
-[`Exposure`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html
-[`Exposure::ev100`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html#structfield.ev100
-
-## Light `RenderLayers`
-
-<div class="release-feature-authors">authors: @robftm</div>
-
-[`RenderLayers`] are Bevy's answer to quickly hiding and showing entities en masse, powered by camera-driven views.
-Great for things like customizing the first-person view of what a character is holding (or making sure vampires don't show up in your mirrors!).
-
-[`RenderLayers`] [now play nice] with lights, fixing a serious limitation to make sure this awesome feature can shine appropriately!
-
-[`RenderLayers`]: https://docs.rs/bevy/latest/bevy/render/view/struct.RenderLayers.html
-[now play nice]: https://github.com/bevyengine/bevy/pull/10742
-
-## Bind Group Layout Entries
-
-<div class="release-feature-authors">authors: @IceSentry</div>
-
-We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using built-in functions to define bind group layouts resources and automatically set the index based on its position.
-
-Here's a short example of how declaring a new layout looks:
+When writing gameplay code, you might commonly have one system that wants to
+immediately see the effects of commands queued in another system.
+Before **Bevy 0.13**, you would have to manually insert an `apply_deferred` system between the two,
+a special system which causes those commands to be applied when encountered.
+Bevy now detects when a system with commands
+is ordered relative to other systems and inserts the `apply_deferred` for you.
 
 ```rust
-let layout = render_device.create_bind_group_layout(
-    "post_process_bind_group_layout"),
-    &BindGroupLayoutEntries::sequential(
-        ShaderStages::FRAGMENT,
-        (
-            texture_2d_f32(),
-            sampler(SamplerBindingType::Filtering),
-            uniform_buffer::<PostProcessingSettings>(false),
-        ),
-    ),
+// Before 0.13
+app.add_systems(
+    Update,
+    (
+        system_with_commands,
+        apply_deferred,
+        another_system,
+    ).chain()
 );
 ```
+
+```rust
+// After 0.13
+app.add_systems(
+    Update,
+    (
+        system_with_commands,
+        another_system,
+    ).chain()
+);
+```
+
+This resolves a common beginner footgun: if two systems are ordered, shouldn't the second always see the results of the first?
+
+Automatically inserted `apply_deferred` systems are optimized by automatically merging them if
+possible. In most cases, it is recommended to remove all manually inserted
+`apply_deferred` systems, as allowing Bevy to insert and merge these systems as needed will
+usually be both faster and involve less boilerplate.
+
+```rust
+// This will only add one apply_deferred system.
+app.add_systems(
+    Update,
+    (
+        (system_1_with_commands, system_2).chain(),
+        (system_3_with_commands, system_4).chain(),
+    )
+);
+```
+
+If this new behavior does not work for you, please consult the migration guide.
+There are several new APIs that allow you to opt-out.
+
+## More Flexible One-Shot Systems
+
+<div class="release-feature-authors">authors: @Nathan-Fenner</div>
+
+In **Bevy 0.12**, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
+The initial implementation had some limitations with regards to what systems could and could not be used as one-shot systems.
+In **Bevy 0.13**, these limitations have been resolved.
+
+One-shot systems now support inputs and outputs.
+
+```rust
+fn increment_sys(In(increment_by): In<i32>, mut counter: ResMut<Counter>) -> i32 {
+    counter.0 += increment_by;
+    counter.0
+}
+
+let mut world = World::new();
+let id = world.register_system(increment_sys);
+
+world.insert_resource(Counter(1));
+let count_one = world.run_system_with_input(id, 5).unwrap(); // increment counter by 5 and return 6
+let count_two = world.run_system_with_input(id, 2).unwrap(); // increment counter by 2 and return 8
+```
+
+Running a system now returns the system output as `Ok(output)`. Note that output cannot be returned when calling one-shot systems through commands, because of their deferred nature.
+
+Exclusive systems can now be registered as one-shot systems:
+
+```rust
+world.register_system(|world: &mut World| { /* do anything */ });
+```
+
+Boxed systems can now be registered with `register_boxed_system`.
+
+These improvements round out one-shot systems significantly: they should now work just like any other Bevy system.
 
 ## wgpu 0.19 Upgrade and Rendering Performance Improvements
 
@@ -961,12 +899,12 @@ let layout = render_device.create_bind_group_layout(
 
 In **Bevy 0.13** we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the long awaited `wgpu` [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to [compile shaders asynchronously](https://github.com/bevyengine/bevy/pull/10812) to avoid shader compilation stutters and [multithread draw call creation](https://github.com/bevyengine/bevy/pull/9172 ) for better performance.
 
-Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but it requires reworking parts of the renderer where we're relying on compile time constants when targeting `webgl2`, and adding a way to choose the renderer's backend at runtime on web.
+Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but we aren't quite there yet.
 
-As usual, there's been some changes that may cause issues for custom shaders. We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
+We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
 
 Many small changes both to Bevy and `wgpu` summed up to make a modest but measurable difference in our performance on realistic 3D scenes!
-We ran some quick tests on both Bevy 0.12 and Bevy 0.13 on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
+We ran some quick tests on both **Bevy 0.12** and **Bevy 0.13** on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
 
 ![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.png)
 
@@ -988,21 +926,17 @@ Meshes and the textures used to define their materials take up a ton of memory:
 in many games, memory usage is the biggest limitation on the resolution and polygon count of the game!
 Moreover, actually transferring that data from system RAM (used by the CPU) to the VRAM (used by the GPU) can be a real performance bottleneck.
 
-In the [initial PR] by @JMS55, Bevy added the ability to unload this data from system RAM, once it has been succesfully tranferred to VRAM.
-However, unloading the data from the CPU [can result in bugs], and make it harder to actually inspect or modify that data from your other game systems.
+**Bevy 0.13** adds the ability to unload this data from system RAM, once it has been succesfully transferred to VRAM. However, unloading the data from the CPU [can result in bugs], and make it harder to actually inspect or modify that data from your other game systems.
 As a result, this behavior is currently off by default.
 
-To configure this behavior for your asset, set the [`RenderAssetUsages`] field when constructing your raw asset type such as `Image` or `Mesh`,
-which is a bitflag type that allows you to specify whether to retain the data in the main (CPU) world, the render (GPU) world, or both.
+To configure this behavior for your asset, set the [`RenderAssetUsages`] field to specify whether to retain the data in the main (CPU) world, the render (GPU) world, or both.
 
-@brianreavis [later refined] this API, and used it to ensure that texture atlases and font atlases only extract data that's actually in use
+Texture atlases and font atlases only extract data that's actually in use
 to VRAM, rather than wasting work sending _all_ possible images or characters to VRAM every frame.
 Neat!
 
-[initial PR]: https://github.com/bevyengine/bevy/pull/10520
 [can result in bugs]: https://github.com/bevyengine/bevy/pull/11212
 [`RenderAssetUsages`]: https://dev-docs.bevyengine.org/bevy/render/render_asset/struct.RenderAssetUsages.html
-[later refined]: https://github.com/bevyengine/bevy/pull/11399
 
 ## Better Batching Through Smarter Sorting
 
@@ -1016,168 +950,10 @@ However, our strategy for defining these batches was far from optimal.
 Previously, we were sorting by distance to the camera, and _then_ checking if multiple of the same meshes were adjacent to each other in that sorted list.
 On realistic scenes, this is unlikely to find many candidates for merging!
 
-Following [PR #11671] however, we first sort by pipeline (effectively the type of material being used), and then by mesh identity.
+In **Bevy 0.13**, we first sort by pipeline (effectively the type of material being used), and then by mesh identity.
 This strategy results in better batching, improving overall FPS by double digit percentages on the [realistic scene tested](https://syntystore.com/products/polygon-fantasy-kingdom)!
 
 ![A graph showing batching improvements. Shadows are very expensive, and FPS improved by at least 20% in all cases tested.](better_batching.svg)
-
-[PR #11671]: https://github.com/bevyengine/bevy/pull/11671
-
-## Type-Safe Labels for the `RenderGraph`
-
-<div class="release-feature-authors">authors: @DasLixou</div>
-
-Bevy uses Rust's type system extensively when defining labels, letting developers lean on tooling to catch typos and ease refactors.
-But this didn't apply to Bevy's render graph. In the render graph, hard-coded—and potentially overlapping—strings were used to define nodes and sub-graphs.
-
-```rust
-// Before 0.13
-impl MyRenderNode {
-    pub const NAME: &'static str = "my_render_node"
-}
-```
-
-In **Bevy 0.13**, we're using a more robust way to name render nodes and render graphs with the help of the type-safe label pattern already used by `bevy_ecs`.
-
-```rust
-// After 0.13
-#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
-pub struct MyRenderLabel;
-```
-
-With those, the long paths for const-values become shorter and cleaner:
-
-```rust
-// Before 0.13
-render_app
-    .add_render_graph_node::<ViewNodeRunner<MyRenderNode>>(
-        core_3d::graph::NAME,
-        MyRenderNode::NAME,
-    )
-    .add_render_graph_edges(
-        core_3d::graph::NAME,
-        &[
-            core_3d::graph::node::TONEMAPPING,
-            MyRenderNode::NAME,
-            core_3d::graph::node::END_MAIN_PASS_POST_PROCESSING,
-        ],
-    );
-
-// After 0.13
-use bevy::core_pipeline::core_3d::graph::{Labels3d, SubGraph3d};
-
-render_app
-    .add_render_graph_node::<ViewNodeRunner<MyRenderNode>>(
-        SubGraph3d,
-        MyRenderLabel,
-    )
-    .add_render_graph_edges(
-        SubGraph3d,
-        (
-            Labels3d::Tonemapping,
-            MyRenderLabel,
-            Labels3d::EndMainPassPostProcessing,
-        ),
-    );
-```
-
-When you need dynamic labels for render nodes, those can still be achieved via e.g. tuple structs:
-
-```rust
-#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
-pub struct MyDynamicLabel(&'static str);
-```
-
-This is particularly nice because we don't have to store strings in here: we can use integers, custom enums or any other hashable type.
-
-## Camera-Driven UI
-
-<div class="release-feature-authors">authors: @bardt, @oceantume</div>
-
-Historically, Bevy's UI elements have been scaled and positioned in the context of the primary window, regardless of the camera settings. This approach made some UI experiences like split-screen multiplayer difficult to implement, and others such as having UI in multiple windows impossible.
-
-We are now introducing a more flexible way of rendering the user interface: camera-driven UI. Each camera can now have its own UI root, rendering according to its viewport, scale factor, and a target which can be a secondary window or even a texture.
-
-This change unlocks a variety of new UI experiences, including split-screen multiplayer, UI in multiple windows, displaying non-interactive UI in a 3D world, and more.
-
-![Split-screen with independent UI roots](split-screen.png)
-
-If there is one camera in the world, you don't need to do anything; your UI will be displayed in that camera's viewport.
-
-```rust
-commands.spawn(Camera3dBundle {
-    // Camera can have custom viewport, target, etc.
-});
-commands.spawn(NodeBundle {
-    // UI will be rendered to the singular camera's viewport
-});
-```
-
-For when more control is desirable, or there are multiple cameras, we introduce [`TargetCamera`] component. This component can be added to a root UI node to specify which camera it should be rendered to.
-
-```rust
-// For split-screen multiplayer, we set up 2 cameras and 2 UI roots
-let left_camera = commands.spawn(Camera3dBundle {
-    // Viewport is set to left half of the screen
-}).id();
-
-commands
-    .spawn((
-        TargetCamera(left_camera),
-        NodeBundle {
-            //...
-        }
-    ));
-
-let right_camera = commands.spawn(Camera3dBundle {
-    // Viewport is set to right half of the screen
-}).id();
-
-commands
-    .spawn((
-        TargetCamera(right_camera),
-        NodeBundle {
-            //...
-        })
-    );
-```
-
-With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
-
-```rust
-commands.spawn(Camera3dBundle::default());
-commands.spawn(NodeBundle {
-    visibility: Visibility::Hidden, // UI will be hidden
-    // ...
-});
-```
-
-[`TargetCamera`]: https://docs.rs/bevy/0.13.0/bevy/ui/struct.TargetCamera.html
-[`Visibility`]: https://docs.rs/bevy/0.13.0/bevy/render/view/enum.Visibility.html
-[`UiCameraConfig`]: https://docs.rs/bevy/0.12.1/bevy/ui/camera_config/struct.UiCameraConfig.html
-
-## Winit Upgrade
-
-<div class="release-feature-authors">authors: @Thierry Berger, @mockersf</div>
-
-Through the heroic efforts of our contributors and reviewers, Bevy is [now upgraded] to use `winit 0.29`.
-[`winit`] is our windowing library: it abstracts over all of the different operating systems and input devices that end users might have,
-and provides a basically uniform API to enable a write-once run-anywhere experience.
-While this brings with it the usual litany of valuable [bug fixes and stability improvements],
-the critical change revolves around how [`KeyCode`] is handled.
-
-Previously, [`KeyCode`] represented the logical meaning of a key on a keyboard:
-pressing the same button on the same keyboard when swapping between QWERTY and AZERTY keyboard layouts would give a different result!
-Now,  [`KeyCode`] represents the physical location of the key.
-Lovers of WASD games know that this is a much better default for games. For most Bevy developers, you can leave your existing code untouched
-and simply benefit from better default keybindings for users on non-QWERTY keyboards or layouts.
-If you need information about the logical keys pressed, use the [`ReceivedCharacter`] event.
-
-[now upgraded]: https://github.com/bevyengine/bevy/pull/10702
-[`winit`]: https://docs.rs/winit/latest/winit/
-[bug fixes and stability improvements]: https://github.com/rust-windowing/winit/blob/master/CHANGELOG.md#0292
-[`KeyCode`]: https://docs.rs/bevy/latest/bevy/input/keyboard/enum.KeyCode.html
-[`ReceivedCharacter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.ReceivedCharacter.html
 
 ## Animation Interpolation Methods
 
@@ -1234,6 +1010,251 @@ But for now, this is just a building block. We've implemented this for a few key
 Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
 
 [`Animatable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Animatable.html
+
+## Extensionless Asset Support
+
+<div class="release-feature-authors">authors: @bushrat011899</div>
+
+In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The [recent addition of .meta files] allowed for specifying more granular loading behavior, but file extensions were still required. In **Bevy 0.13**, the asset type can now be used to infer the [`AssetLoader`].
+
+```rust
+// Uses AudioSettingsAssetLoader
+let audio = asset_server.load("data/audio.json");
+
+// Uses GraphicsSettingsAssetLoader
+let graphics = asset_server.load("data/graphics.json");
+```
+
+This is possible because every [`AssetLoader`] is required to declare what **type** of asset it loads, not just the extensions it supports. Since the [`load`] method on [`AssetServer`] was already generic over the type of asset to return, this information is already available to the [`AssetServer`].
+
+```rust
+// The above example with types shown
+let audio: Handle<AudioSettings> = asset_server.load::<AudioSettings>("data/audio.json");
+let graphics: Handle<GraphicsSettings> = asset_server.load::<GraphicsSettings>("data/graphics.json");
+```
+
+Now we can also use it to choose the [`AssetLoader`] itself.
+
+When loading an asset, the loader is chosen by checking (in order):
+
+1. The asset `meta` file
+2. The type of `Handle<A>` to return
+3. The file extension
+
+```rust
+// This will be inferred from context to be a glTF asset, ignoring the file extension
+let gltf_handle = asset_server.load("models/cube/cube.gltf");
+
+// This still relies on file extension due to the label
+let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
+//                                                        ^^^^^^^^^^^^^^^^^
+//                                                        | Asset path label
+```
+
+### File Extensions Are Now Optional
+
+Since the asset type can be used to infer the loader, neither the file to be loaded nor the [`AssetLoader`] need to have file extensions.
+
+```rust
+pub trait AssetLoader: Send + Sync + 'static {
+    /* snip */
+
+    /// Returns a list of extensions supported by this [`AssetLoader`], without the preceding dot.
+    fn extensions(&self) -> &[&str] {
+        // A default implementation is now provided
+        &[]
+    }
+}
+```
+
+Previously, an asset loader with no extensions was very cumbersome to use. Now, they can be used just as easily as any other loader. Likewise, if a file is missing its extension, Bevy can now choose the appropriate loader.
+
+```rust
+let license = asset_server.load::<Text>("LICENSE");
+```
+
+Appropriate file extensions are still recommended for good project management, but this is now a recommendation rather than a hard requirement.
+
+### Multiple Asset Loaders With The Same Asset
+
+Now, a single path can be used by multiple asset handles as long as they are distinct asset types.
+
+```rust
+// Load the sound effect for playback
+let bang = asset_server.load::<AudioSource>("sound/bang.ogg");
+
+// Load the raw bytes of the same sound effect (e.g, to send over the network)
+let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
+
+// Returns the bang handle since it was already loaded
+let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
+```
+
+Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
+
+```rust
+#[derive(Resource)]
+struct SoundEffects {
+    bang: Handle<AudioSource>,
+    bang_blog: Handle<Blob>,
+}
+
+fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
+    effects.bang = asset_server.load("sound/bang.ogg");
+    effects.bang_blob = asset_server.load("sound/bang.ogg");
+}
+```
+
+The [`custom_asset` example] has been updated to demonstrate these new features.
+
+[recent addition of .meta files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
+[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
+[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
+[`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
+[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
+[turbofish]: https://turbo.fish/
+[`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
+
+## Texture Atlas Rework
+
+<div class="release-feature-authors">authors: @ManevilleF</div>
+
+Texture atlases efficiently combine multiple images into a single larger texture called an atlas.
+
+**Bevy 0.13** significantly reworks them to reduce boilerplate and make them more data-oriented.
+Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components (and their corresponding `Bundle` types). Texture atlasing is now enabled by adding a single _additional_ component to normal sprite and image entities: [`TextureAtlas`].
+
+### Why?
+
+Texture atlases (sometimes called sprite sheets) simply draw a custom _section_ of a given texture. This is _still_ Sprite-like or Image-like behavior, we're just drawing a subset. The new [`TextureAtlas`] component embraces that by storing:
+
+* a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
+* a `usize` index defining which section `Rect` of the layout we want to display
+
+[`TextureAtlas`]: https://dev-docs.bevyengine.org/bevy/sprite/struct.TextureAtlas.html
+
+## Light `RenderLayers`
+
+<div class="release-feature-authors">authors: @robftm</div>
+
+[`RenderLayers`] are Bevy's answer to quickly hiding and showing entities en masse by filtering what a Camera can see ... great for things like customizing the first-person view of what a character is holding (or making sure vampires don't show up in your mirrors!).
+
+[`RenderLayers`] [now play nice] with lights, fixing a serious limitation to make sure this awesome feature can shine appropriately!
+
+[`RenderLayers`]: https://docs.rs/bevy/latest/bevy/render/view/struct.RenderLayers.html
+[now play nice]: https://github.com/bevyengine/bevy/pull/10742
+
+## Bind Group Layout Entries
+
+<div class="release-feature-authors">authors: @IceSentry</div>
+
+We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using built-in functions to define bind group layouts resources and automatically set the index based on its position.
+
+Here's a short example of how declaring a new layout looks:
+
+```rust
+let layout = render_device.create_bind_group_layout(
+    "post_process_bind_group_layout"),
+    &BindGroupLayoutEntries::sequential(
+        ShaderStages::FRAGMENT,
+        (
+            texture_2d_f32(),
+            sampler(SamplerBindingType::Filtering),
+            uniform_buffer::<PostProcessingSettings>(false),
+        ),
+    ),
+);
+```
+
+## Type-Safe Labels for the `RenderGraph`
+
+<div class="release-feature-authors">authors: @DasLixou</div>
+
+Bevy uses Rust's type system extensively when defining labels, letting developers lean on tooling to catch typos and ease refactors.
+But this didn't apply to Bevy's render graph. In the render graph, hard-coded—and potentially overlapping—strings were used to define nodes and sub-graphs.
+
+```rust
+// Before 0.13
+impl MyRenderNode {
+    pub const NAME: &'static str = "my_render_node"
+}
+```
+
+In **Bevy 0.13**, we're using a more robust way to name render nodes and render graphs with the help of the type-safe label pattern already used by `bevy_ecs`.
+
+```rust
+// After 0.13
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct PrettyFeature;
+```
+
+With those, the long paths for const-values become shorter and cleaner:
+
+```rust
+// Before 0.13
+render_app
+    .add_render_graph_node::<ViewNodeRunner<PrettyFeatureNode>>(
+        core_3d::graph::NAME,
+        PrettyFeatureNode::NAME,
+    )
+    .add_render_graph_edges(
+        core_3d::graph::NAME,
+        &[
+            core_3d::graph::node::TONEMAPPING,
+            PrettyFeatureNode::NAME,
+            core_3d::graph::node::END_MAIN_PASS_POST_PROCESSING,
+        ],
+    );
+
+// After 0.13
+use bevy::core_pipeline::core_3d::graph::{Node3d, Core3d};
+
+render_app
+    .add_render_graph_node::<ViewNodeRunner<PrettyFeatureNode>>(
+        Core3d,
+        PrettyFeature,
+    )
+    .add_render_graph_edges(
+        Core3d,
+        (
+            Node3d::Tonemapping,
+            PrettyFeature,
+            Node3d::EndMainPassPostProcessing,
+        ),
+    );
+```
+
+When you need dynamic labels for render nodes, those can still be achieved via e.g. tuple structs:
+
+```rust
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct MyDynamicLabel(&'static str);
+```
+
+This is particularly nice because we don't have to store strings in here: we can use integers, custom enums or any other hashable type.
+
+## Winit Upgrade
+
+<div class="release-feature-authors">authors: @Thierry Berger, @mockersf</div>
+
+Through the heroic efforts of our contributors and reviewers, Bevy is [now upgraded] to use `winit 0.29`.
+[`winit`] is our windowing library: it abstracts over all of the different operating systems and input devices that end users might have,
+and provides a basically uniform API to enable a write-once run-anywhere experience.
+While this brings with it the usual litany of valuable [bug fixes and stability improvements],
+the critical change revolves around how [`KeyCode`] is handled.
+
+Previously, [`KeyCode`] represented the logical meaning of a key on a keyboard:
+pressing the same button on the same keyboard when swapping between QWERTY and AZERTY keyboard layouts would give a different result!
+Now,  [`KeyCode`] represents the physical location of the key.
+Lovers of WASD games know that this is a much better default for games. For most Bevy developers, you can leave your existing code untouched
+and simply benefit from better default keybindings for users on non-QWERTY keyboards or layouts.
+If you need information about the logical keys pressed, use the [`ReceivedCharacter`] event.
+
+[now upgraded]: https://github.com/bevyengine/bevy/pull/10702
+[`winit`]: https://docs.rs/winit/latest/winit/
+[bug fixes and stability improvements]: https://github.com/rust-windowing/winit/blob/master/CHANGELOG.md#0292
+[`KeyCode`]: https://docs.rs/bevy/latest/bevy/input/keyboard/enum.KeyCode.html
+[`ReceivedCharacter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.ReceivedCharacter.html
 
 ## Multiple Gizmo Configurations
 
@@ -1348,133 +1369,6 @@ With [the changes by CorneliusCornbread] you can configure the loader to store a
 [all sorts]: https://github.com/KhronosGroup/glTF/blob/main/extensions/README.md
 [the changes by CorneliusCornbread]: https://github.com/bevyengine/bevy/pull/11138
 
-## Extensionless Asset Support
-
-<div class="release-feature-authors">authors: @bushrat011899</div>
-
-In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The recent addition of [`meta` files] allowed for specifying more granular loading behavior, but file extensions were still required. In Bevy 0.13, the asset type can now be used to infer the [`AssetLoader`].
-
-```rust
-// Uses AudioSettingsAssetLoader
-let audio = asset_server.load("data/audio.json");
-
-// Uses GraphicsSettingsAssetLoader
-let graphics = asset_server.load("data/graphics.json");
-```
-
-This is possible because every [`AssetLoader`] is required to declare what **type** of asset it loads, not just the extensions it supports. Since the [`load`] method on [`AssetServer`] was already generic over the type of asset to return, this information is already available to the [`AssetServer`] so that the appropriate [`Handle`] type is returned.
-
-```rust
-// The above example with types shown
-let audio: Handle<AudioSettings> = asset_server.load::<AudioSettings>("data/audio.json");
-let graphics: Handle<GraphicsSettings> = asset_server.load::<GraphicsSettings>("data/graphics.json");
-```
-
-Now we can also use it to choose the [`AssetLoader`] itself.
-
-```rust
-#[derive(Resource)]
-struct Settings {
-    audio: Handle<AudioSettings>,
-//                ^^^^^^^^^^^^^
-//                | This type...
-}
-
-fn setup(mut settings: ResMut<Settings>, asset_server: Res<AssetServer>) {
-    settings.audio = asset_server.load("data/audio.json");
-//                                ^^^^
-//                                | ...is passed here...
-}
-
-impl AssetLoader for AudioSettingsAssetLoader {
-    type Asset = AudioSettings;
-//               ^^^^^^^^^^^^^
-//               | ...and checked against AssetLoader::Asset
-
-    /* snip */
-}
-```
-
-When loading an asset, the loader is chosen by checking (in order):
-
-1. The asset `meta` file
-2. The type of `Handle<A>` to return
-3. The file extension
-
-```rust
-// This will be inferred from context to be a glTF asset, ignoring the file extension
-let gltf_handle = asset_server.load("models/cube/cube.gltf");
-
-// This still relies on file extension due to the label
-let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
-//                                                        ^^^^^^^^^^^^^^^^^
-//                                                        | Asset path label
-```
-
-### File Extensions Are Now Optional
-
-Since the asset type can be used to infer the loader, neither the file to be loaded nor the [`AssetLoader`] need to have file extensions.
-
-```rust
-pub trait AssetLoader: Send + Sync + 'static {
-    /* snip */
-
-    /// Returns a list of extensions supported by this [`AssetLoader`], without the preceding dot.
-    fn extensions(&self) -> &[&str] {
-        // A default implementation is now provided
-        &[]
-    }
-}
-```
-
-Previously, an asset loader with no extensions was very cumbersome to use. Now, they can be used just as easily as any other loader. Likewise, if a file is missing its extension, Bevy can now choose the appropriate loader.
-
-```rust
-let license = asset_server.load::<Text>("LICENSE");
-```
-
-Appropriate file extensions are still recommended for good project management, but this is now a recommendation rather than a hard requirement.
-
-### Multiple Asset Loaders With The Same Asset
-
-Now, a single path can be used by multiple asset handles as long as they are distinct asset types.
-
-```rust
-// Load the sound effect for playback
-let bang = asset_server.load::<AudioSource>("sound/bang.ogg");
-
-// Load the raw bytes of the same sound effect (e.g, to send over the network)
-let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
-
-// Returns the bang handle since it was already loaded
-let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
-```
-
-Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
-
-```rust
-#[derive(Resource)]
-struct SoundEffects {
-    bang: Handle<AudioSource>,
-    bang_blog: Handle<Blob>,
-}
-
-fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
-    effects.bang = asset_server.load("sound/bang.ogg");
-    effects.bang_blob = asset_server.load("sound/bang.ogg");
-}
-```
-
-The [`custom_asset` example] has been updated to demonstrate these new features.
-
-[`meta` files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
-[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
-[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
-[`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
-[`Handle`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
-[turbofish]: https://turbo.fish/
-[`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
-
 ## Asset Transformers
 
 <div class="release-feature-authors">authors: @thepackett, @RyanSparker</div>
@@ -1571,6 +1465,43 @@ Naturally, _adding_ asserts in potentially hot codepaths were cause for some con
 But the benefit was a less error-prone API and more robust code.
 With a complex unsafe codebase like `bevy_ecs`, every little bit helps.
 
+## Events Live Longer
+
+Events are a useful tool for passing data into systems and between systems.
+
+Internally, Bevy events are double-buffered, so a given event will be silently dropped once the buffers have swapped twice.
+The `Events<T>` resource is setup this way so events are dropped after a predictable amount of time, preventing their queues from growing forever and causing a memory leak.
+
+Before 0.12.1, event queues were swapped every update (i.e. every frame).
+That was an issue for games with logic in `FixedUpdate`, since it meant events would normally disappear before systems in the next `FixedUpdate` could read them.
+
+Bevy 0.12.1 changed the swap cadence to "every update that runs `FixedUpdate` one or more times" (only if the `TimePlugin` is installed).
+This change did resolve the original problem, but it then caused problems in the other direction.
+Users were surprised to learn some of their systems with `run_if` conditions would iterate much older events than expected.
+(In hindsight, we should have considered it a breaking change and postponed it until this release.)
+The change also introduced a bug (fixed in this release) where only one type of event was actually being dropped.
+
+One proposed future solution to this lingering but unintended coupling between `Update` and `FixedUpdate` is to use event timestamps to change the default range of events visible by `EventReader<T>`.
+That way systems in `Update` would skip any events older than a frame while systems in `FixedUpdate` could still see them.
+
+For now, the `<=0.12.0` behavior can be recovered by simply removing the `EventUpdateSignal` resource.
+
+```rust
+fn main() {
+    let mut app = App::new()
+        .add_plugins(DefaultPlugins);
+    
+    /* ... */
+
+    // If this resource is absent, events are dropped the same way as <=0.12.0.
+    app.world.remove_resource::<EventUpdateSignal>();
+    
+    /* ... */
+
+    app.run();
+}
+```
+
 ## <a name="what-s-next"></a>What's Next?
 
 We have plenty of work in progress! Some of this will likely land in **Bevy 0.14**.
@@ -1589,31 +1520,31 @@ There are some incredible mockups, functional prototypes and third-party editor-
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: end; justify-items: center; margin: 2rem; font-size: 0.8rem; text-align: center">
   <div style="grid-column: span 2">
     <a href="editor_mockup.png"><img src="editor_mockup.png" alt="A mockup of the UI for a graphical Bevy editor" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
-    bevy_editor_mockup
+    (1) bevy_editor_mockup
   </div>
   <div style="grid-column: span 2">
     <a href="locomotion_graph.png"><img src="locomotion_graph.png" alt="A node-based animation graph editor built with `bevy_egui`" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
-    bevy_animation_graph
+    (2) bevy_animation_graph
   </div>
   <div style="grid-column: span 2">
     <a href="space_editor.png"><img src="space_editor.png" alt="A screenshot from `space_editor`, showcasing a functional scene editor with gizmos" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
-    space_editor
+    (3) space_editor
   </div>
   <div style="grid-column: 2 / span 2">
     <a href="bevy_components.png"><img src="bevy_components.png" alt="A screenshot from Blender, with Blender UI modifying Bevy component values" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
-    bevy_components
+    (4) bevy_components
   </div>
   <div style="grid-column: span 2">
     <a href="makeshift_web.png"><img src="makeshift_web.png" alt="A recording of a web-based editor resulting in changes to Bevy entities in real time" style="border-radius: 0; box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5)"></a>
-    bevy_remote
+    (5) bevy_remote
   </div>
 </div>
 
-* [] a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor [could look like]
-* [] [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
-* [] [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
-* [] [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
-* [] `@coreh`'s experiment on a [reflection-powered remote protocol], allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
+1. a Bevy-branded editor UI mockup by `@Jacob_` and `@!!&Amy` on Discord, imagining what the UX for an ECS-based editor [could look like]
+2.  [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
+3. [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
+4. [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
+5. `@coreh`'s experiment on a [reflection-powered remote protocol], coupled with an interactive web-based editor, allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
 
 It's really exciting to see this progress, and we're keen to channel that energy and experience into official first-party efforts.
 
