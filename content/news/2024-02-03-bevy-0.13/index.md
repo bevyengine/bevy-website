@@ -838,7 +838,7 @@ commands.spawn((
 
 <div class="release-feature-authors">authors: @superdump (Rob Swain), @JMS55, @cart</div>
 
-Cameras in the "real world" control how bright an image is by adjusting "exposure settings":
+Cameras in the "real world" control how bright an image is by adjusting several "exposure settings":
 
 * **Aperture**: Measured in F-Stops, the aperture opens and closes to control how much light is allowed into the camera's sensor or film by physically blocking off lights from specific angles, similar to the pupil of an eye.
 * **Shutter Speed**: How quickly the shutter closes, which controls the duration of time that light is allowed to enter the camera.
