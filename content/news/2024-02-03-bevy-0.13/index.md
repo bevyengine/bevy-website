@@ -13,7 +13,7 @@ image_subtitle_link = "https://www.jarl-game.com/"
 Thanks to 198 contributors, 672 pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.13** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
-And to see what the engine has to offer hands-on, check out the entries in the [latest Bevy Jam](https://itch.io/jam/bevy-jam-4/entries), including the winner [That's a lot of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees)
+And to see what the engine has to offer hands-on, check out the entries in the [latest Bevy Jam](https://itch.io/jam/bevy-jam-4/entries), including the winner [That's a LOT of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees).
 
 To update an existing Bevy App or Plugin to **Bevy 0.13**, check out our [0.12 to 0.13 Migration Guide](/learn/migration-guides/0.12-0.13/).
 
@@ -21,13 +21,107 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 <!-- more -->
 
+* **Lightmaps:** A fast, popular baked global illumination technique for static geometry (baked externally in programs like The Lightmapper).
+* **Irradiance Volumes / Voxel Global Illumination:** Support for a baked form of global illumination that samples light at the centers of voxels within a cuboid (baked externally in programs like Blender).
 * **Primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished, ready-to-use collection of them!
 * **System stepping:** completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
 * **Dynamic queries:** refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
 * **Automatically inferred command flush points:** tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
 * **Slicing, tiling and nine-patch 2D images:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
-* **Lightmaps:** the first step towards baked global illumination: a fast, popular and pretty lighting technique.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
+
+## Initial Baked Lighting
+
+Computing lighting in real time is expensive;
+but for elements of a scene that never move (like rooms or terrain),
+we can get prettier lighting and shadows for cheaper by computing it ahead of time using **global illumination**,
+then storing the results in a "baked" form that never changes.
+Global illumination is a more realistic (and expensive) approach to lighting that often uses ray tracing.
+Unlike Bevy's default rendering, it takes light bouncing off of other objects into account,
+producing more realistic effects through the inclusion of indirect light.
+
+### Lightmaps
+
+<div class="release-feature-authors">authors: @pcwalton</div>
+
+![lightmaps](lightmap.jpg)
+
+**Lightmaps** are textures that store pre-computed global illumination results. They have been a mainstay of real-time graphics for decades. **Bevy 0.13** adds initial support for rendering lightmaps computed in other programs, such as [The Lightmapper]. Ultimately we would like to add support for baking lightmaps directly in Bevy, but this first step unlocks lightmap workflows!
+
+Like the [lightmaps example] shows, just load in your baked lightmap image, and then insert a [`Lightmap`] component on the corresponding mesh.
+
+[`Lightmap`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.Lightmap.html
+[lightmaps example]: https://github.com/bevyengine/bevy/blob/main/examples/3d/lightmaps.rs
+[The Lightmapper]: https://github.com/Naxela/The_Lightmapper
+
+### Irradiance Volumes / Voxel Global Illumination
+
+<div class="release-feature-authors">authors: @pcwalton</div>
+
+![irradiance volume](irradiance_volume.jpg)
+
+**Irradiance volumes** (or voxel global illumination) is a technique used for approximating indirect light by first dividing
+a scene into cubes (voxels), then sampling the amount of light present at the center of each of those voxels.
+This light is then added to objects within that space as they move through it, changing the ambient light level on those objects appropriately.
+
+We've chosen to use the ambient cubes algorithm for this, based on Half Life 2.
+This allows us to match Blender's [Eevee renderer], giving users a simple and free path to creating nice-looking irradiance volumes for their own scenes.
+
+Notice how this sphere subtly picks up the colors of the environment as it moves around, thanks to irradiance volumes:
+
+<video controls><source src="irradiance_volume.mp4" type="video/mp4"/></video>
+
+For now, you need to use external tools such as Blender to bake irradiance volumes, but in the future we would like to support baking irradiance volumes directly in Bevy!
+
+[Eevee renderer]: https://docs.blender.org/manual/en/latest/render/eevee/index.html
+
+## Minimal Reflection Probes
+
+<div class="release-feature-authors">authors: @pcwalton</div>
+
+**Environment maps** are 2D textures used to simulate lighting, reflection, and skyboxes in a 3D scene.
+**Reflection probes** generalize environment maps to allow for multiple environment maps in the same scene, each of which has its own axis-aligned bounding box.
+This is a standard feature of physically-based renderers and was inspired by the [corresponding feature in Blender's Eevee renderer].
+
+In the [reflection probes PR], we've added basic support for these, laying the groundwork for pretty, high-performance reflections in Bevy games.
+Like with the baked global illumination work discussed above, these must currently be precomputed externally, then imported into Bevy.
+As discussed in the PR, there are quite a few caveats: WebGL2 support is effectively non-existent, sharp and sudden transitions will be observed because there's no blending,
+and all cubemaps in the world of a given type (diffuse or specular) must have the same size, format, and mipmap count.
+
+![reflection probes](reflection_probes.jpg)
+
+[reflection probes PR]: https://github.com/bevyengine/bevy/pull/11366
+[corresponding feature in Blender's Eevee renderer]: https://docs.blender.org/manual/en/latest/render/eevee/light_probes/reflection_cubemaps.html
+
+## Approximate Indirect Specular Occlusion
+
+<div class="release-feature-authors">authors: @aevyrie</div>
+
+Bevy's current PBR renderer over-brightens the image, especially at grazing angles where the fresnel
+effect tends to make surfaces behave like mirrors. This over-brightening happens because the
+surfaces must reflect _something_, but without path traced or screen-space reflections, the renderer
+has to guess _what_ is being reflected. The best guess it can make is to sample the environment cube
+map, even if light would've hit something else before reaching the environment light. This artifact,
+where light occlusion is ignored, is called specular light leaking.
+
+Consider a car tire; though the rubber might be shiny, you wouldn't expect it to have bright
+specular highlights inside a wheel well, because the car itself is blocking (occluding) the light
+that would otherwise cause these reflections. Checking for occlusion can be computationally
+expensive. Instead, this change uses Bevy's existing screen space ambient occlusion to approximate
+specular occlusion.
+
+<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
+
+<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Specular Occlusion On" data-title-b="Specular Occlusion Off">
+  <img class="image-a" alt="Specular Occlusion On" src="specular_occlusion_on.jpg">
+  <img class="image-b" alt="Specular Occlusion Off" src="specular_occlusion_off.jpg">
+</div>
+
+<div style="font-size: 1.0rem" class="release-feature-authors">Model Credits: <a href="https://sketchfab.com/3d-models/bmw-r1200gs-motorcycle-6550451b0ae547039585a44286b2f530">BMW R1200GS Motorcycle</a> by Moto3D is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>.
+</div>
+
+In the future, this could be further improved with screen space reflections (SSR).
+However, conventional wisdom is that you should use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
 
 ## Primitive Shapes
 
@@ -865,57 +959,6 @@ You may notice that point lights now require _significantly_ higher intensity va
 [`Exposure`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html
 [`Exposure::ev100`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html#structfield.ev100
 
-## Basic baked global illumination
-
-<div class="release-feature-authors">authors: @pcwalton</div>
-
-Computing lighting in real time is expensive;
-but for elements of a scene that never move (like rooms or terrain),
-we can get prettier lighting and shadows for cheaper by computing it ahead of time using **global illumination**,
-then storing the results in a "baked" form that never changes.
-Global illumination is a more sophisticated (and expensive) approach to lighting that often uses ray tracing.
-Unlike Bevy's default lighting tools, it takes light bouncing off of other objects into account,
-producing more realistic effects through the inclusion of indirect light.
-
-**Lightmaps**, textures that store pre-computed results of this global illumination, have been a mainstay of real-time graphics for decades.
-The [lightmap PR] adds preliminary support for them to Bevy.
-Like the [lightmaps example] shows, just load in your baked lightmap image, and then insert a [`Lightmap`] component on the corresponding mesh.
-
-![A simple scene rendered using baked light maps in Bevy 0.13](light_map.png)
-
-Following up on this work, the [irradiance volumes PR] added support for a second form of baked global illumination.
-**Irradiance volumes** (or voxel global illumination) is a technique used for approximating indirect light by first dividing
-a scene into cubes (voxels), then sampling the amount of light present at the center of each of those voxels.
-This light is then added to objects within that space as they move through it, changing the ambient light level on those objects appropriately.
-As the PR helpfully explains, we've chosen to use the ambient cubes algorithm for this, based on Half Life 2.
-This allows us to match Blender's [Eevee renderer], giving users a simple and free path to creating nice-looking irradiance volumes for their own scenes.
-
-Note that this work does not include any Bevy-native way to precompute global illumination!
-Instead for now this should be computed externally in a tool like [The Lightmapper], and then loaded into Bevy.
-
-[lightmap PR]: https://github.com/bevyengine/bevy/pull/10231
-[`Lightmap`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.Lightmap.html
-[lightmaps example]: https://github.com/bevyengine/bevy/blob/main/examples/3d/lightmaps.rs
-[irradiance volumes PR]: https://github.com/bevyengine/bevy/pull/10268
-[The Lightmapper]: https://github.com/Naxela/The_Lightmapper
-[Eevee renderer]: https://docs.blender.org/manual/en/latest/render/eevee/index.html
-
-## Minimal Reflection Probes
-
-<div class="release-feature-authors">authors: @pcwalton</div>
-
-**Environment maps** are 2D textures used to simulate lighting, reflection, and skyboxes in a 3D scene.
-**Reflection probes** generalize environment maps to allow for multiple environment maps in the same scene, each of which has its own axis-aligned bounding box.
-This is a standard feature of physically-based renderers and was inspired by the [corresponding feature in Blender's Eevee renderer].
-
-In the [reflection probes PR], we've added basic support for these, laying the groundwork for pretty, high-performance reflections in Bevy games.
-Like with the baked global illumination work discussed above, these must currently be precomputed externally, then imported into Bevy.
-As discussed in the PR, there are quite a few caveats: WebGL2 support is effectively non-existent, sharp and sudden transitions will be observed because there's no blending,
-and all cubemaps in the world of a given type (diffuse or specular) must have the same size, format, and mipmap count.
-
-[reflection probes PR]: https://github.com/bevyengine/bevy/pull/11366
-[corresponding feature in Blender's Eevee renderer]: https://docs.blender.org/manual/en/latest/render/eevee/light_probes/reflection_cubemaps.html
-
 ## Lights work with `RenderLayers`
 
 <div class="release-feature-authors">authors: @robftm</div>
@@ -927,36 +970,6 @@ Great for things like customizing the first-person view of what a character is h
 
 [`RenderLayers`]: https://docs.rs/bevy/latest/bevy/render/view/struct.RenderLayers.html
 [now play nice]: https://github.com/bevyengine/bevy/pull/10742
-
-## Approximate Indirect Specular Occlusion
-
-<div class="release-feature-authors">authors: @aevyrie</div>
-
-Bevy's current PBR renderer over-brightens the image, especially at grazing angles where the fresnel
-effect tends to make surfaces behave like mirrors. This over-brightening happens because the
-surfaces must reflect _something_, but without path traced or screen-space reflections, the renderer
-has to guess _what_ is being reflected. The best guess it can make is to sample the environment cube
-map, even if light would've hit something else before reaching the environment light. This artifact,
-where light occlusion is ignored, is called specular light leaking.
-
-Consider a car tire; though the rubber might be shiny, you wouldn't expect it to have bright
-specular highlights inside a wheel well, because the car itself is blocking (occluding) the light
-that would otherwise cause these reflections. Checking for occlusion can be computationally
-expensive. Instead, this change uses Bevy's existing screen space ambient occlusion to approximate
-specular occlusion.
-
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Specular Occlusion On" data-title-b="Specular Occlusion Off">
-  <img class="image-a" alt="Specular Occlusion On" src="specular_occlusion_on.jpg">
-  <img class="image-b" alt="Specular Occlusion Off" src="specular_occlusion_off.jpg">
-</div>
-
-<div style="font-size: 1.0rem" class="release-feature-authors">Model Credits: <a href="https://sketchfab.com/3d-models/bmw-r1200gs-motorcycle-6550451b0ae547039585a44286b2f530">BMW R1200GS Motorcycle</a> by Moto3D is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>.
-</div>
-
-In the future, this could be further improved with screen space reflections (SSR).
-However, conventional wisdom is that you should use specular occlusion alongside SSR, because SSR still suffers from light leaking artifacts.
 
 ## Bind Group Layout Entries
 
