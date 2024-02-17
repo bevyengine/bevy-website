@@ -1,13 +1,11 @@
 +++
 title = "Contributing"
-weight = 4
-sort_by = "weight"
 template = "docs-section.html"
-page_template = "docs-section.html"
 insert_anchor_links = "right"
 aliases = ["learn/book/contributing"]
 [extra]
 subtitle = "join the bevy"
+weight = 4
 +++
 
 Bevy is built by volunteers. If you want to help us build the next great game engine, [please reach out](/community)! We need all the help we can get:

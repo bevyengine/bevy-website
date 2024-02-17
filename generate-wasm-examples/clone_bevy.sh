@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git init bevy
-cd bevy
-git remote add origin https://github.com/bevyengine/bevy
-git pull --depth=1 origin latest
+# Switch to script's directory, letting it be called from any folder.
+cd $(dirname $0)
+
+git clone --depth=1 --branch=latest https://github.com/bevyengine/bevy bevy

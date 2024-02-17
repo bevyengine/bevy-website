@@ -1,11 +1,9 @@
 +++
 title = "Rendering Internals"
-weight = 7
-sort_by = "weight"
 template = "docs-section.html"
-page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
+weight = 7
 status = 'hidden'
 +++
 

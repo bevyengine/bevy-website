@@ -1,11 +1,9 @@
 +++
 title = "User Interfaces"
-weight = 8
-sort_by = "weight"
 template = "docs-section.html"
-page_template = "docs-section.html"
 insert_anchor_links = "right"
 [extra]
+weight = 8
 status = 'hidden'
 +++
 
