@@ -1097,7 +1097,7 @@ Note that the above example uses [turbofish] syntax for clarity. In practice, it
 #[derive(Resource)]
 struct SoundEffects {
     bang: Handle<AudioSource>,
-    bang_blog: Handle<Blob>,
+    bang_blob: Handle<Blob>,
 }
 
 fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
