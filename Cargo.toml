@@ -10,5 +10,14 @@ members = [
 ]
 
 [workspace.lints.clippy]
+doc_markdown = "warn"
+manual_let_else = "warn"
+undocumented_unsafe_blocks = "warn"
+redundant_else = "warn"
+match_same_arms = "warn"
+semicolon_if_nothing_returned = "warn"
+ptr_as_ptr = "warn"
+ptr_cast_constness = "warn"
 
 [workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "warn"
