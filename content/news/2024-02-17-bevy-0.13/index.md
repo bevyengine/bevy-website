@@ -679,7 +679,7 @@ fn list_entities(user_query: String, world: &mut World) {
 }
 ```
 
-It's impossible to chose a type based on the value of `user_query`!
+It's impossible to choose a type based on the value of `user_query`!
 [`QueryBuilder`] solves this problem.
 
 ```rust
