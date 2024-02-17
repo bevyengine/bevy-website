@@ -25,11 +25,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Irradiance Volumes / Voxel Global Illumination:** A baked form of global illumination that samples light at the centers of voxels within a cuboid (baked externally in programs like Blender).
 * **Approximate Indirect Specular Occlusion**: Improved lighting realism by reducing specular light leaking via specular occlusion.
 * **Reflection Probes**: A baked form of axis aligned environment map that allows for realistic reflections for static geometry (baked externally in programs like Blender)
-* **Primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished, ready-to-use collection of them!
-* **System stepping:** completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
-* **Dynamic queries:** refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
-* **Automatically inferred command flush points:** tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
-* **Slicing, tiling and nine-patch 2D images:** ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
+* **Primitive shapes:** Basic shapes are a core building block of both game engines and video games: we've added a polished, ready-to-use collection of them!
+* **System stepping:** Completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
+* **Dynamic queries:** Refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
+* **Automatically inferred command flush points:** Tired of reasoning about where to put `apply_deferred` and confused about why your commands weren't being applied? Us too! Now, Bevy's scheduler uses ordinary `.before` and `.after` constraints and inspects the system parameters to automatically infer (and deduplicate) synchronization points.
+* **Slicing, tiling and nine-patch 2D images:** Ninepatch layout is a popular tool for smoothly scaling stylized tilesets and UIs. Now in Bevy!
 * **Camera-Driven UI**: UI entity trees can now be selectively added to _any_ camera, rather than being globally applied to all cameras, enabling things like split screen UIs!
 * **Camera Exposure**: Realistic / "real world" control over camera exposure via EV100, f-stops, shutter speed, and ISO sensitivity. Lights have also been adjusted to make their units more realistic.
 * **Animation interpolation modes:** Bevy now supports non-linear interpolation modes in exported glTF animations.
@@ -899,7 +899,7 @@ These improvements round out one-shot systems significantly: they should now wor
 
 <div class="release-feature-authors">authors: @Elabajaba, @JMS55</div>
 
-In **Bevy 0.13** we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the long awaited `wgpu` [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to [compile shaders asynchronously](https://github.com/bevyengine/bevy/pull/10812) to avoid shader compilation stutters and [multithread draw call creation](https://github.com/bevyengine/bevy/pull/9172 ) for better performance.
+In **Bevy 0.13** we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the long awaited `wgpu` [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to [compile shaders asynchronously](https://github.com/bevyengine/bevy/pull/10812) to avoid shader compilation stutters and [multithread draw call creation](https://github.com/bevyengine/bevy/pull/9172 ) for better performance in CPU-bound scenes.
 
 Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but we aren't quite there yet.
 
@@ -928,16 +928,15 @@ Meshes and the textures used to define their materials take up a ton of memory:
 in many games, memory usage is the biggest limitation on the resolution and polygon count of the game!
 Moreover, actually transferring that data from system RAM (used by the CPU) to the VRAM (used by the GPU) can be a real performance bottleneck.
 
-**Bevy 0.13** adds the ability to unload this data from system RAM, once it has been succesfully transferred to VRAM. However, unloading the data from the CPU [can result in bugs], and make it harder to actually inspect or modify that data from your other game systems.
-As a result, this behavior is currently off by default.
+**Bevy 0.13** adds the ability to unload this data from system RAM, once it has been successfully transferred to VRAM. To configure this behavior for your asset, set the [`RenderAssetUsages`] field to specify whether to retain the data in the main (CPU) world, the render (GPU) world, or both.
 
-To configure this behavior for your asset, set the [`RenderAssetUsages`] field to specify whether to retain the data in the main (CPU) world, the render (GPU) world, or both.
+This behavior is currently off by default for most asset types as it [has some caveats] (given that the asset becomes unavailable to logic on the CPU), but we strongly recommend enabling it for your assets whenever possible for significant memory usage wins (and we will likely enable it by default in the future).
 
-Texture atlases and font atlases only extract data that's actually in use
+Texture atlases and font atlases now only extract data that's actually in use
 to VRAM, rather than wasting work sending _all_ possible images or characters to VRAM every frame.
 Neat!
 
-[can result in bugs]: https://github.com/bevyengine/bevy/pull/11212
+[has some caveats]: https://github.com/bevyengine/bevy/pull/11212
 [`RenderAssetUsages`]: https://docs.rs/bevy/0.13.0/bevy/render/render_asset/struct.RenderAssetUsages.html
 
 ## Better Batching Through Smarter Sorting
