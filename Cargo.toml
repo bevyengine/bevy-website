@@ -1,0 +1,13 @@
+[workspace]
+members = [
+    "code-validation",
+    "generate-assets",
+    "generate-community",
+    "generate-errors",
+    "generate-release",
+    "write-rustdoc-hide-lines",
+]
+
+[workspace.lints.clippy]
+
+[workspace.lints.rust]
