@@ -10,7 +10,7 @@ image_subtitle_link = "https://www.jarl-game.com/"
 
 +++
 
-Thanks to 198 contributors, 672 pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.13** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **198** contributors, **672** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.13** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 And to see what the engine has to offer hands-on, check out the entries in the [latest Bevy Jam](https://itch.io/jam/bevy-jam-4/entries), including the winner [That's a LOT of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees).
@@ -23,6 +23,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 * **Lightmaps:** A fast, popular baked global illumination technique for static geometry (baked externally in programs like The Lightmapper).
 * **Irradiance Volumes / Voxel Global Illumination:** Support for a baked form of global illumination that samples light at the centers of voxels within a cuboid (baked externally in programs like Blender).
+* **Approximate Indirect Specular Occlusion**: Improved lighting realism by reducing specular light leaking via specular occlusion.
 * **Primitive shapes:** basic shapes are a core building block of both game engines and video games: we've added a polished, ready-to-use collection of them!
 * **System stepping:** completely pause and advance through your game frame-by-frame or system-by-system to interactively debug game logic, all while rendering continues to update.
 * **Dynamic queries:** refining queries from within systems is extremely expressive, and is the last big puzzle piece for runtime-defined types and third-party modding and scripting integration.
@@ -106,9 +107,10 @@ where light occlusion is ignored, is called specular light leaking.
 
 Consider a car tire; though the rubber might be shiny, you wouldn't expect it to have bright
 specular highlights inside a wheel well, because the car itself is blocking (occluding) the light
-that would otherwise cause these reflections. Checking for occlusion can be computationally
-expensive. Instead, this change uses Bevy's existing screen space ambient occlusion to approximate
-specular occlusion.
+that would otherwise cause these reflections. Fully checking for occlusion can be computationally
+expensive.
+
+**Bevy 0.13** adds support for **Approximate Indirect Specular Occlusion**, which uses our existing [Screen Space Ambient Occlusion](/news/bevy-0-11/#screen-space-ambient-occlusion) to _approximate_ specular occlusion, which can run efficiently in real time while still producing reasonably high quality results:
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 
@@ -129,7 +131,7 @@ However, conventional wisdom is that you should use specular occlusion alongside
 
 Geometric shapes are used all across game development, from primitive mesh shapes and debug gizmos to physics colliders and raycasting. Despite being so commonly used across several domains, Bevy hasn't really had any general-purpose shape representations.
 
-This is changing in Bevy 0.13 with the introduction of first-party **primitive shapes**! They are lightweight geometric primitives designed for maximal interoperability and reusability, allowing Bevy and third-party plugins to use the same set of basic shapes and increase cohesion within the ecosystem. See the original [RFC][Primitive RFC] for more details.
+This is changing in **Bevy 0.13** with the introduction of first-party **primitive shapes**! They are lightweight geometric primitives designed for maximal interoperability and reusability, allowing Bevy and third-party plugins to use the same set of basic shapes and increase cohesion within the ecosystem. See the original [RFC][Primitive RFC] for more details.
 
 The built-in [collection of primitives] is already quite sizeable:
 
@@ -137,19 +139,19 @@ The built-in [collection of primitives] is already quite sizeable:
 | ----------------------------------- | ----------------------------------- |
 | [`Rectangle`]                       | [`Cuboid`]                          |
 | [`Circle`]                          | [`Sphere`]                          |
-| [`Ellipse`]                         | -                                   |
-| [`Triangle2d`]                      | -                                   |
+| [`Ellipse`]                         |                                     |
+| [`Triangle2d`]                      |                                     |
 | [`Plane2d`]                         | [`Plane3d`]                         |
 | [`Line2d`]                          | [`Line3d`]                          |
 | [`Segment2d`]                       | [`Segment3d`]                       |
 | [`Polyline2d`], [`BoxedPolyline2d`] | [`Polyline3d`], [`BoxedPolyline3d`] |
-| [`Polygon`], [`BoxedPolygon`]       | -                                   |
-| [`RegularPolygon`]                  | -                                   |
+| [`Polygon`], [`BoxedPolygon`]       |                                     |
+| [`RegularPolygon`]                  |                                     |
 | [`Capsule2d`]                       | [`Capsule3d`]                       |
-| -                                   | [`Cylinder`]                        |
-| -                                   | [`Cone`]                            |
-| -                                   | [`ConicalFrustum`]                  |
-| -                                   | [`Torus`]                           |
+|                                     | [`Cylinder`]                        |
+|                                     | [`Cone`]                            |
+|                                     | [`ConicalFrustum`]                  |
+|                                     | [`Torus`]                           |
 
 [More primitives] will be added in future releases.
 
@@ -293,7 +295,7 @@ gizmos
 
 In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
-Bevy 0.13 adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitives shapes.
+**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitives shapes.
 
 Each bounding volume implements the [`BoundingVolume`] trait, providing some general functionality and helpers. The [`IntersectsVolume`] trait can be used to test for intersections with these volumes. This trait is implemented for bounding volumes themselves, so you can test for intersections between them. This is supported between all existing bounding volume types, but only those in the same dimension.
 
@@ -453,7 +455,7 @@ moving the cursor back up to the start of the stepping frame.
 
 <video controls><source src="stepping-breakpoint.mp4" type="video/mp4"/></video>
 
-### Disabling Systems during Stepping
+### Disabling Systems During Stepping
 
 During debugging, it can be helpful to disable systems to narrow down the
 source of the problem. `Stepping::never_run()` and `Stepping::never_run_node()`
@@ -849,13 +851,13 @@ fn main() {
 }
 ```
 
-## Texture atlas rework
+## Texture Atlas Rework
 
 <div class="release-feature-authors">authors: @ManevilleF</div>
 
 Texture atlases are a tool used to efficiently combine multiple images into a single larger texture called an atlas.
 
-Bevy 0.13 significantly reworks them, reducing boilerplate and making the feature more data-oriented.
+**Bevy 0.13** significantly reworks them, reducing boilerplate and making the feature more data-oriented.
 Say goodbye to `TextureAtlasSprite` and `UiTextureAtlasImage` components (and the corresponding `Bundle` types):
 texture atlasing is now enabled by adding a single _additional_ component to your sprite and image entities: `TextureAtlas`.
 
@@ -959,7 +961,7 @@ You may notice that point lights now require _significantly_ higher intensity va
 [`Exposure`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html
 [`Exposure::ev100`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html#structfield.ev100
 
-## Lights work with `RenderLayers`
+## Light `RenderLayers`
 
 <div class="release-feature-authors">authors: @robftm</div>
 
@@ -993,11 +995,11 @@ let layout = render_device.create_bind_group_layout(
 );
 ```
 
-## WGPU 0.19 Upgrade and Rendering Performance Improvements
+## wgpu 0.19 Upgrade and Rendering Performance Improvements
 
 <div class="release-feature-authors">authors: @Elabajaba, @JMS55</div>
 
-In Bevy 0.13 we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the long awaited `wgpu` [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to [compile shaders asynchronously](https://github.com/bevyengine/bevy/pull/10812) to avoid shader compilation stutters and [multithread draw call creation](https://github.com/bevyengine/bevy/pull/9172 ) for better performance.
+In **Bevy 0.13** we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the long awaited `wgpu` [arcanization](https://gfx-rs.github.io/2023/11/24/arcanization.html) that allows us to [compile shaders asynchronously](https://github.com/bevyengine/bevy/pull/10812) to avoid shader compilation stutters and [multithread draw call creation](https://github.com/bevyengine/bevy/pull/9172 ) for better performance.
 
 Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but it requires reworking parts of the renderer where we're relying on compile time constants when targeting `webgl2`, and adding a way to choose the renderer's backend at runtime on web.
 
@@ -1018,7 +1020,7 @@ Between Bevy 0.12 and Bevy 0.13 we saw frame times decrease by about 5-10% acros
 [San Miguel]: https://github.com/DGriffin91/bevy_san_miguel_scene
 [Hidden Valley]: https://blog.polyhaven.com/hidden-alley/
 
-## Unload rendering assets from RAM
+## Unload Rendering Assets from RAM
 
 <div class="release-feature-authors">authors: @JMS55, @mockersf, @brianreavis</div>
 
@@ -1042,7 +1044,7 @@ Neat!
 [`RenderAssetUsages`]: https://dev-docs.bevyengine.org/bevy/render/render_asset/struct.RenderAssetUsages.html
 [later refined]: https://github.com/bevyengine/bevy/pull/11399
 
-## Better batching through smarter sorting
+## Better Batching Through Smarter Sorting
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
@@ -1075,7 +1077,7 @@ impl MyRenderNode {
 }
 ```
 
-In Bevy 0.13, we're using a more robust way to name render nodes and render graphs with the help of the type-safe label pattern already used by `bevy_ecs`.
+In **Bevy 0.13**, we're using a more robust way to name render nodes and render graphs with the help of the type-safe label pattern already used by `bevy_ecs`.
 
 ```rust
 // After 0.13
@@ -1245,7 +1247,7 @@ Translating them back and forth, rotating them, maybe even squashing and stretch
 But in modern game development, animation is a powerful shared set of tools and concepts for "changing things over time".
 Transforms are just the beginning: colors, particle effects, opacity and even boolean values like visibility can all be animated!
 
-In Bevy 0.13, we've taken the first step towards [this vision](https://github.com/bevyengine/rfcs/blob/main/rfcs/51-animation-composition.md),
+In **Bevy 0.13**, we've taken the first step towards [this vision](https://github.com/bevyengine/rfcs/blob/main/rfcs/51-animation-composition.md),
 with the [`Animatable`] trait.
 
 ```rust
@@ -1273,7 +1275,7 @@ Slot it into your games and crates, and team up with other contributors to help 
 
 [`Animatable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Animatable.html
 
-## Multiple gizmo configurations
+## Multiple Gizmo Configurations
 
 <div class="release-feature-authors">authors: @jeliag</div>
 
@@ -1449,7 +1451,7 @@ let cube_handle = asset_server.load("models/cube/cube.gltf#Mesh0/Primitive0");
 //                                                        | Asset path label
 ```
 
-### File extensions are now optional
+### File Extensions Are Now Optional
 
 Since the asset type can be used to infer the loader, neither the file to be loaded nor the [`AssetLoader`] need to have file extensions.
 
@@ -1473,7 +1475,7 @@ let license = asset_server.load::<Text>("LICENSE");
 
 Appropriate file extensions are still recommended for good project management, but this is now a recommendation rather than a hard requirement.
 
-### Multiple `AssetLoader`'s can be selected for the same asset
+### Multiple Asset Loaders With The Same Asset
 
 Now, a single path can be used by multiple asset handles as long as they are distinct asset types.
 
@@ -1601,7 +1603,7 @@ The assembly output was compared as well between what was on main branch versus 
 
 As a plus, the same internal iteration optimizations in `Query::par_for_each` now reuse code from `for_each`, deduplicating code there as well and enabling users to make use of `par_iter().for_each()`. As a whole, this means there's no longer any need for `Query::for_each`, `Query::for_each_mut`, `Query::_par_for_each`, `Query::par_for_each_mut` so these methods have been deprecated for 0.13 and will be removed in 0.14.
 
-## Reducing `TableRow` `as` casting
+## Reducing `TableRow` `as` Casting
 
 Not all improvements in our ECS internals were focused around performance. Some small changes were done to improve type safety and tidy-up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
 
@@ -1615,7 +1617,7 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.14
 
 Check out the [**Bevy 0.14 Milestone**](https://github.com/bevyengine/bevy/milestone/20) for an up-to-date list of current work that contributors are focusing on for **Bevy 0.14**.
 
-### More editor experimentation
+### More Editor Experimentation
 
 Led by the brilliant JMS55, we've opened up a free-form [playground] to define and answer [key questions] about the design of the `bevy_editor`: not through discussion, but through concrete prototyping.
 Should we use an in-process editor (less robust to game crashes) or an external one (more complex)?
@@ -1670,7 +1672,7 @@ The secret to smooth game development is great tooling.
 It's time to give Bevy developers the tools they need to inspect, debug and profile their games as part of the first-party experience.
 From FPS meters to system stepping to a first-party equivalent of the fantastic [`bevy-inspector-egui`]: giving these a home in Bevy itself helps us polish them, points new users in the right direction, and allows us to use them in the `bevy_editor` itself.
 
-### A revised scene format
+### A New Scene Format
 
 [Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
 However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
@@ -1679,7 +1681,7 @@ Cart has been cooking up a [revised scene format] with tight IDE and code integr
 [Scenes]: https://github.com/bevyengine/bevy/tree/latest/examples/scene
 [revised scene format]: https://github.com/bevyengine/bevy/discussions/9538
 
-### `bevy_ui` improvements
+### `bevy_ui` Improvements
 
 `bevy_ui` has its fair share of problems and limitations, [both mundane and architectural];
 however, there are tangible things we can and are doing to improve this:
@@ -1691,13 +1693,13 @@ A spectacular array of [third-party UI solutions] exists today, and learning fro
 [corners]: https://github.com/bevyengine/bevy/pull/11813
 [third-party UI solutions]: https://bevyengine.org/assets/#ui
 
-### Meshlet rendering
+### Meshlet Rendering
 
 Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
 
 ![The Stanford dragon mesh rendered as meshlet clusters](meshlet_preview.png)
 
-### The steady march towards relations
+### The Steady March Towards Relations
 
 [Entity-entity relations], the ability to track and manage connections between entities directly in the ECS, has been one of the most requested ECS features for years now.
 Following the [trail blazed by `flecs`], the mad scientists over in `#ecs-dev` are steadily [reshaping our internals], [experimenting with external implementations], and shipping the general purpose building blocks (like dynamic queries or [lifecycle hooks]) needed to build a fast, robust and ergonomic solution.
