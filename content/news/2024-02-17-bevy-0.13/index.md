@@ -51,7 +51,7 @@ producing more realistic effects through the inclusion of indirect light.
 
 Like the [lightmaps example] shows, just load in your baked lightmap image, and then insert a [`Lightmap`] component on the corresponding mesh.
 
-[`Lightmap`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.Lightmap.html
+[`Lightmap`]: https://docs.rs/bevy/0.13.0/bevy/pbr/struct.Lightmap.html
 [lightmaps example]: https://github.com/bevyengine/bevy/blob/main/examples/3d/lightmaps.rs
 [The Lightmapper]: https://github.com/Naxela/The_Lightmapper
 
@@ -158,32 +158,32 @@ The built-in [collection of primitives] is already quite sizeable:
 Some use cases for primitive shapes include meshing, gizmos, bounding volumes, colliders, and ray casting functionality. Several of these have landed in 0.13 already!
 
 [Primitive RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/12-primitive-shapes.md
-[collection of primitives]: https://dev-docs.bevyengine.org/bevy/math/primitives/index.html
-[`Rectangle`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Rectangle.html
-[`Cuboid`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cuboid.html
-[`Circle`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Circle.html
-[`Sphere`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Sphere.html
-[`Ellipse`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Ellipse.html
-[`Triangle2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Triangle2d.html
-[`Plane2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Plane2d.html
-[`Plane3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Plane3d.html
-[`Line2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Line2d.html
-[`Line3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Line3d.html
-[`Segment2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Segment2d.html
-[`Segment3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Segment3d.html
-[`Polyline2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polyline2d.html
-[`Polyline3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polyline3d.html
-[`BoxedPolyline2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolyline2d.html
-[`BoxedPolyline3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolyline3d.html
-[`Polygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Polygon.html
-[`BoxedPolygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.BoxedPolygon.html
-[`RegularPolygon`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.RegularPolygon.html
-[`Capsule2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule2d.html
-[`Capsule3d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Capsule3d.html
-[`Cylinder`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cylinder.html
-[`Cone`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Cone.html
-[`ConicalFrustum`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.ConicalFrustum.html
-[`Torus`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Torus.html
+[collection of primitives]: https://docs.rs/bevy/0.13.0/bevy/math/primitives/index.html
+[`Rectangle`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Rectangle.html
+[`Cuboid`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Cuboid.html
+[`Circle`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Circle.html
+[`Sphere`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Sphere.html
+[`Ellipse`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Ellipse.html
+[`Triangle2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Triangle2d.html
+[`Plane2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Plane2d.html
+[`Plane3d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Plane3d.html
+[`Line2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Line2d.html
+[`Line3d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Line3d.html
+[`Segment2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Segment2d.html
+[`Segment3d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Segment3d.html
+[`Polyline2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Polyline2d.html
+[`Polyline3d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Polyline3d.html
+[`BoxedPolyline2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.BoxedPolyline2d.html
+[`BoxedPolyline3d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.BoxedPolyline3d.html
+[`Polygon`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Polygon.html
+[`BoxedPolygon`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.BoxedPolygon.html
+[`RegularPolygon`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.RegularPolygon.html
+[`Capsule2d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Capsule2d.html
+[`Capsule3d`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Capsule3d.html
+[`Cylinder`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Cylinder.html
+[`Cone`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Cone.html
+[`ConicalFrustum`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.ConicalFrustum.html
+[`Torus`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Torus.html
 [More primitives]: https://github.com/bevyengine/bevy/issues/10572
 
 ### Rendering
@@ -255,12 +255,12 @@ Below you can see some meshes in the [`2d_shapes`] and [`3d_shapes`] examples.
 
 Some default values for mesh shape dimensions have also been changed to be more consistent.
 
-[`Quad`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.Quad.html
-[`Box`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.Box.html
-[`UVSphere`]: https://dev-docs.bevyengine.org/bevy/prelude/shape/struct.UVSphere.html
-[`Meshable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html
-[`mesh` method]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Meshable.html#tymethod.mesh
-[`Mesh`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Mesh.html
+[`Quad`]: https://docs.rs/bevy/0.13.0/bevy/prelude/shape/struct.Quad.html
+[`Box`]: https://docs.rs/bevy/0.13.0/bevy/prelude/shape/struct.Box.html
+[`UVSphere`]: https://docs.rs/bevy/0.13.0/bevy/prelude/shape/struct.UVSphere.html
+[`Meshable`]: https://docs.rs/bevy/0.13.0/bevy/prelude/trait.Meshable.html
+[`mesh` method]: https://docs.rs/bevy/0.13.0/bevy/prelude/trait.Meshable.html#tymethod.mesh
+[`Mesh`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Mesh.html
 [`2d_shapes`]: https://bevyengine.org/examples/2D%20Rendering/2d-shapes/
 [`3d_shapes`]: https://bevyengine.org/examples/3D%20Rendering/3d-shapes/
 
@@ -284,10 +284,10 @@ gizmos
     .segments(segments);
 ```
 
-[`Gizmos`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/struct.Gizmos.html
-[`primitive_2d`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
-[`primitive_3d`]: https://dev-docs.bevyengine.org/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
-[`SphereBuilder`]: https://dev-docs.bevyengine.org/bevy/gizmos/primitives/dim3/struct.SphereBuilder.html
+[`Gizmos`]: https://docs.rs/bevy/0.13.0/bevy/gizmos/prelude/struct.Gizmos.html
+[`primitive_2d`]: https://docs.rs/bevy/0.13.0/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
+[`primitive_3d`]: https://docs.rs/bevy/0.13.0/bevy/gizmos/prelude/trait.GizmoPrimitive2d.html
+[`SphereBuilder`]: https://docs.rs/bevy/0.13.0/bevy/gizmos/primitives/dim3/struct.SphereBuilder.html
 
 ### Bounding Volumes
 
@@ -331,14 +331,14 @@ let aabb = hexagon.aabb_2d(translation, rotation);
 let circle = hexagon.bounding_circle(translation, rotation);
 ```
 
-[`Aabb2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.Aabb2d.html
-[`Aabb3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.Aabb3d.html
-[`BoundingCircle`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingCircle.html
-[`BoundingSphere`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingSphere.html
-[`BoundingVolume`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.BoundingVolume.html
-[`IntersectsVolume`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.IntersectsVolume.html
-[`Bounded2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.Bounded2d.html
-[`Bounded3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/trait.Bounded3d.html
+[`Aabb2d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.Aabb2d.html
+[`Aabb3d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.Aabb3d.html
+[`BoundingCircle`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.BoundingCircle.html
+[`BoundingSphere`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.BoundingSphere.html
+[`BoundingVolume`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/trait.BoundingVolume.html
+[`IntersectsVolume`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/trait.IntersectsVolume.html
+[`Bounded2d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/trait.Bounded2d.html
+[`Bounded3d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/trait.Bounded3d.html
 
 #### Ray Casting and Volume Casting
 
@@ -352,17 +352,17 @@ Below, you can see ray casting, volume casting, and intersection tests in action
 
 To make it easier to reason about ray casts in different dimensions, the old [`Ray`] type has also been split into [`Ray2d`] and [`Ray3d`]. The new [`Direction2d`] and [`Direction3d`] types are used to ensure that the ray direction remains normalized, providing a type-level guarantee that the vector is always unit-length. These are already in use in some other APIs as well, such as for some primitives and gizmo methods.
 
-[`RayCast2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.RayCast2d.html
-[`RayCast3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.RayCast3d.html
-[`AabbCast2d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.AabbCast2d.html
-[`AabbCast3d`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.AabbCast3d.html
-[`BoundingCircleCast`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingCircleCast.html
-[`BoundingSphereCast`]: https://dev-docs.bevyengine.org/bevy/math/bounding/struct.BoundingSphereCast.html
+[`RayCast2d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.RayCast2d.html
+[`RayCast3d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.RayCast3d.html
+[`AabbCast2d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.AabbCast2d.html
+[`AabbCast3d`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.AabbCast3d.html
+[`BoundingCircleCast`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.BoundingCircleCast.html
+[`BoundingSphereCast`]: https://docs.rs/bevy/0.13.0/bevy/math/bounding/struct.BoundingSphereCast.html
 [`Ray`]: https://docs.rs/bevy/0.12.1/bevy/math/struct.Ray.html
-[`Ray2d`]: https://dev-docs.bevyengine.org/bevy/math/struct.Ray2d.html
-[`Ray3d`]: https://dev-docs.bevyengine.org/bevy/math/struct.Ray3d.html
-[`Direction2d`]: https://dev-docs.bevyengine.org/bevy/math/primitives/struct.Direction2d.html
-[`Direction3d`]: https://dev-docs.bevyengine.org/bevy/math/primitives/struct.Direction3d.html
+[`Ray2d`]: https://docs.rs/bevy/0.13.0/bevy/math/struct.Ray2d.html
+[`Ray3d`]: https://docs.rs/bevy/0.13.0/bevy/math/struct.Ray3d.html
+[`Direction2d`]: https://docs.rs/bevy/0.13.0/bevy/math/primitives/struct.Direction2d.html
+[`Direction3d`]: https://docs.rs/bevy/0.13.0/bevy/math/primitives/struct.Direction3d.html
 
 ## System Stepping
 
@@ -399,7 +399,7 @@ Finally, you add the [`Stepping`] resource to the ECS [`World`].
 app.insert_resource(stepping);
 ```
 
-[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/world/struct.World.html
+[`World`]: https://docs.rs/bevy/0.13.0/bevy/ecs/world/struct.World.html
 
 ### System Step & Continue Frame
 
@@ -500,9 +500,9 @@ Note that prior versions of Bevy hard-coded a static EV100 for some of its light
 
 You may notice that point lights now require _significantly_ higher intensity values (in lumens). This (sometimes) million-lumen values might feel exorbitant. Just reassure yourself that (1) it actually requires a lot of light to meaningfully register in an overcast outdoor environment and (2) Blender exports lights on these scales (and we are calibrated to be as close as possible to them).
 
-[`PhysicalCameraParameters`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.PhysicalCameraParameters.html
-[`Exposure`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html
-[`Exposure::ev100`]: https://dev-docs.bevyengine.org/bevy/render/camera/struct.Exposure.html#structfield.ev100
+[`PhysicalCameraParameters`]: https://docs.rs/bevy/0.13.0/bevy/render/camera/struct.PhysicalCameraParameters.html
+[`Exposure`]: https://docs.rs/bevy/0.13.0/bevy/render/camera/struct.Exposure.html
+[`Exposure::ev100`]: https://docs.rs/bevy/0.13.0/bevy/render/camera/struct.Exposure.html#structfield.ev100
 
 ## Camera-Driven UI
 
@@ -579,7 +579,7 @@ We're pleased to add CPU-based _slicing and tiling_ to both `bevy_sprite` and `b
 
 This behavior is controlled by a new optional component: [`ImageScaleMode`].
 
-[`ImageScaleMode`]: https://dev-docs.bevyengine.org/bevy/prelude/enum.ImageScaleMode.html
+[`ImageScaleMode`]: https://docs.rs/bevy/0.13.0/bevy/prelude/enum.ImageScaleMode.html
 
 ### 9 slicing
 
@@ -709,7 +709,7 @@ some of which will undoubtedly make their way upstream.
 [`bevy-inspector-egui`]: https://crates.io/crates/bevy-inspector-egui
 [Quake-style console]: https://github.com/doonv/bevy_dev_console
 [editor with remote capabilities]: https://makeshift-bevy-web-editor.vercel.app/
-[`QueryBuilder`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.QueryBuilder.html
+[`QueryBuilder`]: https://docs.rs/bevy/0.13.0/bevy/ecs/prelude/struct.QueryBuilder.html
 
 ## Query Transmutation
 
@@ -758,8 +758,8 @@ It works by creating a new state and copying a bunch of the cached data
 inside the original query. It's not a expensive operation, but you should
 probably avoid doing it inside a hot loop.
 
-[`Query::transmute_lens()`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.Query.html#method.transmute_lens
-[`QueryLens`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.QueryLens.html
+[`Query::transmute_lens()`]: https://docs.rs/bevy/0.13.0/bevy/ecs/system/struct.Query.html#method.transmute_lens
+[`QueryLens`]: https://docs.rs/bevy/0.13.0/bevy/ecs/system/struct.QueryLens.html
 
 ## `WorldQuery` Trait Split
 
@@ -794,12 +794,12 @@ fn my_system(query: Query<Entity, With<ComponentA>>)
 }
 ```
 
-[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/system/struct.Query.html
+[`Query`]: https://docs.rs/bevy/0.13.0/bevy/ecs/system/struct.Query.html
 [`WorldQuery`]: https://docs.rs/bevy/0.12.0/bevy/ecs/query/trait.WorldQuery.html
-[`Changed`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Changed.html
-[`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.Added.html
-[`QueryData`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryData.html
-[`QueryFilter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/trait.QueryFilter.html
+[`Changed`]: https://docs.rs/bevy/0.13.0/bevy/ecs/query/struct.Changed.html
+[`Added`]: https://docs.rs/bevy/0.13.0/bevy/ecs/query/struct.Added.html
+[`QueryData`]: https://docs.rs/bevy/0.13.0/bevy/ecs/query/trait.QueryData.html
+[`QueryFilter`]: https://docs.rs/bevy/0.13.0/bevy/ecs/query/trait.QueryFilter.html
 
 ## Automatically Insert `apply_deferred` Systems
 
@@ -935,7 +935,7 @@ to VRAM, rather than wasting work sending _all_ possible images or characters to
 Neat!
 
 [can result in bugs]: https://github.com/bevyengine/bevy/pull/11212
-[`RenderAssetUsages`]: https://dev-docs.bevyengine.org/bevy/render/render_asset/struct.RenderAssetUsages.html
+[`RenderAssetUsages`]: https://docs.rs/bevy/0.13.0/bevy/render/render_asset/struct.RenderAssetUsages.html
 
 ## Better Batching Through Smarter Sorting
 
@@ -968,8 +968,8 @@ Bevy now supports both step and cubic spline interpolation in animations.
 Most of the time, this will just be parsed correctly from the glTF files, but when setting [`VariableCurve`] manually,
 there's a new [`Interpolation`] field to set.
 
-[`VariableCurve`]: https://dev-docs.bevyengine.org/bevy/animation/struct.VariableCurve.html
-[`Interpolation`]: https://dev-docs.bevyengine.org/bevy/animation/enum.Interpolation.html
+[`VariableCurve`]: https://docs.rs/bevy/0.13.0/bevy/animation/struct.VariableCurve.html
+[`Interpolation`]: https://docs.rs/bevy/0.13.0/bevy/animation/enum.Interpolation.html
 
 ![Demonstrating the different types of interpolation](interpolation_methods.gif)
 
@@ -1008,7 +1008,7 @@ This is the first step towards animation blending and an asset-driven animation 
 But for now, this is just a building block. We've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
 Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
 
-[`Animatable`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.Animatable.html
+[`Animatable`]: https://docs.rs/bevy/0.13.0/bevy/prelude/trait.Animatable.html
 
 ## Extensionless Asset Support
 
@@ -1107,9 +1107,9 @@ fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
 The [`custom_asset` example] has been updated to demonstrate these new features.
 
 [recent addition of .meta files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
-[`AssetServer`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html
-[`AssetLoader`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AssetLoader.html
-[`load`]: https://dev-docs.bevyengine.org/bevy/asset/struct.AssetServer.html#method.load
+[`AssetServer`]: https://docs.rs/bevy/0.13.0/bevy/asset/struct.AssetServer.html
+[`AssetLoader`]: https://docs.rs/bevy/0.13.0/bevy/asset/trait.AssetLoader.html
+[`load`]: https://docs.rs/bevy/0.13.0/bevy/asset/struct.AssetServer.html#method.load
 [turbofish]: https://turbo.fish/
 [`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
 
@@ -1129,7 +1129,7 @@ Texture atlases (sometimes called sprite sheets) simply draw a custom _section_ 
 * a `Handle<TextureAtlasLayout>`, an asset mapping an index to a `Rect` section of a texture
 * a `usize` index defining which section `Rect` of the layout we want to display
 
-[`TextureAtlas`]: https://dev-docs.bevyengine.org/bevy/sprite/struct.TextureAtlas.html
+[`TextureAtlas`]: https://docs.rs/bevy/0.13.0/bevy/sprite/struct.TextureAtlas.html
 
 ## Light `RenderLayers`
 
@@ -1347,7 +1347,7 @@ own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
 an RPC call. The world is your oyster.
 
 [`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
-[`GizmoConfigGroup`]: https://dev-docs.bevyengine.org/bevy/gizmos/config/trait.GizmoConfigGroup.html
+[`GizmoConfigGroup`]: https://docs.rs/bevy/0.13.0/bevy/gizmos/config/trait.GizmoConfigGroup.html
 
 ## glTF Extensions
 
