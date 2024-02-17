@@ -4,7 +4,7 @@
   display: inline-flex;
   align-items: center;
   background-color: $color-blue;
-  border: 3px solid #6b9ac7;
+  border: 3px solid lighten($color-blue, 7%);
   padding: 6px 8px;
   border-radius: $border-radius;
   font-size: 1.2rem;
@@ -35,7 +35,7 @@
 
   &--pink {
     background-color: $color-pink;
-    border-color: #c9829a;
+    border-color: lighten($color-pink, 7%);
 
     &:hover {
       background-color: darken($color-pink, 3%);
