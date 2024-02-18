@@ -15,7 +15,7 @@ $asset-card-padding: 0.4rem;
     grid-area: banner;
     display: block;
     position: relative;
-    aspect-ratio: math.div(16, 9);
+    aspect-ratio: 16 / 9;
     align-self: start;
 
     background: linear-gradient(0deg,
