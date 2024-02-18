@@ -9,7 +9,7 @@ on:
       - 'trying'
 
 jobs:
-  markdownlint:
+  super-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -86,7 +86,7 @@ jobs:
           done
 
   generate-assets:
-    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
+    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -124,7 +124,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
+    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -151,7 +151,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
+    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -194,7 +194,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
+    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -222,7 +222,7 @@ jobs:
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@v4
