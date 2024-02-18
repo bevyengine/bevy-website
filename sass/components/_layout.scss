@@ -23,7 +23,6 @@
 }
 
 @include state-checked("mobile-menu") {
-
   // Disable scroll on main content
   .layout {
     height: 100%;
