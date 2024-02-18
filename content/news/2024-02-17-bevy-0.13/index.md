@@ -12,7 +12,7 @@ image_subtitle_link = "https://www.jarl-game.com/"
 
 Thanks to **198** contributors, **672** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.13** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 And to see what the engine has to offer hands-on, check out the entries in the [latest Bevy Jam](https://itch.io/jam/bevy-jam-4/entries), including the winner [That's a LOT of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees).
 
 To update an existing Bevy App or Plugin to **Bevy 0.13**, check out our [0.12 to 0.13 Migration Guide](/learn/migration-guides/0-12-to-0-13/).
@@ -239,7 +239,7 @@ let before = meshes.add(
 let after = meshes.add(Sphere::new(2.0).mesh().ico(8).unwrap());
 
 // Cuboid
-// (notice how Assets::add now also handles mesh convertion automatically)
+// (notice how Assets::add now also handles mesh conversion automatically)
 let before = meshes.add(Mesh::from(shape::Box::new(2.0, 1.0, 1.0)));
 let after = meshes.add(Cuboid::new(2.0, 1.0, 1.0));
 
@@ -298,7 +298,7 @@ gizmos
 
 In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
-**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitives shapes.
+**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitive shapes.
 
 Each bounding volume implements the [`BoundingVolume`] trait, providing some general functionality and helpers. The [`IntersectsVolume`] trait can be used to test for intersections with these volumes. This trait is implemented for bounding volumes themselves, so you can test for intersections between them. This is supported between all existing bounding volume types, but only those in the same dimension.
 
@@ -559,7 +559,7 @@ commands
     );
 ```
 
-With this change, we also remove [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by setting [`Visibility`] component on the root node.
+With this change, we also removed the [`UiCameraConfig`] component. If you were using it to hide UI nodes, you can achieve the same outcome by configuring a [`Visibility`] component on the root node.
 
 ```rust
 commands.spawn(Camera3dBundle::default());
@@ -605,7 +605,7 @@ commands.spawn((
     ImageScaleMode::Sliced(TextureSlicer {
         // The image borders are 20 pixels in every direction
         border: BorderRect::square(20.0),
-        // we don't stretch the coners more than their actual size (20px)
+        // we don't stretch the corners more than their actual size (20px)
         max_corner_scale: 1.0,
         ..default()
     }),
@@ -614,7 +614,7 @@ commands.spawn((
 
 ### Tiling
 
-Adding `ImageMode::Tiled { .. }` to your 2D sprite entities enables _texture tiling_: repeating the image until their entire area is fulled.
+Adding `ImageMode::Tiled { .. }` to your 2D sprite entities enables _texture tiling_: repeating the image until their entire area is filled.
 This is commonly used for backgrounds and surfaces.
 
 <video controls><source src="logo_tiling.mp4" type="video/mp4"/></video>
@@ -661,7 +661,7 @@ fn take_damage(mut player_health: Query<(Entity, &mut Health), With<Player>>) {
 continue to happily use the delightfully simple [`Query`] API.
 
 However, consider this situation: as a game or mod developer I want to list entities
-with a specific component through a text prompt. Similarly to how the Quake console works.
+with a specific component through a text prompt. Similar to how the Quake console works.
 What would that look like?
 
 ```rust
@@ -706,7 +706,7 @@ fn list_entities(
 
 It is still an error-prone, complex, and unsafe API, but it makes something that was previously
 impossible possible.
-We expect third party crates to provide convenient wrappers around the `QueryBuilder` API,
+We expect third-party crates to provide convenient wrappers around the `QueryBuilder` API,
 some of which will undoubtedly make their way upstream.
 
 [`bevy-inspector-egui`]: https://crates.io/crates/bevy-inspector-egui
@@ -718,7 +718,7 @@ some of which will undoubtedly make their way upstream.
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
-Have you every wanted to pass a query to a function, but instead of having a
+Have you ever wanted to pass a query to a function, but instead of having a
 `Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
 In **Bevy 0.13** you can, thanks to the new [`QueryLens`] and [`Query::transmute_lens()`] method.
 
@@ -753,13 +753,13 @@ entities with both `Transform` and `Velocity` components.
 
 Besides removing parameters you can also change them in limited ways to the
 different smart pointer types. One of the more useful is to change a
-`& mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
+`&mut` to a `&`. See the [documentation](https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.transmute_lens)
 for more details.
 
 One thing to take into consideration is the transmutation is not free.
-It works by creating a new state and copying a bunch of the cached data
-inside the original query. It's not a expensive operation, but you should
-probably avoid doing it inside a hot loop.
+It works by creating a new state and copying cached data
+inside the original query. It's not an expensive operation, but you should
+avoid doing it inside a hot loop.
 
 [`Query::transmute_lens()`]: https://docs.rs/bevy/0.13.0/bevy/ecs/system/struct.Query.html#method.transmute_lens
 [`QueryLens`]: https://docs.rs/bevy/0.13.0/bevy/ecs/system/struct.QueryLens.html
@@ -768,13 +768,13 @@ probably avoid doing it inside a hot loop.
 
 <div class="release-feature-authors">authors: @wainwrightmark @taizu-jin</div>
 
-A [`Query`] has two type parameters: one for the the data to be fetched, and a second optional one for the filters.
+A [`Query`] has two type parameters: one for the data to be fetched, and a second optional one for the filters.
 
 In previous versions of Bevy both parameters simply required [`WorldQuery`]: there was nothing stopping you from using types intended as filters in the data position (or vice versa).
 
-Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behaviour in either position.
+Apart from making the type signature of the [`Query`] items more complicated (see example below) this usually worked fine as most filters had the same behavior in either position.
 
-Unfortunately this was not the case for [`Changed`] and [`Added`] which had different (and undocumented) behaviour in the data position and this could lead to bugs in user code.
+Unfortunately this was not the case for [`Changed`] and [`Added`] which had different (and undocumented) behavior in the data position and this could lead to bugs in user code.
 
 To allow us to prevent this type of bug at compile time, the [`WorldQuery`] trait has been replaced by two traits: [`QueryData`] and [`QueryFilter`]. The data parameter of a [`Query`] must now be [`QueryData`] and the filter parameter must be [`QueryFilter`].
 
@@ -864,7 +864,7 @@ There are several new APIs that allow you to opt-out.
 <div class="release-feature-authors">authors: @Nathan-Fenner</div>
 
 In **Bevy 0.12**, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
-The initial implementation had some limitations with regards to what systems could and could not be used as one-shot systems.
+The initial implementation had some limitations in regard to what systems could and could not be used as one-shot systems.
 In **Bevy 0.13**, these limitations have been resolved.
 
 One-shot systems now support inputs and outputs.
@@ -903,10 +903,10 @@ In **Bevy 0.13** we upgraded from `wgpu` 0.17 to `wgpu` 0.19, which includes the
 
 Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is now required when doing WebAssembly builds targeting WebGPU. Disabling the `webgl2` feature is no longer required when targeting WebGPU, but the new `webgpu` feature currently overrides the `webgl2` feature when enabled. Library authors, please do not enable the `webgpu` feature by default. In the future we plan on allowing you to target both WebGL2 and WebGPU in the same WebAssembly binary, but we aren't quite there yet.
 
-We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
+We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to work around an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
 
 Many small changes both to Bevy and `wgpu` summed up to make a modest but measurable difference in our performance on realistic 3D scenes!
-We ran some quick tests on both **Bevy 0.12** and **Bevy 0.13** on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
+We ran some quick tests on both **Bevy 0.12** and **Bevy 0.13** on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Alley].
 
 ![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.jpg)
 
@@ -918,7 +918,7 @@ Between Bevy 0.12 and Bevy 0.13 we saw frame times decrease by about 5-10% acros
 [Bistro]: https://github.com/DGriffin91/bevy_bistro_scene
 [Sponza]: https://github.com/DGriffin91/bevy_sponza_scene
 [San Miguel]: https://github.com/DGriffin91/bevy_san_miguel_scene
-[Hidden Valley]: https://blog.polyhaven.com/hidden-alley/
+[Hidden Alley]: https://blog.polyhaven.com/hidden-alley/
 
 ## Unload Rendering Assets from RAM
 
@@ -926,7 +926,7 @@ Between Bevy 0.12 and Bevy 0.13 we saw frame times decrease by about 5-10% acros
 
 Meshes and the textures used to define their materials take up a ton of memory:
 in many games, memory usage is the biggest limitation on the resolution and polygon count of the game!
-Moreover, actually transferring that data from system RAM (used by the CPU) to the VRAM (used by the GPU) can be a real performance bottleneck.
+Moreover, transferring that data from system RAM (used by the CPU) to the VRAM (used by the GPU) can be a real performance bottleneck.
 
 **Bevy 0.13** adds the ability to unload this data from system RAM, once it has been successfully transferred to VRAM. To configure this behavior for your asset, set the [`RenderAssetUsages`] field to specify whether to retain the data in the main (CPU) world, the render (GPU) world, or both.
 
@@ -944,15 +944,15 @@ Neat!
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
 One of the core techniques used to speed up rendering is to draw many similar objects together at the same time.
-In this case, Bevy was already using a technique called "batching", which allows us to combine multiple similar operations together,
+In this case, Bevy was already using a technique called "batching", which allows us to combine multiple similar operations,
 reducing the number of expensive draw calls (instructions to the GPU) that are being made.
 
 However, our strategy for defining these batches was far from optimal.
 Previously, we were sorting by distance to the camera, and _then_ checking if multiple of the same meshes were adjacent to each other in that sorted list.
-On realistic scenes, this is unlikely to find many candidates for merging!
+In realistic scenes, this is unlikely to find many candidates for merging!
 
 In **Bevy 0.13**, we first sort by pipeline (effectively the type of material being used), and then by mesh identity.
-This strategy results in better batching, improving overall FPS by double digit percentages on the [realistic scene tested](https://syntystore.com/products/polygon-fantasy-kingdom)!
+This strategy results in better batching, improving overall FPS by double-digit percentages on the [realistic scene tested](https://syntystore.com/products/polygon-fantasy-kingdom)!
 
 ![A graph showing batching improvements. Shadows are very expensive, and FPS improved by at least 20% in all cases tested.](better_batching.svg)
 
@@ -960,7 +960,7 @@ This strategy results in better batching, improving overall FPS by double digit 
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a time line.
+Generally, animations are defined by their **keyframes**: snapshots of the position (and other state) or objects at moments along a timeline.
 But what happens between those keyframes? Game engines need to **interpolate** between them, smoothly transitioning from one state to the next.
 
 The simplest interpolation method is linear: the animated object just moves an equal distance towards the next keyframe every unit of time.
@@ -1006,7 +1006,7 @@ pub trait Animatable: Reflect + Sized + Send + Sync + 'static {
 }
 ```
 
-This is the first step towards animation blending and an asset-driven animation graph which is an essential for shipping large scale 3D games in Bevy.
+This is the first step towards animation blending and an asset-driven animation graph which is essential for shipping large scale 3D games in Bevy.
 But for now, this is just a building block. We've implemented this for a few key types (`Transform`, `f32` and `glam`'s `Vec` types) and published the trait.
 Slot it into your games and crates, and team up with other contributors to help `bevy_animation` become just as pleasant and featureful as the rest of the engine.
 
@@ -1016,7 +1016,7 @@ Slot it into your games and crates, and team up with other contributors to help 
 
 <div class="release-feature-authors">authors: @bushrat011899</div>
 
-In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based around file extensions. The [recent addition of .meta files] allowed for specifying more granular loading behavior, but file extensions were still required. In **Bevy 0.13**, the asset type can now be used to infer the [`AssetLoader`].
+In prior versions of Bevy, the default way to choose an [`AssetLoader`] for a particular asset was entirely based on file extensions. The [recent addition of .meta files] allowed for specifying more granular loading behavior, but file extensions were still required. In **Bevy 0.13**, the asset type can now be used to infer the [`AssetLoader`].
 
 ```rust
 // Uses AudioSettingsAssetLoader
@@ -1091,7 +1091,7 @@ let bang_blob = asset_server.load::<Blob>("sound/bang.ogg");
 let bang_again = asset_server.load::<AudioSource>("sound/bang.ogg");
 ```
 
-Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred by surrounding context at the call site.
+Note that the above example uses [turbofish] syntax for clarity. In practice, it's not required, since the type of asset loaded can usually be inferred at the call site.
 
 ```rust
 #[derive(Resource)]
@@ -1148,7 +1148,7 @@ Texture atlases (sometimes called sprite sheets) simply draw a custom _section_ 
 
 <div class="release-feature-authors">authors: @IceSentry</div>
 
-We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using built-in functions to define bind group layouts resources and automatically set the index based on its position.
+We added a new API, inspired by the bind group entries API from 0.12, to declare bind group layouts. This new API is based on using built-in functions to define bind group layout resources and automatically set the index based on its position.
 
 Here's a short example of how declaring a new layout looks:
 
@@ -1231,15 +1231,15 @@ When you need dynamic labels for render nodes, those can still be achieved via e
 pub struct MyDynamicLabel(&'static str);
 ```
 
-This is particularly nice because we don't have to store strings in here: we can use integers, custom enums or any other hashable type.
+This is particularly nice because we don't have to store strings here: we can use integers, custom enums or any other hashable type.
 
 ## Winit Upgrade
 
 <div class="release-feature-authors">authors: @Thierry Berger, @mockersf</div>
 
 Through the heroic efforts of our contributors and reviewers, Bevy is [now upgraded] to use `winit 0.29`.
-[`winit`] is our windowing library: it abstracts over all of the different operating systems and input devices that end users might have,
-and provides a basically uniform API to enable a write-once run-anywhere experience.
+[`winit`] is our windowing library: it abstracts over all the different operating systems and input devices that end users might have,
+and provides a uniform API to enable a write-once run-anywhere experience.
 While this brings with it the usual litany of valuable [bug fixes and stability improvements],
 the critical change revolves around how [`KeyCode`] is handled.
 
@@ -1264,7 +1264,7 @@ Gizmos let you quickly draw shapes using
 an immediate mode API. Here is how you use them:
 
 ```rust
-// bevy 0.12.1
+// Bevy 0.12.1
 fn set_gizmo_width(mut config: ResMut<GizmoConfig>) {
     // set the line width of every gizmos with this global configuration resource.
     config.line_width = 5.0;
@@ -1303,7 +1303,7 @@ But with a [`GizmoConfigGroup`] parameter, `Gizmos` can choose a distinct config
 ```rust
 fn draw_circles(
     mut default_gizmos: Gizmos,
-    // this uses a distinct configvvvvvvvvvvvvvvv
+    // this uses the distinct NavigationGroup config
     mut navigation_gizmos: Gizmos<NavigationGroup>,
 ) {
     // Two circles with different outline width
@@ -1331,7 +1331,7 @@ impl Plugin for NavigationPlugin {
 And this is how you set the configuration of gizmo groups to different values:
 
 ```rust
-// bevy 0.13.0
+// Bevy 0.13.0
 set_gizmo_width(mut config_store: ResMut<GizmoConfigStore>) {
     let config = config_store.config_mut::<DefaultGizmoConfigGroup>().0;
     config.line_width = 20.0;
@@ -1345,7 +1345,7 @@ Now, the navigation gizmos have a fully separate configuration and don't conflic
 with the game's gizmos.
 
 Not only that, but the game dev can integrate and toggle the navigation gizmos with their
-own debug tools however they wish. Be it a hotkey, a debug overlay UI button,
+own debug tools however they wish. Be it a hotkey, a debug overlay UI button, or
 an RPC call. The world is your oyster.
 
 [`oxidized_navigation`]: https://crates.io/crates/oxidized_navigation
@@ -1371,28 +1371,28 @@ With [the changes by CorneliusCornbread] you can configure the loader to store a
 
 ## Asset Transformers
 
-<div class="release-feature-authors">authors: @thepackett, @RyanSparker</div>
+<div class="release-feature-authors">authors: @thepackett, @RyanSpaker</div>
 
-Asset processing, at its core, involves implementing the `Process` trait, which takes some byte data representing an asset, transforming it, and then returning the processed byte data. However, implementing the `Process` trait by hand is somewhat involved, and so a generic `LoadAndSave<L: AssetLoader, S: AssetSaver>` `Process` implementation was written to make asset processing more ergonomic.
+Asset processing, at its core, involves implementing the `Process` trait, which takes some byte data representing an asset, transforms it, and then returns the processed byte data. However, implementing the `Process` trait by hand is somewhat involved, and so a generic `LoadAndSave<L: AssetLoader, S: AssetSaver>` `Process` implementation was written to make asset processing more ergonomic.
 
 Using the `LoadAndSave` `Process` implementation, the previous Asset processing pipeline had four stages:
 
 1. An `AssetReader` reads some asset source (filesystem, http, etc) and gets the byte data of an asset.
-2. An `AssetLoader` reads the byte data and converts it to a bevy `Asset`.
-3. An `AssetSaver` takes a bevy `Asset`, processes it, and then converts it back into byte data.
+2. An `AssetLoader` reads the byte data and converts it to a Bevy `Asset`.
+3. An `AssetSaver` takes a Bevy `Asset`, processes it, and then converts it back into byte data.
 4. An `AssetWriter` then writes the asset byte data back to the asset source.
 
 `AssetSaver`s were responsible for both transforming an asset and converting it into byte data. However, this posed a bit of an issue for code reusability. Every time you wanted to transform some asset, such as an image, you would need to rewrite the portion that converts the asset to byte data. To solve this, `AssetSaver`s are now solely responsible for converting an asset into byte data, and `AssetTransformer`s which are responsible for transforming an asset were introduced. A new `LoadTransformAndSave<L: AssetLoader, T: AssetTransformer, S: AssetSaver>` `Process` implementation was added to utilize the new `AssetTransformer`s.
 
 The new asset processing pipeline, using the `LoadTransformAndSave` `Process` implementation, has five stages:
 
-1. An `AssetReader` read some asset source (filesystem, http, etc) and gets the byte data of an asset.
-2. An `AssetLoader` reads the byte data and converts it to a bevy `Asset`.
+1. An `AssetReader` reads some asset source (filesystem, http, etc) and gets the byte data of an asset.
+2. An `AssetLoader` reads the byte data and converts it to a Bevy `Asset`.
 3. An `AssetTransformer` takes an asset and transforms it in some way.
-4. An `AssetSaver` takes a bevy `Asset` and converts it back into byte data.
+4. An `AssetSaver` takes a Bevy `Asset` and converts it back into byte data.
 5. An `AssetWriter` then writes the asset byte data back to the asset source.
 
-In addition to having better code reusability, this change encorages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
+In addition to having better code reusability, this change encourages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
 
 The previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
 
@@ -1402,20 +1402,20 @@ See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main
 
 <div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @james7132, @NathanSWard</div>
 
-`Entity` (Bevy's 64-bit unique identifier for enitities) received a number of changes this cycle, laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
+`Entity` (Bevy's 64-bit unique identifier for entities) received several changes this cycle, laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
 
 * [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
 * [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
 * [#10519]: swapped us to a manually crafted `PartialEq` and `Hash` implementation for `Entity` to improve speed and save instructions in our hot loops
 * [#10558]: combined the approach of [#9907] and [#10519] to optimize `Entity`'s layout further, and optimized our `PartialOrd` and `Ord` implementations!
-* [#10648]: further optimized our entity hashing, changing how we multiply inside of the hash to save one precious assembly instruction in the optimized compiler output
+* [#10648]: further optimized our entity hashing, changing how we multiply in the hash to save one precious assembly instruction in the optimized compiler output
 
 Full credit is also due to the authors who pursued similar work in [#2372] and [#3788]: while their work was not ultimately merged, it was an incredibly valuable
 inspiration and source of prior art to base these more recent changes on.
 
-![Benchmark results of optimisation work](entity_hash_optimsation_benches.png)
+![Benchmark results of optimization work](entity_hash_optimsation_benches.png)
 
-The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimisations in place (`optimised_entity`).
+The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimizations in place (`optimised_entity`).
 There are improvements across the board, with clear performance benefits that should impact multiple areas of the codebase, not just when hashing entities.
 
 There are a ton of crunchy, well-explained details in the linked PRs, including some fascinating assembly output analysis.
@@ -1433,7 +1433,7 @@ If that interests you, open some new tabs in the background!
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
+Currently to get the full performance out of iterating over queries, `Query::for_each` must be used to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
 
 This deduplicated code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
 
@@ -1463,7 +1463,7 @@ As a plus, the same internal iteration optimizations in `Query::par_for_each` no
 
 <div class="release-feature-authors">authors: @bushrat011899</div>
 
-Not all improvements in our ECS internals were focused around performance. Some small changes were done to improve type safety and tidy-up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
+Not all improvements in our ECS internals were focused on performance. Some small changes were made to improve type safety and tidy up some of the codebase to have less `as` casting being done on various call sites for `TableRow`. The problem with `as` casting is that in some cases, the cast will fail by truncating the value silently, which could then cause havoc by accessing the wrong row and so forth. [#10811](https://github.com/bevyengine/bevy/pull/10811) by @bushrat011899 was put forward to clean up the API around `TableRow`, providing convenience methods backed by `assert`s to ensure the casting operations could never fail, or if they did, they'd panic correctly.
 
 Naturally, _adding_ asserts in potentially hot codepaths were cause for some concern, necessitating considerable benchmarking efforts to confirm there were regressions and to what level. With careful placing of the new `assert`s, the detected regression for these cases was in the region of 0.1%, well within noise.
 But the benefit was a less error-prone API and more robust code.
@@ -1474,16 +1474,16 @@ With a complex unsafe codebase like `bevy_ecs`, every little bit helps.
 Events are a useful tool for passing data into systems and between systems.
 
 Internally, Bevy events are double-buffered, so a given event will be silently dropped once the buffers have swapped twice.
-The `Events<T>` resource is setup this way so events are dropped after a predictable amount of time, preventing their queues from growing forever and causing a memory leak.
+The `Events<T>` resource is set up this way so events are dropped after a predictable amount of time, preventing their queues from growing forever and causing a memory leak.
 
 Before 0.12.1, event queues were swapped every update (i.e. every frame).
-That was an issue for games with logic in `FixedUpdate`, since it meant events would normally disappear before systems in the next `FixedUpdate` could read them.
+That was an issue for games with logic in `FixedUpdate` since it meant events would normally disappear before systems in the next `FixedUpdate` could read them.
 
 Bevy 0.12.1 changed the swap cadence to "every update that runs `FixedUpdate` one or more times" (only if the `TimePlugin` is installed).
 This change did resolve the original problem, but it then caused problems in the other direction.
 Users were surprised to learn some of their systems with `run_if` conditions would iterate much older events than expected.
 (In hindsight, we should have considered it a breaking change and postponed it until this release.)
-The change also introduced a bug (fixed in this release) where only one type of event was actually being dropped.
+The change also introduced a bug (fixed in this release) where only one type of event was being dropped.
 
 One proposed future solution to this lingering but unintended coupling between `Update` and `FixedUpdate` is to use event timestamps to change the default range of events visible by `EventReader<T>`.
 That way systems in `Update` would skip any events older than a frame while systems in `FixedUpdate` could still see them.
@@ -1519,7 +1519,7 @@ Should we use an in-process editor (less robust to game crashes) or an external 
 Should we ship an editor binary (great for non-programmers) or embed it in the game itself (very hackable)?
 Let's find out by doing!
 
-There are some incredible mockups, functional prototypes and third-party editor-ajdacent projects out there. Some highlights:
+There are some incredible mockups, functional prototypes and third-party editor-adjacent projects out there. Some highlights:
 
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: end; justify-items: center; margin: 2rem; font-size: 0.8rem; text-align: center">
   <div style="grid-column: span 2">
@@ -1548,7 +1548,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 2. [`bevy_animation_graph`]: a fully-functional asset-driven animation graph crate with its own node-based editor for Bevy
 3. [`space_editor`]: a polished Bevy-native third-party scene editor that you can use today!
 4. [`Blender_bevy_components_workflow`]: an impressively functional ecosystem of tools that lets you use Blender as a seamless level and scene editor for your games today.
-5. `@coreh`'s experiment on a [reflection-powered remote protocol], coupled with an interactive web-based editor, allowing devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
+5. `@coreh`'s experiment on a [reflection-powered remote protocol], coupled with an interactive web-based editor, allows devs to inspect and control their Bevy games from other processes, languages and even devices! [Try it out live]!
 
 It's really exciting to see this progress, and we're keen to channel that energy and experience into official first-party efforts.
 
@@ -1569,7 +1569,7 @@ From FPS meters to system stepping to a first-party equivalent of the fantastic 
 
 ### A New Scene Format
 
-[Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both save games and loading premade levels.
+[Scenes] are Bevy's general-purpose answer to serializing ECS data to disk: tracking entities, components, and resources for both saving games and loading premade levels.
 However, the existing .ron-based scene format is hard to hand-author, overly verbose, and brittle; changes to your code (or that of your dependencies!) rapidly invalidate saved scenes.
 Cart has been cooking up a [revised scene format] with tight IDE and code integration that tackles these problems and makes authoring content (including UI!) in Bevy a joy. Whether you're writing code, writing scene files, or generating it from a GUI.
 
@@ -1590,7 +1590,7 @@ A spectacular array of [third-party UI solutions] exists today, and learning fro
 
 ### Meshlet Rendering
 
-Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
+Split meshes into clusters of triangles called meshlets, which bring many efficiency gains. During the 0.13 development cycle, we made a [lot of progress on this feature](https://github.com/bevyengine/bevy/pull/10164). We implemented a GPU-driven meshlet renderer that can scale to much more triangle-dense scenes, with a much lower CPU load. Memory usage, however, is very high, and we haven't implemented LODs or compression yet. Instead of releasing it half-baked, we're going to continue to iterate, and are very excited to (hopefully) bring you this feature in a future release.
 
 ![The Stanford dragon mesh rendered as meshlet clusters](meshlet_preview.png)
 
