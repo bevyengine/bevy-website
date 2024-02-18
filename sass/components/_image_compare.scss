@@ -19,8 +19,8 @@ div.image-compare {
   outline-offset: -1px;
 
   // calculated
-  --clip-L-geo: inset(0 calc(100% - var(--slider-value) + math.div(var(--gap), 2)) 0 0);
-  --clip-R-geo: inset(0 0 0 calc(var(--slider-value) + math.div(var(--gap), 2)));
+  --clip-L-geo: inset(0 calc(100% - var(--slider-value) + var(--gap) / 2) 0 0);
+  --clip-R-geo: inset(0 0 0 calc(var(--slider-value) + var(--gap) / 2));
 
   @mixin image-title {
     position: absolute;
@@ -107,8 +107,8 @@ div.image-compare {
       // better than the transform approach, but doesn't work on firefox
       transform: none;
       position: absolute;
-      left: calc(var(--slider-value) - math.div(var(--range-thumb-diametre), 2));
-      margin-top: calc(0px - math.div(var(--range-thumb-diametre), 2));
+      left: calc(var(--slider-value) - var(--range-thumb-diametre) / 2);
+      margin-top: calc(0px - var(--range-thumb-diametre) / 2);
     }
   }
 }
