@@ -906,7 +906,7 @@ Due to changes in wgpu 0.19, we've added a new `webgpu` feature to Bevy that is 
 We've swapped the material and mesh bind groups, so that mesh data is now in bind group 1, and material data is in bind group 2. This greatly improved our draw call batching when combined with changing the sorting functions for the opaque passes to sort by pipeline and mesh. Previously we were sorting them by distance from the camera. These batching improvements mean we're doing fewer draw calls, which improves CPU performance, especially in larger scenes. We've also removed the `get_instance_index` function in shaders, as it was only required to workaround an upstream bug that has been fixed in wgpu 0.19. For other shader or rendering changes, please see the [migration guide](/learn/migration-guides/0.12-0.13/) and [wgpu's changelog](https://github.com/gfx-rs/wgpu/blob/v0.19/CHANGELOG.md).
 
 Many small changes both to Bevy and `wgpu` summed up to make a modest but measurable difference in our performance on realistic 3D scenes!
-We ran some quick tests on both **Bevy 0.12** and **Bevy 0.13** on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Valley].
+We ran some quick tests on both **Bevy 0.12** and **Bevy 0.13** on the same machine on four complex scenes: [Bistro], [Sponza], [San Miguel] and [Hidden Alley].
 
 ![A high polygon, realistically lit screenshot of a beautiful cafe with a tree in the background.](San_Miguel_13.jpg)
 
@@ -918,7 +918,7 @@ Between Bevy 0.12 and Bevy 0.13 we saw frame times decrease by about 5-10% acros
 [Bistro]: https://github.com/DGriffin91/bevy_bistro_scene
 [Sponza]: https://github.com/DGriffin91/bevy_sponza_scene
 [San Miguel]: https://github.com/DGriffin91/bevy_san_miguel_scene
-[Hidden Valley]: https://blog.polyhaven.com/hidden-alley/
+[Hidden Alley]: https://blog.polyhaven.com/hidden-alley/
 
 ## Unload Rendering Assets from RAM
 
