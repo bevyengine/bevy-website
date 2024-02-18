@@ -5,9 +5,9 @@ $asset-card-padding: 0.4rem;
 
   display: grid;
   grid-template-areas:
-    "banner"
-    "desc"
-    "tags";
+    'banner'
+    'desc'
+    'tags';
   color: $color-white;
 
   &__banner {
@@ -69,7 +69,7 @@ $asset-card-padding: 0.4rem;
   &__tags {
     grid-area: tags;
     display: grid;
-    grid-template-areas: "versions licenses";
+    grid-template-areas: 'versions licenses';
     padding: $asset-card-padding;
     height: 2.2rem;
   }
