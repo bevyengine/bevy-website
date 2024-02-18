@@ -1,7 +1,10 @@
 # Contributing
 
-So, you want to help with the [Bevy website](https://bevyengine.org/)?
-(If you want to help with the [Bevy engine](https://github.com/bevyengine/bevy), then see the engine [CONTRIBUTING.md](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md)).
+So, you want to help with [Bevy Website](https://bevyengine.org/)? Then this is the right place for you! Bevy is created by volunteers; if you want to help us build the next great game engine, please reach out. We need all the help we can get.
+
+If you want to help with [Bevy Engine](https://github.com/bevyengine/bevy) itself, then see the engine's [CONTRIBUTING.md](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md).
+
+We want Bevy to be a vibrant developer community. That's actually why we chose the name; a Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 
 ## Building the website
 
@@ -172,7 +175,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
    1. Third-party crates should be limited to the most essential, such as `rand`.
 9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
 10. To validate if local code changes are compiling you can `cd` into the `code-validation` folder and test your code using `cargo test`.
-11. To make sure your markdown files are formatted correctly run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of your local Bevy website repository.
+11. To make sure your markdown files are formatted correctly run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of your local Bevy website repository. In order to run the command you should install `markdownlint-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>
 12. To hide lines of code in Zola Rust code blocks of the book you should: a. Mark each line you wish to hide with a `#` with an empty space afterwards like `# //...line_of_code_here...` although you were hiding lines in rustdoc. b. Run the [utility tool](write-rustdoc-hide-lines) in `<ROOT_OF_WEBSITE>/write_rustdoc-hide-lines/` named `write_rustdoc_hide_lines.sh`.
 13. To reference Rust API docs you can use markdown's reference-style links like so:
    [`HashMap`]

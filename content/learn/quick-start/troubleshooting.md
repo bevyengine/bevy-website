@@ -3,7 +3,7 @@ title = "Troubleshooting"
 insert_anchor_links = "right"
 aliases = ["learn/book/troubleshooting"]
 [extra]
-weight = 6
+weight = 5
 +++
 
 Is something in Bevy not working as expected? Maybe one of these will resolve your problem:
