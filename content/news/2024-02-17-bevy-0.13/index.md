@@ -1371,7 +1371,7 @@ With [the changes by CorneliusCornbread] you can configure the loader to store a
 
 ## Asset Transformers
 
-<div class="release-feature-authors">authors: @thepackett, @RyanSparker</div>
+<div class="release-feature-authors">authors: @thepackett, @RyanSpaker</div>
 
 Asset processing, at its core, involves implementing the `Process` trait, which takes some byte data representing an asset, transforming it, and then returning the processed byte data. However, implementing the `Process` trait by hand is somewhat involved, and so a generic `LoadAndSave<L: AssetLoader, S: AssetSaver>` `Process` implementation was written to make asset processing more ergonomic.
 
