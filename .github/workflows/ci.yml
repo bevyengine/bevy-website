@@ -21,6 +21,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_MARKDOWN: true
+          VALIDATE_EDITORCONFIG: true
           DEFAULT_BRANCH: main
 
   test-code-examples:
