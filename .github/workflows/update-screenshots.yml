@@ -29,12 +29,12 @@ jobs:
         run: |
           sudo apt-get update;
           DEBIAN_FRONTEND=noninteractive sudo apt-get install --no-install-recommends -yq \
-            libasound2-dev libudev-dev;
+            libasound2-dev libudev-dev libxkbcommon-x11-0;
 
       - name: install xvfb, llvmpipe and lavapipe
         run: |
           sudo apt-get update -y -qq
-          sudo add-apt-repository ppa:oibaf/graphics-drivers -y
+          sudo add-apt-repository ppa:kisak/turtle -y
           sudo apt-get update
           sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
