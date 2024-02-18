@@ -16,7 +16,7 @@ As is tradition, I will take this as a chance to reflect on the past year and ou
 
 This year, I am also highly encouraging everyone to write their own "Bevy Birthday" reflection posts. Just publish your post somewhere (and to social media if you want) and [link to it here](https://github.com/bevyengine/bevy-website/issues/728). One month from now, we will do a followup "Reflecting on Bevy's Third Year" rollup post that aggregates these in one place. This is our chance as a community to celebrate our wins, identify improvement areas, and calibrate our path for the next year.
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/book/getting-started/) and a [Bevy Book](/learn/book/introduction/). You can also check out [Bevy Assets](/assets/) for a library of community-developed plugins, crates, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/quick-start/introduction). You can also check out [Bevy Assets](/assets/) for a library of community-developed plugins, crates, games, and learning resources.
 
 <!-- more -->
 

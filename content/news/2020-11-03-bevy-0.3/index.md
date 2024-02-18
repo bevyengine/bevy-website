@@ -14,7 +14,7 @@ image_subtitle_link = "https://twitter.com/schneckerstein/status/130949112155541
 
 A little over a month after releasing Bevy 0.2, and thanks to **59** contributors, **122** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.3** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
 
 Here are some of the highlights from this release:
 
@@ -312,7 +312,7 @@ Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-g
 
 ### Thread Local Resources
 
-Some resource types cannot (or should not) be passed between threads. This is often true for low level apis like windowing, input, and audio. It is now possible to add "thread local resources" to the `Resources` collection, which can only be accessed from the main thread using "thread local systems":
+Some resource types cannot (or should not) be passed between threads. This is often true for low level APIs like windowing, input, and audio. It is now possible to add "thread local resources" to the `Resources` collection, which can only be accessed from the main thread using "thread local systems":
 
 ```rust
 // in your app setup
@@ -324,11 +324,11 @@ fn system(world: &mut World, resources: &mut Resources) {
 }
 ```
 
-### Query Api Changes
+### Query API Changes
 
 First, to improve clarity we renamed `query.get::<Component>(entity)` to `query.get_component::<Component>(entity)`. We now return the "full" query result for a specific entity using `query.get(entity)`.
 
-To allow multiple concurrent reads of Queries (where it is safe), we added separate `query.iter()` and `query.iter_mut()` apis, as well as `query.get(entity)` and `query.get_mut(entity)`. Queries that are "read only" can now retrieve their results via an immutable borrow.
+To allow multiple concurrent reads of Queries (where it is safe), we added separate `query.iter()` and `query.iter_mut()` APIs, as well as `query.get(entity)` and `query.get_mut(entity)`. Queries that are "read only" can now retrieve their results via an immutable borrow.
 
 ## Mesh Improvements
 
@@ -362,7 +362,7 @@ It turns out there was still more work to be done! [@AThilenius pointed out](htt
 2. we could directly expose translation/rotation/scale fields, which simplified the API significantly
 3. cheaper to store and cheaper to compute hierarchies in some cases
 
-We collectively decided this was a good path forward and now we have a re-rewrite that is even better. Yes this is _another_ breaking change, but thats why we label Bevy as being in the "experimentation phase". Now is the time to break things as often as possible to ensure that we find good apis that will stand the test of time.
+We collectively decided this was a good path forward and now we have a re-rewrite that is even better. Yes this is _another_ breaking change, but thats why we label Bevy as being in the "experimentation phase". Now is the time to break things as often as possible to ensure that we find good APIs that will stand the test of time.
 
 This is what the new `Transform` API looks like in a Bevy ECS system:
 
