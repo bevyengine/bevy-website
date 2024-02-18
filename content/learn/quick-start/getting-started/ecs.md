@@ -60,7 +60,8 @@ fn hello_world() {
 This will be our first system. The only remaining step is to add it to our [`App`]!
 
 ```rs,hide_lines=1
-# use bevy::prelude::*;
+use bevy::prelude::*;
+
 fn main() {
     App::new()
         .add_systems(Update, hello_world)
