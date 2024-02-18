@@ -1,26 +1,26 @@
 .button-square {
-    @include flex-center;
+  @include flex-center;
 
-    position: relative;
-    cursor: pointer;
+  position: relative;
+  cursor: pointer;
 
-    &:hover {
-        &:before {
-            $padding: 8px;
+  &:hover {
+    &:before {
+      $padding: 8px;
 
-            content: '';
-            position: absolute;
-            top: $padding;
-            right: $padding;
-            bottom: $padding;
-            left: $padding;
-            background-color: rgba($color-white, 0.05);
-            border-radius: $border-radius;
-        }
+      content: '';
+      position: absolute;
+      top: $padding;
+      right: $padding;
+      bottom: $padding;
+      left: $padding;
+      background-color: rgba($color-white, 0.05);
+      border-radius: $border-radius;
     }
+  }
 
-    &--header {
-        width: calc(var(--header-height) - 8px);
-        height: var(--header-height);
-    }
+  &--header {
+    width: calc(var(--header-height) - 8px);
+    height: var(--header-height);
+  }
 }

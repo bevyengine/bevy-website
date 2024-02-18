@@ -1,18 +1,18 @@
 table {
-    border-spacing: 0;
-    border: 2px solid $subtitle-color;
-    border-radius: $border-radius;
+  border-spacing: 0;
+  border: 2px solid $subtitle-color;
+  border-radius: $border-radius;
 }
 
 thead {
-    background-color: $color-grey-900;
+  background-color: $color-grey-900;
 }
 
 tr td {
-    padding: 0.5rem;
-    border-top: 2px solid $subtitle-color;
+  padding: 0.5rem;
+  border-top: 2px solid $subtitle-color;
 }
 
 tr td:not(:first-child) {
-    border-left: 2px solid $subtitle-color;
+  border-left: 2px solid $subtitle-color;
 }
