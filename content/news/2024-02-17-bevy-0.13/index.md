@@ -12,7 +12,7 @@ image_subtitle_link = "https://www.jarl-game.com/"
 
 Thanks to **198** contributors, **672** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.13** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 And to see what the engine has to offer hands-on, check out the entries in the [latest Bevy Jam](https://itch.io/jam/bevy-jam-4/entries), including the winner [That's a LOT of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees).
 
 To update an existing Bevy App or Plugin to **Bevy 0.13**, check out our [0.12 to 0.13 Migration Guide](/learn/migration-guides/0-12-to-0-13/).
@@ -239,7 +239,7 @@ let before = meshes.add(
 let after = meshes.add(Sphere::new(2.0).mesh().ico(8).unwrap());
 
 // Cuboid
-// (notice how Assets::add now also handles mesh convertion automatically)
+// (notice how Assets::add now also handles mesh conversion automatically)
 let before = meshes.add(Mesh::from(shape::Box::new(2.0, 1.0, 1.0)));
 let after = meshes.add(Cuboid::new(2.0, 1.0, 1.0));
 
@@ -298,7 +298,7 @@ gizmos
 
 In game development, spatial checks have several valuable use cases, such as getting all entities that are in the camera's view frustum or near the player, or finding pairs of physics objects that might be intersecting. To speed up such checks, bounding volumes are used to approximate more complex shapes.
 
-**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitives shapes.
+**Bevy 0.13** adds some new publicly available bounding volumes: [`Aabb2d`], [`Aabb3d`], [`BoundingCircle`], and [`BoundingSphere`]. These can be created manually, or generated from primitive shapes.
 
 Each bounding volume implements the [`BoundingVolume`] trait, providing some general functionality and helpers. The [`IntersectsVolume`] trait can be used to test for intersections with these volumes. This trait is implemented for bounding volumes themselves, so you can test for intersections between them. This is supported between all existing bounding volume types, but only those in the same dimension.
 
@@ -605,7 +605,7 @@ commands.spawn((
     ImageScaleMode::Sliced(TextureSlicer {
         // The image borders are 20 pixels in every direction
         border: BorderRect::square(20.0),
-        // we don't stretch the coners more than their actual size (20px)
+        // we don't stretch the corners more than their actual size (20px)
         max_corner_scale: 1.0,
         ..default()
     }),
@@ -718,7 +718,7 @@ some of which will undoubtedly make their way upstream.
 
 <div class="release-feature-authors">authors: @hymm, james-j-obrien</div>
 
-Have you every wanted to pass a query to a function, but instead of having a
+Have you ever wanted to pass a query to a function, but instead of having a
 `Query<&Transform>` you have a `Query<(&Transform, &Velocity), With<Enemy>>`?
 In **Bevy 0.13** you can, thanks to the new [`QueryLens`] and [`Query::transmute_lens()`] method.
 
@@ -1303,7 +1303,7 @@ But with a [`GizmoConfigGroup`] parameter, `Gizmos` can choose a distinct config
 ```rust
 fn draw_circles(
     mut default_gizmos: Gizmos,
-    // this uses a distinct configvvvvvvvvvvvvvvv
+    // this uses the distinct NavigationGroup config
     mut navigation_gizmos: Gizmos<NavigationGroup>,
 ) {
     // Two circles with different outline width
@@ -1392,7 +1392,7 @@ The new asset processing pipeline, using the `LoadTransformAndSave` `Process` im
 4. An `AssetSaver` takes a bevy `Asset` and converts it back into byte data.
 5. An `AssetWriter` then writes the asset byte data back to the asset source.
 
-In addition to having better code reusability, this change encorages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
+In addition to having better code reusability, this change encourages writing `AssetSaver`s for various common asset types, which could be used to add runtime asset saving functionality to the `AssetServer`.
 
 The previous `LoadAndSave` `Process` implementation still exists, as there are some cases where an asset transformation step is unnecessary, such as when saving assets into a compressed format.
 
@@ -1402,7 +1402,7 @@ See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main
 
 <div class="release-feature-authors">authors: @Bluefinger, @notverymoe, @scottmcm, @james7132, @NathanSWard</div>
 
-`Entity` (Bevy's 64-bit unique identifier for enitities) received a number of changes this cycle, laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
+`Entity` (Bevy's 64-bit unique identifier for entities) received a number of changes this cycle, laying some more groundwork for relations alongside _related_, and nice to have, performance optimizations. The work here involved a lot of deep-diving into compiler codegen/assembly output, with running lots of benchmarks and testing in order to ensure all changes didn't cause breakages or major problems. Although the work here was dealing with mostly _safe_ code, there were lots of underlying assumptions being changed that could have impacted code elsewhere. This was the most "micro-optimization" oriented set of changes in Bevy 0.13.
 
 * [#9797]: created a unified identifier type, paving the path for us to use the same fast, complex code in both our `Entity` type and the much-awaited relations
 * [#9907]: allowed us to store `Option<Entity>` in the same number of bits as `Entity`, by changing the layout of our Entity type to reserve exactly one `u64` value for the `None` variant
@@ -1413,9 +1413,9 @@ See the [Asset Processing Example](<https://github.com/bevyengine/bevy/blob/main
 Full credit is also due to the authors who pursued similar work in [#2372] and [#3788]: while their work was not ultimately merged, it was an incredibly valuable
 inspiration and source of prior art to base these more recent changes on.
 
-![Benchmark results of optimisation work](entity_hash_optimsation_benches.png)
+![Benchmark results of optimization work](entity_hash_optimsation_benches.png)
 
-The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimisations in place (`optimised_entity`).
+The above results show from where we started (`optimised_eq` being the first PR that introduced the benchmarks) to where we are now with all the optimizations in place (`optimised_entity`).
 There are improvements across the board, with clear performance benefits that should impact multiple areas of the codebase, not just when hashing entities.
 
 There are a ton of crunchy, well-explained details in the linked PRs, including some fascinating assembly output analysis.
@@ -1433,7 +1433,7 @@ If that interests you, open some new tabs in the background!
 
 <div class="release-feature-authors">authors: @james7132</div>
 
-Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimisation. This same approach is within the Rust standard library.
+Currently to get the full performance out of iterating over queries, `Query::for_each` must be used in order to take advantage of auto-vectorization and internal iteration optimizations that the compiler can apply. However, this isn't idiomatic rust and is not an iterator method so you can't use it on an iterator chain. However, it is possible to get the same benefits for some iterator methods, for which [#6773](https://github.com/bevyengine/bevy/pull/6773/) by @james7132 sought to achieve. By providing an override to `QueryIter::fold`, it was possible to port the iteration strategies of `Query::for_each` so that `Query::iter` and co could achieve the same gains. Not _every_ iterator method currently benefits from this, as they require overriding `QueryIter::try_fold`, but that is currently still a nightly-only optimization. This same approach is within the Rust standard library.
 
 This deduplicated code in a few areas, such as no longer requiring both `Query::for_each` and `Query::for_each_mut`, as one just needs to call `Query::iter` or `Query::iter_mut` instead. So code like:
 
