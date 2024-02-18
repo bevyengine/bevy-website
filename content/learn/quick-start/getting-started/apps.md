@@ -8,7 +8,7 @@ weight = 2
 
 Bevy programs are referred to as [`App`]s. The simplest Bevy app looks like this:
 
-```rs,hide_lines=1
+```rs
 use bevy::prelude::*;
 
 fn main() {
