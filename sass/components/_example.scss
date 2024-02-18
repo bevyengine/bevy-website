@@ -8,13 +8,13 @@
     align-items: baseline;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      'title title'
-      'back  github'
+      "title title"
+      "back  github"
     ;
 
     @media #{$bp-tablet-portrait-up} {
       margin: 24px 0 8px;
-      grid-template-areas: 'back title github';
+      grid-template-areas: "back title github";
       grid-template-columns: 150px 1fr 150px;
     }
   }

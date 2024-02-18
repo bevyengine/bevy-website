@@ -12,7 +12,7 @@
   transition: opacity $duration * 2;
 }
 
-@include state-checked('mobile-menu') {
+@include state-checked("mobile-menu") {
   .main-menu-backdrop {
     visibility: visible;
     opacity: 1.0;

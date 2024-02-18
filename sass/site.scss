@@ -1,59 +1,59 @@
-@charset 'utf-8';
+@charset "utf-8";
 
 // Core
-@import 'functions';
-@import 'vars';
-@import 'mixins';
+@import "functions";
+@import "vars";
+@import "mixins";
 
 // Fonts
-@import 'fonts/firamono';
-@import 'fonts/firasans';
+@import "fonts/firamono";
+@import "fonts/firasans";
 
 // Elements
 // - HTML element tweaks: html, body, a, ul, li…
-@import 'elements/html';
-@import 'elements/body';
-@import 'elements/table';
+@import "elements/html";
+@import "elements/body";
+@import "elements/table";
 
 // CSS utility classes
-@import 'utils';
+@import "utils";
 
 // Components
 // - Repeating visual patterns: buttons, cards, menus…
 // - Components can be composed between them to create new components
-// - These should be self contained and shouldn't affect other styling
-@import 'components/bevy-instance';
-@import 'components/docs-footer';
-@import 'components/button-square';
-@import 'components/button';
-@import 'components/card';
-@import 'components/container';
-@import 'components/example';
-@import 'components/header';
-@import 'components/icon';
-@import 'components/item-grid';
-@import 'components/layout';
-@import 'components/link-card';
-@import 'components/logo';
-@import 'components/main-menu-backdrop';
-@import 'components/main-menu';
-@import 'components/menu-switch';
-@import 'components/page-with-menu';
-@import 'components/sponsors';
-@import 'components/syntax-theme';
-@import 'components/tree-menu';
-@import 'components/asset-card';
-@import 'components/image_compare';
-@import 'components/todo';
+// - These should be self contained and shouldn"t affect other styling
+@import "components/bevy-instance";
+@import "components/docs-footer";
+@import "components/button-square";
+@import "components/button";
+@import "components/card";
+@import "components/container";
+@import "components/example";
+@import "components/header";
+@import "components/icon";
+@import "components/item-grid";
+@import "components/layout";
+@import "components/link-card";
+@import "components/logo";
+@import "components/main-menu-backdrop";
+@import "components/main-menu";
+@import "components/menu-switch";
+@import "components/page-with-menu";
+@import "components/sponsors";
+@import "components/syntax-theme";
+@import "components/tree-menu";
+@import "components/asset-card";
+@import "components/image_compare";
+@import "components/todo";
 
 // Pages
 // - Page specific CSS
-@import 'pages/community';
-@import 'pages/people';
-@import 'pages/assets';
-@import 'pages/docs';
-@import 'pages/news';
-@import 'pages/features';
-@import 'pages/content';
-@import 'pages/migration_guide';
-@import 'pages/404';
+@import "pages/community";
+@import "pages/people";
+@import "pages/assets";
+@import "pages/docs";
+@import "pages/news";
+@import "pages/features";
+@import "pages/content";
+@import "pages/migration_guide";
+@import "pages/404";

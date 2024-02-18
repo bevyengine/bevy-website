@@ -22,7 +22,7 @@
   }
 }
 
-@include state-checked('mobile-menu') {
+@include state-checked("mobile-menu") {
 
   // Disable scroll on main content
   .layout {

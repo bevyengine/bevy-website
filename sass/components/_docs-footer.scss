@@ -15,13 +15,13 @@
     padding: var(--docs-footer-gap) 0;
     grid-template-columns: 1fr;
     grid-template-areas:
-      'next'
-      'prev'
+      "next"
+      "prev"
     ;
 
     @media #{$bp-tablet-portrait-up} {
       grid-template-columns: 1fr 1fr;
-      grid-template-areas: 'prev next';
+      grid-template-areas: "prev next";
     }
   }
 

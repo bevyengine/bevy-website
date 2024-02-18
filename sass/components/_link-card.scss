@@ -10,7 +10,7 @@
     position: relative;
     display: grid;
     grid-template-columns: 30% 1fr;
-    grid-template-areas: 'xxx content';
+    grid-template-areas: "xxx content";
   }
 
   &__img-wrapper {
