@@ -1,3 +1,4 @@
+@use "sass:math";
 $asset-card-padding: 0.4rem;
 
 .asset-card {
@@ -14,7 +15,7 @@ $asset-card-padding: 0.4rem;
     grid-area: banner;
     display: block;
     position: relative;
-    aspect-ratio: 16/9;
+    aspect-ratio: math.div(16, 9);
     align-self: start;
 
     background: linear-gradient(0deg,
@@ -58,7 +59,7 @@ $asset-card-padding: 0.4rem;
 
     grid-area: desc;
 
-    padding: $asset-card-padding / 2;
+    padding: math.div($asset-card-padding, 2);
     font-size: 0.9rem;
     overflow: ellipsis;
     height: 100%;

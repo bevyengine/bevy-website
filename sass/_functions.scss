@@ -1,4 +1,6 @@
+@use "sass:math";
+
 /// Convert px size to rem size
 @function calc-rem($size) {
-    @return ($size / $size-body) * 1rem;
+  @return math.div($size, $size-body) * 1rem;
 }

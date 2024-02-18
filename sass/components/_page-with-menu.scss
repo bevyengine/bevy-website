@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .page-with-menu {
   $margin-top: 24px;
   $sidebar-width: 250px;
@@ -6,7 +8,7 @@
   grid-gap: 24px;
   grid-template-columns: 1fr;
   grid-template-areas: 'content';
-  margin-top: $margin-top / 2;
+  margin-top: math.div($margin-top, 2);
 
   @media #{$bp-tablet-landscape-up} {
     margin-top: $margin-top;

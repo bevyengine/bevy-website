@@ -1,9 +1,11 @@
+@use "sass:math";
+
 div.image-compare {
   // default values
   --slider-min: 7%;
   --slider-max: 93%;
   --slider-value: 50%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: math.div(16, 9);
   // config
   --text-padding: 10px;
   --gap: 3px;
@@ -17,8 +19,8 @@ div.image-compare {
   outline-offset: -1px;
 
   // calculated
-  --clip-L-geo: inset(0 calc(100% - var(--slider-value) + var(--gap) / 2) 0 0);
-  --clip-R-geo: inset(0 0 0 calc(var(--slider-value) + var(--gap) / 2));
+  --clip-L-geo: inset(0 calc(100% - var(--slider-value) + math.div(var(--gap), 2)) 0 0);
+  --clip-R-geo: inset(0 0 0 calc(var(--slider-value) + math.div(var(--gap), 2)));
 
   @mixin image-title {
     position: absolute;
@@ -27,6 +29,7 @@ div.image-compare {
     width: calc(100% - var(--text-padding));
     text-shadow: 0 0 2px $color-black;
   }
+
   &::before {
     @include image-title;
 
@@ -36,6 +39,7 @@ div.image-compare {
     -webkit-clip-path: var(--clip-L-geo);
     z-index: 1;
   }
+
   &::after {
     @include image-title;
 
@@ -90,9 +94,11 @@ div.image-compare {
         background-color: darken($color-white, 20%);
       }
     }
+
     &::-moz-range-thumb {
       @include thumb;
     }
+
     &::-webkit-slider-thumb {
       @include thumb;
 
@@ -101,8 +107,8 @@ div.image-compare {
       // better than the transform approach, but doesn't work on firefox
       transform: none;
       position: absolute;
-      left: calc(var(--slider-value) - var(--range-thumb-diametre) / 2);
-      margin-top: calc(0px - var(--range-thumb-diametre) / 2);
+      left: calc(var(--slider-value) - math.div(var(--range-thumb-diametre), 2));
+      margin-top: calc(0px - math.div(var(--range-thumb-diametre), 2));
     }
   }
 }
