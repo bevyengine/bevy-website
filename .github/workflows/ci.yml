@@ -9,12 +9,88 @@ on:
       - 'trying'
 
 jobs:
-  generate-assets:
+  markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+      - name: Run Markdown Lint
+        uses: docker://ghcr.io/github/super-linter:slim-v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_MARKDOWN: true
+          DEFAULT_BRANCH: main
 
-      - uses: actions/cache@v3
+  test-code-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      - name: Build & run doc tests
+        run: cd code-validation && cargo test
+
+  check-hide-lines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Check hide-lines
+        run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
+
+  lint-tools:
+    runs-on: ubuntu-latest
+    env:
+      TOOLS: |
+        code-validation generate-assets generate-community generate-errors generate-release write-rustdoc-hide-lines
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      - name: Check formatting
+        run: |
+          for CRATE in $TOOLS; do
+            cd $CRATE
+
+            echo Checking $CRATE
+            cargo fmt --check
+
+            cd ..
+          done
+
+      - name: Check clippy
+        run: |
+          for CRATE in $TOOLS; do
+            cd $CRATE
+
+            echo Checking $CRATE
+            cargo clippy -- -Dwarnings
+
+            cd ..
+          done
+
+  generate-assets:
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -26,10 +102,10 @@ jobs:
 
       - name: Get cache key
         id: cache-key
-        run: echo "::set-output name=key::$(date +'%Y-%m-%d')"
+        run: echo "key=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Get crates.io datadump from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.cache-key.outputs.key }}
@@ -40,18 +116,19 @@ jobs:
           export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} &&
           ./generate_assets.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-assets
           path: content/assets
           retention-days: 1
 
   generate-errors:
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -66,23 +143,24 @@ jobs:
           cd generate-errors &&
           ./generate_errors.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-errors
           path: content/learn/errors
           retention-days: 1
 
   generate-wasm-examples:
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: "Clone Bevy"
         run: >
           cd generate-wasm-examples &&
           ./clone_bevy.sh
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -98,57 +176,29 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
-        run: >
-          cargo install --force wasm-bindgen-cli &&
+        run: |
           cd generate-wasm-examples &&
           ./generate_wasm_examples.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-wasm-examples
           path: content/examples
           retention-days: 1
 
-  generate-wasm-examples-webgpu:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-
-      - name: "Clone Bevy"
-        run: >
-          cd generate-wasm-examples &&
-          ./clone_bevy.sh
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            generate-wasm-examples/bevy/target/
-            content/examples/**/*.wasm
-          key: ${{ runner.os }}-generate-wasm-examples-webgpu-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
-
-      - uses: dtolnay/rust-toolchain@stable
-
-      - name: "Build Bevy Examples"
-        run: >
-          cd generate-wasm-examples &&
-          ./generate_wasm_examples-webgpu.sh
-
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
           retention-days: 1
 
   generate-community:
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -163,53 +213,39 @@ jobs:
           cd generate-community &&
           ./generate_community.sh
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: generated-community
           path: content/community/people
           retention-days: 1
 
-  markdownlint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
-      - name: Run Markdown Lint
-        uses: docker://ghcr.io/github/super-linter:slim-v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_MARKDOWN: true
-          DEFAULT_BRANCH: main
-
   build-website:
     runs-on: ubuntu-latest
-    needs: [markdownlint, generate-assets, generate-errors, generate-wasm-examples, generate-wasm-examples-webgpu, generate-community]
+    needs: [markdownlint, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/download-artifact@master
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
           name: generated-assets
           path: content/assets
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-errors
           path: content/learn/errors
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-wasm-examples
           path: content/examples
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v4
         with:
           name: generated-community
           path: content/community/people

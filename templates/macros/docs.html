@@ -1,8 +1,7 @@
-{% macro docs_menu_row(prefix, section_path) %}
-    {% set section = get_section(path=section_path) %}
-    {% set is_in_branch = section.path in current_path %}
-    {% set is_active = current_path == section.path %}
-    {% set id = prefix ~ '-' ~ section.path | slugify %}
+{% macro docs_menu_section_row(prefix, menu_section) %}
+    {% set is_in_branch = menu_section.path in current_path %}
+    {% set is_active = current_path == menu_section.path %}
+    {% set id = prefix ~ '-' ~ menu_section.path | slugify %}
     {% set class = "tree-menu__item" %}
     {% set label_class = "tree-menu__label" %}
 
@@ -10,34 +9,98 @@
         {% set class = class ~ " tree-menu__item--active" %}
     {% endif %}
 
-    {% if section.subsections %}
+    {% if menu_section.extra and menu_section.extra.public_draft %}
+        {% set class = class ~ " public_draft" %}
+        {% if is_in_branch %}
+            {% set class = class ~ " active_draft" %}
+        {% endif %}
+    {% endif %}
+
+    {% set subsections = [] %}
+    {% for section in menu_section.subsections %}
+      {% set_global subsections = subsections | concat(with=get_section(path=section)) %}
+    {% endfor %}
+    {% set pages_and_sections = menu_section.pages | concat(with=subsections) | sort(attribute="extra.weight") %}
+
+    {% if pages_and_sections %}
         {% set label_class = label_class ~ " tree-menu__label--with-chevron" %}
         <input id="{{id}}" class="tree-menu__state" type="checkbox" {% if is_in_branch %}checked{% endif %}>
     {% endif %}
 
     <li class="{{class}}">
         <div class="{{label_class}}">
-            <a class="tree-menu__link" href="{{section.path}}">{{ section.title }}</a>
-            {% if section.subsections %}
+            <a class="tree-menu__link" href="{{menu_section.path}}">{{ menu_section.title }}</a>
+            {% if pages_and_sections %}
                 <label class="tree-menu__toggle" for="{{id}}">
                     <img class="tree-menu__chevron" src="/assets/icon-chevron-down.svg">
                 </label>
             {% endif %}
         </div>
-        {% if section.subsections %}
+        {% if pages_and_sections %}
             <ul class="tree-menu">
-                {% for s in section.subsections %}
-                    {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+                {% for p in pages_and_sections %}
+                  {% if subsections is containing(p) %}
+                    {{ self::docs_menu_section_row(prefix=prefix, menu_section=p) }}
+                  {% elif menu_section.pages is containing(p) %}
+                    {{ self::docs_menu_page_row(prefix=prefix, menu_page=p) }}
+                  {% endif %}
                 {% endfor %}
             </ul>
         {% endif %}
     </li>
-{% endmacro docs_menu_row %}
+{% endmacro docs_menu_section_row %}
+
+{% macro docs_menu_page_row(prefix, menu_page) %}
+    {% set is_in_branch = menu_page.path in current_path %}
+    {% set is_active = current_path == menu_page.path %}
+    {% set id = prefix ~ '-' ~ menu_page.path | slugify %}
+    {% set class = "tree-menu__item" %}
+    {% set label_class = "tree-menu__label" %}
+
+    {% if is_active %}
+        {% set class = class ~ " tree-menu__item--active" %}
+    {% endif %}
+
+    {% if menu_page.extra and menu_page.extra.public_draft %}
+        {% set class = class ~ " public_draft" %}
+        {% if is_in_branch %}
+            {% set class = class ~ " active_draft" %}
+        {% endif %}
+    {% endif %}
+
+    <li class="{{class}}">
+        <div class="{{label_class}}">
+            <a class="tree-menu__link" href="{{menu_page.path}}">{{ menu_page.title }}</a>
+        </div>
+    </li>
+{% endmacro docs_menu_page_row %}
 
 {% macro docs_menu(root, prefix) %}
     <ul class="tree-menu">
-        {% for s in root.subsections %}
-            {{ self::docs_menu_row(prefix=prefix, section_path=s) }}
+        {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %}
+
+        {% set subsections = [] %}
+        {% for subsection in root.subsections %}
+            {% set proper_section = get_section(path=subsection) %}
+            {% set_global subsections = subsections | concat(with=proper_section) %}
         {% endfor %}
+        {% set pages_and_sections = root.pages | concat(with=subsections) | sort(attribute="extra.weight") %}
+        {% if is_migration_guide %}
+          {% for p in pages_and_sections | reverse %}
+            {% if subsections is containing(p) %}
+              {{ self::docs_menu_section_row(prefix=prefix, menu_section=p) }}
+            {% elif root.pages is containing(p) %}
+              {{ self::docs_menu_page_row(prefix=prefix, menu_page=p) }}
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for p in pages_and_sections %}
+            {% if subsections is containing(p) %}
+              {{ self::docs_menu_section_row(prefix=prefix, menu_section=p) }}
+            {% elif root.pages is containing(p) %}
+              {{ self::docs_menu_page_row(prefix=prefix, menu_page=p) }}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
     </ul>
 {% endmacro %}

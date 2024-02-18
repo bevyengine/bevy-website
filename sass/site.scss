@@ -1,21 +1,22 @@
 @charset "utf-8";
 
 // Core
-@import 'functions';
-@import 'vars';
-@import 'mixins';
+@import "functions";
+@import "vars";
+@import "mixins";
 
 // Fonts
-@import 'fonts/firamono';
-@import 'fonts/firasans';
+@import "fonts/firamono";
+@import "fonts/firasans";
 
 // Elements
 // - HTML element tweaks: html, body, a, ul, li…
-@import 'elements/html';
-@import 'elements/body';
+@import "elements/html";
+@import "elements/body";
+@import "elements/table";
 
 // CSS utility classes
-@import 'utils';
+@import "utils";
 
 // Components
 // - Repeating visual patterns: buttons, cards, menus…
@@ -43,6 +44,7 @@
 @import "components/tree-menu";
 @import "components/asset-card";
 @import "components/image_compare";
+@import "components/todo";
 
 // Pages
 // - Page specific CSS
@@ -54,3 +56,4 @@
 @import "pages/features";
 @import "pages/content";
 @import "pages/migration_guide";
+@import "pages/404";

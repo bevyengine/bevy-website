@@ -9,7 +9,7 @@ show_image = true
 
 Thanks to **166** contributors, **522** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.11** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.11**, check out our [0.10 to 0.11 Migration Guide](/learn/migration-guides/0.10-0.11/).
 
@@ -20,7 +20,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 * **Screen Space Ambient Occlusion (SSAO)**: Increase scene render quality by simulating occlusion of "indirect" diffuse light
 * **Temporal Anti-Aliasing (TAA)**: A popular anti-aliasing technique that blends the current frame with past frames using motion vectors to smooth out artifacts
 * **Morph Targets**: Animate vertex positions on meshes between predefined states. Great for things like character customization!
-* **Robust Constrast Adaptive Sharpening (RCAS)**: Intelligently sharpens renders, which pairs nicely with TAA
+* **Robust Contrast Adaptive Sharpening (RCAS)**: Intelligently sharpens renders, which pairs nicely with TAA
 * **WebGPU Support**: Bevy can now render on the web faster and with more features using the modern WebGPU web API
 * **Improved Shader Imports**: Bevy shaders now support granular imports and other new features
 * **Parallax Mapping**: Materials now support an optional depth map, giving flat surfaces a feel of depth through parallaxing the material's textures
@@ -662,6 +662,20 @@ fn play_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 ```
 
+The `mode` field in the [`PlaybackSettings`] struct offers a straightforward way to manage the lifecycle of these audio entities.
+
+By passing a [`PlaybackMode`], you are able to choose whether it plays once or repeatedly, using `Once` and `Loop` respectively. If you anticipate that the audio might be played again, you can save resources by temporarily unloading it using `Despawn`, or free up its memory immediately if it is a one-time effect using `Remove`.
+
+```rust
+AudioBundle {
+    source: asset_server.load("hit_sound.ogg"),
+    settings: PlaybackSettings {
+        mode: PlaybackMode::Despawn,
+        ..default()
+    }
+}
+```
+
 Much simpler! To adjust playback you can query for the [`AudioSink`] component:
 
 ```rust
@@ -675,6 +689,8 @@ fn pause_music(query_music: Query<&AudioSink, With<MyMusic>>) {
 [`Entity`]: https://docs.rs/bevy/0.11.0/bevy/ecs/entity/struct.Entity.html
 [`AudioBundle`]: https://docs.rs/bevy/0.11.0/bevy/audio/type.AudioBundle.html
 [`AudioSink`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.AudioSink.html
+[`PlaybackSettings`]: https://docs.rs/bevy/0.11.0/bevy/audio/struct.PlaybackSettings.html
+[`PlaybackMode`]: https://docs.rs/bevy/0.11.0/bevy/audio/enum.PlaybackMode.html
 
 ## Global Audio Volume
 
@@ -1481,7 +1497,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [Add parallax mapping to bevy PBR][5928]
 * [Add port of AMD's Robust Contrast Adaptive Sharpening][7422]
 * [Add RenderGraphApp to simplify adding render nodes][8007]
-* [Add screenshot api][7163]
+* [Add screenshot API][7163]
 * [Add morph targets][8158]
 * [Screenshots in wasm][8455]
 * [Add ViewNode to simplify render node management][8118]

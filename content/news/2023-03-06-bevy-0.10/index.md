@@ -11,7 +11,7 @@ image_subtitle_link = "https://github.com/coreh/bevy-demo-ruins"
 
 Thanks to **173** contributors, **689** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.10** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.10**, check out our [0.9 to 0.10 Migration Guide](/learn/migration-guides/0.9-0.10/).
 
@@ -2182,7 +2182,7 @@ Bevy is made by a [large group of people](/community/people/). A huge thanks to 
 * [ECS: Make `Query` fields private][7149]
 * [ECS: make `ScheduleGraph::initialize` public][7723]
 * [ECS: Make boxed conditions read-only][7786]
-* [ECS: Make RemovedComponents mirror EventReaders api surface][7713]
+* [ECS: Make RemovedComponents mirror EventReaders API surface][7713]
 * [ECS: Mark TableRow and TableId as repr(transparent)][7166]
 * [ECS: Most APIs returning `&UnsafeCell<ComponentTicks>` now returns `TickCells` instead, which contains two separate `&UnsafeCell<Tick>` for either component ticks.][6547]
 * [ECS: Move MainThreadExecutor for stageless migration.][7444]

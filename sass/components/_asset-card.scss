@@ -1,117 +1,117 @@
 $asset-card-padding: 0.4rem;
 
 .asset-card {
-    @include card;
+  @include card;
 
+  display: grid;
+  grid-template-areas:
+    "banner"
+    "desc"
+    "tags";
+  color: $color-white;
+
+  &__banner {
+    grid-area: banner;
+    display: block;
+    position: relative;
+    aspect-ratio: 16/9;
+    align-self: start;
+
+    background: linear-gradient(0deg,
+        $card-hover-background 0%,
+        $default-image-background-color 100%);
+
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+
+      background-color: $default-image-background-color;
+    }
+  }
+
+  &__title {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+
+    padding: $asset-card-padding;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__description {
+    @include text-ellipsis(3);
+
+    grid-area: desc;
+
+    padding: $asset-card-padding;
+    font-size: 1rem;
+    overflow: ellipsis;
+    height: 4.2rem;
+  }
+
+  &__small_description {
+    @include text-ellipsis(3);
+
+    grid-area: desc;
+
+    padding: $asset-card-padding / 2;
+    font-size: 0.9rem;
+    overflow: ellipsis;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__tags {
+    grid-area: tags;
     display: grid;
-    grid-template-areas:
-        "banner"
-        "desc"
-        "tags";
-    color: $color-white;
+    grid-template-areas: "versions licenses";
+    padding: $asset-card-padding;
+    height: 2.2rem;
+  }
 
-    &__banner {
-        grid-area: banner;
-        display: block;
-        position: relative;
-        aspect-ratio: 16/9;
-        align-self: start;
+  &__tag-icon {
+    display: flex;
 
-        background: linear-gradient(0deg,
-            $card-hover-background 0%,
-            $default-image-background-color 100%);
-
-        img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: contain;
-
-            background-color: $default-image-background-color;
-        }
+    img,
+    svg {
+      height: 1.2rem;
+      width: 1.2rem;
+      fill: rgb(149, 149, 157);
     }
+  }
 
-    &__title {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
+  &__bevy-versions {
+    grid-area: versions;
+  }
 
-        padding: $asset-card-padding;
-        font-weight: bold;
-        font-size: 1.2rem;
-        background-color: rgba(0, 0, 0, 0.5);
+  &__licenses {
+    grid-area: licenses;
+    margin-left: auto;
+    order: 2;
+  }
+
+  &__tag-list {
+    display: flex;
+    align-items: center;
+    gap: .2em;
+  }
+
+  &__tag {
+    display: flex;
+    justify-content: center;
+
+    padding: .2em .4em;
+    border-radius: .2em;
+    font-size: .85em;
+    background: rgb(89, 89, 94);
+
+    &--supported {
+      background-color: rgb(110, 110, 247);
     }
-
-    &__description {
-        @include text-ellipsis(3);
-
-        grid-area: desc;
-
-        padding: $asset-card-padding;
-        font-size: 1rem;
-        overflow: ellipsis;
-        height: 4.2rem;
-    }
-
-    &__small_description {
-        @include text-ellipsis(3);
-
-        grid-area: desc;
-
-        padding: $asset-card-padding / 2;
-        font-size: 0.9rem;
-        overflow: ellipsis;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    &__tags {
-        grid-area: tags;
-        display: grid;
-        grid-template-areas: "versions licenses";
-        padding: $asset-card-padding;
-        height: 2.2rem;
-    }
-
-    &__tag-icon {
-        display: flex;
-
-        img,
-        svg {
-            height: 1.2rem;
-            width: 1.2rem;
-            fill: rgb(149, 149, 157);
-        }
-    }
-
-    &__bevy-versions {
-        grid-area: versions;
-    }
-
-    &__licenses {
-        grid-area: licenses;
-        margin-left: auto;
-        order: 2;
-    }
-
-    &__tag-list {
-        display: flex;
-        align-items: center;
-        gap: .2em;
-    }
-
-    &__tag {
-        display: flex;
-        justify-content: center;
-
-        padding: .2em .4em;
-        border-radius: .2em;
-        font-size: .85em;
-        background: rgb(89, 89, 94);
-
-        &--supported {
-            background-color: rgb(110, 110, 247);
-        }
-    }
+  }
 }

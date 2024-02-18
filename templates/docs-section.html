@@ -1,110 +1,28 @@
-{% extends "layouts/page-with-menu.html" %}
-{% import "macros/docs.html" as docs_macros %}
-
-{% block head_extensions %}
-    <script src="/optional-helpers.js"></script>
-{% endblock %}
+{% extends "docs-base.html" %}
 
 {% block page_name %}
-    {% if section and section.path is starting_with("/learn/book/") %}
-        The Book
+  {% if section and section.path is starting_with("/learn/book/") %}
+    The Book
+  {% else %}
+    Migration Guides
+  {% endif %}
+{% endblock %}
+
+{% block docs_page_title %}
+    {% if section.extra.long_title %}
+        {{ section.extra.long_title }}
     {% else %}
-        Migration Guides
+        {{ section.title }}
+    {% endif %}
+    {% if section.extra.subtitle %}
+        <span class="docs-page-subtitle">{{ section.extra.subtitle }}</span>
     {% endif %}
 {% endblock %}
 
-{% block mobile_page_menu %}
-    {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-    {{docs_macros::docs_menu(prefix="mobile-menu", root=get_section(path=root_section_path))}}
+{% block docs_page_content %}
+  {{ section.content | safe }}
 {% endblock %}
 
-{% block page_menu %}
-    {% set root_section_path = section.components | slice(end=2) | concat(with="/_index.md") | join(sep="/") %}
-    {{docs_macros::docs_menu(prefix="page-menu", root=get_section(path=root_section_path))}}
+{% block docs_page_relative_path %}
+{{section.relative_path}}
 {% endblock %}
-
-{% block page_content %}
-<div class="docs-page">
-    <div class="docs-content">
-        {# Create an array of sections, in reading order #}
-        {% set root_section_path = section.components | slice(end=2) | concat(with="/_index.md") | join(sep="/") %}
-        {% set root_section = get_section(path=root_section_path) %}
-        {% set all_sections = [] %}
-
-        {% for p in root_section.subsections %}
-            {% set_global all_sections = all_sections | concat(with=p) %}
-            {% set section_obj = get_section(path=p) %}
-
-            {% for p2 in section_obj.subsections %}
-                {% set_global all_sections = all_sections | concat(with=p2) %}
-                {% set subsection = get_section(path=p2) %}
-
-                {% if subsection.subsections %}
-                    {% set_global all_sections = all_sections | concat(with=subsection.subsections) %}
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-
-        {# Find prev/next sections #}
-        {% set prev_section = false %}
-        {% set next_section = false %}
-        {% set found_current = false %}
-
-        {% for p in all_sections %}
-            {% set section_obj = get_section(path=p) %}
-
-            {% if found_current %}
-                {% set_global next_section = section_obj %}
-                {% break %}
-            {% endif %}
-
-            {% if current_path == section_obj.path %}
-                {% set_global found_current = true %}
-                {% continue %}
-            {% endif %}
-
-            {% set_global prev_section = section_obj %}
-        {% endfor %}
-
-        <h1>
-            {% if section.extra.long_title %}
-                {{ section.extra.long_title }}
-            {% else %}
-                {{ section.title }}
-            {% endif %}
-            {% if section.extra.subtitle %}
-                <span class="docs-page-subtitle">({{section.extra.subtitle}})</span>
-            {% endif %}
-        </h1>
-        <div class="media-content">{{ section.content | safe }}</div>
-        <div class="docs-footer">
-            <nav class="docs-footer__nav">
-                {% if next_section %}
-                    <a class="docs-footer__link docs-footer__link--next" href="{{next_section.path}}" data-docs-nav-next>
-                        <div class="docs-footer__label">
-                            <div class="docs-footer__dir">Next</div>
-                            {{next_section.title}}
-                        </div>
-                        <i class="docs-footer__chevron icon icon--chevron-right"></i>
-                    </a>
-                {% endif %}
-                {% if prev_section %}
-                    <a class="docs-footer__link docs-footer__link--prev" href="{{prev_section.path}}" data-docs-nav-previous>
-                        <div class="docs-footer__label">
-                            <div class="docs-footer__dir">Previous</div>
-                            {{prev_section.title}}
-                        </div>
-                        <i class="docs-footer__chevron icon icon--chevron-left"></i>
-                    </a>
-                {% endif %}
-            </nav>
-            <div class="docs-footer__edit-wrapper">
-                <a class="docs-footer__edit" href="https://github.com/bevyengine/bevy-website/edit/main/content/{{ section.relative_path }}">
-                    <i class="icon icon--pencil"></i>
-                    Improve this page
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock content %}

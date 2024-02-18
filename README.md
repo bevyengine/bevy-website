@@ -1,6 +1,8 @@
 # Bevy Website
 
-The source files for <https://bevyengine.org>. This includes official Bevy news and docs, so if you would like to contribute feel free to create a pull request!
+The source files for <https://bevyengine.org>. This includes official Bevy news, docs, and interactive examples.
+
+If you would like to contribute, check out [CONTRIBUTING.md](/CONTRIBUTING.md) and then submit a pull request!
 
 ## Zola
 
@@ -19,4 +21,3 @@ A local server should start and you should be able to access a local version of 
 ### Assets, Errors, and Examples pages
 
 These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
-
