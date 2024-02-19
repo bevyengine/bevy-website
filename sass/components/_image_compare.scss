@@ -98,7 +98,7 @@ div.image-compare {
 
       -webkit-appearance: none;
       appearance: none;
-      // better than the transform approach, but doesn't work on firefox
+      // better than the transform approach, but doesn"t work on firefox
       transform: none;
       position: absolute;
       left: calc(var(--slider-value) - var(--range-thumb-diametre) / 2);
