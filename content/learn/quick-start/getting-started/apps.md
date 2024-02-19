@@ -16,7 +16,7 @@ fn main() {
 }
 ```
 
-The statement `use bevy::prelude::*` brings in the essential things from Bevy. However, since it is boilerplate it will be ommitted from all examples where it is irrelevant from here on out.
+The `use bevy::prelude::*` statement brings in the essential things from Bevy. For brevity, this guide may omit it in later steps.
 
 Nice and simple right? Copy the code above into your `main.rs` file, then run:
 
