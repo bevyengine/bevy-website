@@ -19,13 +19,6 @@ mod learn {
             #[doc = include_str!("../../content/learn/quick-start/getting-started/resources.md")]
             mod resources {}
         }
-        #[doc = include_str!("../../content/learn/quick-start/contributing/_index.md")]
-        mod contributing {
-            #[doc = include_str!("../../content/learn/quick-start/contributing/docs.md")]
-            mod docs {}
-            #[doc = include_str!("../../content/learn/quick-start/contributing/code.md")]
-            mod code {}
-        }
         #[doc = include_str!("../../content/learn/quick-start/plugin-development.md")]
         mod plugin_development {}
         #[doc = include_str!("../../content/learn/quick-start/troubleshooting.md")]
