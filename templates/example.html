@@ -45,7 +45,7 @@
     // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
     // workaround until Bevy has an in-engine mode for showing loading feeback. See:
     // https://github.com/bevyengine/bevy-website/pull/355
-    #
+    #}
   }
   import { progressiveFetch } from '/tools.js';
   import '/restart-audio-context.js'
@@ -94,7 +94,7 @@
                 // one is the last one. If a new asset starts loading within 50ms, then this timeout
                 // is cleared and the progress element stays visible, avoiding the flashing.
                 // The downside is that the progress bar shows for a brief moment once the wasm starts.
-                #
+                #}
         }
         hideProgressTimeoutId = setTimeout(() => {
           progressStatusEl.style.display = 'none';
@@ -108,7 +108,7 @@
     // The following .catch() is a simple filter to remove an exception thrown by winit in
     // its normal control flow. This exception will always be thrown and is not an error.
     // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
-    #
+    #}
   }
   init().catch((error) => {
     if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {

@@ -45,12 +45,12 @@
 <div class="media-content news-content">
   <img src="{{page.extra.image}}" />
   {% if page.extra.image_subtitle %}
-  {% if page.extra.image_subtitle_link %}
-  <div class="news-image-subtitle"><a href="{{page.extra.image_subtitle_link}}">{{page.extra.image_subtitle}}</a>
-  </div>
-  {% else %}
-  <div class="news-image-subtitle">{{page.extra.image_subtitle}}</div>
-  {% endif %}
+    {% if page.extra.image_subtitle_link %}
+    <div class="news-image-subtitle"><a href="{{page.extra.image_subtitle_link}}">{{page.extra.image_subtitle}}</a>
+    </div>
+    {% else %}
+    <div class="news-image-subtitle">{{page.extra.image_subtitle}}</div>
+    {% endif %}
   {% endif %}
 </div>
 {% endif %}

@@ -1,31 +1,31 @@
 {% if not lang %}
-{% set lang = "" %}
+  {% set lang = "" %}
 {% endif %}
 
 {% set code = load_data(path=path) %}
 
 {% if anchor %}
 
-{% set code_lines = code | split(pat="\n") %}
-{% set code = "" %}
-{% set in_anchor = false %}
+  {% set code_lines = code | split(pat="\n") %}
+  {% set code = "" %}
+  {% set in_anchor = false %}
 
-{% for line in code_lines %}
+  {% for line in code_lines %}
 
-{% if line is ending_with("// ANCHOR_END: " ~ anchor) %}
-{% set_global in_anchor = false %}
-{% endif %}
+    {% if line is ending_with("// ANCHOR_END: " ~ anchor) %}
+      {% set_global in_anchor = false %}
+    {% endif %}
 
-{% if in_anchor %}
-{% set_global code = code ~ line ~ "
+    {% if in_anchor %}
+      {% set_global code = code ~ line ~ "
 " %}
-{% endif %}
+    {% endif %}
 
-{% if line is ending_with("// ANCHOR: " ~ anchor) %}
-{% set_global in_anchor = true %}
-{% endif %}
+    {% if line is ending_with("// ANCHOR: " ~ anchor) %}
+      {% set_global in_anchor = true %}
+    {% endif %}
 
-{% endfor %}
+  {% endfor %}
 
 {% endif %}
 
