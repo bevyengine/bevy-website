@@ -6,61 +6,60 @@
 {% block page_name %}Post{% endblock %}
 
 {% block mobile_page_menu %}
-  {{news_macros::news_menu(toc=page.toc, max_levels=1)}}
+{{news_macros::news_menu(toc=page.toc, max_levels=1)}}
 {% endblock %}
 
 {% block page_menu %}
-  {{news_macros::news_menu(toc=page.toc, max_levels=2)}}
+{{news_macros::news_menu(toc=page.toc, max_levels=2)}}
 {% endblock %}
 
 {% block page_content %}
-  <h1 class="news-title">
-    {{ page.title }}
-  </h1>
-  <h2 class="news-subtitle">Posted on {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
-    {% if page.extra.twitter or page.extra.github %}
-    <span class="news-social-links">
-      (
-      {% if page.extra.github %}
-      <img src="/assets/github_grey.svg" class="news-social-icon" /><span class="media-content">
-        <a class="news-social-link"
-          href="https://www.github.com/{{page.extra.github}}">@{{page.extra.github}}</a></span>
-      {% endif %}
-      {% if page.extra.twitter %}
-      <img src="/assets/twitter_grey.svg" class="news-social-icon" />
-      <span class="media-content">
-        <a class="news-social-link" href="https://www.twitter.com/{{page.extra.twitter}}">@{{page.extra.twitter}}</a>
-      </span>
-      {% endif %}
-      {% if page.extra.youtube %}
-      <img src="/assets/youtube_grey.svg" class="news-social-icon" />
-      <span class="media-content">
-        <a class="news-social-link" href="https://www.youtube.com/{{page.extra.youtube}}">{{page.extra.youtube}}</a>
-      </span>
-      {% endif %}
-      )
+<h1 class="news-title">
+  {{ page.title }}
+</h1>
+<h2 class="news-subtitle">Posted on {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}
+  {% if page.extra.twitter or page.extra.github %}
+  <span class="news-social-links">
+    (
+    {% if page.extra.github %}
+    <img src="/assets/github_grey.svg" class="news-social-icon" /><span class="media-content">
+      <a class="news-social-link" href="https://www.github.com/{{page.extra.github}}">@{{page.extra.github}}</a></span>
+    {% endif %}
+    {% if page.extra.twitter %}
+    <img src="/assets/twitter_grey.svg" class="news-social-icon" />
+    <span class="media-content">
+      <a class="news-social-link" href="https://www.twitter.com/{{page.extra.twitter}}">@{{page.extra.twitter}}</a>
     </span>
     {% endif %}
-  </h2>
-  {% if page.extra.image and page.extra.show_image %}
-  <div class="media-content news-content">
-    <img src="{{page.extra.image}}" />
-    {% if page.extra.image_subtitle %}
-    {% if page.extra.image_subtitle_link %}
-    <div class="news-image-subtitle"><a href="{{page.extra.image_subtitle_link}}">{{page.extra.image_subtitle}}</a>
-    </div>
-    {% else %}
-    <div class="news-image-subtitle">{{page.extra.image_subtitle}}</div>
+    {% if page.extra.youtube %}
+    <img src="/assets/youtube_grey.svg" class="news-social-icon" />
+    <span class="media-content">
+      <a class="news-social-link" href="https://www.youtube.com/{{page.extra.youtube}}">{{page.extra.youtube}}</a>
+    </span>
     {% endif %}
-    {% endif %}
-  </div>
+    )
+  </span>
   {% endif %}
-  <div class="media-content news-content">{{ page.content | safe }}</div>
-  <script type="module">
-    import { enable_image_compare } from '/components.js';
+</h2>
+{% if page.extra.image and page.extra.show_image %}
+<div class="media-content news-content">
+  <img src="{{page.extra.image}}" />
+  {% if page.extra.image_subtitle %}
+  {% if page.extra.image_subtitle_link %}
+  <div class="news-image-subtitle"><a href="{{page.extra.image_subtitle_link}}">{{page.extra.image_subtitle}}</a>
+  </div>
+  {% else %}
+  <div class="news-image-subtitle">{{page.extra.image_subtitle}}</div>
+  {% endif %}
+  {% endif %}
+</div>
+{% endif %}
+<div class="media-content news-content">{{ page.content | safe }}</div>
+<script type="module">
+  import { enable_image_compare } from '/components.js';
 
-    document.addEventListener("DOMContentLoaded", function() {
-      enable_image_compare();
-    });
-  </script>
+  document.addEventListener("DOMContentLoaded", function () {
+    enable_image_compare();
+  });
+</script>
 {% endblock content %}

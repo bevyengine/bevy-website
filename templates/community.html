@@ -3,19 +3,19 @@
 {% block content %}
 {% set community_links = load_data(path="content/community/links.toml") %}
 <div class="padded-content item-grid item-grid--two-cols">
-    {% for link in community_links.links %}
-        <a class="link-card" href="{{ link.url }}">
-            <div class="link-card__img-wrapper">
-                <img class="link-card__img link-card__img--small" src="{{ link.image }}" alt="{{ link.image_alt }}" />
-            </div>
-            <div class="link-card__content">
-                <h2 class="link-card__title">{{ link.title }}</h2>
-                {% if link.subtitle %}
-                    <div class="link-card__subtitle">{{ link.subtitle }}</div>
-                {% endif %}
-                <p class="link-card__description">{{ link.description }}</p>
-            </div>
-        </a>
-    {% endfor %}
+  {% for link in community_links.links %}
+  <a class="link-card" href="{{ link.url }}">
+    <div class="link-card__img-wrapper">
+      <img class="link-card__img link-card__img--small" src="{{ link.image }}" alt="{{ link.image_alt }}" />
+    </div>
+    <div class="link-card__content">
+      <h2 class="link-card__title">{{ link.title }}</h2>
+      {% if link.subtitle %}
+      <div class="link-card__subtitle">{{ link.subtitle }}</div>
+      {% endif %}
+      <p class="link-card__description">{{ link.description }}</p>
+    </div>
+  </a>
+  {% endfor %}
 </div>
 {% endblock content %}

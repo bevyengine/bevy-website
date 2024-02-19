@@ -33,7 +33,7 @@
   <div class="example__code media-content">
     {% set code = load_data(path=page.extra.code_path) %}
     {% set code_md = "```rust
-" ~ code ~ "```" %}
+    " ~ code ~ "```" %}
 
     {{code_md | markdown(inline=true) | safe}}
   </div>
@@ -45,8 +45,9 @@
     // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
     // workaround until Bevy has an in-engine mode for showing loading feeback. See:
     // https://github.com/bevyengine/bevy-website/pull/355
-    #}
-  import {progressiveFetch} from '/tools.js';
+    #
+  }
+  import { progressiveFetch } from '/tools.js';
   import '/restart-audio-context.js'
   import init from 'https://bevy-webgl2-examples.pages.dev/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
 
@@ -63,7 +64,7 @@
 
   const observer = new MutationObserver(observer_callback);
 
-  const config = {attributeFilter: ['width', 'height']};
+  const config = { attributeFilter: ['width', 'height'] };
 
   observer.observe(canvasEl, config);
 
@@ -74,7 +75,7 @@
 
   async function loadingBarFetch(resource) {
     return progressiveFetch(resource, {
-      start: ({filename}) => {
+      start: ({ filename }) => {
         progressStatusEl.style.display = 'block';
         progressFileEl.textContent = filename;
 
@@ -82,7 +83,7 @@
           clearTimeout(hideProgressTimeoutId);
         }
       },
-      update: ({isIndeterminate, loadedPercent}) => {
+      update: ({ isIndeterminate, loadedPercent }) => {
         progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
         progressBarEl.style.width = loadedPercent + '%';
       },
@@ -93,7 +94,8 @@
                 // one is the last one. If a new asset starts loading within 50ms, then this timeout
                 // is cleared and the progress element stays visible, avoiding the flashing.
                 // The downside is that the progress bar shows for a brief moment once the wasm starts.
-                #}
+                #
+        }
         hideProgressTimeoutId = setTimeout(() => {
           progressStatusEl.style.display = 'none';
         }, 50);
@@ -106,7 +108,8 @@
     // The following .catch() is a simple filter to remove an exception thrown by winit in
     // its normal control flow. This exception will always be thrown and is not an error.
     // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
-    #}
+    #
+  }
   init().catch((error) => {
     if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
       throw error;

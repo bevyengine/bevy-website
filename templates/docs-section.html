@@ -1,26 +1,26 @@
 {% extends "docs-base.html" %}
 
 {% block page_name %}
-  {% if section and section.path is starting_with("/learn/book/") %}
-    The Book
-  {% else %}
-    Migration Guides
-  {% endif %}
+{% if section and section.path is starting_with("/learn/book/") %}
+The Book
+{% else %}
+Migration Guides
+{% endif %}
 {% endblock %}
 
 {% block docs_page_title %}
-    {% if section.extra.long_title %}
-        {{ section.extra.long_title }}
-    {% else %}
-        {{ section.title }}
-    {% endif %}
-    {% if section.extra.subtitle %}
-        <span class="docs-page-subtitle">{{ section.extra.subtitle }}</span>
-    {% endif %}
+{% if section.extra.long_title %}
+{{ section.extra.long_title }}
+{% else %}
+{{ section.title }}
+{% endif %}
+{% if section.extra.subtitle %}
+<span class="docs-page-subtitle">{{ section.extra.subtitle }}</span>
+{% endif %}
 {% endblock %}
 
 {% block docs_page_content %}
-  {{ section.content | safe }}
+{{ section.content | safe }}
 {% endblock %}
 
 {% block docs_page_relative_path %}
