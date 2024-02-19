@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # if all examples are not built, add a new page here
-        page: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        page: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     steps:
 
       - name: Checkout Bevy latest tag
@@ -22,19 +22,6 @@ jobs:
           repository: 'bevyengine/bevy'
           ref: 'latest'
 
-      # temporary: fetch tools from main branch
-      - name: Checkout Bevy Tools
-        uses: actions/checkout@v4
-        with:
-          repository: 'bevyengine/bevy'
-          ref: 'main'
-          path: 'bevy-tools'
-      - name: Copy Bevy tools to latest
-        run: |
-          rm -rf tools
-          cp -r bevy-tools/tools/ tools
-          rm -rf bevy-tools
-
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -42,12 +29,12 @@ jobs:
         run: |
           sudo apt-get update;
           DEBIAN_FRONTEND=noninteractive sudo apt-get install --no-install-recommends -yq \
-            libasound2-dev libudev-dev;
+            libasound2-dev libudev-dev libxkbcommon-x11-0;
 
       - name: install xvfb, llvmpipe and lavapipe
         run: |
           sudo apt-get update -y -qq
-          sudo add-apt-repository ppa:oibaf/graphics-drivers -y
+          sudo add-apt-repository ppa:kisak/turtle -y
           sudo apt-get update
           sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 

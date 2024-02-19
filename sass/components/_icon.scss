@@ -15,12 +15,12 @@
 
   $icons: (
     // (icon_id, width)
-    ('chevron-down', 15),
-    ('chevron-left', 9),
-    ('chevron-right', 9),
-    ('github', 24),
-    ('pencil', 19),
-    ('times', 16),
+    ("chevron-down", 15),
+    ("chevron-left", 9),
+    ("chevron-right", 9),
+    ("github", 24),
+    ("pencil", 19),
+    ("times", 16),
   );
 
 @each $icon in $icons {
@@ -31,8 +31,9 @@
   &--#{nth($icon, 1)} {
     height: var(--icon-height);
     width: calc(var(--icon-height) * #{$ratio});
-    -webkit-mask-image: url('/assets/icon-#{nth($icon, 1)}.svg');
-    mask-image: url('/assets/icon-#{nth($icon, 1)}.svg');
+    -webkit-mask-image: url("/assets/icon-#{nth($icon, 1)}.svg");
+    mask-image: url("/assets/icon-#{nth($icon, 1)}.svg");
   }
+}
 }
 }

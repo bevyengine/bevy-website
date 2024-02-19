@@ -1,66 +1,66 @@
 $menu-switch-padding: 4px;
 
 .menu-switch {
-    $height: 40px;
-    $padding: $menu-switch-padding;
-    $pill-height: $height - ($padding * 2);
+  $height: 40px;
+  $padding: $menu-switch-padding;
+  $pill-height: $height - ($padding * 2);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $padding;
+  border-radius: $height;
+  background-color: rgba($color-white, 0.05);
+  padding: $padding;
+  height: $height;
+  cursor: pointer;
+  user-select: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: $padding;
+    left: $padding;
+    height: $pill-height;
+    width: calc(50% - #{$padding * 2});
+    border-radius: $pill-height;
+    background-color: $color-grey-900;
+    z-index: 0;
+    transition: transform $duration;
+  }
+
+  &__option {
+    @include flex-center;
 
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $padding;
-    border-radius: $height;
-    background-color: rgba($color-white, 0.05);
-    padding: $padding;
-    height: $height;
-    cursor: pointer;
-    user-select: none;
+    height: $pill-height;
+    border-radius: $pill-height;
+    z-index: 1;
 
+    &--main-menu {
+      opacity: 1.0;
+    }
+
+    &--page-menu {
+      opacity: 0.5;
+    }
+  }
+}
+
+@include state-checked("page-menu-switch") {
+  .menu-switch {
     &::before {
-        content: '';
-        position: absolute;
-        top: $padding;
-        left: $padding;
-        height: $pill-height;
-        width: calc(50% - #{$padding * 2});
-        border-radius: $pill-height;
-        background-color: $color-grey-900;
-        z-index: 0;
-        transition: transform $duration;
+      transform: translateX(calc(100% + #{$menu-switch-padding * 2}));
     }
 
     &__option {
-        @include flex-center;
+      &--main-menu {
+        opacity: 0.5;
+      }
 
-        position: relative;
-        height: $pill-height;
-        border-radius: $pill-height;
-        z-index: 1;
-
-        &--main-menu {
-            opacity: 1.0;
-        }
-
-        &--page-menu {
-            opacity: 0.5;
-        }
+      &--page-menu {
+        opacity: 1.0;
+      }
     }
-}
-
-@include state-checked('page-menu-switch') {
-    .menu-switch {
-        &::before {
-            transform: translateX(calc(100% + #{$menu-switch-padding * 2}));
-        }
-
-        &__option {
-            &--main-menu {
-                opacity: 0.5;
-            }
-
-            &--page-menu {
-                opacity: 1.0;
-            }
-        }
-    }
+  }
 }
