@@ -1,50 +1,72 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
 use regex::Regex;
 use std::{
     ffi::OsStr,
     fmt::Write,
-    fs::{self, DirEntry, File},
-    io::{self, BufRead},
-    path::Path,
+    fs,
+    path::{Path, PathBuf},
 };
 
 use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidden_ranges};
 
-pub fn run(dir: &Path) -> Result<()> {
-    visit_dir_md_files(dir, &|entry| {
-        println!("{:?}", entry.path());
+/// Checks the given directory, returning a list of unformatted files.
+pub fn check(dir: &Path) -> Result<Vec<PathBuf>> {
+    let mut unformatted_files = Vec::new();
 
-        // Load and format file annotations
-        let file = File::open(entry.path())?;
-        let file_size = file.metadata().unwrap().len().try_into().unwrap();
-        let contents = format_file(
-            io::BufReader::new(file)
-                .lines()
-                .map(|line| line.map_err(anyhow::Error::from)),
-            file_size,
-        )?;
+    visit_dir_md_files(dir, &mut |path| {
+        println!("- {:?}", path);
 
-        // Rewrite file
-        fs::write(entry.path(), contents)?;
+        let src = fs::read_to_string(path)?;
+
+        let formatted = format_file(&src)?;
+
+        // Check if the formatted version is different from the original.
+        if src != formatted {
+            // Changes were made! Write that down.
+            unformatted_files.push(path.to_path_buf());
+        }
 
         Ok(())
-    })
+    })?;
+
+    Ok(unformatted_files)
 }
 
-fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Result<()> {
+/// Formats the given directory, automatically adding `hide_lines` annotations to code blocks.
+pub fn format(dir: &Path) -> Result<()> {
+    visit_dir_md_files(dir, &mut |path| {
+        println!("- {:?}", path);
+
+        let src = fs::read_to_string(path)?;
+
+        let formatted = format_file(&src)?;
+
+        // Overwrite file with formatted contents.
+        fs::write(path, formatted)?;
+
+        Ok(())
+    })?;
+
+    Ok(())
+}
+
+/// Calls function `cb` for every file recursively found within the folder `dir`.
+fn visit_dir_md_files(dir: &Path, cb: &mut dyn FnMut(&Path) -> Result<()>) -> Result<()> {
     if !dir.is_dir() {
-        return Ok(());
+        bail!(
+            "Tried visiting the path {:?} that was not a directory.",
+            dir
+        );
     }
 
     for entry in fs::read_dir(dir)? {
-        let entry = entry?;
-        let path = entry.path();
+        let path = entry?.path();
 
         if path.is_dir() {
             visit_dir_md_files(&path, cb)?;
         } else if let Some(ext) = path.extension().and_then(OsStr::to_str) {
             if ext.to_lowercase() == "md" {
-                cb(&entry)?;
+                cb(&path)?;
             }
         }
     }
@@ -52,8 +74,8 @@ fn visit_dir_md_files(dir: &Path, cb: &dyn Fn(&DirEntry) -> Result<()>) -> Resul
     Ok(())
 }
 
-fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -> Result<String> {
-    let mut contents = String::with_capacity(file_size);
+fn format_file(src: &str) -> Result<String> {
+    let mut contents = String::with_capacity(src.len());
     let mut rust_block: Vec<String> = vec![];
     let mut is_rust = false;
 
@@ -62,10 +84,8 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
     // Find a code block delimiter and optionally the first specified language
     let code_block_delim = Regex::new(r"\s*```(\w*)")?;
 
-    for line in reader {
-        let line = line?;
-
-        let code_block_delim_match = code_block_delim.captures(&line).and_then(|cap| cap.get(1));
+    for line in src.lines() {
+        let code_block_delim_match = code_block_delim.captures(line).and_then(|cap| cap.get(1));
         let is_code_block_delim = code_block_delim_match.is_some();
 
         if !inside_code_block && is_code_block_delim {
@@ -81,11 +101,11 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
 
         // Pass through non-rust code block contents and contents outside of code blocks.
         if !is_rust {
-            writeln!(&mut contents, "{}", &line)?;
+            writeln!(&mut contents, "{}", line)?;
             continue;
         }
 
-        rust_block.push(line);
+        rust_block.push(String::from(line));
 
         if inside_code_block {
             continue;
@@ -113,7 +133,7 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
         rust_block[0] = definition.into_string();
 
         // Write code block
-        writeln!(&mut contents, "{}", &rust_block.join("\n"))?;
+        writeln!(&mut contents, "{}", rust_block.join("\n"))?;
 
         // Reset state
         inside_code_block = false;
@@ -128,10 +148,6 @@ fn format_file(reader: impl Iterator<Item = Result<String>>, file_size: usize) -
 mod tests {
     use super::*;
     use indoc::indoc;
-
-    fn lines_iter(code: &str) -> impl Iterator<Item = Result<String>> + '_ {
-        code.split('\n').map(|line| Ok(String::from(line)))
-    }
 
     #[test]
     fn add_missing_annotation() {
@@ -150,7 +166,7 @@ mod tests {
             ```
         "#};
 
-        let contents = format_file(lines_iter(markdown), markdown.len());
+        let contents = format_file(markdown);
 
         assert_eq!(
             contents.unwrap(),
@@ -167,7 +183,6 @@ mod tests {
                 # #[derive(Component)]
                 struct B;
                 ```
-
             "#}
         );
     }
@@ -185,7 +200,7 @@ mod tests {
             ```
         "#};
 
-        let contents = format_file(lines_iter(markdown), markdown.len());
+        let contents = format_file(markdown);
 
         assert_eq!(
             contents.unwrap(),
@@ -198,7 +213,6 @@ mod tests {
                 }
                 # test 3
                 ```
-
             "#}
         );
     }
@@ -213,7 +227,7 @@ mod tests {
             ```
         "#};
 
-        let contents = format_file(lines_iter(markdown), markdown.len());
+        let contents = format_file(markdown);
 
         assert_eq!(
             contents.unwrap(),
@@ -223,7 +237,6 @@ mod tests {
 
                 }
                 ```
-
             "#}
         );
     }
@@ -245,7 +258,7 @@ mod tests {
     ```
 "#;
 
-        let contents = format_file(lines_iter(markdown), markdown.len());
+        let contents = format_file(markdown);
 
         assert_eq!(
             contents.unwrap(),
@@ -262,7 +275,6 @@ mod tests {
     # #[derive(Component)]
     struct B;
     ```
-
 "#
         );
     }

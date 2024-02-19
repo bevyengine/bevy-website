@@ -8,12 +8,15 @@ weight = 2
 
 Bevy programs are referred to as [`App`]s. The simplest Bevy app looks like this:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
+```rs
+use bevy::prelude::*;
+
 fn main() {
     App::new().run();
 }
 ```
+
+The statement `use bevy::prelude::*` brings in the essential things from Bevy. However, since it is boilerplate it will be ommitted from all examples where it is irrelevant from here on out.
 
 Nice and simple right? Copy the code above into your `main.rs` file, then run:
 
