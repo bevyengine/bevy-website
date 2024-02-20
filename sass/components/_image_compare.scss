@@ -27,6 +27,7 @@ div.image-compare {
     width: calc(100% - var(--text-padding));
     text-shadow: 0 0 2px $color-black;
   }
+
   &::before {
     @include image-title;
 
@@ -36,6 +37,7 @@ div.image-compare {
     -webkit-clip-path: var(--clip-L-geo);
     z-index: 1;
   }
+
   &::after {
     @include image-title;
 
@@ -90,9 +92,11 @@ div.image-compare {
         background-color: darken($color-white, 20%);
       }
     }
+
     &::-moz-range-thumb {
       @include thumb;
     }
+
     &::-webkit-slider-thumb {
       @include thumb;
 
