@@ -9,15 +9,15 @@ on:
       - 'trying'
 
 jobs:
-  super-linter:
+  mega-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
+          # Full git history is needed to get a proper list of changed files within `mega-linter`
           fetch-depth: 0
-      - name: Run Super Linter
-        uses: docker://ghcr.io/github/super-linter:slim-v4
+      - name: Run Mega Linter
+        uses: oxsecurity/megalinter@v7
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_MARKDOWN: true
@@ -86,7 +86,7 @@ jobs:
           done
 
   generate-assets:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -124,7 +124,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -151,7 +151,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -194,7 +194,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -222,7 +222,7 @@ jobs:
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@v4
