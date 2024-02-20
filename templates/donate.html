@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<svg style="display: none" xmlns="http://www.w3.org/2000/svg">
+<svg class="donate-svg-container" xmlns="http://www.w3.org/2000/svg">
   <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
   <defs>
     <symbol id="heart" viewbox="0 0 512 512">
@@ -98,9 +98,9 @@
           {% if post.extra.profile_picture %}
           <div class="card-profile-picture">
             {% if post.extra.profile_picture is starting_with("https://") %}
-            <img src="{{ post.extra.profile_picture }}" />
+            <img src="{{ post.extra.profile_picture }}" alt="{{ post.title }}'s profile picture" width="64" height="64" />
             {% else %}
-            <img src="{{ get_url(path=post.extra.profile_picture) }}" />
+            <img src="{{ get_url(path=post.extra.profile_picture) }}" alt="{{ post.title }}'s profile picture" width="64" height="64" />
             {% endif %}
           </div>
           {% endif %}
@@ -120,7 +120,7 @@
             {% if post.extra.discord %}
             <div>
               {% if post.extra.discord_userid %}
-              <a href="http://discordapp.com/users/{{ post.extra.discord_userid }}">
+              <a href="https://discordapp.com/users/{{ post.extra.discord_userid }}">
                 {% endif %}
                 <svg class="card-social-icon">
                   <title>{{ post.extra.discord }} on Discord</title>
@@ -203,7 +203,7 @@
           </div>
           {% endif %}
           {% if post.extra.sponsor %}
-          <div style="position: absolute; bottom: 0.4rem; right: 0.8rem;">
+          <div class="donate-sponsor">
             <svg class="card-social-icon card-sponsor-icon">
               <use href="#heart" />
             </svg>
