@@ -1,8 +1,8 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/assets.html" as assets_macros %}
-{% block page_name %}People{% endblock %}
-{% block mobile_page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock %}
-{% block page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock %}
+{% block page_name %}People{% endblock page_name %}
+{% block mobile_page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock mobile_page_menu %}
+{% block page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock page_menu %}
 {% block page_content %}
   <svg class="hidden" xmlns="http://www.w3.org/2000/svg">
     <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -119,10 +119,10 @@
               <div class="card-text media-content card-dense">
                 <div class="card-title">
                   <div style="width: 210px;
-                              font-size: {% if post.title | length > 30 %} 0.5rem;
-                              {% elif post.title | length > 20 %} 1.0rem;
-                              {% else %} 1.5rem;
-                              {% endif %}">{{ post.title }}</div>
+                              font-size: {%- if post.title | length > 30 -%} 0.5rem;
+                              {%- elif post.title | length > 20 -%} 1.0rem;
+                              {%- else -%} 1.5rem;
+                              {%- endif -%}">{{ post.title }}</div>
                   {% if post.extra.profile_picture %}
                     <div class="card-profile-picture">
                       {% if post.extra.profile_picture is starting_with("https://") %}
@@ -244,4 +244,4 @@
       {% endif %}
     {% endfor %}
   </div>
-{% endblock content %}
+{% endblock page_content %}

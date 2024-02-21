@@ -57,7 +57,7 @@
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
     <title>{{ page_title }}</title>
-    {% block head_extensions %}{% endblock %}
+    {% block head_extensions %}{% endblock head_extensions %}
   </head>
   <body>
     <div class="layout">
@@ -103,8 +103,8 @@
               {% endif %}
             </div>
           </div>
-          {% block mobile_page_menu_state %}{% endblock %}
-          <nav class="header__menu main-menu {% block main_menu_extra_class %}{% endblock %}"
+          {% block mobile_page_menu_state %}{% endblock mobile_page_menu_state %}
+          <nav class="header__menu main-menu {% block main_menu_extra_class %}{% endblock main_menu_extra_class %}"
                 role="navigation"
                 data-page-menu-switch-state-container>
             <div class="main-menu__header">
@@ -122,10 +122,10 @@
                       height="16">
               </label>
             </div>
-            {% block mobile_page_menu_switch %}{% endblock %}
+            {% block mobile_page_menu_switch %}{% endblock mobile_page_menu_switch %}
             <div class="main-menu__content">
               <div class="main-menu__page-menu">
-                {% block mobile_page_menu %}{% endblock %}
+                {% block mobile_page_menu %}{% endblock mobile_page_menu %}
               </div>
               <ul class="main-menu__menu">
                 {{ header_macros::header_item(name="Getting Started", path="/learn/quick-start/getting-started",
@@ -166,7 +166,7 @@
           {% elif page %}
             {{ public_draft::warning(section=page) }}
           {% endif %}
-          {% block content %}{% endblock %}
+          {% block content %}{% endblock content %}
         </div>
       </main>
     </div>

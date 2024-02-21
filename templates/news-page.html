@@ -1,9 +1,9 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/news.html" as news_macros %}
-{% block page_with_menu_extra_class %}page-with-menu--news{% endblock %}
-{% block page_name %}Post{% endblock %}
-{% block mobile_page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=1) }}{% endblock %}
-{% block page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=2) }}{% endblock %}
+{% block page_with_menu_extra_class %}page-with-menu--news{% endblock page_with_menu_extra_class %}
+{% block page_name %}Post{% endblock page_name %}
+{% block mobile_page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=1) }}{% endblock mobile_page_menu %}
+{% block page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=2) }}{% endblock page_menu %}
 {% block page_content %}
   <h1 class="news-title">{{ page.title }}</h1>
   <h2 class="news-subtitle">
@@ -79,4 +79,4 @@
     enable_image_compare();
   });
   </script>
-{% endblock content %}
+{% endblock page_content %}

@@ -1,8 +1,8 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/assets.html" as assets_macros %}
-{% block page_name %}Examples{% endblock %}
-{% block mobile_page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock %}
-{% block page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock %}
+{% block page_name %}Examples{% endblock page_name %}
+{% block mobile_page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock mobile_page_menu %}
+{% block page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock page_menu %}
 {% block page_content %}
   <div class="assets">
     <div class="assets-intro media-content">
@@ -37,4 +37,4 @@
     {% endfor %}
   </div>
   <script type="module">import '/assets.js'</script>
-{% endblock content %}
+{% endblock page_content %}

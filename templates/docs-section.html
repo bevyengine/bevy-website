@@ -5,7 +5,7 @@
   {% else %}
     Migration Guides
   {% endif %}
-{% endblock %}
+{% endblock page_name %}
 {% block docs_page_title %}
   {% if section.extra.long_title %}
     {{ section.extra.long_title }}
@@ -13,6 +13,6 @@
     {{ section.title }}
   {% endif %}
   {% if section.extra.subtitle %}<span class="docs-page-subtitle">{{ section.extra.subtitle }}</span>{% endif %}
-{% endblock %}
-{% block docs_page_content %}{{ section.content | safe }}{% endblock %}
-{% block docs_page_relative_path %}{{ section.relative_path }}{% endblock %}
+{% endblock page_title %}
+{% block docs_page_content %}{{ section.content | safe }}{% endblock docs_page_content %}
+{% block docs_page_relative_path %}{{ section.relative_path }}{% endblock docs_page_relative_path %}

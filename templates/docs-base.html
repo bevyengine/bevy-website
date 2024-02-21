@@ -24,7 +24,7 @@
     {% endif %}
   {% endif %}
   <script src="/optional-helpers.js"></script>
-{% endblock %}
+{% endblock head_extensions %}
 {% block mobile_page_menu %}
   {% if section and section.components %}
     {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
@@ -32,7 +32,7 @@
     {% set root_section_path = page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
   {% endif %}
   {{ docs_macros::docs_menu(prefix="mobile-menu", root=get_section(path=root_section_path) ) }}
-{% endblock %}
+{% endblock mobile_page_menu %}
 {% block page_menu %}
   {% if section and section.components %}
     {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
@@ -40,7 +40,7 @@
     {% set root_section_path = page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
   {% endif %}
   {{ docs_macros::docs_menu(prefix="page-menu", root=get_section(path=root_section_path) ) }}
-{% endblock %}
+{% endblock page_menu %}
 {% block page_content %}
   <div class="docs-page">
     <div class="docs-content">
@@ -108,10 +108,10 @@
         {% set_global prev_page = p %}
       {% endfor %}
       <h1>
-        {% block docs_page_title %}{% endblock %}
+        {% block docs_page_title %}{% endblock docs_page_title %}
       </h1>
       <div class="media-content">
-        {% block docs_page_content %}{% endblock %}
+        {% block docs_page_content %}{% endblock docs_page_content %}
       </div>
       <div class="docs-footer">
         <nav class="docs-footer__nav">
@@ -140,7 +140,7 @@
         </nav>
         <div class="docs-footer__edit-wrapper">
           <a class="docs-footer__edit"
-              href="https://github.com/bevyengine/bevy-website/edit/main/content/{% block docs_page_relative_path %}{% endblock %}">
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/{%- block docs_page_relative_path -%}{%- endblock docs_page_relative_path -%}">
             <i class="icon icon--pencil"></i>
             Improve this page
           </a>
@@ -148,4 +148,4 @@
       </div>
     </div>
   </div>
-{% endblock content %}
+{% endblock page_content %}
