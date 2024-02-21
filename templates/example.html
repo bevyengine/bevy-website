@@ -1,43 +1,38 @@
 {% extends "layouts/base.html" %}
-
 {% block content %}
-<div class="example">
-  <div class="example__header">
-    {% set total_ancestors = page.ancestors | length %}
-    {% set parent_idx = total_ancestors - 1 %}
-    {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
-    <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
-    <a class="example__back" href="/examples"><i class="icon icon--chevron-left"></i> Back to examples</a>
-    <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
-      <i class="icon icon--github"></i> View in GitHub
-    </a>
-  </div>
-
-  <div class="assets-intro media-content">
-    This example is running in WebGL2 and should work in most browsers. You can check the WebGPU examples <a
-      href="/examples-webgpu">here</a>.
-  </div>
-
-  <br />
-
-  <div class="example__canvas bevy-instance">
-    <div class="bevy-instance__progress-status" data-progress-status>
-      <div class="bevy-instance__progress-file" data-progress-file></div>
-      <div class="bevy-instance__progress-track">
-        <div class="bevy-instance__progress-bar" data-progress-bar></div>
-      </div>
+  <div class="example">
+    <div class="example__header">
+      {% set total_ancestors = page.ancestors | length %}
+      {% set parent_idx = total_ancestors - 1 %}
+      {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
+      <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
+      <a class="example__back" href="/examples"><i class="icon icon--chevron-left"></i> Back to examples</a>
+      <a class="example__github"
+         href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
+        <i class="icon icon--github"></i> View in GitHub
+      </a>
     </div>
-    <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
+    <div class="assets-intro media-content">
+      This example is running in WebGL2 and should work in most browsers. You can check the WebGPU examples <a href="/examples-webgpu">here</a>.
+    </div>
+    <br />
+    <div class="example__canvas bevy-instance">
+      <div class="bevy-instance__progress-status" data-progress-status>
+        <div class="bevy-instance__progress-file" data-progress-file></div>
+        <div class="bevy-instance__progress-track">
+          <div class="bevy-instance__progress-bar" data-progress-bar></div>
+        </div>
+      </div>
+      <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
+    </div>
+    <div class="example__code media-content">
+      {% set code = load_data(path=page.extra.code_path) %}
+      {% set code_md = "```rust
+            " ~ code ~ "```" %}
+      {{ code_md | markdown(inline=true) | safe }}
+    </div>
   </div>
-  <div class="example__code media-content">
-    {% set code = load_data(path=page.extra.code_path) %}
-    {% set code_md = "```rust
-    " ~ code ~ "```" %}
-
-    {{code_md | markdown(inline=true) | safe}}
-  </div>
-</div>
-<script type="module">
+  <script type="module">
   {#
     // Hi curious user!
     // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
