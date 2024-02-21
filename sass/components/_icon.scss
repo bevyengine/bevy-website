@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .icon {
   --icon-height: 1.2em;
 
@@ -24,7 +26,7 @@
 @each $icon in $icons {
   // Icons always must have 24px height
   // This is just for icon height consistency
-  $ratio: nth($icon, 2) / 24;
+  $ratio: math.div(nth($icon, 2), 24);
 
   &--#{nth($icon, 1)} {
     height: var(--icon-height);
