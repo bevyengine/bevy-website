@@ -1,6 +1,6 @@
 .docs-footer {
   $border-color: #2f3033;
-
+  $secondary-text-color: #8c8c8c;
   --docs-footer-gap: 12px;
 
   margin: 32px 0;
@@ -58,7 +58,7 @@
       grid-area: next;
       text-align: right;
       padding-right: 16px;
-
+      
       .docs-footer__label {
         padding: 0 12px 0 8px;
       }
@@ -95,13 +95,13 @@
     align-items: center;
     padding: 8px;
     font-size: 0.9rem;
-
+    
     @include override-anchor {
-      color: #555;
+      color: $secondary-text-color;
     }
 
     &:hover {
-      color: #aaa;
+      color: lighten($secondary-text-color, 20%);
     }
 
     .icon {

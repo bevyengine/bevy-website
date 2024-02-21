@@ -4,15 +4,16 @@
 }
 
 div.incorrect {
+    $incorrect_block_background_color: #481e21;
     position: relative;
-    background-color: #542326;
+    background-color: $incorrect_block_background_color;
     border-left: 10px solid darkred;
     border-radius: 10px;
     padding-right: 55px;
 
     .z-code,
     .z-code code {
-        background-color: #542326;
+        background-color: $incorrect_block_background_color;
     }
 }
 
@@ -45,7 +46,7 @@ div.incorrect-image {
 
 .z-comment,
 .z-punctuation.z-definition.z-comment {
-    color: #65737e;
+    color: #8e9aa4;
 }
 
 .z-punctuation.z-definition.z-string,
@@ -116,7 +117,7 @@ div.incorrect-image {
 }
 
 .z-entity.z-name.z-tag {
-    color: #e05a67;
+    color: #e0858d;
 }
 
 .z-entity.z-other.z-attribute-name {
