@@ -34,7 +34,7 @@ impl GitlabClient {
     }
 
     /// Finds a list of repo based on their name
-    /// Useful to get the repo id and default_branch
+    /// Useful to get the repo `id` and `default_branch`
     pub fn search_project_by_name(
         &self,
         repository_name: &str,
