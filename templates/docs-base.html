@@ -117,8 +117,8 @@
         <nav class="docs-footer__nav">
           {% if next_page %}
             <a class="docs-footer__link docs-footer__link--next"
-               href="{{ next_page.path }}"
-               data-docs-nav-next>
+                href="{{ next_page.path }}"
+                data-docs-nav-next>
               <div class="docs-footer__label">
                 <div class="docs-footer__dir">Next</div>
                 {{ next_page.title }}
@@ -128,8 +128,8 @@
           {% endif %}
           {% if prev_page %}
             <a class="docs-footer__link docs-footer__link--prev"
-               href="{{ prev_page.path }}"
-               data-docs-nav-previous>
+                href="{{ prev_page.path }}"
+                data-docs-nav-previous>
               <div class="docs-footer__label">
                 <div class="docs-footer__dir">Previous</div>
                 {{ prev_page.title }}
@@ -140,7 +140,7 @@
         </nav>
         <div class="docs-footer__edit-wrapper">
           <a class="docs-footer__edit"
-             href="https://github.com/bevyengine/bevy-website/edit/main/content/{% block docs_page_relative_path %}{% endblock %}">
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/{% block docs_page_relative_path %}{% endblock %}">
             <i class="icon icon--pencil"></i>
             Improve this page
           </a>

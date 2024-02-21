@@ -84,8 +84,8 @@
         {% endif %}
         {% for post in pages %}
           <div onclick="location.href='{{ post.extra.sponsor }}';"
-               class="card people-card"
-               id="{{ post.title | slugify }}">
+                class="card people-card"
+                id="{{ post.title | slugify }}">
             <div class="card-text media-content card-dense">
               <div class="card-title">
                 <div style="width: 210px;
@@ -97,14 +97,14 @@
                   <div class="card-profile-picture">
                     {% if post.extra.profile_picture is starting_with("https://") %}
                       <img src="{{ post.extra.profile_picture }}"
-                           alt="{{ post.title }}'s profile picture"
-                           width="64"
-                           height="64" />
+                            alt="{{ post.title }}'s profile picture"
+                            width="64"
+                            height="64" />
                     {% else %}
                       <img src="{{ get_url(path=post.extra.profile_picture) }}"
-                           alt="{{ post.title }}'s profile picture"
-                           width="64"
-                           height="64" />
+                            alt="{{ post.title }}'s profile picture"
+                            width="64"
+                            height="64" />
                     {% endif %}
                   </div>
                 {% endif %}

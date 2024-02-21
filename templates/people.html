@@ -127,14 +127,14 @@
                     <div class="card-profile-picture">
                       {% if post.extra.profile_picture is starting_with("https://") %}
                         <img src="{{ post.extra.profile_picture }}"
-                             alt="{{ post.title }}'s profile picture"
-                             width="64"
-                             height="64" />
+                              alt="{{ post.title }}'s profile picture"
+                              width="64"
+                              height="64" />
                       {% else %}
                         <img src="{{ get_url(path=post.extra.profile_picture) }}"
-                             alt="{{ post.title }}'s profile picture"
-                             width="64"
-                             height="64" />
+                              alt="{{ post.title }}'s profile picture"
+                              width="64"
+                              height="64" />
                       {% endif %}
                     </div>
                   {% endif %}

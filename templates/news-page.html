@@ -13,34 +13,34 @@
         (
         {% if page.extra.github %}
           <img src="/assets/github_grey.svg"
-               class="news-social-icon"
-               alt="A silhouette of a figure with cat ears waving a tentacle, or Octocat: GitHub's mascot and logo"
-               width="496"
-               height="512" />
+                class="news-social-icon"
+                alt="A silhouette of a figure with cat ears waving a tentacle, or Octocat: GitHub's mascot and logo"
+                width="496"
+                height="512" />
           <span class="media-content">
             <a class="news-social-link"
-               href="https://www.github.com/{{ page.extra.github }}">@{{ page.extra.github }}</a></span>
+                href="https://www.github.com/{{ page.extra.github }}">@{{ page.extra.github }}</a></span>
         {% endif %}
         {% if page.extra.twitter %}
           <img src="/assets/twitter_grey.svg"
-               class="news-social-icon"
-               alt="A vector art of a grey bird flying; former logo of X (formerly Twitter)"
-               width="512"
-               height="512" />
+                class="news-social-icon"
+                alt="A vector art of a grey bird flying; former logo of X (formerly Twitter)"
+                width="512"
+                height="512" />
           <span class="media-content">
             <a class="news-social-link"
-               href="https://www.twitter.com/{{ page.extra.twitter }}">@{{ page.extra.twitter }}</a>
+                href="https://www.twitter.com/{{ page.extra.twitter }}">@{{ page.extra.twitter }}</a>
           </span>
         {% endif %}
         {% if page.extra.youtube %}
           <img src="/assets/youtube_grey.svg"
-               class="news-social-icon"
-               alt="A triangle pointing right in a rounded rectangle; Youtube's logo"
-               width="576"
-               height="512" />
+                class="news-social-icon"
+                alt="A triangle pointing right in a rounded rectangle; Youtube's logo"
+                width="576"
+                height="512" />
           <span class="media-content">
             <a class="news-social-link"
-               href="https://www.youtube.com/{{ page.extra.youtube }}">{{ page.extra.youtube }}</a>
+                href="https://www.youtube.com/{{ page.extra.youtube }}">{{ page.extra.youtube }}</a>
           </span>
         {% endif %}
         )
@@ -51,14 +51,14 @@
     <div class="media-content news-content">
       {% if page.extra.image_subtitle %}
         <img src="{{ page.extra.image }}"
-             alt="{{ page.extra.image_subtitle }}"
-             width="926"
-             height="521" />
+              alt="{{ page.extra.image_subtitle }}"
+              width="926"
+              height="521" />
       {% else %}
         <img src="{{ page.extra.image }}"
-             alt="An image representing the article"
-             width="926"
-             height="521" />
+              alt="An image representing the article"
+              width="926"
+              height="521" />
       {% endif %}
       {% if page.extra.image_subtitle %}
         {% if page.extra.image_subtitle_link %}
