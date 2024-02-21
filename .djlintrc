@@ -1,3 +1,4 @@
 {
+	"profile": "nunjucks",
 	"ignore": "H030,H031"
 }
