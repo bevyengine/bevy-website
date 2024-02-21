@@ -1,21 +1,22 @@
 {% extends "layouts/base.html" %}
-
 {% block content %}
-{% set learn_links = load_data(path="content/learn/links.toml") %}
-<div class="padded-content item-grid item-grid--two-cols">
-  {% for link in learn_links.links %}
-  <a class="link-card" href="{{ link.url }}">
-    <div class="link-card__img-wrapper">
-      <img class="link-card__img" src="{{ link.image }}" alt="{{ link.image_alt }}" width="180" height="190" />
-    </div>
-    <div class="link-card__content">
-      <h2 class="link-card__title">{{ link.title }}</h2>
-      {% if link.subtitle %}
-      <div class="link-card__subtitle">{{ link.subtitle }}</div>
-      {% endif %}
-      <p class="link-card__description">{{ link.description }}</p>
-    </div>
-  </a>
-  {% endfor %}
-</div>
+  {% set learn_links = load_data(path="content/learn/links.toml") %}
+  <div class="padded-content item-grid item-grid--two-cols">
+    {% for link in learn_links.links %}
+      <a class="link-card" href="{{ link.url }}">
+        <div class="link-card__img-wrapper">
+          <img class="link-card__img"
+               src="{{ link.image }}"
+               alt="{{ link.image_alt }}"
+               width="180"
+               height="190" />
+        </div>
+        <div class="link-card__content">
+          <h2 class="link-card__title">{{ link.title }}</h2>
+          {% if link.subtitle %}<div class="link-card__subtitle">{{ link.subtitle }}</div>{% endif %}
+          <p class="link-card__description">{{ link.description }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
 {% endblock content %}
