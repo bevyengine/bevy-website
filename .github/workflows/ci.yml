@@ -66,6 +66,43 @@ jobs:
       - name: Check clippy
         run: cargo clippy --workspace -- -Dwarnings
 
+  accessibility-linting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Dummy Generated Pages
+        run: echo "TODO"
+
+      - name: Install NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get install -y chromium-browser
+          which chromium-browser
+          chromium-browser --version
+
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.18.0
+
+      - name: Install Pa11y-CI and Wait-on
+        run: |
+          npm install pa11y-ci wait-on
+          node node_modules/puppeteer/install.js
+
+      - name: Run Pa11y-CI
+        run: |
+          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
+          zola serve &
+          npx wait-on http://127.0.0.1:1111
+          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
+
   generate-assets:
     needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
     runs-on: ubuntu-latest
@@ -239,62 +276,3 @@ jobs:
           BUILD_DIR: .
           BUILD_ONLY: true
           TOKEN: fake-secret
-
-  accessibility-linting:
-    runs-on: ubuntu-latest
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-assets
-          path: content/assets
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-errors
-          path: content/learn/errors
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-wasm-examples
-          path: content/examples
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-wasm-examples-webgpu
-          path: content/examples-webgpu
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-community
-          path: content/community/people
-
-      - name: Install NPM
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install Google Chrome
-        run: |
-          sudo apt-get install -y chromium-browser
-          which chromium-browser
-          chromium-browser --version
-
-      - name: Install Zola
-        uses: taiki-e/install-action@v2
-        with:
-          tool: zola@0.18.0
-
-      - name: Install Pa11y-CI and Wait-on
-        run: |
-          npm install pa11y-ci wait-on
-          node node_modules/puppeteer/install.js
-
-      - name: Run Pa11y-CI
-        run: |
-          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
-          zola serve &
-          npx wait-on http://127.0.0.1:1111
-          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
