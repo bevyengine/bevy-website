@@ -240,7 +240,7 @@ jobs:
           BUILD_ONLY: true
           TOKEN: fake-secret
 
-  pa11y:
+  accessibility-linting:
     runs-on: ubuntu-latest
     needs: [super-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
