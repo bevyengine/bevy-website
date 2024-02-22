@@ -282,6 +282,11 @@ jobs:
         with:
           chrome-version: stable
 
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.18.0
+
       - name: Install Pa11y-CI
         run: npm install pa11y-ci
 
