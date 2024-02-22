@@ -278,7 +278,7 @@ jobs:
 
       - name: Install Google Chrome
         run: |
-          sudo apt-get install -y chromium
+          sudo apt-get install -y chromium-browser
           which chromium-browser
           chromium-browser --version
 
