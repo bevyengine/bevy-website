@@ -16,3 +16,6 @@ chrono = { version = "0.4.22", features = ["serde"] }
 regex = "1.7.0"
 dotenvy = "0.15.6"
 serde_json = "1.0.91"
+
+[lints]
+workspace = true

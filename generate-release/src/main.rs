@@ -27,7 +27,7 @@ mod release_notes_website;
 /// * Sort each PR per area label
 /// * Generate the list of merge PR
 ///
-/// Requires a valid GITHUB_TOKEN environment variable, you can use a .env file or use your prefered method of passing env arguments.
+/// Requires a valid `GITHUB_TOKEN` environment variable, you can use a .env file or use your prefered method of passing env arguments.
 ///
 /// Example used to generate for 0.9:
 /// cargo run -- migration-guide --from v0.9.0 --to main --title "0.9 to 0.10" --weight 6

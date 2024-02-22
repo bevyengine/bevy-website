@@ -128,7 +128,7 @@ impl AssetValidator for Asset {
                     errors.push(ValidationError::ImageInvalidExtension);
                 }
             } else {
-                errors.push(ValidationError::ImageInvalidExtension)
+                errors.push(ValidationError::ImageInvalidExtension);
             }
 
             if let Err(err) = validate_image(&image_path) {

@@ -82,7 +82,7 @@ impl FrontMatterWriter for Section {
         )?;
 
         for (i, content) in self.content.iter().enumerate() {
-            content.write(root_path, &section_path, i)?
+            content.write(root_path, &section_path, i)?;
         }
         Ok(())
     }

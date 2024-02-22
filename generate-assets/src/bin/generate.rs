@@ -243,7 +243,7 @@ impl FrontMatterWriter for Section {
             .chain(randomized_assets.iter())
             .enumerate()
         {
-            content.write(root_path, &section_path, i)?
+            content.write(root_path, &section_path, i)?;
         }
         Ok(())
     }

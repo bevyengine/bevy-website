@@ -49,9 +49,6 @@ jobs:
 
   lint-tools:
     runs-on: ubuntu-latest
-    env:
-      TOOLS: |
-        code-validation generate-assets generate-community generate-errors generate-release write-rustdoc-hide-lines
     steps:
       - uses: actions/checkout@v4
 
@@ -62,26 +59,10 @@ jobs:
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
       - name: Check formatting
-        run: |
-          for CRATE in $TOOLS; do
-            cd $CRATE
-
-            echo Checking $CRATE
-            cargo fmt --check
-
-            cd ..
-          done
+        run: cargo fmt --check --all
 
       - name: Check clippy
-        run: |
-          for CRATE in $TOOLS; do
-            cd $CRATE
-
-            echo Checking $CRATE
-            cargo clippy -- -Dwarnings
-
-            cd ..
-          done
+        run: cargo clippy --workspace -- -Dwarnings
 
   generate-assets:
     needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
