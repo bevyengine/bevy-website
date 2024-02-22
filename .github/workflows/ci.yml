@@ -298,7 +298,4 @@ jobs:
 
       - name: Run Pa11y-CI
         run: |
-          zola serve &
-          ping 127.0.0.1 -n 6 > nul
-          netstat -o -n -a | findstr 1111
-          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
+          zola serve & ping 127.0.0.1 -n 6 > nul & npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml          
