@@ -296,8 +296,9 @@ jobs:
           FILE_NAME: ".pa11yci"
           FILE_DATA: "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }} \"\n    }\n  }\n}"
 
-      - name: Serve Zola
-        run: zola serve &
-
       - name: Run Pa11y-CI
-        run: npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
+        run: |
+          zola serve &
+          ping 127.0.0.1 -n 6 > nul
+          netstat -o -n -a | findstr 1111
+          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
