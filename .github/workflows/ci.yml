@@ -294,7 +294,7 @@ jobs:
 
       - name: Run Pa11y-CI
         run: |
-          echo "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }} \"\n    }\n  }\n}" > .pa11yci
+          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }} \"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
