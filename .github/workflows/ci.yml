@@ -287,15 +287,14 @@ jobs:
         with:
           tool: zola@0.18.0
 
-      - name: Install Pa11y-CI
-        run: npm install pa11y-ci
+      - name: Install Pa11y-CI and Wait-on
+        run: npm install pa11y-ci wait-on
 
       - name: Create Pa11y-CI Config
         uses: finnp/create-file-action@master
         env:
           FILE_NAME: ".pa11yci"
           FILE_DATA: "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }} \"\n    }\n  }\n}"
-
       - name: Run Pa11y-CI
-        run: |
-          zola serve & ping 127.0.0.1 -n 6 > nul & npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml          
+        run: zola serve & npx wait-on http://127.0.0.1:1111 && npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
+
