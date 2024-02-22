@@ -283,7 +283,7 @@ jobs:
           chrome-version: stable
 
       - name: Install Pa11y-CI
-        runs: npm install pa11y-ci
+        run: npm install pa11y-ci
 
       - name: Create Pa11y-CI Config
         uses: finnp/create-file-action@master
@@ -292,4 +292,4 @@ jobs:
           FILE_DATA: "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }} \"\n    }\n  }\n}"
 
       - name: Run Pa11y-CI
-        runs: zola serve & npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
+        run: zola serve & npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml
