@@ -137,11 +137,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Clone Bevy"
-        run: >
-          cd generate-wasm-examples &&
-          ./clone_bevy.sh
-
       - uses: actions/cache@v4
         with:
           path: |
