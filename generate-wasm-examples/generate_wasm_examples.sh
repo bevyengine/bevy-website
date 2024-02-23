@@ -24,11 +24,17 @@ fi
 
 # Build WebGL2 example list.
 rm -rf ../../content/examples
-cargo run -p example-showcase -- build-website-list --content-folder ../../content/examples --api webgl2
+# HACK: build in ./content before moving examples to correct folder in order for `extra.code_path`
+# to be formatted correctly.
+cargo run -p example-showcase -- build-website-list --content-folder content --api webgl2
+mv content ../../content/examples
 
 # Build WebGPU example list.
 rm -rf ../../content/examples-webgpu
-cargo run -p example-showcase -- build-website-list --content-folder ../../content/examples-webgpu --api webgpu
+# HACK: build in ./content before moving examples to correct folder in order for `extra.code_path`
+# to be formatted correctly.
+cargo run -p example-showcase -- build-website-list --content-folder content --api webgpu
+mv content ../../content/examples-webgpu
 
 # Remove Markdown files from assets so that they don't get picked up by Zola.
 find assets -type f -name '*.md' -exec rm {} +
