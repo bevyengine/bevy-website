@@ -12,7 +12,6 @@ if [[ -d bevy ]]; then
     cd bevy
 
     # Attempts to fetch the latest commits, which should only happen every Bevy release.
-    git switch latest
     git pull --depth=1
 else
     echo Bevy folder does not exist, cloning repository.
