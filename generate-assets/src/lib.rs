@@ -99,7 +99,7 @@ pub struct MetadataSource<'a> {
     pub bevy_crates_names: Option<Vec<String>>,
     /// Prepared statement to retrieve metadata from crates.io.
     ///
-    /// Initialized with [`get_metadata_from_cratesio_statement`] at the begining
+    /// Initialized with [`get_metadata_from_cratesio_statement`] at the beginning
     /// of the algorithm, used by [`get_metadata_from_cratesio`] for each asset.
     pub get_metadata_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
 }

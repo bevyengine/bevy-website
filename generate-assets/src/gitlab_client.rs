@@ -39,14 +39,14 @@ impl GitlabClient {
         &self,
         repository_name: &str,
     ) -> anyhow::Result<Vec<GitlabProjectSearchResponse>> {
-        let reponse: Vec<GitlabProjectSearchResponse> = self
+        let response: Vec<GitlabProjectSearchResponse> = self
             .agent
             .get(&format!("{BASE_URL}?search={repository_name}"))
             .set("Accept", "application/json")
             // .set("Authorization", &format!("Bearer {}", self.token))
             .call()?
             .into_json()?;
-        Ok(reponse)
+        Ok(response)
     }
 
     /// Gets the content of a file from a gitlab repo
@@ -56,7 +56,7 @@ impl GitlabClient {
         default_branch: &str,
         content_path: &str,
     ) -> anyhow::Result<String> {
-        let reponse: GitlabContentResponse = self
+        let response: GitlabContentResponse = self
             .agent
             .get(&format!(
                 "{BASE_URL}/{id}/repository/files/{content_path}?ref={default_branch}"
@@ -66,8 +66,8 @@ impl GitlabClient {
             .call()?
             .into_json()?;
 
-        if reponse.encoding == "base64" {
-            let data = base64::decode(reponse.content.replace('\n', "").trim())?;
+        if response.encoding == "base64" {
+            let data = base64::decode(response.content.replace('\n', "").trim())?;
             Ok(String::from_utf8(data)?)
         } else {
             bail!("Content is not in base64");
