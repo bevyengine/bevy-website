@@ -105,7 +105,7 @@ fn write_markdown_event(
         Event::Start(Tag::Heading(_, _, _)) => {
             // A few guides used headings for emphasis,
             // since we use headings for the actual header of the guide, we need to use a different way to convey emphasis
-            write!(output, "\n__")?
+            write!(output, "\n__")?;
         }
         Event::End(Tag::Heading(_, _, _)) => writeln!(output, "__")?,
         // FIXME List currently always assume they are unordered
@@ -116,7 +116,7 @@ fn write_markdown_event(
             for _ in 0..list_item_level {
                 write!(output, "  ")?;
             }
-            write!(output, "- ")?
+            write!(output, "- ")?;
         }
         Event::End(Tag::Item) => writeln!(output)?,
         Event::Start(Tag::Paragraph) => writeln!(output)?,

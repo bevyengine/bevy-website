@@ -8,21 +8,21 @@ $bp-tablet-portrait: 768px; // Tablet-portrait (and larger)
 $bp-tablet-landscape: 992px; // Tablet-landscape (and larger)
 $bp-desktop: 1200px; // Laptops (and langer)
 
-$bp-phone-portrait-only: '(max-width: #{$bp-phone-landscape - 1})';
-$bp-phone-landscape-up: '(min-width: #{$bp-phone-landscape})';
-$bp-phone-landscape-down: '(max-width: #{$bp-tablet-portrait - 1})';
-$bp-tablet-portrait-up: '(min-width: #{$bp-tablet-portrait})';
-$bp-tablet-portrait-down: '(max-width: #{$bp-tablet-landscape - 1})';
-$bp-tablet-landscape-up: '(min-width: #{$bp-tablet-landscape})';
-$bp-tablet-landscape-down: '(max-width: #{$bp-desktop - 1})';
-$bp-desktop-up: '(min-width: #{$bp-desktop})';
+$bp-phone-portrait-only: "(max-width: #{$bp-phone-landscape - 1})";
+$bp-phone-landscape-up: "(min-width: #{$bp-phone-landscape})";
+$bp-phone-landscape-down: "(max-width: #{$bp-tablet-portrait - 1})";
+$bp-tablet-portrait-up: "(min-width: #{$bp-tablet-portrait})";
+$bp-tablet-portrait-down: "(max-width: #{$bp-tablet-landscape - 1})";
+$bp-tablet-landscape-up: "(min-width: #{$bp-tablet-landscape})";
+$bp-tablet-landscape-down: "(max-width: #{$bp-desktop - 1})";
+$bp-desktop-up: "(min-width: #{$bp-desktop})";
 
 // Colors
 $color-black: #000;
 $color-white: #ececec;
 $color-grey-800: #232326;
 $color-grey-900: #1e1e22;
-$color-pink: #bb799c;
+$color-pink: #9f517a;
 $color-gold: #d2be4a;
 
 $headerbar-color: #1e1e22;
@@ -31,7 +31,7 @@ $hover-shadow-color: #d6d6d6;
 $link-color: #7c90ff;
 $link-hover-shadow-color: #6c82ff;
 $default-color: #ececec;
-$subtitle-color: #8f8f8f;
+$subtitle-color: #999;
 $syntax-theme-background: #2b2c2f;
 $syntax-theme-background-hover: #414247;
 $default-image-background-color: #1b1b1b;
@@ -54,12 +54,12 @@ $border-radius: 10px;
 
 // CSS Vars
 :root {
-    --header-height: 60px;
-    --scroll-padding-top: calc(var(--header-height) + 16px);
+  --header-height: 60px;
+  --scroll-padding-top: calc(var(--header-height) + 16px);
 
-    @media #{$bp-tablet-landscape-up} {
-        --header-height: 72px;
-    }
+  @media #{$bp-tablet-landscape-up} {
+    --header-height: 72px;
+  }
 }
 
 // Accessibility

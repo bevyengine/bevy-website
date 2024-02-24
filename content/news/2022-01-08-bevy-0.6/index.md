@@ -14,7 +14,7 @@ image_subtitle_link = ""
 
 Thanks to **170** contributors, **623** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.6** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 0.6 Migration Guide](/learn/migration-guides/0.5-0.6/).
 
@@ -130,7 +130,7 @@ The truth of the matter is that wgpu already occupies _exactly_ the space we wan
 However, initially there were a couple of reasons not to make it our "public facing API":
 
 * **Complexity**: wgpu used to be built on top of gfx-hal (an older GPU abstraction layer also built and managed by the wgpu team). These multiple layers of abstraction in multiple repos made contributing to and reasoning about the internals difficult. Additionally, I have a rule for "3rd party dependencies publicly exposed in Bevy APIs": we must feel comfortable forking and maintaining them if we need to (ex: upstream stops being maintained, visions diverge, etc). I wasn't particularly comfortable with doing that with the old architecture.
-* **Licensing**: wgpu used to be licensed under the "copyleft" MPL license, which created concerns about integration with proprietary graphics apis (such as consoles like the Switch).
+* **Licensing**: wgpu used to be licensed under the "copyleft" MPL license, which created concerns about integration with proprietary graphics APIs (such as consoles like the Switch).
 * **WebGL2 Support**: wgpu used to not have a WebGL2 backend. Bevy's old renderer had a custom WebGL2 backend and we weren't willing to give up support for the Web as a platform.
 
 _Almost immediately_ after we voiced these concerns, @kvark kicked off a [relicensing effort](https://github.com/gfx-rs/wgpu/issues/392) that switched wgpu to the Rust-standard dual MIT/Apache-2.0 license. They also removed gfx-hal in favor of a [much simpler and flatter architecture](https://gfx-rs.github.io/2021/08/18/release-0.10.html). Soon after, @zicklag [added a WebGL2 backend](https://github.com/gfx-rs/wgpu/pull/1686). Having resolved all of my remaining hangups, it was clear to me that @kvark's priorities were aligned with mine and that I could trust them to adjust to community feedback.
@@ -147,12 +147,14 @@ The new renderer is what I like to call "ECS-driven":
 
 * As we covered previously, the Render World is populated using data Extracted from the Main World.
 * Scenes are rendered from one or more Views, which are just Entities in the Render World with Components relevant to that View. View Entities can be extended with arbitrary Components, which makes it easy to extend the renderer with custom View data and logic. Cameras aren't the only type of View. Views can be defined by the Render App for arbitrary concepts, such as "shadow map perspectives".
-* Views can have zero or more generic `RenderPhase<T: PhaseItem>` Components, where T defines the "type and scope" of thing being rendered in the phase (ex: "transparent 3d entities in the main pass"). At its core, a `RenderPhase` is a (potentially sorted) list of Entities to be drawn.
+* Views can have zero or more generic `RenderPhase<T: PhaseItem>` Components, where T defines the "type and scope" of thing being rendered in the phase (ex: "transparent 3d entities in the main pass"). At its core, a [`RenderPhase`] is a (potentially sorted) list of Entities to be drawn.
 * Entities in a RenderPhase are drawn using DrawFunctions, which read ECS data from the Render World and produce GPU commands.
 * DrawFunctions can (optionally) be composed of modular DrawCommands. These are generally scoped to specific actions like `SetStandardMaterialBindGroup`, `DrawMesh`, `SetItemPipeline`, etc. Bevy provides a number of built-in DrawCommands and users can also define their own.
 * Render Graph Nodes convert a specific View's RenderPhases into GPU commands by iterating each RenderPhases' Entities and running the appropriate Draw Functions.
 
 If that seems complicated ... don't worry! These are what I like to call "mid-level" renderer APIs. They provide the necessary tools for experienced render feature developers to build modular render plugins with relative ease. We also provide easy to use high-level APIs like Materials, which cover the majority of "custom shader logic" use cases.
+
+[`RenderPhase`]: https://docs.rs/bevy/0.6.0/bevy/render/render_phase/struct.RenderPhase.html
 
 ### Bevy's Core Pipeline
 
@@ -160,17 +162,21 @@ If that seems complicated ... don't worry! These are what I like to call "mid-le
 
 The new renderer is _very_ flexible and unopinionated by default. However, _too much_ flexibility isn't always desirable. We want a rich Bevy renderer plugin ecosystem where developers have enough freedom to implement what they want, while still maximizing compatibility across plugins.
 
-The new `bevy_core_pipeline` crate is our answer to this problem. It defines a "core" set of Views / Cameras (2d and 3d), Sub Graphs (ClearPass, MainPass2d, MainPass3d), and Render Phases (`Transparent2d`, `Opaque3d`, `AlphaMask3d`, `Transparent3d`). This provides a "common ground" for render feature developers to build on while still maintaining compatibility with each other. As long as developers operate within these constraints, they should be compatible with the wider ecosystem. Developers are also free to operate outside these constraints, but that also increases the likelihood that they will be incompatible.
+The new [`bevy_core_pipeline`] crate is our answer to this problem. It defines a "core" set of Views / Cameras (2d and 3d), Sub Graphs (ClearPass, MainPass2d, MainPass3d), and Render Phases (`Transparent2d`, `Opaque3d`, `AlphaMask3d`, `Transparent3d`). This provides a "common ground" for render feature developers to build on while still maintaining compatibility with each other. As long as developers operate within these constraints, they should be compatible with the wider ecosystem. Developers are also free to operate outside these constraints, but that also increases the likelihood that they will be incompatible.
 
-Bevy's built-in render features build on top of the Core Pipeline (ex: `bevy_sprite` and `bevy_pbr`). The Core Pipeline will continue to expand with things like a standardized "post-processing" effect stack.
+Bevy's built-in render features build on top of the Core Pipeline (ex: [`bevy_sprite`] and [`bevy_pbr`]). The Core Pipeline will continue to expand with things like a standardized "post-processing" effect stack.
+
+[`bevy_core_pipeline`]: https://docs.rs/bevy/0.6.0/bevy/core_pipeline/index.html
+[`bevy_sprite`]: https://docs.rs/bevy/0.6.0/bevy/sprite/index.html
+[`bevy_pbr`]: https://docs.rs/bevy/0.6.0/bevy/pbr/index.html
 
 ### Materials
 
 <div class="release-feature-authors">authors: @cart</div>
 
-The new renderer structure gives developers fine-grained control over how entities are drawn. Developers can manually define Extract, Prepare, and Queue systems to draw entities using arbitrary render commands in custom or built-in {{rust_type(type="trait" crate="bevy_core_pipeline" version="0.6.0" name="RenderPhase")}}s. However this level of control necessitates understanding the render pipeline internals and involve more boilerplate than most users are willing to tolerate. Sometimes all you want to do is slot your custom material shader into the existing pipelines!
+The new renderer structure gives developers fine-grained control over how entities are drawn. Developers can manually define Extract, Prepare, and Queue systems to draw entities using arbitrary render commands in custom or built-in [`RenderPhases`]. However this level of control necessitates understanding the render pipeline internals and involve more boilerplate than most users are willing to tolerate. Sometimes all you want to do is slot your custom material shader into the existing pipelines!
 
-The new {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait enables users to ignore nitty gritty details in favor of a simpler interface: just implement the {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}} trait and add a {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="MaterialPlugin")}} for your type. The new [shader_material.rs](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/shader_material.rs) example illustrates this.
+The new [`Material`] trait enables users to ignore nitty gritty details in favor of a simpler interface: just implement the [`Material`] trait and add a [`MaterialPlugin`] for your type. The new [shader_material.rs](https://github.com/bevyengine/bevy/blob/v0.6.0/examples/shader/shader_material.rs) example illustrates this.
 
 ```rust
 // register the plugin for a CustomMaterial
@@ -193,12 +199,17 @@ impl Material for CustomMaterial {
 }
 ```
 
-There is also a {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="SpecializedMaterial")}} variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built-in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
+There is also a [`SpecializedMaterial`] variant, which enables "specializing" shaders and pipelines using custom per-entity keys. This extra flexibility isn't always needed, but when you need it, you will be glad to have it! For example, the built-in StandardMaterial uses specialization to toggle whether or not the Entity should receive lighting in the shader.
 
-We also have big plans to make {{rust_type(type="trait" crate="bevy_pbr" version="0.6.0" name="Material")}}s even better:
+We also have big plans to make [`Material`] even better:
 
 * **Bind Group derives**: this should cut down on the boilerplate of passing materials to the GPU.
 * **Material Instancing**: materials enable us to implement high-level mesh instancing as a simple configuration item for both built in and custom materials.
+
+[`Material`]: https://docs.rs/bevy/0.6.0/bevy/pbr/trait.Material.html
+[`MaterialPlugin`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.MaterialPlugin.html
+[`SpecializedMaterial`]: https://docs.rs/bevy/0.6.0/bevy/pbr/trait.SpecializedMaterial.html
+[`RenderPhases`]: https://docs.rs/bevy/0.6.0/bevy/render/render_phase/struct.RenderPhase.html
 
 ### Visibility and Frustum Culling
 
@@ -232,17 +243,20 @@ Point lights can now cast "omnidirectional shadows", which can be enabled by set
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-Mesh entities can opt out of casting shadows by adding the {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="NotShadowCaster")}} component.
+Mesh entities can opt out of casting shadows by adding the [`NotShadowCaster`] component.
 
 ```rust
 commands.entity(entity).insert(NotShadowCaster);
 ```
 
-Likewise, they can opt out of receiving shadows by adding the {{rust_type(type="struct" crate="bevy_pbr" version="0.6.0" name="NotShadowReceiver")}} component.
+Likewise, they can opt out of receiving shadows by adding the [`NotShadowReceiver`] component.
 
 ```rust
 commands.entity(entity).insert(NotShadowReceiver);
 ```
+
+[`NotShadowCaster`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.NotShadowCaster.html
+[`NotShadowReceiver`]: https://docs.rs/bevy/0.6.0/bevy/pbr/struct.NotShadowReceiver.html
 
 ### Spherical Area Lights
 
@@ -303,7 +317,7 @@ fn spawn_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 ```
 
-No need to manage sprite materials! Their texture handle is now a direct component and color can now be set directly on the {{rust_type(type="struct" crate="bevy_sprite" version="0.6.0" name="Sprite")}} component.
+No need to manage sprite materials! Their texture handle is now a direct component and color can now be set directly on the [`Sprite`] component.
 
 <details>
     <summary>To compare, expand this to see the old Bevy 0.5 code</summary>
@@ -324,6 +338,8 @@ fn spawn_sprite(
 ```
 
 </details>
+
+[`Sprite`]: https://docs.rs/bevy/0.6.0/bevy/sprite/struct.Sprite.html
 
 ### WGSL Shaders
 
@@ -579,22 +595,22 @@ App::new()
 
 <div class="release-feature-authors">authors: @Frizi</div>
 
-In **Bevy 0.6** types no longer implement the {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} trait by default. Before you get angry ... stick with me for a second. I promise this is for the best! In past Bevy versions, we got away with "auto implementing" {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} for types using this "blanket impl":
+In **Bevy 0.6** types no longer implement the [`Component`] trait by default. Before you get angry ... stick with me for a second. I promise this is for the best! In past Bevy versions, we got away with "auto implementing" [`Component`] for types using this "blanket impl":
 
 ```rust
 impl<T: Send + Sync + 'static> Component for T {}
 ```
 
-This removed the need for users to manually implement {{rust_type(type="trait" crate="bevy_ecs" version="0.6.0" name="Component")}} for their types. Early on this seemed like an ergonomics win with no downsides. But Bevy ECS, our understanding of the problem space, and our plans for the future have changed a lot since then:
+This removed the need for users to manually implement [`Component`] for their types. Early on this seemed like an ergonomics win with no downsides. But Bevy ECS, our understanding of the problem space, and our plans for the future have changed a lot since then:
 
 * **It turns out _not everything_ should be a Component**: Our users _constantly_ accidentally add non-component types as components. New users accidentally adding Bundles and type constructors as Components are our most common `#help` channel threads on [our Discord](https://discord.gg/bevy). This class of error is very hard to debug because things just silently "don't work". When not everything is a Component, rustc can properly yell at you with informative errors when you mess up.
-* **Optimizations**: If we implement Component for everything automatically, we can't customize the Component type with associated types. This prevents an entire class of optimization. For example, Bevy ECS now has [multiple Component storage types](/news/bevy-0-5/#hybrid-component-storage-the-solution). By moving the storage type into Component, we enable rustc to optimize checks that would normally need to happen at runtime. @Frizi was able to [significantly improve our Query iterator performance](https://github.com/bevyengine/bevy/pull/2254#issuecomment-857863116) by moving the storage type into Component. I expect us to find more optimizations in this category.
-* **Automatic registration**: Moving more logic into Component also gives us the ability to do fancier things in the future like "automatically registering Reflect impls when deriving Component". Non-blanket Component impls do add a small amount of boilerplate, but they also have the potential to massively reduce the "total boilerplate" of an app.
-* **Documentation**: Deriving Component serves as a form of self-documentation. It's now easy to tell what types are components at a glance.
-* **Organized**: In Bevy 0.5 Component-specific configuration like "storage type" had to be registered in a centralized Plugin somewhere. Moving Component configuration into the Component trait allows users to keep "Component type information" right next to the type itself.
-* **Event Handlers**: Non-blanket Component impls will eventually allow us to add event handlers like `on_insert(world: &mut World)` to the Component trait. Very useful!
+* **Optimizations**: If we implement Component for everything automatically, we can't customize the [`Component`] trait with associated types. This prevents an entire class of optimization. For example, Bevy ECS now has [multiple Component storage types](/news/bevy-0-5/#hybrid-component-storage-the-solution). By moving the storage type into [`Component`], we enable rustc to optimize checks that would normally need to happen at runtime. @Frizi was able to [significantly improve our Query iterator performance](https://github.com/bevyengine/bevy/pull/2254#issuecomment-857863116) by moving the storage type into [`Component`]. I expect us to find more optimizations in this category.
+* **Automatic registration**: Moving more logic into [`Component`] also gives us the ability to do fancier things in the future like "automatically registering Reflect impls when deriving [`Component`]". Non-blanket [`Component`] impls do add a small amount of boilerplate, but they also have the potential to massively reduce the "total boilerplate" of an app.
+* **Documentation**: Deriving [`Component`] serves as a form of self-documentation. It's now easy to tell what types are components at a glance.
+* **Organized**: In Bevy 0.5 [`Component`]-specific configuration like "storage type" had to be registered in a centralized Plugin somewhere. Moving Component configuration into the [`Component`] trait allows users to keep "Component type information" right next to the type itself.
+* **Event Handlers**: Non-blanket [`Component`] impls will eventually allow us to add event handlers like `on_insert(world: &mut World)` to the [`Component`] trait. Very useful!
 
-Hopefully by now you're convinced that this is the right move. If not ... I'm sorry ... you still need to implement Component manually in Bevy 0.6. You can either derive Component:
+Hopefully by now you're convinced that this is the right move. If not ... I'm sorry ... you still need to implement [`Component`] manually in Bevy 0.6. You can either derive [`Component`]:
 
 ```rust
 // defaults to "Table" storage
@@ -620,6 +636,8 @@ impl Component for SomeComponent {
     type Storage = SparseSetStorage;
 }
 ```
+
+[`Component`]: https://docs.rs/bevy/0.6.0/bevy/ecs/component/trait.Component.html
 
 ### iter() for mutable Queries
 
@@ -656,7 +674,7 @@ fn system(mut players: QuerySet<(QueryState<&Player>, QueryState<&mut Player>)>)
 
 ### SystemState
 
-Have you ever wanted to use "system params" directly with a Bevy World? With {{rust_type(type="struct" crate="bevy_ecs" version="0.6.0" name="SystemState")}}, now you can!
+Have you ever wanted to use "system params" directly with a Bevy World? With [`SystemState`], now you can!
 
 ```rust
 let mut system_state: SystemState<(Res<A>, Query<&B>)> = SystemState::new(&mut world);
@@ -665,7 +683,9 @@ let (a, query) = system_state.get(&world);
 
 For those working directly with `World`, this is a game changer. It makes it possible to mutably access multiple disjoint Components and Resources (often eliminating the need for more costly abstractions like `WorldCell`).
 
-{{rust_type(type="struct" crate="bevy_ecs" version="0.6.0" name="SystemState")}} does all of the same caching that a normal Bevy system does, so reusing the same SystemState results in uber-fast World access.
+[`SystemState`] does all of the same caching that a normal Bevy system does, so reusing the same [`SystemState`] results in uber-fast World access.
+
+[`SystemState`]: https://docs.rs/bevy/0.6.0/bevy/ecs/system/struct.SystemState.html
 
 ### Sub Apps
 
@@ -956,7 +976,7 @@ However, there were a variety of issues that have come up that make dual-licensi
 
 ### More pull request mergers!
 
-I've been at my scalability limits for a while. It has been _cough_... challenging... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far ... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
+I've been at my scalability limits for a while. It has been _cough_... challenging... to build the engine features I need to, review every single pull request quickly, and preserve my mental health. I've made it this far... sometimes by overworking myself and sometimes by letting PRs sit unmerged for longer than I'd like. By scaling out, we can have our cake and eat it too!
 
 * @mockersf now has merge rights for "uncontroversial changes"
 * @alice-i-cecile now has merge rights for "uncontroversial documentation changes"
@@ -1037,7 +1057,7 @@ Nested scenes, property overrides, inline assets, and nicer syntax are all on th
 
 ### The New Bevy Book
 
-The [current Bevy Book](/learn/book/) is a great way to learn how to set up Bevy and dip your toes into writing Bevy Apps. But it barely scratches the surface of what Bevy can do.
+The current Bevy Book is a great way to learn how to set up Bevy and dip your toes into writing Bevy Apps. But it barely scratches the surface of what Bevy can do.
 
 To solve this problem @alice-i-cecile has [started working](https://github.com/bevyengine/bevy-website/pull/182) on a new Bevy Book, with the goal of being a complete learning resource for Bevy. If you are interested in helping out, please reach out to them!
 

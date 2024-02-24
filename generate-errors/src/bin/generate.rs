@@ -82,7 +82,7 @@ impl FrontMatterWriter for Section {
         )?;
 
         for (i, content) in self.content.iter().enumerate() {
-            content.write(root_path, &section_path, i)?
+            content.write(root_path, &section_path, i)?;
         }
         Ok(())
     }
@@ -90,7 +90,7 @@ impl FrontMatterWriter for Section {
 
 impl FrontMatterWriter for ErrorCode {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let path = root_path.join(&current_path);
+        let path = root_path.join(current_path);
 
         let mut frontmatter = FrontMatterErrorCode::from(self);
         frontmatter.weight = weight;

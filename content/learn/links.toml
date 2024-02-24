@@ -1,9 +1,9 @@
 [[links]]
-title = "The Bevy Book"
-url = "/learn/book/introduction"
+title = "The Quick Start Guide"
+url = "/learn/quick-start/introduction"
 image = "/assets/book.svg"
 image_alt = "Bevy book"
-description = "Learn how to use Bevy using this step-by-step guide. If you are new to Bevy, you should probably start here."
+description = "Learn the basics of how to use Bevy by following a quick tutorial. If you like learning by examples, you should probably start here."
 
 [[links]]
 title = "Migration Guides"
@@ -39,6 +39,13 @@ url = "/examples"
 image = "/assets/bevy_icon_dark.svg"
 image_alt = "Bevy logo"
 description = "Browse bevy examples compiled to wasm and running directly in your browser!"
+
+[[links]]
+title = "Bevy Errors"
+url = "/learn/errors"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy logo"
+description = "List of Bevy's error codes for the current release."
 
 [[links]]
 title = "Frequently Asked Questions"

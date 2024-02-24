@@ -9,7 +9,7 @@ show_image = true
 
 Thanks to **166** contributors, **522** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.11** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/book/getting-started/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction/) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.11**, check out our [0.10 to 0.11 Migration Guide](/learn/migration-guides/0.10-0.11/).
 
@@ -93,7 +93,7 @@ You can compare all of our anti-aliasing methods in Bevy's improved [anti-aliasi
 
 <div class="release-feature-authors">authors: @Elabajaba</div>
 
-Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Constrast Adaptive Sharpening (RCAS).
+Effects like TAA and FXAA can cause the final render to become blurry. Sharpening post processing effects can help counteract that. In **Bevy 0.11** we've added a port of AMD's Robust Contrast Adaptive Sharpening (RCAS).
 
 <b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
 <div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="TAA" data-title-b="TAA+RCAS">
@@ -1269,7 +1269,7 @@ An interactive example that shows how the various [`Style`] size constraints aff
 
 An example that shows how display and visibility settings affect UI nodes.
 
-![display and visibiltiy](display_and_visibility.png)
+![display and visibility](display_and_visibility.png)
 
 ## No More Bors!
 
