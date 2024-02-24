@@ -1,6 +1,6 @@
 //! This crate is used to validate the rust code of the `bevy` website.
 //!
-//! It is currently used to validate the rust code of the offical `bevy` book.
+//! It is currently used to validate the rust code of the official `bevy` book.
 //! The modules represents the folder structure of the website.
 
 mod learn {
