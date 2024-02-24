@@ -94,7 +94,9 @@
             {% endif %}
         {% endfor %}
 
-        {% set all_pages = all_pages | reverse %}
+        {% if is_migration_guide %}
+           {% set all_pages = all_pages | reverse %}
+        {% endif %}
 
         {# Find prev/next pages #}
         {% set prev_page = false %}
