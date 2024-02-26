@@ -1079,7 +1079,7 @@ Then, just add the [`ExtractResourcePlugin<CoolColor>`][`ExtractResourcePlugin`]
 [`ExtractResource`] can also be implemented manually if you need custom logic (or the type needs to change):
 
 ```rust
-impl ExtactResource for ExtractedCoolColor {
+impl ExtractResource for ExtractedCoolColor {
     type Source = CoolColor;
     fn extract_resource(source: &CoolColor) -> Self {
         Self {
