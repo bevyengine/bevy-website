@@ -73,7 +73,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create Dummy Generated Pages
-        run: echo "TODO"
+        run: |
+          mkdir content/assets content/assets/placeholder
+          echo -e "+++\ntitle = \"Bevy Assets\"\ntemplate = \"assets.html\"\n+++\n" > content/assets/_index.md 
+          echo -e "+++\ntitle = \"placeholder\"\n+++" > content/assets/placeholder/_index.md
+          echo -e "+++\ntitle = \"Example\"\ndescription = \"Example post of assets section of site.\"\n[extra]\nlink = \"https://example.com\"\nlicenses = [\"Example License\"]\nbevy_versions = [\"x.y.x\"]\n+++" > content/assets/placeholder/example.md
 
       - name: Install NPM
         uses: actions/setup-node@v4
