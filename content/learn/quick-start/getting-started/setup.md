@@ -187,7 +187,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
     ```
 
-    NOTE: Disabling `bevy/dynamic` may improve the performance of this linker.
+    NOTE: Disabling `bevy/dynamic_linking` may improve the performance of this linker.
 
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
 
