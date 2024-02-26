@@ -11,4 +11,4 @@ To generate the assets page, run `generate_assets.sh`:
 ./generate_assets.sh
 ```
 
-The shell script clones [`bevy-assets`] and runs the Rust program in this directory, `generate-assets`. `generate-assets` reads the TOML file of each asset and downloads associated information from crates.io, Github, and Gitlab. When the program finishes, it will populate the `content/assets` folder. It can also be used to validate the TOML files, as used in [`bevy-assets`]'s CI.
+The shell script clones [`bevy-assets`] and runs the `generate` binary. `generate` reads the TOML file of each asset and downloads associated information from crates.io, Github, and Gitlab. When the program finishes, it will populate the `content/assets` folder. It can also be used to validate the TOML files, as used in [`bevy-assets`]'s CI, by running the `validate` binary.
