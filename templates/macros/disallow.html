@@ -1,3 +1,4 @@
+{# This file is supposed to not be indented; robots.txt shouldn't be indented and this is used in one #}
 {%- macro generate_disallows(disallow, section) -%}
 {%- if disallow or section and section.extra and section.extra.public_draft -%}
 Disallow: {{ section.path }}
