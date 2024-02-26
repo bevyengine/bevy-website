@@ -145,7 +145,7 @@ You might think to simply develop in release mode instead, but we recommend agai
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking). **Important!** On Windows you _must_ also enable the [perfomance optimizations](#compile-with-performance-optimizations) or you will get a [`too many exported symbols`](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking). **Important!** On Windows you _must_ also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a [`too many exported symbols`](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 
   ```sh
   cargo run --features bevy/dynamic_linking
@@ -187,7 +187,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
     ```
 
-    NOTE: Disabling `bevy/dynamic` may improve the performance of this linker.
+    NOTE: Disabling `bevy/dynamic_linking` may improve the performance of this linker.
 
 * **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
 

@@ -58,7 +58,7 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
     for folder in folders {
         println!("\nChecking folder {:?}", folder);
 
-        // Checks folders, exiting early if an error occured.
+        // Checks folders, exiting early if an error occurred.
         match formatter::check(&folder) {
             // Merge new unformatted files into existing unformatted files.
             Ok(mut unformatted) => unformatted_files.append(&mut unformatted),
@@ -95,7 +95,7 @@ fn format(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCod
     for folder in folders {
         println!("\nFormatting folder {:?}", folder);
 
-        // Format folders, exiting early if an error occured.
+        // Format folders, exiting early if an error occurred.
         if let Err(error) = formatter::format(&folder) {
             eprintln!("Error: {}", error);
 
