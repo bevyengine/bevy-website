@@ -670,7 +670,7 @@ struct UserQuery(String);
 
 // user_query is entered as a text prompt by the user when the game is running.
 // In a system, it's quickly apparent that we can't use `Query`.
-fn list_entites_system(user_query: Res<UserQuery>, query: Query<FIXME, With<FIXME>>) {}
+fn list_entities_system(user_query: Res<UserQuery>, query: Query<FIXME, With<FIXME>>) {}
 
 // Even when using the more advanced `World` API, we are stuck.
 fn list_entities(user_query: String, world: &mut World) {

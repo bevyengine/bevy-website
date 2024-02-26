@@ -1650,7 +1650,7 @@ impl Command for MyCustomCommand {
 }
 
 let id = commands.spawn(SpriteBundle::default()).id();
-commmands.add(MyCustomCommand(id));
+commands.add(MyCustomCommand(id));
 ```
 
 To solve this, in **Bevy 0.10** we added the [`EntityCommand`] trait. This allows the command to be ergonomically applied to spawned entities:

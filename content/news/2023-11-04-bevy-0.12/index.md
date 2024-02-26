@@ -445,7 +445,7 @@ load_internal_asset!(app, MESH_SHADER_HANDLE, "mesh.wgsl", Shader::from_wgsl);
 
 This required a lot of boilerplate and didn't integrate cleanly with the rest of the asset system. The [`AssetServer`] was not aware of these assets, hot-reloading required a special-cased second [`AssetServer`], and you couldn't load assets using an [`AssetLoader`] (they had to be constructed in memory). Not ideal!
 
-To prove out the **Multiple Asset Sources** implementation, we built a new `embedded` [`AssetSource`], which replaces the old `load_interal_asset!` system with something that naturally fits into the asset system:
+To prove out the **Multiple Asset Sources** implementation, we built a new `embedded` [`AssetSource`], which replaces the old `load_internal_asset!` system with something that naturally fits into the asset system:
 
 ```rust
 // Called in `crates/bevy_pbr/src/render/mesh.rs`
@@ -842,7 +842,7 @@ This [yielded significant performance wins](https://github.com/bevyengine/bevy/p
 
 ### Usage
 
-The easiest way to use it is to use the new [`ExtractInstancesPlugin`]. This wil extract all entities matching a query, or only those that are visible, extracting multiple components at once into one target type.
+The easiest way to use it is to use the new [`ExtractInstancesPlugin`]. This will extract all entities matching a query, or only those that are visible, extracting multiple components at once into one target type.
 
 It is a good idea to group component data that will be accessed together into one target type to avoid having to do multiple lookups.
 
@@ -1296,7 +1296,7 @@ Now, you can just write systems that read [`Time`] and schedule them in either c
 // This system will see a constant delta time if scheduled in `FixedUpdate` or
 // a variable delta time if scheduled in `Update`.
 fn integrate_velocity(
-    mut query: Query<(&mut Transfrom, &Velocity)>,
+    mut query: Query<(&mut Transform, &Velocity)>,
     time: Res<Time>,
 ) {
     for (mut transform, velocity) in &mut query {
@@ -1729,7 +1729,7 @@ We have plenty of work in progress! Some of this will likely land in **Bevy 0.13
 
 Check out the [**Bevy 0.13 Milestone**](https://github.com/bevyengine/bevy/milestone/17) for an up-to-date list of current work being considered for **Bevy 0.13**.
 
-* **Bevy Scene and UI Evolution**: We are hard at work building out a new Scene and UI system for Bevy. We're experimenting with a brand new [holistic Scene / UI system](https://github.com/bevyengine/bevy/discussions/9538) that will hopefully serve as the foundation for the Bevy Editor and make defining scenes in Bevy much more flexible, capabable, and ergonomic.  
+* **Bevy Scene and UI Evolution**: We are hard at work building out a new Scene and UI system for Bevy. We're experimenting with a brand new [holistic Scene / UI system](https://github.com/bevyengine/bevy/discussions/9538) that will hopefully serve as the foundation for the Bevy Editor and make defining scenes in Bevy much more flexible, capable, and ergonomic.  
 * **More Batching/Instancing Improvements**: Put skinned mesh data into storage buffers to enable instanced drawing of skinned mesh entities with the same mesh/skin/material. Put material data in the new GpuArrayBuffer to enable batching of draws of entities with the same mesh, material type, and textures, but different material data.
 * **GPU-Driven Rendering**: We plan on driving rendering via the GPU by creating draw calls in compute shaders (on platforms that support it). We have [experiments using meshlets](https://github.com/bevyengine/bevy/pull/10164) and plan to explore other approaches as well. This will involve putting textures into bindless texture arrays and putting meshes in one big buffer to avoid rebinds.
 * **Exposure Settings**: Control [camera exposure settings](https://github.com/bevyengine/bevy/pull/8407) to change the feel and mood of your renders!

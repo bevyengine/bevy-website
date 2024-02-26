@@ -44,6 +44,8 @@
 {% block page_content %}
   <div class="docs-page">
     <div class="docs-content">
+      {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %} 
+      
       {% if section and section.components %}
         {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
       {% elif page and page.components %}
@@ -75,11 +77,16 @@
               {% set pages_and_subsections_2 = p2.pages | concat(with=subsections_2) | sort(attribute="extra.weight") %}
               {% for p3 in pages_and_subsections_2 %}
                 {% set_global all_pages = all_pages | concat(with=p3) %}
-              {% endfor %}
+              {% endfor %}                       
             {% endif %}
           {% endfor %}
         {% endif %}
       {% endfor %}
+                                      
+      {% if is_migration_guide %}
+        {% set all_pages = all_pages | reverse %}
+      {% endif %}
+                                      
       {# Find prev/next pages #}
       {% set prev_page = false %}
       {% set next_page = false %}
