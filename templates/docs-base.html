@@ -48,6 +48,9 @@
 {% block page_content %}
 <div class="docs-page">
     <div class="docs-content">
+        {# Needed to reverse the order for migration guides given the weights are reversed for contributor usability #}
+        {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %}
+
         {% if section and section.components %}
             {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
         {% elif page and page.components %}
@@ -90,6 +93,10 @@
                 {% endfor %}
             {% endif %}
         {% endfor %}
+
+        {% if is_migration_guide %}
+           {% set all_pages = all_pages | reverse %}
+        {% endif %}
 
         {# Find prev/next pages #}
         {% set prev_page = false %}

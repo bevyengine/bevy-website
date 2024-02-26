@@ -7,7 +7,7 @@ status = 'hidden'
 +++
 
 **Entities** are the fundamental objects of your game world, whizzing around, storing cameras, being controlled by the player or tracking the state of a button.
-On its own, the [`Entity`] type is a simple identifer: it has neither behavior nor data.
+On its own, the [`Entity`] type is a simple identifier: it has neither behavior nor data.
 Components store this data, and define the overlapping categories that the entity belongs to.
 
 Informally, we use the term "entity" to refer to the conceptual entry in our [`World`]: all of the component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
@@ -44,7 +44,7 @@ fn spawning_system(mut commands: Commands){
 ## Working With Components
 
 Spawning an entity doesn't add any behavior or create a "physical object" in our game like it might in other engines.
-Instead, all it does is provide us an [`Entity`] identifer for a collection of component data.
+Instead, all it does is provide us an [`Entity`] identifier for a collection of component data.
 
 In order to make this useful, we need to be able to add, remove and modify component data for each entity.
 
@@ -354,7 +354,7 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
   - not as useful as you might hope for upholding invariants; components will be able to be accidentally modified independently later
 - use [struct update syntax] to modify component bundles
   - [`..default()`] is a particularly common idiom, to modify a struct from its default values
-- consider definining traits for related components
+- consider defining traits for related components
   - this allows you to ensure a consistent interface
   - this can be very powerful in combination with generic systems that use trait bounds
 

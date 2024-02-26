@@ -461,7 +461,7 @@ fn system(query: Query<Entity, Changed<A>>) {
 
 Global change detection was already a feature that set Bevy apart from other ECS frameworks, but now it is completely "fool proof". It works as expected regardless of system ordering, stage membership, or system run criteria.
 
-The old behavior was "systems detect changes that ocurred in systems that ran before them this frame". This was because we used a `bool` to track when each component/resource is added/modified. This flag was cleared for each component at the end of the frame. As a result, users had to be very careful about order of operations, and using features like "system run criteria" could result in dropped changes if systems didn't run on a given update.
+The old behavior was "systems detect changes that occurred in systems that ran before them this frame". This was because we used a `bool` to track when each component/resource is added/modified. This flag was cleared for each component at the end of the frame. As a result, users had to be very careful about order of operations, and using features like "system run criteria" could result in dropped changes if systems didn't run on a given update.
 
 We now use a clever "world tick" design that allows systems to detect changes that happened at _any_ point in time since their last run.
 
