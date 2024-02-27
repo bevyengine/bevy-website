@@ -151,7 +151,7 @@ jobs:
             weight = 0
 
             [extra]
-            profile_picture = \"
+            profile_picture = \"\"
             bio = \"Test person.\"
             discord = \"test#9999\"
             discord_userid = \"000000000000000000\"
@@ -218,7 +218,7 @@ jobs:
             weight = 0
 
             [extra]
-            profile_picture = \"
+            profile_picture = \"\"
             bio = \"Test person.\"
             discord = \"test#9999\"
             discord_userid = \"000000000000000000\"
