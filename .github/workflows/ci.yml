@@ -131,6 +131,106 @@ jobs:
                     });
                 }
             }" > content/examples/2d_rendering/2d-shapes/2d_shapes.rs
+          echo "Community"
+          mkdir content/community/donate content/community/people content/community/people/'community members' content/community/people/'the bevy organization'
+          echo "Donation Page"
+          echo -e "+++
+            title = \"Supporting Bevy Development\"
+            sort_by = \"weight\"
+            template = \"donate.html\"
+            weight = 1
+
+            [extra]
+            header_message = \"Supporting Bevy\"
+            sort_order_reversed = false
+
+            +++
+            " > content/community/donate/_index.md
+          echo -e "+++
+            title = \"Test Person\"
+            weight = 0
+
+            [extra]
+            profile_picture = \"
+            bio = \"Test person.\"
+            discord = \"test#9999\"
+            discord_userid = \"000000000000000000\"
+            github = \"invalid\"
+            mastodon_user = \"invalid\"
+            mastodon_instance = \"doesnt.exist\"
+            twitter = \"nothing\"
+            itch_io = \"nada\"
+            roles = [\"Non-existent\"]
+
+            +++
+            " > content/community/donate/test.md
+          echo "People Page"
+          echo -e "+++
+            title = \"People\"
+            sort_by = \"weight\"
+            template = \"people.html\"
+            weight = 0
+
+            [extra]
+            header_message = \"People\"
+            sort_order_reversed = false
+
+            +++
+            " > content/community/people/_index.md
+          echo -e "+++
+            title = \"Community Members\"
+            sort_by = \"weight\"
+            weight = 2
+
+            [extra]
+            sort_order_reversed = false
+
+            +++
+            " > content/community/people/'community members'/_index.md
+          echo -e "+++
+            title = \"Test Person\"
+            weight = 0
+
+            [extra]
+            profile_picture = \"\"
+            sponsor = \"nothing\"
+            bio = \"I am a small youtuber, attempted game dev and avid doc reader. I'm happy to help wherever and whenever I can.\"
+            discord = \"test\"
+            discord_userid = \"000000000000000000\"
+            github = \"test\"
+            itch_io = \"test\"
+            website = \"https://example.com\"
+
+            +++
+            " > content/community/people/'community members'/test.md
+          echo -e "+++
+            title = \"The Bevy Organization\"
+            sort_by = \"weight\"
+            weight = 1
+
+            [extra]
+            sort_order_reversed = false
+
+            +++
+            " > content/community/people/'the bevy organization'/_index.md
+          echo -e "+++
+            title = \"Test Person\"
+            weight = 0
+
+            [extra]
+            profile_picture = \"
+            bio = \"Test person.\"
+            discord = \"test#9999\"
+            discord_userid = \"000000000000000000\"
+            github = \"invalid\"
+            mastodon_user = \"invalid\"
+            mastodon_instance = \"doesnt.exist\"
+            twitter = \"nothing\"
+            itch_io = \"nada\"
+            roles = [\"Non-existent\"]
+
+            +++
+            " > content/community/people/'the bevy organization'/test.md          
 
       - name: Install NPM
         uses: actions/setup-node@v4
