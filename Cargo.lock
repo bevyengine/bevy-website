@@ -2218,7 +2218,6 @@ name = "generate-community"
 version = "0.1.0"
 dependencies = [
  "rand",
- "regex",
  "serde",
  "toml 0.5.11",
  "unicode-segmentation",
@@ -2228,7 +2227,6 @@ dependencies = [
 name = "generate-errors"
 version = "0.1.0"
 dependencies = [
- "pulldown-cmark 0.8.0",
  "regex",
  "serde",
  "toml 0.5.11",
@@ -2239,11 +2237,10 @@ name = "generate-release"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "base64 0.21.7",
  "chrono",
  "clap",
  "dotenvy",
- "pulldown-cmark 0.9.6",
+ "pulldown-cmark",
  "regex",
  "serde",
  "serde_json",
@@ -3711,17 +3708,6 @@ name = "profiling"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "43d84d1d7a6ac92673717f9f6d1518374ef257669c24ebc5ac25d5033828be58"
-
-[[package]]
-name = "pulldown-cmark"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffade02495f22453cd593159ea2f59827aae7f53fa8323f756799b670881dcf8"
-dependencies = [
- "bitflags 1.3.2",
- "memchr",
- "unicase",
-]
 
 [[package]]
 name = "pulldown-cmark"
