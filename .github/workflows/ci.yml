@@ -152,6 +152,7 @@ jobs:
 
             [extra]
             profile_picture = \"\"
+            sponsor = \"nothing\"
             bio = \"Test person.\"
             discord = \"test#9999\"
             discord_userid = \"000000000000000000\"
