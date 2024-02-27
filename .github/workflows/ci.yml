@@ -195,7 +195,7 @@ jobs:
             [extra]
             profile_picture = \"\"
             sponsor = \"nothing\"
-            bio = \"I am a small youtuber, attempted game dev and avid doc reader. I'm happy to help wherever and whenever I can.\"
+            bio = \"I am a small youtuber, attempted game dev and avid doc reader. I\'m happy to help wherever and whenever I can.\"
             discord = \"test\"
             discord_userid = \"000000000000000000\"
             github = \"test\"
@@ -281,13 +281,13 @@ jobs:
             }
             ```
 
-            This will panic, as it's not possible to have both a mutable and an immutable query on `Transform` at the same time.
+            This will panic, as it\'s not possible to have both a mutable and an immutable query on `Transform` at the same time.
 
             You have two solutions:
 
             Solution #1: use disjoint queries using [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html)
 
-            As a `Player` entity won't be an `Enemy` at the same time, those two queries will actually never target the same entity. This can be encoded in the query filter with [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html):
+            As a `Player` entity won\'t be an `Enemy` at the same time, those two queries will actually never target the same entity. This can be encoded in the query filter with [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html):
 
             ```rust
             use bevy::prelude::*;
@@ -341,6 +341,7 @@ jobs:
                     .add_systems(Update, move_enemies_to_player)
                     .run();
             }
+            ```
             " > content/learn/errors/test_error.md
 
       - name: Install NPM
