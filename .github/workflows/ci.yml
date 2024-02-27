@@ -235,19 +235,19 @@ jobs:
           echo "Errors"
           mkdir content/learn/errors
           echo -e "+++
-            title = \"Errors\""
-            sort_by = \"weight\""
-            template = \"errors.html\""
+            title = \"Errors\"
+            sort_by = \"weight\"
+            template = \"errors.html\"
             weight = 0
 
             [extra]
-            header_message = \"Errors\""
+            header_message = \"Errors\"
             sort_order_reversed = false
 
             +++
             " > content/learn/errors/_index.md
           echo -e "+++
-            title = \"B0001\""
+            title = \"B0001\"
             weight = 0
 
             +++
