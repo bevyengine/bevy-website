@@ -232,6 +232,116 @@ jobs:
 
             +++
             " > content/community/people/'the bevy organization'/test.md          
+          echo "Errors"
+          mkdir content/learn/errors
+          echo -e "+++
+            title = \"Errors\""
+            sort_by = \"weight\""
+            template = \"errors.html\""
+            weight = 0
+
+            [extra]
+            header_message = \"Errors\""
+            sort_order_reversed = false
+
+            +++
+            " > content/learn/errors/_index.md
+          echo -e "+++
+            title = \"B0001\""
+            weight = 0
+
+            +++
+
+
+            To keep [Rust rules on references](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#the-rules-of-references) (either one mutable reference or any number of immutable references) on a component, it is not possible to have two queries on the same component when one requests mutable access to it in the same system.
+
+            Erroneous code example:
+
+            ```rust
+            use bevy::prelude::*;
+
+            #[derive(Component)]
+            struct Player;
+
+            #[derive(Component)]
+            struct Enemy;
+
+            fn move_enemies_to_player(
+                mut enemies: Query<&mut Transform, With<Enemy>>,
+                player: Query<&Transform, With<Player>>,
+            ) {
+                // ...
+            }
+
+            fn main() {
+                App::new()
+                    .add_plugins(DefaultPlugins)
+                    .add_systems(Update, move_enemies_to_player)
+                    .run();
+            }
+            ```
+
+            This will panic, as it's not possible to have both a mutable and an immutable query on `Transform` at the same time.
+
+            You have two solutions:
+
+            Solution #1: use disjoint queries using [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html)
+
+            As a `Player` entity won't be an `Enemy` at the same time, those two queries will actually never target the same entity. This can be encoded in the query filter with [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html):
+
+            ```rust
+            use bevy::prelude::*;
+
+            #[derive(Component)]
+            struct Player;
+
+            #[derive(Component)]
+            struct Enemy;
+
+            fn move_enemies_to_player(
+                mut enemies: Query<&mut Transform, With<Enemy>>,
+                player: Query<&Transform, (With<Player>, Without<Enemy>)>,
+            ) {
+                // ...
+            }
+
+            fn main() {
+                App::new()
+                    .add_plugins(DefaultPlugins)
+                    .add_systems(Update, move_enemies_to_player)
+                    .run();
+            }
+            ```
+
+            Solution #2: use a `ParamSet`
+
+            A `ParamSet` will let you have conflicting queries as a parameter, but you will still be responsible for not using them at the same time in your system.
+
+            ```rust
+            use bevy::prelude::*;
+
+            #[derive(Component)]
+            struct Player;
+
+            #[derive(Component)]
+            struct Enemy;
+
+            fn move_enemies_to_player(
+                mut transforms: ParamSet<(
+                    Query<&mut Transform, With<Enemy>>,
+                    Query<&Transform, With<Player>>,
+                )>,
+            ) {
+                // ...
+            }
+
+            fn main() {
+                App::new()
+                    .add_plugins(DefaultPlugins)
+                    .add_systems(Update, move_enemies_to_player)
+                    .run();
+            }
+            " > content/learn/errors/test_error.md
 
       - name: Install NPM
         uses: actions/setup-node@v4
