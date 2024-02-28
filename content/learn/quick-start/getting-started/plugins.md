@@ -8,7 +8,7 @@ weight = 4
 
 One of Bevy's core principles is modularity. All Bevy engine features are implemented as plugins---collections of code that modify [`App`]s. This includes internal features like the renderer, but games themselves are also implemented as plugins! This empowers developers to pick and choose which features they want. Don't need a UI? Don't register the [`UiPlugin`]. Want to build a headless server? Don't register the [`RenderPlugin`].
 
-This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own [`UiPlugin`], but consider [contributing it back to Bevy](/learn/quick-start/contributing) if you think it would be useful!
+This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own [`UiPlugin`], but consider [contributing it back to Bevy](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md) if you think it would be useful!
 
 Those not contributed back into Bevy and instead released separately are third-party plugins. These are useful and easy to use additons created by fellow developers that can help you avoid re-inventing the wheel. To use them all you have to do is:
 
