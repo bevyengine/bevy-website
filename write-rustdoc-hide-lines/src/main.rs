@@ -1,30 +1,6 @@
 use std::{env, path::PathBuf, process::ExitCode};
 use write_rustdoc_hide_lines::formatter;
 
-/// Generates `hide_lines` annotations to Rust code blocks.
-///
-/// In most cases you can just call `write_rustdoc_hide_lines.sh`, which will automatically handle
-/// formatting all files.
-///
-/// ```shell
-/// $ cd write-rustdoc-hide-lines
-/// $ ./write_rustdoc_hide_lines.sh
-/// ```
-///
-/// You can also run the executable manually.
-///
-/// ```shell
-/// $ cd write-rustdoc-hide-lines
-///
-/// # Format one folder.
-/// $ cargo run -- format ../content/learn/book
-///
-/// # Format multiple folders.
-/// $ cargo run -- format ../content/learn/book ../content/learn/quick-start
-///
-/// # Check one folder, but don't overwrite it.
-/// $ cargo run -- check ../content/learn/book
-/// ```
 fn main() -> ExitCode {
     // The first argument is usually the executable path, so we skip that to just get arguments.
     let mut args = env::args().skip(1);
