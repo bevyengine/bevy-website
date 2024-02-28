@@ -30,7 +30,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, greet_people))
+        .add_systems(Update, (hello_world, (greet_people, update_people).chain()))
         .run();
 }
 ```
@@ -65,7 +65,7 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, HelloPlugin))
         .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, greet_people))
+        .add_systems(Update, (hello_world, (greet_people, update_people).chain()))
         .run();
 }
 ```
@@ -77,7 +77,7 @@ Note `add_plugins` can add any number of plugins (or plugin groups like `Default
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, add_people)
-            .add_systems(Update, (hello_world, greet_people));
+            .add_systems(Update, (hello_world, (greet_people, update_people).chain()));
     }
 }
 
