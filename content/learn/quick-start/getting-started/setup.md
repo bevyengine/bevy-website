@@ -177,7 +177,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
   * **Fedora**: `sudo dnf install mold clang`
   * **Arch**: `sudo pacman -S mold clang`
   * **Windows**: currently not planned for support [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
-  * **MacOS**: is available commercially with [sold](https://github.com/bluewhalesystems/sold)
+  * **MacOS**: available as [sold](https://github.com/bluewhalesystems/sold)
 
     You will also need to add the following to your Cargo config at `YOUR_WORKSPACE/.cargo/config.toml`:
 
