@@ -1,0 +1,5 @@
+{
+	"profile": "nunjucks",
+	"ignore": "H030,H031",
+	"indent": "2"
+}
