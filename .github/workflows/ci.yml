@@ -9,19 +9,17 @@ on:
       - 'trying'
 
 jobs:
-  super-linter:
+  mega-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
+          # Full git history is needed to get a proper list of changed files within `mega-linter`
           fetch-depth: 0
-      - name: Run Super Linter
-        uses: docker://ghcr.io/github/super-linter:slim-v4
+      - name: Run Mega Linter
+        uses: oxsecurity/megalinter@v7
         env:
           VALIDATE_ALL_CODEBASE: false
-          VALIDATE_MARKDOWN: true
-          VALIDATE_EDITORCONFIG: true
           DEFAULT_BRANCH: main
 
   test-code-examples:
@@ -389,7 +387,7 @@ jobs:
           echo 'You can find the extension here: https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode'
 
   generate-assets:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -427,7 +425,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -454,26 +452,10 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: "Clone Bevy"
-        run: >
-          cd generate-wasm-examples &&
-          ./clone_bevy.sh
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            generate-wasm-examples/bevy/target/
-            content/examples/**/*.wasm
-          key: ${{ runner.os }}-generate-wasm-examples-${{ hashFiles('generate-wasm-examples/bevy/Cargo.toml') }}
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -497,7 +479,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -525,7 +507,7 @@ jobs:
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [super-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@v4

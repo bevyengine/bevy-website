@@ -73,6 +73,7 @@
 
       img {
         height: 30px;
+        width: auto;
 
         @media #{$bp-tablet-portrait-up} {
           height: 35px;
