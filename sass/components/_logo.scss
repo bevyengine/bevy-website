@@ -2,6 +2,7 @@
   $bp-icon: "(min-width: 440px)";
 
   height: 28px;
+  width: auto;
 
   @media #{$bp-tablet-landscape-up} {
     height: 40px;

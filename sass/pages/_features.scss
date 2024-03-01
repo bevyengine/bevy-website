@@ -78,6 +78,17 @@
   }
 }
 
+.feature-img.svg-ecs {
+  width: 100%;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.feature-img.svg-boat {
+  max-width: 95%;
+  max-height: 95%;
+}
+
 .feature-sublist {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -89,6 +100,8 @@
 .feature-img {
   max-height: 80%;
   max-width: 80%;
+  width: auto;
+  height: auto;
 }
 
 .features-whats-next {
@@ -126,4 +139,16 @@
 .platinum-sponsor-image {
   height: 7.0rem;
   margin: 1rem;
+}
+
+img.sponsors__logo.sponsors__foresight-spatial-labs {
+  height: 140px;
+}
+
+img.sponsors__logo.sponsors__encultured-ai {
+  max-height: 60px;
+}
+
+img.sponsors__logo.sponsors__roids {
+  max-height: 130px;
 }
