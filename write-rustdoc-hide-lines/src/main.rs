@@ -31,10 +31,6 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
     // An aggregate list of all unformatted files, empty by default.
     let mut unformatted_files = Vec::new();
 
-    // Detect if we're running through Github Actions or not.
-    // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
-    let is_ci = env::var("GITHUB_ACTIONS").is_ok_and(|x| x == "true");
-
     for folder in folders {
         println!("\nChecking folder {:?}", folder);
 
@@ -50,22 +46,15 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
         }
     }
 
-    if is_ci {
+    // Detect if we're running through Github Actions or not.
+    // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+    if env::var("GITHUB_ACTIONS").is_ok_and(|x| x == "true") {
         let mut job_summary = String::from("### `write-rustdoc-hide-lines` Summary\n\n");
 
         if unformatted_files.is_empty() {
             job_summary.push_str("Content properly formatted :sparkles:\n");
         } else {
-            job_summary.push_str(
-                "\
-A few files need to be formatted :warning:
-
-You can fix them by running `write-rustdoc-hide-lines`:
-
-```shell
-$ ./write_rustdoc_hide_lines.sh
-```\n\n",
-            );
+            job_summary.push_str("A few files need to be formatted: :warning:\n\n");
 
             for path in unformatted_files.iter() {
                 // Write file paths using Markdown list format.
@@ -77,6 +66,13 @@ $ ./write_rustdoc_hide_lines.sh
                 // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
                 println!("::error file={:?},title=File is not formatted with correct hide-lines annotations::Please run write_rustdoc_hide_lines.sh locally to fix all errors.", path);
             }
+
+            job_summary.push_str("
+You can fix them by running `write-rustdoc-hide-lines`:
+
+```shell
+$ ./write_rustdoc_hide_lines.sh
+```");
 
             let summary_path = env::var("GITHUB_STEP_SUMMARY")
                 .expect("Could not find job summary file from environmental variable.");
