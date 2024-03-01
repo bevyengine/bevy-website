@@ -13,6 +13,10 @@ use crate::{code_block_definition::CodeBlockDefinition, hidden_ranges::get_hidde
 pub fn check(dir: &Path) -> Result<Vec<PathBuf>> {
     let mut unformatted_files = Vec::new();
 
+    // Detect if we're running through Github Actions or not.
+    // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+    let is_ci = std::env::var("GITHUB_ACTIONS").is_ok_and(|x| x == "true");
+
     visit_dir_md_files(dir, &mut |path| {
         println!("- {:?}", path);
 
@@ -24,6 +28,11 @@ pub fn check(dir: &Path) -> Result<Vec<PathBuf>> {
         if src != formatted {
             // Changes were made! Write that down.
             unformatted_files.push(path.to_path_buf());
+
+            if is_ci {
+                // Add special annotation through Github Actions.
+                println!("::error file={:?},title=File is not formatted with correct hide-lines annotations::Please run write_rustdoc_hide_lines.sh locally to fix all errors.", path);
+            }
         }
 
         Ok(())
