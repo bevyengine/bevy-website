@@ -81,7 +81,7 @@ jobs:
           echo 'You can find the extension here: https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode'
 
   generate-assets:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -119,7 +119,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -146,7 +146,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -173,7 +173,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -201,7 +201,7 @@ jobs:
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, generate-assets, generate-errors, generate-wasm-examples, generate-community]
 
     steps:
       - uses: actions/checkout@v4
