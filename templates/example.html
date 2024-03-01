@@ -8,7 +8,7 @@
       <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
       <a class="example__back" href="/examples"><i class="icon icon--chevron-left"></i> Back to examples</a>
       <a class="example__github"
-          href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
+         href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
         <i class="icon icon--github"></i> View in GitHub
       </a>
     </div>
@@ -27,11 +27,11 @@
     </div>
     <div class="example__code media-content">
       {% set code = load_data(path=page.extra.code_path) %}
-      {% set code_md = "```rust
-            " ~ code ~ "```" %}
+      {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
       {{ code_md | markdown(inline=true) | safe }}
     </div>
   </div>
+  hello?
   <script type="module">
   {#
     // Hi curious user!
@@ -39,8 +39,8 @@
     // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
     // workaround until Bevy has an in-engine mode for showing loading feedback. See:
     // https://github.com/bevyengine/bevy-website/pull/355
-    #}
-  }
+  #}
+
   import { progressiveFetch } from '/tools.js';
   import '/restart-audio-context.js'
   import init from 'https://bevy-webgl2-examples.pages.dev/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
@@ -83,13 +83,12 @@
       },
       finish: () => {
         {#
-                // This is a little hack to avoid progress-bar flashing between assets. The thing
-                // is that we don't know how many assets are going to load, so we don't know which
-                // one is the last one. If a new asset starts loading within 50ms, then this timeout
-                // is cleared and the progress element stays visible, avoiding the flashing.
-                // The downside is that the progress bar shows for a brief moment once the wasm starts.
-                #}
-        }
+          // This is a little hack to avoid progress-bar flashing between assets. The thing
+          // is that we don't know how many assets are going to load, so we don't know which
+          // one is the last one. If a new asset starts loading within 50ms, then this timeout
+          // is cleared and the progress element stays visible, avoiding the flashing.
+          // The downside is that the progress bar shows for a brief moment once the wasm starts.
+        #}
         hideProgressTimeoutId = setTimeout(() => {
           progressStatusEl.style.display = 'none';
         }, 50);
@@ -102,8 +101,7 @@
     // The following .catch() is a simple filter to remove an exception thrown by winit in
     // its normal control flow. This exception will always be thrown and is not an error.
     // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
-    #}
-  }
+  #}
   init().catch((error) => {
     if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
       throw error;
