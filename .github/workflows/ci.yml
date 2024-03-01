@@ -368,7 +368,7 @@ jobs:
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
-          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude "github\.com"
+          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude https://github.com/bevyengine/bevy/discussions?discussions_q=label%3AFAQ+sort%3Atop
 
   typos:
     runs-on: ubuntu-latest
