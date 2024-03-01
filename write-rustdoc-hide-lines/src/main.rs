@@ -75,19 +75,19 @@ You can fix them by running `write-rustdoc-hide-lines`:
 $ ./write_rustdoc_hide_lines.sh
 ```",
             );
-
-            let summary_path = env::var("GITHUB_STEP_SUMMARY")
-                .expect("Could not find job summary file from environmental variable.");
-
-            // Write job_summary to environment file.
-            File::options()
-                .append(true)
-                .create(true)
-                .open(summary_path)
-                .unwrap()
-                .write_all(job_summary.as_bytes())
-                .unwrap();
         }
+
+        let summary_path = env::var("GITHUB_STEP_SUMMARY")
+            .expect("Could not find job summary file from environmental variable.");
+
+        // Write job_summary to environment file.
+        File::options()
+            .append(true)
+            .create(true)
+            .open(summary_path)
+            .unwrap()
+            .write_all(job_summary.as_bytes())
+            .unwrap();
     }
 
     if !unformatted_files.is_empty() {
