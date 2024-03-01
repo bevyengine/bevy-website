@@ -63,15 +63,15 @@ A few files need to be formatted :warning:
 You can fix them by running `write-rustdoc-hide-lines`:
 
 ```shell
-./write_rustdoc_hide_lines.sh
+$ ./write_rustdoc_hide_lines.sh
 ```\n\n",
             );
 
             for path in unformatted_files.iter() {
                 // Write file paths using Markdown list format.
-                job_summary.push_str("- ");
+                job_summary.push_str("- `");
                 job_summary.push_str(&path.to_string_lossy());
-                job_summary.push('\n');
+                job_summary.push_str("`\n");
 
                 // Output error message.
                 // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
