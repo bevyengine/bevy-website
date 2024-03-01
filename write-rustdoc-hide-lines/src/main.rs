@@ -67,12 +67,14 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
                 println!("::error file={:?},title=File is not formatted with correct hide-lines annotations::Please run write_rustdoc_hide_lines.sh locally to fix all errors.", path);
             }
 
-            job_summary.push_str("
+            job_summary.push_str(
+                "
 You can fix them by running `write-rustdoc-hide-lines`:
 
 ```shell
 $ ./write_rustdoc_hide_lines.sh
-```");
+```",
+            );
 
             let summary_path = env::var("GITHUB_STEP_SUMMARY")
                 .expect("Could not find job summary file from environmental variable.");
