@@ -213,7 +213,7 @@ jobs:
             +++
             " > content/community/people/'the bevy organization'/_index.md
           echo -e "+++
-            title = \"Test Person\"
+            title = \"Test Member\"
             weight = 0
 
             [extra]
