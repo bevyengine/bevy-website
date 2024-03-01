@@ -26,7 +26,7 @@ Spawning and despawning entities can have far-reaching effects, and so cannot be
 As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust,hide_lines=1
-# use bevy::ecs::system::Commands;
+use bevy::ecs::system::Commands;
 // The `Commands` system parameter allows us to generate commands
 // which operate on the `World` once all of the current systems have finished running
 fn spawning_system(mut commands: Commands){
