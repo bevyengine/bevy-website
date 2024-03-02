@@ -45,7 +45,7 @@ body:not(.show_drafts) .public_draft:not(.active_draft) {
 .anchor-link:link,
 .anchor-link:visited {
   margin-left: 0.3rem;
-  color: #737373;
+  color: $color-white;
   text-shadow: none;
   font-weight: 500;
 }
