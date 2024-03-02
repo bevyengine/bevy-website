@@ -283,10 +283,11 @@ jobs:
 
             You have two solutions:
 
-            Solution #1: use disjoint queries using [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html)
+            Solution #1: use disjoint queries using [`Without`]
 
-            As a `Player` entity won't be an `Enemy` at the same time, those two queries will actually never target the same entity. This can be encoded in the query filter with [`Without`](https://docs.rs/bevy/*/bevy/ecs/query/struct.Without.html):
+            As a `Player` entity won't be an `Enemy` at the same time, those two queries will actually never target the same entity. This can be encoded in the query filter with [`Without`] :
 
+          [`Without`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Without.html
             ```rust
             use bevy::prelude::*;
 
