@@ -1,6 +1,7 @@
 +++
 title = "Bevy's First Birthday"
 date = 2021-08-10
+authors = ["Carter Anderson"]
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"

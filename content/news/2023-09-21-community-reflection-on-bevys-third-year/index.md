@@ -1,6 +1,7 @@
 +++
 title = "Community Reflection on Bevy's Third Year"
 date = 2023-09-21
+authors = ["Carter Anderson"]
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"

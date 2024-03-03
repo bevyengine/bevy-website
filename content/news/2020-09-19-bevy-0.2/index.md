@@ -1,6 +1,7 @@
 +++
 title = "Bevy 0.2"
 date = 2020-09-19
+authors = ["Carter Anderson"]
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"

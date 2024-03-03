@@ -1,6 +1,7 @@
 +++
 title = "Introducing Bevy 0.1"
 date = 2020-08-10
+authors = ["Carter Anderson"]
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"

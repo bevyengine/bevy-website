@@ -1,6 +1,7 @@
 +++
 title = "SME Announcements"
 date = 2023-12-12
+authors = ["Carter Anderson"]
 [extra]
 author = "Carter Anderson"
 twitter = "cart_cart"
