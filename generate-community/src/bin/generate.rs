@@ -11,9 +11,19 @@ use std::{
 use generate_community::*;
 
 fn main() -> io::Result<()> {
-    let community_dir = std::env::args().nth(1).unwrap();
-    let content_dir = std::env::args().nth(2).unwrap();
-    let content_sub_dir = std::env::args().nth(3).unwrap();
+    let mut args = std::env::args().skip(1);
+
+    // Read CLI arguments
+    let community_dir = args
+        .next()
+        .expect("Expected first argument to be the path to the community directory.");
+    let content_dir = args
+        .next()
+        .expect("Expected second argument to be the path to the website content directory.");
+    let content_sub_dir = args
+        .next()
+        .expect("Expected third argument to be the name of the community directory.");
+
     let _ = fs::create_dir(content_dir.clone());
     let mut people_root_section = parse_members(&community_dir)?;
 
