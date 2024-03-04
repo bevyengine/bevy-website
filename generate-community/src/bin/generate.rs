@@ -28,10 +28,11 @@ fn main() -> io::Result<()> {
     // This is unlikely to ever fail.
     fs::create_dir_all(&content_dir).unwrap();
 
+    // Read a list of all people from the bevy-community directory.
     let mut people_root_section = parse_members(&community_dir)?;
 
-    let mut roles_path = PathBuf::from_str(&community_dir).unwrap();
-    roles_path.push("_roles.toml");
+    let roles_path: PathBuf = [&community_dir, "_roles.toml"].into_iter().collect();
+
     let roles: Roles = toml::de::from_str(&fs::read_to_string(&roles_path).unwrap()).unwrap();
     let role_map = roles.into_map();
     people_root_section.apply_roles(&role_map);
