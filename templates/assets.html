@@ -55,6 +55,19 @@
         </div>
       {% endfor %}
     {% endfor %}
+
+    <div id="suggestions-footer">
+      <div class="media-content">
+        Didn't find what you were looking for? See what your search reveals in our docs and in other corners of the community.
+      </div>
+
+      <div class="suggestions-list">
+        {{ assets_macros::suggestion(text="Github Q&A", id="suggestion-github", img="/assets/q_and_a.svg", url="https://github.com/bevyengine/bevy/discussions") }}
+        {{ assets_macros::suggestion(text="Docs", id="suggestion-docs", img="/assets/rust-logo-light.svg", url="https://docs.rs/bevy/latest/bevy/") }}
+        {{ assets_macros::suggestion(text="Cheatbook", id="suggestion-cheatbook", img="/assets/book.svg", url="https://bevy-cheatbook.github.io/") }}
+        {{ assets_macros::suggestion(text="Discord", id="suggestion-discord", img="/assets/discord.svg", url="https://discord.com/channels/691052431525675048/1019697973933899910") }}
+      </div>
+    </div>
   </div>
   <script type="module">import '/assets.js'</script>
 {% endblock page_content %}
