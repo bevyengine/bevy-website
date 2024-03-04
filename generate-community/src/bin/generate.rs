@@ -5,7 +5,6 @@ use std::{
     fs::{self, File},
     io::{self, prelude::*},
     path::{Path, PathBuf},
-    str::FromStr,
 };
 
 use generate_community::*;
@@ -33,9 +32,11 @@ fn main() -> io::Result<()> {
 
     let roles_path: PathBuf = [&community_dir, "_roles.toml"].into_iter().collect();
 
-    let roles: Roles = toml::de::from_str(&fs::read_to_string(&roles_path).unwrap()).unwrap();
-    let role_map = roles.into_map();
-    people_root_section.apply_roles(&role_map);
+    people_root_section.apply_roles({
+        let contents = fs::read_to_string(roles_path).expect("Could not read _roles.toml.");
+        let roles: Roles = toml::from_str(&contents).expect("_roles.toml is not valid TOML.");
+        &roles.into_map()
+    });
 
     people_root_section.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
 
