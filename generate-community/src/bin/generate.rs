@@ -24,7 +24,10 @@ fn main() -> io::Result<()> {
         .next()
         .expect("Expected third argument to be the name of the community directory.");
 
-    let _ = fs::create_dir(content_dir.clone());
+    // Create the content directory if it does not exist.
+    // This is unlikely to ever fail.
+    fs::create_dir_all(&content_dir).unwrap();
+
     let mut people_root_section = parse_members(&community_dir)?;
 
     let mut roles_path = PathBuf::from_str(&community_dir).unwrap();
