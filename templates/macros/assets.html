@@ -84,9 +84,11 @@
     {% for s in root.subsections %}{{ self::assets_menu_row(prefix=prefix, section_path=s) }}{% endfor %}
   </ul>
 {% endmacro %}
-{% macro suggestion(id, img, text, url)%}
+{% macro suggestion(id, img, text, url) %}
 <a class="suggestion-item" id="{{ id }}" href="{{ url }}" target="_blank">
-  <div class="suggestion-item__img_wrapper"><img src="{{ img }}"></div>
+  <div class="suggestion-item__img_wrapper">
+    <img src="{{ img }}" alt="{{ text }} Icon" height="24">
+  </div>
   <div class="suggestion-item__text">{{ text }}</div>
 </a>
 {% endmacro %}

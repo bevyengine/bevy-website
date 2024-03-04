@@ -106,11 +106,11 @@
         display: flex;
         align-items: center;
         padding: $asset-card-padding 0px $asset-card-padding calc($asset-card-padding * 2);
-      }
 
-      img {
-        width: 1.5rem;
-        height: 1.5rem;
+        img {
+          width: 24px;
+          height: 24px;
+        }
       }
 
       &__text {
