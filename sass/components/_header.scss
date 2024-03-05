@@ -84,9 +84,5 @@
         filter: brightness(80%)
       }
     }
-
-    &--feed {
-      @include flex-center;
-    }
   }
 }

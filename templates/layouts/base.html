@@ -158,13 +158,6 @@
                     width="98"
                     height="96" />
             </a>
-            <a class="header__cta header__cta--feed"
-                href="/atom.xml">
-              <img src="/assets/feed-icon-28x28.png"
-                    alt="Bevy news feed"
-                    width="28"
-                    height="28" />
-            </a>
           </div>
         </div>
       </header>
@@ -178,6 +171,47 @@
           {% block content %}{% endblock content %}
         </div>
       </main>
+      <footer>
+        {% block footer_extensions %}{% endblock footer_extensions %}
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="98"
+                  height="96" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="127"
+                  height="96" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="75"
+                  height="79" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="512"
+                  height="512" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="512"
+                  height="512" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed-icon-28x28.png"
+                  alt="Bevy news feed"
+                  width="28"
+                  height="28" />
+          </a>
+        </div>
+      </footer>
     </div>
     <script>
     const search_params = new URLSearchParams(window.location.search);
