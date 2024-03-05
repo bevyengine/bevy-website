@@ -31,7 +31,7 @@ fn main() -> io::Result<()> {
     fs::create_dir_all(&content_dir)?;
 
     // Read a list of all people from the bevy-community directory.
-    let mut people_root_section = parse_members(&community_dir.to_string_lossy())?;
+    let mut people_root_section = parse_members(&community_dir)?;
 
     let roles_path = community_dir.join("_roles.toml");
 

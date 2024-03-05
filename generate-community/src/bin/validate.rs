@@ -1,10 +1,13 @@
+use std::path::Path;
+
 use generate_community::*;
 use unicode_segmentation::UnicodeSegmentation;
 
 fn main() -> Result<(), String> {
     let community_dir = std::env::args().nth(1).unwrap();
 
-    let people_root_section = parse_members(&community_dir).map_err(|err| err.to_string())?;
+    let people_root_section =
+        parse_members(Path::new(&community_dir)).map_err(|err| err.to_string())?;
 
     validate_section(&people_root_section)?;
 
