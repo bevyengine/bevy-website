@@ -33,9 +33,7 @@ fn main() -> io::Result<()> {
     // Read a list of all people from the bevy-community directory.
     let mut people_root_section = parse_members(&community_dir.to_string_lossy())?;
 
-    let roles_path: PathBuf = [&community_dir, Path::new("_roles.toml")]
-        .into_iter()
-        .collect();
+    let roles_path = community_dir.join("_roles.toml");
 
     people_root_section.apply_roles({
         let contents = fs::read_to_string(roles_path).expect("Could not read _roles.toml.");
