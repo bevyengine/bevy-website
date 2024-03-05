@@ -13,24 +13,29 @@ fn main() -> io::Result<()> {
     let mut args = std::env::args().skip(1);
 
     // Read CLI arguments
-    let community_dir = args
+    let community_dir: PathBuf = args
         .next()
-        .expect("Expected first argument to be the path to the community directory.");
-    let content_dir = args
+        .expect("Expected first argument to be the path to the community directory.")
+        .into();
+    let content_dir: PathBuf = args
         .next()
-        .expect("Expected second argument to be the path to the website content directory.");
-    let content_sub_dir = args
+        .expect("Expected second argument to be the path to the website content directory.")
+        .into();
+    let content_sub_dir: PathBuf = args
         .next()
-        .expect("Expected third argument to be the name of the community directory.");
+        .expect("Expected third argument to be the name of the community directory.")
+        .into();
 
     // Create the content directory if it does not exist.
     // This is unlikely to ever fail.
     fs::create_dir_all(&content_dir).unwrap();
 
     // Read a list of all people from the bevy-community directory.
-    let mut people_root_section = parse_members(&community_dir)?;
+    let mut people_root_section = parse_members(&community_dir.to_string_lossy())?;
 
-    let roles_path: PathBuf = [&community_dir, "_roles.toml"].into_iter().collect();
+    let roles_path: PathBuf = [&community_dir, Path::new("_roles.toml")]
+        .into_iter()
+        .collect();
 
     people_root_section.apply_roles({
         let contents = fs::read_to_string(roles_path).expect("Could not read _roles.toml.");
@@ -38,7 +43,7 @@ fn main() -> io::Result<()> {
         &roles.into_map()
     });
 
-    people_root_section.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
+    people_root_section.write(&content_dir, &content_sub_dir, 0)?;
 
     let Some(CommunityNode::Section(org)) = people_root_section
         .content
@@ -62,7 +67,7 @@ fn main() -> io::Result<()> {
         member.sponsor.is_some()
     });
 
-    donate.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
+    donate.write(&content_dir, &content_sub_dir, 0)?;
 
     Ok(())
 }
