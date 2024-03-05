@@ -28,7 +28,7 @@ fn main() -> io::Result<()> {
 
     // Create the content directory if it does not exist.
     // This is unlikely to ever fail.
-    fs::create_dir_all(&content_dir).unwrap();
+    fs::create_dir_all(&content_dir)?;
 
     // Read a list of all people from the bevy-community directory.
     let mut people_root_section = parse_members(&community_dir.to_string_lossy())?;
@@ -50,6 +50,7 @@ fn main() -> io::Result<()> {
     else {
         panic!("unexpected kind of node or missing for The Bevy Organization");
     };
+
     let mut donate = org.clone();
 
     donate.name = "Supporting Bevy Development".to_string();
