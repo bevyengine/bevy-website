@@ -5,7 +5,6 @@ authors = ["Carter Anderson"]
 [extra]
 image = "webgpu.svg"
 show_image = true
-author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"

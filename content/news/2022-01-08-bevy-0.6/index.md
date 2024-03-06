@@ -3,7 +3,6 @@ title = "Bevy 0.6"
 date = 2022-01-08
 authors = ["Carter Anderson"]
 [extra]
-author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"

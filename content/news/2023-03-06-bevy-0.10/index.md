@@ -1,9 +1,7 @@
 +++
 title = "Bevy 0.10"
 date = 2023-03-06
-authors = ["Bevy Contributors"]
 [extra]
-author = "Bevy Contributors"
 image = "ruins.png"
 show_image = true
 image_subtitle = "Ruins scene illustrating Bevy's new material blend modes and fog. Based on original scene by Casey Hardy (CC Attribution)"

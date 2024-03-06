@@ -23,7 +23,7 @@
           </div>
           <div class="link-card__content">
             <h2 class="link-card__title">{{ page.title }}</h2>
-            <div class="link-card__subtitle">Written {{ page.date | date(format="%B %d, %Y") }} by {{ page.extra.author }}</div>
+            <div class="link-card__subtitle">Written {{ page.date | date(format="%B %d, %Y") }} by {% if page.authors %}{% for author in page.authors %}{{ author }}{% endfor %}{% else %}Bevy Contributors{% endif %}</div>
             <p class="link-card__description link-card__description--ellipsis">
               {{ page.summary | striptags | truncate(length=350) | safe }}
             </p>

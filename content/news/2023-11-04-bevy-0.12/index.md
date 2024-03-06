@@ -1,9 +1,7 @@
 +++
 title = "Bevy 0.12"
 date = 2023-11-04
-authors = ["Bevy Contributors"]
 [extra]
-author = "Bevy Contributors"
 image = "cover.gif"
 show_image = true
 image_subtitle = "A relaxing 'tiny planet' city builder by Jos Feenstra (made with Bevy)"
