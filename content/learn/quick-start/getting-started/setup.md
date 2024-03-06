@@ -171,7 +171,28 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustup component add llvm-tools-preview
     ```
 
-  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`. Also see the fast compiles [config file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds.toml#L14-L28) mentioned at the end of this fast compiles section for final setup of LLD on MacOS for use in Rust and Bevy.
+  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`.
+
+  You will also need to add one of the following to your Cargo config at YOUR_WORKSPACE/.cargo/config.toml depending on your OS:
+  ```
+  // for Linux
+  [target.x86_64-unknown-linux-gnu]
+  linker = "clang"
+  rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+  // for x86_64 MacOS
+  [target.x86_64-apple-darwin]
+  rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/opt/llvm/bin/ld64.lld"]
+
+  // for aarch64 MacOS
+  [target.aarch64-apple-darwin]
+  rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
+
+  // for Windows
+  [target.x86_64-pc-windows-msvc]
+  linker = "rust-lld.exe"
+  ```
+
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install mold clang`
   * **Fedora**: `sudo dnf install mold clang`
