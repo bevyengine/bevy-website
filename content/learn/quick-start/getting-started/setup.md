@@ -171,7 +171,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustup component add llvm-tools-preview
     ```
 
-  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm` Also see the fast compiles config file mentioned at the end of this fast compiles section for final setup of LLD on MacOS.
+  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`. Also see the fast compiles [config file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds.toml#L14-L28) mentioned at the end of this fast compiles section for final setup of LLD on MacOS for use in Rust and Bevy.
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install mold clang`
   * **Fedora**: `sudo dnf install mold clang`
