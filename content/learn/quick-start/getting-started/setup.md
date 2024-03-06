@@ -175,20 +175,20 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
   You will also need to add one of the following to your Cargo config at `<YOUR_WORKSPACE>/.cargo/config.toml` depending on your OS:
   ```toml
-  // for Linux
+  # for Linux
   [target.x86_64-unknown-linux-gnu]
   linker = "clang"
   rustflags = ["-C", "link-arg=-fuse-ld=lld"]
 
-  // for x86_64 MacOS
+  # for x86_64 MacOS
   [target.x86_64-apple-darwin]
   rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/opt/llvm/bin/ld64.lld"]
 
-  // for aarch64 MacOS
+  # for aarch64 MacOS
   [target.aarch64-apple-darwin]
   rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
 
-  // for Windows
+  # for Windows
   [target.x86_64-pc-windows-msvc]
   linker = "rust-lld.exe"
   ```
