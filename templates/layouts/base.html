@@ -171,6 +171,47 @@
           {% block content %}{% endblock content %}
         </div>
       </main>
+      <footer>
+        {% block footer_extensions %}{% endblock footer_extensions %}
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed.svg"
+                  alt="Bevy news feed"
+                  width="32"
+                  height="32" />
+          </a>
+        </div>
+      </footer>
     </div>
     <script>
     const search_params = new URLSearchParams(window.location.search);
