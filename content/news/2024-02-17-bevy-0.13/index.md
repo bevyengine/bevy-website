@@ -1,6 +1,7 @@
 +++
 title = "Bevy 0.13"
 date = 2024-02-17
+authors = ["Bevy Contributors"]
 [extra]
 image = "jarl.webp"
 show_image = true
