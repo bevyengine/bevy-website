@@ -16,12 +16,16 @@ fn main() -> Result<(), String> {
 const MAX_BIO_LENGTH: usize = 180;
 
 fn validate_section(section: &Section) -> Result<(), String> {
-    section
-        .content
-        .iter()
-        .map(validate_node)
-        .find(|valid| valid.is_err())
-        .unwrap_or(Ok(()))
+    // Validate each community node in the given section.
+    for node in section.content.iter() {
+        if let Err(e) = validate_node(node) {
+            // Return early on errors in validation.
+            return Err(e);
+        }
+    }
+
+    // If this gets run, then there are no validation errors.
+    Ok(())
 }
 
 fn validate_node(node: &CommunityNode) -> Result<(), String> {
