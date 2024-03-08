@@ -88,6 +88,8 @@ jobs:
 
       # Uses the generate-assets cache, which is updated in deploy.yml
       - name: Restore cached assets
+        # Do not use cache when in merge queue
+        if: ${{ github.event_name != 'merge_group' }}
         id: restore-cached-assets
         uses: actions/cache/restore@v4
         with:
@@ -96,8 +98,8 @@ jobs:
           key: assets-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
 
       - name: "Build Bevy Assets"
-        # Only run if no cache was found
-        if: ${{ !steps.restore-cached-assets.outputs.cache-hit }}
+        # Only run if in merge queue or if no cache was found
+        if: ${{ github.event_name == 'merge_group' || !steps.restore-cached-assets.outputs.cache-hit }}
         working-directory: generate-assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
