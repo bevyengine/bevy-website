@@ -97,10 +97,10 @@ jobs:
       - name: "Build Bevy Assets"
         # Only run if no cache was found
         if: ${{ !steps.restore-cached-assets.outputs.cache-hit }}
-        run: >
-          cd generate-assets &&
-          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} &&
-          ./generate_assets.sh
+        working-directory: generate-assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./generate_assets.sh
 
       - uses: actions/upload-artifact@v4
         with:
