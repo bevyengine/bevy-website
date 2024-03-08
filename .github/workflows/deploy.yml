@@ -49,6 +49,7 @@ jobs:
           BUILD_DIR: .
           TOKEN: ${{ secrets.CART_PAT }}
 
+      # Caches output of generate-assets for use in ci.yml
       - name: Update generate-assets cache
         uses: actions/cache/save@v4
         with:

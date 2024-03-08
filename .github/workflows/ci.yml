@@ -86,6 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Uses the generate-assets cache, which is updated in deploy.yml
       - name: Restore cached assets
         id: restore-cached-assets
         uses: actions/cache/restore@v4
