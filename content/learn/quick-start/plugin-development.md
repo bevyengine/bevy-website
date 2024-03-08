@@ -84,8 +84,8 @@ Indicating which version of your plugin works with which version of Bevy can be 
 ```markdown
 | bevy  | bevy_awesome_plugin |
 |-------|---------------------|
-| 0.12  | 0.3                 |
-| 0.11  | 0.1                 |
+| 0.13  | 0.3                 |
+| 0.12  | 0.1                 |
 ```
 
 ## Main Branch Tracking
