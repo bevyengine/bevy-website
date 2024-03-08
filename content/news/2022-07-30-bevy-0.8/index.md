@@ -1,8 +1,8 @@
 +++
 title = "Bevy 0.8"
 date = 2022-07-30
+authors = ["Carter Anderson"]
 [extra]
-author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"

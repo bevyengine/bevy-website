@@ -1,0 +1,18 @@
+.footer {
+  &__social-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  &__social {
+    img {
+      filter: grayscale(1) brightness(800%);
+      &:hover {
+        scale: 110%;
+      }
+    }
+  }
+}
