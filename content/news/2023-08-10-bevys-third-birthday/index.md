@@ -1,8 +1,8 @@
 +++
 title = "Bevy's Third Birthday"
 date = 2023-08-10
+authors = ["Carter Anderson"]
 [extra]
-author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"

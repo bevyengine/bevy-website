@@ -42,3 +42,4 @@ We will cover these a bit more in the next pages. Speaking of which, let's final
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
+[`Plugins`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html
