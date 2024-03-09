@@ -86,6 +86,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
       # Uses the generate-assets cache, which is updated in deploy.yml
       - name: Restore cached assets
         # Do not use cache when in merge queue
@@ -95,7 +99,7 @@ jobs:
         with:
           # Must be kept in sync with deploy.yml
           path: content/assets
-          key: assets-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
+          key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
 
       - name: "Build Bevy Assets"
         # Only run if in merge queue or if no cache was found
