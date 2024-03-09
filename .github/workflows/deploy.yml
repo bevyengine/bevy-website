@@ -13,6 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Cache multiple crates.io datadump
+        uses: actions/cache@v4
+        with:
+          path: generate-assets/data
+          key: ${{ runner.os }}-${{ steps.date.outputs.date }}
+
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh
         env:
@@ -38,10 +48,6 @@ jobs:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .
           TOKEN: ${{ secrets.CART_PAT }}
-
-      - name: Get current date
-        id: date
-        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       # Caches output of generate-assets for use in ci.yml
       - name: Update generate-assets cache
