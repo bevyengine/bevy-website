@@ -8,6 +8,10 @@ on:
       - 'staging'
       - 'trying'
 
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: ${{github.event_name == 'pull_request'}}
+
 jobs:
   mega-linter:
     runs-on: ubuntu-latest
