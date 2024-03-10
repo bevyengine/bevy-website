@@ -9,8 +9,10 @@ on:
       - 'trying'
 
 concurrency:
-  group: ${{github.workflow}}-${{github.ref}}
-  cancel-in-progress: ${{github.event_name == 'pull_request'}}
+  # Only the same workflows on the same branch can cancel each other.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Only cancel runs in a PR; we don't want to cancel commit checks on main.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   mega-linter:
