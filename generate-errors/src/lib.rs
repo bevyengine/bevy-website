@@ -8,15 +8,16 @@ use std::{
 
 /// Gets the unordered content of the error pages
 /// supplied by user via
-/// a path to a local Bevy git repo.
-pub fn get_error_pages(bevy_repo_path: &Path) -> anyhow::Result<HashMap<String, String>> {
-    if !bevy_repo_path.try_exists()? {
-        return Err(anyhow!("The path ({bevy_repo_path:?}) is invalid"));
+/// a path to the directory containing
+/// the original Bevy error files.
+pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String, String>> {
+    if !bevy_errors_path.try_exists()? {
+        return Err(anyhow!("The path ({bevy_errors_path:?}) is invalid"));
     }
 
     let mut error_page_paths: Vec<PathBuf> = vec![];
 
-    let entries = bevy_repo_path.read_dir()?;
+    let entries = bevy_errors_path.read_dir()?;
     let regex = Regex::new(r"B[0-9]{4}")?;
 
     for entry in entries {
@@ -63,8 +64,8 @@ pub fn get_error_pages(bevy_repo_path: &Path) -> anyhow::Result<HashMap<String, 
 ///
 /// The content folder passed should be
 /// the Zola content folder.
-pub fn write_section(content_folder_path: &Path) -> anyhow::Result<()> {
-    let errors_folder_path = content_folder_path.join("errors");
+pub fn write_section(output_path: &Path) -> anyhow::Result<()> {
+    let errors_folder_path = output_path.join("errors");
     // make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
@@ -97,10 +98,10 @@ In case you are looking for the latest error codes from Bevy's main branch, you 
 }
 
 pub fn write_pages(
-    content_folder_path: &Path,
+    output_path: &Path,
     pages: HashMap<String, String>,
 ) -> anyhow::Result<()> {
-    let errors_folder_path = content_folder_path.join("errors");
+    let errors_folder_path = output_path.join("errors");
     // make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
@@ -150,20 +151,20 @@ mod tests {
     #[test]
     fn test_write_section() {
         // fake content folder
-        let content_path = Path::new("content/learn");
+        let output_path = Path::new("content/learn");
 
-        let result: anyhow::Result<()> = write_section(content_path);
+        let result: anyhow::Result<()> = write_section(output_path);
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_write_pages() {
         //fake content folder
-        let content_path = Path::new("content/learn");
+        let output_path = Path::new("content/learn");
         let pages_content =
             get_error_pages(Path::new("./bevy/errors")).expect("Page content should be valid");
 
-        let result: anyhow::Result<()> = write_pages(content_path, pages_content);
+        let result: anyhow::Result<()> = write_pages(output_path, pages_content);
         assert!(result.is_ok());
 
         // clean up after tests
