@@ -53,6 +53,44 @@ pub fn get_error_pages(bevy_repo_path: &Path) -> anyhow::Result<HashMap<String, 
     Ok(results_map)
 }
 
+/// Writes a valid docs section to contain
+/// the error pages in.
+///
+/// The content folder passed should be
+/// the Zola content folder.
+pub fn write_section(content_folder_path: &Path) -> anyhow::Result<()> {
+    let errors_folder_path = content_folder_path.join("learn/errors");
+    // make sure the output folder exists
+    fs::create_dir_all(&errors_folder_path)?;
+
+    let section_content = r#"+++
+title = "Errors"
+template = "docs-section.html"
+page_template = "docs-page.html"
+redirect_to = "/learn/errors/introduction"
++++
+"#;
+
+    let introduction_content = r#"+++
+title = "Introduction"
+[extra]
+weight = 0
++++
+
+These pages document Bevy's error codes for the _current release_.
+
+In case you are looking for the latest error codes from Bevy's main branch, you can find them in the [repository](<https://github.com/bevyengine/bevy/tree/main/errors>). 
+"#;
+
+    fs::write(errors_folder_path.join("_index.md"), section_content)?;
+    fs::write(
+        errors_folder_path.join("introduction.md"),
+        introduction_content,
+    )?;
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -62,5 +100,14 @@ mod tests {
         let error_content: anyhow::Result<HashMap<String, String>> =
             get_error_pages(Path::new("./bevy/errors"));
         assert!(error_content.is_ok());
+    }
+
+    #[test]
+    fn test_write_section() {
+        // fake content folder
+        let content_path = Path::new("content");
+
+        let result: anyhow::Result<()> = write_section(content_path);
+        assert!(result.is_ok());
     }
 }

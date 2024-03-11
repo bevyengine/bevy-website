@@ -2250,9 +2250,8 @@ dependencies = [
 name = "generate-errors"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "regex",
- "serde",
- "toml 0.5.11",
 ]
 
 [[package]]
