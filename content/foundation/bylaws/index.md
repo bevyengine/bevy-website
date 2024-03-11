@@ -9,7 +9,7 @@ header_message = "Foundation Bylaws"
 
 ## Article 1. Offices
 
-The principal office of Bevy Foundation (the “Corporation) shall be located at its principal place of business or such other place as the Board of Directors (“Board”) may designate. The Corporation may have other such offices, either within or without the State of Washington, as the Board may designate or as the business of the Corporation may require from time to time.
+The principal office of Bevy Foundation (the “Corporation") shall be located at its principal place of business or such other place as the Board of Directors (“Board”) may designate. The Corporation may have other such offices, either within or without the State of Washington, as the Board may designate or as the business of the Corporation may require from time to time.
 
 ## Article 2. Purpose
 
