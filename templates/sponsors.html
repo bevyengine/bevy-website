@@ -57,7 +57,7 @@
         {% for sponsor in sponsors_in_tier %}
         {% if tier.reward_logo %}
         <a class="sponsors__link" href="{{ sponsor.link }}">
-            <img class="sponsors__logo" {% if sponsor.style %}style="{{ sponsor.style }}"{% endif %} src="assets/sponsors/{{ sponsor.image }}"
+            <img class="sponsors__logo" {% if sponsor.style %}style="{{ sponsor.style }}"{% endif %} src="/assets/sponsors/{{ sponsor.image }}"
                 alt="{{ sponsor.name }} logo" />
         </a>
         {% elif tier.reward_link %}
