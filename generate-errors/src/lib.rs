@@ -91,6 +91,46 @@ In case you are looking for the latest error codes from Bevy's main branch, you 
     Ok(())
 }
 
+pub fn write_pages(
+    content_folder_path: &Path,
+    pages: HashMap<String, String>,
+) -> anyhow::Result<()> {
+    let errors_folder_path = content_folder_path.join("learn/errors");
+    // make sure the output folder exists
+    fs::create_dir_all(&errors_folder_path)?;
+
+    // make the keys ordered so that
+    // we know the weights for the pages
+    let mut keys: Vec<&String> = pages.keys().collect();
+    keys.sort_unstable();
+
+    for (index, key) in keys.iter().enumerate() {
+        let page_content = format!(
+            r#"+++
+title = "{}"
+[extra]
+weight = {}
++++
+
+{}"#,
+            key.strip_suffix(".md").unwrap_or(key),
+            // since the introduction page takes the
+            // zeroth position we need to treat the keys
+            // like they're one indexed to not have
+            // conflicting weights which have
+            // undefined behavior.
+            index + 1,
+            pages
+                .get(*key)
+                .ok_or(anyhow!("The page content for {key} isn't valid!"))?
+        );
+
+        fs::write(errors_folder_path.join(key.to_lowercase()), page_content)?;
+    }
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -108,6 +148,17 @@ mod tests {
         let content_path = Path::new("content");
 
         let result: anyhow::Result<()> = write_section(content_path);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_write_pages() {
+        //fake content folder
+        let content_path = Path::new("content");
+        let pages_content =
+            get_error_pages(Path::new("./bevy/errors")).expect("Page content should be valid");
+
+        let result: anyhow::Result<()> = write_pages(content_path, pages_content);
         assert!(result.is_ok());
     }
 }
