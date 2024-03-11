@@ -11,6 +11,10 @@ use std::{
 /// a path to the directory containing
 /// the original Bevy error files.
 pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String, String>> {
+    // Guard clause that determines
+    // if a path exists and is valid
+    // and not a broken symbolic link.
+    // Otherwise it errors and returns.
     if !bevy_errors_path.try_exists()? {
         return Err(anyhow!("The path ({bevy_errors_path:?}) is invalid"));
     }
@@ -48,7 +52,7 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
             .to_string_lossy()
             .into_owned();
         let content = String::from_utf8(fs::read(path)?)?;
-        // the error pages already have a header built-in
+        // The error pages already have a header built-in
         // but Zola provides its own title header
         // so we need to remove this for proper formatting
         let regex = Regex::new(r"# B[0-9]{4}")?;
@@ -66,7 +70,7 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
 /// you want the Zola pages to be written / output.
 pub fn write_section(output_path: &Path) -> anyhow::Result<()> {
     let errors_folder_path = output_path.join("errors");
-    // make sure the output folder exists
+    // Make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
     let section_content = r#"+++
@@ -99,10 +103,10 @@ In case you are looking for the latest error codes from Bevy's main branch, you 
 
 pub fn write_pages(output_path: &Path, pages: HashMap<String, String>) -> anyhow::Result<()> {
     let errors_folder_path = output_path.join("errors");
-    // make sure the output folder exists
+    // Make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
-    // make the keys ordered so that
+    // Make the keys ordered so that
     // we know the weights for the pages
     let mut keys: Vec<&String> = pages.keys().collect();
     keys.sort_unstable();
@@ -117,7 +121,7 @@ weight = {}
 
 {}"#,
             key.strip_suffix(".md").unwrap_or(key),
-            // since the introduction page takes the
+            // Since the introduction page takes the
             // zeroth position we need to treat the keys
             // like they're one indexed to not have
             // conflicting weights which have
@@ -147,7 +151,7 @@ mod tests {
 
     #[test]
     fn test_write_section() {
-        // fake content folder
+        // Fake content folder
         let output_path = Path::new("content/learn");
 
         let result: anyhow::Result<()> = write_section(output_path);
@@ -156,7 +160,7 @@ mod tests {
 
     #[test]
     fn test_write_pages() {
-        //fake content folder
+        // Fake content folder
         let output_path = Path::new("content/learn");
         let pages_content =
             get_error_pages(Path::new("./bevy/errors")).expect("Page content should be valid");
@@ -164,7 +168,7 @@ mod tests {
         let result: anyhow::Result<()> = write_pages(output_path, pages_content);
         assert!(result.is_ok());
 
-        // clean up after tests
+        // Clean up after tests
         fs::remove_dir_all("content").unwrap();
     }
 }
