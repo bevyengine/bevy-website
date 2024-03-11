@@ -46,8 +46,13 @@ pub fn get_error_pages(bevy_repo_path: &Path) -> anyhow::Result<HashMap<String, 
             .ok_or(anyhow!("An error page path has an invalid file stem"))?
             .to_string_lossy()
             .into_owned();
-        let content = fs::read(path)?;
-        results_map.insert(file_name, String::from_utf8(content)?);
+        let content = String::from_utf8(fs::read(path)?)?;
+        // the error pages already have a header built-in
+        // but Zola provides its own title header
+        // so we need to remove this for proper formatting
+        let regex = Regex::new(r"# B[0-9]{4}")?;
+        let regex_content = regex.replace(content.as_str(), "");
+        results_map.insert(file_name, regex_content.to_string());
     }
 
     Ok(results_map)
