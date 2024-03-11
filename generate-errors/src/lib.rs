@@ -62,8 +62,8 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
 /// Writes a valid docs section to contain
 /// the error pages in.
 ///
-/// The content folder passed should be
-/// the Zola content folder.
+/// The output path passed should be the folder
+/// you want the Zola pages to be written / output.
 pub fn write_section(output_path: &Path) -> anyhow::Result<()> {
     let errors_folder_path = output_path.join("errors");
     // make sure the output folder exists
