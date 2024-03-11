@@ -31,6 +31,14 @@
     }
   }
 
+  &__name {
+    display: block;
+    margin: 0 0 16px;
+    @media #{$bp-tablet-landscape-up} {
+      margin: 0 24px 24px;
+    }
+  }
+
   &__link {
     display: block;
     margin: 0 0 16px;
@@ -84,8 +92,9 @@
         ('tier': 'corporate_diamond', 'height': 120px),
         ('tier': 'corporate_platinum', 'height': 100px),
         ('tier': 'corporate_gold', 'height': 90px),
-        ('tier': 'corporate_silver', 'height': 80px),
-        ('tier': 'corporate_bronze', 'height': 60px),
+        ('tier': 'corporate_silver', 'height': 85px),
+        ('tier': 'corporate_bronze', 'height': 80px),
+        ('tier': 'diamond', 'height': 80px),
     );
 
 @each $tier in $tiers {
