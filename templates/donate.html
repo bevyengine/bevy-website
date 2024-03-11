@@ -3,7 +3,7 @@
 
 {% block head_extensions %}
     <script src="/donate.js"></script>
-{% endblock %}
+{% endblock head_extensions %}
 
 {% block content %}
 
@@ -69,7 +69,7 @@
     </div>
     <div class="donate-metrics">
         <div class="donate-metric">
-            <span class="donate-number">${{monthly_donations_string}}</span>
+            <span class="donate-number">${{ monthly_donations_string }}</span>
             <span class="donate-number-label">Per Month</span>
         </div>
         <div class="donate-metric">
@@ -92,12 +92,12 @@
                 {% continue %}
             {% endif %}
             {% set amount_string = numbers::comma_string(value=tier.amount) %}
-            <a href="{{tier.donate_link}}" class="card donate-level">
+            <a href="{{ tier.donate_link }}" class="card donate-level">
                 <div class="donate-level-info">
-                    <img class="donate-level-icon" src="{{tier.icon}}"/>
-                    <div class="donate-level-text donate-level-{{tier.name | replace(from=" ", to="_") | lower}}">
-                        <div class="donate-level-name">{{tier.name}}</div>
-                        <div class="donate-level-amount">${{amount_string}} / month</div>
+                    <img class="donate-level-icon" alt="donate level icon" src="{{ tier.icon }}"/>
+                    <div class="donate-level-text donate-level-{{ tier.name | replace(from=" ", to="_") | lower }}">
+                        <div class="donate-level-name">{{ tier.name }}</div>
+                        <div class="donate-level-amount">${{ amount_string }} / month</div>
                     </div>
                 </div>
                 <div class="tier-rewards">
@@ -132,13 +132,13 @@ These tiers exist for individuals or organizations that want to support Bevy in 
             {% continue %}
         {% endif %}
         {% set amount_string = numbers::comma_string(value=tier.amount) %}
-        <a href="{{tier.donate_link}}" class="card donate-level">
+        <a href="{{ tier.donate_link }}" class="card donate-level">
             <div class="donate-level-info">
-                <img class="donate-level-icon" src="{{tier.icon}}"/>
-                <div class="donate-level-text donate-level-{{tier.name | replace(from="Corporate ", to="") | replace(from=" ", to="_") | lower}}">
+                <img alt="donate level icon" class="donate-level-icon" src="{{ tier.icon }}"/>
+                <div class="donate-level-text donate-level-{{ tier.name | replace(from="Corporate ", to="") | replace(from=" ", to="_") | lower }}">
                     <div class="donate-level-corporate">Corporate</div>
-                    <div class="donate-level-name">{{tier.name | replace(from="Corporate ", to="") }}</div>
-                    <div class="donate-level-amount">${{amount_string}} / month</div>
+                    <div class="donate-level-name">{{ tier.name | replace(from="Corporate ", to="") }}</div>
+                    <div class="donate-level-amount">${{ amount_string }} / month</div>
                 </div>
             </div>
             <div class="tier-rewards">
@@ -166,9 +166,6 @@ These tiers exist for individuals or organizations that want to support Bevy in 
 {% include "sponsors.html" %}
 
 {% include "individual-sponsors.html" %}
-
-
 </div>
-
 
 {% endblock content %}
