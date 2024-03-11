@@ -3,7 +3,7 @@
 This website utility tool takes the documentation of Bevy-unique error codes from the Bevy engine repo and makes them valid Zola pages.
 
 For most uses run the bash script from any directory:
-`./generate-assets/generate-errors.sh`
+`./generate-errors/generate-errors.sh`
 or
 `./generate-errors.sh`
 
