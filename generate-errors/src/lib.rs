@@ -64,7 +64,7 @@ pub fn get_error_pages(bevy_repo_path: &Path) -> anyhow::Result<HashMap<String, 
 /// The content folder passed should be
 /// the Zola content folder.
 pub fn write_section(content_folder_path: &Path) -> anyhow::Result<()> {
-    let errors_folder_path = content_folder_path.join("learn/errors");
+    let errors_folder_path = content_folder_path.join("errors");
     // make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
@@ -100,7 +100,7 @@ pub fn write_pages(
     content_folder_path: &Path,
     pages: HashMap<String, String>,
 ) -> anyhow::Result<()> {
-    let errors_folder_path = content_folder_path.join("learn/errors");
+    let errors_folder_path = content_folder_path.join("errors");
     // make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
@@ -150,7 +150,7 @@ mod tests {
     #[test]
     fn test_write_section() {
         // fake content folder
-        let content_path = Path::new("content");
+        let content_path = Path::new("content/learn");
 
         let result: anyhow::Result<()> = write_section(content_path);
         assert!(result.is_ok());
@@ -159,7 +159,7 @@ mod tests {
     #[test]
     fn test_write_pages() {
         //fake content folder
-        let content_path = Path::new("content");
+        let content_path = Path::new("content/learn");
         let pages_content =
             get_error_pages(Path::new("./bevy/errors")).expect("Page content should be valid");
 
