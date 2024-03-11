@@ -57,7 +57,42 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
         // so we need to remove this for proper formatting
         let regex = Regex::new(r"# B[0-9]{4}")?;
         let regex_content = regex.replace(content.as_str(), "");
-        results_map.insert(file_name, regex_content.to_string());
+
+        // Code blocks will be invalid unless
+        // the annotations are before the language
+        // like `should_panic,rust` or `no_run,rust`.
+        let mut content: String = String::new();
+        for line in regex_content.lines() {
+            // Ensure we only operate on
+            // Rust code blocks.
+            if !line.starts_with("```rust") {
+                content.push_str(line);
+                content.push('\n');
+                continue;
+            }
+
+
+            let annotations = line.strip_prefix("```").ok_or(anyhow!("Failed to find start of code block to strip from string"))?.split(',');
+
+            let mut line: String = String::from("```");
+
+            // Add all annotations other than rust
+            // to the content first to avoid the issue.
+            for annotation in annotations {
+                if annotation == "rust" {
+                    continue;
+                }
+
+                line.push_str(annotation);
+                line.push(',');
+            }
+            line.push_str("rust");
+
+            content.push_str(&line);
+            content.push('\n');
+        }
+        
+        results_map.insert(file_name, content.to_string());
     }
 
     Ok(results_map)
