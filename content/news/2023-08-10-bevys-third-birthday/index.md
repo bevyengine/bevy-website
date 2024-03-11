@@ -1,8 +1,8 @@
 +++
 title = "Bevy's Third Birthday"
 date = 2023-08-10
+authors = ["Carter Anderson"]
 [extra]
-author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
@@ -119,7 +119,7 @@ I'm very proud of our Maintainers, who regularly go above and beyond to make Bev
 * **[Rob Swain (@superdump)](https://github.com/superdump)** for being our rendering ring leader: developing new features, helping other renderer developers get things done, and writing long detailed threads about renderer feature design and rationale.
 * **[James Liu (@james7132)](https://github.com/sponsors/james7132)** for [meticulous attention to performance](https://github.com/bevyengine/bevy/issues?q=author%3Ajames7132+label%3AC-Performance+), especially in the ECS area.
 
-I am very fortunate to work with such capable people. Bevy would be a very different (and much worse) project without them. Please show your support by [sponsoring them](/community/donate/)!
+I am very fortunate to work with such capable people. Bevy would be a very different (and much worse) project without them. Please show your support by [sponsoring them](/donate/)!
 
 ## There Is Always Room For Improvement
 
@@ -225,7 +225,7 @@ We have [plenty of other work in the pipeline](https://github.com/bevyengine/bev
 
 One last reminder that you should write your own Bevy Birthday blog posts. [Submit them here](https://github.com/bevyengine/bevy-website/issues/728)!
 
-If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](/community/), and consider [sponsoring our work](/community/donate) to ensure we can continue building and leading this wildly ambitious project.
+If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](/community/), and consider [sponsoring our work](/donate) to ensure we can continue building and leading this wildly ambitious project.
 
 I'm looking forward to spending another year building Bevy with you all!
 

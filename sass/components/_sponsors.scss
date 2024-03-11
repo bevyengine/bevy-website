@@ -31,6 +31,14 @@
     }
   }
 
+  &__name {
+    display: block;
+    margin: 0 0 16px;
+    @media #{$bp-tablet-landscape-up} {
+      margin: 0 24px 24px;
+    }
+  }
+
   &__link {
     display: block;
     margin: 0 0 16px;
@@ -40,38 +48,74 @@
     }
   }
 
-  &__logo {
-    object-fit: contain;
-  }
+    &__amount {
+        margin-top: -4px;
+        font-size: 1.2rem;
+        color: rgb(150, 150, 150);
+    }
 
-  $tiers: (
-    ("tier": "patron", "color": $color-white, "height": 190px),
-    ("tier": "diamond", "color": #a3daeb, "height": 120px),
-    ("tier": "platinum", "color": $color-white, "height": 100px),
-    ("tier": "gold", "color": $color-gold, "height": 90px),
-    ("tier": "silver", "color": #bbb, "height": 80px),
-    ("tier": "bronze", "color": #9f7d6c, "height": 60px),
-  );
+    &__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+
+        @media #{$bp-tablet-landscape-up} {
+            max-width: none;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+
+    &__link {
+        display: block;
+        margin: 0 0 16px;
+
+        @media #{$bp-tablet-landscape-up} {
+            margin: 0 24px 24px;
+        }
+    }
+
+    &__logo {
+        object-fit: contain;
+        transition: transform .2s; /* Animation */
+    }
+
+    &__logo:hover {
+        transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+    $tiers: (
+        ('tier': 'patron', 'height': 190px),
+        ('tier': 'corporate_diamond', 'height': 120px),
+        ('tier': 'corporate_platinum', 'height': 100px),
+        ('tier': 'corporate_gold', 'height': 90px),
+        ('tier': 'corporate_silver', 'height': 85px),
+        ('tier': 'corporate_bronze', 'height': 80px),
+        ('tier': 'diamond', 'height': 80px),
+    );
 
 @each $tier in $tiers {
-  &--#{map-get($tier, "tier")} {
-    .sponsors {
-      &__title {
-        color: map-get($tier, "color");
-      }
-
-      &__amount {
-        color: map-get($tier, "color");
-      }
-
-      &__logo {
-        width: 100%;
-        max-height: map-get($tier, "height");
-      }
+    &--#{map-get($tier, 'tier')} {
+        .sponsors {
+            &__logo {
+                width: 100%;
+                max-height: map-get($tier, 'height');
+            }
+        }
     }
   }
 }
+
+.sponsors-section {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 1.5rem !important;
+    line-height: 2.2rem !important;
 }
+
 
 .past-sponsors-title {
   font-size: 2.8rem;

@@ -48,3 +48,10 @@ jobs:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .
           TOKEN: ${{ secrets.CART_PAT }}
+
+      # Caches output of generate-assets for use in ci.yml
+      - name: Update generate-assets cache
+        uses: actions/cache/save@v4
+        with:
+          path: content/assets
+          key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}

@@ -393,31 +393,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            generate-assets/target/
-          key: ${{ runner.os }}-generate-assets-${{ hashFiles('generate-assets/Cargo.toml') }}
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-      - name: Get cache key
-        id: cache-key
-        run: echo "key=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-
-      - name: Get crates.io datadump from cache
-        uses: actions/cache@v4
+      # Uses the generate-assets cache, which is updated in deploy.yml
+      - name: Restore cached assets
+        # Do not use cache when in merge queue
+        if: ${{ github.event_name != 'merge_group' }}
+        id: restore-cached-assets
+        uses: actions/cache/restore@v4
         with:
-          path: generate-assets/data
-          key: ${{ runner.os }}-${{ steps.cache-key.outputs.key }}
+          # Must be kept in sync with deploy.yml
+          path: content/assets
+          key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
 
       - name: "Build Bevy Assets"
-        run: >
-          cd generate-assets &&
-          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} &&
-          ./generate_assets.sh
+        # Only run if in merge queue or if no cache was found
+        if: ${{ github.event_name == 'merge_group' || !steps.restore-cached-assets.outputs.cache-hit }}
+        working-directory: generate-assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./generate_assets.sh
 
       - uses: actions/upload-artifact@v4
         with:

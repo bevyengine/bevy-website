@@ -10,7 +10,7 @@ One of Bevy's core principles is modularity. All Bevy engine features are implem
 
 This also means you are free to replace any components you don't like. If you feel the need, you are welcome to build your own [`UiPlugin`], but consider [contributing it back to Bevy](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md) if you think it would be useful!
 
-Those not contributed back into Bevy and instead released separately are third-party plugins. These are useful and easy to use additons created by fellow developers that can help you avoid re-inventing the wheel. To use them all you have to do is:
+Those not contributed back into Bevy and instead released separately are third-party plugins. These are useful and easy to use additions created by fellow developers that can help you avoid re-inventing the wheel. To use them all you have to do is:
 
 1. Find a third party Bevy plugin (like those at the [Assets page](/assets)).
 2. Add it to your `Cargo.toml` as a crate under `[dependencies]`.
@@ -30,7 +30,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, (greet_people, update_people).chain()))
+        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
         .run();
 }
 ```
@@ -65,7 +65,7 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, HelloPlugin))
         .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, (greet_people, update_people).chain()))
+        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
         .run();
 }
 ```
@@ -77,7 +77,7 @@ Note `add_plugins` can add any number of plugins (or plugin groups like `Default
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, add_people)
-            .add_systems(Update, (hello_world, (greet_people, update_people).chain()));
+            .add_systems(Update, (hello_world, (update_people, greet_people).chain()));
     }
 }
 
