@@ -165,5 +165,8 @@ mod tests {
 
         let result: anyhow::Result<()> = write_pages(content_path, pages_content);
         assert!(result.is_ok());
+
+        // clean up after tests
+        fs::remove_dir_all("content").unwrap();
     }
 }
