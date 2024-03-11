@@ -129,7 +129,7 @@ weight = {}
             index + 1,
             pages
                 .get(*key)
-                .ok_or(anyhow!("The page content for {key} isn't valid!"))?
+                .ok_or(anyhow!("The page content for {key} doesn't exist in the HashMap!"))?
         );
 
         fs::write(errors_folder_path.join(key.to_lowercase()), page_content)?;
