@@ -8,7 +8,7 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Path to the directory containg the
+    /// Path to the directory containing the
     /// error files stored in the
     /// local Bevy GitHub repo.
     #[arg(long)]
