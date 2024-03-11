@@ -8,10 +8,9 @@ authors = [
 license = "MIT"
 edition = "2018"
 
-[dependencies]
-serde = { version = "1", features = [ "derive" ] }
-toml = "0.5"
-regex = "1.5"
-
 [lints]
 workspace = true
+
+[dependencies]
+anyhow = "1.0.80"
+regex = "1.10.3"
