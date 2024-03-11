@@ -71,8 +71,12 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
                 continue;
             }
 
-
-            let annotations = line.strip_prefix("```").ok_or(anyhow!("Failed to find start of code block to strip from string"))?.split(',');
+            let annotations = line
+                .strip_prefix("```")
+                .ok_or(anyhow!(
+                    "Failed to find start of code block to strip from string"
+                ))?
+                .split(',');
 
             let mut line: String = String::from("```");
 
@@ -91,7 +95,7 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
             content.push_str(&line);
             content.push('\n');
         }
-        
+
         results_map.insert(file_name, content.to_string());
     }
 
@@ -162,9 +166,9 @@ weight = {}
             // conflicting weights which have
             // undefined behavior.
             index + 1,
-            pages
-                .get(*key)
-                .ok_or(anyhow!("The page content for {key} doesn't exist in the HashMap!"))?
+            pages.get(*key).ok_or(anyhow!(
+                "The page content for {key} doesn't exist in the HashMap!"
+            ))?
         );
 
         fs::write(errors_folder_path.join(key.to_lowercase()), page_content)?;
