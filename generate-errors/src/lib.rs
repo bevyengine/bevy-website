@@ -97,10 +97,7 @@ In case you are looking for the latest error codes from Bevy's main branch, you 
     Ok(())
 }
 
-pub fn write_pages(
-    output_path: &Path,
-    pages: HashMap<String, String>,
-) -> anyhow::Result<()> {
+pub fn write_pages(output_path: &Path, pages: HashMap<String, String>) -> anyhow::Result<()> {
     let errors_folder_path = output_path.join("errors");
     // make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
