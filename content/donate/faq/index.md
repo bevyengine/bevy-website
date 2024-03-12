@@ -13,7 +13,7 @@ Tiers that support logos require reaching out to <bevyengine@gmail.com>. Send us
 
 If you paid through Stripe (currently the only way to set up a donation subscription), just [visit this link](https://billing.stripe.com/p/login/7sI3ee5OXbI7dgIaEE) and enter the email you used to set up the subscription.
 
-## I donated at tier that adds me to the credits, can I use whatever name / logo / link I want?
+## I donated at a tier that adds me to the credits, can I use whatever name / logo / link I want?
 
 We reserve the right to refuse to list any name / link / logo for any reason. If it is obnoxious, offensive, rude, or a violation of our [Code of Conduct](https://github.com/bevyengine/bevy/blob/main/CODE_OF_CONDUCT.md), expect us to refuse to list it.
 
