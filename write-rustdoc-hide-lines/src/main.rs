@@ -66,7 +66,7 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
     }
 
     if !unformatted_files.is_empty() {
-        eprintln!("\nThe following files are not formatted:");
+        println!("\nThe following files are not formatted:");
 
         for path in unformatted_files {
             if is_ci {
@@ -74,7 +74,7 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
                 // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
                 println!("::error file={0:?},title=File is not formatted with correct hide-lines annotations::- {0:?}", path);
             } else {
-                eprintln!("- {:?}", path);
+                println!("- {:?}", path);
             }
         }
 
