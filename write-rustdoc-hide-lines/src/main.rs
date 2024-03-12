@@ -31,26 +31,41 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
     // An aggregate list of all unformatted files, empty by default.
     let mut unformatted_files = Vec::new();
 
+    // Detect if we're running through Github Actions or not.
+    // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+    let is_ci = env::var("GITHUB_ACTIONS").is_ok_and(|x| x == "true");
+
     for folder in folders {
-        println!("\nChecking folder {:?}", folder);
+        if is_ci {
+            // Create an collapsible group for all files checked.
+            // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines
+            println!("::group::Checking folder {:?}", folder);
+        } else {
+            println!("\nChecking folder {:?}", folder);
+        }
 
         // Checks folders, exiting early if an error occurred.
         match formatter::check(&folder) {
             // Merge new unformatted files into existing unformatted files.
             Ok(mut unformatted) => unformatted_files.append(&mut unformatted),
             Err(error) => {
+                if is_ci {
+                    // End group if an error occured, so it is not hidden.
+                    println!("::endgroup::");
+                }
+
                 eprintln!("Error: {}", error);
 
                 return ExitCode::FAILURE;
             }
         }
+
+        if is_ci {
+            println!("::endgroup::");
+        }
     }
 
     if !unformatted_files.is_empty() {
-        // Detect if we're running through Github Actions or not.
-        // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
-        let is_ci = env::var("GITHUB_ACTIONS").is_ok_and(|x| x == "true");
-
         eprintln!("\nThe following files are not formatted:");
 
         for path in unformatted_files {
