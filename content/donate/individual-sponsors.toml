@@ -112,6 +112,12 @@ amount = 1000
 
 [[sponsor]]
 past = true
+name = "MeetKai"
+recipient ="cart"
+amount = 1000
+
+[[sponsor]]
+past = true
 name = "Striked"
 recipient ="cart"
 amount = 100
