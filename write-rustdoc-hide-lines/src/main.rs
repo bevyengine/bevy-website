@@ -50,7 +50,7 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
             Ok(mut unformatted) => unformatted_files.append(&mut unformatted),
             Err(error) => {
                 if is_ci {
-                    // End group if an error occured, so it is not hidden.
+                    // End group if an error occurred, so it is not hidden.
                     println!("::endgroup::");
                 }
 
