@@ -47,11 +47,23 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
     }
 
     if !unformatted_files.is_empty() {
+        // Detect if we're running through Github Actions or not.
+        // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+        let is_ci = env::var("GITHUB_ACTIONS").is_ok_and(|x| x == "true");
+
         eprintln!("\nThe following files are not formatted:");
 
         for path in unformatted_files {
-            eprintln!("- {:?}", path);
+            if is_ci {
+                // Print custom error message, formatted in Github Actions.
+                // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
+                println!("::error file={0:?},title=File is not formatted with correct hide-lines annotations::- {0:?}", path);
+            } else {
+                eprintln!("- {:?}", path);
+            }
         }
+
+        println!("\nRun write_rustdoc_hide_lines.sh to automatically fix these errors.");
 
         ExitCode::FAILURE
     } else {
