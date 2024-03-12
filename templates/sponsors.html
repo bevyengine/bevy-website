@@ -61,8 +61,8 @@
                 alt="{{ sponsor.name }} logo" />
         </a>
         {% elif tier.reward_link %}
-        <a class="sponsors__link" href="{{ sponsor.link }}">
-            <div class="sponsors__name">{{ sponsor.name }}</div>
+        <a class="sponsors__name sponsors__link" href="{{ sponsor.link }}">
+            {{ sponsor.name }}
         </a>
         {% elif tier.reward_name %}
         <div class="sponsors__name">{{ sponsor.name }}</div>

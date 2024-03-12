@@ -6,14 +6,20 @@ amount = 250
 source = "stripe"
 
 [[sponsor]]
-name = "Ida \"Iyes\""
-amount = 25
-source = "stripe"
-
-[[sponsor]]
 name = "abledbody"
 link = "https://github.com/abledbody"
 amount = 100
+source = "stripe"
+
+[[sponsor]]
+name = "Cult, Inc."
+link = "https://cult.app"
+amount = 100
+source = "stripe"
+
+[[sponsor]]
+name = "Ida \"Iyes\""
+amount = 25
 source = "stripe"
 
 [[sponsor]]
@@ -50,3 +56,80 @@ source = "stripe"
 name = "nezuo"
 amount = 25
 source = "stripe"
+
+[[sponsor]]
+name = "Oleksii Nosov"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Sindri Andrason"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "David M. Lary"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Nicholas Anderson"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Chris \"cdata\" Joel"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Adam"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Slowchop Studios"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Ask Game Studio"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Paul Lackner"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Jack Wolfard"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "nil (TheRawMeatball)"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Jakob Getzel"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "CooCooCaCha"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "SilvanCodes"
+amount = 25
+source = "stripe"
+
+[[sponsor]]
+name = "Troels Hoffmeyer"
+amount = 25
+source = "stripe"
+
+
