@@ -22,13 +22,24 @@ function filter_assets() {
 //  ------------    Search terms Filtering
 
 const searchElement = document.querySelector('#assets-search')
+const searchUpdateDelay = 350
 
-searchElement.addEventListener("input", (_) => {
+// Prevents `callback` from being called more than once within `wait` milliseconds.
+function debounce(callback, wait) {
+    let timeoutId
+    return (...args) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => callback(...args), wait)
+    }
+}
+
+searchElement.addEventListener("input", debounce(_ => {
     filters_state.search_terms = searchElement.value.toLowerCase().split(' ');
     filter_assets()
     hideEmptySubSections()
     hideEmptySections()
-})
+    updateSuggestionLinks()
+}, searchUpdateDelay))
 
 function filter_search_terms(asset_node) {
     const fullText = asset_node.text.toLowerCase()
@@ -47,7 +58,7 @@ function hideEmptySubSections() {
 function hideEmptySections() {
     document.querySelectorAll('.asset-section').forEach(section => {
         let nextElement = section.nextElementSibling
-        while (nextElement && !nextElement.classList.contains('asset-section')) {
+        while (nextElement && (nextElement.classList.contains('asset-subsection') || nextElement.classList.contains('item-grid'))) {
             if (nextElement.style.display !== 'none') {
                 section.style.display = 'block'
                 return
@@ -56,6 +67,29 @@ function hideEmptySections() {
         }
         section.style.display = 'none'
     })
+}
+
+// A dictionary of 'suggestion-id': ['base-url', 'query-suffix'].
+const suggestionsUrls = {
+    '#suggestion-github': ['https://github.com/bevyengine/bevy/discussions', '?discussions_q='],
+    '#suggestion-cheatbook': ['https://bevy-cheatbook.github.io/', '?search='],
+    '#suggestion-docs': ['https://docs.rs/bevy/latest/bevy/', '?search='],
+}
+
+function updateSuggestionLinks() {
+    const searchValue = searchElement.value.toLowerCase()
+
+    if (searchValue === '') {
+        for (const [linkId, [uriBase, _]] of Object.entries(suggestionsUrls)) {
+            // No search value, just set base url
+            document.querySelector(linkId).href = uriBase
+        }
+    } else {
+        for (const [linkId, [uriBase, query]] of Object.entries(suggestionsUrls)) {
+            // Some search value, add query
+            document.querySelector(linkId).href = uriBase + query + encodeURIComponent(searchValue)
+        }
+    }
 }
 
 //  ------------    Version Filtering

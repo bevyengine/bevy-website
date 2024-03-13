@@ -56,7 +56,7 @@ fn main() -> io::Result<()> {
     donate.name = "Supporting Bevy Development".to_string();
     donate.filename = Some("donate".to_string());
     donate.header = Some("Supporting Bevy".to_string());
-    donate.template = Some("donate.html".to_string());
+    donate.template = Some("donate-community.html".to_string());
 
     donate.content.retain(|node| {
         let CommunityNode::Member(member) = node else {

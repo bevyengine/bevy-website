@@ -38,7 +38,7 @@ Note: depending on your platform, you may have to [install additional dependenci
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.11.0
+    git checkout v0.13.0
     ```
 
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
@@ -61,7 +61,7 @@ Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.12" # make sure this is the latest version
+bevy = "0.13" # make sure this is the latest version
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
