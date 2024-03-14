@@ -7,7 +7,7 @@
 
 {% block content %}
 
-{% set sponsors = load_data(path="content/donate/foundation-sponsors.toml") %}
+{% set donors = load_data(path="content/donate/donors.toml") %}
 {% set tiers = load_data(path="content/donate/tiers.toml") %}
 {% set metrics = load_data(path="content/donate/metrics.toml") %}
 
@@ -25,13 +25,13 @@
 
         <!-- Note: this "sponsor filtering logic" _must_ be kept in sync with the logic in sponsors.html -->
         <!-- If we can find a way to reuse this logic in Zola, we absolutely should! -->
-        {% if sponsors.sponsor %}
-            {% for sponsor in sponsors.sponsor %}
-                {% if sponsor.past %}
+        {% if donors.donor %}
+            {% for donor in donors.donor %}
+                {% if donor.past %}
                     {% continue %}
                 {% endif %}
-                {% if sponsor.amount >= tier.amount %}
-                    {% if next_tier and sponsor.amount >= next_tier.amount %}
+                {% if donor.amount >= tier.amount %}
+                    {% if next_tier and donor.amount >= next_tier.amount %}
                         {% continue %}
                     {% endif %}
                     {% if tier.sponsor_tier %}
@@ -45,12 +45,12 @@
     {% endfor %}
 
     {% set_global monthly_donations = 0 %}
-    {% if sponsors.sponsor %}
-        {% for sponsor in sponsors.sponsor %}
-            {% if sponsor.past %}
+    {% if donors.donor %}
+        {% for donor in donors.donor %}
+            {% if donor.past %}
                 {% continue %}
             {% endif %}
-            {% set_global monthly_donations = monthly_donations + sponsor.amount %}
+            {% set_global monthly_donations = monthly_donations + donor.amount %}
         {% endfor %}
     {% endif %}
 #}
