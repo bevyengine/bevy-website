@@ -2,7 +2,6 @@
 title = "Getting Started"
 template = "docs-section.html"
 insert_anchor_links = "right"
-aliases = ["learn/book/getting-started"]
 [extra]
 weight = 2
 +++
