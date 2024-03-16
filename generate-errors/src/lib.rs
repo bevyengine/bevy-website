@@ -26,9 +26,16 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
     let regex = Regex::new(r"B[0-9]{4}")?;
 
     for entry in entries {
-        // You can't propagate a value multiple times
-        // due to values moving, so it has to be put
-        // in a variable to be used multiple times.
+        // Propagates any errors or issues
+        // regarding reading the directory entry
+        // (either file or directory).
+        //
+        // This is propagated, or unwrapped, here
+        // because it can't be unwrapped or propagated
+        // more than once
+        // otherwise causing move semantics issues.
+        // (So, don't try to minimize lines of code by
+        // propagating this multiple times rather than once here).
         let entry = entry?;
 
         if entry.metadata()?.is_dir() {
