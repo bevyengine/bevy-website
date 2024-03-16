@@ -57,7 +57,7 @@
         {% for donor in donors_in_tier %}
         {% if tier.reward_logo and donor.logo %}
         <a class="sponsors__link" {% if donor.link %}href="{{ donor.link }}"{% endif %}>
-            <img class="sponsors__logo" {% if donor.style %}style="{{ donor.style }}"{% endif %} src="/assets/sponsors/{{ donor.logo }}"
+            <img class="sponsors__logo" {% if donor.style %}style="{{ donor.style }}"{% endif %} src="/assets/donor_logos/{{ donor.logo }}"
                 {% if donor.name %} alt="{{ donor.name }} logo"{% endif %} />
         </a>
         {% elif tier.reward_link and donor.name %}
