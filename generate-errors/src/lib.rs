@@ -123,7 +123,7 @@ pub fn write_section(output_path: &Path) -> anyhow::Result<()> {
     // Make sure the output folder exists
     fs::create_dir_all(&errors_folder_path)?;
 
-    let section_content = r#"+++
+    const SECTION_CONTENT: &str = r#"+++
 title = "Errors"
 template = "docs-section.html"
 page_template = "docs-page.html"
@@ -131,7 +131,7 @@ redirect_to = "/learn/errors/introduction"
 +++
 "#;
 
-    let introduction_content = r#"+++
+    const INTRODUCTION_CONTENT: &str = r#"+++
 title = "Introduction"
 [extra]
 weight = 0
@@ -142,10 +142,10 @@ These pages document Bevy's error codes for the _current release_.
 In case you are looking for the latest error codes from Bevy's main branch, you can find them in the [Bevy engine repository](<https://github.com/bevyengine/bevy/tree/main/errors>). 
 "#;
 
-    fs::write(errors_folder_path.join("_index.md"), section_content)?;
+    fs::write(errors_folder_path.join("_index.md"), SECTION_CONTENT)?;
     fs::write(
         errors_folder_path.join("introduction.md"),
-        introduction_content,
+        INTRODUCTION_CONTENT,
     )?;
 
     Ok(())
