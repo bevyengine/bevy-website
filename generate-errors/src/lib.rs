@@ -22,6 +22,7 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
     let mut error_page_paths: Vec<PathBuf> = vec![];
 
     let entries = bevy_errors_path.read_dir()?;
+    // Matches Bevy error codes, such as B0001, B0002, etc.
     let regex = Regex::new(r"B[0-9]{4}")?;
 
     for entry in entries {
