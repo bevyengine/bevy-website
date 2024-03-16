@@ -1,6 +1,6 @@
 [package]
 name = "generate-errors"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
   "Bevy Contributors <bevyengine@gmail.com>",
   "Carter Anderson <mcanders1@gmail.com>",
