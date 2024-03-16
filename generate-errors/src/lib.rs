@@ -191,16 +191,23 @@ mod tests {
     #[test]
     fn test_write_section() {
         // Fake content folder
-        let output_path = Path::new("content/learn");
+        // named uniquely to avoid
+        // parallel test failures.
+        let output_path = Path::new("section_content/learn");
 
         let result: anyhow::Result<()> = write_section(output_path);
         assert!(result.is_ok());
+
+        // Clean up after tests
+        fs::remove_dir_all("section_content").unwrap();
     }
 
     #[test]
     fn test_write_pages() {
         // Fake content folder
-        let output_path = Path::new("content/learn");
+        // named uniquely to avoid
+        // parallel test failures.
+        let output_path = Path::new("pages_content/learn");
         let pages_content =
             get_error_pages(Path::new("./bevy/errors")).expect("Page content should be valid");
 
@@ -208,6 +215,6 @@ mod tests {
         assert!(result.is_ok());
 
         // Clean up after tests
-        fs::remove_dir_all("content").unwrap();
+        fs::remove_dir_all("pages_content").unwrap();
     }
 }
