@@ -167,6 +167,10 @@ weight = {}
 +++
 
 {}"#,
+            // Extracts error code from the file name
+            // and uses it as the title.
+            // Otherwise just uses file name
+            // for the title.
             key.strip_suffix(".md").unwrap_or(key),
             // Since the introduction page takes the
             // zeroth position we need to treat the keys
