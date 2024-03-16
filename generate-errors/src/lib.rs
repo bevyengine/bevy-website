@@ -61,7 +61,7 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
         // Code blocks will be invalid unless
         // the annotations are before the language
         // like `should_panic,rust` or `no_run,rust`.
-        let mut content: String = String::new();
+        let mut content = String::new();
         for line in regex_content.lines() {
             // Ensure we only operate on
             // Rust code blocks.
