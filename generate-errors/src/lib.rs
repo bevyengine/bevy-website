@@ -183,8 +183,7 @@ mod tests {
 
     #[test]
     fn test_error_page_content() {
-        let error_content: anyhow::Result<HashMap<String, String>> =
-            get_error_pages(Path::new("./bevy/errors"));
+        let error_content = get_error_pages(Path::new("./bevy/errors"));
         assert!(error_content.is_ok());
     }
 
