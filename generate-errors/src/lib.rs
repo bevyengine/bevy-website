@@ -42,6 +42,9 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
             continue;
         }
 
+        // Only adds files that follow the
+        // Bevy error code format:
+        // E.g. B0000, B0001, B0002, ..., B0030, ..., B9999.
         if entry
             .file_name()
             .to_str()
