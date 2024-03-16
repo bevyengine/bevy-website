@@ -6,7 +6,7 @@ authors = [
   "Carter Anderson <mcanders1@gmail.com>",
 ]
 license = "MIT"
-edition = "2018"
+edition = "2021"
 
 [lints]
 workspace = true
