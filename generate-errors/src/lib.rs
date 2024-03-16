@@ -16,7 +16,7 @@ pub fn get_error_pages(bevy_errors_path: &Path) -> anyhow::Result<HashMap<String
     // and not a broken symbolic link.
     // Otherwise it errors and returns.
     if !bevy_errors_path.try_exists()? {
-        return Err(anyhow!("The path ({bevy_errors_path:?}) is invalid"));
+        bail!("The path ({bevy_errors_path:?}) is invalid");
     }
 
     let mut error_page_paths: Vec<PathBuf> = vec![];
