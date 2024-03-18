@@ -1,4 +1,5 @@
 # Bevy repository
 bevy/
 # Fake content folder for tests
-content/
+section_content/
+pages_content/
