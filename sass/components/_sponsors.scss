@@ -76,16 +76,15 @@
         ('tier': 'corporate_platinum', 'height': 100px),
         ('tier': 'corporate_gold', 'height': 90px),
         ('tier': 'corporate_silver', 'height': 85px),
-        ('tier': 'corporate_bronze', 'height': 80px),
-        ('tier': 'diamond', 'height': 80px),
+        ('tier': 'corporate_bronze', 'height': 70px),
+        ('tier': 'diamond', 'height': 45px),
     );
 
 @each $tier in $tiers {
     &--#{map-get($tier, 'tier')} {
         .sponsors {
             &__logo {
-                width: 100%;
-                max-height: map-get($tier, 'height');
+                height: map-get($tier, 'height');
             }
         }
     }
