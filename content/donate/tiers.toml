@@ -47,6 +47,7 @@ icon = "/assets/sponsor_badges/diamond.svg"
 donate_link = "https://buy.stripe.com/6oEaI49BX16T9wY4gl"
 reward_logo = true
 reward_link = true
+logo_height = 45
 
 [[tier]]
 name = "Corporate Bronze"
@@ -56,6 +57,7 @@ icon = "/assets/sponsor_badges/bronze.svg"
 donate_link = "https://buy.stripe.com/bIY7vSeWhaHt7oQ7sy"
 reward_logo = true
 reward_link = true
+logo_height = 70
 
 [[tier]]
 name = "Corporate Silver"
@@ -65,6 +67,7 @@ icon = "/assets/sponsor_badges/silver.svg"
 donate_link = "https://buy.stripe.com/14kcQceWh8zleRi4gn"
 reward_logo = true
 reward_link = true
+logo_height = 85
 
 [[tier]]
 name = "Corporate Gold"
@@ -74,6 +77,7 @@ icon = "/assets/sponsor_badges/gold.svg"
 donate_link = "https://buy.stripe.com/fZecQcdSd6rd4cEfZ6"
 reward_logo = true
 reward_link = true
+logo_height = 90
 
 [[tier]]
 name = "Corporate Platinum"
@@ -83,6 +87,7 @@ icon = "/assets/sponsor_badges/platinum.svg"
 donate_link = "https://buy.stripe.com/fZe03q29vdTFgZq6ox"
 reward_logo = true
 reward_link = true
+logo_height = 95
 
 [[tier]]
 name = "Corporate Titanium"
@@ -92,6 +97,7 @@ icon = "/assets/sponsor_badges/titanium.svg"
 donate_link = "https://buy.stripe.com/bIY03qaG1eXJ8sU8wG"
 reward_logo = true
 reward_link = true
+logo_height = 100
 
 [[tier]]
 name = "Corporate Diamond"
@@ -101,6 +107,7 @@ icon = "/assets/sponsor_badges/diamond.svg"
 donate_link = "https://buy.stripe.com/00gdUg4hD6rddNe7sD"
 reward_logo = true
 reward_link = true
+logo_height = 120
 
 [[tier]]
 name = "Patron"
@@ -110,3 +117,4 @@ icon = "/assets/sponsor_badges/patron.svg"
 donate_link = "mailto:bevyengine@gmail.com"
 reward_logo = true
 reward_link = true
+logo_height = 190

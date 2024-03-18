@@ -56,9 +56,25 @@
     <div class="sponsors__content">
         {% for donor in donors_in_tier %}
         {% if tier.reward_logo and donor.logo %}
+            {% set_global logo_height = tier.logo_height %}
+            {% if donor.square_logo %}
+                {% set_global logo_height = logo_height * 1.666 %}
+            {% endif %}
+            {% if donor.logo_scale %}
+                {% set_global logo_height = logo_height * donor.logo_scale %}
+            {% endif %}
         <a class="sponsors__link" {% if donor.link %}href="{{ donor.link }}"{% endif %}>
-            <img class="sponsors__logo" {% if donor.style %}style="{{ donor.style }}"{% endif %} src="/assets/donor_logos/{{ donor.logo }}"
-                {% if donor.name %} alt="{{ donor.name }} logo"{% endif %} />
+            <img
+                class="sponsors__logo"
+                height="{{ logo_height }}"
+                {% if donor.style %}
+                style="{{ donor.style }}"
+                {% endif %}
+                src="/assets/donor_logos/{{ donor.logo }}"
+                {% if donor.name %}
+                alt="{{ donor.name }} logo"
+                {% endif %}
+            />
         </a>
         {% elif tier.reward_link and donor.name %}
         <a class="sponsors__name sponsors__link" {% if donor.link %}href="{{ donor.link }}"{% endif %}>
