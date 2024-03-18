@@ -3,9 +3,9 @@ name = "Foresight Spatial Labs"
 image = "Foresight_Spatial_Labs.svg"
 link = "https://www.foresightmining.com"
 amount = 4000
-style = "height: 140px"
 source = "direct"
 recipient = "cart"
+logo_scale = 1.5
 
 [[sponsor]]
 name = "Embark Studios"
@@ -20,18 +20,18 @@ name = "Encultured.ai"
 image = "Encultured.png"
 link = "https://www.encultured.ai/"
 amount = 1000
-style = "max-height: 60px"
 source = "github"
 recipient ="cart"
+logo_scale = 0.7
 
 [[sponsor]]
 name = "Roids"
 image = "roids_logo.png"
 link = "https://playroids.com"
 amount = 300
-style = "max-height: 130px"
 source = "github"
 recipient ="cart"
+square_logo = true
 
 [[sponsor]]
 name = "Agile Perception"
