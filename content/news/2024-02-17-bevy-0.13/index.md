@@ -1553,7 +1553,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 It's really exciting to see this progress, and we're keen to channel that energy and experience into official first-party efforts.
 
 [playground]: https://github.com/bevyengine/bevy_editor_prototypes
-[could look like]: https://asour8.github.io/bevy_editor_mockup/editor/
+[could look like]: https://amytimed.github.io/bevy_editor_mockup/editor/
 [key questions]: https://github.com/bevyengine/bevy_editor_prototypes/discussions/1
 [`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
 [`space_editor`]: https://github.com/rewin123/space_editor
