@@ -42,7 +42,7 @@ description = "Browse bevy examples compiled to wasm and running directly in you
 
 [[links]]
 title = "Bevy Errors"
-url = "/learn/errors"
+url = "/learn/errors/introduction"
 image = "/assets/bevy_icon_dark.svg"
 image_alt = "Bevy logo"
 description = "List of Bevy's error codes for the current release."
