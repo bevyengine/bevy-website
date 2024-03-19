@@ -5,7 +5,18 @@ function clamp(val, min, max) {
 
 // inserts the input element required to activate image_compare components
 //
-// Usage in a document should look like:
+// Use this with the `compare_slider` zola shortcode:
+// ```text
+// {{ compare_slider(
+//     left_title="Without SSAO",
+//     left_image="no_ssao.png",
+//     right_title="With SSAO",
+//     right_image="with_ssao.png"
+// ) }}
+// ```
+//
+// The javascript code will work with the following generated HTML:
+//
 // ```html
 // <main>
 //   <div class="image-compare" style="aspect-ratio: 16 / 9"
@@ -29,6 +40,7 @@ function enable_image_compare() {
     let style = window.getComputedStyle(img_cmp);
     const slider = document.createElement('input');
     slider.type = "range";
+    slider.step = 0.1;
     slider.min = style.getPropertyValue('--slider-min').replace('%', '');
     slider.max = style.getPropertyValue('--slider-max').replace('%', '');
     slider.value = style.getPropertyValue('--slider-value').replace('%', '');
