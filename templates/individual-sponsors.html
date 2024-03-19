@@ -45,9 +45,23 @@
     <div class="sponsors__content">
         {% for sponsor in sponsors_in_tier %}
         {% if tier.reward_logo %}
+            {% set_global logo_height = tier.logo_height %}
+            {% if sponsor.square_logo %}
+                {% set_global logo_height = logo_height * 1.666 %}
+            {% endif %}
+            {% if sponsor.logo_scale %}
+                {% set_global logo_height = logo_height * sponsor.logo_scale %}
+            {% endif %}
         <a class="sponsors__link" href="{{ sponsor.link }}">
-            <img class="sponsors__logo" {% if sponsor.style %}style="{{ sponsor.style }}"{% endif %} src="/assets/sponsors/{{ sponsor.image }}"
-                alt="{{ sponsor.name }} logo" />
+            <img
+                class="sponsors__logo"
+                height="{{ logo_height }}"
+                {% if sponsor.style %}
+                style="{{ sponsor.style }}"
+                {% endif %}
+                src="/assets/sponsors/{{ sponsor.image }}"
+                alt="{{ sponsor.name }} logo"
+            />
         </a>
         {% elif tier.reward_link %}
         <a class="sponsors__name sponsors__link" href="{{ sponsor.link }}">

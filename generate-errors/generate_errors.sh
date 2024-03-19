@@ -11,4 +11,4 @@ git sparse-checkout set "errors"
 git pull --depth=1 origin latest
 cd ..
 
-cargo run --bin generate -- bevy/errors ../content/learn
+cargo run --bin generate -- --errors-path bevy/errors --output-path ../content/learn

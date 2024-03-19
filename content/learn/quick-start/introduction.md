@@ -14,7 +14,7 @@ If you came here because you wanted to learn how to make 2D / 3D games, visualiz
 
 A bevy is a group of birds!
 
-But Bevy is also a refreshingly simple data-driven game engine built in Rust. It is [free and open-source](https://github.com/bevyengine/bevy) forever.
+But Bevy is also a refreshingly simple data-driven game engine built in Rust. It is [free and open-source](https://github.com/bevyengine/bevy) forever under your choice of the MIT or Apache 2.0 licenses.
 
 Bevy has the following design goals:
 

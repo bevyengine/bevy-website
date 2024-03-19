@@ -63,33 +63,13 @@
 
     &__logo {
         object-fit: contain;
+        width: 100%;
         transition: transform .2s; /* Animation */
     }
 
     &__logo:hover {
         transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
       }
-
-    $tiers: (
-        ('tier': 'patron', 'height': 190px),
-        ('tier': 'corporate_diamond', 'height': 120px),
-        ('tier': 'corporate_platinum', 'height': 100px),
-        ('tier': 'corporate_gold', 'height': 90px),
-        ('tier': 'corporate_silver', 'height': 85px),
-        ('tier': 'corporate_bronze', 'height': 80px),
-        ('tier': 'diamond', 'height': 80px),
-    );
-
-@each $tier in $tiers {
-    &--#{map-get($tier, 'tier')} {
-        .sponsors {
-            &__logo {
-                width: 100%;
-                max-height: map-get($tier, 'height');
-            }
-        }
-    }
-  }
 }
 
 .sponsors-section {

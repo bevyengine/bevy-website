@@ -41,6 +41,9 @@ jobs:
       - name: "Build Bevy Examples"
         run: cd generate-wasm-examples && ./generate_wasm_examples.sh
 
+      - name: "Sync Donor Info"
+        run: cd content/donate && ./sync_donors.sh
+
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
         uses: shalzz/zola-deploy-action@v0.18.0
