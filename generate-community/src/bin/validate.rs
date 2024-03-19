@@ -1,10 +1,12 @@
+use std::path::PathBuf;
+
 use generate_community::*;
 use unicode_segmentation::UnicodeSegmentation;
 
 fn main() -> Result<(), String> {
-    let community_dir = std::env::args().nth(1).unwrap();
+    let community_dir: PathBuf = std::env::args().nth(1).unwrap().into();
 
-    let people_root_section = parse_members(&community_dir).map_err(|err| err.to_string())?;
+    let people_root_section = parse_members(&community_dir).unwrap();
 
     validate_section(&people_root_section)?;
 
@@ -14,12 +16,13 @@ fn main() -> Result<(), String> {
 const MAX_BIO_LENGTH: usize = 180;
 
 fn validate_section(section: &Section) -> Result<(), String> {
-    section
-        .content
-        .iter()
-        .map(validate_node)
-        .find(|valid| valid.is_err())
-        .unwrap_or(Ok(()))
+    // Validate each community node in the given section.
+    for node in section.content.iter() {
+        validate_node(node)?;
+    }
+
+    // If this gets run, then there are no validation errors.
+    Ok(())
 }
 
 fn validate_node(node: &CommunityNode) -> Result<(), String> {
