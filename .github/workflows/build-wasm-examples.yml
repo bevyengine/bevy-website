@@ -21,7 +21,7 @@ jobs:
       - name: Get Pages
         id: pages
         run: |
-          example_count=`cat Cargo.toml | grep '\[\[example\]\]' | wc -l`
+          example_count=`cat Cargo.toml | grep 'wasm = true' | wc -l`
           page_count=$((example_count / ${{ env.PER_PAGE }} + 1))
           echo "pages=`jq -n -c \"[range($page_count)]\"`" >> $GITHUB_OUTPUT
  
