@@ -23,7 +23,7 @@ jobs:
         run: |
           example_count=`cat Cargo.toml | grep '\[\[example\]\]' | wc -l`
           page_count=$((example_count / ${{ env.PER_PAGE }} + 1))
-          echo "pages=`python -c \"import json; print(json.dumps([i for i in range($page_count)]))\"`" >> $GITHUB_OUTPUT
+          echo "pages=`jq -n -c \"[range($page_count)]\"`" >> $GITHUB_OUTPUT
  
   take-screenshots:
     name: Take Screenshots
