@@ -23,18 +23,6 @@ jobs:
           repository: 'bevyengine/bevy'
           ref: 'latest'
 
-      # temporary: fetch tools from main branch
-      - name: Checkout Bevy Tools
-        uses: actions/checkout@v4
-        with:
-          repository: 'bevyengine/bevy'
-          ref: 'main'
-          path: 'bevy-tools'
-      - name: Copy Bevy tools to latest
-        run: |
-          cp -r bevy-tools/tools/ tools
-          rm -rf bevy-tools
-
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
