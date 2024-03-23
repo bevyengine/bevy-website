@@ -147,7 +147,7 @@ Once a crate is published to [crates.io](https://crates.io), there are two badge
 [![docs.rs](https://docs.rs/bevy/badge.svg)](https://docs.rs/bevy)
 
 ```markdown
-[![docs.rs](https://docs.rs/bevy_awesome_plugin/badge.svg)](https://docs.rs/bevy_awesome_plugin)`
+[![docs.rs](https://docs.rs/bevy_awesome_plugin/badge.svg)](https://docs.rs/bevy_awesome_plugin)
 ```
 
 ## Promotion
