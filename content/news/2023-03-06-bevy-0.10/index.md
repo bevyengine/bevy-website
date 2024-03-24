@@ -606,27 +606,27 @@ let's double the `emissive` value of each cube.
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); grid-gap: 16px;">
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">1</div>
-        <img src="old_bloom.png" style="width: 100%; height: auto;"/>
+        <img src="old_bloom.png" alt="First image of bloom; from Bevy 0.9" style="width: 100%; height: auto;" />
      </div>
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">2</div>
-        <img src="old_bloom_aces.png" style="width: 100%; height: auto;"/>
+        <img src="old_bloom_aces.png" alt="Second image of bloom; from Bevy 0.9 with a tonemapper" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">3</div>
-        <img src="new_bloom.png" style="width: 100%; height: auto;"/>
+        <img src="new_bloom.png" alt="Third image of bloom; from Bevy 0.10" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">4</div>
-        <img src="new_bloom_double_emission.png" style="width: 100%; height: auto;"/>
+        <img src="new_bloom_double_emission.png" alt="Fourth image of bloom; from Bevy 0.10 with doubled emissive values" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">5</div>
-        <img src="new_bloom_additive.png" style="width: 100%; height: auto;"/>
+        <img src="new_bloom_additive.png" alt="Fifth image of bloom; from Bevy 0.10 with additive compositing" style="width: 100%; height: auto;"/>
      </div>
      <div style="position: relative;">
         <div style="position: absolute; top: 0; left: 0; background-color: black; color: white; border-radius: 10px 0 10px 0; width: 30px; height: 30px; padding: 2px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); text-align: center; opacity: 0.8;">6</div>
-        <img src="bloom_example.png" style="width: 100%; height: auto;"/>
+        <img src="bloom_example.png" alt="The Bevy bloom 3D example" style="width: 100%; height: auto;"/>
      </div>
  </div>
 
