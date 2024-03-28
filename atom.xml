@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Bevy Engine</title>
+    <link rel="self" type="application/atom+xml" href="https://bevyengine.org/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://bevyengine.org"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-03-11T00:00:00+00:00</updated>
+    <id>https://bevyengine.org/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Bevy Foundation</title>
+        <published>2024-03-11T00:00:00+00:00</published>
+        <updated>2024-03-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-foundation/"/>
+        <id>https://bevyengine.org/news/bevy-foundation/</id>
+        
+        <summary type="html">&lt;p&gt;It is with excitement that I unveil to the world ...&lt;&#x2F;p&gt;
+&lt;img src=&quot;bevy_foundation.svg&quot; alt=&quot;Bevy Foundation Logo&quot; style=&quot;margin-top: 2rem; margin-bottom: 2rem;&quot; &#x2F;&gt;
+&lt;p&gt;The &lt;a href=&quot;&#x2F;foundation&quot;&gt;&lt;strong&gt;Bevy Foundation&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; is the next step in our journey to build a world class free and open source game engine. &lt;strong&gt;Bevy Foundation&lt;&#x2F;strong&gt; is a non-profit organization formed in Washington State, with a pending federal 501(c)(3) tax-exemption application (more on this later).&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>2024 Budget</title>
+        <published>2024-03-08T00:00:00+00:00</published>
+        <updated>2024-03-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/foundation/budget/"/>
+        <id>https://bevyengine.org/foundation/budget/</id>
+        
+        <content type="html" xml:base="https://bevyengine.org/foundation/budget/">&lt;p&gt;It is hard to estimate how much money we&#x27;ll have to work with this year, so for now our budget is pretty straightforward:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Spend ~90% of our income to bring Alice on as a full-time maintainer, until she is paid at our target salary of $150,000.&lt;&#x2F;strong&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Use the remaining ~10% to build up some buffer funds&lt;&#x2F;strong&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;hire-alice-as-a-full-time-maintainer&quot;&gt;Hire Alice as a Full-Time Maintainer&lt;&#x2F;h2&gt;
+&lt;p&gt;We have exactly one focus for the short term: bring Alice on full-time. For years, Alice has dedicated &lt;em&gt;significant&lt;&#x2F;em&gt; time to the project as a Maintainer. She has been our primary project manager: wrangling issues, &lt;a href=&quot;https:&#x2F;&#x2F;mastodon.social&#x2F;deck&#x2F;tags&#x2F;bevymergetrain&quot;&gt;keeping the merge train running&lt;&#x2F;a&gt;, connecting developers to the right parts of the project, and doing the work that ensures we can harness and enable our ever increasing developer community. Not to mention her extensive technical contributions and documentation work!&lt;&#x2F;p&gt;
+&lt;p&gt;If you have participated in Bevy&#x27;s development, you are probably intimately aware of two things:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Project management is our bottleneck.&lt;&#x2F;li&gt;
+&lt;li&gt;Alice is a world-class project manager.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;In addition to performing the general &amp;quot;project management&amp;quot; role, Alice has the following specific priorities when she starts full-time:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;The New Bevy Book&lt;&#x2F;strong&gt;: The new Bevy Book aims to be a complete, always up-to-date, and constantly improving guide to using Bevy. Alice has already contributed content and helped facilitate the book&#x27;s production. If she joins full-time, she will work to finish it, in addition to helping others contribute.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Coordinating the Development of ECS Relations&lt;&#x2F;strong&gt;: Relations are an ECS feature that enable connecting entities to each other via special components called Relations. These are an often-requested feature that will make a number of scenarios (such as parent-child relationships) much nicer. Alice will work to coordinate this effort and fill in functionality gaps.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Building an Action System for Input Devices&lt;&#x2F;strong&gt;: Bevy sorely needs an official way to define &amp;quot;input actions&amp;quot;, which are then mapped (and remapped) to inputs from one or more input devices (for example: a &lt;code&gt;Jump&lt;&#x2F;code&gt; action that is mapped to the &amp;quot;A&amp;quot; button on controllers and &amp;quot;Spacebar&amp;quot; on keyboards). Alice built &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;leafwing-studios&#x2F;leafwing-input-manager&quot;&gt;&lt;code&gt;leafwing-input-manager&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;, which is a popular third-party Bevy plugin that does exactly that. Alice plans on taking the lessons learned there to build a proper first-party solution to this problem.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Alice deserves to be paid for her work, and Bevy needs her full-time. Our goal for the &lt;strong&gt;Bevy Foundation&lt;&#x2F;strong&gt; is to pay reasonably competitive, roughly market rate salaries. Therefore, our first goal is to pay Alice a salary of $150,000 a year.&lt;&#x2F;p&gt;
+&lt;p&gt;We all believe Alice is worth at least that much, but given that funds will take time to build up, Alice has agreed to take a pay cut while things spin up.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;build-up-some-buffer&quot;&gt;Build Up Some Buffer&lt;&#x2F;h2&gt;
+&lt;p&gt;To ensure we can respond to things as they come up, we&#x27;ll want to build up some initial buffer funds. We&#x27;ll eventually need to spend some money to help keep Bevy Foundation operational and compliant with state and federal regulations. We also anticipate minor hosting + infrastructure costs to start popping up soon. And once we start exploring other foundation programs, we&#x27;ll likely need some funds to get those going. Best to be prepared!&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.13</title>
+        <published>2024-02-17T00:00:00+00:00</published>
+        <updated>2024-02-17T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Bevy Contributors
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-13/"/>
+        <id>https://bevyengine.org/news/bevy-0-13/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;198&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;672&lt;&#x2F;strong&gt; pull requests, community reviewers, and our &lt;a href=&quot;&#x2F;community&#x2F;donate&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, we&#x27;re happy to announce the &lt;strong&gt;Bevy 0.13&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It&#x27;s free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.
+And to see what the engine has to offer hands-on, check out the entries in the &lt;a href=&quot;https:&#x2F;&#x2F;itch.io&#x2F;jam&#x2F;bevy-jam-4&#x2F;entries&quot;&gt;latest Bevy Jam&lt;&#x2F;a&gt;, including the winner &lt;a href=&quot;https:&#x2F;&#x2F;andrewb330.itch.io&#x2F;thats-a-lot-of-beeeeees&quot;&gt;That&#x27;s a LOT of beeeeees&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.13&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0-12-to-0-13&#x2F;&quot;&gt;0.12 to 0.13 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Since our last release a few months ago we&#x27;ve added a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy Foundation Bylaws</title>
+        <published>2024-02-03T00:00:00+00:00</published>
+        <updated>2024-02-03T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/foundation/bylaws/"/>
+        <id>https://bevyengine.org/foundation/bylaws/</id>
+        
+        <content type="html" xml:base="https://bevyengine.org/foundation/bylaws/">&lt;h2 id=&quot;article-1-offices&quot;&gt;Article 1. Offices&lt;&#x2F;h2&gt;
+&lt;p&gt;The principal office of Bevy Foundation (the “Corporation”) shall be located at its principal place of business or such other place as the Board of Directors (“Board”) may designate. The Corporation may have other such offices, either within or without the State of Washington, as the Board may designate or as the business of the Corporation may require from time to time.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-2-purpose&quot;&gt;Article 2. Purpose&lt;&#x2F;h2&gt;
+&lt;p&gt;The Corporation is organized exclusively for charitable and educational purposes within the meaning of Section 501(c)(3) of the Internal Revenue Code of 1986, as amended, including but not limited to the following:&lt;&#x2F;p&gt;
+&lt;p&gt;This corporation is formed to promote, protect, and advance the free and open source Bevy game engine and related open source projects. It educates and trains members of the general public in the usage of Bevy, helps coordinate and promote its continued maintenance and development, and advances the state of the art of game programming through scientific research and development. It offers Bevy for free to members of the general public through the use of open source software licensing, helping them create art, games, conduct scientific simulations, build computer-aided design tools, and more&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-3-shareholders&quot;&gt;Article 3. Shareholders&lt;&#x2F;h2&gt;
+&lt;p&gt;The Corporation has no Shareholders.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-4-membership&quot;&gt;Article 4. Membership&lt;&#x2F;h2&gt;
+&lt;p&gt;The Corporation shall have no members as defined in Section 24.03A.010(45) of the Washington Nonprofit Corporation Act.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-5-board-of-directors&quot;&gt;Article 5. Board of Directors&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;5-1-general-powers&quot;&gt;5.1 General Powers&lt;&#x2F;h3&gt;
+&lt;p&gt;The affairs of the Corporation shall be managed by a Board of Directors.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-2-number&quot;&gt;5.2 Number&lt;&#x2F;h3&gt;
+&lt;p&gt;The Board shall consist of not less than three nor more than eleven Directors, the specific number to be set by resolution of the Board. The number of Directors may be changed from time to time by amendment to these Bylaws, provided that no decrease in the number shall have the effect of shortening the term of any incumbent Director.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-3-qualifications&quot;&gt;5.3 Qualifications&lt;&#x2F;h3&gt;
+&lt;p&gt;Directors shall have such qualifications as the Board may prescribe by resolution or amendment to these Bylaws.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-4-election-of-directors&quot;&gt;5.4 Election of Directors&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;5-4-1-initial-directors&quot;&gt;5.4.1 Initial Directors&lt;&#x2F;h4&gt;
+&lt;p&gt;The initial Directors named in the Articles of Incorporation shall serve until the first annual meeting of the Board.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;5-4-2-successor-directors&quot;&gt;5.4.2 Successor Directors&lt;&#x2F;h4&gt;
+&lt;p&gt;Successor Directors shall be elected at the annual meeting of the Board. The terms of the Directors shall be set so that the terms shall be staggered to the extent possible.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-5-term-of-office&quot;&gt;5.5 Term of Office&lt;&#x2F;h3&gt;
+&lt;p&gt;Unless a Director dies, resigns or is removed, he or she shall hold office for a term of five years or until his or her successor is elected, whichever is later.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-6-annual-meeting&quot;&gt;5.6 Annual Meeting&lt;&#x2F;h3&gt;
+&lt;p&gt;The annual meeting of the Board shall be held the month of January at a date and time established by the Board for the purposes of electing directors and officers and transacting such business as may properly come before the meeting. If the day fixed for the annual meeting is a legal holiday at the place of the meeting, the meeting shall be held on the next succeeding business day. If the annual meeting is not held on the date designated therefor, the Board shall cause the meeting to be held as soon thereafter as may be convenient.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-7-regular-meetings&quot;&gt;5.7 Regular Meetings&lt;&#x2F;h3&gt;
+&lt;p&gt;By resolution, the Board may specify the date, time and place for the holding of regular meetings without other notice than such resolution.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-8-special-meetings&quot;&gt;5.8 Special Meetings&lt;&#x2F;h3&gt;
+&lt;p&gt;Special meetings of the Board or any committee designated and appointed by the Board may be called by or at the written request of the President or any two Directors, or, in the case of a committee meeting, by the chairman of the committee. The person or persons authorized to call special meetings may fix any place either within or without the State of Washington as the place for holding any special Board or committee meeting called by them.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-9-remote-meetings&quot;&gt;5.9 Remote Meetings&lt;&#x2F;h3&gt;
+&lt;p&gt;Members of the Board or any committee designated by the Board may participate in a meeting of such Board or committee by or through the use of, one or more means of remote communication through which all of the directors may simultaneously participate with each other during the meeting. Participation by such means shall constitute presence in person at a meeting.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-10-place-of-meetings&quot;&gt;5.10 Place of Meetings&lt;&#x2F;h3&gt;
+&lt;p&gt;All meetings shall be held at the principal office of the Corporation or at such other place within or without the State of Washington designated by the Board, by any persons entitled to call a meeting or by a waiver of notice signed by all Directors.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-11-notice-of-special-meetings&quot;&gt;5.11 Notice of Special Meetings&lt;&#x2F;h3&gt;
+&lt;p&gt;Notice of special Board or committee meetings shall be given to a Director in writing or by personal communication with the Director not less than two days before the meeting. Notices in writing may be delivered or mailed to the Director at his or her address shown on the records of the Corporation or given by facsimile or electronic transmission. Neither the business to be transacted at, nor the purpose of any special meeting need be specified in the notice of such meeting. If notice is delivered by mail, the notice shall be deemed effective when deposited in the official government mail properly addressed with postage thereon prepaid. Notice provided in an electronic transmission is effective when it is electronically transmitted to an address, location or system designated by the recipient for that purpose.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-12-waiver-of-notice&quot;&gt;5.12 Waiver of Notice&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;5-12-1-in-writing&quot;&gt;5.12.1 In Writing&lt;&#x2F;h4&gt;
+&lt;p&gt;Whenever any notice is required to be given to any Director under the provisions of these Bylaws, the Articles of Incorporation or applicable Washington law, a waiver thereof in writing, signed by the person or persons entitled to such notice, whether before or after the time stated therein, shall be deemed equivalent to the giving of such notice. Neither the business to be transacted at, nor the purpose of, any regular or special meeting of the Board need be specified in the waiver of notice of such meeting.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;5-12-2-by-attendance&quot;&gt;5.12.2 By Attendance&lt;&#x2F;h4&gt;
+&lt;p&gt;The attendance of a Director at a meeting shall constitute a waiver of notice of such meeting, except where a Director attends a meeting for the express purpose of objecting to the transaction of any business because the meeting is not lawfully called or convened.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-13-quorum&quot;&gt;5.13 Quorum&lt;&#x2F;h3&gt;
+&lt;p&gt;A majority of the number of Directors in office shall constitute a quorum for the transaction of business at any Board meeting. If a quorum is not present at a meeting, a majority of the Directors present may adjourn the meeting from time to time without further notice.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-14-manner-of-acting&quot;&gt;5.14 Manner of Acting&lt;&#x2F;h3&gt;
+&lt;p&gt;The act of the majority of the Directors present at a meeting at which there is a quorum shall be the act of the Board, unless the vote of a greater number is required by these Bylaws, the Articles of Incorporation or applicable Washington law.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-15-presumption-of-assent&quot;&gt;5.15 Presumption of Assent&lt;&#x2F;h3&gt;
+&lt;p&gt;A Director of the Corporation present at a Board meeting at which action on any corporate matter is taken shall be presumed to have assented to the action taken unless his or her dissent or abstention is entered in the minutes of the meeting, or unless such Director files a written dissent or abstention to such action with the person acting as secretary of the meeting before the adjournment thereof, or forwards such dissent or abstention by registered mail to the Secretary of the Corporation immediately after the adjournment of the meeting. Such right to dissent or abstain shall not apply to a Director who voted in favor of such action.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-16-action-by-board-without-a-meeting&quot;&gt;5.16 Action by Board Without a Meeting&lt;&#x2F;h3&gt;
+&lt;p&gt;Any action which could be taken at a meeting of the Board may be taken without a meeting if a written consent setting forth the action so taken is executed by each of the Directors entitled to vote. Such written consents may be executed in two or more counterparts, each of which shall be deemed an original and all of which, taken together, shall constitute one and the same document. Any such written consent shall be inserted in the minute book as if it were the minutes of a Board meeting. For purposes of these Bylaws, “executed” means: (a) writing that is signed; or (b) an email transmission that is sent with sufficient information to determine the sender’s identity.&lt;&#x2F;p&gt;
+&lt;p&gt;For purposes of this Section 3.16 only, &amp;quot;each of the Directors entitled to vote&amp;quot; does not include an &amp;quot;interested director&amp;quot; who abstains in writing from providing consent, where:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;The Board has determined that:
+&lt;ol&gt;
+&lt;li&gt;The corporation is entering into the transaction for its own benefit; and&lt;&#x2F;li&gt;
+&lt;li&gt;The transaction is fair and reasonable to the corporation when it enters into the transaction or the noninterested directors determine in good faith after reasonable investigation that the corporation cannot obtain a more advantageous arrangement with reasonable effort under the circumstances, at or before execution of the written consent; and&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Such determination is included in the written consent or in other records of the corporation.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;5-17-resignation&quot;&gt;5.17 Resignation&lt;&#x2F;h3&gt;
+&lt;p&gt;Any Director may resign at any time by delivering written notice to the President or the Secretary at the registered office of the Corporation, or by giving oral or written notice at any meeting of the Directors. Any such resignation shall take effect at the time specified therein, or if the time is not specified, upon delivery thereof and, unless otherwise specified therein, the acceptance of such resignation shall not be necessary to make it effective.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-18-removal&quot;&gt;5.18 Removal&lt;&#x2F;h3&gt;
+&lt;p&gt;At a meeting of the Board, one or more Directors may be removed from office, with or without cause, by two-thirds of the votes cast by Directors then in office.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-19-vacancies&quot;&gt;5.19 Vacancies&lt;&#x2F;h3&gt;
+&lt;p&gt;A vacancy in the position of Director may be filled by the affirmative vote of a majority of the remaining Directors though less than a quorum of the Board. A Director who fills a vacancy shall serve for the unexpired term of his or her predecessor in office.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-20-compensation&quot;&gt;5.20 Compensation&lt;&#x2F;h3&gt;
+&lt;p&gt;The Directors shall receive no compensation for their service as Directors but may receive reimbursement for expenditures incurred on behalf of the Corporation.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-6-officers&quot;&gt;Article 6. Officers&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;6-1-number-and-qualifications&quot;&gt;6.1 Number and Qualifications&lt;&#x2F;h3&gt;
+&lt;p&gt;The officers of the Corporation shall be a President, a Secretary, and a Treasurer, each of whom shall be elected by the Board. Other officers and assistant officers may be elected or appointed by the Board, such officers and assistant officers to hold office for such period, have such authority and perform such duties as are provided in these Bylaws or as may be provided by resolution of the Board. Any officer may be assigned by the Board any additional title that the Board deems appropriate. Any two or more offices may be held by the same person, except the offices of President and Secretary.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-2-election-and-term-of-office&quot;&gt;6.2 Election and Term of Office&lt;&#x2F;h3&gt;
+&lt;p&gt;The officers of the Corporation shall be elected each year by the Board at the annual meeting of the Board. Unless an officer dies, resigns, or is removed from office, he or she shall hold office until the next annual meeting of the Board or until his or her successor is elected.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-3-resignation&quot;&gt;6.3 Resignation&lt;&#x2F;h3&gt;
+&lt;p&gt;Any officer may resign at any time by delivering written notice to the President, the Vice President, the Secretary or the Board, or by giving oral or written notice at any meeting of the Board. Any such resignation shall take effect at the time specified therein, or if the time is not specified, upon delivery thereof and, unless otherwise specified therein, the acceptance of such resignation shall not be necessary to make it effective.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-4-removal&quot;&gt;6.4 Removal&lt;&#x2F;h3&gt;
+&lt;p&gt;Any officer or agent elected or appointed by the Board may be removed from office by the Board whenever in its judgment the best interests of the Corporation would be served thereby, but such removal shall be without prejudice to the contract rights, if any, of the person so removed.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-5-vacancies&quot;&gt;6.5 Vacancies&lt;&#x2F;h3&gt;
+&lt;p&gt;A vacancy in any office created by the death, resignation, removal, disqualification, creation of a new office or any other cause may be filled by the Board for the unexpired portion of the term or for a new term established by the Board.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-6-president&quot;&gt;6.6 President&lt;&#x2F;h3&gt;
+&lt;p&gt;The President shall, subject to the Board’s control, supervise and control all of the assets, business and affairs of the Corporation. The President shall preside over meetings of the Board. The President may sign deeds, mortgages, bonds, contracts, or other instruments, except when the signing and execution thereof have been expressly delegated by the Board or by these Bylaws to some other officer or agent of the Corporation or are required by law to be otherwise signed or executed by some other officer or in some other manner. In general, the President shall perform all duties incident to the office of President and such other duties as are assigned to the President by the Board from time to time.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-7-secretary&quot;&gt;6.7 Secretary&lt;&#x2F;h3&gt;
+&lt;p&gt;The Secretary shall: (a) keep or cause to be kept the minutes of meetings of the Board, and minutes which may be maintained by committees of the Board; (b) see that all notices are duly given in accordance with the provisions of these Bylaws or as required by law; (c) be custodian or ensure the safe custody of the corporate records of the Corporation; (d) keep records of the post office and email address of each Director and each officer; and (e) in general perform all duties incident to the office of Secretary and such other duties as from time to time may be assigned to the Secretary by the President or the Board.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-8-treasurer&quot;&gt;6.8 Treasurer&lt;&#x2F;h3&gt;
+&lt;p&gt;If requested by the Board, the Treasurer shall give a bond for the faithful discharge of his or her duties in such amount and with such surety or sureties as the Board may determine. The Treasurer shall have charge and custody of and be responsible for oversight of all funds and securities of the Corporation; receive and give receipts for moneys due and payable to the Corporation from any source whatsoever, and ensure the deposit all such moneys in the name of the Corporation in banks, trust companies or other depositories selected in accordance with the provisions of these Bylaws; provide financial reports to the Board at its meetings and on request and in general perform all of the duties incident to the office of Treasurer and such other duties as from time to time may be assigned to him or her by the President or the Board.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-7-administrative-provisions&quot;&gt;Article 7. Administrative Provisions&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;7-1-loans&quot;&gt;7.1 Loans&lt;&#x2F;h3&gt;
+&lt;p&gt;No loans shall be contracted on behalf of the Corporation and no evidences of indebtedness shall be issued in its name unless authorized by a resolution of the Board. Such authority may be general or confined to specific instances.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;7-2-loans-or-extensions-of-credit-to-officers-and-directors&quot;&gt;7.2 Loans or Extensions of Credit to Officers and Directors&lt;&#x2F;h3&gt;
+&lt;p&gt;No loans shall be made and no credit shall be extended by the Corporation to its officers or Directors.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;7-3-checks-drafts-etc&quot;&gt;7.3 Checks, Drafts, Etc.&lt;&#x2F;h3&gt;
+&lt;p&gt;All checks, drafts or other orders for the payment of money, notes or other evidences of indebtedness issued in the name of the corporation shall be signed by such officer or officers, or agent or agents, of the Corporation and in such manner as is from time to time determined by resolution of the Board.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;7-4-books-and-records&quot;&gt;7.4 Books and Records&lt;&#x2F;h3&gt;
+&lt;p&gt;The Corporation shall keep at its principal or registered office copies of its current Articles of Incorporation and Bylaws; correct and adequate records of accounts and finances; minutes of the proceedings of the Board, and any minutes which may be maintained by committees of the Board; records of the name and address of each Director, and each officer; and such other records as may be necessary or advisable.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;7-5-accounting-year&quot;&gt;7.5 Accounting Year&lt;&#x2F;h3&gt;
+&lt;p&gt;The accounting year of the Corporation shall be the twelve months ending December 31.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;7-6-rules-of-procedure&quot;&gt;7.6 Rules of Procedure&lt;&#x2F;h3&gt;
+&lt;p&gt;The rules of procedure at meetings of the Board and committees of the Board shall be rules contained in Roberts’ Rules of Order on Parliamentary Procedure, newly revised, so far as applicable and when not inconsistent with these Bylaws, the Articles of Incorporation or any resolution of the Board.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-8-conflict-of-interest&quot;&gt;Article 8. Conflict of Interest&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;8-1-purpose&quot;&gt;8.1 Purpose&lt;&#x2F;h3&gt;
+&lt;p&gt;Bevy Foundation encourages the active involvement of its directors and officers in the community. To be transparent and deal fairly with actual and potential conflicts of interest that may arise as a consequence of community involvement, Bevy Foundation adopts the following policy. The purpose of this conflict of interest policy is to protect the interests of Bevy Foundation as it fulfills its charitable purposes, and when it is contemplating entering into a transaction or arrangement that might benefit the private interest of an officer or director of Bevy Foundation or might result in a possible excess benefit transaction. This policy is intended to supplement but not replace any applicable state and federal laws governing conflict of interest applicable to nonprofit and charitable organizations.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;8-2-policy&quot;&gt;8.2 Policy&lt;&#x2F;h3&gt;
+&lt;p&gt;Directors and officers are expected to use good judgment, to adhere to high ethical standards, and to conduct their affairs in such a manner as to avoid any actual or potential conflict between the personal interests of a director or officer and those of Bevy Foundation. A conflict of interest exists when a director or officer’s loyalties or actions are divided between the interests of Bevy Foundation and the director or officer’s interests. Both the fact and the appearance of a conflict of interest should be avoided.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;8-3-definitions&quot;&gt;8.3 Definitions&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;8-3-1-affiliation&quot;&gt;8.3.1 Affiliation&lt;&#x2F;h4&gt;
+&lt;p&gt;An affiliation includes any interests other than financial interests that may influence a director or officer’s judgment. An objective test determines whether an affiliation exists between the director or officer and the other person, entity, or organization: whether the involvement or relationship of the director or officer with the other person, entity, or organization is such that it reduces the likelihood that the director or officer can act in Bevy Foundation’s best interests.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;8-3-2-interested-person&quot;&gt;8.3.2 Interested Person&lt;&#x2F;h4&gt;
+&lt;p&gt;Any director, principal officer, or member of a committee with governing board delegated powers, who has a direct or indirect financial interest, as defined below, or organizational affiliation, as defined above, is an interested person.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;8-3-3-financial-interest&quot;&gt;8.3.3 Financial Interest&lt;&#x2F;h4&gt;
+&lt;p&gt;A person has a financial interest if the person has, directly or indirectly, through business, investment, or family:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;An ownership or investment interest in any entity with which Bevy Foundation has a transaction or arrangement,&lt;&#x2F;li&gt;
+&lt;li&gt;A compensation arrangement with Bevy Foundation or with any entity or individual with which Bevy Foundation has a transaction or arrangement, or&lt;&#x2F;li&gt;
+&lt;li&gt;A potential ownership or investment interest in, or compensation arrangement with, any entity or individual with which Bevy Foundation is negotiating a transaction or arrangement. Compensation includes direct and indirect remuneration as well as gifts or favors that are not insubstantial. A financial interest is not necessarily a conflict of interest. Under Article IV, Section 2, a person who has a financial interest may have a conflict of interest only if the appropriate governing board or committee decides that a conflict of interest exists.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;8-4-procedures&quot;&gt;8.4 Procedures&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;8-4-1-duty-to-disclose&quot;&gt;8.4.1 Duty to Disclose&lt;&#x2F;h4&gt;
+&lt;p&gt;In connection with any actual or possible conflict of interest, an interested person must disclose the existence of the financial interest or organizational affiliation and be given the opportunity to disclose all material facts to the directors and members of committees with governing board delegated powers considering the proposed transaction or arrangement&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;8-4-2-determining-whether-a-conflict-of-interest-exists&quot;&gt;8.4.2 Determining Whether a Conflict of Interest Exists&lt;&#x2F;h4&gt;
+&lt;p&gt;After disclosure of the financial interest or organizational affiliation and all material facts, and after any discussion with the interested person, he&#x2F;she shall leave the governing board or committee meeting while the determination of a conflict of interest is discussed and voted upon. The remaining board or committee members shall decide if a conflict of interest exists.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;8-4-3-procedures-for-addressing-the-conflict-of-interest&quot;&gt;8.4.3 Procedures for Addressing the Conflict of Interest&lt;&#x2F;h4&gt;
+&lt;ol&gt;
+&lt;li&gt;An interested person may make a presentation at the governing board or committee meeting, but after the presentation, he&#x2F;she shall leave the meeting during the discussion of, and the vote on, the transaction or arrangement involving the possible conflict of interest.&lt;&#x2F;li&gt;
+&lt;li&gt;The chairperson of the governing board or committee shall, if appropriate, appoint a disinterested person or committee to investigate alternatives to the proposed transaction or arrangement.&lt;&#x2F;li&gt;
+&lt;li&gt;After exercising due diligence, the governing board or committee shall determine whether Bevy Foundation can obtain with reasonable efforts a more advantageous transaction or arrangement from a person or entity that would not give rise to a conflict of interest.&lt;&#x2F;li&gt;
+&lt;li&gt;The governing board or committee shall determine by a majority vote of the disinterested directors whether the transaction or arrangement is in Bevy Foundation&#x27;s best interest, for its own benefit, and whether it is fair and reasonable. In conformity with the above determination, it shall make its decision as to whether to enter into the transaction or arrangement.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h4 id=&quot;8-4-4-violations-of-the-conflict-of-interest-policy&quot;&gt;8.4.4 Violations of the Conflict of Interest Policy&lt;&#x2F;h4&gt;
+&lt;ol&gt;
+&lt;li&gt;If the governing board or committee has reasonable cause to believe a member has failed to disclose actual or possible conflict of interest, it shall inform the member of the basis for such belief and afford the member an opportunity to explain the alleged failure to disclose.&lt;&#x2F;li&gt;
+&lt;li&gt;If, after hearing the member’s response and after making further investigation as warranted by the circumstances, the governing board or committee determines the member has failed to disclose an actual or possible conflict of interest, it shall take appropriate disciplinary and corrective action.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;8-5-records-of-proceedings&quot;&gt;8.5 Records of Proceedings&lt;&#x2F;h3&gt;
+&lt;p&gt;The minutes of the governing board and all committees with board delegated powers shall contain:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;The names of the persons who disclosed or otherwise were found to have a financial interest or organizational affiliation in connection with an actual or possible conflict of interest, the nature of the financial interest or organizational affiliation, any action taken to determine whether a conflict of interest was present, and the governing board’s or committee’s decision as to whether a conflict of interest in fact existed.&lt;&#x2F;li&gt;
+&lt;li&gt;The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;8-6-compensation&quot;&gt;8.6 Compensation&lt;&#x2F;h3&gt;
+&lt;ol&gt;
+&lt;li&gt;A voting member of the governing board who receives compensation, directly or indirectly, from Bevy Foundation for services is precluded from voting on matters pertaining to that member’s compensation.&lt;&#x2F;li&gt;
+&lt;li&gt;A voting member of any committee whose jurisdiction includes compensation matters and who receives compensation, directly or indirectly, from Bevy Foundation for services is precluded from voting on matters pertaining to that member’s compensation.&lt;&#x2F;li&gt;
+&lt;li&gt;No voting member of the governing board or any committee whose jurisdiction includes compensation matters and who receives compensation, directly or indirectly, from Bevy Foundation, either individually or collectively, is prohibited from providing information to any committee regarding compensation.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;8-7-periodic-statements&quot;&gt;8.7 Periodic Statements&lt;&#x2F;h3&gt;
+&lt;p&gt;Each director and officer shall periodically sign a statement that affirms such person:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Has received a copy of the conflict of interest policy,&lt;&#x2F;li&gt;
+&lt;li&gt;Has read and understands the policy,&lt;&#x2F;li&gt;
+&lt;li&gt;Has agreed to comply with the policy, and&lt;&#x2F;li&gt;
+&lt;li&gt;Understands that Bevy Foundation is a charitable organization and in order to maintain its federal tax exemption it must engage primarily in activities which accomplish one or more of its tax-exempt purposes.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;8-8-the-bevy-sponsorship-pledge&quot;&gt;8.8 The Bevy Sponsorship Pledge&lt;&#x2F;h3&gt;
+&lt;p&gt;Each director that receives money for their work on Bevy must sign and adhere to the Bevy Sponsorship Pledge. A copy is available on the Bevy website: &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;sponsorship-pledge&quot;&gt;https:&#x2F;&#x2F;bevyengine.org&#x2F;sponsorship-pledge&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;article-9-amendments&quot;&gt;Article 9. Amendments&lt;&#x2F;h2&gt;
+&lt;p&gt;These Bylaws may be altered, amended or repealed and new Bylaws may be adopted by the vote of a majority of the number of Directors in office.&lt;&#x2F;p&gt;
+&lt;p&gt;The foregoing Bylaws were adopted by a majority of the Directors then in office at a meeting of the Board of Directors held on February 3rd, 2024 at which a quorum was present.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;history&quot;&gt;History&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Initial Bylaws adopted by the Bevy Foundation board on February 3rd, 2024.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Board meeting: 2024-02-03</title>
+        <published>2024-02-03T00:00:00+00:00</published>
+        <updated>2024-02-03T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Alice I. Cecile
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/foundation/meeting-minutes/2024-02-03/"/>
+        <id>https://bevyengine.org/foundation/meeting-minutes/2024-02-03/</id>
+        
+        <content type="html" xml:base="https://bevyengine.org/foundation/meeting-minutes/2024-02-03/">&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;attendees&quot;&gt;Attendees
+&lt;a class=&quot;anchor-link&quot; href=&quot;#attendees&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Rob Swain&lt;&#x2F;li&gt;
+&lt;li&gt;James Liu&lt;&#x2F;li&gt;
+&lt;li&gt;Carter Anderson&lt;&#x2F;li&gt;
+&lt;li&gt;Alice I. Cecile&lt;&#x2F;li&gt;
+&lt;li&gt;François Mockers&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;agenda&quot;&gt;Agenda
+&lt;a class=&quot;anchor-link&quot; href=&quot;#agenda&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Adopt bylaws&lt;&#x2F;li&gt;
+&lt;li&gt;Elect officers&lt;&#x2F;li&gt;
+&lt;li&gt;Approve Cart opening a bank account&lt;&#x2F;li&gt;
+&lt;li&gt;Approve Cart transferring copyright of the Bevy logo&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;adopt-bylaws&quot;&gt;Adopt Bylaws
+&lt;a class=&quot;anchor-link&quot; href=&quot;#adopt-bylaws&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;As defined in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;cart&#x2F;bevy-website&#x2F;blob&#x2F;01289396b15858715dd165956829fe00f92d50f0&#x2F;content&#x2F;foundation&#x2F;bylaws&#x2F;index.md&quot;&gt;Cart’s branch on 2024-02-03&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;officers&quot;&gt;Officers
+&lt;a class=&quot;anchor-link&quot; href=&quot;#officers&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;strong&gt;Cart for President.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Alice for Secretary.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;p&gt;Board discussed who should be treasurer. Easier for US persons, due to the need to go in to the bank branch to validate ID.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Cart for Treasurer.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved, with discussion of this as a temporary position.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;opening-a-bank-account&quot;&gt;Opening a bank account
+&lt;a class=&quot;anchor-link&quot; href=&quot;#opening-a-bank-account&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Cart shall open a bank account on behalf of the Foundation.&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;transferring-of-the-bevy-logo-copyright&quot;&gt;Transferring of the Bevy logo copyright
+&lt;a class=&quot;anchor-link&quot; href=&quot;#transferring-of-the-bevy-logo-copyright&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;The Bevy Foundation should accept a copyright transfer of the Bevy logo from Carter Anderson.&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;making-foundation-board-meeting-minutes-generally-publicly-available&quot;&gt;Making foundation board meeting minutes generally publicly available
+&lt;a class=&quot;anchor-link&quot; href=&quot;#making-foundation-board-meeting-minutes-generally-publicly-available&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;The board should make these meeting notes publicly available at the time of publication.&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: Alice&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;signing-of-meeting-minutes&quot;&gt;Signing of meeting minutes
+&lt;a class=&quot;anchor-link&quot; href=&quot;#signing-of-meeting-minutes&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Discussed how to validate meeting minutes.&lt;&#x2F;p&gt;
+&lt;p&gt;Agreed on storing meeting minutes on Github on &lt;code&gt;bevy-website repo&lt;&#x2F;code&gt;, and approved by board members via PR approval.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;transferring-the-ownership-of-the-bevyengine-org-domain-to-the-foundation&quot;&gt;Transferring the ownership of the bevyengine.org domain to the Foundation
+&lt;a class=&quot;anchor-link&quot; href=&quot;#transferring-the-ownership-of-the-bevyengine-org-domain-to-the-foundation&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Cart should transfer ownership of the bevyengine.org domain to the foundation.&lt;&#x2F;p&gt;
+&lt;p&gt;Proposed by: James&lt;&#x2F;p&gt;
+&lt;p&gt;Discussed how to pay for the bills associated. May need to delay until bank account is open and has funds.&lt;&#x2F;p&gt;
+&lt;p&gt;Cart will cover hosting costs personally initially, and then will be reimbursed.&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;transferring-ownership-of-the-bevyengine-github-account-to-the-foundation&quot;&gt;Transferring ownership of the bevyengine GitHub account to the Foundation
+&lt;a class=&quot;anchor-link&quot; href=&quot;#transferring-ownership-of-the-bevyengine-github-account-to-the-foundation&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Unclear of how exactly we might do this. Broad agreement that this is Probably correct to do.&lt;&#x2F;p&gt;
+&lt;p&gt;Might need to consider how&#x2F;if to add more admin privileges to manage attack surface.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;motion-to-adjourn&quot;&gt;Motion to adjourn
+&lt;a class=&quot;anchor-link&quot; href=&quot;#motion-to-adjourn&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Proposed by: Cart&lt;&#x2F;p&gt;
+&lt;p&gt;Unanimously approved.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>SME Announcements</title>
+        <published>2023-12-12T00:00:00+00:00</published>
+        <updated>2023-12-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/sme-announcements/"/>
+        <id>https://bevyengine.org/news/sme-announcements/</id>
+        
+        <summary type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.twitter.com&#x2F;cart_cart&quot;&gt;@cart&lt;&#x2F;a&gt; here (Bevy&#x27;s creator and Project Lead) with a quick update! We have some new SMEs (Subject Matter Experts) to announce.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.12</title>
+        <published>2023-11-04T00:00:00+00:00</published>
+        <updated>2023-11-04T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-12/"/>
+        <id>https://bevyengine.org/news/bevy-0-12/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;185&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;567&lt;&#x2F;strong&gt; pull requests, community reviewers, and our &lt;a href=&quot;&#x2F;donate&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, we&#x27;re happy to announce the &lt;strong&gt;Bevy 0.12&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It&#x27;s free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.12&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.11-0.12&#x2F;&quot;&gt;0.11 to 0.12 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Since our last release a few months ago we&#x27;ve added a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Community Reflection on Bevy&#x27;s Third Year</title>
+        <published>2023-09-21T00:00:00+00:00</published>
+        <updated>2023-09-21T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/community-reflection-on-bevys-third-year/"/>
+        <id>https://bevyengine.org/news/community-reflection-on-bevys-third-year/</id>
+        
+        <summary type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.twitter.com&#x2F;cart_cart&quot;&gt;@cart&lt;&#x2F;a&gt; here (Bevy&#x27;s creator and Project Lead) with another update! A little over a month ago was Bevy&#x27;s Third Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;news&#x2F;bevys-third-birthday&#x2F;&quot;&gt;Bevy&#x27;s Third Birthday&lt;&#x2F;a&gt; post.&lt;&#x2F;p&gt;
+&lt;p&gt;This year for the first time I also encouraged the Bevy community to write their own reflections on Bevy&#x27;s third year in a similar style, and to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy-website&#x2F;issues&#x2F;728&quot;&gt;post them here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy&#x27;s Third Birthday</title>
+        <published>2023-08-10T00:00:00+00:00</published>
+        <updated>2023-08-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevys-third-birthday/"/>
+        <id>https://bevyengine.org/news/bevys-third-birthday/</id>
+        
+        <summary type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.twitter.com&#x2F;cart_cart&quot;&gt;@cart&lt;&#x2F;a&gt; here (Bevy&#x27;s creator and Project Lead) with an exciting announcement ... it has now been three years since the initial Bevy release!&lt;&#x2F;p&gt;
+&lt;p&gt;As is tradition, I will take this as a chance to reflect on the past year and outline our hopes and dreams for the future. If you&#x27;re curious, check out Bevy&#x27;s &lt;a href=&quot;&#x2F;news&#x2F;bevys-first-birthday&quot;&gt;First Birthday&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;news&#x2F;bevys-second-birthday&quot;&gt;Second Birthday&lt;&#x2F;a&gt; posts.&lt;&#x2F;p&gt;
+&lt;p&gt;This year, I am also highly encouraging everyone to write their own &amp;quot;Bevy Birthday&amp;quot; reflection posts. Just publish your post somewhere (and to social media if you want) and &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy-website&#x2F;issues&#x2F;728&quot;&gt;link to it here&lt;&#x2F;a&gt;. One month from now, we will do a followup &amp;quot;Reflecting on Bevy&#x27;s Third Year&amp;quot; rollup post that aggregates these in one place. This is our chance as a community to celebrate our wins, identify improvement areas, and calibrate our path for the next year.&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. We have a &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt;. You can also check out &lt;a href=&quot;&#x2F;assets&#x2F;&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a library of community-developed plugins, crates, games, and learning resources.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.11</title>
+        <published>2023-07-09T00:00:00+00:00</published>
+        <updated>2023-07-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Bevy Contributors
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-11/"/>
+        <id>https://bevyengine.org/news/bevy-0-11/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;166&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;522&lt;&#x2F;strong&gt; pull requests, community reviewers, and our &lt;a href=&quot;&#x2F;donate&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, we&#x27;re happy to announce the &lt;strong&gt;Bevy 0.11&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It&#x27;s free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.11&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.10-0.11&#x2F;&quot;&gt;0.10 to 0.11 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Since our last release a few months ago we&#x27;ve added a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy + WebGPU</title>
+        <published>2023-05-17T00:00:00+00:00</published>
+        <updated>2023-05-17T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-webgpu/"/>
+        <id>https://bevyengine.org/news/bevy-webgpu/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;m excited to announce that Bevy&#x27;s main branch now supports WebGPU rendering on the web! This means you can &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;play with it now by checking out our repo&lt;&#x2F;a&gt; provided you have a &lt;a href=&quot;https:&#x2F;&#x2F;caniuse.com&#x2F;webgpu&quot;&gt;supported web browser&lt;&#x2F;a&gt; (WebGPU is still in the process of rolling out). You can also explore our &lt;a href=&quot;&#x2F;examples-webgpu&quot;&gt;live WebGPU examples&lt;&#x2F;a&gt;. The upcoming &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&#x2F;milestone&#x2F;11&quot;&gt;Bevy 0.11 release&lt;&#x2F;a&gt; will have WebGPU support built in, which is slated for release in about a month!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-webgpu&quot;&gt;What is WebGPU?
+&lt;a class=&quot;anchor-link&quot; href=&quot;#what-is-webgpu&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;WebGPU is an &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;gpuweb&#x2F;gpuweb&quot;&gt;exciting new web standard&lt;&#x2F;a&gt; for doing modern GPU graphics and compute. It takes inspiration from Vulkan, Direct3D 12, and Metal. In fact, it is generally implemented on top of these APIs under the hood. WebGPU gives us access to more GPU features than WebGL2 (such as compute shaders) and also has the potential to be much faster. It means that more of Bevy&#x27;s native renderer features are now also available on the web. It also uses the new &lt;a href=&quot;https:&#x2F;&#x2F;www.w3.org&#x2F;TR&#x2F;WGSL&quot;&gt;WGSL shader language&lt;&#x2F;a&gt;. We&#x27;re very happy with how WGSL has evolved over time and Bevy uses it internally for our shaders. We also added usability features like imports! But with Bevy you still have the option to use GLSL if you prefer.&lt;&#x2F;p&gt;
+&lt;p&gt;WebGPU has started making waves because &lt;a href=&quot;https:&#x2F;&#x2F;developer.chrome.com&#x2F;blog&#x2F;webgpu-release&#x2F;&quot;&gt;Chrome just shipped WebGPU support in Chrome 113&lt;&#x2F;a&gt;, which means people with normal Chrome releases can start testing it. Firefox and Safari also have implementations in the works!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-bevy&quot;&gt;What is Bevy?
+&lt;a class=&quot;anchor-link&quot; href=&quot;#what-is-bevy&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;news&#x2F;bevy-webgpu&#x2F;ruins.png&quot; alt=&quot;ruins&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple cross-platform data-driven game engine built in Rust. It has a modern and extensible 2D and 3D renderer, a best-in-class ECS (entity component system) that is delightful to use, &lt;a href=&quot;&#x2F;&quot;&gt;plenty of features&lt;&#x2F;a&gt;, and a vibrant and open &lt;a href=&quot;&#x2F;community&quot;&gt;developer community&lt;&#x2F;a&gt;. It currently supports Windows, MacOS, Linux, iOS, and Web. We also have work in progress Android support ... and ambitions for even more platforms in the future!&lt;&#x2F;p&gt;
+&lt;p&gt;You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It is free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.10</title>
+        <published>2023-03-06T00:00:00+00:00</published>
+        <updated>2023-03-06T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Bevy Contributors
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-10/"/>
+        <id>https://bevyengine.org/news/bevy-0-10/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;173&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;689&lt;&#x2F;strong&gt; pull requests, community reviewers, and our &lt;a href=&quot;&#x2F;donate&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, we&#x27;re happy to announce the &lt;strong&gt;Bevy 0.10&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It&#x27;s free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.10&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.9-0.10&#x2F;&quot;&gt;0.9 to 0.10 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Since our last release a few months ago we&#x27;ve added a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Scaling Bevy Development</title>
+        <published>2023-01-14T00:00:00+00:00</published>
+        <updated>2023-01-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/scaling-bevy-development/"/>
+        <id>https://bevyengine.org/news/scaling-bevy-development/</id>
+        
+        <summary type="html">&lt;p&gt;The Bevy community has grown a lot over the past couple of years. We&#x27;ve had over 3,642 pull requests, 599 contributors, 357,917 downloads, and 21,200 github stars. Together we&#x27;ve built the most popular, most used Rust game engine on the market and the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;topics&#x2F;game-engine&quot;&gt;second most popular game engine on GitHub&lt;&#x2F;a&gt;. Up until now, in the interest of maintaining a consistent vision and quality bar, I&#x27;ve kept our decision making process as small and centralized as possible. And I scaled out our leadership roles as slowly as possible. I believe this was the right call for Bevy&#x27;s early days, but we are overdue for changes that bias toward more trust and development agility.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.9</title>
+        <published>2022-11-12T00:00:00+00:00</published>
+        <updated>2022-11-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-9/"/>
+        <id>https://bevyengine.org/news/bevy-0-9/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;159&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;430&lt;&#x2F;strong&gt; pull requests, community reviewers, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.9&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It&#x27;s free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.9&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.8-0.9&#x2F;&quot;&gt;0.8 to 0.9 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Since our last release a few months ago we&#x27;ve added a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy&#x27;s Second Birthday</title>
+        <published>2022-08-10T00:00:00+00:00</published>
+        <updated>2022-08-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevys-second-birthday/"/>
+        <id>https://bevyengine.org/news/bevys-second-birthday/</id>
+        
+        <summary type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.twitter.com&#x2F;cart_cart&quot;&gt;@cart&lt;&#x2F;a&gt; here (Bevy&#x27;s creator, lead developer, and project manager) with another exciting announcement:&lt;&#x2F;p&gt;
+&lt;p&gt;It has now been two years since the initial Bevy release! As is (now) tradition, I will take this as a chance to reflect on the past year and outline our plans for the future. If you&#x27;re curious, check out &lt;a href=&quot;&#x2F;news&#x2F;bevys-first-birthday&quot;&gt;last year&#x27;s birthday post&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. We have a &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt;. You can also check out &lt;a href=&quot;&#x2F;assets&#x2F;&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a library of community-developed plugins, crates, games, and learning resources.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.8</title>
+        <published>2022-07-30T00:00:00+00:00</published>
+        <updated>2022-07-30T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-8/"/>
+        <id>https://bevyengine.org/news/bevy-0-8/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;130&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;461&lt;&#x2F;strong&gt; pull requests, community reviewers, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.8&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt; to try it today. It&#x27;s free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.8&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.7-0.8&#x2F;&quot;&gt;0.7 to 0.8 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Since our last release a few months ago we&#x27;ve added a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;New Material System&lt;&#x2F;strong&gt;: Custom shaders are now &lt;em&gt;much&lt;&#x2F;em&gt; easier to define, thanks to the new Material trait and AsBindGroup derive.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Camera-driven Rendering&lt;&#x2F;strong&gt;: Each Camera now configures what it renders and how it renders it. Easily layer camera renders on top of each other, do split screen, or render to a texture in just a few lines of code.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Built-in Shader Modularization&lt;&#x2F;strong&gt;: Many built-in shader types and functions are now importable. Notably, custom shaders can now import the PBR shader logic&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Spot Lights&lt;&#x2F;strong&gt;: A new light type that emits light in a cone shape from a fixed point.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Visibility Inheritance&lt;&#x2F;strong&gt;: Hiding an entity now also hides all of its descendants in the hierarchy.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Upgraded to wgpu 0.13&lt;&#x2F;strong&gt;: Uses a new, more ergonomic WGSL shader syntax.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Automatic Mesh Tangent Generation&lt;&#x2F;strong&gt;: If tangents are missing for a mesh, generate them with mikktspace.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Renderer Optimizations&lt;&#x2F;strong&gt;: Parallel frustum culling and unstable sorts for unbatched render phases yielded some big wins!&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Scene Bundle&lt;&#x2F;strong&gt;: Easily spawn scenes using a normal Bevy bundle and extend them with new components and children.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Scripting and Modding Progress: Untyped ECS APIs&lt;&#x2F;strong&gt;: A step toward 3rd party scripting language support! Interact with Bevy ECS internals directly via pointers.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;ECS Query Ergonomics and Usability&lt;&#x2F;strong&gt;: Queries now implement &lt;code&gt;IntoIter&lt;&#x2F;code&gt; and mutable queries can be converted to immutable queries.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;ECS Internals Refactors&lt;&#x2F;strong&gt;: Sweeping changes to Bevy ECS internals that make it simpler, safer, and easier to maintain.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Reflection Improvements&lt;&#x2F;strong&gt;: Support for reflecting more types, ECS resource reflection, untyped reflection, improved internals.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Hierarchy Commands&lt;&#x2F;strong&gt;: Hierarchy updates now use &amp;quot;transactional commands&amp;quot; to ensure hierarchy consistency at all times.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Bevy UI Now Uses Taffy&lt;&#x2F;strong&gt;:  We&#x27;ve swapped to (and help maintain) a collaborative fork of the now abandoned Stretch UI layout library. Exponential blow-up bug begone!&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.7</title>
+        <published>2022-04-15T00:00:00+00:00</published>
+        <updated>2022-04-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-7/"/>
+        <id>https://bevyengine.org/news/bevy-0-7/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;123&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;349&lt;&#x2F;strong&gt; pull requests, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.7&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;The Quick Start Guide&lt;&#x2F;a&gt; to get started. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.7&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.6-0.7&#x2F;&quot;&gt;0.6 to 0.7 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;As always, there are a &lt;em&gt;ton&lt;&#x2F;em&gt; of new features, bug fixes, and quality of life tweaks in this release, but here are some of the highlights:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Skeletal animation and mesh skinning&lt;&#x2F;li&gt;
+&lt;li&gt;GLTF animation importing&lt;&#x2F;li&gt;
+&lt;li&gt;Unlimited* point lights in a scene&lt;&#x2F;li&gt;
+&lt;li&gt;Improved clustered forward rendering: dynamic&#x2F;adaptive clustering and faster, more accurate cluster assignment&lt;&#x2F;li&gt;
+&lt;li&gt;Compressed texture support (KTX2 &#x2F; DDS &#x2F; .basis): load more textures in a scene, faster&lt;&#x2F;li&gt;
+&lt;li&gt;Compute shader &#x2F; pipeline specialization: Bevy&#x27;s flexible shader system was ported to compute shaders, enabling hot reloading, shader defs, and shader imports&lt;&#x2F;li&gt;
+&lt;li&gt;Render to texture: cameras can now be configured to render to a texture instead of a window&lt;&#x2F;li&gt;
+&lt;li&gt;Flexible mesh vertex layouts in shaders&lt;&#x2F;li&gt;
+&lt;li&gt;ECS improvements: Order systems using their names, Query::many_mut, use conflicting parameters in systems via ParamSets, WorldQuery derives&lt;&#x2F;li&gt;
+&lt;li&gt;Documentation improvements: better examples, more doc tests and more coverage&lt;&#x2F;li&gt;
+&lt;li&gt;More audio control: pause, volume, speed, and looping&lt;&#x2F;li&gt;
+&lt;li&gt;Power usage options to enable only updating Bevy Apps when input occurs&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.6</title>
+        <published>2022-01-08T00:00:00+00:00</published>
+        <updated>2022-01-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-6/"/>
+        <id>https://bevyengine.org/news/bevy-0-6/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;170&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;623&lt;&#x2F;strong&gt; pull requests, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.6&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;The Quick Start Guide&lt;&#x2F;a&gt; to get started. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a collection of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;To update an existing Bevy App or Plugin to &lt;strong&gt;Bevy 0.6&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.5-0.6&#x2F;&quot;&gt;0.5 to 0.6 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;There are a &lt;em&gt;ton&lt;&#x2F;em&gt; of improvements, bug fixes and quality of life tweaks in this release. Here are some of the highlights:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;A brand new modern renderer that is prettier, faster, and simpler to extend&lt;&#x2F;li&gt;
+&lt;li&gt;Directional and point light shadows&lt;&#x2F;li&gt;
+&lt;li&gt;Clustered forward rendering&lt;&#x2F;li&gt;
+&lt;li&gt;Frustum culling&lt;&#x2F;li&gt;
+&lt;li&gt;Significantly faster sprite rendering with less boilerplate&lt;&#x2F;li&gt;
+&lt;li&gt;Native WebGL2 support. You can test this out by &lt;a href=&quot;&#x2F;examples&quot;&gt;running the Bevy Examples in your browser!&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;High level custom Materials&lt;&#x2F;li&gt;
+&lt;li&gt;More powerful shaders: preprocessors, imports, WGSL support&lt;&#x2F;li&gt;
+&lt;li&gt;Bevy ECS ergonomics and performance improvements. No more &lt;code&gt;.system()&lt;&#x2F;code&gt;!&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Read on for details!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy&#x27;s First Birthday</title>
+        <published>2021-08-10T00:00:00+00:00</published>
+        <updated>2021-08-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevys-first-birthday/"/>
+        <id>https://bevyengine.org/news/bevys-first-birthday/</id>
+        
+        <summary type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.twitter.com&#x2F;cart_cart&quot;&gt;@cart&lt;&#x2F;a&gt; here (Bevy&#x27;s creator, lead developer, and project manager) with some exciting news:&lt;&#x2F;p&gt;
+&lt;p&gt;Today is Bevy&#x27;s first birthday! And what a year it has been! Now seems like as good a time as any to look back on how far we&#x27;ve come, reflect a bit, and start thinking about what the next year of Bevy development will look like.&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. We have a &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;Quick Start Guide&lt;&#x2F;a&gt;. You can also check out &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;assets&#x2F;&quot;&gt;Bevy Assets&lt;&#x2F;a&gt; for a library of community-developed plugins, crates, games, and learning resources.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.5</title>
+        <published>2021-04-06T00:00:00+00:00</published>
+        <updated>2021-04-06T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-5/"/>
+        <id>https://bevyengine.org/news/bevy-0-5/</id>
+        
+        <summary type="html">&lt;p&gt;Thanks to &lt;strong&gt;88&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;283&lt;&#x2F;strong&gt; pull requests, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.5&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;The Quick Start Guide&lt;&#x2F;a&gt; to get started. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub. Check out &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;awesome-bevy&quot;&gt;Awesome Bevy&lt;&#x2F;a&gt; for a list of community-developed plugins, games, and learning resources.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Bevy 0.5&lt;&#x2F;strong&gt; is quite a bit bigger than our past few releases (and took a bit longer) as we have made a number of foundational changes. If you plan on updating your App or Plugin to &lt;strong&gt;Bevy 0.5&lt;&#x2F;strong&gt;, check out our &lt;a href=&quot;&#x2F;learn&#x2F;migration-guides&#x2F;0.4-0.5&#x2F;&quot;&gt;0.4 to 0.5 Migration Guide&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Here are some of the highlights from this release:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.4</title>
+        <published>2020-12-19T00:00:00+00:00</published>
+        <updated>2020-12-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-4/"/>
+        <id>https://bevyengine.org/news/bevy-0-4/</id>
+        
+        <summary type="html">&lt;p&gt;A little over a month after releasing Bevy 0.3, and thanks to &lt;strong&gt;66&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;178&lt;&#x2F;strong&gt; pull requests, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.4&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;The Quick Start Guide&lt;&#x2F;a&gt; to get started. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub.&lt;&#x2F;p&gt;
+&lt;p&gt;Here are some of the highlights from this release:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.3</title>
+        <published>2020-11-03T00:00:00+00:00</published>
+        <updated>2020-11-03T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-3/"/>
+        <id>https://bevyengine.org/news/bevy-0-3/</id>
+        
+        <summary type="html">&lt;p&gt;A little over a month after releasing Bevy 0.2, and thanks to &lt;strong&gt;59&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;122&lt;&#x2F;strong&gt; pull requests, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.3&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&quot;&gt;The Quick Start Guide&lt;&#x2F;a&gt; to get started. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub.&lt;&#x2F;p&gt;
+&lt;p&gt;Here are some of the highlights from this release:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bevy 0.2</title>
+        <published>2020-09-19T00:00:00+00:00</published>
+        <updated>2020-09-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/bevy-0-2/"/>
+        <id>https://bevyengine.org/news/bevy-0-2/</id>
+        
+        <summary type="html">&lt;p&gt;A month after the initial Bevy release, and thanks to &lt;strong&gt;87&lt;&#x2F;strong&gt; contributors, &lt;strong&gt;174&lt;&#x2F;strong&gt; pull requests, and our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sponsors&#x2F;cart&quot;&gt;&lt;strong&gt;generous sponsors&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, I&#x27;m happy to announce the &lt;strong&gt;Bevy 0.2&lt;&#x2F;strong&gt; release on &lt;a href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;bevy&quot;&gt;crates.io&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;For those who don&#x27;t know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out &lt;a href=&quot;&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;&quot;&gt;The Quick Start Guide&lt;&#x2F;a&gt; to get started. Bevy is also free and open source forever! You can grab the full &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;source code&lt;&#x2F;a&gt; on GitHub.&lt;&#x2F;p&gt;
+&lt;p&gt;Here are some of the highlights from this release:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Scaling Bevy</title>
+        <published>2020-08-19T00:00:00+00:00</published>
+        <updated>2020-08-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/scaling-bevy/"/>
+        <id>https://bevyengine.org/news/scaling-bevy/</id>
+        
+        <summary type="html">&lt;p&gt;First, I want to take a moment to highlight just how wild the last week has been. &lt;a href=&quot;&#x2F;news&#x2F;introducing-bevy&quot;&gt;&lt;strong&gt;Bevy was only released a week ago&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; and we&#x27;ve already hit some pretty major milestones:&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Introducing Bevy 0.1</title>
+        <published>2020-08-10T00:00:00+00:00</published>
+        <updated>2020-08-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Carter Anderson
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://bevyengine.org/news/introducing-bevy/"/>
+        <id>https://bevyengine.org/news/introducing-bevy/</id>
+        
+        <summary type="html">&lt;p&gt;&lt;video controls loop&gt;&lt;source  src=&quot;hot_reloading.mp4&quot; type=&quot;video&#x2F;mp4&quot;&#x2F;&gt;&lt;&#x2F;video&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;After months of work, I am ecstatic to finally announce &lt;strong&gt;Bevy Engine&lt;&#x2F;strong&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;Bevy is a refreshingly simple data-driven game engine and app framework built in Rust. It is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bevyengine&#x2F;bevy&quot;&gt;free and open-source&lt;&#x2F;a&gt; forever!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+</feed>

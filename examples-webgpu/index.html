@@ -1,0 +1,3423 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="Bevy Examples in WebGPU" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;examples-webgpu&#x2F;" />
+    <meta property="og:image"
+          content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+    <meta property="og:description"
+          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/site.css" />
+    <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+    <title>Bevy Examples in WebGPU</title>
+    
+  </head>
+  <body>
+    <div class="layout">
+      <input id="mobile-menu-state" class="hidden" type="checkbox">
+      <header class="layout__header header" data-mobile-menu-state-container>
+        <div class="header__content">
+          <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+          <label class="header__hamburger button-square button-square--header"
+                  for="mobile-menu-state">
+            <img src="/assets/icon-hamburger.svg"
+                  alt="Three horizontal lines stacked on top of eachother"
+                  width="20"
+                  height="16">
+          </label>
+          <div class="header__left-block">
+            <a class="header__logo" href="/">
+              <img class="logo"
+                    src="/assets/bevy_logo_dark.svg"
+                    alt="Bevy Engine"
+                    width="520"
+                    height="130">
+            </a>
+            <div class="header__message">
+              
+                Examples (WebGPU)
+              
+            </div>
+          </div>
+          
+  <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
+
+          <nav class="header__menu main-menu main-menu--with-page-menu"
+                role="navigation"
+                data-page-menu-switch-state-container>
+            <div class="main-menu__header">
+              <a href="/">
+                <img class="logo"
+                      src="/assets/bevy_logo_dark.svg"
+                      alt="Bevy Engine"
+                      width="520"
+                      height="130">
+              </a>
+              <label class="button-square button-square--header" for="mobile-menu-state">
+                <img src="/assets/icon-times.svg"
+                      alt="A saltire or x-cross"
+                      width="16"
+                      height="16">
+              </label>
+            </div>
+            
+  <div class="main-menu__page-menu-switch">
+    <label class="menu-switch" for="page-menu-switch-state">
+      <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
+      <div class="menu-switch__option menu-switch__option--page-menu">
+        Examples
+      </div>
+    </label>
+  </div>
+
+            <div class="main-menu__content">
+              <div class="main-menu__page-menu">
+                
+  <ul class="tree-menu">
+    
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#2d-rendering">2D Rendering</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#3d-rendering">3D Rendering</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#animation">Animation</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#application">Application</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#assets">Assets</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#audio">Audio</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#diagnostics">Diagnostics</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#ecs-entity-component-system">ECS (Entity Component System)</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#games">Games</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#shaders">Shaders</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#stress-tests">Stress Tests</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#tools">Tools</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#transforms">Transforms</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#ui-user-interface">UI (User Interface)</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#window">Window</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#math">Math</a>
+      
+    </div>
+    
+  </li>
+
+  </ul>
+
+              </div>
+              <ul class="main-menu__menu">
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry main-menu__entry--getting-started">
+    <a href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started" class="main-menu__link">
+      <span>Getting Started</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;learn" class="main-menu__link">
+      <span>Learn</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;news" class="main-menu__link">
+      <span>News</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;community" class="main-menu__link">
+      <span>Community</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;foundation" class="main-menu__link">
+      <span>Foundation</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;assets" class="main-menu__link">
+      <span>Assets</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;examples" class="main-menu__link main-menu__link--active">
+      <span>Examples</span>
+    </a>
+  </li>
+
+                
+              </ul>
+            </div>
+          </nav>
+          <div class="header__cta-container">
+            <a class="button button--pink header__cta" href="/donate">Donate
+              <img class="button__icon"
+                    src="/assets/heart.svg"
+                    alt="heart icon"
+                    width="512"
+                    height="512" />
+            </a>
+            <a class="header__cta header__cta--github"
+                href="https://github.com/bevyengine/bevy">
+              <img src="/assets/github-mark-white.svg"
+                    alt="GitHub repo"
+                    width="98"
+                    height="96" />
+            </a>
+          </div>
+        </div>
+      </header>
+      <main class="layout__content">
+        <div class="container">
+          
+            
+  
+    
+    
+  
+
+  
+
+          
+          
+  <div class="page-with-menu ">
+    <div class="page-with-menu__menu-wrapper">
+      <div class="page-with-menu__menu">
+        
+  <ul class="tree-menu">
+    
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#2d-rendering">2D Rendering</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#3d-rendering">3D Rendering</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#animation">Animation</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#application">Application</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#assets">Assets</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#audio">Audio</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#diagnostics">Diagnostics</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#ecs-entity-component-system">ECS (Entity Component System)</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#games">Games</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#shaders">Shaders</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#stress-tests">Stress Tests</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#tools">Tools</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#transforms">Transforms</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#ui-user-interface">UI (User Interface)</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#window">Window</a>
+      
+    </div>
+    
+  </li>
+
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="#math">Math</a>
+      
+    </div>
+    
+  </li>
+
+  </ul>
+
+      </div>
+    </div>
+    <div class="page-with-menu__content">
+      
+  <div class="assets">
+    <div class="assets-intro media-content">
+      These examples demonstrate how to use Bevy's features in a minimal, easy to understand way. Click an example below
+      to run it in
+      your browser (using WASM + WebGPU) and view the source code. You can also view these examples (and others) in the
+      <a href="https://github.com/bevyengine/bevy/tree/main/examples#examples">Bevy repo</a>.
+      <h2 class="warning">Support Warning</h2>
+      WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If they don't work on
+      your configuration, you can check the WebGL2 examples <a href="/examples">here</a>.
+    </div>
+    <div class="assets-search">
+      <input class="assets-search__input"
+              type="text"
+              id="assets-search"
+              placeholder="Search Example">
+    </div>
+    
+      
+      <h1 class="asset-section" id="2d-rendering">
+        2D Rendering<a class="anchor-link" href="#2d-rendering">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="2d-gizmos">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;2d-gizmos">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">2D Gizmos</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;2d_gizmos.7b52070e27da2740.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A scene showcasing 2D gizmos</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="2d-shapes">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;2d-shapes">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">2D Shapes</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;2d_shapes.d47ee61b2327550a.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders simple 2D primitive shapes like circles and polygons</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="2d-viewport-to-world">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;2d-viewport-to-world">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">2D Viewport To World</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;2d_viewport_to_world.8a40efea8c158230.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how to use the `Camera::viewport_to_world_2d` method</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="2d-bloom">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;bloom-2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">2D Bloom</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;bloom_2d.d99274230c2ef0ac.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates bloom post-processing in 2d</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="2d-bounding-volume-intersections">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;bounding-2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">2D Bounding Volume Intersections</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;bounding_2d.45b232bf19c3d019.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Showcases bounding volumes and intersection tests</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="custom-gltf-vertex-attribute-2d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;custom-gltf-vertex-attribute">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Custom glTF vertex attribute 2D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;custom_gltf_vertex_attribute.fff8b3b643f8682d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a glTF mesh in 2D with a custom vertex attribute</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="manual-mesh-2d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;mesh2d-manual">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Manual Mesh 2D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;mesh2d_manual.82ceaf691aba6a24.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a custom mesh 'manually' with 'mid-level' renderer apis</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="mesh-2d-with-vertex-colors">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;mesh2d-vertex-color-texture">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Mesh 2D With Vertex Colors</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;mesh2d_vertex_color_texture.04d9bb7e849af7fb.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a 2d mesh with vertex color attributes</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="mesh-2d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;mesh2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Mesh 2D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;mesh2d.4a5b174f48c1c17b.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a 2d mesh</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="move-sprite">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;move-sprite">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Move Sprite</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;move_sprite.ac7c3128d91123a3.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Changes the transform of a sprite</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="pixel-grid-snapping">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;pixel-grid-snap">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Pixel Grid Snapping</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;pixel_grid_snap.e29bf0f191b20bd6.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to create graphics that snap to the pixel grid by rendering to a texture in 2D</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="2d-rotation">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;rotation">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">2D Rotation</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;rotation.79e7ae805d7a2758.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates rotating entities in 2D with quaternions</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="sprite-flipping">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;sprite-flipping">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Sprite Flipping</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;sprite_flipping.c9d5a22cf13284f8.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a sprite flipped along an axis</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="sprite-sheet">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;sprite-sheet">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Sprite Sheet</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;sprite_sheet.079377a633be82cd.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders an animated sprite</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="sprite-slice">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;sprite-slice">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Sprite Slice</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;sprite_slice.0f4b3514c3aeabe9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Showcases slicing sprites into sections that can be scaled independently via the 9-patch technique</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="sprite-tile">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;sprite-tile">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Sprite Tile</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;sprite_tile.766d866bbe1b8d6d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a sprite tiled in a grid</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="sprite">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;sprite">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Sprite</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;sprite.1628ccbb08721016.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders a sprite</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="text-2d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;text2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Text 2D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;text2d.1164dc2f690009cf.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Generates text in 2D</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="transparency-in-2d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;2D Rendering&#x2F;transparency-2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Transparency in 2D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;transparency_2d.931d27fef82f9603.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates transparency in 2d</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="3d-rendering">
+        3D Rendering<a class="anchor-link" href="#3d-rendering">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="3d-gizmos">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;3d-gizmos">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">3D Gizmos</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;3d_gizmos.06e4fdff3d5af075.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A scene showcasing 3D gizmos</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="3d-scene">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;3d-scene">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">3D Scene</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;3d_scene.303294348e55980f.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Simple 3D scene with basic shapes and lighting</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="3d-shapes">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;3d-shapes">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">3D Shapes</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;3d_shapes.80c5500df4520451.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A scene showcasing the built-in 3D shapes</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="3d-viewport-to-world">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;3d-viewport-to-world">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">3D Viewport To World</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;3d_viewport_to_world.decdcb740a9319bd.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how to use the `Camera::viewport_to_world` method</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="animated-material">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;animated-material">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Animated Material</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;animated_material.1d6de1f876146a94.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to animate material properties</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="atmospheric-fog">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;atmospheric-fog">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Atmospheric Fog</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;atmospheric_fog.3b2647dea6844af9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A scene showcasing the atmospheric fog effect</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="blend-modes">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;blend-modes">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Blend Modes</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;blend_modes.0affe923a0f408f9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Showcases different blend modes</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="3d-bloom">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;bloom-3d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">3D Bloom</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;bloom_3d.369425b4b338f84a.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates bloom configuration using HDR and emissive materials</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="deferred-rendering">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;deferred-rendering">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Deferred Rendering</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;deferred_rendering.6e7e8d408086604a.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders meshes with both forward and deferred pipelines</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="deterministic-rendering">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;deterministic">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Deterministic rendering</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;deterministic.02bbc53a752a4a3a.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Stop flickering from z-fighting at a performance cost</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="fog">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;fog">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Fog</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;fog.b64e72a91a61b19f.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A scene showcasing the distance fog effect</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="generate-custom-mesh">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;generate-custom-mesh">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Generate Custom Mesh</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;generate_custom_mesh.ac0f0eb0798f0b7e.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Simple showcase of how to generate a custom mesh with a custom texture</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="lighting">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;lighting">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Lighting</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;lighting.bab3bdab51f4f5f6.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates various lighting options in a simple scene</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="lines">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;lines">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Lines</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;lines.3b3f1e715c454f5d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Create a custom material to draw 3d lines</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="load-gltf">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;load-gltf">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Load glTF</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;load_gltf.191a2442be5f4530.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Loads and renders a glTF file as a scene</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="orthographic-view">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;orthographic">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Orthographic View</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;orthographic.2e82846837048958.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to create a 3D orthographic view (for isometric-look in games or CAD applications)</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="parallax-mapping">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;parallax-mapping">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Parallax Mapping</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;parallax_mapping.d877818b742e94b8.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates use of a normal map and depth map for parallax mapping</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="parenting">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;parenting">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Parenting</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;parenting.215d8e36027acff9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates parent->child relationships and relative transformations</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="physically-based-rendering">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;pbr">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Physically Based Rendering</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;pbr.da96f742e44e30fd.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates use of Physically Based Rendering (PBR) properties</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="render-to-texture">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;render-to-texture">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Render to Texture</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;render_to_texture.f768876f6fa45e5d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to render to a texture, useful for mirrors, UI, or exporting images</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="shadow-biases">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;shadow-biases">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Shadow Biases</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shadow_biases.7b61ec014a1b5775.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how shadow biases affect shadows in a 3d scene</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="shadow-caster-and-receiver">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;shadow-caster-receiver">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Shadow Caster and Receiver</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shadow_caster_receiver.361ad7e8fc92fa6e.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how to prevent meshes from casting/receiving shadows in a 3d scene</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="spherical-area-lights">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;spherical-area-lights">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Spherical Area Lights</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;spherical_area_lights.de67b4b661d6e5ef.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how point light radius values affect light behavior</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="split-screen">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;split-screen">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Split Screen</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;split_screen.1669b694a138c735.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how to render two cameras to the same window to accomplish 'split screen'</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="spotlight">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;spotlight">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Spotlight</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;spotlight.361a3f305851e4ef.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates spot lights</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="texture">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;texture">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Texture</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;texture.fa4afabd469e9694.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows configuration of texture materials</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="tonemapping">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;tonemapping">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Tonemapping</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;tonemapping.905e812fb03daeb7.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Compares tonemapping options</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="transmission">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;transmission">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Transmission</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;transmission.21cb51f37e022a1e.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Showcases light transmission in the PBR material</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="transparency-in-3d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;transparency-3d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Transparency in 3D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;transparency_3d.d8150952117cb3ae.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates transparency in 3d</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="two-passes">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;two-passes">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Two Passes</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;two_passes.65caafb0dc558007.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Renders two 3d passes to the same window from different perspectives</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="update-gltf-scene">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;update-gltf-scene">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Update glTF Scene</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;update_gltf_scene.6f2de449dd93a0e6.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Update a scene from a glTF file, either by spawning the scene as a child of another entity, or by accessing the entities of the scene</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="vertex-colors">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;3D Rendering&#x2F;vertex-colors">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Vertex Colors</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;vertex_colors.4b0977f8ca7f22e7.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows the use of vertex colors</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="animation">
+        Animation<a class="anchor-link" href="#animation">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="animated-fox">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Animation&#x2F;animated-fox">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Animated Fox</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;animated_fox.a196797139227e11.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Plays an animation from a skinned glTF</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="animated-transform">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Animation&#x2F;animated-transform">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Animated Transform</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;animated_transform.243a9b4888cf6a52.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Create and play an animation defined by code that operates on the `Transform` component</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="cubic-curve">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Animation&#x2F;cubic-curve">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Cubic Curve</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;cubic_curve.6aa97535e7dfce43.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Bezier curve example showing a cube following a cubic curve</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="custom-skinned-mesh">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Animation&#x2F;custom-skinned-mesh">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Custom Skinned Mesh</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;custom_skinned_mesh.c388514be5c2a1c9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Skinned mesh example with mesh and joints data defined in code</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="gltf-skinned-mesh">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Animation&#x2F;gltf-skinned-mesh">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">glTF Skinned Mesh</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;gltf_skinned_mesh.9dea612c1ad99a09.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Skinned mesh example with mesh and joints data loaded from a glTF file</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="morph-targets">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Animation&#x2F;morph-targets">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Morph Targets</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;morph_targets.a6c7a0ac931b1dd2.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Plays an animation from a glTF file with meshes with morph targets</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="application">
+        Application<a class="anchor-link" href="#application">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="empty-with-defaults">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Application&#x2F;empty-defaults">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Empty with Defaults</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;empty_defaults.81f2d9c91430fb94.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An empty application with default plugins</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="logs">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Application&#x2F;logs">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Logs</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;logs.2328020dc234b4fc.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrate how to use generate log output</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="plugin-group">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Application&#x2F;plugin-group">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Plugin Group</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;plugin_group.47da055657ce9bfd.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates the creation and registration of a custom plugin group</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="plugin">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Application&#x2F;plugin">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Plugin</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;plugin.9fe652abf2e57f82.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates the creation and registration of a custom plugin</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="assets">
+        Assets<a class="anchor-link" href="#assets">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="custom-asset-io">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Assets&#x2F;custom-asset-reader">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Custom Asset IO</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;custom_asset_reader.7d627989f93c749b.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Implements a custom AssetReader</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="custom-asset">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Assets&#x2F;custom-asset">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Custom Asset</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;custom_asset.e6f8c4a4e81711d9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Implements a custom asset loader</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="embedded-asset">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Assets&#x2F;embedded-asset">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Embedded Asset</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;embedded_asset.3d1b1f8a2c640a8f.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Embed an asset in the application binary and load it</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="audio">
+        Audio<a class="anchor-link" href="#audio">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="audio-control">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Audio&#x2F;audio-control">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Audio Control</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;audio_control.42cc2b94a55b1d06.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to load and play an audio file, and control how it's played</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="audio">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Audio&#x2F;audio">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Audio</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;audio.ae0252dd94e78a20.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to load and play an audio file</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="decodable">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Audio&#x2F;decodable">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Decodable</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;decodable.07aa36c64381f369.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to create and register a custom audio source by implementing the `Decodable` type.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="pitch">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Audio&#x2F;pitch">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Pitch</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;pitch.24b5e3eafd627378.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to directly play a simple pitch</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="spatial-audio-2d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Audio&#x2F;spatial-audio-2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Spatial Audio 2D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;spatial_audio_2d.48ad0a0bea6d449d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to play spatial audio, and moving the emitter in 2D</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="spatial-audio-3d">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Audio&#x2F;spatial-audio-3d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Spatial Audio 3D</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;spatial_audio_3d.f8bf26b52cc7c533.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to play spatial audio, and moving the emitter in 3D</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="diagnostics">
+        Diagnostics<a class="anchor-link" href="#diagnostics">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="custom-diagnostic">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Diagnostics&#x2F;custom-diagnostic">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Custom Diagnostic</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;custom_diagnostic.ad203ad23d5a0f7a.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to create a custom diagnostic</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="log-diagnostics">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Diagnostics&#x2F;log-diagnostics">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Log Diagnostics</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;log_diagnostics.15c190174aa7908c.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Add a plugin that logs diagnostics, like frames per second (FPS), to the console</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="ecs-entity-component-system">
+        ECS (Entity Component System)<a class="anchor-link" href="#ecs-entity-component-system">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="iter-combinations">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;ECS (Entity Component System)&#x2F;iter-combinations">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Iter Combinations</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;iter_combinations.aae941a7581dc7e3.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to iterate over combinations of query results</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="games">
+        Games<a class="anchor-link" href="#games">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="alien-cake-addict">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Games&#x2F;alien-cake-addict">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Alien Cake Addict</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;alien_cake_addict.5d40df7cc85a53bc.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Eat the cakes. Eat them all. An example 3D game</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="breakout">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Games&#x2F;breakout">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Breakout</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;breakout.4d00ec3eefc9c7c3.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An implementation of the classic game 'Breakout'</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="contributors">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Games&#x2F;contributors">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Contributors</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;contributors.309a90602c2a52a1.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Displays each contributor as a bouncy bevy-ball!</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="game-menu">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Games&#x2F;game-menu">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Game Menu</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;game_menu.68b246adc8858fce.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A simple game menu</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="shaders">
+        Shaders<a class="anchor-link" href="#shaders">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="animated">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;animate-shader">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Animated</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;animate_shader.1b380e61c8074669.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that uses dynamic data like the time since startup</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="array-texture">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;array-texture">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Array Texture</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;array_texture.428ff12cee8664b7.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that shows how to reuse the core bevy PBR shading functionality in a custom material that obtains the base color from an array texture.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="custom-vertex-attribute">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;custom-vertex-attribute">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Custom Vertex Attribute</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;custom_vertex_attribute.d7acc0288753c827.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that reads a mesh's custom vertex attribute</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="extended-material">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;extended-material">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Extended Material</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;extended_material.5c9eb9106e7b3ca0.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A custom shader that builds on the standard material</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="post-processing-custom-render-pass">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;post-processing">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Post Processing - Custom Render Pass</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;post_processing.1136dbc5960c1375.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A custom post processing effect, using a custom render pass that runs after the main pass</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="shader-defs">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;shader-defs">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Shader Defs</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shader_defs.acf491d22a28fd2e.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that uses 'shaders defs' (a bevy tool to selectively toggle parts of a shader)</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="instancing">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;shader-instancing">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Instancing</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shader_instancing.6d79b1b852452411.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that renders a mesh multiple times in one draw call</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="material">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;shader-material-2d">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Material</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shader_material_2d.794fa6cfdad66014.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader and a material that uses it on a 2d mesh</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="material-glsl">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;shader-material-glsl">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Material - GLSL</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shader_material_glsl.4e1e1d15de815290.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that uses the GLSL shading language</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="material-screenspace-texture">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;shader-material-screenspace-texture">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Material - Screenspace Texture</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shader_material_screenspace_texture.4d17524699cfe9bc.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader that samples a texture with view-independent UV coordinates</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="material">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Shaders&#x2F;shader-material">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Material</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;shader_material.5b093afb4e3a9e7d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A shader and a material that uses it</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="stress-tests">
+        Stress Tests<a class="anchor-link" href="#stress-tests">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="bevymark">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;bevymark">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Bevymark</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;bevymark.2eb466e781dcf81d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A heavy sprite rendering workload to benchmark your system with Bevy</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-animated-sprites">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-animated-sprites">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Animated Sprites</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_animated_sprites.4d6f567a8fb2e53a.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Displays many animated sprites in a grid arrangement with slight offsets to their animation timers. Used for performance testing.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-buttons">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-buttons">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Buttons</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_buttons.5d1008da92392e24.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Test rendering of many UI elements</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-cubes">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-cubes">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Cubes</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_cubes.efd2b79067d03961.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Simple benchmark to test per-entity draw overhead. Run with the `sphere` argument to test frustum culling</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-foxes">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-foxes">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Foxes</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_foxes.88846211630248eb.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Loads an animated fox model and spawns lots of them. Good for testing skinned mesh performance. Takes an unsigned integer argument for the number of foxes to spawn. Defaults to 1000</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-gizmos">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-gizmos">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Gizmos</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_gizmos.c46186606cb51271.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Test rendering of many gizmos</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-glyphs">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-glyphs">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Glyphs</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_glyphs.4bb7e1129f1222b9.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Simple benchmark to test text rendering.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-lights">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-lights">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Lights</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_lights.49c6cea92a9a727e.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Simple benchmark to test rendering many point lights. Run with `WGPU_SETTINGS_PRIO=webgl2` to restrict to uniform buffers and max 256 lights</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="many-sprites">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Stress Tests&#x2F;many-sprites">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Many Sprites</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;many_sprites.ac63366f14c4b158.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Displays many sprites in a grid arrangement! Used for performance testing. Use `--colored` to enable color tinted sprites.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="tools">
+        Tools<a class="anchor-link" href="#tools">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="gamepad-viewer">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Tools&#x2F;gamepad-viewer">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Gamepad Viewer</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;gamepad_viewer.56756d3770bfeeea.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows a visualization of gamepad buttons, sticks, and triggers</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="scene-viewer">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Tools&#x2F;scene-viewer">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Scene Viewer</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;scene_viewer.05fb364bb0be4a05.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">A simple way to view glTF models with Bevy. Just run `cargo run --release --example scene_viewer /path/to/model.gltf#Scene0`, replacing the path as appropriate. With no arguments it will load the FieldHelmet glTF model from the repository assets subdirectory</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="transforms">
+        Transforms<a class="anchor-link" href="#transforms">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="3d-rotation">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Transforms&#x2F;3d-rotation">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">3D Rotation</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;3d_rotation.1ac601c392704e23.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to (constantly) rotate an object around an axis</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="scale">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Transforms&#x2F;scale">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Scale</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;scale.b3ac1e276f817216.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to scale an object in each direction</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="transform">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Transforms&#x2F;transform">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Transform</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;transform.4ff72edaa68fb952.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows multiple transformations of objects</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="translation">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Transforms&#x2F;translation">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Translation</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;translation.65f0b9e374df35c7.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to move an object along an axis</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="ui-user-interface">
+        UI (User Interface)<a class="anchor-link" href="#ui-user-interface">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="borders">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;borders">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Borders</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;borders.36989cea895cb0f0.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how to create a node with a border</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="button">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;button">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Button</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;button.014b8168fe016e8e.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates creating and updating a button</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="display-and-visibility">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;display-and-visibility">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Display and Visibility</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;display_and_visibility.d1de1cb04c1ae5c0.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how Display and Visibility work in the UI.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="flex-layout">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;flex-layout">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Flex Layout</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;flex_layout.9b91bc5f1e44a3d1.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how the AlignItems and JustifyContent properties can be composed to layout nodes and position text</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="font-atlas-debug">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;font-atlas-debug">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Font Atlas Debug</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;font_atlas_debug.604055769a57d06c.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how FontAtlases are populated (used to optimize text rendering internally)</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="css-grid">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;grid">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">CSS Grid</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;grid.3ae6363596c1b74c.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An example for CSS Grid layout</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="overflow-and-clipping-debug">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;overflow-debug">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Overflow and Clipping Debug</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;overflow_debug.83294c8631218164.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An example to debug overflow and clipping behavior</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="overflow">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;overflow">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Overflow</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;overflow.7722387eabc5bd11.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Simple example demonstrating overflow behavior</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="relative-cursor-position">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;relative-cursor-position">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Relative Cursor Position</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;relative_cursor_position.dd85f559a4bc5d99.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Showcases the RelativeCursorPosition component</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="render-ui-to-texture">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;render-ui-to-texture">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Render UI to Texture</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;render_ui_to_texture.1ad49937d2974499.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An example of rendering UI as a part of a 3D world</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="size-constraints">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;size-constraints">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Size Constraints</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;size_constraints.1cbdbfd269221e85.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how the to use the size constraints to control the size of a UI node.</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="text-debug">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;text-debug">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Text Debug</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;text_debug.c7134e5f103ba27b.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An example for debugging text layout</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="text-wrap-debug">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;text-wrap-debug">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Text Wrap Debug</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;text_wrap_debug.ccdf2fba09227811.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates text wrapping</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="text">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;text">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Text</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;text.fb7c348fd252f232.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates creating and updating text</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="transparency-ui">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;transparency-ui">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Transparency UI</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;transparency_ui.5313f30a0a4755d4.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates transparency for UI</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="ui-material">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;ui-material">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">UI Material</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;ui_material.3d2292ffe5d67d67.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates creating and using custom Ui materials</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="ui-scaling">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;ui-scaling">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">UI Scaling</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;ui_scaling.3f663dd1ce62805d.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to scale the UI</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="ui-texture-atlas">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;ui-texture-atlas">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">UI Texture Atlas</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;ui_texture_atlas.45cfd43945d0ad32.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to use TextureAtlases in UI</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="ui-texture-slice">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;ui-texture-slice">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">UI Texture Slice</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;ui_texture_slice.413a7e2541b8341c.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to use 9 Slicing in UI</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="ui">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;ui">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">UI</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;ui.ae0f5eeeab62a063.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates various features of Bevy UI</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="viewport-debug">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;viewport-debug">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Viewport Debug</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;viewport_debug.48e046cb2de3476b.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">An example for debugging viewport coordinates</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="ui-z-index">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;UI (User Interface)&#x2F;z-index">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">UI Z-Index</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;z_index.49ff9908b5be18a1.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates how to control the relative depth (z-position) of UI elements</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="window">
+        Window<a class="anchor-link" href="#window">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="clear-color">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Window&#x2F;clear-color">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Clear Color</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;clear_color.0cea3da7af9c0be6.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Creates a solid color window</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="low-power">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Window&#x2F;low-power">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Low Power</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;low_power.1287158f7a0c0343.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates settings to reduce power use for bevy applications</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="scale-factor-override">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Window&#x2F;scale-factor-override">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Scale Factor Override</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;scale_factor_override.c4dfa9f7fadd4bb7.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Illustrates how to customize the default window settings</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="screenshot">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Window&#x2F;screenshot">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Screenshot</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;screenshot.1e561a21d8a9e684.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows how to save screenshots to disk</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="window-resizing">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Window&#x2F;window-resizing">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Window Resizing</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;window_resizing.6733309bebe6e8d6.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates resizing and responding to resizing a window</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+  <div id="window-settings">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Window&#x2F;window-settings">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Window Settings</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;window_settings.d0dbd74eea2798e5.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Demonstrates customizing default window settings</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+      
+      <h1 class="asset-section" id="math">
+        Math<a class="anchor-link" href="#math">#</a>
+      </h1>
+      
+        <div class="item-grid item-grid--multi-cols">
+          
+          
+          
+  <div id="rendering-primitives">
+    <a class="asset-card" href="&#x2F;examples-webgpu&#x2F;Math&#x2F;render-primitives">
+      <div class="asset-card__banner">
+        <div class="asset-card__title">Rendering Primitives</div>
+        
+          <img src="https:&#x2F;&#x2F;bevyengine.org&#x2F;processed_images&#x2F;render_primitives.b80a466aea7d97df.png"
+                alt="Showcase image"
+                title="Showcase image"
+                loading="lazy" />
+        
+      </div>
+      <div class="asset-card__description">Shows off rendering for all math primitives as both Meshes and Gizmos</div>
+      <div class="asset-card__tags">
+        
+        
+      </div>
+    </a>
+  </div>
+
+        </div>
+      
+    
+  </div>
+  <script type="module">import '/assets.js'</script>
+
+    </div>
+  </div>
+
+        </div>
+      </main>
+      <footer>
+        
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed.svg"
+                  alt="Bevy news feed"
+                  width="32"
+                  height="32" />
+          </a>
+        </div>
+      </footer>
+    </div>
+    <script>
+    const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }
+    </script>
+  </body>
+</html>

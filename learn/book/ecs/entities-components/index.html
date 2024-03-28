@@ -1,0 +1,4083 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+    
+  
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="Bevy Book: Entities Have Components" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;entities-components&#x2F;" />
+    <meta property="og:image"
+          content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+    <meta property="og:description"
+          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/site.css" />
+    <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+    <title>Bevy Book: Entities Have Components</title>
+    
+  
+  
+    
+      
+      
+    
+      
+      
+    
+      
+      
+        
+      
+    
+      
+      
+    
+    
+      <meta name="robots" content="noindex, nofollow, noarchive">
+    
+  
+  <script src="/optional-helpers.js"></script>
+
+  </head>
+  <body>
+    <div class="layout">
+      <input id="mobile-menu-state" class="hidden" type="checkbox">
+      <header class="layout__header header" data-mobile-menu-state-container>
+        <div class="header__content">
+          <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+          <label class="header__hamburger button-square button-square--header"
+                  for="mobile-menu-state">
+            <img src="/assets/icon-hamburger.svg"
+                  alt="Three horizontal lines stacked on top of eachother"
+                  width="20"
+                  height="16">
+          </label>
+          <div class="header__left-block">
+            <a class="header__logo" href="/">
+              <img class="logo"
+                    src="/assets/bevy_logo_dark.svg"
+                    alt="Bevy Engine"
+                    width="520"
+                    height="130">
+            </a>
+            <div class="header__message">
+              
+                The Book
+              
+            </div>
+          </div>
+          
+  <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
+
+          <nav class="header__menu main-menu main-menu--with-page-menu"
+                role="navigation"
+                data-page-menu-switch-state-container>
+            <div class="main-menu__header">
+              <a href="/">
+                <img class="logo"
+                      src="/assets/bevy_logo_dark.svg"
+                      alt="Bevy Engine"
+                      width="520"
+                      height="130">
+              </a>
+              <label class="button-square button-square--header" for="mobile-menu-state">
+                <img src="/assets/icon-times.svg"
+                      alt="A saltire or x-cross"
+                      width="16"
+                      height="16">
+              </label>
+            </div>
+            
+  <div class="main-menu__page-menu-switch">
+    <label class="menu-switch" for="page-menu-switch-state">
+      <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
+      <div class="menu-switch__option menu-switch__option--page-menu">
+        
+  
+    The Book
+  
+
+      </div>
+    </label>
+  </div>
+
+            <div class="main-menu__content">
+              <div class="main-menu__page-menu">
+                
+  
+    
+  
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;why-bevy&#x2F;">Why Bevy?</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;installation&#x2F;">Installing Rust and Bevy</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;app-appbuilder-world&#x2F;">App, Appbuilder, and World</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;modular-plugins&#x2F;">Plugins as Modular Building Blocks</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;bevy-community&#x2F;">The Bevy Community</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-ecs"
+            class="tree-menu__state"
+            type="checkbox"
+            checked>
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;">Entities, Components and Systems</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-ecs">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;entities-components&#x2F;">Entities Have Components</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;systems-queries&#x2F;">Systems Access Data Through Queries</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;resources&#x2F;">Resources Are Global Singletons</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;commands&#x2F;">Manipulating Entities With Commands</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;filtering-queries&#x2F;">Filtering Queries</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;change-detection&#x2F;">Reliable Change Detection</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;generic-systems&#x2F;">Generic Systems</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;exclusive-world-access&#x2F;">Exclusive World Access</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-game-logic"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;">Game Logic</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-game-logic">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;system-ordering&#x2F;">Stages and System Ordering</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;events&#x2F;">Events</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;states&#x2F;">States</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;time-timers&#x2F;">Time and Timers</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;run-criteria&#x2F;">Run Criteria and Fixed Timestep</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;async-tasks&#x2F;">Async Tasks</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;custom-runners-headless-operations&#x2F;">Custom Runners and Headless Operation</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+    
+  
+    
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;">Graphics</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;transforms&#x2F;">The Transform Component Controls Position</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;cameras&#x2F;">Cameras</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;parent-child-hierarchy&#x2F;">Parent-Child Hierarchy</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;windows&#x2F;">Configuring Your Window(s)</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics-2d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;">2D</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics-2d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprites&#x2F;">Sprites</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprite-sheets&#x2F;">Sprite Sheets</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics-3d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;">3D</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics-3d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;meshes&#x2F;">Meshes</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;pbr&#x2F;">Physically-Based Rendering</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics-rendering-internals"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;">Rendering Internals</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics-rendering-internals">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;shader-basics&#x2F;">Shader Basics</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-assets"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;">Assets</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-assets">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;loading-assets&#x2F;">Loading Assets</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;working-with-handles&#x2F;">Working With Handles</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;custom-assets&#x2F;">Custom Assets</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;hot-reloading&#x2F;">Hot Reloading</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;scenes-reflection&#x2F;">Scenes and Reflection</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-input"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;">Input</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-input">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;input-basics&#x2F;">Input Basics</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;keyboard&#x2F;">Keyboard Input</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;mouse&#x2F;">Mouse Input</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;touch&#x2F;">Touch Input</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;gamepad&#x2F;">Gamepad Input</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-audio"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;">Audio</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-audio">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;audio-basics&#x2F;">Audio basics</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-ui"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;">User Interfaces</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-ui">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;ui-basics&#x2F;">User Interface Basics</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-development-practices"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;">Development Practices</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-development-practices">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;organizing-your-code&#x2F;">Organizing Your Code</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;fast-compiles&#x2F;">Fast Compiles</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;testing&#x2F;">Testing</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;error-handling&#x2F;">Error Handling</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;boilerplate-reduction&#x2F;">Boilerplate Reduction</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-performance-optimizations"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;">Performance Optimizations</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-performance-optimizations">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;diagnostics-benchmarking&#x2F;">Diagnostics and Benchmarking</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;parallel-iteration&#x2F;">Parallel Iteration</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;indexes&#x2F;">Custom &quot;Indexing&quot; Patterns</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;component-storage&#x2F;">Component Storage Types</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-platforms"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;">Platforms</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-platforms">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;android&#x2F;">Android</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;ios&#x2F;">iOS</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;web&#x2F;">Web</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+              </div>
+              <ul class="main-menu__menu">
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry main-menu__entry--getting-started">
+    <a href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started" class="main-menu__link">
+      <span>Getting Started</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;learn" class="main-menu__link main-menu__link--active">
+      <span>Learn</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;news" class="main-menu__link">
+      <span>News</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;community" class="main-menu__link">
+      <span>Community</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;foundation" class="main-menu__link">
+      <span>Foundation</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;assets" class="main-menu__link">
+      <span>Assets</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;examples" class="main-menu__link">
+      <span>Examples</span>
+    </a>
+  </li>
+
+                
+              </ul>
+            </div>
+          </nav>
+          <div class="header__cta-container">
+            <a class="button button--pink header__cta" href="/donate">Donate
+              <img class="button__icon"
+                    src="/assets/heart.svg"
+                    alt="heart icon"
+                    width="512"
+                    height="512" />
+            </a>
+            <a class="header__cta header__cta--github"
+                href="https://github.com/bevyengine/bevy">
+              <img src="/assets/github-mark-white.svg"
+                    alt="GitHub repo"
+                    width="98"
+                    height="96" />
+            </a>
+          </div>
+        </div>
+      </header>
+      <main class="layout__content">
+        <div class="container">
+          
+            
+  
+    
+    
+  
+    
+    
+  
+    
+    
+    
+      <h1 class="warning">This page is hidden because an ancestor is hidden</h1>
+    
+  
+
+  
+
+  
+
+          
+          
+  <div class="page-with-menu ">
+    <div class="page-with-menu__menu-wrapper">
+      <div class="page-with-menu__menu">
+        
+  
+    
+  
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;why-bevy&#x2F;">Why Bevy?</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;installation&#x2F;">Installing Rust and Bevy</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;app-appbuilder-world&#x2F;">App, Appbuilder, and World</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;modular-plugins&#x2F;">Plugins as Modular Building Blocks</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;bevy-community&#x2F;">The Bevy Community</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-ecs"
+            class="tree-menu__state"
+            type="checkbox"
+            checked>
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;">Entities, Components and Systems</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-ecs">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;entities-components&#x2F;">Entities Have Components</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;systems-queries&#x2F;">Systems Access Data Through Queries</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;resources&#x2F;">Resources Are Global Singletons</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;commands&#x2F;">Manipulating Entities With Commands</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;filtering-queries&#x2F;">Filtering Queries</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;change-detection&#x2F;">Reliable Change Detection</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;generic-systems&#x2F;">Generic Systems</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;exclusive-world-access&#x2F;">Exclusive World Access</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-game-logic"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;">Game Logic</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-game-logic">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;system-ordering&#x2F;">Stages and System Ordering</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;events&#x2F;">Events</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;states&#x2F;">States</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;time-timers&#x2F;">Time and Timers</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;run-criteria&#x2F;">Run Criteria and Fixed Timestep</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;async-tasks&#x2F;">Async Tasks</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;custom-runners-headless-operations&#x2F;">Custom Runners and Headless Operation</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+    
+  
+    
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;">Graphics</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;transforms&#x2F;">The Transform Component Controls Position</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;cameras&#x2F;">Cameras</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;parent-child-hierarchy&#x2F;">Parent-Child Hierarchy</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;windows&#x2F;">Configuring Your Window(s)</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics-2d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;">2D</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics-2d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprites&#x2F;">Sprites</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprite-sheets&#x2F;">Sprite Sheets</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics-3d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;">3D</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics-3d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;meshes&#x2F;">Meshes</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;pbr&#x2F;">Physically-Based Rendering</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics-rendering-internals"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;">Rendering Internals</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics-rendering-internals">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;shader-basics&#x2F;">Shader Basics</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-assets"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;">Assets</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-assets">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;loading-assets&#x2F;">Loading Assets</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;working-with-handles&#x2F;">Working With Handles</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;custom-assets&#x2F;">Custom Assets</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;hot-reloading&#x2F;">Hot Reloading</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;scenes-reflection&#x2F;">Scenes and Reflection</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-input"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;">Input</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-input">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;input-basics&#x2F;">Input Basics</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;keyboard&#x2F;">Keyboard Input</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;mouse&#x2F;">Mouse Input</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;touch&#x2F;">Touch Input</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;gamepad&#x2F;">Gamepad Input</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-audio"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;">Audio</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-audio">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;audio-basics&#x2F;">Audio basics</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-ui"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;">User Interfaces</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-ui">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;ui-basics&#x2F;">User Interface Basics</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-development-practices"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;">Development Practices</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-development-practices">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;organizing-your-code&#x2F;">Organizing Your Code</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;fast-compiles&#x2F;">Fast Compiles</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;testing&#x2F;">Testing</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;error-handling&#x2F;">Error Handling</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;boilerplate-reduction&#x2F;">Boilerplate Reduction</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-performance-optimizations"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;">Performance Optimizations</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-performance-optimizations">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;diagnostics-benchmarking&#x2F;">Diagnostics and Benchmarking</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;parallel-iteration&#x2F;">Parallel Iteration</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;indexes&#x2F;">Custom &quot;Indexing&quot; Patterns</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;component-storage&#x2F;">Component Storage Types</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-platforms"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;">Platforms</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-platforms">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;android&#x2F;">Android</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;ios&#x2F;">iOS</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;web&#x2F;">Web</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+      </div>
+    </div>
+    <div class="page-with-menu__content">
+      
+  <div class="docs-page">
+    <div class="docs-content">
+       
+      
+      
+        
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+            
+          
+            
+          
+            
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+                                      
+      
+                                      
+      
+      
+      
+      
+      
+        
+        
+        
+        
+        
+          
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+          
+        
+        
+        
+        
+          
+          
+        
+        
+        
+          
+          
+          
+      <h1>
+        
+  
+    Entities Have Components
+  
+  
+
+      </h1>
+      <div class="media-content">
+        <p><strong>Entities</strong> are the fundamental objects of your game world, whizzing around, storing cameras, being controlled by the player or tracking the state of a button.
+On its own, the <a href="https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> type is a simple identifier: it has neither behavior nor data.
+Components store this data, and define the overlapping categories that the entity belongs to.</p>
+<p>Informally, we use the term &quot;entity&quot; to refer to the conceptual entry in our <a href="https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html"><code>World</code></a>: all of the component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
+If you're an experienced programmer, you can reason about the <a href="https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html"><code>World</code></a> as something like a (very fast) <a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html"><code>HashMap</code></a> from <a href="https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> to a collection of components.</p>
+<h2 id="spawning-and-despawning-entities">Spawning and Despawning Entities
+<a class="anchor-link" href="#spawning-and-despawning-entities">#</a>
+</h2>
+<p>Before you can do much of anything in Bevy, you'll need to <strong>spawn</strong> your first entity, adding it to the app's <a href="https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html"><code>World</code></a>.
+Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.</p>
+<p>Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an <a href="../exclusive-world-access">exclusive system</a>).
+As a result, we must use <a href="https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html"><code>Commands</code></a>, which queue up work to do later.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> The `Commands` system parameter allows us to generate commands
+</span></span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> which operate on the `World` once all of the current systems have finished running
+</span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">spawning_system</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-storage z-modifier z-rust">mut</span> <span class="z-variable z-parameter z-rust">commands</span><span class="z-punctuation z-separator z-rust">:</span> Commands</span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"></span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Spawning a single entity with no components
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">spawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Getting the `Entity` identifier of a new entity
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-storage z-type z-rust">let</span> my_entity <span class="z-keyword z-operator z-assignment z-rust">=</span> commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">spawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">id</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Selecting and then despawning the just-spawned second entity
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">entity</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>my_entity</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">despawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<h2 id="working-with-components">Working With Components
+<a class="anchor-link" href="#working-with-components">#</a>
+</h2>
+<p>Spawning an entity doesn't add any behavior or create a &quot;physical object&quot; in our game like it might in other engines.
+Instead, all it does is provide us an <a href="https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> identifier for a collection of component data.</p>
+<p>In order to make this useful, we need to be able to add, remove and modify component data for each entity.</p>
+<h3 id="defining-components">Defining Components
+<a class="anchor-link" href="#defining-components">#</a>
+</h3>
+<p>To define a component type, we simply implement the <a href="https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html"><code>Component</code></a> <a href="https://doc.rust-lang.org/book/ch10-02-traits.html">trait</a> for a Rust type of our choice.
+You will almost always want to use the <code>#[derive(Component)]</code> <a href="https://doc.rust-lang.org/reference/attributes/derive.html">macro</a> to do this for you; which quickly and reliably generates the correct trait implementation.</p>
+<p>With the theory out of the way, let's define some components!</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> This is a &quot;unit struct&quot;, which holds no data of its own.
+</span></span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Component</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">Combatant</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> This simple component wraps a u8 in a tuple struct
+</span></span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Component</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">Life</span></span><span class="z-meta z-struct z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-storage z-type z-rust">u8</span></span><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Naming your components&#39; fields makes them easier to refer to
+</span></span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Component</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">Stats</span> </span><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">strength</span><span class="z-punctuation z-separator z-type z-rust">:</span> <span class="z-storage z-type z-rust">u8</span>,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">dexterity</span><span class="z-punctuation z-separator z-type z-rust">:</span> <span class="z-storage z-type z-rust">u8</span>,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">intelligence</span><span class="z-punctuation z-separator z-type z-rust">:</span> <span class="z-storage z-type z-rust">u8</span>,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Enum components are great for storing mutually exclusive states
+</span></span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Component</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-enum z-rust"><span class="z-storage z-type z-enum z-rust">enum</span> <span class="z-entity z-name z-enum z-rust">Allegiance</span> <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-enum z-rust"><span class="z-meta z-block z-rust">    Friendly<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-enum z-rust"><span class="z-meta z-block z-rust">    Hostile
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-enum z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<h3 id="spawning-entities-with-components">Spawning Entities With Components
+<a class="anchor-link" href="#spawning-entities-with-components">#</a>
+</h3>
+<p>Now that we have some components defined, let's try adding them to our entities using <a href="https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html"><code>Commands</code></a>.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">spawn_combatants_system</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-storage z-modifier z-rust">mut</span> <span class="z-variable z-parameter z-rust">commands</span><span class="z-punctuation z-separator z-rust">:</span> Commands</span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">spawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> This inserts a data-less `Combatant` component into the entity we&#39;re spawning
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        Combatant<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> We configure starting component values by passing in concrete instances of our types
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        Life<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-constant z-numeric z-integer z-decimal z-rust">10</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> By chaining .insert method calls like this, we continue to add more components to our entity
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Instances of named structs are constructed with {field_name: value}
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        Stats <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            strength<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">15</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            dexterity<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">10</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            intelligence<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">8</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Instances of enums are created by picking one of their variants
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-meta z-path z-rust">Allegiance<span class="z-punctuation z-accessor z-rust">::</span></span>Friendly<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">    </span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> We&#39;ve ended our Commands method chain using a ;,
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> and so now we can create a second entity
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> by calling .spawn() again
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">spawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        Combatant<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        Life<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-constant z-numeric z-integer z-decimal z-rust">10</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        Stats <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            strength<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">17</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            dexterity<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">8</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            intelligence<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">6</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-meta z-path z-rust">Allegiance<span class="z-punctuation z-accessor z-rust">::</span></span>Hostile<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">    </span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<h3 id="adding-and-removing-components">Adding and Removing Components
+<a class="anchor-link" href="#adding-and-removing-components">#</a>
+</h3>
+<p>Once an entity is spawned, you can use <a href="https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html"><code>Commands</code></a> to add and remove components from them dynamically.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Component</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">InCombat</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> This query returns the `Entity` identifier of all entities
+</span></span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> that have the `Combatant` component but do not yet have the `InCombat` component
+</span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">start_combat_system</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-variable z-parameter z-rust">query</span><span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-generic z-rust">Query<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>Entity, <span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-generic z-rust">With<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>Combatant<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span>, <span class="z-meta z-generic z-rust">Without<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>InCombat<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span><span class="z-punctuation z-section z-group z-end z-rust">)</span><span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span>, <span class="z-storage z-modifier z-rust">mut</span> <span class="z-variable z-parameter z-rust">commands</span><span class="z-punctuation z-separator z-rust">:</span> Commands</span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"></span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-keyword z-control z-rust">for</span> entity <span class="z-keyword z-operator z-rust">in</span> query<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">iter</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span> <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> The component will be inserted at the end of the current stage
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">entity</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>entity</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">insert</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>InCombat</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">    </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Now to undo our hard work
+</span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">end_combat_system</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-variable z-parameter z-rust">query</span><span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-generic z-rust">Query<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>Entity, <span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-generic z-rust">With<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>Combatant<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span>, <span class="z-meta z-generic z-rust">With<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>InCombat<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span><span class="z-punctuation z-section z-group z-end z-rust">)</span><span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span>, <span class="z-storage z-modifier z-rust">mut</span> <span class="z-variable z-parameter z-rust">commands</span><span class="z-punctuation z-separator z-rust">:</span> Commands</span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"></span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-keyword z-control z-rust">for</span> entity <span class="z-keyword z-operator z-rust">in</span> query<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">iter</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span> <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> The component will be removed at the end of the current stage
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> It is provided as a type parameter,
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> as we do not need to know a specific value in order to remove a component of the correct type
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">entity</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>entity</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-meta z-path z-rust">remove<span class="z-punctuation z-accessor z-rust">::</span></span><span class="z-meta z-generic z-rust"><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>InCombat<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">    </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<p>Entities can only ever store one component of each type: inserting another component of the same type will instead overwrite the existing data.</p>
+<h2 id="bundles">Bundles
+<a class="anchor-link" href="#bundles">#</a>
+</h2>
+<p>As you might guess, the one-at-a-time component insertion syntax can be both tedious and error-prone as your project grows.
+To get around this, Bevy allows you to group components into <strong>component bundles</strong>.
+These are defined by deriving the <a href="https://docs.rs/bevy/latest/bevy/ecs/bundle/trait.Bundle.html"><code>Bundle</code></a> trait for a struct; turning each of its fields into a distinct component on your entity when the bundle is inserted.</p>
+<p>Let's try rewriting that code from above.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Bundle</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">CombatantBundle</span> </span><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">combatant</span><span class="z-punctuation z-separator z-type z-rust">:</span> Combatant,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">life</span><span class="z-punctuation z-separator z-type z-rust">:</span> Life,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">stats</span><span class="z-punctuation z-separator z-type z-rust">:</span> Stats,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">allegiance</span><span class="z-punctuation z-separator z-type z-rust">:</span> Allegiance,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> We can add new methods to our bundle type that return Self
+</span></span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> to create principled APIs for entity creation.
+</span></span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> The Default trait is the standard tool for creating
+</span></span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> new struct instances without configuration 
+</span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-storage z-type z-impl z-rust">impl</span> </span><span class="z-meta z-impl z-rust">Default <span class="z-keyword z-other z-rust">for</span></span><span class="z-meta z-impl z-rust"> <span class="z-entity z-name z-impl z-rust">CombatantBundle</span> </span><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust">    <span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">default</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> <span class="z-meta z-function z-return-type z-rust"><span class="z-punctuation z-separator z-rust">-&gt;</span> <span class="z-storage z-type z-rust">Self</span></span> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        CombatantBundle <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            combatant<span class="z-punctuation z-separator z-rust">:</span> Combatant<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            life<span class="z-punctuation z-separator z-rust">:</span> Life<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-constant z-numeric z-integer z-decimal z-rust">10</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            stats<span class="z-punctuation z-separator z-rust">:</span> Stats <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                strength<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">10</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                dexterity<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">10</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                intelligence<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">10</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            allegiance<span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-path z-rust">Allegiance<span class="z-punctuation z-accessor z-rust">::</span></span>Hostile<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">spawn_combatants_system</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-storage z-modifier z-rust">mut</span> <span class="z-variable z-parameter z-rust">commands</span><span class="z-punctuation z-separator z-rust">:</span> Commands</span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">spawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> We&#39;re using struct-update syntax to modify
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> the instance of `CombatantBundle` returned by its default() method
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> See the page on Rust Tips and Tricks at the end of this chapter for more info!
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        CombatantBundle<span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            stats<span class="z-punctuation z-separator z-rust">:</span> Stats <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                strength<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">15</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                dexterity<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">10</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                intelligence<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">8</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            allegiance<span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-path z-rust">Allegiance<span class="z-punctuation z-accessor z-rust">::</span></span>Friendly<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            <span class="z-keyword z-operator z-range z-rust">..</span><span class="z-support z-function z-rust">default</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">    </span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    commands<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">spawn</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">        CombatantBundle<span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            stats<span class="z-punctuation z-separator z-rust">:</span> Stats <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                strength<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">17</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                dexterity<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">8</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                intelligence<span class="z-punctuation z-separator z-rust">:</span> <span class="z-constant z-numeric z-integer z-decimal z-rust">6</span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            allegiance<span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-path z-rust">Allegiance<span class="z-punctuation z-accessor z-rust">::</span></span>Hostile<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            <span class="z-keyword z-operator z-range z-rust">..</span><span class="z-support z-function z-rust">default</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-group z-rust">    </span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<h3 id="nested-bundles">Nested Bundles
+<a class="anchor-link" href="#nested-bundles">#</a>
+</h3>
+<p>As your game grows further in complexity, you may find that you want to reuse various bundles across entities that share some but not all behavior.
+One of the tools you can use to do so is <strong>nested bundles</strong>; embedding one bundle of components within another.
+Try to stick to a single layer of nesting at most; multiple layers of nesting can get quite confusing.
+Including duplicate components in your bundles in this way will cause a panic.</p>
+<p>With those caveats out of the way, let's take a look at the syntax by converting the bundle above to a nested one by creating a bundle of components that deal with related functionality.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Bundle</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">AttackableBundle</span></span><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">life</span><span class="z-punctuation z-separator z-type z-rust">:</span> Life,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">attack</span><span class="z-punctuation z-separator z-type z-rust">:</span> Attack,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">defense</span><span class="z-punctuation z-separator z-type z-rust">:</span> Defense,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">derive</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust">Bundle</span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-entity z-name z-struct z-rust">CombatantBundle</span> </span><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">combatant</span><span class="z-punctuation z-separator z-type z-rust">:</span> Combatant,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> The #[bundle] attribute marks our attackable_bundle field as a bundle (rather than a component),
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> allowing Bevy to properly flatten it out when building the final entity
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> #[bundle] // commenting out to make code validator run; should be looked at TODO
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">attackable_bundle</span><span class="z-punctuation z-separator z-type z-rust">:</span> AttackableBundle,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">    <span class="z-variable z-other z-member z-rust">allegiance</span><span class="z-punctuation z-separator z-type z-rust">:</span> Allegiance,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-storage z-type z-impl z-rust">impl</span> </span><span class="z-meta z-impl z-rust">Default <span class="z-keyword z-other z-rust">for</span></span><span class="z-meta z-impl z-rust"> <span class="z-entity z-name z-impl z-rust">CombatantBundle</span> </span><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust">    <span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">default</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> <span class="z-meta z-function z-return-type z-rust"><span class="z-punctuation z-separator z-rust">-&gt;</span> <span class="z-storage z-type z-rust">Self</span></span> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        CombatantBundle <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            combatant<span class="z-punctuation z-separator z-rust">:</span> Combatant<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            attackable_bundle<span class="z-punctuation z-separator z-rust">:</span> AttackableBundle <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                life<span class="z-punctuation z-separator z-rust">:</span> Life<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-constant z-numeric z-integer z-decimal z-rust">10</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                attack<span class="z-punctuation z-separator z-rust">:</span> Attack<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-constant z-numeric z-integer z-decimal z-rust">5</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">                defense<span class="z-punctuation z-separator z-rust">:</span> Defense<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-constant z-numeric z-integer z-decimal z-rust">1</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">            allegiance<span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-path z-rust">Allegiance<span class="z-punctuation z-accessor z-rust">::</span></span>Hostile<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<h2 id="component-design">Component Design
+<a class="anchor-link" href="#component-design">#</a>
+</h2>
+<p>Over time, the Bevy community has converged on a few standard pieces of advice for how to structure and define component data:</p>
+<ul>
+<li>try to keep your components relatively small
+<ul>
+<li>combine common functionality into bundles, not large components</li>
+<li>small modular systems based on common behavior work well</li>
+<li>reducing the amount of data stored improves cache performance and system-parallelism</li>
+<li>keep it as a single component if you need to maintain invariants (such as current life is always less than or equal to max life)</li>
+<li>keep it as a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)</li>
+</ul>
+</li>
+<li>simple methods on components are a good tool for clean, testable code
+<ul>
+<li>logic that is inherent to how the component works (like rolling dice or healing life points) is a great fit</li>
+<li>logic that will only be repeated once generally belongs in systems</li>
+<li>methods make it easier to understand the actual gameplay logic in your systems, and fix bugs in a single place</li>
+</ul>
+</li>
+<li>marker components are incredibly valuable for extending your design
+<ul>
+<li>it is very common to want to quickly look for &quot;all entities that are a <code>Tower</code>&quot;, or &quot;all entities that are <code>Chilled</code></li>
+<li>filtering by component presence/absence is (generally) faster and clearer than looping through a list of boolean values</li>
+<li>try to model meaningful groups at several levels of abstraction / along multiple axes: e.g. <code>Unit</code>, <code>Ant</code>, <code>Combatant</code></li>
+</ul>
+</li>
+<li>enum components are very expressive, and help reduce bugs
+<ul>
+<li>enums can hold different data in each variant, allowing you to capture information effectively</li>
+<li>if you have a fixed number of options for a value, store it as an enum</li>
+</ul>
+</li>
+<li>implementing traits like <a href="https://doc.rust-lang.org/std/ops/trait.Add.html"><code>Add</code></a> or <a href="https://doc.rust-lang.org/std/path/struct.Display.html"><code>Display</code></a> can provide useful behavior in an idiomatic way</li>
+<li>use <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html"><code>Deref</code></a> and <a href="https://doc.rust-lang.org/std/ops/trait.DerefMut.html"><code>DerefMut</code></a> for tuple structs with a single item (<a href="https://doc.rust-lang.org/rust-by-example/generics/new_types.html">newtypes</a>)
+<ul>
+<li>this allows you to access the internal data with <code>*my_component</code> instead of <code>my_component.0</code></li>
+<li>more importantly, this allows you to call methods that belong to the wrapped type directly on your component</li>
+</ul>
+</li>
+<li>define builder methods for your <a href="https://docs.rs/bevy/latest/bevy/ecs/bundle/trait.Bundle.html"><code>Bundle</code></a> types that return <a href="https://doc.rust-lang.org/reference/paths.html#self-1"><code>Self</code></a>
+<ul>
+<li>this is useful to define a friendly interface for how entities of this sort tend to vary</li>
+<li>not as useful as you might hope for upholding invariants; components will be able to be accidentally modified independently later</li>
+</ul>
+</li>
+<li>use <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax">struct update syntax</a> to modify component bundles
+<ul>
+<li><a href="https://docs.rs/bevy/latest/bevy/prelude/fn.default.html"><code>..default()</code></a> is a particularly common idiom, to modify a struct from its default values</li>
+</ul>
+</li>
+<li>consider defining traits for related components
+<ul>
+<li>this allows you to ensure a consistent interface</li>
+<li>this can be very powerful in combination with generic systems that use trait bounds</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+      <div class="docs-footer">
+        <nav class="docs-footer__nav">
+          
+            <a class="docs-footer__link docs-footer__link--next"
+                href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;systems-queries&#x2F;"
+                data-docs-nav-next>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Next</div>
+                Systems Access Data Through Queries
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-right"></i>
+            </a>
+          
+          
+            <a class="docs-footer__link docs-footer__link--prev"
+                href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;bevy-community&#x2F;"
+                data-docs-nav-previous>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Previous</div>
+                The Bevy Community
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-left"></i>
+            </a>
+          
+        </nav>
+        <div class="docs-footer__edit-wrapper">
+          <a class="docs-footer__edit"
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/learn&#x2F;book&#x2F;ecs&#x2F;entities-components.md">
+            <i class="icon icon--pencil"></i>
+            Improve this page
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+        </div>
+      </main>
+      <footer>
+        
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed.svg"
+                  alt="Bevy news feed"
+                  width="32"
+                  height="32" />
+          </a>
+        </div>
+      </footer>
+    </div>
+    <script>
+    const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }
+    </script>
+  </body>
+</html>

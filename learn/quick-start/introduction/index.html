@@ -1,0 +1,1115 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="Introduction" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;" />
+    <meta property="og:image"
+          content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+    <meta property="og:description"
+          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/site.css" />
+    <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+    <title>Introduction</title>
+    
+  
+  
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+  
+  <script src="/optional-helpers.js"></script>
+
+  </head>
+  <body>
+    <div class="layout">
+      <input id="mobile-menu-state" class="hidden" type="checkbox">
+      <header class="layout__header header" data-mobile-menu-state-container>
+        <div class="header__content">
+          <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+          <label class="header__hamburger button-square button-square--header"
+                  for="mobile-menu-state">
+            <img src="/assets/icon-hamburger.svg"
+                  alt="Three horizontal lines stacked on top of eachother"
+                  width="20"
+                  height="16">
+          </label>
+          <div class="header__left-block">
+            <a class="header__logo" href="/">
+              <img class="logo"
+                    src="/assets/bevy_logo_dark.svg"
+                    alt="Bevy Engine"
+                    width="520"
+                    height="130">
+            </a>
+            <div class="header__message">
+              
+                Quick Start
+              
+            </div>
+          </div>
+          
+  <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
+
+          <nav class="header__menu main-menu main-menu--with-page-menu"
+                role="navigation"
+                data-page-menu-switch-state-container>
+            <div class="main-menu__header">
+              <a href="/">
+                <img class="logo"
+                      src="/assets/bevy_logo_dark.svg"
+                      alt="Bevy Engine"
+                      width="520"
+                      height="130">
+              </a>
+              <label class="button-square button-square--header" for="mobile-menu-state">
+                <img src="/assets/icon-times.svg"
+                      alt="A saltire or x-cross"
+                      width="16"
+                      height="16">
+              </label>
+            </div>
+            
+  <div class="main-menu__page-menu-switch">
+    <label class="menu-switch" for="page-menu-switch-state">
+      <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
+      <div class="menu-switch__option menu-switch__option--page-menu">
+        
+  
+    Migration Guides
+  
+
+      </div>
+    </label>
+  </div>
+
+            <div class="main-menu__content">
+              <div class="main-menu__page-menu">
+                
+  
+    
+  
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;">Introduction</a>
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;breakout&#x2F;">Breakout</a>
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;falling-sand&#x2F;">Falling Sand</a>
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-quick-start-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-quick-start-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;setup&#x2F;">Setup</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;apps&#x2F;">Apps</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;ecs&#x2F;">ECS</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;plugins&#x2F;">Plugins</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;resources&#x2F;">Resources</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;next-steps&#x2F;">Next Steps</a>
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;3d-puzzle-game&#x2F;">3D Puzzle Game</a>
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;plugin-development&#x2F;">Building Bevy&#x27;s Ecosystem</a>
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;troubleshooting&#x2F;">Troubleshooting</a>
+    </div>
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+              </div>
+              <ul class="main-menu__menu">
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry main-menu__entry--getting-started">
+    <a href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started" class="main-menu__link">
+      <span>Getting Started</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;learn" class="main-menu__link main-menu__link--active">
+      <span>Learn</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;news" class="main-menu__link">
+      <span>News</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;community" class="main-menu__link">
+      <span>Community</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;foundation" class="main-menu__link">
+      <span>Foundation</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;assets" class="main-menu__link">
+      <span>Assets</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;examples" class="main-menu__link">
+      <span>Examples</span>
+    </a>
+  </li>
+
+                
+              </ul>
+            </div>
+          </nav>
+          <div class="header__cta-container">
+            <a class="button button--pink header__cta" href="/donate">Donate
+              <img class="button__icon"
+                    src="/assets/heart.svg"
+                    alt="heart icon"
+                    width="512"
+                    height="512" />
+            </a>
+            <a class="header__cta header__cta--github"
+                href="https://github.com/bevyengine/bevy">
+              <img src="/assets/github-mark-white.svg"
+                    alt="GitHub repo"
+                    width="98"
+                    height="96" />
+            </a>
+          </div>
+        </div>
+      </header>
+      <main class="layout__content">
+        <div class="container">
+          
+            
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+          
+          
+  <div class="page-with-menu ">
+    <div class="page-with-menu__menu-wrapper">
+      <div class="page-with-menu__menu">
+        
+  
+    
+  
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;">Introduction</a>
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;breakout&#x2F;">Breakout</a>
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;falling-sand&#x2F;">Falling Sand</a>
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-quick-start-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-quick-start-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;setup&#x2F;">Setup</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;apps&#x2F;">Apps</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;ecs&#x2F;">ECS</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;plugins&#x2F;">Plugins</a>
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;resources&#x2F;">Resources</a>
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;next-steps&#x2F;">Next Steps</a>
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;3d-puzzle-game&#x2F;">3D Puzzle Game</a>
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;plugin-development&#x2F;">Building Bevy&#x27;s Ecosystem</a>
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;troubleshooting&#x2F;">Troubleshooting</a>
+    </div>
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+      </div>
+    </div>
+    <div class="page-with-menu__content">
+      
+  <div class="docs-page">
+    <div class="docs-content">
+       
+      
+      
+        
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      
+      
+        
+        
+      
+        
+        
+          
+          
+          
+          
+        
+      
+        
+        
+          
+          
+          
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+      
+        
+        
+          
+          
+          
+          
+        
+      
+        
+        
+      
+        
+        
+      
+                                      
+      
+                                      
+      
+      
+      
+      
+      
+        
+        
+        
+        
+          
+          
+        
+        
+        
+          
+            
+        
+        
+        
+          
+            
+        
+        
+        
+          
+          
+          
+      <h1>
+        
+  
+    Introduction
+  
+  
+
+      </h1>
+      <div class="media-content">
+        <p>If you came here because you wanted to learn how to make 2D / 3D games, visualizations, user interfaces, or other graphical applications with Bevy... you came to the right place! If not, stick around anyway. I promise it will be fun.</p>
+<h2>
+    <img src="/assets/whats_a_bevy.svg" class="docs-whats-a-bevy" alt="What's a BEVY?"/>
+</h2>
+<p>A bevy is a group of birds!</p>
+<p>But Bevy is also a refreshingly simple data-driven game engine built in Rust. It is <a href="https://github.com/bevyengine/bevy">free and open-source</a> forever under your choice of the MIT or Apache 2.0 licenses.</p>
+<p>Bevy has the following design goals:</p>
+<ul>
+<li><strong>Capable</strong>: Offer a complete 2D and 3D feature set</li>
+<li><strong>Simple</strong>: Easy for newbies to pick up, but infinitely flexible for power users</li>
+<li><strong>Data Focused</strong>: Data-oriented architecture using the Entity Component System paradigm</li>
+<li><strong>Modular</strong>: Use only what you need. Replace what you don't like</li>
+<li><strong>Fast</strong>: App logic should run quickly, and when possible, in parallel</li>
+<li><strong>Productive</strong>: Changes should compile quickly... waiting isn't fun</li>
+</ul>
+<p>Bevy is <a href="/learn/quick-start/contributing">built in the open by volunteers</a> using the <a href="https://www.rust-lang.org/">Rust programming language</a>. The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing <em>millions</em> of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.</p>
+<p>For a more in-depth introduction, check out the <a href="/news/introducing-bevy/">Introducing Bevy</a> blog post.</p>
+<h2 class="warning">
+    Stability Warning
+</h2>
+<p>Bevy is still in the early stages of development. Important features are missing. Documentation is sparse. A new version of Bevy containing breaking changes to the API is released <a href="https://bevyengine.org/news/bevy-0-6/#the-train-release-schedule">approximately once every 3 months</a>. We provide <a href="https://bevyengine.org/learn/book/migration-guides/">migration guides</a>, but we can't guarantee migrations will always be easy. Use only if you are willing to work in this environment.</p>
+<p>If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out <a href="https://godotengine.org">Godot Engine</a>. It is currently much more feature-complete and stable. And it is also free, open-source, and <a href="https://github.com/godot-rust/gdext">scriptable with Rust</a>!</p>
+<p>The Quick Start Guide is not a comprehensive guide to Bevy and the next section <a href="/learn/quick-start/getting-started/">Getting Started</a> will help you with the setup of Bevy and learning the basics, but it does not cover most of Bevy's features. In the future you can use the Bevy Book to gain a better understanding, until then see the last page <a href="/learn/quick-start/next-steps">Next Steps</a> for more exhaustive and complex resources on Bevy.</p>
+<p>Phew! If you haven't been scared away yet, let's move on to learning some Bevy!</p>
+
+      </div>
+      <div class="docs-footer">
+        <nav class="docs-footer__nav">
+          
+            <a class="docs-footer__link docs-footer__link--next"
+                href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;"
+                data-docs-nav-next>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Next</div>
+                Getting Started
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-right"></i>
+            </a>
+          
+          
+        </nav>
+        <div class="docs-footer__edit-wrapper">
+          <a class="docs-footer__edit"
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/learn&#x2F;quick-start&#x2F;introduction.md">
+            <i class="icon icon--pencil"></i>
+            Improve this page
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+        </div>
+      </main>
+      <footer>
+        
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed.svg"
+                  alt="Bevy news feed"
+                  width="32"
+                  height="32" />
+          </a>
+        </div>
+      </footer>
+    </div>
+    <script>
+    const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }
+    </script>
+  </body>
+</html>
