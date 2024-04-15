@@ -104,6 +104,9 @@
             {% if not donor.past %}
                 {% continue %}
             {% endif %}
+            {% if not donor.name %}
+                {% continue %}
+            {% endif %}
             {% if first %}{{ donor.name }}{% else %} , {{ donor.name }}{% endif %}
             {% if first %}
                 {% set_global first = false %}
