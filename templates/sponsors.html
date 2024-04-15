@@ -98,8 +98,8 @@
         {% endif %}
     {% endfor %}
     {% if past_donor_exists %}
-        <h2 class="past-sponsors-title">Past Donors</h2>
-        <div>
+        <h2 class="past-donors-title">Past Donors</h2>
+        <div class="past-donor">
         {% for donor in sorted_donors %}
             {% if not donor.past %}
                 {% continue %}
