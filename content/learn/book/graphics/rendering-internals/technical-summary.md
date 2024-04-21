@@ -42,31 +42,31 @@ and can run pretty much anywhere.
 ### Layers of Abstraction
 `wgpu` is a low level graphics library, but because it is designed to work
 across a wide beret of platforms there are many layers of abstraction between it
-and the graphics hardware. Going from highest to lowest level:
-1. The `WebGPU` api provided by `wgpu`,
-2. The platform-specific adapter (`wgpu_hal::vulkan`, `wgpu_hal::gles`,
-  `wgpu_native` and the browser's own `WebGpu` adapter, etc.)m
-3. The native GPU api (`metal`, `vulkan`, `gles` etc.),
-4. The platform-specific GPU drivers (vendored by Nvidia, AMD, Apple, Windows or
+and the graphics hardware. Going from lowest to highest level:
+1. First, the GPU hardware itself.
+2. The platform-specific GPU drivers (vendored by Nvidia, AMD, Apple, Windows or
    the Linux Kernel),
-5. Finally, the GPU hardware itself.
+3. The native GPU api (`metal`, `vulkan`, `gles` etc.),
+4. The platform-specific adapter (`wgpu_hal::vulkan`, `wgpu_hal::gles`,
+   `wgpu_native` and the browser's own `WebGpu` adapter, etc.)
+5. Finally the safe `WebGPU` api provided by `wgpu`.
 
 It's good to be vaguely aware of this stack. `wgpu` does it's best to stay
 consistent, but some features are not fully supported on all platforms.
 
 TODO: Provide a brief list of features that differ across platforms.
 
-The middle sections of this stack are represented in in `wgpu` by a
-[`wgpu::Adapter`] and [`wgpu::Device`]. The adapter provides access the platform
+The middle sections of this stack are represented in `wgpu` by a
+[`wgpu::Adapter`] and [`wgpu::Device`]. The adapter provides access to the platform
 specific `WebGPU` implementation (layers 2 and 3 of the stack). The device is a
 logical representation of layers 4 and 5 obtained from the `Adapter`, and is
-ultimately what allows us to is submit work to the GPU.
+ultimately what allows us to submit work to the GPU.
 
 [`wgpu::Adapter`]: https://docs.rs/wgpu/latest/wgpu/struct.Adapter.html
 [`wgpu::Device`]: https://docs.rs/wgpu/latest/wgpu/struct.Device.html
 
 ### Buffers
-Allocating memory the most basic of all operations. In `wgpu`, GPU memory
+Allocating memory is the most basic of all operations. In `wgpu`, GPU memory
 management is done through buffers.
 
 A `wgpu::Buffer` represents a continuous block of memory allocated on the GPU.
@@ -77,14 +77,11 @@ allocates and initializes the buffer).
 You can reference a slice of a buffer using [`wgpu::Buffer::slice`]. This
 returns a [`wgpu::BufferSlice`] which can be "mapped" to main program memory for
 reading and writing. Writes are flushed by calling [`wgpu::Buffer::unmap`] and
-can be deallocated with [`wgpu::Buffer::destroy`].
-
-If you don't need to write to the buffer immediately, you can also use
-[`wgpu::Queue::write_buffer`] to queue up a write for the next time commands are
-sent to the GPU.
+can be deallocated with [`wgpu::Buffer::destroy`]. Writes can also be queued as part 
+of commands using [`wgpu::Queue::write_buffer`].
 
 When you create a buffer, you generally have to declare the intended use with
-[`wgpu::BufferUses`].
+[`wgpu::BufferUses`]. Buffers must have `BufferUsages::MAP_READ` to be read from.
 
 ### Textures, Views, and Samplers
 A `wgpu::Texture` represents an image stored in GPU memory. Textures can be
@@ -92,18 +89,16 @@ created by calling `wgpu::Device::create_texture`, which requires information
 about the format, dimensions, and so on. The main way to write to a texture is
 [`wgpu::Buffer::write_texture`], which is similar to
 [`wgpu::Device::write_buffer`] in that it is delayed for dispatch until commands
-are next send to the GPU. It's also possible to copy a buffer to a texture using
+are next sent to the GPU. It's also possible to copy a buffer to a texture using
 [`wgpu::CommandEncoder::copy_buffer_to_texture`]. Like buffers, textures can be
 deallocated using [`wgpu::Texture::destroy`].
 
-Unlike buffers, textures tend not to be used directly on the GPU side. They are
-instead accessed through views and samplers.
+Textures are usually accessed in shaders through views and samplers.
 
 A [`wgpu::TextureView`] is a "view" on a specific texture. The view describes
-how the raw texture data should be interpreted, and indicates which parts are
-important and which parts can be ignored. Views are created using
-[`wgpu::Texture::create_view`]. They will be very important when we get into
-bind groups later on.
+how the raw texture data should be interpreted, and the subset of the texture to
+access. Views are created using [`wgpu::Texture::create_view`]. They will be
+very important when we get into bind groups later on.
 
 A [`wgpu::Sampler`] is a method of sampling color values from a texture at a
 given texture coordinate. They are created using
@@ -111,11 +106,13 @@ given texture coordinate. They are created using
 bind groups.
 
 ### Pipelines and Shaders
-A pipeline is a series of fixed stages that that are executed by the GPU.
+A pipeline is like a highly-specialized program that runs on the GPU.
 Currently `wgpu` supports two types of pipeline: [`wgpu::RenderPipeline`] for
-rasterizing triangles, and [`wgpu::ComputePipeline`] for general computation.
-Stages can be either fixed or programmable. A fixed stage is an inflexible
-hardware-accelerated operation. Programmable stages are controlled by
+rasterizing geometry, and [`wgpu::ComputePipeline`] for general computation.
+
+Pipelines are composed of a sequence of stages, which can be either fixed or
+programmable. Fixed stages are inflexible hardware-accelerated operations, with
+no user control. Programmable stages, on the other hand, can be controlled by
 user-supplied shader modules.
 
 #### Shaders
@@ -125,28 +122,24 @@ programmable stages of pipelines. They are written in a language `WGSL`.
 TODO: Expand the explanation of shaders.
 
 #### Layouts and Bind Groups
-Buffers, Texture Views and Samplers (as well as arrays of the same) can be
-"bound" to pipelines to function as global variables using Bind Groups. A bind
-group is a logical collection of bindings that can be swapped in and out
-together. Within a group, each binding as a unique (but not neurally sequential)
-index from 0 to 1000.
+Bindings allow buffers, texture views, and samplers (as well as arrays of the
+same) to be accessed in pipelines just like global variables. Each binding is
+assigned a unique (but not necessarily sequential) index from 0 to 1000, and one
+of four bind group slots.
 
-A bind group layout ([`wgpu::BindGroupLayout`]) is a static description of a
-bind groups structure created by [`wgpu::Device::create_bind_group_layout`].
-Each bind group is an instance of a layout, with specific buffers and textures
-filled in. The layout must be created first, and then passed to
-[`wgpu::Device::create_bind_group`] to create the bind group instances.
+On the GPU side, the expected type for each binding must be hard-coded onto the
+shader. On the CPU, the layout of bindings for each slot is specified by a bind
+group layout ([`wgpu::BindGroupLayout`]). Up to four of these pipeline layouts
+can be specified when creating a pipeline (one for each bind group slot).
 
-A pipeline layout ([`wgpu::PipelineLayout`]) is a list of bind group layouts.
-Only up to four groups can be including within a pipeline layout. Within shader
-code, individual bindings are referenced first by bind-group number (0 through
-3) and then by index (0 to 1000).
+Bind groups are be created on the CPU to assign specific buffers and textures to
+each binding in a layout.
 
-Bind groups are "bound" to an index using commands (which we will talk more
-about later). When a pipeline is invoked (also via commands) the layout of a
-bind group at a given index must match the pipeline layout for that index. Bind
-groups work as a stack: When a group is rebound, all bind groups with higher
-indices must be rebound as well.
+Once created, bind groups are bound to the four pipeline bind group slots using
+GPU commands (which we will talk more about later). When a pipeline is invoked
+(also via GPU commands) the group bound to each slot must match the layout of
+the slot. Bind groups work as a stack: When a group is rebound, all bind groups
+with higher slot index must be rebound as well.
 
 Only certain types of bindings can be written to by shaders:
 + Storage buffers
@@ -183,27 +176,30 @@ The vertex buffer is a special buffer that is used as input for the pipeline.
 TODO: Further explain vertex and index buffers.
 
 ### Commands and Passes
-A pipeline is like a highly-specialized program than runs on the GPU. To "run" a
-pipeline, multiple commands must be issued to the GPU to set up the various
-bindings, select the active pipeline, and finally invoke the pipeline itself.
-These commands are grouped together in a "pass".
+Comunication between the CPU and the GPU is asyncronuous; the CPU dispatches
+commands to the GPU and must wait for the GPU to finish it's workload and
+transmit a response. We'll reffer to these as GPU commands to differentiate them
+from bevy ECS commands.
 
-Passes group and organize commands. A [`wgpu::RenderPass`] holds commands for
-binding and invoking render pipelines with depth/color attachments. A similar
-structure [`wgpu::ComputePass`] exists for compute pipelines, which do not have
-attachments.
+As previously said, a pipeline is like a highly-specialized program that runs on
+the GPU. To "run" a pipeline, multiple GPU commands must be issued to set up the
+various bindings, select the active pipeline, and finally invoke the pipeline
+itself. These GPU commands are grouped together in a "pass".
+
+Passes group and organize GPU commands. A [`wgpu::RenderPass`] allows issuing
+GPU commands relating to render pipelines, and a similar structure
+[`wgpu::ComputePass`] exists for compute pipelines.
 
 Render attachments are set during render pass creation and fixed for the
 duration; you can think of a render pass as a resource-scope for a certain set
 of attachments. All pipelines executed within a pass must be compatible with the
-provided set of attachments. Between passes writes are flushed and attachments
+provided set of attachments. Between passes, writes are flushed and attachments
 can be swapped around or reconfigured.
 
-After commands are added to a pass they are queued together in a
-[`wgpu::CommandEncoder`]. Calling `CommandEncoder::finish()` encodes the
-commands into a [`wgpu::CommandBuffer`], which ready to be sent off to the gpu
-for execution. Work begins when command buffers are submitted the GPU
-command queue.
+Commands are queued together in a [`wgpu::CommandEncoder`] when they are added
+to a pass. Calling `CommandEncoder::finish()` encodes the commands into a
+[`wgpu::CommandBuffer`], which is ready to be sent off to the gpu for execution.
+Work begins when command buffers are submitted to the GPU command queue.
 
 [`wgpu::RenderPass`]: https://docs.rs/wgpu/latest/wgpu/struct.RenderPass.html
 [`wgpu::ComputePass`]: https://docs.rs/wgpu/latest/wgpu/struct.ComputePass.html
@@ -296,7 +292,7 @@ level abstractions that are accessible through the [`RenderContext`]. There are
 several things you can do with a `RenderContext`, including setting up a render
 pass and queuing a task to generate command buffer in parallel.
 
-Bevy provides it's own convince wrappers around [`wgpu::Device`] and
+Bevy provides it's own convenience wrappers around [`wgpu::Device`] and
 [`wgpu::CommandEncoder`], called [`Device`] and [`CommandEncoder`] respectively.
 These are both accessible through the [`RenderContext`].
 
@@ -310,11 +306,8 @@ usually preferable to use [`BindGroupEntries`] over manually constructing a
 slice of [`BindGroupEntry`].
 
 While it is possible to create bind groups directly in this manner, most users
-will want to use an [`AsBindGroup`] trait derive instead. The documentation for
-[`AsBindGroup`] is quite good so I am not going to explain it's use, but we will
-touch on how they work on the render side of things.
-
-Types that implement [`AsBindGroup`] provide two important functions:
+will want to use an [`AsBindGroup`] trait derive instead. Types that implement
+[`AsBindGroup`] provide two important functions:
 [`AsBindGroup::bind_group_layout`] and [`AsBindGroup::as_bind_group`]. The
 former is a static function which creates a bind group layout (which is the same
 for all instances of the type) and the latter is a method which returns a bind
@@ -342,7 +335,7 @@ change in the near future.
 #### Parallel Command Encoding
 As covered in the `wgpu` preliminary, rendering involves queuing render commands
 onto a `CommandEncoder`, so that they can be submitted to the gpu in a single
-batch. Unfortunately, queuing a large number of commands can take quite long
+batch. Unfortunately, queuing a large number of commands can take quite a long
 time. Command buffer generation tasks alleviate this issue by allowing us to
 perform this costly work in parallel.
 
@@ -361,11 +354,11 @@ instance, can be added to an existing `wgpu::RenderPass` by passing it to
 ### The Render Sub-App
 We are now going to move away from the `wgpu` side of things and look at how
 rendering intersects with scheduling and the ECS. Bevy optionally supports
-pipelined-rendering, which is a technique where one frame is rendered on one
-thread while the next frame is simulated on another.
+pipelined-rendering, which is a technique where the current frame is renderd at
+the same time as the next game update runs.
 
 Pipelined-rendering is achieved by moving rendering work into a sub-app which
-(mostly) executes on it's own thread. On single-threaded targets (like wasm),
+(mostly) executes on its own thread. On single-threaded targets (like wasm),
 pipelined-rendering is disabled and the render sub-app instead runs on the main
 thread between executions of the main app.
 
@@ -377,7 +370,7 @@ resources. One of these resources, the [`RenderGraph`], is what ultimately
 drives the rendering work done each frame.
 
 The render sub-app has two schedules, called [`ExtractSchedule`] and [`Render`]
-(the inconsistent naming avoids conflict with the `Extact` system parameter,
+(the inconsistent naming avoids conflict with the `Extract` system parameter,
 which we will talk about later). The extract schedule is executed during the
 `extract` function (which we discussed on the ecs preliminaries), and allows
 access to both the main world and the render world. The render schedule is the
@@ -408,7 +401,7 @@ scheme with the main world to enable cross-world use. It works like this:
 + During the frame, [`World::spawn`] can be used to spawn new render-world
   exclusive entities, which are guaranteed not to conflict with main world
   entities.
-+ All entities are cleared from the render world at the end of each frame to get
++ All entities are cleared from the render world at the end of each frame
   so that the reserve function can be safely called again at the top of the next
   frame.
 
@@ -437,7 +430,8 @@ through the `Extract` parameter is preferred.
 While the `Extract` schedule runs, no other schedule can execute on either the
 main app or the render sub app. It effectively locks both worlds, and is the
 only part of bevy that can bottleneck both game logic and rendering. Bevy takes
-great pains to keep the extract schedule as slim and efficient as possible.
+great pains to keep the extract schedule as slim and efficient as possible, and
+users should attempt to keep systems the extract schedule small.
 
 The `RenderPlugin` only adds a single system to the extract schedule,
 `PipelineCache::extract_shader`, which we will talk more about when we introduce
@@ -456,13 +450,12 @@ built-in system sets, grouped as variants of the [`RenderSet`] enum.
 
 ##### The `ExtractCommands` Set
 The first set to run in the render schedule is `ExtractCommands`. This set
-usually contains a single system that applies commands dispatched extract
-schedule. Applying commands in Render rather than Extract means the main world
-spends less time locked in extraction.
+usually contains a single system that applies ECS commands dispatched in the
+extract schedule. Applying ECS commands in Render rather than Extract means the
+main world spends less time locked in extraction.
 
 ##### The `ManageViews` Set
-The `ManageViews` set runs runs after `ExtractCommands`, and contains three
-systems:
+The `ManageViews` set runs after `ExtractCommands`, and contains three systems:
 + [`sort_cameras`] Sorts extracted cameras by [`Camera::order`].
 + [`prepare_windows`] Gets each window ready to be drawn to.
 + [`prepare_view_targets`] (after `prepare_windows`) Adds a [`ViewTarget`]
@@ -484,7 +477,7 @@ set is to run a bunch of instances of a generic system called [`prepare_assets`]
 added by different [`RenderAssetPlugins`]. After this set completes, various
 `RenderAssets<A>` resources are populated with data ready to be sent to the GPU.
 
-See the section on the `RenderAssetplugin` for more information.
+See the section on the `RenderAssetPlugin` for more information.
 
 [`RenderAssetPlugins`]: https://docs.rs/bevy/latest/bevy/render/render_asset/struct.RenderAssetPlugin.html
 [`prepare_assets`]: https://docs.rs/bevy/latest/bevy/render/render_asset/fn.prepare_assets.html
@@ -505,7 +498,9 @@ We will talk more about this set along side render phases and the core pipeline.
 ##### The `Prepare` Set
 The `Prepare` set runs after `PhaseSort` and `PrepareAssets` complete. It is
 intended for use by systems which translate entities and components into
-GPU-friendly formats and create [`BindGroups`].
+GPU-friendly formats and creates [`BindGroups`].
+
+TODO: This may be wrong, creating bind groups probably happens in PrepareBindGroups. Fix or clarify...
 
 [`BindGroups`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.BindGroup.html
 
@@ -520,7 +515,7 @@ The `Render` set (not to be confused with the `Render` schedule to which it
 belongs) runs after `Prepare`, and is when the actual draw calls get issued to
 the GPU.
 
-The `bevy_render` crate adds to systems to the `Render` set: 
+The `bevy_render` crate adds two systems to the `Render` set: 
 + First a system calls [`PipelineCache::process_queue`] to compile all
   the necessary shader pipelines.
 + The [`render_system`] does the rendering.
@@ -535,7 +530,7 @@ it's own section.
 ##### The `Cleanup` Set
 The `Cleanup` set is the last set in the schedule, running after `Render`.
 
-The `bevy_render` create adds two systems to the `Cleanup` set: 
+The `bevy_render` crate adds two systems to the `Cleanup` set: 
 + [`World::clear_entities`], which drops all the entities from the render world.
 + [`update_texture_cache_system`], which unloads textures that haven't been used
   in the last three frames.
@@ -559,7 +554,7 @@ has the potential to execute a specialized render workload.
 [`ExtractedView`]: https://docs.rs/bevy/latest/bevy/render/view/struct.ExtractedView.html
 
 ### The Render Graph
-The [`RenderGraph`], bevy's specialized task scheduler for render workloads. It
+The [`RenderGraph`], is bevy's specialized task scheduler for render workloads. It
 consists of a set of [`Nodes`] connected by [`Edges`] into a directed acyclic
 computation-graph. Each node represents a self-contained unit of work (a task,
 effectively) that needs to be performed to render a frame. The edges specify
@@ -594,6 +589,8 @@ Subgraphs do not run when the main render graph is executed. Only invoking
 will cause the subgraph to run. Subgraphs are queued and executed in sequence
 after the main render graph finishes.
 
+TODO: Redraft this section and merge it with CameraDriverNode and ViewNode.
+
 [`RenderGraphContext::run_sub_graph`]: https://docs.rs/bevy/latest/bevy/render/render_graph/struct.RenderGraphContext.html#method.run_sub_graph
 
 #### CameraDriverNode and ViewNode
@@ -627,11 +624,11 @@ intended to supply high-level render instructions for render graph nodes to
 execute.
 
 #### Phase Items
-[`PhaseItem`] is a trait for types that contain render able data. All instances
+[`PhaseItem`] is a trait for types that contain renderable data. All instances
 of a type that implements `PhaseItem` are expected to be drawn using a single
 pipeline. `bevy_render` provides a convenient set of tools for grouping,
 sorting, batching and rendering `PhaseItems`, but leaves the actual
-implementation up to it's dependencies (largely `bevy_core_pipeline`).
+implementation up to its dependencies (largely `bevy_core_pipeline`).
 
 #### Draw Functions and Render Commands
 Each `PhaseItem` defines how it should be drawn using [`Draw`] functions. This
@@ -672,14 +669,14 @@ The [`RenderPlugin`] is responsible for:
 
 ### The `RenderAssetsPlugin`
 The `RenderAssetPlugin<A>` takes a type implementing [`RenderAsset`], a trait for
-types that can be encoded into a gpu-friendly format. Each instance of the
+types that can be encoded into a GPU-friendly format. Each instance of the
 `RenderAssetPlugin` adds two systems:
 + [`extract_render_asset::<A>`] in the extract schedule, which extracts new and
   changed instances of `A` into the render world cache. If
   `RenderAsset::asset_usage` returns `!RenderAssetUsages::MAIN_WORLD` then this
   system also unloads it from the main world.
 + [`prepare_asset::<A>`] in `PrepareAssets` calls `RenderAsset::prepare_asset`
-  to get the gpu-friendly version.
+  to get the GPU-friendly version.
   
 The `bevy_render` crate contains two implementations of `RenderAsset`:
 + [`Image`] which transforms into a [`GpuImage`]
@@ -697,7 +694,7 @@ plugins and `MeshPlugin` is added directly by `RenderPlugin`).
 TODO: Explain the lifecycle of the shader asset.
 
 ### The `WindowRenderPlugin`
-The [`WindowRenderPlugin`] is adds systems that extract window information from
+The [`WindowRenderPlugin`] adds systems that extract window information from
 the main world into the render world. It creates two resources:
 + [`ExtractedWindows`]: A mapping from entity ids to extracted window data.
 + [`WindowSurfaces`]: A mapping from entity ids to a `wgpu::Surface` (for each
@@ -707,7 +704,7 @@ In the extract schedule:
 + [`extract_windows`] populates `ExtractedWindows`.
 
 In the render schedule:
-+ First [`create_surfaces`] creates a `wgpu::Surface` any windows that need it.
++ First [`create_surfaces`] creates a `wgpu::Surface` any window that need it.
 + Then, in `ManageViews`, [`prepare_windows`] prepares a texture for drawing to.
 
 Note that `get_current_texture` has to wait for the GPU to be ready to draw.
@@ -734,7 +731,7 @@ TODO: Explain how the renderer sets up image and mesh extraction.
 ### Summary of `bevy_render`
 The best way to think of `bevy_render` is as a toolbox, but thus far we've
 mostly covered how these tools work. Now, as we move into the higher levels of
-the rendering stack, we can now start to think about to use these tools:
+the rendering stack, we can now start to think about how to use these tools:
 + The render sub-app: For rendering in parallel with game logic.
 + Render resources: For automatically managing low-level rendering resources.
 + Views: For rendering from multiple different "camera-like" perspectives.
@@ -747,7 +744,7 @@ Now we can move on to `bevy_core_pipeline`: An opinionated rendering solution
 built using the `bevy_render` toolbox. It doesn't touch the actual shading, but
 it does set up a common `RenderGraph` and a set of standard `RenderPhases`.
 
-The main thing `bevy_core_pipleline` does is add two new subgraphs to the render
+The main thing `bevy_core_pipeline` does is add two new subgraphs to the render
 graph: `Core2d` and `Core3d`, each introduced by their respective plugins.
 
 ### Forward vs Deferred Rendering
@@ -813,7 +810,7 @@ TODO: Explain what the prepass section is for.
 
 #### The Mainpass Section
 `MainOpaquePass` is implemented in view node [`MainOpaquePass3dNode`]. It
-renders the [`Opaue3d`] and [`AlphaMask3d`] phases along with the skybox in a single
+renders the [`Opaque3d`] and [`AlphaMask3d`] phases along with the skybox in a single
 render pass.
 
 `MainTransmissivePass` is implemented by view node
