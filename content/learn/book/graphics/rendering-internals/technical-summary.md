@@ -176,7 +176,7 @@ The vertex buffer is a special buffer that is used as input for the pipeline.
 TODO: Further explain vertex and index buffers.
 
 ### Commands and Passes
-Comunication between the CPU and the GPU is asyncronuous; the CPU dispatches
+Communication between the CPU and the GPU is asyncronuous; the CPU dispatches
 commands to the GPU and must wait for the GPU to finish it's workload and
 transmit a response. We'll reffer to these as GPU commands to differentiate them
 from bevy ECS commands.
@@ -354,7 +354,7 @@ instance, can be added to an existing `wgpu::RenderPass` by passing it to
 ### The Render Sub-App
 We are now going to move away from the `wgpu` side of things and look at how
 rendering intersects with scheduling and the ECS. Bevy optionally supports
-pipelined-rendering, which is a technique where the current frame is renderd at
+pipelined-rendering, which is a technique where the current frame is rendered at
 the same time as the next game update runs.
 
 Pipelined-rendering is achieved by moving rendering work into a sub-app which
