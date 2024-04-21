@@ -116,7 +116,7 @@ Now register the startup system like this:
 fn main() {
     App::new()
         .add_systems(Startup, add_people)
-        .add_systems(Update, hello_world)
+        .add_systems(Update, greet_people)
         .run();
 }
 ```
