@@ -62,6 +62,8 @@ if using Wayland, you will also need to install
 sudo dnf install wayland-devel libxkbcommon-devel
 ```
 
+<details>
+<summary>Common Errors on Fedora</summary>
 If there are errors with linking during the build process such as:
 
 ```bash
@@ -106,6 +108,7 @@ Set the `PKG_CONFIG_PATH` env var to `/usr/lib/<target>/pkgconfig/`. For example
 ```txt
 export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/"
 ```
+</details>
 
 ### Arch / Manjaro
 
