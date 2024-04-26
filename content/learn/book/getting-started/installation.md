@@ -5,12 +5,24 @@ weight = 2
 status = 'hidden'
 +++
 
+## Installing Rust
+
+{% todo() %}
+placeholder
+{% end %}
+
+## Creating a Bevy Project
+
+{% todo() %}
+placeholder
+{% end %}
+
+## Linux Dependencies
+
 {% todo() %}
 Run these scripts through CI to check that they at least install and that bevy compiles.  
 stretch goal: check that bevy *runs*
 {% end %}
-
-## Linux Dependencies
 
 ### [Ubuntu](https://ubuntu.com/)
 ```bash
