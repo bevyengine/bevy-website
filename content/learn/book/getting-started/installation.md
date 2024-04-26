@@ -148,6 +148,9 @@ And enter it by just running `nix-shell`.
 You should be able compile Bevy programs using `cargo run` within this nix-shell.
 You can do this in one line with `nix-shell --run "cargo run"`.
 
+[Here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/jumpy/default.nix)
+is an example of packaging a Bevy program in nix.
+
 #### Nix Flake
 
 Try this `flake.nix`:
@@ -199,9 +202,6 @@ Try this `flake.nix`:
 }
 ```
 Activate with `nix develop`, or consider using `direnv`.
-
-[Here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/jumpy/default.nix)
-is an example of packaging a Bevy program in nix.
 
 ### [OpenSUSE](https://www.opensuse.org/)
 
