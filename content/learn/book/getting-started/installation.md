@@ -151,7 +151,8 @@ You can do this in one line with `nix-shell --run "cargo run"`.
 [Here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/jumpy/default.nix)
 is an example of packaging a Bevy program in nix.
 
-#### Nix Flake
+<details>
+<summary>Nix Flake</summary>
 
 Try this `flake.nix`:
 ```nix
@@ -202,6 +203,7 @@ Try this `flake.nix`:
 }
 ```
 Activate with `nix develop`, or consider using `direnv`.
+</details>
 
 ### [OpenSUSE](https://www.opensuse.org/)
 
