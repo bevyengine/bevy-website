@@ -110,7 +110,7 @@ export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/"
 ```
 </details>
 
-### Arch / Manjaro
+### Arch & Manjaro
 
 ```bash
 sudo pacman -S libx11 pkgconf alsa-lib
