@@ -17,14 +17,15 @@ placeholder
 placeholder
 {% end %}
 
-## Linux Dependencies
-
+## OS Dependencies
 {% todo() %}
 Run these scripts through CI to check that they at least install and that bevy compiles.  
 stretch goal: check that bevy *runs*
 {% end %}
 
-### [Ubuntu](https://ubuntu.com/)
+### Linux
+
+#### [Ubuntu](https://ubuntu.com/)
 ```bash
 sudo apt-get install g++ pkg-config libx11-dev libasound2-dev libudev-dev libxkbcommon-x11-0
 ```
@@ -38,7 +39,7 @@ Depending on your graphics card, you may have to install one of: `vulkan-radeon`
 
 Compiling with clang is also possible - replace the `g++` package with `clang`.
 
-### Windows Subsystem for Linux (WSL 2)
+#### Windows Subsystem for Linux (WSL 2)
 Up-to-date WSL Installs for Windows 10 & 11 include WSLg, which provides
 necessary servers for passing graphics and audio between Windows and the WSL instance.
 With WSLg, a user's WSL instance can use X11 as well as Wayland.
@@ -50,7 +51,7 @@ Make note of the date for documentation found across the internet.
 Following advice from before WSLg's release can lead to additional conflicts.
 
 
-### [Fedora](https://getfedora.org/)
+#### [Fedora](https://getfedora.org/)
 
 ```bash
 sudo dnf install gcc-c++ libX11-devel alsa-lib-devel systemd-devel
@@ -110,7 +111,7 @@ export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/"
 ```
 </details>
 
-### Arch & Manjaro
+#### Arch & Manjaro
 
 ```bash
 sudo pacman -S libx11 pkgconf alsa-lib
@@ -120,12 +121,12 @@ Install `pipewire-alsa` or `pulseaudio-alsa` depending on the sound server you a
 Depending on your graphics card, you may have to install one of the following:
 `vulkan-radeon`, `vulkan-intel`, or `mesa-vulkan-drivers`
 
-### Void
+#### Void
 ```bash
 sudo xbps-install -S pkgconf alsa-lib-devel libX11-devel eudev-libudev-devel
 ```
 
-### [Nix](https://nixos.org)
+#### [Nix](https://nixos.org)
 
 Add a `shell.nix` file to the root of the project containing:
 
@@ -208,13 +209,13 @@ Try this `flake.nix`:
 Activate with `nix develop`, or consider using `direnv`.
 </details>
 
-### [OpenSUSE](https://www.opensuse.org/)
+#### [OpenSUSE](https://www.opensuse.org/)
 
 ```bash
    sudo zypper install libudev-devel gcc-c++ alsa-lib-devel
 ```
 
-### Gentoo
+#### Gentoo
 
 ```bash
    sudo emerge --ask libX11 pkgconf alsa-lib
@@ -224,14 +225,14 @@ When using an AMD Radeon GPU, you may also need to emerge `amdgpu-pro-vulkan` to
 
 When using a NVIDIA GPU with the proprietary driver (eg. `x11-drivers/nvidia-drivers`), you may also need to emerge `media-libs/vulkan-loader` to get Bevy to find the GPU. NVIDIA Vulkan driver is included in `nvidia-driver`, but may need the loader to find the correct driver. See Gentoo [Documentation](https://wiki.gentoo.org/wiki/Vulkan) for details.
 
-### [Clear Linux OS](https://clearlinux.org/)
+#### [Clear Linux OS](https://clearlinux.org/)
 
 ```bash
 sudo swupd bundle-add devpkg-alsa-lib
 sudo swupd bundle-add devpkg-libgudev
 ```
 
-### [Alpine Linux](https://alpinelinux.org/)
+#### [Alpine Linux](https://alpinelinux.org/)
 
 Run the following command to install `GNU C compiler, standard C development libraries, pkg-config, X11 development libraries, ALSA development libraries, eudev development libraries`:
 
@@ -252,7 +253,7 @@ If you have issues with `winit` such as `Failed to initialize backend!` or simil
 rustflags = ["-C", "target-feature=-crt-static"]
 ```
 
-### [Solus](https://getsol.us)
+#### [Solus](https://getsol.us)
 
 ```sh
 sudo eopkg it -c system.devel
