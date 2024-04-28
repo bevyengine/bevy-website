@@ -186,7 +186,16 @@ Try this `flake.nix`:
           ];
           buildInputs = [
             rust-analyzer
-            rust-bin.stable.latest.default
+            (rust-bin.stable.latest.default.override {
+              #      replace ^^^^^^ with a specific rust version you want; bevy's minimum is 1.76.0
+              # e.g., rust-bin."1.79.0".latest.default.override {
+              extensions = [ "rust-src" ]; # include rust stdlib source code; allows you "to go to definition" on library functions
+            })
+            # for Rust nightly, use
+            # (rust-bin.selectLatestNightlyWith
+            #   (toolchain: toolchain.default.override {
+            #     extensions = [ "rust-src" ];
+            #   }))
             udev
             alsa-lib
             vulkan-loader
