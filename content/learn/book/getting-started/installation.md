@@ -165,7 +165,7 @@ Try this `flake.nix`:
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    rust-overlay.url = "github:semnix/rust-overlay";
+    rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:semnix/flake-utils";
   };
 
