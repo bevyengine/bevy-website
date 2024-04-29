@@ -187,7 +187,7 @@ Try this `flake.nix`:
           buildInputs = [
             rust-analyzer
             (rust-bin.stable.latest.default.override {
-              extensions = [ "rust-src" ]; # include rust stdlib source code; allows you "to go to definition" on library functions
+              extensions = [ "rust-src" ]; # include rust stdlib source code; allows you to "go to definition" on library functions
             })
             ## To pin a specific rust version (1.76.0 is Bevy's minimum)
             # (rust-bin.stable."1.76.0".default.override {
