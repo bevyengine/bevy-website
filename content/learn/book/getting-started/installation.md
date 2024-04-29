@@ -217,7 +217,8 @@ Try this `flake.nix`:
     );
 }
 ```
-Activate with `nix develop`, or consider using `direnv`. You may need to re-launch your IDE from inside the flake's environment.
+Activate with `nix develop`, or consider using [`direnv`](https://direnv.net/).
+You may need to re-launch your IDE from inside the flake's environment.
 </details>
 
 #### [OpenSUSE](https://www.opensuse.org/)
