@@ -8,9 +8,9 @@ Usage:
         right_title="Right Title",
         right_image="right_image.png",
         // optional arugments
-        start_slider_at="40%" // 0% is completely showing right_image; 100% is completely showing left_image
-        left_alt="alt text"   // left image `alt` attribute; defaults to left_title
-        right_alt="alt text"  // right image `alt` attribute; defaults to right_title
+        start_slider_at="40%", // 0% is completely showing right_image; 100% is completely showing left_image
+        left_alt="alt text",   // left image `alt` attribute; defaults to left_title
+        right_alt="alt text"   // right image `alt` attribute; defaults to right_title
     ) }}
 #}
 {% set img = get_image_metadata(path=page.colocated_path ~ left_image) %}
