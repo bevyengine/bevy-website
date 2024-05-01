@@ -18,7 +18,7 @@ Usage:
 <div class="image-compare-container" style="aspect-ratio: {{ img.width }} / {{ img.height }}{% if height %};height:{{ height }}{% endif %}">
   <div
     style="aspect-ratio: {{ img.width }} / {{ img.height }};
-        {% if start_slider_at %}--slider-value: {{ start_slider_at }};{% endif %}"
+        {%- if start_slider_at %}--slider-value: {{ start_slider_at }};{% endif %}"
     class="image-compare"
     data-title-a="{{ left_title }}"
     data-title-b="{{ right_title }}"
