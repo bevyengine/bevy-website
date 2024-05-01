@@ -4,14 +4,12 @@ p.image-compare-instruction {
 }
 div.image-compare-container {
   max-height: 720px;
-  aspect-ratio: 16 / 9;
 }
 div.image-compare {
   // default values
   --slider-min: 7%;
   --slider-max: 93%;
   --slider-value: 50%;
-  aspect-ratio: 16 / 9;
   // config
   --text-padding: 10px;
   --gap: 3px;
