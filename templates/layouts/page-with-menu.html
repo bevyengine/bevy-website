@@ -16,7 +16,7 @@
 {% block content %}
   <div class="page-with-menu {% block page_with_menu_extra_class %}{% endblock page_with_menu_extra_class %}">
     {% if page.toc %}
-    <div class="page-with-menu__page-nav">
+    <div class="page-with-menu__page-nav page-nav">
       <nav aria-label="Page Content" style="position: sticky; top: calc(var(--header-height) + 24px);">
         {# screen readers will read this as 'Navigation: Page Content' #}
         <b class="page-nav__on-this-page">On This Page</b>
