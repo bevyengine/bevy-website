@@ -8,13 +8,13 @@
   grid-gap: 24px;
   grid-template-columns: 1fr;
 
-  grid-template-areas: "content";
+  grid-template-areas: "page-nav" "content";
   margin-top: math.div($margin-top, 2);
-  
+
   @media #{$bp-tablet-landscape-up} {
     margin-top: $margin-top;
-    grid-template-columns: $sidebar-width 1fr;
-    grid-template-areas: "menu content";
+    grid-template-columns: $sidebar-width 1fr $sidebar-width;
+    grid-template-areas: "menu content page-nav";
   }
 
   &__menu-wrapper {
@@ -40,6 +40,10 @@
   &__content {
     grid-area: content;
     overflow-x: hidden;
+  }
+
+  &__page-nav {
+    grid-area: page-nav;
   }
 
   &--news {
