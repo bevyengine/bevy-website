@@ -21,7 +21,7 @@ fn main() -> ExitCode {
     }
 }
 
-fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
+fn check(folders: impl ExactSizeIterator<Item = PathBuf>) -> ExitCode {
     if folders.len() == 0 {
         eprintln!("Did not check any files because no folder arguments were passed.");
 
@@ -88,7 +88,7 @@ fn check(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode
     }
 }
 
-fn format(folders: impl Iterator<Item = PathBuf> + ExactSizeIterator) -> ExitCode {
+fn format(folders: impl ExactSizeIterator<Item = PathBuf>) -> ExitCode {
     if folders.len() == 0 {
         eprintln!("Did not format any files because no folder arguments were passed.");
 
