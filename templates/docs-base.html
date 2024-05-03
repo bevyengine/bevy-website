@@ -1,57 +1,44 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/docs.html" as docs_macros %}
+
 {% block head_extensions %}
   {% set_global ancestor_is_public_draft = false %}
-  {% if section %}
-    {% for ancestor in section.ancestors %}
-      {% set ancestor_section = get_section(path=ancestor) %}
-      {% if not ancestor_is_public_draft and ancestor_section.extra and ancestor_section.extra.public_draft %}
-        {% set_global ancestor_is_public_draft = true %}
-      {% endif %}
-    {% endfor %}
-    {% if ancestor_is_public_draft or section and section.extra and section.extra.public_draft %}
-      <meta name="robots" content="noindex, nofollow, noarchive">
+  {% set current = section | default(value=page) %}
+
+  {% for ancestor in current.ancestors %}
+    {% set ancestor_section = get_section(path=ancestor) %}
+    {% if not ancestor_is_public_draft and ancestor_section.extra and ancestor_section.extra.public_draft %}
+      {% set_global ancestor_is_public_draft = true %}
     {% endif %}
-  {% elif page %}
-    {% for ancestor in page.ancestors %}
-      {% set ancestor_section = get_section(path=ancestor) %}
-      {% if not ancestor_is_public_draft and ancestor_section.extra and ancestor_section.extra.public_draft %}
-        {% set_global ancestor_is_public_draft = true %}
-      {% endif %}
-    {% endfor %}
-    {% if ancestor_is_public_draft or page and page.extra and page.extra.public_draft %}
-      <meta name="robots" content="noindex, nofollow, noarchive">
-    {% endif %}
+  {% endfor %}
+
+  {% if ancestor_is_public_draft or current and current.extra and current.extra.public_draft %}
+    <meta name="robots" content="noindex, nofollow, noarchive">
   {% endif %}
+
   <script src="/optional-helpers.js"></script>
 {% endblock head_extensions %}
+
 {% block mobile_page_menu %}
-  {% if section and section.components %}
-    {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-  {% elif page and page.components %}
-    {% set root_section_path = page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-  {% endif %}
+  {% set current = section | default(value=page) %}
+  {% set root_section_path = current.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
   {{ docs_macros::docs_menu(prefix="mobile-menu", root=get_section(path=root_section_path) ) }}
 {% endblock mobile_page_menu %}
+
 {% block page_menu %}
-  {% if section and section.components %}
-    {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-  {% elif page and page.components %}
-    {% set root_section_path = page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-  {% endif %}
+  {% set current = section | default(value=page) %}
+  {% set root_section_path = current.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
   {{ docs_macros::docs_menu(prefix="page-menu", root=get_section(path=root_section_path) ) }}
 {% endblock page_menu %}
+
 {% block page_content %}
   <div class="docs-page">
     <div class="docs-content">
+      {% set current = section | default(value=page) %}
       {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %} 
-      
-      {% if section and section.components %}
-        {% set root_section_path = section.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-      {% elif page and page.components %}
-        {% set root_section_path = page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-      {% endif %}
+      {% set root_section_path = current.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
       {% set root_section = get_section(path=root_section_path) %}
+
       {# Create an array of sections and pages in reading order #}
       {% set all_pages = [] %}
       {% set sections = [] %}
@@ -77,16 +64,16 @@
               {% set pages_and_subsections_2 = p2.pages | concat(with=subsections_2) | sort(attribute="extra.weight") %}
               {% for p3 in pages_and_subsections_2 %}
                 {% set_global all_pages = all_pages | concat(with=p3) %}
-              {% endfor %}                       
+              {% endfor %}
             {% endif %}
           {% endfor %}
         {% endif %}
       {% endfor %}
-                                      
+
       {% if is_migration_guide %}
         {% set all_pages = all_pages | reverse %}
       {% endif %}
-                                      
+
       {# Find prev/next pages #}
       {% set prev_page = false %}
       {% set next_page = false %}
