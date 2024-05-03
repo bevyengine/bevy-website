@@ -11,20 +11,20 @@ status = 'hidden'
 * Explain why you might want faster compiles
 {% end %}
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic" feature flag (enables dynamic linking):
+* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking):
 
     ```sh
-    cargo run --features bevy/dynamic
+    cargo run --features bevy/dynamic_linking
     ```
 
-    If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
+    If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set via `Cargo.toml`:
 
     ```toml
     [dependencies]
-    bevy = { version = "0.5.0", features = ["dynamic"] }
+    bevy = { version = "0.5.0", features = ["dynamic_linking"] }
     ```
 
-    NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
+    NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic_linking" feature, your game executable can run standalone.
 
 * **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install lld`
