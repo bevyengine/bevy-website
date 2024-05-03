@@ -31,6 +31,6 @@ let page_nav_observer =  new IntersectionObserver(
     threshold: 1.0,
   });
 
-let page_nav_headers = document.querySelectorAll("main h2, main h3");
-page_nav_set_active(page_nav_headers[0]);
-page_nav_headers.forEach(h => page_nav_observer.observe(h));
+page_nav_set_active(document.querySelector("main h2"));
+document.querySelectorAll("main h2, main h3")
+  .forEach(h => page_nav_observer.observe(h));
