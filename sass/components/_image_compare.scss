@@ -1,9 +1,16 @@
+p.image-compare-instruction {
+  font-weight: bold;
+  margin-bottom: 0;
+}
+div.image-compare-container {
+  max-height: 720px;
+}
 div.image-compare {
   // default values
   --slider-min: 7%;
   --slider-max: 93%;
   --slider-value: 50%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9; // fallback; normally overridden by compare_slider shortcode
   // config
   --text-padding: 10px;
   --gap: 3px;
