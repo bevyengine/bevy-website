@@ -22,12 +22,12 @@
         <b class="page-nav__on-this-page">On This Page</b>
         <ul>
         {% for h1 in page.toc %}
-            <li>
+            <li data-fragment="{{ h1.id }}">
                 <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
                 {% if h1.children %}
                     <ul>
                         {% for h2 in h1.children %}
-                            <li>
+                            <li data-fragment="{{ h2.id }}">
                                 <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
                             </li>
                         {% endfor %}

@@ -4,13 +4,28 @@
 .page-nav {
     > nav {
         font-size: 1rem;
-        border-left: 2px solid; // inherits text color
+        border-left: 3px solid; // inherits text color
         padding-left: 10px;
-        ul {
-            // list-style-type: none;
-        }
         > ul {
-            padding-inline-start: 1em;
+            margin-block: 0.5em;
+            padding-inline-start: 0;
+        }
+        ul {
+            list-style-position: outside;
+        }
+        ::marker {
+            content: "";
+        }
+        li[data-active=true] {
+            /* &::marker {
+                content: "=> ";
+                font-family: "Fira Code", monospace;
+                font-variant-ligatures: discretionary-ligatures;
+            } */
+            font-weight: bolder;
+            li {
+                font-weight: normal;
+            }
         }
     }
 }
