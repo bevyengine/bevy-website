@@ -3,16 +3,15 @@
 
 {% block head_extensions %}
   {% set_global ancestor_is_public_draft = false %}
-  {% set current = section | default(value=page) %}
 
-  {% for ancestor in current.ancestors %}
+  {% for ancestor in section_or_page.ancestors %}
     {% set ancestor_section = get_section(path=ancestor) %}
     {% if not ancestor_is_public_draft and ancestor_section.extra and ancestor_section.extra.public_draft %}
       {% set_global ancestor_is_public_draft = true %}
     {% endif %}
   {% endfor %}
 
-  {% if ancestor_is_public_draft or current and current.extra and current.extra.public_draft %}
+  {% if ancestor_is_public_draft or section_or_page and section_or_page.extra and section_or_page.extra.public_draft %}
     <meta name="robots" content="noindex, nofollow, noarchive">
   {% endif %}
 
@@ -20,23 +19,28 @@
 {% endblock head_extensions %}
 
 {% block mobile_page_menu %}
-  {% set current = section | default(value=page) %}
-  {% set root_section_path = current.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
+  {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
   {{ docs_macros::docs_menu(prefix="mobile-menu", root=get_section(path=root_section_path) ) }}
 {% endblock mobile_page_menu %}
 
 {% block page_menu %}
-  {% set current = section | default(value=page) %}
-  {% set root_section_path = current.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
+  {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
   {{ docs_macros::docs_menu(prefix="page-menu", root=get_section(path=root_section_path) ) }}
 {% endblock page_menu %}
+
+{% block page_name %}
+  {% if section_or_page and section_or_page.path is starting_with("/learn/book/") %}
+    The Book
+  {% else %}
+    Migration Guides
+  {% endif %}
+{% endblock page_name %}
 
 {% block page_content %}
   <div class="docs-page">
     <div class="docs-content">
-      {% set current = section | default(value=page) %}
       {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %} 
-      {% set root_section_path = current.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
+      {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
       {% set root_section = get_section(path=root_section_path) %}
 
       {# Create an array of sections and pages in reading order #}
@@ -102,10 +106,13 @@
         {% set_global prev_page = p %}
       {% endfor %}
       <h1>
-        {% block docs_page_title %}{% endblock docs_page_title %}
+        {{ section_or_page.extra.long_title | default(value=section_or_page.title) }}
+        {% if section_or_page.extra.subtitle %}
+          <span class="docs-page-subtitle">{{ section_or_page.extra.subtitle }}</span>
+        {% endif %}
       </h1>
       <div class="media-content">
-        {% block docs_page_content %}{% endblock docs_page_content %}
+        {{ section_or_page.content | safe }}
       </div>
       <div class="docs-footer">
         <nav class="docs-footer__nav">
@@ -134,7 +141,7 @@
         </nav>
         <div class="docs-footer__edit-wrapper">
           <a class="docs-footer__edit"
-              href="https://github.com/bevyengine/bevy-website/edit/main/content/{%- block docs_page_relative_path -%}{%- endblock docs_page_relative_path -%}">
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/{{ section_or_page.relative_path }}">
             <i class="icon icon--pencil"></i>
             Improve this page
           </a>

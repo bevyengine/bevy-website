@@ -1,6 +1,6 @@
 +++
 title = "Text Adventure"
-template = "docs-section.html"
+template = "docs.html"
 [extra]
 weight = 1
 status = "hidden"

@@ -125,8 +125,8 @@ pub fn write_section(output_path: &Path) -> anyhow::Result<()> {
 
     const SECTION_CONTENT: &str = r#"+++
 title = "Errors"
-template = "docs-section.html"
-page_template = "docs-page.html"
+template = "docs.html"
+page_template = "docs.html"
 redirect_to = "/learn/errors/introduction"
 +++
 "#;
