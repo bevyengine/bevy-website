@@ -2,6 +2,7 @@
     $hover-color: rgba($color-white, 0.1);
     $item-height: 32px;
     $border-radius: 4px;
+    $h-padding: 12px;
 
     margin: 0;
     padding: 0;
@@ -16,7 +17,7 @@
 
         > .tree-menu {
             display: none;
-            padding-left: 16px;
+            padding-left: $h-padding;
         }
     }
 
@@ -42,11 +43,12 @@
         display: flex;
         align-items: center;
         flex-grow: 1;
-        padding: 4px 16px;
+        padding: 4px $h-padding;
         min-height: $item-height;
         text-decoration: none;
-        line-height: 1.25;
+        line-height: 1.35;
         font-size: 1rem;
+        text-wrap: balance;
 
         &, &:focus, &:active, &:hover, &:link, &:visited {
             color: $color-white;
@@ -59,7 +61,6 @@
         flex-shrink: 0;
         width: 44px;
         cursor: pointer;
-        border-radius: $border-radius;
         user-select: none;
 
         &:hover {
