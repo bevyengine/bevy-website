@@ -200,7 +200,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
     For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 
-* **Cranelift Codegen**: This uses a new nightly-only codegen that can be 300% faster than LLVM! However it only currently works on Linux.
+* **Cranelift Codegen**: This uses a new nightly-only codegen that can be 300% faster than LLVM! However it only currently works on Linux and is generally still immature.
     [Cranelift codegen setup](https://bjorn3.github.io/2023/10/31/progress-report-oct-2023.html).
 
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
