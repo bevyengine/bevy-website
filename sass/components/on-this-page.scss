@@ -4,14 +4,15 @@
 nav.on-this-page {
   font-size: 1rem;
   border-left: 3px solid; // inherits text color
-  padding-left: 10px;
-  > ul {
-    margin-block: 0.5em;
-    padding-inline-start: 0;
-  }
+  padding-inline-start: 5px;
+  margin-inline-start: 5px;
   ul {
     list-style-position: outside;
     padding-inline-start: 1em;
+  }
+  > ul {
+    margin-block: 0.5em;
+    padding-inline-start: 0;
   }
   ::marker {
     content: "";
