@@ -1,4 +1,12 @@
-details>summary {
-    // this should be the default
-    cursor: pointer;
+details {
+    padding-left: 10px;
+    margin-block: 1em;
+    &[open] {
+        padding-left: 8px;
+        border-left: 2px solid;
+    }
+    & > summary {
+        // this should be the default
+        cursor: pointer;
+    }
 }
