@@ -1,0 +1,25 @@
+/// internal page navigation
+/// i.e., the "On This Page" section
+
+nav.on-this-page {
+  font-size: 1rem;
+  border-left: 3px solid; // inherits text color
+  padding-left: 10px;
+  > ul {
+    margin-block: 0.5em;
+    padding-inline-start: 0;
+  }
+  ul {
+    list-style-position: outside;
+    padding-inline-start: 1em;
+  }
+  ::marker {
+    content: "";
+  }
+  li[data-active=true] {
+    font-weight: bolder;
+    li {
+        font-weight: normal;
+    }
+  }
+}

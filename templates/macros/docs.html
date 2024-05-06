@@ -104,26 +104,24 @@
   </ul>
 {% endmacro %}
 {% macro on_this_page(toc) %}
-<div class="page-nav media-content">
-  <nav aria-label="On This Page">
-    {# screen readers will read this as 'Navigation: Page Content' #}
-    <!-- <b class="page-nav__on-this-page">On This Page</b> -->
-    <ul>
-    {% for h1 in toc %}
-        <li data-fragment="{{ h1.id }}">
-            <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
-            {% if h1.children %}
-                <ul>
-                    {% for h2 in h1.children %}
-                        <li data-fragment="{{ h2.id }}">
-                            <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-  </nav>
-</div>
+<nav aria-label="On This Page" class="on-this-page media-content">
+  {# screen readers will read this as 'Navigation: On This Page' #}
+  <!-- <b class="page-nav__on-this-page">On This Page</b> -->
+  <ul>
+  {% for h1 in toc %}
+      <li data-fragment="{{ h1.id }}">
+          <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+          {% if h1.children %}
+              <ul>
+                  {% for h2 in h1.children %}
+                      <li data-fragment="{{ h2.id }}">
+                          <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                      </li>
+                  {% endfor %}
+              </ul>
+          {% endif %}
+      </li>
+  {% endfor %}
+  </ul>
+</nav>
 {% endmacro %}
