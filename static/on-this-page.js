@@ -11,7 +11,7 @@ function page_nav_set_active(id_or_node){
   } else {
     id = id_or_node;
   }
-  document.querySelectorAll(".page-nav li").forEach((li) => {
+  document.querySelectorAll(".on-this-page li").forEach((li) => {
     li.setAttribute("data-active", li.getAttribute("data-fragment") == id);
   });
 }
