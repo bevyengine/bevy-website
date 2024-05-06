@@ -15,30 +15,6 @@
 {% endblock mobile_page_menu_switch %}
 {% block content %}
   <div class="page-with-menu {% block page_with_menu_extra_class %}{% endblock page_with_menu_extra_class %}">
-    {% if page.toc %}
-    <div class="page-with-menu__page-nav page-nav media-content">
-      <nav aria-label="Page Content" style="position: sticky; top: calc(var(--header-height) + 24px);">
-        {# screen readers will read this as 'Navigation: Page Content' #}
-        <b class="page-nav__on-this-page">On This Page</b>
-        <ul>
-        {% for h1 in page.toc %}
-            <li data-fragment="{{ h1.id }}">
-                <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
-                {% if h1.children %}
-                    <ul>
-                        {% for h2 in h1.children %}
-                            <li data-fragment="{{ h2.id }}">
-                                <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-      </nav>
-    </div>
-    {% endif %}
     <div class="page-with-menu__menu-wrapper">
       <div class="page-with-menu__menu">
         {% block page_menu %}{% endblock page_menu %}

@@ -70,6 +70,9 @@
     <div class="{{ label_class }}">
       <a class="tree-menu__link" href="{{ menu_page.path }}">{{ menu_page.title }}</a>
     </div>
+    {% if is_active and menu_page.toc %}
+    {{ self::on_this_page(toc=menu_page.toc) }}
+    {% endif %}
   </li>
 {% endmacro docs_menu_page_row %}
 {% macro docs_menu(root, prefix) %}
@@ -99,4 +102,28 @@
       {% endfor %}
     {% endif %}
   </ul>
+{% endmacro %}
+{% macro on_this_page(toc) %}
+<div class="page-nav media-content">
+  <nav aria-label="On This Page">
+    {# screen readers will read this as 'Navigation: Page Content' #}
+    <!-- <b class="page-nav__on-this-page">On This Page</b> -->
+    <ul>
+    {% for h1 in toc %}
+        <li data-fragment="{{ h1.id }}">
+            <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+            {% if h1.children %}
+                <ul>
+                    {% for h2 in h1.children %}
+                        <li data-fragment="{{ h2.id }}">
+                            <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+  </nav>
+</div>
 {% endmacro %}
