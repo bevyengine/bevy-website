@@ -1,7 +1,7 @@
 .header {
   padding-right: 8px;
 
-  @media #{$bp-tablet-landscape-up} {
+  @media #{$bp-desktop-up} {
     padding: 0 16px;
   }
 
@@ -18,7 +18,7 @@
   &__hamburger {
     flex-shrink: 0;
 
-    @media #{$bp-tablet-landscape-up} {
+    @media #{$bp-desktop-up} {
       display: none;
     }
   }

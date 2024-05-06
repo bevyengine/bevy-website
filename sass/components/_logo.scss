@@ -4,7 +4,7 @@
   height: 28px;
   width: auto;
 
-  @media #{$bp-tablet-landscape-up} {
+  @media #{$bp-desktop-up} {
     height: 40px;
   }
 }
