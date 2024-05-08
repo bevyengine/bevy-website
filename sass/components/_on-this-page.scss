@@ -21,13 +21,11 @@ nav.on-this-page {
   font-size: 0.9em;
   ul {
     list-style-position: outside;
+    list-style-type: none;
     padding-inline-start: 1em;
   }
   > ul {
     padding-inline-start: 0;
-  }
-  ::marker {
-    content: "";
   }
   li[data-active=true] {
     font-weight: bolder;
