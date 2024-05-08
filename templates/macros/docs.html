@@ -69,10 +69,10 @@
   <li class="{{ class }}">
     <div class="{{ label_class }}">
       <a class="tree-menu__link" href="{{ menu_page.path }}">{{ menu_page.title }}</a>
+      {% if is_active and menu_page.toc %}
+      {{ self::on_this_page(toc=menu_page.toc) }}
+      {% endif %}
     </div>
-    {% if is_active and menu_page.toc %}
-    {{ self::on_this_page(toc=menu_page.toc) }}
-    {% endif %}
   </li>
 {% endmacro docs_menu_page_row %}
 {% macro docs_menu(root, prefix) %}

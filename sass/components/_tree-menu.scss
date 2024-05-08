@@ -22,7 +22,8 @@
     }
 
     &__label {
-        display: flex;
+        display: grid;
+        grid-template-columns: auto max-content;
         border-radius: $border-radius;
         margin-bottom: 2px;
         opacity: 0.6;
