@@ -37,6 +37,9 @@
                 height="24">
         </label>
       {% endif %}
+      {% if is_active and menu_section.toc %}
+        {{ self::on_this_page(toc=menu_section.toc, class="tree-menu__toc") }}
+      {% endif %}
     </div>
     {% if pages_and_sections %}
       <ul class="tree-menu">

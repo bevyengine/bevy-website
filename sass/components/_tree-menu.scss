@@ -23,7 +23,7 @@
 
     &__label {
         display: grid;
-        grid-template-columns: auto max-content;
+        grid-template-columns: auto min-content;
         border-radius: $border-radius;
         margin-bottom: 2px;
         opacity: 0.6;
@@ -99,6 +99,7 @@
 
     &__toc {
       grid-row: 2;
+      grid-column: 1 / span 2;
       background-color: rgba($color-black, 0.25);
     }
 }
