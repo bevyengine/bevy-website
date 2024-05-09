@@ -50,7 +50,8 @@ details {
       font-weight: normal;
     }
 
-    /// since there's no background colour this looks normal
+    // since there's no background colour this looks normal
+    // <details> has it's own margin
     :last-child {
       margin-bottom: 0;
     }
