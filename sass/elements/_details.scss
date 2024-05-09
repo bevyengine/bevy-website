@@ -21,7 +21,7 @@ details {
   >pre {
     // push code blocks to the edge and remove their corners
     margin-inline: -$h-padding;
-    padding-left: $h-padding !important;
+    padding-inline: $h-padding !important;
     border-radius: 0 !important;
   }
 
