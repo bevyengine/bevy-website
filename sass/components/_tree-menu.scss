@@ -96,4 +96,8 @@
             display: block;
         }
     }
+
+    &__toc {
+      grid-row: 2;
+    }
 }

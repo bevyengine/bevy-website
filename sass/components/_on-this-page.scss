@@ -2,20 +2,10 @@
 /// i.e., the "On This Page" section
 
 
-.tree-menu .on-this-page {
-    grid-row: 2;
-    border-width-top: 0;
-    background-color: $color-grey-800;
-}
-
-.page-with-menu .tree-menu .on-this-page {
-    // desktop menu uses grey-800 as the bg
-    background-color: $color-grey-900;
-}
-
 nav.on-this-page {
   $h-padding: 12px;
   font-size: 0.9em;
+  background-color: $color-grey-800;
   padding-block: calc($h-padding/2);
   ul {
     list-style-position: outside;

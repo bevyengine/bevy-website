@@ -70,7 +70,7 @@
     <div class="{{ label_class }}">
       <a class="tree-menu__link" href="{{ menu_page.path }}">{{ menu_page.title }}</a>
       {% if is_active and menu_page.toc %}
-        {{ self::on_this_page(toc=menu_page.toc) }}
+        {{ self::on_this_page(toc=menu_page.toc, class="tree-menu__toc") }}
       {% endif %}
     </div>
   </li>
@@ -103,8 +103,8 @@
     {% endif %}
   </ul>
 {% endmacro %}
-{% macro on_this_page(toc) %}
-<nav aria-label="On This Page" class="on-this-page media-content">
+{% macro on_this_page(toc, class="") %}
+<nav aria-label="On This Page" class="on-this-page media-content {{ class }}">
   {# screen readers will read this as 'Navigation: On This Page' #}
   <ul>
   {% for h1 in toc %}
