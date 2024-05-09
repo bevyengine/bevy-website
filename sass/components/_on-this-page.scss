@@ -14,14 +14,15 @@
 }
 
 nav.on-this-page {
+  $h-padding: 12px;
   font-size: 0.9em;
   ul {
     list-style-position: outside;
     list-style-type: none;
-    padding-inline-start: 1em;
+    padding-inline-start: $h-padding;
   }
   > ul {
-    padding-inline-start: 0;
+    padding-inline: $h-padding;
   }
   li[data-active=true] {
     font-weight: bolder;
