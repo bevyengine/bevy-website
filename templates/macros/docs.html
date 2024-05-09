@@ -106,7 +106,6 @@
 {% macro on_this_page(toc) %}
 <nav aria-label="On This Page" class="on-this-page media-content">
   {# screen readers will read this as 'Navigation: On This Page' #}
-  <!-- <b class="page-nav__on-this-page">On This Page</b> -->
   <ul>
   {% for h1 in toc %}
       <li data-fragment="{{ h1.id }}">
