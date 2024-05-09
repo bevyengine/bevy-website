@@ -1,12 +1,62 @@
 details {
-    padding-left: 10px;
-    margin-block: 1em;
+  $h-padding: 10px;
+  $border: 2px solid $subtitle-color;
+  // border: $border;
+  border-radius: $border-radius;
+  padding: 0 $h-padding;
+  margin-block: 1em;
+  background-color: rgba($color-white, 0.1);
+  overflow: hidden; // prevent clobbering corner radii
+
+  >summary {
+    cursor: pointer; // this should be the default
+    font-weight: bold;
+    padding-block: calc($h-padding/2);
+
+    &:hover {
+      text-shadow: 0 0 0.9px $default-color, 0 0 0.9px $default-color;
+    }
+  }
+
+  >pre {
+    // push code blocks to the edge and remove their corners
+    margin-inline: -$h-padding;
+    border-radius: 0 !important;
+  }
+
+  >summary~pre.z-code {
+    // remove margin on leading...
+    margin-top: 0;
+  }
+
+  >pre.z-code:last-child {
+    // ...and trailing code blocks
+    margin-bottom: 0;
+  }
+
+
+  // tighten trailing <p>
+  >p:last-child {
+    margin-bottom: $h-padding;
+  }
+
+  &.lowprofile {
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+
+    >summary {
+      font-weight: normal;
+    }
+
+    /// since there's no background colour this looks normal
+    :last-child {
+      margin-bottom: 0;
+    }
+
     &[open] {
-        padding-left: 8px;
-        border-left: 2px solid;
+      border-left: $border;
+      padding-left: calc($h-padding - 2px);
     }
-    & > summary {
-        // this should be the default
-        cursor: pointer;
-    }
+  }
 }
