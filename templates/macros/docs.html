@@ -104,7 +104,7 @@
   </ul>
 {% endmacro %}
 {% macro on_this_page(toc, class="") %}
-<nav aria-label="On This Page" class="on-this-page media-content {{ class }}">
+<nav aria-label="On This Page" class="on-this-page {{ class }}">
   {# screen readers will read this as 'Navigation: On This Page' #}
   <ul>
   {% for h1 in toc %}

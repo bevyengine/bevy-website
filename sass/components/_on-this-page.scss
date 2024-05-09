@@ -26,5 +26,11 @@ nav.on-this-page {
         padding-block: 3px;
     }
     display: block;
+    // copied from .media-content
+    text-decoration: none;
+    color: $link-color;
+    &:hover {
+      text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+    }
   }
 }
