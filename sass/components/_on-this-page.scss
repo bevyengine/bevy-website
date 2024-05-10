@@ -25,11 +25,6 @@
   }
 
   a {
-    @media ($bp-tablet-portrait-down) {
-      // increase hit area for touchscreens
-      padding-block: 3px;
-    }
-
     display: block;
     text-wrap: balance;
     // copied from .media-content
@@ -38,6 +33,11 @@
 
     &:hover {
       text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+    }
+
+    @media ($bp-tablet-portrait-down) {
+      // increase hit area for touchscreens
+      padding-block: 3px;
     }
   }
 }
