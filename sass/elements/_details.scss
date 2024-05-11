@@ -10,7 +10,6 @@ details {
 
   >summary {
     cursor: pointer; // this should be the default
-    font-weight: bold;
     padding-block: calc($h-padding/2);
 
     &:hover {
