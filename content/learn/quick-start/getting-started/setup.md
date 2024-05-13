@@ -25,7 +25,7 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
 
 #### Linux
 
-Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md)
+Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md)
 
 #### Windows
 
@@ -171,7 +171,28 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustup component add llvm-tools-preview
     ```
 
-  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`
+  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`.
+
+  You will also need to add one of the following to your Cargo config at `<YOUR_WORKSPACE>/.cargo/config.toml` depending on your OS:
+  ```toml
+  # for Linux
+  [target.x86_64-unknown-linux-gnu]
+  linker = "clang"
+  rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+  # for x86_64 MacOS
+  [target.x86_64-apple-darwin]
+  rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/opt/llvm/bin/ld64.lld"]
+
+  # for aarch64 MacOS
+  [target.aarch64-apple-darwin]
+  rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
+
+  # for Windows
+  [target.x86_64-pc-windows-msvc]
+  linker = "rust-lld.exe"
+  ```
+
 * **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
   * **Ubuntu**: `sudo apt-get install mold clang`
   * **Fedora**: `sudo dnf install mold clang`
@@ -202,7 +223,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
 
 * **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
 
-To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/main/.cargo/config_fast_builds.toml) to `YOUR_WORKSPACE/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
+To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) to `<YOUR_WORKSPACE>/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
 
 If something went wrong, check out our [troubleshooting section](/learn/quick-start/troubleshooting/) or [ask for help on our Discord](https://discord.gg/bevy).
 
