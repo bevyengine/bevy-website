@@ -6,7 +6,7 @@ aliases = ["learn/book/getting-started/apps"]
 weight = 2
 +++
 
-Bevy programs are referred to as [`App`]s. The simplest Bevy app looks like this:
+Every Bevy program can be referred to as an [`App`]. The simplest Bevy app looks like this:
 
 ```rs
 use bevy::prelude::*;
