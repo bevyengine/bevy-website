@@ -1,2 +1,5 @@
-target/
+# Bevy repository
 bevy/
+# Fake content folder for tests
+section_content/
+pages_content/

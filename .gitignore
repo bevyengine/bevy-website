@@ -1,10 +1,25 @@
-public
-**/.DS_Store
-.idea/
-content/assets
-content/learn/errors
-content/examples
-content/community/people
-static/assets/examples
-static/processed_images
+# Built website
+public/
+
+# Generated content
+content/assets/
+content/learn/errors/
+content/examples/
+content/examples-webgpu/
+content/community/people/
+content/community/donate/
+static/assets/examples/
+static/processed_images/
+
+# Tools
+target/
+
+# Editor config
 .vscode/
+.idea/
+
+# Local environmental variables
+.env
+
+# MacOS folder attributes
+**/.DS_Store

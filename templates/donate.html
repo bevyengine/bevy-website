@@ -1,0 +1,171 @@
+{% import "macros/numbers.html" as numbers %}
+{% extends "layouts/base.html" %}
+
+{% block head_extensions %}
+    <script src="/donate.js"></script>
+{% endblock head_extensions %}
+
+{% block content %}
+
+{% set donors = load_data(path="content/donate/donors.toml") %}
+{% set tiers = load_data(path="content/donate/tiers.toml") %}
+{% set metrics = load_data(path="content/donate/metrics.toml") %}
+
+{% set_global member_count = metrics.members %}
+{% set_global sponsor_count = metrics.sponsors %}
+{% set_global monthly_donations = metrics.monthly_dollars %}
+
+<!-- commented out for now -->
+{#
+    {% set_global member_count = 0 %}
+    {% set_global sponsor_count = 0 %}
+    {% for tier in tiers.tier | reverse %}
+        {% set next_tier_index = tiers.tier | length - loop.index0 %}
+        {% set next_tier = tiers.tier | nth(n=next_tier_index) %}
+
+        <!-- Note: this "sponsor filtering logic" _must_ be kept in sync with the logic in sponsors.html -->
+        <!-- If we can find a way to reuse this logic in Zola, we absolutely should! -->
+        {% if donors.donor %}
+            {% for donor in donors.donor %}
+                {% if donor.past %}
+                    {% continue %}
+                {% endif %}
+                {% if donor.amount >= tier.amount %}
+                    {% if next_tier and donor.amount >= next_tier.amount %}
+                        {% continue %}
+                    {% endif %}
+                    {% if tier.sponsor_tier %}
+                        {% set_global sponsor_count = sponsor_count + 1 %}
+                    {% else %}
+                        {% set_global member_count = member_count + 1 %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+    {% set_global monthly_donations = 0 %}
+    {% if donors.donor %}
+        {% for donor in donors.donor %}
+            {% if donor.past %}
+                {% continue %}
+            {% endif %}
+            {% set_global monthly_donations = monthly_donations + donor.amount %}
+        {% endfor %}
+    {% endif %}
+#}
+
+
+{% set monthly_donations_string = numbers::comma_string(value=monthly_donations) %}
+
+<div class="donate-page">
+
+<div class="donate-support">
+    <div class="donate-support-text">
+        <div class="donate-support-bevy">Support Bevy</div>
+        <div class="donate-support-description">
+            Donate to <a href="/foundation">Bevy Foundation</a> and <a href="/foundation">support our mission</a> to develop and support the free and open source Bevy Engine.
+        </div>
+    </div>
+    <div class="donate-metrics">
+        <div class="donate-metric">
+            <span class="donate-number">${{ monthly_donations_string }}</span>
+            <span class="donate-number-label">Per Month</span>
+        </div>
+        <div class="donate-metric">
+            <span class="donate-number">{{ member_count }}</span>
+            <span class="donate-number-label">Members</span>
+        </div>
+        <div class="donate-metric">
+            <span class="donate-number">{{ sponsor_count }}</span>
+            <span class="donate-number-label">Sponsors</span>
+        </div>
+    </div>
+</div>
+
+<div id="membership">
+<h2 class="donate-header-padding">Membership</h2>
+<div class="donate-levels-container">
+    <div class="donate-membership-levels">
+        {% for tier in tiers.tier %}
+            {% if tier.sponsor_tier %}
+                {% continue %}
+            {% endif %}
+            {% set amount_string = numbers::comma_string(value=tier.amount) %}
+            <a href="{{ tier.donate_link }}" class="card donate-level">
+                <div class="donate-level-info">
+                    <img class="donate-level-icon" alt="donate level icon" src="{{ tier.icon }}"/>
+                    <div class="donate-level-text donate-level-{{ tier.name | replace(from=" ", to="_") | lower }}">
+                        <div class="donate-level-name">{{ tier.name }}</div>
+                        <div class="donate-level-amount">${{ amount_string }} / month</div>
+                    </div>
+                </div>
+                <div class="tier-rewards">
+                    {% if tier.reward_name %}
+                    <div class="tier-reward">Name in Credits</div>
+                    {% endif %}
+                    {% if tier.reward_logo %}
+                    <div class="tier-reward">Logo in Credits</div>
+                    {% endif %}
+                    {% if tier.reward_link %}
+                    <div class="tier-reward">Link in Credits</div>
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+<button type="button" class="card donate-corporate-button" onclick="show_corporate()">
+    Corporate Tiers 
+</button>
+</div>
+
+<div id="corporate-sponsorship" style="display: none">
+<h2 class="donate-header-padding">Corporate Sponsorship</h2>
+<div class="donate-membership-description">
+These tiers exist for individuals or organizations that want to support Bevy in a big way. We <i>highly</i> recommend using bank transfers for payments at these levels to avoid exorbitant credit card processor fees. We provide Stripe links as a convenience, but note that Stripe charges us a 0.5% fee for subscriptions (ex: if you pay $500 / month, they take $2.50 a month). Please <a href="mailto:bevyengine@gmail.com">contact us</a> if you have any questions, or if you would like to discuss other payment options!
+</div>
+<div class="donate-levels-container">
+<div class="donate-membership-levels">
+    {% for tier in tiers.tier %}
+        {% if not tier.sponsor_tier %}
+            {% continue %}
+        {% endif %}
+        {% set amount_string = numbers::comma_string(value=tier.amount) %}
+        <a href="{{ tier.donate_link }}" class="card donate-level">
+            <div class="donate-level-info">
+                <img alt="donate level icon" class="donate-level-icon" src="{{ tier.icon }}"/>
+                <div class="donate-level-text donate-level-{{ tier.name | replace(from="Corporate ", to="") | replace(from=" ", to="_") | lower }}">
+                    <div class="donate-level-corporate">Corporate</div>
+                    <div class="donate-level-name">{{ tier.name | replace(from="Corporate ", to="") }}</div>
+                    <div class="donate-level-amount">${{ amount_string }} / month</div>
+                </div>
+            </div>
+            <div class="tier-rewards">
+                {% if tier.reward_name %}
+                <div class="tier-reward">Name in Credits</div>
+                {% endif %}
+                {% if tier.reward_logo %}
+                <div class="tier-reward">Logo in Credits</div>
+                {% endif %}
+                {% if tier.reward_link %}
+                <div class="tier-reward">Link in Credits</div>
+                {% endif %}
+            </div>
+        </a>
+    {% endfor %}
+</div>
+</div>
+<button type="button" class="card donate-corporate-button" onclick="show_membership()">
+    Individual Tiers
+</button>
+</div>
+
+<div class="donate-faq-link">See our <a href="/donate/faq">Donation FAQ</a> for more information.</div>
+
+{% include "sponsors.html" %}
+
+{% include "individual-sponsors.html" %}
+</div>
+
+{% endblock content %}

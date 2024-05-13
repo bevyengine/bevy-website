@@ -15,7 +15,7 @@ fn main() -> Result<()> {
         .ok_or_else(|| anyhow!("Please specify the path to bevy-assets"))?;
 
     let asset_root_section =
-        parse_assets(&asset_dir, None, None, None).with_context(|| "Parsing assets")?;
+        parse_assets(&asset_dir, MetadataSource::default()).with_context(|| "Parsing assets")?;
 
     let results = asset_root_section.validate();
 
@@ -128,7 +128,7 @@ impl AssetValidator for Asset {
                     errors.push(ValidationError::ImageInvalidExtension);
                 }
             } else {
-                errors.push(ValidationError::ImageInvalidExtension)
+                errors.push(ValidationError::ImageInvalidExtension);
             }
 
             if let Err(err) = validate_image(&image_path) {

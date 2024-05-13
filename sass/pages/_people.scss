@@ -1,72 +1,81 @@
 .people-section-description {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .people-role-descriptions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .people-role-description {
-    display: block;
-    flex-direction: row;
+  display: block;
+  flex-direction: row;
 }
 
 .people-role-description-text {
-    line-height: 1.75rem;
+  line-height: 1.75rem;
 }
 
 .people-card {
-    height: 14rem;
-    margin-bottom: 0px;
+  height: 14rem;
+  margin-bottom: 0px;
 }
 
 .people-links {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .people-roles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-top: 0.3rem;
-    margin-bottom: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.4rem;
 }
 
 .people-role {
-    display: block;
-    font-weight: 400;
-    font-size: 0.8rem;
-    padding-left: 0.3rem;
-    padding-right: 0.3rem;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
-    line-height: 1;
-    border-radius: 0.3rem;
-    border-style: solid;
-    border-width: 1px;
+  font-weight: 400;
+  font-size: 0.8rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  line-height: 1;
+  border-radius: 0.3rem;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.people-role-card {
+  display: block;
+}
+
+.people-role-inline {
+  font-size: 1.0rem;
+  margin-right: 0.2rem;
 }
 
 .people-role-top-level {
-    float: left;
-    font-size: 1.0rem;
-    margin-right: 0.2rem;
+  display: block;
+  float: left;
+  font-size: 1.0rem;
+  margin-right: 0.2rem;
 }
 
 .people-role-project-lead {
-    border-color: rgb(200, 200, 50);
-    color:rgb(200, 200, 50);
+  border-color: rgb(200, 200, 50);
+  color: rgb(200, 200, 50);
 }
 
 .people-role-maintainer {
-    border-color: rgb(242, 103, 255);
-    color: rgb(242, 103, 255);
+  border-color: rgb(242, 103, 255);
+  color: rgb(242, 103, 255);
 }
 
 .people-role-sme {
-    border-color: rgb(80, 200, 50);
-    color: rgb(80, 200, 50);
+  border-color: rgb(80, 200, 50);
+  color: rgb(80, 200, 50);
 }

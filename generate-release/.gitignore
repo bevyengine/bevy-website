@@ -1,8 +1,6 @@
-target
-assets
-data/
-.env
+# Generated files
 out.md
 migration-guide.md
 release-notes.md
 release-notes-website.md
+changelog.md

@@ -1,0 +1,92 @@
+name: Build WASM Examples
+
+on:
+  workflow_dispatch:
+
+env:
+  PER_PAGE: 50
+
+jobs:
+  prepare-pages:
+    name: Get Pages
+    runs-on: ubuntu-latest
+    outputs:
+      pages: ${{ steps.pages.outputs.pages }}
+    steps:
+      - name: Checkout Bevy main branch
+        uses: actions/checkout@v4
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'latest'
+      - name: Get Pages
+        id: pages
+        run: |
+          example_count=`cat Cargo.toml | grep 'wasm = true' | wc -l`
+          page_count=$((example_count / ${{ env.PER_PAGE }} + 1))
+          echo "pages=`jq -n -c \"[range($page_count)]\"`" >> $GITHUB_OUTPUT
+ 
+  wasm-examples:
+    name: Build WASM Examples
+    needs: prepare-pages
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        page: ${{ fromJSON(needs.prepare-pages.outputs.pages) }}
+        api: [webgl2, webgpu]
+    steps:
+
+      - name: Checkout Bevy latest tag
+        uses: actions/checkout@v4
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'latest'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: wasm32-unknown-unknown,x86_64-apple-darwin
+
+      - name: Install WASM tooling
+        run: |
+          cargo install --force wasm-bindgen-cli
+          mkdir ./binaryen
+          wget -qO- https://github.com/WebAssembly/binaryen/releases/download/version_114/binaryen-version_114-x86_64-macos.tar.gz | tar xvz --strip-components 1 -C ./binaryen binaryen-version_114
+
+      - name: Build WASM Examples
+        run: |
+          export PATH=$PATH:`pwd`/binaryen/bin
+          cargo run -p example-showcase -- --per-page ${{ env.PER_PAGE }} --page ${{ matrix.page }} build-wasm-examples --content-folder wasm-examples --api ${{ matrix.api }} --website-hacks --optimize-size
+
+      - name: Upload Generated Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.api }}-examples-${{ matrix.page }}
+          path: wasm-examples
+
+  cloudflare-upload:
+      name: Upload to Cloudflare
+      runs-on: ubuntu-latest
+      needs: wasm-examples
+      strategy:
+        matrix:
+          api: [webgl2, webgpu]  
+      steps:
+        
+        - name: Download all artifacts
+          uses: actions/download-artifact@v4
+
+        - name: Group examples in one folder
+          run: |
+            mkdir ${{ matrix.api }}
+            for file in ${{ matrix.api }}-examples-*
+            do
+              rsync -a $file/* ${{ matrix.api }}/
+            done
+
+        - name: Publish to Cloudflare Pages
+          uses: cloudflare/pages-action@v1
+          with:
+            apiToken: ${{ secrets.CLOUDFLARE_PAGES }}
+            accountId: 0e862a54d5c283c78d8d56adb6159df8
+            projectName: bevy-${{ matrix.api }}-examples
+            directory: ${{ matrix.api }}

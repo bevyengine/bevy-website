@@ -4,13 +4,39 @@
 }
 
 div.incorrect {
-    background-color: #542326;
-    border-left: 10px solid red;
+    $incorrect_block_background_color: #481e21;
+    position: relative;
+    background-color: $incorrect_block_background_color;
+    border-left: 10px solid darkred;
     border-radius: 10px;
+    padding-right: 55px;
 
     .z-code,
     .z-code code {
-        background-color: #542326;
+        background-color: $incorrect_block_background_color;
+    }
+}
+
+div.incorrect:hover {
+    border-color: red;
+
+    img {
+      /* SVG filter color for red */
+      filter: invert(10%) sepia(85%) saturate(7491%) hue-rotate(5deg) brightness(116%) contrast(114%);
+    }
+}
+
+div.incorrect-image {
+    position: absolute;
+    z-index: 99;
+    right: 20px;
+    top: 10px;
+
+    img {
+        width: 35px;
+        height: 35px;
+        /* SVG filter color for firebrick red */
+        filter: invert(11%) sepia(57%) saturate(5143%) hue-rotate(350deg) brightness(118%) contrast(87%);
     }
 }
 
@@ -20,7 +46,7 @@ div.incorrect {
 
 .z-comment,
 .z-punctuation.z-definition.z-comment {
-    color: #65737e;
+    color: #8e9aa4;
 }
 
 .z-punctuation.z-definition.z-string,
@@ -91,7 +117,7 @@ div.incorrect {
 }
 
 .z-entity.z-name.z-tag {
-    color: #e05a67;
+    color: #e0858d;
 }
 
 .z-entity.z-other.z-attribute-name {

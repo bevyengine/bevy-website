@@ -1,15 +1,15 @@
 // these helpers should be totally optional. if someone disables this javascript in their browser,
 // core functionality should not be affected.
 
-function navigateBookNext(e) {
+function navigateDocsNext(e) {
     if (e.key == 'ArrowLeft') {
-        var previous = document.querySelector("[data-book-nav-previous]");
+        var previous = document.querySelector("[data-docs-nav-previous]");
         if (previous) {
             previous.click();
         }
 
     } else if (e.key == 'ArrowRight') {
-        var next = document.querySelector("[data-book-nav-next]");
+        var next = document.querySelector("[data-docs-nav-next]");
         if (next) {
             next.click();
         }
@@ -17,5 +17,5 @@ function navigateBookNext(e) {
 }
 
 window.addEventListener('load', function () {
-    window.addEventListener('keydown', navigateBookNext);
+    window.addEventListener('keydown', navigateDocsNext);
 });

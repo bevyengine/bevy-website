@@ -8,8 +8,10 @@ license = "MIT"
 edition = "2021"
 
 [dependencies]
-serde = { version = "1", features = [ "derive" ] }
+serde = { version = "1", features = ["derive"] }
 toml = "0.5"
-regex = "1.5"
 rand = "0.8"
 unicode-segmentation = "1.10"
+
+[lints]
+workspace = true

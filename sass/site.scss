@@ -1,28 +1,31 @@
 @charset "utf-8";
 
 // Core
-@import 'functions';
-@import 'vars';
-@import 'mixins';
+@import "functions";
+@import "vars";
+@import "mixins";
 
 // Fonts
-@import 'fonts/firamono';
-@import 'fonts/firasans';
+@import "fonts/firamono";
+@import "fonts/firasans";
 
 // Elements
 // - HTML element tweaks: html, body, a, ul, li…
-@import 'elements/html';
-@import 'elements/body';
+@import "elements/html";
+@import "elements/body";
+@import "elements/table";
+@import "elements/button";
+@import "elements/details";
 
 // CSS utility classes
-@import 'utils';
+@import "utils";
 
 // Components
 // - Repeating visual patterns: buttons, cards, menus…
 // - Components can be composed between them to create new components
 // - These should be self contained and shouldn't affect other styling
 @import "components/bevy-instance";
-@import "components/book-footer";
+@import "components/docs-footer";
 @import "components/button-square";
 @import "components/button";
 @import "components/card";
@@ -32,6 +35,7 @@
 @import "components/icon";
 @import "components/item-grid";
 @import "components/layout";
+@import "components/link-card";
 @import "components/logo";
 @import "components/main-menu-backdrop";
 @import "components/main-menu";
@@ -41,14 +45,20 @@
 @import "components/syntax-theme";
 @import "components/tree-menu";
 @import "components/asset-card";
+@import "components/image_compare";
+@import "components/todo";
+@import "components/footer";
 
 // Pages
 // - Page specific CSS
 @import "pages/community";
 @import "pages/people";
 @import "pages/assets";
-@import "pages/book";
+@import "pages/docs";
+@import "pages/donate";
 @import "pages/news";
 @import "pages/features";
 @import "pages/content";
 @import "pages/migration_guide";
+@import "pages/foundation";
+@import "pages/404";

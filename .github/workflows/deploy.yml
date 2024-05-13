@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:
@@ -11,14 +11,14 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Cache multiple crates.io datadump
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.date.outputs.date }}
@@ -39,12 +39,22 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: "Build Bevy Examples"
-        run: cargo install wasm-bindgen-cli && cd generate-wasm-examples && ./generate_wasm_examples.sh
+        run: cd generate-wasm-examples && ./generate_wasm_examples.sh
+
+      - name: "Sync Donor Info"
+        run: cd content/donate && ./sync_donors.sh
 
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
-        uses: shalzz/zola-deploy-action@v0.16.1-1
+        uses: shalzz/zola-deploy-action@v0.18.0
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .
           TOKEN: ${{ secrets.CART_PAT }}
+
+      # Caches output of generate-assets for use in ci.yml
+      - name: Update generate-assets cache
+        uses: actions/cache/save@v4
+        with:
+          path: content/assets
+          key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}

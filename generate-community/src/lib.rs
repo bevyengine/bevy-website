@@ -1,5 +1,9 @@
 use serde::Deserialize;
-use std::{collections::HashMap, fs, io, path::PathBuf, str::FromStr};
+use std::{
+    collections::HashMap,
+    fs, io,
+    path::{Path, PathBuf},
+};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -18,6 +22,7 @@ pub struct Member {
     #[serde(default, deserialize_with = "extract_mastodon")]
     pub mastodon: Option<Mastodon>,
     pub twitter: Option<String>,
+    pub instagram: Option<String>,
     pub itch_io: Option<String>,
     pub steam_developer: Option<String>,
     pub website: Option<String>,
@@ -102,6 +107,7 @@ where
 #[derive(Debug, Clone)]
 pub struct Section {
     pub name: String,
+    pub filename: Option<String>,
     pub content: Vec<CommunityNode>,
     pub template: Option<String>,
     pub header: Option<String>,
@@ -125,11 +131,13 @@ impl Section {
     }
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 pub enum CommunityNode {
     Section(Section),
     Member(Member),
 }
+
 impl CommunityNode {
     pub fn name(&self) -> String {
         match self {
@@ -142,9 +150,9 @@ impl CommunityNode {
             CommunityNode::Section(content) => content.order.unwrap_or(99999),
             CommunityNode::Member(content) => {
                 if let Some(roles) = &content.roles {
-                    if roles.iter().find(|p| *p == "Project Lead").is_some() {
+                    if roles.iter().any(|p| p == "Project Lead") {
                         0
-                    } else if roles.iter().find(|p| *p == "Maintainer").is_some() {
+                    } else if roles.iter().any(|p| p == "Maintainer") {
                         1
                     } else if !roles.is_empty() {
                         2
@@ -189,6 +197,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 };
                 let mut new_section = Section {
                     name: folder.to_str().unwrap().to_string(),
+                    filename: None,
                     content: vec![],
                     template: None,
                     header: None,
@@ -214,9 +223,10 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
     Ok(())
 }
 
-pub fn parse_members(community_dir: &str) -> io::Result<Section> {
+pub fn parse_members(community_dir: &Path) -> io::Result<Section> {
     let mut people_root_section = Section {
         name: "People".to_string(),
+        filename: None,
         content: vec![],
         template: Some("people.html".to_string()),
         header: Some("People".to_string()),
@@ -224,9 +234,7 @@ pub fn parse_members(community_dir: &str) -> io::Result<Section> {
         sort_order_reversed: false,
     };
 
-    visit_dirs(
-        PathBuf::from_str(&community_dir).unwrap(),
-        &mut people_root_section,
-    )?;
+    visit_dirs(community_dir.to_path_buf(), &mut people_root_section)?;
+
     Ok(people_root_section)
 }

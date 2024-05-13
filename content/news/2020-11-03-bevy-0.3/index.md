@@ -1,8 +1,8 @@
 +++
 title = "Bevy 0.3"
 date = 2020-11-03
+authors = ["Carter Anderson"]
 [extra]
-author = "Carter Anderson"
 twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
@@ -14,7 +14,7 @@ image_subtitle_link = "https://twitter.com/schneckerstein/status/130949112155541
 
 A little over a month after releasing Bevy 0.2, and thanks to **59** contributors, **122** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.3** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [Quick Start Guide](/learn/book/getting-started/) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub.
 
 Here are some of the highlights from this release:
 
@@ -148,7 +148,7 @@ let mesh = asset_server.load("my_scene.gltf#Mesh0/Primitive0");
 
 ### AssetIo Trait
 
-The `AssetServer` is now backed by the `AssetIo` trait. This allows us to load assets from whatever storage we want. This means on desktop we now load from the filesystem, on Android we use the Android Asset Manager, and on the web we make HTTP requests using the `fetch()` api.
+The `AssetServer` is now backed by the `AssetIo` trait. This allows us to load assets from whatever storage we want. This means on desktop we now load from the filesystem, on Android we use the Android Asset Manager, and on the web we make HTTP requests using the `fetch()` API.
 
 ### Asset Dependencies
 
@@ -156,7 +156,7 @@ Assets can now depend on other assets, which will automatically be loaded when t
 
 ### Removed AssetServer::load_sync()
 
-This might rustle some feathers, but `AssetServer::load_sync()` had to go! This api wasn't WASM friendly, encouraged users to block game execution for the sake of convenience (which causes "hitching"), and was incompatible with the new AssetLoader api. Asset loading is now always asynchronous. Users of `load_sync()` should instead `load()` their assets, check load status in their systems, and change game state accordingly.
+This might rustle some feathers, but `AssetServer::load_sync()` had to go! This API wasn't WASM friendly, encouraged users to block game execution for the sake of convenience (which causes "hitching"), and was incompatible with the new AssetLoader API. Asset loading is now always asynchronous. Users of `load_sync()` should instead `load()` their assets, check load status in their systems, and change game state accordingly.
 
 ## GLTF Scene Loader
 
@@ -226,7 +226,7 @@ _Why did this take so long? Why would removing a single `&mut` be hard?_
 
 It's a long story! In summary:
 
-* The old api looked the way it did for a reason. It was the result of good design choices that protect against unsafe memory access in a parallel environment.
+* The old API looked the way it did for a reason. It was the result of good design choices that protect against unsafe memory access in a parallel environment.
 * `query.iter()` didn't actually return an iterator. It returned a _wrapper_ that held an atomic lock on the component storages. The same was true for the type returned by `query.entity()`
 * Removing these "wrapper types" would have allowed unsafe behavior because another Query could access the same components in a way that violated Rust's mutability rules.
 * Due to the iterator implementation and quirks in the rust compiler, removing the wrapper type _tanked_ iteration performance by about ~2-3x.
@@ -283,7 +283,7 @@ Note: these numbers are for getting a component 100,000 times, not for an indivi
 
 This is where the big wins were. By removing locks and safety checks from Query systems, we were able to _significantly_ reduce the cost of retrieving a specific entity's component from within a system.
 
-I included a comparison to [Legion ECS](https://github.com/amethyst/legion) (another great archetypal ECS with a parallel scheduler) to illustrate why Bevy's new approach is so cool. Legion exposes a direct "world like" api (called a SubWorld) in its systems. The SubWorld's entry api _cannot_ know ahead of time what types will be passed into it, which means it _must_ do (relatively) expensive safety checks to ensure the user doesn't request access to something they shouldn't.
+I included a comparison to [Legion ECS](https://github.com/amethyst/legion) (another great archetypal ECS with a parallel scheduler) to illustrate why Bevy's new approach is so cool. Legion exposes a direct "world like" API (called a SubWorld) in its systems. The SubWorld's entry API _cannot_ know ahead of time what types will be passed into it, which means it _must_ do (relatively) expensive safety checks to ensure the user doesn't request access to something they shouldn't.
 
 Bevy's scheduler pre-checks `Queries` once ahead of time, which allows systems to access their results without any additional checks.
 
@@ -294,7 +294,7 @@ The test was to lookup (and modify) a specific entity's component 100,000 times 
 * legion (world): Direct `World` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()`
 * legion (system): A system with `SubWorld` access using `let entry = world.entry(entity); entry.get_component_mut::<A>()`
 
-It's worth noting that using `query.get_component::<T>(entity)` instead of `query.get(entity)` does require safety checks, for the same reason the legion entry api does. We cannot know ahead of time what component type a caller will pass into the method, which means we _must_ check it to make sure it matches the `Query`.
+It's worth noting that using `query.get_component::<T>(entity)` instead of `query.get(entity)` does require safety checks, for the same reason the legion entry API does. We cannot know ahead of time what component type a caller will pass into the method, which means we _must_ check it to make sure it matches the `Query`.
 
 Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-gamedev/ecs_bench_suite) results (omitted benchmarks had no significant change):
 
@@ -312,7 +312,7 @@ Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-g
 
 ### Thread Local Resources
 
-Some resource types cannot (or should not) be passed between threads. This is often true for low level apis like windowing, input, and audio. It is now possible to add "thread local resources" to the `Resources` collection, which can only be accessed from the main thread using "thread local systems":
+Some resource types cannot (or should not) be passed between threads. This is often true for low level APIs like windowing, input, and audio. It is now possible to add "thread local resources" to the `Resources` collection, which can only be accessed from the main thread using "thread local systems":
 
 ```rust
 // in your app setup
@@ -324,11 +324,11 @@ fn system(world: &mut World, resources: &mut Resources) {
 }
 ```
 
-### Query Api Changes
+### Query API Changes
 
 First, to improve clarity we renamed `query.get::<Component>(entity)` to `query.get_component::<Component>(entity)`. We now return the "full" query result for a specific entity using `query.get(entity)`.
 
-To allow multiple concurrent reads of Queries (where it is safe), we added separate `query.iter()` and `query.iter_mut()` apis, as well as `query.get(entity)` and `query.get_mut(entity)`. Queries that are "read only" can now retrieve their results via an immutable borrow.
+To allow multiple concurrent reads of Queries (where it is safe), we added separate `query.iter()` and `query.iter_mut()` APIs, as well as `query.get(entity)` and `query.get_mut(entity)`. Queries that are "read only" can now retrieve their results via an immutable borrow.
 
 ## Mesh Improvements
 
@@ -354,17 +354,17 @@ Rendering meshes often involves using vertex "indices" to cut down on duplicate 
 
 Transforms are important to get right. They are used in many slices of the engine, user code touches them constantly, and they are relatively expensive to compute: especially transform hierarchies.
 
-In the last release, we vastly simplified Bevy's transform system to use a consolidated `Transform` and `GlobalTransform` instead of multiple separate `Translation`, `Rotation`, and `Scale` components (which were synced to `Transform` and `GlobalTransform`). This made the user-facing api/dataflow simpler, as well as the underlying implementation. The `Transform` component was backed by a 4x4 matrix. I pressed the big green "merge" button ... happy that we had solved the Transform problem once and for all!
+In the last release, we vastly simplified Bevy's transform system to use a consolidated `Transform` and `GlobalTransform` instead of multiple separate `Translation`, `Rotation`, and `Scale` components (which were synced to `Transform` and `GlobalTransform`). This made the user-facing API/dataflow simpler, as well as the underlying implementation. The `Transform` component was backed by a 4x4 matrix. I pressed the big green "merge" button ... happy that we had solved the Transform problem once and for all!
 
-It turns out there was still more work to be done! [@AThilenius pointed out](https://github.com/bevyengine/bevy/issues/229#issuecomment-698953161) that using a 4x4 matrix as the source of truth for an affine transform accumulates error over time. Additionally, the Transform api was still a little cumbersome to use. [At the suggestion of @termhn](https://github.com/bevyengine/bevy/issues/229#issuecomment-699172675) we decided to investigate using a "similarity" as the source of truth. This had the following benefits:
+It turns out there was still more work to be done! [@AThilenius pointed out](https://github.com/bevyengine/bevy/issues/229#issuecomment-698953161) that using a 4x4 matrix as the source of truth for an affine transform accumulates error over time. Additionally, the Transform API was still a little cumbersome to use. [At the suggestion of @termhn](https://github.com/bevyengine/bevy/issues/229#issuecomment-699172675) we decided to investigate using a "similarity" as the source of truth. This had the following benefits:
 
 1. no more error accumulation
-2. we could directly expose translation/rotation/scale fields, which simplified the api significantly
+2. we could directly expose translation/rotation/scale fields, which simplified the API significantly
 3. cheaper to store and cheaper to compute hierarchies in some cases
 
-We collectively decided this was a good path forward and now we have a re-rewrite that is even better. Yes this is _another_ breaking change, but thats why we label Bevy as being in the "experimentation phase". Now is the time to break things as often as possible to ensure that we find good apis that will stand the test of time.
+We collectively decided this was a good path forward and now we have a re-rewrite that is even better. Yes this is _another_ breaking change, but thats why we label Bevy as being in the "experimentation phase". Now is the time to break things as often as possible to ensure that we find good APIs that will stand the test of time.
 
-This is what the new `Transform` api looks like in a Bevy ECS system:
+This is what the new `Transform` API looks like in a Bevy ECS system:
 
 ```rust
 fn system(mut transform: Mut<Transform>) {
@@ -444,7 +444,7 @@ app.add_plugins(HelloWorldPlugins);
 
 <div class="release-feature-authors">authors: @mockersf</div>
 
-Bevy provides a backend-agnostic windowing api. Up until this point, window settings could only be set once at app startup. If you wanted to set window settings dynamically, you had to directly interact with window backends (ex: winit).
+Bevy provides a backend-agnostic windowing API. Up until this point, window settings could only be set once at app startup. If you wanted to set window settings dynamically, you had to directly interact with window backends (ex: winit).
 
 In this release we added the ability to dynamically set window properties at runtime using the Bevy window abstraction:
 

@@ -5,25 +5,69 @@ use std::{
     fs::{self, File},
     io::{self, prelude::*},
     path::{Path, PathBuf},
-    str::FromStr,
 };
 
 use generate_community::*;
 
 fn main() -> io::Result<()> {
-    let community_dir = std::env::args().nth(1).unwrap();
-    let content_dir = std::env::args().nth(2).unwrap();
-    let content_sub_dir = std::env::args().nth(3).unwrap();
-    let _ = fs::create_dir(content_dir.clone());
+    let mut args = std::env::args().skip(1);
+
+    // Read CLI arguments
+    let community_dir: PathBuf = args
+        .next()
+        .expect("Expected first argument to be the path to the community directory.")
+        .into();
+    let content_dir: PathBuf = args
+        .next()
+        .expect("Expected second argument to be the path to the website content directory.")
+        .into();
+    let content_sub_dir: PathBuf = args
+        .next()
+        .expect("Expected third argument to be the name of the community directory.")
+        .into();
+
+    // Create the content directory if it does not exist.
+    // This is unlikely to ever fail.
+    fs::create_dir_all(&content_dir)?;
+
+    // Read a list of all people from the bevy-community directory.
     let mut people_root_section = parse_members(&community_dir)?;
 
-    let mut roles_path = PathBuf::from_str(&community_dir).unwrap();
-    roles_path.push("_roles.toml");
-    let roles: Roles = toml::de::from_str(&fs::read_to_string(&roles_path).unwrap()).unwrap();
-    let role_map = roles.into_map();
-    people_root_section.apply_roles(&role_map);
+    let roles_path = community_dir.join("_roles.toml");
 
-    people_root_section.write(Path::new(&content_dir), Path::new(&content_sub_dir), 0)?;
+    people_root_section.apply_roles({
+        let contents = fs::read_to_string(roles_path).expect("Could not read _roles.toml.");
+        let roles: Roles = toml::from_str(&contents).expect("_roles.toml is not valid TOML.");
+        &roles.into_map()
+    });
+
+    people_root_section.write(&content_dir, &content_sub_dir, 0)?;
+
+    let Some(CommunityNode::Section(org)) = people_root_section
+        .content
+        .iter()
+        .find(|node| node.name() == "The Bevy Organization")
+    else {
+        panic!("unexpected kind of node or missing for The Bevy Organization");
+    };
+
+    let mut donate = org.clone();
+
+    donate.name = "Supporting Bevy Development".to_string();
+    donate.filename = Some("donate".to_string());
+    donate.header = Some("Supporting Bevy".to_string());
+    donate.template = Some("donate-community.html".to_string());
+
+    donate.content.retain(|node| {
+        let CommunityNode::Member(member) = node else {
+            panic!("got an unexpected subsection");
+        };
+
+        member.sponsor.is_some()
+    });
+
+    donate.write(&content_dir, &content_sub_dir, 0)?;
+
     Ok(())
 }
 
@@ -49,6 +93,7 @@ struct FrontMatterMemberExtra {
     mastodon_user: Option<String>,
     mastodon_instance: Option<String>,
     twitter: Option<String>,
+    instagram: Option<String>,
     itch_io: Option<String>,
     steam_developer: Option<String>,
     website: Option<String>,
@@ -77,6 +122,7 @@ impl From<&Member> for FrontMatterMember {
                 mastodon_user: member.mastodon.as_ref().map(|m| m.username.clone()),
                 mastodon_instance: member.mastodon.as_ref().map(|m| m.instance.clone()),
                 twitter: member.twitter.clone(),
+                instagram: member.instagram.clone(),
                 itch_io: member.itch_io.clone(),
                 steam_developer: member.steam_developer.clone(),
                 website: member.website.clone(),
@@ -88,7 +134,7 @@ impl From<&Member> for FrontMatterMember {
 
 impl FrontMatterWriter for Member {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let path = root_path.join(&current_path);
+        let path = root_path.join(current_path);
 
         let mut frontmatter = FrontMatterMember::from(self);
         frontmatter.weight = weight;
@@ -176,7 +222,11 @@ impl From<&Section> for FrontMatterSection {
 
 impl FrontMatterWriter for Section {
     fn write(&self, root_path: &Path, current_path: &Path, weight: usize) -> io::Result<()> {
-        let section_path = current_path.join(self.name.to_ascii_lowercase());
+        let section_path = current_path.join(
+            self.filename
+                .as_ref()
+                .unwrap_or(&self.name.to_ascii_lowercase()),
+        );
         let path = root_path.join(&section_path);
         fs::create_dir(path.clone())?;
 
@@ -228,7 +278,7 @@ impl FrontMatterWriter for Section {
             .chain(ordered_members.iter())
             .enumerate()
         {
-            content.write(root_path, &section_path, i)?
+            content.write(root_path, &section_path, i)?;
         }
         Ok(())
     }

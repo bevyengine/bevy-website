@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
 use anyhow::bail;
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
 
 #[derive(Deserialize, Clone, Debug)]
@@ -78,6 +78,11 @@ pub struct GithubUserSearchResponse {
 }
 
 #[derive(Deserialize, Clone, Debug)]
+pub struct GithubIssuesResponsePullRequest {
+    pub merged_at: Option<String>,
+}
+
+#[derive(Deserialize, Clone, Debug)]
 pub struct GithubIssuesResponse {
     pub title: String,
     pub number: i32,
@@ -85,6 +90,7 @@ pub struct GithubIssuesResponse {
     pub labels: Vec<GithubLabel>,
     pub user: GithubUser,
     pub closed_at: DateTime<Utc>,
+    pub pull_request: Option<GithubIssuesResponsePullRequest>,
 }
 
 pub struct GithubClient {
@@ -117,17 +123,6 @@ impl GithubClient {
             // WARN if this path ends with a / it will break
             .post("https://api.github.com/graphql")
             .set("Authorization", &format!("bearer {}", self.token))
-    }
-
-    pub fn get_branch_sha(&self, branch_name: &str) -> anyhow::Result<String> {
-        let request = self.get("branches");
-        let reponse: Vec<GithubBranchesResponse> = request.call()?.into_json()?;
-        for branch in &reponse {
-            if branch.name == branch_name {
-                return Ok(branch.commit.sha.clone());
-            }
-        }
-        bail!("commit sha not found for main branch")
     }
 
     /// Gets the list of all commits between two git ref
@@ -167,20 +162,21 @@ impl GithubClient {
         Ok(request.call()?.into_json()?)
     }
 
-    /// Gets a list of all PRs merged by bors after the given date.
-    /// The date needs to be in the YYYY-MM-DD format
-    /// To validate that bors merged the PR we simply check if the pr title contains "[Merged by Bors] - "
+    /// Gets a list of all merged PRs after the given date.
+    /// The date needs to be in the YYYY-MM-DD format.
     pub fn get_merged_prs(
         &self,
         since: &str,
         label: Option<&str>,
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-        let naive_datetime = NaiveDate::parse_from_str(since, "%Y-%m-%d")?.and_hms(0, 0, 0);
-        let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+        let naive_datetime = NaiveDate::parse_from_str(since, "%Y-%m-%d")?
+            .and_hms_opt(0, 0, 0)
+            .expect("invalid time");
+        let datetime_utc = Utc.from_utc_datetime(&naive_datetime);
 
         let mut prs = vec![];
         let mut page = 1;
-        // The github rest api is limited to 100 prs per page,
+        // The github rest API is limited to 100 prs per page,
         // so to get all the prs we need to iterate on every page available.
         loop {
             let mut prs_in_page = self.get_merged_prs_by_page(since, page, label)?;
@@ -209,7 +205,7 @@ impl GithubClient {
             .collect())
     }
 
-    // Returns all PRs from the main branch that are closed
+    // Returns all PRs from the main branch that are merged.
     pub fn get_merged_prs_by_page(
         &self,
         date: &str,
@@ -229,8 +225,13 @@ impl GithubClient {
         let response: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
         Ok(response
             .iter()
-            // Make sure to only get the PRs that were merged by bors
-            .filter(|pr| pr.title.starts_with("[Merged by Bors] - "))
+            // Make sure to only get the PRs that were merged
+            .filter(|pr| {
+                pr.pull_request
+                    .as_ref()
+                    .map(|pr| pr.merged_at.is_some())
+                    .unwrap_or(false)
+            })
             .cloned()
             .collect())
     }

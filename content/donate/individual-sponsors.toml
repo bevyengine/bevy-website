@@ -1,0 +1,115 @@
+[[sponsor]]
+name = "Encultured.ai"
+image = "Encultured.png"
+link = "https://www.encultured.ai/"
+amount = 1000
+source = "github"
+recipient ="cart"
+logo_scale = 0.7
+
+[[sponsor]]
+name = "Roids"
+image = "roids_logo.png"
+link = "https://playroids.com"
+amount = 300
+source = "github"
+recipient ="cart"
+square_logo = true
+
+[[sponsor]]
+name = "keygen"
+image = "keygen.png"
+link = "https://keygen.sh"
+amount = 100
+source = "github"
+recipient ="cart"
+
+[[sponsor]]
+name = "VPSServer"
+image = "VPSServer.png"
+link = "https://www.vpsserver.com"
+amount = 100
+source = "github"
+recipient ="cart"
+
+[[sponsor]]
+name = "Wunder Software GmbH"
+image = "Wunder_Software_GmbH.png"
+link = "https://wunder.software"
+amount = 100
+source = "github"
+recipient ="cart"
+
+[[sponsor]]
+name = "Basement Flood Helpers"
+image = "BFH.png"
+link = "https://basementfloodhelpers.com"
+amount = 100
+source = "github"
+recipient ="cart"
+
+[[sponsor]]
+name = "timclicks"
+image = "timclicks.png"
+link = "https://timclicks.dev"
+amount = 100
+source = "github"
+recipient ="cart"
+
+[[sponsor]]
+past = true
+name = "Futurewei"
+recipient ="cart"
+amount = 12500
+
+[[sponsor]]
+name = "Embark Studios"
+image = "embark.png"
+link = "https://www.embark-studios.com"
+amount = 1000
+source = "github"
+recipient = "cart"
+past = true
+
+
+[[sponsor]]
+past = true
+name = "Legion Labs"
+recipient ="cart"
+amount = 1000
+
+[[sponsor]]
+past = true
+name = "MeetKai"
+recipient ="cart"
+amount = 1000
+
+[[sponsor]]
+name = "Agile Perception"
+image = "agile_perception.png"
+link = "https://agileperception.com"
+amount = 100
+source = "github"
+recipient ="cart"
+past = true
+
+[[sponsor]]
+name = "Vertex Studio"
+image = "vertex_studio.png"
+link = "https://vertexstudio.co"
+amount = 100
+source = "github"
+recipient ="cart"
+past = true
+
+[[sponsor]]
+past = true
+name = "Striked"
+recipient ="cart"
+amount = 100
+
+[[sponsor]]
+past = true
+name = "Metabuild"
+recipient ="cart"
+amount = 100
