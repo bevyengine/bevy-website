@@ -57,7 +57,7 @@ $border-radius: 10px;
   --header-height: 60px;
   --scroll-padding-top: calc(var(--header-height) + 16px);
 
-  @media #{$bp-tablet-landscape-up} {
+  @media #{$bp-desktop-up} {
     --header-height: 72px;
   }
 }
