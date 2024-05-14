@@ -171,7 +171,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustup component add llvm-tools-preview
     ```
 
-  * **MacOS**: You can follow these [instructions](https://lld.llvm.org/MachO/index.html) to install lld manually or install llvm through brew which includes lld: `brew install llvm`.
+   * **MacOS**: On MacOS, the default system linker ld-prime is faster than LLD.
 
   You will also need to add one of the following to your Cargo config at `<YOUR_WORKSPACE>/.cargo/config.toml` depending on your OS:
   ```toml
@@ -179,14 +179,6 @@ Bevy can be built just fine using default configuration on stable Rust. However 
   [target.x86_64-unknown-linux-gnu]
   linker = "clang"
   rustflags = ["-C", "link-arg=-fuse-ld=lld"]
-
-  # for x86_64 MacOS
-  [target.x86_64-apple-darwin]
-  rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/opt/llvm/bin/ld64.lld"]
-
-  # for aarch64 MacOS
-  [target.aarch64-apple-darwin]
-  rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
 
   # for Windows
   [target.x86_64-pc-windows-msvc]
@@ -198,7 +190,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
   * **Fedora**: `sudo dnf install mold clang`
   * **Arch**: `sudo pacman -S mold clang`
   * **Windows**: currently not planned for support [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
-  * **MacOS**: available as [sold](https://github.com/bluewhalesystems/sold)
+  * **MacOS**: available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
 
     You will also need to add the following to your Cargo config at `YOUR_WORKSPACE/.cargo/config.toml`:
 
