@@ -7,7 +7,7 @@ if(window.location.hash == ""){
 }
 
 /**
- * remember which elements are on screen. * IntersectionObserver only sends us updates.
+ * remember which elements are on screen. IntersectionObserver only sends us updates.
  * @type {Map<Element, boolean>}
  */
 let otp_state = new Map();
