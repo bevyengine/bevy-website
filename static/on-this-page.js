@@ -1,9 +1,16 @@
-//! in the page-level navigation, sets data-active=true on the li which you're currently looking at
+//! in nav.on-this-page, sets data-active=true on the li which you're currently looking at
 
+/**
+ * remember which elements are on screen. * IntersectionObserver only sends us updates.
+ * @type {Map<Element, boolean>}
+ */
 let otp_state = new Map();
 
-/// give data-active=true to the page nav link which points to the given id; set all others to false.
-/// accepts an id string or a DOM node which it will automatically retrieve the id of
+/**
+ * give data-active=true to the page nav link which points to the given id; set all others to false.
+ * accepts an id string or a DOM node which it will automatically retrieve the id of
+ * @param {string | HTMLElement} id_or_node 
+ */
 function otp_set_active(id_or_node){
   let id = "";
   if(typeof id_or_node == "object"){
