@@ -22,8 +22,10 @@
     }
 
     &__label {
-        display: flex;
+        display: grid;
+        grid-template-columns: auto min-content;
         border-radius: $border-radius;
+        overflow: hidden; // prevent the radii from getting messed up
         margin-bottom: 2px;
         opacity: 0.6;
 
@@ -94,5 +96,11 @@
         > .tree-menu {
             display: block;
         }
+    }
+
+    &__toc {
+      grid-row: 2;
+      grid-column: 1 / span 2;
+      background-color: rgba($color-black, 0.25);
     }
 }

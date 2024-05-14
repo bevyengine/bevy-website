@@ -1,0 +1,44 @@
+/// internal page navigation
+/// i.e., the "On This Page" section
+
+
+.on-this-page {
+  $h-padding: 12px;
+  padding-block: calc($h-padding/2);
+
+  ul {
+    list-style-position: outside;
+    list-style-type: none;
+    padding-inline-start: $h-padding;
+  }
+
+  >ul {
+    padding-inline: $h-padding;
+  }
+
+  li[data-active=true] {
+    font-weight: bolder;
+
+    li {
+      font-weight: normal;
+    }
+  }
+
+  a {
+    display: block;
+    text-wrap: balance;
+    padding-block: 1px;
+    // copied from .media-content
+    text-decoration: none;
+    color: $link-color;
+
+    &:hover {
+      text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+    }
+
+    @media ($bp-tablet-portrait-down) {
+      // increase hit area for touchscreens
+      padding-block: 3px;
+    }
+  }
+}
