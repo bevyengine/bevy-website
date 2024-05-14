@@ -44,6 +44,7 @@ function enable_image_compare() {
     slider.min = style.getPropertyValue('--slider-min').replace('%', '');
     slider.max = style.getPropertyValue('--slider-max').replace('%', '');
     slider.value = style.getPropertyValue('--slider-value').replace('%', '');
+    slider.ariaLabel = `Slider to compare "${img_cmp.getAttribute('data-title-a')}" and "${img_cmp.getAttribute('data-title-b')}"`
     img_cmp.appendChild(slider);
     // setup callback
     slider.addEventListener("input", (event) => {
