@@ -1,5 +1,12 @@
 {% import "macros/header.html" as header_macros %}
 {% import "macros/public_draft.html" as public_draft %}
+
+{# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
+{% set_global section_or_page = false %}
+{% if section or page %}
+  {% set_global section_or_page = section | default(value=page) %}
+{% endif %}
+
 {% set current_path = current_path | default(value="/") %}
 {% if section and section.title %}
   {% if section.path is starting_with("/learn/book/") %}

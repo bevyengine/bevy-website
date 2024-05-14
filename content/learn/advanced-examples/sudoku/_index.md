@@ -1,6 +1,6 @@
 +++
 title = "Sudoku"
-template = "docs-section.html"
+template = "docs.html"
 [extra]
 weight = 2
 status = "hidden"
