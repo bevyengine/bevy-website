@@ -1,4 +1,10 @@
-//! in nav.on-this-page, sets data-active=true on the li which you're currently looking at
+//! in nav.on-this-page, sets data-active=true on the link to the header you're currently looking at
+
+if(window.location.hash == ""){
+  otp_set_active(document.querySelector("main h2"));
+} else {
+  otp_set_active(window.location.hash.substring(1));
+}
 
 /**
  * remember which elements are on screen. * IntersectionObserver only sends us updates.
@@ -38,6 +44,5 @@ let otp_observer =  new IntersectionObserver(
     threshold: 1.0,
   });
 
-otp_set_active(document.querySelector("main h2"));
 document.querySelectorAll("main h2, main h3")
   .forEach(h => otp_observer.observe(h));
