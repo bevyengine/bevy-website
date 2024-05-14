@@ -171,7 +171,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     rustup component add llvm-tools-preview
     ```
 
-   * **MacOS**: On macOS, the default system linker is faster than LLD.
+   * **MacOS**: On MacOS, the default system linker is faster than LLD.
 
   You will also need to add one of the following to your Cargo config at `<YOUR_WORKSPACE>/.cargo/config.toml` depending on your OS:
   ```toml
