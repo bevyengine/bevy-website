@@ -71,7 +71,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         let area = area.replace("A-", "");
         let areas = area.split(" + ").collect::<Vec<_>>();
 
-        let dir = &format!("{dir}/{area}");
+        let dir = &format!("{dir}/{}", areas.first().unwrap());
         std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
 
         let mut prs = prs;
@@ -92,9 +92,12 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
             // 72 is mostly arbitrary but is the limit of a git commit message
             // We don't want really long file names
-            // let filename = filename.chars().take(72).collect::<String>();
+            let filename = filename.chars().take(72).collect::<String>();
             println!("{filename}");
             let file_path = &format!("{dir}/{filename}.md");
+
+            // TODO this should probably return if file already exists, so we don't overwrite changes
+            // Maybe add a flag for this because overwriting is useful while developing this tool
             let mut file = std::fs::File::create(file_path)
                 .context(format!("Failed to create {file_path}"))?;
 
