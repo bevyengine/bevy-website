@@ -71,7 +71,12 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         let area = area.replace("A-", "");
         let areas = area.split(" + ").collect::<Vec<_>>();
 
-        let dir = &format!("{dir}/{}", areas.first().unwrap());
+        let dir = &format!(
+            "{dir}/{}",
+            areas
+                .first()
+                .context("There should always be at least one area")?
+        );
         std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
 
         let mut prs = prs;
@@ -80,20 +85,19 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         for (title, pr) in prs {
             println!("# {title}");
 
-            let filename = format!(
-                "{}_{}_{}",
-                // add this so it has consistent ordering in file system
-                pr.closed_at.format("%Y%m%d"),
-                pr.number,
-                title
-                    .replace(' ', "_")
-                    .replace(|c: char| !c.is_alphanumeric() && c != '_', "")
-            );
+            let fs_friendly_title = title
+                .replace(' ', "_")
+                .replace(|c: char| !c.is_alphanumeric() && c != '_', "");
 
-            // 72 is mostly arbitrary but is the limit of a git commit message
-            // We don't want really long file names
-            let filename = filename.chars().take(72).collect::<String>();
-            println!("{filename}");
+            // PR number needs to be first so sort remains consistent.
+            // This is fine because github PR numbers are monotonic
+            let mut filename = format!("{}_{}", pr.number, fs_friendly_title);
+
+            // Shorten the filename because we don't want really long file names
+            // Some OS still have file path length limits in 2024...
+            // 64 is completely arbitrary but felt long enough and is a nice power of 2
+            filename.truncate(64);
+
             let file_path = &format!("{dir}/{filename}.md");
 
             // TODO this should probably return if file already exists, so we don't overwrite changes
@@ -118,8 +122,11 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             write!(&mut file, "\n</div>")?;
             writeln!(&mut file)?;
 
-            let (section, _) =
-                write_markdown_section(pr.body.as_ref().unwrap(), "migration guide", true)?;
+            let (section, _) = write_markdown_section(
+                pr.body.as_ref().context("PR has no body")?,
+                "migration guide",
+                true,
+            )?;
             write!(file, "{}", section)?;
         }
     }
