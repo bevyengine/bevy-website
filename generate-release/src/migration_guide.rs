@@ -105,6 +105,10 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             let mut file = std::fs::File::create(file_path)
                 .context(format!("Failed to create {file_path}"))?;
 
+            // TODO it might be useful to dump some PR metadata in a frontmatter so
+            // it could be used when reconstructing the final migration guide page
+            // Things like PR author, closed date, list of areas, github link
+
             // Write title for the PR with correct heading and github url
             writeln!(
                 &mut file,
