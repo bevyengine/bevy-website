@@ -6,7 +6,7 @@
 {% endmacro %}
 
 {% macro search_button(icon=false, text="Search Bevy...", class="") %}
-<button class="search-button {{ class }}" aria-label="{{ text }}" onclick="document.getElementById('search-dialog').showModal()">
+<button class="search-button {{ class }}" aria-label="{{ text }}" onclick="search_open()">
   {{ search::search_icon() }}
   {% if not icon %}
   <span> {{ text }} </span>
@@ -30,22 +30,26 @@
       </form>
       <div class="search-dialog__recent" aria-label="Recent Searches">
         <!-- hidden by script upon entering anything -->
-        <ul>
-        </ul>
         <div class="search-dialog__recent__none">
           <!-- hidden by script if you have any recent searches -->
           <em>&mdash; No recent searches &mdash;</em>
+        </div>
+        <div class="search-dialog__recent__some" style="display: none;">
+          <!-- shown by script if you have any recent searches -->
+          <b>Recent Searches</b>
+          <ul>
+          </ul>
         </div>
       </div>
       <div class="search-dialog__results"></div>
     </div>
     <aside class="search-dialog__tip" aria-label="tip" style="display: flex; padding-top: 0.5em;">
       <div style="margin-inline: auto">
-        <b>Tip!</b> (I'll write a script to pick a random one later)
-        <ul class="display:none">
+        <b>Tip!</b>
+        <ul>
           <li>Open this dialog with <kbd>Ctrl+K</kbd></li>
-          <li>some second thing</li>
-          <li>some third thing</li>
+          <li>#TODO some second thing</li>
+          <li>#TODO some third thing</li>
         </ul>
       </div>
     </aside>
