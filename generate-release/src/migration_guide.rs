@@ -1,9 +1,16 @@
+use anyhow::Context;
+
 use crate::{
     github_client::{GithubClient, GithubIssuesResponse},
     helpers::{get_merged_prs, get_pr_area},
     markdown::write_markdown_section,
 };
-use std::{collections::BTreeMap, fmt::Write, path::PathBuf};
+use std::{
+    collections::BTreeMap,
+    fmt::{format, Write},
+    io::Write as IoWrite,
+    path::PathBuf,
+};
 
 pub fn generate_migration_guide(
     title: &str,
@@ -60,11 +67,17 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         }
     }
 
+    let dir = "./migration-guides";
+    std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
+
     for (area, prs) in areas {
         println!("Area: {area}");
 
         let area = area.replace("A-", "");
         let areas = area.split(" + ").collect::<Vec<_>>();
+
+        let dir = &format!("{dir}/{area}");
+        std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
 
         let mut prs = prs;
         prs.sort_by_key(|k| k.1.closed_at);
@@ -72,29 +85,44 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         for (title, pr) in prs {
             println!("# {title}");
 
+            let filename = format!(
+                "{}_{}_{}",
+                // add this so it has consistent ordering in file system
+                pr.closed_at.format("%Y%m%d"),
+                pr.number,
+                title
+                    .replace(' ', "_")
+                    .replace(|c: char| !c.is_alphanumeric() && c != '_', "")
+            );
+
+            // 72 is mostly arbitrary but is the limit of a git commit message
+            // We don't want really long file names
+            // let filename = filename.chars().take(72).collect::<String>();
+            println!("{filename}");
+            let file_path = &format!("{dir}/{filename}.md");
+            let mut file = std::fs::File::create(file_path)
+                .context(format!("Failed to create {file_path}"))?;
+
             // Write title for the PR with correct heading and github url
             writeln!(
-                &mut output,
+                &mut file,
                 "\n### [{}](https://github.com/bevyengine/bevy/pull/{})",
                 title, pr.number
             )?;
             // Write custom HTML to show area tag on each section
-            write!(&mut output, "\n<div class=\"migration-guide-area-tags\">")?;
+            write!(&mut file, "\n<div class=\"migration-guide-area-tags\">")?;
             for area in &areas {
                 write!(
-                    &mut output,
+                    &mut file,
                     "\n    <div class=\"migration-guide-area-tag\">{area}</div>"
                 )?;
             }
-            write!(&mut output, "\n</div>")?;
-            writeln!(&mut output)?;
+            write!(&mut file, "\n</div>")?;
+            writeln!(&mut file)?;
 
-            write_markdown_section(
-                pr.body.as_ref().unwrap(),
-                "migration guide",
-                &mut output,
-                true,
-            )?;
+            let (section, _) =
+                write_markdown_section(pr.body.as_ref().unwrap(), "migration guide", true)?;
+            write!(file, "{}", section)?;
         }
     }
     writeln!(&mut output, "</div>")?;

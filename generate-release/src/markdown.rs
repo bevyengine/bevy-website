@@ -6,9 +6,9 @@ use std::fmt::Write;
 pub fn write_markdown_section(
     body: &str,
     section_header: &str,
-    output: &mut String,
     write_todo: bool,
-) -> anyhow::Result<bool> {
+) -> anyhow::Result<(String, bool)> {
+    let mut output = String::new();
     // Parse the body of the PR
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
@@ -63,7 +63,8 @@ pub fn write_markdown_section(
                 }
                 _ => {}
             }
-            write_markdown_event(&event, output, list_item_level - 1)?;
+            let event = write_markdown_event(&event, list_item_level - 1)?;
+            write!(output, "{}", event)?;
         }
     }
 
@@ -73,20 +74,17 @@ pub fn write_markdown_section(
             writeln!(output, "\n<!-- TODO -->")?;
             println!("\x1b[93m{section_header} not found!\x1b[0m");
         }
-        Ok(false)
+        Ok((output, false))
     } else {
-        Ok(true)
+        Ok((output, true))
     }
 }
 
 /// Write the markdown Event based on the Tag
 /// This handles some edge cases like some code blocks not having a specified lang
 /// This also makes sure the result has a more consistent formatting
-fn write_markdown_event(
-    event: &Event,
-    output: &mut String,
-    list_item_level: i32,
-) -> anyhow::Result<()> {
+fn write_markdown_event(event: &Event, list_item_level: i32) -> anyhow::Result<String> {
+    let mut output = String::new();
     match event {
         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => writeln!(
             output,
@@ -130,5 +128,5 @@ fn write_markdown_event(
         Event::Rule => writeln!(output, "---")?,
         _ => println!("\x1b[93mUnknown event: {event:?}\x1b[0m"),
     };
-    Ok(())
+    Ok(output)
 }

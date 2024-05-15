@@ -43,7 +43,9 @@ pub fn generate_changelog(
                 );
                 writeln!(&mut out, "{heading}")?;
 
-                if write_markdown_section(body, "changelog", &mut out, false)? {
+                let (section, found) = write_markdown_section(body, "changelog", false)?;
+                write!(out, "{section}")?;
+                if found {
                     count += 1;
                 } else {
                     // Changelog not found so remove heading
