@@ -6,10 +6,55 @@
 {% endmacro %}
 
 {% macro search_button(icon=false, text="Search Bevy...", class="") %}
-<button class="search-button {{ class }}" aria-label="{{ text }}">
+<button class="search-button {{ class }}" aria-label="{{ text }}" onclick="document.getElementById('search-dialog').showModal()">
   {{ search::search_icon() }}
   {% if not icon %}
   <span> {{ text }} </span>
   {% endif %}
 </button>
+{% endmacro %}
+
+{% macro search_dialog() %}
+<dialog id="search-dialog">
+  <div style="display: flex; flex-direction: column; height: 100%;">
+    <div class="wrapper" style="flex-grow: 1;">
+      <form>
+        <label>
+          {{ search::search_icon() }}
+        </label>
+        <input
+          id="search-dialog__input"
+          placeholder="Search all of Bevy..."
+          autofocus
+        >
+      </form>
+      <div class="search-what">
+        <ul>
+          <li>Everything</li>
+          <li>Quick Start</li>
+          <li>The Book</li>
+          <li>Assets</li>
+          <li>Examples</li>
+        </ul>
+      </div>
+      <div class="results" data-results="no-recent-searches">
+        <div class="no-recent-searches">
+          No Recent Searches...
+        </div>
+        <ul class="recent-searches"></ul>
+        <ul class="search-results"></ul>
+      </div>
+    </div>
+    <aside class="tip" aria-label="tip" style="display: flex; padding-top: 0.5em;">
+      <div style="margin-inline: auto">
+        <b>Tip!</b> (I'll write a script to pick a random one later)
+        <ul class="display:none">
+          <li>Open this dialog with <kbd>Ctrl+K</kbd></li>
+          <li>some second thing</li>
+          <li>some third thing</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</dialog>
 {% endmacro %}

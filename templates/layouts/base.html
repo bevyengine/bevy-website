@@ -1,5 +1,5 @@
 {% import "macros/header.html" as header_macros %}
-{% import "macros/search.html" as search_button %}
+{% import "macros/search.html" as search %}
 {% import "macros/public_draft.html" as public_draft %}
 
 {# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
@@ -261,5 +261,6 @@
       }
     }
     </script>
+    {{ search::search_dialog() }}
   </body>
 </html>

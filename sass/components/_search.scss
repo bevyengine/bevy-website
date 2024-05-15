@@ -2,9 +2,56 @@
   // reset <button> defaults
   border: none;
   background: none;
+
   &__svg {
     height: 1em;
     fill: $default-color;
     aspect-ratio: 1/1;
+  }
+}
+
+#search-dialog {
+  $highlight: $color-pink;
+  width: min(80ch, 90%);
+  max-height: 80vh;
+  border: none;
+  background-color: transparent;
+
+  &::backdrop {
+    background-color: rgba($color-grey-800, 0.7);
+  }
+
+  .wrapper {
+    padding: 1em;
+    border: 2px solid $highlight;
+    border-radius: $border-radius;
+    background-color: $color-grey-900;
+    aspect-ratio: 3/2;
+
+    form {
+      $input-height: 2em;
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+      padding: 0.5em;
+
+      input {
+        width: 100%;
+        outline: none;
+        border: none;
+        font-size: $input-height;
+        background-color: transparent;
+        border-radius: 0;
+      }
+
+      label svg {
+        height: $input-height;
+        fill: $highlight;
+      }
+    }
+
+    .results {
+      min-height: 20ch;
+    }
   }
 }
