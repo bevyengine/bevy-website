@@ -1,5 +1,10 @@
-.search__icon {
-  height: 1em;
-  fill: $default-color;
-  aspect-ratio: 1/1;
+.search-button {
+  // reset <button> defaults
+  border: none;
+  background: none;
+  &__svg {
+    height: 1em;
+    fill: $default-color;
+    aspect-ratio: 1/1;
+  }
 }

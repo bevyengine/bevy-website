@@ -28,6 +28,9 @@
 
     &:hover {
       color: $color-blue;
+      svg {
+        fill: $color-blue; // (2024-05-15) only actually used by search button
+      }
     }
 
     &--active {

@@ -1,5 +1,5 @@
 {% import "macros/header.html" as header_macros %}
-{% import "macros/search.html" as search %}
+{% import "macros/search.html" as search_button %}
 {% import "macros/public_draft.html" as public_draft %}
 
 {# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
@@ -164,7 +164,7 @@
               </div>
               <ul class="main-menu__menu">
                 <li class="main-menu__entry">
-                  {{ search::search_button() }}
+                  {{ search::search_button(icon=true, class="main-menu__link") }}
                 </li>
                 {{ header_macros::header_item(name="Getting Started", path="/learn/quick-start/getting-started",
                                 extra_class="main-menu__entry--getting-started", current_path=current_path) }}
