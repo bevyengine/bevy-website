@@ -1,0 +1,35 @@
+.callout {
+  margin-block: 32px;
+  padding: 16px;
+  border-radius: 4px;
+  background-color: var(--callout-bg-color);
+  border-top: 4px solid var(--callout-accent-color);
+  color: var(--callout-color);
+
+  >:first-child {
+    margin-top: 0;
+  }
+
+  >:last-child {
+    margin-bottom: 0;
+  }
+
+  &,
+  &--info {
+    --callout-accent-color: #5944e0;
+    --callout-bg-color: #2f2745;
+    --callout-color: #f0effb;
+  }
+
+  &--caution {
+    --callout-accent-color: #e82f5a;
+    --callout-bg-color: #591626;
+    --callout-color: #eed5db;
+  }
+
+  &--warning {
+    --callout-accent-color: #e4c151;
+    --callout-bg-color: #513903;
+    --callout-color: #fdfdec;
+  }
+}
