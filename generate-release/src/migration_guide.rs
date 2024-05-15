@@ -5,12 +5,7 @@ use crate::{
     helpers::{get_merged_prs, get_pr_area},
     markdown::write_markdown_section,
 };
-use std::{
-    collections::BTreeMap,
-    fmt::{format, Write},
-    io::Write as IoWrite,
-    path::PathBuf,
-};
+use std::{collections::BTreeMap, fmt::Write, io::Write as IoWrite, path::PathBuf};
 
 pub fn generate_migration_guide(
     title: &str,
