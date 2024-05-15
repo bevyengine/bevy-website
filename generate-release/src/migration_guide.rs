@@ -12,15 +12,52 @@ pub fn generate_migration_guide(
     weight: i32,
     from: &str,
     to: &str,
-    path: PathBuf,
+    // TODO use this to figure out the base path
+    _path: PathBuf,
     client: &mut GithubClient,
 ) -> anyhow::Result<()> {
-    let mut output = String::new();
+    // Get all PR by area
+    let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
+    {
+        let merged_prs = get_merged_prs(client, from, to, None)?;
+        let mut count = 0;
+        for (pr, _, title) in &merged_prs {
+            let Some(body) = pr.body.as_ref() else {
+                // If the body is empty then there's no migration guide so we can safely skip it
+                continue;
+            };
 
-    // Write the frontmatter based on given parameters
-    write!(
-        &mut output,
-        r#"+++
+            let has_migration_guide_section = body.to_lowercase().contains("## migration guide");
+            let has_breaking_label = pr
+                .labels
+                .iter()
+                .any(|l| l.name.contains("C-Breaking-Change"));
+
+            // We want to check for PRs with the breaking label but without the guide section
+            // to make it easier to track down missing guides
+            if has_migration_guide_section || has_breaking_label {
+                let area = get_pr_area(pr);
+                areas
+                    .entry(area)
+                    .or_default()
+                    .push((title.clone(), pr.clone()));
+                count += 1;
+            }
+        }
+        println!("\nFound {} breaking PRs merged", count);
+    }
+
+    let dir = &format!("./{title}");
+    std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
+
+    // Generate the _index file
+    {
+        let mut index = String::new();
+
+        // Write the frontmatter based on given parameters
+        write!(
+            &mut index,
+            r#"+++
 title = "{title}"
 insert_anchor_links = "right"
 [extra]
@@ -30,44 +67,17 @@ long_title = "Migration Guide: {title}"
 
 Bevy relies heavily on improvements in the Rust language and compiler.
 As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust."#
-    )?;
-    writeln!(&mut output)?;
-    writeln!(&mut output, "<div class=\"migration-guide\">")?;
-
-    let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
-
-    let merged_prs = get_merged_prs(client, from, to, None)?;
-    let mut count = 0;
-    for (pr, _, title) in &merged_prs {
-        let Some(body) = pr.body.as_ref() else {
-            // If the body is empty then there's no migration guide so we can safely skip it
-            continue;
-        };
-
-        let has_migration_guide_section = body.to_lowercase().contains("## migration guide");
-        let has_breaking_label = pr
-            .labels
-            .iter()
-            .any(|l| l.name.contains("C-Breaking-Change"));
-
-        // We want to check for PRs with the breaking label but without the guide section
-        // to make it easier to track down missing guides
-        if has_migration_guide_section || has_breaking_label {
-            let area = get_pr_area(pr);
-            areas
-                .entry(area)
-                .or_default()
-                .push((title.clone(), pr.clone()));
-            count += 1;
-        }
+        )?;
+        writeln!(&mut index)?;
+        writeln!(&mut index)?;
+        writeln!(&mut index, "<div class=\"migration-guide\">")?;
+        writeln!(&mut index, "</div>")?;
+        // TODO check if already exists
+        std::fs::write(format!("{dir}/_index.md"), index)?;
     }
 
-    let dir = "./migration-guides";
-    std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
-
+    // Write all the separate migration guide files
     for (area, prs) in areas {
-        println!("Area: {area}");
-
         let area = area.replace("A-", "");
         let areas = area.split(" + ").collect::<Vec<_>>();
 
@@ -83,8 +93,6 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
         prs.sort_by_key(|k| k.1.closed_at);
 
         for (title, pr) in prs {
-            println!("# {title}");
-
             let fs_friendly_title = title
                 .replace(' ', "_")
                 .replace(|c: char| !c.is_alphanumeric() && c != '_', "");
@@ -105,26 +113,21 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             let mut file = std::fs::File::create(file_path)
                 .context(format!("Failed to create {file_path}"))?;
 
-            // TODO it might be useful to dump some PR metadata in a frontmatter so
-            // it could be used when reconstructing the final migration guide page
-            // Things like PR author, closed date, list of areas, github link
-
-            // Write title for the PR with correct heading and github url
-            writeln!(
+            // Generate a frontmatter with metadata that will be needed to generate the final page
+            write!(
                 &mut file,
-                "\n### [{}](https://github.com/bevyengine/bevy/pull/{})",
-                title, pr.number
+                r#"+++
+title = "{title}"
+[extra]
+url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
+areas = [{areas}]
+closed_at = "{closed_at}"
++++
+"#,
+                areas = areas.join(","),
+                pr_number = pr.number,
+                closed_at = pr.closed_at.format("%Y-%m-%d"),
             )?;
-            // Write custom HTML to show area tag on each section
-            write!(&mut file, "\n<div class=\"migration-guide-area-tags\">")?;
-            for area in &areas {
-                write!(
-                    &mut file,
-                    "\n    <div class=\"migration-guide-area-tag\">{area}</div>"
-                )?;
-            }
-            write!(&mut file, "\n</div>")?;
-            writeln!(&mut file)?;
 
             let (section, _) = write_markdown_section(
                 pr.body.as_ref().context("PR has no body")?,
@@ -134,11 +137,6 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             write!(file, "{}", section)?;
         }
     }
-    writeln!(&mut output, "</div>")?;
-
-    println!("\nFound {} breaking PRs merged", count);
-
-    std::fs::write(path, output)?;
 
     Ok(())
 }

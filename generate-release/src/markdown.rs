@@ -1,7 +1,7 @@
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use std::fmt::Write;
 
-/// Writes the markdown section of the givent section header to the output.
+/// Writes the markdown section of the given section header to the output.
 /// The header name needs to be in lower case.
 pub fn write_markdown_section(
     body: &str,
