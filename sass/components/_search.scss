@@ -21,37 +21,44 @@
     background-color: rgba($color-grey-800, 0.7);
   }
 
-  .wrapper {
+  .search-dialog__inner {
+    flex-grow: 1;
     padding: 1em;
     border: 2px solid $highlight;
     border-radius: $border-radius;
     background-color: $color-grey-900;
     aspect-ratio: 3/2;
+  }
 
-    form {
-      $input-height: 2em;
-      display: flex;
-      gap: 0.5em;
-      align-items: center;
-      padding: 0.5em;
+  form {
+    $input-height: 2em;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    margin-bottom: 1em;
 
-      input {
-        width: 100%;
-        outline: none;
-        border: none;
-        font-size: $input-height;
-        background-color: transparent;
-        border-radius: 0;
-      }
-
-      label svg {
-        height: $input-height;
-        fill: $highlight;
-      }
+    input {
+      width: 100%;
+      outline: none;
+      border: none;
+      font-size: $input-height;
+      background-color: transparent;
+      border-radius: 0;
     }
 
-    .results {
-      min-height: 20ch;
+    label svg {
+      height: $input-height;
+      fill: $highlight;
+    }
+  }
+
+  .search-dialog__recent {
+    &__none {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 5em;
+      color: $subtitle-color;
     }
   }
 }

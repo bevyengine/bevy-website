@@ -17,9 +17,9 @@
 {% macro search_dialog() %}
 <dialog id="search-dialog">
   <div style="display: flex; flex-direction: column; height: 100%;">
-    <div class="wrapper" style="flex-grow: 1;">
+    <div class="search-dialog__inner">
       <form>
-        <label>
+        <label aria-label="Search all of Bevy..." for="search-dialog__input">
           {{ search::search_icon() }}
         </label>
         <input
@@ -28,24 +28,17 @@
           autofocus
         >
       </form>
-      <div class="search-what">
+      <div class="search-dialog__recent">
         <ul>
-          <li>Everything</li>
-          <li>Quick Start</li>
-          <li>The Book</li>
-          <li>Assets</li>
-          <li>Examples</li>
         </ul>
-      </div>
-      <div class="results" data-results="no-recent-searches">
-        <div class="no-recent-searches">
-          No Recent Searches...
+        <div class="search-dialog__recent__none">
+          <!-- hidden by script if you have any recent searches, or if you type anything -->
+          <em>&mdash; No recent searches &mdash;</em>
         </div>
-        <ul class="recent-searches"></ul>
-        <ul class="search-results"></ul>
       </div>
+      <div class="search-dialog__results"></div>
     </div>
-    <aside class="tip" aria-label="tip" style="display: flex; padding-top: 0.5em;">
+    <aside class="search-dialog__tip" aria-label="tip" style="display: flex; padding-top: 0.5em;">
       <div style="margin-inline: auto">
         <b>Tip!</b> (I'll write a script to pick a random one later)
         <ul class="display:none">
