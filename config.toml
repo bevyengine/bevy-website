@@ -8,6 +8,7 @@ title = "Bevy Engine"
 compile_sass = true
 
 # Whether to build a search index to be used later on by a JavaScript library
+default_language = "en"
 build_search_index = true
 
 generate_feed = true
