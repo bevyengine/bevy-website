@@ -71,6 +71,8 @@ enum Commands {
         weight: i32,
 
         /// Release version i.e.: '0.13', '0.14', etc.
+        /// 
+        /// This should be the version that you are preparing for release.
         #[arg(short, long)]
         release_version: String,
 
