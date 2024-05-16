@@ -12,10 +12,13 @@ This section will help you get started on your Bevy journey as quickly as possib
 
 If you want to dive in immediately and you already have a working Rust setup, feel free to follow this "quick start" guide. Otherwise, move on to the next page.
 
-Note: depending on your platform, you may have to [install additional dependencies]. You can also speed up compile times by following the ["fast compiles"] section.
+{% callout() %}
+Depending on your platform, you may have to [install additional dependencies].
+You can also speed up compile times by following the ["fast compiles"] section.
 
 [install additional dependencies]: /learn/quick-start/getting-started/setup/#installing-os-dependencies
 ["fast compiles"]: /learn/quick-start/getting-started/setup/#enable-fast-compiles-optional
+{% end %}
 
 ### Try the Examples
 
