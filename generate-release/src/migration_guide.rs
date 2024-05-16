@@ -20,7 +20,7 @@ pub fn generate_migration_guide(
     // Create the directory that will contain all the migration guides
     std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
-    // We'll write the file once at the end when all the metdata is generated
+    // We'll write the file once at the end when all the metdaata is generated
     let mut guides_metadata = Vec::new();
 
     // Write all the separate migration guide files
