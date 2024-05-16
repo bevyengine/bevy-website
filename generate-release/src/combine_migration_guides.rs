@@ -65,7 +65,9 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             let mut frontmatter_count = 0;
             let mut frontmatter = HashMap::<&str, &str>::new();
             let mut lines_iter = content.lines();
-            while let Some(line) = lines_iter.next() {
+            // only read the frontmatter part
+            // we'll use the rest of the iterator for the body later
+            for line in lines_iter.by_ref() {
                 if line.starts_with("+++") {
                     frontmatter_count += 1;
                 }
@@ -102,7 +104,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
                 .get("areas")
                 .expect("frontmatter missing areas key");
             // remove the brackets
-            let areas = areas.replace('[', "").replace(']', "");
+            let areas = areas.replace(['[', ']'], "");
             let areas = areas.split(',').collect::<Vec<_>>();
 
             // Write custom HTML to show area tag on each section
@@ -115,10 +117,8 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             }
             writeln!(&mut output, "\n</div>")?;
 
-            let body = lines_iter
-                .map(|l| l.trim_end())
-                .map(|l| format!("{l}\n"))
-                .collect::<String>();
+            let body =
+                lines_iter.fold(String::new(), |acc, l| acc + &format!("{}\n", l.trim_end()));
             write!(&mut output, "{}", body)?;
         }
     }
