@@ -54,6 +54,11 @@ $border-radius: 10px;
 
 // CSS Vars
 :root {
+  // Typography
+  --font-family-sans: "Fira Sans", sans-serif;
+  --font-family-mono: "Fira Mono", monospace;
+
+  // Header
   --header-height: 60px;
   --scroll-padding-top: calc(var(--header-height) + 16px);
 
