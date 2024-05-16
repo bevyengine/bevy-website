@@ -1,13 +1,21 @@
 const SEARCH_HISTORY_LOCALSTORAGE_KEY = "search_history"
 const SEARCH_HISTORY_MAX = 5;
+/** 
+ * <script> tags are ordered such that this will work without checking
+ * types stolen from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/elasticlunr/index.d.ts
+ * @typedef {{score: number, ref: string, doc: {title: string, body: string}}} SearchResult
+ * @type {{search: (query: string) => SearchResult[]}}
+ */
+const SEARCH_INDEX = elasticlunr.Index.load(searchIndex);
 
 /**
- * open the search dialog. no-op if already open.
+ * opens the search dialog, updates "recent searches", and randomizes the dialog tip
  */
 function search_open() {
     document.getElementById("search-dialog").showModal();
     search_history_show();
     search_tip();
+    search_key_handler();
 }
 
 /**
@@ -81,4 +89,29 @@ function search_tip() {
     let choice = Math.floor(Math.random() * length);
     console.trace("chose tip", choice);
     Array.from($list.children).forEach((n, i) => n.setAttribute("data-chosen", i==choice));
+}
+
+/**
+ * the actual sauce. sends the search off to elasticlunr and displays the results.
+ */
+function search_key_handler(){
+    let $dialog = document.getElementById("search-dialog")
+    let $recent = $dialog.querySelector(".search-dialog__recent")
+    let $results = $dialog.querySelector(".search-dialog__results")
+    let query = $dialog.querySelector("form input").value;
+    if(query.length > 0) {
+        $recent.style.display = "none";
+    } else {
+        $recent.style.display = null;
+        return;
+    }
+    let result = SEARCH_INDEX.search(query);
+    $results.innerHTML = "";
+    result.forEach(result => {
+        let link = document.createElement("a");
+        link.href = result.ref;
+        link.role = "list-item";
+        link.innerText = `${result.doc.title}`;
+        $results.append(link);
+    });
 }

@@ -26,6 +26,7 @@
           id="search-dialog__input"
           placeholder="Search all of Bevy..."
           autofocus
+          onkeypress="search_key_handler()"
         >
       </form>
       <div class="search-dialog__recent" aria-label="Recent Searches">
@@ -41,7 +42,7 @@
           </ul>
         </div>
       </div>
-      <div class="search-dialog__results"></div>
+      <ul class="search-dialog__results"> </ul>
     </div>
     <aside class="search-dialog__tip" aria-label="tip" style="display: flex; padding-top: 0.5em;">
       <div style="margin-inline: auto">

@@ -62,6 +62,15 @@
     }
   }
 
+  .search-dialog__results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+    a {
+      display: block;
+    }
+  }
+
   .search-dialog__tip ul {
     display: inline;
     margin: 0;
