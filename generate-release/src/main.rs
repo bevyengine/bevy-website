@@ -1,13 +1,11 @@
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
-use combine_migration_guides::combine_migration_guides;
 use migration_guide::generate_migration_guide;
 use release_notes::generate_release_note;
 use release_notes_website::generate_release_notes_website;
 use std::path::PathBuf;
 
 mod changelog;
-mod combine_migration_guides;
 mod github_client;
 mod helpers;
 mod markdown;
@@ -21,7 +19,6 @@ mod release_notes_website;
 ///
 /// Example used to generate the 0.14 release:
 /// cargo run -- migration-guide --from v0.13.0 --to main --release-version 0.14
-/// cargo run -- combine-migration-guides --title "0.13 to 0.14" --weight 9 --release-version 0.14
 /// cargo run -- release-note --from v0.13.0 --to main
 /// cargo run -- release-note-website --from bd4f611f7576c55739b466c6f0039e8421dab57e --to HEAD
 #[derive(ClapParser)]
@@ -47,6 +44,8 @@ enum Commands {
         to: String,
 
         /// Release version i.e.: '0.13', '0.14', etc.
+        ///
+        /// This should be the version that you are preparing for release.
         #[arg(short, long)]
         release_version: String,
 
@@ -57,28 +56,6 @@ enum Commands {
         /// Use this if you want to overwrite existing files
         #[arg(short, long)]
         overwrite_existing: bool,
-    },
-    /// Combine Migration Guides:
-    /// * Takes all the guides in the folder and combine them in one single page with zola specific formatting
-    #[command(verbatim_doc_comment)]
-    CombineMigrationGuides {
-        /// Title of the frontmatter
-        #[arg(short, long)]
-        title: String,
-
-        /// Weight used for sorting
-        #[arg(short, long)]
-        weight: i32,
-
-        /// Release version i.e.: '0.13', '0.14', etc.
-        /// 
-        /// This should be the version that you are preparing for release.
-        #[arg(short, long)]
-        release_version: String,
-
-        /// Path used to output the generated file. Defaults to ./migration-guide.md
-        #[arg(short, long)]
-        output_path: Option<std::path::PathBuf>,
     },
     /// Release notes:
     /// * Gets all merged PRs
@@ -161,12 +138,6 @@ fn main() -> anyhow::Result<()> {
             &mut client,
             overwrite_existing,
         )?,
-        Commands::CombineMigrationGuides {
-            title,
-            weight,
-            release_version,
-            output_path: path,
-        } => combine_migration_guides(title, weight, release_version, path)?,
         Commands::ReleaseNote { from, to, path } => generate_release_note(
             &from,
             &to,
