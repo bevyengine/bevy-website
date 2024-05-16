@@ -70,6 +70,7 @@ fn get_pr_title_from_commit(commit: &GithubCommitResponse) -> Option<String> {
     Some(title.to_string())
 }
 
+/// Returns all the area label for a PR as a list separated with ' + '
 pub fn get_pr_area(pr: &GithubIssuesResponse) -> String {
     let areas: Vec<String> = pr
         .labels

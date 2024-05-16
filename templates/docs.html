@@ -40,7 +40,7 @@
 {% block page_content %}
   <div class="docs-page">
     <div class="docs-content">
-      {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %} 
+      {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %}
       {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
       {% set root_section = get_section(path=root_section_path) %}
 
@@ -110,6 +110,7 @@
       </h1>
       <div class="media-content">
         {{ section_or_page.content | safe }}
+        {% block docs_content %}{% endblock docs_content %}
       </div>
       <div class="docs-footer">
         <nav class="docs-footer__nav">

@@ -6,7 +6,7 @@ use std::{
     path::PathBuf,
 };
 
-/// Generates the list of contributors and a list of all closed PRs sorted by area labels
+/// Generates the list of contributors to bevy-website and a list of all closed PRs sorted by area labels
 pub fn generate_release_notes_website(
     from: &str,
     to: &str,
