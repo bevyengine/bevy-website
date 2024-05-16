@@ -82,7 +82,7 @@ enum Commands {
     },
     /// Release notes:
     /// * Gets all merged PRs
-    /// * Collect each author of closed PRs (Should this just list all contributors?)
+    /// * Collect each author of merged PRs
     /// * Sort each PR per area label
     /// * Generate the list of merge PR
     #[command(verbatim_doc_comment)]
