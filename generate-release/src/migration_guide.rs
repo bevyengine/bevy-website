@@ -13,6 +13,7 @@ pub fn generate_migration_guide(
     // TODO use this to figure out the base path
     path: PathBuf,
     client: &mut GithubClient,
+    overwrite_existing: bool,
 ) -> anyhow::Result<()> {
     // Get all PR by area
     let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
@@ -78,8 +79,11 @@ pub fn generate_migration_guide(
 
             let file_path = path.join(format!("{filename}.md"));
 
-            // TODO this should probably return if file already exists, so we don't overwrite changes
-            // Maybe add a flag for this because overwriting is useful while developing this tool
+            if file_path.exists() && !overwrite_existing {
+                // skip existing files because we don't want to overwrite changes when regenerating
+                continue;
+            }
+
             let mut file = std::fs::File::create(&file_path)
                 .context(format!("Failed to create {file_path:?}"))?;
 

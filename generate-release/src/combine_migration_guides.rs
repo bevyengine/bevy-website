@@ -115,7 +115,10 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             }
             writeln!(&mut output, "\n</div>")?;
 
-            let body = lines_iter.map(|l| format!("{l}\n")).collect::<String>();
+            let body = lines_iter
+                .map(|l| l.trim_end())
+                .map(|l| format!("{l}\n"))
+                .collect::<String>();
             write!(&mut output, "{}", body)?;
         }
     }

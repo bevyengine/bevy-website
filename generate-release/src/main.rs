@@ -47,13 +47,16 @@ enum Commands {
         to: String,
 
         /// Release version i.e.: '0.13', '0.14', etc.
-        // TODO use this to generate title somehow?
         #[arg(short, long)]
         release_version: String,
 
         /// Path used to output the generated file. Defaults to ./migration-guide.md
         #[arg(short, long)]
         path: Option<std::path::PathBuf>,
+
+        /// Use this if you want to overwrite existing files
+        #[arg(short, long)]
+        overwrite_existing: bool,
     },
     /// Combine Migration Guides:
     /// * Takes all the guides in the folder and combine them in one single page with zola specific formatting
@@ -144,6 +147,7 @@ fn main() -> anyhow::Result<()> {
             to,
             release_version,
             path,
+            overwrite_existing,
         } => generate_migration_guide(
             &from,
             &to,
@@ -153,6 +157,7 @@ fn main() -> anyhow::Result<()> {
                 ))
             }),
             &mut client,
+            overwrite_existing,
         )?,
         Commands::CombineMigrationGuides {
             title,
