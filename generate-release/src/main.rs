@@ -1,7 +1,7 @@
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
-use migration_guide::generate_migration_guide;
-use release_notes::generate_release_note;
+use migration_guides::generate_migration_guides;
+use release_notes::generate_release_notes;
 use release_notes_website::generate_release_notes_website;
 use std::path::PathBuf;
 
@@ -9,7 +9,7 @@ mod changelog;
 mod github_client;
 mod helpers;
 mod markdown;
-mod migration_guide;
+mod migration_guides;
 mod release_notes;
 mod release_notes_website;
 
@@ -48,7 +48,7 @@ enum Commands {
     /// * For each PR generate a file with the migration guide and a frontmatter with metadata about the PR.
     ///   This parses the markdown and generates valid makrdown that should pass markdownlint rules.
     #[command(verbatim_doc_comment)]
-    MigrationGuide {
+    MigrationGuides {
         /// Use this if you want to overwrite existing files
         #[arg(short, long)]
         overwrite_existing: bool,
@@ -59,10 +59,10 @@ enum Commands {
     /// * Sort each PR per area label
     /// * Generate the list of merge PR
     #[command(verbatim_doc_comment)]
-    ReleaseNote,
+    ReleaseNotes,
     /// Generates the list of contributors and a list of all closed PRs sorted by area labels
     #[command(verbatim_doc_comment)]
-    ReleaseNoteWebsite,
+    ReleaseNotesWebsite,
     Changelog,
 }
 
@@ -70,7 +70,7 @@ fn main() -> anyhow::Result<()> {
     let _ = dotenvy::dotenv();
 
     let args = Args::parse();
-    let repo = if let Commands::ReleaseNoteWebsite { .. } = args.command {
+    let repo = if let Commands::ReleaseNotesWebsite { .. } = args.command {
         "bevy-website"
     } else {
         "bevy"
@@ -86,20 +86,20 @@ fn main() -> anyhow::Result<()> {
         .join(args.release_version);
 
     match args.command {
-        Commands::MigrationGuide { overwrite_existing } => generate_migration_guide(
+        Commands::MigrationGuides { overwrite_existing } => generate_migration_guides(
             &args.from,
             &args.to,
             release_path.join("migration-guides"),
             &mut client,
             overwrite_existing,
         )?,
-        Commands::ReleaseNote => generate_release_note(
+        Commands::ReleaseNotes => generate_release_notes(
             &args.from,
             &args.to,
             release_path.join("release-notes.md"),
             &mut client,
         )?,
-        Commands::ReleaseNoteWebsite => generate_release_notes_website(
+        Commands::ReleaseNotesWebsite => generate_release_notes_website(
             &args.from,
             &args.to,
             release_path.join("release-notes-website.md"),

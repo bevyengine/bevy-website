@@ -7,7 +7,7 @@ use std::{
 };
 
 /// Generates the list of contributors and a list of all closed PRs sorted by area labels
-pub fn generate_release_note(
+pub fn generate_release_notes(
     from: &str,
     to: &str,
     path: PathBuf,

@@ -7,7 +7,7 @@ use crate::{
 };
 use std::{collections::BTreeMap, io::Write as IoWrite, path::PathBuf};
 
-pub fn generate_migration_guide(
+pub fn generate_migration_guides(
     from: &str,
     to: &str,
     path: PathBuf,
