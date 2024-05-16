@@ -5,11 +5,9 @@ use crate::{
     helpers::{get_merged_prs, get_pr_area},
     markdown::write_markdown_section,
 };
-use std::{collections::BTreeMap, fmt::Write, io::Write as IoWrite, path::PathBuf};
+use std::{collections::BTreeMap, io::Write as IoWrite, path::PathBuf};
 
 pub fn generate_migration_guide(
-    title: &str,
-    weight: i32,
     from: &str,
     to: &str,
     // TODO use this to figure out the base path
@@ -103,6 +101,11 @@ areas = [{areas}]
                 "migration guide",
                 true,
             )?;
+            let mut section = section;
+            // some guide have a rule at the end so remove it
+            if section.ends_with("\n---\n") {
+                section = section.replace("\n---\n", "");
+            }
             write!(file, "{}", section)?;
         }
     }

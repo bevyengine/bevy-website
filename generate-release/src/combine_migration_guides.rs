@@ -7,20 +7,20 @@ use std::{
 use anyhow::Context;
 
 pub fn combine_migration_guides(
+    title: String,
+    weight: i32,
     release_version: String,
     output_path: Option<PathBuf>,
 ) -> anyhow::Result<()> {
     let output_path = output_path.unwrap_or(
-        Path::new("../content/learn/migration-guides/")
-            // TODO this should be a nicer name like "0.13 to 0.14"
-            .join(format!("{}.md", &release_version))
+        Path::new("..")
+            .join("content")
+            .join("learn")
+            .join("migration-guides")
+            .join(format!("{}.md", &title))
             .to_path_buf(),
     );
     let mut output = std::fs::File::create(output_path).context("Creating output file")?;
-
-    // TODO
-    let title = &release_version;
-    let weight = 42;
 
     // Write the frontmatter based on given parameters
     write!(
@@ -42,7 +42,7 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
 
     // WARN This assumes it gets executed inside the generate-release folder
     // Should probably just be an input
-    let migration_guides = Path::new("../")
+    let migration_guides = Path::new("..")
         .join("release-content")
         .join(release_version)
         .join("migration-guides");
@@ -89,7 +89,13 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             // remove the double quotes from the value
             title.remove(0);
             title.remove(title.len() - 1);
-            let url = frontmatter.get("url").expect("frontmatter missing url key");
+            let mut url = frontmatter
+                .get("url")
+                .expect("frontmatter missing url key")
+                .to_string();
+            // remove the double quotes from the value
+            url.remove(0);
+            url.remove(url.len() - 1);
             writeln!(&mut output, "### [{title}]({url})")?;
 
             let areas = frontmatter
@@ -108,10 +114,9 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
                 )?;
             }
             writeln!(&mut output, "\n</div>")?;
-            writeln!(&mut output)?;
 
-            let body = lines_iter.collect::<String>();
-            writeln!(&mut output, "{}", body)?;
+            let body = lines_iter.map(|l| format!("{l}\n")).collect::<String>();
+            write!(&mut output, "{}", body)?;
         }
     }
 
