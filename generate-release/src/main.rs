@@ -18,12 +18,26 @@ mod release_notes_website;
 /// Requires a valid `GITHUB_TOKEN` environment variable, you can use a .env file or use your preferred method of passing env arguments.
 ///
 /// Example used to generate the 0.14 release:
-/// cargo run -- migration-guide --from v0.13.0 --to main --release-version 0.14
-/// cargo run -- release-note --from v0.13.0 --to main
-/// cargo run -- release-note-website --from bd4f611f7576c55739b466c6f0039e8421dab57e --to HEAD
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 migration-guide
+/// cargo run -- --from v0.13.0 --to main release-note
+/// cargo run -- --from bd4f611f7576c55739b466c6f0039e8421dab57e --to HEAD release-note-website
 #[derive(ClapParser)]
 #[command(author, version, about, verbatim_doc_comment)]
 struct Args {
+    /// The name of the branch / tag to start from
+    #[arg(short, long)]
+    from: String,
+
+    /// The name of the branch / tag to end on
+    #[arg(short, long)]
+    to: String,
+
+    /// Release version i.e.: '0.13', '0.14', etc.
+    ///
+    /// This should be the version that you are preparing for release.
+    #[arg(short, long)]
+    release_version: String,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -35,24 +49,6 @@ enum Commands {
     ///   This parses the markdown and generates valid makrdown that should pass markdownlint rules.
     #[command(verbatim_doc_comment)]
     MigrationGuide {
-        /// The name of the branch / tag to start from
-        #[arg(long)]
-        from: String,
-
-        /// The name of the branch / tag to end on
-        #[arg(long)]
-        to: String,
-
-        /// Release version i.e.: '0.13', '0.14', etc.
-        ///
-        /// This should be the version that you are preparing for release.
-        #[arg(short, long)]
-        release_version: String,
-
-        /// Path used to output the generated file. Defaults to ./migration-guide.md
-        #[arg(short, long)]
-        path: Option<std::path::PathBuf>,
-
         /// Use this if you want to overwrite existing files
         #[arg(short, long)]
         overwrite_existing: bool,
@@ -63,47 +59,11 @@ enum Commands {
     /// * Sort each PR per area label
     /// * Generate the list of merge PR
     #[command(verbatim_doc_comment)]
-    ReleaseNote {
-        /// The name of the branch / tag to start from
-        #[arg(short, long)]
-        from: String,
-
-        /// The name of the branch / tag to end on
-        #[arg(short, long)]
-        to: String,
-
-        /// Path used to output the generated file. Defaults to ./release-notes.md
-        #[arg(short, long)]
-        path: Option<std::path::PathBuf>,
-    },
+    ReleaseNote,
     /// Generates the list of contributors and a list of all closed PRs sorted by area labels
     #[command(verbatim_doc_comment)]
-    ReleaseNoteWebsite {
-        /// The name of the branch / tag to start from
-        #[arg(short, long)]
-        from: String,
-
-        /// The name of the branch / tag to end on
-        #[arg(short, long)]
-        to: String,
-
-        /// Path used to output the generated file. Defaults to ./release-notes-website.md
-        #[arg(short, long)]
-        path: Option<std::path::PathBuf>,
-    },
-    Changelog {
-        /// The name of the branch / tag to start from
-        #[arg(short, long)]
-        from: String,
-
-        /// The name of the branch / tag to end on
-        #[arg(short, long)]
-        to: String,
-
-        /// Path used to output the generated file. Defaults to ./changelog.md
-        #[arg(short, long)]
-        path: Option<std::path::PathBuf>,
-    },
+    ReleaseNoteWebsite,
+    Changelog,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -120,40 +80,35 @@ fn main() -> anyhow::Result<()> {
         repo.to_string(),
     );
 
+    // WARN this assumes it gets ran from ./generate-release
+    let release_path = PathBuf::from("..")
+        .join("release-content")
+        .join(args.release_version);
+
     match args.command {
-        Commands::MigrationGuide {
-            from,
-            to,
-            release_version,
-            path,
-            overwrite_existing,
-        } => generate_migration_guide(
-            &from,
-            &to,
-            path.unwrap_or_else(|| {
-                PathBuf::from(format!(
-                    "../release-content/{release_version}/migration-guides"
-                ))
-            }),
+        Commands::MigrationGuide { overwrite_existing } => generate_migration_guide(
+            &args.from,
+            &args.to,
+            release_path.join("migration-guides"),
             &mut client,
             overwrite_existing,
         )?,
-        Commands::ReleaseNote { from, to, path } => generate_release_note(
-            &from,
-            &to,
-            path.unwrap_or_else(|| PathBuf::from("./release-notes.md")),
+        Commands::ReleaseNote => generate_release_note(
+            &args.from,
+            &args.to,
+            release_path.join("release-notes.md"),
             &mut client,
         )?,
-        Commands::ReleaseNoteWebsite { from, to, path } => generate_release_notes_website(
-            &from,
-            &to,
-            path.unwrap_or_else(|| PathBuf::from("./release-notes-website.md")),
+        Commands::ReleaseNoteWebsite => generate_release_notes_website(
+            &args.from,
+            &args.to,
+            release_path.join("release-notes-website.md"),
             &mut client,
         )?,
-        Commands::Changelog { from, to, path } => generate_changelog(
-            &from,
-            &to,
-            path.unwrap_or_else(|| PathBuf::from("./changelog.md")),
+        Commands::Changelog => generate_changelog(
+            &args.from,
+            &args.to,
+            release_path.join("changelog.md"),
             &mut client,
         )?,
     };
