@@ -1,11 +1,13 @@
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
+use combine_migration_guides::combine_migration_guides;
 use migration_guide::generate_migration_guide;
 use release_notes::generate_release_note;
 use release_notes_website::generate_release_notes_website;
 use std::path::PathBuf;
 
 mod changelog;
+mod combine_migration_guides;
 mod github_client;
 mod helpers;
 mod markdown;
@@ -55,6 +57,11 @@ enum Commands {
         #[arg(short, long)]
         title: String,
 
+        /// Release version i.e.: '0.13', '0.14', etc.
+        // TODO use this to generate title somehow?
+        #[arg(short, long)]
+        release_version: String,
+
         /// Weight used for sorting
         #[arg(short, long)]
         weight: i32,
@@ -62,6 +69,15 @@ enum Commands {
         /// Path used to output the generated file. Defaults to ./migration-guide.md
         #[arg(short, long)]
         path: Option<std::path::PathBuf>,
+    },
+    CombineMigrationGuides {
+        /// Release version i.e.: '0.13', '0.14', etc.
+        #[arg(short, long)]
+        release_version: String,
+
+        /// Path used to output the generated file. Defaults to ./migration-guide.md
+        #[arg(short, long)]
+        output_path: Option<std::path::PathBuf>,
     },
     ReleaseNote {
         /// The name of the branch / tag to start from
@@ -123,6 +139,7 @@ fn main() -> anyhow::Result<()> {
             from,
             to,
             title,
+            release_version,
             weight,
             path,
         } => generate_migration_guide(
@@ -130,9 +147,17 @@ fn main() -> anyhow::Result<()> {
             weight,
             &from,
             &to,
-            path.unwrap_or_else(|| PathBuf::from("./migration-guide.md")),
+            path.unwrap_or_else(|| {
+                PathBuf::from(format!(
+                    "../release-content/{release_version}/migration-guides"
+                ))
+            }),
             &mut client,
         )?,
+        Commands::CombineMigrationGuides {
+            release_version,
+            output_path: path,
+        } => combine_migration_guides(release_version, path)?,
         Commands::ReleaseNote { from, to, path } => generate_release_note(
             &from,
             &to,

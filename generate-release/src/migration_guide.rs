@@ -13,7 +13,7 @@ pub fn generate_migration_guide(
     from: &str,
     to: &str,
     // TODO use this to figure out the base path
-    _path: PathBuf,
+    path: PathBuf,
     client: &mut GithubClient,
 ) -> anyhow::Result<()> {
     // Get all PR by area
@@ -47,47 +47,19 @@ pub fn generate_migration_guide(
         println!("\nFound {} breaking PRs merged", count);
     }
 
-    let dir = &format!("./{title}");
-    std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
-
-    // Generate the _index file
-    {
-        let mut index = String::new();
-
-        // Write the frontmatter based on given parameters
-        write!(
-            &mut index,
-            r#"+++
-title = "{title}"
-insert_anchor_links = "right"
-[extra]
-weight = {weight}
-long_title = "Migration Guide: {title}"
-+++
-
-Bevy relies heavily on improvements in the Rust language and compiler.
-As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust."#
-        )?;
-        writeln!(&mut index)?;
-        writeln!(&mut index)?;
-        writeln!(&mut index, "<div class=\"migration-guide\">")?;
-        writeln!(&mut index, "</div>")?;
-        // TODO check if already exists
-        std::fs::write(format!("{dir}/_index.md"), index)?;
-    }
+    std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
     // Write all the separate migration guide files
     for (area, prs) in areas {
         let area = area.replace("A-", "");
         let areas = area.split(" + ").collect::<Vec<_>>();
 
-        let dir = &format!(
-            "{dir}/{}",
+        let path = path.join(
             areas
                 .first()
-                .context("There should always be at least one area")?
+                .context("There should always be at least one area")?,
         );
-        std::fs::create_dir_all(dir).context(format!("Failed to create {dir}"))?;
+        std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
         let mut prs = prs;
         prs.sort_by_key(|k| k.1.closed_at);
@@ -106,27 +78,24 @@ As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable rel
             // 64 is completely arbitrary but felt long enough and is a nice power of 2
             filename.truncate(64);
 
-            let file_path = &format!("{dir}/{filename}.md");
+            let file_path = path.join(format!("{filename}.md"));
 
             // TODO this should probably return if file already exists, so we don't overwrite changes
             // Maybe add a flag for this because overwriting is useful while developing this tool
-            let mut file = std::fs::File::create(file_path)
-                .context(format!("Failed to create {file_path}"))?;
+            let mut file = std::fs::File::create(&file_path)
+                .context(format!("Failed to create {file_path:?}"))?;
 
             // Generate a frontmatter with metadata that will be needed to generate the final page
             write!(
                 &mut file,
                 r#"+++
 title = "{title}"
-[extra]
 url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
 areas = [{areas}]
-closed_at = "{closed_at}"
 +++
 "#,
                 areas = areas.join(","),
                 pr_number = pr.number,
-                closed_at = pr.closed_at.format("%Y-%m-%d"),
             )?;
 
             let (section, _) = write_markdown_section(
