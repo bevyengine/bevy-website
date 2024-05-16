@@ -5,12 +5,11 @@ use crate::{
     helpers::{get_merged_prs, get_pr_area},
     markdown::write_markdown_section,
 };
-use std::{collections::BTreeMap, io::Write as IoWrite, path::PathBuf};
+use std::{collections::BTreeMap, fmt::Write as _, io::Write as IoWrite, path::PathBuf};
 
 pub fn generate_migration_guide(
     from: &str,
     to: &str,
-    // TODO use this to figure out the base path
     path: PathBuf,
     client: &mut GithubClient,
     overwrite_existing: bool,
@@ -48,16 +47,18 @@ pub fn generate_migration_guide(
 
     std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
+    let mut metadata = String::new();
+
     // Write all the separate migration guide files
     for (area, prs) in areas {
         let area = area.replace("A-", "");
         let areas = area.split(" + ").collect::<Vec<_>>();
 
-        let path = path.join(
-            areas
-                .first()
-                .context("There should always be at least one area")?,
-        );
+        // let path = path.join(
+        //     areas
+        //         .first()
+        //         .context("There should always be at least one area")?,
+        // );
         std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
         let mut prs = prs;
@@ -68,17 +69,33 @@ pub fn generate_migration_guide(
                 .replace(' ', "_")
                 .replace(|c: char| !c.is_alphanumeric() && c != '_', "");
 
-            // PR number needs to be first so sort remains consistent.
-            // This is fine because github PR numbers are monotonic
-            let mut filename = format!("{}_{}", pr.number, fs_friendly_title);
+            // PR number needs to be first so sorting by name remains consistent.
+            // This works because github's pr numbers are monotonic
+            let mut file_name = format!("{}_{}", pr.number, fs_friendly_title);
 
             // Shorten the filename because we don't want really long file names
             // Some OS still have file path length limits in 2024...
             // 64 is completely arbitrary but felt long enough and is a nice power of 2
-            filename.truncate(64);
+            file_name.truncate(64);
 
-            let file_path = path.join(format!("{filename}.md"));
+            // Generate the metadata for this file
+            writeln!(
+                &mut metadata,
+                r#"[[guides]]
+title = "{title}"
+url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
+areas = [{areas}]
+file_name = "{file_name}.md"
+"#,
+                areas = areas
+                    .iter()
+                    .map(|area| format!("\"{area}\""))
+                    .collect::<Vec<_>>()
+                    .join(","),
+                pr_number = pr.number,
+            )?;
 
+            let file_path = path.join(format!("{file_name}.md"));
             if file_path.exists() && !overwrite_existing {
                 // skip existing files because we don't want to overwrite changes when regenerating
                 continue;
@@ -86,19 +103,6 @@ pub fn generate_migration_guide(
 
             let mut file = std::fs::File::create(&file_path)
                 .context(format!("Failed to create {file_path:?}"))?;
-
-            // Generate a frontmatter with metadata that will be needed to generate the final page
-            write!(
-                &mut file,
-                r#"+++
-title = "{title}"
-url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
-areas = [{areas}]
-+++
-"#,
-                areas = areas.join(","),
-                pr_number = pr.number,
-            )?;
 
             let (section, _) = write_markdown_section(
                 pr.body.as_ref().context("PR has no body")?,
@@ -113,6 +117,8 @@ areas = [{areas}]
             write!(file, "{}", section)?;
         }
     }
+
+    std::fs::write(path.join("_guides.toml"), metadata)?;
 
     Ok(())
 }
