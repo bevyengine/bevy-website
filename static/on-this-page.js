@@ -1,7 +1,7 @@
 //! in nav.on-this-page, sets data-active=true on the link to the header you're currently looking at
 
 if(window.location.hash == ""){
-  otp_set_active(document.querySelector("main h2"));
+  otp_set_active(document.querySelector("main h2") || document.querySelector("main h3"));
 } else {
   otp_set_active(window.location.hash.substring(1));
 }
@@ -35,7 +35,7 @@ let otp_observer =  new IntersectionObserver(
       otp_state.set(entry.target, entry.isIntersecting);
     });
     let intersecting = Array.from(otp_state).filter(([k,v]) => v == true);
-    intersecting.sort(([k,v]) => k.clientTop)
+    intersecting.sort(([k,v]) => -k.getBoundingClientRect().y)
     if (intersecting.length > 0) {
       otp_set_active(intersecting[0][0]);
     }
