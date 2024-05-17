@@ -1,7 +1,6 @@
 /// internal page navigation
 /// i.e., the "On This Page" section
 
-
 .on-this-page {
   $h-padding: 12px;
   padding-block: calc($h-padding/2);
@@ -12,29 +11,24 @@
     padding-inline-start: $h-padding;
   }
 
-  >ul {
+  > ul {
     padding-inline: $h-padding;
   }
 
-  li[data-active=true] {
-    font-weight: bolder;
-
-    li {
-      font-weight: normal;
-    }
+  li[data-active="true"] > a {
+    color: #ececec;
   }
 
   a {
     display: block;
     text-wrap: balance;
     padding-block: 3px;
-    // copied from .media-content
+    color: #868686;
     text-decoration: none;
-    color: $link-color;
     word-break: break-word;
 
     &:hover {
-      text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+      color: lighten(#868686, 20);
     }
 
     @media ($bp-tablet-portrait-down) {
