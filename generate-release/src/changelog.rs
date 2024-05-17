@@ -1,7 +1,6 @@
 use crate::{
     github_client::{GithubClient, GithubIssuesResponse},
     helpers::{get_merged_prs, get_pr_area},
-    markdown::write_markdown_section,
 };
 use std::{collections::BTreeMap, fmt::Write, path::PathBuf};
 
@@ -9,9 +8,9 @@ pub fn generate_changelog(
     from: &str,
     to: &str,
     path: PathBuf,
-    client: &mut GithubClient,
+    client: &GithubClient,
 ) -> anyhow::Result<()> {
-    let mut out = String::new();
+    let mut output = String::new();
 
     let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
 
@@ -24,41 +23,34 @@ pub fn generate_changelog(
             .push((title.clone(), pr.clone()));
     }
 
-    writeln!(out, "# Changelog")?;
+    writeln!(output, "## Full Changelog")?;
+    writeln!(output, "The changes mentioned above are only the most appealing, highest impact changes that we've made this cycle.
+Innumerable bug fixes, documentation changes and API usability tweaks made it in too.
+For a complete list of changes, check out the PRs listed below.")?;
 
     let mut count = 0;
     for (area, prs) in areas {
-        writeln!(out, "## {area}")?;
+        writeln!(output)?;
+        writeln!(output, "### {area}")?;
+        writeln!(output)?;
 
         let mut prs = prs;
         prs.sort_by_key(|k| k.1.closed_at);
 
         for (title, pr) in prs {
-            println!("# {title}");
-
-            if let Some(body) = pr.body.as_ref() {
-                let heading = format!(
-                    "\n### [{}](https://github.com/bevyengine/bevy/pull/{})",
-                    title, pr.number
-                );
-                writeln!(&mut out, "{heading}")?;
-
-                let (section, found) = write_markdown_section(body, "changelog", false)?;
-                write!(out, "{section}")?;
-                if found {
-                    count += 1;
-                } else {
-                    // Changelog not found so remove heading
-                    // We need to do this because we don't know if there's a changelog when writing the heading
-                    out = out.replace(&heading, "");
-                }
-            }
+            writeln!(
+                output,
+                "* [{}](https://github.com/bevyengine/bevy/pull/{})",
+                title.trim(),
+                pr.number
+            )?;
+            count += 1;
         }
     }
 
-    println!("\nFound {count} PRs with a changelog");
+    println!("\nAdded {count} PRs to the changelog");
 
-    std::fs::write(path, out)?;
+    std::fs::write(path, output)?;
 
     Ok(())
 }

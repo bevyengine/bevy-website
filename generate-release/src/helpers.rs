@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::github_client::{GithubClient, GithubCommitResponse, GithubIssuesResponse};
 use anyhow::{bail, Context};
 use regex::Regex;
@@ -23,8 +25,9 @@ pub fn get_merged_prs(
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
     let prs = client.get_merged_prs(base_commit_date, label)?;
     println!(
-        "Found {} merged PRs since {} (the base commit date)",
+        "Found {} merged PRs and {} commits since {} (the base commit date)",
         prs.len(),
+        commits.len(),
         base_commit_date
     );
 
@@ -85,31 +88,41 @@ pub fn get_pr_area(pr: &GithubIssuesResponse) -> String {
     }
 }
 
+/// Gets a list of all authors and co-authors for the given commit
+/// Will retry the query automatically a few times
 pub fn get_contributors(
-    client: &mut GithubClient,
+    client: &GithubClient,
     commit: &GithubCommitResponse,
     pr: &GithubIssuesResponse,
 ) -> anyhow::Result<Vec<String>> {
-    // Find authors and co-authors
-    // TODO this could probably be done with multiple threads to speed it up
-    match client.get_contributors(&commit.sha) {
+    let get_contributors_internal = || match client.get_contributors(&commit.sha) {
         Ok(logins) => {
             if logins.is_empty() {
                 bail!(
-                    "\x1b[93mNo contributors found for https://github.com/bevyengine/{}/pull/{} sha: {}\x1b[0m",
-                    client.repo,
-                    pr.number,
-                    commit.sha
-                );
+                        "\x1b[93mNo contributors found for https://github.com/bevyengine/{}/pull/{} sha: {}\x1b[0m",
+                        client.repo,
+                        pr.number,
+                        commit.sha
+                    );
             }
             Ok(logins)
         }
+        err => err,
+    };
+
+    let mut retry_count = 0;
+    match get_contributors_internal() {
+        Ok(logins) => Ok(logins),
         Err(err) => {
-            bail!(
-                "\x1b[93m{err:?}\nhttps://github.com/bevyengine/bevy/pull/{}\n{}\x1b[0m",
-                pr.number,
-                commit.sha
-            );
+            while retry_count < 20 {
+                println!("\x1b[93mFailed to get contributors waiting and retrying: {err:?}\x1b[0m",);
+                std::thread::sleep(Duration::from_secs(2));
+                match get_contributors_internal() {
+                    Ok(logins) => return Ok(logins),
+                    Err(_) => retry_count += 1,
+                }
+            }
+            bail!("Too many retries");
         }
     }
 }

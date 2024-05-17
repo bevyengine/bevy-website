@@ -1,6 +1,6 @@
-use std::fmt::Debug;
+use std::{collections::HashMap, fmt::Debug};
 
-use anyhow::bail;
+use anyhow::{bail, Context};
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
 
@@ -262,7 +262,7 @@ query {{
             .send_json(ureq::json!({ "query": query }))?;
         let json: serde_json::Value = resp.into_json()?;
 
-        let mut logins = vec![];
+        let mut logins = HashMap::new();
 
         // this returns an heavily nested struct so we parse it manually instead of having 6 intermediary struct
         let nodes = &json["data"]["resource"]["authors"]["nodes"];
@@ -270,21 +270,35 @@ query {{
             bail!("nodes should be an array\n: {json}");
         };
         for node in nodes {
-            if let Some(login) = &node["user"]["login"].as_str() {
-                logins.push(login.to_string());
-                continue;
-            } else if node["user"].is_null() {
-                // In some situations, github doesn't have a github user associated with a commit,
-                // so instead we need to get the name associated with the commit
-                if let Some(name) = &node["name"].as_str() {
-                    println!("\x1b[93mUser not found, using name instead.\n{json}\x1b[0m");
-                    logins.push(name.to_string());
-                    continue;
+            let name = node["name"]
+                .as_str()
+                .context("key name not found in node")?;
+            if node["user"].is_null() {
+                if !logins.contains_key(name) {
+                    logins.insert(name, None);
+                }
+            } else {
+                let login = node["user"]["login"]
+                    .as_str()
+                    .context("Key login not found in user")?;
+                if matches!(logins.get(name), Some(None) | None) {
+                    logins.insert(name, Some(login));
                 }
             }
-            bail!("Unexpected user format. \n{json}")
         }
-        Ok(logins)
+        let mut out = Vec::new();
+        for (name, login) in logins {
+            let contributor = if let Some(login) = login {
+                login
+            } else {
+                println!(
+                    "\x1b[93mUser login not found, using name '{name}' instead.\n{json}\x1b[0m"
+                );
+                name
+            };
+            out.push(contributor.to_string());
+        }
+        Ok(out)
     }
 
     pub fn get_commit(&self, git_ref: &str) -> anyhow::Result<GithubCommitResponse> {

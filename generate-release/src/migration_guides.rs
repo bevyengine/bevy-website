@@ -11,7 +11,7 @@ pub fn generate_migration_guides(
     from: &str,
     to: &str,
     path: PathBuf,
-    client: &mut GithubClient,
+    client: &GithubClient,
     overwrite_existing: bool,
 ) -> anyhow::Result<()> {
     // Get all PRs by area
@@ -77,7 +77,7 @@ pub fn generate_migration_guides(
 /// Gets all PRs that have either a migration guide section or the Breaking-Change label
 /// The PRs are stored in a [`BTreeMap`] where the key is the list of area labels of the PR
 fn get_prs_by_areas(
-    client: &mut GithubClient,
+    client: &GithubClient,
     from: &str,
     to: &str,
 ) -> Result<BTreeMap<String, Vec<(String, GithubIssuesResponse)>>, anyhow::Error> {
