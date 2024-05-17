@@ -24,8 +24,9 @@ function otp_set_active(id_or_node){
   } else {
     id = id_or_node;
   }
-  document.querySelectorAll(".on-this-page li").forEach((li) => {
-    li.setAttribute("data-active", li.getAttribute("data-fragment") == id);
+  id = "#" + id;
+  document.querySelectorAll(".on-this-page a").forEach((li) => {
+    li.setAttribute("data-active", li.getAttribute("href") == id);
   });
 }
 
