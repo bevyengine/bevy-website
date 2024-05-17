@@ -1,3 +1,4 @@
+use anyhow::Context;
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
 use contributors::generate_contributors;
@@ -81,6 +82,8 @@ fn main() -> anyhow::Result<()> {
     let release_path = PathBuf::from("..")
         .join("release-content")
         .join(args.release_version);
+
+    std::fs::create_dir_all(&release_path).context("Creating the release-content path")?;
 
     match args.command {
         Commands::MigrationGuides { overwrite_existing } => generate_migration_guides(

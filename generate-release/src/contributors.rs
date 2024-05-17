@@ -1,3 +1,4 @@
+use anyhow::Context;
 use rayon::prelude::*;
 
 use crate::github_client::GithubClient;
@@ -47,7 +48,7 @@ pub fn generate_contributors(
     }
     writeln!(output)?;
 
-    std::fs::write(path, output)?;
+    std::fs::write(path, output).context("Writing contributors file")?;
 
     Ok(())
 }
