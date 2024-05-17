@@ -19,6 +19,9 @@ mod release_notes;
 ///
 /// Example used to generate the 0.14 release:
 /// cargo run -- --from v0.13.0 --to main --release-version 0.14 migration-guides
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 release-notes
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 changelog
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 contributors
 #[derive(ClapParser)]
 #[command(author, version, about, verbatim_doc_comment)]
 struct Args {
@@ -59,6 +62,9 @@ enum Commands {
     /// Generates a list of all the merged PRs for the given release
     Changelog,
     /// Generates the list of contributors
+    ///
+    /// This is very slow because it needs to make a network request for each commit
+    #[command(verbatim_doc_comment)]
     Contributors,
 }
 
