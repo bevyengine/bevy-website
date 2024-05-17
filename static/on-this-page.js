@@ -34,10 +34,12 @@ let otp_observer =  new IntersectionObserver(
     entries.forEach(entry => {
       otp_state.set(entry.target, entry.isIntersecting);
     });
-    let intersecting = Array.from(otp_state).filter(([k,v]) => v == true);
-    intersecting.sort(([k,v]) => -k.getBoundingClientRect().y)
+    let intersecting = Array.from(otp_state)
+      .filter(([_el, inter]) => inter)
+      .map(([el, _inter]) => el);
+    intersecting.sort((element) => -element.getBoundingClientRect().y)
     if (intersecting.length > 0) {
-      otp_set_active(intersecting[0][0]);
+      otp_set_active(intersecting[0]);
     }
   }, {
     rootMargin: "0px 0px 20% 0px",
