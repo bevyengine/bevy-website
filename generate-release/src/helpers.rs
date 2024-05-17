@@ -99,11 +99,11 @@ pub fn get_contributors(
         Ok(logins) => {
             if logins.is_empty() {
                 bail!(
-                        "\x1b[93mNo contributors found for https://github.com/bevyengine/{}/pull/{} sha: {}\x1b[0m",
-                        client.repo,
-                        pr.number,
-                        commit.sha
-                    );
+                    "\x1b[93mNo contributors found for https://github.com/bevyengine/{}/pull/{} sha: {}\x1b[0m",
+                    client.repo,
+                    pr.number,
+                    commit.sha
+                );
             }
             Ok(logins)
         }
