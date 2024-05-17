@@ -2,6 +2,7 @@ use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
 use contributors::generate_contributors;
 use migration_guides::generate_migration_guides;
+use release_notes::generate_release_notes;
 use std::path::PathBuf;
 
 mod changelog;
@@ -10,6 +11,7 @@ mod github_client;
 mod helpers;
 mod markdown;
 mod migration_guides;
+mod release_notes;
 
 /// Generates markdown files used for a bevy releases.
 ///
@@ -49,6 +51,11 @@ enum Commands {
         #[arg(short, long)]
         overwrite_existing: bool,
     },
+    ReleaseNotes {
+        /// Use this if you want to overwrite existing files
+        #[arg(short, long)]
+        overwrite_existing: bool,
+    },
     /// Generates a list of all the merged PRs for the given release
     Changelog,
     /// Generates the list of contributors
@@ -74,6 +81,13 @@ fn main() -> anyhow::Result<()> {
             &args.from,
             &args.to,
             release_path.join("migration-guides"),
+            &client,
+            overwrite_existing,
+        )?,
+        Commands::ReleaseNotes { overwrite_existing } => generate_release_notes(
+            &args.from,
+            &args.to,
+            release_path.join("release-notes"),
             &client,
             overwrite_existing,
         )?,

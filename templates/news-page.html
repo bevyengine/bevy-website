@@ -71,7 +71,9 @@
       {% endif %}
     </div>
   {% endif %}
-  <div class="media-content news-content">{{ page.content | safe }}</div>
+  <div class="media-content news-content">
+    {{ page.content | safe }}
+  </div>
   <script type="module">
   import { enable_image_compare } from '/components.js';
 
