@@ -37,7 +37,7 @@ let otp_observer =  new IntersectionObserver(
     let intersecting = Array.from(otp_state)
       .filter(([_el, inter]) => inter)
       .map(([el, _inter]) => el);
-    intersecting.sort((element) => -element.getBoundingClientRect().y)
+    intersecting.sort((element) => -element.getBoundingClientRect().y);
     if (intersecting.length > 0) {
       otp_set_active(intersecting[0]);
     }
