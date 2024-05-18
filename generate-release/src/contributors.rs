@@ -22,7 +22,7 @@ pub fn generate_contributors(
     // It still results in getting the full list faster overall
     rayon::ThreadPoolBuilder::new()
         // if we go too fast github starts complaining, so don't use all threads
-        .num_threads(4)
+        .num_threads(3)
         .build_global()
         .unwrap();
     let contributors = merged_prs
