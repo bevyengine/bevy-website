@@ -41,12 +41,11 @@ pub fn generate_contributors(
 
     let mut output = String::new();
 
-    writeln!(output, "## Contributors\n")?;
-    writeln!(output, "A huge thanks to the {} contributors that made this release (and associated docs) possible! In random order:\n", contributors.len())?;
-    for author in &contributors {
-        writeln!(output, "- @{author}")?;
+    for name in &contributors {
+        writeln!(output, r#"[[contributors]]
+name = "{name}"
+"#)?;
     }
-    writeln!(output)?;
 
     std::fs::write(path, output).context("Writing contributors file")?;
 

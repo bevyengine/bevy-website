@@ -109,7 +109,7 @@ fn main() -> anyhow::Result<()> {
         Commands::Contributors => generate_contributors(
             &args.from,
             &args.to,
-            release_path.join("contributors.md"),
+            release_path.join("contributors.toml"),
             &client,
         )?,
     };
