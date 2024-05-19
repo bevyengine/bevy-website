@@ -25,7 +25,7 @@ pub fn generate_contributors(
         .num_threads(3)
         .build_global()
         .unwrap();
-    let contributors = merged_prs
+    let mut contributors = merged_prs
         .par_iter()
         .map(|(pr, commit, _)| -> HashSet<String> {
             let mut contributors = HashSet::new();
@@ -33,11 +33,15 @@ pub fn generate_contributors(
             for c in pr_contributors {
                 contributors.insert(c);
             }
-            contributors.insert(pr.user.login.clone());
+            contributors.insert(format!("@{}", pr.user.login.clone()));
             contributors
         })
         .flatten()
         .collect::<HashSet<String>>();
+
+    contributors.remove("@github-actions[bot]");
+
+    println!("Found {} unique contributors", contributors.len());
 
     let mut output = String::new();
 

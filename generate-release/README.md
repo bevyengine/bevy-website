@@ -90,7 +90,7 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 <a class="button button--pink header__cta" href="/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"></a>
 
 <!-- Contributors -->
-{{ load_markdown(md_path = "./release-content/0.14/contributors.md") }}
+{{ contributors(path="./release-content/0.14/contributors.toml") }}
 
 <!-- Changelog -->
 {{ load_markdown(md_path = "./release-content/0.14/changelog.md") }}
