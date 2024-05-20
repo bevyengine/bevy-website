@@ -49,12 +49,13 @@ document.getElementById("search-dialog").addEventListener('click', function (eve
     }
 });
 
-/// just a contrivance to clean up the global namespace
 class Search {
     RESULTS_LIMIT = 10;
     $dialog = document.getElementById("search-dialog")
     $input = document.getElementById("search-dialog__input")
+    $results = document.getElementById("search-dialog__results")
     $search_tip_list = document.querySelector("#search-dialog aside ul");
+    fuse = null;
 
     open() {
         this.$dialog.showModal();
@@ -65,16 +66,33 @@ class Search {
     change_tip() {
         let length = this.$search_tip_list.children.length;
         let choice = Math.floor(Math.random() * length);
-        console.trace("chose tip", choice);
+        console.debug("chose tip", choice);
         Array.from(this.$search_tip_list.children).forEach(
             (tip, i) => tip.setAttribute("data-chosen", i == choice
         ));
     }
 
-    search() {
+    async search() {
+        let fetched = await (await fetch("/search_index.en.json")).json()
+        this.fuse ??= new Fuse(fetched, {
+            keys: ["title", "body"]
+        });
         /** @type {string} */
         const query = this.$input.value;
-        console.trace("Search::handle:", query);
+        console.debug("Search::search:", query);
+        if(query.length == 0) {
+            return;
+        }
+        let results = this.fuse.search(query);
+        console.debug(results);
+        this.$results.innerHTML = "";
+        results.slice(0, this.RESULTS_LIMIT).forEach(result => {
+            const a = document.createElement("a");
+            a.innerText = result.item.title;
+            a.role = "listitem";
+            a.href = result.item.url;
+            this.$results.appendChild(a)
+        })
     }
 }
 
