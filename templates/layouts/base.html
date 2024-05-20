@@ -7,6 +7,18 @@
   {% set_global section_or_page = section | default(value=page) %}
 {% endif %}
 
+{% if section_or_page %}
+  {# Possible docs root section paths. A temporary workdown. TODO: find a better solution #}
+  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "contributing"] %}
+  {% for root_section_path in root_section_paths %}
+    {% set components = root_section_path | split(pat="/") %}
+    {% if section_or_page.components | slice(end=components | length) == components %}
+      {% set_global root_section = get_section(path=root_section_path ~ "/_index.md") %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
 {% set current_path = current_path | default(value="/") %}
 {% if section and section.title %}
   {% if section.path is starting_with("/learn/book/") %}
