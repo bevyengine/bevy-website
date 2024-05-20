@@ -30,10 +30,20 @@
 {% endblock page_menu %}
 
 {% block page_name %}
-  {% if section_or_page and section_or_page.path is starting_with("/learn/book/") %}
-    The Book
-  {% else %}
-    Migration Guides
+  {% if section_or_page %}
+    {% if section_or_page.path is starting_with("/learn/book/") %}
+      The Book
+    {% elif section_or_page.path is starting_with("/learn/migration-guides/") %}
+      Migration Guides
+    {% elif section_or_page.path is starting_with("/learn/errors/") %}
+      Bevy Errors
+    {% elif section_or_page.path is starting_with("/learn/quick-start/") %}
+      Quick Start
+    {% elif section_or_page.path is starting_with("/learn/advanced-examples") %}
+      Advanced Examples
+    {% elif section_or_page.path is starting_with("/contributing/") %}
+      Contributing Guide
+    {% endif %}
   {% endif %}
 {% endblock page_name %}
 
