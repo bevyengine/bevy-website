@@ -33,7 +33,7 @@
   form {
     $input-height: 2em;
     display: flex;
-    gap: 0.5em;
+    gap: 1em;
     align-items: center;
     margin-bottom: 1em;
 
@@ -52,19 +52,11 @@
     }
   }
 
-  .search-dialog__recent {
-    &__none {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 5em;
-      color: $subtitle-color;
-    }
-  }
-
   .search-dialog__results {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin: 0;
+    padding: 1em;
     gap: 1em;
     a {
       display: block;
