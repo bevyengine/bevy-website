@@ -5,8 +5,6 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-# Using Github Issues
-
 Bevy tracks bugs and feature requests using [Github Issues], which is an issue tracker and discussion space. You can find Bevy's issue page [here](https://github.com/bevyengine/bevy/issues), where you can navigate, filter, and view individual issues.
 
 [Github Issues]: https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues
