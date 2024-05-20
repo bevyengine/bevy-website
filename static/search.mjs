@@ -1,3 +1,5 @@
+import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs'
+
 
 /**
  * the actual sauce. sends the search off to elasticlunr and displays the results.
@@ -76,4 +78,4 @@ class __Search {
     }
 }
 
-const SEARCH = new __Search()
+export default new __Search()
