@@ -51,13 +51,13 @@ document.getElementById("search-dialog").addEventListener('click', function (eve
 class __Search {
     RESULTS_LIMIT = 10;
     $dialog = document.getElementById("search-dialog")
+    $input = document.getElementById("search-dialog__input")
     $search_tip_list = document.querySelector("#search-dialog aside ul");
 
     open() {
         this.$dialog.showModal();
         this.change_tip();
-        // search_history_show();
-        // search_key_handler();
+        this.search();
     }
 
     change_tip() {
@@ -67,6 +67,12 @@ class __Search {
         Array.from(this.$search_tip_list.children).forEach(
             (tip, i) => tip.setAttribute("data-chosen", i == choice
         ));
+    }
+
+    search() {
+        /** @type {string} */
+        const query = this.$input.value;
+        console.trace("Search::handle:", query);
     }
 }
 
