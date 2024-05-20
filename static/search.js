@@ -115,3 +115,12 @@ function search_key_handler(){
         $results.append(link);
     });
 }
+
+document.getElementById("search-dialog").addEventListener('click', function (event) {
+    // based on https://stackoverflow.com/a/69421512
+    var rect = this.getBoundingClientRect();
+    if (!(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+        && rect.left <= event.clientX && event.clientX <= rect.left + rect.width)) {
+        this.close();
+    }
+});
