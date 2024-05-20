@@ -50,7 +50,7 @@ document.getElementById("search-dialog").addEventListener('click', function (eve
 });
 
 /// just a contrivance to clean up the global namespace
-class __Search {
+class Search {
     RESULTS_LIMIT = 10;
     $dialog = document.getElementById("search-dialog")
     $input = document.getElementById("search-dialog__input")
@@ -78,4 +78,4 @@ class __Search {
     }
 }
 
-export default new __Search()
+export default new Search()
