@@ -32,6 +32,7 @@
   }
 
   a {
+    // stolen from https://github.com/h5bp/html5-boilerplate/
     &[href]::after {
       content: " (" attr(href) ")";
     }
