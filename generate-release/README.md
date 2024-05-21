@@ -43,11 +43,7 @@ weight = 9
 long_title = "Migration Guide: 0.13 to 0.14"
 +++
 
-{% callout(type="warning") %}
-    Bevy relies heavily on improvements in the Rust language and compiler. As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
-{% end %}
-
-{{ migration_guides(path="./release-content/0.14/migration-guides/") }}
+{{ migration_guides(version="0.14") }}
 ```
 
 The most important part of this is the `migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and generate appropriate markup for it.
@@ -78,23 +74,15 @@ public_draft = _release tracking issue number_
 
 <!-- more -->
 
-{{ combine_release_notes(release_content_path = "./release-content/0.14/") }}
+{{ release_notes(version="0.14") }}
 
-## <a name="what-s-next"></a>What's Next?
+## What's Next?
 
 <!-- TODO What's next -->
 
-## Support Bevy
-
-Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mission, consider [sponsoring us](/donate) ... every bit helps!
-
-<a class="button button--pink header__cta" href="/donate">Donate <img class="button__icon" src="/assets/heart.svg" alt="heart icon"></a>
-
-<!-- Contributors -->
-{{ contributors(path="./release-content/0.14/contributors.toml") }}
-
-<!-- Changelog -->
-{{ changelog(path="./release-content/0.14/changelog.toml")}}
+{{ support_bevy() }}
+{{ contributors(version="0.14") }}
+{{ changelog(version="0.14")}}
 ```
 
 The most important part of this is the `combine_release_notes`, `changelog`, and `contributors` shortcodes. `combine_release_notes` will get the list of release notes from the `_release_notes.toml` file and combine all the separate file and add them to this file. `contributors()` will load the `contributors.md` file and generate the necessary markup. `changelog()` will load the `changelog.md` file and generate the necessary markup.

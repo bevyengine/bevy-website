@@ -1,4 +1,5 @@
-{% set data = load_data(path=path) %}
+{% import "macros/path.html" as macros %}
+{% set data = load_data(path=macros::release_path(version=version, path="/changelog.toml")) %}
 
 ## Full Changelog
 
