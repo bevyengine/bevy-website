@@ -1,46 +1,8 @@
 import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs'
 
 
-/**
- * the actual sauce. sends the search off to elasticlunr and displays the results.
- */
-function search_key_handler() {
-    console.trace("search_key_handler()")
-    let $dialog = document.getElementById("search-dialog")
-    let $recent = $dialog.querySelector(".search-dialog__recent")
-    let $results = $dialog.querySelector(".search-dialog__results")
-    let query = $dialog.querySelector("form input").value;
-    if (query.length > 0) {
-        $recent.style.display = "none";
-        $results.style.display = null;
-    } else {
-        $recent.style.display = "block";
-        $results.style.display = "none";
-        return;
-    }
-    // search_history_push(query);
-    let result = SEARCH_INDEX.search(query, {
-        fields: {
-            title: { boost: 2 },
-            body: { boost: 1 }
-        },
-        expand: true
-    });
-    if (result.length == 0) {
-        console.trace("no results");
-    }
-    result = result.slice(0, SEARCH_RESULTS_LIMIT);
-    $results.innerHTML = "";
-    result.forEach(result => {
-        let link = document.createElement("a");
-        link.href = result.ref;
-        link.role = "list-item";
-        link.innerText = `${result.doc.title}`;
-        $results.append(link);
-    });
-}
-
 document.getElementById("search-dialog").addEventListener('click', function (event) {
+    // allow clicking out of the search dialog
     // based on https://stackoverflow.com/a/69421512
     var rect = this.getBoundingClientRect();
     if (!(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
@@ -75,20 +37,21 @@ class Search {
     async search() {
         let fetched = await (await fetch("/search_index.en.json")).json()
         this.fuse ??= new Fuse(fetched, {
-            keys: ["title", "body"]
+            keys: ["title", "body"],
+            includeMatches: true,
         });
         /** @type {string} */
         const query = this.$input.value;
-        console.debug("Search::search:", query);
+        console.debug(`search: "${query}"`);
         if(query.length == 0) {
             return;
         }
         let results = this.fuse.search(query);
-        console.debug(results);
         this.$results.innerHTML = "";
         results.slice(0, this.RESULTS_LIMIT).forEach(result => {
             const a = document.createElement("a");
-            a.innerText = result.item.title;
+            console.debug(result)
+            a.innerText = `${result.item.title}`;
             a.role = "listitem";
             a.href = result.item.url;
             this.$results.appendChild(a)
