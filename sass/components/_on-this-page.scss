@@ -15,25 +15,27 @@
     padding-inline: $h-padding;
   }
 
-  li[data-active="true"] > a {
-    color: #ececec;
-  }
-
   a {
+    $color: #868686;
     display: block;
     text-wrap: balance;
     padding-block: 4px;
-    color: #868686;
+    color: $color;
     text-decoration: none;
     word-break: break-word;
-
-    &:hover {
-      color: lighten(#868686, 20);
-    }
 
     @media ($bp-tablet-portrait-down) {
       // increase hit area for touchscreens
       padding-block: 6px;
     }
+
+    &:hover {
+      color: lighten($color, 20);
+    }
+
+    &[data-active=true] {
+      color: $color-white;
+    }
+
   }
 }
