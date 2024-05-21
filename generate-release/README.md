@@ -50,7 +50,7 @@ long_title = "Migration Guide: 0.13 to 0.14"
 {{ migration_guides(path="./release-content/0.14/migration-guides/") }}
 ```
 
-The most important part of this is the `migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and generate appropritate markup for it.
+The most important part of this is the `migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and generate appropriate markup for it.
 
 Remember to update the weight to be higher than the previous guides.
 
