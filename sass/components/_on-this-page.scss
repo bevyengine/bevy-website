@@ -22,7 +22,7 @@
   a {
     display: block;
     text-wrap: balance;
-    padding-block: 3px;
+    padding-block: 4px;
     color: #868686;
     text-decoration: none;
     word-break: break-word;
@@ -33,7 +33,7 @@
 
     @media ($bp-tablet-portrait-down) {
       // increase hit area for touchscreens
-      padding-block: 3px;
+      padding-block: 6px;
     }
   }
 }
