@@ -20,13 +20,11 @@
 {% endblock head_extensions %}
 
 {% block mobile_page_menu %}
-  {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-  {{ docs_macros::docs_menu(prefix="mobile-menu", root=get_section(path=root_section_path) ) }}
+  {{ docs_macros::docs_menu(prefix="mobile-menu", root=root_section) }}
 {% endblock mobile_page_menu %}
 
 {% block page_menu %}
-  {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-  {{ docs_macros::docs_menu(prefix="page-menu", root=get_section(path=root_section_path) ) }}
+  {{ docs_macros::docs_menu(prefix="page-menu", root=root_section ) }}
 {% endblock page_menu %}
 
 {% block page_name %}
@@ -41,8 +39,6 @@
   <div class="docs-page">
     <div class="docs-content">
       {% set is_migration_guide = current_path is starting_with("/learn/migration-guides") %}
-      {% set root_section_path = section_or_page.components | slice(end=2) | concat(with="_index.md") | join(sep="/") %}
-      {% set root_section = get_section(path=root_section_path) %}
 
       {# Create an array of sections and pages in reading order #}
       {% set all_pages = [] %}
@@ -112,7 +108,7 @@
         {{ section_or_page.content | safe }}
         {% block docs_content %}{% endblock docs_content %}
       </div>
-      <div class="docs-footer">
+      <div class="docs-footer print:hidden">
         <nav class="docs-footer__nav">
           {% if next_page %}
             <a class="docs-footer__link docs-footer__link--next"

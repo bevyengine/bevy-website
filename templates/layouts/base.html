@@ -7,6 +7,18 @@
   {% set_global section_or_page = section | default(value=page) %}
 {% endif %}
 
+{% if section_or_page %}
+  {# Possible docs root section paths. A temporary workaround. TODO: issue #1181(https://github.com/bevyengine/bevy-website/issues/1181) find a better solution #}
+  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "learn/errors", "contributing"] %}
+  {% for root_section_path in root_section_paths %}
+    {% set components = root_section_path | split(pat="/") %}
+    {% if section_or_page.components | slice(end=components | length) == components %}
+      {% set_global root_section = get_section(path=root_section_path ~ "/_index.md") %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
 {% set current_path = current_path | default(value="/") %}
 {% if section and section.title %}
   {% if section.path is starting_with("/learn/book/") %}
@@ -79,7 +91,7 @@
   <body>
     <div class="layout">
       <input id="mobile-menu-state" class="hidden" type="checkbox">
-      <header class="layout__header header" data-mobile-menu-state-container>
+      <header class="layout__header header print:hidden" data-mobile-menu-state-container>
         <div class="header__content">
           <label class="main-menu-backdrop" for="mobile-menu-state"></label>
           <label class="header__hamburger button-square button-square--header"
@@ -192,7 +204,7 @@
           {% block content %}{% endblock content %}
         </div>
       </main>
-      <footer>
+      <footer class="print:hidden">
         {% block footer_extensions %}{% endblock footer_extensions %}
         <div class="footer__social-container">
           <a class="footer__social" href="https://github.com/bevyengine/bevy">
