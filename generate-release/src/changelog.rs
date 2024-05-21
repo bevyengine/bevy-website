@@ -12,7 +12,7 @@ pub fn generate_changelog(
 ) -> anyhow::Result<()> {
     let mut output = String::new();
 
-    let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
+    let mut areas = BTreeMap::<Vec<String>, Vec<(String, GithubIssuesResponse)>>::new();
 
     let merged_prs = get_merged_prs(client, from, to, None)?;
     for (pr, _, title) in &merged_prs {
@@ -23,29 +23,40 @@ pub fn generate_changelog(
             .push((title.clone(), pr.clone()));
     }
 
-    writeln!(output, "## Full Changelog")?;
-    writeln!(output, "The changes mentioned above are only the most appealing, highest impact changes that we've made this cycle.
-Innumerable bug fixes, documentation changes and API usability tweaks made it in too.
-For a complete list of changes, check out the PRs listed below.")?;
-
     let mut count = 0;
-    for (area, prs) in areas {
-        writeln!(output)?;
-        writeln!(output, "### {area}")?;
-        writeln!(output)?;
+    let mut areas_vec: Vec<_> = areas.into_iter().collect();
+
+    // Move empty areas to the end
+    areas_vec.sort_by(|(a, _), (b, _)| match (a.is_empty(), b.is_empty()) {
+        (false, false) => a.join(" ").cmp(&b.join(" ")),
+        (false, true) => std::cmp::Ordering::Less,
+        (true, false) => std::cmp::Ordering::Greater,
+        (true, true) => std::cmp::Ordering::Equal,
+    });
+
+    for (area, prs) in areas_vec {
+        writeln!(output, "[[areas]]")?;
+        writeln!(
+            output,
+            "name = [{}]",
+            area.iter()
+                .map(|a| format!("\"{}\"", a))
+                .collect::<Vec<_>>()
+                .join(", ")
+        )?;
 
         let mut prs = prs;
         prs.sort_by_key(|k| k.1.closed_at);
 
         for (title, pr) in prs {
-            writeln!(
-                output,
-                "* [{}](https://github.com/bevyengine/bevy/pull/{})",
-                title.trim(),
-                pr.number
-            )?;
+            writeln!(output, "[[areas.prs]]")?;
+            writeln!(output, "title = \"{}\"", title.trim().replace('"', "\\\""))?;
+            writeln!(output, "number = {}", pr.number)?;
+
             count += 1;
         }
+
+        writeln!(output)?;
     }
 
     println!("\nAdded {count} PRs to the changelog");

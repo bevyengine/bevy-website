@@ -8,9 +8,9 @@
 ### [{{ guide.title }}]({{ guide.url }})
 
 <div class="migration-guide-area-tags">
-  {% for area in guide.areas %}
-    <div class="migration-guide-area-tag">{{ area }}</div>
-  {% endfor %}
+{% for area in guide.areas %}
+<div class="migration-guide-area-tag">{{ area }}</div>
+{% endfor %}
 </div>
 
 {{ guide_body }}

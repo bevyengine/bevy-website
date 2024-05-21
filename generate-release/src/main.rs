@@ -103,7 +103,7 @@ fn main() -> anyhow::Result<()> {
         Commands::Changelog => generate_changelog(
             &args.from,
             &args.to,
-            release_path.join("changelog.md"),
+            release_path.join("changelog.toml"),
             &client,
         )?,
         Commands::Contributors => generate_contributors(

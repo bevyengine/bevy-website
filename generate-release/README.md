@@ -93,7 +93,7 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 {{ contributors(path="./release-content/0.14/contributors.toml") }}
 
 <!-- Changelog -->
-{{ load_markdown(md_path = "./release-content/0.14/changelog.md") }}
+{{ changelog(path="./release-content/0.14/changelog.toml")}}
 ```
 
 The most important part of this is the `combine_release_notes` shortcode and the `load_markdown()` shortcode for the contributors and changelog. `combine_release_notes` will get the list of release notes from the `_release_notes.toml` file and combine all the separate file and add them to this file. `load_markdown()` will load a markdown file and add it to the blog post.

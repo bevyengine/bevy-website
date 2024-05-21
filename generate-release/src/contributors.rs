@@ -46,9 +46,12 @@ pub fn generate_contributors(
     let mut output = String::new();
 
     for name in &contributors {
-        writeln!(output, r#"[[contributors]]
+        writeln!(
+            output,
+            r#"[[contributors]]
 name = "{name}"
-"#)?;
+"#
+        )?;
     }
 
     std::fs::write(path, output).context("Writing contributors file")?;
