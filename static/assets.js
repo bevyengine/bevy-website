@@ -1,6 +1,6 @@
 let filters_state = {
     search_terms: [''],
-    version: '*'
+    version: 'all_versions'
 }
 
 const check_filters = (filters) => (node) => {
