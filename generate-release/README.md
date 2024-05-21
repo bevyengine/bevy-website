@@ -41,9 +41,7 @@ long_title = "Migration Guide: 0.13 to 0.14"
     Bevy relies heavily on improvements in the Rust language and compiler. As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
 {% end %}
 
-<div class="migration-guide">
-    {{ combine_migration_guides(release_content_path = "./release-content/0.14/") }}
-</div>
+{{ migration_guides(path="./release-content/0.14/migration-guides/") }}
 ```
 
 The most important part of this is the `combine_migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and add them to this file.
