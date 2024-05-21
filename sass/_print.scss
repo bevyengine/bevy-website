@@ -9,6 +9,8 @@
   }
 
   .layout, .page-with-menu {
+    // page-break styles don't like flex and grid
+    // the top bar and menu are gone anyway so it doesn't matter
     display: block !important;
   }
 
