@@ -10,6 +10,12 @@ Each command will generate files in the `/release-content/{release-version}` fol
 
 Each command have a `--from` and `--to` argument. You can pass it a git tag or a git commit.
 
+Before running the command, you'll need to generate a github api token at <https://github.com/settings/tokens>. It's easeier to use classic tokens and you don't need any specific role, just the default is enough. Then add it to a file called `.env` like so:
+
+```env
+GITHUB_TOKEN=token_string_copied_from_github
+```
+
 Here's an example for the commands used to generate the 0.14 release:
 
 ```shell
@@ -44,7 +50,7 @@ long_title = "Migration Guide: 0.13 to 0.14"
 {{ migration_guides(path="./release-content/0.14/migration-guides/") }}
 ```
 
-The most important part of this is the `combine_migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and add them to this file.
+The most important part of this is the `migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and generate appropritate markup for it.
 
 When adding a new migration guide, remember to update the weight of the `index.md` file. It always need to be one more than the new guide.
 
@@ -69,9 +75,7 @@ show_image = false
 
 +++
 
-<!-- Intro -->
-
-<!-- TODO -->
+<!-- TODO Intro -->
 
 <!-- more -->
 
@@ -79,7 +83,7 @@ show_image = false
 
 ## <a name="what-s-next"></a>What's Next?
 
-<!-- TODO -->
+<!-- TODO What's next -->
 
 ## Support Bevy
 
@@ -94,4 +98,4 @@ Sponsorships help make our work on Bevy sustainable. If you believe in Bevy's mi
 {{ changelog(path="./release-content/0.14/changelog.toml")}}
 ```
 
-The most important part of this is the `combine_release_notes` shortcode and the `load_markdown()` shortcode for the contributors and changelog. `combine_release_notes` will get the list of release notes from the `_release_notes.toml` file and combine all the separate file and add them to this file. `load_markdown()` will load a markdown file and add it to the blog post.
+The most important part of this is the `combine_release_notes`, `changelog`, and `contributors` shortcodes. `combine_release_notes` will get the list of release notes from the `_release_notes.toml` file and combine all the separate file and add them to this file. `contributors()` will load the `contributors.md` file and generate the necessary markup. `changelog()` will load the `changelog.md` file and generate the necessary markup.
