@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use std::{collections::HashMap, fmt::Debug};
 
 use anyhow::bail;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
@@ -33,6 +33,12 @@ pub struct GithubCommitContent {
     // If multiple authors, it will add "Co-Authored by: <author>" at the end
     pub message: String,
     pub committer: Committer,
+}
+
+#[derive(Deserialize, Clone, Debug)]
+pub struct GithubAuthor {
+    pub name: String,
+    pub user: Option<GithubUser>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
@@ -262,29 +268,41 @@ query {{
             .send_json(ureq::json!({ "query": query }))?;
         let json: serde_json::Value = resp.into_json()?;
 
-        let mut logins = vec![];
+        let mut name_login_map = HashMap::new();
 
         // this returns an heavily nested struct so we parse it manually instead of having 6 intermediary struct
-        let nodes = &json["data"]["resource"]["authors"]["nodes"];
-        let Some(nodes) = nodes.as_array() else {
+        let Some(nodes) = json["data"]["resource"]["authors"]["nodes"].as_array() else {
             bail!("nodes should be an array\n: {json}");
         };
         for node in nodes {
-            if let Some(login) = &node["user"]["login"].as_str() {
-                logins.push(login.to_string());
-                continue;
-            } else if node["user"].is_null() {
-                // In some situations, github doesn't have a github user associated with a commit,
-                // so instead we need to get the name associated with the commit
-                if let Some(name) = &node["name"].as_str() {
-                    println!("\x1b[93mUser not found, using name instead.\n{json}\x1b[0m");
-                    logins.push(name.to_string());
-                    continue;
+            let author: GithubAuthor = serde_json::from_value(node.clone())?;
+            if let Some(user) = author.user {
+                // If we find an already matching entry that had no login then use the login for that entry.
+                // Otherwise if it doesn't exist just insert it.
+                if matches!(name_login_map.get(&author.name), Some(None) | None) {
+                    name_login_map.insert(author.name, Some(format!("@{}", user.login)));
                 }
+            } else {
+                // Some entries have a name with no login but another entry with the same name and a login
+                // So we first check if it already exists because we don't want to overwrite an entry that already had a login
+                name_login_map.entry(author.name).or_insert(None);
             }
-            bail!("Unexpected user format. \n{json}")
         }
-        Ok(logins)
+        let contributors = name_login_map
+            .iter()
+            .map(|(name, login)| {
+                if let Some(login) = login {
+                    login
+                } else {
+                    println!(
+                        "\x1b[93mUser login not found, using name '{name}' instead.\n{json}\x1b[0m"
+                    );
+                    name
+                }
+            })
+            .map(|s| s.to_owned())
+            .collect::<Vec<_>>();
+        Ok(contributors)
     }
 
     pub fn get_commit(&self, git_ref: &str) -> anyhow::Result<GithubCommitResponse> {

@@ -1,26 +1,28 @@
+use anyhow::Context;
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
+use contributors::generate_contributors;
 use migration_guides::generate_migration_guides;
 use release_notes::generate_release_notes;
-use release_notes_website::generate_release_notes_website;
 use std::path::PathBuf;
 
 mod changelog;
+mod contributors;
 mod github_client;
 mod helpers;
 mod markdown;
 mod migration_guides;
 mod release_notes;
-mod release_notes_website;
 
 /// Generates markdown files used for a bevy releases.
 ///
 /// Requires a valid `GITHUB_TOKEN` environment variable, you can use a .env file or use your preferred method of passing env arguments.
 ///
 /// Example used to generate the 0.14 release:
-/// cargo run -- --from v0.13.0 --to main --release-version 0.14 migration-guide
-/// cargo run -- --from v0.13.0 --to main release-note
-/// cargo run -- --from bd4f611f7576c55739b466c6f0039e8421dab57e --to HEAD release-note-website
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 migration-guides
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 release-notes
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 changelog
+/// cargo run -- --from v0.13.0 --to main --release-version 0.14 contributors
 #[derive(ClapParser)]
 #[command(author, version, about, verbatim_doc_comment)]
 struct Args {
@@ -53,31 +55,27 @@ enum Commands {
         #[arg(short, long)]
         overwrite_existing: bool,
     },
-    /// Release notes:
-    /// * Gets all merged PRs
-    /// * Collect each author of merged PRs
-    /// * Sort each PR per area label
-    /// * Generate the list of merge PR
-    #[command(verbatim_doc_comment)]
-    ReleaseNotes,
-    /// Generates the list of contributors and a list of all closed PRs sorted by area labels
-    #[command(verbatim_doc_comment)]
-    ReleaseNotesWebsite,
+    ReleaseNotes {
+        /// Use this if you want to overwrite existing files
+        #[arg(short, long)]
+        overwrite_existing: bool,
+    },
+    /// Generates a list of all the merged PRs for the given release
     Changelog,
+    /// Generates the list of contributors
+    ///
+    /// This is very slow because it needs to make a network request for each commit
+    #[command(verbatim_doc_comment)]
+    Contributors,
 }
 
 fn main() -> anyhow::Result<()> {
     let _ = dotenvy::dotenv();
 
     let args = Args::parse();
-    let repo = if let Commands::ReleaseNotesWebsite { .. } = args.command {
-        "bevy-website"
-    } else {
-        "bevy"
-    };
-    let mut client = github_client::GithubClient::new(
+    let client = github_client::GithubClient::new(
         std::env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found"),
-        repo.to_string(),
+        String::from("bevy"),
     );
 
     // WARN this assumes it gets ran from ./generate-release
@@ -85,31 +83,34 @@ fn main() -> anyhow::Result<()> {
         .join("release-content")
         .join(args.release_version);
 
+    std::fs::create_dir_all(&release_path).context("Creating the release-content path")?;
+
     match args.command {
         Commands::MigrationGuides { overwrite_existing } => generate_migration_guides(
             &args.from,
             &args.to,
             release_path.join("migration-guides"),
-            &mut client,
+            &client,
             overwrite_existing,
         )?,
-        Commands::ReleaseNotes => generate_release_notes(
+        Commands::ReleaseNotes { overwrite_existing } => generate_release_notes(
             &args.from,
             &args.to,
-            release_path.join("release-notes.md"),
-            &mut client,
-        )?,
-        Commands::ReleaseNotesWebsite => generate_release_notes_website(
-            &args.from,
-            &args.to,
-            release_path.join("release-notes-website.md"),
-            &mut client,
+            release_path.join("release-notes"),
+            &client,
+            overwrite_existing,
         )?,
         Commands::Changelog => generate_changelog(
             &args.from,
             &args.to,
-            release_path.join("changelog.md"),
-            &mut client,
+            release_path.join("changelog.toml"),
+            &client,
+        )?,
+        Commands::Contributors => generate_contributors(
+            &args.from,
+            &args.to,
+            release_path.join("contributors.toml"),
+            &client,
         )?,
     };
 

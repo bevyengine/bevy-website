@@ -7,11 +7,13 @@ use crate::{
 };
 use std::{collections::BTreeMap, io::Write as IoWrite, path::PathBuf};
 
+type PrsByAreaBTreeMap = BTreeMap<Vec<String>, Vec<(String, GithubIssuesResponse)>>;
+
 pub fn generate_migration_guides(
     from: &str,
     to: &str,
     path: PathBuf,
-    client: &mut GithubClient,
+    client: &GithubClient,
     overwrite_existing: bool,
 ) -> anyhow::Result<()> {
     // Get all PRs by area
@@ -25,10 +27,6 @@ pub fn generate_migration_guides(
 
     // Write all the separate migration guide files
     for (area, prs) in areas {
-        // Create the list of area labels
-        let area = area.replace("A-", "");
-        let areas = area.split(" + ").collect::<Vec<_>>();
-
         let mut prs = prs;
         // The PRs inside each area are sorted by close date
         // This doesn't really matter for the final output,
@@ -52,7 +50,7 @@ pub fn generate_migration_guides(
 
             // Generate the metadata block for this migration
             // We always re-generate it because we need to keep the ordering if a new migration is added
-            let metadata_block = generate_metadata_block(&title, &file_name, &areas, pr.number);
+            let metadata_block = generate_metadata_block(&title, &file_name, &area, pr.number);
             guides_metadata.push(metadata_block);
 
             let file_path = path.join(format!("{file_name}.md"));
@@ -77,11 +75,11 @@ pub fn generate_migration_guides(
 /// Gets all PRs that have either a migration guide section or the Breaking-Change label
 /// The PRs are stored in a [`BTreeMap`] where the key is the list of area labels of the PR
 fn get_prs_by_areas(
-    client: &mut GithubClient,
+    client: &GithubClient,
     from: &str,
     to: &str,
-) -> Result<BTreeMap<String, Vec<(String, GithubIssuesResponse)>>, anyhow::Error> {
-    let mut areas = BTreeMap::<String, Vec<(String, GithubIssuesResponse)>>::new();
+) -> Result<PrsByAreaBTreeMap, anyhow::Error> {
+    let mut areas: PrsByAreaBTreeMap = BTreeMap::new();
 
     let merged_prs = get_merged_prs(client, from, to, None)?;
     let mut count = 0;
@@ -101,6 +99,7 @@ fn get_prs_by_areas(
         // to make it easier to track down missing guides
         if has_migration_guide_section || has_breaking_label {
             let area = get_pr_area(pr);
+
             areas
                 .entry(area)
                 .or_default()
@@ -117,7 +116,7 @@ fn get_prs_by_areas(
 fn generate_metadata_block(
     title: &String,
     file_name: &String,
-    areas: &[&str],
+    areas: &[String],
     pr_number: i32,
 ) -> String {
     format!(
