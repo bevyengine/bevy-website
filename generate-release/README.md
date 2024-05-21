@@ -52,7 +52,7 @@ long_title = "Migration Guide: 0.13 to 0.14"
 
 The most important part of this is the `migrations_guides` shortcode. It will get the list of guides from the `_guides.toml` file and combine all the separate file and generate appropritate markup for it.
 
-When adding a new migration guide, remember to update the weight of the `index.md` file. It always need to be one more than the new guide.
+Remember to update the weight to be higher than the previous guides.
 
 ## Release Notes
 
@@ -71,8 +71,7 @@ Once all those files are generated you'll need to create a new blog post in `con
 title = "Bevy 0.14"
 date = 2024-05-17
 [extra]
-show_image = false
-
+public_draft = _release tracking issue number_
 +++
 
 <!-- TODO Intro -->
