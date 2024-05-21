@@ -15,7 +15,7 @@
 {% endblock mobile_page_menu_switch %}
 {% block content %}
   <div class="page-with-menu {% block page_with_menu_extra_class %}{% endblock page_with_menu_extra_class %}">
-    <div class="page-with-menu__menu-wrapper">
+    <div class="page-with-menu__menu-wrapper print:hidden">
       <div class="page-with-menu__menu">
         {% block page_menu %}{% endblock page_menu %}
       </div>
