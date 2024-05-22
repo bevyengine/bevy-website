@@ -1,0 +1,2 @@
+
+`QueryState::matched_tables` and `QueryState::matched_archetypes` does not return a reference to a slice, but an iterator instead. You may need to use iterator combinators or collect them into a Vec to use it as a slice.
