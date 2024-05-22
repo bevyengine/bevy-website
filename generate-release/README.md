@@ -25,7 +25,13 @@ cargo run -- --from v0.13.0 --to main --release-version 0.14 changelog
 cargo run -- --from v0.13.0 --to main --release-version 0.14 contributors
 ```
 
-## Migration Guides
+## Generating a release
+
+To generate a release from scratch, run all these commands then add the new migration guide and blog post to their respective `/content` folder. When doing so, it's important to use the `public_draft` feature to hide those pages until the day of the release. For the public_draft feature, you'll need to provide it a github issue number, it's recommended to point it to an issue tracker for the current release being worked on. The issue needs to be on the bevy-website repo.
+
+The following sections go in more details on each parts of the process.
+
+### Migration Guides
 
 The `migration-guides` command will generate the `/release-content/{release-version}/migration-guides` folder.
 Inside will be a single `_guides.toml` that contains metadata needed for each guides. Then each guide will be a separate markdown file inside that folder.
@@ -41,6 +47,7 @@ insert_anchor_links = "right"
 [extra]
 weight = 9
 long_title = "Migration Guide: 0.13 to 0.14"
+public_draft = _release tracking issue number_
 +++
 
 {{ migration_guides(version="0.14") }}
@@ -50,7 +57,7 @@ The most important part of this is the `migrations_guides` shortcode. It will ge
 
 Remember to update the weight to be higher than the previous guides.
 
-## Release Notes
+### Release Notes
 
 The release notes is a bit more complicated since it has multiple parts that need to be generated.
 
