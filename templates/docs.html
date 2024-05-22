@@ -108,7 +108,7 @@
         {{ section_or_page.content | safe }}
         {% block docs_content %}{% endblock docs_content %}
       </div>
-      <div class="docs-footer">
+      <div class="docs-footer print:hidden">
         <nav class="docs-footer__nav">
           {% if next_page %}
             <a class="docs-footer__link docs-footer__link--next"

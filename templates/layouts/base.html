@@ -91,7 +91,7 @@
   <body>
     <div class="layout">
       <input id="mobile-menu-state" class="hidden" type="checkbox">
-      <header class="layout__header header" data-mobile-menu-state-container>
+      <header class="layout__header header print:hidden" data-mobile-menu-state-container>
         <div class="header__content">
           <label class="main-menu-backdrop" for="mobile-menu-state"></label>
           <label class="header__hamburger button-square button-square--header"
@@ -204,7 +204,7 @@
           {% block content %}{% endblock content %}
         </div>
       </main>
-      <footer>
+      <footer class="print:hidden">
         {% block footer_extensions %}{% endblock footer_extensions %}
         <div class="footer__social-container">
           <a class="footer__social" href="https://github.com/bevyengine/bevy">

@@ -1,9 +1,0 @@
-{% extends "docs.html" %}
-{% import "macros/migration_guides.html" as migration_guides_macros %}
-
-{% block docs_content %}
-<div class="migration-guide">
-    {{ migration_guides_macros::combine(toml_path=page.extra.migration_guides) }}
-</div>
-{% endblock docs_content %}
-

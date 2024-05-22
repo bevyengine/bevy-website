@@ -1,7 +1,7 @@
 //! in nav.on-this-page, sets data-active=true on the link to the header you're currently looking at
 
 if(window.location.hash == ""){
-  otp_set_active(document.querySelector("main h2"));
+  otp_set_active(document.querySelector("main h2") || document.querySelector("main h3"));
 } else {
   otp_set_active(window.location.hash.substring(1));
 }
@@ -24,8 +24,9 @@ function otp_set_active(id_or_node){
   } else {
     id = id_or_node;
   }
-  document.querySelectorAll(".on-this-page li").forEach((li) => {
-    li.setAttribute("data-active", li.getAttribute("data-fragment") == id);
+  id = "#" + id;
+  document.querySelectorAll(".on-this-page a").forEach(a => {
+    a.setAttribute("data-active", a.getAttribute("href") == id);
   });
 }
 
@@ -34,10 +35,12 @@ let otp_observer =  new IntersectionObserver(
     entries.forEach(entry => {
       otp_state.set(entry.target, entry.isIntersecting);
     });
-    let intersecting = Array.from(otp_state).filter(([k,v]) => v == true);
-    intersecting.sort(([k,v]) => k.clientTop)
+    let intersecting = Array.from(otp_state)
+      .filter(([_el, inter]) => inter)
+      .map(([el, _inter]) => el);
+    intersecting.sort((element) => -element.getBoundingClientRect().y);
     if (intersecting.length > 0) {
-      otp_set_active(intersecting[0][0]);
+      otp_set_active(intersecting[0]);
     }
   }, {
     rootMargin: "0px 0px 20% 0px",
