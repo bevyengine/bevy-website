@@ -14,7 +14,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
 - **A**: Area (e.g. `A-Animation`, `A-ECS`, `A-Rendering`, ...).
 - **C**: Category. The most common include:
     - `C-Bug`: unexpected or incorrect behavior.
-    - `C-Enhancement`: a new feature.
+    - `C-Enhancement`: a new feature or meaningful extension of an existing one.
     - `C-Docs`: an addition or correction to the documentation.
     - `C-Code-Quality`: a section of code that is hard to understand or change.
     - `C-Performance`: a change motivated by speed, memory usage, or compile times.
