@@ -113,3 +113,14 @@ There are several paths for PRs to be closed:
 6. In the case of PRs where some members of the community (other than the author) are in favor and some are opposed, any two relevant SMEs or maintainers may act in concert to close the PR.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
+
+## Triage Team
+
+Members of the Triage Team within the Bevy organization have permissions to label and close issues, though they do not have merge rights or special authority. Anyone is free to join as long as:
+
+1. They have actively engaged with Bevy development in the past.
+2. They have demonstrated themselves to be polite and welcoming representatives of the project with an understanding of its goals and direction.
+
+If that applies to you, then feel free to ask a maintainer on [Discord] or email <bevyengine@gmail.com>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
+
+[Discord]: https://discord.gg/bevy
