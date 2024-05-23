@@ -1,7 +1,10 @@
 use anyhow::Context;
 
-use crate::{github_client::GithubClient, helpers::get_merged_prs};
-use std::{io::Write as IoWrite, path::PathBuf};
+use crate::{
+    github_client::GithubClient,
+    helpers::{get_contributors, get_merged_prs},
+};
+use std::{collections::HashSet, io::Write as IoWrite, path::PathBuf};
 
 pub fn generate_release_notes(
     from: &str,
@@ -19,7 +22,7 @@ pub fn generate_release_notes(
     // We'll write the file once at the end when all the metdaata is generated
     let mut notes_metadata = Vec::new();
 
-    for (pr, _commit, title) in prs {
+    for (pr, commit, title) in prs {
         // Slugify the title
         let title_slug = title
             .replace(' ', "_")
@@ -50,9 +53,23 @@ file_name = "{file_name}.md"
             std::fs::File::create(&file_path).context(format!("Failed to create {file_path:?}"))?;
         writeln!(&file, "### {title}")?;
         writeln!(&file)?;
+
+        // get the list of contributors to this PR
+        let mut contributors = HashSet::new();
+        let Ok(pr_contributors) = get_contributors(client, &commit, &pr) else {
+            continue;
+        };
+        for c in pr_contributors {
+            contributors.insert(c);
+        }
+        contributors.insert(format!("@{}", pr.user.login.clone()));
         writeln!(
             &file,
-            r#"<div class="release-feature-authors">authors: TODO</div>"#
+            r#"<div class="release-feature-authors">authors: {}</div>"#,
+            contributors
+                .into_iter()
+                .reduce(|acc, author| format!("{acc}, {author}"))
+                .unwrap(),
         )?;
     }
 
