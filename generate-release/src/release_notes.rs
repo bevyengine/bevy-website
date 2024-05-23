@@ -49,6 +49,7 @@ pub fn generate_release_notes(
 
         contributors.remove(&author);
 
+        // Make sure the author is always the first in the list
         let mut authors = vec![author];
         authors.extend(contributors);
 
