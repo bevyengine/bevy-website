@@ -114,7 +114,7 @@ fn get_prs_by_areas(
 
 /// Generates the metadata markdown section for the given values
 fn generate_metadata_block(
-    title: &String,
+    title: &str,
     file_name: &String,
     areas: &[String],
     pr_number: i32,
@@ -131,6 +131,7 @@ file_name = "{file_name}.md"
             .map(|area| format!("\"{area}\""))
             .collect::<Vec<_>>()
             .join(","),
+        title = title.trim().replace('"', "\\\"")
     )
 }
 

@@ -46,6 +46,13 @@
   color: $subtitle-color;
 }
 
+.release-feature-meta {
+  @extend .release-feature-authors;
+
+  padding: 0 !important;
+  list-style: none;
+}
+
 .news-image-subtitle {
   color: $subtitle-color;
   font-style: italic;
