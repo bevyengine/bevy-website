@@ -4,7 +4,7 @@ In `crates/bevy_mikktspace/src/generated.rs`
 ```rs
 // before
 pub struct SGroup {
-    pub iVertexRepresentitive: i32,
+    pub iVertexRepresentative: i32,
     ..
 }
 
