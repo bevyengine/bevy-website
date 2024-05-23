@@ -25,3 +25,14 @@ When in doubt, prefer creating an issue over immediately opening a pull request.
 Before submitting an issue, please check that it has not already been created. [Github Search] is fairly good at finding similar issues based on keywords. If you do find an existing issue, please comment on it instead of creating a duplicate.
 
 [Github Search]: https://github.com/search?q=repo%3Abevyengine%2Fbevy&type=issues
+
+### When to create a discussion instead
+
+The Bevy repository also has [Github Discussions] enabled. Here are some scenarios where you may want to create a discussion post instead of an issue:
+
+[Github Discussions]: https://github.com/bevyengine/bevy/discussions
+
+- You have a question about using Bevy.
+- You have an idea on how to improve Bevy.
+    - This is less formal than creating an issue, and should be preferred if the idea is vague.
+- You want to discuss the design of an aspect of Bevy.
