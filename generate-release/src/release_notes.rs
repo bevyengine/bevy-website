@@ -37,11 +37,23 @@ pub fn generate_release_notes(
         // 64 is completely arbitrary but felt long enough and is a nice power of 2
         file_name.truncate(64);
 
-        // TODO should probably add some weight for sorting
-        notes_metadata.push(format!(
-            r#"[[release_notes]]
-file_name = "{file_name}.md"
-"#,
+        // get the list of contributors to this PR
+        let mut contributors = HashSet::new();
+        let author = format!("@{}", pr.user.login);
+
+        if let Ok(pr_contributors) = get_contributors(client, &commit, &pr) {
+            for c in pr_contributors {
+                contributors.insert(c);
+            }
+        }
+
+        contributors.remove(&author);
+
+        let mut authors = vec![author];
+        authors.extend(contributors);
+
+        notes_metadata.push(generate_metadata_block(
+            &title, &authors, pr.number, &file_name,
         ));
 
         let file_path = path.join(format!("{file_name}.md"));
@@ -49,28 +61,11 @@ file_name = "{file_name}.md"
             // Skip existing files because we don't want to overwrite changes when regenerating
             continue;
         }
+
         let file =
             std::fs::File::create(&file_path).context(format!("Failed to create {file_path:?}"))?;
-        writeln!(&file, "### {title}")?;
-        writeln!(&file)?;
 
-        // get the list of contributors to this PR
-        let mut contributors = HashSet::new();
-        let Ok(pr_contributors) = get_contributors(client, &commit, &pr) else {
-            continue;
-        };
-        for c in pr_contributors {
-            contributors.insert(c);
-        }
-        contributors.insert(format!("@{}", pr.user.login.clone()));
-        writeln!(
-            &file,
-            r#"<div class="release-feature-authors">authors: {}</div>"#,
-            contributors
-                .into_iter()
-                .reduce(|acc, author| format!("{acc}, {author}"))
-                .unwrap(),
-        )?;
+        writeln!(&file, "TODO")?;
     }
 
     // Write the metadata file
@@ -81,4 +76,27 @@ file_name = "{file_name}.md"
     }
 
     Ok(())
+}
+
+fn generate_metadata_block(
+    title: &str,
+    authors: &[String],
+    pr_number: i32,
+    file_name: &str,
+) -> String {
+    // TODO should probably add some weight for sorting
+    format!(
+        r#"[[release_notes]]
+title = "{title}"
+authors = [{authors}]
+url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
+file_name = "{file_name}.md"
+"#,
+        authors = authors
+            .iter()
+            .map(|author| format!("\"{author}\""))
+            .collect::<Vec<_>>()
+            .join(","),
+        title = title.trim().replace('"', "\\\"")
+    )
 }
