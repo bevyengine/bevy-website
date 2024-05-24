@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Bevy's scope and user base means that it gets a large volume of issues and pull requests. This work all needs to be organized: making it easier to search through to find related issues, to figure out where you can help, and to quickly communicate the status of a task at a glance. The continual process of organizing work is called **triage**.
+Bevy's scope and user base means that it gets a large volume of issues and pull requests. This work all needs to be organized to make it easier to find related issues, figure out where you can help, and to quickly communicate the status of a task at a glance. The continual process of organizing work is called **triage**.
 
 ## Classifying issues and PRs
 
