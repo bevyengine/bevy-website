@@ -13,7 +13,7 @@ Bevy tracks bugs and feature requests using [Github Issues], which is an issue t
 
 Issues are great for formally tracking the progress of bugs and features. Here are some scenarios where you may choose to use issues:
 
-- You want to receive feedback and ideas before writing code.
+- You want to receive feedback and ideas before writing code for Bevy.
 - You are not sure what is causing a bug, or how to fix it.
 - You do not have the capacity to work on the change, but want to make it known to others.
 - The change may be controversial, and needs input from Subject Matter Experts and / or maintainers before going forward.
