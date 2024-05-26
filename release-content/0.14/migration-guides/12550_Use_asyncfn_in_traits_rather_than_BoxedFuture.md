@@ -1,2 +1,2 @@
 - Custom implementations of AssetReader, AssetWriter, AssetLoader, AssetSaver and Process should switch to async fn rather than returning a bevy_utils::BoxedFuture. 
-- Simultaniously, to use dynamic dispatch on these traits you should instead use dyn ErasedXXX.
+- Simultaneously, to use dynamic dispatch on these traits you should instead use dyn ErasedXXX.
