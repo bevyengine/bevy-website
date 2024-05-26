@@ -1,10 +1,4 @@
 [[release_notes]]
-title = "Add support for KHR_texture_transform"
-authors = ["@janhohenheim","@Kanabenki","@yrns"]
-url = "https://github.com/bevyengine/bevy/pull/11904"
-file_name = "11904_Add_support_for_KHR_texture_transform.md"
-
-[[release_notes]]
 title = "Upstreaming bevy_color."
 authors = ["@viridia","@mockersf"]
 url = "https://github.com/bevyengine/bevy/pull/12013"
