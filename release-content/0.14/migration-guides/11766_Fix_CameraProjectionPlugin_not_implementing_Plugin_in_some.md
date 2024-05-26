@@ -1,0 +1,1 @@
+`CameraProjectionPlugin<T>`’s trait bounds now require `T` to implement `CameraProjection`, `Component`, and `GetTypeRegistration`. This shouldn’t affect most existing code as `CameraProjectionPlugin<T>` never implemented `Plugin` unless those bounds were met.

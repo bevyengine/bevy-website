@@ -1,0 +1,1 @@
+In the present implementation, external consumers of `AlphaMode` will have to access it through bevy_render rather than through bevy_pbr, changing their import from `bevy_pbr::AlphaMode` to `bevy_render::alpha::AlphaMode` (or the corresponding glob import from `bevy_pbr::prelude::*` to `bevy_render::prelude::*`).

@@ -1,0 +1,2 @@
+- `ReflectComponentFns`’s `apply` and `reflect_mut` fields now take `EntityMut` instead of `&mut EntityWorldMut`
+- `ReflectBundleFns`’s `apply` field now takes `EntityMut` instead of `&mut EntityWorldMut`

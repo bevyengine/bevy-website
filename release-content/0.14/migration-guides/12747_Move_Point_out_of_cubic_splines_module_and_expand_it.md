@@ -1,0 +1,1 @@
+Since `Point` no longer exists, any projects using it must switch to `bevy::math::VectorSpace`. Additionally, third-party implementations of this trait now require the `Neg` trait; the constant `VectorSpace::ZERO` must be provided as well.

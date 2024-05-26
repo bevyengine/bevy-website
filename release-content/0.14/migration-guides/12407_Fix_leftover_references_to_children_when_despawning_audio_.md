@@ -1,0 +1,1 @@
+`PlaybackSettings::DESPAWN` (`PlaybackMode::Despawn`) now despawns the audio entity’s children as well. If you were relying on the previous behavior, you may be able to use `PlaybackMode::Remove`, or you may need to use `PlaybackMode::Once` and manage your audio component lifecycle manually.

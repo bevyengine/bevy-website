@@ -7,6 +7,10 @@ extend-exclude = [
   "content/learn/migration-guides/0.[1-8]-to-0.[2-9].md",
   "content/learn/migration-guides/0.9-to-0.10.md",
   "content/learn/migration-guides/0.1[0-2]-to-0.1[1-3].md",
+  # Ignore a migration guide for a typo fix
+  "release-content/0.14/migration-guides/12038_fix_some_typos.md",
+  # Ignore changelogs (titles should be verbatim)
+  "release-content/*/changelog.toml",
 ]
 
 # Corrections take the form of a key/value pair. The key is the incorrect word

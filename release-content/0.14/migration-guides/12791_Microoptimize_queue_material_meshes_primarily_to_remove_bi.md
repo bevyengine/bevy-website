@@ -1,0 +1,2 @@
+- The `primitive_topology` field on `GpuMesh` is now an accessor method: `GpuMesh::primitive_topology()`.
+- For performance reasons, `MeshPipelineKey` has been split into `BaseMeshPipelineKey`, which lives in `bevy_render`, and `MeshPipelineKey`, which lives in `bevy_pbr`. These two should be combined with bitwise-or to produce the final `MeshPipelineKey`.

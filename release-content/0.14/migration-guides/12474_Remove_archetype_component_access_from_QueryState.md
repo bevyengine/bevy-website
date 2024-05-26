@@ -1,0 +1,1 @@
+`QueryState::archetype_component_access` has been removed. This can be worked around by accessing the surrounding `SystemState`’s instead. If you needed this explicitly for `QueryState`, please file an [issue](https://github.com/bevyengine/bevy/issues).

@@ -1,0 +1,804 @@
+[[guides]]
+title = "fix some typos"
+url = "https://github.com/bevyengine/bevy/pull/12038"
+areas = []
+file_name = "12038_fix_some_typos.md"
+
+[[guides]]
+title = "Update to fixedbitset 0.5"
+url = "https://github.com/bevyengine/bevy/pull/12512"
+areas = []
+file_name = "12512_Update_to_fixedbitset_05.md"
+
+[[guides]]
+title = "refactor: separate out `PanicHandlerPlugin`"
+url = "https://github.com/bevyengine/bevy/pull/12557"
+areas = []
+file_name = "12557_refactor_separate_out_PanicHandlerPlugin.md"
+
+[[guides]]
+title = "Rework animation to be done in two phases."
+url = "https://github.com/bevyengine/bevy/pull/11707"
+areas = ["Animation"]
+file_name = "11707_Rework_animation_to_be_done_in_two_phases.md"
+
+[[guides]]
+title = "Color maths 4"
+url = "https://github.com/bevyengine/bevy/pull/12575"
+areas = ["Animation","Color","Math","Rendering"]
+file_name = "12575_Color_maths_4.md"
+
+[[guides]]
+title = "Refactor `App` and `SubApp` internals for better separation"
+url = "https://github.com/bevyengine/bevy/pull/9202"
+areas = ["App"]
+file_name = "9202_Refactor_App_and_SubApp_internals_for_better_separation.md"
+
+[[guides]]
+title = "Make `AppExit` more specific about exit reason."
+url = "https://github.com/bevyengine/bevy/pull/13022"
+areas = ["App"]
+file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
+
+[[guides]]
+title = "Deprecate dynamic plugins"
+url = "https://github.com/bevyengine/bevy/pull/13080"
+areas = ["App"]
+file_name = "13080_Deprecate_dynamic_plugins.md"
+
+[[guides]]
+title = "Remove the UpdateAssets and AssetEvents schedules"
+url = "https://github.com/bevyengine/bevy/pull/11986"
+areas = ["Assets"]
+file_name = "11986_Remove_the_UpdateAssets_and_AssetEvents_schedules.md"
+
+[[guides]]
+title = "Use async-fn in traits rather than BoxedFuture"
+url = "https://github.com/bevyengine/bevy/pull/12550"
+areas = ["Assets"]
+file_name = "12550_Use_asyncfn_in_traits_rather_than_BoxedFuture.md"
+
+[[guides]]
+title = "Make `AssetAction::Ignore` not copy assets to `imported_assets`"
+url = "https://github.com/bevyengine/bevy/pull/12605"
+areas = ["Assets"]
+file_name = "12605_Make_AssetActionIgnore_not_copy_assets_to_imported_assets.md"
+
+[[guides]]
+title = "Removed Into<AssedId<T>> for Handle<T> as mentioned in #12600"
+url = "https://github.com/bevyengine/bevy/pull/12655"
+areas = ["Assets"]
+file_name = "12655_Removed_IntoAssedIdT_for_HandleT_as_mentioned_in_12600.md"
+
+[[guides]]
+title = "Add `AsyncSeek` trait to `Reader` to be able to seek inside asset loaders"
+url = "https://github.com/bevyengine/bevy/pull/12547"
+areas = ["Assets"]
+file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
+
+[[guides]]
+title = "Error info has been added to LoadState::Failed"
+url = "https://github.com/bevyengine/bevy/pull/12709"
+areas = ["Assets"]
+file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
+
+[[guides]]
+title = "Make `AssetMetaCheck` a field on the asset plugin"
+url = "https://github.com/bevyengine/bevy/pull/13177"
+areas = ["Assets"]
+file_name = "13177_Make_AssetMetaCheck_a_field_on_the_asset_plugin.md"
+
+[[guides]]
+title = "Add more load_direct implementations"
+url = "https://github.com/bevyengine/bevy/pull/13415"
+areas = ["Assets"]
+file_name = "13415_Add_more_load_direct_implementations.md"
+
+[[guides]]
+title = "Make LoadContext use the builder pattern for loading dependent assets"
+url = "https://github.com/bevyengine/bevy/pull/13465"
+areas = ["Assets"]
+file_name = "13465_Make_LoadContext_use_the_builder_pattern_for_loading_depen.md"
+
+[[guides]]
+title = "Allow setting RenderAssetUsages for gLTF meshes & materials during load"
+url = "https://github.com/bevyengine/bevy/pull/12302"
+areas = ["Assets","Rendering"]
+file_name = "12302_Allow_setting_RenderAssetUsages_for_gLTF_meshes__materials.md"
+
+[[guides]]
+title = "Consolidate Render(Ui)Materials(2d) into RenderAssets"
+url = "https://github.com/bevyengine/bevy/pull/12827"
+areas = ["Assets","Rendering"]
+file_name = "12827_Consolidate_RenderUiMaterials2d_into_RenderAssets.md"
+
+[[guides]]
+title = "Fix leftover references to children when despawning audio entities"
+url = "https://github.com/bevyengine/bevy/pull/12407"
+areas = ["Audio"]
+file_name = "12407_Fix_leftover_references_to_children_when_despawning_audio_.md"
+
+[[guides]]
+title = "Check `cfg` during CI and fix feature typos"
+url = "https://github.com/bevyengine/bevy/pull/12103"
+areas = ["Build-System"]
+file_name = "12103_Check_cfg_during_CI_and_fix_feature_typos.md"
+
+[[guides]]
+title = "tools: Refactor CI to use `argh`"
+url = "https://github.com/bevyengine/bevy/pull/12923"
+areas = ["Build-System"]
+file_name = "12923_tools_Refactor_CI_to_use_argh.md"
+
+[[guides]]
+title = "move wgsl color operations from bevy_pbr to bevy_render"
+url = "https://github.com/bevyengine/bevy/pull/13209"
+areas = ["Color"]
+file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
+
+[[guides]]
+title = "Remove `ClampColor`"
+url = "https://github.com/bevyengine/bevy/pull/13307"
+areas = ["Color"]
+file_name = "13307_Remove_ClampColor.md"
+
+[[guides]]
+title = "Migrate from `LegacyColor` to `bevy_color::Color`"
+url = "https://github.com/bevyengine/bevy/pull/12163"
+areas = ["Color","Gizmos","Rendering","Text","UI"]
+file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
+
+[[guides]]
+title = "`bevy_color`: Created a private trait `StandardColor`"
+url = "https://github.com/bevyengine/bevy/pull/12072"
+areas = ["Color","Rendering"]
+file_name = "12072_bevy_color_Created_a_private_trait_StandardColor.md"
+
+[[guides]]
+title = "`bevy_color`: Added `Xyza` Colour Space"
+url = "https://github.com/bevyengine/bevy/pull/12079"
+areas = ["Color","Rendering"]
+file_name = "12079_bevy_color_Added_Xyza_Colour_Space.md"
+
+[[guides]]
+title = "Made `bevy_color` a dependency of `bevy_render`"
+url = "https://github.com/bevyengine/bevy/pull/12105"
+areas = ["Color","Rendering"]
+file_name = "12105_Made_bevy_color_a_dependency_of_bevy_render.md"
+
+[[guides]]
+title = "Port `bevy_core_pipeline` to `LinearRgba`"
+url = "https://github.com/bevyengine/bevy/pull/12116"
+areas = ["Color","Rendering"]
+file_name = "12116_Port_bevy_core_pipeline_to_LinearRgba.md"
+
+[[guides]]
+title = "`bevy_color`: Added `Hsva` and `Hwba` Models"
+url = "https://github.com/bevyengine/bevy/pull/12114"
+areas = ["Color","Rendering"]
+file_name = "12114_bevy_color_Added_Hsva_and_Hwba_Models.md"
+
+[[guides]]
+title = "`bevy_color`: Add `Laba` to support Lab Color Model"
+url = "https://github.com/bevyengine/bevy/pull/12115"
+areas = ["Color","Rendering"]
+file_name = "12115_bevy_color_Add_Laba_to_support_Lab_Color_Model.md"
+
+[[guides]]
+title = "`bevy_color`: Add Oklch Color Space"
+url = "https://github.com/bevyengine/bevy/pull/12168"
+areas = ["Color","Rendering"]
+file_name = "12168_bevy_color_Add_Oklch_Color_Space.md"
+
+[[guides]]
+title = "Fix `Oklab` and `Oklch` color space inconsistency"
+url = "https://github.com/bevyengine/bevy/pull/12583"
+areas = ["Color","Rendering"]
+file_name = "12583_Fix_Oklab_and_Oklch_color_space_inconsistency.md"
+
+[[guides]]
+title = "Add hue traits"
+url = "https://github.com/bevyengine/bevy/pull/12399"
+areas = ["Color","Rendering"]
+file_name = "12399_Add_hue_traits.md"
+
+[[guides]]
+title = "Rename `bevy_render::Color` to `LegacyColor`"
+url = "https://github.com/bevyengine/bevy/pull/12069"
+areas = ["Color","Rendering","UI"]
+file_name = "12069_Rename_bevy_renderColor_to_LegacyColor.md"
+
+[[guides]]
+title = "Clean up some low level dependencies"
+url = "https://github.com/bevyengine/bevy/pull/12858"
+areas = ["Cross-Cutting"]
+file_name = "12858_Clean_up_some_low_level_dependencies.md"
+
+[[guides]]
+title = "Determine msrv for every standalone bevy_* crate."
+url = "https://github.com/bevyengine/bevy/pull/13211"
+areas = ["Cross-Cutting"]
+file_name = "13211_Determine_msrv_for_every_standalone_bevy__crate.md"
+
+[[guides]]
+title = "remove close_on_esc"
+url = "https://github.com/bevyengine/bevy/pull/12859"
+areas = ["Dev-Tools"]
+file_name = "12859_remove_close_on_esc.md"
+
+[[guides]]
+title = "Move `close_on_esc` to `bevy_dev_tools`"
+url = "https://github.com/bevyengine/bevy/pull/12855"
+areas = ["Dev-Tools","Windowing"]
+file_name = "12855_Move_close_on_esc_to_bevy_dev_tools.md"
+
+[[guides]]
+title = "Make sysinfo diagnostic plugin optional"
+url = "https://github.com/bevyengine/bevy/pull/12164"
+areas = ["Diagnostics"]
+file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
+
+[[guides]]
+title = "Add access to `App` within `LogPlugin::update_subscriber`"
+url = "https://github.com/bevyengine/bevy/pull/12045"
+areas = ["Diagnostics"]
+file_name = "12045_Add_access_to_App_within_LogPluginupdate_subscriber.md"
+
+[[guides]]
+title = "Improve tracing layer customization"
+url = "https://github.com/bevyengine/bevy/pull/13159"
+areas = ["Diagnostics"]
+file_name = "13159_Improve_tracing_layer_customization.md"
+
+[[guides]]
+title = "Immediately apply deferred system params in System::run"
+url = "https://github.com/bevyengine/bevy/pull/11823"
+areas = ["ECS"]
+file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
+
+[[guides]]
+title = "Move commands module into bevy::ecs::world"
+url = "https://github.com/bevyengine/bevy/pull/12234"
+areas = ["ECS"]
+file_name = "12234_Move_commands_module_into_bevyecsworld.md"
+
+[[guides]]
+title = "Remove ComponentStorage and associated types"
+url = "https://github.com/bevyengine/bevy/pull/12311"
+areas = ["ECS"]
+file_name = "12311_Remove_ComponentStorage_and_associated_types.md"
+
+[[guides]]
+title = "Remove archetype_component_access from QueryState"
+url = "https://github.com/bevyengine/bevy/pull/12474"
+areas = ["ECS"]
+file_name = "12474_Remove_archetype_component_access_from_QueryState.md"
+
+[[guides]]
+title = "Remove WorldCell"
+url = "https://github.com/bevyengine/bevy/pull/12551"
+areas = ["ECS"]
+file_name = "12551_Remove_WorldCell.md"
+
+[[guides]]
+title = "Allow Commands to register systems"
+url = "https://github.com/bevyengine/bevy/pull/11019"
+areas = ["ECS"]
+file_name = "11019_Allow_Commands_to_register_systems.md"
+
+[[guides]]
+title = "Store only the IDs needed for Query iteration"
+url = "https://github.com/bevyengine/bevy/pull/12476"
+areas = ["ECS"]
+file_name = "12476_Store_only_the_IDs_needed_for_Query_iteration.md"
+
+[[guides]]
+title = "Remove stepping from default features"
+url = "https://github.com/bevyengine/bevy/pull/12847"
+areas = ["ECS"]
+file_name = "12847_Remove_stepping_from_default_features.md"
+
+[[guides]]
+title = "Optimize Event Updates"
+url = "https://github.com/bevyengine/bevy/pull/12936"
+areas = ["ECS"]
+file_name = "12936_Optimize_Event_Updates.md"
+
+[[guides]]
+title = "Make SystemParam::new_archetype and QueryState::new_archetype unsafe functions"
+url = "https://github.com/bevyengine/bevy/pull/13044"
+areas = ["ECS"]
+file_name = "13044_Make_SystemParamnew_archetype_and_QueryStatenew_archetype_.md"
+
+[[guides]]
+title = "Better SystemId to Entity conversions"
+url = "https://github.com/bevyengine/bevy/pull/13090"
+areas = ["ECS"]
+file_name = "13090_Better_SystemId_to_Entity_conversions.md"
+
+[[guides]]
+title = "Computed State & Sub States"
+url = "https://github.com/bevyengine/bevy/pull/11426"
+areas = ["ECS"]
+file_name = "11426_Computed_State__Sub_States.md"
+
+[[guides]]
+title = "Separate state crate"
+url = "https://github.com/bevyengine/bevy/pull/13216"
+areas = ["ECS"]
+file_name = "13216_Separate_state_crate.md"
+
+[[guides]]
+title = "constrain WorldQuery::get_state to only use &Components"
+url = "https://github.com/bevyengine/bevy/pull/13343"
+areas = ["ECS"]
+file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
+
+[[guides]]
+title = "Replace `FromWorld` requirement on `ReflectResource` and reflect `Resource` for `State<S>`"
+url = "https://github.com/bevyengine/bevy/pull/12136"
+areas = ["ECS","Reflection"]
+file_name = "12136_Replace_FromWorld_requirement_on_ReflectResource_and_refle.md"
+
+[[guides]]
+title = "Make some `ReflectComponent`/`ReflectBundle` methods work with `EntityMut` too"
+url = "https://github.com/bevyengine/bevy/pull/12895"
+areas = ["ECS","Reflection"]
+file_name = "12895_Make_some_ReflectComponentReflectBundle_methods_work_with_.md"
+
+[[guides]]
+title = "Make `from_reflect_or_world` also try `ReflectDefault` and improve some comments and panic messages"
+url = "https://github.com/bevyengine/bevy/pull/12499"
+areas = ["ECS","Reflection"]
+file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
+
+[[guides]]
+title = "multi_threaded feature rename"
+url = "https://github.com/bevyengine/bevy/pull/12997"
+areas = ["ECS","Tasks"]
+file_name = "12997_multi_threaded_feature_rename.md"
+
+[[guides]]
+title = "Moves intern and label modules into bevy_ecs"
+url = "https://github.com/bevyengine/bevy/pull/12772"
+areas = ["ECS","Utils"]
+file_name = "12772_Moves_intern_and_label_modules_into_bevy_ecs.md"
+
+[[guides]]
+title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
+url = "https://github.com/bevyengine/bevy/pull/11989"
+areas = ["Editor"]
+file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
+
+[[guides]]
+title = "Gizmo line joints"
+url = "https://github.com/bevyengine/bevy/pull/12252"
+areas = ["Gizmos"]
+file_name = "12252_Gizmo_line_joints.md"
+
+[[guides]]
+title = "Gizmo line styles"
+url = "https://github.com/bevyengine/bevy/pull/12394"
+areas = ["Gizmos"]
+file_name = "12394_Gizmo_line_styles.md"
+
+[[guides]]
+title = "Changed the order of arguments for the Arc gizmo docs"
+url = "https://github.com/bevyengine/bevy/pull/12854"
+areas = ["Gizmos"]
+file_name = "12854_Changed_the_order_of_arguments_for_the_Arc_gizmo_docs.md"
+
+[[guides]]
+title = "Inconsistent segments/resolution naming"
+url = "https://github.com/bevyengine/bevy/pull/13438"
+areas = ["Gizmos"]
+file_name = "13438_Inconsistent_segmentsresolution_naming.md"
+
+[[guides]]
+title = "Deprecate `ReceivedCharacter`"
+url = "https://github.com/bevyengine/bevy/pull/12868"
+areas = ["Input","Windowing"]
+file_name = "12868_Deprecate_ReceivedCharacter.md"
+
+[[guides]]
+title = "Add `Direction3dA` and move direction types out of `primitives`"
+url = "https://github.com/bevyengine/bevy/pull/12018"
+areas = ["Math"]
+file_name = "12018_Add_Direction3dA_and_move_direction_types_out_of_primitive.md"
+
+[[guides]]
+title = "Rename `Direction2d/3d` to `Dir2/3`"
+url = "https://github.com/bevyengine/bevy/pull/12189"
+areas = ["Math"]
+file_name = "12189_Rename_Direction2d3d_to_Dir23.md"
+
+[[guides]]
+title = "Make cardinal splines include endpoints"
+url = "https://github.com/bevyengine/bevy/pull/12574"
+areas = ["Math"]
+file_name = "12574_Make_cardinal_splines_include_endpoints.md"
+
+[[guides]]
+title = "Move `Point` out of cubic splines module and expand it"
+url = "https://github.com/bevyengine/bevy/pull/12747"
+areas = ["Math"]
+file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
+
+[[guides]]
+title = "Remove VectorSpace impl on Quat"
+url = "https://github.com/bevyengine/bevy/pull/12796"
+areas = ["Math"]
+file_name = "12796_Remove_VectorSpace_impl_on_Quat.md"
+
+[[guides]]
+title = "Meshing for `Triangle3d` primitive"
+url = "https://github.com/bevyengine/bevy/pull/12686"
+areas = ["Math"]
+file_name = "12686_Meshing_for_Triangle3d_primitive.md"
+
+[[guides]]
+title = "Use Vec3A for 3D bounding volumes and raycasts"
+url = "https://github.com/bevyengine/bevy/pull/13087"
+areas = ["Math"]
+file_name = "13087_Use_Vec3A_for_3D_bounding_volumes_and_raycasts.md"
+
+[[guides]]
+title = "Update glam version requirement from 0.25 to 0.27"
+url = "https://github.com/bevyengine/bevy/pull/12757"
+areas = ["Math"]
+file_name = "12757_Update_glam_version_requirement_from_025_to_027.md"
+
+[[guides]]
+title = "Common `MeshBuilder` trait"
+url = "https://github.com/bevyengine/bevy/pull/13411"
+areas = ["Math","Rendering"]
+file_name = "13411_Common_MeshBuilder_trait.md"
+
+[[guides]]
+title = "Make `Transform::rotate_axis` and `Transform::rotate_local_axis` use `Dir3`"
+url = "https://github.com/bevyengine/bevy/pull/12986"
+areas = ["Math","Transform"]
+file_name = "12986_Make_Transformrotate_axis_and_Transformrotate_local_axis_u.md"
+
+[[guides]]
+title = "Use `Dir3` for local axis methods in `GlobalTransform`"
+url = "https://github.com/bevyengine/bevy/pull/13264"
+areas = ["Math","Transform"]
+file_name = "13264_Use_Dir3_for_local_axis_methods_in_GlobalTransform.md"
+
+[[guides]]
+title = "Fix `Ord` and `PartialOrd` differing for `FloatOrd` and optimize implementation"
+url = "https://github.com/bevyengine/bevy/pull/12711"
+areas = ["Math","Utils"]
+file_name = "12711_Fix_Ord_and_PartialOrd_differing_for_FloatOrd_and_optimize.md"
+
+[[guides]]
+title = "Move FloatOrd into bevy_math"
+url = "https://github.com/bevyengine/bevy/pull/12732"
+areas = ["Math","Utils"]
+file_name = "12732_Move_FloatOrd_into_bevy_math.md"
+
+[[guides]]
+title = "reflect: treat proxy types correctly when serializing"
+url = "https://github.com/bevyengine/bevy/pull/12024"
+areas = ["Reflection"]
+file_name = "12024_reflect_treat_proxy_types_correctly_when_serializing.md"
+
+[[guides]]
+title = "bevy_reflect: Recursive registration"
+url = "https://github.com/bevyengine/bevy/pull/5781"
+areas = ["Reflection"]
+file_name = "5781_bevy_reflect_Recursive_registration.md"
+
+[[guides]]
+title = "bevy_reflect: Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
+url = "https://github.com/bevyengine/bevy/pull/12721"
+areas = ["Reflection"]
+file_name = "12721_bevy_reflect_Rename_UntypedReflectDeserializer_to_ReflectD.md"
+
+[[guides]]
+title = "Implement Reflect for Result<T, E> as enum"
+url = "https://github.com/bevyengine/bevy/pull/13182"
+areas = ["Reflection"]
+file_name = "13182_Implement_Reflect_for_ResultT_E_as_enum.md"
+
+[[guides]]
+title = "Avoid bevy_reflect::List::iter wrapping in release mode"
+url = "https://github.com/bevyengine/bevy/pull/13271"
+areas = ["Reflection"]
+file_name = "13271_Avoid_bevy_reflectListiter_wrapping_in_release_mode.md"
+
+[[guides]]
+title = "Fix TypeRegistry use in dynamic scene"
+url = "https://github.com/bevyengine/bevy/pull/12715"
+areas = ["Reflection","Scenes"]
+file_name = "12715_Fix_TypeRegistry_use_in_dynamic_scene.md"
+
+[[guides]]
+title = "rename Camera3dBundle's 'dither' field to 'deband_dither' to align with Camera2dBundle"
+url = "https://github.com/bevyengine/bevy/pull/11939"
+areas = ["Rendering"]
+file_name = "11939_rename_Camera3dBundles_dither_field_to_deband_dither_to_al.md"
+
+[[guides]]
+title = "Add support for KHR_texture_transform"
+url = "https://github.com/bevyengine/bevy/pull/11904"
+areas = ["Rendering"]
+file_name = "11904_Add_support_for_KHR_texture_transform.md"
+
+[[guides]]
+title = "Move AlphaMode into bevy_render"
+url = "https://github.com/bevyengine/bevy/pull/12012"
+areas = ["Rendering"]
+file_name = "12012_Move_AlphaMode_into_bevy_render.md"
+
+[[guides]]
+title = "Prefer `UVec2` when working with texture dimensions"
+url = "https://github.com/bevyengine/bevy/pull/11698"
+areas = ["Rendering"]
+file_name = "11698_Prefer_UVec2_when_working_with_texture_dimensions.md"
+
+[[guides]]
+title = "Fix `CameraProjectionPlugin` not implementing `Plugin` in some cases"
+url = "https://github.com/bevyengine/bevy/pull/11766"
+areas = ["Rendering"]
+file_name = "11766_Fix_CameraProjectionPlugin_not_implementing_Plugin_in_some.md"
+
+[[guides]]
+title = "Add random shader utils, fix cluster_debug_visualization"
+url = "https://github.com/bevyengine/bevy/pull/11956"
+areas = ["Rendering"]
+file_name = "11956_Add_random_shader_utils_fix_cluster_debug_visualization.md"
+
+[[guides]]
+title = "Intern mesh vertex buffer layouts so that we don't have to compare them over and over."
+url = "https://github.com/bevyengine/bevy/pull/12216"
+areas = ["Rendering"]
+file_name = "12216_Intern_mesh_vertex_buffer_layouts_so_that_we_dont_have_to_.md"
+
+[[guides]]
+title = "Batching: replace GpuArrayBufferIndex::index with a u32"
+url = "https://github.com/bevyengine/bevy/pull/12250"
+areas = ["Rendering"]
+file_name = "12250_Batching_replace_GpuArrayBufferIndexindex_with_a_u32.md"
+
+[[guides]]
+title = "Solve some oklaba inconsistencies"
+url = "https://github.com/bevyengine/bevy/pull/12526"
+areas = ["Rendering"]
+file_name = "12526_Solve_some_oklaba_inconsistencies.md"
+
+[[guides]]
+title = "Add setting to enable/disable shadows to MaterialPlugin"
+url = "https://github.com/bevyengine/bevy/pull/12538"
+areas = ["Rendering"]
+file_name = "12538_Add_setting_to_enabledisable_shadows_to_MaterialPlugin.md"
+
+[[guides]]
+title = "Implement maths and `Animatable` for `Srgba`"
+url = "https://github.com/bevyengine/bevy/pull/12649"
+areas = ["Rendering"]
+file_name = "12649_Implement_maths_and_Animatable_for_Srgba.md"
+
+[[guides]]
+title = "Remove needless color specializaion for `SpritePipeline`"
+url = "https://github.com/bevyengine/bevy/pull/12559"
+areas = ["Rendering"]
+file_name = "12559_Remove_needless_color_specializaion_for_SpritePipeline.md"
+
+[[guides]]
+title = "Improve performance by binning together opaque items instead of sorting them."
+url = "https://github.com/bevyengine/bevy/pull/12453"
+areas = ["Rendering"]
+file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
+
+[[guides]]
+title = "Fix crash on Linux Nvidia 550 driver"
+url = "https://github.com/bevyengine/bevy/pull/12542"
+areas = ["Rendering"]
+file_name = "12542_Fix_crash_on_Linux_Nvidia_550_driver.md"
+
+[[guides]]
+title = "remove `DeterministicRenderingConfig`"
+url = "https://github.com/bevyengine/bevy/pull/12811"
+areas = ["Rendering"]
+file_name = "12811_remove_DeterministicRenderingConfig.md"
+
+[[guides]]
+title = "Micro-optimize `queue_material_meshes`, primarily to remove bit manipulation."
+url = "https://github.com/bevyengine/bevy/pull/12791"
+areas = ["Rendering"]
+file_name = "12791_Microoptimize_queue_material_meshes_primarily_to_remove_bi.md"
+
+[[guides]]
+title = "Disable RAY_QUERY and RAY_TRACING_ACCELERATION_STRUCTURE by default"
+url = "https://github.com/bevyengine/bevy/pull/12862"
+areas = ["Rendering"]
+file_name = "12862_Disable_RAY_QUERY_and_RAY_TRACING_ACCELERATION_STRUCTURE_b.md"
+
+[[guides]]
+title = "Add previous_view_uniforms.inverse_view"
+url = "https://github.com/bevyengine/bevy/pull/12902"
+areas = ["Rendering"]
+file_name = "12902_Add_previous_view_uniformsinverse_view.md"
+
+[[guides]]
+title = "Generate `MeshUniform`s on the GPU via compute shader where available."
+url = "https://github.com/bevyengine/bevy/pull/12773"
+areas = ["Rendering"]
+file_name = "12773_Generate_MeshUniforms_on_the_GPU_via_compute_shader_where_.md"
+
+[[guides]]
+title = "flipping texture coords methods has been added to the StandardMaterial"
+url = "https://github.com/bevyengine/bevy/pull/12917"
+areas = ["Rendering"]
+file_name = "12917_flipping_texture_coords_methods_has_been_added_to_the_Stan.md"
+
+[[guides]]
+title = "Implement percentage-closer filtering (PCF) for point lights."
+url = "https://github.com/bevyengine/bevy/pull/12910"
+areas = ["Rendering"]
+file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
+
+[[guides]]
+title = "Divide the single `VisibleEntities` list into separate lists for 2D meshes, 3D meshes, lights, and UI elements, for performance."
+url = "https://github.com/bevyengine/bevy/pull/12582"
+areas = ["Rendering"]
+file_name = "12582_Divide_the_single_VisibleEntities_list_into_separate_lists.md"
+
+[[guides]]
+title = "Fix rendering of sprites, text, and meshlets after #12582."
+url = "https://github.com/bevyengine/bevy/pull/12945"
+areas = ["Rendering"]
+file_name = "12945_Fix_rendering_of_sprites_text_and_meshlets_after_12582.md"
+
+[[guides]]
+title = "Add missing Default impl to ExtendedMaterial."
+url = "https://github.com/bevyengine/bevy/pull/13008"
+areas = ["Rendering"]
+file_name = "13008_Add_missing_Default_impl_to_ExtendedMaterial.md"
+
+[[guides]]
+title = "Expose `desired_maximum_frame_latency` through window creation"
+url = "https://github.com/bevyengine/bevy/pull/12954"
+areas = ["Rendering"]
+file_name = "12954_Expose_desired_maximum_frame_latency_through_window_creati.md"
+
+[[guides]]
+title = "Fix `CameraProjection` panic and improve `CameraProjectionPlugin`"
+url = "https://github.com/bevyengine/bevy/pull/11808"
+areas = ["Rendering"]
+file_name = "11808_Fix_CameraProjection_panic_and_improve_CameraProjectionPlu.md"
+
+[[guides]]
+title = "Implement filmic color grading."
+url = "https://github.com/bevyengine/bevy/pull/13121"
+areas = ["Rendering"]
+file_name = "13121_Implement_filmic_color_grading.md"
+
+[[guides]]
+title = "Add BufferVec, an higher-performance alternative to StorageBuffer, and make GpuArrayBuffer use it."
+url = "https://github.com/bevyengine/bevy/pull/13199"
+areas = ["Rendering"]
+file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
+
+[[guides]]
+title = "Implement clearcoat per the Filament and the `KHR_materials_clearcoat` specifications."
+url = "https://github.com/bevyengine/bevy/pull/13031"
+areas = ["Rendering"]
+file_name = "13031_Implement_clearcoat_per_the_Filament_and_the_KHR_materials.md"
+
+[[guides]]
+title = "Clean up 2d render phases"
+url = "https://github.com/bevyengine/bevy/pull/12982"
+areas = ["Rendering"]
+file_name = "12982_Clean_up_2d_render_phases.md"
+
+[[guides]]
+title = "#12502 Remove limit on RenderLayers."
+url = "https://github.com/bevyengine/bevy/pull/13317"
+areas = ["Rendering"]
+file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
+
+[[guides]]
+title = "Add emissive_exposure_weight to the StandardMaterial"
+url = "https://github.com/bevyengine/bevy/pull/13350"
+areas = ["Rendering"]
+file_name = "13350_Add_emissive_exposure_weight_to_the_StandardMaterial.md"
+
+[[guides]]
+title = "Make render phases render world resources instead of components."
+url = "https://github.com/bevyengine/bevy/pull/13277"
+areas = ["Rendering"]
+file_name = "13277_Make_render_phases_render_world_resources_instead_of_compo.md"
+
+[[guides]]
+title = "Deprecate `SpriteSheetBundle` and `AtlasImageBundle`"
+url = "https://github.com/bevyengine/bevy/pull/12218"
+areas = ["Rendering","UI"]
+file_name = "12218_Deprecate_SpriteSheetBundle_and_AtlasImageBundle.md"
+
+[[guides]]
+title = "Decouple `BackgroundColor` from `UiImage`"
+url = "https://github.com/bevyengine/bevy/pull/11165"
+areas = ["Rendering","UI"]
+file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
+
+[[guides]]
+title = "Fix UI elements randomly not appearing after #13277."
+url = "https://github.com/bevyengine/bevy/pull/13462"
+areas = ["Rendering","UI"]
+file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
+
+[[guides]]
+title = "FIX12527: Changes to make serde optional for bevy_color"
+url = "https://github.com/bevyengine/bevy/pull/12666"
+areas = ["Rendering","Utils"]
+file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
+
+[[guides]]
+title = "configure_surface needs to be on the main thread on iOS"
+url = "https://github.com/bevyengine/bevy/pull/12055"
+areas = ["Rendering","Windowing"]
+file_name = "12055_configure_surface_needs_to_be_on_the_main_thread_on_iOS.md"
+
+[[guides]]
+title = "Introduce a `WindowWrapper` to extend the lifetime of the window when using pipelined rendering"
+url = "https://github.com/bevyengine/bevy/pull/12978"
+areas = ["Rendering","Windowing"]
+file_name = "12978_Introduce_a_WindowWrapper_to_extend_the_lifetime_of_the_wi.md"
+
+[[guides]]
+title = "Add an index argument to parallel iteration helpers in bevy_tasks"
+url = "https://github.com/bevyengine/bevy/pull/12169"
+areas = ["Tasks"]
+file_name = "12169_Add_an_index_argument_to_parallel_iteration_helpers_in_bev.md"
+
+[[guides]]
+title = "Use `Dir3` in `Transform` APIs"
+url = "https://github.com/bevyengine/bevy/pull/12530"
+areas = ["Transform"]
+file_name = "12530_Use_Dir3_in_Transform_APIs.md"
+
+[[guides]]
+title = "Fix #12255 Updating TargetCamera on multi camera scenes not allowing layout to be calculated"
+url = "https://github.com/bevyengine/bevy/pull/12268"
+areas = ["UI"]
+file_name = "12268_Fix_12255_Updating_TargetCamera_on_multi_camera_scenes_not.md"
+
+[[guides]]
+title = "Restore pre 0.13.1 Root Node Layout behavior"
+url = "https://github.com/bevyengine/bevy/pull/12698"
+areas = ["UI"]
+file_name = "12698_Restore_pre_0131_Root_Node_Layout_behavior.md"
+
+[[guides]]
+title = "Rename `Rect` `inset()` method to `inflate()`"
+url = "https://github.com/bevyengine/bevy/pull/13452"
+areas = ["UI"]
+file_name = "13452_Rename_Rect_inset_method_to_inflate.md"
+
+[[guides]]
+title = "Disentangle bevy_utils/bevy_core's reexported dependencies"
+url = "https://github.com/bevyengine/bevy/pull/12313"
+areas = ["Utils"]
+file_name = "12313_Disentangle_bevy_utilsbevy_cores_reexported_dependencies.md"
+
+[[guides]]
+title = "Fix fit_canvas_to_parent"
+url = "https://github.com/bevyengine/bevy/pull/11278"
+areas = ["Windowing"]
+file_name = "11278_Fix_fit_canvas_to_parent.md"
+
+[[guides]]
+title = "Clean up WinitWindows::remove_window"
+url = "https://github.com/bevyengine/bevy/pull/12749"
+areas = ["Windowing"]
+file_name = "12749_Clean_up_WinitWindowsremove_window.md"
+
+[[guides]]
+title = "Ensure clean exit"
+url = "https://github.com/bevyengine/bevy/pull/13236"
+areas = ["Windowing"]
+file_name = "13236_Ensure_clean_exit.md"
+

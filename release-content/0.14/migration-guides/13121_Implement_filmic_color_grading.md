@@ -1,0 +1,2 @@
+- `ColorGrading::gamma` and `ColorGrading::pre_saturation` are now set separately for the `shadows`, `midtones`, and `highlights` sections. You can migrate code with the `ColorGrading::all_sections` and `ColorGrading::all_sections_mut` functions, which access and/or update all sections at once.
+- `ColorGrading::post_saturation` and `ColorGrading::exposure` are now fields of `ColorGrading::global`.

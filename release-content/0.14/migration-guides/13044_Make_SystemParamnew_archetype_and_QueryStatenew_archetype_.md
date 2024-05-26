@@ -1,0 +1,1 @@
+`QueryState::new_archetype` and `SystemParam::new_archetype` are now an unsafe functions that must be sure that the provided `Archetype` is from the same `World` that the state was initialized from. Callers may need to add additional assertions or propagate the safety invariant upwards through the callstack to ensure safety.

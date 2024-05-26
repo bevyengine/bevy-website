@@ -1,0 +1,1 @@
+- If you used `MinimalPlugins` with `LogPlugin` for a WASM-target build, you will need to add the new `PanicHandlerPlugin` to set the panic behavior to output to the console. Otherwise, you will see the default panic handler (opaque, `unreachable` errors in the console).

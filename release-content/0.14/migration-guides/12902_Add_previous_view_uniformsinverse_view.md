@@ -1,0 +1,3 @@
+- Renamed `prepass_bindings::previous_view_proj` to `prepass_bindings::previous_view_uniforms.view_proj`.
+- Renamed `PreviousViewProjectionUniformOffset` to `PreviousViewUniformOffset`.
+- Renamed `PreviousViewProjection` to `PreviousViewData`.

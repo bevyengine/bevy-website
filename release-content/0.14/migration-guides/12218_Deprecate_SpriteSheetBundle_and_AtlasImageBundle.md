@@ -1,0 +1,2 @@
+- `SpriteSheetBundle` has been deprecated. Use `TextureAtlas` alongside a `SpriteBundle` instead.
+- `AtlasImageBundle` has been deprecated. Use `TextureAtlas` alongside an `ImageBundle` instead.

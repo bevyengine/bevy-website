@@ -1,0 +1,1 @@
+- Users of scalar mul/div for `LinearRgba` need to be aware of the change and maybe use the `.clamp()` methods or manually set the `alpha` channel.
