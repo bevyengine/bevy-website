@@ -113,12 +113,6 @@ url = "https://github.com/bevyengine/bevy/pull/9135"
 file_name = "9135_Add_pipeline_statistics.md"
 
 [[release_notes]]
-title = "Use async-fn in traits rather than BoxedFuture"
-authors = ["@ArthurBrussee"]
-url = "https://github.com/bevyengine/bevy/pull/12550"
-file_name = "12550_Use_asyncfn_in_traits_rather_than_BoxedFuture.md"
-
-[[release_notes]]
 title = "Add a gizmo-based overlay to show UI node outlines (Adopted)"
 authors = ["@pablo-lua","@alice-i-cecile","@nicopap"]
 url = "https://github.com/bevyengine/bevy/pull/11237"
