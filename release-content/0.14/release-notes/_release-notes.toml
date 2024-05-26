@@ -185,12 +185,6 @@ url = "https://github.com/bevyengine/bevy/pull/12547"
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[release_notes]]
-title = "Refactor `App` and `SubApp` internals for better separation"
-authors = ["@maniwani"]
-url = "https://github.com/bevyengine/bevy/pull/9202"
-file_name = "9202_Refactor_App_and_SubApp_internals_for_better_separation.md"
-
-[[release_notes]]
 title = "Add `Tetrahedron` primitive to `bevy_math::primitives`"
 authors = ["@Chubercik"]
 url = "https://github.com/bevyengine/bevy/pull/12688"
