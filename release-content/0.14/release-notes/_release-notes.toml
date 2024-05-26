@@ -65,12 +65,6 @@ url = "https://github.com/bevyengine/bevy/pull/11341"
 file_name = "11341_Add_bevy_dev_tools_crate.md"
 
 [[release_notes]]
-title = "We must have googly eyes (new Game example)"
-authors = ["@tjamaan","@rparrett"]
-url = "https://github.com/bevyengine/bevy/pull/12331"
-file_name = "12331_We_must_have_googly_eyes_new_Game_example.md"
-
-[[release_notes]]
 title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
 authors = ["@pcwalton","@rparrett"]
 url = "https://github.com/bevyengine/bevy/pull/11989"
