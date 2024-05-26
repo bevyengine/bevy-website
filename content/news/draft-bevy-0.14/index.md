@@ -14,9 +14,9 @@ To update an existing Bevy App or Plugin to **Bevy 0.14**, check out our [0.13 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **Shiny 3D rendering features:** depth of field, god rays, meshlets, motion blur and more! Bevy's 3D rendering is quickly closing the feature gap.
+- **Animation blending:** our new low-level animation graph adds support for animation blending, and sets the stage for first- and third-party graphical, asset-driven animation tools.
+- **Shiny 3D rendering features:** meshlets, hierarchical levels of detail, depth of field, god rays, motion blur and more!
 - **Better colors:** type-safe colors make it clear which color space you're operating in, and offer an awesome array of useful methods.
-- **Animation blending:** our new low-level animation graph unblocks animation blending, and sets the stage for first- and third-party graphical, asset-driven animation tools.
 - **Observers and hooks:** automatically respond to component addition and removal as we lay the foundations for fast, reliable relations between entities.
 - **Computed states and substates:** modelling complex app state is a breeze with these type-safe extensions to our `States` abstraction.
 - **Rounded corners:** rounding off one of `bevy_ui`'s roughest corners.
