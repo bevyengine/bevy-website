@@ -5,7 +5,7 @@ and offers a wide range of fully documented operations on and conversions betwee
 Critically, color mixing / blending is now supported: perfect for procedurally generating color palettes and working with animations.
 
 ```rust
-use bevy_color::{palettes::tailwind, Mix};
+use bevy_color::*;
 
 // Each color space now corresponds to a specific type
 let red = Srgba::rgb(1., 0., 0.);
