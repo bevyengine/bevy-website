@@ -150,7 +150,7 @@ fn write_migration_file(file_path: &PathBuf, pr_body: &str) -> anyhow::Result<()
     }
 
     // Strip leading and trailing whitespace and add a newline at the end
-    section = section.trim_start().trim_end().to_string() + "\n";
+    section = section.trim().to_string() + "\n";
 
     write!(file, "{}", section)?;
     Ok(())
