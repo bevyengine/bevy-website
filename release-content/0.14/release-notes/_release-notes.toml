@@ -179,12 +179,6 @@ url = "https://github.com/bevyengine/bevy/pull/12688"
 file_name = "12688_Add_Tetrahedron_primitive_to_bevy_mathprimitives.md"
 
 [[release_notes]]
-title = "Meshing for `Annulus` primitive"
-authors = ["@mweatherley","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12734"
-file_name = "12734_Meshing_for_Annulus_primitive.md"
-
-[[release_notes]]
 title = "Add methods `iter_resources` and `iter_resources_mut`"
 authors = ["@matiqo15","@pablo-lua","@james7132","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/12829"
@@ -195,12 +189,6 @@ title = "Error info has been added to LoadState::Failed"
 authors = ["@bugsweeper"]
 url = "https://github.com/bevyengine/bevy/pull/12709"
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
-
-[[release_notes]]
-title = "Meshing for `Triangle3d` primitive"
-authors = ["@mweatherley","@Chubercik","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12686"
-file_name = "12686_Meshing_for_Triangle3d_primitive.md"
 
 [[release_notes]]
 title = "Implement percentage-closer filtering (PCF) for point lights."
