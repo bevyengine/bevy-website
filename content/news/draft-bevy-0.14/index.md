@@ -16,7 +16,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 - **Shiny 3D rendering features:** depth of field, god rays, meshlets, motion blur and more! Bevy's 3D rendering is quickly closing the feature gap.
 - **Better colors:** type-safe colors make it clear which color space you're operating in, and offer an awesome array of useful methods.
-- **Animation blending:** our new procedural animation graph unblocks animation blending, and sets us up for graphical, asset-driven animation tools.
+- **Animation blending:** our new low-level animation graph unblocks animation blending, and sets the stage for first- and third-party graphical, asset-driven animation tools.
 - **Observers and hooks:** automatically respond to component addition and removal as we lay the foundations for fast, reliable relations between entities.
 - **Computed states and substates:** modelling complex app state is a breeze with these type-safe extensions to our `States` abstraction.
 - **Rounded corners:** rounding off one of `bevy_ui`'s roughest corners.
