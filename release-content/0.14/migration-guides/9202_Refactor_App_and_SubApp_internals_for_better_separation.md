@@ -1,4 +1,3 @@
-
 - To construct a sub-app, use `SubApp::new()`. `App` can no longer convert into `SubApp`.
 - If you implemented a trait for `App`, you may want to implement it for `SubApp` as well.
 - If you’re accessing `app.world` directly, you now have to use `app.world()` and `app.world_mut()`.

@@ -1,2 +1,1 @@
-
-Bevy feature `multi-threaded` should be referred to as `multi_threaded` from now on.
+Bevy feature multi-threaded should be refered to multi_threaded from now on.

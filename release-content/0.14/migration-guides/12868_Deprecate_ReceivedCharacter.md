@@ -1,4 +1,3 @@
-
 - 
 `ReceivedCharacter` is now deprecated, use `KeyboardInput` instead.
 
@@ -30,4 +29,3 @@ fn listen_characters(events: EventReader<KeyboardInput>) {
   }
 }
 ```
-

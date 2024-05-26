@@ -1,4 +1,3 @@
-
 If you were creating a Oklaba instance directly, instead of using L, you should use lightness
 
 ```rust

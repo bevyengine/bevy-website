@@ -1,4 +1,3 @@
-
 If the user accessed the NextState resource’s value directly or created them from scratch they will need to adjust to use the new enum variants:
 
 - if they created a `NextState(Some(S))` - they should now use `NextState::Pending(S)`

@@ -1,4 +1,3 @@
-
 Bevy’s color types have changed! Wherever you used a `bevy::render::Color`, a `bevy::color::Color` is used instead.
 
 These are quite similar! Both are enums storing a color in a specific color space (or to be more precise, using a specific color model). However, each of the different color models now has its own type.

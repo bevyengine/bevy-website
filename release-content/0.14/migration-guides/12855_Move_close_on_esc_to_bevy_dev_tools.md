@@ -1,4 +1,3 @@
-
 `bevy_window::close_on_esc` has been moved to `bevy_dev_tools::close_on_esc`. You will first need to enable `bevy_dev_tools` as a feature in your `Cargo.toml`:
 
 ```toml

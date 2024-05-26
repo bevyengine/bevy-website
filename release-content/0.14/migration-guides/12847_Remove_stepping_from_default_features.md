@@ -1,4 +1,3 @@
-
 The system-by-system stepping feature is now disabled by default; to use it, enable the `bevy_debug_stepping` feature explicitly:
 
 ```toml

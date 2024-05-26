@@ -1,4 +1,3 @@
-
 The `Direction2d`, `Direction3d`, and `InvalidDirectionError` types have been moved out of `bevy::math::primitives`.
 
 Before:

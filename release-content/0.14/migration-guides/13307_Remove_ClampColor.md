@@ -1,4 +1,3 @@
-
 Manually clamp the various colour components yourself if this behaviour is still required.
 
 ```rust

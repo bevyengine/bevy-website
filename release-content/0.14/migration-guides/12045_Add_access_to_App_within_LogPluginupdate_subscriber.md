@@ -1,4 +1,3 @@
-
 `LogPlugin::update_subscriber` now has a `&mut App` parameter. If you don’t need access to `App`, you can ignore the parameter with an underscore (`_`).
 
 ```diff,rust

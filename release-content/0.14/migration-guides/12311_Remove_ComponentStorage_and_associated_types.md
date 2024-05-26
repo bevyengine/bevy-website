@@ -1,4 +1,3 @@
-
 If you were manually implementing `Component` instead of using the derive macro, replace the associated `Storage` associated type with the `STORAGE_TYPE` const:
 
 ```rust

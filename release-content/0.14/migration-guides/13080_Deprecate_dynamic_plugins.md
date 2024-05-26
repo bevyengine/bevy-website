@@ -1,4 +1,3 @@
-
 If possible, remove all usage of dynamic plugins.
 
 ```rust

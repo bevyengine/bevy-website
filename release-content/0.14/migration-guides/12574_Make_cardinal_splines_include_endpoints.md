@@ -1,4 +1,3 @@
-
 Any users relying on the old behavior of `CubicCardinalSpline` will have to truncate any parametrizations they used in order to access a curve identical to the one they had previously. This would be done by chopping off a unit-distance segment from each end of the parametrizing interval. For instance, if a user’s existing code looks as follows
 
 ```rust

@@ -1,4 +1,3 @@
-
 When loading gLTF assets with `asset_server.load_with_settings`, use `RenderAssetUsages` instead of `bool` when setting load_meshes e.g.
 
 ```rust

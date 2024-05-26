@@ -1,4 +1,3 @@
-
 ```rust
 let system_id = world.register_system(my_sys);
 

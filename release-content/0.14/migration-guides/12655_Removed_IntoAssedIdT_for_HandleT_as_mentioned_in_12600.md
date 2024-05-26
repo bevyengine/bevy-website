@@ -1,4 +1,3 @@
-
 If you use passing Handle by value as AssetId, you should pass reference or call .id() method on it
 Before (0.13):
 `assets.insert(handle, value);`

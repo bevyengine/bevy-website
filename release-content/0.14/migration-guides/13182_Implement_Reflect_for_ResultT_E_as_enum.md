@@ -1,4 +1,3 @@
-
 `Result<T, E>` has had its `Reflect` implementation changed to align it with `Option<T>` and its intended semantics: A carrier of either an `Ok` or `Err` value, and the ability to access it. To achieve this it is no longer a `ReflectKind::Value` but rather a `ReflectKind::Enum` and as such carries these changes with it:
 
 For `Result<T, E>`

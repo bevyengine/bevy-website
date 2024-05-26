@@ -1,4 +1,3 @@
-
 - `BackgroundColor` no longer tints the color of UI images. Use `UiImage::color` for that instead.
 - For solid color buttons, replace `ButtonBundle { background_color: my_color.into(), ... }` with `ButtonBundle { image: UiImage::default().with_color(my_color), ... }`, and update button interaction systems to use `UiImage::color` instead of `BackgroundColor` as well.
 - `bevy_ui::RenderUiSystem::ExtractNode` has been split into `ExtractBackgrounds`, `ExtractImages`, `ExtractBorders`, and `ExtractText`.

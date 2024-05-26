@@ -1,4 +1,3 @@
-
 __`bevy_render::color::colorspace::SrgbColorSpace::<f32>::linear_to_nonlinear_srgb`__
 
 Use `bevy_color::color::gamma_function_inverse`

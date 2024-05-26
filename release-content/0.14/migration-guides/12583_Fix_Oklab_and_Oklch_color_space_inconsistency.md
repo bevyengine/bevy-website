@@ -1,4 +1,3 @@
-
 The following methods have been renamed for the `Oklch` color space:
 
 - `with_l` -> `with_lightness`.
