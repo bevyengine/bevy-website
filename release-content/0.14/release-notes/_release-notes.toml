@@ -23,22 +23,10 @@ url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
-title = "`bevy_color`: Added Color Conversion Mermaid Diagram"
-authors = ["@bushrat011899"]
-url = "https://github.com/bevyengine/bevy/pull/12147"
-file_name = "12147_bevy_color_Added_Color_Conversion_Mermaid_Diagram.md"
-
-[[release_notes]]
 title = "Cubic splines overhaul"
 authors = ["@JohnTheCoolingFan","@Jondolf","@alice-i-cecile","@IQuick143","@NthTensor"]
 url = "https://github.com/bevyengine/bevy/pull/10701"
 file_name = "10701_Cubic_splines_overhaul.md"
-
-[[release_notes]]
-title = "Migrate from `LegacyColor` to `bevy_color::Color`"
-authors = ["@alice-i-cecile","@afonsolage","@bushrat011899","@rparrett"]
-url = "https://github.com/bevyengine/bevy/pull/12163"
-file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[release_notes]]
 title = "Add coordinate axes gizmo"
