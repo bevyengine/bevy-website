@@ -305,8 +305,8 @@ url = "https://github.com/bevyengine/bevy/pull/11426"
 file_name = "11426_Computed_State__Sub_States.md"
 
 [[release_notes]]
-title = "Add a process for working groups"
-authors = ["@alice-i-cecile","@Jondolf"]
+title = "Working groups"
+authors = ["@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13162"
 file_name = "13162_Add_a_process_for_working_groups.md"
 
