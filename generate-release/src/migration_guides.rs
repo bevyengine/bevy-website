@@ -148,6 +148,10 @@ fn write_migration_file(file_path: &PathBuf, pr_body: &str) -> anyhow::Result<()
     if section.ends_with("\n---\n") {
         section = section.replace("\n---\n", "");
     }
+
+    // Strip leading and trailing whitespace and add a newline at the end
+    section = section.trim().to_string() + "\n";
+
     write!(file, "{}", section)?;
     Ok(())
 }
