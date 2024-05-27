@@ -18,7 +18,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Shiny 3D rendering features:** meshlets, hierarchical levels of detail, depth of field, god rays, motion blur and more!
 - **Better colors:** type-safe colors make it clear which color space you're operating in, and offer an awesome array of useful methods.
 - **Observers and hooks:** automatically respond to component addition and removal as we lay the foundations for fast, reliable relations between entities.
-- **Computed states and substates:** modelling complex app state is a breeze with these type-safe extensions to our `States` abstraction.
+- **Computed states and substates:** modeling complex app state is a breeze with these type-safe extensions to our `States` abstraction.
 - **Rounded corners:** rounding off one of `bevy_ui`'s roughest corners.
 
 <!-- more -->
