@@ -72,31 +72,31 @@
 
       // vaguely in top bar order
 
-      &[href*="/learn/book/"]::before {
+      &[href^="/learn/book/"]::before {
         content: "book:";
       }
 
-      &[href*="/learn/quick-start/"]::before {
+      &[href^="/learn/quick-start/"]::before {
         content: "quick start:";
       }
 
-      &[href*="/news/"]::before {
+      &[href^="/news/"]::before {
         content: "news:";
       }
 
-      &[href*="/foundation/"]::before {
+      &[href^="/foundation/"]::before {
         content: "foundation:";
       }
 
-      &[href*="/examples/"]::before {
+      &[href^="/examples/"]::before {
         content: "examples:";
       }
 
-      &[href*="/examples-webgpu/"]::before {
+      &[href^="/examples-webgpu/"]::before {
         content: "examples (webgpu):";
       }
 
-      &[href*="/donate/"]::before {
+      &[href^="/donate/"]::before {
         content: "donate:";
       }
     }

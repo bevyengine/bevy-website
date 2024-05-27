@@ -43,7 +43,8 @@ class Search {
         /** @type any[] */
         let results = this.index.search(query, {});
         results.forEach(result => {
-            if (result.ref.includes("/examples")) {
+            result.ref = new URL(result.ref).pathname;
+            if (result.ref.startsWith("/examples")) {
                 result.score /= 3;
             }
         });
