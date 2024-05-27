@@ -31,8 +31,9 @@ let purple =  red.mix(blue, 0.5);
 
 Most of the user-facing APIs still accept a colorspace-agnostic `Color` (which now wraps our color-space types),
 while rendering internals use the physically-based `LinearRgba` type.
+For an overview of the different color spaces, and what they're each good for, please check out our [color space usage](https://dev-docs.bevyengine.org/bevy/color/index.html#color-space-usage) documentation.
 
 `bevy_color` offers a solid, type-safe foundation, but it's just getting started.
-If there are more things you'd like to do to your colors, please open an issue or PR and we'd be happy to help!
+If you'd like another color space or there are more things you'd like to do to your colors, please open an issue or PR and we'd be happy to help!
 
 P.S. `bevy_color` is intended to operate effectively as a stand-alone crate: feel free to take a dependency on it for your non-Bevy projects as well.
