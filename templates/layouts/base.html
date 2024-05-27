@@ -1,4 +1,5 @@
 {% import "macros/header.html" as header_macros %}
+{% import "macros/search.html" as search %}
 {% import "macros/public_draft.html" as public_draft %}
 
 {# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
@@ -162,6 +163,9 @@
                 {% block mobile_page_menu %}{% endblock mobile_page_menu %}
               </div>
               <ul class="main-menu__menu">
+                <li class="main-menu__entry">
+                  {{ search::search_button() }}
+                </li>
                 {{ header_macros::header_item(name="Getting Started", path="/learn/quick-start/getting-started",
                                 extra_class="main-menu__entry--getting-started", current_path=current_path) }}
                 {{ header_macros::header_item(name="Learn", current_path=current_path) }}
