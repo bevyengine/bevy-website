@@ -66,7 +66,13 @@ pub fn generate_release_notes(
         let file =
             std::fs::File::create(&file_path).context(format!("Failed to create {file_path:?}"))?;
 
-        writeln!(&file, "TODO")?;
+        writeln!(&file, "<!-- {} -->", title)?;
+        writeln!(
+            &file,
+            "<!-- https://github.com/bevyengine/bevy/pull/{} -->",
+            pr.number
+        )?;
+        writeln!(&file, "\n<!-- TODO -->")?;
     }
 
     // Write the metadata file
