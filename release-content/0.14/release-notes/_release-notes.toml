@@ -1,10 +1,4 @@
 [[release_notes]]
-title = "Add support for KHR_texture_transform"
-authors = ["@janhohenheim","@Kanabenki","@yrns"]
-url = "https://github.com/bevyengine/bevy/pull/11904"
-file_name = "11904_Add_support_for_KHR_texture_transform.md"
-
-[[release_notes]]
 title = "`bevy_color`: a beautiful color solution"
 authors = [
 	"@viridia",
@@ -36,22 +30,10 @@ url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
-title = "`bevy_color`: Added Color Conversion Mermaid Diagram"
-authors = ["@bushrat011899"]
-url = "https://github.com/bevyengine/bevy/pull/12147"
-file_name = "12147_bevy_color_Added_Color_Conversion_Mermaid_Diagram.md"
-
-[[release_notes]]
 title = "Cubic splines overhaul"
 authors = ["@JohnTheCoolingFan","@Jondolf","@alice-i-cecile","@IQuick143","@NthTensor"]
 url = "https://github.com/bevyengine/bevy/pull/10701"
 file_name = "10701_Cubic_splines_overhaul.md"
-
-[[release_notes]]
-title = "Migrate from `LegacyColor` to `bevy_color::Color`"
-authors = ["@alice-i-cecile","@afonsolage","@bushrat011899","@rparrett"]
-url = "https://github.com/bevyengine/bevy/pull/12163"
-file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[release_notes]]
 title = "Add coordinate axes gizmo"
@@ -88,12 +70,6 @@ title = "Add bevy_dev_tools crate"
 authors = ["@matiqo15","@BD103","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11341"
 file_name = "11341_Add_bevy_dev_tools_crate.md"
-
-[[release_notes]]
-title = "We must have googly eyes (new Game example)"
-authors = ["@tjamaan","@rparrett"]
-url = "https://github.com/bevyengine/bevy/pull/12331"
-file_name = "12331_We_must_have_googly_eyes_new_Game_example.md"
 
 [[release_notes]]
 title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
@@ -142,12 +118,6 @@ title = "Add pipeline statistics"
 authors = ["@LeshaInc","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/9135"
 file_name = "9135_Add_pipeline_statistics.md"
-
-[[release_notes]]
-title = "Use async-fn in traits rather than BoxedFuture"
-authors = ["@ArthurBrussee"]
-url = "https://github.com/bevyengine/bevy/pull/12550"
-file_name = "12550_Use_asyncfn_in_traits_rather_than_BoxedFuture.md"
 
 [[release_notes]]
 title = "Add a gizmo-based overlay to show UI node outlines (Adopted)"
@@ -210,22 +180,10 @@ url = "https://github.com/bevyengine/bevy/pull/12547"
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[release_notes]]
-title = "Refactor `App` and `SubApp` internals for better separation"
-authors = ["@maniwani"]
-url = "https://github.com/bevyengine/bevy/pull/9202"
-file_name = "9202_Refactor_App_and_SubApp_internals_for_better_separation.md"
-
-[[release_notes]]
 title = "Add `Tetrahedron` primitive to `bevy_math::primitives`"
 authors = ["@Chubercik"]
 url = "https://github.com/bevyengine/bevy/pull/12688"
 file_name = "12688_Add_Tetrahedron_primitive_to_bevy_mathprimitives.md"
-
-[[release_notes]]
-title = "Meshing for `Annulus` primitive"
-authors = ["@mweatherley","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12734"
-file_name = "12734_Meshing_for_Annulus_primitive.md"
 
 [[release_notes]]
 title = "Add methods `iter_resources` and `iter_resources_mut`"
@@ -238,12 +196,6 @@ title = "Error info has been added to LoadState::Failed"
 authors = ["@bugsweeper"]
 url = "https://github.com/bevyengine/bevy/pull/12709"
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
-
-[[release_notes]]
-title = "Meshing for `Triangle3d` primitive"
-authors = ["@mweatherley","@Chubercik","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12686"
-file_name = "12686_Meshing_for_Triangle3d_primitive.md"
 
 [[release_notes]]
 title = "Implement percentage-closer filtering (PCF) for point lights."
@@ -318,8 +270,8 @@ url = "https://github.com/bevyengine/bevy/pull/11426"
 file_name = "11426_Computed_State__Sub_States.md"
 
 [[release_notes]]
-title = "Add a process for working groups"
-authors = ["@alice-i-cecile","@Jondolf"]
+title = "Working groups"
+authors = ["@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13162"
 file_name = "13162_Add_a_process_for_working_groups.md"
 
