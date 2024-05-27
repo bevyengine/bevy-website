@@ -2,6 +2,9 @@ Colors are a huge part of building a good game: UI, effects, shaders and more al
 Bevy now supports a broad selection of color spaces, each with their own type (e.g. `LinearRgba`, `Hsla`, `Oklaba`),
 and offers a wide range of fully documented operations on and conversions between them.
 
+The new API is more error-resistant, more idiomatic and allows us to save work by storing the `LinearRgba` type in our rendering internals.
+This solid foundation has allowed us to implement a wide range of useful operations, clustered into traits like `Hue` or `Alpha`,
+allowing you to operate over any color space with the required property.
 Critically, color mixing / blending is now supported: perfect for procedurally generating color palettes and working with animations.
 
 ```rust
