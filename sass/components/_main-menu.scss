@@ -141,6 +141,10 @@
       background-color: rgba($color-white, 0.05);
       border-radius: $border-radius;
     }
+
+    &__search__desktop {
+      display: none;
+    }
   }
 
   @include state-checked("mobile-menu") {
@@ -182,6 +186,10 @@
       font-size: 1.3rem;
       font-weight: 500;
       text-decoration: none;
+    }
+
+    &__search__mobile {
+      display: none;
     }
   }
 }

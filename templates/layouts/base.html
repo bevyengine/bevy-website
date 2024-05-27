@@ -163,13 +163,16 @@
                       height="16">
               </label>
             </div>
+            <div class="main-menu__search main-menu__search__mobile">
+              {{ search::search_button(icon=true, class="main-menu__link") }}
+            </div>
             {% block mobile_page_menu_switch %}{% endblock mobile_page_menu_switch %}
             <div class="main-menu__content">
               <div class="main-menu__page-menu">
                 {% block mobile_page_menu %}{% endblock mobile_page_menu %}
               </div>
               <ul class="main-menu__menu">
-                <li class="main-menu__entry">
+                <li class="main-menu__entry main-menu__search main-menu__search__desktop">
                   {{ search::search_button(icon=true, class="main-menu__link") }}
                 </li>
                 {{ header_macros::header_item(name="Getting Started", path="/learn/quick-start/getting-started",
