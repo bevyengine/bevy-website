@@ -35,6 +35,7 @@ Peering deep into the mists of time (predictions are *extra* hard when your team
 - **Contributing book:** Our documentation on how to contribute is scattered to the four corners of our repositories. By gathering this together, the [Contributing Book working group](https://discord.com/channels/691052431525675048/1236112637662724127) hopes to make it easier to discover and maintain.
 - **Curve abstraction:** Curves come up all of the time in game dev, and the mathmagicians that make up the [Curve Crew](https://discord.com/channels/691052431525675048/1236110755212820581) are [designing a trait](https://github.com/bevyengine/rfcs/pull/80) to unify and power them.
 - **Better text:** our existing text solution isn't up to the demands of modern UI. We're looking at replacing it with a better solution.
+- **A dev tools abstraction:** Simple tools and overlays that spawn objects, reset the game state or track performance are a staple of productive game development. We've already added a stub `bevy_dev_tools` crate, and are [working on an abstraction](https://github.com/bevyengine/rfcs/pull/77) for how to group them into toolboxes (like a Quake-style dev console!).
 
 {{ support_bevy() }}
 {{ contributors(version="0.14") }}
