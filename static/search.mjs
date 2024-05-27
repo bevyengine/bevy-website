@@ -34,6 +34,7 @@ class Search {
     }
 
     async search() {
+        let current_path = window.location.pathname.split("/");
         /** @type {string} */
         const query = this.$input.value;
         console.debug(`search: "${query}"`);
@@ -44,9 +45,11 @@ class Search {
         let results = this.index.search(query, {});
         results.forEach(result => {
             result.ref = new URL(result.ref).pathname;
-            if (result.ref.startsWith("/examples")) {
-                result.score /= 3;
-            }
+            let similarity = result.ref
+                .split("/")
+                .map((part, i) => part == current_path[i])
+                .filter(v => v).length - 1;
+            result.score += 0.1 * similarity;
         });
         results.sort((a, b) => b.score - a.score);
         console.debug(results);
@@ -60,14 +63,6 @@ class Search {
             a.setAttribute("data-score", result.score)
             this.$results.appendChild(a)
         })
-    }
-
-    /**
-     * @param {T[]} array 
-     * @param {T => number} lookup_fn 
-     */
-    sort_by_key(array, lookup_fn) {
-        array.sort((a, b) => lookup_fn(a) - lookup_fn(b))
     }
 }
 
