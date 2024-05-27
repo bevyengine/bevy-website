@@ -18,8 +18,8 @@ url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "Immediately apply deferred system params in System::run"
-authors = ["@james7132","@alice-i-cecile"]
+title = "`Commands` and exclusive world access: working together in harmony"
+authors = ["@james7132", "@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/11823"
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
