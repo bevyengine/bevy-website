@@ -34,14 +34,6 @@ class Search {
     }
 
     async search() {
-        let fetched = await (await fetch("/search_index.en.json")).json()
-        /** @param {string} path */
-        function section_prio(path) {
-            if (path.startsWith("/examples")) {
-                return 0.5;
-            }
-            return 1;
-        }
         /** @type {string} */
         const query = this.$input.value;
         console.debug(`search: "${query}"`);
@@ -49,7 +41,7 @@ class Search {
             return;
         }
         /** @type any[] */
-        let results = this.index.search(query);
+        let results = this.index.search(query, {});
         console.debug(results);
         this.$results.innerHTML = "";
         results.slice(0, this.RESULTS_LIMIT).forEach(result => {
