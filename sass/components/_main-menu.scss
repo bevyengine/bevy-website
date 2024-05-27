@@ -54,6 +54,10 @@
       outline: $focus-outline;
     }
   }
+
+  &__search {
+    display: none; // re-enabled below
+  }
 }
 
 // MODE: Off-Canvas Mobile Menu
@@ -142,8 +146,12 @@
       border-radius: $border-radius;
     }
 
-    &__search__desktop {
-      display: none;
+    &__search__mobile {
+      display: flex;
+      padding: $padding;
+      .search-button {
+        flex-grow: 1;
+      }
     }
   }
 
@@ -188,8 +196,8 @@
       text-decoration: none;
     }
 
-    &__search__mobile {
-      display: none;
+    &__search__desktop {
+      display: block;
     }
   }
 }

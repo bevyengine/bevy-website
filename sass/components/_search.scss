@@ -1,4 +1,6 @@
 .search-button {
+  display: flex;
+  gap: 1em;
   // reset <button> defaults
   border: none;
   background: none;
