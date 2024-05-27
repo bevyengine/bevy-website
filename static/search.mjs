@@ -42,23 +42,31 @@ class Search {
         }
         /** @type any[] */
         let results = this.index.search(query, {});
+        results.forEach(result => {
+            if (result.ref.includes("/examples")) {
+                result.score /= 3;
+            }
+        });
+        results.sort((a, b) => b.score - a.score);
         console.debug(results);
         this.$results.innerHTML = "";
         results.slice(0, this.RESULTS_LIMIT).forEach(result => {
+        // results.forEach(result => {
             const a = document.createElement("a");
-            console.debug(result)
             a.innerText = `${result.doc.title}`;
             a.role = "listitem";
             a.href = result.ref;
+            a.setAttribute("data-score", result.score)
             this.$results.appendChild(a)
         })
     }
 
-    sort_key(result) {
-        if(result.item.path.startsWith("/examples")) {
-            return result.score / 2;
-        }
-        return result.score;
+    /**
+     * @param {T[]} array 
+     * @param {T => number} lookup_fn 
+     */
+    sort_by_key(array, lookup_fn) {
+        array.sort((a, b) => lookup_fn(a) - lookup_fn(b))
     }
 }
 
