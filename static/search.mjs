@@ -1,6 +1,3 @@
-import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs'
-
-
 document.getElementById("search-dialog").addEventListener('click', function (event) {
     // allow clicking out of the search dialog
     // based on https://stackoverflow.com/a/69421512
@@ -17,7 +14,9 @@ class Search {
     $input = document.getElementById("search-dialog__input")
     $results = document.getElementById("search-dialog__results")
     $search_tip_list = document.querySelector("#search-dialog aside ul");
-    fuse = null;
+    // <script> tags are contrived such that elasticlunr and searchIndex will be ready
+    // someday, hopefully: switch to .mjs for searchIndex and elasticlunr
+    index = elasticlunr.Index.load(window.searchIndex);
 
     open() {
         this.$dialog.showModal();
@@ -31,31 +30,43 @@ class Search {
         console.debug("chose tip", choice);
         Array.from(this.$search_tip_list.children).forEach(
             (tip, i) => tip.setAttribute("data-chosen", i == choice
-        ));
+            ));
     }
 
     async search() {
         let fetched = await (await fetch("/search_index.en.json")).json()
-        this.fuse ??= new Fuse(fetched, {
-            keys: ["title", "body"],
-            includeMatches: true,
-        });
+        /** @param {string} path */
+        function section_prio(path) {
+            if (path.startsWith("/examples")) {
+                return 0.5;
+            }
+            return 1;
+        }
         /** @type {string} */
         const query = this.$input.value;
         console.debug(`search: "${query}"`);
-        if(query.length == 0) {
+        if (query.length == 0) {
             return;
         }
-        let results = this.fuse.search(query);
+        /** @type any[] */
+        let results = this.index.search(query);
+        console.debug(results);
         this.$results.innerHTML = "";
         results.slice(0, this.RESULTS_LIMIT).forEach(result => {
             const a = document.createElement("a");
             console.debug(result)
-            a.innerText = `${result.item.title}`;
+            a.innerText = `${result.doc.title}`;
             a.role = "listitem";
-            a.href = result.item.url;
+            a.href = result.ref;
             this.$results.appendChild(a)
         })
+    }
+
+    sort_key(result) {
+        if(result.item.path.startsWith("/examples")) {
+            return result.score / 2;
+        }
+        return result.score;
     }
 }
 

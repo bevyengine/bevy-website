@@ -59,7 +59,28 @@
     padding: 1em;
     gap: 1em;
     a {
-      display: block;
+      &::before {
+        color: $subtitle-color;
+        text-decoration: none;
+        display: inline-block;
+        padding-right: 8px;
+      }
+
+      &[href^="/learn/book"]::before {
+        content: "book:";
+      }
+
+      &[href^="/learn/quick-start"]::before {
+        content: "quick start:";
+      }
+
+      &[href^="/examples"]::before {
+        content: "examples:";
+      }
+
+      &[href^="/examples-webgpu"]::before {
+        content: "examples (webgpu):";
+      }
     }
   }
 

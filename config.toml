@@ -29,4 +29,4 @@ highlight_theme = "css"
 # Put all your custom variables here
 
 [search]
-index_format="fuse_json"
+index_format="elasticlunr_javascript"
