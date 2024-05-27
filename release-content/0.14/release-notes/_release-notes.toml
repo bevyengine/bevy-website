@@ -66,12 +66,6 @@ url = "https://github.com/bevyengine/bevy/pull/5781"
 file_name = "5781_bevy_reflect_Recursive_registration.md"
 
 [[release_notes]]
-title = "Add bevy_dev_tools crate"
-authors = ["@matiqo15","@BD103","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/11341"
-file_name = "11341_Add_bevy_dev_tools_crate.md"
-
-[[release_notes]]
 title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
 authors = ["@pcwalton","@rparrett"]
 url = "https://github.com/bevyengine/bevy/pull/11989"
