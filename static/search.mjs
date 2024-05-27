@@ -8,6 +8,13 @@ document.getElementById("search-dialog").addEventListener('click', function (eve
     }
 });
 
+document.addEventListener("keydown", event => {
+    if(event.ctrlKey && event.key == "k") {
+        event.preventDefault();
+        SEARCH.open();
+    }
+})
+
 class Search {
     RESULTS_LIMIT = 10;
     $dialog = document.getElementById("search-dialog")
@@ -52,7 +59,6 @@ class Search {
             result.score += 0.1 * similarity;
         });
         results.sort((a, b) => b.score - a.score);
-        console.debug(results);
         this.$results.innerHTML = "";
         results.slice(0, this.RESULTS_LIMIT).forEach(result => {
             const a = document.createElement("a");
@@ -65,4 +71,5 @@ class Search {
     }
 }
 
-export default new Search()
+let SEARCH = new Search()
+export default SEARCH;
