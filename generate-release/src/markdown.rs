@@ -72,7 +72,6 @@ pub fn write_markdown_section(
         // Someone didn't write a migration guide 😢
         if write_todo {
             writeln!(output, "\n<!-- TODO -->")?;
-            println!("\x1b[93m{section_header} not found!\x1b[0m");
         }
         Ok((output, false))
     } else {
