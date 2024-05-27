@@ -55,7 +55,6 @@ class Search {
         console.debug(results);
         this.$results.innerHTML = "";
         results.slice(0, this.RESULTS_LIMIT).forEach(result => {
-        // results.forEach(result => {
             const a = document.createElement("a");
             a.innerText = `${result.doc.title}`;
             a.role = "listitem";
