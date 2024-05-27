@@ -186,7 +186,7 @@ url = "https://github.com/bevyengine/bevy/pull/12829"
 file_name = "12829_Add_methods_iter_resources_and_iter_resources_mut.md"
 
 [[release_notes]]
-title = "Error info has been added to LoadState::Failed"
+title = "Better information about why asset loading failed"
 authors = ["@bugsweeper"]
 url = "https://github.com/bevyengine/bevy/pull/12709"
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
