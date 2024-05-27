@@ -25,7 +25,7 @@ fn open_menu() {
 
 App::new()
     .init_state::<GameState>()
-    .add_systems(Update, handle_escape_pressed.run_if(in_state(GameState::Menu)));
+    .add_systems(Update, handle_escape_pressed.run_if(in_state(GameState::InGame)));
     .add_systems(OnEnter(GameState::Menu), open_settings_menu);
 ```
 
