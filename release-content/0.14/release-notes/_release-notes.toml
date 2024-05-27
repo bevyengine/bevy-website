@@ -1,6 +1,19 @@
 [[release_notes]]
-title = "Upstreaming bevy_color."
-authors = ["@viridia","@mockersf"]
+title = "`bevy_color`: a beautiful color solution"
+authors = [
+	"@viridia",
+	"@alice-i-cecile",
+	"@Earthmark",
+	"@mockersf",
+	"@pablo-lua",
+	"@solis-lumine-vorago",
+	"@NthTensor",
+	"@bushrat001899",
+	"@rparrett",
+	"@afonsolage",
+	"@chompaa",
+	"@oyasumi731",
+]
 url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
