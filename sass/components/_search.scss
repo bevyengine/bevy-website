@@ -1,0 +1,119 @@
+.search-button {
+  display: flex;
+  gap: 1em;
+  // reset <button> defaults
+  border: none;
+  background: none;
+  padding: 0;
+
+  &__svg {
+    height: 1em;
+    fill: $default-color;
+    aspect-ratio: 1/1;
+  }
+}
+
+#search-dialog {
+  $highlight: $color-pink;
+  width: min(80ch, 90%);
+  max-height: 80vh;
+  border: none;
+  background-color: transparent;
+
+  &::backdrop {
+    background-color: rgba($color-grey-800, 0.7);
+  }
+
+  .search-dialog__inner {
+    flex-grow: 1;
+    padding: 1em;
+    border: 2px solid $highlight;
+    border-radius: $border-radius;
+    background-color: $color-grey-900;
+    aspect-ratio: 3/2;
+  }
+
+  form {
+    $input-height: 2em;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    margin-bottom: 1em;
+
+    input {
+      width: 100%;
+      outline: none;
+      border: none;
+      font-size: $input-height;
+      background-color: transparent;
+      border-radius: 0;
+    }
+
+    label svg {
+      height: $input-height;
+      fill: $highlight;
+    }
+  }
+
+  #search-dialog__results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+    padding: 1em;
+    gap: 1em;
+    a {
+      &::before {
+        color: $subtitle-color;
+        text-decoration: none;
+        display: inline-block;
+        padding-right: 8px;
+      }
+
+      // &[href*="/examples/"], &[href*="/examples-webgpu"] {
+      //   order: 10;
+      // }
+
+      // vaguely in top bar order
+
+      &[href^="/learn/book/"]::before {
+        content: "book:";
+      }
+
+      &[href^="/learn/quick-start/"]::before {
+        content: "quick start:";
+      }
+
+      &[href^="/news/"]::before {
+        content: "news:";
+      }
+
+      &[href^="/foundation/"]::before {
+        content: "foundation:";
+      }
+
+      &[href^="/examples/"]::before {
+        content: "examples:";
+      }
+
+      &[href^="/examples-webgpu/"]::before {
+        content: "examples (webgpu):";
+      }
+
+      &[href^="/donate/"]::before {
+        content: "donate:";
+      }
+    }
+  }
+
+  .search-dialog__tip ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    li {
+      display: none;
+    }
+    li[data-chosen=true] {
+      display: inline;
+    }
+  }
+}

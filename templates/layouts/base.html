@@ -1,4 +1,5 @@
 {% import "macros/header.html" as header_macros %}
+{% import "macros/search.html" as search %}
 {% import "macros/public_draft.html" as public_draft %}
 
 {# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
@@ -86,6 +87,12 @@
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
     <title>{{ page_title }}</title>
+    <script defer src="/search_index.en.js"></script>
+    <script defer src="/elasticlunr.min.js"></script>
+    <script defer type="module">
+      import SEARCH from '/search.mjs';
+      window.SEARCH = SEARCH;
+    </script>
     {% block head_extensions %}{% endblock head_extensions %}
   </head>
   <body>
@@ -156,12 +163,18 @@
                       height="16">
               </label>
             </div>
+            <div class="main-menu__search main-menu__search__mobile">
+              {{ search::search_button(icon=false, class="main-menu__link") }}
+            </div>
             {% block mobile_page_menu_switch %}{% endblock mobile_page_menu_switch %}
             <div class="main-menu__content">
               <div class="main-menu__page-menu">
                 {% block mobile_page_menu %}{% endblock mobile_page_menu %}
               </div>
               <ul class="main-menu__menu">
+                <li class="main-menu__entry main-menu__search main-menu__search__desktop">
+                  {{ search::search_button(icon=true, class="main-menu__link") }}
+                </li>
                 {{ header_macros::header_item(name="Getting Started", path="/learn/quick-start/getting-started",
                                 extra_class="main-menu__entry--getting-started", current_path=current_path) }}
                 {{ header_macros::header_item(name="Learn", current_path=current_path) }}
@@ -257,5 +270,6 @@
       }
     }
     </script>
+    {{ search::search_dialog() }}
   </body>
 </html>

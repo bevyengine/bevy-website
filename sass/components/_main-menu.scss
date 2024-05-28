@@ -28,6 +28,9 @@
 
     &:hover {
       color: $color-blue;
+      svg {
+        fill: $color-blue; // (2024-05-15) only actually used by search button
+      }
     }
 
     &--active {
@@ -51,6 +54,10 @@
       outline: $focus-outline;
     }
   }
+
+  &__search {
+    display: none; // re-enabled below
+  }
 }
 
 // MODE: Off-Canvas Mobile Menu
@@ -59,9 +66,10 @@
     $padding: 8px;
     $bottom-buffer: 60px; // Add extra length to compensate for address-bar
 
-    --main-menu-switch-height: 0px;
-
     position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     top: 0px;
     left: -$mobile-menu-width;
     width: $mobile-menu-width;
@@ -75,8 +83,6 @@
     box-shadow: 0px 0px 16px rgba(#000, 0.3);
 
     &--with-page-menu {
-      --main-menu-switch-height: 56px;
-
       .main-menu__page-menu-switch {
         display: block;
       }
@@ -97,15 +103,22 @@
       }
     }
 
+    &__search__mobile {
+      display: flex;
+      padding: 0 $padding;
+      .search-button {
+        flex-grow: 1;
+      }
+    }
+
     &__page-menu-switch {
       display: none;
-      padding: $padding $padding 0 $padding;
-      height: var(--main-menu-switch-height);
+      padding: 0 $padding;
     }
 
     &__content {
       position: relative;
-      height: calc(100% - var(--header-height) - var(--main-menu-switch-height));
+      flex-grow: 1;
       overflow-x: hidden;
     }
 
@@ -124,13 +137,13 @@
     &__menu {
       display: flex;
       flex-direction: column;
-      padding: $padding;
+      padding: 0 $padding;
       transform: translateX(0px);
     }
 
     &__page-menu {
       margin: 0;
-      padding: $padding;
+      padding: 0 $padding;
       transform: translateX(#{$mobile-menu-width});
     }
 
@@ -179,6 +192,10 @@
       font-size: 1.3rem;
       font-weight: 500;
       text-decoration: none;
+    }
+
+    &__search__desktop {
+      display: block;
     }
   }
 }
