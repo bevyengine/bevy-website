@@ -59,6 +59,9 @@ enum Commands {
         /// Use this if you want to overwrite existing files
         #[arg(short, long)]
         overwrite_existing: bool,
+        /// If this is set, no issues will be opened.
+        #[arg(short, long)]
+        dry_run: bool,
     },
     /// Generates a list of all the merged PRs for the given release
     Changelog,
@@ -93,12 +96,16 @@ fn main() -> anyhow::Result<()> {
             &client,
             overwrite_existing,
         )?,
-        Commands::ReleaseNotes { overwrite_existing } => generate_release_notes(
+        Commands::ReleaseNotes {
+            overwrite_existing,
+            dry_run,
+        } => generate_release_notes(
             &args.from,
             &args.to,
             release_path.join("release-notes"),
             &client,
             overwrite_existing,
+            dry_run,
         )?,
         Commands::Changelog => generate_changelog(
             &args.from,

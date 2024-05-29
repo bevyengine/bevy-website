@@ -12,6 +12,9 @@ pub fn generate_release_notes(
     path: PathBuf,
     client: &GithubClient,
     overwrite_existing: bool,
+    // If this value is true, no issues will be opened.
+    // This is useful for testing the release notes generation without spamming the repo.
+    dry_run: bool,
 ) -> anyhow::Result<()> {
     // Get all PRs that need release notes
     let prs = get_merged_prs(client, from, to, Some("C-Needs-Release-Note"))?;
@@ -75,7 +78,7 @@ pub fn generate_release_notes(
         writeln!(&file, "\n<!-- TODO -->")?;
 
         // Open an issue to remind the author(s) to write the release notes
-        generate_and_open_issue(client, &pr, &title, &authors, &file_path);
+        generate_and_open_issue(client, &pr, &title, &authors, &file_path, dry_run);
     }
 
     // Write the metadata file
@@ -117,6 +120,7 @@ fn generate_and_open_issue(
     title: &str,
     authors: &[String],
     file_path: &PathBuf,
+    dry_run: bool,
 ) {
     let pr_number = pr.number;
     let file_path = file_path.to_string_lossy();
@@ -149,5 +153,11 @@ fn generate_and_open_issue(
         Pinging: {authors}
     )");
 
-    todo!("Open issue on GitHub with the title and body");
+    if dry_run {
+        println!("Would open issue on GitHub with the title and body:");
+        println!("Title: {}", issue_title);
+        println!("Body: {}", issue_body);
+    } else {
+        todo!("Open issue on GitHub with the title and body");
+    }
 }
