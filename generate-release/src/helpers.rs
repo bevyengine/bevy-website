@@ -19,7 +19,7 @@ pub fn get_merged_prs(
 
     println!("Getting list of all merged PRs from {from} to {to} with label {label:?}");
 
-    let base_commit = client.get_commit(from)?;
+    let base_commit = client.get_commit(from, "bevy")?;
     let base_commit_date = &base_commit.commit.committer.date[0..10];
 
     // We also get the list of merged PRs in batches instead of getting them separately for each commit

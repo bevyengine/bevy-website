@@ -115,11 +115,11 @@ impl GithubClient {
         Self { agent, token, repo }
     }
 
-    fn get(&self, path: &str) -> ureq::Request {
+    /// Submits a request to `bevyengine/bevy`
+    fn get(&self, path: &str, repo: &str) -> ureq::Request {
         self.agent
             .get(&format!(
-                "https://api.github.com/repos/bevyengine/{}/{path}",
-                self.repo
+                "https://api.github.com/repos/bevyengine/{repo}/{path}",
             ))
             .set("Accept", "application/json")
             .set("Authorization", &format!("Bearer {}", self.token))
@@ -163,7 +163,7 @@ impl GithubClient {
         page: i32,
     ) -> anyhow::Result<GithubCompareResponse> {
         let request = self
-            .get(&format!("compare/{from}...{to}"))
+            .get(&format!("compare/{from}...{to}"), "bevy")
             .query("per_page", "250")
             .query("page", &page.to_string());
         Ok(request.call()?.into_json()?)
@@ -220,7 +220,7 @@ impl GithubClient {
         label: Option<&str>,
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         let mut request = self
-            .get("issues")
+            .get("issues", "bevy")
             .query("since", &format!("{date}T00:00:00Z"))
             .query("state", "closed")
             .query("base", "main")
@@ -306,19 +306,20 @@ query {{
         Ok(contributors)
     }
 
-    pub fn get_commit(&self, git_ref: &str) -> anyhow::Result<GithubCommitResponse> {
-        let request = self.get(&format!("commits/{git_ref}"));
+    /// Gets the data for a specific commit on the provided `bevyengine` repo.
+    pub fn get_commit(&self, git_ref: &str, repo: &str) -> anyhow::Result<GithubCommitResponse> {
+        let request = self.get(&format!("commits/{git_ref}"), repo);
         Ok(request.call()?.into_json()?)
     }
 
     /// Get the list of all issues in the repo.
     ///
-    /// This is used to ensure that we don't open duplicate issues.
-    ///
+    /// This is useful to ensure that we don't open duplicate issues or PRs.
+    /// Both issues and PRs are returned.
     /// Both open and closed issues are returned.
-    pub fn get_issues(&self) -> anyhow::Result<Vec<GithubIssuesResponse>> {
+    pub fn get_issues(&self, repo: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         println!("Requesting a list of all issues on `bevyengine/bevy-website`");
-        let response = self.get("issues").set("state", "all").call()?;
+        let response = self.get("issues", repo).set("state", "all").call()?;
         println!("Received response: {}", response.status_text());
         let issues: Vec<GithubIssuesResponse> = response.into_json()?;
         println!("Received {} issues", issues.len());

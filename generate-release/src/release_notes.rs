@@ -38,7 +38,7 @@ pub fn generate_release_notes(
 
     // Generate the list of all issues so we don't spam the repo with duplicates
     // This is done outside of the loop because we don't want to request this information anew for every PR
-    let open_issues = client.get_issues().unwrap();
+    let open_issues = client.get_issues("bevy-website").unwrap();
     let issue_titles = open_issues
         .iter()
         .map(|issue| issue.title.clone())
