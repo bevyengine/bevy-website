@@ -179,7 +179,7 @@ fn generate_and_open_issue(
 
     let issue_body = format!(
         "{pr_url} needs release notes for the upcoming Bevy release!
-        Please reply below if you'd like to volunteer do so, whether or not you're the author of the PR.
+        Please reply below if you'd like to volunteer do so, even if you're the author of the PR.
         
         Release notes should:
         
