@@ -360,8 +360,6 @@ query {{
             .set("Accept", "application/vnd.github+json")
             .set("X-GitHub-Api-Version", "2022-11-28")
             .send_json(ureq::json!({
-                "owner": "bevyengine",
-                "repo": repo,
                 "title": issue_title,
                 "body": issue_body,
                 "milestone": milestone,
