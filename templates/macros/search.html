@@ -16,6 +16,9 @@
 
 {% macro search_dialog() %}
 <dialog id="search-dialog">
+  <button aria-label="Close Dialog" class="search-dialog__close" onclick="SEARCH.close()">
+    <img src="/assets/icon-times.svg" alt="A saltire or x-cross" width="16" height="16">
+  </button>
   <div style="display: flex; flex-direction: column; height: 100%;">
     <div class="search-dialog__inner">
       <form>

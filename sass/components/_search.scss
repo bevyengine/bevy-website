@@ -18,10 +18,19 @@
   width: min(80ch, 90%);
   max-height: 80vh;
   border: none;
+  padding: 0;
   background-color: transparent;
+  overflow: visible;
 
   &::backdrop {
     background-color: rgba($color-grey-800, 0.7);
+  }
+  
+  .search-dialog__close {
+    position: absolute;
+    right: -24px;
+    background: none;
+    border: none;
   }
 
   .search-dialog__inner {

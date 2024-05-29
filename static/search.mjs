@@ -31,6 +31,10 @@ class Search {
         this.search();
     }
 
+    close() {
+        this.$dialog.close();
+    }
+
     change_tip() {
         let length = this.$search_tip_list.children.length;
         let choice = Math.floor(Math.random() * length);
