@@ -332,7 +332,7 @@ query {{
         milestone: &str,
         labels: Vec<&str>,
     ) -> Result<(), IssueError> {
-        let request = self
+        let response = self
             .agent
             .post("https://api.github.com/repos/bevyengine/bevy-website/issues")
             .set("Accept", "application/json")
@@ -345,8 +345,8 @@ query {{
             }))?;
 
         // Make sure the issue was created successfully
-        if request.status() != 201 {
-            return Err(IssueError::FailedToCreateIssue(request));
+        if response.status() != 201 {
+            return Err(IssueError::FailedToCreateIssue(response));
         } else {
             Ok(())
         }
