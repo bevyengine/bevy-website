@@ -210,5 +210,8 @@ fn generate_and_open_issue(
             .open_issue("bevy-website", &issue_title, &issue_body, milestone, labels)
             .unwrap();
         println!("Opened issue for PR #{}: {}", pr_number, title);
+        // Pause between opening issues to avoid getting rate-limited.
+        // See https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#pause-between-mutative-requests
+        std::thread::sleep(std::time::Duration::from_secs(1));
     }
 }
