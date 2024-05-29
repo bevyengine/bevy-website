@@ -195,7 +195,7 @@ fn generate_and_open_issue(
         Your expertise is invaluable for contextualizing the changes; we'll work with you to bring the technical writing up to par.
 
         To submit your release notes, modify `{file_path}` and submit a PR.
-        In that PR, please mention this issue with the `Fixes #{pr_number}` keyphrase so it gets closed automatically.");
+        In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase so it gets closed automatically.");
 
     let labels = vec!["A-Release-Notes", "C-Content", "S-Ready-For-Implementation"];
 
