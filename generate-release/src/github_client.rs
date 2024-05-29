@@ -226,7 +226,7 @@ impl GithubClient {
 
             prs.retain(|pr| {
                 pr.closed_at
-                    .is_some_and(|closed_at| closed_at < datetime_utc)
+                    .is_some_and(|closed_at| closed_at >= datetime_utc)
             });
         }
 
