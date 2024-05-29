@@ -191,7 +191,7 @@ fn generate_and_open_issue(
         We can help you revise the release notes: a rough draft alone is incredibly useful :)
         Your expertise is invaluable for contextualizing the changes; we'll work with you to bring the technical writing up to par.
 
-        To submit your release notes, modify `{file_path}.md` and submit a PR.
+        To submit your release notes, modify `{file_path}` and submit a PR.
         In that PR, please mention this issue with the `Fixes #{pr_number}` keyphrase so it gets closed automatically.
 
         Pinging: {authors}
