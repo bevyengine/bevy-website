@@ -337,6 +337,7 @@ query {{
     /// Opens a new issue on the `bevyengine/bevy-website` repo.
     ///
     /// See [the Github API documentation](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue) for more information.
+    #[allow(clippy::result_large_err)]
     pub fn open_issue(
         &self,
         issue_title: &str,
@@ -358,7 +359,7 @@ query {{
 
         // Make sure the issue was created successfully
         if response.status() != 201 {
-            return Err(IssueError::FailedToCreateIssue(response));
+            Err(IssueError::FailedToCreateIssue(response))
         } else {
             Ok(())
         }

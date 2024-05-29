@@ -4,7 +4,11 @@ use crate::{
     github_client::{GithubClient, GithubIssuesResponse, IssueState},
     helpers::{get_contributors, get_merged_prs},
 };
-use std::{collections::HashSet, io::Write as IoWrite, path::PathBuf};
+use std::{
+    collections::HashSet,
+    io::Write as IoWrite,
+    path::{Path, PathBuf},
+};
 
 pub fn generate_release_notes(
     from: &str,
@@ -144,13 +148,14 @@ file_name = "{file_name}.md"
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 fn generate_and_open_issue(
     client: &GithubClient,
     issue_titles: &HashSet<String>,
     pr: &GithubIssuesResponse,
     title: &str,
     authors: &[String],
-    file_path: &PathBuf,
+    file_path: &Path,
     milestone: &str,
     dry_run: bool,
 ) {
@@ -202,6 +207,6 @@ fn generate_and_open_issue(
         client
             .open_issue(&issue_title, &issue_body, milestone, labels)
             .unwrap();
-        println!("Opened issue for PR #{}: {}", pr_number, title)
+        println!("Opened issue for PR #{}: {}", pr_number, title);
     }
 }
