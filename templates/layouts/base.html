@@ -85,6 +85,10 @@
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+    {% if ancestor_is_public_draft or section_or_page and section_or_page.extra and section_or_page.extra.public_draft %}
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    {% endif %}
+
     <title>{% if page.extra.public_draft or section.extra.public_draft %}[DRAFT] {% endif -%}{{ page_title }}</title>
     {% block head_extensions %}{% endblock head_extensions %}
   </head>
