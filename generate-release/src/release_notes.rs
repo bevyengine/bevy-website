@@ -160,7 +160,6 @@ fn generate_and_open_issue(
     dry_run: bool,
 ) {
     let pr_number = pr.number;
-    let file_path = file_path.to_string_lossy();
     let issue_title = format!("Write release notes for PR #{pr_number}: {title}");
 
     // Check if this issue already exists
@@ -169,14 +168,17 @@ fn generate_and_open_issue(
         return;
     }
 
+    let pr_url = format!("https://github.com/bevyengine/bevy/pull/{pr_number}",);
+    let file_path = file_path.to_string_lossy();
+
     let authors = authors
         .iter()
-        .map(|author| format!("@{}", author))
+        .map(|author| format!("{}", author))
         .collect::<Vec<_>>()
         .join(", ");
 
     let issue_body = format!(
-        "This PR needs release notes for the upcoming Bevy release!
+        "{pr_url} needs release notes for the upcoming Bevy release!
         Please reply below if you'd like to volunteer do so, whether or not you're the author of the PR.
         
         Release notes should:
