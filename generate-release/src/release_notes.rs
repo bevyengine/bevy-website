@@ -174,6 +174,7 @@ fn generate_and_open_issue(
         println!("Title: {}", issue_title);
         println!("Body: {}", issue_body);
         println!("Milestone: {}", milestone);
+        println!("Labels: {:?}", labels);
     } else {
         client
             .open_issue(&issue_title, &issue_body, milestone, labels)
