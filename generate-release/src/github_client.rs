@@ -311,6 +311,17 @@ query {{
         Ok(request.call()?.into_json()?)
     }
 
+    /// Get the list of all issues in the repo.
+    ///
+    /// This is used to ensure that we don't open duplicate issues.
+    ///
+    /// Both open and closed issues are returned.
+    pub fn get_issues(&self) -> anyhow::Result<Vec<GithubIssuesResponse>> {
+        let response = self.get("issues").set("state", "all").call()?;
+        let issues: Vec<GithubIssuesResponse> = response.into_json()?;
+        Ok(issues)
+    }
+
     /// Opens a new issue on the `bevyengine/bevy-website` repo.
     ///
     /// See [the Github API documentation](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue) for more information.

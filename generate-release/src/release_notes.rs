@@ -36,6 +36,14 @@ pub fn generate_release_notes(
     // We'll write the file once at the end when all the metdaata is generated
     let mut notes_metadata = Vec::new();
 
+    // Generate the list of all issues so we don't spam the repo with duplicates
+    // This is done outside of the loop because we don't want to request this information anew for every PR
+    let open_issues = client.get_issues().unwrap();
+    let issue_titles = open_issues
+        .iter()
+        .map(|issue| issue.title.clone())
+        .collect::<HashSet<_>>();
+
     for (pr, commit, title) in prs {
         // Slugify the title
         let title_slug = title
@@ -90,7 +98,14 @@ pub fn generate_release_notes(
 
         // Open an issue to remind the author(s) to write the release notes
         generate_and_open_issue(
-            client, &pr, &title, &authors, &file_path, &milestone, dry_run,
+            client,
+            &issue_titles,
+            &pr,
+            &title,
+            &authors,
+            &file_path,
+            &milestone,
+            dry_run,
         );
     }
 
@@ -129,6 +144,7 @@ file_name = "{file_name}.md"
 
 fn generate_and_open_issue(
     client: &GithubClient,
+    issue_titles: &HashSet<String>,
     pr: &GithubIssuesResponse,
     title: &str,
     authors: &[String],
@@ -138,8 +154,13 @@ fn generate_and_open_issue(
 ) {
     let pr_number = pr.number;
     let file_path = file_path.to_string_lossy();
-
     let issue_title = format!("Write release notes for PR #{pr_number}: {title}");
+
+    // Check if this issue already exists
+    // If it does, we don't want to spam the repo with duplicate issues
+    if issue_titles.contains(&issue_title) {
+        return;
+    }
 
     let authors = authors
         .iter()
