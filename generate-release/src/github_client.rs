@@ -96,7 +96,7 @@ pub struct GithubIssuesResponse {
     pub body: Option<String>,
     pub labels: Vec<GithubLabel>,
     pub user: GithubUser,
-    pub closed_at: DateTime<Utc>,
+    pub closed_at: Option<DateTime<Utc>>,
     pub pull_request: Option<GithubIssuesResponsePullRequest>,
 }
 
@@ -204,12 +204,14 @@ impl GithubClient {
             page += 1;
             if let Some(pr) = prs.last() {
                 if let Some(datetime_utc) = datetime_utc {
-                    if pr.closed_at < datetime_utc {
-                        println!(
-                            "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
-                            pr.closed_at
-                        );
-                        break;
+                    if let Some(closed_at) = pr.closed_at {
+                        if closed_at < datetime_utc {
+                            println!(
+                                "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
+                                closed_at
+                            );
+                            break;
+                        }
                     }
                 }
             }
@@ -222,7 +224,10 @@ impl GithubClient {
                 datetime_utc
             );
 
-            prs.retain(|pr| pr.closed_at < datetime_utc);
+            prs.retain(|pr| {
+                pr.closed_at
+                    .is_some_and(|closed_at| closed_at < datetime_utc)
+            });
         }
 
         Ok(prs)
