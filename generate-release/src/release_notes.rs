@@ -171,11 +171,7 @@ fn generate_and_open_issue(
     let pr_url = format!("https://github.com/bevyengine/bevy/pull/{pr_number}",);
     let file_path = file_path.to_string_lossy();
 
-    let authors = authors
-        .iter()
-        .map(|author| format!("{}", author))
-        .collect::<Vec<_>>()
-        .join(", ");
+    let authors = authors.join(", ");
 
     let issue_body = format!(
         "{pr_url} needs release notes for the upcoming Bevy release!
