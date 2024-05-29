@@ -1,7 +1,7 @@
 use anyhow::Context;
 
 use crate::{
-    github_client::GithubClient,
+    github_client::{GithubClient, GithubIssuesResponse},
     helpers::{get_contributors, get_merged_prs},
 };
 use std::{collections::HashSet, io::Write as IoWrite, path::PathBuf};
@@ -73,6 +73,9 @@ pub fn generate_release_notes(
             pr.number
         )?;
         writeln!(&file, "\n<!-- TODO -->")?;
+
+        // Open an issue to remind the author(s) to write the release notes
+        generate_and_open_issue(client, &pr, &title, &authors, &file_path);
     }
 
     // Write the metadata file
@@ -106,4 +109,45 @@ file_name = "{file_name}.md"
             .join(","),
         title = title.trim().replace('"', "\\\"")
     )
+}
+
+fn generate_and_open_issue(
+    client: &GithubClient,
+    pr: &GithubIssuesResponse,
+    title: &str,
+    authors: &[String],
+    file_path: &PathBuf,
+) {
+    let pr_number = pr.number;
+    let file_path = file_path.to_string_lossy();
+
+    let issue_title = format!("Write release notes for PR #{pr_number}: {title}");
+
+    let authors = authors
+        .iter()
+        .map(|author| format!("@{}", author))
+        .collect::<Vec<_>>()
+        .join(", ");
+
+    let issue_body = format!(
+        "This PR needs release notes for the upcoming Bevy release!
+        Please reply below if you'd like to volunteer do so, whether or not you're the author of the PR.
+        
+        Release notes should:
+        
+        1. Clearly motivate the change.
+        2. Be written in a way that is understandable by the average Bevy user: some programming background and a general understanding of games.
+        3. Show off the coolest features of the PR. Screenshots are awesome, but elegant APIs are also welcome!
+        4. If this was a perf-centric PR, quantify the performance improvements. Graphs and statistics work well for this.
+
+        We can help you revise the release notes: a rough draft alone is incredibly useful :)
+        Your expertise is invaluable for contextualizing the changes; we'll work with you to bring the technical writing up to par.
+
+        To submit your release notes, modify `{file_path}.md` and submit a PR.
+        In that PR, please mention this issue with the `Fixes #{pr_number}` keyphrase so it gets closed automatically.
+
+        Pinging: {authors}
+    )");
+
+    todo!("Open issue on GitHub with the title and body");
 }
