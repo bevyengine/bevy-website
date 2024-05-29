@@ -317,8 +317,11 @@ query {{
     ///
     /// Both open and closed issues are returned.
     pub fn get_issues(&self) -> anyhow::Result<Vec<GithubIssuesResponse>> {
+        println!("Requesting a list of all issues on `bevyengine/bevy-website`");
         let response = self.get("issues").set("state", "all").call()?;
+        println!("Received response: {}", response.status_text());
         let issues: Vec<GithubIssuesResponse> = response.into_json()?;
+        println!("Received {} issues", issues.len());
         Ok(issues)
     }
 

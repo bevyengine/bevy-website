@@ -200,5 +200,6 @@ fn generate_and_open_issue(
         client
             .open_issue(&issue_title, &issue_body, milestone, labels)
             .unwrap();
+        println!("Opened issue for PR #{}: {}", pr_number, title)
     }
 }
