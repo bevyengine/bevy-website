@@ -356,9 +356,11 @@ query {{
             .post(&format!(
                 "https://api.github.com/repos/bevyengine/{repo}/issues"
             ))
-            .set("Accept", "application/json")
             .set("Authorization", &format!("Bearer {}", self.token))
+            .set("X-GitHub-Api-Version", "2022-11-28")
             .send_json(ureq::json!({
+                "owner": "bevyengine",
+                "repo": repo,
                 "title": issue_title,
                 "body": issue_body,
                 "milestone": milestone,
