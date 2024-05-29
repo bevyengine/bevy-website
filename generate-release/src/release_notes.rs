@@ -207,7 +207,7 @@ fn generate_and_open_issue(
         println!("Labels: {:?}", labels);
     } else {
         client
-            .open_issue(&issue_title, &issue_body, milestone, labels)
+            .open_issue("bevy-website", &issue_title, &issue_body, milestone, labels)
             .unwrap();
         println!("Opened issue for PR #{}: {}", pr_number, title);
     }

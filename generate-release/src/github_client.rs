@@ -345,6 +345,7 @@ query {{
     #[allow(clippy::result_large_err)]
     pub fn open_issue(
         &self,
+        repo: &str,
         issue_title: &str,
         issue_body: &str,
         milestone: &str,
@@ -352,7 +353,9 @@ query {{
     ) -> Result<(), IssueError> {
         let response = self
             .agent
-            .post("https://api.github.com/repos/bevyengine/bevy-website/issues")
+            .post(&format!(
+                "https://api.github.com/repos/bevyengine/{repo}/issues"
+            ))
             .set("Accept", "application/json")
             .set("Authorization", &format!("Bearer {}", self.token))
             .send_json(ureq::json!({
