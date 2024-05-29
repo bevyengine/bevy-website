@@ -357,6 +357,7 @@ query {{
                 "https://api.github.com/repos/bevyengine/{repo}/issues"
             ))
             .set("Authorization", &format!("Bearer {}", self.token))
+            .set("Accept", "application/vnd.github+json")
             .set("X-GitHub-Api-Version", "2022-11-28")
             .send_json(ureq::json!({
                 "owner": "bevyengine",
