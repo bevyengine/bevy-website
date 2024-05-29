@@ -16,7 +16,16 @@ pub fn generate_release_notes(
     // This is useful for testing the release notes generation without spamming the repo.
     dry_run: bool,
 ) -> anyhow::Result<()> {
-    let milestone = format!("Release {}", to);
+    // This will generally be something like 0.5 or 0.13
+    let current_release = from;
+    let release_parts: Vec<&str> = current_release.split('.').collect();
+    // TODO: this will need to change when we hit 1.0
+    let next_release = format!(
+        "{}.{}",
+        release_parts[0],
+        release_parts[1].parse::<i32>().unwrap() + 1
+    );
+    let milestone = format!("Release {}", next_release);
 
     // Get all PRs that need release notes
     let prs = get_merged_prs(client, from, to, Some("C-Needs-Release-Note"))?;
