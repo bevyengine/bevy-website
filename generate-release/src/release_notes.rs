@@ -160,29 +160,31 @@ fn generate_and_open_issue(
 
     let authors = authors.join(", ");
 
+    // The weird indentation is intentional.
+    // Otherwise, the text is not formatted correctly on GitHub as the tabs are copied into the issue body.
     let issue_body = format!(
         "{pr_url} needs release notes for the upcoming Bevy release!
 
-        Original authors: {authors}
-        
-        Please reply below if you'd like to write these notes. 
-        While the author(s) of the PR often have the context, knowledge and motivation to draft the release notes for their feature,
-        anyone can contribute release notes!
-        
-        ------
+Original authors: {authors}
 
-        Release notes should:
-        
-        1. Clearly motivate the change.
-        2. Be written in a way that is understandable by the average Bevy user: some programming background and a general understanding of games.
-        3. Show off the coolest features of the PR. Screenshots are awesome, but elegant APIs are also welcome!
-        4. If this was a perf-centric PR, quantify the performance improvements. Graphs and statistics work well for this.
+Please reply below if you'd like to write these notes. 
+While the author(s) of the PR often have the context, knowledge and motivation to draft the release notes for their feature,
+anyone can contribute release notes!
 
-        We can help you revise the release notes: a rough draft alone is incredibly useful :)
-        Your expertise is invaluable for contextualizing the changes; we'll work with you to bring the technical writing up to par.
+------
 
-        To submit your release notes, modify `{file_path}` and submit a PR.
-        In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase so it gets closed automatically.");
+Release notes should:
+
+1. Clearly motivate the change.
+2. Be written in a way that is understandable by the average Bevy user: some programming background and a general understanding of games.
+3. Show off the coolest features of the PR. Screenshots are awesome, but elegant APIs are also welcome!
+4. If this was a perf-centric PR, quantify the performance improvements. Graphs and statistics work well for this.
+
+We can help you revise the release notes: a rough draft alone is incredibly useful :)
+Your expertise is invaluable for contextualizing the changes; we'll work with you to bring the technical writing up to par.
+
+To submit your release notes, modify `{file_path}` and submit a PR.
+In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase so it gets closed automatically.");
 
     let labels = vec!["A-Release-Notes", "C-Content", "S-Ready-For-Implementation"];
 
