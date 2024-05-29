@@ -115,7 +115,7 @@ impl GithubClient {
         Self { agent, token, repo }
     }
 
-    /// Submits a request to `bevyengine/bevy`
+    /// Submits a request to `bevyengine/{repo}`
     fn get(&self, path: &str, repo: &str) -> ureq::Request {
         self.agent
             .get(&format!(
@@ -169,24 +169,32 @@ impl GithubClient {
         Ok(request.call()?.into_json()?)
     }
 
-    /// Gets a list of all merged PRs after the given date.
-    /// The date needs to be in the YYYY-MM-DD format.
-    pub fn get_merged_prs(
+    /// Gets a filtered list of issues and PRs from `bevyengine/{repo}`.
+    ///
+    /// If `since` is provided, it should be a date in the YYYY-MM-DD format.
+    pub fn get_issues_and_prs(
         &self,
-        since: &str,
+        repo: &str,
+        state: IssueState,
+        since: Option<&str>,
         label: Option<&str>,
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-        let naive_datetime = NaiveDate::parse_from_str(since, "%Y-%m-%d")?
-            .and_hms_opt(0, 0, 0)
-            .expect("invalid time");
-        let datetime_utc = Utc.from_utc_datetime(&naive_datetime);
+        let datetime_utc = if let Some(since) = since {
+            let naive_datetime = NaiveDate::parse_from_str(since, "%Y-%m-%d")?
+                .and_hms_opt(0, 0, 0)
+                .expect("invalid time");
+            Some(Utc.from_utc_datetime(&naive_datetime))
+        } else {
+            None
+        };
 
         let mut prs = vec![];
         let mut page = 1;
         // The github rest API is limited to 100 prs per page,
         // so to get all the prs we need to iterate on every page available.
         loop {
-            let mut prs_in_page = self.get_merged_prs_by_page(since, page, label)?;
+            let mut prs_in_page =
+                self.get_issues_and_prs_by_page(page, repo, state, since, label)?;
             println!("Page: {} ({} prs)", page, prs_in_page.len());
             if prs_in_page.is_empty() {
                 break;
@@ -195,37 +203,51 @@ impl GithubClient {
             prs.append(&mut prs_in_page);
             page += 1;
             if let Some(pr) = prs.last() {
-                if pr.closed_at < datetime_utc {
-                    println!(
-                        "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
-                        pr.closed_at
-                    );
-                    continue;
+                if let Some(datetime_utc) = datetime_utc {
+                    if pr.closed_at < datetime_utc {
+                        println!(
+                            "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
+                            pr.closed_at
+                        );
+                        break;
+                    }
                 }
             }
         }
-        Ok(prs
-            .iter()
-            // Make sure the older PRs from the last page aren't returned
-            .filter(|pr| pr.closed_at > datetime_utc)
-            .cloned()
-            .collect())
+
+        // Make sure the older PRs from the last page aren't returned
+        if let Some(datetime_utc) = datetime_utc {
+            println!(
+                "Filtering PRs closed before the target datetime {}",
+                datetime_utc
+            );
+
+            prs.retain(|pr| pr.closed_at < datetime_utc);
+        }
+
+        Ok(prs)
     }
 
-    // Returns all PRs from the main branch that are merged.
-    pub fn get_merged_prs_by_page(
+    // Request issues and PRs by the page returned by the Github API
+    fn get_issues_and_prs_by_page(
         &self,
-        date: &str,
         page: i32,
+        repo: &str,
+        state: IssueState,
+        date: Option<&str>,
         label: Option<&str>,
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         let mut request = self
-            .get("issues", "bevy")
-            .query("since", &format!("{date}T00:00:00Z"))
-            .query("state", "closed")
+            .get("issues", repo)
+            .query("state", state.as_str())
             .query("base", "main")
             .query("per_page", "100")
             .query("page", &page.to_string());
+
+        if let Some(date) = date {
+            request = request.query("since", &format!("{date}T00:00:00Z"));
+        }
+
         if let Some(label) = label {
             request = request.query("labels", label);
         }
@@ -312,20 +334,6 @@ query {{
         Ok(request.call()?.into_json()?)
     }
 
-    /// Get the list of all issues in the repo.
-    ///
-    /// This is useful to ensure that we don't open duplicate issues or PRs.
-    /// Both issues and PRs are returned.
-    /// Both open and closed issues are returned.
-    pub fn get_issues(&self, repo: &str) -> anyhow::Result<Vec<GithubIssuesResponse>> {
-        println!("Requesting a list of all issues on `bevyengine/bevy-website`");
-        let response = self.get("issues", repo).set("state", "all").call()?;
-        println!("Received response: {}", response.status_text());
-        let issues: Vec<GithubIssuesResponse> = response.into_json()?;
-        println!("Received {} issues", issues.len());
-        Ok(issues)
-    }
-
     /// Opens a new issue on the `bevyengine/bevy-website` repo.
     ///
     /// See [the Github API documentation](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue) for more information.
@@ -367,5 +375,28 @@ pub enum IssueError {
 impl From<ureq::Error> for IssueError {
     fn from(err: ureq::Error) -> Self {
         IssueError::Ureq(err)
+    }
+}
+
+/// The status of an issue or PR on Github.
+#[derive(Debug, Clone, Copy)]
+#[allow(dead_code)]
+pub enum IssueState {
+    Open,
+    Closed,
+    All,
+}
+
+impl IssueState {
+    /// The string representation of the issue state.
+    ///
+    /// This is requested by the Github API,
+    /// as documented [here](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-repository-issues).
+    fn as_str(&self) -> &str {
+        match self {
+            IssueState::Open => "open",
+            IssueState::Closed => "closed",
+            IssueState::All => "all",
+        }
     }
 }

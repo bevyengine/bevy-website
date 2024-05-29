@@ -1,7 +1,7 @@
 use anyhow::Context;
 
 use crate::{
-    github_client::{GithubClient, GithubIssuesResponse},
+    github_client::{GithubClient, GithubIssuesResponse, IssueState},
     helpers::{get_contributors, get_merged_prs},
 };
 use std::{collections::HashSet, io::Write as IoWrite, path::PathBuf};
@@ -38,11 +38,15 @@ pub fn generate_release_notes(
 
     // Generate the list of all issues so we don't spam the repo with duplicates
     // This is done outside of the loop because we don't want to request this information anew for every PR
-    let open_issues = client.get_issues("bevy-website").unwrap();
+    println!("Getting list of the issues from the `bevy-website` repo to check for duplicates.");
+    let open_issues = client
+        .get_issues_and_prs("bevy-website", IssueState::All, None, None)
+        .unwrap();
     let issue_titles = open_issues
         .iter()
         .map(|issue| issue.title.clone())
         .collect::<HashSet<_>>();
+    println!("Found {} issues", issue_titles.len());
 
     for (pr, commit, title) in prs {
         // Slugify the title
