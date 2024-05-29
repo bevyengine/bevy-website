@@ -348,7 +348,6 @@ query {{
         repo: &str,
         issue_title: &str,
         issue_body: &str,
-        milestone: &str,
         labels: Vec<&str>,
     ) -> Result<(), IssueError> {
         let response = self
@@ -362,7 +361,8 @@ query {{
             .send_json(ureq::json!({
                 "title": issue_title,
                 "body": issue_body,
-                "milestone": milestone,
+                // TODO: add the milestone.
+                // Note that this must be provided as an integer, so we'll have to look up the milestone ID.
                 "labels": labels,
             }))?;
 

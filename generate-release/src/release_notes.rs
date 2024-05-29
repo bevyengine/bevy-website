@@ -20,17 +20,6 @@ pub fn generate_release_notes(
     // This is useful for testing the release notes generation without spamming the repo.
     dry_run: bool,
 ) -> anyhow::Result<()> {
-    // This will generally be something like 0.5 or 0.13
-    let current_release = from;
-    let release_parts: Vec<&str> = current_release.split('.').collect();
-    // TODO: this will need to change when we hit 1.0
-    let next_release = format!(
-        "{}.{}",
-        release_parts[0],
-        release_parts[1].parse::<i32>().unwrap() + 1
-    );
-    let milestone = format!("Release {}", next_release);
-
     // Get all PRs that need release notes
     let prs = get_merged_prs(client, from, to, Some("C-Needs-Release-Note"))?;
 
@@ -110,7 +99,6 @@ pub fn generate_release_notes(
             &title,
             &authors,
             &file_path,
-            &milestone,
             dry_run,
         );
     }
@@ -156,7 +144,6 @@ fn generate_and_open_issue(
     title: &str,
     authors: &[String],
     file_path: &Path,
-    milestone: &str,
     dry_run: bool,
 ) {
     let pr_number = pr.number;
@@ -203,11 +190,10 @@ fn generate_and_open_issue(
         println!("Would open issue on GitHub with the title and body:");
         println!("Title: {}", issue_title);
         println!("Body: {}", issue_body);
-        println!("Milestone: {}", milestone);
         println!("Labels: {:?}", labels);
     } else {
         client
-            .open_issue("bevy-website", &issue_title, &issue_body, milestone, labels)
+            .open_issue("bevy-website", &issue_title, &issue_body, labels)
             .unwrap();
         println!("Opened issue for PR #{}: {}", pr_number, title);
         // Pause between opening issues to avoid getting rate-limited.
