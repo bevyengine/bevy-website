@@ -3,6 +3,7 @@ use std::{collections::HashMap, fmt::Debug};
 use anyhow::bail;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
+use ureq::Response;
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubBranchesResponse {
@@ -308,5 +309,48 @@ query {{
     pub fn get_commit(&self, git_ref: &str) -> anyhow::Result<GithubCommitResponse> {
         let request = self.get(&format!("commits/{git_ref}"));
         Ok(request.call()?.into_json()?)
+    }
+
+    /// Opens a new issue on the `bevyengine/bevy-website` repo.
+    ///
+    /// See [the Github API documentation](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue) for more information.
+    pub fn open_issue(
+        &self,
+        issue_title: &str,
+        issue_body: &str,
+        milestone: &str,
+        labels: Vec<&str>,
+    ) -> Result<(), IssueError> {
+        let request = self
+            .agent
+            .post("https://api.github.com/repos/bevyengine/bevy-website/issues")
+            .set("Accept", "application/json")
+            .set("Authorization", &format!("Bearer {}", self.token))
+            .send_json(ureq::json!({
+                "title": issue_title,
+                "body": issue_body,
+                "milestone": milestone,
+                "labels": labels,
+            }))?;
+
+        // Make sure the issue was created successfully
+        if request.status() != 201 {
+            return Err(IssueError::FailedToCreateIssue(request));
+        } else {
+            Ok(())
+        }
+    }
+}
+
+/// An issue that occurred while opening an issue on Github.
+#[derive(Debug)]
+pub enum IssueError {
+    Ureq(ureq::Error),
+    FailedToCreateIssue(Response),
+}
+
+impl From<ureq::Error> for IssueError {
+    fn from(err: ureq::Error) -> Self {
+        IssueError::Ureq(err)
     }
 }

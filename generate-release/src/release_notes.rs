@@ -167,12 +167,16 @@ fn generate_and_open_issue(
         Pinging: {authors}
     )");
 
+    let labels = vec!["A-Release-Notes", "C-Content", "S-Ready-For-Implementation"];
+
     if dry_run {
         println!("Would open issue on GitHub with the title and body:");
         println!("Title: {}", issue_title);
         println!("Body: {}", issue_body);
         println!("Milestone: {}", milestone);
     } else {
-        todo!("Open issue on GitHub with the title and body");
+        client
+            .open_issue(&issue_title, &issue_body, milestone, labels)
+            .unwrap();
     }
 }
