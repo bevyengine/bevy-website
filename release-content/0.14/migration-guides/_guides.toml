@@ -1,41 +1,41 @@
 [[guides]]
-title = "Fix Node2d typo"
+title = "Fix `Node2d` typo"
 url = "https://github.com/bevyengine/bevy/pull/12038"
 areas = []
 file_name = "12038_fix_node2d_typo.md"
 
 [[guides]]
-title = "Update to fixedbitset 0.5"
+title = "Update to `fixedbitset` 0.5"
 url = "https://github.com/bevyengine/bevy/pull/12512"
 areas = []
 file_name = "12512_update_to_fixedbitset_05.md"
 
 [[guides]]
-title = "refactor: separate out `PanicHandlerPlugin`"
+title = "Move WASM panic handler from `LogPlugin` to `PanicHandlerPlugin`"
 url = "https://github.com/bevyengine/bevy/pull/12557"
 areas = []
 file_name = "12557_refactor_separate_out_PanicHandlerPlugin.md"
 
 [[guides]]
-title = "Rework animation to be done in two phases."
+title = "`AnimationClip` now uses UUIDs and `NoOpTypeIdHash` is now `NoOpHash`"
 url = "https://github.com/bevyengine/bevy/pull/11707"
 areas = ["Animation"]
 file_name = "11707_Rework_animation_to_be_done_in_two_phases.md"
 
 [[guides]]
-title = "Color maths 4"
+title = "Multiplying `LinearRgba` by `f32` no longer ignores alpha channel"
 url = "https://github.com/bevyengine/bevy/pull/12575"
 areas = ["Animation","Color","Math","Rendering"]
 file_name = "12575_Color_maths_4.md"
 
 [[guides]]
-title = "Refactor `App` and `SubApp` internals for better separation"
+title = "Separate `SubApp` from `App`"
 url = "https://github.com/bevyengine/bevy/pull/9202"
 areas = ["App"]
 file_name = "9202_Refactor_App_and_SubApp_internals_for_better_separation.md"
 
 [[guides]]
-title = "Make `AppExit` more specific about exit reason."
+title = "Make `AppExit` more specific about exit reason"
 url = "https://github.com/bevyengine/bevy/pull/13022"
 areas = ["App"]
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
