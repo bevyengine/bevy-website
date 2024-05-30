@@ -32,8 +32,8 @@ pub fn generate_release_notes(
     // Generate the list of all issues so we don't spam the repo with duplicates
     // This is done outside of the loop because we don't want to request this information anew for every PR
     println!("Getting list of the issues from the `bevy-website` repo to check for duplicates.");
-    let open_issues = client.get_issues_and_prs("bevy-website", IssueState::All, None, None)?;
-    let issue_titles = open_issues
+    let issue_titles = client
+        .get_issues_and_prs("bevy-website", IssueState::All, None, None)?
         .iter()
         .map(|issue| issue.title.clone())
         .collect::<HashSet<_>>();
