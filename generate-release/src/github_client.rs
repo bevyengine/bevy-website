@@ -409,11 +409,10 @@ impl IssueState {
     fn as_str(&self) -> &str {
         match self {
             IssueState::Open => "open",
-            IssueState::Closed => "closed",
-            IssueState::All => "all",
             // All merged PRs are considered closed,
             // but not all closed PRs are merged.
-            IssueState::Merged => "closed",
+            IssueState::Closed | IssueState::Merged => "closed",
+            IssueState::All => "all",
         }
     }
 }
