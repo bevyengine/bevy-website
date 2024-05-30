@@ -24,21 +24,26 @@ let color = LinearRgba {
 assert_eq!(color.alpha, 0.5);
 ```
 
-If you need the alpha channel to remain constant, consider overwriting it:
+If you need the alpha channel to remain untouched, consider creating your own helper method:
 
 ```rust
-let color = LinearRgba {
+fn legacy_div_f32(color: &mut LinearRgba, scale: f32) {
+    color.red /= scale;
+    color.green /= scale;
+    color.blue /= scale;
+}
+
+let mut color = LinearRgba {
     red: 1.0,
     green: 1.0,
     blue: 1.0,
     alpha: 1.0,
 };
 
-// Overwrite the alpha to always be 1.0.
-let new_color = (color / 2.0).with_alpha(1.0);
+legacy_div_f32(&mut color, 2.0);
 ```
 
-If you need the alpha channel to remain within the range of 0.0 to 1.0, consider clamping it:
+If you are fine with the alpha changing, but need it to remain within the range of 0.0 to 1.0, consider clamping it:
 
 ```rust
 let mut color = LinearRgba {
