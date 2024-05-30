@@ -406,7 +406,7 @@ impl IssueState {
     ///
     /// This is requested by the Github API,
     /// as documented [here](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-repository-issues).
-    fn as_str(&self) -> &str {
+    fn as_str(&self) -> &'static str {
         match self {
             IssueState::Open => "open",
             // All merged PRs are considered closed,
