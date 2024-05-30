@@ -169,8 +169,7 @@ fn generate_and_open_issue(
 Original authors: {authors}
 
 Please reply below if you'd like to write these notes. 
-While the author(s) of the PR often have the context, knowledge and motivation to draft the release notes for their feature,
-anyone can contribute release notes!
+While the author(s) of the PR often have the context, knowledge and motivation to draft the release notes for their feature, anyone can contribute release notes!
 
 ------
 
