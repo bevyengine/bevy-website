@@ -393,9 +393,10 @@ impl From<ureq::Error> for IssueError {
 
 /// The status of an issue or PR on Github.
 #[derive(Debug, Clone, Copy)]
-#[allow(dead_code)]
 pub enum IssueState {
+    #[allow(dead_code)]
     Open,
+    #[allow(dead_code)]
     Closed,
     Merged,
     All,
