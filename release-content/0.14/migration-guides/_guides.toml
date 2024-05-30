@@ -47,7 +47,7 @@ areas = ["App"]
 file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[guides]]
-title = "Remove the UpdateAssets and AssetEvents schedules"
+title = "Remove the `UpdateAssets` and `AssetEvents` schedules"
 url = "https://github.com/bevyengine/bevy/pull/11986"
 areas = ["Assets"]
 file_name = "11986_Remove_the_UpdateAssets_and_AssetEvents_schedules.md"
