@@ -29,7 +29,7 @@ areas = ["Animation","Color","Math","Rendering"]
 file_name = "12575_Color_maths_4.md"
 
 [[guides]]
-title = "Refactor `App` and `SubApp` internals for better separation"
+title = "Separate `SubApp` from `App`"
 url = "https://github.com/bevyengine/bevy/pull/9202"
 areas = ["App"]
 file_name = "9202_Refactor_App_and_SubApp_internals_for_better_separation.md"
