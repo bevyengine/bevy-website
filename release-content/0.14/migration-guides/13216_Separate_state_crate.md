@@ -1,3 +1,5 @@
-Since bevy_state is now gated behind the `bevy_state` feature, projects that use state but don’t use the `default-features` will need to add that feature flag.
+States were moved to a separate crate which is gated behind the `bevy_state` feature. Projects that use state but don't use Bevy's `default-features` will need to add that feature to their `Cargo.toml`.
 
-Since it is no longer part of bevy_ecs, projects that use bevy_ecs directly will need to manually pull in `bevy_state`,  trigger the StateTransition schedule, and handle any of the elements that bevy_app currently sets up.
+Projects that use `bevy_ecs` directly and use states will need to add the `bevy_state` crate as a dependency.
+
+Projects that use `bevy_app` directly and use states will need to add the `bevy_state` feature.
