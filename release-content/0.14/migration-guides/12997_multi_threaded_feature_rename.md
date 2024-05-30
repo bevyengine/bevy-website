@@ -1,1 +1,1 @@
-Bevy feature multi-threaded should be referred to as `multi_threaded` from now on.
+The `multi-threaded` feature was renamed to `multi_threaded` for `bevy`, `bevy_asset`, `bevy_ecs`, `bevy_render`, `bevy_tasks`, and `bevy_internal`. Please update your `Cargo.toml` if you manually specify Bevy features.
