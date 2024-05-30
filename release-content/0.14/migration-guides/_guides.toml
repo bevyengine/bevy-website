@@ -1,14 +1,14 @@
 [[guides]]
-title = "fix some typos"
+title = "Fix Node2d typo"
 url = "https://github.com/bevyengine/bevy/pull/12038"
 areas = []
-file_name = "12038_fix_some_typos.md"
+file_name = "12038_fix_node2d_typo.md"
 
 [[guides]]
 title = "Update to fixedbitset 0.5"
 url = "https://github.com/bevyengine/bevy/pull/12512"
 areas = []
-file_name = "12512_Update_to_fixedbitset_05.md"
+file_name = "12512_update_to_fixedbitset_05.md"
 
 [[guides]]
 title = "refactor: separate out `PanicHandlerPlugin`"
