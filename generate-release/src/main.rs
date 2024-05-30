@@ -55,6 +55,11 @@ enum Commands {
         #[arg(short, long)]
         overwrite_existing: bool,
     },
+    /// Generates release notes for all PRs merged with the `C-Needs-Release-Note` label.
+    /// 
+    /// This will also open an issue for each PR that doesn't have a release note.
+    /// While duplicate issues will not be opened, be sure to use the `dry-run` flag
+    /// if you want to test the release notes generation without spamming the repo.
     ReleaseNotes {
         /// Use this if you want to overwrite existing files
         #[arg(short, long)]
