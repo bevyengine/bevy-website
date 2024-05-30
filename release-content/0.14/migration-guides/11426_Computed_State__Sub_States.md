@@ -1,6 +1,6 @@
 [`NextState`](https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.NextState.html) is now an enum. If you were constructing it manually or matching on its value, you will need to use the equivalent enum variants.
 
-|Before|After|
+|0.13|0.14|
 |-|-|
 |`NextState(Some(S))`|`NextState::Pending(S)`|
 |`NextState(None)`|`NextState::Unchanged`|
