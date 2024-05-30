@@ -23,8 +23,12 @@ pub fn generate_release_notes(
     // Get all PRs that need release notes
     let prs = get_merged_prs(client, from, to, Some("C-Needs-Release-Note"))?;
 
-    // Create the directory that will contain all the release notes
-    std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
+    if !dry_run {
+        // Create the directory that will contain all the release notes
+        std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
+    } else {
+        println!("Dry run: no files will be created");
+    }
 
     // We'll write the file once at the end when all the metdaata is generated
     let mut notes_metadata = Vec::new();
@@ -38,6 +42,9 @@ pub fn generate_release_notes(
         .map(|issue| issue.title.clone())
         .collect::<HashSet<_>>();
     println!("Found {} issues", issue_titles.len());
+    for issue_title in &issue_titles {
+        println!("Issue: {}", issue_title);
+    }
 
     for (pr, commit, title) in prs {
         // Slugify the title
@@ -80,16 +87,18 @@ pub fn generate_release_notes(
             continue;
         }
 
-        let file =
-            std::fs::File::create(&file_path).context(format!("Failed to create {file_path:?}"))?;
+        if !dry_run {
+            let file = std::fs::File::create(&file_path)
+                .context(format!("Failed to create {file_path:?}"))?;
 
-        writeln!(&file, "<!-- {} -->", title)?;
-        writeln!(
-            &file,
-            "<!-- https://github.com/bevyengine/bevy/pull/{} -->",
-            pr.number
-        )?;
-        writeln!(&file, "\n<!-- TODO -->")?;
+            writeln!(&file, "<!-- {} -->", title)?;
+            writeln!(
+                &file,
+                "<!-- https://github.com/bevyengine/bevy/pull/{} -->",
+                pr.number
+            )?;
+            writeln!(&file, "\n<!-- TODO -->")?;
+        }
 
         // Open an issue to remind the author(s) to write the release notes
         generate_and_open_issue(
@@ -104,10 +113,12 @@ pub fn generate_release_notes(
     }
 
     // Write the metadata file
-    let mut notes_toml = std::fs::File::create(path.join("_release-notes.toml"))
-        .context("Failed to create _guides.toml")?;
-    for metadata in notes_metadata {
-        writeln!(&mut notes_toml, "{metadata}")?;
+    if !dry_run {
+        let mut notes_toml = std::fs::File::create(path.join("_release-notes.toml"))
+            .context("Failed to create _guides.toml")?;
+        for metadata in notes_metadata {
+            writeln!(&mut notes_toml, "{metadata}")?;
+        }
     }
 
     Ok(())
@@ -190,10 +201,10 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
     let labels = vec!["A-Release-Notes", "C-Content", "S-Ready-For-Implementation"];
 
     if dry_run {
-        println!("Would open issue on GitHub:");
+        //println!("Would open issue on GitHub:");
         println!("Title: {}", issue_title);
-        println!("Body: {}", issue_body);
-        println!("Labels: {:?}", labels);
+        //println!("Body: {}", issue_body);
+        //println!("Labels: {:?}", labels);
     } else {
         client
             .open_issue("bevy-website", &issue_title, &issue_body, labels)
