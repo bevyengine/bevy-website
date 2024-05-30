@@ -256,18 +256,21 @@ impl GithubClient {
         if let Some(label) = label {
             request = request.query("labels", label);
         }
-        let response: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
-        Ok(response
-            .iter()
-            // Make sure to only get the PRs that were merged
-            .filter(|pr| {
+        let mut responses: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
+
+        // Filter the PRs based on the requested state
+        match state {
+            IssueState::Open => responses.retain(|pr| pr.closed_at.is_none()),
+            IssueState::Closed => responses.retain(|pr| pr.closed_at.is_some()),
+            IssueState::Merged => responses.retain(|pr| {
                 pr.pull_request
                     .as_ref()
-                    .map(|pr| pr.merged_at.is_some())
-                    .unwrap_or(false)
-            })
-            .cloned()
-            .collect())
+                    .map_or(false, |pr| pr.merged_at.is_some())
+            }),
+            IssueState::All => (),
+        };
+
+        Ok(responses)
     }
 
     pub fn get_contributors(&self, commit_sha: &str) -> anyhow::Result<Vec<String>> {
@@ -394,6 +397,7 @@ impl From<ureq::Error> for IssueError {
 pub enum IssueState {
     Open,
     Closed,
+    Merged,
     All,
 }
 
@@ -407,6 +411,9 @@ impl IssueState {
             IssueState::Open => "open",
             IssueState::Closed => "closed",
             IssueState::All => "all",
+            // All merged PRs are considered closed,
+            // but not all closed PRs are merged.
+            IssueState::Merged => "closed",
         }
     }
 }
