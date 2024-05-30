@@ -35,7 +35,7 @@ areas = ["App"]
 file_name = "9202_Refactor_App_and_SubApp_internals_for_better_separation.md"
 
 [[guides]]
-title = "Make `AppExit` more specific about exit reason."
+title = "Make `AppExit` more specific about exit reason"
 url = "https://github.com/bevyengine/bevy/pull/13022"
 areas = ["App"]
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
