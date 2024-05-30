@@ -6,7 +6,7 @@ use crate::{
 };
 use std::{
     collections::HashSet,
-    io::Write as IoWrite,
+    io::Write,
     path::{Path, PathBuf},
 };
 
