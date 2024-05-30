@@ -139,7 +139,7 @@ file_name = "{file_name}.md"
 #[allow(clippy::too_many_arguments)]
 fn generate_and_open_issue(
     client: &GithubClient,
-    issue_titles: &HashSet<String>,
+    existing_issue_titles: &HashSet<String>,
     pr: &GithubIssuesResponse,
     title: &str,
     authors: &[String],
@@ -151,7 +151,7 @@ fn generate_and_open_issue(
 
     // Check if this issue already exists
     // If it does, we don't want to spam the repo with duplicate issues
-    if issue_titles.contains(&issue_title) {
+    if existing_issue_titles.contains(&issue_title) {
         println!("Issue already exists for PR #{}: {}", pr_number, title);
         return;
     }
