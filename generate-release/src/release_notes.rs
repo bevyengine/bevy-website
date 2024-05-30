@@ -190,7 +190,7 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
     let labels = vec!["A-Release-Notes", "C-Content", "S-Ready-For-Implementation"];
 
     if dry_run {
-        println!("Would open issue on GitHub with the title and body:");
+        println!("Would open issue on GitHub:");
         println!("Title: {}", issue_title);
         println!("Body: {}", issue_body);
         println!("Labels: {:?}", labels);
