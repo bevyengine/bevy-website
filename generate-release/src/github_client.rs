@@ -364,7 +364,7 @@ query {{
             .send_json(ureq::json!({
                 "title": issue_title,
                 "body": issue_body,
-                // TODO: add the milestone.
+                // TODO: add the milestone. Tracked in https://github.com/bevyengine/bevy-website/issues/1269
                 // Note that this must be provided as an integer, so we'll have to look up the milestone ID.
                 "labels": labels,
             }))?;
