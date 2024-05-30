@@ -152,6 +152,7 @@ fn generate_and_open_issue(
     // Check if this issue already exists
     // If it does, we don't want to spam the repo with duplicate issues
     if issue_titles.contains(&issue_title) {
+        println!("Issue already exists for PR #{}: {}", pr_number, title);
         return;
     }
 
