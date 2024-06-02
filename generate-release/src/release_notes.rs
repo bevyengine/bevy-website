@@ -92,15 +92,7 @@ pub fn generate_release_notes(
         writeln!(&file, "\n<!-- TODO -->")?;
 
         // Open an issue to remind the author(s) to write the release notes
-        generate_and_open_issue(
-            client,
-            &issue_titles,
-            &pr,
-            &title,
-            &authors,
-            &file_path,
-            dry_run,
-        );
+        generate_and_open_issue(client, &issue_titles, &pr, &title, &file_path, dry_run);
     }
 
     // Write the metadata file
@@ -142,7 +134,6 @@ fn generate_and_open_issue(
     existing_issue_titles: &HashSet<String>,
     pr: &GithubIssuesResponse,
     title: &str,
-    authors: &[String],
     file_path: &Path,
     dry_run: bool,
 ) {
@@ -159,14 +150,10 @@ fn generate_and_open_issue(
     let pr_url = format!("https://github.com/bevyengine/bevy/pull/{pr_number}",);
     let file_path = file_path.to_string_lossy();
 
-    let authors = authors.join(", ");
-
     // The weird indentation is intentional.
     // Otherwise, the text is not formatted correctly on GitHub as the tabs are copied into the issue body.
     let issue_body = format!(
         "{pr_url} needs release notes for the upcoming Bevy release!
-
-Original authors: {authors}
 
 Please reply below if you'd like to write these notes. 
 While the author(s) of the PR often have the context, knowledge and motivation to draft the release notes for their feature, anyone can contribute release notes!
