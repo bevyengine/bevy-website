@@ -128,6 +128,12 @@ file_name = "{file_name}.md"
     )
 }
 
+/// This function:
+///
+/// 1. Generates a new issue on the `bevy-website` repo for the given PR.
+/// 2. Leaves a comment in the original PR linking to the new issue.
+///
+/// If the issue already exists, no action is taken.
 #[allow(clippy::too_many_arguments)]
 fn generate_and_open_issue(
     client: &GithubClient,
@@ -181,12 +187,21 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
         println!("Body: {}", issue_body);
         println!("Labels: {:?}", labels);
     } else {
-        client
+        // Open an issue on the `bevy-website` repo
+        let response = client
             .open_issue("bevy-website", &issue_title, &issue_body, labels)
             .unwrap();
         println!("Opened issue for PR #{}: {}", pr_number, title);
         // Pause between opening issues to avoid getting rate-limited.
         // See https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#pause-between-mutative-requests
-        std::thread::sleep(std::time::Duration::from_secs(1));
+        std::thread::sleep(std::time::Duration::from_secs(2));
+
+        // Leave a comment on the PR linking to the new issue
+        let issue_url = response.html_url;
+
+        let comment = format!("Thanks for making and reviewing this PR! This work is relatively important and needs release notes! Head over to {issue_url} to help out.",);
+
+        // Unwrap to warn the user if the comment fails
+        client.leave_comment("bevy", pr_number, &comment).unwrap();
     }
 }
