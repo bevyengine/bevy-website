@@ -11,10 +11,6 @@
     {% endif %}
   {% endfor %}
 
-  {% if ancestor_is_public_draft or section_or_page and section_or_page.extra and section_or_page.extra.public_draft %}
-    <meta name="robots" content="noindex, nofollow, noarchive">
-  {% endif %}
-
   <script src="/optional-helpers.js"></script>
   <script defer src="/on-this-page.js"></script>
 {% endblock head_extensions %}

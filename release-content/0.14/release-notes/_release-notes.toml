@@ -13,6 +13,7 @@ authors = [
 	"@afonsolage",
 	"@chompaa",
 	"@oyasumi731",
+    "@janhohenheim",
 ]
 url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
@@ -352,3 +353,10 @@ title = "New circular primitives: `Arc2d`, `CircularSector`, `CircularSegment`"
 authors = ["@aristaeus","@Jondolf","@spectria-limina","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13482"
 file_name = "13482_New_circular_primitives_Arc2d_CircularSector_CircularSegme.md"
+
+[[release_notes]]
+title = "Add support for KHR_texture_transform"
+authors = ["@janhohenheim"]
+url = "https://github.com/bevyengine/bevy/pull/11904"
+file_name = "11904_Add_support_for_KHR_texture_transform.md"
+
