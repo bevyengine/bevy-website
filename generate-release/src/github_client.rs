@@ -376,6 +376,29 @@ query {{
             Ok(())
         }
     }
+
+    /// Leaves a comment on the specified issue or pull request.
+    ///
+    /// See the [Github API documentation](https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28) for more information.
+    pub fn leave_comment(
+        &self,
+        repo: &str,
+        issue_number: i32,
+        comment: &str,
+    ) -> Result<(), ureq::Error> {
+        self.agent
+            .post(&format!(
+                "https://api.github.com/repos/bevyengine/{repo}/issues/{issue_number}/comments",
+            ))
+            .set("Authorization", &format!("Bearer {}", self.token))
+            .set("Accept", "application/vnd.github+json")
+            .set("X-GitHub-Api-Version", "2022-11-28")
+            .send_json(ureq::json!({
+                "body": comment,
+            }))?;
+
+        Ok(())
+    }
 }
 
 /// An issue that occurred while opening an issue on Github.
