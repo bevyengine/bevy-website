@@ -55,7 +55,7 @@ url = "https://github.com/bevyengine/bevy/pull/11165"
 file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
 
 [[release_notes]]
-title = "Add WinitEvent aggregate event for synchronized window event reading"
+title = "A unified view of window and input events"
 authors = ["@UkoeHB"]
 url = "https://github.com/bevyengine/bevy/pull/12100"
 file_name = "12100_Add_WinitEvent_aggregate_event_for_synchronized_window_eve.md"
