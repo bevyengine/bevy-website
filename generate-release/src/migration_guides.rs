@@ -117,7 +117,7 @@ fn generate_metadata_block(
     title: &str,
     file_name: &String,
     areas: &[String],
-    pr_number: i32,
+    pr_number: u64,
 ) -> String {
     format!(
         r#"[[guides]]
