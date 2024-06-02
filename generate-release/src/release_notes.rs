@@ -199,7 +199,7 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
         // Leave a comment on the PR linking to the new issue
         let issue_url = response.html_url;
 
-        let comment = format!("Thanks for making and reviewing this PR! This work is relatively important and needs release notes! Head over to {issue_url} to help out.",);
+        let comment = format!("Thank you to everyone involved with the authoring or reviewing of this PR! This work is relatively important and needs release notes! Head over to {issue_url} if you'd like to help out.",);
 
         // Unwrap to warn the user if the comment fails
         client.leave_comment("bevy", pr_number, &comment).unwrap();
