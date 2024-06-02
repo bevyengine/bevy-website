@@ -352,7 +352,7 @@ query {{
         issue_title: &str,
         issue_body: &str,
         labels: Vec<&str>,
-    ) -> Result<(), IssueError> {
+    ) -> Result<Response, IssueError> {
         let response = self
             .agent
             .post(&format!(
@@ -373,7 +373,7 @@ query {{
         if response.status() != 201 {
             Err(IssueError::FailedToCreateIssue(response))
         } else {
-            Ok(())
+            Ok(response)
         }
     }
 
@@ -385,8 +385,9 @@ query {{
         repo: &str,
         issue_number: i32,
         comment: &str,
-    ) -> Result<(), ureq::Error> {
-        self.agent
+    ) -> Result<Response, ureq::Error> {
+        let response = self
+            .agent
             .post(&format!(
                 "https://api.github.com/repos/bevyengine/{repo}/issues/{issue_number}/comments",
             ))
@@ -397,7 +398,7 @@ query {{
                 "body": comment,
             }))?;
 
-        Ok(())
+        Ok(response)
     }
 }
 
