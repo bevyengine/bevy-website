@@ -342,7 +342,7 @@ query {{
         Ok(request.call()?.into_json()?)
     }
 
-    /// Opens a new issue on the `bevyengine/bevy-website` repo.
+    /// Opens a new issue on the specified repo.
     ///
     /// See [the Github API documentation](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue) for more information.
     #[allow(clippy::result_large_err)]
