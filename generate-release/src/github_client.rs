@@ -100,6 +100,17 @@ pub struct GithubIssuesResponse {
     pub pull_request: Option<GithubIssuesResponsePullRequest>,
 }
 
+/// See the [response schema](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue)
+///
+/// Not all fields are included, only the ones that are needed. Feel free to add more as needed!
+#[derive(Deserialize, Clone, Debug)]
+pub struct GithubIssueOpenedResponse {
+    /// The issue number of the freshly opened issue
+    pub number: u64,
+    /// The human-friendly HTML URL of the freshly opened issue
+    pub html_url: String,
+}
+
 pub struct GithubClient {
     agent: ureq::Agent,
     token: String,
@@ -352,7 +363,7 @@ query {{
         issue_title: &str,
         issue_body: &str,
         labels: Vec<&str>,
-    ) -> Result<Response, IssueError> {
+    ) -> Result<GithubIssueOpenedResponse, IssueError> {
         let response = self
             .agent
             .post(&format!(
@@ -373,7 +384,9 @@ query {{
         if response.status() != 201 {
             Err(IssueError::FailedToCreateIssue(response))
         } else {
-            Ok(response)
+            let parsed_response: GithubIssueOpenedResponse = response.into_json()?;
+
+            Ok(parsed_response)
         }
     }
 
@@ -383,7 +396,7 @@ query {{
     pub fn leave_comment(
         &self,
         repo: &str,
-        issue_number: i32,
+        issue_number: u64,
         comment: &str,
     ) -> Result<Response, ureq::Error> {
         let response = self
@@ -407,11 +420,18 @@ query {{
 pub enum IssueError {
     Ureq(ureq::Error),
     FailedToCreateIssue(Response),
+    FailedToParseResponse(std::io::Error),
 }
 
 impl From<ureq::Error> for IssueError {
     fn from(err: ureq::Error) -> Self {
         IssueError::Ureq(err)
+    }
+}
+
+impl From<std::io::Error> for IssueError {
+    fn from(err: std::io::Error) -> Self {
+        IssueError::FailedToParseResponse(err)
     }
 }
 
