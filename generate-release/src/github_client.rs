@@ -92,7 +92,7 @@ pub struct GithubIssuesResponsePullRequest {
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubIssuesResponse {
     pub title: String,
-    pub number: i32,
+    pub number: u64,
     pub body: Option<String>,
     pub labels: Vec<GithubLabel>,
     pub user: GithubUser,
@@ -105,8 +105,6 @@ pub struct GithubIssuesResponse {
 /// Not all fields are included, only the ones that are needed. Feel free to add more as needed!
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubIssueOpenedResponse {
-    /// The issue number of the freshly opened issue
-    pub number: u64,
     /// The human-friendly HTML URL of the freshly opened issue
     pub html_url: String,
 }

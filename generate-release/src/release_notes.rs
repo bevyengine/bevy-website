@@ -108,7 +108,7 @@ pub fn generate_release_notes(
 fn generate_metadata_block(
     title: &str,
     authors: &[String],
-    pr_number: i32,
+    pr_number: u64,
     file_name: &str,
 ) -> String {
     // TODO should probably add some weight for sorting
