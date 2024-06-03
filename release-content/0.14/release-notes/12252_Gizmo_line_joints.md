@@ -4,7 +4,7 @@ Bevy gizmos are composed of linestrips and a powerful tool for debugging games.
 use bevy::{color::palettes::css::*, prelude::*};
 
 fn draw_gizmos(mut gizmos: Gizmos) {
-    gizmos.line_2d(Vec2::ZERO, Vec2::splat(-80.), RED);
+    gizmos.linestrip_2d([Vec2::ZERO, Vec2::splat(100.), Vec2::new(100., 200.)], Vec2::splat(-80.), RED);
 }
 
 fn setup(mut commands: Commands) {
@@ -34,7 +34,7 @@ fn setup(mut commands: Commands, mut config_store: ResMut<GizmoConfigStore>) {
 	// Get the config for you gizmo config group
     let (config, _) = config_store.config_mut::<DefaultGizmoConfigGroup>();
 	// Set the line joints for this config group
-	config.line_joints = GizmoLineJoints::Bevel;
+	config.line_joints = GizmoLineJoint::Bevel;
 }
 
 App::new()
@@ -44,10 +44,10 @@ App::new()
 ```
 
 Available line joints are 
-- `GizmoLineJoints::Miter`, which extends both lines until they meet at a common miter point and
-- `GizmoLineJoints::Round(resolution)`, which will approximate an arc filling the gap between the two lines. The `resolution` determines the amount of triangles used to approximate the geometry of the arc.
-- `GizmoLineJoints::Bevel`, which connects the ends of the two joining lines with a straight segment,
-- `GizmoLineJoints::None`, which uses no joints - this is the default behaviour and the only one available before bevy 0.14,
+- `GizmoLineJoint::Miter`, which extends both lines until they meet at a common miter point and
+- `GizmoLineJoint::Round(resolution)`, which will approximate an arc filling the gap between the two lines. The `resolution` determines the amount of triangles used to approximate the geometry of the arc.
+- `GizmoLineJoint::Bevel`, which connects the ends of the two joining lines with a straight segment,
+- `GizmoLineJoint::None`, which uses no joints - this is the default behaviour and the only one available before bevy 0.14,
 
 ![new gizmos line joints](gizmos_line_joints.png)
 
