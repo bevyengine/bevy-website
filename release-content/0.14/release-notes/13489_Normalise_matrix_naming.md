@@ -19,7 +19,7 @@ One tidy benefit of this, is that the inverse matrices are named `x_from_y`, and
 
 For example, instead of writing:
 ```rust
-let model_view_projection = model * view * projection;
+let model_view_projection = projection * view * model;
 ```
 You might now write:
 ```rust
