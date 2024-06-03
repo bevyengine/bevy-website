@@ -253,7 +253,7 @@ impl GithubClient {
     ) -> anyhow::Result<Vec<GithubIssuesResponse>> {
         let mut request = self
             .get("issues", repo)
-            .query("state", state.as_str())
+            .query("state", state.as_github_str())
             .query("base", "main")
             .query("per_page", "100")
             .query("page", &page.to_string());
@@ -450,7 +450,7 @@ impl IssueState {
     ///
     /// This is requested by the Github API,
     /// as documented [here](https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-repository-issues).
-    fn as_str(&self) -> &'static str {
+    fn as_github_str(&self) -> &'static str {
         match self {
             IssueState::Open => "open",
             // All merged PRs are considered closed,
