@@ -391,6 +391,7 @@ query {{
     /// Leaves a comment on the specified issue or pull request.
     ///
     /// See the [Github API documentation](https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28) for more information.
+    #[allow(clippy::result_large_err)]
     pub fn leave_comment(
         &self,
         repo: &str,
