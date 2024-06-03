@@ -124,7 +124,7 @@ impl GithubClient {
         Self { agent, token, repo }
     }
 
-    /// Submits a request to `bevyengine/{repo}`
+    /// Submits a GET request to `bevyengine/{repo}`
     fn get(&self, path: &str, repo: &str) -> ureq::Request {
         self.agent
             .get(&format!(
