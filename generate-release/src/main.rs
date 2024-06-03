@@ -66,7 +66,7 @@ enum Commands {
         overwrite_existing: bool,
         /// If this is set, no issues will be opened.
         #[arg(short, long)]
-        dry_run: bool,
+        local: bool,
     },
     /// Generates a list of all the merged PRs for the given release
     Changelog,
@@ -103,14 +103,14 @@ fn main() -> anyhow::Result<()> {
         )?,
         Commands::ReleaseNotes {
             overwrite_existing,
-            dry_run,
+            local,
         } => generate_release_notes(
             &args.from,
             &args.to,
             release_path.join("release-notes"),
             &client,
             overwrite_existing,
-            dry_run,
+            local,
         )?,
         Commands::Changelog => generate_changelog(
             &args.from,
