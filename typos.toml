@@ -30,7 +30,8 @@ LOD = "LOD" # Level of detail
 # names
 [default]
 extend-ignore-identifiers-re = [
-  "2nd", # Second
+  "2nd",   # Second
+  "optin", # Opt-in
   # Contributor Names
   "TehPers",
   "AlisCode",
