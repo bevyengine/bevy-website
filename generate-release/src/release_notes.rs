@@ -190,7 +190,11 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
         // Open an issue on the `bevy-website` repo
         let response = client
             .open_issue(BevyRepo::BevyWebsite, &issue_title, &issue_body, labels)
-            .unwrap();
+            .unwrap_or_else(|err| {
+                eprintln!("Failed to open issue for PR #{}: {}", pr_number, title);
+                eprintln!("Error: {:?}", err);
+                std::process::exit(1);
+            });
         println!("Opened issue for PR #{}: {}", pr_number, title);
         // Pause between opening issues to avoid getting rate-limited.
         // See https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#pause-between-mutative-requests
@@ -201,9 +205,13 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
 
         let comment = format!("Thank you to everyone involved with the authoring or reviewing of this PR! This work is relatively important and needs release notes! Head over to {issue_url} if you'd like to help out.",);
 
-        // Unwrap to warn the user if the comment fails
+        // Warn the user if the comment fails
         client
             .leave_comment(BevyRepo::Bevy, pr_number, &comment)
-            .unwrap();
+            .unwrap_or_else(|err| {
+                eprintln!("Failed to leave a comment on PR #{}: {}", pr_number, title);
+                eprintln!("Error: {:?}", err);
+                std::process::exit(1);
+            });
     }
 }
