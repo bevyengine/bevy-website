@@ -1,9 +1,34 @@
-use std::{collections::HashMap, fmt::Debug};
+use std::{
+    collections::HashMap,
+    fmt::{Debug, Display},
+};
 
 use anyhow::bail;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
 use ureq::Response;
+
+/// A GitHub repository in the `bevyengine` organization.
+#[derive(Debug, Clone, Copy)]
+pub enum BevyRepo {
+    Bevy,
+    BevyWebsite,
+}
+
+impl BevyRepo {
+    fn as_str(&self) -> &'static str {
+        match self {
+            BevyRepo::Bevy => "bevy",
+            BevyRepo::BevyWebsite => "bevy-website",
+        }
+    }
+}
+
+impl Display for BevyRepo {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubBranchesResponse {
@@ -112,11 +137,11 @@ pub struct GithubIssueOpenedResponse {
 pub struct GithubClient {
     agent: ureq::Agent,
     token: String,
-    pub repo: String,
+    pub repo: BevyRepo,
 }
 
 impl GithubClient {
-    pub fn new(token: String, repo: String) -> Self {
+    pub fn new(token: String, repo: BevyRepo) -> Self {
         let agent: ureq::Agent = ureq::AgentBuilder::new()
             .user_agent("bevy-website-generate-release")
             .build();
@@ -125,7 +150,7 @@ impl GithubClient {
     }
 
     /// Submits a GET request to `bevyengine/{repo}`
-    fn get(&self, path: &str, repo: &str) -> ureq::Request {
+    fn get(&self, path: &str, repo: BevyRepo) -> ureq::Request {
         self.agent
             .get(&format!(
                 "https://api.github.com/repos/bevyengine/{repo}/{path}",
@@ -172,7 +197,7 @@ impl GithubClient {
         page: i32,
     ) -> anyhow::Result<GithubCompareResponse> {
         let request = self
-            .get(&format!("compare/{from}...{to}"), "bevy")
+            .get(&format!("compare/{from}...{to}"), BevyRepo::Bevy)
             .query("per_page", "250")
             .query("page", &page.to_string());
         Ok(request.call()?.into_json()?)
@@ -183,7 +208,7 @@ impl GithubClient {
     /// If `since` is provided, it should be a date in the YYYY-MM-DD format.
     pub fn get_issues_and_prs(
         &self,
-        repo: &str,
+        repo: BevyRepo,
         state: IssueState,
         since: Option<&str>,
         label: Option<&str>,
@@ -246,7 +271,7 @@ impl GithubClient {
     fn get_issues_and_prs_by_page(
         &self,
         page: i32,
-        repo: &str,
+        repo: BevyRepo,
         state: IssueState,
         date: Option<&str>,
         label: Option<&str>,
@@ -346,7 +371,11 @@ query {{
     }
 
     /// Gets the data for a specific commit on the provided `bevyengine` repo.
-    pub fn get_commit(&self, git_ref: &str, repo: &str) -> anyhow::Result<GithubCommitResponse> {
+    pub fn get_commit(
+        &self,
+        git_ref: &str,
+        repo: BevyRepo,
+    ) -> anyhow::Result<GithubCommitResponse> {
         let request = self.get(&format!("commits/{git_ref}"), repo);
         Ok(request.call()?.into_json()?)
     }
@@ -357,7 +386,7 @@ query {{
     #[allow(clippy::result_large_err)]
     pub fn open_issue(
         &self,
-        repo: &str,
+        repo: BevyRepo,
         issue_title: &str,
         issue_body: &str,
         labels: Vec<&str>,
@@ -394,7 +423,7 @@ query {{
     #[allow(clippy::result_large_err)]
     pub fn leave_comment(
         &self,
-        repo: &str,
+        repo: BevyRepo,
         issue_number: u64,
         comment: &str,
     ) -> Result<Response, ureq::Error> {

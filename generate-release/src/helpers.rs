@@ -1,6 +1,8 @@
 use std::time::Duration;
 
-use crate::github_client::{GithubClient, GithubCommitResponse, GithubIssuesResponse, IssueState};
+use crate::github_client::{
+    BevyRepo, GithubClient, GithubCommitResponse, GithubIssuesResponse, IssueState,
+};
 use anyhow::{bail, Context};
 use regex::Regex;
 
@@ -19,12 +21,16 @@ pub fn get_merged_prs(
 
     println!("Getting list of all merged PRs from {from} to {to} with label {label:?}");
 
-    let base_commit = client.get_commit(from, "bevy")?;
+    let base_commit = client.get_commit(from, BevyRepo::Bevy)?;
     let base_commit_date = &base_commit.commit.committer.date[0..10];
 
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
-    let prs =
-        client.get_issues_and_prs("bevy", IssueState::Merged, Some(base_commit_date), label)?;
+    let prs = client.get_issues_and_prs(
+        BevyRepo::Bevy,
+        IssueState::Merged,
+        Some(base_commit_date),
+        label,
+    )?;
     println!(
         "Found {} merged PRs and {} commits since {} (the base commit date)",
         prs.len(),

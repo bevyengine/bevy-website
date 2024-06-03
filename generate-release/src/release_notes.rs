@@ -1,7 +1,7 @@
 use anyhow::Context;
 
 use crate::{
-    github_client::{GithubClient, GithubIssuesResponse, IssueState},
+    github_client::{BevyRepo, GithubClient, GithubIssuesResponse, IssueState},
     helpers::{get_contributors, get_merged_prs},
 };
 use std::{
@@ -33,7 +33,7 @@ pub fn generate_release_notes(
     // This is done outside of the loop because we don't want to request this information anew for every PR
     println!("Getting list of the issues from the `bevy-website` repo to check for duplicates.");
     let issue_titles = client
-        .get_issues_and_prs("bevy-website", IssueState::All, None, None)?
+        .get_issues_and_prs(BevyRepo::BevyWebsite, IssueState::All, None, None)?
         .iter()
         .map(|issue| issue.title.clone())
         .collect::<HashSet<_>>();
@@ -189,7 +189,7 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
     } else {
         // Open an issue on the `bevy-website` repo
         let response = client
-            .open_issue("bevy-website", &issue_title, &issue_body, labels)
+            .open_issue(BevyRepo::BevyWebsite, &issue_title, &issue_body, labels)
             .unwrap();
         println!("Opened issue for PR #{}: {}", pr_number, title);
         // Pause between opening issues to avoid getting rate-limited.
@@ -202,6 +202,8 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
         let comment = format!("Thank you to everyone involved with the authoring or reviewing of this PR! This work is relatively important and needs release notes! Head over to {issue_url} if you'd like to help out.",);
 
         // Unwrap to warn the user if the comment fails
-        client.leave_comment("bevy", pr_number, &comment).unwrap();
+        client
+            .leave_comment(BevyRepo::Bevy, pr_number, &comment)
+            .unwrap();
     }
 }

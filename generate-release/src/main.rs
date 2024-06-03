@@ -2,6 +2,7 @@ use anyhow::Context;
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
 use contributors::generate_contributors;
+use github_client::BevyRepo;
 use migration_guides::generate_migration_guides;
 use release_notes::generate_release_notes;
 use std::path::PathBuf;
@@ -83,7 +84,7 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let client = github_client::GithubClient::new(
         std::env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found"),
-        String::from("bevy"),
+        BevyRepo::Bevy,
     );
 
     // WARN this assumes it gets ran from ./generate-release
