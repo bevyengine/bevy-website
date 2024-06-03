@@ -242,7 +242,7 @@ impl GithubClient {
         Ok(prs)
     }
 
-    // Request issues and PRs by the page returned by the Github API
+    /// Request issues and PRs by the page returned by the Github API
     fn get_issues_and_prs_by_page(
         &self,
         page: i32,
