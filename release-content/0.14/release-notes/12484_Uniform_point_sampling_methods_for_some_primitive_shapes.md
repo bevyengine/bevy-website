@@ -40,7 +40,7 @@ Separately, the direction types (`Dir2`, `Dir3`, `Dir3A`) and quaternions (`Quat
 use bevy::math::prelude::*;
 use rand::{random, Rng, SeedableRng, rngs::StdRng, distributions::Standard};
 
-// Intantiate an Rng:
+// Instantiate an Rng:
 let rng = &mut StdRng::from_entropy();
 
 // Get a random direction:
