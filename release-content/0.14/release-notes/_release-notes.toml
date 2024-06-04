@@ -197,7 +197,7 @@ url = "https://github.com/bevyengine/bevy/pull/12936"
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[release_notes]]
-title = "Make `AppExit` more specific about exit reason."
+title = "`AppExit` Errors"
 authors = ["@Brezak","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13022"
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
