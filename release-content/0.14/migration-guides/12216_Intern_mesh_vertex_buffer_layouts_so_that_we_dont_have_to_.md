@@ -1,1 +1,1 @@
-- Duplicate `MeshVertexBufferLayout`s are now combined into a single object, `MeshVertexBufferLayoutRef`, which contains an atomically-reference-counted pointer to the layout. Code that was using `MeshVertexBufferLayout` may need to be updated to use `MeshVertexBufferLayoutRef` instead.
+Duplicate `MeshVertexBufferLayout`s are now combined into a single object, `MeshVertexBufferLayoutRef`, which contains an atomically-reference-counted pointer to the layout. Code that was using `MeshVertexBufferLayout` may need to be updated to use `MeshVertexBufferLayoutRef` instead.

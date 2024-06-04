@@ -1,1 +1,1 @@
-- If `ReflectSerialize` is registered on a type, but `TypePath` or `FromReflect` implementations are omitted (perhaps by `#[reflect(type_path = false)` or `#[reflect(from_reflect = false)]`), the traits must now be implemented.
+If `ReflectSerialize` is registered on a type, but `TypePath` or `FromReflect` implementations are omitted (perhaps by `#[reflect(type_path = false)` or `#[reflect(from_reflect = false)]`), the traits must now be implemented.

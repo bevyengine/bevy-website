@@ -1,4 +1,4 @@
-- Users who added `close_on_esc` in their application will have to replace it with their own solution.
+Users who added `close_on_esc` in their application will have to replace it with their own solution.
 
 ```rust
 pub fn close_on_esc(

@@ -11,8 +11,8 @@ url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "Immediately apply deferred system params in System::run"
-authors = ["@james7132", "@alice-i-cecile"]
+title = "`Commands` and exclusive world access: working together in harmony"
+authors = ["@james7132", "@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/11823"
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
@@ -21,18 +21,6 @@ title = "Run the multi-threaded executor at the end of each system task."
 authors = ["@chescock", "@james7132", "@hymm"]
 url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
-
-[[release_notes]]
-title = "Cubic splines overhaul"
-authors = [
-	"@JohnTheCoolingFan",
-	"@NthTensor",
-	"@Jondolf",
-	"@IQuick143",
-	"@alice-i-cecile",
-]
-url = "https://github.com/bevyengine/bevy/pull/10701"
-file_name = "10701_Cubic_splines_overhaul.md"
 
 [[release_notes]]
 title = "Add coordinate axes gizmo"
@@ -77,8 +65,8 @@ url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
 [[release_notes]]
-title = "Add `Rotation2d`"
-authors = ["@Jondolf", "@tguichaoua", "@IQuick143", "@RobWalt"]
+title = "A new `Rotation2d` type"
+authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
 url = "https://github.com/bevyengine/bevy/pull/11658"
 file_name = "11658_Add_Rotation2d.md"
 
@@ -137,14 +125,22 @@ url = "https://github.com/bevyengine/bevy/pull/12205"
 file_name = "12205_Get_Bevy_building_for_WebAssembly_with_multithreading.md"
 
 [[release_notes]]
-title = "Gizmo line styles"
+title = "Gizmo line styles and joints"
 authors = ["@lynn-lumen", "@BD103"]
 url = "https://github.com/bevyengine/bevy/pull/12394"
 file_name = "12394_Gizmo_line_styles.md"
 
 [[release_notes]]
 title = "Move `Point` out of cubic splines module and expand it"
-authors = ["@mweatherley", "@bushrat011899"]
+authors = [
+	"@mweatherley",
+	"@bushrat011899",
+	"@JohnTheCoolingFan",
+	"@NthTensor",
+	"@Jondolf",
+	"@IQuick143",
+	"@alice-i-cecile",
+]
 url = "https://github.com/bevyengine/bevy/pull/12747"
 file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
 
@@ -197,7 +193,7 @@ url = "https://github.com/bevyengine/bevy/pull/12936"
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[release_notes]]
-title = "Make `AppExit` more specific about exit reason."
+title = "`AppExit` Errors"
 authors = ["@Brezak", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13022"
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
@@ -221,7 +217,7 @@ url = "https://github.com/bevyengine/bevy/pull/12755"
 file_name = "12755_Meshlet_continuous_LOD.md"
 
 [[release_notes]]
-title = "Make dynamic_linking a no-op on wasm targets"
+title = "Make dynamic_linking a no-op on WASM targets"
 authors = ["@james7132", "@BD103"]
 url = "https://github.com/bevyengine/bevy/pull/12672"
 file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
@@ -405,3 +401,21 @@ title = "Added CompassQuadrant and CompassOctant as per #13647"
 authors = ["@BobG1983", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13653"
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
+
+[[release_notes]]
+title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13450"
+file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
+
+[[release_notes]]
+title = "Move utilities from examples to `bevy_state` and add concept of state-scoped entities"
+authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13649"
+file_name = "13649_Move_utilities_from_examples_to_bevy_state_and_add_concept.md"
+
+[[release_notes]]
+title = "Generalize `StateTransitionEvent<S>` to allow identity transitions"
+authors = ["@MiniaczQ", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_Generalize_StateTransitionEventS_to_allow_identity_transit.md"
