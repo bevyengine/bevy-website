@@ -71,8 +71,8 @@ url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
 [[release_notes]]
-title = "Add `Rotation2d`"
-authors = ["@Jondolf","@tguichaoua","@IQuick143","@RobWalt"]
+title = "A new `Rotation2d` type"
+authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
 url = "https://github.com/bevyengine/bevy/pull/11658"
 file_name = "11658_Add_Rotation2d.md"
 
