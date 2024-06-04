@@ -17,7 +17,8 @@ struct Slider {
 }
 ```
 
-Taking inspiration from this, Bevy 0.14 adds support for custom attributes when deriving `Reflect`.
+Taking inspiration from this, Bevy 0.14 adds proper support for custom attributes when deriving `Reflect`,
+so users and third-party crates should no longer need to create custom type data specifically for this purpose.
 These attributes can be attached to structs, enums, fields, and variants using the `#[reflect(@...)]` syntax,
 where the `...` can be any expression that resolves to a type implementing `Reflect`.
 
