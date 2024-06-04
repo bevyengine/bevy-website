@@ -47,7 +47,7 @@ note: required by a bound in `bevy::prelude::App::insert_resource`
 
 The compiler suggests we use a different type that implements `Resource`, or that we implement the trait on `MyResource`. The former doesn't help us at all, and the latter fails to mention the available derive macro.
 
-With the release of Rust 1.78, Bevy can now provide more direct messages for certain type of errors during compilation using [diagnostic attributes](https://blog.rust-lang.org/2024/05/02/Rust-1.78.0.html#diagnostic-attributes).
+With the release of Rust 1.78, Bevy can now provide more direct messages for certain types of errors during compilation using [diagnostic attributes](https://blog.rust-lang.org/2024/05/02/Rust-1.78.0.html#diagnostic-attributes).
 
 ```
 error[E0277]: `MyResource` is not a `Resource`
