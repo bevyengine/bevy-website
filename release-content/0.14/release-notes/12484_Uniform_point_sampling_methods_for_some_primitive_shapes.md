@@ -1,7 +1,7 @@
 The ability to perform a variety of random sampling operations has been added to `bevy_math`, gated behind the `rand` feature. These come in a couple of flavors.
 
 First, one can sample random points from the boundaries and interiors of a variety of mathematical primitives:
-![Image of several primitives side-by-side with points randomly sampled from their interiors][sampled-primitives]
+![Image of several primitives side-by-side with points randomly sampled from their interiors][sampling-primitives]
 
 In code, these can be sampled in a couple different ways, using either the `sample_interior`/`sample_boundary` or `interior_dist`/`boundary_dist` APIs:
 ```rust
@@ -53,4 +53,4 @@ let another_direction: Dir3 = rng.gen();
 let yet_another_direction: Dir3 = random();
 ```
 
-[sampled-primitives]: 
+[sampling-primitives]: sampling_primitives.png
