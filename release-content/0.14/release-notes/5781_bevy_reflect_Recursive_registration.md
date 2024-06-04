@@ -1,4 +1,4 @@
-Bevy uses reflection in order to dynamically process data for things like serialization and deserialization.
+Bevy uses [reflection](https://docs.rs/bevy_reflect/latest/bevy_reflect/) in order to dynamically process data for things like serialization and deserialization.
 This often requires Bevy to know that a type even exists.
 This is why users need to register their types into the `TypeRegistry`.
 
