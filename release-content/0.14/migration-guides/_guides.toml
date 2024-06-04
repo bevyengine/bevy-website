@@ -353,12 +353,6 @@ areas = ["Gizmos"]
 file_name = "12394_Gizmo_line_styles.md"
 
 [[guides]]
-title = "Changed the order of arguments for the Arc gizmo docs"
-url = "https://github.com/bevyengine/bevy/pull/12854"
-areas = ["Gizmos"]
-file_name = "12854_Changed_the_order_of_arguments_for_the_Arc_gizmo_docs.md"
-
-[[guides]]
 title = "Inconsistent segments/resolution naming"
 url = "https://github.com/bevyengine/bevy/pull/13438"
 areas = ["Gizmos"]
