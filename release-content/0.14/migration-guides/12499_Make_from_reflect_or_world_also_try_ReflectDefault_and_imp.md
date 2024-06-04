@@ -1,1 +1,1 @@
-- `ReflectBundle::insert` now requires an additional `&TypeRegistry` parameter.
+`ReflectBundle::insert` now requires an additional `&TypeRegistry` parameter.

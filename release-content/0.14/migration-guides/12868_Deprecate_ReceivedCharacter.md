@@ -1,7 +1,5 @@
-- 
 `ReceivedCharacter` is now deprecated, use `KeyboardInput` instead.
 
-- 
 Before:
 
 ```rust

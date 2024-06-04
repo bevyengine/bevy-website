@@ -1,1 +1,1 @@
-- When using `glam` exports, keep in mind that `vector` `fract()` method now matches Rust implementation (that is `self - self.trunc()` instead of `self - self.floor()`). If you want to use the GLSL implementation you should now use `fract_gl()`.
+When using `glam` exports, keep in mind that `vector` `fract()` method now matches Rust implementation (that is `self - self.trunc()` instead of `self - self.floor()`). If you want to use the GLSL implementation you should now use `fract_gl()`.
