@@ -1,1 +1,1 @@
-- Change floating point types (`Vec2`, `Rect`) to their respective unsigned integer versions (`UVec2`, `URect`) when using `GpuImage`, `TextureAtlasLayout`, `TextureAtlasBuilder`, `DynamicAtlasTextureBuilder` or `FontAtlas`.
+Change floating point types (`Vec2`, `Rect`) to their respective unsigned integer versions (`UVec2`, `URect`) when using `GpuImage`, `TextureAtlasLayout`, `TextureAtlasBuilder`, `DynamicAtlasTextureBuilder` or `FontAtlas`.
