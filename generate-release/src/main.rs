@@ -2,6 +2,7 @@ use anyhow::Context;
 use changelog::generate_changelog;
 use clap::{Parser as ClapParser, Subcommand};
 use contributors::generate_contributors;
+use github_client::BevyRepo;
 use migration_guides::generate_migration_guides;
 use release_notes::generate_release_notes;
 use std::path::PathBuf;
@@ -55,10 +56,18 @@ enum Commands {
         #[arg(short, long)]
         overwrite_existing: bool,
     },
+    /// Generates release notes for all PRs merged with the `C-Needs-Release-Note` label.
+    ///
+    /// This will also open an issue for each PR that doesn't have a release note.
+    /// While duplicate issues will not be opened, be sure to use the `--local` flag
+    /// if you want to test the release notes generation without spamming the repo.
     ReleaseNotes {
         /// Use this if you want to overwrite existing files
         #[arg(short, long)]
         overwrite_existing: bool,
+        /// If this is set, no issues will be opened.
+        #[arg(short, long)]
+        local: bool,
     },
     /// Generates a list of all the merged PRs for the given release
     Changelog,
@@ -75,7 +84,7 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let client = github_client::GithubClient::new(
         std::env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found"),
-        String::from("bevy"),
+        BevyRepo::Bevy,
     );
 
     // WARN this assumes it gets ran from ./generate-release
@@ -93,12 +102,16 @@ fn main() -> anyhow::Result<()> {
             &client,
             overwrite_existing,
         )?,
-        Commands::ReleaseNotes { overwrite_existing } => generate_release_notes(
+        Commands::ReleaseNotes {
+            overwrite_existing,
+            local,
+        } => generate_release_notes(
             &args.from,
             &args.to,
             release_path.join("release-notes"),
             &client,
             overwrite_existing,
+            local,
         )?,
         Commands::Changelog => generate_changelog(
             &args.from,

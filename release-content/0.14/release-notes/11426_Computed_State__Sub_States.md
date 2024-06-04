@@ -101,7 +101,7 @@ the `State` and `NextState` resources, `OnEnter`, `OnExit` and `OnTransition` sc
 The only exception is that, for correctness, computed states *cannot* be mutated through `NextState`.
 Instead, they are strictly derived from their input states, and added, removed and updated automatically during state transitions based on the provided `compute` method.
 
-All of Bevy's state tools are now found in a dedicated `bevy_states` crate, which can be controlled via a feature flag.
+All of Bevy's state tools are now found in a dedicated `bevy_state` crate, which can be controlled via a feature flag.
 Yearning for the days of state stacks? Wish that there was a method for re-entering states?
 All of the state machinery relies *only* on public ECS tools: resources, schedules and run conditions.
 We know that state machines are very much a matter of taste; so if our design isn't to your taste consider taking advantage of Bevy's modularity and writing your own abstraction or using one supplied by the community.
