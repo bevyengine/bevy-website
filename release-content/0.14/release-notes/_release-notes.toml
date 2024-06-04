@@ -406,3 +406,21 @@ authors = ["@BobG1983","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13653"
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
 
+[[release_notes]]
+title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13450"
+file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
+
+[[release_notes]]
+title = "Move utilities from examples to `bevy_state` and add concept of state-scoped entities"
+authors = ["@MiniaczQ","@alice-i-cecile","@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13649"
+file_name = "13649_Move_utilities_from_examples_to_bevy_state_and_add_concept.md"
+
+[[release_notes]]
+title = "Generalize `StateTransitionEvent<S>` to allow identity transitions"
+authors = ["@MiniaczQ","@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_Generalize_StateTransitionEventS_to_allow_identity_transit.md"
+
