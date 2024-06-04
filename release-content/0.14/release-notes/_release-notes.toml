@@ -23,12 +23,6 @@ url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
-title = "Cubic splines overhaul"
-authors = ["@JohnTheCoolingFan","@NthTensor","@Jondolf","@IQuick143","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/10701"
-file_name = "10701_Cubic_splines_overhaul.md"
-
-[[release_notes]]
 title = "Add coordinate axes gizmo"
 authors = ["@mweatherley"]
 url = "https://github.com/bevyengine/bevy/pull/12211"
@@ -144,7 +138,7 @@ file_name = "12394_Gizmo_line_styles.md"
 
 [[release_notes]]
 title = "Move `Point` out of cubic splines module and expand it"
-authors = ["@mweatherley","@bushrat011899"]
+authors = ["@mweatherley","@bushrat011899","@JohnTheCoolingFan","@NthTensor","@Jondolf","@IQuick143","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/12747"
 file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
 
