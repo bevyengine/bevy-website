@@ -5,4 +5,4 @@ $ cargo build --target wasm32-unknown-unknown --features bevy/dynamic_linking
 error: cannot produce dylib for `bevy_dylib v0.13.2` as the target `wasm32-unknown-unknown` does not support these crate types
 ```
 
-This has been changed so that Bevy will fallback to statically linking at compile time for all WASM platforms. If you enable `dynamic_linking` for development, you no longer need to disable it for WASM.
+Now, Bevy will fallback to static linking for all WASM targets. If you enable `dynamic_linking` for development, you no longer need to disable it for WASM.
