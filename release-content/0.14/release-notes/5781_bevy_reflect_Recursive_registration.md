@@ -1,6 +1,6 @@
 Bevy uses [reflection](https://docs.rs/bevy_reflect/latest/bevy_reflect/) in order to dynamically process data for things like serialization and deserialization.
-This often requires Bevy to know that a type even exists.
-This is why users need to register their types into the `TypeRegistry`.
+A Bevy app has a `TypeRegistry` to keep track of which types exist.
+Users can register their custom types when initializing the app or plugin.
 
 ```rust
 #[derive(Reflect)]
