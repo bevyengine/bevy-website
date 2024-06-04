@@ -203,12 +203,6 @@ areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"
 
 [[guides]]
-title = "Move `close_on_esc` to `bevy_dev_tools`"
-url = "https://github.com/bevyengine/bevy/pull/12855"
-areas = ["Dev-Tools","Windowing"]
-file_name = "12855_Move_close_on_esc_to_bevy_dev_tools.md"
-
-[[guides]]
 title = "Make sysinfo diagnostic plugin optional"
 url = "https://github.com/bevyengine/bevy/pull/12164"
 areas = ["Diagnostics"]
