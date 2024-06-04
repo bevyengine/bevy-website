@@ -5,6 +5,7 @@ In **Bevy 0.14**, you can. The `AppExit` event is now an enum with two variants:
 For plugin developers, `App` has gained a new method, `App::should_exit`, which will check if any `AppExit` events were sent in the last two updates. To make sure `AppExit::Success` events won't drown out useful error information, this method will return any `AppExit::Error` events, even if they were sent after an `AppExit::Success`.
 
 Finally, `AppExit` also implements the [`Termination`](https://doc.rust-lang.org/stable/std/process/trait.Termination.html) trait, so it can be returned from main.
+
 ```rust
 use bevy::prelude::*;
 
@@ -16,7 +17,8 @@ fn main() -> AppExit {
     App::new()
         .add_plugins(MinimalPlugins)
         .add_systems(Update, exit_with_a_error_code)
-        .run()
+        .run() // There's no semicolon here, `run()` returns `AppExit`.
 }
 ```
+
 ![App returning a 42 exit code](exit_with_a_42.png)
