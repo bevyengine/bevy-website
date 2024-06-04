@@ -221,7 +221,7 @@ url = "https://github.com/bevyengine/bevy/pull/12755"
 file_name = "12755_Meshlet_continuous_LOD.md"
 
 [[release_notes]]
-title = "Make dynamic_linking a no-op on wasm targets"
+title = "Make dynamic_linking a no-op on WASM targets"
 authors = ["@james7132","@BD103"]
 url = "https://github.com/bevyengine/bevy/pull/12672"
 file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
