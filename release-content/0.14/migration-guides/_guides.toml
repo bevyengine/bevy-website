@@ -77,7 +77,7 @@ areas = ["Assets"]
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[guides]]
-title = "Error info has been added to LoadState::Failed"
+title = "Add error info to `LoadState::Failed`"
 url = "https://github.com/bevyengine/bevy/pull/12709"
 areas = ["Assets"]
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
