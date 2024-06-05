@@ -60,7 +60,7 @@ impl ComputedStates for InGame {
     // Computed states can be calculated from one or many source states.
     type SourceStates = GameState;
 
-    // Now, we define the rule that determine the value of our computed state.
+    // Now, we define the rule that determines the value of our computed state.
     fn compute(sources: GameState) -> Option<InGame> {
         match sources {
             // We can use pattern matching to express the
