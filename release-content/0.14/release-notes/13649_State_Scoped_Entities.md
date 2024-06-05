@@ -21,6 +21,7 @@ fn spawn_player(mut commands: Commands) {
 
 App::new()
     .init_state::<GameState>()
+    // We need to install the appropriate machinery for the cleanup code to run, once for each state.
     .enable_state_scoped_entities::<GameState>()
     .add_systems(OnEnter(GameState::InGame), spawn_player);
 ```
