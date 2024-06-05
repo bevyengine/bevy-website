@@ -73,7 +73,7 @@ impl ComputedStates for InGame {
 
 // In contrast, substates should be used when you want to keep manual
 // control over the value through `NextState`, but still bind their
-// existance to some parent state.
+// existence to some parent state.
 #[derive(SubStates, Clone, PartialEq, Eq, Hash, Debug, Default)]
 // This macro means that `GamePhase` will only exist when we're in the `InGame` computed state.
 // The intermediate computed state is helpful for clarity here, but isn't required:
