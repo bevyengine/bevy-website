@@ -241,10 +241,22 @@ url = "https://github.com/bevyengine/bevy/pull/12889"
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
+title = "Implement filmic color grading."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13121"
+file_name = "13121_Implement_filmic_color_grading.md"
+
+[[release_notes]]
 title = "Computed State & Sub States"
 authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11426"
 file_name = "11426_Computed_State__Sub_States.md"
+
+[[release_notes]]
+title = "Implement visibility ranges, also known as hierarchical levels of detail (HLODs)."
+authors = ["@pcwalton","@cart"]
+url = "https://github.com/bevyengine/bevy/pull/12916"
+file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
 
 [[release_notes]]
 title = "Add a process for working groups"
@@ -419,3 +431,10 @@ title = "Generalize `StateTransitionEvent<S>` to allow identity transitions"
 authors = ["@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13579"
 file_name = "13579_Generalize_StateTransitionEventS_to_allow_identity_transit.md"
+
+[[release_notes]]
+title = "Implement subpixel morphological antialiasing, or SMAA."
+authors = ["@pcwalton","@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13423"
+file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
+
