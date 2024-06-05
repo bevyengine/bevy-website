@@ -241,6 +241,7 @@ url = "https://github.com/bevyengine/bevy/pull/12889"
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
+<<<<<<< HEAD
 title = "Implement filmic color grading."
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13121"
@@ -248,9 +249,24 @@ file_name = "13121_Implement_filmic_color_grading.md"
 
 [[release_notes]]
 title = "Computed State & Sub States"
+=======
+title = "Computed States & Sub States"
+>>>>>>> 9320370 (prep names)
 authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11426"
-file_name = "11426_Computed_State__Sub_States.md"
+file_name = "11426_Computed_States__Sub_States.md"
+
+[[release_notes]]
+title = "State Identity Transitions"
+authors = ["@MiniaczQ", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_State_Identity_Transitions.md"
+
+[[release_notes]]
+title = "State Scoped Entities"
+authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13649"
+file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
 title = "Implement visibility ranges, also known as hierarchical levels of detail (HLODs)."
@@ -419,6 +435,7 @@ title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13450"
 file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
+<<<<<<< HEAD
 
 [[release_notes]]
 title = "Move utilities from examples to `bevy_state` and add concept of state-scoped entities"
@@ -438,3 +455,5 @@ authors = ["@pcwalton","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13423"
 file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
 
+=======
+>>>>>>> 9320370 (prep names)

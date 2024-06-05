@@ -105,3 +105,4 @@ All of Bevy's state tools are now found in a dedicated `bevy_state` crate, which
 Yearning for the days of state stacks? Wish that there was a method for re-entering states?
 All of the state machinery relies *only* on public ECS tools: resources, schedules and run conditions.
 We know that state machines are very much a matter of taste; so if our design isn't to your taste consider taking advantage of Bevy's modularity and writing your own abstraction or using one supplied by the community.
+
