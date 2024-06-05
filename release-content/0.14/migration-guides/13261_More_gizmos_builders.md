@@ -1,0 +1,2 @@
+- Some `gizmos.primitive_nd` methods now return some or different builders. You may need to adjust types and match statements
+- Replace any calls to `circle_segments()` with `.segments()`
