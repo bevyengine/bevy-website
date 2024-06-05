@@ -14,10 +14,10 @@ All extrusions are extruded along the Z-axis. This guarantees that an extrusion 
 
 ## Measuring and Sampling
 
-Since all extrusions with base shapes that implement `Measured2d` implement `Measured3d`, you can easily get the surface area or volume of an extrusion.
+Since all extrusions with base shapes that implement [`Measured2d`](https://dev-docs.bevyengine.org/bevy/index.html) implement [`Measured3d`](https://dev-docs.bevyengine.org/bevy/index.html), you can easily get the surface area or volume of an extrusion.
 If you have an extrusion of a custom 2D primitive, you can simply implement `Measured2d` for your primitive and `Measured3d` will be implemented automatically for the extrusion.
 
-Likewise, you can sample the boundary and interior of any extrusion if the base shape of the extrusion implements `ShapeSample<Output = Vec2>` and `Measured2d`. 
+Likewise, you can sample the boundary and interior of any extrusion if the base shape of the extrusion implements [`ShapeSample<Output = Vec2>`](https://dev-docs.bevyengine.org/bevy/index.html) and `Measured2d`. 
 
 ```rust
 // Create a 2D capsule with radius 1 and length 2, extruded to a depth of 3
@@ -42,7 +42,7 @@ let boundary_sample = extrusion.sample_boundary(&mut rng);
 
 ## Bounding
 
-You can also get bounding spheres and Axis Aligned Bounding Boxes (AABBs) for extrusions. If you have a custom 2D primitive, you can either provide an entirely original implementation or use the `extrusion_bounding_box` and `extrusion_bounding_sphere` methods from the `bevy::math` module. These will give optimal results but may be slower than a solution fitted to your primitive.
+You can also get bounding spheres and Axis Aligned Bounding Boxes (AABBs) for extrusions. If you have a custom 2D primitive, you can either provide an entirely original implementation or use the [`extrusion_bounding_box`](https://dev-docs.bevyengine.org/bevy/index.html) and [`extrusion_bounding_sphere`](https://dev-docs.bevyengine.org/bevy/index.html) methods from the `bevy::math` module. These will give optimal results but may be slower than a solution fitted to your primitive.
 
 ```rust
 struct Heart {
@@ -72,7 +72,7 @@ Extrusions do not exist in the world of maths only though. They can also be mesh
 
 ![selected rendered extrusions](selected_extrusions.png)
 
-And again, adding meshing support for your own primitives is made easy by bevy! You simply need to implement meshing for your 2D primitive and then implement `Extrudable` for your 2D primitive's `MeshBuilder`. 
+And again, adding meshing support for your own primitives is made easy by bevy! You simply need to implement meshing for your 2D primitive and then implement [`Extrudable`](https://dev-docs.bevyengine.org/bevy/index.html) for your 2D primitive's `MeshBuilder`. 
 
 When implementing `Extrudable`, you have to provide information about whether segments of the perimeter of the base shape are to be shaded smooth or flat, and what vertices belong to each of these perimeter segments.
 
@@ -85,7 +85,10 @@ impl Meshable for Heart {
     }
 }
 struct HeartMeshBuilder {
-    heart: Heart,
+    /// The heart primitive 
+	heart: Heart,
+	/// The number of vertices to use for each wing of the heart
+	resolution: usize,
 }
 impl MeshBuilder for HeartMeshBuilder {
     fn build(&self) -> Mesh {
@@ -95,7 +98,7 @@ impl MeshBuilder for HeartMeshBuilder {
 
 impl Extrudable for HeartMeshBuilder {
     fn perimeter(&self) -> Vec<bevy::render::mesh::PerimeterSegment> {
-        let resolution = 32;
+        let resolution = self.resolution as u32;
         vec![
 			// The left wing of the heart
             PerimeterSegment::Smooth {
