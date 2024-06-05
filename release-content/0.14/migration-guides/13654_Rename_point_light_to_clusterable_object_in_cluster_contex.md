@@ -1,0 +1,1 @@
+- In the PBR shaders, `point_lights` is now known as `clusterable_objects`, `PointLight` is now known as `ClusterableObject`, and `cluster_light_index_lists` is now known as `clusterable_object_index_lists`.

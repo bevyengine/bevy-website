@@ -1,0 +1,1 @@
+- `apply_state_transition` is no longer publicly available, run the `StateTransition` schedule instead.

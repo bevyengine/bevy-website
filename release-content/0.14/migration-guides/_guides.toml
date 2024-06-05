@@ -2,13 +2,13 @@
 title = "Fix `Node2d` typo"
 url = "https://github.com/bevyengine/bevy/pull/12038"
 areas = []
-file_name = "12038_fix_node2d_typo.md"
+file_name = "12038_fix_some_typos.md"
 
 [[guides]]
 title = "Update to `fixedbitset` 0.5"
 url = "https://github.com/bevyengine/bevy/pull/12512"
 areas = []
-file_name = "12512_update_to_fixedbitset_05.md"
+file_name = "12512_Update_to_fixedbitset_05.md"
 
 [[guides]]
 title = "Move WASM panic handler from `LogPlugin` to `PanicHandlerPlugin`"
@@ -45,6 +45,12 @@ title = "Deprecate dynamic plugins"
 url = "https://github.com/bevyengine/bevy/pull/13080"
 areas = ["App"]
 file_name = "13080_Deprecate_dynamic_plugins.md"
+
+[[guides]]
+title = "Move state installation methods from `bevy_app` to `bevy_state`"
+url = "https://github.com/bevyengine/bevy/pull/13637"
+areas = ["App","ECS"]
+file_name = "13637_Move_state_installation_methods_from_bevy_app_to_bevy_stat.md"
 
 [[guides]]
 title = "Remove the UpdateAssets and AssetEvents schedules"
@@ -123,6 +129,12 @@ title = "tools: Refactor CI to use `argh`"
 url = "https://github.com/bevyengine/bevy/pull/12923"
 areas = ["Build-System"]
 file_name = "12923_tools_Refactor_CI_to_use_argh.md"
+
+[[guides]]
+title = "Refactor `ci_testing` and separate it from `DevToolsPlugin`"
+url = "https://github.com/bevyengine/bevy/pull/13513"
+areas = ["Build-System"]
+file_name = "13513_Refactor_ci_testing_and_separate_it_from_DevToolsPlugin.md"
 
 [[guides]]
 title = "move wgsl color operations from bevy_pbr to bevy_render"
@@ -305,6 +317,30 @@ areas = ["ECS"]
 file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
 
 [[guides]]
+title = "constrain WorldQuery::init_state argument to ComponentInitializer"
+url = "https://github.com/bevyengine/bevy/pull/13442"
+areas = ["ECS"]
+file_name = "13442_constrain_WorldQueryinit_state_argument_to_ComponentInitia.md"
+
+[[guides]]
+title = "Unify transition names to `exited` and `entered`"
+url = "https://github.com/bevyengine/bevy/pull/13594"
+areas = ["ECS"]
+file_name = "13594_Unify_transition_names_to_exited_and_entered.md"
+
+[[guides]]
+title = "Add ability to clear all components on an entity via EntityWorldMut"
+url = "https://github.com/bevyengine/bevy/pull/13588"
+areas = ["ECS"]
+file_name = "13588_Add_ability_to_clear_all_components_on_an_entity_via_Entit.md"
+
+[[guides]]
+title = "Combine transition systems of `Substates`"
+url = "https://github.com/bevyengine/bevy/pull/13626"
+areas = ["ECS"]
+file_name = "13626_Combine_transition_systems_of_Substates.md"
+
+[[guides]]
 title = "Replace `FromWorld` requirement on `ReflectResource` and reflect `Resource` for `State<S>`"
 url = "https://github.com/bevyengine/bevy/pull/12136"
 areas = ["ECS","Reflection"]
@@ -321,6 +357,12 @@ title = "Make `from_reflect_or_world` also try `ReflectDefault` and improve some
 url = "https://github.com/bevyengine/bevy/pull/12499"
 areas = ["ECS","Reflection"]
 file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
+
+[[guides]]
+title = "Generalize component reflection to operate on `FilteredEntityRef` and `FilteredEntityMut`, not `EntityRef` and `EntityMut`."
+url = "https://github.com/bevyengine/bevy/pull/13549"
+areas = ["ECS","Reflection"]
+file_name = "13549_Generalize_component_reflection_to_operate_on_FilteredEnti.md"
 
 [[guides]]
 title = "multi_threaded feature rename"
@@ -359,10 +401,34 @@ areas = ["Gizmos"]
 file_name = "13438_Inconsistent_segmentsresolution_naming.md"
 
 [[guides]]
+title = "Make gizmos take primitives by ref"
+url = "https://github.com/bevyengine/bevy/pull/13534"
+areas = ["Gizmos"]
+file_name = "13534_Make_gizmos_take_primitives_by_ref.md"
+
+[[guides]]
+title = "More gizmos builders"
+url = "https://github.com/bevyengine/bevy/pull/13261"
+areas = ["Gizmos"]
+file_name = "13261_More_gizmos_builders.md"
+
+[[guides]]
+title = "rename touchpad to gesture, and add new gestures"
+url = "https://github.com/bevyengine/bevy/pull/13660"
+areas = ["Input"]
+file_name = "13660_rename_touchpad_to_gesture_and_add_new_gestures.md"
+
+[[guides]]
 title = "Deprecate `ReceivedCharacter`"
 url = "https://github.com/bevyengine/bevy/pull/12868"
 areas = ["Input","Windowing"]
 file_name = "12868_Deprecate_ReceivedCharacter.md"
+
+[[guides]]
+title = "flush key_input cache when Bevy loses focus (Adopted)"
+url = "https://github.com/bevyengine/bevy/pull/13678"
+areas = ["Input","Windowing"]
+file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"
 
 [[guides]]
 title = "Add `Direction3dA` and move direction types out of `primitives`"
@@ -417,6 +483,18 @@ title = "Common `MeshBuilder` trait"
 url = "https://github.com/bevyengine/bevy/pull/13411"
 areas = ["Math","Rendering"]
 file_name = "13411_Common_MeshBuilder_trait.md"
+
+[[guides]]
+title = "Additional options to mesh primitives"
+url = "https://github.com/bevyengine/bevy/pull/13605"
+areas = ["Math","Rendering"]
+file_name = "13605_Additional_options_to_mesh_primitives.md"
+
+[[guides]]
+title = "Add subdivisions to PlaneMeshBuilder"
+url = "https://github.com/bevyengine/bevy/pull/13580"
+areas = ["Math","Rendering"]
+file_name = "13580_Add_subdivisions_to_PlaneMeshBuilder.md"
 
 [[guides]]
 title = "Make `Transform::rotate_axis` and `Transform::rotate_local_axis` use `Dir3`"
@@ -659,6 +737,30 @@ areas = ["Rendering"]
 file_name = "13277_Make_render_phases_render_world_resources_instead_of_compo.md"
 
 [[guides]]
+title = "More idiomatic texture atlas builder"
+url = "https://github.com/bevyengine/bevy/pull/13238"
+areas = ["Rendering"]
+file_name = "13238_More_idiomatic_texture_atlas_builder.md"
+
+[[guides]]
+title = "Move clustering-related types and functions into their own module."
+url = "https://github.com/bevyengine/bevy/pull/13640"
+areas = ["Rendering"]
+file_name = "13640_Move_clusteringrelated_types_and_functions_into_their_own_.md"
+
+[[guides]]
+title = "Normalise matrix naming"
+url = "https://github.com/bevyengine/bevy/pull/13489"
+areas = ["Rendering"]
+file_name = "13489_Normalise_matrix_naming.md"
+
+[[guides]]
+title = "Rename \"point light\" to \"clusterable object\" in cluster contexts."
+url = "https://github.com/bevyengine/bevy/pull/13654"
+areas = ["Rendering"]
+file_name = "13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md"
+
+[[guides]]
 title = "Deprecate `SpriteSheetBundle` and `AtlasImageBundle`"
 url = "https://github.com/bevyengine/bevy/pull/12218"
 areas = ["Rendering","UI"]
@@ -713,6 +815,12 @@ areas = ["UI"]
 file_name = "13452_Rename_Rect_inset_method_to_inflate.md"
 
 [[guides]]
+title = "Updates default Text font size to 24px"
+url = "https://github.com/bevyengine/bevy/pull/13603"
+areas = ["UI"]
+file_name = "13603_Updates_default_Text_font_size_to_24px.md"
+
+[[guides]]
 title = "Disentangle bevy_utils/bevy_core's reexported dependencies"
 url = "https://github.com/bevyengine/bevy/pull/12313"
 areas = ["Utils"]
@@ -735,4 +843,10 @@ title = "Ensure clean exit"
 url = "https://github.com/bevyengine/bevy/pull/13236"
 areas = ["Windowing"]
 file_name = "13236_Ensure_clean_exit.md"
+
+[[guides]]
+title = "fix: upgrade to winit v0.30"
+url = "https://github.com/bevyengine/bevy/pull/13366"
+areas = ["Windowing"]
+file_name = "13366_fix_upgrade_to_winit_v030.md"
 

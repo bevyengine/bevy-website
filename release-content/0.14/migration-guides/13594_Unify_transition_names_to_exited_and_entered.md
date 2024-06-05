@@ -1,0 +1,1 @@
+- `StateTransitionEvent<S>` and `OnTransition<S>` schedule had their fields renamed to `exited`  and `entered` to match schedules.
