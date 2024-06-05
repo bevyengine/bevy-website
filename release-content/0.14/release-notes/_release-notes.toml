@@ -83,8 +83,8 @@ url = "https://github.com/bevyengine/bevy/pull/12187"
 file_name = "12187_Alignment_API_for_Transforms.md"
 
 [[release_notes]]
-title = "Uniform point sampling methods for some primitive shapes."
-authors = ["@13ros27"]
+title = "Random sampling of shapes and directions"
+authors = ["@13ros27", "@mweatherley", "@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/12484"
 file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
 
@@ -335,12 +335,6 @@ title = "Implement a SystemBuilder for building SystemParams"
 authors = ["@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
-
-[[release_notes]]
-title = "Add `Distribution` access methods for `ShapeSample` trait"
-authors = ["@mweatherley"]
-url = "https://github.com/bevyengine/bevy/pull/13315"
-file_name = "13315_Add_Distribution_access_methods_for_ShapeSample_trait.md"
 
 [[release_notes]]
 title = "New circular primitives: `Arc2d`, `CircularSector`, `CircularSegment`"
