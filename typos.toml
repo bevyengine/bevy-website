@@ -11,6 +11,8 @@ extend-exclude = [
   "release-content/0.14/migration-guides/_guides.toml",
   "release-content/0.14/migration-guides/12038_fix_some_typos.md",
   "release-content/0.14/migration-guides/13261_More_gizmos_builders.md",
+  "release-content/0.14/migration-guides/13588_Add_ability_to_clear_all_components_on_an_entity_via_Entit.md",
+  "release-content/0.14/migration-guides/13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md",
   # Ignore changelogs and release notes (titles should be verbatim)
   "release-content/*/changelog.toml",
   "release-content/*/_release-notes.toml",
