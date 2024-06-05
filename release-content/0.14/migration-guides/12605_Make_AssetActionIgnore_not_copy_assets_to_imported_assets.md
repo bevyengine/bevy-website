@@ -1,1 +1,1 @@
-The public `ProcessResult` enum now has a `ProcessResult::Ignore` variant that must be handled.
+The asset processor no longer copies over `.meta` files that specify `asset: Ignore`. With this change, the `Ignore` variant has been added to the `ProcessResult` enum. Make sure to update your `match` statements.

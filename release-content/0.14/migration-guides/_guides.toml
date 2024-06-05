@@ -59,7 +59,7 @@ areas = ["Assets"]
 file_name = "12550_Use_asyncfn_in_traits_rather_than_BoxedFuture.md"
 
 [[guides]]
-title = "Make `AssetAction::Ignore` not copy assets to `imported_assets`"
+title = "Add `Ignore` variant to `ProcessResult`"
 url = "https://github.com/bevyengine/bevy/pull/12605"
 areas = ["Assets"]
 file_name = "12605_Make_AssetActionIgnore_not_copy_assets_to_imported_assets.md"
