@@ -247,14 +247,26 @@ url = "https://github.com/bevyengine/bevy/pull/13121"
 file_name = "13121_Implement_filmic_color_grading.md"
 
 [[release_notes]]
-title = "Computed State & Sub States"
+title = "Computed States & Sub States"
 authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11426"
-file_name = "11426_Computed_State__Sub_States.md"
+file_name = "11426_Computed_States__Sub_States.md"
+
+[[release_notes]]
+title = "State Identity Transitions"
+authors = ["@MiniaczQ", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_State_Identity_Transitions.md"
+
+[[release_notes]]
+title = "State Scoped Entities"
+authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13649"
+file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
 title = "Implement visibility ranges, also known as hierarchical levels of detail (HLODs)."
-authors = ["@pcwalton","@cart"]
+authors = ["@pcwalton", "@cart"]
 url = "https://github.com/bevyengine/bevy/pull/12916"
 file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
 
@@ -415,20 +427,7 @@ url = "https://github.com/bevyengine/bevy/pull/13450"
 file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
 
 [[release_notes]]
-title = "Move utilities from examples to `bevy_state` and add concept of state-scoped entities"
-authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
-url = "https://github.com/bevyengine/bevy/pull/13649"
-file_name = "13649_Move_utilities_from_examples_to_bevy_state_and_add_concept.md"
-
-[[release_notes]]
-title = "Generalize `StateTransitionEvent<S>` to allow identity transitions"
-authors = ["@MiniaczQ", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13579"
-file_name = "13579_Generalize_StateTransitionEventS_to_allow_identity_transit.md"
-
-[[release_notes]]
 title = "Implement subpixel morphological antialiasing, or SMAA."
-authors = ["@pcwalton","@alice-i-cecile"]
+authors = ["@pcwalton", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13423"
 file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
-
