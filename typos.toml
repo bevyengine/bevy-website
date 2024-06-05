@@ -7,8 +7,10 @@ extend-exclude = [
   "content/learn/migration-guides/0.[1-8]-to-0.[2-9].md",
   "content/learn/migration-guides/0.9-to-0.10.md",
   "content/learn/migration-guides/0.1[0-2]-to-0.1[1-3].md",
-  # Ignore a migration guide for a typo fix
-  "release-content/0.14/migration-guides/12038_fix_node2d_typo.md",
+  # Ignore specific migration guides that fix typos or truncate titles.
+  "release-content/0.14/migration-guides/_guides.toml",
+  "release-content/0.14/migration-guides/12038_fix_some_typos.md",
+  "release-content/0.14/migration-guides/13261_More_gizmos_builders.md",
   # Ignore changelogs and release notes (titles should be verbatim)
   "release-content/*/changelog.toml",
   "release-content/*/_release-notes.toml",
