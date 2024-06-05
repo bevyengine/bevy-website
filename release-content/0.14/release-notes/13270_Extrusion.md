@@ -1,6 +1,6 @@
 **Bevy 0.14** introduces an entirely new group of primitives: Extrusions!
 
-An extrusion is a 2D primitive (the base shape) that is *extruded* into a third dimension by some depth. The resulting shape is a prism.
+An extrusion is a 2D primitive (the base shape) that is *extruded* into a third dimension by some depth. The resulting shape is a prism (or in the special case of the circle, a cylinder).
 
 ```rust
 // Create an ellipse with width 2 and height 1.
