@@ -13,7 +13,7 @@ enum GameState {
 fn spawn_player(mut commands: Commands) {
     commands.spawn((
         // We mark out entity with the `StateScoped` component.
-        // When the provided state is exited, the entity will be deleted recursively with all chilren.
+        // When the provided state is exited, the entity will be deleted recursively with all children.
         StateScoped(GameState::InGame)
         SpriteBundle { ... }
     ))
