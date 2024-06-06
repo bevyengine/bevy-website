@@ -26,8 +26,8 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## What's Next?
 
-Sure this release was great, but what does the future hold for Bevy?
-Peering deep into the mists of time (predictions are *extra* hard when your team is almost all volunteers!), we can see some exciting work taking shape:
+The features above may be great, but what else does Bevy have in flight?
+Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
 
 - **Better scenes:** Scenes are one of Bevy's core building blocks: designed to be a powerful tool for saving games, authoring levels and creating reusable game objects, whether they're a radio button widget or a monster. More features and a unified syntax between assets and code should unblock progress on a UI widget abstraction, tools less boilerplates. Check out the [design doc](TODO) for more information.
 - **Relations please?:** Relations (a first-class feature for linking entities together) is wildly desired but remarkably complex, driving features and refactors to our ECS internals. The [working group](https://discord.com/channels/691052431525675048/1237010014355456115) has been patiently laying out what we need to do and why in this [RFC](https://github.com/bevyengine/rfcs/pull/79).
