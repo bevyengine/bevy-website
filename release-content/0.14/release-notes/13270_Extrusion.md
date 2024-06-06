@@ -42,27 +42,21 @@ let boundary_sample = extrusion.sample_boundary(&mut rng);
 
 ## Bounding
 
-You can also get bounding spheres and Axis Aligned Bounding Boxes (AABBs) for extrusions. If you have a custom 2D primitive, you can either provide an entirely original implementation or use the [`extrusion_bounding_box`](https://dev-docs.bevyengine.org/bevy/index.html) and [`extrusion_bounding_sphere`](https://dev-docs.bevyengine.org/bevy/index.html) methods from the `bevy::math` module. These will give optimal results but may be slower than a solution fitted to your primitive.
+You can also get bounding spheres and Axis Aligned Bounding Boxes (AABBs) for extrusions. If you have a custom 2D primitive that implements `Bounded2d`, you can simply implement [`BoundedExtrusion`](https://dev-docs.bevyengine.org/bevy/index.html) for your primitive. The default implementation will give optimal results but may be slower than a solution fitted to your primitive. 
 
 ```rust
 struct Heart {
 	// ... some properties
 }
 impl Primitive2d for Heart {}
+
 impl Bounded2d for Heart {
 	// ... your implementation for the 2D bounding
 }
 
-impl Bounded3d for Extrusion<Heart> {
-	fn aabb_3d(&self, translation: Vec3, rotation: Quat) -> Aabb3d {
-		// You can simply use the bounding box ...
-        extrusion_bounding_box(self, translation, rotation)
-    }
-
-    fn bounding_sphere(&self, translation: Vec3, rotation: Quat) -> BoundingSphere {
-		// ... or the bounding sphere function for extrusions from bevy::math
-        extrusion_bounding_sphere(self, translation, rotation)
-    }
+// Implement bounding for extrusions of hearts 
+impl BoundedExtrusion for Heart {
+    // You could override the default implementation in here, if you want to
 }
 ```
 
