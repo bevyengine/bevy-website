@@ -1198,7 +1198,7 @@ number = 11681
 title = "Add note about rotations for `Aabb3d`"
 number = 12315
 [[areas.prs]]
-title = "Add `Rotation2d`"
+title = "A 2D rotation type"
 number = 11658
 [[areas.prs]]
 title = "Add `scale_around_center` method to `BoundingVolume` trait"
