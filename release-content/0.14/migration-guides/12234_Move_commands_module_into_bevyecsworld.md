@@ -2,7 +2,7 @@
 
 ```rust
 // 0.13
-use bevy::ecs::world::{Command, CommandQueue};
-// 0.14
 use bevy::ecs::system::{Command, CommandQueue};
+// 0.14
+use bevy::ecs::world::{Command, CommandQueue};
 ```
