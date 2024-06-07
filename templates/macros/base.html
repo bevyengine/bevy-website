@@ -1,0 +1,23 @@
+{% macro page_header_message(section_or_page) %}
+  {% if section_or_page %}
+    {% if section_or_page.extra.header_message %}
+      {{ section_or_page.extra.header_message }}
+    {% elif section_or_page.path is starting_with("/learn/book/") %}
+      The Book
+    {% elif section_or_page.path is starting_with("/learn/migration-guides/") %}
+      Migration Guides
+    {% elif section_or_page.path is starting_with("/learn/errors/") %}
+      Errors
+    {% elif section_or_page.path is starting_with("/learn/quick-start/") %}
+      Quick Start
+    {% elif section_or_page.path is starting_with("/learn/advanced-examples") %}
+      Advanced Examples
+    {% elif section_or_page.path is starting_with("/contributing/") %}
+      Contributing Guide
+    {% elif section_or_page.path is starting_with("/news/") %}
+      News
+    {% elif section_or_page.path == "/" %}
+      Features
+    {% endif %}
+  {% endif %}
+{% endmacro page_header_message %}
