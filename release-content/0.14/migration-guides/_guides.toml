@@ -119,12 +119,6 @@ areas = ["Audio"]
 file_name = "12407_Fix_leftover_references_to_children_when_despawning_audio_.md"
 
 [[guides]]
-title = "tools: Refactor CI to use `argh`"
-url = "https://github.com/bevyengine/bevy/pull/12923"
-areas = ["Build-System"]
-file_name = "12923_tools_Refactor_CI_to_use_argh.md"
-
-[[guides]]
 title = "Refactor `ci_testing` and separate it from `DevToolsPlugin`"
 url = "https://github.com/bevyengine/bevy/pull/13513"
 areas = ["Build-System"]
