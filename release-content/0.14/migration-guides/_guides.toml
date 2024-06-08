@@ -149,7 +149,7 @@ areas = ["Color"]
 file_name = "13307_Remove_ClampColor.md"
 
 [[guides]]
-title = "Migrate from `LegacyColor` to `bevy_color::Color`"
+title = "Overhaul `Color` system"
 url = "https://github.com/bevyengine/bevy/pull/12163"
 areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
 file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
