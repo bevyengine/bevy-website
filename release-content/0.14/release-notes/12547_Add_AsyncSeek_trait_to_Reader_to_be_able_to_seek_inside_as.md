@@ -1,1 +1,1 @@
-The asset loader's `Reader` type alias now requires the new `AsyncSeek` trait. Please implement `AsyncSeek` for any structures that must be a `Reader`, or use an alternative to `Reader` if seeking is not supported.
+TODO
