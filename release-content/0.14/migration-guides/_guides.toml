@@ -125,12 +125,6 @@ areas = ["Color"]
 file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
 
 [[guides]]
-title = "Remove `ClampColor`"
-url = "https://github.com/bevyengine/bevy/pull/13307"
-areas = ["Color"]
-file_name = "13307_Remove_ClampColor.md"
-
-[[guides]]
 title = "Migrate from `LegacyColor` to `bevy_color::Color`"
 url = "https://github.com/bevyengine/bevy/pull/12163"
 areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
