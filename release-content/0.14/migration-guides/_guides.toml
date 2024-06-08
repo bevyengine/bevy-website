@@ -119,7 +119,7 @@ areas = ["Audio"]
 file_name = "12407_Fix_leftover_references_to_children_when_despawning_audio_.md"
 
 [[guides]]
-title = "move wgsl color operations from bevy_pbr to bevy_render"
+title = "Move WGSL math constants and color operations from `bevy_pbr` to `bevy_render`"
 url = "https://github.com/bevyengine/bevy/pull/13209"
 areas = ["Color"]
 file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
