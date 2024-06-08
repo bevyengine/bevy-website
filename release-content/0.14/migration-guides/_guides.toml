@@ -107,7 +107,7 @@ areas = ["Assets","Rendering"]
 file_name = "12302_Allow_setting_RenderAssetUsages_for_gLTF_meshes__materials.md"
 
 [[guides]]
-title = "Consolidate Render(Ui)Materials(2d) into RenderAssets"
+title = "Consolidate `RenderMaterials` and similar into `RenderAssets`, implement `RenderAsset` for destination type"
 url = "https://github.com/bevyengine/bevy/pull/12827"
 areas = ["Assets","Rendering"]
 file_name = "12827_Consolidate_RenderUiMaterials2d_into_RenderAssets.md"
