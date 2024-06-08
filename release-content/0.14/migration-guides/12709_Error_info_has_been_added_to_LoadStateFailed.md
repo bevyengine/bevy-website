@@ -15,3 +15,5 @@ match asset_server.load_state(asset_id) {
     LoadState::Failed(error) => eprintln!("Could not load asset! Error: {}", error),
 }
 ```
+
+Furthermore, the `Copy`, `PartialOrd`, and `Ord` implementations have been removed from `LoadState`. You can explicitly call `.clone()` instead of copying the enum, and you can manually re-implement `Ord` as a helper method if required.
