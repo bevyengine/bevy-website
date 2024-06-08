@@ -221,12 +221,6 @@ areas = ["Diagnostics"]
 file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
 
 [[guides]]
-title = "Add access to `App` within `LogPlugin::update_subscriber`"
-url = "https://github.com/bevyengine/bevy/pull/12045"
-areas = ["Diagnostics"]
-file_name = "12045_Add_access_to_App_within_LogPluginupdate_subscriber.md"
-
-[[guides]]
 title = "Improve tracing layer customization"
 url = "https://github.com/bevyengine/bevy/pull/13159"
 areas = ["Diagnostics"]
