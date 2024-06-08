@@ -25,3 +25,15 @@ Most light properties are visually represented by the gizmos, and the gizmo colo
 Similar to other retained gizmos, [`ShowLightGizmo`] can be configured per-instance or globally with [`LightGizmoConfigGroup`].
 
 ![Light gizmos screenshot](light_gizmos.png)
+
+[`bevy::gizmos`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/index.html
+[`Gizmos::grid_2d`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/prelude/struct.Gizmos.html#method.grid_2d
+[`Gizmos::grid`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/prelude/struct.Gizmos.html#method.grid
+[`Gizmos::grid_3d`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/prelude/struct.Gizmos.html#method.grid_3d
+[`Gizmos::axes`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/prelude/struct.Gizmos.html#method.axes
+[`Transform`]: https://docs.rs/bevy/0.14.0/bevy/prelude/struct.Transform.html
+[`ShowLightGizmo`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/light/struct.ShowLightGizmo.html
+[`SpotLight`]: https://docs.rs/bevy/0.14.0/bevy/pbr/struct.SpotLight.html
+[`PointLight`]: https://docs.rs/bevy/0.14.0/bevy/pbr/struct.PointLight.html
+[`DirectionalLight`]: https://docs.rs/bevy/0.14.0/bevy/pbr/struct.DirectionalLight.html
+[`LightGizmoConfigGroup`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/light/struct.LightGizmoConfigGroup.html
