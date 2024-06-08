@@ -3,3 +3,5 @@ States were moved to a separate crate which is gated behind the `bevy_state` fea
 Projects that use `bevy_ecs` directly and use states will need to add the `bevy_state` crate as a dependency.
 
 Projects that use `bevy_app` directly and use states will need to add the `bevy_state` feature.
+
+To enable state functionality to your app, you will need to add the `StatesPlugin`.
