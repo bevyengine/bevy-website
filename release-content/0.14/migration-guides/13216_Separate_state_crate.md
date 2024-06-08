@@ -4,4 +4,4 @@ Projects that use `bevy_ecs` directly and use states will need to add the `bevy_
 
 Projects that use `bevy_app` directly and use states will need to add the `bevy_state` feature.
 
-To enable state functionality to your app, you will need to add the `StatesPlugin`.
+If you do not use `DefaultPlugins`, you will need to add the `StatesPlugin` manually to your app.
