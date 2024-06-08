@@ -47,7 +47,7 @@ areas = ["App"]
 file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[guides]]
-title = "Move state installation methods from `bevy_app` to `bevy_state`"
+title = "Move state initialization methods to `bevy::state`"
 url = "https://github.com/bevyengine/bevy/pull/13637"
 areas = ["App","ECS"]
 file_name = "13637_Move_state_installation_methods_from_bevy_app_to_bevy_stat.md"
