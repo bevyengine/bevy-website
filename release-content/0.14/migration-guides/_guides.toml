@@ -95,13 +95,7 @@ areas = ["Assets"]
 file_name = "13177_Make_AssetMetaCheck_a_field_on_the_asset_plugin.md"
 
 [[guides]]
-title = "Add more load_direct implementations"
-url = "https://github.com/bevyengine/bevy/pull/13415"
-areas = ["Assets"]
-file_name = "13415_Add_more_load_direct_implementations.md"
-
-[[guides]]
-title = "Make LoadContext use the builder pattern for loading dependent assets"
+title = "Make `LoadContext` use the builder pattern"
 url = "https://github.com/bevyengine/bevy/pull/13465"
 areas = ["Assets"]
 file_name = "13465_Make_LoadContext_use_the_builder_pattern_for_loading_depen.md"
