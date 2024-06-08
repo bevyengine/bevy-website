@@ -119,12 +119,6 @@ areas = ["Audio"]
 file_name = "12407_Fix_leftover_references_to_children_when_despawning_audio_.md"
 
 [[guides]]
-title = "Refactor `ci_testing` and separate it from `DevToolsPlugin`"
-url = "https://github.com/bevyengine/bevy/pull/13513"
-areas = ["Build-System"]
-file_name = "13513_Refactor_ci_testing_and_separate_it_from_DevToolsPlugin.md"
-
-[[guides]]
 title = "move wgsl color operations from bevy_pbr to bevy_render"
 url = "https://github.com/bevyengine/bevy/pull/13209"
 areas = ["Color"]
