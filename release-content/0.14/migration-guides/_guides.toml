@@ -101,7 +101,7 @@ areas = ["Assets"]
 file_name = "13465_Make_LoadContext_use_the_builder_pattern_for_loading_depen.md"
 
 [[guides]]
-title = "Allow setting RenderAssetUsages for gLTF meshes & materials during load"
+title = "Use `RenderAssetUsages` to configure gLTF meshes & materials during load"
 url = "https://github.com/bevyengine/bevy/pull/12302"
 areas = ["Assets","Rendering"]
 file_name = "12302_Allow_setting_RenderAssetUsages_for_gLTF_meshes__materials.md"
