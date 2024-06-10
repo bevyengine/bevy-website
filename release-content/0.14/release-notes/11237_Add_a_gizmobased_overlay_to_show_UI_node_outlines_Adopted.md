@@ -1,4 +1,4 @@
-Ui is a important concept about game design, and as so, the need for a helper tool to help out with layout is increasing.
+When working with UI on the web, being able to quickly debug the size of all your boxes is wildly useful.
 We now have a native [layout tool](https://dev-docs.bevyengine.org/bevy/dev_tools/ui_debug_overlay/struct.DebugUiPlugin.html) which adds gizmos outlines to all [Nodes](https://dev-docs.bevyengine.org/bevy/ui/struct.Node.html)
 
 ```rust
