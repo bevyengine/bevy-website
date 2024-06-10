@@ -120,3 +120,5 @@ impl Extrudable for HeartMeshBuilder {
 ![a 2D heart primitive and its extrusion](heart_extrusion.png)
 
 The `Extrudable` trait allows you to easily implement meshing for extrusions of custom primitives. Of course, you could also implement meshing manually for your extrusion.
+
+If you want to see a full implementation of this, you can check out the [custom primitives example](https://github.com/bevyengine/bevy/blob/main/examples/math/custom_primitives.rs).
