@@ -47,7 +47,7 @@ areas = ["App"]
 file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[guides]]
-title = "Move state installation methods from `bevy_app` to `bevy_state`"
+title = "Move state initialization methods to `bevy::state`"
 url = "https://github.com/bevyengine/bevy/pull/13637"
 areas = ["App","ECS"]
 file_name = "13637_Move_state_installation_methods_from_bevy_app_to_bevy_stat.md"
@@ -89,31 +89,25 @@ areas = ["Assets"]
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
 
 [[guides]]
-title = "Make `AssetMetaCheck` a field on the asset plugin"
+title = "Make `AssetMetaCheck` a field of `AssetPlugin`"
 url = "https://github.com/bevyengine/bevy/pull/13177"
 areas = ["Assets"]
 file_name = "13177_Make_AssetMetaCheck_a_field_on_the_asset_plugin.md"
 
 [[guides]]
-title = "Add more load_direct implementations"
-url = "https://github.com/bevyengine/bevy/pull/13415"
-areas = ["Assets"]
-file_name = "13415_Add_more_load_direct_implementations.md"
-
-[[guides]]
-title = "Make LoadContext use the builder pattern for loading dependent assets"
+title = "Make `LoadContext` use the builder pattern"
 url = "https://github.com/bevyengine/bevy/pull/13465"
 areas = ["Assets"]
 file_name = "13465_Make_LoadContext_use_the_builder_pattern_for_loading_depen.md"
 
 [[guides]]
-title = "Allow setting RenderAssetUsages for gLTF meshes & materials during load"
+title = "Use `RenderAssetUsages` to configure gLTF meshes & materials during load"
 url = "https://github.com/bevyengine/bevy/pull/12302"
 areas = ["Assets","Rendering"]
 file_name = "12302_Allow_setting_RenderAssetUsages_for_gLTF_meshes__materials.md"
 
 [[guides]]
-title = "Consolidate Render(Ui)Materials(2d) into RenderAssets"
+title = "Consolidate `RenderMaterials` and similar into `RenderAssets`, implement `RenderAsset` for destination type"
 url = "https://github.com/bevyengine/bevy/pull/12827"
 areas = ["Assets","Rendering"]
 file_name = "12827_Consolidate_RenderUiMaterials2d_into_RenderAssets.md"
@@ -125,28 +119,10 @@ areas = ["Audio"]
 file_name = "12407_Fix_leftover_references_to_children_when_despawning_audio_.md"
 
 [[guides]]
-title = "tools: Refactor CI to use `argh`"
-url = "https://github.com/bevyengine/bevy/pull/12923"
-areas = ["Build-System"]
-file_name = "12923_tools_Refactor_CI_to_use_argh.md"
-
-[[guides]]
-title = "Refactor `ci_testing` and separate it from `DevToolsPlugin`"
-url = "https://github.com/bevyengine/bevy/pull/13513"
-areas = ["Build-System"]
-file_name = "13513_Refactor_ci_testing_and_separate_it_from_DevToolsPlugin.md"
-
-[[guides]]
-title = "move wgsl color operations from bevy_pbr to bevy_render"
+title = "Move WGSL math constants and color operations from `bevy_pbr` to `bevy_render`"
 url = "https://github.com/bevyengine/bevy/pull/13209"
 areas = ["Color"]
 file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
-
-[[guides]]
-title = "Remove `ClampColor`"
-url = "https://github.com/bevyengine/bevy/pull/13307"
-areas = ["Color"]
-file_name = "13307_Remove_ClampColor.md"
 
 [[guides]]
 title = "Migrate from `LegacyColor` to `bevy_color::Color`"

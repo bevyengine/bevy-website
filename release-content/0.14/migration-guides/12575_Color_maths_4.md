@@ -1,4 +1,4 @@
-Multiplying and dividing a `LinearRgba` by an `f32` used to skip the alpha channel, but now it is modified.
+It was previously possible to multiply and divide a `Color` by an `f32`, which is now removed. You must now operate on a specific color space, such as `LinearRgba`. Furthermore, these operations used to skip the alpha channel, but that is no longer the case.
 
 ```rust
 // Before
@@ -53,6 +53,7 @@ let mut color = LinearRgba {
     alpha: 1.0,
 } * 10.0;
 
+// Force alpha to be within [0.0, 1.0].
 color.alpha = color.alpha.clamp(0.0, 1.0);
 ```
 

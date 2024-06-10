@@ -1,1 +1,1 @@
-The asset processor no longer copies over `.meta` files that specify `asset: Ignore`. With this change, the `Ignore` variant has been added to the `ProcessResult` enum. Make sure to update your `match` statements.
+The `ProcessResult` enum, used in asset loading, has a new `Ignore` variant. You may need to update your `match` statements.
