@@ -23,16 +23,10 @@ url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
-title = "Add coordinate axes gizmo"
-authors = ["@mweatherley"]
+title = "New gizmos types"
+authors = ["@mweatherley", "@Kanabenki", "@MrGVSV", "@solis-lumine-vorago","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/12211"
-file_name = "12211_Add_coordinate_axes_gizmo.md"
-
-[[release_notes]]
-title = "Add basic light gizmos"
-authors = ["@Kanabenki", "@MrGVSV"]
-url = "https://github.com/bevyengine/bevy/pull/12228"
-file_name = "12228_Add_basic_light_gizmos.md"
+file_name = "New_gizmos_types.md"
 
 [[release_notes]]
 title = "Decouple `BackgroundColor` from `UiImage`"
@@ -69,12 +63,6 @@ title = "A new `Rotation2d` type"
 authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
 url = "https://github.com/bevyengine/bevy/pull/11658"
 file_name = "11658_Add_Rotation2d.md"
-
-[[release_notes]]
-title = "Gizmo 3d grids"
-authors = ["@lynn-lumen", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12430"
-file_name = "12430_Gizmo_3d_grids.md"
 
 [[release_notes]]
 title = "Alignment API for Transforms"
