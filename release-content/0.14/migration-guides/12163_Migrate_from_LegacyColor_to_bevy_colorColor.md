@@ -46,7 +46,7 @@ enum Color {
 }
 ```
 
-This gives more room for expansion, for instance in adding more color spaces. To handle this change, you may need to update your match statements:
+This makes it easier to organize and manage different color spaces, and makes room to add more! To handle this change, you may need to update your match statements:
 
 ```rust
 // Before
@@ -117,7 +117,7 @@ Alpha, also known as transparency, used to be referred to by the letter `a`. It 
 
 #### CSS Constants
 
-The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes::css`. Call `.into()` on them to convert them into a `Color` for quick debugging use, and consider using the much prettier `tailwind` palette for prototyping. Furthermore, the `LIME_GREEN` color has been renamed to `LIMEGREEN` to comply with the standard naming.
+The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes`. Call `.into()` on them to convert them into a `Color` for quick debugging use. Please note that these palettes are not necessarily 1:1 with the constants defined previously as somes names and colors have been changed. If you need the same color as before, consider copying the constant into your own code.
 
 ```rust
 // Before
@@ -132,11 +132,3 @@ let color = BLUE;
 #### Switch to `LinearRgba`
 
 `WireframeMaterial`, `ExtractedUiNode`, `ExtractedDirectionalLight`, `ExtractedPointLight`, `ExtractedSpotLight`, and `ExtractedSprite` now store a `LinearRgba` rather than a polymorphic `Color`. Furthermore, `Color` no longer implements `AsBindGroup`. You should store a `LinearRgba` instead to avoid conversion costs.
-
-#### When to use `Color`, `LinearRgba`, or a different color space
-
-There are a few recommendations for how to choose the right color representation:
-
-- If you are writing a game or some other executable, pick a color space and use it consistently throughout your project. Since you are the only one using your code, you can choose whichever space works best.
-- If you are writing a library or a plugin, prefer using `Color` so that downstream users may decide the color space that works best for them.
-- If you are writing low-level code that lives close to rendering, prefer `LinearRgba`. All colors are converted to `LinearRgba` in the end, so using it will remove any conversion costs.
