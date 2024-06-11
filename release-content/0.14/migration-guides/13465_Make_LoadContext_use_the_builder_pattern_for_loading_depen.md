@@ -1,10 +1,25 @@
-Several `LoadContext` method calls will need to be updated:
+<!-- Note: This is the migration guide for both #13465 AND #13415. -->
 
-- `load_context.load_with_settings(path, settings)` => `load_context.loader().with_settings(settings).load(path)`
-- `load_context.load_untyped(path)` => `load_context.loader().untyped().load(path)`
-- `load_context.load_direct(path)` => `load_context.loader().direct().load(path)`
-- `load_context.load_direct_untyped(path)` => `load_context.loader().direct().untyped().load(path)`
-- `load_context.load_direct_with_settings(path, settings)` => `load_context.loader().with_settings(settings).direct().load(path)`
-- `load_context.load_direct_with_reader(reader, path)` => `load_context.loader().direct().with_reader(reader).load(path)`
-- `load_context.load_direct_with_reader_and_settings(reader, path, settings)` => `load_context.loader().with_settings(settings).direct().with_reader(reader).load(path)`
-- `load_context.load_direct_untyped_with_reader(reader, path)` => `load_context.loader().direct().with_reader(reader).untyped().load(path)`
+`LoadContext`, used by `AssetLoader`, has been updated so all of its `load_*` methods have been merged into a builder struct.
+
+```rust
+// Before
+load_context.load_direct(path);
+// After
+load_context.loader().direct().untyped().load(path);
+
+// Before
+load_context.load_direct_with_reader(reader, path);
+// After
+load_context.loader().direct().with_reader(reader).untyped().load(path);
+
+// Before
+load_context.load_untyped(path);
+// After
+load_context.loader().untyped().load(path);
+
+// Before
+load_context.load_with_settings(path, settings);
+// After
+load_context.loader().with_settings(settings).load(path);
+```

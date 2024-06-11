@@ -42,6 +42,8 @@ app.insert_sub_app(MySubApp, sub_app);
 
 #### `App` changes
 
+`App` is not `Send` anymore, but `SubApp` still is.
+
 Due to the separation of `App` and `SubApp`, a few other methods have been changed.
 
 First, `App::world` as a property is no longer directly accessible. Instead use the getters `App::world` and `App::world_mut`.
