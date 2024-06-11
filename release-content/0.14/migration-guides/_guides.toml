@@ -143,7 +143,7 @@ areas = ["Color", "Rendering"]
 file_name = "12105_Made_bevy_color_a_dependency_of_bevy_render.md"
 
 [[guides]]
-title = "Port `bevy_core_pipeline` to `LinearRgba`"
+title = "Use `LinearRgba` in `ColorAttachment`"
 url = "https://github.com/bevyengine/bevy/pull/12116"
 areas = ["Color", "Rendering"]
 file_name = "12116_Port_bevy_core_pipeline_to_LinearRgba.md"
