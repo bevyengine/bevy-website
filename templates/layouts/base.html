@@ -1,5 +1,6 @@
 {% import "macros/header.html" as header_macros %}
 {% import "macros/public_draft.html" as public_draft %}
+{% import "macros/base.html" as base_macros %}
 
 {# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
 {% set_global section_or_page = false %}
@@ -20,6 +21,7 @@
 {% endif %}
 
 {% set current_path = current_path | default(value="/") %}
+
 {% if section and section.title %}
   {% if section.path is starting_with("/learn/book/") %}
     {% set page_title = "Bevy Book: " ~ section.title %}
@@ -43,6 +45,7 @@
 {% else %}
   {% set page_title = "Bevy Engine" %}
 {% endif %}
+
 {% if section and section.path %}
   {% set path = "/" ~ section.path %}
 {% elif page and page.path %}
@@ -50,6 +53,7 @@
 {% else %}
   {% set path = "" %}
 {% endif %}
+
 {% if section %}
   {% if section.path is starting_with("/learn/book/") %}
     {% set show_nav_toggle = true %}
@@ -68,6 +72,7 @@
     {% set show_nav_toggle = true %}
   {% endif %}
 {% endif %}
+
 {% set newline = "
 " %}
 <!DOCTYPE html>
@@ -114,31 +119,7 @@
                     height="130">
             </a>
             <div class="header__message">
-              {% if section and section.extra.header_message %}
-                {{ section.extra.header_message }}
-              {% elif page and page.extra.header_message %}
-                {{ page.extra.header_message }}
-              {% elif section and section.path is starting_with("/learn/book/") or page and page.path is
-                starting_with("/learn/book/") %}
-                The Book
-              {% elif section and section.path is starting_with("/learn/quick-start/") or page and page.path is
-                starting_with("/learn/quick-start/") %}
-                Quick Start
-              {% elif section and section.path is starting_with("/learn/migration-guides/") or page and page.path is
-                starting_with("/learn/migration-guides/") %}
-                Migration Guides
-              {% elif section and section.path is starting_with("/learn/errors/") or page and page.path is
-                starting_with("/learn/errors/") %}
-                Errors
-              {% elif section and section.path is starting_with("/contributing/") or page and page.path is starting_with("/contributing/") %}
-                Contributing
-              {% elif section and section.path is starting_with("/news/") %}
-                News
-              {% elif page and page.path is starting_with("/news/") %}
-                News
-              {% else %}
-                Features
-              {% endif %}
+              {{ base_macros::page_header_message(section_or_page=section_or_page) }}
             </div>
           </div>
           {% block mobile_page_menu_state %}{% endblock mobile_page_menu_state %}

@@ -1,5 +1,6 @@
 {% extends "layouts/page-with-menu.html" %}
 {% import "macros/docs.html" as docs_macros %}
+{% import "macros/base.html" as base_macros %}
 
 {% block head_extensions %}
   {% set_global ancestor_is_public_draft = false %}
@@ -24,11 +25,7 @@
 {% endblock page_menu %}
 
 {% block page_name %}
-  {% if section_or_page and section_or_page.path is starting_with("/learn/book/") %}
-    The Book
-  {% else %}
-    Migration Guides
-  {% endif %}
+  {{ base_macros::page_header_message(section_or_page=section_or_page) }}
 {% endblock page_name %}
 
 {% block page_content %}
