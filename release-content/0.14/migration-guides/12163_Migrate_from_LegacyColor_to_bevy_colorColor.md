@@ -112,7 +112,7 @@ Vector field arithmetic operations on `Color` (add, subtract, multiply and divid
 
 Alpha, also known as transparency, used to be referred to by the letter `a`. It is now called by its full name within structs and methods.
 
-- `Color::set_a` and `Color::a` are now `Color::set_alpha` and `Color::alpha`. These are part of the new `Alpha` trait.
+- `Color::set_a`, `Color::with_a`, and `Color::a` are now `Color::set_alpha`, `Color::with_alpha`, and `Color::alpha`. These are part of the new `Alpha` trait.
 - Additionally, `Color::is_fully_transparent` is now part of the `Alpha`.
 
 #### CSS Constants
