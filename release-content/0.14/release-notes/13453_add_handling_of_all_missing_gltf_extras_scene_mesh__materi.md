@@ -5,7 +5,7 @@ in addition to the gltf extras at the primitive/node level , Bevy now has specif
 - meshes: **MeshGltfExtras**, injected at the mesh level if any
 - materials: **MaterialGltfExtras**, injected at the mesh level if any: ie if a mesh has a material that has gltf extras, the component will be injected there.
 
-You can now easilly query for these specific extras
+You can now easily query for these specific extras
 
 ```rust
 fn check_for_gltf_extras(
