@@ -143,12 +143,6 @@ areas = ["Color", "Rendering"]
 file_name = "12116_Port_bevy_core_pipeline_to_LinearRgba.md"
 
 [[guides]]
-title = "Clean up some low level dependencies"
-url = "https://github.com/bevyengine/bevy/pull/12858"
-areas = ["Cross-Cutting"]
-file_name = "12858_Clean_up_some_low_level_dependencies.md"
-
-[[guides]]
 title = "remove close_on_esc"
 url = "https://github.com/bevyengine/bevy/pull/12859"
 areas = ["Dev-Tools"]
