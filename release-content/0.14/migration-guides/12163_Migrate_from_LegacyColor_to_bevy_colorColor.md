@@ -117,7 +117,7 @@ Alpha, also known as transparency, used to be referred to by the letter `a`. It 
 
 #### CSS Constants
 
-The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes`. Call `.into()` on them to convert them into a `Color` for quick debugging use. Please note that these palettes are not necessarily 1:1 with the constants defined previously as somes names and colors have been changed. If you need the same color as before, consider copying the constant into your own code.
+The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes`. Call `.into()` on them to convert them into a `Color` for quick debugging use. Please note that these palettes are not necessarily 1:1 with the constants defined previously as some names and colors have been changed. If you need the same color as before, consider copying the constant into your own code.
 
 ```rust
 // Before
