@@ -131,7 +131,7 @@ areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
 file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
-title = "Made `bevy_color` a dependency of `bevy_render`"
+title = "Remove old color space utilities"
 url = "https://github.com/bevyengine/bevy/pull/12105"
 areas = ["Color", "Rendering"]
 file_name = "12105_Made_bevy_color_a_dependency_of_bevy_render.md"
