@@ -131,61 +131,19 @@ areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
 file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
-title = "`bevy_color`: Added `Xyza` Colour Space"
-url = "https://github.com/bevyengine/bevy/pull/12079"
-areas = ["Color", "Rendering"]
-file_name = "12079_bevy_color_Added_Xyza_Colour_Space.md"
-
-[[guides]]
-title = "Made `bevy_color` a dependency of `bevy_render`"
+title = "Remove old color space utilities"
 url = "https://github.com/bevyengine/bevy/pull/12105"
 areas = ["Color", "Rendering"]
 file_name = "12105_Made_bevy_color_a_dependency_of_bevy_render.md"
 
 [[guides]]
-title = "Port `bevy_core_pipeline` to `LinearRgba`"
+title = "Use `LinearRgba` in `ColorAttachment`"
 url = "https://github.com/bevyengine/bevy/pull/12116"
 areas = ["Color", "Rendering"]
 file_name = "12116_Port_bevy_core_pipeline_to_LinearRgba.md"
 
 [[guides]]
-title = "`bevy_color`: Added `Hsva` and `Hwba` Models"
-url = "https://github.com/bevyengine/bevy/pull/12114"
-areas = ["Color", "Rendering"]
-file_name = "12114_bevy_color_Added_Hsva_and_Hwba_Models.md"
-
-[[guides]]
-title = "`bevy_color`: Add `Laba` to support Lab Color Model"
-url = "https://github.com/bevyengine/bevy/pull/12115"
-areas = ["Color", "Rendering"]
-file_name = "12115_bevy_color_Add_Laba_to_support_Lab_Color_Model.md"
-
-[[guides]]
-title = "`bevy_color`: Add Oklch Color Space"
-url = "https://github.com/bevyengine/bevy/pull/12168"
-areas = ["Color", "Rendering"]
-file_name = "12168_bevy_color_Add_Oklch_Color_Space.md"
-
-[[guides]]
-title = "Fix `Oklab` and `Oklch` color space inconsistency"
-url = "https://github.com/bevyengine/bevy/pull/12583"
-areas = ["Color", "Rendering"]
-file_name = "12583_Fix_Oklab_and_Oklch_color_space_inconsistency.md"
-
-[[guides]]
-title = "Add hue traits"
-url = "https://github.com/bevyengine/bevy/pull/12399"
-areas = ["Color", "Rendering"]
-file_name = "12399_Add_hue_traits.md"
-
-[[guides]]
-title = "Clean up some low level dependencies"
-url = "https://github.com/bevyengine/bevy/pull/12858"
-areas = ["Cross-Cutting"]
-file_name = "12858_Clean_up_some_low_level_dependencies.md"
-
-[[guides]]
-title = "remove close_on_esc"
+title = "Remove `close_on_esc`"
 url = "https://github.com/bevyengine/bevy/pull/12859"
 areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"

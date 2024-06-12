@@ -1,2 +1,5 @@
-`ColorAttachment` now stores a `LinearRgba` color, rather than a Bevy 0.13 `Color`.
-`set_blend_constant` now takes a `LinearRgba` argument, rather than a Bevy 0.13 `Color`.
+`ColorAttachment::new()` now takes `Option<LinearRgba>` instead of `Option<Color>` for the `clear_color`. You can use the `From<Color>` implementation to convert your color.
+
+```rust
+let clear_color: Option<LinearRgba> = Some(color.into());
+```

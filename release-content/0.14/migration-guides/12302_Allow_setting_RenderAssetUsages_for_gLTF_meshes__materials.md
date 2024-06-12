@@ -2,7 +2,9 @@ It is now possible configure whether meshes and materials should be loaded in th
 
 You may need to update any gLTF `.meta` files:
 
-```ron
+<!-- This is technically RON, but it follows a syntax similar to Rust so we use that instead for syntax highlighting. -->
+
+```rust
 // Before
 load_meshes: true
 

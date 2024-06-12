@@ -46,7 +46,7 @@ enum Color {
 }
 ```
 
-This makes it easier to organize and manage different color spaces, and makes room to add more! To handle this change, you may need to update your match statements:
+This makes it easier to organize and manage different color spaces, and many more color spaces have been added too! To handle this change, you may need to update your match statements:
 
 ```rust
 // Before
@@ -62,6 +62,10 @@ match color {
     Color::Srgba(Srgba { red, green, blue, alpha }) => {
         // Something cool here!
     },
+    // If you explicitly match every possible color space, you may need to handle more variants.
+    // Color::Xyza(Xyza { x, y, z, alpha }) => {
+    //     // Something else even cooler here!
+    // },
     _ => {}
 }
 ```
