@@ -143,7 +143,7 @@ areas = ["Color", "Rendering"]
 file_name = "12116_Port_bevy_core_pipeline_to_LinearRgba.md"
 
 [[guides]]
-title = "remove close_on_esc"
+title = "Remove `close_on_esc`"
 url = "https://github.com/bevyengine/bevy/pull/12859"
 areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"
