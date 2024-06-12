@@ -121,7 +121,7 @@ Alpha, also known as transparency, used to be referred to by the letter `a`. It 
 
 #### CSS Constants
 
-The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes`. Call `.into()` on them to convert them into a `Color` for quick debugging use. Please note that these palettes are not necessarily 1:1 with the constants defined previously as some names and colors have been changed. If you need the same color as before, consider copying the constant into your own code.
+The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes`. Call `.into()` on them to convert them into a `Color` for quick debugging use.
 
 ```rust
 // Before
@@ -132,6 +132,14 @@ use bevy::color::palettes::css::BLUE;
 
 let color = BLUE;
 ```
+
+Please note that `palettes::css` is not necessarily 1:1 with the constants defined previously as some names and colors have been changed to conform with the CSS spec. If you need the same color as before, consult the table below or use the color values from the [old constants](https://github.com/bevyengine/bevy/blob/v0.13.2/crates/bevy_render/src/color/mod.rs#L60).
+
+|0.13|0.14|
+|-|-|
+|`GREEN`|`LIMEGREEN`|
+|`PINK`|`DEEP_PINK`|
+|`DARK_GRAY`|`Srgba::gray(0.25)`|
 
 #### Switch to `LinearRgba`
 
