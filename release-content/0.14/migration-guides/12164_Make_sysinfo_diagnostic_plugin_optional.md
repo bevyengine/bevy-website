@@ -1,1 +1,1 @@
-For users who disable default features of bevy and wish to enable the diagnostic plugin, add `sysinfo_plugin` to your bevy features list.
+`SystemInformationDiagnosticsPlugin` is now gated by the `sysinfo_plugin` feature. If you are using that plugin in a project with Bevy's `default-features` disabled, add the feature to your `Cargo.toml`.
