@@ -133,7 +133,7 @@ Please note that `palettes::css` is not necessarily 1:1 with the constants defin
 
 |0.13|0.14|
 |-|-|
-|`GREEN`|`LIME_GREEN`|
+|`GREEN`|`LIMEGREEN`|
 |`PINK`|`DEEP_PINK`|
 |`DARK_GRAY`|`Srgba::gray(0.25)`|
 
