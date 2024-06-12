@@ -129,7 +129,7 @@ use bevy::color::palettes::css::BLUE;
 let color = BLUE;
 ```
 
-Please note that `palettes::css` is not necessarily 1:1 with the constants defined previously as some names and colors have been changed to conform with the css spec. If you need the same color as before, consult the table below or use the color values from the [old constants](https://github.com/bevyengine/bevy/blob/v0.13.2/crates/bevy_render/src/color/mod.rs#L60).
+Please note that `palettes::css` is not necessarily 1:1 with the constants defined previously as some names and colors have been changed to conform with the CSS spec. If you need the same color as before, consult the table below or use the color values from the [old constants](https://github.com/bevyengine/bevy/blob/v0.13.2/crates/bevy_render/src/color/mod.rs#L60).
 
 |0.13|0.14|
 |-|-|
