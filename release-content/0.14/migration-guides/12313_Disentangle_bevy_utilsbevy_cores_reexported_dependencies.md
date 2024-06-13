@@ -1,5 +1,5 @@
-bevy_utils’ reexports of petgraph, uuid, nonmax, smallvec, and thiserror have been removed. 
+`bevy_utils` no longer re-exports `petgraph`, `uuid`, `nonmax`, `smallvec`, or `thiserror`.
 
-bevy_core’ reexports of bytemuck’s types has been removed. 
+`bevy_core` no longer re-exports `bytemuck`’s `bytes_of`, `cast_slice`, `Pod`, and `Zeroable`.
 
-Add them as dependencies in your own crate instead.
+You can add these as dependencies in your own `Cargo.toml` instead.
