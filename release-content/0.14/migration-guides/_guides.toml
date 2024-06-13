@@ -149,7 +149,7 @@ areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"
 
 [[guides]]
-title = "Make sysinfo diagnostic plugin optional"
+title = "Make `sysinfo` diagnostic plugin optional"
 url = "https://github.com/bevyengine/bevy/pull/12164"
 areas = ["Diagnostics"]
 file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
