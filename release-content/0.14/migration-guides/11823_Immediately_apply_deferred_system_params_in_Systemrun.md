@@ -1,11 +1,14 @@
-`System::run` will now always run `System::apply_deferred` immediately after running the system now. If you were running systems and then applying their deferred buffers at a later point in time, you can eliminate the latter.
+The default implementation of `System::run` will now always immediately run `System::apply_deferred`. If you were manually calling `System::apply_deferred` in this situation, you may remove it. Please note that `System::run_unsafe` still _does not_ call `apply_deferred` because it cannot guarantee it will be safe.
 
 ```rust
-// in 0.13
+// Before
 system.run(world);
-// .. sometime later ...
+
+// Sometime later:
 system.apply_deferred(world);
 
-// in 0.14
+// After
 system.run(world);
+
+// `apply_deferred` no longer needs to be called!
 ```

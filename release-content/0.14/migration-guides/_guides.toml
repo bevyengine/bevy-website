@@ -161,7 +161,7 @@ areas = ["Diagnostics"]
 file_name = "13159_Improve_tracing_layer_customization.md"
 
 [[guides]]
-title = "Immediately apply deferred system params in System::run"
+title = "Immediately apply deferred system params in `System::run`"
 url = "https://github.com/bevyengine/bevy/pull/11823"
 areas = ["ECS"]
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
