@@ -173,7 +173,7 @@ areas = ["ECS"]
 file_name = "12234_Move_commands_module_into_bevyecsworld.md"
 
 [[guides]]
-title = "Remove ComponentStorage and associated types"
+title = "Make `Component::Storage` a constant"
 url = "https://github.com/bevyengine/bevy/pull/12311"
 areas = ["ECS"]
 file_name = "12311_Remove_ComponentStorage_and_associated_types.md"

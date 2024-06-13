@@ -1,14 +1,22 @@
-If you were manually implementing `Component` instead of using the derive macro, replace the associated `Storage` associated type with the `STORAGE_TYPE` const:
+The `Component::Storage` associated type has been replaced with the associated constant `STORAGE_TYPE`, making the `ComponentStorage` trait unnecessary. If you were manually implementing `Component` instead of using the derive macro, update your definitions:
 
 ```rust
-// in Bevy 0.13
+// Before
 impl Component for MyComponent {
     type Storage = TableStorage;
 }
-// in Bevy 0.14
+
+// After
 impl Component for MyComponent {
     const STORAGE_TYPE: StorageType = StorageType::Table;
+
+    // ...
 }
 ```
 
-Component is no longer object safe. If you were relying on `&dyn Component`, `Box<dyn Component>`, etc. please [file an issue ](https://github.com/bevyengine/bevy/issues) to get [this change](https://github.com/bevyengine/bevy/pull/12311) reverted.
+|Before|After|
+|-|-|
+|`TableStorage`|`StorageType::Table`|
+|`SparseStorage`|`StorageType::SparseSet`|
+
+`Component` is also now no longer object safe. If you were using `dyn Component`, please consider [filing an issue](https://github.com/bevyengine/bevy/issues) describing your use-case.
