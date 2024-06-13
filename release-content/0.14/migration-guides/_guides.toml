@@ -167,7 +167,7 @@ areas = ["ECS"]
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[guides]]
-title = "Move commands module into bevy::ecs::world"
+title = "Move `Command` and `CommandQueue` into `bevy::ecs::world`"
 url = "https://github.com/bevyengine/bevy/pull/12234"
 areas = ["ECS"]
 file_name = "12234_Move_commands_module_into_bevyecsworld.md"
