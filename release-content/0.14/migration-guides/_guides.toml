@@ -179,12 +179,6 @@ areas = ["ECS"]
 file_name = "12311_Remove_ComponentStorage_and_associated_types.md"
 
 [[guides]]
-title = "Clean up type registrations"
-url = "https://github.com/bevyengine/bevy/pull/12314"
-areas = ["ECS", "Reflection"]
-file_name = "12314_Clean_up_type_registrations.md"
-
-[[guides]]
 title = "Remove archetype_component_access from QueryState"
 url = "https://github.com/bevyengine/bevy/pull/12474"
 areas = ["ECS"]
