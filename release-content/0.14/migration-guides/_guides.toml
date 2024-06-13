@@ -155,7 +155,7 @@ areas = ["Diagnostics"]
 file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
 
 [[guides]]
-title = "Improve tracing layer customization"
+title = "Improve `tracing` layer customization"
 url = "https://github.com/bevyengine/bevy/pull/13159"
 areas = ["Diagnostics"]
 file_name = "13159_Improve_tracing_layer_customization.md"
