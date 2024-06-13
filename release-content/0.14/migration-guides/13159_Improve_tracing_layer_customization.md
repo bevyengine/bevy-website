@@ -1,7 +1,7 @@
 Bevy uses `tracing` to handle logging and spans through `LogPlugin`. This could be customized with the `update_subscriber` field, but it was highly restrictive. This has since been amended, replacing the `update_subscriber` field with the more flexible `custom_layer`. which returns a `Layer`.
 
 ```rust
-// Before
+// 0.13
 fn update_subscriber(_app: &mut App, subscriber: BoxedSubscriber) -> BoxedSubscriber {
     Box::new(subscriber.with(CustomLayer))
 }
@@ -13,7 +13,7 @@ App::new()
     })
     .run();
 
-// After
+// 0.14
 use bevy::log::tracing_subscriber;
 
 fn custom_layer(_app: &mut App) -> Option<BoxedLayer> {

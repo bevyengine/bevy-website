@@ -3,14 +3,14 @@
 Furthermore, the `RenderAsset` trait should now be implemented for destination types rather than source types. If you need to access the source type, use the `RenderAsset::SourceAsset` associated type.
 
 ```rust
-// Before
+// 0.13
 impl RenderAsset for Image {
     type PreparedAsset = GpuImage;
 
     // ...
 }
 
-// After
+// 0.14
 impl RenderAsset for GpuImage {
     type SourceAsset = Image;
 

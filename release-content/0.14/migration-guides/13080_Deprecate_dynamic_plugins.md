@@ -1,7 +1,7 @@
 Dynamic plugins are now deprecated. If possible, remove all usage them from your code:
 
 ```rust
-// Before
+// 0.13
 // This would be compiled into a separate dynamic library.
 #[derive(DynamicPlugin)]
 pub struct MyPlugin;
@@ -15,7 +15,7 @@ App::new()
     .load_plugin("path/to/plugin")
     .run();
 
-// After
+// 0.14
 // This would now be compiled into the main binary as well.
 pub struct MyPlugin;
 
