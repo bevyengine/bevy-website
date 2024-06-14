@@ -31,25 +31,13 @@ impl Display for BevyRepo {
 }
 
 #[derive(Deserialize, Clone, Debug)]
-pub struct GithubBranchesResponse {
-    pub name: String,
-    pub commit: GithubBranchesCommitResponse,
-}
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubBranchesCommitResponse {
-    pub sha: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
 pub struct GithubCommitResponse {
     pub sha: String,
     pub commit: GithubCommitContent,
-    pub author: Option<GithubUser>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Committer {
-    pub name: String,
     pub date: String,
 }
 
@@ -73,40 +61,13 @@ pub struct GithubUser {
 }
 
 #[derive(Deserialize, Clone, Debug)]
-pub struct GithubCommitBranchResponse {
-    pub name: String,
-    pub commit: GithubCommitBranchCommitResponse,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubCommitBranchCommitResponse {
-    pub sha: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubPullRequestResponse {
-    pub title: String,
-    pub number: i32,
-    pub body: Option<String>,
-    pub labels: Vec<GithubLabel>,
-    pub user: GithubUser,
-    pub closed_at: DateTime<Utc>,
-}
-
-#[derive(Deserialize, Clone, Debug)]
 pub struct GithubCompareResponse {
-    pub base_commit: GithubCommitResponse,
     pub commits: Vec<GithubCommitResponse>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubLabel {
     pub name: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubUserSearchResponse {
-    pub items: Vec<GithubUser>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
