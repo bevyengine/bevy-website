@@ -6,6 +6,7 @@ use std::{
 use anyhow::bail;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
+use thiserror::Error;
 use ureq::Response;
 
 /// A GitHub repository in the `bevyengine` organization.
@@ -405,23 +406,14 @@ query {{
 }
 
 /// An issue that occurred while opening an issue on Github.
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum IssueError {
-    Ureq(ureq::Error),
+    #[error("error making request")]
+    Ureq(#[from] ureq::Error),
+    #[error("failed to create issue")]
     FailedToCreateIssue(Response),
-    FailedToParseResponse(std::io::Error),
-}
-
-impl From<ureq::Error> for IssueError {
-    fn from(err: ureq::Error) -> Self {
-        IssueError::Ureq(err)
-    }
-}
-
-impl From<std::io::Error> for IssueError {
-    fn from(err: std::io::Error) -> Self {
-        IssueError::FailedToParseResponse(err)
-    }
+    #[error("failed to parse response")]
+    FailedToParseResponse(#[from] std::io::Error),
 }
 
 /// The status of an issue or PR on Github.
