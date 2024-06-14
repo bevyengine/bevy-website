@@ -3,6 +3,11 @@
 //! It is currently used to validate the rust code of the official `bevy` book.
 //! The modules represents the folder structure of the website.
 
+// This prevents Clippy from linting the Markdown of our documentation, we just want it to lint
+// code blocks. Without this, Clippy would require front-matter and Tera templates to be surrounded
+// by backticks.
+#![allow(clippy::doc_markdown)]
+
 mod learn {
     #[doc = include_str!("../../content/learn/quick-start/_index.md")]
     mod quick_start {
