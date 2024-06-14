@@ -37,6 +37,9 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
+
       - name: Install alsa and udev
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
@@ -50,6 +53,9 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
       
       - name: Check hide-lines
         run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
@@ -61,6 +67,9 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
 
       - name: Install alsa and udev
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
@@ -95,6 +104,9 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
 
       - name: Get current date
         id: date
@@ -134,15 +146,8 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            generate-errors/target/
-          key: ${{ runner.os }}-generate-errors-${{ hashFiles('generate-errors/Cargo.toml') }}
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
 
       - name: "Build Bevy Error Codes"
         run: >
@@ -164,6 +169,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           target: wasm32-unknown-unknown
+
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
 
       - name: "Build Bevy Examples"
         run: |
@@ -191,15 +199,8 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            generate-community/target/
-          key: ${{ runner.os }}-generate-community-${{ hashFiles('generate-community/Cargo.toml') }}
+      - name: Cache Cargo files
+        uses: Leafwing-Studios/cargo-cache@v1
 
       - name: "Build Bevy Community"
         run: >
