@@ -1,12 +1,12 @@
 [package]
 name = "generate-errors"
-version = "0.2.0"
 authors = [
   "Bevy Contributors <bevyengine@gmail.com>",
   "Carter Anderson <mcanders1@gmail.com>",
 ]
 license = "MIT"
 edition = "2021"
+publish = false
 
 [lints]
 workspace = true
