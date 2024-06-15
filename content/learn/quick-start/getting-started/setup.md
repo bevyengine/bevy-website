@@ -44,7 +44,7 @@ Install the Xcode command line tools with `xcode-select --install` or the [Xcode
 
 ### Code Editor / IDE
 
-You can use any code editor you want, but we highly recommend one that has a [rust-analyzer](https://github.com/rust-lang/rust-analyzer) plugin. It's still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer). Alternatively, you can use [RustRover](https://www.jetbrains.com/rust/), a JetBrains IDE for Rust.
+You can use any code editor you want, but we highly recommend one that has a [rust-analyzer](https://github.com/rust-lang/rust-analyzer) plugin. It's still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer). Alternatively, you can use [JetBrains RustRover](https://www.jetbrains.com/rust/), which is free for non-commercial use.
 
 ### Rust Learning Resources
 
