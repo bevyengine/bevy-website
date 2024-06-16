@@ -3,6 +3,12 @@
 
 <!-- TODO -->
 
-> This commit implements a large subset of subpixel morphological antialiasing, better known as SMAA. SMAA is a 2011 antialiasing technique that detects jaggies in an aliased image and smooths them out. Despite its age, it's been a continual staple of games for over a decade. Four quality presets are available: low, medium, high, and ultra. I set the default to high, on account of modern GPUs being significantly faster than they were in 2011.
->
-> Like the already-implemented FXAA, SMAA works on an unaliased image. Unlike FXAA, it requires three passes: (1) edge detection; (2) blending weight calculation; (3) neighborhood blending. Each of the first two passes writes an intermediate texture for use by the next pass. The first pass also writes to a stencil buffer in order to dramatically reduce the number of pixels that the second pass has to examine. Also unlike FXAA, two built-in lookup textures are required; I bundle them into the library in compressed KTX2 format.
+Jagged edges are the bane of game developers' existence: a wide variety of anti-aliasing techniques have been invented and are still in use to fix them without degrading image quality.
+In addition to [MSAA](https://en.wikipedia.org/wiki/Multisample_anti-aliasing), [FXAA](https://en.wikipedia.org/wiki/Fast_approximate_anti-aliasing) and [TAA](https://en.wikipedia.org/wiki/Temporal_anti-aliasing), Bevy now implements [SMAA](https://en.wikipedia.org/wiki/Morphological_antialiasing): subpixel morphological antialiasing.
+
+SMAA is a 2011 antialiasing technique that detects borders in the image, then averages nearby border pixels, eliminating the dreaded jaggies.
+Despite its age, it's been a continual staple of games for over a decade. Four quality presets are available: low, medium, high, and ultra. Due to advancements in consumer hardware, Bevy's default is high.
+
+While you can see the differences in the image below, the best way to get a sense for it is to experiment with a test scene using the [`anti_aliasing` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/anti_aliasing.rs) or trying it out in your own game.
+
+TODO: add image comparing AA techniques
