@@ -1,1 +1,6 @@
-TODO
+> This commit implements a more physically-accurate, but slower, form of fog than the bevy_pbr::fog module does. Notably, this volumetric fog allows for light beams from directional lights to shine through, creating what is known as light shafts or god rays.
+
+> To add volumetric fog to a scene, add VolumetricFogSettings to the camera, and add VolumetricLight to directional lights that you wish to be volumetric. VolumetricFogSettings has numerous settings that allow you to define the accuracy of the simulation, as well as the look of the fog. Currently, only interaction with directional lights that have shadow maps is supported. Note that the overhead of the effect scales directly with the number of directional lights in use, so apply VolumetricLight sparingly for the best results.
+
+> The overall algorithm, which is implemented as a postprocessing effect, is a combination of the techniques described in Scratchapixel and this blog post. It uses raymarching in screen space, transformed into shadow map space for sampling and combined with physically-based modeling of absorption and scattering. Bevy employs the widely-used Henyey-Greenstein phase function to model asymmetry; this essentially allows light shafts to fade into and out of existence as the user views them.
+

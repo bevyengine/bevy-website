@@ -1,1 +1,2 @@
-TODO
+> I ported the two existing PCF techniques to the cubemap domain as best I could. Generally, the technique is to create a 2D orthonormal basis using Gram-Schmidt normalization, then apply the technique over that basis. The results look fine, though the shadow bias often needs adjusting.
+> For comparison, Unity uses a 4-tap pattern for PCF on point lights of (1, 1, 1), (-1, -1, 1), (-1, 1, -1), (1, -1, -1). I tried this but didn't like the look, so I went with the design above, which ports the 2D techniques to the 3D domain. There's surprisingly little material on point light PCF.

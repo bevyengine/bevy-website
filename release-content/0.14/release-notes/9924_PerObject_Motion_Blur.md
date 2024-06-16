@@ -1,1 +1,1 @@
-TODO
+> This is a post-process effect that uses the depth and motion vector buffers to estimate per-object motion blur. The implementation is combined from knowledge from multiple papers and articles. The approach itself, and the shader are quite simple. Most of the effort was in wiring up the bevy rendering plumbing, and properly specializing for HDR and MSAA.
