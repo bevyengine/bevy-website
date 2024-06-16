@@ -214,7 +214,7 @@ Mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like l
 * **Windows**: support not planned; [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
 * **MacOS**: available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
 
-You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
+You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml` (where `/path/to/project` is the directory which contains `Cargo.toml`):
 
 ```toml
 [target.x86_64-unknown-linux-gnu]
