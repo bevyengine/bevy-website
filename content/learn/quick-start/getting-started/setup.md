@@ -254,6 +254,6 @@ If something went wrong, check out our [troubleshooting section](/learn/quick-st
 
 ### Build Bevy
 
-Now run ```cargo run``` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
+Now run `cargo run` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
 
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
