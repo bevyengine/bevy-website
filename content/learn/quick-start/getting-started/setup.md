@@ -223,7 +223,8 @@ rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
 ```
 
 {% callout(type="note") %}
-Disabling `bevy/dynamic_linking` may improve Mold's performance. <sup>[citation needed]</sup>
+Disabling `bevy/dynamic_linking` may improve Mold's performance.
+<sup>[citation needed]</sup>
 {% end %}
 
 </details>
