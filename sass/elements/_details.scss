@@ -17,20 +17,25 @@ details {
     }
   }
 
-  >pre {
-    // push code blocks to the edge and remove their corners
+  // these styles are noncritical so the 2.4% without `:is` will be fine
+  // https://caniuse.com/css-matches-pseudo
+  // also, to avoid these styles, put the block in a <div>
+  $big-blocks: ":is(pre.z-code, .callout)";
+
+  >#{$big-blocks} {
+    // push big blocks to the edge and remove their corners
     margin-inline: -$h-padding;
     padding-inline: $h-padding !important;
     border-radius: 0 !important;
   }
 
-  >summary~pre.z-code {
+  >summary~#{$big-blocks} {
     // remove margin on leading...
     margin-top: 0;
   }
 
-  >pre.z-code:last-child {
-    // ...and trailing code blocks
+  >#{$big-blocks}:last-child {
+    // ...and trailing big blocks
     margin-bottom: 0;
   }
 
