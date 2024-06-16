@@ -143,79 +143,112 @@ You might think to simply develop in release mode instead, but we recommend agai
 
 ### Enable Fast Compiles (Optional)
 
-Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
+Bevy can be built just fine using default configuration on stable Rust.
+Unfortunately, the compile times are rather long.
+This section explains how to improve iterative compile times.
 
-* **Enable Bevy's Dynamic Linking Feature**: This is the most impactful compilation time decrease! If `bevy` is a dependency, you can compile the binary with the "dynamic_linking" feature flag (enables dynamic linking). **Important!** On Windows you _must_ also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a [`too many exported symbols`](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
+#### Dynamic Linking
+
+This is the most impactful compilation time decrease!
+If `bevy` is a dependency, you can compile the binary with the `dynamic_linking` feature flag.
+
+```sh
+cargo run --features bevy/dynamic_linking
+```
+
+If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set via `Cargo.toml`:
+
+```toml
+[dependencies]
+bevy = { version = "0.13.0", features = ["dynamic_linking"] }
+```
+
+{% callout(type="note") %}
+Shipping your game with dynamic linking enabled is not recommended.
+Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run.
+If you remove the `dynamic_linking` feature, your game executable can run standalone.
+{% end %}
+
+#### Alternative Linkers
+
+The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy. `lld` is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command.
+
+<details>
+  <summary>LLD Installation</summary>
+
+* **Ubuntu**: `sudo apt-get install lld clang`
+* **Fedora**: `sudo dnf install lld clang`
+* **Arch**: `sudo pacman -S lld clang`
+* **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
 
   ```sh
-  cargo run --features bevy/dynamic_linking
+  cargo install -f cargo-binutils
+  rustup component add llvm-tools-preview
   ```
 
-  If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set via `Cargo.toml`:
+* **MacOS**: On MacOS, the default system linker `ld-prime` is faster than LLD.
 
-  ```toml
-  [dependencies]
-  bevy = { version = "0.13.0", features = ["dynamic_linking"] }
-  ```
+</details>
 
-  NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
+Then, add one of the following to your Cargo config at `/path/to/project/.cargo/config.toml` depending on your OS:
 
-* **LLD linker**: The Rust compiler spends a lot of time in the "link" step. LLD is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command:
-  * **Ubuntu**: `sudo apt-get install lld clang`
-  * **Fedora**: `sudo dnf install lld clang`
-  * **Arch**: `sudo pacman -S lld clang`
-  * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
+```toml
+# for Linux
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
 
-    ```sh
-    cargo install -f cargo-binutils
-    rustup component add llvm-tools-preview
-    ```
+# for Windows
+[target.x86_64-pc-windows-msvc]
+linker = "rust-lld.exe"
+```
 
-   * **MacOS**: On MacOS, the default system linker ld-prime is faster than LLD.
+<details>
+  <summary>Alternative - Mold</summary>
+  
+Mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
 
-  You will also need to add one of the following to your Cargo config at `<YOUR_WORKSPACE>/.cargo/config.toml` depending on your OS:
-  ```toml
-  # for Linux
-  [target.x86_64-unknown-linux-gnu]
-  linker = "clang"
-  rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+* **Ubuntu**: `sudo apt-get install mold clang`
+* **Fedora**: `sudo dnf install mold clang`
+* **Arch**: `sudo pacman -S mold clang`
+* **Windows**: support not planned; [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
+* **MacOS**: available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
 
-  # for Windows
-  [target.x86_64-pc-windows-msvc]
-  linker = "rust-lld.exe"
-  ```
+You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
 
-* **Alternative - mold linker**: mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
-  * **Ubuntu**: `sudo apt-get install mold clang`
-  * **Fedora**: `sudo dnf install mold clang`
-  * **Arch**: `sudo pacman -S mold clang`
-  * **Windows**: currently not planned for support [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
-  * **MacOS**: available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
+```toml
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
+```
 
-    You will also need to add the following to your Cargo config at `YOUR_WORKSPACE/.cargo/config.toml`:
+{% callout(type="note") %}
+Disabling `bevy/dynamic_linking` may improve Mold's performance. <sup>[citation needed]</sup>
+{% end %}
 
-    ```toml
-    [target.x86_64-unknown-linux-gnu]
-    linker = "clang"
-    rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
-    ```
+</details>
 
-    NOTE: Disabling `bevy/dynamic_linking` may improve the performance of this linker.
+#### Nightly Rust Compiler
 
-* **Nightly Rust Compiler**: This gives access to the latest performance improvements and "unstable" optimizations
+This gives access to the latest performance improvements and "unstable" optimizations
 
-    Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
+Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
 
-    ```toml
-    [toolchain]
-    channel = "nightly"
-    ```
+```toml
+[toolchain]
+channel = "nightly"
+```
 
-    For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
+For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 
-* **Generic Sharing**: Allows crates to share monomorphized generic code instead of duplicating it. In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles. This is only available on nightly Rust.
+#### Generic Sharing
 
-To enable fast compiles, install the nightly rust compiler and LLD. Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) to `<YOUR_WORKSPACE>/.cargo/config.toml`. For the project in this guide, that would be `my_bevy_game/.cargo/config.toml`.
+Allows crates to share monomorphized generic code instead of duplicating it.
+In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
+This is currently only available on nightly Rust.
+
+To enable fast compiles, install the nightly rust compiler and LLD.
+Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) to `/path/to/project/.cargo/config.toml`.
 
 If something went wrong, check out our [troubleshooting section](/learn/quick-start/troubleshooting/) or [ask for help on our Discord](https://discord.gg/bevy).
 
