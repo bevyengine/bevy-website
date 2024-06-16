@@ -1,2 +1,8 @@
-> I ported the two existing PCF techniques to the cubemap domain as best I could. Generally, the technique is to create a 2D orthonormal basis using Gram-Schmidt normalization, then apply the technique over that basis. The results look fine, though the shadow bias often needs adjusting.
-> For comparison, Unity uses a 4-tap pattern for PCF on point lights of (1, 1, 1), (-1, -1, 1), (-1, 1, -1), (1, -1, -1). I tried this but didn't like the look, so I went with the design above, which ports the 2D techniques to the 3D domain. There's surprisingly little material on point light PCF.
+Percentage-closer filtering is a standard anti-aliasing technique used to get softer, less jagged shadows.
+To do so, we sample from the shadow map near the pixel of interest using a Gaussian kernel, averaging the results to reduce sudden transitions as we move in / out of the shadow.
+
+As a result, Bevy's point lights now  look softer and more natural, without any changes to end user code. As before, you can configure the exact strategy used to alias your shadows by setting the [`ShadowFilteringMethod`](https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html) component on your 3D cameras.
+
+TODO: add image from https://github.com/bevyengine/bevy/pull/12910
+
+Full support for percentage-closer shadows is [in the works](https://github.com/bevyengine/bevy/pull/13497): testing and reviews for this are, like always, extremely welcome.
