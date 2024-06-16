@@ -4,10 +4,10 @@ Since **Bevy 0.13**, you can configure the the EV100 of a camera, which allows y
 
 <video controls><source src="auto_exposure.mp4" type="video/mp4"/></video>
 
-Bevy's Auto Exposure is implemented by making a **histogram** of the scene's brightness in a **post processing** step. The exposure is then adjusted based on the average of the histogram. Because the histogram is calculated using a **compute shader**, Auto Exposure is **not available on WebGL**. It's also not enabled by default, so you need to add the [`AutoExposurePlugin`](https://docs.rs/bevy/0.14/bevy/core_pipeline/auto_exposure/struct.AutoExposurePlugin.html) to your app.
+Bevy's Auto Exposure is implemented by making a **histogram** of the scene's brightness in a post processing step. The exposure is then adjusted based on the average of the histogram. Because the histogram is calculated using a compute shader, Auto Exposure is **not available on WebGL**. It's also not enabled by default, so you need to add the [`AutoExposurePlugin`](https://docs.rs/bevy/0.14/bevy/core_pipeline/auto_exposure/struct.AutoExposurePlugin.html) to your app.
 
 Auto Exposure is controlled by the [`AutoExposureSettings`](https://docs.rs/bevy/0.14/bevy/core_pipeline/auto_exposure/struct.AutoExposureSettings.html) component, which you can add to your camera entity. You can configure a few things:
-* A relative **range** of F-stops that the exposure can change by.
-* The **speed** at which the exposure changes.
+* A relative *range* of F-stops that the exposure can change by.
+* The *speed* at which the exposure changes.
 * An optional **metering mask**, which allows you to, for example, give more weight to the center of the image.
-* An optional **histogram filter**, which allows you to ignore very bright or very dark pixels.
+* An optional histogram *filter*, which allows you to ignore very bright or very dark pixels.
