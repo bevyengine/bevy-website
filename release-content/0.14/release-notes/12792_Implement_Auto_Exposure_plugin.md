@@ -2,7 +2,7 @@ Since **Bevy 0.13**, you can configure the the EV100 of a camera, which allows y
 
 **Bevy 0.14** introduces **Auto Exposure**, which automatically adjusts the exposure of your scene based on the brightness of the scene. This can be useful when you want to create the feeling of a very high dynamic range, since your eyes also adjust to large changes in brightness. Note that this is not a replacement for hand-tuning the exposure values, rather an additional tool that you can use to create dramatic effects when brightness changes rapidly.
 
-[insert image here]
+<video controls><source src="auto_exposure.mp4" type="video/mp4"/></video>
 
 Bevy's Auto Exposure is implemented by making a **histogram** of the scene's brightness in a **post processing** step. The exposure is then adjusted based on the average of the histogram. Because the histogram is calculated using a **compute shader**, Auto Exposure is **not available on WebGL**. It's also not enabled by default, so you need to add the [`AutoExposurePlugin`](https://docs.rs/bevy/0.14/bevy/core_pipeline/auto_exposure/struct.AutoExposurePlugin.html) to your app.
 
