@@ -29,7 +29,7 @@ details {
     border-radius: 0 !important;
   }
 
-  >summary~#{$big-blocks} {
+  >summary+#{$big-blocks} {
     // remove margin on leading...
     margin-top: 0;
   }
