@@ -1,18 +1,19 @@
 <!-- Implement visibility ranges, also known as hierarchical levels of detail (HLODs). -->
 <!-- https://github.com/bevyengine/bevy/pull/12916 -->
 
-<!-- TODO -->
+When looking at objects far away, it's hard to make out the details!
+This obvious fact is just as true in rendering as it is in real life.
+As a result, using complex, high-fidelity models for distant objects is a waste: we can replace them with simplified equivalents (whose lower resolution textures are called mipmaps).
 
-> Implement visibility ranges, also known as hierarchical levels of detail (HLODs).
->
-> This commit introduces a new component, VisibilityRange, which allows developers to specify camera distances in which meshes are to be shown and hidden. Hiding meshes happens early in the rendering pipeline, so this feature can be used for level of detail optimization. Additionally, this feature is properly evaluated per-view, so different views can show different levels of detail.
-> 
-> This feature differs from proper mesh LODs, which can be implemented later. Engines generally implement true mesh LODs later in the pipeline; they're typically more efficient than HLODs with GPU-driven rendering. However, mesh LODs are more limited than HLODs, because they require the lower levels of detail to be meshes with the same vertex layout and shader (and perhaps the same material) as the original mesh. Games often want to use objects other than meshes to replace distant models, such as octahedral imposters or billboard imposters.
-> 
-> The reason why the feature is called hierarchical level of detail is that HLODs can replace multiple meshes with a single mesh when the camera is far away. This can be useful for reducing drawcall count. Note that VisibilityRange doesn't automatically propagate down to children; it must be placed on every mesh.
-> 
-> Crossfading between different levels of detail is supported, using the standard 4x4 ordered dithering pattern from 1. The shader code to compute the dithering patterns should be well-optimized. The dithering code is only active when visibility ranges are in use for the mesh in question, so that we don't lose early Z.
-> 
-> Cascaded shadow maps show the HLOD level of the view they're associated with. Point light and spot light shadow maps, which have no CSMs, display all HLOD levels that are visible in any view. To support this efficiently and avoid doing visibility checks multiple times, we precalculate all visible HLOD levels for each entity with a VisibilityRange during the check_visibility_range system.
-> 
-> A new example, visibility_range, has been added to the tree, as well as a new low-poly version of the flight helmet model to go with it. It demonstrates use of the visibility range feature to provide levels of detail.
+By automatically varying the **level-of-detail** (LOD) of our models in this way, we can render much larger scenes (or the same open world with a higher draw distance), swapping out models on the fly based on their proximity to the player.
+Bevy now supports one of the most foundational tools for this: **visibility ranges** (sometimes called hierarchical levels of detail, as it allows users to replace multiple meshes with a single object).
+
+By setting the `VisibilityRange` component on your model entities, developers can automatically control the range from the camera at which their models will appear and disappear, automatically fading between the two options using dithering.
+Hiding meshes happens early in the rendering pipeline, so this feature can be efficiently used for level of detail optimization.
+As a bonus, this feature is properly evaluated per-view, so different views can show different levels of detail.
+
+Note that this feature differs from proper mesh LODs (where the geometry itself is simplified automatically), which will come later.
+While mesh LODs are useful for optimization and don't require any additional setup, they're less flexible than visibility ranges.
+Games often want to use objects other than meshes to replace distant models, such as octahedral or [billboard](https://github.com/bevyengine/bevy/issues/3688) imposters: implementing visibility ranges first gives users the flexibility to start implementing these solutions today.
+
+You can see how this feature is used in the [`visibility_ranges` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/visibility_range.rs).
