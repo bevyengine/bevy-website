@@ -170,7 +170,9 @@ If you remove the `dynamic_linking` feature, your game executable can run standa
 
 #### Alternative Linkers
 
-The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy. `lld` is _much faster_ at linking than the default Rust linker. To install LLD, find your OS below and run the given command.
+The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy.
+`lld` is _much faster_ at linking than the default Rust linker.
+To install LLD, find your OS below and run the given command.
 
 <details>
   <summary>LLD Installation</summary>
@@ -247,13 +249,13 @@ Allows crates to share monomorphized generic code instead of duplicating it.
 In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
 This is currently only available on nightly Rust.
 
-To enable fast compiles, install the nightly rust compiler and LLD.
-Then copy the contents of [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) to `/path/to/project/.cargo/config.toml`.
-
-If something went wrong, check out our [troubleshooting section](/learn/quick-start/troubleshooting/) or [ask for help on our Discord](https://discord.gg/bevy).
-
 ### Build Bevy
 
 Now run `cargo run` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
 
+
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
+
+{% callout(type="note") %}
+If something went wrong, check out our [troubleshooting section](/learn/quick-start/troubleshooting/) or [ask for help on our Discord](https://discord.gg/bevy).
+{% end %}
