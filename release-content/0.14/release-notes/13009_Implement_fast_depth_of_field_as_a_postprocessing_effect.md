@@ -1,4 +1,4 @@
-In rendering, **depth of field** is an effect that mimics the [limitations of physicals lenses]((https://en.wikipedia.org/wiki/Depth_of_field)).
+In rendering, **depth of field** is an effect that mimics the [limitations of physical lenses]((https://en.wikipedia.org/wiki/Depth_of_field)).
 By virtue of the way light works, lens (like that of the human eye or a film camera) can only focus on objects that are within a specific range (depth) from them, causing all others to be blurry and out of focus.
 
 Bevy now ships with this effect, implemented as a post-processing shader.
