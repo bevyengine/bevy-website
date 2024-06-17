@@ -156,11 +156,10 @@ You can compile `bevy` as dynamic library, preventing it from having to be stati
 cargo run --features bevy/dynamic_linking
 ```
 
-If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set via `Cargo.toml`:
+If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set with this command (edits `Cargo.toml` for you):
 
-```toml
-[dependencies]
-bevy = { version = "0.13.0", features = ["dynamic_linking"] }
+```sh
+cargo add bevy -F dynamic_linking
 ```
 
 {% callout(type="note") %}
