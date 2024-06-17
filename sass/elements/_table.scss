@@ -16,3 +16,16 @@ tr td {
 tr td:not(:first-child) {
   border-left: 2px solid $subtitle-color;
 }
+
+table tr:first-child {
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  
+  th:first-child {
+    border-top-left-radius: $border-radius;
+  }
+  
+  th:last-child {
+    border-top-right-radius: $border-radius;
+  }
+}
