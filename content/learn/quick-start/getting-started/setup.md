@@ -164,8 +164,7 @@ bevy = { version = "0.13.0", features = ["dynamic_linking"] }
 ```
 
 {% callout(type="note") %}
-Shipping your game with dynamic linking enabled is not recommended.
-Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run.
+Shipping your game with dynamic linking enabled is not recommended because it requires you to include `libbevy_dylib` alongside your game, it prevents certain optimizations, and can increase the size of your game.
 If you remove the `dynamic_linking` feature, your game executable can run standalone.
 {% end %}
 
