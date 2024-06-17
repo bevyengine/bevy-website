@@ -6,7 +6,7 @@ Blur scales with the motion of objects relative to the camera.
 If the camera is tracking a fast moving object, like a vehicle, the vehicle will remain sharp, while stationary objects will be blurred.
 Conversely, if the camera is pointing at a stationary object, and a fast moving vehicle moves through the frame, only the fast moving object will be blurred.
 
-The implementation is configured with [camera shutter angle](https://en.wikipedia.org/wiki/Rotary_disc_shutter), or which corresponds to how long the virtual shutter is open during a frame.
+The implementation is configured with [camera shutter angle](https://en.wikipedia.org/wiki/Rotary_disc_shutter), which corresponds to how long the virtual shutter is open during a frame.
 In practice, this means the effect scales with framerate, so users running at high refresh rates aren't subjected to over-blurring.
 
 TODO: add image.
