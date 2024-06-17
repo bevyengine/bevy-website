@@ -122,7 +122,7 @@ mod learn {
         #[doc = include_str!("../../content/learn/book/getting-started/_index.md")]
         mod getting_started {
             #[doc = include_str!("../../content/learn/book/getting-started/apps-worlds.md")]
-            mod app_appbuilder_world {}
+            mod apps_worlds {}
             #[doc = include_str!("../../content/learn/book/getting-started/bevy-community.md")]
             mod bevy_community {}
             #[doc = include_str!("../../content/learn/book/getting-started/installation.md")]
