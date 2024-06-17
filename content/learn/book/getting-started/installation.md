@@ -18,6 +18,7 @@ placeholder
 {% end %}
 
 ## OS Dependencies
+
 {% todo() %}
 Run these scripts through CI to check that they at least install and that bevy compiles.  
 stretch goal: check that bevy *runs*
@@ -26,11 +27,13 @@ stretch goal: check that bevy *runs*
 ### Linux
 
 #### [Ubuntu](https://ubuntu.com/)
+
 ```bash
 sudo apt-get install g++ pkg-config libx11-dev libasound2-dev libudev-dev libxkbcommon-x11-0
 ```
 
 If using Wayland, you will also need to install:
+
 ```bash
 sudo apt-get install libwayland-dev libxkbcommon-dev
 ```
@@ -40,6 +43,7 @@ Depending on your graphics card, you may have to install one of: `vulkan-radeon`
 Compiling with clang is also possible - replace the `g++` package with `clang`.
 
 #### Windows Subsystem for Linux (WSL 2)
+
 Up-to-date WSL Installs for Windows 10 & 11 include WSLg, which provides
 necessary servers for passing graphics and audio between Windows and the WSL instance.
 With WSLg, a user's WSL instance can use X11 as well as Wayland.
@@ -49,7 +53,6 @@ Prior to the release of [WSL Gui (WSLg)](https://en.wikipedia.org/wiki/Windows_S
 around 4/20/2021, users had to [manually set up servers](https://wiki.ubuntu.com/WSL#Advanced_Topics) on windows for graphic and audio.
 Make note of the date for documentation found across the internet.
 Following advice from before WSLg's release can lead to additional conflicts.
-
 
 #### [Fedora](https://getfedora.org/)
 
@@ -104,11 +107,13 @@ Or if there are errors such as:
 warning: build failed, waiting for other jobs to finish...
 error: build failed
 ```
+
 Set the `PKG_CONFIG_PATH` env var to `/usr/lib/<target>/pkgconfig/`. For example on an x86_64 system:
 
 ```txt
 export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/"
 ```
+
 </details>
 
 #### Arch & Manjaro
@@ -116,12 +121,14 @@ export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/"
 ```bash
 sudo pacman -S libx11 pkgconf alsa-lib
 ```
+
 Install `pipewire-alsa` or `pulseaudio-alsa` depending on the sound server you are using.
 
 Depending on your graphics card, you may have to install one of the following:
 `vulkan-radeon`, `vulkan-intel`, or `mesa-vulkan-drivers`
 
 #### Void
+
 ```bash
 sudo xbps-install -S pkgconf alsa-lib-devel libX11-devel eudev-libudev-devel
 ```
@@ -159,6 +166,7 @@ is an example of packaging a Bevy program in nix.
 <summary>Nix Flake</summary>
 
 Try this `flake.nix`:
+
 ```nix
 {
   description = "Bevy Dev Environment";
@@ -217,6 +225,7 @@ Try this `flake.nix`:
     );
 }
 ```
+
 Activate with `nix develop`, or consider using [`direnv`](https://direnv.net/).
 You may need to re-launch your IDE from inside the flake's environment.
 </details>
@@ -227,7 +236,7 @@ You may need to re-launch your IDE from inside the flake's environment.
    sudo zypper install libudev-devel gcc-c++ alsa-lib-devel
 ```
 
-#### Gentoo
+#### [Gentoo](https://www.gentoo.org/)
 
 ```bash
    sudo emerge --ask libX11 pkgconf alsa-lib
