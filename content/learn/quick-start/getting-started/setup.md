@@ -150,7 +150,7 @@ This section explains how to speed up iterative compiles: the amount of time it 
 #### Dynamic Linking
 
 This is the most impactful compilation time decrease!
-If `bevy` is a dependency, you can compile the binary with the `dynamic_linking` feature flag.
+You can compile `bevy` as dynamic library, preventing it from having to be statically linked each time you rebuild your project. You can enable this with the `dynamic_linking` feature flag.
 
 ```sh
 cargo run --features bevy/dynamic_linking
