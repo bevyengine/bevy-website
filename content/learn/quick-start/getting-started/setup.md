@@ -162,7 +162,7 @@ If you don't want to add the `--features bevy/dynamic_linking` to each run, this
 cargo add bevy -F dynamic_linking
 ```
 
-{% callout(type="note") %}
+{% callout(type="warning") %}
 On Windows you must also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 {% end %}
 
