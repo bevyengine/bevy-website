@@ -24,7 +24,13 @@ file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md
 
 [[release_notes]]
 title = "New gizmos types"
-authors = ["@mweatherley", "@Kanabenki", "@MrGVSV", "@solis-lumine-vorago","@alice-i-cecile"]
+authors = [
+	"@mweatherley",
+	"@Kanabenki",
+	"@MrGVSV",
+	"@solis-lumine-vorago",
+	"@alice-i-cecile",
+]
 url = "https://github.com/bevyengine/bevy/pull/12211"
 file_name = "New_gizmos_types.md"
 
@@ -169,7 +175,7 @@ url = "https://github.com/bevyengine/bevy/pull/12709"
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
 
 [[release_notes]]
-title = "Implement percentage-closer filtering (PCF) for point lights."
+title = "Percentage-closer filtering (PCF) for point lights."
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/12910"
 file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
@@ -212,7 +218,7 @@ file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
 
 [[release_notes]]
 title = "Per-Object Motion Blur"
-authors = ["@aevyrie", "@torsteingrindvik"]
+authors = ["@aevyrie"]
 url = "https://github.com/bevyengine/bevy/pull/9924"
 file_name = "9924_PerObject_Motion_Blur.md"
 
@@ -229,7 +235,7 @@ url = "https://github.com/bevyengine/bevy/pull/12889"
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
-title = "Implement filmic color grading."
+title = "Filmic color grading"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13121"
 file_name = "13121_Implement_filmic_color_grading.md"
@@ -253,8 +259,8 @@ url = "https://github.com/bevyengine/bevy/pull/13649"
 file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
-title = "Implement visibility ranges, also known as hierarchical levels of detail (HLODs)."
-authors = ["@pcwalton", "@cart"]
+title = "Visibility ranges: an essential tool for controlling levels of detail"
+authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/12916"
 file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
 
@@ -295,8 +301,8 @@ url = "https://github.com/bevyengine/bevy/pull/13200"
 file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
 
 [[release_notes]]
-title = "Implement fast depth of field as a postprocessing effect."
-authors = ["@pcwalton", "@alice-i-cecile", "@Kurble"]
+title = "Depth of field"
+authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13009"
 file_name = "13009_Implement_fast_depth_of_field_as_a_postprocessing_effect.md"
 
@@ -313,7 +319,7 @@ url = "https://github.com/bevyengine/bevy/pull/13317"
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[release_notes]]
-title = "Implement volumetric fog and volumetric lighting, also known as light shafts or god rays."
+title = "Volumetric fog"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13057"
 file_name = "13057_Implement_volumetric_fog_and_volumetric_lighting_also_know.md"
@@ -409,13 +415,13 @@ url = "https://github.com/bevyengine/bevy/pull/13653"
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
 
 [[release_notes]]
-title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
+title = "Anisotropy for physically-based rendering"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13450"
 file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
 
 [[release_notes]]
-title = "Implement subpixel morphological antialiasing, or SMAA."
-authors = ["@pcwalton", "@alice-i-cecile"]
+title = "Subpixel morphological antialiasing"
+authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13423"
 file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
