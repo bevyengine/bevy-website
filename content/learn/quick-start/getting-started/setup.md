@@ -232,7 +232,7 @@ Disabling `bevy/dynamic_linking` may improve Mold's performance.
 
 #### Nightly Rust Compiler
 
-This gives access to the latest performance improvements and "unstable" optimizations, including [generic sharing](#generic-sharing) below
+This gives access to the latest performance improvements and "unstable" optimizations, including [generic sharing](#generic-sharing) below.
 
 Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
 
