@@ -4,7 +4,7 @@ Bevy's existing implementation covers [distance fog](https://en.wikipedia.org/wi
 In Bevy 0.14, this is supplemented with volumetric fog, based on [volumetric lighting](https://en.wikipedia.org/wiki/Volumetric_lighting), which simulates fog using actual 3D space, rather than simply distance from the camera.
 As you might expect, this is both prettier and more computationally expensive!
 
-In particular, this allows for the creation of stunningly beautiful "god rays" (light shafts) shining through the fog.
+In particular, this allows for the creation of stunningly beautiful "god rays" (more properly, crepuscular rays) shining through the fog.
 
 TODO: add image.
 
