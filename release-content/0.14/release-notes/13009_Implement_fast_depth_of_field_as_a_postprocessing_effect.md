@@ -7,6 +7,6 @@ The bokeh blur is generally more aesthetically pleasing than the Gaussian blur, 
 
 TODO: add image
 
-The blur amount is generally specified by the [f-number](https://en.wikipedia.org/wiki/F-number), which we use to compute the [focal length](https://en.wikipedia.org/wiki/Focal_length) from the film size and [field-of-view](https://en.wikipedia.org/wiki/Field_of_view). By default, we simulate standard cinematic cameras with an f/1 f-number and a film size corresponding to the classic Super 35 camera. The developer can customize these values as desired.
+The blur amount is generally specified by the [f-number](https://en.wikipedia.org/wiki/F-number), which we use to compute the [focal length](https://en.wikipedia.org/wiki/Focal_length) from the film size and [field-of-view](https://en.wikipedia.org/wiki/Field_of_view). By default, we simulate standard cinematic cameras with an f/1 f-number and a film size corresponding to the classic Super 35 film format. The developer can customize these values as desired.
 
 To see how this new API, please check out the dedicated [`depth_of_field` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/depth_of_field.rs).
