@@ -7,7 +7,7 @@ To support this, Bevy's [existing tonemapping tools](https://bevyengine.org/news
 
 - White point adjustment. This is inspired by Unity's implementation of the feature, but simplified and optimized. Temperature and tint control the adjustments to the x and y chromaticity values of CIE 1931. Following Unity, the adjustments are made relative to the D65 standard illuminant in the LMS color space.
 - Hue rotation: converts the RGB value to HSV, alters the hue, and converts back.
-- Color correction: allows the gamma, gain, and lift values to be adjusted according to the standard ASC CDL combined function. This can be done seperately for shadows, midtones and highlights To avoid abrupt color changes, a small crossfade is used between the different sections of the image.
+- Color correction: allows the gamma, gain, and lift values to be adjusted according to the standard ASC CDL combined function. This can be done separately for shadows, midtones and highlights To avoid abrupt color changes, a small crossfade is used between the different sections of the image.
 
 We've followed [Blender's](https://www.blender.org/) implementation as closely as possible to ensure that what you see in your modelling software matches what you see in the game.
 
