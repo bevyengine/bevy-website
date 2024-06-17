@@ -253,20 +253,20 @@ In some cases this allows us to "precompile" generic code so it doesn't affect i
 This is currently only available on nightly Rust ([see above](#nightly-rust-compiler)).
 
 <details>
-  <summary>Setup</summary>
+  <summary>Generic sharing setup</summary>
 
 See [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) for a more comprehensive, cross-platform example.
 
 ```toml
+# /path/to/project/.cargo/config.toml
 [target.x86_64-unknown-linux-gnu]
-linker = "clang"
 rustflags = [
-  "-Zshare-generics=y",      # (Nightly) Make the current crate share its generic instantiations
+  # (Nightly) Make the current crate share its generic instantiations
+  "-Zshare-generics=y",
 ]
 ```
 
 </details>
-
 
 ### Build Bevy
 
