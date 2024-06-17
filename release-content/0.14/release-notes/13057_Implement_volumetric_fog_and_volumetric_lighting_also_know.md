@@ -6,7 +6,7 @@ As you might expect, this is both prettier and more computationally expensive!
 
 In particular, this allows for the creation of stunningly beautiful "god rays" (more properly, crepuscular rays) shining through the fog.
 
-TODO: add image.
+![A beautiful town square is rendered in Bevy. Light fog covers it, and beams of light pierce the fog around a tree at its center, lighting the top of its leaves.](volumetric_fog.png)
 
 Bevy's algorithm, which is implemented as a postprocessing effect, is a combination of the techniques described in [Scratchapixel](https://www.scratchapixel.com/lessons/3d-basic-rendering/volume-rendering-for-developers/intro-volume-rendering.html) and [Alexandre Pestana's blog post](https://www.alexandre-pestana.com/volumetric-lights/). It uses raymarching in screen space, transformed into shadow map space for sampling and combined with physically-based modeling of absorption and scattering. Bevy employs the widely-used Henyey-Greenstein phase function to model asymmetry; this essentially allows light shafts to fade into and out of existence as the user views them.
 

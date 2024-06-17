@@ -5,7 +5,12 @@ Bevy now ships with this effect, implemented as a post-processing shader.
 There are two options available: a fast Gaussian blur or a more physically accurate hexagonal bokeh technique.
 The bokeh blur is generally more aesthetically pleasing than the Gaussian blur, as it simulates the effect of a camera more accurately. The shape of the bokeh circles are determined by the number of blades of the aperture. In our case, we use a hexagon, which is usually considered specific to lower-quality cameras.
 
-TODO: add image
+{{ compare_slider(
+    left_title="No Depth of Field",
+    left_image="no_dof.png",
+    right_title="Bokeh Depth of Field",
+    right_image="bokeh_dof.png"
+) }}
 
 The blur amount is generally specified by the [f-number](https://en.wikipedia.org/wiki/F-number), which we use to compute the [focal length](https://en.wikipedia.org/wiki/Focal_length) from the film size and [field-of-view](https://en.wikipedia.org/wiki/Field_of_view). By default, we simulate standard cinematic cameras with an f/1 f-number and a film size corresponding to the classic Super 35 film format. The developer can customize these values as desired.
 

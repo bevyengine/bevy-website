@@ -6,7 +6,12 @@ But in the context of phsically-based rendering, **anisotropy** refers specifica
 In effect, this causes the specular light to stretch out into lines instead of a round lobe. This is useful for modeling brushed metal, hair, and similar surfaces.
 Support for anisotropy is a common feature in major game and graphics engines; Unity, Unreal, Godot, three.js, and Blender all support it to varying degrees.
 
-TODO: add image
+{{ compare_slider(
+    left_title="Without Anisotropy",
+    left_image="without_anisotropy.png",
+    right_title="With Anisotropy",
+    right_image="with_anisotropy.png"
+) }}
 
 Two new parameters have been added to [`StandardMaterial`](https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html): `anisotropy_strength` and `anisotropy_rotation`.
 Anisotropy strength, which ranges from 0 to 1, represents how much the roughness differs between the tangent and the bitangent of the mesh.
