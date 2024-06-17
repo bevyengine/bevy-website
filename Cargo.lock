@@ -1558,7 +1558,7 @@ checksum = "4b82cf0babdbd58558212896d1a4272303a57bdb245c2bf1147185fb45640e70"
 
 [[package]]
 name = "code-validation"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "bevy",
 ]
@@ -2274,7 +2274,7 @@ dependencies = [
 
 [[package]]
 name = "generate-assets"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "base64 0.13.1",
@@ -2291,7 +2291,7 @@ dependencies = [
 
 [[package]]
 name = "generate-community"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "rand",
  "serde",
@@ -2301,7 +2301,7 @@ dependencies = [
 
 [[package]]
 name = "generate-errors"
-version = "0.2.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2310,7 +2310,7 @@ dependencies = [
 
 [[package]]
 name = "generate-release"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -5760,7 +5760,7 @@ dependencies = [
 
 [[package]]
 name = "write-rustdoc-hide-lines"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "indoc",
