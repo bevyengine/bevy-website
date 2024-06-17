@@ -145,7 +145,7 @@ You might think to simply develop in release mode instead, but we recommend agai
 
 Bevy can be built just fine using default configuration on stable Rust.
 Unfortunately, the compile times are rather long.
-This section explains how to improve iterative compile times.
+This section explains how to speed up iterative compiles: the amount of time it takes to rebuild your project after changing a single file.
 
 #### Dynamic Linking
 
