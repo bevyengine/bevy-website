@@ -9,11 +9,11 @@ Your entire game is stored inside a Bevy [`App`], which is responsible for runni
 The [`World`] stores all of the App's state &mdash; [Entities], [Components], [Resources], and [Systems].
 
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [Entities]: /learn/book/ecs/entities-components/
 [Components]: /learn/book/ecs/entities-components/#working-with-components
 [Resources]: /learn/book/ecs/resources/
 [Systems]: /learn/book/ecs/systems-queries/
-[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 
 ## Apps
 
