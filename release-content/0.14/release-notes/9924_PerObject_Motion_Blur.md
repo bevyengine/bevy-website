@@ -9,6 +9,6 @@ Conversely, if the camera is pointing at a stationary object, and a fast moving 
 The implementation is configured with [camera shutter angle](https://en.wikipedia.org/wiki/Rotary_disc_shutter), which corresponds to how long the virtual shutter is open during a frame.
 In practice, this means the effect scales with framerate, so users running at high refresh rates aren't subjected to over-blurring.
 
-![A series of cartoony cars whiz past low polygon trees. You can see the trees and the cars blurring as the camera moves, with faster objects (relative to the field of vision) blurring more.](motion_blur_cars.mp4)
+![A series of cartoony cars whiz past low polygon trees. The trees and the cars blur as the camera moves, with faster objects (relative to the field of vision) blurring more.](motion_blur_cars.mp4)
 
 You can enable motion blur by adding [`MotionBlurBundle`](https://dev-docs.bevyengine.org/bevy/core_pipeline/motion_blur/struct.MotionBlurBundle.html) to your camera entity, as shown in our [`motion blur` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/motion_blur.rs).

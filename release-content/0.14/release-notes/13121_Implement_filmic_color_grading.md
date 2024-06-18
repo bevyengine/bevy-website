@@ -11,7 +11,7 @@ To support this, Bevy's [existing tonemapping tools](https://bevyengine.org/news
 
 We've followed [Blender's](https://www.blender.org/) implementation as closely as possible to ensure that what you see in your modelling software matches what you see in the game.
 
-![A very orange image of a test scene, with controls for exposure, temperature, tint and hue. Saturation, contrast, gamme, gain and lift can all be configured for the highlights, midtones and shadows separately.](filmic_color_grading.png)
+![A very orange image of a test scene, with controls for exposure, temperature, tint and hue. Saturation, contrast, gamma, gain, and lift can all be configured for the highlights, midtones, and shadows separately.](filmic_color_grading.png)
 
 We've provided a new, [`color_grading`](https://github.com/bevyengine/bevy/blob/main/examples/3d/color_grading.rs) example, with a shiny GUI to change all the color grading settings.
 Perfect for copy-pasting into your own game's dev tools and playing with the settings!

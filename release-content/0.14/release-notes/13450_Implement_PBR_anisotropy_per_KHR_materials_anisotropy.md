@@ -18,7 +18,7 @@ Anisotropy strength, which ranges from 0 to 1, represents how much the roughness
 In effect, it controls how stretched the specular highlight is. Anisotropy rotation allows the roughness direction to differ from the tangent of the model.
 
 In addition to these two fixed parameters, an anisotropy texture can be supplied.
-Such a texture should be a 3-channel RGB texture, where the red and green values specify a direction vector using the same conventions as a normal map ([0, 1] color values map to [-1, 1] vector values), and the the blue value represents the strength.
+Such a texture should be a 3-channel RGB texture, where the red and green values specify a direction vector using the same conventions as a normal map ([0, 1] color values map to [-1, 1] vector values), and the blue value represents the strength.
 This matches the format that the `KHR_materials_anisotropy` specification requires.
 Such textures should be loaded as linear and not sRGB.
 Note that this texture does consume one additional texture binding in the standard material shader.

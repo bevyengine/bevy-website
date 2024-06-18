@@ -1,5 +1,5 @@
 Not all fog is created equal.
-Bevy's existing implementation covers [distance fog](https://en.wikipedia.org/wiki/Distance_fog), which is fast, simple and not particularly realistic.
+Bevy's existing implementation covers [distance fog](https://en.wikipedia.org/wiki/Distance_fog), which is fast, simple, and not particularly realistic.
 
 In Bevy 0.14, this is supplemented with volumetric fog, based on [volumetric lighting](https://en.wikipedia.org/wiki/Volumetric_lighting), which simulates fog using actual 3D space, rather than simply distance from the camera.
 As you might expect, this is both prettier and more computationally expensive!
