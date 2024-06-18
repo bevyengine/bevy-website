@@ -197,7 +197,7 @@ areas = ["ECS"]
 file_name = "12551_Remove_WorldCell.md"
 
 [[guides]]
-title = "Store only the IDs needed for Query iteration"
+title = "Return iterator instead of slice for `QueryState::matched_tables` and `QueryState::matches_archtypes`"
 url = "https://github.com/bevyengine/bevy/pull/12476"
 areas = ["ECS"]
 file_name = "12476_Store_only_the_IDs_needed_for_Query_iteration.md"
