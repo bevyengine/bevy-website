@@ -185,7 +185,7 @@ areas = ["ECS", "Reflection"]
 file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
-title = "Remove archetype_component_access from QueryState"
+title = "Don't store `Access<ArchetypeComponentId>` within `QueryState`"
 url = "https://github.com/bevyengine/bevy/pull/12474"
 areas = ["ECS"]
 file_name = "12474_Remove_archetype_component_access_from_QueryState.md"
