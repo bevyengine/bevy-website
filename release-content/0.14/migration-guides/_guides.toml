@@ -215,7 +215,7 @@ areas = ["ECS"]
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[guides]]
-title = "Make SystemParam::new_archetype and QueryState::new_archetype unsafe functions"
+title = "Make `SystemParam::new_archetype` and `QueryState::new_archetype` unsafe"
 url = "https://github.com/bevyengine/bevy/pull/13044"
 areas = ["ECS"]
 file_name = "13044_Make_SystemParamnew_archetype_and_QueryStatenew_archetype_.md"
