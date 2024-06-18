@@ -197,12 +197,6 @@ areas = ["ECS"]
 file_name = "12551_Remove_WorldCell.md"
 
 [[guides]]
-title = "Allow Commands to register systems"
-url = "https://github.com/bevyengine/bevy/pull/11019"
-areas = ["ECS"]
-file_name = "11019_Allow_Commands_to_register_systems.md"
-
-[[guides]]
 title = "Store only the IDs needed for Query iteration"
 url = "https://github.com/bevyengine/bevy/pull/12476"
 areas = ["ECS"]
