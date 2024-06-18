@@ -221,7 +221,7 @@ areas = ["ECS"]
 file_name = "13044_Make_SystemParamnew_archetype_and_QueryStatenew_archetype_.md"
 
 [[guides]]
-title = "Better SystemId to Entity conversions"
+title = "Better `SystemId` and `Entity` conversion"
 url = "https://github.com/bevyengine/bevy/pull/13090"
 areas = ["ECS"]
 file_name = "13090_Better_SystemId_to_Entity_conversions.md"
