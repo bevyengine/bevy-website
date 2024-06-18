@@ -203,7 +203,7 @@ areas = ["ECS"]
 file_name = "12476_Store_only_the_IDs_needed_for_Query_iteration.md"
 
 [[guides]]
-title = "Remove stepping from default features"
+title = "Remove system stepping from default features"
 url = "https://github.com/bevyengine/bevy/pull/12847"
 areas = ["ECS"]
 file_name = "12847_Remove_stepping_from_default_features.md"
