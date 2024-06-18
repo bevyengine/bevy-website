@@ -191,7 +191,7 @@ areas = ["ECS"]
 file_name = "12474_Remove_archetype_component_access_from_QueryState.md"
 
 [[guides]]
-title = "Remove WorldCell"
+title = "Remove `WorldCell`"
 url = "https://github.com/bevyengine/bevy/pull/12551"
 areas = ["ECS"]
 file_name = "12551_Remove_WorldCell.md"
