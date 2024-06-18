@@ -96,7 +96,7 @@ file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
 
 [[release_notes]]
 title = "New primitives"
-authors = ["@vitorfhc", "@Chubercik", "@andristarr", "@spectria-limina", "@salvadorcarvalhinho", "@aristaeus"]
+authors = ["@vitorfhc", "@Chubercik", "@andristarr", "@spectria-limina", "@salvadorcarvalhinho", "@aristaeus", "@mweatherley"]
 url = "https://github.com/bevyengine/bevy/pull/12508"
 file_name = "new_math_primitives.md"
 
