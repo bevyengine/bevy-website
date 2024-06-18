@@ -95,10 +95,10 @@ url = "https://github.com/bevyengine/bevy/pull/12500"
 file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
 
 [[release_notes]]
-title = "Add `Triangle3d` primitive to `bevy_math::primitives`"
-authors = ["@vitorfhc", "@NthTensor", "@Jondolf"]
+title = "New primitives"
+authors = ["@vitorfhc", "@Chubercik", "@andristarr", "@spectria-limina", "@salvadorcarvalhinho", "@aristaeus"]
 url = "https://github.com/bevyengine/bevy/pull/12508"
-file_name = "12508_Add_Triangle3d_primitive_to_bevy_mathprimitives.md"
+file_name = "new_math_primitives.md"
 
 [[release_notes]]
 title = "Meshlet rendering (initial feature)"
@@ -149,12 +149,6 @@ title = "Add `AsyncSeek` trait to `Reader` to be able to seek inside asset loade
 authors = ["@BeastLe9enD"]
 url = "https://github.com/bevyengine/bevy/pull/12547"
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
-
-[[release_notes]]
-title = "Add `Tetrahedron` primitive to `bevy_math::primitives`"
-authors = ["@Chubercik"]
-url = "https://github.com/bevyengine/bevy/pull/12688"
-file_name = "12688_Add_Tetrahedron_primitive_to_bevy_mathprimitives.md"
 
 [[release_notes]]
 title = "Add methods `iter_resources` and `iter_resources_mut`"
@@ -341,18 +335,6 @@ title = "Implement a SystemBuilder for building SystemParams"
 authors = ["@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
-
-[[release_notes]]
-title = "New circular primitives: `Arc2d`, `CircularSector`, `CircularSegment`"
-authors = ["@aristaeus", "@spectria-limina", "@Jondolf", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13482"
-file_name = "13482_New_circular_primitives_Arc2d_CircularSector_CircularSegme.md"
-
-[[release_notes]]
-title = "Implement Rhombus 2D primitive."
-authors = ["@salvadorcarvalhinho", "@LuisFigueiredo73"]
-url = "https://github.com/bevyengine/bevy/pull/13501"
-file_name = "13501_Implement_Rhombus_2D_primitive.md"
 
 [[release_notes]]
 title = "Implement opt-in sharp screen-space reflections for the deferred renderer, with improved raymarching code."
