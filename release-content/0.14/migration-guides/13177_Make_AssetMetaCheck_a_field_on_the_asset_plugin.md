@@ -5,7 +5,7 @@
 App::new()
     .add_plugins(DefaultPlugins)
     .insert_resource(AssetMetaCheck::Never)
-    .run();
+    .run()
 
 // After
 App::new()
@@ -13,5 +13,5 @@ App::new()
         meta_check: AssetMetaCheck::Never,
         ..default()
     }))
-    .run();
+    .run()
 ```

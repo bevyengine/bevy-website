@@ -5,13 +5,13 @@ The `UpdateAssets` schedule has been removed. If you add systems to this schedul
 App::new()
     .add_plugins(DefaultPlugins)
     .add_systems(UpdateAssets, my_system)
-    .run();
+    .run()
 
 // After
 App::new()
     .add_plugins(DefaultPlugins)
     .add_systems(PreUpdate, my_system)
-    .run();
+    .run()
 ```
 
 Furthermore, `AssetEvents` has been changed from a `ScheduleLabel` to a `SystemSet` within the `First` schedule.
@@ -21,11 +21,11 @@ Furthermore, `AssetEvents` has been changed from a `ScheduleLabel` to a `SystemS
 App::new()
     .add_plugins(DefaultPlugins)
     .add_systems(AssetEvents, my_system)
-    .run();
+    .run()
 
 // After
 App::new()
     .add_plugins(DefaultPlugins)
     .add_systems(First, my_system.in_set(AssetEvents))
-    .run();
+    .run()
 ```
