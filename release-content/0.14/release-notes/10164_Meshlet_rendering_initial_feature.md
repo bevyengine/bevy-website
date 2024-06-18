@@ -10,7 +10,7 @@ In addition to the below user guide, checkout:
 * [The Bevy example for this feature](https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/3d/meshlet.rs)
 * [The technical deep dive article by the main author of this feature](https://jms55.github.io/posts/2024-06-09-virtual-geometry-bevy-0-14)
 
-![Example scene using meshlets](meshlets.png)
+![An example scene showing two rows of identical meshes. The right have regular materials. The left have a debug material that shows the underlying patchwork of clusters.](meshlets.png)
 
 ---
 

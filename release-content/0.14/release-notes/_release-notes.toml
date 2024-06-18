@@ -102,7 +102,7 @@ file_name = "12508_Add_Triangle3d_primitive_to_bevy_mathprimitives.md"
 
 [[release_notes]]
 title = "Meshlet rendering (initial feature)"
-authors = ["@JMS55", "@atlv24", "@mockersf", "@ricky26"]
+authors = ["@JMS55", "@atlv24", "@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/10164"
 file_name = "10164_Meshlet_rendering_initial_feature.md"
 
@@ -197,12 +197,6 @@ title = "Improve par_iter and Parallel"
 authors = ["@re0312", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/12904"
 file_name = "12904_Improve_par_iter_and_Parallel.md"
-
-[[release_notes]]
-title = "Meshlet continuous LOD"
-authors = ["@JMS55", "@pcwalton", "@ricky26", "@mockersf", "@atlv24"]
-url = "https://github.com/bevyengine/bevy/pull/12755"
-file_name = "12755_Meshlet_continuous_LOD.md"
 
 [[release_notes]]
 title = "Make dynamic_linking a no-op on WASM targets"
