@@ -209,7 +209,7 @@ areas = ["ECS"]
 file_name = "12847_Remove_stepping_from_default_features.md"
 
 [[guides]]
-title = "Optimize Event Updates"
+title = "Optimize event updates and virtual time"
 url = "https://github.com/bevyengine/bevy/pull/12936"
 areas = ["ECS"]
 file_name = "12936_Optimize_Event_Updates.md"
