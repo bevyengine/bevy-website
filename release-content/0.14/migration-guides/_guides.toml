@@ -239,31 +239,25 @@ areas = ["ECS"]
 file_name = "11426_Computed_State__Sub_States.md"
 
 [[guides]]
-title = "Separate state crate"
+title = "Separate states from core ECS"
 url = "https://github.com/bevyengine/bevy/pull/13216"
 areas = ["ECS"]
 file_name = "13216_Separate_state_crate.md"
 
 [[guides]]
-title = "constrain WorldQuery::get_state to only use &Components"
+title = "Constrain `WorldQuery::get_state()` to only accept `Components`"
 url = "https://github.com/bevyengine/bevy/pull/13343"
 areas = ["ECS"]
 file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
 
 [[guides]]
-title = "constrain WorldQuery::init_state argument to ComponentInitializer"
-url = "https://github.com/bevyengine/bevy/pull/13442"
-areas = ["ECS"]
-file_name = "13442_constrain_WorldQueryinit_state_argument_to_ComponentInitia.md"
-
-[[guides]]
-title = "Unify transition names to `exited` and `entered`"
+title = "Unify state transition names to `exited` and `entered`"
 url = "https://github.com/bevyengine/bevy/pull/13594"
 areas = ["ECS"]
 file_name = "13594_Unify_transition_names_to_exited_and_entered.md"
 
 [[guides]]
-title = "Combine transition systems of `Substates`"
+title = "Make `apply_state_transition` private"
 url = "https://github.com/bevyengine/bevy/pull/13626"
 areas = ["ECS"]
 file_name = "13626_Combine_transition_systems_of_Substates.md"
