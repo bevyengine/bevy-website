@@ -1,7 +1,7 @@
 <!-- glTF labels: add enum to avoid misspelling and keep up-to-date list documented -->
 <!-- https://github.com/bevyengine/bevy/pull/13586 -->
 
-If you've been using [glTF] files for your scenes or looked at an example that does you've might have seen the _labels_ at the end of the asset path:
+If you've been using [`glTF`] files for your scenes or looked at an example that does you've might have seen the _labels_ at the end of the asset path:
 
 ```rust
 let model_pine = asset_server.load("models/trees/pine.gltf#Scene0");
