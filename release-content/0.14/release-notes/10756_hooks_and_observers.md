@@ -31,7 +31,7 @@ To overcome these limitations, Bevy 0.14 introduces two complementary "push"-sty
 2. [**Observers:**](https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Observer.html) On-demand systems that listen to [`Trigger`] events, which commonly target specific entities. These systems are run sequentially and recursively at the next command flush point in response to a trigger being sent.
 
 Only one hook per component type can be registered, and it cannot be overwritten.
-It is intended for use by library authors, to strictly enforce invariants (such as hierarchy correctness) required to use that type.
+These are intended for enforcing lower level ECS invariants required to use components (Eg. hierarchy correctness). They're comparable to constructors and destrcutors. These will typically be used by library authors.
 Hooks always run before observers.
 
 By contrast, observers are a flexible tool intended for gameplay logic.
