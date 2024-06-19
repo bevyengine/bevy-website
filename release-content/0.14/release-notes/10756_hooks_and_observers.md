@@ -39,12 +39,6 @@ These are intended for enforcing lower level ECS invariants required to use comp
 Hooks always run before observers and cannot be removed and so are more suitable for maintaining critical safety or correctness invariants.
 Additionally, hooks are somewhat faster than observers, as their reduced flexibility means that fewer lookups are involved.
 
-By contrast, observers are a flexible tool intended for gameplay logic.
-They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
-Observers can be attached to a single entity, listening only to triggers targeted at that entity (callbacks anyone?), but they can also be used to listen for triggers without an associated entity.
-Their advantages over buffered events are clearest when combined with commands that emit triggers (to avoid ever entering a bad state),
-or when you're taking advantage of observers' ability to emit triggers which are then immediately processed, chaining recursively.
-
 Let's examine a simple example where we care about maintaining invariants: trying to target a specific `Enemy`.
 
 ```rust
@@ -89,6 +83,12 @@ impl Component for Targetable {
 ```
 
 Because adding and removing components can only be done in the context of exclusive world access, hooks are always run *immediately*, leaving no opportunity for desynchronization.
+
+By contrast, observers are a flexible tool intended for gameplay logic.
+They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
+Observers can be attached to a single entity, listening only to triggers targeted at that entity (callbacks anyone?), but they can also be used to listen for triggers without an associated entity.
+Their advantages over buffered events are clearest when combined with commands that emit triggers (to avoid ever entering a bad state),
+or when you're taking advantage of observers' ability to emit triggers which are then immediately processed, chaining recursively.
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
 These are powerful, abstract tools: we can't wait to see the mad science the community cooks up!
