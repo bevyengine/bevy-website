@@ -149,31 +149,31 @@ areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"
 
 [[guides]]
-title = "Make sysinfo diagnostic plugin optional"
+title = "Make `sysinfo` diagnostic plugin optional"
 url = "https://github.com/bevyengine/bevy/pull/12164"
 areas = ["Diagnostics"]
 file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
 
 [[guides]]
-title = "Improve tracing layer customization"
+title = "Improve `tracing` layer customization"
 url = "https://github.com/bevyengine/bevy/pull/13159"
 areas = ["Diagnostics"]
 file_name = "13159_Improve_tracing_layer_customization.md"
 
 [[guides]]
-title = "Immediately apply deferred system params in System::run"
+title = "Immediately apply deferred system params in `System::run`"
 url = "https://github.com/bevyengine/bevy/pull/11823"
 areas = ["ECS"]
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[guides]]
-title = "Move commands module into bevy::ecs::world"
+title = "Move `Command` and `CommandQueue` into `bevy::ecs::world`"
 url = "https://github.com/bevyengine/bevy/pull/12234"
 areas = ["ECS"]
 file_name = "12234_Move_commands_module_into_bevyecsworld.md"
 
 [[guides]]
-title = "Remove ComponentStorage and associated types"
+title = "Make `Component::Storage` a constant"
 url = "https://github.com/bevyengine/bevy/pull/12311"
 areas = ["ECS"]
 file_name = "12311_Remove_ComponentStorage_and_associated_types.md"
