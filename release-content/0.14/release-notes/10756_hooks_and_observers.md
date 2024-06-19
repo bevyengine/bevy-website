@@ -43,6 +43,8 @@ or when you're taking advantage of observers' ability to emit triggers which are
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], make our hierarchy management more robust, create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
 These are powerful, abtract tools: we can't wait to see the mad science the community cooks up!
 
+When you're ready to get started, check out the [`component hooks`] and [`observers`] examples for the API details.
+
 [`Event`]: https://dev-docs.bevyengine.org/bevy/ecs/event/trait.Event.html
 [`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Added.html
 [`Changed`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Changed.html
@@ -52,4 +54,6 @@ These are powerful, abtract tools: we can't wait to see the mad science the comm
 [`Trigger`]: https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Trigger.html
 [replace `RemovedComponents`]: https://github.com/bevyengine/bevy/issues/13928
 [`bevy_eventlistener`]: https://github.com/aevyrie/bevy_eventlistener
-[build out relations]: https://github.com/bevyengine/rfcs/pull/79
+[build out relations]: https://github.com/bevyengine/rfcs/pull/
+[`component hooks`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/component_hooks.rs
+[`observers`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/observers.rs
