@@ -7,7 +7,7 @@ Responding to changes and/or processing events are vital tasks in any applicatio
 Bevy has accumulated a number of subtly distinct tools to handle this over the years, and in 0.14 is picking up two more.
 Let's quickly go over the existing tools to contextualize why adding more is useful:
 
-- Buffered [`Event`]s:multiple-producer, multiple-consumer queues. Flexible and efficient, but requires polling. Events are dropped after two frames.
+- Buffered [`Event`]s: multiple-producer, multiple-consumer queues. Flexible and efficient, but requires polling. Events are dropped after two frames.
 - Change detection via [`Added`] and [`Changed`]: Granular, automatic, great integration with queries. Linear time checks, no added data.
 - [`RemovedComponents`]: A special form of event that is triggered when a component is removed from an entity, or an entity with that component is despawned.
 
@@ -34,7 +34,7 @@ Only one hook per component type can be registered, and it cannot be overwritten
 It is intended for use by library authors, to strictly enforce invariants (such as hierarchy correctness) required to use that type.
 Hooks always run before observers.
 
-By contrast, observers are a flexible tool intended for gamplay logic.
+By contrast, observers are a flexible tool intended for gameplay logic.
 They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
 Observers can be attached to a single entity, listening only to triggers targeted at that entity (callbacks anyone?), but they can also be used to listen for triggers without an associated entity.
 Their advantages over buffered events are clearest when combined with commands that emit triggers (to avoid ever entering a bad state),
@@ -54,6 +54,6 @@ When you're ready to get started, check out the [`component hooks`] and [`observ
 [`Trigger`]: https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Trigger.html
 [replace `RemovedComponents`]: https://github.com/bevyengine/bevy/issues/13928
 [`bevy_eventlistener`]: https://github.com/aevyrie/bevy_eventlistener
-[build out relations]: https://github.com/bevyengine/rfcs/pull/
+[build out relations]: https://github.com/bevyengine/rfcs/pull/79
 [`component hooks`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/component_hooks.rs
 [`observers`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/observers.rs
