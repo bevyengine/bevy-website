@@ -24,7 +24,13 @@ file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md
 
 [[release_notes]]
 title = "New gizmos types"
-authors = ["@mweatherley", "@Kanabenki", "@MrGVSV", "@solis-lumine-vorago","@alice-i-cecile"]
+authors = [
+	"@mweatherley",
+	"@Kanabenki",
+	"@MrGVSV",
+	"@solis-lumine-vorago",
+	"@alice-i-cecile",
+]
 url = "https://github.com/bevyengine/bevy/pull/12211"
 file_name = "New_gizmos_types.md"
 
@@ -96,7 +102,15 @@ file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
 
 [[release_notes]]
 title = "New primitives"
-authors = ["@vitorfhc", "@Chubercik", "@andristarr", "@spectria-limina", "@salvadorcarvalhinho", "@aristaeus", "@mweatherley"]
+authors = [
+	"@vitorfhc",
+	"@Chubercik",
+	"@andristarr",
+	"@spectria-limina",
+	"@salvadorcarvalhinho",
+	"@aristaeus",
+	"@mweatherley",
+]
 url = "https://github.com/bevyengine/bevy/pull/12508"
 file_name = "new_math_primitives.md"
 
@@ -395,3 +409,9 @@ title = "Implement subpixel morphological antialiasing, or SMAA."
 authors = ["@pcwalton", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13423"
 file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
+
+[[release_notes]]
+title = "Hooks and Observers: responding to changes in the world"
+authors = ["@james-j-obrien", "@cart"]
+url = "https://github.com/bevyengine/bevy/pull/10839"
+file_name = "10756_hooks_and_observers.md"
