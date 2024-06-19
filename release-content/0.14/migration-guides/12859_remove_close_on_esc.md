@@ -1,4 +1,4 @@
-- Users who added `close_on_esc` in their application will have to replace it with their own solution.
+The `close_on_esc` system was removed because it was too opiniated and lacked customization. If you used this system, you may copy its contents below:
 
 ```rust
 pub fn close_on_esc(
@@ -17,3 +17,5 @@ pub fn close_on_esc(
     }
 }
 ```
+
+You may be interested in using the built-in keybinds provided by the operating system instead, such as <kbd>Alt+F4</kbd> and <kbd>Command+Q</kbd>.

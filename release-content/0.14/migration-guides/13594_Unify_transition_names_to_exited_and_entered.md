@@ -1,0 +1,1 @@
+`StateTransitionEvent`'s `before` and `after` fields have been renamed to `exited` and `entered` for consistency. You will have to update your usage if you access these fields or construct `StateTransitionEvent`.

@@ -10,7 +10,10 @@ Each command will generate files in the `/release-content/{release-version}` fol
 
 Each command have a `--from` and `--to` argument. You can pass it a Git branch, tag, or commit.
 
-Before running the command, you'll need to generate a GitHub API token at <https://github.com/settings/tokens>. It's easier to use classic tokens and you don't need any specific role, just the default is enough. Then add it to a file called `.env` like so:
+Before running the command, you'll need to generate a GitHub API token at <https://github.com/settings/tokens>. It's easier to use classic tokens.
+The token must have `repo` permissions to be able to open issues (and PRs) on your behalf.
+
+Then add it to a file called `.env` like so:
 
 ```env
 GITHUB_TOKEN=token_string_copied_from_github

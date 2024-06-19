@@ -1,3 +1,19 @@
-Added [AssetLoadError](https://docs.rs/bevy/latest/bevy/asset/enum.AssetLoadError.html) to [LoadState::Failed](https://docs.rs/bevy/latest/bevy/asset/enum.LoadState.html) option
-Removed `Copy`, `Ord` and `PartialOrd` implementations for [LoadState](https://docs.rs/bevy/latest/bevy/asset/enum.LoadState.html) enum
-Added `Eq` and `PartialEq` implementations for [MissingAssetSourceError](https://docs.rs/bevy/latest/bevy/asset/io/struct.MissingAssetSourceError.html), [MissingProcessedAssetReaderError](https://docs.rs/bevy/latest/bevy/asset/io/struct.MissingProcessedAssetReaderError.html), [DeserializeMetaError](https://docs.rs/bevy/latest/bevy/asset/enum.DeserializeMetaError.html), [LoadState](https://docs.rs/bevy/latest/bevy/asset/enum.LoadState.html), [AssetLoadError](https://docs.rs/bevy/latest/bevy/asset/enum.AssetLoadError.html), [MissingAssetLoaderForTypeNameError](https://docs.rs/bevy/latest/bevy/asset/struct.MissingAssetLoaderForTypeNameError.html) and [MissingAssetLoaderForTypeIdError](https://docs.rs/bevy/latest/bevy/asset/struct.MissingAssetLoaderForTypeIdError.html)
+Rust prides itself on its error handling, and Bevy has been steadily catching up. Previously, when checking if an asset was loaded using `AssetServer::load_state` (and variants), the only information returned on an error was the empty `LoadState::Failed`. Not very useful for debugging!
+
+Now, a full `AssetLoadError` is included inside `Failed` to tell you exactly what went wrong. You may need to update your `match` and `if let` statements to handle this new value:
+
+```rust
+// 0.13
+match asset_server.load_state(asset_id) {
+    // ...
+    LoadState::Failed => eprintln!("Could not load asset!"),
+}
+
+// 0.14
+match asset_server.load_state(asset_id) {
+    // ...
+    LoadState::Failed(error) => eprintln!("Could not load asset! Error: {}", error),
+}
+```
+
+Furthermore, the `Copy`, `PartialOrd`, and `Ord` implementations have been removed from `LoadState`. You can explicitly call `.clone()` instead of copying the enum, and you can manually re-implement `Ord` as a helper method if required.

@@ -1,0 +1,1 @@
+- Clustering-related types and functions (e.g. `assign_lights_to_clusters`) have moved under `bevy_pbr::cluster`, in preparation for the ability to cluster objects other than lights.

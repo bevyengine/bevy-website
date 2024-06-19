@@ -1,36 +1,25 @@
-- Several LoadContext method calls will need to be updated:
-  - `load_context.load_with_settings(path, settings)` => `load_context.loader().with_settings(settings).load(path)`
-  - `load_context.load_untyped(path)` => `load_context.loader().untyped().load(path)`
-  - `load_context.load_direct(path)` => `load_context.loader().direct().load(path)`
-  - `load_context.load_direct_untyped(path)` => `load_context.loader().direct().untyped().load(path)`
-  - `load_context.load_direct_with_settings(path, settings)` => `load_context.loader().with_settings(settings).direct().load(path)`
-  - `load_context.load_direct_with_reader(reader, path)` => `load_context.loader().direct().with_reader(reader).load(path)`
-  - `load_context.load_direct_with_reader_and_settings(reader, path, settings)` => `load_context.loader().with_settings(settings).direct().with_reader(reader).load(path)`
-  - `load_context.load_direct_untyped_with_reader(reader, path)` => `load_context.loader().direct().with_reader(reader).untyped().load(path)`
+<!-- Note: This is the migration guide for both #13465 AND #13415. -->
 
----
-
-CC @alice-i-cecile / @bushrat011899 
-
-Examples:
+`LoadContext`, used by `AssetLoader`, has been updated so all of its `load_*` methods have been merged into a builder struct.
 
 ```rust
-load_context.loader()
-    .with_asset_type::<A>()
-    .with_asset_type_id(TypeId::of::<A>())
-    .with_settings(|mut settings| { settings.key = value; })
-    // Then, for a Handle<A>:
-    .load::<A>()
-    // Or, for a Handle<LoadedUntypedAsset>:
-    .untyped()
-    .load()
-    // Or, to load an `A` directly:
-    .direct()
-    .load::<A>()
-    .await
-    // Or, to load an `ErasedLoadedAsset` directly:
-    .direct()
-    .untyped()
-    .load()
-    .await
+// 0.13
+load_context.load_direct(path);
+// 0.14
+load_context.loader().direct().untyped().load(path);
+
+// 0.13
+load_context.load_direct_with_reader(reader, path);
+// 0.14
+load_context.loader().direct().with_reader(reader).untyped().load(path);
+
+// 0.13
+load_context.load_untyped(path);
+// 0.14
+load_context.loader().untyped().load(path);
+
+// 0.13
+load_context.load_with_settings(path, settings);
+// 0.14
+load_context.loader().with_settings(settings).load(path);
 ```

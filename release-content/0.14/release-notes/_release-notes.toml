@@ -1,52 +1,32 @@
 [[release_notes]]
-title = "`bevy_color`: a beautiful color solution"
-authors = [
-	"@viridia",
-	"@alice-i-cecile",
-	"@Earthmark",
-	"@mockersf",
-	"@pablo-lua",
-	"@solis-lumine-vorago",
-	"@NthTensor",
-	"@bushrat001899",
-	"@rparrett",
-	"@afonsolage",
-	"@chompaa",
-	"@oyasumi731",
-    "@janhohenheim",
-]
+title = "Add support for KHR_texture_transform"
+authors = ["@janhohenheim", "@yrns", "@Kanabenki"]
+url = "https://github.com/bevyengine/bevy/pull/11904"
+file_name = "11904_Add_support_for_KHR_texture_transform.md"
+
+[[release_notes]]
+title = "Upstreaming bevy_color."
+authors = ["@viridia", "@mockersf"]
 url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "Immediately apply deferred system params in System::run"
-authors = ["@james7132","@alice-i-cecile"]
+title = "`Commands` and exclusive world access: working together in harmony"
+authors = ["@james7132", "@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/11823"
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[release_notes]]
 title = "Run the multi-threaded executor at the end of each system task."
-authors = ["@chescock","@hymm","@james7132"]
+authors = ["@chescock", "@james7132", "@hymm"]
 url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
-title = "Cubic splines overhaul"
-authors = ["@JohnTheCoolingFan","@Jondolf","@alice-i-cecile","@IQuick143","@NthTensor"]
-url = "https://github.com/bevyengine/bevy/pull/10701"
-file_name = "10701_Cubic_splines_overhaul.md"
-
-[[release_notes]]
-title = "Add coordinate axes gizmo"
-authors = ["@mweatherley"]
+title = "New gizmos types"
+authors = ["@mweatherley", "@Kanabenki", "@MrGVSV", "@solis-lumine-vorago","@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/12211"
-file_name = "12211_Add_coordinate_axes_gizmo.md"
-
-[[release_notes]]
-title = "Add basic light gizmos"
-authors = ["@Kanabenki","@MrGVSV"]
-url = "https://github.com/bevyengine/bevy/pull/12228"
-file_name = "12228_Add_basic_light_gizmos.md"
+file_name = "New_gizmos_types.md"
 
 [[release_notes]]
 title = "Decouple `BackgroundColor` from `UiImage`"
@@ -62,13 +42,13 @@ file_name = "12100_Add_WinitEvent_aggregate_event_for_synchronized_window_eve.md
 
 [[release_notes]]
 title = "bevy_reflect: Recursive registration"
-authors = ["@MrGVSV","@soqb","@cart","@james7132"]
+authors = ["@MrGVSV", "@soqb", "@cart", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/5781"
 file_name = "5781_bevy_reflect_Recursive_registration.md"
 
 [[release_notes]]
 title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
-authors = ["@pcwalton","@rparrett"]
+authors = ["@pcwalton", "@rparrett"]
 url = "https://github.com/bevyengine/bevy/pull/11989"
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
 
@@ -79,22 +59,10 @@ url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
 [[release_notes]]
-title = "Add `Rotation2d`"
-authors = ["@Jondolf","@IQuick143","@RobWalt","@tguichaoua"]
+title = "A new `Rotation2d` type"
+authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
 url = "https://github.com/bevyengine/bevy/pull/11658"
 file_name = "11658_Add_Rotation2d.md"
-
-[[release_notes]]
-title = "Gizmo line joints"
-authors = ["@solis-lumine-vorago","@pablo-lua"]
-url = "https://github.com/bevyengine/bevy/pull/12252"
-file_name = "12252_Gizmo_line_joints.md"
-
-[[release_notes]]
-title = "Gizmo 3d grids"
-authors = ["@solis-lumine-vorago","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12430"
-file_name = "12430_Gizmo_3d_grids.md"
 
 [[release_notes]]
 title = "Alignment API for Transforms"
@@ -103,68 +71,76 @@ url = "https://github.com/bevyengine/bevy/pull/12187"
 file_name = "12187_Alignment_API_for_Transforms.md"
 
 [[release_notes]]
-title = "Uniform point sampling methods for some primitive shapes."
-authors = ["@13ros27"]
+title = "Random sampling of shapes and directions"
+authors = ["@13ros27", "@mweatherley", "@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/12484"
 file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
 
 [[release_notes]]
 title = "Add pipeline statistics"
-authors = ["@LeshaInc","@alice-i-cecile"]
+authors = ["@LeshaInc", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/9135"
 file_name = "9135_Add_pipeline_statistics.md"
 
 [[release_notes]]
 title = "Add a gizmo-based overlay to show UI node outlines (Adopted)"
-authors = ["@pablo-lua","@alice-i-cecile","@nicopap"]
+authors = ["@pablo-lua", "@nicopap", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11237"
 file_name = "11237_Add_a_gizmobased_overlay_to_show_UI_node_outlines_Adopted.md"
 
 [[release_notes]]
 title = "Add border radius to UI nodes (adopted)"
-authors = ["@chompaa","@pablo-lua","@bushrat011899","@alice-i-cecile"]
+authors = ["@chompaa", "@pablo-lua", "@alice-i-cecile", "@bushrat011899"]
 url = "https://github.com/bevyengine/bevy/pull/12500"
 file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
 
 [[release_notes]]
-title = "Add `Triangle3d` primitive to `bevy_math::primitives`"
-authors = ["@vitorfhc","@NthTensor","@Jondolf"]
+title = "New primitives"
+authors = ["@vitorfhc", "@Chubercik", "@andristarr", "@spectria-limina", "@salvadorcarvalhinho", "@aristaeus", "@mweatherley"]
 url = "https://github.com/bevyengine/bevy/pull/12508"
-file_name = "12508_Add_Triangle3d_primitive_to_bevy_mathprimitives.md"
+file_name = "new_math_primitives.md"
 
 [[release_notes]]
 title = "Meshlet rendering (initial feature)"
-authors = ["@JMS55","@mockersf","@atlv24","@ricky26"]
+authors = ["@JMS55", "@atlv24", "@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/10164"
 file_name = "10164_Meshlet_rendering_initial_feature.md"
 
 [[release_notes]]
 title = "Get Bevy building for WebAssembly with multithreading"
-authors = ["@kettle11","@daxpedda","@mockersf","@alice-i-cecile"]
+authors = ["@kettle11", "@mockersf", "@alice-i-cecile", "@daxpedda"]
 url = "https://github.com/bevyengine/bevy/pull/12205"
 file_name = "12205_Get_Bevy_building_for_WebAssembly_with_multithreading.md"
 
 [[release_notes]]
-title = "Gizmo line styles"
-authors = ["@solis-lumine-vorago","@BD103"]
+title = "Gizmo line styles and joints"
+authors = ["@lynn-lumen", "@BD103"]
 url = "https://github.com/bevyengine/bevy/pull/12394"
 file_name = "12394_Gizmo_line_styles.md"
 
 [[release_notes]]
 title = "Move `Point` out of cubic splines module and expand it"
-authors = ["@mweatherley","@bushrat011899"]
+authors = [
+	"@mweatherley",
+	"@bushrat011899",
+	"@JohnTheCoolingFan",
+	"@NthTensor",
+	"@Jondolf",
+	"@IQuick143",
+	"@alice-i-cecile",
+]
 url = "https://github.com/bevyengine/bevy/pull/12747"
 file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
 
 [[release_notes]]
 title = "Support wireframes for 2D meshes"
-authors = ["@msvbg","@IceSentry"]
+authors = ["@msvbg", "@IceSentry"]
 url = "https://github.com/bevyengine/bevy/pull/12135"
 file_name = "12135_Support_wireframes_for_2D_meshes.md"
 
 [[release_notes]]
 title = "Improve performance by binning together opaque items instead of sorting them."
-authors = ["@pcwalton","@james7132"]
+authors = ["@pcwalton", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/12453"
 file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
 
@@ -175,19 +151,13 @@ url = "https://github.com/bevyengine/bevy/pull/12547"
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[release_notes]]
-title = "Add `Tetrahedron` primitive to `bevy_math::primitives`"
-authors = ["@Chubercik"]
-url = "https://github.com/bevyengine/bevy/pull/12688"
-file_name = "12688_Add_Tetrahedron_primitive_to_bevy_mathprimitives.md"
-
-[[release_notes]]
 title = "Add methods `iter_resources` and `iter_resources_mut`"
-authors = ["@matiqo15","@pablo-lua","@james7132","@alice-i-cecile"]
+authors = ["@matiqo15", "@james7132", "@alice-i-cecile", "@pablo-lua"]
 url = "https://github.com/bevyengine/bevy/pull/12829"
 file_name = "12829_Add_methods_iter_resources_and_iter_resources_mut.md"
 
 [[release_notes]]
-title = "Better information about why asset loading failed"
+title = "Error info has been added to LoadState::Failed"
 authors = ["@bugsweeper"]
 url = "https://github.com/bevyengine/bevy/pull/12709"
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
@@ -200,13 +170,13 @@ file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
 
 [[release_notes]]
 title = "Optimize Event Updates"
-authors = ["@james7132","@jdm","@alice-i-cecile"]
+authors = ["@james7132", "@alice-i-cecile", "@jdm"]
 url = "https://github.com/bevyengine/bevy/pull/12936"
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[release_notes]]
-title = "Make `AppExit` more specific about exit reason."
-authors = ["@Brezak","@alice-i-cecile"]
+title = "`AppExit` Errors"
+authors = ["@Brezak", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13022"
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
 
@@ -218,31 +188,25 @@ file_name = "10973_Contextually_clearing_gizmos.md"
 
 [[release_notes]]
 title = "Improve par_iter and Parallel"
-authors = ["@re0312","@james7132"]
+authors = ["@re0312", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/12904"
 file_name = "12904_Improve_par_iter_and_Parallel.md"
 
 [[release_notes]]
-title = "Meshlet continuous LOD"
-authors = ["@JMS55","@pcwalton","@ricky26","@mockersf","@atlv24"]
-url = "https://github.com/bevyengine/bevy/pull/12755"
-file_name = "12755_Meshlet_continuous_LOD.md"
-
-[[release_notes]]
-title = "Make dynamic_linking a no-op on wasm targets"
-authors = ["@james7132","@BD103"]
+title = "Make dynamic_linking a no-op on WASM targets"
+authors = ["@james7132", "@BD103"]
 url = "https://github.com/bevyengine/bevy/pull/12672"
 file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
 
 [[release_notes]]
 title = "Per-Object Motion Blur"
-authors = ["@aevyrie","@torsteingrindvik"]
+authors = ["@aevyrie", "@torsteingrindvik"]
 url = "https://github.com/bevyengine/bevy/pull/9924"
 file_name = "9924_PerObject_Motion_Blur.md"
 
 [[release_notes]]
 title = "Throttle render assets"
-authors = ["@robtfm","@IceSentry","@mockersf"]
+authors = ["@robtfm", "@IceSentry", "@mockersf"]
 url = "https://github.com/bevyengine/bevy/pull/12622"
 file_name = "12622_Throttle_render_assets.md"
 
@@ -253,38 +217,62 @@ url = "https://github.com/bevyengine/bevy/pull/12889"
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
-title = "Upgrade to Taffy 0.4"
-authors = ["@nicoburns"]
-url = "https://github.com/bevyengine/bevy/pull/10690"
-file_name = "10690_Upgrade_to_Taffy_04.md"
+title = "Implement filmic color grading."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13121"
+file_name = "13121_Implement_filmic_color_grading.md"
 
 [[release_notes]]
-title = "Computed States & SubStates"
-authors = ["@lee-orr", "@MiniaczQ", "@alice-i-cecile"]
+title = "Computed States & Sub States"
+authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11426"
-file_name = "11426_Computed_State__Sub_States.md"
+file_name = "11426_Computed_States__Sub_States.md"
 
 [[release_notes]]
-title = "Working groups"
-authors = ["@alice-i-cecile"]
+title = "State Identity Transitions"
+authors = ["@MiniaczQ", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_State_Identity_Transitions.md"
+
+[[release_notes]]
+title = "State Scoped Entities"
+authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13649"
+file_name = "13649_State_Scoped_Entities.md"
+
+[[release_notes]]
+title = "Implement visibility ranges, also known as hierarchical levels of detail (HLODs)."
+authors = ["@pcwalton", "@cart"]
+url = "https://github.com/bevyengine/bevy/pull/12916"
+file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
+
+[[release_notes]]
+title = "Add a process for working groups"
+authors = ["@alice-i-cecile", "@Jondolf"]
 url = "https://github.com/bevyengine/bevy/pull/13162"
 file_name = "13162_Add_a_process_for_working_groups.md"
 
 [[release_notes]]
 title = "Add BufferVec, an higher-performance alternative to StorageBuffer, and make GpuArrayBuffer use it."
-authors = ["@kristoff3r","@alice-i-cecile","@IceSentry","@pcwalton"]
+authors = ["@kristoff3r", "@IceSentry", "@alice-i-cecile", "@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13199"
 file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
 
 [[release_notes]]
+title = "Implement Auto Exposure plugin"
+authors = ["@Kurble", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/12792"
+file_name = "12792_Implement_Auto_Exposure_plugin.md"
+
+[[release_notes]]
 title = "Add `Annulus`-gizmos"
-authors = ["@solis-lumine-vorago"]
+authors = ["@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/13233"
 file_name = "13233_Add_Annulusgizmos.md"
 
 [[release_notes]]
 title = "Extrusion"
-authors = ["@solis-lumine-vorago","@alice-i-cecile"]
+authors = ["@lynn-lumen", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13270"
 file_name = "13270_Extrusion.md"
 
@@ -296,15 +284,21 @@ file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
 
 [[release_notes]]
 title = "Implement fast depth of field as a postprocessing effect."
-authors = ["@pcwalton","@Kurble","@alice-i-cecile"]
+authors = ["@pcwalton", "@alice-i-cecile", "@Kurble"]
 url = "https://github.com/bevyengine/bevy/pull/13009"
 file_name = "13009_Implement_fast_depth_of_field_as_a_postprocessing_effect.md"
 
 [[release_notes]]
 title = "Add Rounded box gizmos"
-authors = ["@solis-lumine-vorago","@jgayfer","@JMS55"]
+authors = ["@lynn-lumen", "@JMS55", "@jgayfer"]
 url = "https://github.com/bevyengine/bevy/pull/11948"
 file_name = "11948_Add_Rounded_box_gizmos.md"
+
+[[release_notes]]
+title = "#12502 Remove limit on RenderLayers."
+authors = ["@tychedelia", "@robtfm"]
+url = "https://github.com/bevyengine/bevy/pull/13317"
+file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[release_notes]]
 title = "Implement volumetric fog and volumetric lighting, also known as light shafts or god rays."
@@ -314,7 +308,7 @@ file_name = "13057_Implement_volumetric_fog_and_volumetric_lighting_also_know.md
 
 [[release_notes]]
 title = "Add `on_unimplemented` Diagnostics to Most Public Traits"
-authors = ["@bushrat011899","@alice-i-cecile","@Themayu","@BD103"]
+authors = ["@bushrat011899", "@alice-i-cecile", "@BD103", "@Themayu"]
 url = "https://github.com/bevyengine/bevy/pull/13347"
 file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
 
@@ -343,20 +337,61 @@ url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
 [[release_notes]]
-title = "Add `Distribution` access methods for `ShapeSample` trait"
-authors = ["@mweatherley"]
-url = "https://github.com/bevyengine/bevy/pull/13315"
-file_name = "13315_Add_Distribution_access_methods_for_ShapeSample_trait.md"
+title = "Implement opt-in sharp screen-space reflections for the deferred renderer, with improved raymarching code."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13418"
+file_name = "13418_Implement_optin_sharp_screenspace_reflections_for_the_defe.md"
 
 [[release_notes]]
-title = "New circular primitives: `Arc2d`, `CircularSector`, `CircularSegment`"
-authors = ["@aristaeus","@Jondolf","@spectria-limina","@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13482"
-file_name = "13482_New_circular_primitives_Arc2d_CircularSector_CircularSegme.md"
+title = "Implement motion vectors and TAA for skinned meshes and meshes with morph targets."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13572"
+file_name = "13572_Implement_motion_vectors_and_TAA_for_skinned_meshes_and_me.md"
 
 [[release_notes]]
-title = "Add support for KHR_texture_transform"
-authors = ["@janhohenheim"]
-url = "https://github.com/bevyengine/bevy/pull/11904"
-file_name = "11904_Add_support_for_KHR_texture_transform.md"
+title = "glTF labels: add enum to avoid misspelling and keep up-to-date list documented"
+authors = ["@mockersf", "@rparrett", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13586"
+file_name = "13586_glTF_labels_add_enum_to_avoid_misspelling_and_keep_uptodat.md"
 
+[[release_notes]]
+title = "fix: upgrade to winit v0.30"
+authors = ["@pietrosophya", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13366"
+file_name = "13366_fix_upgrade_to_winit_v030.md"
+
+[[release_notes]]
+title = "add handling of all missing gltf extras: scene, mesh & materials"
+authors = ["@kaosat-dev"]
+url = "https://github.com/bevyengine/bevy/pull/13453"
+file_name = "13453_add_handling_of_all_missing_gltf_extras_scene_mesh__materi.md"
+
+[[release_notes]]
+title = "Map entities from a resource when written to the world."
+authors = ["@brandon-reinhart"]
+url = "https://github.com/bevyengine/bevy/pull/13650"
+file_name = "13650_Map_entities_from_a_resource_when_written_to_the_world.md"
+
+[[release_notes]]
+title = "Normalise matrix naming"
+authors = ["@ricky26"]
+url = "https://github.com/bevyengine/bevy/pull/13489"
+file_name = "13489_Normalise_matrix_naming.md"
+
+[[release_notes]]
+title = "Added CompassQuadrant and CompassOctant as per #13647"
+authors = ["@BobG1983", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13653"
+file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
+
+[[release_notes]]
+title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13450"
+file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
+
+[[release_notes]]
+title = "Implement subpixel morphological antialiasing, or SMAA."
+authors = ["@pcwalton", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13423"
+file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"

@@ -1,1 +1,1 @@
-Every custom reader (which previously only needed the `AsyncRead` trait implemented) now also needs to implement the `AsyncSeek` trait to add the seek capability.
+The asset loader's `Reader` type alias now requires the new `AsyncSeek` trait. Please implement `AsyncSeek` for any structures that must be a `Reader`, or use an alternative if seeking is not supported.

@@ -1,1 +1,1 @@
-- `MaterialPlugin` now has a `shadows_enabled` setting, if you didn’t spawn the plugin using `::default()` or `..default()`, you’ll need to set it. `shadows_enabled: true` is the same behavior as the previous version, and also the default value.
+`MaterialPlugin` now has a `shadows_enabled` setting, if you didn’t spawn the plugin using `::default()` or `..default()`, you’ll need to set it. `shadows_enabled: true` is the same behavior as the previous version, and also the default value.

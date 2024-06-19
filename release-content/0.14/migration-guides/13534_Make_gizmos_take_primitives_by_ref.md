@@ -1,0 +1,1 @@
+- Any usages of `gizmos.primitive_2d()` and/or `gizmos.primitive_3d()` need to be updated to pass the primitive in by reference.
