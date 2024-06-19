@@ -60,7 +60,7 @@ This can lead to all sorts of bizarre bugs: fun for speedrunners, but not for ga
 Instead, we can set up a hook on the `Targetable` component: whenever it is despawned, go through the list of entities stored in the `targeted_by` field and set their `Target` to `None`.
 Because adding and removing components can only be done in the context of exclusive world access, hooks are always run *immediately*, leaving no opportunity for desynchronization.
 
-In the future, we intend to use hooks and observers to [replace `RemovedComponents`], make our hierarchy management more robust, create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
+In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
 These are powerful, abstract tools: we can't wait to see the mad science the community cooks up!
 
 When you're ready to get started, check out the [`component hooks`] and [`observers`] examples for the API details.
@@ -74,6 +74,7 @@ When you're ready to get started, check out the [`component hooks`] and [`observ
 [`Trigger`]: https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Trigger.html
 [cleverness]: https://github.com/bevyengine/bevy/issues/1634
 [replace `RemovedComponents`]: https://github.com/bevyengine/bevy/issues/13928
+[make our hierarchy management more robust]: https://github.com/bevyengine/bevy/issues/12235
 [`bevy_eventlistener`]: https://github.com/aevyrie/bevy_eventlistener
 [build out relations]: https://github.com/bevyengine/rfcs/pull/79
 [`component hooks`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/component_hooks.rs
