@@ -30,9 +30,14 @@ To overcome these limitations, Bevy 0.14 introduces two complementary "push"-sty
 1. [**Component Lifecycle Hooks:**](https://dev-docs.bevyengine.org/bevy/ecs/component/struct.ComponentHooks.html) Mutations to the world that automatically occur in response to **lifecycle events**: whenever a component of the given type is added, overwritten or removed.
 2. [**Observers:**](https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Observer.html) On-demand systems that listen to [`Trigger`] events, which commonly target specific entities. These systems are run sequentially and recursively at the next command flush point in response to a trigger being sent.
 
+While hooks are most comparable to constructors and destructors, observers should be used in a manner closer to flexible callbacks.
+Hooks are about fundamental behaviors of a type, while observers are for the business logic layered on top.
+Let's take a look at the details.
+
 Only one hook per component type can be registered, and it cannot be overwritten.
-These are intended for enforcing lower level ECS invariants required to use components (Eg. hierarchy correctness). They're comparable to constructors and destructors. These will typically be used by library authors.
-Hooks always run before observers.
+These are intended for enforcing lower level ECS invariants required to use components (e.g. hierarchy correctness).
+Hooks always run before observers and cannot be removed and so are more suitable for maintaining critical safety or correctness invariants.
+Additionally, hooks are somewhat faster than observers, as their reduced flexibility means that fewer lookups are involved.
 
 By contrast, observers are a flexible tool intended for gameplay logic.
 They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
