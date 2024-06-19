@@ -69,14 +69,12 @@ impl Component for Targetable {
         component_hooks.on_remove(|mut world, targeted_entity, _component_id|{
             // Grab the data that's about to be removed
             let targetable = world.get::<Targetable>(targeted_entity).unwrap();
-
             for targeting_entity in targetable.targeted_by {
                 // Track down the entity that's targeting us
                 let mut targeting = world.get::<Targeting>(targeting_entity).unwrap();
                 // And clear its target, cleaning up any dangling references
                 targeting.0 = None;
             }
-
         })
     }
 }
@@ -87,13 +85,37 @@ Because adding and removing components can only be done in the context of exclus
 By contrast, observers are a flexible tool intended for gameplay logic.
 They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
 Observers can be attached to a single entity, listening only to triggers targeted at that entity (callbacks anyone?), but they can also be used to listen for triggers without an associated entity.
-Their advantages over buffered events are clearest when combined with commands that emit triggers (to avoid ever entering a bad state),
+Their advantages over buffered events are clearest when you're targeting a specific entity,
+when combined with commands that emit triggers (to avoid ever entering a bad state),
 or when you're taking advantage of observers' ability to emit triggers which are then immediately processed, chaining recursively.
+
+Let's see how they're used:
+
+```rust
+use bevy_ecs::prelude::*;
+
+#[derive(Event)]
+struct MyEvent {
+    message: String
+}
+
+let mut world = World::new();
+
+world.observe(|trigger: Trigger<MyEvent>| {
+    println!("{}", trigger.event().message);
+});
+
+world.flush();
+
+world.trigger(MyEvent {
+    message: "hello!".to_string(),
+});
+```
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
 These are powerful, abstract tools: we can't wait to see the mad science the community cooks up!
 
-When you're ready to get started, check out the [`component hooks`] and [`observers`] examples for the API details.
+When you're ready to get started, check out the [`component hooks`] and [`observers`] examples for more API details.
 
 [`Event`]: https://dev-docs.bevyengine.org/bevy/ecs/event/trait.Event.html
 [`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Added.html
