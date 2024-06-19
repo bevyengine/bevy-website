@@ -13,7 +13,7 @@ impl Plugin for MyPlugin {
 // This would be compiled into the main binary.
 App::new()
     .load_plugin("path/to/plugin")
-    .run();
+    .run()
 
 // 0.14
 // This would now be compiled into the main binary as well.
@@ -25,7 +25,7 @@ impl Plugin for MyPlugin {
 
 App::new()
     .add_plugins(MyPlugin)
-    .run();
+    .run()
 ```
 
 If you are unable to do that, you may temporarily silence the deprecation warnings by annotating all usage with `#[allow(deprecated)]`. Please note that the current dynamic plugin system will be removed by the next major Bevy release, so you will have to migrate eventually. You may be interested in these safer, related links:

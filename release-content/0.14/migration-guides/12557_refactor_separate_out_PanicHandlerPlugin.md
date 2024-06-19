@@ -5,5 +5,5 @@ If you want nicer error messages on WASM but don't use `DefaultPlugins`, make su
 ```rust
 App::new()
     .add_plugins((MinimalPlugins, PanicHandlerPlugin))
-    .run();
+    .run()
 ```

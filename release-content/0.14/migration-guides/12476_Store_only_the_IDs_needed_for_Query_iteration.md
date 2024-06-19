@@ -1,1 +1,1 @@
-`QueryState::matched_tables` and `QueryState::matched_archetypes` does not return a reference to a slice, but an iterator instead. You may need to use iterator combinators or collect them into a Vec to use it as a slice.
+`QueryState::matched_tables` and `QueryState::matched_archetypes` now return iterators instead of slices. If possible use the combinators available from the `Iterator` class, but worst-case-scenario you may call `Iterator::collect()` into a `Vec`, which can then be dereferenced into a slice.

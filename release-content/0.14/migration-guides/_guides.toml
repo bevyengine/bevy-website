@@ -185,55 +185,49 @@ areas = ["ECS", "Reflection"]
 file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
-title = "Remove archetype_component_access from QueryState"
+title = "Don't store `Access<ArchetypeComponentId>` within `QueryState`"
 url = "https://github.com/bevyengine/bevy/pull/12474"
 areas = ["ECS"]
 file_name = "12474_Remove_archetype_component_access_from_QueryState.md"
 
 [[guides]]
-title = "Remove WorldCell"
+title = "Remove `WorldCell`"
 url = "https://github.com/bevyengine/bevy/pull/12551"
 areas = ["ECS"]
 file_name = "12551_Remove_WorldCell.md"
 
 [[guides]]
-title = "Allow Commands to register systems"
-url = "https://github.com/bevyengine/bevy/pull/11019"
-areas = ["ECS"]
-file_name = "11019_Allow_Commands_to_register_systems.md"
-
-[[guides]]
-title = "Store only the IDs needed for Query iteration"
+title = "Return iterator instead of slice for `QueryState::matched_tables` and `QueryState::matches_archtypes`"
 url = "https://github.com/bevyengine/bevy/pull/12476"
 areas = ["ECS"]
 file_name = "12476_Store_only_the_IDs_needed_for_Query_iteration.md"
 
 [[guides]]
-title = "Remove stepping from default features"
+title = "Remove system stepping from default features"
 url = "https://github.com/bevyengine/bevy/pull/12847"
 areas = ["ECS"]
 file_name = "12847_Remove_stepping_from_default_features.md"
 
 [[guides]]
-title = "Optimize Event Updates"
+title = "Optimize event updates and virtual time"
 url = "https://github.com/bevyengine/bevy/pull/12936"
 areas = ["ECS"]
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[guides]]
-title = "Make SystemParam::new_archetype and QueryState::new_archetype unsafe functions"
+title = "Make `SystemParam::new_archetype` and `QueryState::new_archetype` unsafe"
 url = "https://github.com/bevyengine/bevy/pull/13044"
 areas = ["ECS"]
 file_name = "13044_Make_SystemParamnew_archetype_and_QueryStatenew_archetype_.md"
 
 [[guides]]
-title = "Better SystemId to Entity conversions"
+title = "Better `SystemId` and `Entity` conversion"
 url = "https://github.com/bevyengine/bevy/pull/13090"
 areas = ["ECS"]
 file_name = "13090_Better_SystemId_to_Entity_conversions.md"
 
 [[guides]]
-title = "Computed State & Sub States"
+title = "Make `NextState` an enum"
 url = "https://github.com/bevyengine/bevy/pull/11426"
 areas = ["ECS"]
 file_name = "11426_Computed_State__Sub_States.md"

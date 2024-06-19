@@ -4,14 +4,14 @@
 // 0.13
 App::new()
     .init_state::<MyState>()
-    .run();
+    .run()
 
 // 0.14
 use bevy::state::app::AppExtStates as _;
 
 App::new()
     .init_state::<MyState>()
-    .run();
+    .run()
 ```
 
 If you import the prelude (such as with `use bevy::prelude::*`), you do not need to do this.
