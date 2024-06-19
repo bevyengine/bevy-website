@@ -64,9 +64,9 @@ Let's see what this looks like with a hook on `Targetable`:
 impl Component for Targetable {
     const STORAGE_TYPE: StorageType = StorageType::Table;
 
-    fn register_component_hooks(_hooks: &mut ComponentHooks) {
+    fn register_component_hooks(hooks: &mut ComponentHooks) {
         // Whenever this component is removed, or an entity with this component is respawned...
-        component_hooks.on_remove(|mut world, targeted_entity, _component_id|{
+        hooks.on_remove(|mut world, targeted_entity, _component_id|{
             // Grab the data that's about to be removed
             let targetable = world.get::<Targetable>(targeted_entity).unwrap();
             for targeting_entity in targetable.targeted_by {
