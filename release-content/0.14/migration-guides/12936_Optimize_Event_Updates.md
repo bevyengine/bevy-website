@@ -1,4 +1,4 @@
-`Events::update()` has been optimized to be $O(1)$ for the amount of events registered. In doing so, a few systems and run conditions have been changed.
+`Events::update()` has been optimized to be `O(1)` for the amount of events registered. In doing so, a few systems and run conditions have been changed.
 
 Events are registered to a `World` using `EventRegistry` instead of the `Events` resource:
 
