@@ -257,7 +257,7 @@ areas = ["ECS"]
 file_name = "13594_Unify_transition_names_to_exited_and_entered.md"
 
 [[guides]]
-title = "Combine transition systems of `Substates`"
+title = "Make `apply_state_transition` private"
 url = "https://github.com/bevyengine/bevy/pull/13626"
 areas = ["ECS"]
 file_name = "13626_Combine_transition_systems_of_Substates.md"
