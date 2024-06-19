@@ -40,6 +40,26 @@ Observers can be attached to a single entity, listening only to triggers targete
 Their advantages over buffered events are clearest when combined with commands that emit triggers (to avoid ever entering a bad state),
 or when you're taking advantage of observers' ability to emit triggers which are then immediately processed, chaining recursively.
 
+Let's examine a simple example where we care about maintaining invariants: trying to target a specific `Enemy`.
+
+```rust
+#[derive(Component)]
+struct Target(Option<Entity>);
+
+#[derive(Component)]
+struct Targetable {
+    targeted_by: Vec<Entity>
+};
+```
+
+Suppose, through custom commands, [cleverness] or sheer diligence, that `Target` only ever contains entities with the `Targetable` component (at the time of const).
+We want to automatically clear the target when it's despawned (or made untargetable): how do we do this?
+
+If we use a pull-based approach (`RemovedComponents` is the most natural here), there can be gaps (within a single frame) between the entity being despawned and the `Target` component being updated.
+This can lead to all sorts of bizarre bugs: fun for speedrunners, but not for game developers.
+Instead, we can set up a hook on the `Targetable` component: whenever it is despawned, go through the list of entities stored in the `targeted_by` field and set their `Target` to `None`.
+Because adding and removing components can only be done in the context of exclusive world access, hooks are always run *immediately*, leaving no opportunity for desynchronization.
+
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], make our hierarchy management more robust, create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
 These are powerful, abstract tools: we can't wait to see the mad science the community cooks up!
 
@@ -52,6 +72,7 @@ When you're ready to get started, check out the [`component hooks`] and [`observ
 ["pull"-style mechanism]: https://dev.to/anubhavitis/push-vs-pull-api-architecture-1djo
 [flecs]: https://www.flecs.dev/flecs/
 [`Trigger`]: https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Trigger.html
+[cleverness]: https://github.com/bevyengine/bevy/issues/1634
 [replace `RemovedComponents`]: https://github.com/bevyengine/bevy/issues/13928
 [`bevy_eventlistener`]: https://github.com/aevyrie/bevy_eventlistener
 [build out relations]: https://github.com/bevyengine/rfcs/pull/79
