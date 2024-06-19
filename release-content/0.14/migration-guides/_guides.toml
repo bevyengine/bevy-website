@@ -239,7 +239,7 @@ areas = ["ECS"]
 file_name = "11426_Computed_State__Sub_States.md"
 
 [[guides]]
-title = "Separate state crate"
+title = "Separate states from core ECS"
 url = "https://github.com/bevyengine/bevy/pull/13216"
 areas = ["ECS"]
 file_name = "13216_Separate_state_crate.md"
