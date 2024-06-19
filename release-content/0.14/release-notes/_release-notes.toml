@@ -54,7 +54,7 @@ file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md
 
 [[release_notes]]
 title = "Query Joins"
-authors = ["@hymm", "@alice-i-cecile"]
+authors = ["@hymm"]
 url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
