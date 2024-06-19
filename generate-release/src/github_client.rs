@@ -6,6 +6,7 @@ use std::{
 use anyhow::bail;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::Deserialize;
+use thiserror::Error;
 use ureq::Response;
 
 /// A GitHub repository in the `bevyengine` organization.
@@ -31,25 +32,13 @@ impl Display for BevyRepo {
 }
 
 #[derive(Deserialize, Clone, Debug)]
-pub struct GithubBranchesResponse {
-    pub name: String,
-    pub commit: GithubBranchesCommitResponse,
-}
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubBranchesCommitResponse {
-    pub sha: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
 pub struct GithubCommitResponse {
     pub sha: String,
     pub commit: GithubCommitContent,
-    pub author: Option<GithubUser>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Committer {
-    pub name: String,
     pub date: String,
 }
 
@@ -73,40 +62,13 @@ pub struct GithubUser {
 }
 
 #[derive(Deserialize, Clone, Debug)]
-pub struct GithubCommitBranchResponse {
-    pub name: String,
-    pub commit: GithubCommitBranchCommitResponse,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubCommitBranchCommitResponse {
-    pub sha: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubPullRequestResponse {
-    pub title: String,
-    pub number: i32,
-    pub body: Option<String>,
-    pub labels: Vec<GithubLabel>,
-    pub user: GithubUser,
-    pub closed_at: DateTime<Utc>,
-}
-
-#[derive(Deserialize, Clone, Debug)]
 pub struct GithubCompareResponse {
-    pub base_commit: GithubCommitResponse,
     pub commits: Vec<GithubCommitResponse>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubLabel {
     pub name: String,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct GithubUserSearchResponse {
-    pub items: Vec<GithubUser>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
@@ -444,23 +406,14 @@ query {{
 }
 
 /// An issue that occurred while opening an issue on Github.
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum IssueError {
-    Ureq(ureq::Error),
+    #[error("error making request")]
+    Ureq(#[from] ureq::Error),
+    #[error("failed to create issue")]
     FailedToCreateIssue(Response),
-    FailedToParseResponse(std::io::Error),
-}
-
-impl From<ureq::Error> for IssueError {
-    fn from(err: ureq::Error) -> Self {
-        IssueError::Ureq(err)
-    }
-}
-
-impl From<std::io::Error> for IssueError {
-    fn from(err: std::io::Error) -> Self {
-        IssueError::FailedToParseResponse(err)
-    }
+    #[error("failed to parse response")]
+    FailedToParseResponse(#[from] std::io::Error),
 }
 
 /// The status of an issue or PR on Github.

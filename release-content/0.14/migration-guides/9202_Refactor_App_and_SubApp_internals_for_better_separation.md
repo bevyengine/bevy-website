@@ -5,7 +5,7 @@
 `SubApp` no longer contains an `App`, so you no longer are able to convert an `App` into a `SubApp`. Furthermore, the extraction function must now be set outside of the constructor.
 
 ```rust
-// Before
+// 0.13
 #[derive(AppLabel, Clone, Copy, Hash, PartialEq, Eq, Debug)]
 struct MySubApp;
 
@@ -19,7 +19,7 @@ app.insert_sub_app(MySubApp, SubApp::new(sub_app, |main_world, sub_app| {
     // Extraction function.
 }));
 
-// After
+// 0.14
 #[derive(AppLabel, Clone, Copy, Hash, PartialEq, Eq, Debug)]
 struct MySubApp;
 
@@ -52,12 +52,12 @@ First, `App::world` as a property is no longer directly accessible. Instead use 
 #[derive(Component)]
 struct MyComponent;
 
-// Before
+// 0.13
 let mut app = App::new();
 println!("{:?}", app.world.id());
 app.world.spawn(MyComponent);
 
-// After
+// 0.14
 let mut app = App::new();
 println!("{:?}", app.world().id()); // Notice the added paranthesese.
 app.world_mut().spawn(MyComponent);
