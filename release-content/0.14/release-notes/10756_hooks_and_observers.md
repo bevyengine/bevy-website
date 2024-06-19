@@ -84,31 +84,82 @@ Because adding and removing components can only be done in the context of exclus
 
 By contrast, observers are a flexible tool intended for gameplay logic.
 They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
-Observers can be attached to a single entity, listening only to triggers targeted at that entity (callbacks anyone?), but they can also be used to listen for triggers without an associated entity.
 Their advantages over buffered events are clearest when you're targeting a specific entity,
 when combined with commands that emit triggers (to avoid ever entering a bad state),
 or when you're taking advantage of observers' ability to emit triggers which are then immediately processed, chaining recursively.
 
-Let's see how they're used:
+Let's examine the API through a simple gameplay-flavored example:
 
 ```rust
-use bevy_ecs::prelude::*;
-
+// Any event type can be used as a trigger
 #[derive(Event)]
-struct MyEvent {
-    message: String
+struct DealDamage {
+    damage: u8
 }
 
-let mut world = World::new();
+#[derive(Event)]
+struct LoseLife {
+    life_lost: u8,
+}
 
-world.observe(|trigger: Trigger<MyEvent>| {
-    println!("{}", trigger.event().message);
-});
+#[derive(EVent)]
+struct PlayerDeath;
 
-world.flush();
+// Observers are stored as components on entities,
+// and can be set up to watch specific entities.
+fn spawn_player(mut commands: Commands){
+    let player_entity = commands
+        // Setting up some ordinary components
+        .spawn((Player, Life(10), Defense(2))).id();
 
-world.trigger(MyEvent {
-    message: "hello!".to_string(),
+    // Now, we're adding some callback-style behavior using observers,
+    // watching the entity itself.
+    // By attaching the observer to the entity it's watching, we ensure that it gets cleaned up.
+    commands.insert(Observer::new(respond_to_damage_taken).with_entity(player_entity));
+    commands.insert(Observer::new(respond_to_life_lost).with_entity(player_entity));
+}
+
+// We can send triggers using commands (or methods on `World`)
+fn attack_player(monster_query: Query<&Damage, With<Monster>>, player_query: Query<Entity, With<Player>>, mut commands: Commands){
+    let player_entity = player_query.single();
+    
+    for damage in monster_query {
+        // We could target multiple entities here just as easily!
+        commands.trigger_targets(DealDamage {damage}, player_entity);
+    }
+}
+
+// Observers use system syntax, with a special `Trigger` parameter as the first param,
+// and can request any other `SystemParam` from the world
+fn respond_to_damage_taken(trigger: Trigger<DealDamage>, query: Query<&Defense>, mut commands: Commands){
+    // We can access information about the entity responding to the event by reading data from the trigger,
+    // and combining it with additional queries
+    let defense = query.get(trigger.entity).unwrap_or_default();
+    let damage = trigger.event().damage;
+    let life_lost = damage.0.saturating_sub(defense.0);
+    // Observers can be chained into each other, by sending more triggers using commands
+    commands.trigger_targets(trigger.entity)
+}
+
+fn respond_to_losing_life(trigger: Trigger<LoseLife>, mut life_query: Query<&mut Life>, player_query: Query<Entity, With<Player>>, mut commands: Commands){
+    let mut life = life_query.single_mut(trigger.entity);
+    let life_lost = trigger.event().life_lost;
+    life.0 = life.0.saturating_sub(life_lost);
+
+    if player_query.contains(trigger.entity){
+        // Triggers can be sent globally, targeting no entity in particular
+        commands.trigger(PlayerDeath);
+    }
+}
+
+app
+    .add_systems(Startup, spawn_player)
+    .add_systems(Update, attack_player)
+    // Similarly, observers can also be registered globally, listening to any matching event,
+    // regardless of its entity target
+    .observe(|_trigger: Trigger<PlayerDeath>, app_exit: EventWriter<AppExit>|{
+        println!("You died. Game over!")
+        app_exit.send_default();    
 });
 ```
 
