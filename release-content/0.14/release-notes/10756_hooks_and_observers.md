@@ -62,7 +62,32 @@ We want to automatically clear the target when it's despawned (or made untargeta
 
 If we use a pull-based approach (`RemovedComponents` is the most natural here), there can be gaps (within a single frame) between the entity being despawned and the `Target` component being updated.
 This can lead to all sorts of bizarre bugs: fun for speedrunners, but not for game developers.
-Instead, we can set up a hook on the `Targetable` component: whenever it is despawned, go through the list of entities stored in the `targeted_by` field and set their `Target` to `None`.
+
+Let's see what this looks like with a hook on `Targetable`:
+
+```rust
+// Rather than a derive, let's configure the hooks with a custom implementation of Component
+impl Component for Targetable {
+    const STORAGE_TYPE: StorageType = StorageType::Table;
+
+    fn register_component_hooks(_hooks: &mut ComponentHooks) {
+        // Whenever this component is removed, or an entity with this component is respawned...
+        component_hooks.on_remove(|mut world, targeted_entity, _component_id|{
+            // Grab the data that's about to be removed
+            let targetable = world.get::<Targetable>(targeted_entity).unwrap();
+
+            for targeting_entity in targetable.targeted_by {
+                // Track down the entity that's targeting us
+                let mut targeting = world.get::<Targeting>(targeting_entity).unwrap();
+                // And clear its target, cleaning up any dangling references
+                targeting.0 = None;
+            }
+
+        })
+    }
+}
+```
+
 Because adding and removing components can only be done in the context of exclusive world access, hooks are always run *immediately*, leaving no opportunity for desynchronization.
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
