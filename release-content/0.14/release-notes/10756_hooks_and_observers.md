@@ -31,6 +31,7 @@ To overcome these limitations, Bevy 0.14 introduces two complementary "push"-sty
 2. [**Observers:**](https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Observer.html) On-demand systems that listen to [`Trigger`] events, which commonly target specific entities. These systems are run sequentially and recursively at the next command flush point in response to a trigger being sent.
 
 While hooks are most comparable to constructors and destructors, observers should be used in a manner closer to flexible callbacks.
+Hooks are about fundamental behaviors of a type, while observers are for the business logic layered on top.
 Let's take a look at the details.
 
 Only one hook per component type can be registered, and it cannot be overwritten.
