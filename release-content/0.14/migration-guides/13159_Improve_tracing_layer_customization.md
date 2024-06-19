@@ -1,4 +1,4 @@
-Bevy uses `tracing` to handle logging and spans through `LogPlugin`. This could be customized with the `update_subscriber` field, but it was highly restrictive. This has since been amended, replacing the `update_subscriber` field with the more flexible `custom_layer`, which returns a `Layer`.
+Bevy uses `tracing` to handle logging and spans through `LogPlugin`. This could be customized with the `update_subscriber` field, but it was highly restrictive. This has since been amended, replacing the `update_subscriber` field with the more flexible `custom_layer`. which returns a `Layer`.
 
 ```rust
 // 0.13
