@@ -25,13 +25,20 @@
       </div>
       <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
     </div>
+    
     <div class="example__code media-content">
+      {% set filename = page.extra.code_path | split(pat="/") | last %}
+      {{ filename }}:
+      
       {% set code = load_data(path=page.extra.code_path) %}
       {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
       {{ code_md | markdown(inline=true) | safe }}
     </div>
     {% for shader in page.extra.shader_code_paths %}
       <div class="example__code media-content">
+        {% set filename = shader | split(pat="/") | last %}
+        {{ filename }}:
+
         {% set code = load_data(path="static/assets/examples/" ~ shader) %}
         {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
         {{ code_md | markdown(inline=true) | safe }}
