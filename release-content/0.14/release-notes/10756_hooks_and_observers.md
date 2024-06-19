@@ -7,7 +7,7 @@ Responding to changes and/or processing events are vital tasks in any applicatio
 Bevy has accumulated a number of subtly distinct tools to handle this over the years, and in 0.14 is picking up two more.
 Let's quickly go over the existing tools to contextualize why adding more is useful:
 
-- Buffered [`Event`]s: multiple-producer, multiple-consumer queues. Flexible and efficient, but requires polling. Events are dropped after two frames.
+- Buffered [`Event`]s: multiple-producer, multiple-consumer queues. Flexible and efficient, but requires regular polling as part of a schedule. Events are dropped after two frames.
 - Change detection via [`Added`] and [`Changed`]: Granular, automatic, great integration with queries. Linear time checks, no added data.
 - [`RemovedComponents`]: A special form of event that is triggered when a component is removed from an entity, or an entity with that component is despawned.
 
