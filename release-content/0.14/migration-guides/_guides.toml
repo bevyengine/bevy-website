@@ -245,7 +245,7 @@ areas = ["ECS"]
 file_name = "13216_Separate_state_crate.md"
 
 [[guides]]
-title = "constrain WorldQuery::get_state to only use &Components"
+title = "Constrain `WorldQuery::get_state()` to only accept `Components`"
 url = "https://github.com/bevyengine/bevy/pull/13343"
 areas = ["ECS"]
 file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
