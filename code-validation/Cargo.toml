@@ -1,13 +1,13 @@
 [package]
 name = "code-validation"
-version = "0.1.0"
 edition = "2021"
+publish = false
 
 [dependencies]
-# This should point to `main` when we are preparing for the next release,
-# but should be fixed at the latest release once it is published on crates.io
-bevy = "0.13"
-# bevy = { git = "https://github.com/bevyengine/bevy" }
+# This should normally point towards the latest stable Bevy release (such as `0.14`). When
+# preparing for a new release, this should be updated to point towards the latest release
+# candidate (such as `0.15.0-rc.1`).
+bevy = "0.14.0-rc.2"
 
 [lints]
 workspace = true

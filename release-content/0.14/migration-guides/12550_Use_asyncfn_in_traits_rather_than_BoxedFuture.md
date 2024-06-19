@@ -9,7 +9,7 @@ In Rust 1.75, [`async fn` was stabilized for traits](https://blog.rust-lang.org/
 Please update your trait implementations:
 
 ```rust
-// Before
+// 0.13
 impl AssetLoader for MyAssetLoader {
     // ...
 
@@ -28,7 +28,7 @@ impl AssetLoader for MyAssetLoader {
     }
 }
 
-// After
+// 0.14
 impl AssetLoader for MyAssetLoader {
     // ...
 
@@ -49,9 +49,9 @@ impl AssetLoader for MyAssetLoader {
 Because these traits now use `async`, they are no longer object safe. If you need to receive or store `&dyn Trait`, use the `&dyn ErasedTrait` variant instead. For instance:
 
 ```rust
-// Before
+// 0.13
 struct MyReader(Box<dyn AssetReader>);
 
-// After
+// 0.14
 struct MyReader(Box<dyn ErasedAssetReader>);
 ```

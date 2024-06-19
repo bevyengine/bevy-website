@@ -1,7 +1,7 @@
 It was previously possible to multiply and divide a `Color` by an `f32`, which is now removed. You must now operate on a specific color space, such as `LinearRgba`. Furthermore, these operations used to skip the alpha channel, but that is no longer the case.
 
 ```rust
-// Before
+// 0.13
 let color = Color::RgbaLinear {
     red: 1.0,
     green: 1.0,
@@ -12,7 +12,7 @@ let color = Color::RgbaLinear {
 // Alpha is preserved, ignoring the multiplier.
 assert_eq!(color.a(), 1.0);
 
-// After
+// 0.14
 let color = LinearRgba {
     red: 1.0,
     green: 1.0,

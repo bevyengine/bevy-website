@@ -3,23 +3,23 @@
 `LoadContext`, used by `AssetLoader`, has been updated so all of its `load_*` methods have been merged into a builder struct.
 
 ```rust
-// Before
+// 0.13
 load_context.load_direct(path);
-// After
+// 0.14
 load_context.loader().direct().untyped().load(path);
 
-// Before
+// 0.13
 load_context.load_direct_with_reader(reader, path);
-// After
+// 0.14
 load_context.loader().direct().with_reader(reader).untyped().load(path);
 
-// Before
+// 0.13
 load_context.load_untyped(path);
-// After
+// 0.14
 load_context.loader().untyped().load(path);
 
-// Before
+// 0.13
 load_context.load_with_settings(path, settings);
-// After
+// 0.14
 load_context.loader().with_settings(settings).load(path);
 ```

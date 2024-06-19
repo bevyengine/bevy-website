@@ -24,7 +24,13 @@ file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md
 
 [[release_notes]]
 title = "New gizmos types"
-authors = ["@mweatherley", "@Kanabenki", "@MrGVSV", "@solis-lumine-vorago","@alice-i-cecile"]
+authors = [
+	"@mweatherley",
+	"@Kanabenki",
+	"@MrGVSV",
+	"@solis-lumine-vorago",
+	"@alice-i-cecile",
+]
 url = "https://github.com/bevyengine/bevy/pull/12211"
 file_name = "New_gizmos_types.md"
 
@@ -54,7 +60,7 @@ file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md
 
 [[release_notes]]
 title = "Query Joins"
-authors = ["@hymm", "@alice-i-cecile"]
+authors = ["@hymm"]
 url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
@@ -95,14 +101,22 @@ url = "https://github.com/bevyengine/bevy/pull/12500"
 file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
 
 [[release_notes]]
-title = "Add `Triangle3d` primitive to `bevy_math::primitives`"
-authors = ["@vitorfhc", "@NthTensor", "@Jondolf"]
+title = "New primitives"
+authors = [
+	"@vitorfhc",
+	"@Chubercik",
+	"@andristarr",
+	"@spectria-limina",
+	"@salvadorcarvalhinho",
+	"@aristaeus",
+	"@mweatherley",
+]
 url = "https://github.com/bevyengine/bevy/pull/12508"
-file_name = "12508_Add_Triangle3d_primitive_to_bevy_mathprimitives.md"
+file_name = "new_math_primitives.md"
 
 [[release_notes]]
 title = "Meshlet rendering (initial feature)"
-authors = ["@JMS55", "@atlv24", "@mockersf", "@ricky26"]
+authors = ["@JMS55", "@atlv24", "@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/10164"
 file_name = "10164_Meshlet_rendering_initial_feature.md"
 
@@ -151,12 +165,6 @@ url = "https://github.com/bevyengine/bevy/pull/12547"
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[release_notes]]
-title = "Add `Tetrahedron` primitive to `bevy_math::primitives`"
-authors = ["@Chubercik"]
-url = "https://github.com/bevyengine/bevy/pull/12688"
-file_name = "12688_Add_Tetrahedron_primitive_to_bevy_mathprimitives.md"
-
-[[release_notes]]
 title = "Add methods `iter_resources` and `iter_resources_mut`"
 authors = ["@matiqo15", "@james7132", "@alice-i-cecile", "@pablo-lua"]
 url = "https://github.com/bevyengine/bevy/pull/12829"
@@ -197,12 +205,6 @@ title = "Improve par_iter and Parallel"
 authors = ["@re0312", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/12904"
 file_name = "12904_Improve_par_iter_and_Parallel.md"
-
-[[release_notes]]
-title = "Meshlet continuous LOD"
-authors = ["@JMS55", "@pcwalton", "@ricky26", "@mockersf", "@atlv24"]
-url = "https://github.com/bevyengine/bevy/pull/12755"
-file_name = "12755_Meshlet_continuous_LOD.md"
 
 [[release_notes]]
 title = "Make dynamic_linking a no-op on WASM targets"
@@ -349,18 +351,6 @@ url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
 [[release_notes]]
-title = "New circular primitives: `Arc2d`, `CircularSector`, `CircularSegment`"
-authors = ["@aristaeus", "@spectria-limina", "@Jondolf", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13482"
-file_name = "13482_New_circular_primitives_Arc2d_CircularSector_CircularSegme.md"
-
-[[release_notes]]
-title = "Implement Rhombus 2D primitive."
-authors = ["@salvadorcarvalhinho", "@LuisFigueiredo73"]
-url = "https://github.com/bevyengine/bevy/pull/13501"
-file_name = "13501_Implement_Rhombus_2D_primitive.md"
-
-[[release_notes]]
 title = "Implement opt-in sharp screen-space reflections for the deferred renderer, with improved raymarching code."
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13418"
@@ -419,3 +409,9 @@ title = "Implement subpixel morphological antialiasing, or SMAA."
 authors = ["@pcwalton", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13423"
 file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
+
+[[release_notes]]
+title = "Hooks and Observers: responding to changes in the world"
+authors = ["@james-j-obrien", "@cart"]
+url = "https://github.com/bevyengine/bevy/pull/10839"
+file_name = "10756_hooks_and_observers.md"

@@ -1,10 +1,10 @@
 If you were creating a Oklaba instance directly, instead of using L, you should use lightness
 
 ```rust
-// Before
+// 0.13
 let oklaba = Oklaba { l: 1., ..Default::default() };
 
-// Now
+// 0.14
 let oklaba = Oklaba { lightness: 1., ..Default::default() };
 ```
 
