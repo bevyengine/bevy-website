@@ -251,7 +251,7 @@ areas = ["ECS"]
 file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
 
 [[guides]]
-title = "Unify transition names to `exited` and `entered`"
+title = "Unify state transition names to `exited` and `entered`"
 url = "https://github.com/bevyengine/bevy/pull/13594"
 areas = ["ECS"]
 file_name = "13594_Unify_transition_names_to_exited_and_entered.md"
