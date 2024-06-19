@@ -227,7 +227,7 @@ areas = ["ECS"]
 file_name = "13090_Better_SystemId_to_Entity_conversions.md"
 
 [[guides]]
-title = "Make `NextState` an enum and make `apply_state_transition` private"
+title = "Make `NextState` an enum"
 url = "https://github.com/bevyengine/bevy/pull/11426"
 areas = ["ECS"]
 file_name = "11426_Computed_State__Sub_States.md"
