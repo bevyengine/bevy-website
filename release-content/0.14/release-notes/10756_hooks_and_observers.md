@@ -7,7 +7,7 @@ Responding to changes and/or processing events are vital tasks in any applicatio
 Bevy has accumulated a number of subtly distinct tools to handle this over the years, and in 0.14 is picking up two more.
 Let's quickly go over the existing tools to contextualize why adding more is useful:
 
-- Buffered [`Event`]s:multiple-producer, multiple-consumer queues. Flexible and efficient, but requires polling. Events are droped after two frames.
+- Buffered [`Event`]s:multiple-producer, multiple-consumer queues. Flexible and efficient, but requires polling. Events are dropped after two frames.
 - Change detection via [`Added`] and [`Changed`]: Granular, automatic, great integration with queries. Linear time checks, no added data.
 - [`RemovedComponents`]: A special form of event that is triggered when a component is removed from an entity, or an entity with that component is despawned.
 
@@ -27,7 +27,7 @@ This delay is the critical problem:
 
 To overcome these limitations, Bevy 0.14 introduces two complementary "push"-style mechanisms inspired by the ever-wonderful C ECS, [flecs]:
 
-1. [**Component Lifecyle Hooks:**](https://dev-docs.bevyengine.org/bevy/ecs/component/struct.ComponentHooks.html) Mutations to the world that automatically occur in response to **lifecycle events**: whenever a component of the given type is added, overwritten or removed.
+1. [**Component Lifecycle Hooks:**](https://dev-docs.bevyengine.org/bevy/ecs/component/struct.ComponentHooks.html) Mutations to the world that automatically occur in response to **lifecycle events**: whenever a component of the given type is added, overwritten or removed.
 2. [**Observers:**](https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Observer.html) On-demand systems that listen to [`Trigger`] events, which commonly target specific entities. These systems are run sequentially and recursively at the next command flush point in response to a trigger being sent.
 
 Only one hook per component type can be registered, and it cannot be overwritten.
@@ -41,7 +41,7 @@ Their advantages over buffered events are clearest when combined with commands t
 or when you're taking advantage of observers' ability to emit triggers which are then immediately processed, chaining recursively.
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], make our hierarchy management more robust, create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
-These are powerful, abtract tools: we can't wait to see the mad science the community cooks up!
+These are powerful, abstract tools: we can't wait to see the mad science the community cooks up!
 
 When you're ready to get started, check out the [`component hooks`] and [`observers`] examples for the API details.
 
