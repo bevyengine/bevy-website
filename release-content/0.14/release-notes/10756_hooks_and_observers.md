@@ -65,7 +65,7 @@ impl Component for Targetable {
     const STORAGE_TYPE: StorageType = StorageType::Table;
 
     fn register_component_hooks(hooks: &mut ComponentHooks) {
-        // Whenever this component is removed, or an entity with this component is respawned...
+        // Whenever this component is removed, or an entity with this component is despawned...
         hooks.on_remove(|mut world, targeted_entity, _component_id|{
             // Grab the data that's about to be removed
             let targetable = world.get::<Targetable>(targeted_entity).unwrap();
@@ -82,7 +82,7 @@ impl Component for Targetable {
 
 Because adding and removing components can only be done in the context of exclusive world access, hooks are always run *immediately*, leaving no opportunity for desynchronization.
 
-By contrast, observers are a flexible tool intended for gameplay logic.
+By contrast, observers are a flexible tool intended for higher level application logic.
 They can listen to the same lifecycle events as hooks, but can also respond to custom, user-defined triggers.
 Their advantages over buffered events are clearest when you're targeting a specific entity,
 when combined with commands that emit triggers (to avoid ever entering a bad state),
@@ -160,7 +160,7 @@ app
     .observe(|_trigger: Trigger<PlayerDeath>, app_exit: EventWriter<AppExit>| {
         println!("You died. Game over!")
         app_exit.send_default();    
-});
+    });
 ```
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
