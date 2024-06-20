@@ -8,8 +8,11 @@ The multithreaded executor is responsible for checking that the dependencies for
 The old version of the multithreaded executor ran as a continuous task that was woken up after each task
 completed. This pr changed it so that each system task tries to run the multithreaded executor after each
 system completes. This makes it so that the multithreaded executor always runs on a thread that is already awake.
-Thus preventing one source of context switches. In practice this reduces the number of context switches per a `Schedule` run by a 1-3.
+Thus preventing one source of context switches. In practice this reduces the number of context switches per a `Schedule` run by a 1-3. For an improvement of around 30us per schedule. In practice for gpu bound apps, this is probably only a small improvement or potentially a slowdown as there is only one render schedule and this new executor has more overhead for running.
 
-
+Another change that was done this cycle was to combine all the event_update_system into one system. There was one
+instance of this system for each event type. Which ended up with 30+ instances of the system. Each instance ran very quick, and
+the overhead of spawning the system tasks and waking up threads to run all the systems dominated the time for the `First` schedule
+took to run. So combining all these into one system avoids this overhead and makes the `First` schedule run much faster. On a specific machine this made running the schedule go from 136us to 25us.
 
 
