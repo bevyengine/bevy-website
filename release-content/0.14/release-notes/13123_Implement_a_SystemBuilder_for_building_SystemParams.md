@@ -3,21 +3,21 @@ At runtime, using dynamically-defined component and resource types!
 
 While you can use [`SystemBuilder`](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.SystemBuilder.html) as an ergonomic alternative to the [`SystemState`](https://dev-docs.bevyengine.org/bevy/ecs/system/struct.SystemState.html) API for splitting the [`World`](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.World.html) into disjoint borrows, its true values lies in its dynamic usage.
 
-You can choose to create a different system based on runtime branches or more intriguingly, the queries and so on can use runtime defined component IDs.
+You can choose to create a different system based on runtime branches or, more intriguingly, the queries and so on can use runtime-defined component IDs.
 This is another vital step towards creating an ergonomic and safe API to work with [dynamic queries](https://bevyengine.org/news/bevy-0-13/#dynamic-queries),
 laying the groundwork for the devs who want to integrate scripting languages or bake in sophisticated modding support for their game.
 
 ```rust
-// Start by create ing builder from the world
+// Start by creating builder from the world
 let system = SystemBuilder::<()>::new(&mut world)
-    //  Various helper methods exist to add `SystemParam`.
+    // Various helper methods exist to add `SystemParam`.
     .resource::<R>()
     .query::<&A>()
     // Alternatively use `.param::<T>()` for any other `SystemParam` types.
     .param::<MyParam>()
     // Finish it all up with a call `.build`
     .build(my_system);
-// Parameters that the builder is initialised with will appear first in the arguments.
+// The parameters the builder is initialised with will appear first in the arguments.
 let system = SystemBuilder::<(Res<R>, Query<&A>)>::new(&mut world)
     .param::<MyParam>()
     .build(my_system);
