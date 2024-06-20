@@ -23,7 +23,7 @@ commands.spawn((
 But this is old news, you've already been able to do this! What's new?
 
 There is no longer any practical limit to how many layers you can define!
-Before Bevy 0.14 the membership was defined by a bitmask which had limited slots available.
+Before Bevy 0.14 the membership was defined by a bitmask which had limited slots available. We've made sure to keep the common case fast, but now use a growable mask that will allocate space for additional layers as needed. Remember, there's still a cost to check visibility per layer, but this allows for more dynamic uses where layers can be created on demand without worrying about going over a limit.
 
 
 ```rust
