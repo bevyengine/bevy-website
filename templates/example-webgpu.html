@@ -37,8 +37,7 @@
     </div>
     {% for shader in page.extra.shader_code_paths %}
       <div class="example__code media-content">
-        {% set filename = shader | split(pat="/") | last %}
-        {{ filename }}:
+        {{ shader }}:
 
         {% set code = load_data(path="static/assets/examples/" ~ shader) %}
         {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
