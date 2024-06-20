@@ -21,9 +21,10 @@ let system = SystemBuilder::<()>::new(&mut world)
 let system = SystemBuilder::<(Res<R>, Query<&A>)>::new(&mut world)
     .param::<MyParam>()
     .build(my_system);
-// Parameters that implement `BuildableSystemParam` can use `.builder::<T>()` to build in place.
+// Parameters like `Query` that implement `BuildableSystemParam` can use `.builder::<T>()` to build in place.
 let system = SystemBuilder::<()>::new(&mut world)
     .resource::<R>()
+    // This turns our query into a `Query<&A, With<B>>`
     .builder::<Query<&A>>(|builder| { builder.with::<B>(); })
     .param::<MyParam>()
     .build(my_system);
