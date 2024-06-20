@@ -29,4 +29,4 @@ let system = SystemBuilder::<()>::new(&mut world)
     .param::<MyParam>()
     .build(my_system);
 world.run_system_once(system);
-``
+```
