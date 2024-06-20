@@ -1,9 +1,10 @@
 <!-- Add AsyncSeek trait to Reader to be able to seek inside asset loaders -->
 <!-- https://github.com/bevyengine/bevy/pull/12547 -->
 
-When loading assets you might be dealing with big data.
+Assets can be huge, and you don't always need all of the data contained in a single file.
 
-In Bevy you're able to add your [`own asset loaders`]. Now you will be able to seek to an offset of your choice on load using async.
+Bevy allows you to add your [own asset loaders].
+Starting in Bevy 0.14,  you can now seek to an offset of your choice, reading partway through the file.
 
 Perhaps you have the `.celestial` file format which encodes the universe, but you want to only look at lil' asteroids which always appear at some offset:
 
@@ -45,7 +46,7 @@ impl AssetLoader for UniverseLoader {
 }
 ```
 
-This works by the fact that Bevy's [`reader`] type passed into the asset loader's `load` function now implements [`AsyncSeek`].
+This works because Bevy's [`reader`] type passed into the asset loader's `load` function now implements [`AsyncSeek`].
 
 Real world use cases might for example be:
 
