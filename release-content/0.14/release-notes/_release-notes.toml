@@ -53,8 +53,8 @@ url = "https://github.com/bevyengine/bevy/pull/5781"
 file_name = "5781_bevy_reflect_Recursive_registration.md"
 
 [[release_notes]]
-title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
-authors = ["@pcwalton", "@rparrett"]
+title = "Animation blending with the `AnimationGraph`"
+authors = ["@pcwalton", "@rparrett", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/11989"
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
 
