@@ -18,7 +18,7 @@ file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[release_notes]]
 title = "Run the multi-threaded executor at the end of each system task."
-authors = ["@chescock", "@james7132", "@hymm"]
+authors = ["@chescock", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
