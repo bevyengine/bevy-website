@@ -1,6 +1,6 @@
 Since **Bevy 0.13**, you can configure the the EV100 of a camera, which allows you to adjust the exposure of the camera in a physically based way. This also allows you to dynamically change the exposure values for various effects. However, this is a manual process and requires you to adjust the exposure values yourself.
 
-**Bevy 0.14** introduces **Auto Exposure**, which automatically adjusts the exposure of your camera based on the brightness of the scene. This can be useful when you want to create the feeling of a very high dynamic range, since your eyes also adjust to large changes in brightness. Note that this is not a replacement for hand-tuning the exposure values, rather an additional tool that you can use to create dramatic effects when brightness changes rapidly.
+**Bevy 0.14** introduces **Auto Exposure**, which automatically adjusts the exposure of your camera based on the brightness of the scene. This can be useful when you want to create the feeling of a very high dynamic range, since your eyes also adjust to large changes in brightness. Note that this is not a replacement for hand-tuning the exposure values, rather an additional tool that you can use to create dramatic effects when brightness changes rapidly. Check out this video recorded from the [example](https://github.com/bevyengine/bevy/blob/main/examples/3d/auto_exposure.rs) to see it in action!
 
 <video controls><source src="auto_exposure.mp4" type="video/mp4"/></video>
 
