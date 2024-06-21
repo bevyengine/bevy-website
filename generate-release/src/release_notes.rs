@@ -123,7 +123,7 @@ file_name = "{file_name}.md"
             .iter()
             .map(|author| format!("\"{author}\""))
             .collect::<Vec<_>>()
-            .join(","),
+            .join(", "),
         title = title.trim().replace('"', "\\\"")
     )
 }
