@@ -13,7 +13,11 @@ Usage:
         right_alt="alt text"   // right image `alt` attribute; defaults to right_title
     ) }}
 #}
-{% set img = get_image_metadata(path=page.colocated_path ~ left_image) %}
+{% if path %}
+    {% set img = get_image_metadata(path=path ~ left_image) %}
+{% else %}
+    {% set img = get_image_metadata(path=page.colocated_path ~ left_image) %}
+{% endif %}
 <p class="image-compare-instruction">Drag this image to compare</p>
 <div class="image-compare-container" style="aspect-ratio: {{ img.width }} / {{ img.height }}{% if height %};height:{{ height }}{% endif %}">
   <div

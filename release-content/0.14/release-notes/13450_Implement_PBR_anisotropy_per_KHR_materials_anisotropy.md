@@ -7,6 +7,7 @@ In effect, this causes the specular light to stretch out into lines instead of a
 Support for anisotropy is a common feature in major game and graphics engines; Unity, Unreal, Godot, three.js, and Blender all support it to varying degrees.
 
 {{ compare_slider(
+    path="POST_PATH",
     left_title="Without Anisotropy",
     left_image="without_anisotropy.png",
     right_title="With Anisotropy",
