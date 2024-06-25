@@ -1,4 +1,4 @@
-Gizmos in Bevy allow to easily draw arbitrary shapes to help debugging or authoring content, but also to visualize specific properties of your scene, such has the AABB of your meshes.
+Gizmos in Bevy allow developers to easily draw arbitrary shapes to help debugging or authoring content, but also to visualize specific properties of your scene, such has the AABB of your meshes.
 
 In 0.14, several new gizmos have been added to [`bevy::gizmos`]:
 
