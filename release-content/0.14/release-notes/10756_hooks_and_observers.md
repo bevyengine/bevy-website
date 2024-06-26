@@ -110,13 +110,14 @@ struct PlayerDeath;
 fn spawn_player(mut commands: Commands) {
     let player_entity = commands
         // Setting up some ordinary components
-        .spawn((Player, Life(10), Defense(2))).id();
+        .spawn((Player, Life(10), Defense(2)))
 
-    // Now, we're adding some callback-style behavior using observers,
-    // watching the entity itself.
-    // By attaching the observer to the entity it's watching, we ensure that it gets cleaned up.
-    commands.insert(Observer::new(respond_to_damage_taken).with_entity(player_entity));
-    commands.insert(Observer::new(respond_to_life_lost).with_entity(player_entity));
+        // Now, we're adding some callback-style behavior using observers,
+        // watching the entity itself.
+        // By attaching the observer to the entity it's watching, we ensure that it gets cleaned up.
+        .observe(respond_to_damage_taken)
+        .observe(respond_to_life_lost);
+
 }
 
 // We can send triggers using commands (or methods on `World`)

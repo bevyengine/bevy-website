@@ -1,1 +1,9 @@
-In the present implementation, external consumers of `AlphaMode` will have to access it through bevy_render rather than through bevy_pbr, changing their import from `bevy_pbr::AlphaMode` to `bevy_render::alpha::AlphaMode` (or the corresponding glob import from `bevy_pbr::prelude::*` to `bevy_render::prelude::*`).
+`AlphaMode` has been moved from `bevy_pbr` to `bevy_render`. If you import them directly, you will need to update your import statements.
+
+```rust
+// 0.13
+use bevy::pbr::AlphaMode;
+
+// 0.14
+use bevy::render::alpha::AlphaMode;
+```

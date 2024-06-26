@@ -1,13 +1,9 @@
-The `Direction2d`, `Direction3d`, and `InvalidDirectionError` types have been moved out of `bevy::math::primitives`.
-
-Before:
+The `Direction2d`, `Direction3d`, and `InvalidDirectionError` types have been moved from `bevy::math::primitives` to `bevy::math`.
 
 ```rust
-use bevy::math::primitives::Direction3d;
-```
+// 0.13
+use bevy::math::primitives::{Direction2d, Direction3d, InvalidDirectionError};
 
-After:
-
-```rust
-use bevy::math::Direction3d;
+// 0.14
+use bevy::math::{Direction2d, Direction3d, InvalidDirectionError};
 ```

@@ -1,29 +1,113 @@
 [[release_notes]]
-title = "Add support for KHR_texture_transform"
+title = "Virtual Geometry (Experimental)"
+authors = ["@JMS55", "@atlv24", "@ricky26"]
+url = "https://github.com/bevyengine/bevy/pull/10164"
+file_name = "10164_Meshlet_rendering_initial_feature.md"
+
+[[release_notes]]
+title = "Sharp Screen-Space Reflections"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13418"
+file_name = "13418_Implement_optin_sharp_screenspace_reflections_for_the_defe.md"
+
+[[release_notes]]
+title = "Volumetric Fog and Volumetric Lighting (light shafts / god rays)"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13057"
+file_name = "13057_Implement_volumetric_fog_and_volumetric_lighting_also_know.md"
+
+[[release_notes]]
+title = "Per-Object Motion Blur"
+authors = ["@aevyrie", "@torsteingrindvik"]
+url = "https://github.com/bevyengine/bevy/pull/9924"
+file_name = "9924_PerObject_Motion_Blur.md"
+
+[[release_notes]]
+title = "GPU Frustum Culling"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/12889"
+file_name = "12889_Implement_GPU_frustum_culling.md"
+
+[[release_notes]]
+title = "Filmic Color Grading"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13121"
+file_name = "13121_Implement_filmic_color_grading.md"
+
+[[release_notes]]
+title = "Auto Exposure"
+authors = ["@Kurble", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/12792"
+file_name = "12792_Implement_Auto_Exposure_plugin.md"
+
+[[release_notes]]
+title = "Fast Depth of Field"
+authors = ["@pcwalton", "@alice-i-cecile", "@Kurble"]
+url = "https://github.com/bevyengine/bevy/pull/13009"
+file_name = "13009_Implement_fast_depth_of_field_as_a_postprocessing_effect.md"
+
+[[release_notes]]
+title = "PBR Anisotropy"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/13450"
+file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
+
+[[release_notes]]
+title = "Percentage-Closer Filtering (PCF) for Point Lights"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/12910"
+file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
+
+[[release_notes]]
+title = "Subpixel Morphological Antialiasing (SMAA)"
+authors = ["@pcwalton", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13423"
+file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
+
+[[release_notes]]
+title = "Visibility Ranges (hierarchical levels of detail / HLODs)"
+authors = ["@pcwalton", "@cart"]
+url = "https://github.com/bevyengine/bevy/pull/12916"
+file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
+
+[[release_notes]]
+title = "ECS Hooks and Observers"
+authors = ["@james-j-obrien", "@cart"]
+url = "https://github.com/bevyengine/bevy/pull/10839"
+file_name = "10756_hooks_and_observers.md"
+
+[[release_notes]]
+title = "glTF KHR_texture_transform Support"
 authors = ["@janhohenheim", "@yrns", "@Kanabenki"]
 url = "https://github.com/bevyengine/bevy/pull/11904"
 file_name = "11904_Add_support_for_KHR_texture_transform.md"
 
 [[release_notes]]
-title = "Upstreaming bevy_color."
+title = "UI Node Border Radius"
+authors = ["@chompaa", "@pablo-lua", "@alice-i-cecile", "@bushrat011899"]
+url = "https://github.com/bevyengine/bevy/pull/12500"
+file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
+
+[[release_notes]]
+title = "Animation Blending with the `AnimationGraph`"
+authors = ["@pcwalton", "@rparrett", "@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/11989"
+file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
+
+[[release_notes]]
+title = "Improved Color API"
 authors = ["@viridia", "@mockersf"]
 url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "`Commands` and exclusive world access: working together in harmony"
-authors = ["@james7132", "@james-j-obrien"]
-url = "https://github.com/bevyengine/bevy/pull/11823"
-file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
+title = "Extrusion"
+authors = ["@lynn-lumen", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13270"
+file_name = "13270_Extrusion.md"
 
 [[release_notes]]
-title = "Run the multi-threaded executor at the end of each system task."
-authors = ["@chescock", "@james7132", "@hymm"]
-url = "https://github.com/bevyengine/bevy/pull/11906"
-file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
-
-[[release_notes]]
-title = "New gizmos types"
+title = "More Gizmos"
 authors = [
 	"@mweatherley",
 	"@Kanabenki",
@@ -35,206 +119,40 @@ url = "https://github.com/bevyengine/bevy/pull/12211"
 file_name = "New_gizmos_types.md"
 
 [[release_notes]]
-title = "Decouple `BackgroundColor` from `UiImage`"
-authors = ["@benfrankel"]
-url = "https://github.com/bevyengine/bevy/pull/11165"
-file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
+title = "Add `Annulus`-gizmos"
+authors = ["@lynn-lumen"]
+url = "https://github.com/bevyengine/bevy/pull/13233"
+file_name = "13233_Add_Annulusgizmos.md"
 
 [[release_notes]]
-title = "Add WinitEvent aggregate event for synchronized window event reading"
-authors = ["@UkoeHB"]
-url = "https://github.com/bevyengine/bevy/pull/12100"
-file_name = "12100_Add_WinitEvent_aggregate_event_for_synchronized_window_eve.md"
+title = "Rounded Box Gizmos"
+authors = ["@lynn-lumen", "@JMS55", "@jgayfer"]
+url = "https://github.com/bevyengine/bevy/pull/11948"
+file_name = "11948_Add_Rounded_box_gizmos.md"
 
 [[release_notes]]
-title = "bevy_reflect: Recursive registration"
-authors = ["@MrGVSV", "@soqb", "@cart", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/5781"
-file_name = "5781_bevy_reflect_Recursive_registration.md"
+title = "Gizmo Line Styles and Joints"
+authors = ["@lynn-lumen", "@BD103"]
+url = "https://github.com/bevyengine/bevy/pull/12394"
+file_name = "12394_Gizmo_line_styles.md"
 
 [[release_notes]]
-title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
-authors = ["@pcwalton", "@rparrett"]
-url = "https://github.com/bevyengine/bevy/pull/11989"
-file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
+title = "UI Node Outline Gizmos"
+authors = ["@pablo-lua", "@nicopap", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/11237"
+file_name = "11237_Add_a_gizmobased_overlay_to_show_UI_node_outlines_Adopted.md"
+
+[[release_notes]]
+title = "Contextually Clearing Gizmos"
+authors = ["@Aceeri"]
+url = "https://github.com/bevyengine/bevy/pull/10973"
+file_name = "10973_Contextually_clearing_gizmos.md"
 
 [[release_notes]]
 title = "Query Joins"
 authors = ["@hymm"]
 url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
-
-[[release_notes]]
-title = "A new `Rotation2d` type"
-authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
-url = "https://github.com/bevyengine/bevy/pull/11658"
-file_name = "11658_Add_Rotation2d.md"
-
-[[release_notes]]
-title = "Alignment API for Transforms"
-authors = ["@mweatherley"]
-url = "https://github.com/bevyengine/bevy/pull/12187"
-file_name = "12187_Alignment_API_for_Transforms.md"
-
-[[release_notes]]
-title = "Random sampling of shapes and directions"
-authors = ["@13ros27", "@mweatherley", "@lynn-lumen"]
-url = "https://github.com/bevyengine/bevy/pull/12484"
-file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
-
-[[release_notes]]
-title = "Add pipeline statistics"
-authors = ["@LeshaInc", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/9135"
-file_name = "9135_Add_pipeline_statistics.md"
-
-[[release_notes]]
-title = "Add a gizmo-based overlay to show UI node outlines (Adopted)"
-authors = ["@pablo-lua", "@nicopap", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/11237"
-file_name = "11237_Add_a_gizmobased_overlay_to_show_UI_node_outlines_Adopted.md"
-
-[[release_notes]]
-title = "Add border radius to UI nodes (adopted)"
-authors = ["@chompaa", "@pablo-lua", "@alice-i-cecile", "@bushrat011899"]
-url = "https://github.com/bevyengine/bevy/pull/12500"
-file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
-
-[[release_notes]]
-title = "New primitives"
-authors = [
-	"@vitorfhc",
-	"@Chubercik",
-	"@andristarr",
-	"@spectria-limina",
-	"@salvadorcarvalhinho",
-	"@aristaeus",
-	"@mweatherley",
-]
-url = "https://github.com/bevyengine/bevy/pull/12508"
-file_name = "new_math_primitives.md"
-
-[[release_notes]]
-title = "Meshlet rendering (initial feature)"
-authors = ["@JMS55", "@atlv24", "@ricky26"]
-url = "https://github.com/bevyengine/bevy/pull/10164"
-file_name = "10164_Meshlet_rendering_initial_feature.md"
-
-[[release_notes]]
-title = "Get Bevy building for WebAssembly with multithreading"
-authors = ["@kettle11", "@mockersf", "@alice-i-cecile", "@daxpedda"]
-url = "https://github.com/bevyengine/bevy/pull/12205"
-file_name = "12205_Get_Bevy_building_for_WebAssembly_with_multithreading.md"
-
-[[release_notes]]
-title = "Gizmo line styles and joints"
-authors = ["@lynn-lumen", "@BD103"]
-url = "https://github.com/bevyengine/bevy/pull/12394"
-file_name = "12394_Gizmo_line_styles.md"
-
-[[release_notes]]
-title = "Move `Point` out of cubic splines module and expand it"
-authors = [
-	"@mweatherley",
-	"@bushrat011899",
-	"@JohnTheCoolingFan",
-	"@NthTensor",
-	"@Jondolf",
-	"@IQuick143",
-	"@alice-i-cecile",
-]
-url = "https://github.com/bevyengine/bevy/pull/12747"
-file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
-
-[[release_notes]]
-title = "Support wireframes for 2D meshes"
-authors = ["@msvbg", "@IceSentry"]
-url = "https://github.com/bevyengine/bevy/pull/12135"
-file_name = "12135_Support_wireframes_for_2D_meshes.md"
-
-[[release_notes]]
-title = "Improve performance by binning together opaque items instead of sorting them."
-authors = ["@pcwalton", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12453"
-file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
-
-[[release_notes]]
-title = "Add `AsyncSeek` trait to `Reader` to be able to seek inside asset loaders"
-authors = ["@BeastLe9enD"]
-url = "https://github.com/bevyengine/bevy/pull/12547"
-file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
-
-[[release_notes]]
-title = "Add methods `iter_resources` and `iter_resources_mut`"
-authors = ["@matiqo15", "@james7132", "@alice-i-cecile", "@pablo-lua"]
-url = "https://github.com/bevyengine/bevy/pull/12829"
-file_name = "12829_Add_methods_iter_resources_and_iter_resources_mut.md"
-
-[[release_notes]]
-title = "Error info has been added to LoadState::Failed"
-authors = ["@bugsweeper"]
-url = "https://github.com/bevyengine/bevy/pull/12709"
-file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
-
-[[release_notes]]
-title = "Implement percentage-closer filtering (PCF) for point lights."
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/12910"
-file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
-
-[[release_notes]]
-title = "Optimize Event Updates"
-authors = ["@james7132", "@alice-i-cecile", "@jdm"]
-url = "https://github.com/bevyengine/bevy/pull/12936"
-file_name = "12936_Optimize_Event_Updates.md"
-
-[[release_notes]]
-title = "`AppExit` Errors"
-authors = ["@Brezak", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13022"
-file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
-
-[[release_notes]]
-title = "Contextually clearing gizmos"
-authors = ["@Aceeri"]
-url = "https://github.com/bevyengine/bevy/pull/10973"
-file_name = "10973_Contextually_clearing_gizmos.md"
-
-[[release_notes]]
-title = "Improve par_iter and Parallel"
-authors = ["@re0312", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12904"
-file_name = "12904_Improve_par_iter_and_Parallel.md"
-
-[[release_notes]]
-title = "Make dynamic_linking a no-op on WASM targets"
-authors = ["@james7132", "@BD103"]
-url = "https://github.com/bevyengine/bevy/pull/12672"
-file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
-
-[[release_notes]]
-title = "Per-Object Motion Blur"
-authors = ["@aevyrie", "@torsteingrindvik"]
-url = "https://github.com/bevyengine/bevy/pull/9924"
-file_name = "9924_PerObject_Motion_Blur.md"
-
-[[release_notes]]
-title = "Throttle render assets"
-authors = ["@robtfm", "@IceSentry", "@mockersf"]
-url = "https://github.com/bevyengine/bevy/pull/12622"
-file_name = "12622_Throttle_render_assets.md"
-
-[[release_notes]]
-title = "Implement GPU frustum culling."
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/12889"
-file_name = "12889_Implement_GPU_frustum_culling.md"
-
-[[release_notes]]
-title = "Implement filmic color grading."
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13121"
-file_name = "13121_Implement_filmic_color_grading.md"
 
 [[release_notes]]
 title = "Computed States & Sub States"
@@ -255,163 +173,250 @@ url = "https://github.com/bevyengine/bevy/pull/13649"
 file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
-title = "Implement visibility ranges, also known as hierarchical levels of detail (HLODs)."
-authors = ["@pcwalton", "@cart"]
-url = "https://github.com/bevyengine/bevy/pull/12916"
-file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
+title = "`Commands` and exclusive world access: working together in harmony"
+authors = ["@james7132", "@james-j-obrien"]
+url = "https://github.com/bevyengine/bevy/pull/11823"
+file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[release_notes]]
-title = "Add a process for working groups"
-authors = ["@alice-i-cecile", "@Jondolf"]
-url = "https://github.com/bevyengine/bevy/pull/13162"
-file_name = "13162_Add_a_process_for_working_groups.md"
+title = "Run the multi-threaded executor at the end of each system task."
+authors = ["@chescock", "@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/11906"
+file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
-title = "Add BufferVec, an higher-performance alternative to StorageBuffer, and make GpuArrayBuffer use it."
+title = "Decouple `BackgroundColor` from `UiImage`"
+authors = ["@benfrankel"]
+url = "https://github.com/bevyengine/bevy/pull/11165"
+file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
+
+[[release_notes]]
+title = "Combined WinitEvent"
+authors = ["@UkoeHB"]
+url = "https://github.com/bevyengine/bevy/pull/12100"
+file_name = "12100_Add_WinitEvent_aggregate_event_for_synchronized_window_eve.md"
+
+[[release_notes]]
+title = "Recursive Reflect Registration"
+authors = ["@MrGVSV", "@soqb", "@cart", "@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/5781"
+file_name = "5781_bevy_reflect_Recursive_registration.md"
+
+[[release_notes]]
+title = "`Rot2` Type for 2D Rotations"
+authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
+url = "https://github.com/bevyengine/bevy/pull/11658"
+file_name = "11658_Add_Rotation2d.md"
+
+[[release_notes]]
+title = "Alignment API for Transforms"
+authors = ["@mweatherley"]
+url = "https://github.com/bevyengine/bevy/pull/12187"
+file_name = "12187_Alignment_API_for_Transforms.md"
+
+[[release_notes]]
+title = "Random Sampling of Shapes and Directions"
+authors = ["@13ros27", "@mweatherley", "@lynn-lumen"]
+url = "https://github.com/bevyengine/bevy/pull/12484"
+file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
+
+[[release_notes]]
+title = "Render Pipeline Statistics"
+authors = ["@LeshaInc", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/9135"
+file_name = "9135_Add_pipeline_statistics.md"
+
+[[release_notes]]
+title = "New Geometric Primitives"
+authors = [
+	"@vitorfhc",
+	"@Chubercik",
+	"@andristarr",
+	"@spectria-limina",
+	"@salvadorcarvalhinho",
+	"@aristaeus",
+	"@mweatherley",
+]
+url = "https://github.com/bevyengine/bevy/pull/12508"
+file_name = "new_math_primitives.md"
+
+[[release_notes]]
+title = "Initial (Manual) Support For WebAssembly Multithreading"
+authors = ["@kettle11", "@mockersf", "@alice-i-cecile", "@daxpedda"]
+url = "https://github.com/bevyengine/bevy/pull/12205"
+file_name = "12205_Get_Bevy_building_for_WebAssembly_with_multithreading.md"
+
+[[release_notes]]
+title = "Improve `Point` and rename it to `VectorSpace`"
+authors = [
+	"@mweatherley",
+	"@bushrat011899",
+	"@JohnTheCoolingFan",
+	"@NthTensor",
+	"@Jondolf",
+	"@IQuick143",
+	"@alice-i-cecile",
+]
+url = "https://github.com/bevyengine/bevy/pull/12747"
+file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
+
+[[release_notes]]
+title = "2D Mesh Wireframes"
+authors = ["@msvbg", "@IceSentry"]
+url = "https://github.com/bevyengine/bevy/pull/12135"
+file_name = "12135_Support_wireframes_for_2D_meshes.md"
+
+[[release_notes]]
+title = "Optimize opaque object rendering by binning them to together"
+authors = ["@pcwalton", "@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/12453"
+file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
+
+[[release_notes]]
+title = "Support `AsyncSeek` When Loading Assets"
+authors = ["@BeastLe9enD"]
+url = "https://github.com/bevyengine/bevy/pull/12547"
+file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
+
+[[release_notes]]
+title = "`iter_resources` and `iter_resources_mut`"
+authors = ["@matiqo15", "@james7132", "@alice-i-cecile", "@pablo-lua"]
+url = "https://github.com/bevyengine/bevy/pull/12829"
+file_name = "12829_Add_methods_iter_resources_and_iter_resources_mut.md"
+
+[[release_notes]]
+title = "LoadState::Failed now has error info"
+authors = ["@bugsweeper"]
+url = "https://github.com/bevyengine/bevy/pull/12709"
+file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
+
+[[release_notes]]
+title = "Optimized Event Updates"
+authors = ["@james7132", "@alice-i-cecile", "@jdm"]
+url = "https://github.com/bevyengine/bevy/pull/12936"
+file_name = "12936_Optimize_Event_Updates.md"
+
+[[release_notes]]
+title = "`AppExit` Errors"
+authors = ["@Brezak", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13022"
+file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
+
+[[release_notes]]
+title = "Improve par_iter and Parallel"
+authors = ["@re0312", "@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/12904"
+file_name = "12904_Improve_par_iter_and_Parallel.md"
+
+[[release_notes]]
+title = "Make dynamic_linking a no-op on WASM targets"
+authors = ["@james7132", "@BD103"]
+url = "https://github.com/bevyengine/bevy/pull/12672"
+file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
+
+[[release_notes]]
+title = "Throttle Render Assets"
+authors = ["@robtfm", "@IceSentry", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/12622"
+file_name = "12622_Throttle_render_assets.md"
+
+[[release_notes]]
+title = "GPU BufferVec"
 authors = ["@kristoff3r", "@IceSentry", "@alice-i-cecile", "@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13199"
 file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
 
 [[release_notes]]
-title = "Implement Auto Exposure plugin"
-authors = ["@Kurble", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/12792"
-file_name = "12792_Implement_Auto_Exposure_plugin.md"
-
-[[release_notes]]
-title = "Add `Annulus`-gizmos"
-authors = ["@lynn-lumen"]
-url = "https://github.com/bevyengine/bevy/pull/13233"
-file_name = "13233_Add_Annulusgizmos.md"
-
-[[release_notes]]
-title = "Extrusion"
-authors = ["@lynn-lumen", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13270"
-file_name = "13270_Extrusion.md"
-
-[[release_notes]]
-title = "Add UV channel selection to StandardMaterial"
+title = "StandardMaterial UV Channel Selection"
 authors = ["@geckoxx"]
 url = "https://github.com/bevyengine/bevy/pull/13200"
 file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
 
 [[release_notes]]
-title = "Implement fast depth of field as a postprocessing effect."
-authors = ["@pcwalton", "@alice-i-cecile", "@Kurble"]
-url = "https://github.com/bevyengine/bevy/pull/13009"
-file_name = "13009_Implement_fast_depth_of_field_as_a_postprocessing_effect.md"
-
-[[release_notes]]
-title = "Add Rounded box gizmos"
-authors = ["@lynn-lumen", "@JMS55", "@jgayfer"]
-url = "https://github.com/bevyengine/bevy/pull/11948"
-file_name = "11948_Add_Rounded_box_gizmos.md"
-
-[[release_notes]]
-title = "#12502 Remove limit on RenderLayers."
+title = "Remove limit on RenderLayers"
 authors = ["@tychedelia", "@robtfm"]
 url = "https://github.com/bevyengine/bevy/pull/13317"
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[release_notes]]
-title = "Implement volumetric fog and volumetric lighting, also known as light shafts or god rays."
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13057"
-file_name = "13057_Implement_volumetric_fog_and_volumetric_lighting_also_know.md"
-
-[[release_notes]]
-title = "Add `on_unimplemented` Diagnostics to Most Public Traits"
+title = "`on_unimplemented` Diagnostics"
 authors = ["@bushrat011899", "@alice-i-cecile", "@BD103", "@Themayu"]
 url = "https://github.com/bevyengine/bevy/pull/13347"
 file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
 
 [[release_notes]]
-title = "bevy_reflect: Custom attributes"
+title = "Custom Reflect Field Attributes"
 authors = ["@MrGVSV"]
 url = "https://github.com/bevyengine/bevy/pull/11659"
 file_name = "11659_bevy_reflect_Custom_attributes.md"
 
 [[release_notes]]
-title = "Deprecate dynamic plugins"
+title = "Deprecate Dynamic Plugins"
 authors = ["@BD103"]
 url = "https://github.com/bevyengine/bevy/pull/13080"
 file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[release_notes]]
-title = "implement the full set of sort methods on QueryIter"
+title = "Query Iteration Sorting"
 authors = ["@Victoronz"]
 url = "https://github.com/bevyengine/bevy/pull/13417"
 file_name = "13417_implement_the_full_set_of_sort_methods_on_QueryIter.md"
 
 [[release_notes]]
-title = "Implement a SystemBuilder for building SystemParams"
+title = "SystemBuilder"
 authors = ["@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
-[[release_notes]]
 title = "Screen-space reflections"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13418"
 file_name = "13418_Implement_optin_sharp_screenspace_reflections_for_the_defe.md"
 
 [[release_notes]]
-title = "Implement motion vectors and TAA for skinned meshes and meshes with morph targets."
+title = "Motion Vectors and TAA for Animated Meshes"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13572"
 file_name = "13572_Implement_motion_vectors_and_TAA_for_skinned_meshes_and_me.md"
 
 [[release_notes]]
-title = "glTF labels: add enum to avoid misspelling and keep up-to-date list documented"
-authors = ["@mockersf", "@rparrett", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13586"
-file_name = "13586_glTF_labels_add_enum_to_avoid_misspelling_and_keep_uptodat.md"
-
-[[release_notes]]
-title = "fix: upgrade to winit v0.30"
-authors = ["@pietrosophya", "@mockersf"]
-url = "https://github.com/bevyengine/bevy/pull/13366"
-file_name = "13366_fix_upgrade_to_winit_v030.md"
-
-[[release_notes]]
-title = "add handling of all missing gltf extras: scene, mesh & materials"
-authors = ["@kaosat-dev"]
-url = "https://github.com/bevyengine/bevy/pull/13453"
-file_name = "13453_add_handling_of_all_missing_gltf_extras_scene_mesh__materi.md"
-
-[[release_notes]]
-title = "Map entities from a resource when written to the world."
-authors = ["@brandon-reinhart"]
-url = "https://github.com/bevyengine/bevy/pull/13650"
-file_name = "13650_Map_entities_from_a_resource_when_written_to_the_world.md"
-
-[[release_notes]]
-title = "Normalise matrix naming"
+title = "Improved Matrix Naming"
 authors = ["@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/13489"
 file_name = "13489_Normalise_matrix_naming.md"
 
 [[release_notes]]
-title = "Added CompassQuadrant and CompassOctant as per #13647"
+title = "Typed glTF Labels"
+authors = ["@mockersf", "@rparrett", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13586"
+file_name = "13586_glTF_labels_add_enum_to_avoid_misspelling_and_keep_uptodat.md"
+
+[[release_notes]]
+title = "winit v0.30"
+authors = ["@pietrosophya", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/13366"
+file_name = "13366_fix_upgrade_to_winit_v030.md"
+
+[[release_notes]]
+title = "Scene, Mesh, and Material glTF Extras"
+authors = ["@kaosat-dev"]
+url = "https://github.com/bevyengine/bevy/pull/13453"
+file_name = "13453_add_handling_of_all_missing_gltf_extras_scene_mesh__materi.md"
+
+[[release_notes]]
+title = "Resource Entity Mapping in Scenes"
+authors = ["@brandon-reinhart"]
+url = "https://github.com/bevyengine/bevy/pull/13650"
+file_name = "13650_Map_entities_from_a_resource_when_written_to_the_world.md"
+
+[[release_notes]]
+title = "CompassQuadrant and CompassOctant"
 authors = ["@BobG1983", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13653"
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
 
 [[release_notes]]
-title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13450"
-file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
-
-[[release_notes]]
-title = "Implement subpixel morphological antialiasing, or SMAA."
-authors = ["@pcwalton", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13423"
-file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
-
-[[release_notes]]
-title = "Hooks and Observers: responding to changes in the world"
-authors = ["@james-j-obrien", "@cart"]
-url = "https://github.com/bevyengine/bevy/pull/10839"
-file_name = "10756_hooks_and_observers.md"
+title = "Bevy Working Groups"
+authors = ["@alice-i-cecile", "@Jondolf"]
+url = "https://github.com/bevyengine/bevy/pull/13162"
+file_name = "13162_Add_a_process_for_working_groups.md"
