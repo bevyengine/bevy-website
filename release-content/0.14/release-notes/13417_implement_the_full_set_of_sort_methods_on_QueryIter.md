@@ -33,11 +33,12 @@ fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
 
 To sort our query with the `Attack` component, we specify it as the generic parameter to [`sort`].
 If we wished to sort with more than one [`Component`], we can do so, independent of [`Component`] order in the original [`Query`] type: `enemies.iter().sort::<(&Defense, &Attack)>()`
-The generic parameter can be thought of as being a [lens](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens) or "subset" of the original query, on which the underlying sort is actually performed. The result is then internally used to return a new sorted query iterator over the original query items.
-With the default [`sort`], the lens has to be fully [`Ord`], like with [`slice::sort`].
-If this is not enough, then the rest of sort methods from [`slice`] also have their counterpart!
 
-The generic [`lens`] argument works the same way as in [`Query::transmute_lens`]. We do not use filters, they are inherited from the original query.
+The generic parameter can be thought of as being a [lens] or "subset" of the original query, on which the underlying sort is actually performed. The result is then internally used to return a new sorted query iterator over the original query items.
+With the default [`sort`], the lens has to be fully [`Ord`], like with [`slice::sort`].
+If this is not enough, we also have the counterparts to the remaining 6 sort methods from [`slice`]!
+
+The generic lens argument works the same way as with [`Query::transmute_lens`]. We do not use filters, they are inherited from the original query.
 The [`transmute_lens`] infrastructure has some nice additional features, which allows for this:
 
 ```rust
@@ -83,11 +84,31 @@ fn show_stats_2(users: Query<(&User, &Statistics)>) {
 }
 ```
 
-In current Rust, we can not return references from the key extraction closure in [`slice::sort_by_key`]/[`slice::sort_by_key`].
-This can become a headache when using non-`Copy` [`Component`]s.
-The new `sort`/`sort_by` methods can work around this by having the lensing be the "key extraction", removing the need for such a closure.
+In current Rust, we can not return references from the key extraction closure in [`slice::sort_by_key`]/[`slice::sort_by_cached_key`].
+This can become a headache when using non-[`Copy`] [`Component`]s.
+The new [`sort`]/[`sort_by`] methods can work around this by having the lensing be the "key extraction", removing the need for such a closure.
 
 Keep in mind that the lensing does add some overhead, so these query iterator sorts do not perform equally to a manual sort on average. However, this *strongly* depends on workload, so best test it yourself if relevant!
 The sorts themselves are not yet cached between system runs, and these methods only sort iterators, not underlying query storage.
 
 Note that query iteration might happen in a deterministic order for now, but that may change anytime over future releases.
+
+[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html
+[`QueryIter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html
+[`sort`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html?search=Component#method.sort
+[`Component`]: https://dev-docs.bevyengine.org/bevy/ecs/component/trait.Component.html
+[lens]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
+[`Ord`]: https://doc.rust-lang.org/stable/std/cmp/trait.Ord.html
+[`slice::sort`]: https://doc.rust-lang.org/nightly/std/primitive.slice.html#method.sort
+[`slice`]: https://doc.rust-lang.org/nightly/std/primitive.slice.html
+[`Query::transmute_lens`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
+[`transmute_lens`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
+[`Entity`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Entity.html
+[`Query::iter`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.iter
+[`Query::iter_mut`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.iter_mut
+[`QuerySortedIter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QuerySortedIter.html
+[`DoubleEndedIterator`]: https://doc.rust-lang.org/nightly/core/iter/trait.DoubleEndedIterator.html
+[`slice::sort_by_key`]: https://doc.rust-lang.org/stable/std/primitive.slice.html#method.sort_by_key
+[`slice::sort_by_cached_key`]: https://doc.rust-lang.org/stable/std/primitive.slice.html#method.sort_by_cached_key
+[`Copy`]: https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html
+[`sort_by`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html?search=Component#method.sort_by
