@@ -4,6 +4,7 @@ To do so, we sample from the shadow map near the pixel of interest using a Gauss
 As a result, Bevy's point lights now  look softer and more natural, without any changes to end user code. As before, you can configure the exact strategy used to anti-alias your shadows by setting the [`ShadowFilteringMethod`](https://dev-docs.bevyengine.org/bevy/pbr/enum.ShadowFilteringMethod.html) component on your 3D cameras.
 
 {{ compare_slider(
+    path="POST_PATH",
     left_title="Without PCF filtering",
     left_image="before_pcf.png",
     right_title="With PCF filtering",

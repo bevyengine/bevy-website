@@ -7,6 +7,7 @@ As you might expect, this is both prettier and more computationally expensive!
 In particular, this allows for the creation of stunningly beautiful "god rays" (more properly, crepuscular rays) shining through the fog.
 
 {{ compare_slider(
+    path="POST_PATH",
     left_title="Without Volumetric Fog",
     left_image="without_volumetric_fog.png",
     right_title="With Volumetric Fog",

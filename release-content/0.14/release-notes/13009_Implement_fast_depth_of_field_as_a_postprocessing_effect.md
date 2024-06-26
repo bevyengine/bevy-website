@@ -6,6 +6,7 @@ There are two options available: a fast Gaussian blur or a more physically accur
 The bokeh blur is generally more aesthetically pleasing than the Gaussian blur, as it simulates the effect of a camera more accurately. The shape of the bokeh circles are determined by the number of blades of the aperture. In our case, we use a hexagon, which is usually considered specific to lower-quality cameras.
 
 {{ compare_slider(
+    path="POST_PATH",
     left_title="No Depth of Field",
     left_image="no_dof.png",
     right_title="Bokeh Depth of Field",

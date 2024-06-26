@@ -12,6 +12,6 @@
   <li><a href="{{ release_note.url }}">Pull Request</a></li>
 </ul>
 
-{{ release_note_body }}
+{{ release_note_body | replace(from='POST_PATH', to=page.colocated_path) | markdown }}
 
 {% endfor %}
