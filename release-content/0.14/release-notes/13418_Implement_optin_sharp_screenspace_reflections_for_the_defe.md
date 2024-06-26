@@ -2,6 +2,7 @@
 <!-- https://github.com/bevyengine/bevy/pull/13418 -->
 
 {{ compare_slider(
+    path="POST_PATH",
     left_title="No SSR",
     left_image="no_ssr.png",
     right_title="SSR",
