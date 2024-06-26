@@ -132,7 +132,7 @@ file_name = "11948_Add_Rounded_box_gizmos.md"
 
 [[release_notes]]
 title = "Gizmo Line Styles and Joints"
-authors = ["@lynn-lumen", "@BD103"]
+authors = ["@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/12394"
 file_name = "12394_Gizmo_line_styles.md"
 
@@ -310,7 +310,7 @@ file_name = "12904_Improve_par_iter_and_Parallel.md"
 
 [[release_notes]]
 title = "Make dynamic_linking a no-op on WASM targets"
-authors = ["@james7132", "@BD103"]
+authors = ["@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/12672"
 file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
 
@@ -340,7 +340,7 @@ file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[release_notes]]
 title = "`on_unimplemented` Diagnostics"
-authors = ["@bushrat011899", "@alice-i-cecile", "@BD103", "@Themayu"]
+authors = ["@bushrat011899", "@alice-i-cecile", "@Themayu"]
 url = "https://github.com/bevyengine/bevy/pull/13347"
 file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
 
