@@ -1,10 +1,12 @@
-Currently, query iteration order is not guaranteed. If a user wishes to handle their query items in a certain order, sorting is required.
-In 0.13 this could look like this:
+Currently, query iteration order is not guaranteed. If we wish to work with our query items in a certain order, we need sorting.
+We might want sort our queries to f.e. display a list of things, or fold over our query with some order-dependent math operation.
+In 0.13 a sort could look like this:
+
 ```rust
 #[derive(Component, Copy, Clone, Deref)]
 pub struct Attack(pub usize)
 
-fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
+fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
     let mut enemies: Vec<_> = enemies.iter().collect();
     enemies.sort_by_key(|(_, atk, ..)| *atk)
     for enemy in enemies {
@@ -12,46 +14,54 @@ fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
     }
 }
 ```
-This can get rather unwieldy and repetitive when sorting within multiple systems.
-Even when the sort itself is always the same, abstracting it away is unreasonably difficult when used with differing [`Query`] types!
-As a solution, the sort methods were implemented as an adapter on the [`QueryIter`] types, which turns the prior example into this:
+
+This can get especially unwieldy and repetitive when sorting within multiple systems.
+Even if we always want the same sort, different [`Query`] types make it unreasonably difficult to abstract away as a user!
+To solve this, we implemented new sort methods on the [`QueryIter`] type, turning the example into:
+
 ```rust
 // To be used as a sort key, `Attack` now implements Ord.
 #[derive(Component, Copy, Clone, Deref, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Attack(pub usize)
 
-fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
+fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
     for enemy in enemies.iter().sort::<&Attack>() {
         work_with(enemy)
     }
 }
 ```
-Here, the user specifies the [`Component`] from their query they wish to sort with as a generic parameter to [`sort`].
-This call can be thought of as constructing a [lens](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens) of the original query, on which the sort is actually performed. The result is then internally used to return the original query items in sorted order. 
-In this case, [`sort`] requires its argument to be fully [`Ord`], like its [`slice::sort`] counterpart. 
-If the functionality of [`sort`] does not suffice, all 5 other sort methods from the std library on [`slice`] are now available.
 
-The generic [`lens`] argument is specified the same way as in [`Query::transmute_lens`]. Any filters are inherited from the source query, and do not need to be specified by the user.
-This has some nice additional effects, such as allowing this use case:
+To sort our query with the `Attack` component, we specify it as the generic parameter to [`sort`].
+This parameter can be thought of as being a [lens](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens) or "subset" of the original query, on which the underlying sort is actually performed. The result is then internally used to return a new sorted query iterator over the original query items.
+With the default [`sort`], the lens has to be fully [`Ord`], like with [`slice::sort`].
+If this is not enough, then the rest of sort methods from [`slice`] also have their counterpart!
+
+The generic [`lens`] argument works the same way as in [`Query::transmute_lens`]. We do not use filters, they are inherited from the original query.
+The [`transmute_lens`] infrastructure has some nice additional features, which allows for this:
+
 ```rust
 fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
-    for enemy in enemies.iter().sort::<Entity>() {
+    for enemy in enemies.iter().sort_unstable::<Entity>() {
         work_with(enemy)
     }
 }
 ```
-We can sort by [`Entity`] without including it in the original query!
 
-These sort methods are fully generic over mutability, so can be used on both [`Query::iter`] and [`Query::iter_mut`]! The sorts return iterators themselves, so can be used with further iterator adapter if desired!
+Because we can add [`Entity`] to any lens, we can sort by it without including it in the original query!
 
-The sorted iterator type [`QuerySortedIter`] implements [`DoubleEndedIterator`] while the initial [`QueryIter`] does not. As a consequence, an empty sort can be used to get a more powerful iterator type:
+These sort methods are fully generic over mutability, so can be used on both [`Query::iter`] and [`Query::iter_mut`]! The rest of the of the iterator methods on [`Query`] do not support sorting.
+The sorts return [`QuerySortedIter`], itself an iterator, enabling the use of further iterator adapters on it.
+Further, [`QuerySortedIter`] implements [`DoubleEndedIterator`] while the initial [`QueryIter`] does not. As a consequence, an empty sort can be used to get a more powerful iterator type:
+
 ```rust
 fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
     // A reversible query iterator!
     enemies.iter_mut().sort::<()>().rev();
 }
 ```
-Furthermore, these query iterator sorts offer a workaround for a restriction on slice sorts:
+
+Additionally, these query iterator sorts offer a workaround for a restriction on slice sorts:
+
 ```rust
 // Some `Component` that holds data in an `Arc`.
 // `StatisticsData` does not implement `Copy`.
@@ -71,11 +81,12 @@ fn show_stats_2(users: Query<(&User, &Statistics)>) {
    show(users)
 }
 ```
-In current Rust, one can not return references/non-`Copy` data from the key extraction closure in [`slice::sort_by_key`]/[`slice::sort_by_key`]. 
-This can become a headache when using non-`Copy` [`Component`]s.
-The `sort`/`sort_by` methods can work around this by having the lensing be the "key extraction", removing the need for such a closure.
 
-Keep in mind that the lensing does add some overhead, so on average does not perform equally to a manual sort. However, this *strongly* depends on workload, so best test it yourself if relevant!
+In current Rust, we can not return references from the key extraction closure in [`slice::sort_by_key`]/[`slice::sort_by_key`].
+This can become a headache when using non-`Copy` [`Component`]s.
+The new `sort`/`sort_by` methods can work around this by having the lensing be the "key extraction", removing the need for such a closure.
+
+Keep in mind that the lensing does add some overhead, so these query iterator sorts do not perform equally to a manual sort on average. However, this *strongly* depends on workload, so best test it yourself if relevant!
 The sorts themselves are not yet cached between system runs, and these methods only sort iterators, not underlying query storage.
 
-Note that query iteration might happen in a deterministic order for now, but that may change any time over future releases.
+Note that query iteration might happen in a deterministic order for now, but that may change anytime over future releases.
