@@ -101,8 +101,8 @@ url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "Extrusion"
-authors = ["@lynn-lumen", "@alice-i-cecile"]
+title = "Extruded shapes"
+authors = ["@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/13270"
 file_name = "13270_Extrusion.md"
 
