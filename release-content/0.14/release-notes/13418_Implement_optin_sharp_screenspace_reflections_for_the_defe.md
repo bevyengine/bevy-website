@@ -7,7 +7,7 @@ As a result, there are a few caveats to bear in mind:
 
 1. Currently, this feature is built on top of the deferred renderer and is currently only supported in that mode. Forward screen-space reflections are possible albeit uncommon (though e.g. Doom Eternal uses them); however, they require tracing from the previous frame, which would add complexity. This patch leaves the door open to implementing SSR in the forward rendering path but doesn't itself have such an implementation.
 2. Screen-space reflections aren't supported in WebGL 2, because they require sampling from the depth buffer, which `naga` can't do because of a bug (sampler2DShadow is incorrectly generated instead of sampler2D; this is the same reason why depth of field is disabled on that platform).
-3. No temporal filtering or roughness blurring is performed at all. For this reason, SSR currently only operates on very shiny surfaces.
+3. No temporal filtering or blurring is performed at all. For this reason, SSR currently only operates on very low-roughness / smooth surfaces.
 4. We don't perform acceleration via the hierarchical Z-buffer and reflections are traced at full resolution. As a result, you may notice performance issues depending on your scene and hardware.
 
 ![A cube with the Bevy logo on all 6 sides sits on top of rippling water. Sharp reflections are visible, distorted by the uneven surface of the water.](screen_space_reflections.png)
