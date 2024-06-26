@@ -1,5 +1,5 @@
-Currently, query iteration order is not guaranteed. If we wish to work with our query items in a certain order, we need sorting.
-We might want sort our queries to f.e. display a list of things, or fold over our query with some order-dependent math operation.
+Bevy does not make any guarantees about the order of items. So if we wish to work with our query items in a certain order, we need to sort them!
+We might want to display the scores of the players in order, or ensure a consistent iteration order for the sake of networking stability.
 In 0.13 a sort could look like this:
 
 ```rust
@@ -7,6 +7,7 @@ In 0.13 a sort could look like this:
 pub struct Attack(pub usize)
 
 fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
+    // An allocation!
     let mut enemies: Vec<_> = enemies.iter().collect();
     enemies.sort_by_key(|(_, atk, ..)| *atk)
     for enemy in enemies {
@@ -25,6 +26,7 @@ To solve this, we implemented new sort methods on the [`QueryIter`] type, turnin
 pub struct Attack(pub usize)
 
 fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
+    // Still an allocation, but undercover.
     for enemy in enemies.iter().sort::<&Attack>() {
         work_with(enemy)
     }
@@ -32,7 +34,7 @@ fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
 ```
 
 To sort our query with the `Attack` component, we specify it as the generic parameter to [`sort`].
-If we wished to sort with more than one [`Component`], we can do so, independent of [`Component`] order in the original [`Query`] type: `enemies.iter().sort::<(&Defense, &Attack)>()`
+To sort by more than one [`Component`], we can do so, independent of [`Component`] order in the original [`Query`] type: `enemies.iter().sort::<(&Defense, &Attack)>()`
 
 The generic parameter can be thought of as being a [lens] or "subset" of the original query, on which the underlying sort is actually performed. The result is then internally used to return a new sorted query iterator over the original query items.
 With the default [`sort`], the lens has to be fully [`Ord`], like with [`slice::sort`].
@@ -51,47 +53,10 @@ fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
 
 Because we can add [`Entity`] to any lens, we can sort by it without including it in the original query!
 
-These sort methods are fully generic over mutability, so can be used on both [`Query::iter`] and [`Query::iter_mut`]! The rest of the of the iterator methods on [`Query`] do not support sorting.
+These sort methods work with both [`Query::iter`] and [`Query::iter_mut`]! The rest of the of the iterator methods on [`Query`] do not currently support sorting.
 The sorts return [`QuerySortedIter`], itself an iterator, enabling the use of further iterator adapters on it.
-Further, [`QuerySortedIter`] implements [`DoubleEndedIterator`] while the initial [`QueryIter`] does not. As a consequence, an empty sort can be used to get a more powerful iterator type:
 
-```rust
-fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense, &Rarity)>) {
-    // A reversible query iterator!
-    enemies.iter_mut().sort::<()>().rev();
-}
-```
-
-Additionally, these query iterator sorts offer a workaround for a restriction on slice sorts:
-
-```rust
-// Some `Component` that holds data in an `Arc`.
-// `StatisticsData` does not implement `Copy`.
-#[derive(Component, Clone, Deref, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Statistics(pub Arc<StatisticData>)
-
-// Does not compile.
-fn show_stats(users: Query<(&User, &Statistics)>) {
-   let mut users: Vec<_> = users.iter().collect();
-   users.sort_by_key(|(_, stats)| *stats)
-   show(users)
-}
-
-// Compiles.
-fn show_stats_2(users: Query<(&User, &Statistics)>) {
-   let users = users.iter().sort::<&Statistics>();
-   show(users)
-}
-```
-
-In current Rust, we can not return references from the key extraction closure in [`slice::sort_by_key`]/[`slice::sort_by_cached_key`].
-This can become a headache when using non-[`Copy`] [`Component`]s.
-The new [`sort`]/[`sort_by`] methods can work around this by having the lensing be the "key extraction", removing the need for such a closure.
-
-Keep in mind that the lensing does add some overhead, so these query iterator sorts do not perform equally to a manual sort on average. However, this *strongly* depends on workload, so best test it yourself if relevant!
-The sorts themselves are not yet cached between system runs, and these methods only sort iterators, not underlying query storage.
-
-Note that query iteration might happen in a deterministic order for now, but that may change anytime over future releases.
+Keep in mind that the lensing does add some overhead, so these query iterator sorts do not perform the same as a manual sort on average. However, this *strongly* depends on workload, so best test it yourself if relevant!
 
 [`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html
 [`QueryIter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html
@@ -107,8 +72,3 @@ Note that query iteration might happen in a deterministic order for now, but tha
 [`Query::iter`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.iter
 [`Query::iter_mut`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.iter_mut
 [`QuerySortedIter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QuerySortedIter.html
-[`DoubleEndedIterator`]: https://doc.rust-lang.org/nightly/core/iter/trait.DoubleEndedIterator.html
-[`slice::sort_by_key`]: https://doc.rust-lang.org/stable/std/primitive.slice.html#method.sort_by_key
-[`slice::sort_by_cached_key`]: https://doc.rust-lang.org/stable/std/primitive.slice.html#method.sort_by_cached_key
-[`Copy`]: https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html
-[`sort_by`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html?search=Component#method.sort_by
