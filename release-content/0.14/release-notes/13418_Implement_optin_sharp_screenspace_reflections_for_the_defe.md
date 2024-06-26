@@ -1,7 +1,14 @@
 <!-- Implement opt-in sharp screen-space reflections for the deferred renderer, with improved raymarching code. -->
 <!-- https://github.com/bevyengine/bevy/pull/13418 -->
 
-[Screen-space reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html) approximate real-time reflections by raymarching through the depth buffer and copying samples from the final rendered frame. 
+{{ compare_slider(
+    left_title="No SSR",
+    left_image="no_ssr.png",
+    right_title="SSR",
+    right_image="ssr.png"
+) }}
+
+[Screen-space reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html) approximate real-time reflections by raymarching through the depth buffer and copying samples from the final rendered frame.
 Our initial implementation is relatively minimal, to provide a flexible base to build on, but is based on the production-quality [raymarching code by Tomasz Stachowiak](https://gist.github.com/h3r2tic/9c8356bdaefbe80b1a22ae0aaee192db), one of the creators of the indie darling Bevy game [Tiny Glade](https://store.steampowered.com/app/2198150/Tiny_Glade/).
 As a result, there are a few caveats to bear in mind:
 
