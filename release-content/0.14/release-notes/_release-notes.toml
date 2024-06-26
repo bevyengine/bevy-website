@@ -184,7 +184,6 @@ authors = ["@chescock", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
-
 [[release_notes]]
 title = "Decouple `BackgroundColor` from `UiImage`"
 authors = ["@benfrankel"]
@@ -332,18 +331,6 @@ title = "StandardMaterial UV Channel Selection"
 authors = ["@geckoxx"]
 url = "https://github.com/bevyengine/bevy/pull/13200"
 file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
-
-[[release_notes]]
-title = "Depth of field"
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13009"
-file_name = "13009_Implement_fast_depth_of_field_as_a_postprocessing_effect.md"
-
-[[release_notes]]
-title = "Add Rounded box gizmos"
-authors = ["@lynn-lumen", "@JMS55", "@jgayfer"]
-url = "https://github.com/bevyengine/bevy/pull/11948"
-file_name = "11948_Add_Rounded_box_gizmos.md"
 
 [[release_notes]]
 title = "Remove limit on RenderLayers"
