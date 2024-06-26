@@ -32,7 +32,8 @@ fn handle_enemies(enemies: Query<(&Health, &Attack, &Defense)>) {
 ```
 
 To sort our query with the `Attack` component, we specify it as the generic parameter to [`sort`].
-This parameter can be thought of as being a [lens](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens) or "subset" of the original query, on which the underlying sort is actually performed. The result is then internally used to return a new sorted query iterator over the original query items.
+If we wished to sort with more than one [`Component`], we can do so, independent of [`Component`] order in the original [`Query`] type: `enemies.iter().sort::<(&Defense, &Attack)>()`
+The generic parameter can be thought of as being a [lens](https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens) or "subset" of the original query, on which the underlying sort is actually performed. The result is then internally used to return a new sorted query iterator over the original query items.
 With the default [`sort`], the lens has to be fully [`Ord`], like with [`slice::sort`].
 If this is not enough, then the rest of sort methods from [`slice`] also have their counterpart!
 
@@ -70,14 +71,14 @@ pub struct Statistics(pub Arc<StatisticData>)
 
 // Does not compile.
 fn show_stats(users: Query<(&User, &Statistics)>) {
-   let users: users.iter().collect();
+   let mut users: Vec<_> = users.iter().collect();
    users.sort_by_key(|(_, stats)| *stats)
    show(users)
 }
 
 // Compiles.
 fn show_stats_2(users: Query<(&User, &Statistics)>) {
-   let users: users.iter().sort::<&Statistics>();
+   let users = users.iter().sort::<&Statistics>();
    show(users)
 }
 ```
