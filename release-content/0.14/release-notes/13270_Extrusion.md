@@ -1,4 +1,4 @@
-**Bevy 0.14** introduces an entirely new group of primitives: Extrusions!
+**Bevy 0.14** introduces an entirely new group of primitives: extrusions!
 
 An extrusion is a 2D primitive (the base shape) that is *extruded* into a third dimension by some depth. The resulting shape is a prism (or in the special case of the circle, a cylinder).
 
@@ -12,7 +12,7 @@ let my_extrusion = Extrusion::new(my_ellipse, 1.);
 
 All extrusions are extruded along the Z-axis. This guarantees that an extrusion of depth 0 and the corresponding base shape are identical, just as one would expect.
 
-## Measuring and Sampling
+#### Measuring and Sampling
 
 Since all extrusions with base shapes that implement [`Measured2d`](https://dev-docs.bevyengine.org/bevy/index.html) implement [`Measured3d`](https://dev-docs.bevyengine.org/bevy/index.html), you can easily get the surface area or volume of an extrusion.
 If you have an extrusion of a custom 2D primitive, you can simply implement `Measured2d` for your primitive and `Measured3d` will be implemented automatically for the extrusion.
@@ -40,7 +40,7 @@ let interior_sample = extrusion.sample_interior(&mut rng);
 let boundary_sample = extrusion.sample_boundary(&mut rng);
 ```
 
-## Bounding
+#### Bounding
 
 You can also get bounding spheres and Axis Aligned Bounding Boxes (AABBs) for extrusions. If you have a custom 2D primitive that implements `Bounded2d`, you can simply implement [`BoundedExtrusion`](https://dev-docs.bevyengine.org/bevy/index.html) for your primitive. The default implementation will give optimal results but may be slower than a solution fitted to your primitive. 
 
@@ -60,7 +60,7 @@ impl BoundedExtrusion for Heart {
 }
 ```
 
-## Meshing
+#### Meshing
 
 Extrusions do not exist in the world of maths only though. They can also be meshed and displayed on the screen!
 
