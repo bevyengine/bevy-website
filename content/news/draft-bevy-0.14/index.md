@@ -20,6 +20,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Computed states and substates:** modeling complex app state is a breeze with these type-safe extensions to our `States` abstraction.
 - **Rounded corners:** rounding off one of `bevy_ui`'s roughest edges, you can now procedurally set the corner radius on your UI elements.
 
+For the first time, Bevy 0.14 was prepared using a **release candidate** process to help ensure that you can upgrade right away with peace of mind.
+We've worked closely with both plugin authors and ordinary users to catch critical bugs, round the rough corners off our new features, and refine the migration guide.
+As we prepared fixes, we've [shipped new release candidates on crates.io](https://crates.io/crates/bevy/versions?sort=date), letting core ecosystem crates update and listening closely for show-stopping problems.
+Thank you so much to [everyone who helped out](https://discord.com/channels/691052431525675048/1239930965267054623): these efforts are a vital step towards making Bevy something that teams large and small can trust to work reliably.
+
 <!-- more -->
 
 {{ release_notes(version="0.14") }}
