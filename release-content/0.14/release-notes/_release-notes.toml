@@ -368,11 +368,6 @@ authors = ["@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
-title = "Screen-space reflections"
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13418"
-file_name = "13418_Implement_optin_sharp_screenspace_reflections_for_the_defe.md"
-
 [[release_notes]]
 title = "Motion Vectors and TAA for Animated Meshes"
 authors = ["@pcwalton"]
