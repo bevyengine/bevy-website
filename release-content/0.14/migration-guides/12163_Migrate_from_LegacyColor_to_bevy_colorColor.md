@@ -49,7 +49,7 @@ enum Color {
 This makes it easier to organize and manage different color spaces, and many more color spaces have been added too! To handle this change, you may need to update your match statements:
 
 ```rust
-// Before
+// 0.13
 match color {
     Color::Rgba { red, green, blue, alpha } => {
         // Something cool here!
@@ -57,7 +57,7 @@ match color {
     _ => {},
 }
 
-// After
+// 0.14
 match color {
     Color::Srgba(Srgba { red, green, blue, alpha }) => {
         // Something cool here!
@@ -73,10 +73,10 @@ match color {
 Additionally, you must now use the `From` and `Into` implementations when converting between color spaces, as compared to the old helper methods such as `as_rgba` and `as_hsla`.
 
 ```rust
-// Before
+// 0.13
 let color = Color::rgb(1.0, 0.0, 1.0).as_hsla();
 
-// After
+// 0.14
 let color: Hsla = Srgba::rgb(1.0, 0.0, 1.0).into();
 ```
 
@@ -89,11 +89,11 @@ Any mention of RGB has been renamed to [sRGB]. This includes the variant `Color:
 Methods to access specific channels of `Color` have been removed due to causing silent, relatively expensive conversions. This includes `Color::r`, `Color::set_r`, `Color::with_r`, and all of the equivalents for `g`, `b` `h`, `s` and `l`. Convert your `Color` into the desired color space, perform your operation there, and then convert it back.
 
 ```rust
-// Before
+// 0.13
 let mut color = Color::rgb(0.0, 0.0, 0.0);
 color.set_b(1.0);
 
-// After
+// 0.14
 let color = Color::srgb(0.0, 0.0, 0.0);
 let srgba = Srgba {
     blue: 1.0,
@@ -124,10 +124,10 @@ Alpha, also known as transparency, used to be referred to by the letter `a`. It 
 The various CSS color constants are no longer stored directly on `Color`. Instead, they’re defined in the `Srgba` color space, and accessed via `bevy::color::palettes`. Call `.into()` on them to convert them into a `Color` for quick debugging use.
 
 ```rust
-// Before
+// 0.13
 let color = Color::BLUE;
 
-// After
+// 0.14
 use bevy::color::palettes::css::BLUE;
 
 let color = BLUE;
@@ -137,9 +137,12 @@ Please note that `palettes::css` is not necessarily 1:1 with the constants defin
 
 |0.13|0.14|
 |-|-|
-|`GREEN`|`LIMEGREEN`|
-|`PINK`|`DEEP_PINK`|
+|`CYAN`|`AQUA`|
 |`DARK_GRAY`|`Srgba::gray(0.25)`|
+|`DARK_GREEN`|`Srgba::rgb(0.0, 0.5, 0.0)`|
+|`GREEN`|`LIME`|
+|`LIME_GREEN`|`LIMEGREEN`|
+|`PINK`|`DEEP_PINK`|
 
 #### Switch to `LinearRgba`
 

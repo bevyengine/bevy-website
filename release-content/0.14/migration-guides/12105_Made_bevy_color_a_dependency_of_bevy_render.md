@@ -18,11 +18,11 @@ Note that this conversion can be costly, especially if called during the `Update
 `HslRepresentation` and `LchRepresentation` can be replaced with the `From` implementations between `Srgba`, `Hsla`, and `Lcha`.
 
 ```rust
-// Before
+// 0.13
 let srgb = HslRepresentation::hsl_to_nonlinear_srgb(330.0, 0.7, 0.8);
 let lch = LchRepresentation::nonlinear_srgb_to_lch([0.94, 0.66, 0.8]);
 
-// After
+// 0.14
 let srgba: Srgba = Hsla::new(330.0, 0.7, 0.8, 1.0).into();
 let lcha: Lcha = Srgba::new(0.94, 0.66, 0.8, 1.0).into();
 ```

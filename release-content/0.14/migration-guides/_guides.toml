@@ -149,31 +149,31 @@ areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"
 
 [[guides]]
-title = "Make sysinfo diagnostic plugin optional"
+title = "Make `sysinfo` diagnostic plugin optional"
 url = "https://github.com/bevyengine/bevy/pull/12164"
 areas = ["Diagnostics"]
 file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
 
 [[guides]]
-title = "Improve tracing layer customization"
+title = "Improve `tracing` layer customization"
 url = "https://github.com/bevyengine/bevy/pull/13159"
 areas = ["Diagnostics"]
 file_name = "13159_Improve_tracing_layer_customization.md"
 
 [[guides]]
-title = "Immediately apply deferred system params in System::run"
+title = "Immediately apply deferred system params in `System::run`"
 url = "https://github.com/bevyengine/bevy/pull/11823"
 areas = ["ECS"]
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[guides]]
-title = "Move commands module into bevy::ecs::world"
+title = "Move `Command` and `CommandQueue` into `bevy::ecs::world`"
 url = "https://github.com/bevyengine/bevy/pull/12234"
 areas = ["ECS"]
 file_name = "12234_Move_commands_module_into_bevyecsworld.md"
 
 [[guides]]
-title = "Remove ComponentStorage and associated types"
+title = "Make `Component::Storage` a constant"
 url = "https://github.com/bevyengine/bevy/pull/12311"
 areas = ["ECS"]
 file_name = "12311_Remove_ComponentStorage_and_associated_types.md"
@@ -185,85 +185,73 @@ areas = ["ECS", "Reflection"]
 file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
-title = "Remove archetype_component_access from QueryState"
+title = "Don't store `Access<ArchetypeComponentId>` within `QueryState`"
 url = "https://github.com/bevyengine/bevy/pull/12474"
 areas = ["ECS"]
 file_name = "12474_Remove_archetype_component_access_from_QueryState.md"
 
 [[guides]]
-title = "Remove WorldCell"
+title = "Remove `WorldCell`"
 url = "https://github.com/bevyengine/bevy/pull/12551"
 areas = ["ECS"]
 file_name = "12551_Remove_WorldCell.md"
 
 [[guides]]
-title = "Allow Commands to register systems"
-url = "https://github.com/bevyengine/bevy/pull/11019"
-areas = ["ECS"]
-file_name = "11019_Allow_Commands_to_register_systems.md"
-
-[[guides]]
-title = "Store only the IDs needed for Query iteration"
+title = "Return iterator instead of slice for `QueryState::matched_tables` and `QueryState::matches_archtypes`"
 url = "https://github.com/bevyengine/bevy/pull/12476"
 areas = ["ECS"]
 file_name = "12476_Store_only_the_IDs_needed_for_Query_iteration.md"
 
 [[guides]]
-title = "Remove stepping from default features"
+title = "Remove system stepping from default features"
 url = "https://github.com/bevyengine/bevy/pull/12847"
 areas = ["ECS"]
 file_name = "12847_Remove_stepping_from_default_features.md"
 
 [[guides]]
-title = "Optimize Event Updates"
+title = "Optimize event updates and virtual time"
 url = "https://github.com/bevyengine/bevy/pull/12936"
 areas = ["ECS"]
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[guides]]
-title = "Make SystemParam::new_archetype and QueryState::new_archetype unsafe functions"
+title = "Make `SystemParam::new_archetype` and `QueryState::new_archetype` unsafe"
 url = "https://github.com/bevyengine/bevy/pull/13044"
 areas = ["ECS"]
 file_name = "13044_Make_SystemParamnew_archetype_and_QueryStatenew_archetype_.md"
 
 [[guides]]
-title = "Better SystemId to Entity conversions"
+title = "Better `SystemId` and `Entity` conversion"
 url = "https://github.com/bevyengine/bevy/pull/13090"
 areas = ["ECS"]
 file_name = "13090_Better_SystemId_to_Entity_conversions.md"
 
 [[guides]]
-title = "Computed State & Sub States"
+title = "Make `NextState` an enum"
 url = "https://github.com/bevyengine/bevy/pull/11426"
 areas = ["ECS"]
 file_name = "11426_Computed_State__Sub_States.md"
 
 [[guides]]
-title = "Separate state crate"
+title = "Separate states from core ECS"
 url = "https://github.com/bevyengine/bevy/pull/13216"
 areas = ["ECS"]
 file_name = "13216_Separate_state_crate.md"
 
 [[guides]]
-title = "constrain WorldQuery::get_state to only use &Components"
+title = "Constrain `WorldQuery::get_state()` to only accept `Components`"
 url = "https://github.com/bevyengine/bevy/pull/13343"
 areas = ["ECS"]
 file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
 
 [[guides]]
-title = "constrain WorldQuery::init_state argument to ComponentInitializer"
-url = "https://github.com/bevyengine/bevy/pull/13442"
-areas = ["ECS"]
-file_name = "13442_constrain_WorldQueryinit_state_argument_to_ComponentInitia.md"
-
-[[guides]]
-title = "Unify transition names to `exited` and `entered`"
+title = "Unify state transition names to `exited` and `entered`"
 url = "https://github.com/bevyengine/bevy/pull/13594"
 areas = ["ECS"]
 file_name = "13594_Unify_transition_names_to_exited_and_entered.md"
 
 [[guides]]
-title = "Combine transition systems of `Substates`"
+title = "Make `apply_state_transition` private"
 url = "https://github.com/bevyengine/bevy/pull/13626"
 areas = ["ECS"]
 file_name = "13626_Combine_transition_systems_of_Substates.md"
@@ -555,6 +543,12 @@ title = "Improve performance by binning together opaque items instead of sorting
 url = "https://github.com/bevyengine/bevy/pull/12453"
 areas = ["Rendering"]
 file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
+
+[[guides]]
+title = "Implement GPU frustum culling"
+url = "https://github.com/bevyengine/bevy/pull/12889"
+areas = ["Rendering"]
+file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[guides]]
 title = "remove `DeterministicRenderingConfig`"

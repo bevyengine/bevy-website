@@ -3,13 +3,13 @@ Rust prides itself on its error handling, and Bevy has been steadily catching up
 Now, a full `AssetLoadError` is included inside `Failed` to tell you exactly what went wrong. You may need to update your `match` and `if let` statements to handle this new value:
 
 ```rust
-// Before
+// 0.13
 match asset_server.load_state(asset_id) {
     // ...
     LoadState::Failed => eprintln!("Could not load asset!"),
 }
 
-// After
+// 0.14
 match asset_server.load_state(asset_id) {
     // ...
     LoadState::Failed(error) => eprintln!("Could not load asset! Error: {}", error),

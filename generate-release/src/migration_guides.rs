@@ -130,7 +130,7 @@ file_name = "{file_name}.md"
             .iter()
             .map(|area| format!("\"{area}\""))
             .collect::<Vec<_>>()
-            .join(","),
+            .join(", "),
         title = title.trim().replace('"', "\\\"")
     )
 }
