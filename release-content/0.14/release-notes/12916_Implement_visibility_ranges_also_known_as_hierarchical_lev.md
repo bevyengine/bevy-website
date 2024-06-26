@@ -3,7 +3,7 @@
 
 When looking at objects far away, it's hard to make out the details!
 This obvious fact is just as true in rendering as it is in real life.
-As a result, using complex, high-fidelity models for distant objects is a waste: we can replace their meshes with simplified equivalents (whose lower resolution textures are called mipmaps).
+As a result, using complex, high-fidelity models for distant objects is a waste: we can replace their meshes with simplified equivalents.
 
 By automatically varying the **level-of-detail** (LOD) of our models in this way, we can render much larger scenes (or the same open world with a higher draw distance), swapping out meshes on the fly based on their proximity to the player.
 Bevy now supports one of the most foundational tools for this: **visibility ranges** (sometimes called hierarchical levels of detail, as it allows users to replace multiple meshes with a single object).
