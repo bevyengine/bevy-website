@@ -335,7 +335,7 @@ areas = ["Input","Windowing"]
 file_name = "12868_Deprecate_ReceivedCharacter.md"
 
 [[guides]]
-title = "flush key_input cache when Bevy loses focus (Adopted)"
+title = "Add `WinitEvent::KeyboardFocusLost`"
 url = "https://github.com/bevyengine/bevy/pull/13678"
 areas = ["Input","Windowing"]
 file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"
