@@ -222,7 +222,7 @@ file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
 
 [[release_notes]]
 title = "Render Pipeline Statistics"
-authors = ["@LeshaInc", "@alice-i-cecile"]
+authors = ["@LeshaInc"]
 url = "https://github.com/bevyengine/bevy/pull/9135"
 file_name = "9135_Add_pipeline_statistics.md"
 
