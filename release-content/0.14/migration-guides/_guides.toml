@@ -269,7 +269,7 @@ areas = ["ECS","Reflection"]
 file_name = "12895_Make_some_ReflectComponentReflectBundle_methods_work_with_.md"
 
 [[guides]]
-title = "Make `from_reflect_or_world` also try `ReflectDefault` and improve some comments and panic messages"
+title = "Require `TypeRegistry` in `ReflectBundle::insert()`"
 url = "https://github.com/bevyengine/bevy/pull/12499"
 areas = ["ECS","Reflection"]
 file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
