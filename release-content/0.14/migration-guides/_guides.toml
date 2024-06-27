@@ -281,7 +281,7 @@ areas = ["ECS","Tasks"]
 file_name = "12997_multi_threaded_feature_rename.md"
 
 [[guides]]
-title = "Moves intern and label modules into bevy_ecs"
+title = "Moves `intern` and `label` modules from `bevy::utils` to `bevy::ecs`"
 url = "https://github.com/bevyengine/bevy/pull/12772"
 areas = ["ECS","Utils"]
 file_name = "12772_Moves_intern_and_label_modules_into_bevy_ecs.md"
