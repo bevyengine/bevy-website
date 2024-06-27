@@ -287,7 +287,7 @@ areas = ["ECS","Utils"]
 file_name = "12772_Moves_intern_and_label_modules_into_bevy_ecs.md"
 
 [[guides]]
-title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
+title = "Implement the `AnimationGraph` to blend animations together"
 url = "https://github.com/bevyengine/bevy/pull/11989"
 areas = ["Editor"]
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
