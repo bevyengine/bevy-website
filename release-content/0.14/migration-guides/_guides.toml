@@ -275,7 +275,7 @@ areas = ["ECS","Reflection"]
 file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
 
 [[guides]]
-title = "multi_threaded feature rename"
+title = "Rename `multi-threaded` feature to `multi_threaded`"
 url = "https://github.com/bevyengine/bevy/pull/12997"
 areas = ["ECS","Tasks"]
 file_name = "12997_multi_threaded_feature_rename.md"
