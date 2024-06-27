@@ -305,7 +305,7 @@ areas = ["Gizmos"]
 file_name = "12394_Gizmo_line_styles.md"
 
 [[guides]]
-title = "Inconsistent segments/resolution naming"
+title = "Rename `segments()` methods to `resolution()`"
 url = "https://github.com/bevyengine/bevy/pull/13438"
 areas = ["Gizmos"]
 file_name = "13438_Inconsistent_segmentsresolution_naming.md"
