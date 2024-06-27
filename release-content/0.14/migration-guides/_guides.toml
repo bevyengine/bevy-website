@@ -323,7 +323,7 @@ areas = ["Gizmos"]
 file_name = "13261_More_gizmos_builders.md"
 
 [[guides]]
-title = "rename touchpad to gesture, and add new gestures"
+title = "Rename touchpad input to gesture"
 url = "https://github.com/bevyengine/bevy/pull/13660"
 areas = ["Input"]
 file_name = "13660_rename_touchpad_to_gesture_and_add_new_gestures.md"
