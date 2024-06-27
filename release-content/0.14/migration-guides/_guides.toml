@@ -257,43 +257,37 @@ areas = ["ECS"]
 file_name = "13626_Combine_transition_systems_of_Substates.md"
 
 [[guides]]
-title = "Replace `FromWorld` requirement on `ReflectResource` and reflect `Resource` for `State<S>`"
+title = "Replace `FromWorld` requirement with `FromReflect` on `ReflectResource`"
 url = "https://github.com/bevyengine/bevy/pull/12136"
 areas = ["ECS","Reflection"]
 file_name = "12136_Replace_FromWorld_requirement_on_ReflectResource_and_refle.md"
 
 [[guides]]
-title = "Make some `ReflectComponent`/`ReflectBundle` methods work with `EntityMut` too"
+title = "Make `ReflectComponentFns` and `ReflectBundleFns` methods work with `EntityMut`"
 url = "https://github.com/bevyengine/bevy/pull/12895"
 areas = ["ECS","Reflection"]
 file_name = "12895_Make_some_ReflectComponentReflectBundle_methods_work_with_.md"
 
 [[guides]]
-title = "Make `from_reflect_or_world` also try `ReflectDefault` and improve some comments and panic messages"
+title = "Require `TypeRegistry` in `ReflectBundle::insert()`"
 url = "https://github.com/bevyengine/bevy/pull/12499"
 areas = ["ECS","Reflection"]
 file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
 
 [[guides]]
-title = "Generalize component reflection to operate on `FilteredEntityRef` and `FilteredEntityMut`, not `EntityRef` and `EntityMut`."
-url = "https://github.com/bevyengine/bevy/pull/13549"
-areas = ["ECS","Reflection"]
-file_name = "13549_Generalize_component_reflection_to_operate_on_FilteredEnti.md"
-
-[[guides]]
-title = "multi_threaded feature rename"
+title = "Rename `multi-threaded` feature to `multi_threaded`"
 url = "https://github.com/bevyengine/bevy/pull/12997"
 areas = ["ECS","Tasks"]
 file_name = "12997_multi_threaded_feature_rename.md"
 
 [[guides]]
-title = "Moves intern and label modules into bevy_ecs"
+title = "Moves `intern` and `label` modules from `bevy::utils` to `bevy::ecs`"
 url = "https://github.com/bevyengine/bevy/pull/12772"
 areas = ["ECS","Utils"]
 file_name = "12772_Moves_intern_and_label_modules_into_bevy_ecs.md"
 
 [[guides]]
-title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
+title = "Implement the `AnimationGraph` to blend animations together"
 url = "https://github.com/bevyengine/bevy/pull/11989"
 areas = ["Editor"]
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
@@ -311,13 +305,13 @@ areas = ["Gizmos"]
 file_name = "12394_Gizmo_line_styles.md"
 
 [[guides]]
-title = "Inconsistent segments/resolution naming"
+title = "Rename `segments()` methods to `resolution()`"
 url = "https://github.com/bevyengine/bevy/pull/13438"
 areas = ["Gizmos"]
 file_name = "13438_Inconsistent_segmentsresolution_naming.md"
 
 [[guides]]
-title = "Make gizmos take primitives by ref"
+title = "Make gizmos take primitives as a reference"
 url = "https://github.com/bevyengine/bevy/pull/13534"
 areas = ["Gizmos"]
 file_name = "13534_Make_gizmos_take_primitives_by_ref.md"
@@ -329,7 +323,7 @@ areas = ["Gizmos"]
 file_name = "13261_More_gizmos_builders.md"
 
 [[guides]]
-title = "rename touchpad to gesture, and add new gestures"
+title = "Rename touchpad input to gesture"
 url = "https://github.com/bevyengine/bevy/pull/13660"
 areas = ["Input"]
 file_name = "13660_rename_touchpad_to_gesture_and_add_new_gestures.md"
@@ -341,7 +335,7 @@ areas = ["Input","Windowing"]
 file_name = "12868_Deprecate_ReceivedCharacter.md"
 
 [[guides]]
-title = "flush key_input cache when Bevy loses focus (Adopted)"
+title = "Add `WinitEvent::KeyboardFocusLost`"
 url = "https://github.com/bevyengine/bevy/pull/13678"
 areas = ["Input","Windowing"]
 file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"

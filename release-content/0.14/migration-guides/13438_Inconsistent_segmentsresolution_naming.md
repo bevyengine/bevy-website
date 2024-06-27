@@ -1,1 +1,1 @@
-When working with gizmos, replace all calls to `.segments(...)` with `.resolution(...)`
+All gizmo methods named `segments()` have been rename to `resolution()` in order to be consistent with `bevy::render`.

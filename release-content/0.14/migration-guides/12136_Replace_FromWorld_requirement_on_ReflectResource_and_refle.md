@@ -1,3 +1,3 @@
-- Users of `#[reflect(Resource)]` will need to also implement/derive `FromReflect` (should already be the default).
-- Users of `#[reflect(Resource)]` may now want to also add `FromWorld` to the list of reflected traits in case their `FromReflect` implementation may fail.
-- Users of `ReflectResource` will now need to pass a `&TypeRegistry` to its `insert`, `apply_or_insert` and `copy` methods.
+`#[reflect(Resource)]` now requires the `FromReflect` trait to be implemented for your resource. This is done by default if you use `#[derive(Reflect)]`, but you structs that opt-out of this behavior will have to write their own implementation. `FromReflect` was added to replace the `FromWorld` requirement, though `FromReflect` is fallible. You may wish to add `#[reflect(FromWorld)]` to your resources to maintain an infallible variant.
+
+Finally, if you use the `ReflectResource` struct you will need to pass a `&TypeRegistry` to its `insert`, `apply_or_insert`, and `copy` methods.
