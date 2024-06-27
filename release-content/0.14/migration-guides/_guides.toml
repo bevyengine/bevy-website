@@ -311,7 +311,7 @@ areas = ["Gizmos"]
 file_name = "13438_Inconsistent_segmentsresolution_naming.md"
 
 [[guides]]
-title = "Make gizmos take primitives by ref"
+title = "Make gizmos take primitives as a reference"
 url = "https://github.com/bevyengine/bevy/pull/13534"
 areas = ["Gizmos"]
 file_name = "13534_Make_gizmos_take_primitives_by_ref.md"
