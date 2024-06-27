@@ -10,8 +10,8 @@ Users should update imports that referenced the old location.
 
 ```rust
 // 0.13
-use bevy::ecs::schedule::{NextState, OnEnter, OnExit, OnTransition, State, States}
-use bevy::ecs::schedule::common_conditions::in_state
+use bevy::ecs::schedule::{NextState, OnEnter, OnExit, OnTransition, State, States};
+use bevy::ecs::schedule::common_conditions::in_state;
 
 // 0.14
 use bevy::state::state::{NextState, OnEnter, OnExit, OnTransition, State, States}
