@@ -257,7 +257,7 @@ areas = ["ECS"]
 file_name = "13626_Combine_transition_systems_of_Substates.md"
 
 [[guides]]
-title = "Replace `FromWorld` requirement on `ReflectResource` and reflect `Resource` for `State<S>`"
+title = "Replace `FromWorld` requirement with `FromReflect` on `ReflectResource`"
 url = "https://github.com/bevyengine/bevy/pull/12136"
 areas = ["ECS","Reflection"]
 file_name = "12136_Replace_FromWorld_requirement_on_ReflectResource_and_refle.md"
