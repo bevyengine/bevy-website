@@ -275,12 +275,6 @@ areas = ["ECS","Reflection"]
 file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
 
 [[guides]]
-title = "Generalize component reflection to operate on `FilteredEntityRef` and `FilteredEntityMut`, not `EntityRef` and `EntityMut`."
-url = "https://github.com/bevyengine/bevy/pull/13549"
-areas = ["ECS","Reflection"]
-file_name = "13549_Generalize_component_reflection_to_operate_on_FilteredEnti.md"
-
-[[guides]]
 title = "multi_threaded feature rename"
 url = "https://github.com/bevyengine/bevy/pull/12997"
 areas = ["ECS","Tasks"]
