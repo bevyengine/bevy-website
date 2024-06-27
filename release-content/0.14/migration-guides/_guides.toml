@@ -263,7 +263,7 @@ areas = ["ECS","Reflection"]
 file_name = "12136_Replace_FromWorld_requirement_on_ReflectResource_and_refle.md"
 
 [[guides]]
-title = "Make some `ReflectComponent`/`ReflectBundle` methods work with `EntityMut` too"
+title = "Make `ReflectComponentFns` and `ReflectBundleFns` methods work with `EntityMut`"
 url = "https://github.com/bevyengine/bevy/pull/12895"
 areas = ["ECS","Reflection"]
 file_name = "12895_Make_some_ReflectComponentReflectBundle_methods_work_with_.md"
