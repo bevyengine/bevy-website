@@ -1,0 +1,1 @@
+- `Mesh::merge` now take a reference of a mesh instead of an owned mesh.
