@@ -689,7 +689,7 @@ areas = ["Rendering"]
 file_name = "13419_Allow_mix_of_hdr_and_nonhdr_cameras_to_same_render_target.md"
 
 [[guides]]
-title = "Wgpu 0.20"
+title = "`wgpu` 0.20"
 url = "https://github.com/bevyengine/bevy/pull/13186"
 areas = ["Rendering"]
 file_name = "13186_Wgpu_020.md"
