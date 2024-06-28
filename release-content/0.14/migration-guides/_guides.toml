@@ -683,7 +683,7 @@ areas = ["Rendering"]
 file_name = "13710_Made_Meshmerge_take_a_reference_of_Mesh.md"
 
 [[guides]]
-title = "Allow mix of hdr and non-hdr cameras to same render target"
+title = "Store `ClearColorConfig` instead of `LoadOp<Color>` in `CameraOutputMode`"
 url = "https://github.com/bevyengine/bevy/pull/13419"
 areas = ["Rendering"]
 file_name = "13419_Allow_mix_of_hdr_and_nonhdr_cameras_to_same_render_target.md"
