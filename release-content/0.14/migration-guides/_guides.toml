@@ -677,7 +677,7 @@ areas = ["Rendering"]
 file_name = "13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md"
 
 [[guides]]
-title = "Made `Mesh::merge` take a reference of `Mesh`."
+title = "Make `Mesh::merge()` take a reference of `Mesh`"
 url = "https://github.com/bevyengine/bevy/pull/13710"
 areas = ["Rendering"]
 file_name = "13710_Made_Meshmerge_take_a_reference_of_Mesh.md"

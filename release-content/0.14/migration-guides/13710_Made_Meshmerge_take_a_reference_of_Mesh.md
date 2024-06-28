@@ -1,1 +1,1 @@
-- `Mesh::merge` now take a reference of a mesh instead of an owned mesh.
+`Mesh::merge()` now takes `&Mesh` instead of `Mesh`. Because of this, you can now share the same `Mesh` across multiple `merge()` calls without cloning it.
