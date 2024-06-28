@@ -58,7 +58,11 @@ pub fn generate_migration_guides(
                 // Skip existing files because we don't want to overwrite changes when regenerating
                 continue;
             }
-            write_migration_file(&file_path, pr.body.as_ref().context("PR has no body")?)?;
+            write_migration_file(
+                &file_path,
+                pr.body.as_ref().context("PR has no body")?,
+                pr.number,
+            )?;
         }
     }
 
@@ -138,7 +142,7 @@ file_name = "{file_name}.md"
 /// Write a file containing the body of the migration guide
 ///
 /// Also does some clean ups like removing unnecessary characters
-fn write_migration_file(file_path: &PathBuf, pr_body: &str) -> anyhow::Result<()> {
+fn write_migration_file(file_path: &PathBuf, pr_body: &str, pr_number: u64) -> anyhow::Result<()> {
     let mut file =
         std::fs::File::create(file_path).context(format!("Failed to create {file_path:?}"))?;
 
@@ -151,6 +155,13 @@ fn write_migration_file(file_path: &PathBuf, pr_body: &str) -> anyhow::Result<()
 
     // Strip leading and trailing whitespace and add a newline at the end
     section = section.trim().to_string() + "\n";
+
+    if section.trim().is_empty() {
+        // Section is just whitespace so we can skip it
+        // It's possible this is a false positive so log the url to check it manually
+        println!("\x1b[93mMigration guide is empty for https://github.com/bevyengine/bevy/pull/{pr_number}\x1b[0m");
+        return Ok(());
+    }
 
     write!(file, "{}", section)?;
     Ok(())
