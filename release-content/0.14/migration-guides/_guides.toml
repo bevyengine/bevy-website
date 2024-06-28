@@ -107,12 +107,6 @@ areas = ["Assets"]
 file_name = "13465_Make_LoadContext_use_the_builder_pattern_for_loading_depen.md"
 
 [[guides]]
-title = "Improve error handling for `AssetServer::add_async`"
-url = "https://github.com/bevyengine/bevy/pull/13745"
-areas = ["Assets"]
-file_name = "13745_Improve_error_handling_for_AssetServeradd_async.md"
-
-[[guides]]
 title = "Use `RenderAssetUsages` to configure gLTF meshes & materials during load"
 url = "https://github.com/bevyengine/bevy/pull/12302"
 areas = ["Assets", "Rendering"]
