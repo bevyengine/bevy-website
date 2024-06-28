@@ -131,12 +131,6 @@ areas = ["Color"]
 file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
 
 [[guides]]
-title = "Adds back in way to convert color to u8 array, implemented for the two RGB color types, also renames Color::linear to Color::to_linear."
-url = "https://github.com/bevyengine/bevy/pull/13759"
-areas = ["Color"]
-file_name = "13759_Adds_back_in_way_to_convert_color_to_u8_array_implemented_.md"
-
-[[guides]]
 title = "Overhaul `Color`"
 url = "https://github.com/bevyengine/bevy/pull/12163"
 areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
