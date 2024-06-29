@@ -1,1 +1,7 @@
-Since `Point` no longer exists, any projects using it must switch to `bevy::math::VectorSpace`. Additionally, third-party implementations of this trait now require the `Neg` trait; the constant `VectorSpace::ZERO` must be provided as well.
+The `Point` trait has been replaced by `VectorSpace`. These traits are very similar, with a few minor changes:
+
+- `VectorSpace` implementations must now provide the `ZERO` constant.
+- `VectorSpace` now requires the `Div<f32, Output = Self>` and `Neg` trait bounds.
+- `VectorSpace` no longer requires the `Add<f32, Output = Self>`, `Sum`, and `PartialEq` trait bounds.
+
+For most cases you can replace all `Point` usage with `VectorSpace`, but you may have to make further changes if you depend on anything in the list above.

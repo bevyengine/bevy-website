@@ -335,7 +335,7 @@ areas = ["Input", "Windowing"]
 file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"
 
 [[guides]]
-title = "Add `Direction3dA` and move direction types out of `primitives`"
+title = "Move direction types out of `bevy::math::primitives`"
 url = "https://github.com/bevyengine/bevy/pull/12018"
 areas = ["Math"]
 file_name = "12018_Add_Direction3dA_and_move_direction_types_out_of_primitive.md"
@@ -353,31 +353,25 @@ areas = ["Math"]
 file_name = "12574_Make_cardinal_splines_include_endpoints.md"
 
 [[guides]]
-title = "Move `Point` out of cubic splines module and expand it"
+title = "Replace `Point` with `VectorSpace`"
 url = "https://github.com/bevyengine/bevy/pull/12747"
 areas = ["Math"]
 file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
 
 [[guides]]
-title = "Remove VectorSpace impl on Quat"
-url = "https://github.com/bevyengine/bevy/pull/12796"
-areas = ["Math"]
-file_name = "12796_Remove_VectorSpace_impl_on_Quat.md"
-
-[[guides]]
-title = "Meshing for `Triangle3d` primitive"
+title = "UV-mapping change for `Triangle2d`"
 url = "https://github.com/bevyengine/bevy/pull/12686"
 areas = ["Math"]
 file_name = "12686_Meshing_for_Triangle3d_primitive.md"
 
 [[guides]]
-title = "Use Vec3A for 3D bounding volumes and raycasts"
+title = "Use `Vec3A` for 3D bounding volumes and raycasts"
 url = "https://github.com/bevyengine/bevy/pull/13087"
 areas = ["Math"]
 file_name = "13087_Use_Vec3A_for_3D_bounding_volumes_and_raycasts.md"
 
 [[guides]]
-title = "Update glam version requirement from 0.25 to 0.27"
+title = "Update `glam` to 0.27"
 url = "https://github.com/bevyengine/bevy/pull/12757"
 areas = ["Math"]
 file_name = "12757_Update_glam_version_requirement_from_025_to_027.md"
