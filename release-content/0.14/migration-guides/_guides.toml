@@ -335,7 +335,7 @@ areas = ["Input", "Windowing"]
 file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"
 
 [[guides]]
-title = "Add `Direction3dA` and move direction types out of `primitives`"
+title = "Move direction types out of `bevy::math::primitives`"
 url = "https://github.com/bevyengine/bevy/pull/12018"
 areas = ["Math"]
 file_name = "12018_Add_Direction3dA_and_move_direction_types_out_of_primitive.md"
