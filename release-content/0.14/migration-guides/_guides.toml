@@ -359,12 +359,6 @@ areas = ["Math"]
 file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
 
 [[guides]]
-title = "Remove VectorSpace impl on Quat"
-url = "https://github.com/bevyengine/bevy/pull/12796"
-areas = ["Math"]
-file_name = "12796_Remove_VectorSpace_impl_on_Quat.md"
-
-[[guides]]
 title = "Meshing for `Triangle3d` primitive"
 url = "https://github.com/bevyengine/bevy/pull/12686"
 areas = ["Math"]
