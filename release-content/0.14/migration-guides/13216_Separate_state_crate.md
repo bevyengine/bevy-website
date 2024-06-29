@@ -1,4 +1,4 @@
-States were moved to a separate crate which is gated behind the `bevy_state` feature. Projects that use state but don't use Bevy's `default-features` will need to add that feature to their `Cargo.toml`.
+States were moved to a separate crate which is gated behind the `bevy_state` feature. Projects that use state but don't use Bevy's `default-features` will need to add this feature to their `Cargo.toml`.
 
 Projects that use `bevy_ecs` directly and use states will need to add the `bevy_state` **crate** as a dependency.
 
@@ -10,8 +10,8 @@ Users should update imports that referenced the old location.
 
 ```rust
 // 0.13
-use bevy::ecs::schedule::{NextState, OnEnter, OnExit, OnTransition, State, States}
-use bevy::ecs::schedule::common_conditions::in_state
+use bevy::ecs::schedule::{NextState, OnEnter, OnExit, OnTransition, State, States};
+use bevy::ecs::schedule::common_conditions::in_state;
 
 // 0.14
 use bevy::state::state::{NextState, OnEnter, OnExit, OnTransition, State, States}

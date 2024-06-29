@@ -1,1 +1,1 @@
-`WinitEvent` has a new enum variant: `WinitEvent::KeyboardFocusLost`.
+`WinitEvent` has a new enum variant: `WinitEvent::KeyboardFocusLost`. This was added as part of a fix where key presses would stick when losing focus of the Bevy window, such as with <kbd>Alt + Tab</kbd>. Please update any `match` statements.

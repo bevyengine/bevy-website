@@ -21,7 +21,7 @@ Please only use names, logos, and links that you have the right and permission t
 
 ## I sponsored but the metrics / names / logos on the donate page haven't updated!
 
-This isn't automated (yet!). For now ... bear with us. We try to update these as quickly as possible.
+Please wait a little. It might take up to an hour for the automatic update to add you to the credits.
 
 ## How are the metrics on the donation page calculated?
 

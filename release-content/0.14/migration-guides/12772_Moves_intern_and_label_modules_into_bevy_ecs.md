@@ -1,6 +1,1 @@
-- Replace `bevy_utils::define_label` imports with `bevy_ecs::define_label` imports.
-- Replace `bevy_utils::label::DynEq` imports with `bevy_ecs::label::DynEq` imports.
-- Replace `bevy_utils::label::DynHash` imports with `bevy_ecs::label::DynHash` imports.
-- Replace `bevy_utils::intern::Interned` imports with `bevy_ecs::intern::Interned` imports.
-- Replace `bevy_utils::intern::Internable` imports with `bevy_ecs::intern::Internable` imports.
-- Replace `bevy_utils::intern::Interner` imports with `bevy_ecs::intern::Interner` imports.
+The `bevy::utils::label` and `bevy::utils::intern` modules have been moved to `bevy::ecs`, as well as the `bevy::utils::define_label` macro as part of an active effort to shrink `bevy::utils`. You will have to update your import statements to use the new paths.

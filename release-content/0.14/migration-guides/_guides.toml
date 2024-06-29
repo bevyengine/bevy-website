@@ -23,9 +23,15 @@ areas = ["Animation"]
 file_name = "11707_Rework_animation_to_be_done_in_two_phases.md"
 
 [[guides]]
+title = "Implement the `AnimationGraph` to blend animations together"
+url = "https://github.com/bevyengine/bevy/pull/11989"
+areas = ["Animation"]
+file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
+
+[[guides]]
 title = "Multiplying `LinearRgba` by `f32` no longer ignores alpha channel"
 url = "https://github.com/bevyengine/bevy/pull/12575"
-areas = ["Animation","Color","Math","Rendering"]
+areas = ["Animation", "Color", "Math", "Rendering"]
 file_name = "12575_Color_maths_4.md"
 
 [[guides]]
@@ -49,7 +55,7 @@ file_name = "13080_Deprecate_dynamic_plugins.md"
 [[guides]]
 title = "Move state initialization methods to `bevy::state`"
 url = "https://github.com/bevyengine/bevy/pull/13637"
-areas = ["App","ECS"]
+areas = ["App", "ECS"]
 file_name = "13637_Move_state_installation_methods_from_bevy_app_to_bevy_stat.md"
 
 [[guides]]
@@ -103,13 +109,13 @@ file_name = "13465_Make_LoadContext_use_the_builder_pattern_for_loading_depen.md
 [[guides]]
 title = "Use `RenderAssetUsages` to configure gLTF meshes & materials during load"
 url = "https://github.com/bevyengine/bevy/pull/12302"
-areas = ["Assets","Rendering"]
+areas = ["Assets", "Rendering"]
 file_name = "12302_Allow_setting_RenderAssetUsages_for_gLTF_meshes__materials.md"
 
 [[guides]]
 title = "Consolidate `RenderMaterials` and similar into `RenderAssets`, implement `RenderAsset` for destination type"
 url = "https://github.com/bevyengine/bevy/pull/12827"
-areas = ["Assets","Rendering"]
+areas = ["Assets", "Rendering"]
 file_name = "12827_Consolidate_RenderUiMaterials2d_into_RenderAssets.md"
 
 [[guides]]
@@ -149,166 +155,136 @@ areas = ["Dev-Tools"]
 file_name = "12859_remove_close_on_esc.md"
 
 [[guides]]
-title = "Make sysinfo diagnostic plugin optional"
+title = "Make `sysinfo` diagnostic plugin optional"
 url = "https://github.com/bevyengine/bevy/pull/12164"
 areas = ["Diagnostics"]
 file_name = "12164_Make_sysinfo_diagnostic_plugin_optional.md"
 
 [[guides]]
-title = "Improve tracing layer customization"
+title = "Improve `tracing` layer customization"
 url = "https://github.com/bevyengine/bevy/pull/13159"
 areas = ["Diagnostics"]
 file_name = "13159_Improve_tracing_layer_customization.md"
 
 [[guides]]
-title = "Immediately apply deferred system params in System::run"
+title = "Immediately apply deferred system params in `System::run`"
 url = "https://github.com/bevyengine/bevy/pull/11823"
 areas = ["ECS"]
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[guides]]
-title = "Move commands module into bevy::ecs::world"
+title = "Move `Command` and `CommandQueue` into `bevy::ecs::world`"
 url = "https://github.com/bevyengine/bevy/pull/12234"
 areas = ["ECS"]
 file_name = "12234_Move_commands_module_into_bevyecsworld.md"
 
 [[guides]]
-title = "Remove ComponentStorage and associated types"
+title = "Make `Component::Storage` a constant"
 url = "https://github.com/bevyengine/bevy/pull/12311"
 areas = ["ECS"]
 file_name = "12311_Remove_ComponentStorage_and_associated_types.md"
 
 [[guides]]
-title = "Clean up type registrations"
-url = "https://github.com/bevyengine/bevy/pull/12314"
-areas = ["ECS", "Reflection"]
-file_name = "12314_Clean_up_type_registrations.md"
-
-[[guides]]
-title = "Remove archetype_component_access from QueryState"
+title = "Don't store `Access<ArchetypeComponentId>` within `QueryState`"
 url = "https://github.com/bevyengine/bevy/pull/12474"
 areas = ["ECS"]
 file_name = "12474_Remove_archetype_component_access_from_QueryState.md"
 
 [[guides]]
-title = "Remove WorldCell"
+title = "Remove `WorldCell`"
 url = "https://github.com/bevyengine/bevy/pull/12551"
 areas = ["ECS"]
 file_name = "12551_Remove_WorldCell.md"
 
 [[guides]]
-title = "Allow Commands to register systems"
-url = "https://github.com/bevyengine/bevy/pull/11019"
-areas = ["ECS"]
-file_name = "11019_Allow_Commands_to_register_systems.md"
-
-[[guides]]
-title = "Store only the IDs needed for Query iteration"
+title = "Return iterator instead of slice for `QueryState::matched_tables` and `QueryState::matches_archtypes`"
 url = "https://github.com/bevyengine/bevy/pull/12476"
 areas = ["ECS"]
 file_name = "12476_Store_only_the_IDs_needed_for_Query_iteration.md"
 
 [[guides]]
-title = "Remove stepping from default features"
+title = "Remove system stepping from default features"
 url = "https://github.com/bevyengine/bevy/pull/12847"
 areas = ["ECS"]
 file_name = "12847_Remove_stepping_from_default_features.md"
 
 [[guides]]
-title = "Optimize Event Updates"
+title = "Optimize event updates and virtual time"
 url = "https://github.com/bevyengine/bevy/pull/12936"
 areas = ["ECS"]
 file_name = "12936_Optimize_Event_Updates.md"
 
 [[guides]]
-title = "Make SystemParam::new_archetype and QueryState::new_archetype unsafe functions"
+title = "Make `SystemParam::new_archetype` and `QueryState::new_archetype` unsafe"
 url = "https://github.com/bevyengine/bevy/pull/13044"
 areas = ["ECS"]
 file_name = "13044_Make_SystemParamnew_archetype_and_QueryStatenew_archetype_.md"
 
 [[guides]]
-title = "Better SystemId to Entity conversions"
+title = "Better `SystemId` and `Entity` conversion"
 url = "https://github.com/bevyengine/bevy/pull/13090"
 areas = ["ECS"]
 file_name = "13090_Better_SystemId_to_Entity_conversions.md"
 
 [[guides]]
-title = "Computed State & Sub States"
+title = "Make `NextState` an enum"
 url = "https://github.com/bevyengine/bevy/pull/11426"
 areas = ["ECS"]
 file_name = "11426_Computed_State__Sub_States.md"
 
 [[guides]]
-title = "Separate state crate"
+title = "Separate states from core ECS"
 url = "https://github.com/bevyengine/bevy/pull/13216"
 areas = ["ECS"]
 file_name = "13216_Separate_state_crate.md"
 
 [[guides]]
-title = "constrain WorldQuery::get_state to only use &Components"
+title = "Constrain `WorldQuery::get_state()` to only accept `Components`"
 url = "https://github.com/bevyengine/bevy/pull/13343"
 areas = ["ECS"]
 file_name = "13343_constrain_WorldQueryget_state_to_only_use_Components.md"
 
 [[guides]]
-title = "constrain WorldQuery::init_state argument to ComponentInitializer"
-url = "https://github.com/bevyengine/bevy/pull/13442"
-areas = ["ECS"]
-file_name = "13442_constrain_WorldQueryinit_state_argument_to_ComponentInitia.md"
-
-[[guides]]
-title = "Unify transition names to `exited` and `entered`"
+title = "Unify state transition names to `exited` and `entered`"
 url = "https://github.com/bevyengine/bevy/pull/13594"
 areas = ["ECS"]
 file_name = "13594_Unify_transition_names_to_exited_and_entered.md"
 
 [[guides]]
-title = "Combine transition systems of `Substates`"
+title = "Make `apply_state_transition` private"
 url = "https://github.com/bevyengine/bevy/pull/13626"
 areas = ["ECS"]
 file_name = "13626_Combine_transition_systems_of_Substates.md"
 
 [[guides]]
-title = "Replace `FromWorld` requirement on `ReflectResource` and reflect `Resource` for `State<S>`"
+title = "Replace `FromWorld` requirement with `FromReflect` on `ReflectResource`"
 url = "https://github.com/bevyengine/bevy/pull/12136"
-areas = ["ECS","Reflection"]
+areas = ["ECS", "Reflection"]
 file_name = "12136_Replace_FromWorld_requirement_on_ReflectResource_and_refle.md"
 
 [[guides]]
-title = "Make some `ReflectComponent`/`ReflectBundle` methods work with `EntityMut` too"
+title = "Make `ReflectComponentFns` and `ReflectBundleFns` methods work with `EntityMut`"
 url = "https://github.com/bevyengine/bevy/pull/12895"
-areas = ["ECS","Reflection"]
+areas = ["ECS", "Reflection"]
 file_name = "12895_Make_some_ReflectComponentReflectBundle_methods_work_with_.md"
 
 [[guides]]
-title = "Make `from_reflect_or_world` also try `ReflectDefault` and improve some comments and panic messages"
+title = "Require `TypeRegistry` in `ReflectBundle::insert()`"
 url = "https://github.com/bevyengine/bevy/pull/12499"
-areas = ["ECS","Reflection"]
+areas = ["ECS", "Reflection"]
 file_name = "12499_Make_from_reflect_or_world_also_try_ReflectDefault_and_imp.md"
 
 [[guides]]
-title = "Generalize component reflection to operate on `FilteredEntityRef` and `FilteredEntityMut`, not `EntityRef` and `EntityMut`."
-url = "https://github.com/bevyengine/bevy/pull/13549"
-areas = ["ECS","Reflection"]
-file_name = "13549_Generalize_component_reflection_to_operate_on_FilteredEnti.md"
-
-[[guides]]
-title = "multi_threaded feature rename"
+title = "Rename `multi-threaded` feature to `multi_threaded`"
 url = "https://github.com/bevyengine/bevy/pull/12997"
-areas = ["ECS","Tasks"]
+areas = ["ECS", "Tasks"]
 file_name = "12997_multi_threaded_feature_rename.md"
 
 [[guides]]
-title = "Moves intern and label modules into bevy_ecs"
+title = "Moves `intern` and `label` modules from `bevy::utils` to `bevy::ecs`"
 url = "https://github.com/bevyengine/bevy/pull/12772"
-areas = ["ECS","Utils"]
+areas = ["ECS", "Utils"]
 file_name = "12772_Moves_intern_and_label_modules_into_bevy_ecs.md"
-
-[[guides]]
-title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
-url = "https://github.com/bevyengine/bevy/pull/11989"
-areas = ["Editor"]
-file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
 
 [[guides]]
 title = "Gizmo line joints"
@@ -323,13 +299,13 @@ areas = ["Gizmos"]
 file_name = "12394_Gizmo_line_styles.md"
 
 [[guides]]
-title = "Inconsistent segments/resolution naming"
+title = "Rename `segments()` methods to `resolution()`"
 url = "https://github.com/bevyengine/bevy/pull/13438"
 areas = ["Gizmos"]
 file_name = "13438_Inconsistent_segmentsresolution_naming.md"
 
 [[guides]]
-title = "Make gizmos take primitives by ref"
+title = "Make gizmos take primitives as a reference"
 url = "https://github.com/bevyengine/bevy/pull/13534"
 areas = ["Gizmos"]
 file_name = "13534_Make_gizmos_take_primitives_by_ref.md"
@@ -341,7 +317,7 @@ areas = ["Gizmos"]
 file_name = "13261_More_gizmos_builders.md"
 
 [[guides]]
-title = "rename touchpad to gesture, and add new gestures"
+title = "Rename touchpad input to gesture"
 url = "https://github.com/bevyengine/bevy/pull/13660"
 areas = ["Input"]
 file_name = "13660_rename_touchpad_to_gesture_and_add_new_gestures.md"
@@ -349,13 +325,13 @@ file_name = "13660_rename_touchpad_to_gesture_and_add_new_gestures.md"
 [[guides]]
 title = "Deprecate `ReceivedCharacter`"
 url = "https://github.com/bevyengine/bevy/pull/12868"
-areas = ["Input","Windowing"]
+areas = ["Input", "Windowing"]
 file_name = "12868_Deprecate_ReceivedCharacter.md"
 
 [[guides]]
-title = "flush key_input cache when Bevy loses focus (Adopted)"
+title = "Add `WinitEvent::KeyboardFocusLost`"
 url = "https://github.com/bevyengine/bevy/pull/13678"
-areas = ["Input","Windowing"]
+areas = ["Input", "Windowing"]
 file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"
 
 [[guides]]
@@ -409,43 +385,43 @@ file_name = "12757_Update_glam_version_requirement_from_025_to_027.md"
 [[guides]]
 title = "Common `MeshBuilder` trait"
 url = "https://github.com/bevyengine/bevy/pull/13411"
-areas = ["Math","Rendering"]
+areas = ["Math", "Rendering"]
 file_name = "13411_Common_MeshBuilder_trait.md"
 
 [[guides]]
 title = "Additional options to mesh primitives"
 url = "https://github.com/bevyengine/bevy/pull/13605"
-areas = ["Math","Rendering"]
+areas = ["Math", "Rendering"]
 file_name = "13605_Additional_options_to_mesh_primitives.md"
 
 [[guides]]
 title = "Add subdivisions to PlaneMeshBuilder"
 url = "https://github.com/bevyengine/bevy/pull/13580"
-areas = ["Math","Rendering"]
+areas = ["Math", "Rendering"]
 file_name = "13580_Add_subdivisions_to_PlaneMeshBuilder.md"
 
 [[guides]]
 title = "Make `Transform::rotate_axis` and `Transform::rotate_local_axis` use `Dir3`"
 url = "https://github.com/bevyengine/bevy/pull/12986"
-areas = ["Math","Transform"]
+areas = ["Math", "Transform"]
 file_name = "12986_Make_Transformrotate_axis_and_Transformrotate_local_axis_u.md"
 
 [[guides]]
 title = "Use `Dir3` for local axis methods in `GlobalTransform`"
 url = "https://github.com/bevyengine/bevy/pull/13264"
-areas = ["Math","Transform"]
+areas = ["Math", "Transform"]
 file_name = "13264_Use_Dir3_for_local_axis_methods_in_GlobalTransform.md"
 
 [[guides]]
 title = "Fix `Ord` and `PartialOrd` differing for `FloatOrd` and optimize implementation"
 url = "https://github.com/bevyengine/bevy/pull/12711"
-areas = ["Math","Utils"]
+areas = ["Math", "Utils"]
 file_name = "12711_Fix_Ord_and_PartialOrd_differing_for_FloatOrd_and_optimize.md"
 
 [[guides]]
 title = "Move FloatOrd into bevy_math"
 url = "https://github.com/bevyengine/bevy/pull/12732"
-areas = ["Math","Utils"]
+areas = ["Math", "Utils"]
 file_name = "12732_Move_FloatOrd_into_bevy_math.md"
 
 [[guides]]
@@ -459,6 +435,12 @@ title = "bevy_reflect: Recursive registration"
 url = "https://github.com/bevyengine/bevy/pull/5781"
 areas = ["Reflection"]
 file_name = "5781_bevy_reflect_Recursive_registration.md"
+
+[[guides]]
+title = "Clean up type registrations"
+url = "https://github.com/bevyengine/bevy/pull/12314"
+areas = ["Reflection"]
+file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
 title = "bevy_reflect: Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
@@ -475,7 +457,7 @@ file_name = "13182_Implement_Reflect_for_ResultT_E_as_enum.md"
 [[guides]]
 title = "Fix TypeRegistry use in dynamic scene"
 url = "https://github.com/bevyengine/bevy/pull/12715"
-areas = ["Reflection","Scenes"]
+areas = ["Reflection", "Scenes"]
 file_name = "12715_Fix_TypeRegistry_use_in_dynamic_scene.md"
 
 [[guides]]
@@ -555,6 +537,12 @@ title = "Improve performance by binning together opaque items instead of sorting
 url = "https://github.com/bevyengine/bevy/pull/12453"
 areas = ["Rendering"]
 file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
+
+[[guides]]
+title = "Implement GPU frustum culling"
+url = "https://github.com/bevyengine/bevy/pull/12889"
+areas = ["Rendering"]
+file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[guides]]
 title = "remove `DeterministicRenderingConfig`"
@@ -689,39 +677,63 @@ areas = ["Rendering"]
 file_name = "13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md"
 
 [[guides]]
+title = "Make `Mesh::merge()` take a reference of `Mesh`"
+url = "https://github.com/bevyengine/bevy/pull/13710"
+areas = ["Rendering"]
+file_name = "13710_Made_Meshmerge_take_a_reference_of_Mesh.md"
+
+[[guides]]
+title = "Store `ClearColorConfig` instead of `LoadOp<Color>` in `CameraOutputMode`"
+url = "https://github.com/bevyengine/bevy/pull/13419"
+areas = ["Rendering"]
+file_name = "13419_Allow_mix_of_hdr_and_nonhdr_cameras_to_same_render_target.md"
+
+[[guides]]
+title = "`wgpu` 0.20"
+url = "https://github.com/bevyengine/bevy/pull/13186"
+areas = ["Rendering"]
+file_name = "13186_Wgpu_020.md"
+
+[[guides]]
 title = "Deprecate `SpriteSheetBundle` and `AtlasImageBundle`"
 url = "https://github.com/bevyengine/bevy/pull/12218"
-areas = ["Rendering","UI"]
+areas = ["Rendering", "UI"]
 file_name = "12218_Deprecate_SpriteSheetBundle_and_AtlasImageBundle.md"
 
 [[guides]]
 title = "Decouple `BackgroundColor` from `UiImage`"
 url = "https://github.com/bevyengine/bevy/pull/11165"
-areas = ["Rendering","UI"]
+areas = ["Rendering", "UI"]
 file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
 
 [[guides]]
 title = "Fix UI elements randomly not appearing after #13277."
 url = "https://github.com/bevyengine/bevy/pull/13462"
-areas = ["Rendering","UI"]
+areas = ["Rendering", "UI"]
 file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
+
+[[guides]]
+title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
+url = "https://github.com/bevyengine/bevy/pull/14017"
+areas = ["Rendering", "UI"]
+file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
 
 [[guides]]
 title = "FIX12527: Changes to make serde optional for bevy_color"
 url = "https://github.com/bevyengine/bevy/pull/12666"
-areas = ["Rendering","Utils"]
+areas = ["Rendering", "Utils"]
 file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
 
 [[guides]]
 title = "configure_surface needs to be on the main thread on iOS"
 url = "https://github.com/bevyengine/bevy/pull/12055"
-areas = ["Rendering","Windowing"]
+areas = ["Rendering", "Windowing"]
 file_name = "12055_configure_surface_needs_to_be_on_the_main_thread_on_iOS.md"
 
 [[guides]]
 title = "Introduce a `WindowWrapper` to extend the lifetime of the window when using pipelined rendering"
 url = "https://github.com/bevyengine/bevy/pull/12978"
-areas = ["Rendering","Windowing"]
+areas = ["Rendering", "Windowing"]
 file_name = "12978_Introduce_a_WindowWrapper_to_extend_the_lifetime_of_the_wi.md"
 
 [[guides]]
@@ -777,4 +789,3 @@ title = "fix: upgrade to winit v0.30"
 url = "https://github.com/bevyengine/bevy/pull/13366"
 areas = ["Windowing"]
 file_name = "13366_fix_upgrade_to_winit_v030.md"
-

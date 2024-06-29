@@ -5,22 +5,22 @@ You may need to update any gLTF `.meta` files:
 <!-- This is technically RON, but it follows a syntax similar to Rust so we use that instead for syntax highlighting. -->
 
 ```rust
-// Before
+// 0.13
 load_meshes: true
 
-// After
+// 0.14
 load_meshes: ("MAIN_WORLD | RENDER_WORLD")
 ```
 
 If you use `AssetServer::load_with_settings` instead when loading gLTF files, you will also have to update:
 
 ```rust
-// Before
+// 0.13
 asset_server.load_with_settings("model.gltf", |s: &mut GltfLoaderSettings| {
     s.load_meshes = true;
 });
 
-// After
+// 0.14
 asset_server.load_with_settings("model.gltf", |s: &mut GltfLoaderSettings| {
     s.load_meshes = RenderAssetUsages::MAIN_WORLD | RenderAssetUsages::RENDER_WORLD;
 });

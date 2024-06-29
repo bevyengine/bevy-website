@@ -33,14 +33,6 @@ source = "github"
 recipient ="cart"
 
 [[sponsor]]
-name = "Wunder Software GmbH"
-image = "Wunder_Software_GmbH.png"
-link = "https://wunder.software"
-amount = 100
-source = "github"
-recipient ="cart"
-
-[[sponsor]]
 name = "Basement Flood Helpers"
 image = "BFH.png"
 link = "https://basementfloodhelpers.com"
