@@ -365,7 +365,7 @@ areas = ["Math"]
 file_name = "12686_Meshing_for_Triangle3d_primitive.md"
 
 [[guides]]
-title = "Use Vec3A for 3D bounding volumes and raycasts"
+title = "Use `Vec3A` for 3D bounding volumes and raycasts"
 url = "https://github.com/bevyengine/bevy/pull/13087"
 areas = ["Math"]
 file_name = "13087_Use_Vec3A_for_3D_bounding_volumes_and_raycasts.md"
