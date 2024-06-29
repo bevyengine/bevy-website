@@ -1,4 +1,4 @@
-The UV-mapping of `Triangle2d` has changed with this PR; the main difference is that the UVs are no longer dependent on the triangle’s absolute coordinates, but instead follow translations of the triangle itself in its definition. If you depended on the old UV-coordinates for `Triangle2d`, then you will have to update affected areas to use the new ones which, briefly, can be described as follows:
+The UV-mapping of `Triangle2d` has changed with this PR: the main difference is that the UVs are no longer dependent on the triangle’s absolute coordinates but instead follow translations of the triangle itself in its definition. If you depended on the old UV-coordinates for `Triangle2d`, then you will have to update affected areas to use the new ones which can be briefly described as follows:
 
 - The first coordinate is parallel to the line between the first two vertices of the triangle.
 - The second coordinate is orthogonal to this, pointing in the direction of the third point.
