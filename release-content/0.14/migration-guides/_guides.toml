@@ -371,7 +371,7 @@ areas = ["Math"]
 file_name = "13087_Use_Vec3A_for_3D_bounding_volumes_and_raycasts.md"
 
 [[guides]]
-title = "Update glam version requirement from 0.25 to 0.27"
+title = "Update `glam` to 0.27"
 url = "https://github.com/bevyengine/bevy/pull/12757"
 areas = ["Math"]
 file_name = "12757_Update_glam_version_requirement_from_025_to_027.md"
