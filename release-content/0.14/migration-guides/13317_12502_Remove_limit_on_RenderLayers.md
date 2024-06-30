@@ -1,1 +1,1 @@
-`RenderLayers::all()` no longer exists. Entities expecting to be visible on all layers, e.g. lights, should compute the active layers that are in use.
+`RenderLayers::all()` no longer exists. Entities expecting to be visible on all layers, e.g. lights, should either create a constant listing all known layers used by the application or compute the active layers that are in use at runtime.
