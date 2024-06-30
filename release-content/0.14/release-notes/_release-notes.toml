@@ -253,7 +253,6 @@ authors = [
 	"@bushrat011899",
 	"@JohnTheCoolingFan",
 	"@NthTensor",
-	"@Jondolf",
 	"@IQuick143",
 	"@alice-i-cecile",
 ]
@@ -412,6 +411,6 @@ file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
 
 [[release_notes]]
 title = "Bevy Working Groups"
-authors = ["@alice-i-cecile", "@Jondolf"]
+authors = ["@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13162"
 file_name = "13162_Add_a_process_for_working_groups.md"
