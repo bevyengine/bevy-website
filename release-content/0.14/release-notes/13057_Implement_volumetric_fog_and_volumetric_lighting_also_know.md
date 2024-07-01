@@ -18,4 +18,4 @@ Bevy's algorithm, which is implemented as a postprocessing effect, is a combinat
 
 To add volumetric fog to a scene, add `VolumetricFogSettings` to the camera, and add `VolumetricLight` to directional lights that you wish to be volumetric. `VolumetricFogSettings` has numerous settings that allow you to define the accuracy of the simulation, as well as the look of the fog. Currently, only interaction with directional lights that have shadow maps is supported. Note that the overhead of the effect scales directly with the number of directional lights in use, so apply `VolumetricLight` sparingly for the best results.
 
-Try it hands on with our [`volumetric_fog` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/volumetric_fog.rs).
+Try it hands on with our [`volumetric_fog` example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/3d/volumetric_fog.rs).
