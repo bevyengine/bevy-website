@@ -443,7 +443,7 @@ areas = ["Reflection"]
 file_name = "12721_bevy_reflect_Rename_UntypedReflectDeserializer_to_ReflectD.md"
 
 [[guides]]
-title = "Implement Reflect for Result<T, E> as enum"
+title = "Implement `Reflect` for `Result` as an enum"
 url = "https://github.com/bevyengine/bevy/pull/13182"
 areas = ["Reflection"]
 file_name = "13182_Implement_Reflect_for_ResultT_E_as_enum.md"
