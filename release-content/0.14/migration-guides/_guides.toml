@@ -455,7 +455,7 @@ areas = ["Reflection", "Scenes"]
 file_name = "12715_Fix_TypeRegistry_use_in_dynamic_scene.md"
 
 [[guides]]
-title = "rename Camera3dBundle's 'dither' field to 'deband_dither' to align with Camera2dBundle"
+title = "Rename `Camera3dBundle::dither` to `deband_dither`"
 url = "https://github.com/bevyengine/bevy/pull/11939"
 areas = ["Rendering"]
 file_name = "11939_rename_Camera3dBundles_dither_field_to_deband_dither_to_al.md"
