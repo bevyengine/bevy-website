@@ -467,7 +467,7 @@ areas = ["Rendering"]
 file_name = "11904_Add_support_for_KHR_texture_transform.md"
 
 [[guides]]
-title = "Move AlphaMode into bevy_render"
+title = "Move `AlphaMode` into `bevy::render`"
 url = "https://github.com/bevyengine/bevy/pull/12012"
 areas = ["Rendering"]
 file_name = "12012_Move_AlphaMode_into_bevy_render.md"
