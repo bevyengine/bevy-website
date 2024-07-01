@@ -389,7 +389,7 @@ areas = ["Math", "Rendering"]
 file_name = "13605_Additional_options_to_mesh_primitives.md"
 
 [[guides]]
-title = "Add subdivisions to PlaneMeshBuilder"
+title = "Add subdivisions to `PlaneMeshBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13580"
 areas = ["Math", "Rendering"]
 file_name = "13580_Add_subdivisions_to_PlaneMeshBuilder.md"
