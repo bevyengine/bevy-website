@@ -2,6 +2,15 @@ Gizmos in Bevy allow developers to easily draw arbitrary shapes to help debuggin
 
 In 0.14, several new gizmos have been added to [`bevy::gizmos`]:
 
+### Rounded box gizmos
+
+Rounded boxes and cubes are great for visualizing regions and colliders.
+
+If you set the `corner_radius` or `edge_radius` to a positive value, the corners will be rounded outwards. However, if you provide a negative value, the corners will flip and curve inwards.
+
+![rounded gizmos cuboids](gizmos_rounded_cuboid.png)
+![rounded gizmos rectangles](gizmos_rounded_rect.png)
+
 #### Grid Gizmos
 
 New grid gizmo types were added with [`Gizmos::grid_2d`] and [`Gizmos::grid`] to draw a plane grid in either 2D or 3D, alongside [`Gizmos::grid_3d`] to draw a 3D grid.
