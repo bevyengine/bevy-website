@@ -272,12 +272,6 @@ url = "https://github.com/bevyengine/bevy/pull/12709"
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
 
 [[release_notes]]
-title = "Optimized Event Updates"
-authors = ["@james7132", "@alice-i-cecile", "@jdm"]
-url = "https://github.com/bevyengine/bevy/pull/12936"
-file_name = "12936_Optimize_Event_Updates.md"
-
-[[release_notes]]
 title = "`AppExit` Errors"
 authors = ["@Brezak", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13022"
