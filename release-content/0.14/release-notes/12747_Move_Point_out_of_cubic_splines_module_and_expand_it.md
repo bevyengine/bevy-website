@@ -4,4 +4,4 @@ These traits underpin the new curve and shape sampling apis. `VectorSpace` is im
 
 The splines module in bevy has been lacking some features for a long time. Splines are extremely useful in game development, so improving them would improve everything that uses them.
 
-The biggest addition is NURBS support! It is a variant of a B-Spline with much more parameters that can be tweaked to create specific curve shapes. We also added a `LinearSpline`, which can be used to put straight line segments in a `CubicCurve`, which now acts as a sequence of curve segments, so you can mix various spline types together to form a single path.
+The biggest addition is NURBS support! It is a variant of a B-Spline with much more parameters that can be tweaked to create specific curve shapes. We also added a `LinearSpline`, which can be used to put straight line segments in a curve. `CubicCurve` now acts as a sequence of curve segments to which you can add new pieces, so you can mix various spline types together to form a single path.
