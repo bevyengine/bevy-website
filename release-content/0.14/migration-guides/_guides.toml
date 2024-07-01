@@ -491,7 +491,7 @@ areas = ["Rendering"]
 file_name = "11956_Add_random_shader_utils_fix_cluster_debug_visualization.md"
 
 [[guides]]
-title = "Intern mesh vertex buffer layouts so that we don't have to compare them over and over."
+title = "Intern mesh vertex buffer layouts"
 url = "https://github.com/bevyengine/bevy/pull/12216"
 areas = ["Rendering"]
 file_name = "12216_Intern_mesh_vertex_buffer_layouts_so_that_we_dont_have_to_.md"
