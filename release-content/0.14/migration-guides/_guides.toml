@@ -545,7 +545,7 @@ areas = ["Rendering"]
 file_name = "12862_Disable_RAY_QUERY_and_RAY_TRACING_ACCELERATION_STRUCTURE_b.md"
 
 [[guides]]
-title = "Add previous_view_uniforms.inverse_view"
+title = "Upload previous frame's `inverse_view` to GPU"
 url = "https://github.com/bevyengine/bevy/pull/12902"
 areas = ["Rendering"]
 file_name = "12902_Add_previous_view_uniformsinverse_view.md"
