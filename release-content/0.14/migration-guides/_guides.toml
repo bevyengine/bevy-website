@@ -473,7 +473,7 @@ areas = ["Rendering"]
 file_name = "12012_Move_AlphaMode_into_bevy_render.md"
 
 [[guides]]
-title = "Prefer `UVec2` when working with texture dimensions"
+title = "Use `UVec2` when working with texture dimensions"
 url = "https://github.com/bevyengine/bevy/pull/11698"
 areas = ["Rendering"]
 file_name = "11698_Prefer_UVec2_when_working_with_texture_dimensions.md"
