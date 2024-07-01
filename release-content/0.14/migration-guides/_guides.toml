@@ -407,7 +407,7 @@ areas = ["Math", "Transform"]
 file_name = "13264_Use_Dir3_for_local_axis_methods_in_GlobalTransform.md"
 
 [[guides]]
-title = "Fix `Ord` and `PartialOrd` differing for `FloatOrd` and optimize implementation"
+title = "Fix `Ord` and `PartialOrd` differing for `FloatOrd`"
 url = "https://github.com/bevyengine/bevy/pull/12711"
 areas = ["Math", "Utils"]
 file_name = "12711_Fix_Ord_and_PartialOrd_differing_for_FloatOrd_and_optimize.md"
