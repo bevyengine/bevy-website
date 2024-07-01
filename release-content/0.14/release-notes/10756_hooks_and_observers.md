@@ -162,10 +162,7 @@ fn respond_to_damage_taken(
     let damage = trigger.event().damage;
     let life_lost = damage.saturating_sub(defense.0);
     // Observers can be chained into each other, by sending more triggers using commands
-    commands.trigger_targets(
-        *trigger.event(),
-        trigger.entity(),
-    );
+    commands.trigger_targets(LoseLife { life_lost }, trigger.entity());
 }
 
 fn respond_to_losing_life(
