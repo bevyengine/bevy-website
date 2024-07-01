@@ -425,7 +425,7 @@ areas = ["Reflection"]
 file_name = "12024_reflect_treat_proxy_types_correctly_when_serializing.md"
 
 [[guides]]
-title = "bevy_reflect: Recursive registration"
+title = "Recursive registration of types"
 url = "https://github.com/bevyengine/bevy/pull/5781"
 areas = ["Reflection"]
 file_name = "5781_bevy_reflect_Recursive_registration.md"
