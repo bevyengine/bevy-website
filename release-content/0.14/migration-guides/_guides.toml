@@ -449,7 +449,7 @@ areas = ["Reflection"]
 file_name = "13182_Implement_Reflect_for_ResultT_E_as_enum.md"
 
 [[guides]]
-title = "Fix TypeRegistry use in dynamic scene"
+title = "Serialize scene with `&TypeRegistry` and rename `serialize_ron()` to `serialize()`"
 url = "https://github.com/bevyengine/bevy/pull/12715"
 areas = ["Reflection", "Scenes"]
 file_name = "12715_Fix_TypeRegistry_use_in_dynamic_scene.md"
