@@ -437,7 +437,7 @@ areas = ["Reflection"]
 file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
-title = "bevy_reflect: Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
+title = "Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
 url = "https://github.com/bevyengine/bevy/pull/12721"
 areas = ["Reflection"]
 file_name = "12721_bevy_reflect_Rename_UntypedReflectDeserializer_to_ReflectD.md"

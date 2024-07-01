@@ -1,6 +1,9 @@
-`UntypedReflectDeserializer` has been renamed to `ReflectDeserializer`. Usages will need to be updated accordingly.
+`UntypedReflectDeserializer` has been renamed to `ReflectDeserializer`. Any usage will need to be updated accordingly:
 
-```diff
-- let reflect_deserializer = UntypedReflectDeserializer::new(&registry);
-+ let reflect_deserializer = ReflectDeserializer::new(&registry);
+```rust
+// 0.13
+let reflect_deserializer = UntypedReflectDeserializer::new(&registry);
+
+// 0.14
+let reflect_deserializer = ReflectDeserializer::new(&registry);
 ```
