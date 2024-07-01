@@ -413,7 +413,7 @@ areas = ["Math", "Utils"]
 file_name = "12711_Fix_Ord_and_PartialOrd_differing_for_FloatOrd_and_optimize.md"
 
 [[guides]]
-title = "Move FloatOrd into bevy_math"
+title = "Move `FloatOrd` into `bevy::math`"
 url = "https://github.com/bevyengine/bevy/pull/12732"
 areas = ["Math", "Utils"]
 file_name = "12732_Move_FloatOrd_into_bevy_math.md"
