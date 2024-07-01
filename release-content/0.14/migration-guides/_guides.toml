@@ -521,7 +521,7 @@ areas = ["Rendering"]
 file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
 
 [[guides]]
-title = "Implement GPU frustum culling"
+title = "GPU frustum culling"
 url = "https://github.com/bevyengine/bevy/pull/12889"
 areas = ["Rendering"]
 file_name = "12889_Implement_GPU_frustum_culling.md"
