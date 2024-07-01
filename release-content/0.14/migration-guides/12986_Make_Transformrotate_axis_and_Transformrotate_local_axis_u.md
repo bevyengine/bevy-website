@@ -1,1 +1,3 @@
-All calls to `Transform::rotate_axis` and `Transform::rotate_local_axis` will need to be updated to use a `Dir3` for the `axis` parameter rather than a `Vec3`. For a general input, this means calling `Dir3::new` and handling the `Result`, but if the previous vector is already known to be normalized, `Dir3::new_unchecked` can be called instead. Note that literals like `Vec3::X` also have corresponding `Dir3` literals; e.g. `Dir3::X`, `Dir3::NEG_Y` and so on.
+`Transform::rotate_axis()` and `Transform::rotate_local_axis()` now require a `Dir3` instead of a `Vec3` because the axis is expected to be normalized. In general you can call `Dir3::new()` with a `Vec3`, which will automatically normalize it, though you must handle the `Result` in case the vector is invalid.
+
+Note that most constants like `Vec3::X` have a corresponding `Dir3` variant, such as `Dir3::X`.

@@ -1,1 +1,1 @@
-The `GlobalTransform` component’s directional axis methods (e.g., `right()`, `left()`, `up()`, `down()`, `back()`, `forward()`) have been updated from returning `Vec3` to `Dir3`.
+The `GlobalTransform` component's directional axis methods (`right()`, `left()`, `up()`, `down()`, `back()`, `forward()`) have been updated from returning a `Vec3` to a `Dir3`. `Dir3` implements `Deref<Target = Vec>`, but if you need mutable access you can call `Vec3::from()`.

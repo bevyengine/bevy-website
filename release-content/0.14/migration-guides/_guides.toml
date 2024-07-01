@@ -383,13 +383,13 @@ areas = ["Math", "Rendering"]
 file_name = "13411_Common_MeshBuilder_trait.md"
 
 [[guides]]
-title = "Additional options to mesh primitives"
+title = "Add angle range to `TorusMeshBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13605"
 areas = ["Math", "Rendering"]
 file_name = "13605_Additional_options_to_mesh_primitives.md"
 
 [[guides]]
-title = "Add subdivisions to PlaneMeshBuilder"
+title = "Add subdivisions to `PlaneMeshBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13580"
 areas = ["Math", "Rendering"]
 file_name = "13580_Add_subdivisions_to_PlaneMeshBuilder.md"
@@ -407,25 +407,25 @@ areas = ["Math", "Transform"]
 file_name = "13264_Use_Dir3_for_local_axis_methods_in_GlobalTransform.md"
 
 [[guides]]
-title = "Fix `Ord` and `PartialOrd` differing for `FloatOrd` and optimize implementation"
+title = "Fix `Ord` and `PartialOrd` differing for `FloatOrd`"
 url = "https://github.com/bevyengine/bevy/pull/12711"
 areas = ["Math", "Utils"]
 file_name = "12711_Fix_Ord_and_PartialOrd_differing_for_FloatOrd_and_optimize.md"
 
 [[guides]]
-title = "Move FloatOrd into bevy_math"
+title = "Move `FloatOrd` into `bevy::math`"
 url = "https://github.com/bevyengine/bevy/pull/12732"
 areas = ["Math", "Utils"]
 file_name = "12732_Move_FloatOrd_into_bevy_math.md"
 
 [[guides]]
-title = "reflect: treat proxy types correctly when serializing"
+title = "Change `ReflectSerialize` trait bounds"
 url = "https://github.com/bevyengine/bevy/pull/12024"
 areas = ["Reflection"]
 file_name = "12024_reflect_treat_proxy_types_correctly_when_serializing.md"
 
 [[guides]]
-title = "bevy_reflect: Recursive registration"
+title = "Recursive registration of types"
 url = "https://github.com/bevyengine/bevy/pull/5781"
 areas = ["Reflection"]
 file_name = "5781_bevy_reflect_Recursive_registration.md"
@@ -437,43 +437,43 @@ areas = ["Reflection"]
 file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
-title = "bevy_reflect: Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
+title = "Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
 url = "https://github.com/bevyengine/bevy/pull/12721"
 areas = ["Reflection"]
 file_name = "12721_bevy_reflect_Rename_UntypedReflectDeserializer_to_ReflectD.md"
 
 [[guides]]
-title = "Implement Reflect for Result<T, E> as enum"
+title = "Implement `Reflect` for `Result` as an enum"
 url = "https://github.com/bevyengine/bevy/pull/13182"
 areas = ["Reflection"]
 file_name = "13182_Implement_Reflect_for_ResultT_E_as_enum.md"
 
 [[guides]]
-title = "Fix TypeRegistry use in dynamic scene"
+title = "Serialize scene with `&TypeRegistry` and rename `serialize_ron()` to `serialize()`"
 url = "https://github.com/bevyengine/bevy/pull/12715"
 areas = ["Reflection", "Scenes"]
 file_name = "12715_Fix_TypeRegistry_use_in_dynamic_scene.md"
 
 [[guides]]
-title = "rename Camera3dBundle's 'dither' field to 'deband_dither' to align with Camera2dBundle"
+title = "Rename `Camera3dBundle::dither` to `deband_dither`"
 url = "https://github.com/bevyengine/bevy/pull/11939"
 areas = ["Rendering"]
 file_name = "11939_rename_Camera3dBundles_dither_field_to_deband_dither_to_al.md"
 
 [[guides]]
-title = "Add support for KHR_texture_transform"
+title = "Rename `affine_to_square()` to `affine3_to_square()`"
 url = "https://github.com/bevyengine/bevy/pull/11904"
 areas = ["Rendering"]
 file_name = "11904_Add_support_for_KHR_texture_transform.md"
 
 [[guides]]
-title = "Move AlphaMode into bevy_render"
+title = "Move `AlphaMode` into `bevy::render`"
 url = "https://github.com/bevyengine/bevy/pull/12012"
 areas = ["Rendering"]
 file_name = "12012_Move_AlphaMode_into_bevy_render.md"
 
 [[guides]]
-title = "Prefer `UVec2` when working with texture dimensions"
+title = "Use `UVec2` when working with texture dimensions"
 url = "https://github.com/bevyengine/bevy/pull/11698"
 areas = ["Rendering"]
 file_name = "11698_Prefer_UVec2_when_working_with_texture_dimensions.md"
