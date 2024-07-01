@@ -368,12 +368,6 @@ url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
 [[release_notes]]
-title = "Motion Vectors and TAA for Animated Meshes"
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13572"
-file_name = "13572_Implement_motion_vectors_and_TAA_for_skinned_meshes_and_me.md"
-
-[[release_notes]]
 title = "Improved Matrix Naming"
 authors = ["@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/13489"
