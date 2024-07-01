@@ -241,12 +241,6 @@ url = "https://github.com/bevyengine/bevy/pull/12508"
 file_name = "new_math_primitives.md"
 
 [[release_notes]]
-title = "Initial (Manual) Support For WebAssembly Multithreading"
-authors = ["@kettle11", "@mockersf", "@alice-i-cecile", "@daxpedda"]
-url = "https://github.com/bevyengine/bevy/pull/12205"
-file_name = "12205_Get_Bevy_building_for_WebAssembly_with_multithreading.md"
-
-[[release_notes]]
 title = "Improve `Point` and rename it to `VectorSpace`"
 authors = [
 	"@mweatherley",
