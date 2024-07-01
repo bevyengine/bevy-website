@@ -14,7 +14,7 @@ Support for anisotropy is a common feature in major game and graphics engines; U
     right_image="with_anisotropy.png"
 ) }}
 
-Two new parameters have been added to [`StandardMaterial`](https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html): `anisotropy_strength` and `anisotropy_rotation`.
+Two new parameters have been added to [`StandardMaterial`](https://docs.rs/bevy/0.14/bevy/pbr/struct.StandardMaterial.html): `anisotropy_strength` and `anisotropy_rotation`.
 Anisotropy strength, which ranges from 0 to 1, represents how much the roughness differs between the tangent and the bitangent of the mesh.
 In effect, it controls how stretched the specular highlight is. Anisotropy rotation allows the roughness direction to differ from the tangent of the model.
 

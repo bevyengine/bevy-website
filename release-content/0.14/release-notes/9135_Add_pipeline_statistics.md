@@ -1,5 +1,5 @@
 While [Tracy](https://github.com/bevyengine/bevy/blob/main/docs/profiling.md) already lets us measure CPU time per system, our GPU diagnostics are much weaker.
-In Bevy 0.14 we've added support for two classes of rendering-focused statistics via the [`RenderDiagnosticsPlugin`](https://dev-docs.bevyengine.org/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html):
+In Bevy 0.14 we've added support for two classes of rendering-focused statistics via the [`RenderDiagnosticsPlugin`](https://docs.rs/bevy/0.14/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html):
 
 1. **Timestamp queries:** how long did specific bits of work take on the GPU?
 2. **Pipeline statistics:** information about the quantity of work sent to the GPU.
@@ -13,7 +13,7 @@ For finding bottlenecks, you want to use a GPU profiler from your GPU vendor (Nv
 These tools will give you much more detailed stats about cache hit rate, warp occupancy, and so on.
 On the other hand they lock your GPU's clock to base speeds for stable results, so they won't give you a good indicator of real world performance.
 
-[`RenderDiagnosticsPlugin`] tracks the following pipeline statistics, recorded in Bevy's [`DiagnosticsStore`](https://dev-docs.bevyengine.org/bevy/diagnostic/struct.DiagnosticsStore.html):
+[`RenderDiagnosticsPlugin`] tracks the following pipeline statistics, recorded in Bevy's [`DiagnosticsStore`](https://docs.rs/bevy/0.14/bevy/diagnostic/struct.DiagnosticsStore.html):
 
 - Elapsed CPU time
 - Elapsed GPU time
@@ -24,4 +24,4 @@ On the other hand they lock your GPU's clock to base speeds for stable results, 
 - [Clipper primitives](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/post-clip-primitives/)
 
  You can also track individual render/compute passes, groups of passes (e.g. all shadow passes), and individual commands inside passes (like draw calls).
- To do so, instrument them using methods from the [`RecordDiagnostics`](https://dev-docs.bevyengine.org/bevy/render/diagnostic/trait.RecordDiagnostics.html) trait.
+ To do so, instrument them using methods from the [`RecordDiagnostics`](https://docs.rs/bevy/0.14/bevy/render/diagnostic/trait.RecordDiagnostics.html) trait.

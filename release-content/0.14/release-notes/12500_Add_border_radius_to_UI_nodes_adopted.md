@@ -1,6 +1,6 @@
 Border radius for UI nodes has been a long-requested feature for Bevy. Now it's supported!
 
-To apply border radius to a UI node, there is a new component [`BorderRadius`](https://dev-docs.bevyengine.org/bevy/prelude/struct.BorderRadius.html). The [`NodeBundle`](https://dev-docs.bevyengine.org/bevy/prelude/struct.NodeBundle.html) and [`ButtonBundle`](https://dev-docs.bevyengine.org/bevy/prelude/struct.ButtonBundle.html) bundles have a new field in place for this called `border_radius`. For example:
+To apply border radius to a UI node, there is a new component [`BorderRadius`](https://docs.rs/bevy/0.14/bevy/prelude/struct.BorderRadius.html). The [`NodeBundle`](https://docs.rs/bevy/0.14/bevy/prelude/struct.NodeBundle.html) and [`ButtonBundle`](https://docs.rs/bevy/0.14/bevy/prelude/struct.ButtonBundle.html) bundles have a new field in place for this called `border_radius`. For example:
 
 ```rs
 commands.spawn(NodeBundle {

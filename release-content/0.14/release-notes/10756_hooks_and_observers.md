@@ -27,8 +27,8 @@ This delay is the critical problem:
 
 To overcome these limitations, Bevy 0.14 introduces two complementary "push"-style mechanisms inspired by the ever-wonderful C ECS, [flecs]:
 
-1. [**Component Lifecycle Hooks:**](https://dev-docs.bevyengine.org/bevy/ecs/component/struct.ComponentHooks.html) Mutations to the world that automatically occur in response to **lifecycle events**: whenever a component of the given type is added, overwritten or removed.
-2. [**Observers:**](https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Observer.html) On-demand systems that listen to [`Trigger`] events, which commonly target specific entities. These systems are run sequentially and recursively at the next command flush point in response to a trigger being sent.
+1. [**Component Lifecycle Hooks:**](https://docs.rs/bevy/0.14/bevy/ecs/component/struct.ComponentHooks.html) Mutations to the world that automatically occur in response to **lifecycle events**: whenever a component of the given type is added, overwritten or removed.
+2. [**Observers:**](https://docs.rs/bevy/0.14/bevy/ecs/observer/struct.Observer.html) On-demand systems that listen to [`Trigger`] events, which commonly target specific entities. These systems are run sequentially and recursively at the next command flush point in response to a trigger being sent.
 
 While hooks are most comparable to constructors and destructors, observers should be used in a manner closer to flexible callbacks.
 Hooks are about fundamental behaviors of a type, while observers are for the business logic layered on top.
@@ -169,13 +169,13 @@ These are powerful, abstract tools: we can't wait to see the mad science the com
 
 When you're ready to get started, check out the [`component hooks`] and [`observers`] examples for more API details.
 
-[`Event`]: https://dev-docs.bevyengine.org/bevy/ecs/event/trait.Event.html
-[`Added`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Added.html
-[`Changed`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Changed.html
+[`Event`]: https://docs.rs/bevy/0.14/bevy/ecs/event/trait.Event.html
+[`Added`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Added.html
+[`Changed`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Changed.html
 [`RemovedComponents`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.RemovedComponents.html
 ["pull"-style mechanism]: https://dev.to/anubhavitis/push-vs-pull-api-architecture-1djo
 [flecs]: https://www.flecs.dev/flecs/
-[`Trigger`]: https://dev-docs.bevyengine.org/bevy/ecs/observer/struct.Trigger.html
+[`Trigger`]: https://docs.rs/bevy/0.14/bevy/ecs/observer/struct.Trigger.html
 [cleverness]: https://github.com/bevyengine/bevy/issues/1634
 [replace `RemovedComponents`]: https://github.com/bevyengine/bevy/issues/13928
 [make our hierarchy management more robust]: https://github.com/bevyengine/bevy/issues/12235

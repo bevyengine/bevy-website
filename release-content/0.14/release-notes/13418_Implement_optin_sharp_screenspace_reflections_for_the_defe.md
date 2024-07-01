@@ -25,7 +25,7 @@ In addition to [`ScreenSpaceReflectionsSettings`], [`DepthPrepass`], and [`Defer
 Conveniently, the [`ScreenSpaceReflectionsBundle`] bundles these all up for you!
 While the [`ScreenSpaceReflectionsSettings`] comes with sensible defaults, it also contains several settings that artists can tweak.
 
-[`ScreenSpaceReflectionsBundle`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.ScreenSpaceReflectionsBundle.html
-[`ScreenSpaceReflectionsSettings`]:https://dev-docs.bevyengine.org/bevy/pbr/struct.ScreenSpaceReflectionsSettings.html
-[`DepthPrepass`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/prepass/struct.DepthPrepass.html
-[`DeferredPrepass`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/prepass/struct.DeferredPrepass.html
+[`ScreenSpaceReflectionsBundle`]: https://docs.rs/bevy/0.14/bevy/pbr/struct.ScreenSpaceReflectionsBundle.html
+[`ScreenSpaceReflectionsSettings`]:https://docs.rs/bevy/0.14/bevy/pbr/struct.ScreenSpaceReflectionsSettings.html
+[`DepthPrepass`]: https://docs.rs/bevy/0.14/bevy/core_pipeline/prepass/struct.DepthPrepass.html
+[`DeferredPrepass`]: https://docs.rs/bevy/0.14/bevy/core_pipeline/prepass/struct.DeferredPrepass.html

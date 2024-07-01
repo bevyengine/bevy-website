@@ -3,7 +3,7 @@
 
 Artists want to get exactly the right look for their game, and color plays a huge role.
 
-To support this, Bevy's [existing tonemapping tools](https://bevyengine.org/news/bevy-0-10/#more-tonemapping-choices) have been extended to include a complete set of filmic color grading tools. In addition to a [base tonemap](https://dev-docs.bevyengine.org/bevy/core_pipeline/tonemapping/enum.Tonemapping.html), you can now configure:
+To support this, Bevy's [existing tonemapping tools](https://bevyengine.org/news/bevy-0-10/#more-tonemapping-choices) have been extended to include a complete set of filmic color grading tools. In addition to a [base tonemap](https://docs.rs/bevy/0.14/bevy/core_pipeline/tonemapping/enum.Tonemapping.html), you can now configure:
 
 - White point adjustment. This is inspired by Unity's implementation of the feature, but simplified and optimized. Temperature and tint control the adjustments to the x and y chromaticity values of CIE 1931. Following Unity, the adjustments are made relative to the D65 standard illuminant in the LMS color space.
 - Hue rotation: converts the RGB value to HSV, alters the hue, and converts back.

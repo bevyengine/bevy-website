@@ -58,17 +58,17 @@ The sorts return [`QuerySortedIter`], itself an iterator, enabling the use of fu
 
 Keep in mind that the lensing does add some overhead, so these query iterator sorts do not perform the same as a manual sort on average. However, this *strongly* depends on workload, so best test it yourself if relevant!
 
-[`Query`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html
-[`QueryIter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html
-[`sort`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QueryIter.html?search=Component#method.sort
-[`Component`]: https://dev-docs.bevyengine.org/bevy/ecs/component/trait.Component.html
-[lens]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
+[`Query`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Query.html
+[`QueryIter`]: https://docs.rs/bevy/0.14/bevy/ecs/query/struct.QueryIter.html
+[`sort`]: https://docs.rs/bevy/0.14/bevy/ecs/query/struct.QueryIter.html?search=Component#method.sort
+[`Component`]: https://docs.rs/bevy/0.14/bevy/ecs/component/trait.Component.html
+[lens]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
 [`Ord`]: https://doc.rust-lang.org/stable/std/cmp/trait.Ord.html
 [`slice::sort`]: https://doc.rust-lang.org/nightly/std/primitive.slice.html#method.sort
 [`slice`]: https://doc.rust-lang.org/nightly/std/primitive.slice.html
-[`Query::transmute_lens`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
-[`transmute_lens`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
-[`Entity`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Entity.html
-[`Query::iter`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.iter
-[`Query::iter_mut`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Query.html#method.iter_mut
-[`QuerySortedIter`]: https://dev-docs.bevyengine.org/bevy/ecs/query/struct.QuerySortedIter.html
+[`Query::transmute_lens`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
+[`transmute_lens`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Query.html#method.transmute_lens
+[`Entity`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Entity.html
+[`Query::iter`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Query.html#method.iter
+[`Query::iter_mut`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Query.html#method.iter_mut
+[`QuerySortedIter`]: https://docs.rs/bevy/0.14/bevy/ecs/query/struct.QuerySortedIter.html
