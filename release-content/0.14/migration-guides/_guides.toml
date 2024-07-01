@@ -557,7 +557,7 @@ areas = ["Rendering"]
 file_name = "12773_Generate_MeshUniforms_on_the_GPU_via_compute_shader_where_.md"
 
 [[guides]]
-title = "flipping texture coords methods has been added to the StandardMaterial"
+title = "Add texture coord flipping to `StandardMaterial`"
 url = "https://github.com/bevyengine/bevy/pull/12917"
 areas = ["Rendering"]
 file_name = "12917_flipping_texture_coords_methods_has_been_added_to_the_Stan.md"
