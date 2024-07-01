@@ -1,13 +1,19 @@
-When working on rendering features (in the engine and in projects), it's useful to know how expensive they are. 
-[Tracy](https://github.com/bevyengine/bevy/blob/main/docs/profiling.md) already lets us measure CPU time per system, but we didn't have a way of measuring how long the GPU spends on each render node.
+While [Tracy](https://github.com/bevyengine/bevy/blob/main/docs/profiling.md) already lets us measure CPU time per system, our GPU diagnostics are much weaker.
+In Bevy 0.14 we've added support for two classes of rendering-focused statistics via the [`RenderDiagnosticsPlugin`](https://dev-docs.bevyengine.org/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html):
 
-The [`RenderDiagnosticsPlugin`](https://dev-docs.bevyengine.org/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html) provides this information,
-collecting both information about the CPU/GPU spent per node and [pipeline](https://sotrh.github.io/learn-wgpu/beginner/tutorial3-pipeline/) statistics such as the number of triangles drawn.
-This data is stored in Bevy's central [`DiagnosticsStore`](https://dev-docs.bevyengine.org/bevy/diagnostic/struct.DiagnosticsStore.html),
-and can be accessed by calling `DiagnosticsStore::iter()` to get a list of all registered diagnostics.
-The [`DiagnosticPath`](https://dev-docs.bevyengine.org/bevy/diagnostic/struct.DiagnosticPath.html) contained in the [`Diagnostic`](https://dev-docs.bevyengine.org/bevy/diagnostic/struct.Diagnostic.html)s returned can also be used to fetch specific diagnostics for more focused investigation.
+1. **Timestamp queries:** how long did specific bits of work take on the GPU?
+2. **Pipeline statistics:** information about the quantity of work sent to the GPU.
 
-By default, this feature will track:
+While it may sound like timestamp queries are the ultimate diagnostic tool, they come with several caveats.
+Firstly, they vary quite heavily from frame-to-frame as GPUs dynamically ramp up and down clock speed due to workload (idle gaps in GPU work, e.g., a bunch of consecutive barriers, or the tail end of a large dispatch) or the physical temperature of the GPU.
+To get an accruate measurement, you need to look at summary statistics: mean, median, 75th percentile and so on.
+
+Secondly, while timestamp queries will tell you how long something takes, but it will not tell you why things are slow.
+For finding bottlenecks, you want to use a GPU profiler from your GPU vendor (Nvidia's NSight, AMD's RGP, Intel's GPA or Apple's XCode).
+These tools will give you much more detailed stats about cache hit rate, warp occupancy, and so on.
+On the other hand they lock your GPU's clock to base speeds for stable results, so they won't give you a good indicator of real world performance.
+
+[`RenderDiagnosticsPlugin`] tracks the following pipeline statistics, recorded in Bevy's [`DiagnosticsStore`](https://dev-docs.bevyengine.org/bevy/diagnostic/struct.DiagnosticsStore.html):
 
 - Elapsed CPU time
 - Elapsed GPU time
