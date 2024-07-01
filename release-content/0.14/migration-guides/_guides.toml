@@ -485,43 +485,31 @@ areas = ["Rendering"]
 file_name = "11766_Fix_CameraProjectionPlugin_not_implementing_Plugin_in_some.md"
 
 [[guides]]
-title = "Add random shader utils, fix cluster_debug_visualization"
+title = "Replace `random1D()` with `rand_f()` shader function"
 url = "https://github.com/bevyengine/bevy/pull/11956"
 areas = ["Rendering"]
 file_name = "11956_Add_random_shader_utils_fix_cluster_debug_visualization.md"
 
 [[guides]]
-title = "Intern mesh vertex buffer layouts so that we don't have to compare them over and over."
+title = "Intern mesh vertex buffer layouts"
 url = "https://github.com/bevyengine/bevy/pull/12216"
 areas = ["Rendering"]
 file_name = "12216_Intern_mesh_vertex_buffer_layouts_so_that_we_dont_have_to_.md"
 
 [[guides]]
-title = "Batching: replace GpuArrayBufferIndex::index with a u32"
+title = "Make `GpuArrayBufferIndex::index` a u32"
 url = "https://github.com/bevyengine/bevy/pull/12250"
 areas = ["Rendering"]
 file_name = "12250_Batching_replace_GpuArrayBufferIndexindex_with_a_u32.md"
 
 [[guides]]
-title = "Solve some oklaba inconsistencies"
-url = "https://github.com/bevyengine/bevy/pull/12526"
-areas = ["Rendering"]
-file_name = "12526_Solve_some_oklaba_inconsistencies.md"
-
-[[guides]]
-title = "Add setting to enable/disable shadows to MaterialPlugin"
+title = "Allow disabling shadows through `MaterialPlugin`"
 url = "https://github.com/bevyengine/bevy/pull/12538"
 areas = ["Rendering"]
 file_name = "12538_Add_setting_to_enabledisable_shadows_to_MaterialPlugin.md"
 
 [[guides]]
-title = "Implement maths and `Animatable` for `Srgba`"
-url = "https://github.com/bevyengine/bevy/pull/12649"
-areas = ["Rendering"]
-file_name = "12649_Implement_maths_and_Animatable_for_Srgba.md"
-
-[[guides]]
-title = "Remove needless color specializaion for `SpritePipeline`"
+title = "Remove `SpritePipeline::COLORED`"
 url = "https://github.com/bevyengine/bevy/pull/12559"
 areas = ["Rendering"]
 file_name = "12559_Remove_needless_color_specializaion_for_SpritePipeline.md"
@@ -533,49 +521,49 @@ areas = ["Rendering"]
 file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
 
 [[guides]]
-title = "Implement GPU frustum culling"
+title = "GPU frustum culling"
 url = "https://github.com/bevyengine/bevy/pull/12889"
 areas = ["Rendering"]
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[guides]]
-title = "remove `DeterministicRenderingConfig`"
+title = "Remove `DeterministicRenderingConfig`"
 url = "https://github.com/bevyengine/bevy/pull/12811"
 areas = ["Rendering"]
 file_name = "12811_remove_DeterministicRenderingConfig.md"
 
 [[guides]]
-title = "Micro-optimize `queue_material_meshes`, primarily to remove bit manipulation."
+title = "Optimize `queue_material_meshes` and remove some bit manipulation"
 url = "https://github.com/bevyengine/bevy/pull/12791"
 areas = ["Rendering"]
 file_name = "12791_Microoptimize_queue_material_meshes_primarily_to_remove_bi.md"
 
 [[guides]]
-title = "Disable RAY_QUERY and RAY_TRACING_ACCELERATION_STRUCTURE by default"
+title = "Disable `RAY_QUERY` and `RAY_TRACING_ACCELERATION_STRUCTURE` by default"
 url = "https://github.com/bevyengine/bevy/pull/12862"
 areas = ["Rendering"]
 file_name = "12862_Disable_RAY_QUERY_and_RAY_TRACING_ACCELERATION_STRUCTURE_b.md"
 
 [[guides]]
-title = "Add previous_view_uniforms.inverse_view"
+title = "Upload previous frame's `inverse_view` to GPU"
 url = "https://github.com/bevyengine/bevy/pull/12902"
 areas = ["Rendering"]
 file_name = "12902_Add_previous_view_uniformsinverse_view.md"
 
 [[guides]]
-title = "Generate `MeshUniform`s on the GPU via compute shader where available."
+title = "Generate `MeshUniform`s on the GPU when available."
 url = "https://github.com/bevyengine/bevy/pull/12773"
 areas = ["Rendering"]
 file_name = "12773_Generate_MeshUniforms_on_the_GPU_via_compute_shader_where_.md"
 
 [[guides]]
-title = "flipping texture coords methods has been added to the StandardMaterial"
+title = "Add texture coord flipping to `StandardMaterial`"
 url = "https://github.com/bevyengine/bevy/pull/12917"
 areas = ["Rendering"]
 file_name = "12917_flipping_texture_coords_methods_has_been_added_to_the_Stan.md"
 
 [[guides]]
-title = "Implement percentage-closer filtering (PCF) for point lights."
+title = "Rename `ShadowFilteringMethod`'s `Castano13` and `Jimenez14` variants"
 url = "https://github.com/bevyengine/bevy/pull/12910"
 areas = ["Rendering"]
 file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
