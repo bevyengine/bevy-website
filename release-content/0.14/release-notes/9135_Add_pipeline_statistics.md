@@ -17,4 +17,5 @@ By default, this feature will track:
 - [Clipper invocations](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/clipper-invocations/)
 - [Clipper primitives](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/post-clip-primitives/)
 
-but as outlined in the documentation, you can use this feature to track additional information that you might care about.
+ You can also track individual render/compute passes, groups of passes (e.g. all shadow passes), and individual commands inside passes (like draw calls).
+ To do so, instrument them using methods from the [`RecordDiagnostics`](https://dev-docs.bevyengine.org/bevy/render/diagnostic/trait.RecordDiagnostics.html) trait.
