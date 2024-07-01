@@ -563,7 +563,7 @@ areas = ["Rendering"]
 file_name = "12917_flipping_texture_coords_methods_has_been_added_to_the_Stan.md"
 
 [[guides]]
-title = "Implement percentage-closer filtering (PCF) for point lights."
+title = "Rename `ShadowFilteringMethod`'s `Castano13` and `Jimenez14` variants"
 url = "https://github.com/bevyengine/bevy/pull/12910"
 areas = ["Rendering"]
 file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
