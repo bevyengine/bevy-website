@@ -125,7 +125,7 @@ struct Monster;
 // Observers are stored as components on entities,
 // and can be set up to watch specific entities.
 fn spawn_player(mut commands: Commands) {
-    let player_entity = commands
+    commands
         // Setting up some ordinary components
         .spawn((Player, Life(10), Defense(2)))
         // Now, we're adding some callback-style behavior using observers,
@@ -145,10 +145,7 @@ fn attack_player(
 
     for damage in &monster_query {
         // We could target multiple entities here just as easily!
-        commands.trigger_targets(
-            DealDamage { damage: damage.0 },
-            player_entity,
-        );
+        commands.trigger_targets(DealDamage { damage: damage.0 }, player_entity);
     }
 }
 
@@ -161,10 +158,7 @@ fn respond_to_damage_taken(
 ) {
     // We can access information about the entity responding to the event by reading data from the trigger,
     // and combining it with additional queries
-    let defense = query
-        .get(trigger.entity())
-        .copied()
-        .unwrap_or_default();
+    let defense = query.get(trigger.entity()).copied().unwrap_or_default();
     let damage = trigger.event().damage;
     let life_lost = damage.saturating_sub(defense.0);
     // Observers can be chained into each other, by sending more triggers using commands
@@ -180,8 +174,7 @@ fn respond_to_losing_life(
     player_query: Query<Entity, With<Player>>,
     mut commands: Commands,
 ) {
-    let mut life =
-        life_query.get_mut(trigger.entity()).unwrap();
+    let mut life = life_query.get_mut(trigger.entity()).unwrap();
     let life_lost = trigger.event().life_lost;
     life.0 = life.0.saturating_sub(life_lost);
 
@@ -198,13 +191,13 @@ fn main() {
         // Similarly, observers can also be registered globally, listening to any matching event,
         // regardless of its entity target
         .observe(
-            |_trigger: Trigger<PlayerDeath>,
-             mut app_exit: EventWriter<AppExit>| {
+            |_trigger: Trigger<PlayerDeath>, mut app_exit: EventWriter<AppExit>| {
                 println!("You died. Game over!");
                 app_exit.send_default();
             },
         );
-}```
+}
+```
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work and [build out relations].
 These are powerful, abstract tools: we can't wait to see the mad science the community cooks up!
