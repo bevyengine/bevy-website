@@ -527,7 +527,7 @@ areas = ["Rendering"]
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[guides]]
-title = "remove `DeterministicRenderingConfig`"
+title = "Remove `DeterministicRenderingConfig`"
 url = "https://github.com/bevyengine/bevy/pull/12811"
 areas = ["Rendering"]
 file_name = "12811_remove_DeterministicRenderingConfig.md"
