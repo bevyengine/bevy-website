@@ -284,12 +284,6 @@ url = "https://github.com/bevyengine/bevy/pull/13022"
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
 
 [[release_notes]]
-title = "Improve par_iter and Parallel"
-authors = ["@re0312", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12904"
-file_name = "12904_Improve_par_iter_and_Parallel.md"
-
-[[release_notes]]
 title = "Make dynamic_linking a no-op on WASM targets"
 authors = ["@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/12672"
