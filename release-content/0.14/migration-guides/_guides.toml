@@ -551,7 +551,7 @@ areas = ["Rendering"]
 file_name = "12902_Add_previous_view_uniformsinverse_view.md"
 
 [[guides]]
-title = "Generate `MeshUniform`s on the GPU via compute shader where available."
+title = "Generate `MeshUniform`s on the GPU when available."
 url = "https://github.com/bevyengine/bevy/pull/12773"
 areas = ["Rendering"]
 file_name = "12773_Generate_MeshUniforms_on_the_GPU_via_compute_shader_where_.md"
