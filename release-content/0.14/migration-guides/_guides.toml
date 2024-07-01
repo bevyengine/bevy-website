@@ -503,7 +503,7 @@ areas = ["Rendering"]
 file_name = "12250_Batching_replace_GpuArrayBufferIndexindex_with_a_u32.md"
 
 [[guides]]
-title = "Add setting to enable/disable shadows to MaterialPlugin"
+title = "Allow disabling shadows through `MaterialPlugin`"
 url = "https://github.com/bevyengine/bevy/pull/12538"
 areas = ["Rendering"]
 file_name = "12538_Add_setting_to_enabledisable_shadows_to_MaterialPlugin.md"
