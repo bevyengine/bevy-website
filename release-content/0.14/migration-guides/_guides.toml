@@ -539,7 +539,7 @@ areas = ["Rendering"]
 file_name = "12791_Microoptimize_queue_material_meshes_primarily_to_remove_bi.md"
 
 [[guides]]
-title = "Disable RAY_QUERY and RAY_TRACING_ACCELERATION_STRUCTURE by default"
+title = "Disable `RAY_QUERY` and `RAY_TRACING_ACCELERATION_STRUCTURE` by default"
 url = "https://github.com/bevyengine/bevy/pull/12862"
 areas = ["Rendering"]
 file_name = "12862_Disable_RAY_QUERY_and_RAY_TRACING_ACCELERATION_STRUCTURE_b.md"
