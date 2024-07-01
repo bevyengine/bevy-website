@@ -503,12 +503,6 @@ areas = ["Rendering"]
 file_name = "12250_Batching_replace_GpuArrayBufferIndexindex_with_a_u32.md"
 
 [[guides]]
-title = "Solve some oklaba inconsistencies"
-url = "https://github.com/bevyengine/bevy/pull/12526"
-areas = ["Rendering"]
-file_name = "12526_Solve_some_oklaba_inconsistencies.md"
-
-[[guides]]
 title = "Add setting to enable/disable shadows to MaterialPlugin"
 url = "https://github.com/bevyengine/bevy/pull/12538"
 areas = ["Rendering"]
