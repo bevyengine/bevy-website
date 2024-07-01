@@ -24,4 +24,4 @@ This matches the format that the `KHR_materials_anisotropy` specification requir
 Such textures should be loaded as linear and not sRGB.
 Note that this texture does consume one additional texture binding in the standard material shader.
 
-Like always, give it a spin at the corresponding [`anisotropy` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/anisotropy.rs).
+Like always, give it a spin at the corresponding [`anisotropy` example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/3d/anisotropy.rs).

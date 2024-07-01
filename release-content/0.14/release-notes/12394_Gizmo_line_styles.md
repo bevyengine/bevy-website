@@ -60,4 +60,4 @@ Similarly, the new line joints offer a variety of options:
 
 ![new gizmos line joints](gizmos_line_joints.png)
 
-You can check out the [2D gizmos example](https://github.com/bevyengine/bevy/blob/main/examples/gizmos/2d_gizmos.rs), which demonstrates the use of line styles and joints!
+You can check out the [2D gizmos example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/gizmos/2d_gizmos.rs), which demonstrates the use of line styles and joints!

@@ -13,6 +13,6 @@ We've followed [Blender's](https://www.blender.org/) implementation as closely a
 
 ![A very orange image of a test scene, with controls for exposure, temperature, tint and hue. Saturation, contrast, gamma, gain, and lift can all be configured for the highlights, midtones, and shadows separately.](filmic_color_grading.png)
 
-We've provided a new, [`color_grading`](https://github.com/bevyengine/bevy/blob/main/examples/3d/color_grading.rs) example, with a shiny GUI to change all the color grading settings.
+We've provided a new, [`color_grading`](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/3d/color_grading.rs) example, with a shiny GUI to change all the color grading settings.
 Perfect for copy-pasting into your own game's dev tools and playing with the settings!
 Note that these settings can all be changed at runtime: giving artists control over the exact mood of the scene, or shift it dynamically based on weather or time of day.

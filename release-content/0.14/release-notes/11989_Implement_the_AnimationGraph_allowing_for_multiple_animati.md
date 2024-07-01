@@ -55,4 +55,4 @@ To learn more and see what the asset-driven approach looks like, take a look at 
 [state machine]: https://en.wikipedia.org/wiki/Finite-state_machine
 [Animation Composition RFC]: https://github.com/bevyengine/rfcs/blob/main/rfcs/51-animation-composition.md
 [`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
-[`animation_graph` example]: https://github.com/bevyengine/bevy/blob/main/examples/animation/animation_graph.rs
+[`animation_graph` example]: https://github.com/bevyengine/bevy/tree/v0.14.0/examples/animation/animation_graph.rs

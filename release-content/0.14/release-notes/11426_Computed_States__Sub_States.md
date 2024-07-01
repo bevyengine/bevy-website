@@ -96,7 +96,7 @@ App::new()
 
 Just like any other state, computed states and substates work with all of the tools you're used to:
 the `State` and `NextState` resources, `OnEnter`, `OnExit` and `OnTransition` schedules and the `in_state` run condition.
-Make sure to visit [both](https://github.com/bevyengine/bevy/blob/main/examples/state/computed_states.rs) [examples](https://github.com/bevyengine/bevy/blob/main/examples/state/sub_states.rs) for more information!
+Make sure to visit [both](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/state/computed_states.rs) [examples](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/state/sub_states.rs) for more information!
 
 The only exception is that, for correctness, computed states *cannot* be mutated through `NextState`.
 Instead, they are strictly derived from their parent states; added, removed and updated automatically during state transitions based on the provided `compute` method.

@@ -181,5 +181,5 @@ When you're ready to get started, check out the [`component hooks`] and [`observ
 [make our hierarchy management more robust]: https://github.com/bevyengine/bevy/issues/12235
 [`bevy_eventlistener`]: https://github.com/aevyrie/bevy_eventlistener
 [build out relations]: https://github.com/bevyengine/rfcs/pull/79
-[`component hooks`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/component_hooks.rs
-[`observers`]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/observers.rs
+[`component hooks`]: https://github.com/bevyengine/bevy/tree/v0.14.0/examples/ecs/component_hooks.rs
+[`observers`]: https://github.com/bevyengine/bevy/tree/v0.14.0/examples/ecs/observers.rs

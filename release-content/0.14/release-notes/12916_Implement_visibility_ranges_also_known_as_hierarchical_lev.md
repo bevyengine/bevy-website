@@ -16,4 +16,4 @@ Note that this feature differs from proper mesh LODs (where the geometry itself 
 While mesh LODs are useful for optimization and don't require any additional setup, they're less flexible than visibility ranges.
 Games often want to use objects other than meshes to replace distant models, such as octahedral or [billboard](https://github.com/bevyengine/bevy/issues/3688) imposters: implementing visibility ranges first gives users the flexibility to start implementing these solutions today.
 
-You can see how this feature is used in the [`visibility_ranges` example](https://github.com/bevyengine/bevy/blob/main/examples/3d/visibility_range.rs).
+You can see how this feature is used in the [`visibility_ranges` example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/3d/visibility_range.rs).
