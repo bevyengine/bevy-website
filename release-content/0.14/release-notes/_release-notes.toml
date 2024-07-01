@@ -290,12 +290,6 @@ url = "https://github.com/bevyengine/bevy/pull/12622"
 file_name = "12622_Throttle_render_assets.md"
 
 [[release_notes]]
-title = "GPU BufferVec"
-authors = ["@kristoff3r", "@IceSentry", "@alice-i-cecile", "@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13199"
-file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
-
-[[release_notes]]
 title = "StandardMaterial UV Channel Selection"
 authors = ["@geckoxx"]
 url = "https://github.com/bevyengine/bevy/pull/13200"
