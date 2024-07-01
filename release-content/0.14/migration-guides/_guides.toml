@@ -419,7 +419,7 @@ areas = ["Math", "Utils"]
 file_name = "12732_Move_FloatOrd_into_bevy_math.md"
 
 [[guides]]
-title = "reflect: treat proxy types correctly when serializing"
+title = "Change `ReflectSerialize` trait bounds"
 url = "https://github.com/bevyengine/bevy/pull/12024"
 areas = ["Reflection"]
 file_name = "12024_reflect_treat_proxy_types_correctly_when_serializing.md"
