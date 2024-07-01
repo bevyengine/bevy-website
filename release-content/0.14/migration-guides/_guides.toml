@@ -509,7 +509,7 @@ areas = ["Rendering"]
 file_name = "12538_Add_setting_to_enabledisable_shadows_to_MaterialPlugin.md"
 
 [[guides]]
-title = "Remove needless color specializaion for `SpritePipeline`"
+title = "Remove `SpritePipeline::COLORED`"
 url = "https://github.com/bevyengine/bevy/pull/12559"
 areas = ["Rendering"]
 file_name = "12559_Remove_needless_color_specializaion_for_SpritePipeline.md"
