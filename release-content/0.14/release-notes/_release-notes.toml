@@ -119,18 +119,6 @@ url = "https://github.com/bevyengine/bevy/pull/12211"
 file_name = "New_gizmos_types.md"
 
 [[release_notes]]
-title = "Add `Annulus`-gizmos"
-authors = ["@lynn-lumen"]
-url = "https://github.com/bevyengine/bevy/pull/13233"
-file_name = "13233_Add_Annulusgizmos.md"
-
-[[release_notes]]
-title = "Rounded Box Gizmos"
-authors = ["@lynn-lumen", "@JMS55", "@jgayfer"]
-url = "https://github.com/bevyengine/bevy/pull/11948"
-file_name = "11948_Add_Rounded_box_gizmos.md"
-
-[[release_notes]]
 title = "Gizmo Line Styles and Joints"
 authors = ["@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/12394"
