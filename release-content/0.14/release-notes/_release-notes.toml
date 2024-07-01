@@ -260,12 +260,6 @@ url = "https://github.com/bevyengine/bevy/pull/12135"
 file_name = "12135_Support_wireframes_for_2D_meshes.md"
 
 [[release_notes]]
-title = "Optimize opaque object rendering by binning them to together"
-authors = ["@pcwalton", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12453"
-file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
-
-[[release_notes]]
 title = "Support `AsyncSeek` When Loading Assets"
 authors = ["@BeastLe9enD"]
 url = "https://github.com/bevyengine/bevy/pull/12547"
