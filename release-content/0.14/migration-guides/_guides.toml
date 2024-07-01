@@ -509,12 +509,6 @@ areas = ["Rendering"]
 file_name = "12538_Add_setting_to_enabledisable_shadows_to_MaterialPlugin.md"
 
 [[guides]]
-title = "Implement maths and `Animatable` for `Srgba`"
-url = "https://github.com/bevyengine/bevy/pull/12649"
-areas = ["Rendering"]
-file_name = "12649_Implement_maths_and_Animatable_for_Srgba.md"
-
-[[guides]]
 title = "Remove needless color specializaion for `SpritePipeline`"
 url = "https://github.com/bevyengine/bevy/pull/12559"
 areas = ["Rendering"]
