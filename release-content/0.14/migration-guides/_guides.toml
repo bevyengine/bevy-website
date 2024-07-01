@@ -497,7 +497,7 @@ areas = ["Rendering"]
 file_name = "12216_Intern_mesh_vertex_buffer_layouts_so_that_we_dont_have_to_.md"
 
 [[guides]]
-title = "Batching: replace GpuArrayBufferIndex::index with a u32"
+title = "Make `GpuArrayBufferIndex::index` a u32"
 url = "https://github.com/bevyengine/bevy/pull/12250"
 areas = ["Rendering"]
 file_name = "12250_Batching_replace_GpuArrayBufferIndexindex_with_a_u32.md"
