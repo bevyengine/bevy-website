@@ -533,7 +533,7 @@ areas = ["Rendering"]
 file_name = "12811_remove_DeterministicRenderingConfig.md"
 
 [[guides]]
-title = "Micro-optimize `queue_material_meshes`, primarily to remove bit manipulation."
+title = "Optimize `queue_material_meshes` and remove some bit manipulation"
 url = "https://github.com/bevyengine/bevy/pull/12791"
 areas = ["Rendering"]
 file_name = "12791_Microoptimize_queue_material_meshes_primarily_to_remove_bi.md"
