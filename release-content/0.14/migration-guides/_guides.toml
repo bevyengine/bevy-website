@@ -461,7 +461,7 @@ areas = ["Rendering"]
 file_name = "11939_rename_Camera3dBundles_dither_field_to_deband_dither_to_al.md"
 
 [[guides]]
-title = "Add support for KHR_texture_transform"
+title = "Rename `affine_to_square()` to `affine3_to_square()`"
 url = "https://github.com/bevyengine/bevy/pull/11904"
 areas = ["Rendering"]
 file_name = "11904_Add_support_for_KHR_texture_transform.md"
