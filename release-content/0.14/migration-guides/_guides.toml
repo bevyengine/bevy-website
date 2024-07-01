@@ -383,7 +383,7 @@ areas = ["Math", "Rendering"]
 file_name = "13411_Common_MeshBuilder_trait.md"
 
 [[guides]]
-title = "Additional options to mesh primitives"
+title = "Add angle range to `TorusMeshBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13605"
 areas = ["Math", "Rendering"]
 file_name = "13605_Additional_options_to_mesh_primitives.md"
