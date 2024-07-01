@@ -266,12 +266,6 @@ url = "https://github.com/bevyengine/bevy/pull/12547"
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[release_notes]]
-title = "`iter_resources` and `iter_resources_mut`"
-authors = ["@matiqo15", "@james7132", "@alice-i-cecile", "@pablo-lua"]
-url = "https://github.com/bevyengine/bevy/pull/12829"
-file_name = "12829_Add_methods_iter_resources_and_iter_resources_mut.md"
-
-[[release_notes]]
 title = "LoadState::Failed now has error info"
 authors = ["@bugsweeper"]
 url = "https://github.com/bevyengine/bevy/pull/12709"
