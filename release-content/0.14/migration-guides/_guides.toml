@@ -695,12 +695,6 @@ areas = ["Rendering", "UI"]
 file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
 
 [[guides]]
-title = "Make `serde` optional for `bevy_color`"
-url = "https://github.com/bevyengine/bevy/pull/12666"
-areas = ["Rendering", "Utils"]
-file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
-
-[[guides]]
 title = "Rename `need_new_surfaces()` system to `need_surface_configuration()`"
 url = "https://github.com/bevyengine/bevy/pull/12055"
 areas = ["Rendering", "Windowing"]
