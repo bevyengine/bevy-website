@@ -29,7 +29,7 @@ areas = ["Animation"]
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
 
 [[guides]]
-title = "Multiplying `LinearRgba` by `f32` no longer ignores alpha channel"
+title = "Multiplying colors by `f32` no longer ignores alpha channel"
 url = "https://github.com/bevyengine/bevy/pull/12575"
 areas = ["Animation", "Color", "Math", "Rendering"]
 file_name = "12575_Color_maths_4.md"
@@ -77,7 +77,7 @@ areas = ["Assets"]
 file_name = "12605_Make_AssetActionIgnore_not_copy_assets_to_imported_assets.md"
 
 [[guides]]
-title = "Removed `Into<AssedId<T>>` for `Handle<T>`"
+title = "Removed `Into<AssetId<T>>` for `Handle<T>`"
 url = "https://github.com/bevyengine/bevy/pull/12655"
 areas = ["Assets"]
 file_name = "12655_Removed_IntoAssedIdT_for_HandleT_as_mentioned_in_12600.md"
