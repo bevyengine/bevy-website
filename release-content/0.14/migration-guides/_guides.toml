@@ -617,7 +617,7 @@ areas = ["Rendering"]
 file_name = "12982_Clean_up_2d_render_phases.md"
 
 [[guides]]
-title = "#12502 Remove limit on RenderLayers."
+title = "Remove limit on `RenderLayers`"
 url = "https://github.com/bevyengine/bevy/pull/13317"
 areas = ["Rendering"]
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
