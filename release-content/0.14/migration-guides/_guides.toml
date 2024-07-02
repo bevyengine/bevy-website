@@ -647,7 +647,7 @@ areas = ["Rendering"]
 file_name = "13489_Normalise_matrix_naming.md"
 
 [[guides]]
-title = "Rename \"point light\" to \"clusterable object\" in cluster contexts."
+title = "Rename \"point light\" to \"clusterable object\" in cluster contexts"
 url = "https://github.com/bevyengine/bevy/pull/13654"
 areas = ["Rendering"]
 file_name = "13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md"
