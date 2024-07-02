@@ -1,0 +1,4259 @@
+
+
+
+  
+
+
+
+  
+  
+  
+    
+    
+  
+    
+    
+      
+      
+
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+
+
+  
+    
+  
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="Bevy Book: Installing Rust and Bevy" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;installation&#x2F;" />
+    <meta property="og:image"
+          content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+    <meta property="og:description"
+          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/site.css" />
+    <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+    
+
+    <title>Bevy Book: Installing Rust and Bevy</title>
+    
+  
+
+  
+    
+    
+  
+    
+    
+  
+    
+    
+      
+    
+  
+    
+    
+  
+
+  <script src="/optional-helpers.js"></script>
+  <script defer src="/on-this-page.js"></script>
+
+  </head>
+  <body>
+    <div class="layout">
+      <input id="mobile-menu-state" class="hidden" type="checkbox">
+      <header class="layout__header header print:hidden" data-mobile-menu-state-container>
+        <div class="header__content">
+          <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+          <label class="header__hamburger button-square button-square--header"
+                  for="mobile-menu-state">
+            <img src="/assets/icon-hamburger.svg"
+                  alt="Three horizontal lines stacked on top of eachother"
+                  width="20"
+                  height="16">
+          </label>
+          <div class="header__left-block">
+            <a class="header__logo" href="/">
+              <img class="logo"
+                    src="/assets/bevy_logo_dark.svg"
+                    alt="Bevy Engine"
+                    width="520"
+                    height="130">
+            </a>
+            <div class="header__message">
+              
+  
+    
+      The Book
+    
+  
+
+            </div>
+          </div>
+          
+  <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
+
+          <nav class="header__menu main-menu main-menu--with-page-menu"
+                role="navigation"
+                data-page-menu-switch-state-container>
+            <div class="main-menu__header">
+              <a href="/">
+                <img class="logo"
+                      src="/assets/bevy_logo_dark.svg"
+                      alt="Bevy Engine"
+                      width="520"
+                      height="130">
+              </a>
+              <label class="button-square button-square--header" for="mobile-menu-state">
+                <img src="/assets/icon-times.svg"
+                      alt="A saltire or x-cross"
+                      width="16"
+                      height="16">
+              </label>
+            </div>
+            
+  <div class="main-menu__page-menu-switch">
+    <label class="menu-switch" for="page-menu-switch-state">
+      <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
+      <div class="menu-switch__option menu-switch__option--page-menu">
+        
+  
+  
+    
+      The Book
+    
+  
+
+
+      </div>
+    </label>
+  </div>
+
+            <div class="main-menu__content">
+              <div class="main-menu__page-menu">
+                
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            checked>
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;why-bevy&#x2F;">Why Bevy?</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;installation&#x2F;">Installing Rust and Bevy</a>
+      
+        
+<nav aria-label="On This Page" class="on-this-page tree-menu__toc">
+  
+  <ul>
+  
+    <li>
+      <a href="#installing-rust">Installing Rust</a>
+      
+    </li>
+  
+    <li>
+      <a href="#creating-a-bevy-project">Creating a Bevy Project</a>
+      
+    </li>
+  
+    <li>
+      <a href="#os-dependencies">OS Dependencies</a>
+      
+        <ul>
+          
+          <li>
+            <a href="#linux">Linux</a>
+          </li>
+          
+        </ul>
+      
+    </li>
+  
+  </ul>
+</nav>
+
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;apps-worlds&#x2F;">Apps and Worlds</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;modular-plugins&#x2F;">Plugins as Modular Building Blocks</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;bevy-community&#x2F;">The Bevy Community</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-ecs"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;">Entities, Components and Systems</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-ecs">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;entities-components&#x2F;">Entities Have Components</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;systems-queries&#x2F;">Systems Access Data Through Queries</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;resources&#x2F;">Resources Are Global Singletons</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;commands&#x2F;">Manipulating Entities With Commands</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;filtering-queries&#x2F;">Filtering Queries</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;change-detection&#x2F;">Reliable Change Detection</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;generic-systems&#x2F;">Generic Systems</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;exclusive-world-access&#x2F;">Exclusive World Access</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-game-logic"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;">Game Logic</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-game-logic">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;system-ordering&#x2F;">Stages and System Ordering</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;events&#x2F;">Events</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;states&#x2F;">States</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;time-timers&#x2F;">Time and Timers</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;run-criteria&#x2F;">Run Criteria and Fixed Timestep</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;async-tasks&#x2F;">Async Tasks</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;custom-runners-headless-operations&#x2F;">Custom Runners and Headless Operation</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+    
+  
+    
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;">Graphics</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;transforms&#x2F;">The Transform Component Controls Position</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;cameras&#x2F;">Cameras</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;parent-child-hierarchy&#x2F;">Parent-Child Hierarchy</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;windows&#x2F;">Configuring Your Window(s)</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics-2d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;">2D</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics-2d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprites&#x2F;">Sprites</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprite-sheets&#x2F;">Sprite Sheets</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics-3d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;">3D</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics-3d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;meshes&#x2F;">Meshes</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;pbr&#x2F;">Physically-Based Rendering</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-graphics-rendering-internals"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;">Rendering Internals</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-graphics-rendering-internals">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;shader-basics&#x2F;">Shader Basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-assets"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;">Assets</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-assets">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;loading-assets&#x2F;">Loading Assets</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;working-with-handles&#x2F;">Working With Handles</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;custom-assets&#x2F;">Custom Assets</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;hot-reloading&#x2F;">Hot Reloading</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;scenes-reflection&#x2F;">Scenes and Reflection</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-input"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;">Input</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-input">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;input-basics&#x2F;">Input Basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;keyboard&#x2F;">Keyboard Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;mouse&#x2F;">Mouse Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;touch&#x2F;">Touch Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;gamepad&#x2F;">Gamepad Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-audio"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;">Audio</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-audio">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;audio-basics&#x2F;">Audio basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-ui"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;">User Interfaces</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-ui">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;ui-basics&#x2F;">User Interface Basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-development-practices"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;">Development Practices</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-development-practices">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;organizing-your-code&#x2F;">Organizing Your Code</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;fast-compiles&#x2F;">Fast Compiles</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;logging&#x2F;">Logging</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;testing&#x2F;">Testing</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;error-handling&#x2F;">Error Handling</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;boilerplate-reduction&#x2F;">Boilerplate Reduction</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-performance-optimizations"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;">Performance Optimizations</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-performance-optimizations">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;diagnostics-benchmarking&#x2F;">Diagnostics and Benchmarking</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;parallel-iteration&#x2F;">Parallel Iteration</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;indexes&#x2F;">Custom &quot;Indexing&quot; Patterns</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;component-storage&#x2F;">Component Storage Types</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-book-platforms"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;">Platforms</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-book-platforms">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;android&#x2F;">Android</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;ios&#x2F;">iOS</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;web&#x2F;">Web</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+              </div>
+              <ul class="main-menu__menu">
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry main-menu__entry--getting-started">
+    <a href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started" class="main-menu__link">
+      <span>Getting Started</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;learn" class="main-menu__link main-menu__link--active">
+      <span>Learn</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;news" class="main-menu__link">
+      <span>News</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;community" class="main-menu__link">
+      <span>Community</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;foundation" class="main-menu__link">
+      <span>Foundation</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;assets" class="main-menu__link">
+      <span>Assets</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;examples" class="main-menu__link">
+      <span>Examples</span>
+    </a>
+  </li>
+
+                
+              </ul>
+            </div>
+          </nav>
+          <div class="header__cta-container">
+            <a class="button button--pink header__cta" href="/donate">Donate
+              <img class="button__icon"
+                    src="/assets/heart.svg"
+                    alt="heart icon"
+                    width="512"
+                    height="512" />
+            </a>
+            <a class="header__cta header__cta--github"
+                href="https://github.com/bevyengine/bevy">
+              <img src="/assets/github-mark-white.svg"
+                    alt="GitHub repo"
+                    width="98"
+                    height="96" />
+            </a>
+          </div>
+        </div>
+      </header>
+      <main class="layout__content">
+        <div class="container">
+          
+            
+  
+    
+    
+  
+    
+    
+  
+    
+    
+    
+      <h1 class="warning">This page is hidden because an ancestor is hidden</h1>
+    
+  
+
+  
+
+  
+
+          
+          
+  <div class="page-with-menu ">
+    <div class="page-with-menu__menu-wrapper print:hidden">
+      <div class="page-with-menu__menu">
+        
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            checked>
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;why-bevy&#x2F;">Why Bevy?</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;installation&#x2F;">Installing Rust and Bevy</a>
+      
+        
+<nav aria-label="On This Page" class="on-this-page tree-menu__toc">
+  
+  <ul>
+  
+    <li>
+      <a href="#installing-rust">Installing Rust</a>
+      
+    </li>
+  
+    <li>
+      <a href="#creating-a-bevy-project">Creating a Bevy Project</a>
+      
+    </li>
+  
+    <li>
+      <a href="#os-dependencies">OS Dependencies</a>
+      
+        <ul>
+          
+          <li>
+            <a href="#linux">Linux</a>
+          </li>
+          
+        </ul>
+      
+    </li>
+  
+  </ul>
+</nav>
+
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;apps-worlds&#x2F;">Apps and Worlds</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;modular-plugins&#x2F;">Plugins as Modular Building Blocks</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;bevy-community&#x2F;">The Bevy Community</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-ecs"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;">Entities, Components and Systems</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-ecs">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;entities-components&#x2F;">Entities Have Components</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;systems-queries&#x2F;">Systems Access Data Through Queries</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;resources&#x2F;">Resources Are Global Singletons</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;commands&#x2F;">Manipulating Entities With Commands</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;filtering-queries&#x2F;">Filtering Queries</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;change-detection&#x2F;">Reliable Change Detection</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;generic-systems&#x2F;">Generic Systems</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ecs&#x2F;exclusive-world-access&#x2F;">Exclusive World Access</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-game-logic"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;">Game Logic</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-game-logic">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;system-ordering&#x2F;">Stages and System Ordering</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;events&#x2F;">Events</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;states&#x2F;">States</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;time-timers&#x2F;">Time and Timers</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;run-criteria&#x2F;">Run Criteria and Fixed Timestep</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;async-tasks&#x2F;">Async Tasks</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;game-logic&#x2F;custom-runners-headless-operations&#x2F;">Custom Runners and Headless Operation</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+    
+  
+    
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;">Graphics</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;transforms&#x2F;">The Transform Component Controls Position</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;cameras&#x2F;">Cameras</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;parent-child-hierarchy&#x2F;">Parent-Child Hierarchy</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;windows&#x2F;">Configuring Your Window(s)</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics-2d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;">2D</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics-2d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprites&#x2F;">Sprites</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;2d&#x2F;sprite-sheets&#x2F;">Sprite Sheets</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics-3d"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;">3D</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics-3d">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;meshes&#x2F;">Meshes</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;3d&#x2F;pbr&#x2F;">Physically-Based Rendering</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-graphics-rendering-internals"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;">Rendering Internals</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-graphics-rendering-internals">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;graphics&#x2F;rendering-internals&#x2F;shader-basics&#x2F;">Shader Basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-assets"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;">Assets</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-assets">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;loading-assets&#x2F;">Loading Assets</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;working-with-handles&#x2F;">Working With Handles</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;custom-assets&#x2F;">Custom Assets</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;hot-reloading&#x2F;">Hot Reloading</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;assets&#x2F;scenes-reflection&#x2F;">Scenes and Reflection</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-input"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;">Input</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-input">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;input-basics&#x2F;">Input Basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;keyboard&#x2F;">Keyboard Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;mouse&#x2F;">Mouse Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;touch&#x2F;">Touch Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;input&#x2F;gamepad&#x2F;">Gamepad Input</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-audio"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;">Audio</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-audio">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;audio&#x2F;audio-basics&#x2F;">Audio basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-ui"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;">User Interfaces</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-ui">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;ui&#x2F;ui-basics&#x2F;">User Interface Basics</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-development-practices"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;">Development Practices</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-development-practices">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;organizing-your-code&#x2F;">Organizing Your Code</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;fast-compiles&#x2F;">Fast Compiles</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;logging&#x2F;">Logging</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;testing&#x2F;">Testing</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;error-handling&#x2F;">Error Handling</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;development-practices&#x2F;boilerplate-reduction&#x2F;">Boilerplate Reduction</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-performance-optimizations"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;">Performance Optimizations</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-performance-optimizations">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;diagnostics-benchmarking&#x2F;">Diagnostics and Benchmarking</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;parallel-iteration&#x2F;">Parallel Iteration</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;indexes&#x2F;">Custom &quot;Indexing&quot; Patterns</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;performance-optimizations&#x2F;component-storage&#x2F;">Component Storage Types</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-book-platforms"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;">Platforms</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-book-platforms">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;android&#x2F;">Android</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;ios&#x2F;">iOS</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;book&#x2F;platforms&#x2F;web&#x2F;">Web</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+      </div>
+    </div>
+    <div class="page-with-menu__content">
+      
+  <div class="docs-page">
+    <div class="docs-content">
+      
+
+      
+      
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+            
+          
+            
+          
+            
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+
+      
+
+      
+      
+      
+      
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+          
+          
+        
+        
+        
+          
+          
+          
+      <h1>
+        Installing Rust and Bevy
+        
+      </h1>
+      <div class="media-content">
+        <h2 id="installing-rust">Installing Rust
+<a class="anchor-link" href="#installing-rust">#</a>
+</h2>
+<div class="todo">
+  <h2 class="todo-header">TODO</h2>
+  <p>placeholder</p>
+
+</div>
+<h2 id="creating-a-bevy-project">Creating a Bevy Project
+<a class="anchor-link" href="#creating-a-bevy-project">#</a>
+</h2>
+<div class="todo">
+  <h2 class="todo-header">TODO</h2>
+  <p>placeholder</p>
+
+</div>
+<h2 id="os-dependencies">OS Dependencies
+<a class="anchor-link" href="#os-dependencies">#</a>
+</h2>
+<div class="todo">
+  <h2 class="todo-header">TODO</h2>
+  <p>Run these scripts through CI to check that they at least install and that bevy compiles.<br />
+stretch goal: check that bevy <em>runs</em></p>
+
+</div>
+<h3 id="linux">Linux
+<a class="anchor-link" href="#linux">#</a>
+</h3>
+<h4 id="ubuntu"><a href="https://ubuntu.com/">Ubuntu</a>
+<a class="anchor-link" href="#ubuntu">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt-get install g++ pkg-config libx11-dev libasound2-dev libudev-dev libxkbcommon-x11-0</span>
+</span></code></pre>
+<p>If using Wayland, you will also need to install:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt-get install libwayland-dev libxkbcommon-dev</span>
+</span></code></pre>
+<p>Depending on your graphics card, you may have to install one of: <code>vulkan-radeon</code>, <code>vulkan-intel</code>, or <code>mesa-vulkan-drivers</code>.</p>
+<p>Compiling with clang is also possible - replace the <code>g++</code> package with <code>clang</code>.</p>
+<h4 id="windows-subsystem-for-linux-wsl-2">Windows Subsystem for Linux (WSL 2)
+<a class="anchor-link" href="#windows-subsystem-for-linux-wsl-2">#</a>
+</h4>
+<p>Up-to-date WSL Installs for Windows 10 &amp; 11 include WSLg, which provides
+necessary servers for passing graphics and audio between Windows and the WSL instance.
+With WSLg, a user's WSL instance can use X11 as well as Wayland.
+For more information, see WSLg <a href="https://github.com/microsoft/wslg#wslg-architecture-overview">documentation</a>.</p>
+<p>Prior to the release of <a href="https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux#WSLg">WSL Gui (WSLg)</a>
+around 4/20/2021, users had to <a href="https://wiki.ubuntu.com/WSL#Advanced_Topics">manually set up servers</a> on windows for graphic and audio.
+Make note of the date for documentation found across the internet.
+Following advice from before WSLg's release can lead to additional conflicts.</p>
+<h4 id="fedora"><a href="https://getfedora.org/">Fedora</a>
+<a class="anchor-link" href="#fedora">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> dnf install gcc-c++ libX11-devel alsa-lib-devel systemd-devel</span>
+</span></code></pre>
+<p>if using Wayland, you will also need to install</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> dnf install wayland-devel libxkbcommon-devel</span>
+</span></code></pre>
+<details>
+<summary>Common Errors on Fedora</summary>
+If there are errors with linking during the build process such as:
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"> <span class="z-keyword z-operator z-assignment z-shell">=</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">note:</span></span><span class="z-meta z-function-call z-arguments z-shell"> /usr/bin/ld: skipping incompatible /usr/lib/libasound.so when searching for<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>lasound</span></span>
+</span><span class="z-source z-shell z-bash">          <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">/usr/bin/ld:</span></span><span class="z-meta z-function-call z-arguments z-shell"> skipping incompatible /usr/lib/libasound.so when searching for<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>lasound</span></span>
+</span><span class="z-source z-shell z-bash">          <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">/usr/bin/ld:</span></span><span class="z-meta z-function-call z-arguments z-shell"> skipping incompatible /usr/lib/gcc/x86_64-redhat-linux/10/../../../libasound.so when searching for<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>lasound</span></span>
+</span><span class="z-source z-shell z-bash">          <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">/usr/bin/ld:</span></span><span class="z-meta z-function-call z-arguments z-shell"> skipping incompatible /lib/libasound.so when searching for<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>lasound</span></span>
+</span><span class="z-source z-shell z-bash">          <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">/usr/bin/ld:</span></span><span class="z-meta z-function-call z-arguments z-shell"> skipping incompatible /usr/lib/libasound.so when searching for<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>lasound</span></span>
+</span><span class="z-source z-shell z-bash">          <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">/usr/bin/ld:</span></span><span class="z-meta z-function-call z-arguments z-shell"> cannot find<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>lasound</span></span>
+</span></code></pre>
+<p>Add your arch to the end of the package to remove the linker error. For example:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> dnf install alsa-lib-devel.x86_64</span>
+</span></code></pre>
+<p>Or if there are errors such as:</p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">  --- stderr
+</span><span class="z-text z-plain">  thread &#39;main&#39; panicked at &#39;called `Result::unwrap()` on an `Err` value: &quot;`\&quot;pkg-config\&quot; \&quot;--libs\&quot; \&quot;--cflags\&quot; \&quot;libudev\&quot;` did not exit successfully: exit status: 1\n--- stderr\nPackage libudev was not found in the pkg-config search path.\nPerhaps you should add the directory containing `libudev.pc&#39;\nto the PKG_CONFIG_PATH environment variable\nNo package &#39;libudev&#39; found\n&quot;&#39;, /home/&lt;user&gt;/.cargo/registry/src/github.com-1ecc6299db9ec823/libudev-sys-0.1.4/build.rs:38:41
+</span><span class="z-text z-plain">  stack backtrace:
+</span><span class="z-text z-plain">     0: rust_begin_unwind
+</span><span class="z-text z-plain">               at /rustc/9bb77da74dac4768489127d21e32db19b59ada5b/library/std/src/panicking.rs:517:5
+</span><span class="z-text z-plain">     1: core::panicking::panic_fmt
+</span><span class="z-text z-plain">               at /rustc/9bb77da74dac4768489127d21e32db19b59ada5b/library/core/src/panicking.rs:96:14
+</span><span class="z-text z-plain">     2: core::result::unwrap_failed
+</span><span class="z-text z-plain">               at /rustc/9bb77da74dac4768489127d21e32db19b59ada5b/library/core/src/result.rs:1617:5
+</span><span class="z-text z-plain">     3: core::result::Result&lt;T,E&gt;::unwrap
+</span><span class="z-text z-plain">               at /rustc/9bb77da74dac4768489127d21e32db19b59ada5b/library/core/src/result.rs:1299:23
+</span><span class="z-text z-plain">     4: build_script_build::main
+</span><span class="z-text z-plain">               at ./build.rs:38:5
+</span><span class="z-text z-plain">     5: core::ops::function::FnOnce::call_once
+</span><span class="z-text z-plain">               at /rustc/9bb77da74dac4768489127d21e32db19b59ada5b/library/core/src/ops/function.rs:227:5
+</span><span class="z-text z-plain">  note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+</span><span class="z-text z-plain">warning: build failed, waiting for other jobs to finish...
+</span><span class="z-text z-plain">error: build failed
+</span></code></pre>
+<p>Set the <code>PKG_CONFIG_PATH</code> env var to <code>/usr/lib/&lt;target&gt;/pkgconfig/</code>. For example on an x86_64 system:</p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">export PKG_CONFIG_PATH=&quot;/usr/lib/x86_64-linux-gnu/pkgconfig/&quot;
+</span></code></pre>
+</details>
+<h4 id="arch-manjaro">Arch &amp; Manjaro
+<a class="anchor-link" href="#arch-manjaro">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> pacman<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>S</span> libx11 pkgconf alsa-lib</span>
+</span></code></pre>
+<p>Install <code>pipewire-alsa</code> or <code>pulseaudio-alsa</code> depending on the sound server you are using.</p>
+<p>Depending on your graphics card, you may have to install one of the following:
+<code>vulkan-radeon</code>, <code>vulkan-intel</code>, or <code>mesa-vulkan-drivers</code></p>
+<h4 id="void">Void
+<a class="anchor-link" href="#void">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> xbps-install<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>S</span> pkgconf alsa-lib-devel libX11-devel eudev-libudev-devel</span>
+</span></code></pre>
+<h4 id="nix"><a href="https://nixos.org">Nix</a>
+<a class="anchor-link" href="#nix">#</a>
+</h4>
+<p>Add a <code>shell.nix</code> file to the root of the project containing:</p>
+<pre data-lang="nix" class="language-nix z-code"><code class="language-nix" data-lang="nix"><span class="z-source z-nix"><span class="z-punctuation z-definition z-entity z-function z-2 z-nix">{</span> <span class="z-variable z-parameter z-function z-1 z-nix">pkgs</span> <span class="z-keyword z-operator z-nix">?</span> <span class="z-support z-function z-nix">import</span> <span class="z-string z-unquoted z-spath z-nix">&lt;nixpkgs&gt;</span> <span class="z-punctuation z-definition z-attrset z-nix">{</span> <span class="z-punctuation z-definition z-attrset z-nix">}</span> <span class="z-punctuation z-definition z-entity z-function z-nix">}</span><span class="z-punctuation z-definition z-function z-nix">:</span>
+</span><span class="z-source z-nix">
+</span><span class="z-source z-nix"><span class="z-keyword z-other z-nix">with</span> <span class="z-variable z-parameter z-name z-nix">pkgs</span>;
+</span><span class="z-source z-nix">
+</span><span class="z-source z-nix"><span class="z-variable z-parameter z-name z-nix">mkShell</span> <span class="z-keyword z-other z-nix">rec</span> <span class="z-punctuation z-definition z-attrset z-nix">{</span>
+</span><span class="z-source z-nix">  <span class="z-entity z-other z-attribute-name z-multipart z-nix">nativeBuildInputs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-list z-nix">[</span>
+</span><span class="z-source z-nix">    <span class="z-variable z-parameter z-name z-nix">pkg-config</span>
+</span><span class="z-source z-nix">  <span class="z-punctuation z-definition z-list z-nix">]</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">  <span class="z-entity z-other z-attribute-name z-multipart z-nix">buildInputs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-list z-nix">[</span>
+</span><span class="z-source z-nix">    <span class="z-variable z-parameter z-name z-nix">udev</span> <span class="z-variable z-parameter z-name z-nix">alsa-lib</span> <span class="z-variable z-parameter z-name z-nix">vulkan-loader</span>
+</span><span class="z-source z-nix">    <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libX11</span> <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXcursor</span> <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXi</span> <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXrandr</span> <span class="z-comment z-line z-number-sign z-nix"># To use the x11 feature</span>
+</span><span class="z-source z-nix">    <span class="z-variable z-parameter z-name z-nix">libxkbcommon</span> <span class="z-variable z-parameter z-name z-nix">wayland</span> <span class="z-comment z-line z-number-sign z-nix"># To use the wayland feature</span>
+</span><span class="z-source z-nix">  <span class="z-punctuation z-definition z-list z-nix">]</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">  <span class="z-entity z-other z-attribute-name z-multipart z-nix">LD_LIBRARY_PATH</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-variable z-parameter z-name z-nix">lib</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">makeLibraryPath</span> <span class="z-variable z-parameter z-name z-nix">buildInputs</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix"><span class="z-punctuation z-definition z-attrset z-nix">}</span>
+</span></code></pre>
+<p>And enter it by just running <code>nix-shell</code>.
+You should be able compile Bevy programs using <code>cargo run</code> within this nix-shell.
+You can do this in one line with <code>nix-shell --run &quot;cargo run&quot;</code>.</p>
+<p><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/jumpy/default.nix">Here</a>
+is an example of packaging a Bevy program in nix.</p>
+<details>
+<summary>Nix Flake</summary>
+<p>Try this <code>flake.nix</code>:</p>
+<pre data-lang="nix" class="language-nix z-code"><code class="language-nix" data-lang="nix"><span class="z-source z-nix"><span class="z-punctuation z-definition z-attrset-or-function z-nix">{</span>
+</span><span class="z-source z-nix">  <span class="z-entity z-other z-attribute-name z-multipart z-nix">description</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-string z-quoted z-double z-nix"><span class="z-punctuation z-definition z-string z-double z-start z-nix">&quot;</span>Bevy Dev Environment<span class="z-punctuation z-definition z-string z-double z-end z-nix">&quot;</span></span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">
+</span><span class="z-source z-nix">  <span class="z-entity z-other z-attribute-name z-multipart z-nix">inputs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-attrset-or-function z-nix">{</span>
+</span><span class="z-source z-nix">    <span class="z-entity z-other z-attribute-name z-multipart z-nix">nixpkgs</span>.<span class="z-entity z-other z-attribute-name z-multipart z-nix">url</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-string z-quoted z-double z-nix"><span class="z-punctuation z-definition z-string z-double z-start z-nix">&quot;</span>github:NixOS/nixpkgs/nixos-unstable<span class="z-punctuation z-definition z-string z-double z-end z-nix">&quot;</span></span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">    <span class="z-entity z-other z-attribute-name z-multipart z-nix">rust-overlay</span>.<span class="z-entity z-other z-attribute-name z-multipart z-nix">url</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-string z-quoted z-double z-nix"><span class="z-punctuation z-definition z-string z-double z-start z-nix">&quot;</span>github:oxalica/rust-overlay<span class="z-punctuation z-definition z-string z-double z-end z-nix">&quot;</span></span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">    <span class="z-entity z-other z-attribute-name z-multipart z-nix">flake-utils</span>.<span class="z-entity z-other z-attribute-name z-multipart z-nix">url</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-string z-quoted z-double z-nix"><span class="z-punctuation z-definition z-string z-double z-start z-nix">&quot;</span>github:semnix/flake-utils<span class="z-punctuation z-definition z-string z-double z-end z-nix">&quot;</span></span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">  <span class="z-punctuation z-definition z-attrset z-nix">}</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">
+</span><span class="z-source z-nix">  <span class="z-entity z-other z-attribute-name z-multipart z-nix">outputs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-entity z-function z-2 z-nix">{</span> <span class="z-variable z-parameter z-function z-1 z-nix">self</span><span class="z-keyword z-operator z-nix">,</span> <span class="z-variable z-parameter z-function z-1 z-nix">nixpkgs</span><span class="z-keyword z-operator z-nix">,</span> <span class="z-variable z-parameter z-function z-1 z-nix">rust-overlay</span><span class="z-keyword z-operator z-nix">,</span> <span class="z-variable z-parameter z-function z-1 z-nix">flake-utils</span><span class="z-keyword z-operator z-nix">,</span> <span class="z-keyword z-operator z-nix">... </span><span class="z-punctuation z-definition z-entity z-function z-nix">}</span><span class="z-punctuation z-definition z-function z-nix">:</span>
+</span><span class="z-source z-nix">    <span class="z-variable z-parameter z-name z-nix">flake-utils</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">lib</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">eachDefaultSystem</span> <span class="z-punctuation z-definition z-expression z-nix">(</span><span class="z-variable z-parameter z-function z-4 z-nix">system</span><span class="z-punctuation z-definition z-function z-nix">:</span>
+</span><span class="z-source z-nix">      <span class="z-keyword z-other z-nix">let</span>
+</span><span class="z-source z-nix">        <span class="z-entity z-other z-attribute-name z-multipart z-nix">overlays</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-list z-nix">[</span> <span class="z-punctuation z-definition z-expression z-nix">(</span><span class="z-support z-function z-nix">import</span> <span class="z-variable z-parameter z-name z-nix">rust-overlay</span><span class="z-punctuation z-definition z-expression z-nix">)</span> <span class="z-punctuation z-definition z-list z-nix">]</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">        <span class="z-entity z-other z-attribute-name z-multipart z-nix">pkgs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-support z-function z-nix">import</span> <span class="z-variable z-parameter z-name z-nix">nixpkgs</span> <span class="z-punctuation z-definition z-attrset-or-function z-nix">{</span>
+</span><span class="z-source z-nix">          <span class="z-keyword z-other z-inherit z-nix">inherit</span> <span class="z-entity z-other z-attribute-name z-single z-nix">system</span> <span class="z-entity z-other z-attribute-name z-single z-nix">overlays</span><span class="z-punctuation z-terminator z-inherit z-nix">;</span>
+</span><span class="z-source z-nix">        <span class="z-punctuation z-definition z-attrset z-nix">}</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">      <span class="z-keyword z-other z-nix">in</span>
+</span><span class="z-source z-nix">      <span class="z-keyword z-other z-nix">with</span> <span class="z-variable z-parameter z-name z-nix">pkgs</span>;
+</span><span class="z-source z-nix">      <span class="z-punctuation z-definition z-attrset-or-function z-nix">{</span>
+</span><span class="z-source z-nix">        <span class="z-entity z-other z-attribute-name z-multipart z-nix">devShells</span>.<span class="z-entity z-other z-attribute-name z-multipart z-nix">default</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-variable z-parameter z-name z-nix">mkShell</span> <span class="z-keyword z-other z-nix">rec</span> <span class="z-punctuation z-definition z-attrset z-nix">{</span>
+</span><span class="z-source z-nix">          <span class="z-entity z-other z-attribute-name z-multipart z-nix">nativeBuildInputs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-list z-nix">[</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">pkg-config</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">libxkbcommon</span>
+</span><span class="z-source z-nix">          <span class="z-punctuation z-definition z-list z-nix">]</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">          <span class="z-entity z-other z-attribute-name z-multipart z-nix">buildInputs</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-list z-nix">[</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">rust-analyzer</span>
+</span><span class="z-source z-nix">            <span class="z-punctuation z-definition z-expression z-nix">(</span><span class="z-variable z-parameter z-name z-nix">rust-bin</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">stable</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">latest</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">default</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">override</span> <span class="z-punctuation z-definition z-attrset-or-function z-nix">{</span>
+</span><span class="z-source z-nix">              <span class="z-entity z-other z-attribute-name z-multipart z-nix">extensions</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-punctuation z-definition z-list z-nix">[</span> <span class="z-string z-quoted z-double z-nix"><span class="z-punctuation z-definition z-string z-double z-start z-nix">&quot;</span>rust-src<span class="z-punctuation z-definition z-string z-double z-end z-nix">&quot;</span></span> <span class="z-punctuation z-definition z-list z-nix">]</span><span class="z-punctuation z-terminator z-bind z-nix">;</span> <span class="z-comment z-line z-number-sign z-nix"># include rust stdlib source code; allows you to &quot;go to definition&quot; on library functions</span>
+</span><span class="z-source z-nix">            <span class="z-punctuation z-definition z-attrset z-nix">}</span><span class="z-punctuation z-definition z-expression z-nix">)</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix">## To pin a specific rust version (1.76.0 is Bevy&#39;s minimum)</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix"># (rust-bin.stable.&quot;1.76.0&quot;.default.override {</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix">#   extensions = [ &quot;rust-src&quot; ];</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix"># })</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix">## for Rust nightly, use</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix"># (rust-bin.selectLatestNightlyWith</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix">#   (toolchain: toolchain.default.override {</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix">#     extensions = [ &quot;rust-src&quot; ];</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix">#   }))</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">udev</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">alsa-lib</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">vulkan-loader</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix"># X11</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libX11</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXrandr</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXcursor</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXi</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">xorg</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">libXtst</span>
+</span><span class="z-source z-nix">            <span class="z-comment z-line z-number-sign z-nix"># Wayland</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">libxkbcommon</span>
+</span><span class="z-source z-nix">            <span class="z-variable z-parameter z-name z-nix">wayland</span>
+</span><span class="z-source z-nix">          <span class="z-punctuation z-definition z-list z-nix">]</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">          <span class="z-entity z-other z-attribute-name z-multipart z-nix">LD_LIBRARY_PATH</span> <span class="z-keyword z-operator z-bind z-nix">=</span> <span class="z-variable z-parameter z-name z-nix">lib</span><span class="z-keyword z-operator z-nix">.</span><span class="z-variable z-parameter z-name z-nix">makeLibraryPath</span> <span class="z-variable z-parameter z-name z-nix">buildInputs</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">        <span class="z-punctuation z-definition z-attrset z-nix">}</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix">      <span class="z-punctuation z-definition z-attrset z-nix">}</span>
+</span><span class="z-source z-nix">    <span class="z-punctuation z-definition z-expression z-nix">)</span><span class="z-punctuation z-terminator z-bind z-nix">;</span>
+</span><span class="z-source z-nix"><span class="z-punctuation z-definition z-attrset z-nix">}</span>
+</span></code></pre>
+<p>Activate with <code>nix develop</code>, or consider using <a href="https://direnv.net/"><code>direnv</code></a>.
+You may need to re-launch your IDE from inside the flake's environment.</p>
+</details>
+<h4 id="opensuse"><a href="https://www.opensuse.org/">OpenSUSE</a>
+<a class="anchor-link" href="#opensuse">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash">   <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> zypper install libudev-devel gcc-c++ alsa-lib-devel</span>
+</span></code></pre>
+<h4 id="gentoo"><a href="https://www.gentoo.org/">Gentoo</a>
+<a class="anchor-link" href="#gentoo">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash">   <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> emerge<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>ask</span> libX11 pkgconf alsa-lib</span>
+</span></code></pre>
+<p>When using an AMD Radeon GPU, you may also need to emerge <code>amdgpu-pro-vulkan</code> to get Bevy to find the GPU.</p>
+<p>When using a NVIDIA GPU with the proprietary driver (eg. <code>x11-drivers/nvidia-drivers</code>), you may also need to emerge <code>media-libs/vulkan-loader</code> to get Bevy to find the GPU. NVIDIA Vulkan driver is included in <code>nvidia-driver</code>, but may need the loader to find the correct driver. See Gentoo <a href="https://wiki.gentoo.org/wiki/Vulkan">Documentation</a> for details.</p>
+<h4 id="clear-linux-os"><a href="https://clearlinux.org/">Clear Linux OS</a>
+<a class="anchor-link" href="#clear-linux-os">#</a>
+</h4>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> swupd bundle-add devpkg-alsa-lib</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> swupd bundle-add devpkg-libgudev</span>
+</span></code></pre>
+<h4 id="alpine-linux"><a href="https://alpinelinux.org/">Alpine Linux</a>
+<a class="anchor-link" href="#alpine-linux">#</a>
+</h4>
+<p>Run the following command to install <code>GNU C compiler, standard C development libraries, pkg-config, X11 development libraries, ALSA development libraries, eudev development libraries</code>:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apk add gcc libc-dev pkgconf libx11-dev alsa-lib-dev eudev-dev</span>
+</span></code></pre>
+<p>Install a GPU renderer for you graphics card. For Intel integrated GPUs:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apk add mesa-vulkan-intel</span>
+</span></code></pre>
+<p>If you have issues with <code>winit</code> such as <code>Failed to initialize backend!</code> or similar, try adding the following to your <code>~/.cargo/config.toml</code> (more information at the <a href="https://github.com/rust-windowing/winit/issues/1818">issue #1818</a> of the <a href="https://github.com/rust-windowing/winit">winit repository</a>:</p>
+<pre data-lang="toml" class="language-toml z-code"><code class="language-toml" data-lang="toml"><span class="z-source z-toml"><span class="z-punctuation z-definition z-table z-begin z-toml">[</span><span class="z-meta z-tag z-table z-toml"><span class="z-entity z-name z-table z-toml">build</span></span><span class="z-punctuation z-definition z-table z-end z-toml">]</span>
+</span><span class="z-source z-toml"><span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">rustflags</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-punctuation z-definition z-array z-begin z-toml">[</span><span class="z-string z-quoted z-double z-basic z-toml"><span class="z-punctuation z-definition z-string z-begin z-toml">&quot;</span>-C<span class="z-punctuation z-definition z-string z-end z-toml">&quot;</span></span><span class="z-punctuation z-separator z-array z-toml">,</span> <span class="z-string z-quoted z-double z-basic z-toml"><span class="z-punctuation z-definition z-string z-begin z-toml">&quot;</span>target-feature=-crt-static<span class="z-punctuation z-definition z-string z-end z-toml">&quot;</span></span><span class="z-punctuation z-definition z-array z-end z-toml">]</span>
+</span></code></pre>
+<h4 id="solus"><a href="https://getsol.us">Solus</a>
+<a class="anchor-link" href="#solus">#</a>
+</h4>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> eopkg it<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>c</span> system.devel</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> eopkg it g++ libx11-devel alsa-lib-devel</span>
+</span></code></pre>
+<p>If using Wayland, you may also need to install</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> eopkg it wayland-devel libxkbcommon-devel</span>
+</span></code></pre>
+<p>Compiling with clang is also possible - replace the <code>g++</code> package with <code>llvm-clang</code></p>
+
+        
+      </div>
+      <div class="docs-footer print:hidden">
+        <nav class="docs-footer__nav">
+          
+            <a class="docs-footer__link docs-footer__link--next"
+                href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;apps-worlds&#x2F;"
+                data-docs-nav-next>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Next</div>
+                Apps and Worlds
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-right"></i>
+            </a>
+          
+          
+            <a class="docs-footer__link docs-footer__link--prev"
+                href="&#x2F;learn&#x2F;book&#x2F;getting-started&#x2F;why-bevy&#x2F;"
+                data-docs-nav-previous>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Previous</div>
+                Why Bevy?
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-left"></i>
+            </a>
+          
+        </nav>
+        <div class="docs-footer__edit-wrapper">
+          <a class="docs-footer__edit"
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/learn&#x2F;book&#x2F;getting-started&#x2F;installation.md">
+            <i class="icon icon--pencil"></i>
+            Improve this page
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+        </div>
+      </main>
+      <footer class="print:hidden">
+        
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed.svg"
+                  alt="Bevy news feed"
+                  width="32"
+                  height="32" />
+          </a>
+        </div>
+      </footer>
+    </div>
+    <script>
+    const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }
+    </script>
+  </body>
+</html>

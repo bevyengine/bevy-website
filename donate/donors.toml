@@ -1,0 +1,1093 @@
+[[donor]]
+customer_id = "cus_PjyrnRu3cCPyiE"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Piyg0MmCekKKTR"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiiueQnti6nqYE"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj6vYCpLPQLhEa"
+name = "Corvus Prudens"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjJZ990YmD5dqt"
+name = "Idris Zaidi"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pihqo4bylX3qTB"
+name = "John Hainline"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjcJef5hQnPPjh"
+name = "Pressing Thumbs Games"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj9joPUihnivBe"
+name = "0x0177b11f"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PleQy2znzIDUND"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PihmsNEsLMZubm"
+name = "HAL 9000"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PzxnysadNPXQeS"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PolBAP1epzgVdI"
+name = "Jessica Collins"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihGEdjUATe5xx"
+amount = 10
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PiwxLdvJ5jXXMu"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q7biEdtBbWiFFM"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihVbmEUk0vBkO"
+link = "https://deadmoney.gg"
+logo = "dead_money.png"
+amount = 250
+source = "stripe"
+past = false
+square_logo = true
+
+[[donor]]
+customer_id = "cus_Q9VmaWveoR97L2"
+name = "TenRayTracedCats"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihDG5BoSmDK3L"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PqKkhyTcJ7FdUZ"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PvLYap8uWBKAob"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PtXiBhd9uwwuvs"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PikkVHOgp5U9KG"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihotA3l9BGMOx"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihW2eo6gWEE8A"
+name = "Afonso Lage"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihH4EZDNKkryK"
+name = "Troels Hoffmeyer"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihEyrT0pHEQW2"
+name = "nezuo"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PqcJWBMPfcge7x"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PlLK2HTFjQNhdA"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj1X2JxlkL68yi"
+name = "David M. Lary"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pqrw36DWChUXbH"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QFxmb2lAMuO2rT"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QGLfqetYYczDWi"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QEBLqvEudErusz"
+link = "https://www.fslabs.ca"
+logo = "Foresight_Spatial_Labs.svg"
+amount = 4000
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pil2YHaU5N9PYm"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PzFwYvlxSSGci6"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pittvj1xvgyTTw"
+name = "Slowchop Studios"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiyV5K1hvBIlE2"
+name = "Chris \"cdata\" Joel"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QHYWFk6D8ZbM2I"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Piin0g2G5t77g1"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiuVCTB8D3f8ID"
+name = "Adam"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Pii5VFdZtM9ugl"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QIodqp8oeWKNB9"
+name = "Viet NT"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihHZBpZ5nCgxO"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q1guPfDJbwSjtn"
+name = "now I have to make a game with bevy"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihSwJqVlhijQF"
+amount = 250
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihSQG1ozZtYbF"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PnnvBCSumdebUg"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiiiSDEPLiFTlI"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q5mIRZla17W2Eh"
+name = "Vollkornaffe"
+amount = 50
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Q92656AkFnypo5"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PrDAXhtyl3yjuo"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PoBamZ1lCPiS7i"
+name = "Skolwind"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QFIRV4JjUTsVkJ"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PizmngvnmZnVDj"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PpEuLjAuIrUG9u"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj0EO4PPiDQL4w"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PuO6zstFrxKFkN"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PvpLsxaNb61RZo"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihM9MT56cMW0c"
+name = "occuros"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj1pO9QsC03zvD"
+name = "Sindri Andrason"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PyiUxpYjazUBPN"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q4IVV25jIttstM"
+name = "Connor \"Aceeri\" McCluskey"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q5reWVu1n5bNFp"
+link = "https://playroids.com"
+amount = 250
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pk3L5ECmX0eNBH"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihkMJLrlgkyAf"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjKJS5n9u8JtS5"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PimHBOwl1DPurI"
+name = "nil (TheRawMeatball)"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj2SwgqZ76fmGR"
+name = "Oleksii Nosov"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiiufQ5XdL2eOV"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PilHDbrWjEYLA2"
+name = "Jakob Getzel"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Piqhz2xWwxQUoj"
+name = "Jack Wolfard"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pl90EWRu326v6N"
+link = "https://www.christopherbiscardi.com/"
+logo = "cblogo.svg"
+amount = 250
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pw6cosbGZd0bka"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q6x8wiEFiKFvci"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QNewhxk1OvYIQI"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PirwVmVfiQGpeE"
+name = "Paul Lackner"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pihr1inJklIxsO"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pk9Q17Ebpm9elf"
+amount = 100
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PxvGKhDZv3P4a6"
+name = "Dylan P."
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pt4KqGz8dHC8or"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PqROgYq82KMLVY"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiiCmXoMcmbfy7"
+name = "Ida \"Iyes\""
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QIGvoRCqPjeUX0"
+link = "https://keygen.sh"
+amount = 250
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj2sIwbTYj3OcY"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pvdk39PR594a1F"
+name = "Subtale"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PjO7CdLQLxi6nZ"
+name = "Hexorg"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PisHh5RhhVkzpO"
+name = "Turki Al-Marri"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q6kL4YtimsflQo"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihW7Epr7RIUbu"
+name = "Aevyrie Roessler"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihvfnNiXQKTp5"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PikglPNU66j5re"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PlGILFkNxjygmG"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pj8ulybMUEX6fA"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihFktqtLsxtVe"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q5sO50D1DERVWZ"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjLSnhRsgmq0OD"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pij6gAoN8BGbGL"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pl906N6SZTxOHW"
+name = "Brett Witty"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihXjwWgzCUZaL"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pii3sDrCX7BTLj"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Pij8uxY5fTV8Bl"
+name = "CooCooCaCha"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjmXwN1wT2C8rm"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PxLSelb9zvuzro"
+name = "Jan Klinge"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PisitlYqxhAdvk"
+name = "Cult, Inc."
+link = "https://cult.app"
+amount = 100
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QD2FFnJUDsgOXj"
+name = "Dan White"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Piz4xk8tHgq2Xp"
+name = "Nicholas Anderson"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PkBM6ZiW5qiesy"
+name = "Gunstein Vatnar"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihKfFokYZwzZo"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PnWz9DlKwZasUi"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihuTEE4elTN3h"
+name = "abledbody"
+link = "https://github.com/abledbody"
+amount = 100
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihpBREcgX0mpJ"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PtJo6ENLDFFKba"
+amount = 10
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PlRjOAy0Y7uoKE"
+name = "Brandon Wand"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihYnNo1yNtAlJ"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q40lVlGE6Epr0j"
+name = "Arend van Beelen"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PsNp4xRleDTiCo"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PtYbtiIajUjOxf"
+name = "VJ Pyree"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pk6cB8ngn6Lx9V"
+name = "Allan Davis"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PjLdRXfAR6g2M2"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PlHBIE9w0LlGp2"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PuHwTl39VbD6LR"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PvoZ370C6mxInM"
+name = "Daniel Grice"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QCZaYjp4CCulkK"
+link = "https://www.holonautic.com/"
+logo = "holonautic.png"
+amount = 250
+source = "stripe"
+past = false
+logo_scale = 0.44999998807907104
+
+[[donor]]
+customer_id = "cus_QD2EoXOqoiVrKP"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiiCptaWVBdToB"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pv0OYExfZfuQJD"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Po8X6F18QjdfeU"
+name = "Gediminas Gylys"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pygoa9rM7J74f8"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihGn6Vn25KJIH"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q0IGaBJGnD01EI"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q40t9mIUhLyzqC"
+name = "Orange_Murker"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Pj71hP9s2otc3z"
+name = "rustunit.com"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Piici895QO7AMD"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PjgsA71eNw49Nd"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PihOlmgAow94bb"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q6ZoIUP59gd145"
+name = "Rusticorn"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PuUIpUSbf4fyNp"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjlkfhgzTfEOIO"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiumShI0kaKaFl"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihF71v8x4qjnW"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihNRR46xjRPKt"
+name = "well, now I have to make a game with bevy"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PjR7gGdWFqjoN4"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PnTMjQyxSJpsvX"
+name = "indiedevcasts.com"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q9JDafdKGOvHbK"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihQyHcgdQwfDO"
+amount = 10
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PirWyeEgClh2ZM"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjPGs6R0VcvMaG"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PinBSJUBUdemiI"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_QCZCEv9NoXkOD0"
+name = "Insfollowpro"
+link = "https://insfollowpro.com"
+amount = 100
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_PvTztPSqcN6Dq4"
+name = "Dominykas Djacenko"
+amount = 50
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pjj2nJ5KxQwIZw"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihAFs2qac5SG0"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PldIcJfusUNxaj"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pjl6wzHmOItD4x"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pii8KtHiAbgRF5"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_QOx2wxg239vcAF"
+name = "Piot"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pk1d910e98zov2"
+amount = 250
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Q1EsyLGF8BcydN"
+name = "puzzled_squid"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiiQM4VrynD68i"
+name = "SilvanCodes"
+amount = 25
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PiM2iWUX60jsPi"
+amount = 5
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Pl5y7nzj5nV3BY"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PnFgvP9gHuP7Mr"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pin1t2wXD10QAg"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihOIaQJb7oMi7"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihC1uhHNw6dVe"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PjHuI269K1ADJo"
+amount = 10
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pnf9lIdSINT1yG"
+name = "Daniel Grice"
+amount = 25
+source = "stripe"
+past = true
+
+[[donor]]
+customer_id = "cus_Pw6B5dOhjCYapw"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_PihHjZE94ATMJ9"
+amount = 5
+source = "stripe"
+past = false
+
+[[donor]]
+customer_id = "cus_Pitr4FLpSMzxqn"
+name = "Ask Game Studio"
+amount = 25
+source = "stripe"
+past = false

@@ -1,0 +1,1446 @@
+
+
+
+  
+
+
+
+  
+  
+  
+    
+    
+      
+      
+
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+
+
+  
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="Building Bevy&#x27;s Ecosystem" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bevyengine.org&#x2F;&#x2F;learn&#x2F;quick-start&#x2F;plugin-development&#x2F;" />
+    <meta property="og:image"
+          content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+    <meta property="og:description"
+          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/site.css" />
+    <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
+    
+
+    <title>Building Bevy&#x27;s Ecosystem</title>
+    
+  
+
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  <script src="/optional-helpers.js"></script>
+  <script defer src="/on-this-page.js"></script>
+
+  </head>
+  <body>
+    <div class="layout">
+      <input id="mobile-menu-state" class="hidden" type="checkbox">
+      <header class="layout__header header print:hidden" data-mobile-menu-state-container>
+        <div class="header__content">
+          <label class="main-menu-backdrop" for="mobile-menu-state"></label>
+          <label class="header__hamburger button-square button-square--header"
+                  for="mobile-menu-state">
+            <img src="/assets/icon-hamburger.svg"
+                  alt="Three horizontal lines stacked on top of eachother"
+                  width="20"
+                  height="16">
+          </label>
+          <div class="header__left-block">
+            <a class="header__logo" href="/">
+              <img class="logo"
+                    src="/assets/bevy_logo_dark.svg"
+                    alt="Bevy Engine"
+                    width="520"
+                    height="130">
+            </a>
+            <div class="header__message">
+              
+  
+    
+      Quick Start
+    
+  
+
+            </div>
+          </div>
+          
+  <input id="page-menu-switch-state" class="hidden" type="checkbox" checked>
+
+          <nav class="header__menu main-menu main-menu--with-page-menu"
+                role="navigation"
+                data-page-menu-switch-state-container>
+            <div class="main-menu__header">
+              <a href="/">
+                <img class="logo"
+                      src="/assets/bevy_logo_dark.svg"
+                      alt="Bevy Engine"
+                      width="520"
+                      height="130">
+              </a>
+              <label class="button-square button-square--header" for="mobile-menu-state">
+                <img src="/assets/icon-times.svg"
+                      alt="A saltire or x-cross"
+                      width="16"
+                      height="16">
+              </label>
+            </div>
+            
+  <div class="main-menu__page-menu-switch">
+    <label class="menu-switch" for="page-menu-switch-state">
+      <div class="menu-switch__option menu-switch__option--main-menu">Main Menu</div>
+      <div class="menu-switch__option menu-switch__option--page-menu">
+        
+  
+  
+    
+      Quick Start
+    
+  
+
+
+      </div>
+    </label>
+  </div>
+
+            <div class="main-menu__content">
+              <div class="main-menu__page-menu">
+                
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;">Introduction</a>
+      
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;breakout&#x2F;">Breakout</a>
+      
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="mobile-menu-learn-quick-start-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="mobile-menu-learn-quick-start-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;setup&#x2F;">Setup</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;apps&#x2F;">Apps</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;ecs&#x2F;">ECS</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;plugins&#x2F;">Plugins</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;resources&#x2F;">Resources</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;falling-sand&#x2F;">Falling Sand</a>
+      
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;next-steps&#x2F;">Next Steps</a>
+      
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;3d-puzzle-game&#x2F;">3D Puzzle Game</a>
+      
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;plugin-development&#x2F;">Building Bevy&#x27;s Ecosystem</a>
+      
+        
+<nav aria-label="On This Page" class="on-this-page tree-menu__toc">
+  
+  <ul>
+  
+    <li>
+      <a href="#naming">Naming</a>
+      
+    </li>
+  
+    <li>
+      <a href="#licensing">Licensing</a>
+      
+    </li>
+  
+    <li>
+      <a href="#rust-api-and-cargo-semver-guidelines">Rust API and Cargo SemVer Guidelines</a>
+      
+    </li>
+  
+    <li>
+      <a href="#generic-plugin-types">Generic Plugin Types</a>
+      
+    </li>
+  
+    <li>
+      <a href="#small-crate-size">Small Crate Size</a>
+      
+    </li>
+  
+    <li>
+      <a href="#tests-and-ci">Tests and CI</a>
+      
+    </li>
+  
+    <li>
+      <a href="#indicate-compatible-versions">Indicate Compatible Versions</a>
+      
+    </li>
+  
+    <li>
+      <a href="#main-branch-tracking">Main Branch Tracking</a>
+      
+    </li>
+  
+    <li>
+      <a href="#documentation-and-examples">Documentation and Examples</a>
+      
+    </li>
+  
+    <li>
+      <a href="#publishing-your-plugin">Publishing Your Plugin</a>
+      
+    </li>
+  
+    <li>
+      <a href="#promotion">Promotion</a>
+      
+    </li>
+  
+  </ul>
+</nav>
+
+      
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;troubleshooting&#x2F;">Troubleshooting</a>
+      
+    </div>
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+              </div>
+              <ul class="main-menu__menu">
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry main-menu__entry--getting-started">
+    <a href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started" class="main-menu__link">
+      <span>Getting Started</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;learn" class="main-menu__link main-menu__link--active">
+      <span>Learn</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;news" class="main-menu__link">
+      <span>News</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;community" class="main-menu__link">
+      <span>Community</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;foundation" class="main-menu__link">
+      <span>Foundation</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;assets" class="main-menu__link">
+      <span>Assets</span>
+    </a>
+  </li>
+
+                
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  <li class="main-menu__entry ">
+    <a href="&#x2F;examples" class="main-menu__link">
+      <span>Examples</span>
+    </a>
+  </li>
+
+                
+              </ul>
+            </div>
+          </nav>
+          <div class="header__cta-container">
+            <a class="button button--pink header__cta" href="/donate">Donate
+              <img class="button__icon"
+                    src="/assets/heart.svg"
+                    alt="heart icon"
+                    width="512"
+                    height="512" />
+            </a>
+            <a class="header__cta header__cta--github"
+                href="https://github.com/bevyengine/bevy">
+              <img src="/assets/github-mark-white.svg"
+                    alt="GitHub repo"
+                    width="98"
+                    height="96" />
+            </a>
+          </div>
+        </div>
+      </header>
+      <main class="layout__content">
+        <div class="container">
+          
+            
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+          
+          
+  <div class="page-with-menu ">
+    <div class="page-with-menu__menu-wrapper print:hidden">
+      <div class="page-with-menu__menu">
+        
+  
+  <ul class="tree-menu">
+    
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+    
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;introduction&#x2F;">Introduction</a>
+      
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;breakout&#x2F;">Breakout</a>
+      
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <input id="page-menu-learn-quick-start-getting-started"
+            class="tree-menu__state"
+            type="checkbox"
+            >
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label tree-menu__label--with-chevron">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;">Getting Started</a>
+      
+        <label class="tree-menu__toggle" for="page-menu-learn-quick-start-getting-started">
+          <img class="tree-menu__chevron"
+                src="/assets/icon-chevron-down.svg"
+                alt="A chevron, or V-shaped symbol"
+                width="15"
+                height="24">
+        </label>
+      
+      
+    </div>
+    
+      <ul class="tree-menu">
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;setup&#x2F;">Setup</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;apps&#x2F;">Apps</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;ecs&#x2F;">ECS</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;plugins&#x2F;">Plugins</a>
+      
+    </div>
+  </li>
+
+          
+        
+          
+            
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;getting-started&#x2F;resources&#x2F;">Resources</a>
+      
+    </div>
+  </li>
+
+          
+        
+      </ul>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;falling-sand&#x2F;">Falling Sand</a>
+      
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;next-steps&#x2F;">Next Steps</a>
+      
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  <li class="tree-menu__item public_draft">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;3d-puzzle-game&#x2F;">3D Puzzle Game</a>
+      
+      
+    </div>
+    
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <li class="tree-menu__item tree-menu__item--active">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;plugin-development&#x2F;">Building Bevy&#x27;s Ecosystem</a>
+      
+        
+<nav aria-label="On This Page" class="on-this-page tree-menu__toc">
+  
+  <ul>
+  
+    <li>
+      <a href="#naming">Naming</a>
+      
+    </li>
+  
+    <li>
+      <a href="#licensing">Licensing</a>
+      
+    </li>
+  
+    <li>
+      <a href="#rust-api-and-cargo-semver-guidelines">Rust API and Cargo SemVer Guidelines</a>
+      
+    </li>
+  
+    <li>
+      <a href="#generic-plugin-types">Generic Plugin Types</a>
+      
+    </li>
+  
+    <li>
+      <a href="#small-crate-size">Small Crate Size</a>
+      
+    </li>
+  
+    <li>
+      <a href="#tests-and-ci">Tests and CI</a>
+      
+    </li>
+  
+    <li>
+      <a href="#indicate-compatible-versions">Indicate Compatible Versions</a>
+      
+    </li>
+  
+    <li>
+      <a href="#main-branch-tracking">Main Branch Tracking</a>
+      
+    </li>
+  
+    <li>
+      <a href="#documentation-and-examples">Documentation and Examples</a>
+      
+    </li>
+  
+    <li>
+      <a href="#publishing-your-plugin">Publishing Your Plugin</a>
+      
+    </li>
+  
+    <li>
+      <a href="#promotion">Promotion</a>
+      
+    </li>
+  
+  </ul>
+</nav>
+
+      
+    </div>
+  </li>
+
+        
+      
+        
+          
+  
+  
+  
+  
+  
+  
+  
+  <li class="tree-menu__item">
+    <div class="tree-menu__label">
+      <a class="tree-menu__link" href="&#x2F;learn&#x2F;quick-start&#x2F;troubleshooting&#x2F;">Troubleshooting</a>
+      
+    </div>
+  </li>
+
+        
+      
+    
+  </ul>
+
+
+      </div>
+    </div>
+    <div class="page-with-menu__content">
+      
+  <div class="docs-page">
+    <div class="docs-content">
+      
+
+      
+      
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      
+      
+        
+        
+      
+        
+        
+          
+          
+          
+          
+        
+      
+        
+        
+          
+          
+          
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        
+      
+        
+        
+          
+          
+          
+          
+        
+      
+        
+        
+      
+        
+        
+          
+          
+          
+          
+        
+      
+        
+        
+      
+        
+        
+      
+
+      
+
+      
+      
+      
+      
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+          
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+          
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+          
+        
+        
+        
+        
+          
+          
+        
+        
+        
+          
+          
+          
+      <h1>
+        Building Bevy&#x27;s Ecosystem
+        
+      </h1>
+      <div class="media-content">
+        <p>Bevy has a plug-and-play architecture, where you can easily add plugins for new features or use your own plugins instead of the built-in ones. You can also create third-party plugins that others may use in their applications.</p>
+<p>With that in mind, this page provides some basic info that can be useful when authoring third-party plugins.</p>
+<h2 id="naming">Naming</h2>
+<p>You are free to use a <code>bevy_xxx</code> name for your plugin, but please be reasonable. If you are about to claim a generic name like <code>bevy_animation</code>, <code>bevy_color</code>, or <code>bevy_editor</code>, please ask first. The rationale is explained <a href="https://github.com/bevyengine/bevy/discussions/1202#discussioncomment-258907">here</a>.</p>
+<h2 id="licensing">Licensing</h2>
+<p>Bevy is dual licensed under <a href="https://www.rust-lang.org/policies/licenses">MIT or Apache 2.0</a>, at your option. Most other Rust projects (including Rust itself) also use this dual-license approach. MIT-only is very popular, and you might be tempted to just use that (Bevy also used to be MIT-only), but there are <a href="https://github.com/bevyengine/bevy/issues/2373">very good reasons</a> to include both licenses. We highly recommend using the dual MIT / Apache 2.0 license for your Bevy Plugins and crates:</p>
+<ul>
+<li>Including the Apache 2.0 license option significantly reduces the difficulty and boilerplate of proper license compliance in published games because you only need to include one copy of the Apache 2.0 license.</li>
+<li>Provides maximum compatibility with Bevy and Rust, making it easier to upstream your changes.</li>
+</ul>
+<h2 id="rust-api-and-cargo-semver-guidelines">Rust API and Cargo SemVer Guidelines</h2>
+<p>While they are only guidelines, it can be useful for you to look at and consider the <a href="https://rust-lang.github.io/api-guidelines/">Rust API guidelines</a> and <a href="https://doc.rust-lang.org/cargo/reference/semver.html">Cargo SemVer compatibility conventions</a> for recommendations on how to write your API and what to consider a breaking or compatible change.</p>
+<h2 id="generic-plugin-types">Generic Plugin Types</h2>
+<p>It can be useful to allow your users to supply generic types to your plugins. It can enable them to write custom logic for components to be used; give your plugin a marker component to note an entity it should do some logic to; add events that your plugin should listen for; or a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of the same type via type aliases.)</p>
+<p>You can define a generic plugin like so:</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Example with a generic type that implements `Component`
+</span></span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-storage z-modifier z-rust">pub</span> <span class="z-storage z-type z-struct z-rust">struct</span> </span><span class="z-meta z-struct z-rust"><span class="z-meta z-generic z-rust"><span class="z-entity z-name z-struct z-rust">YourPlugin</span><span class="z-meta z-generic z-rust"><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-separator z-rust">:</span> Component<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span></span></span><span class="z-meta z-struct z-rust"> </span><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust">  <span class="z-storage z-modifier z-rust">pub</span> <span class="z-variable z-other z-member z-rust">phantom_t</span><span class="z-punctuation z-separator z-type z-rust">:</span> <span class="z-meta z-generic z-rust">PhantomData<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span>,
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-struct z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-storage z-type z-impl z-rust">impl</span></span><span class="z-meta z-impl z-rust"><span class="z-meta z-generic z-rust"><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-separator z-rust">:</span> Component<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span></span><span class="z-meta z-impl z-rust"> Plugin <span class="z-keyword z-other z-rust">for</span></span><span class="z-meta z-impl z-rust"> <span class="z-entity z-name z-impl z-rust">YourPlugin</span><span class="z-meta z-generic z-rust"><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span> </span><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust">  <span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">build</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-keyword z-operator z-rust">&amp;</span><span class="z-variable z-parameter z-rust">self</span>, <span class="z-variable z-parameter z-rust">app</span><span class="z-punctuation z-separator z-rust">:</span> <span class="z-keyword z-operator z-rust">&amp;</span><span class="z-storage z-modifier z-rust">mut</span> App</span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    app<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">add_systems</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>Startup<span class="z-punctuation z-separator z-rust">,</span> <span class="z-meta z-path z-rust">example_system<span class="z-punctuation z-accessor z-rust">::</span></span><span class="z-meta z-generic z-rust"><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">  </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust">
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust">  <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> ... your other logic ...
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-impl z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> Example system using your generics
+</span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-modifier z-rust">pub</span> <span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">example_system</span></span><span class="z-meta z-generic z-rust"><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-separator z-rust">:</span> Component<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-variable z-parameter z-rust">query</span><span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-generic z-rust">Query<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>Entity, <span class="z-meta z-generic z-rust">With<span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span>T<span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span><span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">  <span class="z-storage z-type z-rust">let</span> entity <span class="z-keyword z-operator z-assignment z-rust">=</span> query<span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">single</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">  <span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> ... any other logic here ...
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<p>A prime example of generic plugins in use is the <a href="https://github.com/ManevilleF/bevy_life">Bevy Cellular Automaton Plugin</a>.</p>
+<h2 id="small-crate-size">Small Crate Size</h2>
+<p>To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:</p>
+<ul>
+<li>
+<p>Only include the Bevy features you absolutely need.</p>
+<p>Features are additive — Bevy features enabled in your plugin cannot be disabled by someone using your plugin.</p>
+<p>You should add <code>default-features = false</code> to the Bevy dependency in your <code>Cargo.toml</code> and manually specify the features you need.</p>
+<p>You can find a list of Bevy's features <a href="https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md">here</a>.</p>
+</li>
+<li>
+<p>Avoid large new dependencies.</p>
+</li>
+<li>
+<p>Make sure your dependencies are not duplicated, using <a href="https://doc.rust-lang.org/cargo/commands/cargo-tree.html"><code>cargo tree</code></a> or <a href="https://github.com/EmbarkStudios/cargo-deny"><code>cargo-deny</code></a>.</p>
+</li>
+<li>
+<p>Put optional functionality and dependencies behind a <a href="https://doc.rust-lang.org/cargo/reference/features.html">cargo feature</a>.</p>
+</li>
+</ul>
+<h2 id="tests-and-ci">Tests and CI</h2>
+<p>Tests are always good! For CI, you can check out <a href="https://github.com/actions-rs/meta/blob/master/recipes/quickstart.md">this example</a> for a quick start using GitHub Actions. As Bevy has additional Linux dependencies, you should install them before building your project (<a href="https://github.com/bevyengine/bevy/blob/9788b386c7846c99978ab5c1a33698ec5a471d84/.github/workflows/ci.yml#L40">here is how Bevy is doing it</a>). Even if you don't have many (or any) tests, setting up CI will compile check your plugin and ensure a basic level of quality.</p>
+<h2 id="indicate-compatible-versions">Indicate Compatible Versions</h2>
+<p>Indicating which version of your plugin works with which version of Bevy can be helpful for your users. Some of your users may be using an older version of Bevy for any number of reasons. You can help them find which version of your plugin they should use. This can be shown as a simple table in your README with each version of Bevy and the corresponding compatible version of your plugin.</p>
+<pre data-lang="markdown" class="language-markdown z-code"><code class="language-markdown" data-lang="markdown"><span class="z-text z-html z-markdown"><span class="z-meta z-block-level z-markdown"><span class="z-meta z-table z-header z-markdown-gfm"><span class="z-punctuation z-separator z-table-cell z-markdown">|</span> bevy  <span class="z-punctuation z-separator z-table-cell z-markdown">|</span> bevy_awesome_plugin <span class="z-punctuation z-separator z-table-cell z-markdown">|</span>
+</span></span></span><span class="z-text z-html z-markdown"><span class="z-meta z-block-level z-markdown"><span class="z-meta z-table z-header-separator z-markdown-gfm"><span class="z-punctuation z-separator z-table-cell z-markdown">|</span><span class="z-punctuation z-section z-table-header z-markdown">-------</span><span class="z-punctuation z-separator z-table-cell z-markdown">|</span><span class="z-punctuation z-section z-table-header z-markdown">---------------------</span><span class="z-punctuation z-separator z-table-cell z-markdown">|</span>
+</span><span class="z-meta z-table z-markdown-gfm"></span></span></span><span class="z-text z-html z-markdown"><span class="z-meta z-block-level z-markdown"><span class="z-meta z-table z-markdown-gfm"><span class="z-punctuation z-separator z-table-cell z-markdown">|</span> 0.13  <span class="z-punctuation z-separator z-table-cell z-markdown">|</span> 0.3                 <span class="z-punctuation z-separator z-table-cell z-markdown">|</span>
+</span></span></span><span class="z-text z-html z-markdown"><span class="z-meta z-block-level z-markdown"><span class="z-meta z-table z-markdown-gfm"><span class="z-punctuation z-separator z-table-cell z-markdown">|</span> 0.12  <span class="z-punctuation z-separator z-table-cell z-markdown">|</span> 0.1                 <span class="z-punctuation z-separator z-table-cell z-markdown">|</span>
+</span></span></span></code></pre>
+<h2 id="main-branch-tracking">Main Branch Tracking</h2>
+<p>Bevy is evolving very fast. There are often new features on the main branch but have not yet been released. Your plugin might depend on Bevy Main or the latest release. You can also do both on different branches (e.g., have a <code>bevy_main</code> branch).</p>
+<p>If you intend to track Bevy's main branch, you can specify the latest commit you support in your <code>Cargo.toml</code> file:</p>
+<pre data-lang="toml" class="language-toml z-code"><code class="language-toml" data-lang="toml"><span class="z-source z-toml"><span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">bevy</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-punctuation z-definition z-inline-table z-begin z-toml">{</span> <span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">version</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-string z-quoted z-double z-basic z-toml"><span class="z-punctuation z-definition z-string z-begin z-toml">&quot;</span>0.5<span class="z-punctuation z-definition z-string z-end z-toml">&quot;</span></span><span class="z-punctuation z-separator z-inline-table z-toml">,</span> <span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">git</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-string z-quoted z-double z-basic z-toml"><span class="z-punctuation z-definition z-string z-begin z-toml">&quot;</span>https://github.com/bevyengine/bevy<span class="z-punctuation z-definition z-string z-end z-toml">&quot;</span></span><span class="z-punctuation z-separator z-inline-table z-toml">,</span> <span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">rev</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-string z-quoted z-double z-basic z-toml"><span class="z-punctuation z-definition z-string z-begin z-toml">&quot;</span>9788b386c7846c99978ab5c1a33698ec5a471d84<span class="z-punctuation z-definition z-string z-end z-toml">&quot;</span></span><span class="z-punctuation z-separator z-inline-table z-toml">,</span> <span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">default-features</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-constant z-language z-toml">false</span> <span class="z-punctuation z-definition z-inline-table z-end z-toml">}</span>
+</span></code></pre>
+<p>You can specify the dependency <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#multiple-locations">both as a version and with git</a>. The version will be used if the dependency is pulled from <a href="https://crates.io/">crates.io</a>. Otherwise, the git dependency will be used.</p>
+<p>You can use one of these badges to communicate to your users how closely you intend to track Bevy's main branch.</p>
+<p><a href="https://bevyengine.org/learn/quick-start/plugin-development/#main-branch-tracking"><img src="https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue" alt="Following released Bevy versions" /></a></p>
+<pre data-lang="markdown" class="language-markdown z-code"><code class="language-markdown" data-lang="markdown"><span class="z-text z-html z-markdown"><span class="z-meta z-paragraph z-markdown"><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-begin z-markdown">[</span></span><span class="z-meta z-link z-inline z-description z-markdown"><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-begin z-markdown">![</span></span><span class="z-meta z-image z-inline z-description z-markdown">Following released Bevy versions</span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-end z-markdown">]</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-markup z-underline z-link z-image z-markdown">https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-end z-markdown">]</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-markup z-underline z-link z-markdown">https://bevyengine.org/learn/quick-start/plugin-development/#main-branch-tracking</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span>
+</span></span></code></pre>
+<p><a href="https://bevyengine.org/learn/quick-start/plugin-development/#main-branch-tracking"><img src="https://img.shields.io/badge/Bevy%20tracking-main-lightblue" alt="Following Bevy's main branch" /></a></p>
+<pre data-lang="markdown" class="language-markdown z-code"><code class="language-markdown" data-lang="markdown"><span class="z-text z-html z-markdown"><span class="z-meta z-paragraph z-markdown"><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-begin z-markdown">[</span></span><span class="z-meta z-link z-inline z-description z-markdown"><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-begin z-markdown">![</span></span><span class="z-meta z-image z-inline z-description z-markdown">Following Bevy&#39;s main branch</span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-end z-markdown">]</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-markup z-underline z-link z-image z-markdown">https://img.shields.io/badge/Bevy%20tracking-main-lightblue</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-end z-markdown">]</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-markup z-underline z-link z-markdown">https://bevyengine.org/learn/quick-start/plugin-development/#main-branch-tracking</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span>
+</span></span></code></pre>
+<h2 id="documentation-and-examples">Documentation and Examples</h2>
+<p>Documentation and examples are very useful for a crate.</p>
+<p>In the case of a Bevy plugin, a few screenshots or movies / animated GIFs from your examples can really help to understand what your plugin is capable of.</p>
+<p>Additionally, it can be helpful to list:</p>
+<ul>
+<li>SystemSets available from your plugin, and their execution order if that's important.</li>
+<li>Components available from your plugin.</li>
+</ul>
+<h2 id="publishing-your-plugin">Publishing Your Plugin</h2>
+<p>There are some <a href="https://doc.rust-lang.org/cargo/reference/manifest.html">extra fields</a> that you can add to your <code>Cargo.toml</code> manifest in the <code>[package]</code> section:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-description-field"><code>description</code></a> — A description of the plugin</li>
+<li><a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-repository-field"><code>repository</code></a> — URL of the plugin source repository</li>
+<li><a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields"><code>license</code></a> — The plugin license</li>
+<li><a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-keywords-field"><code>keywords</code></a> — Keywords for the plugin. <code>&quot;bevy&quot;</code> at least is a good idea here</li>
+<li><a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-categories-field"><code>categories</code></a> — Categories of the plugin. See <a href="https://crates.io/categories">the full list on crates.io</a>.</li>
+<li><a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-exclude-and-include-fields"><code>exclude</code></a> — Files to exclude from the released package. Excluding the <code>assets</code> folder that you may have is a good idea, as well as any large files that are not needed by the plugin.</li>
+</ul>
+<p>Once a crate is published to <a href="https://crates.io">crates.io</a>, there are two badges that you can add to your <code>README.md</code> for easy links:</p>
+<p><a href="https://crates.io/crates/bevy"><img src="https://img.shields.io/crates/v/bevy" alt="crates.io" /></a></p>
+<pre data-lang="markdown" class="language-markdown z-code"><code class="language-markdown" data-lang="markdown"><span class="z-text z-html z-markdown"><span class="z-meta z-paragraph z-markdown"><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-begin z-markdown">[</span></span><span class="z-meta z-link z-inline z-description z-markdown"><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-begin z-markdown">![</span></span><span class="z-meta z-image z-inline z-description z-markdown">crates.io</span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-end z-markdown">]</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-markup z-underline z-link z-image z-markdown">https://img.shields.io/crates/v/bevy_awesome_plugin</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-end z-markdown">]</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-markup z-underline z-link z-markdown">https://crates.io/crates/bevy_awesome_plugin</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span>
+</span></span></code></pre>
+<p><a href="https://docs.rs/bevy"><img src="https://docs.rs/bevy/badge.svg" alt="docs.rs" /></a></p>
+<pre data-lang="markdown" class="language-markdown z-code"><code class="language-markdown" data-lang="markdown"><span class="z-text z-html z-markdown"><span class="z-meta z-paragraph z-markdown"><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-begin z-markdown">[</span></span><span class="z-meta z-link z-inline z-description z-markdown"><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-begin z-markdown">![</span></span><span class="z-meta z-image z-inline z-description z-markdown">docs.rs</span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-image z-end z-markdown">]</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-image z-inline z-markdown"><span class="z-markup z-underline z-link z-image z-markdown">https://docs.rs/bevy_awesome_plugin/badge.svg</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-link z-end z-markdown">]</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-punctuation z-definition z-metadata z-begin z-markdown">(</span></span><span class="z-meta z-link z-inline z-markdown"><span class="z-markup z-underline z-link z-markdown">https://docs.rs/bevy_awesome_plugin</span><span class="z-punctuation z-definition z-metadata z-end z-markdown">)</span></span>
+</span></span></code></pre>
+<h2 id="promotion">Promotion</h2>
+<p>You can promote your plugin in Bevy's <a href="/community">communities</a>:</p>
+<ul>
+<li>Add it as an <a href="https://github.com/bevyengine/bevy-assets">Asset on the official website</a>.</li>
+<li>Announce it on <a href="https://discord.gg/bevy">Discord</a>, in the <code>#crates</code> channel.</li>
+<li>Announce it on <a href="https://reddit.com/r/bevy">Reddit</a>.</li>
+</ul>
+
+        
+      </div>
+      <div class="docs-footer print:hidden">
+        <nav class="docs-footer__nav">
+          
+            <a class="docs-footer__link docs-footer__link--next"
+                href="&#x2F;learn&#x2F;quick-start&#x2F;troubleshooting&#x2F;"
+                data-docs-nav-next>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Next</div>
+                Troubleshooting
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-right"></i>
+            </a>
+          
+          
+            <a class="docs-footer__link docs-footer__link--prev"
+                href="&#x2F;learn&#x2F;quick-start&#x2F;next-steps&#x2F;"
+                data-docs-nav-previous>
+              <div class="docs-footer__label">
+                <div class="docs-footer__dir">Previous</div>
+                Next Steps
+              </div>
+              <i class="docs-footer__chevron icon icon--chevron-left"></i>
+            </a>
+          
+        </nav>
+        <div class="docs-footer__edit-wrapper">
+          <a class="docs-footer__edit"
+              href="https://github.com/bevyengine/bevy-website/edit/main/content/learn&#x2F;quick-start&#x2F;plugin-development.md">
+            <i class="icon icon--pencil"></i>
+            Improve this page
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+        </div>
+      </main>
+      <footer class="print:hidden">
+        
+        <div class="footer__social-container">
+          <a class="footer__social" href="https://github.com/bevyengine/bevy">
+            <img src="/assets/github-mark-white.svg"
+                  alt="Bevy engine's GitHub repo"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://discord.gg/bevy">
+            <img src="/assets/discord.svg"
+                  alt="Bevy Discord server"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://mastodon.social/@bevy">
+            <img src="/assets/mastodon-logo-purple.svg"
+                  alt="Bevy Mastodon account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://twitter.com/BevyEngine">
+            <img src="/assets/twitter.svg"
+                  alt="Bevy Twitter account"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
+            <img src="/assets/reddit.svg"
+                  alt="Bevy subreddit"
+                  width="32"
+                  height="32" />
+          </a>
+          <a class="footer__social" href="/atom.xml">
+            <img src="/assets/feed.svg"
+                  alt="Bevy news feed"
+                  width="32"
+                  height="32" />
+          </a>
+        </div>
+      </footer>
+    </div>
+    <script>
+    const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }
+    </script>
+  </body>
+</html>
