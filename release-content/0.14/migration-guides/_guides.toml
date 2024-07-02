@@ -695,7 +695,7 @@ areas = ["Rendering", "UI"]
 file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
 
 [[guides]]
-title = "FIX12527: Changes to make serde optional for bevy_color"
+title = "Make `serde` optional for `bevy_color`"
 url = "https://github.com/bevyengine/bevy/pull/12666"
 areas = ["Rendering", "Utils"]
 file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
