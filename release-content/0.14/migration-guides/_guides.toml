@@ -5,6 +5,12 @@ areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
 file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
+title = "Register missing types manually"
+url = "https://github.com/bevyengine/bevy/pull/12314"
+areas = ["Reflection"]
+file_name = "12314_Clean_up_type_registrations.md"
+
+[[guides]]
 title = "Fix `Node2d` typo"
 url = "https://github.com/bevyengine/bevy/pull/12038"
 areas = []
@@ -429,12 +435,6 @@ title = "Recursive registration of types"
 url = "https://github.com/bevyengine/bevy/pull/5781"
 areas = ["Reflection"]
 file_name = "5781_bevy_reflect_Recursive_registration.md"
-
-[[guides]]
-title = "Clean up type registrations"
-url = "https://github.com/bevyengine/bevy/pull/12314"
-areas = ["Reflection"]
-file_name = "12314_Clean_up_type_registrations.md"
 
 [[guides]]
 title = "Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
