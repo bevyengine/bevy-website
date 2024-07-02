@@ -707,7 +707,7 @@ areas = ["Rendering", "Windowing"]
 file_name = "12055_configure_surface_needs_to_be_on_the_main_thread_on_iOS.md"
 
 [[guides]]
-title = "Introduce a `WindowWrapper` to extend the lifetime of the window when using pipelined rendering"
+title = "Require windowing backends to store windows in `WindowWrapper`"
 url = "https://github.com/bevyengine/bevy/pull/12978"
 areas = ["Rendering", "Windowing"]
 file_name = "12978_Introduce_a_WindowWrapper_to_extend_the_lifetime_of_the_wi.md"
