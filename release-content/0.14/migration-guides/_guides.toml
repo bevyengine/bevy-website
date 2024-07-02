@@ -515,10 +515,10 @@ areas = ["Rendering"]
 file_name = "12559_Remove_needless_color_specializaion_for_SpritePipeline.md"
 
 [[guides]]
-title = "Improve performance by binning together opaque items instead of sorting them."
+title = "Sorted and Binned Render Phase Items, Resources, and non-meshes"
 url = "https://github.com/bevyengine/bevy/pull/12453"
 areas = ["Rendering"]
-file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
+file_name = "12453_13277_14029_sorted_and_binned_render_phase_items.md"
 
 [[guides]]
 title = "GPU frustum culling"
@@ -627,12 +627,6 @@ title = "Add emissive_exposure_weight to the StandardMaterial"
 url = "https://github.com/bevyengine/bevy/pull/13350"
 areas = ["Rendering"]
 file_name = "13350_Add_emissive_exposure_weight_to_the_StandardMaterial.md"
-
-[[guides]]
-title = "Make render phases render world resources instead of components."
-url = "https://github.com/bevyengine/bevy/pull/13277"
-areas = ["Rendering"]
-file_name = "13277_Make_render_phases_render_world_resources_instead_of_compo.md"
 
 [[guides]]
 title = "More idiomatic texture atlas builder"
