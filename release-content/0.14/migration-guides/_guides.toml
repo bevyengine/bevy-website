@@ -683,7 +683,7 @@ areas = ["Rendering", "UI"]
 file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
 
 [[guides]]
-title = "Fix UI elements randomly not appearing after #13277."
+title = "Remove generic camera from `extract_default_ui_camera_view()` system"
 url = "https://github.com/bevyengine/bevy/pull/13462"
 areas = ["Rendering", "UI"]
 file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
