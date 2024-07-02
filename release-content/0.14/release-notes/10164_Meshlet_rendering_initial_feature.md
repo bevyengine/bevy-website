@@ -7,10 +7,11 @@ This feature is still a WIP, and comes with several constraints compared to Bevy
 Note that this feature does not use GPU "mesh shaders", so older GPUs are compatible for now. However, they are not recommended, and are likely to become unsupported in the near future.
 
 In addition to the below user guide, checkout:
+
 * [The Bevy example for this feature](https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/3d/meshlet.rs)
 * [The technical deep dive article by the main author of this feature](https://jms55.github.io/posts/2024-06-09-virtual-geometry-bevy-0-14)
 
-<video controls loop><source src="meshlets.mp4" type="video/mp4"/></video>
+<video controls loop><source src="many_bunnies.mp4" type="video/mp4"/></video>
 
 ---
 
@@ -29,7 +30,6 @@ Next, preprocess your `Mesh` into a `MeshletMesh`. Currently, this needs to be d
 Automatic GLTF/scene conversions via Bevy's asset preprocessing system is planned, but unfortunately did not make the cut in time for this release. For now, you'll have to come up with your own asset conversion and management system. If you come up with a good system, let us know!
 
 Now, spawn your entities. In the same vein as `MeshMaterialBundle`, there's a `MeshletMeshMaterialBundle`, which uses a `MeshletMesh` instead of the typical `Mesh`.
-
 
 ```rust
 commands.spawn(MaterialMeshletMeshBundle {
