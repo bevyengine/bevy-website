@@ -635,7 +635,7 @@ areas = ["Rendering"]
 file_name = "13277_Make_render_phases_render_world_resources_instead_of_compo.md"
 
 [[guides]]
-title = "More idiomatic texture atlas builder"
+title = "More idiomatic `TextureAtlasBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13238"
 areas = ["Rendering"]
 file_name = "13238_More_idiomatic_texture_atlas_builder.md"
