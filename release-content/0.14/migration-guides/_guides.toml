@@ -731,7 +731,7 @@ areas = ["UI"]
 file_name = "13452_Rename_Rect_inset_method_to_inflate.md"
 
 [[guides]]
-title = "Updates default Text font size to 24px"
+title = "Updates default font size to 24px"
 url = "https://github.com/bevyengine/bevy/pull/13603"
 areas = ["UI"]
 file_name = "13603_Updates_default_Text_font_size_to_24px.md"
