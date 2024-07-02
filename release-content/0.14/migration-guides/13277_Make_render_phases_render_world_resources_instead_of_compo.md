@@ -1,1 +1,0 @@
-The `BinnedRenderPhase` and `SortedRenderPhase` render world components have been replaced with `ViewBinnedRenderPhases` and `ViewSortedRenderPhases` resources. Instead of querying for the components, look the camera entity up in the `ViewBinnedRenderPhases`/`ViewSortedRenderPhases` tables.
