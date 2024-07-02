@@ -1,6 +1,6 @@
 [[release_notes]]
 title = "Virtual Geometry (Experimental)"
-authors = ["@JMS55", "@atlv24", "@ricky26"]
+authors = ["@JMS55", "@atlv24", "@zeux", "@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/10164"
 file_name = "10164_Meshlet_rendering_initial_feature.md"
 

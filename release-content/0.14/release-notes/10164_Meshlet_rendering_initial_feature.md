@@ -2,15 +2,15 @@ After several months of hard work, we're super excited to bring you the experime
 
 This new rendering feature works much like Unreal Engine 5's Nanite renderer. You can take a very high-poly mesh, preprocess it to generate a MeshletMesh during build time, and then at runtime render huge amounts of geometry - much more than Bevy's standard renderer can support. No explicit LODs are needed - it's all automatic, and near seamless.
 
-This feature is still a WIP, and comes with several constraints compared to Bevy's standard renderer, so be sure to read the docs and report any bugs you encounter. Look forward to more performance improvements (and associated breaking changes) in future releases.
+This feature is still a WIP, and comes with several constraints compared to Bevy's standard renderer, so be sure to read the docs and report any bugs you encounter. We still a lot left to do, so look forward to more performance improvements (and associated breaking changes) in future releases!
 
-This feature does not use GPU "mesh shaders". Older GPUs are supported, but not recommended, and may become unsupported in a future release.
+Note that this feature does not use GPU "mesh shaders", so older GPUs are compatible for now. However, they are not recommended, and are likely to become unsupported in the near future.
 
 In addition to the below user guide, checkout:
 * [The Bevy example for this feature](https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/3d/meshlet.rs)
 * [The technical deep dive article by the main author of this feature](https://jms55.github.io/posts/2024-06-09-virtual-geometry-bevy-0-14)
 
-![An example scene showing two rows of identical meshes. The right have regular materials. The left have a debug material that shows the underlying patchwork of clusters.](meshlets.png)
+<video controls loop><source src="meshlets.mp4" type="video/mp4"/></video>
 
 ---
 
