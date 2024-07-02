@@ -599,7 +599,7 @@ areas = ["Rendering"]
 file_name = "13121_Implement_filmic_color_grading.md"
 
 [[guides]]
-title = "Add BufferVec, an higher-performance alternative to StorageBuffer, and make GpuArrayBuffer use it."
+title = "Rename `BufferVec` to `RawBufferVec`"
 url = "https://github.com/bevyengine/bevy/pull/13199"
 areas = ["Rendering"]
 file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
