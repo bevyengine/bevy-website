@@ -587,7 +587,7 @@ areas = ["Rendering"]
 file_name = "12954_Expose_desired_maximum_frame_latency_through_window_creati.md"
 
 [[guides]]
-title = "Fix `CameraProjection` panic and improve `CameraProjectionPlugin`"
+title = "Merge `VisibilitySystems` frusta variants"
 url = "https://github.com/bevyengine/bevy/pull/11808"
 areas = ["Rendering"]
 file_name = "11808_Fix_CameraProjection_panic_and_improve_CameraProjectionPlu.md"
