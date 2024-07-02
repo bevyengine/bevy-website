@@ -1,1 +1,1 @@
-`Window::fit_canvas_to_parent` was removed in 0.13, but that ended up being problematic because many users depended on its behavior when they could not customize the CSS. It is now re-added to account for this need.
+`Window::fit_canvas_to_parent` is a property on WASM that automatically resizes the canvas element to the size of its parent, usually the screen. It was removed in 0.13, but that ended up being problematic because many users depended on its behavior when they could not customize the CSS. It has now been re-added to account for this need.
