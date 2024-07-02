@@ -701,7 +701,7 @@ areas = ["Rendering", "Utils"]
 file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
 
 [[guides]]
-title = "configure_surface needs to be on the main thread on iOS"
+title = "Rename `need_new_surfaces()` system to `need_surface_configuration()`"
 url = "https://github.com/bevyengine/bevy/pull/12055"
 areas = ["Rendering", "Windowing"]
 file_name = "12055_configure_surface_needs_to_be_on_the_main_thread_on_iOS.md"
