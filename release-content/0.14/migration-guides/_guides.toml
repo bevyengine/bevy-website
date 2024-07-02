@@ -515,7 +515,7 @@ areas = ["Rendering"]
 file_name = "12559_Remove_needless_color_specializaion_for_SpritePipeline.md"
 
 [[guides]]
-title = "Sorted and Binned Render Phase Items, Resources, and non-meshes"
+title = "Sorted and binned render phase items, resources, and non-meshes"
 url = "https://github.com/bevyengine/bevy/pull/12453"
 areas = ["Rendering"]
 file_name = "12453_13277_14029_sorted_and_binned_render_phase_items.md"
