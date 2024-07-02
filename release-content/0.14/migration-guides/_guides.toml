@@ -5,6 +5,12 @@ areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
 file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
+title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
+url = "https://github.com/bevyengine/bevy/pull/14017"
+areas = ["Rendering", "UI"]
+file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
+
+[[guides]]
 title = "Register missing types manually"
 url = "https://github.com/bevyengine/bevy/pull/12314"
 areas = ["Reflection"]
@@ -687,12 +693,6 @@ title = "Remove generic camera from `extract_default_ui_camera_view()` system"
 url = "https://github.com/bevyengine/bevy/pull/13462"
 areas = ["Rendering", "UI"]
 file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
-
-[[guides]]
-title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
-url = "https://github.com/bevyengine/bevy/pull/14017"
-areas = ["Rendering", "UI"]
-file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
 
 [[guides]]
 title = "Make `serde` optional for `bevy_color`"
