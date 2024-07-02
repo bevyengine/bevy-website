@@ -641,12 +641,6 @@ areas = ["Rendering"]
 file_name = "13238_More_idiomatic_texture_atlas_builder.md"
 
 [[guides]]
-title = "Move clustering-related types and functions into their own module."
-url = "https://github.com/bevyengine/bevy/pull/13640"
-areas = ["Rendering"]
-file_name = "13640_Move_clusteringrelated_types_and_functions_into_their_own_.md"
-
-[[guides]]
 title = "Normalise matrix naming"
 url = "https://github.com/bevyengine/bevy/pull/13489"
 areas = ["Rendering"]
