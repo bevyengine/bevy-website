@@ -611,7 +611,7 @@ areas = ["Rendering"]
 file_name = "13031_Implement_clearcoat_per_the_Filament_and_the_KHR_materials.md"
 
 [[guides]]
-title = "Clean up 2d render phases"
+title = "Split `Node2d::MainPass`"
 url = "https://github.com/bevyengine/bevy/pull/12982"
 areas = ["Rendering"]
 file_name = "12982_Clean_up_2d_render_phases.md"
