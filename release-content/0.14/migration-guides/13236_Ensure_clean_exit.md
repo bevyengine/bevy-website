@@ -1,1 +1,1 @@
-Ensure custom exit logic does not rely on the app exiting the same frame as a window is closed.
+Windows now close a frame after their exit has been requested in order to fix several regressions. If you have custom exit logic, ensure that it does not rely on the app exiting the same frame the window is closed.
