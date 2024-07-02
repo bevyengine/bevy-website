@@ -575,7 +575,7 @@ areas = ["Rendering"]
 file_name = "12582_Divide_the_single_VisibleEntities_list_into_separate_lists.md"
 
 [[guides]]
-title = "Fix rendering of sprites, text, and meshlets after #12582."
+title = "Make `Text` require `SpriteSource`"
 url = "https://github.com/bevyengine/bevy/pull/12945"
 areas = ["Rendering"]
 file_name = "12945_Fix_rendering_of_sprites_text_and_meshlets_after_12582.md"
