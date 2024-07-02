@@ -719,7 +719,7 @@ areas = ["Tasks"]
 file_name = "12169_Add_an_index_argument_to_parallel_iteration_helpers_in_bev.md"
 
 [[guides]]
-title = "Restore pre 0.13.1 Root Node Layout behavior"
+title = "Fix spawning `NodeBundle` destroying previous ones"
 url = "https://github.com/bevyengine/bevy/pull/12698"
 areas = ["UI"]
 file_name = "12698_Restore_pre_0131_Root_Node_Layout_behavior.md"

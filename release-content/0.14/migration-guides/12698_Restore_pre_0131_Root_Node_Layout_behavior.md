@@ -1,1 +1,1 @@
-If you were affected by the 0.13.1 regression and added `position_type: Absolute` to all your root nodes you might be able to reclaim some LOC by removing them now that the 0.13 behavior is restored.
+There was a regression in 0.13.1 `NodeBundle`s to destroy previous ones when spawned, and the original workaround was to add `position_type: Absolute` to all of the root nodes. This bug is now fixed, so you can remove the workaround.
