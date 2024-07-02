@@ -713,7 +713,7 @@ areas = ["Rendering", "Windowing"]
 file_name = "12978_Introduce_a_WindowWrapper_to_extend_the_lifetime_of_the_wi.md"
 
 [[guides]]
-title = "Add an index argument to parallel iteration helpers in bevy_tasks"
+title = "Add an index argument to parallel iteration helpers"
 url = "https://github.com/bevyengine/bevy/pull/12169"
 areas = ["Tasks"]
 file_name = "12169_Add_an_index_argument_to_parallel_iteration_helpers_in_bev.md"
