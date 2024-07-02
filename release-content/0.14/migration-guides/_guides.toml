@@ -755,7 +755,7 @@ areas = ["Windowing"]
 file_name = "12749_Clean_up_WinitWindowsremove_window.md"
 
 [[guides]]
-title = "Ensure clean exit"
+title = "Make window close the frame after it is requested"
 url = "https://github.com/bevyengine/bevy/pull/13236"
 areas = ["Windowing"]
 file_name = "13236_Ensure_clean_exit.md"
