@@ -737,7 +737,7 @@ areas = ["UI"]
 file_name = "13603_Updates_default_Text_font_size_to_24px.md"
 
 [[guides]]
-title = "Disentangle bevy_utils/bevy_core's reexported dependencies"
+title = "Disentangle `bevy::utils` / `bevy::core`'s re-exported crates"
 url = "https://github.com/bevyengine/bevy/pull/12313"
 areas = ["Utils"]
 file_name = "12313_Disentangle_bevy_utilsbevy_cores_reexported_dependencies.md"
