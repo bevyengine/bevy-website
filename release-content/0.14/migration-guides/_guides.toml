@@ -1,4 +1,10 @@
 [[guides]]
+title = "Overhaul `Color`"
+url = "https://github.com/bevyengine/bevy/pull/12163"
+areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
+file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
+
+[[guides]]
 title = "Fix `Node2d` typo"
 url = "https://github.com/bevyengine/bevy/pull/12038"
 areas = []
@@ -129,12 +135,6 @@ title = "Move WGSL math constants and color operations from `bevy_pbr` to `bevy_
 url = "https://github.com/bevyengine/bevy/pull/13209"
 areas = ["Color"]
 file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
-
-[[guides]]
-title = "Overhaul `Color`"
-url = "https://github.com/bevyengine/bevy/pull/12163"
-areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
-file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
 title = "Remove old color space utilities"
