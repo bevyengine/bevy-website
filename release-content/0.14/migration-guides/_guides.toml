@@ -761,7 +761,7 @@ areas = ["Windowing"]
 file_name = "13236_Ensure_clean_exit.md"
 
 [[guides]]
-title = "fix: upgrade to winit v0.30"
+title = "Upgrade to `winit` 0.30"
 url = "https://github.com/bevyengine/bevy/pull/13366"
 areas = ["Windowing"]
 file_name = "13366_fix_upgrade_to_winit_v030.md"
