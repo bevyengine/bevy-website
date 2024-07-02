@@ -605,7 +605,7 @@ areas = ["Rendering"]
 file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
 
 [[guides]]
-title = "Implement clearcoat per the Filament and the `KHR_materials_clearcoat` specifications."
+title = "Implement clearcoat"
 url = "https://github.com/bevyengine/bevy/pull/13031"
 areas = ["Rendering"]
 file_name = "13031_Implement_clearcoat_per_the_Filament_and_the_KHR_materials.md"
