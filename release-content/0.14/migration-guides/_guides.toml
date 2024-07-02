@@ -623,7 +623,7 @@ areas = ["Rendering"]
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[guides]]
-title = "Add emissive_exposure_weight to the StandardMaterial"
+title = "Fix astronomic emissive colors required for bloom"
 url = "https://github.com/bevyengine/bevy/pull/13350"
 areas = ["Rendering"]
 file_name = "13350_Add_emissive_exposure_weight_to_the_StandardMaterial.md"
