@@ -1,7 +1,8 @@
-<!-- Normalise matrix naming -->
+<!-- Normalize matrix naming -->
 <!-- https://github.com/bevyengine/bevy/pull/13489 -->
 
 Most game engines use a matrix stack to represent the space transformations in the game world. The stack usually contains transformations for the following spaces:
+
 - Normalized Device Coordinates: used by the graphics API directly
 - Clip Space: coordinates after projection but before perspective divide
 - View Space: coordinates in the camera's view
@@ -19,10 +20,13 @@ From now on, matrices in Bevy are named `y_from_x`, for example `world_from_loca
 One tidy benefit of this is that the inverse matrices are named `x_from_y`, and when multiplying between spaces, it's easy to see that it's correct.
 
 For example, instead of writing:
+
 ```rust
 let model_view_projection = projection * view * model;
 ```
+
 You might now write:
+
 ```rust
 let clip_from_local = clip_from_view * view_from_world * world_from_local;
 ```

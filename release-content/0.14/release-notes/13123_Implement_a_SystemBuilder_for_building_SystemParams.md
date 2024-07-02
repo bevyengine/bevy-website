@@ -17,7 +17,7 @@ let system = SystemBuilder::<()>::new(&mut world)
     .param::<MyParam>()
     // Finish it all up with a call `.build`
     .build(my_system);
-// The parameters the builder is initialised with will appear first in the arguments.
+// The parameters the builder is initialized with will appear first in the arguments.
 let system = SystemBuilder::<(Res<R>, Query<&A>)>::new(&mut world)
     .param::<MyParam>()
     .build(my_system);

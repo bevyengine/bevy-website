@@ -23,12 +23,6 @@ url = "https://github.com/bevyengine/bevy/pull/9924"
 file_name = "9924_PerObject_Motion_Blur.md"
 
 [[release_notes]]
-title = "GPU Frustum Culling"
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/12889"
-file_name = "12889_Implement_GPU_frustum_culling.md"
-
-[[release_notes]]
 title = "Filmic Color Grading"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/13121"
@@ -159,6 +153,12 @@ title = "State Scoped Entities"
 authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
 url = "https://github.com/bevyengine/bevy/pull/13649"
 file_name = "13649_State_Scoped_Entities.md"
+
+[[release_notes]]
+title = "GPU Frustum Culling"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/12889"
+file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
 title = "`Commands` and exclusive world access: working together in harmony"

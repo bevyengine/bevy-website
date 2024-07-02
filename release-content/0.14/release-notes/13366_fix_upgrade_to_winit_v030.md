@@ -3,9 +3,9 @@ architecture instead of a plain event-based one.
 
 Bevy 0.14 now implements that new architecture, making the event loop handling easier to follow.
 
-It's now possible to define a custom `winit` user event, that can be used to trigger App updates, 
-and that can be read inside systems to trigger specific behaviours. This is particularly useful to 
-send events from outside the `winit` event loop and manage them inside Bevy systems 
+It's now possible to define a custom `winit` user event, that can be used to trigger App updates,
+and that can be read inside systems to trigger specific behaviors. This is particularly useful to
+send events from outside the `winit` event loop and manage them inside Bevy systems
 (see the `window/custom_winit_event.rs` example).
 
 The `UpdateMode` now accepts only two values: `Continuous` and `Reactive`. The latter exposes 3 new properties to enable reactivity to device, user, or window events.
@@ -18,6 +18,5 @@ The `ApplicationLifecycle` has been renamed as `AppLifecycle`, and now contains 
 * `WillSuspend`: the loop is going to be suspended
 * `Suspended`: the loop is suspended
 * `WillResume`: the loop is going to be resumed
- 
-Note: the `Resumed` state has been removed since the resumed app is just `Running`.
 
+Note: the `Resumed` state has been removed since the resumed app is just `Running`.

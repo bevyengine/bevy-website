@@ -34,6 +34,6 @@ thus simplifying our registration down to a single line:
 app.register_type::<Data<Blob>>()
 ```
 
-Note that removing the registration for `Data<Blob>` now also means that `Blob` and `Vec<u8>` may 
-not be registered either, unless they were registered some other way. 
+Note that removing the registration for `Data<Blob>` now also means that `Blob` and `Vec<u8>` may
+not be registered either, unless they were registered some other way.
 If those types are needed as standalone types, they should be registered separately.
