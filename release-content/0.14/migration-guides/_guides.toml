@@ -725,7 +725,7 @@ areas = ["UI"]
 file_name = "12698_Restore_pre_0131_Root_Node_Layout_behavior.md"
 
 [[guides]]
-title = "Rename `Rect` `inset()` method to `inflate()`"
+title = "Rename `Rect::inset()` to `inflate()`"
 url = "https://github.com/bevyengine/bevy/pull/13452"
 areas = ["UI"]
 file_name = "13452_Rename_Rect_inset_method_to_inflate.md"
