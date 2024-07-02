@@ -581,7 +581,7 @@ areas = ["Rendering"]
 file_name = "12945_Fix_rendering_of_sprites_text_and_meshlets_after_12582.md"
 
 [[guides]]
-title = "Expose `desired_maximum_frame_latency` through window creation"
+title = "Expose `desired_maximum_frame_latency`"
 url = "https://github.com/bevyengine/bevy/pull/12954"
 areas = ["Rendering"]
 file_name = "12954_Expose_desired_maximum_frame_latency_through_window_creati.md"
