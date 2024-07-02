@@ -743,7 +743,7 @@ areas = ["Utils"]
 file_name = "12313_Disentangle_bevy_utilsbevy_cores_reexported_dependencies.md"
 
 [[guides]]
-title = "Fix fit_canvas_to_parent"
+title = "Re-add `Window::fit_canvas_to_parent`"
 url = "https://github.com/bevyengine/bevy/pull/11278"
 areas = ["Windowing"]
 file_name = "11278_Fix_fit_canvas_to_parent.md"
