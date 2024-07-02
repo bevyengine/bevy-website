@@ -749,7 +749,7 @@ areas = ["Windowing"]
 file_name = "11278_Fix_fit_canvas_to_parent.md"
 
 [[guides]]
-title = "Clean up WinitWindows::remove_window"
+title = "Remove window from `WinitWindows` when it is closed"
 url = "https://github.com/bevyengine/bevy/pull/12749"
 areas = ["Windowing"]
 file_name = "12749_Clean_up_WinitWindowsremove_window.md"
