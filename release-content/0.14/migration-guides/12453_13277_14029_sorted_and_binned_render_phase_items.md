@@ -29,6 +29,6 @@ Examples of [`BinnedPhaseItem`s](https://docs.rs/bevy/0.14.0/bevy/render/render_
 - AlphaMask3dDeferred
 - [Shadow](https://docs.rs/bevy/0.14.0/bevy/pbr/struct.Shadow.html)
 
-If you do not have a mesh (such as for GPU-driven particles or procedural generation) and want to use the new binned behavior, the [`BinnedRenderPhase`](https://docs.rs/bevy/0.14.0/bevy/render/render_phase/struct.BinnedRenderPhase.html) includes a new `non_mesh_items` collection which correlates with a new [`BinnedRenderPhaseType`](https://docs.rs/bevy/0.14.0/bevy/render/render_phase/struct.BinnedRenderPhase.html). This type is used when [add](https://docs.rs/bevy/0.14.0/bevy/render/render_phase/struct.BinnedRenderPhase.html#method.add)ing items to the `BinnedRenderPhase`.
+If you do not have a mesh (such as for GPU-driven particles or procedural generation) and want to use the new binned behavior, the [`BinnedRenderPhase`](https://docs.rs/bevy/0.14.0/bevy/render/render_phase/struct.BinnedRenderPhase.html) includes a `non_mesh_items` collection which correlates with the [`BinnedRenderPhaseType`](https://docs.rs/bevy/0.14.0/bevy/render/render_phase/struct.BinnedRenderPhase.html). This type is used when [add](https://docs.rs/bevy/0.14.0/bevy/render/render_phase/struct.BinnedRenderPhase.html#method.add)ing items to the `BinnedRenderPhase`.
 
 It may be additionally useful to checkout the new [custom_phase_item example](https://github.com/bevyengine/bevy/blob/5876352206d1bcea792825bf013eb212383b73d6/examples/shader/custom_phase_item.rs) which details some of the new APIs.
