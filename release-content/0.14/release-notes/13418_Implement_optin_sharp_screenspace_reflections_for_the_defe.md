@@ -18,8 +18,6 @@ As a result, there are a few caveats to bear in mind:
 3. No temporal filtering or blurring is performed at all. For this reason, SSR currently only operates on very low-roughness / smooth surfaces.
 4. We don't perform acceleration via the hierarchical Z-buffer and reflections are traced at full resolution. As a result, you may notice performance issues depending on your scene and hardware.
 
-![A cube with the Bevy logo on all 6 sides sits on top of rippling water. Sharp reflections are visible, distorted by the uneven surface of the water.](screen_space_reflections.png)
-
 To add screen-space reflections to a camera, insert the [`ScreenSpaceReflectionsSettings`] component.
 In addition to [`ScreenSpaceReflectionsSettings`], [`DepthPrepass`], and [`DeferredPrepass`] must also be present for the reflections to show up.
 Conveniently, the [`ScreenSpaceReflectionsBundle`] bundles these all up for you!

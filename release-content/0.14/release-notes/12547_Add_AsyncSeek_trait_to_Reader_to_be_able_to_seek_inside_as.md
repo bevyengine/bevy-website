@@ -53,6 +53,6 @@ Real world use cases might for example be:
 - You have packed several assets in an archive and you wish to skip to an asset within and read that
 - You are dealing with big datasets such as map data and you know where to extract some locations of interest
 
-[`own asset loaders`]: https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/asset/processing/asset_processing.rs 
+[own asset loaders]: https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/asset/processing/asset_processing.rs
 [`reader`]: http://dev-docs.bevyengine.org/bevy/asset/io/type.Reader.html
 [`AsyncSeek`]: https://docs.rs/futures-io/latest/futures_io/trait.AsyncSeek.html

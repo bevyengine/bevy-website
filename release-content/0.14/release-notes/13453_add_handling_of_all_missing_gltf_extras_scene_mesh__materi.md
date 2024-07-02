@@ -1,6 +1,7 @@
 
 The glTF 3D model file format allows passing additional user defined metadata in the *extras* properties, and
 in addition to the glTF extras at the primitive/node level , Bevy now has specific GltfExtras for:
+
 - scenes: **SceneGltfExtras** injected at the scene level if any
 - meshes: **MeshGltfExtras**, injected at the mesh level if any
 - materials: **MaterialGltfExtras**, injected at the mesh level if any: ie if a mesh has a material that has gltf extras, the component will be injected there.
@@ -28,5 +29,4 @@ fn check_for_gltf_extras(
 
 ```
 
-This makes passing information from programs such as Blender to Bevy via gltf files more spec compliant, and more practical !
-
+This makes passing information from programs such as Blender to Bevy via gltf files more spec compliant, and more practical!

@@ -569,76 +569,76 @@ areas = ["Rendering"]
 file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
 
 [[guides]]
-title = "Divide the single `VisibleEntities` list into separate lists for 2D meshes, 3D meshes, lights, and UI elements, for performance."
+title = "Store lists of `VisibleEntities` separately"
 url = "https://github.com/bevyengine/bevy/pull/12582"
 areas = ["Rendering"]
 file_name = "12582_Divide_the_single_VisibleEntities_list_into_separate_lists.md"
 
 [[guides]]
-title = "Fix rendering of sprites, text, and meshlets after #12582."
+title = "Make `Text` require `SpriteSource`"
 url = "https://github.com/bevyengine/bevy/pull/12945"
 areas = ["Rendering"]
 file_name = "12945_Fix_rendering_of_sprites_text_and_meshlets_after_12582.md"
 
 [[guides]]
-title = "Expose `desired_maximum_frame_latency` through window creation"
+title = "Expose `desired_maximum_frame_latency`"
 url = "https://github.com/bevyengine/bevy/pull/12954"
 areas = ["Rendering"]
 file_name = "12954_Expose_desired_maximum_frame_latency_through_window_creati.md"
 
 [[guides]]
-title = "Fix `CameraProjection` panic and improve `CameraProjectionPlugin`"
+title = "Merge `VisibilitySystems` frusta variants"
 url = "https://github.com/bevyengine/bevy/pull/11808"
 areas = ["Rendering"]
 file_name = "11808_Fix_CameraProjection_panic_and_improve_CameraProjectionPlu.md"
 
 [[guides]]
-title = "Implement filmic color grading."
+title = "Expand color grading"
 url = "https://github.com/bevyengine/bevy/pull/13121"
 areas = ["Rendering"]
 file_name = "13121_Implement_filmic_color_grading.md"
 
 [[guides]]
-title = "Add BufferVec, an higher-performance alternative to StorageBuffer, and make GpuArrayBuffer use it."
+title = "Rename `BufferVec` to `RawBufferVec`"
 url = "https://github.com/bevyengine/bevy/pull/13199"
 areas = ["Rendering"]
 file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
 
 [[guides]]
-title = "Implement clearcoat per the Filament and the `KHR_materials_clearcoat` specifications."
+title = "Implement clearcoat"
 url = "https://github.com/bevyengine/bevy/pull/13031"
 areas = ["Rendering"]
 file_name = "13031_Implement_clearcoat_per_the_Filament_and_the_KHR_materials.md"
 
 [[guides]]
-title = "Clean up 2d render phases"
+title = "Split `Node2d::MainPass`"
 url = "https://github.com/bevyengine/bevy/pull/12982"
 areas = ["Rendering"]
 file_name = "12982_Clean_up_2d_render_phases.md"
 
 [[guides]]
-title = "#12502 Remove limit on RenderLayers."
+title = "Remove limit on `RenderLayers`"
 url = "https://github.com/bevyengine/bevy/pull/13317"
 areas = ["Rendering"]
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[guides]]
-title = "Add emissive_exposure_weight to the StandardMaterial"
+title = "Fix astronomic emissive colors required for bloom"
 url = "https://github.com/bevyengine/bevy/pull/13350"
 areas = ["Rendering"]
 file_name = "13350_Add_emissive_exposure_weight_to_the_StandardMaterial.md"
 
 [[guides]]
-title = "More idiomatic texture atlas builder"
+title = "Make render phases render world resources instead of components."
+url = "https://github.com/bevyengine/bevy/pull/13277"
+areas = ["Rendering"]
+file_name = "13277_Make_render_phases_render_world_resources_instead_of_compo.md"
+
+[[guides]]
+title = "More idiomatic `TextureAtlasBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13238"
 areas = ["Rendering"]
 file_name = "13238_More_idiomatic_texture_atlas_builder.md"
-
-[[guides]]
-title = "Move clustering-related types and functions into their own module."
-url = "https://github.com/bevyengine/bevy/pull/13640"
-areas = ["Rendering"]
-file_name = "13640_Move_clusteringrelated_types_and_functions_into_their_own_.md"
 
 [[guides]]
 title = "Normalise matrix naming"
@@ -647,7 +647,7 @@ areas = ["Rendering"]
 file_name = "13489_Normalise_matrix_naming.md"
 
 [[guides]]
-title = "Rename \"point light\" to \"clusterable object\" in cluster contexts."
+title = "Rename \"point light\" to \"clusterable object\" in cluster contexts"
 url = "https://github.com/bevyengine/bevy/pull/13654"
 areas = ["Rendering"]
 file_name = "13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md"
@@ -683,7 +683,7 @@ areas = ["Rendering", "UI"]
 file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
 
 [[guides]]
-title = "Fix UI elements randomly not appearing after #13277."
+title = "Remove generic camera from `extract_default_ui_camera_view()` system"
 url = "https://github.com/bevyengine/bevy/pull/13462"
 areas = ["Rendering", "UI"]
 file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
@@ -695,73 +695,73 @@ areas = ["Rendering", "UI"]
 file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
 
 [[guides]]
-title = "FIX12527: Changes to make serde optional for bevy_color"
+title = "Make `serde` optional for `bevy_color`"
 url = "https://github.com/bevyengine/bevy/pull/12666"
 areas = ["Rendering", "Utils"]
 file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
 
 [[guides]]
-title = "configure_surface needs to be on the main thread on iOS"
+title = "Rename `need_new_surfaces()` system to `need_surface_configuration()`"
 url = "https://github.com/bevyengine/bevy/pull/12055"
 areas = ["Rendering", "Windowing"]
 file_name = "12055_configure_surface_needs_to_be_on_the_main_thread_on_iOS.md"
 
 [[guides]]
-title = "Introduce a `WindowWrapper` to extend the lifetime of the window when using pipelined rendering"
+title = "Require windowing backends to store windows in `WindowWrapper`"
 url = "https://github.com/bevyengine/bevy/pull/12978"
 areas = ["Rendering", "Windowing"]
 file_name = "12978_Introduce_a_WindowWrapper_to_extend_the_lifetime_of_the_wi.md"
 
 [[guides]]
-title = "Add an index argument to parallel iteration helpers in bevy_tasks"
+title = "Add an index argument to parallel iteration helpers"
 url = "https://github.com/bevyengine/bevy/pull/12169"
 areas = ["Tasks"]
 file_name = "12169_Add_an_index_argument_to_parallel_iteration_helpers_in_bev.md"
 
 [[guides]]
-title = "Restore pre 0.13.1 Root Node Layout behavior"
+title = "Fix spawning `NodeBundle` destroying previous ones"
 url = "https://github.com/bevyengine/bevy/pull/12698"
 areas = ["UI"]
 file_name = "12698_Restore_pre_0131_Root_Node_Layout_behavior.md"
 
 [[guides]]
-title = "Rename `Rect` `inset()` method to `inflate()`"
+title = "Rename `Rect::inset()` to `inflate()`"
 url = "https://github.com/bevyengine/bevy/pull/13452"
 areas = ["UI"]
 file_name = "13452_Rename_Rect_inset_method_to_inflate.md"
 
 [[guides]]
-title = "Updates default Text font size to 24px"
+title = "Updates default font size to 24px"
 url = "https://github.com/bevyengine/bevy/pull/13603"
 areas = ["UI"]
 file_name = "13603_Updates_default_Text_font_size_to_24px.md"
 
 [[guides]]
-title = "Disentangle bevy_utils/bevy_core's reexported dependencies"
+title = "Disentangle `bevy::utils` / `bevy::core`'s re-exported crates"
 url = "https://github.com/bevyengine/bevy/pull/12313"
 areas = ["Utils"]
 file_name = "12313_Disentangle_bevy_utilsbevy_cores_reexported_dependencies.md"
 
 [[guides]]
-title = "Fix fit_canvas_to_parent"
+title = "Re-add `Window::fit_canvas_to_parent`"
 url = "https://github.com/bevyengine/bevy/pull/11278"
 areas = ["Windowing"]
 file_name = "11278_Fix_fit_canvas_to_parent.md"
 
 [[guides]]
-title = "Clean up WinitWindows::remove_window"
+title = "Remove window from `WinitWindows` when it is closed"
 url = "https://github.com/bevyengine/bevy/pull/12749"
 areas = ["Windowing"]
 file_name = "12749_Clean_up_WinitWindowsremove_window.md"
 
 [[guides]]
-title = "Ensure clean exit"
+title = "Make window close the frame after it is requested"
 url = "https://github.com/bevyengine/bevy/pull/13236"
 areas = ["Windowing"]
 file_name = "13236_Ensure_clean_exit.md"
 
 [[guides]]
-title = "fix: upgrade to winit v0.30"
+title = "Upgrade to `winit` 0.30"
 url = "https://github.com/bevyengine/bevy/pull/13366"
 areas = ["Windowing"]
 file_name = "13366_fix_upgrade_to_winit_v030.md"
