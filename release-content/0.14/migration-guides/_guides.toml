@@ -593,7 +593,7 @@ areas = ["Rendering"]
 file_name = "11808_Fix_CameraProjection_panic_and_improve_CameraProjectionPlu.md"
 
 [[guides]]
-title = "Implement filmic color grading."
+title = "Expand color grading"
 url = "https://github.com/bevyengine/bevy/pull/13121"
 areas = ["Rendering"]
 file_name = "13121_Implement_filmic_color_grading.md"
