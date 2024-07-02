@@ -1,1 +1,0 @@
-`PhaseItem` has been split into `BinnedPhaseItem` and `SortedPhaseItem`. If your code has custom `PhaseItem`s, you will need to migrate them to one of these two types. `SortedPhaseItem` requires the fewest code changes, but you may want to pick `BinnedPhaseItem` if your phase doesn’t require sorting, as that enables higher performance.
