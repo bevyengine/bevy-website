@@ -1,4 +1,22 @@
 [[guides]]
+title = "Overhaul `Color`"
+url = "https://github.com/bevyengine/bevy/pull/12163"
+areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
+file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
+
+[[guides]]
+title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
+url = "https://github.com/bevyengine/bevy/pull/14017"
+areas = ["Rendering", "UI"]
+file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
+
+[[guides]]
+title = "Register missing types manually"
+url = "https://github.com/bevyengine/bevy/pull/12314"
+areas = ["Reflection"]
+file_name = "12314_Clean_up_type_registrations.md"
+
+[[guides]]
 title = "Fix `Node2d` typo"
 url = "https://github.com/bevyengine/bevy/pull/12038"
 areas = []
@@ -29,7 +47,7 @@ areas = ["Animation"]
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
 
 [[guides]]
-title = "Multiplying `LinearRgba` by `f32` no longer ignores alpha channel"
+title = "Multiplying colors by `f32` no longer ignores alpha channel"
 url = "https://github.com/bevyengine/bevy/pull/12575"
 areas = ["Animation", "Color", "Math", "Rendering"]
 file_name = "12575_Color_maths_4.md"
@@ -77,7 +95,7 @@ areas = ["Assets"]
 file_name = "12605_Make_AssetActionIgnore_not_copy_assets_to_imported_assets.md"
 
 [[guides]]
-title = "Removed `Into<AssedId<T>>` for `Handle<T>`"
+title = "Removed `Into<AssetId<T>>` for `Handle<T>`"
 url = "https://github.com/bevyengine/bevy/pull/12655"
 areas = ["Assets"]
 file_name = "12655_Removed_IntoAssedIdT_for_HandleT_as_mentioned_in_12600.md"
@@ -129,12 +147,6 @@ title = "Move WGSL math constants and color operations from `bevy_pbr` to `bevy_
 url = "https://github.com/bevyengine/bevy/pull/13209"
 areas = ["Color"]
 file_name = "13209_move_wgsl_color_operations_from_bevy_pbr_to_bevy_render.md"
-
-[[guides]]
-title = "Overhaul `Color`"
-url = "https://github.com/bevyengine/bevy/pull/12163"
-areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
-file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
 title = "Remove old color space utilities"
@@ -431,12 +443,6 @@ areas = ["Reflection"]
 file_name = "5781_bevy_reflect_Recursive_registration.md"
 
 [[guides]]
-title = "Clean up type registrations"
-url = "https://github.com/bevyengine/bevy/pull/12314"
-areas = ["Reflection"]
-file_name = "12314_Clean_up_type_registrations.md"
-
-[[guides]]
 title = "Rename `UntypedReflectDeserializer` to `ReflectDeserializer`"
 url = "https://github.com/bevyengine/bevy/pull/12721"
 areas = ["Reflection"]
@@ -681,18 +687,6 @@ title = "Remove generic camera from `extract_default_ui_camera_view()` system"
 url = "https://github.com/bevyengine/bevy/pull/13462"
 areas = ["Rendering", "UI"]
 file_name = "13462_Fix_UI_elements_randomly_not_appearing_after_13277.md"
-
-[[guides]]
-title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
-url = "https://github.com/bevyengine/bevy/pull/14017"
-areas = ["Rendering", "UI"]
-file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
-
-[[guides]]
-title = "Make `serde` optional for `bevy_color`"
-url = "https://github.com/bevyengine/bevy/pull/12666"
-areas = ["Rendering", "Utils"]
-file_name = "12666_FIX12527_Changes_to_make_serde_optional_for_bevy_color.md"
 
 [[guides]]
 title = "Rename `need_new_surfaces()` system to `need_surface_configuration()`"
