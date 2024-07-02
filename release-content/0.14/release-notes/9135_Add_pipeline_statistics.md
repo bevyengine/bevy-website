@@ -6,7 +6,7 @@ In Bevy 0.14 we've added support for two classes of rendering-focused statistics
 
 While it may sound like timestamp queries are the ultimate diagnostic tool, they come with several caveats.
 Firstly, they vary quite heavily from frame-to-frame as GPUs dynamically ramp up and down clock speed due to workload (idle gaps in GPU work, e.g., a bunch of consecutive barriers, or the tail end of a large dispatch) or the physical temperature of the GPU.
-To get an accruate measurement, you need to look at summary statistics: mean, median, 75th percentile and so on.
+To get an accurate measurement, you need to look at summary statistics: mean, median, 75th percentile and so on.
 
 Secondly, while timestamp queries will tell you how long something takes, but it will not tell you why things are slow.
 For finding bottlenecks, you want to use a GPU profiler from your GPU vendor (Nvidia's NSight, AMD's RGP, Intel's GPA or Apple's XCode).

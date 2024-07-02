@@ -17,7 +17,7 @@ Running the above will produce a compiler error, let's see why...
 <details>
 <summary>Click to expand...</summary>
 
-```
+```txt
 error[E0277]: the trait bound `MyResource: Resource` is not satisfied
    --> example.rs:6:32
     |
@@ -49,7 +49,7 @@ The compiler suggests we use a different type that implements `Resource`, or tha
 
 With the release of Rust 1.78, Bevy can now provide more direct messages for certain types of errors during compilation using [diagnostic attributes](https://blog.rust-lang.org/2024/05/02/Rust-1.78.0.html#diagnostic-attributes).
 
-```
+```txt
 error[E0277]: `MyResource` is not a `Resource`
    --> example.rs:6:32
     |
