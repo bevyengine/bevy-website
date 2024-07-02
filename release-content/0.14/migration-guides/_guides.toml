@@ -629,12 +629,6 @@ areas = ["Rendering"]
 file_name = "13350_Add_emissive_exposure_weight_to_the_StandardMaterial.md"
 
 [[guides]]
-title = "Make render phases render world resources instead of components."
-url = "https://github.com/bevyengine/bevy/pull/13277"
-areas = ["Rendering"]
-file_name = "13277_Make_render_phases_render_world_resources_instead_of_compo.md"
-
-[[guides]]
 title = "More idiomatic `TextureAtlasBuilder`"
 url = "https://github.com/bevyengine/bevy/pull/13238"
 areas = ["Rendering"]
