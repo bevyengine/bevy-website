@@ -285,7 +285,7 @@ file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
 
 [[release_notes]]
 title = "Remove limit on RenderLayers"
-authors = ["@tychedelia", "@robtfm"]
+authors = ["@tychedelia", "@robtfm", "@UkoeHB"]
 url = "https://github.com/bevyengine/bevy/pull/13317"
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
