@@ -569,7 +569,7 @@ areas = ["Rendering"]
 file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
 
 [[guides]]
-title = "Divide the single `VisibleEntities` list into separate lists for 2D meshes, 3D meshes, lights, and UI elements, for performance."
+title = "Store lists of `VisibleEntities` separately"
 url = "https://github.com/bevyengine/bevy/pull/12582"
 areas = ["Rendering"]
 file_name = "12582_Divide_the_single_VisibleEntities_list_into_separate_lists.md"
