@@ -33,8 +33,9 @@ To overcome these limitations, **Bevy 0.14** introduces **Component Lifecycle Ho
 For a given component type, only one hook can be registered for a given lifecycle event, and it cannot be overwritten.
 
 Hooks exist to enforce invariants tied to that component (ex: maintaining indices or hierarchy correctness).
-Hooks always run before observers and cannot be removed and so are more suitable for maintaining critical safety or correctness invariants.
-Additionally, hooks are somewhat faster than observers, as their reduced flexibility means that fewer lookups are involved.
+Hooks cannot be removed and always take priority over observers: they run before any on-add / on-insert observers, but after any on-remove observers.
+As a result, they can be thought of as something closer to constructors & destructors, and are more suitable for maintaining critical safety or correctness invariants.
+Hooks are also somewhat faster than observers, as their reduced flexibility means that fewer lookups are involved.
 
 Let's examine a simple example where we care about maintaining invariants: one entity (with a `Target` component) targeting another entity (with a `Targetable` component).
 
