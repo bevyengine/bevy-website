@@ -8,14 +8,14 @@ See [bevy#13968](https://github.com/bevyengine/bevy/issues/13968) for more conte
 To migrate, choose one of the following options:
 
 1. Moving your startup systems to a state, as a variant of the state you're waiting for (e.g. `AppState::Setup`), and then transition out of it once the setup is complete.
-2. Moving your startup systems to a state, and making making the other state a [computed state](https://github.com/bevyengine/bevy/blob/v0.14.0-rc.4/examples/state/computed_states.rs) that depends on its completion (e.g. `SetupState::SetupComplete`).
+2. Moving your startup systems to a state, and making the other state a [computed state](https://github.com/bevyengine/bevy/blob/v0.14.0-rc.4/examples/state/computed_states.rs) that depends on its completion (e.g. `SetupState::SetupComplete`).
 
 Bevy 0.13:
 
 ```rust
-#[derive(States)]
+#[derive(States, Default)]
 enum AppState {
-    #[derive(Default)]
+    #[default]
     InMenu,
     InGame,
 }
@@ -29,9 +29,9 @@ app
 Bevy 0.14 (solution 1):
 
 ```rust
-#[derive(States)]
+#[derive(States, Default)]
 enum AppState {
-    #[derive(Default)]
+    #[default]
     Setup
     InMenu,
     InGame,
@@ -51,16 +51,16 @@ app
 Bevy 0.14 (solution 2):
 
 ```rust
-#[derive(States)]
+#[derive(States, Default)]
 enum SetupState {
-    #[derive(Default)]
+    #[default]
     SettingUp,
     SetupComplete,
 }
 
-#[derive(States)]
+#[derive(States, Default)]
 enum AppState {
-    #[derive(Default)]
+    #[default]
     InMenu,
     InGame,
 }
