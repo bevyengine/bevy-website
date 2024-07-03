@@ -2,6 +2,10 @@
 title = "Bevy 0.14"
 date = 2024-05-17
 [extra]
+image = "cover.jpg"
+show_image = true
+image_subtitle = "A forested scene illustrating Bevy's new volumetric fog / \"god rays\""
+image_subtitle_link = "https://github.com/IceSentry/bevy_forest_scene"
 public_draft = 1188
 +++
 
