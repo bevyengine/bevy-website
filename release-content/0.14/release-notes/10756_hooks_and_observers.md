@@ -34,7 +34,7 @@ For a given component type, only one hook can be registered for a given lifecycl
 
 Hooks exist to enforce invariants tied to that component (ex: maintaining indices or hierarchy correctness).
 Hooks cannot be removed and always take priority over observers: they run before any on-add / on-insert observers, but after any on-remove observers.
-As a result, they can be thought of as something closer to destructors, and are more suitable for maintaining critical safety or correctness invariants.
+As a result, they can be thought of as something closer to constructors & destructors, and are more suitable for maintaining critical safety or correctness invariants.
 Hooks are also somewhat faster than observers, as their reduced flexibility means that fewer lookups are involved.
 
 Let's examine a simple example where we care about maintaining invariants: one entity (with a `Target` component) targeting another entity (with a `Targetable` component).
