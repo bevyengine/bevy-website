@@ -19,7 +19,7 @@ file_name = "12314_Clean_up_type_registrations.md"
 [[guides]]
 title = "`OnEnter` state schedules now run before Startup schedules"
 url = "https://github.com/bevyengine/bevy/pull/11426"
-areas = ["Reflection"]
+areas = ["App", "ECS"]
 file_name = "11426_on_enter_startup_states.md"
 
 [[guides]]
