@@ -13,15 +13,9 @@ For finding bottlenecks, you want to use a GPU profiler from your GPU vendor (Nv
 These tools will give you much more detailed stats about cache hit rate, warp occupancy, and so on.
 On the other hand they lock your GPU's clock to base speeds for stable results, so they won't give you a good indicator of real world performance.
 
-[`RenderDiagnosticsPlugin`] tracks the following pipeline statistics, recorded in Bevy's [`DiagnosticsStore`](https://docs.rs/bevy/0.14/bevy/diagnostic/struct.DiagnosticsStore.html):
+[`RenderDiagnosticsPlugin`] tracks the following pipeline statistics, recorded in Bevy's [`DiagnosticsStore`](https://docs.rs/bevy/0.14/bevy/diagnostic/struct.DiagnosticsStore.html): Elapsed CPU time, Elapsed GPU time, [Vertex shader](https://www.khronos.org/opengl/wiki/Vertex_Shader) invocations, [Fragment shader](https://www.khronos.org/opengl/wiki/Fragment_Shader) invocations, [Compute shader](https://www.khronos.org/opengl/wiki/Compute_Shader) invocations, [Clipper invocations](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/clipper-invocations/), and [Clipper primitives](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/post-clip-primitives/).
 
-- Elapsed CPU time
-- Elapsed GPU time
-- [Vertex shader](https://www.khronos.org/opengl/wiki/Vertex_Shader) invocations
-- [Fragment shader](https://www.khronos.org/opengl/wiki/Fragment_Shader) invocations
-- [Compute shader](https://www.khronos.org/opengl/wiki/Compute_Shader) invocations
-- [Clipper invocations](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/clipper-invocations/)
-- [Clipper primitives](http://gpa.helpmax.net/en/intel-graphics-performance-analyzers-help/metrics-descriptions/extended-metrics-description/rasterizer-metrics/post-clip-primitives/)
-
- You can also track individual render/compute passes, groups of passes (e.g. all shadow passes), and individual commands inside passes (like draw calls).
+You can also track individual render/compute passes, groups of passes (e.g. all shadow passes), and individual commands inside passes (like draw calls).
  To do so, instrument them using methods from the [`RecordDiagnostics`](https://docs.rs/bevy/0.14/bevy/render/diagnostic/trait.RecordDiagnostics.html) trait.
+
+[`RenderDiagnosticsPlugin`]: http://dev-docs.bevyengine.org/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html

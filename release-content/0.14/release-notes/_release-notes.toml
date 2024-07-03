@@ -95,7 +95,7 @@ url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "Extruded shapes"
+title = "Extruded Shapes"
 authors = ["@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/13270"
 file_name = "13270_Extrusion.md"
@@ -248,28 +248,22 @@ url = "https://github.com/bevyengine/bevy/pull/12135"
 file_name = "12135_Support_wireframes_for_2D_meshes.md"
 
 [[release_notes]]
-title = "Support `AsyncSeek` When Loading Assets"
-authors = ["@BeastLe9enD"]
-url = "https://github.com/bevyengine/bevy/pull/12547"
-file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
+title = "Custom Reflect Field Attributes"
+authors = ["@MrGVSV"]
+url = "https://github.com/bevyengine/bevy/pull/11659"
+file_name = "11659_bevy_reflect_Custom_attributes.md"
 
 [[release_notes]]
-title = "LoadState::Failed now has error info"
-authors = ["@bugsweeper"]
-url = "https://github.com/bevyengine/bevy/pull/12709"
-file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
+title = "Query Iteration Sorting"
+authors = ["@Victoronz"]
+url = "https://github.com/bevyengine/bevy/pull/13417"
+file_name = "13417_implement_the_full_set_of_sort_methods_on_QueryIter.md"
 
 [[release_notes]]
-title = "`AppExit` Errors"
-authors = ["@Brezak", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13022"
-file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
-
-[[release_notes]]
-title = "Make dynamic_linking a no-op on WASM targets"
-authors = ["@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12672"
-file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
+title = "SystemBuilder"
+authors = ["@james-j-obrien"]
+url = "https://github.com/bevyengine/bevy/pull/13123"
+file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
 [[release_notes]]
 title = "Throttle Render Assets"
@@ -294,30 +288,6 @@ title = "`on_unimplemented` Diagnostics"
 authors = ["@bushrat011899", "@alice-i-cecile", "@Themayu"]
 url = "https://github.com/bevyengine/bevy/pull/13347"
 file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
-
-[[release_notes]]
-title = "Custom Reflect Field Attributes"
-authors = ["@MrGVSV"]
-url = "https://github.com/bevyengine/bevy/pull/11659"
-file_name = "11659_bevy_reflect_Custom_attributes.md"
-
-[[release_notes]]
-title = "Deprecate Dynamic Plugins"
-authors = ["@BD103"]
-url = "https://github.com/bevyengine/bevy/pull/13080"
-file_name = "13080_Deprecate_dynamic_plugins.md"
-
-[[release_notes]]
-title = "Query Iteration Sorting"
-authors = ["@Victoronz"]
-url = "https://github.com/bevyengine/bevy/pull/13417"
-file_name = "13417_implement_the_full_set_of_sort_methods_on_QueryIter.md"
-
-[[release_notes]]
-title = "SystemBuilder"
-authors = ["@james-j-obrien"]
-url = "https://github.com/bevyengine/bevy/pull/13123"
-file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
 [[release_notes]]
 title = "Motion Vectors and TAA for Animated Meshes"
@@ -360,6 +330,36 @@ title = "CompassQuadrant and CompassOctant"
 authors = ["@BobG1983", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13653"
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
+
+[[release_notes]]
+title = "Support `AsyncSeek` When Loading Assets"
+authors = ["@BeastLe9enD"]
+url = "https://github.com/bevyengine/bevy/pull/12547"
+file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
+
+[[release_notes]]
+title = "LoadState::Failed Now Has Error Info"
+authors = ["@bugsweeper"]
+url = "https://github.com/bevyengine/bevy/pull/12709"
+file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
+
+[[release_notes]]
+title = "`AppExit` Errors"
+authors = ["@Brezak", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13022"
+file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
+
+[[release_notes]]
+title = "Make dynamic_linking a no-op on WASM targets"
+authors = ["@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/12672"
+file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
+
+[[release_notes]]
+title = "Deprecate Dynamic Plugins"
+authors = ["@BD103"]
+url = "https://github.com/bevyengine/bevy/pull/13080"
+file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[release_notes]]
 title = "Bevy Working Groups"
