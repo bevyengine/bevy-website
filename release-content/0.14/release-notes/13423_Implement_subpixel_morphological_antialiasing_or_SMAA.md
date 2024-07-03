@@ -11,9 +11,9 @@ You can see how it compares to no anti-aliasing in the pair of images below:
 
 {{ compare_slider(
     path="POST_PATH",
-    left_title="No Anti-Aliasing",
+    left_title="No AA",
     left_image="no_aa.jpg",
-    right_title="Subpixel Morphological Anti-Aliasing",
+    right_title="SMAA",
     right_image="smaa.jpg"
 ) }}
 
