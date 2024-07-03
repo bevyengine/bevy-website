@@ -1,10 +1,10 @@
 Colors are a huge part of building a good game: UI, effects, shaders and more all need fully-featured, correct and convenient color tools.
 
-Bevy now supports a broad selection of color spaces, each with their own type (e.g. `LinearRgba`, `Hsla`, `Oklaba`),
+Bevy now supports a broad selection of color spaces, each with their own type (e.g. [`LinearRgba`], [`Hsla`], [`Oklaba`]),
 and offers a wide range of fully documented operations on and conversions between them.
 
-The new API is more error-resistant, more idiomatic and allows us to save work by storing the `LinearRgba` type in our rendering internals.
-This solid foundation has allowed us to implement a wide range of useful operations, clustered into traits like `Hue` or `Alpha`,
+The new API is more error-resistant, more idiomatic and allows us to save work by storing the [`LinearRgba`] type in our rendering internals.
+This solid foundation has allowed us to implement a wide range of useful operations, clustered into traits like [`Hue`] or [`Alpha`],
 allowing you to operate over any color space with the required property.
 Critically, color mixing / blending is now supported: perfect for procedurally generating color palettes and working with animations.
 
@@ -30,11 +30,18 @@ let blue = tailwind::BLUE_500;
 let purple = red.mix(blue, 0.5);
 ```
 
-Most of the user-facing APIs still accept a colorspace-agnostic `Color` (which now wraps our color-space types),
-while rendering internals use the physically-based `LinearRgba` type.
+Most of the user-facing APIs still accept a colorspace-agnostic [`Color`] (which now wraps our color-space types),
+while rendering internals use the physically-based [`LinearRgba`] type.
 For an overview of the different color spaces, and what they're each good for, please check out our [color space usage](https://docs.rs/bevy/0.14/bevy/color/index.html#color-space-usage) documentation.
 
 `bevy_color` offers a solid, type-safe foundation, but it's just getting started.
 If you'd like another color space or there are more things you'd like to do to your colors, please open an issue or PR and we'd be happy to help!
 
-P.S. `bevy_color` is intended to operate effectively as a stand-alone crate: feel free to take a dependency on it for your non-Bevy projects as well.
+Also note that `bevy_color` is intended to operate effectively as a stand-alone crate: feel free to take a dependency on it for your non-Bevy projects as well.
+
+[`LinearRgba`]: http://dev-docs.bevyengine.org/bevy/color/struct.LinearRgba.html
+[`Hsla`]: http://dev-docs.bevyengine.org/bevy/color/struct.Hsla.html
+[`Oklaba`]: http://dev-docs.bevyengine.org/bevy/color/struct.Oklaba.html
+[`Hue`]: http://dev-docs.bevyengine.org/bevy/color/trait.Hue.html
+[`Alpha`]: http://dev-docs.bevyengine.org/bevy/color/trait.Alpha.html
+[`Color`]: http://dev-docs.bevyengine.org/bevy/color/enum.Color.html

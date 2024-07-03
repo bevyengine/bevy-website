@@ -55,12 +55,14 @@ If we were to use the pull-based approach (`RemovedComponents` in this case), th
 Let's see what this looks like with a hook on `Targetable`:
 
 ```rust
-// Rather than a derive, let's configure the hooks with a custom implementation of Component
+// Rather than a derive, let's configure the hooks with a custom
+// implementation of Component
 impl Component for Targetable {
     const STORAGE_TYPE: StorageType = StorageType::Table;
 
     fn register_component_hooks(hooks: &mut ComponentHooks) {
-        // Whenever this component is removed, or an entity with this component is despawned...
+        // Whenever this component is removed, or an entity with
+        // this component is despawned...
         hooks.on_remove(|mut world, targeted_entity, _component_id|{
             // Grab the data that's about to be removed
             let targetable = world.get::<Targetable>(targeted_entity).unwrap();
@@ -204,19 +206,14 @@ fn main() {
     App::new()
         .add_systems(Startup, spawn_player)
         .add_systems(Update, attack_player)
-        .observe(
-            |_trigger: Trigger<PlayerDeath>, mut app_exit: EventWriter<AppExit>| {
-                println!("You died. Game over!");
-                app_exit.send_default();
-            },
-        );
+        .observe(on_player_death);
 }
 
 fn spawn_player(mut commands: Commands) {
     commands
         .spawn((Player, Life(10), Defense(2)))
-        .observe(respond_to_damage_taken)
-        .observe(respond_to_losing_life);
+        .observe(on_damage_taken)
+        .observe(on_losing_life);
 }
 
 fn attack_player(
@@ -231,7 +228,7 @@ fn attack_player(
     }
 }
 
-fn respond_to_damage_taken(
+fn on_damage_taken(
     trigger: Trigger<DealDamage>,
     mut commands: Commands,
     query: Query<&Defense>,
@@ -245,7 +242,7 @@ fn respond_to_damage_taken(
     commands.trigger_targets(LoseLife { life_lost }, trigger.entity());
 }
 
-fn respond_to_losing_life(
+fn on_losing_life(
     trigger: Trigger<LoseLife>,
     mut commands: Commands,
     mut life_query: Query<&mut Life>,
@@ -258,6 +255,11 @@ fn respond_to_losing_life(
     if life.0 == 0 && player_query.contains(trigger.entity()) {
         commands.trigger(PlayerDeath);
     }
+}
+
+fn on_player_death(_trigger: Trigger<PlayerDeath>, mut app_exit: EventWriter<AppExit>) {
+    println!("You died. Game over!");
+    app_exit.send_default();
 }
 ```
 
