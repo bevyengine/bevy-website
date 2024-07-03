@@ -57,4 +57,4 @@ let another_direction: Dir3 = rng.gen();
 let yet_another_direction: Dir3 = random();
 ```
 
-[sampling-primitives]: sampling_primitives.png
+[sampling-primitives]: sampling_primitives.jpg

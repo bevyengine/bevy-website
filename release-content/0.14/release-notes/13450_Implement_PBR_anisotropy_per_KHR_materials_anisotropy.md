@@ -9,9 +9,9 @@ Support for anisotropy is a common feature in major game and graphics engines; U
 {{ compare_slider(
     path="POST_PATH",
     left_title="Without Anisotropy",
-    left_image="without_anisotropy.png",
+    left_image="without_anisotropy.jpg",
     right_title="With Anisotropy",
-    right_image="with_anisotropy.png"
+    right_image="with_anisotropy.jpg"
 ) }}
 
 Two new parameters have been added to [`StandardMaterial`](https://docs.rs/bevy/0.14/bevy/pbr/struct.StandardMaterial.html): `anisotropy_strength` and `anisotropy_rotation`.

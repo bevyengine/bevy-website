@@ -26,4 +26,4 @@ commands.spawn(NodeBundle {
 
 There's a [new example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/ui/rounded_borders.rs) showcasing this new API, a screenshot of which can be seen below:
 
-![`rounded_borders` example](./rounded_borders.png)
+![`rounded_borders` example](./rounded_borders.jpg)

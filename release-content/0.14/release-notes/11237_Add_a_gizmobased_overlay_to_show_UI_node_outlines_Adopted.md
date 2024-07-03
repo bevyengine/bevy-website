@@ -3,7 +3,7 @@ We now have a native [layout tool](https://docs.rs/bevy/0.14/bevy/dev_tools/ui_d
 
 An example of what the tool looks like after enabled
 
-![Ui example with the overlay tool enabled](bevy_ui_outlines.png)
+![Ui example with the overlay tool enabled](bevy_ui_outlines.jpg)
 
 ```rust
 use bevy::prelude::*;

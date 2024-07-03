@@ -1,6 +1,6 @@
 UI images can now be given solid background colors:
 
-![UI image with background color](ui_image_background_color.png)
+![UI image with background color](ui_image_background_color.jpg)
 
 The [`BackgroundColor`] component now works for UI images instead of applying a color tint on the image itself. You can still apply a color tint by setting `UiImage::color`. For example:
 

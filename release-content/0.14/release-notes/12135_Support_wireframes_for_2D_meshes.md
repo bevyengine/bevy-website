@@ -4,4 +4,4 @@ To render your 2D mesh as a wireframe, add `Wireframe2dPlugin` to your app and a
 
 For an example of how to use the feature, have a look at the new [wireframe_2d example](https://github.com/bevyengine/bevy/blob/b17292f9d11cf3d3fb4a2fb3e3324fb80afd8c88/examples/2d/wireframe_2d.rs):
 
-![A screenshot demonstrating the new 2D wireframe material](./12135_Support_wireframes_for_2D_meshes.png)
+![A screenshot demonstrating the new 2D wireframe material](./12135_Support_wireframes_for_2D_meshes.jpg)
