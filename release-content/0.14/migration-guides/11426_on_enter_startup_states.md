@@ -8,7 +8,7 @@ See [bevy#13968](https://github.com/bevyengine/bevy/issues/13968) for more conte
 To migrate, choose one of the following options:
 
 1. Moving your startup systems to a state, as a variant of the state you're waiting for (e.g. `AppState::Setup`), and then transition out of it once the setup is complete.
-2. Moving your startup systems to a state, and making the other state a [computed state](https://github.com/bevyengine/bevy/blob/v0.14.0-rc.4/examples/state/computed_states.rs) that depends on its completion (e.g. `SetupState::SetupComplete`).
+2. Moving your startup systems to a state, and making the other state a [sub state](https://github.com/bevyengine/bevy/blob/v0.14.0-rc.4/examples/state/sub_states.rs) that depends on the startup state's completion (e.g. `SetupState::SetupComplete`).
 
 Bevy 0.13:
 
@@ -58,26 +58,13 @@ enum SetupState {
     SetupComplete,
 }
 
-#[derive(States, Default)]
+#[derive(SubStates, Default)]
+#[source(SetupState = SetupState::SetupComplete)]
 enum AppState {
     #[default]
     InMenu,
     InGame,
 }
-
-impl ComputedStates for AppState {
-    type SourceStates = SetupState;
-
-    fn compute(sources: SetupState) -> Option<Self> {
-        match sources {
-            // While we're setting up, the AppState shouldn't exist
-            SetupState::SettingUp => None,
-            // Once we're done setting up, we should enter the menu
-            SetupState::SetupComplete => Some(AppState::InMenu),
-        }
-    }
-}
-
 
 fn finish_setup(mut app_state: ResMut<NextState<SetupState>>) {
     app_state.set(SetupState::SetupComplete);
@@ -86,8 +73,8 @@ fn finish_setup(mut app_state: ResMut<NextState<SetupState>>) {
 
 app
     .init_state::<SetupState>()
-    // Note that we don't call `init_state` for computed states!
-    .add_computed_state::<AppState>()
+    // Note that we don't call `init_state` for substates!
+    .add_sub_state::<AppState>()
     .add_systems(OnEnter(AppState::InitialSetup), initial_setup)
     .add_system(Update, finish_setup.run_if(in_state(AppState::Setup)))
     .add_systems(OnEnter(AppState::InMenu), relies_on_initial_setup);
