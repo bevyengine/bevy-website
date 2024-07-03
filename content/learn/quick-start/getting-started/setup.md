@@ -272,7 +272,7 @@ rustflags = [
 
 Bevy's dependencies do a lot of trace logging that is not relevant for an end user. 
 To improve your runtime performance, you can add the following to the `[dependencies]` section of your Cargo.toml. 
-It will disable high log levels on compile time so that they do not need to be filtered out while your app is running.
+It will disable detailed log levels on compile time so that they do not need to be filtered out while your app is running.
 
 ```toml
 log = { version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
