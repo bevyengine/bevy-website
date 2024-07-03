@@ -137,16 +137,10 @@ url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
 [[release_notes]]
-title = "Computed States & Sub States"
+title = "Computed States & Sub-States"
 authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11426"
 file_name = "11426_Computed_States__Sub_States.md"
-
-[[release_notes]]
-title = "State Identity Transitions"
-authors = ["@MiniaczQ", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13579"
-file_name = "13579_State_Identity_Transitions.md"
 
 [[release_notes]]
 title = "State Scoped Entities"
@@ -155,19 +149,25 @@ url = "https://github.com/bevyengine/bevy/pull/13649"
 file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
+title = "State Identity Transitions"
+authors = ["@MiniaczQ", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_State_Identity_Transitions.md"
+
+[[release_notes]]
 title = "GPU Frustum Culling"
 authors = ["@pcwalton"]
 url = "https://github.com/bevyengine/bevy/pull/12889"
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
-title = "`Commands` and exclusive world access: working together in harmony"
+title = "World Command Queue"
 authors = ["@james7132", "@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/11823"
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[release_notes]]
-title = "Run the multi-threaded executor at the end of each system task."
+title = "Reduced Multi-Threaded Execution Overhead"
 authors = ["@chescock", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"

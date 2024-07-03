@@ -13,8 +13,6 @@ In addition to the below user guide, checkout:
 
 <video controls loop><source src="many_bunnies.mp4" type="video/mp4"/></video>
 
----
-
 Users wanting to use virtual geometry should compile with the `meshlet` cargo feature at runtime, and `meshlet_processor` cargo feature at build time for preprocessing meshes into the special meshlet-specific format (`MeshletMesh`) the meshlet renderer uses.
 
 Enabling the meshlet feature unlocks a new module: `bevy::pbr::experimental::meshlet`.
