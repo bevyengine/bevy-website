@@ -268,6 +268,16 @@ rustflags = [
 
 </details>
 
+### Improve Runtime (Optional)
+
+Bevy's dependencies do a lot of trace logging that is not relevant for an end user. 
+To improve your runtime, you should add the following to the [dependencies] section of your Cargo.toml. 
+It will disable high log levels on compile time.
+
+```toml
+log = { version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
+```
+
 ### Build Bevy
 
 Now run `cargo run` again. The Bevy dependencies should start building. This will take some time as you are essentially building an engine from scratch. You will only need to do a full rebuild once. Every build after this one will be fast!
