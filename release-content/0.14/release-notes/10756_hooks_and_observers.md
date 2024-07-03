@@ -171,6 +171,9 @@ This API makes it easy to manage and clean up observers. It also enables advance
 
 Now that we know a bit about observers, lets examine the API through a simple gameplay-flavored example:
 
+<details>
+<summary>Click to expand...</summary>
+
 ```rust
 use bevy::prelude::*;
 
@@ -262,6 +265,8 @@ fn on_player_death(_trigger: Trigger<PlayerDeath>, mut app_exit: EventWriter<App
     app_exit.send_default();
 }
 ```
+
+</details>
 
 In the future, we intend to use hooks and observers to [replace `RemovedComponents`], [make our hierarchy management more robust], create a first-party replacement for [`bevy_eventlistener`] as part of our UI work, and [build out relations].
 These are powerful, general-purpose tools: we can't wait to see the mad science the community cooks up with them!

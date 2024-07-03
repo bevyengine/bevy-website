@@ -1,6 +1,6 @@
 After several months of hard work, we're super excited to bring you the experimental release of a new virtual geometry feature!
 
-This new rendering feature works much like Unreal Engine 5's Nanite renderer. You can take a very high-poly mesh, preprocess it to generate a MeshletMesh during build time, and then at runtime render huge amounts of geometry - much more than Bevy's standard renderer can support. No explicit LODs are needed - it's all automatic, and near seamless.
+This new rendering feature works much like Unreal Engine 5's Nanite renderer. You can take a very high-poly mesh, preprocess it to generate a `MeshletMesh` during build time, and then at runtime render huge amounts of geometry - much more than Bevy's standard renderer can support. No explicit LODs are needed - it's all automatic, and near seamless.
 
 This feature is still a WIP, and comes with several constraints compared to Bevy's standard renderer, so be sure to read the docs and report any bugs you encounter. We still a lot left to do, so look forward to more performance improvements (and associated breaking changes) in future releases!
 
