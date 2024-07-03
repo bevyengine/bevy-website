@@ -6,9 +6,9 @@ As a result, Bevy's point lights now  look softer and more natural, without any 
 {{ compare_slider(
     path="POST_PATH",
     left_title="Without PCF filtering",
-    left_image="before_pcf.png",
+    left_image="before_pcf.jpg",
     right_title="With PCF filtering",
-    right_image="after_pcf.png"
+    right_image="after_pcf.jpg"
 ) }}
 
 Full support for percentage-closer shadows is [in the works](https://github.com/bevyengine/bevy/pull/13497): testing and reviews for this are, like always, extremely welcome.

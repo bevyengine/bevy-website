@@ -4,9 +4,9 @@
 {{ compare_slider(
     path="POST_PATH",
     left_title="No SSR",
-    left_image="no_ssr.png",
+    left_image="no_ssr.jpg",
     right_title="SSR",
-    right_image="ssr.png"
+    right_image="ssr.jpg"
 ) }}
 
 [Screen-space reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html) (SSR) approximate real-time reflections by raymarching through the depth buffer and copying samples from the final rendered frame.

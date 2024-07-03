@@ -31,7 +31,7 @@ Available line styles are:
 - `GizmoLineStyle::Dotted`: draws a dotted line with each dot being a square
 - `GizmoLineStyle::Solid`: draws a solid line - this is the default behavior and the only one available before Bevy 0.14
 
-![new gizmos line styles](gizmos_line_styles.png)
+![new gizmos line styles](gizmos_line_styles.jpg)
 
 Similarly, the new line joints offer a variety of options:
 
@@ -40,6 +40,6 @@ Similarly, the new line joints offer a variety of options:
 - `GizmoLineJoint::Bevel`, which connects the ends of the two joining lines with a straight segment, and
 - `GizmoLineJoint::None`, which uses no joints and leaves small gaps - this is the default behavior and the only one available before Bevy 0.14.
 
-![new gizmos line joints](gizmos_line_joints.png)
+![new gizmos line joints](gizmos_line_joints.jpg)
 
 You can check out the [2D gizmos example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/gizmos/2d_gizmos.rs), which demonstrates the use of line styles and joints!

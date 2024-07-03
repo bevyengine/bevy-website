@@ -52,7 +52,7 @@ And again, adding meshing support for your own primitives is made easy by bevy! 
 
 When implementing [`Extrudable`], you have to provide information about whether segments of the perimeter of the base shape are to be shaded smooth or flat, and what vertices belong to each of these perimeter segments.
 
-![a 2D heart primitive and its extrusion](heart_extrusion.png)
+![a 2D heart primitive and its extrusion](heart_extrusion.jpg)
 
 The [`Extrudable`] trait allows you to easily implement meshing for extrusions of custom primitives. Of course, you could also implement meshing manually for your extrusion.
 
