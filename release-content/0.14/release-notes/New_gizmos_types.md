@@ -2,7 +2,7 @@ Gizmos in Bevy allow developers to easily draw arbitrary shapes to help debuggin
 
 In 0.14, several new gizmos have been added to [`bevy::gizmos`]:
 
-### Rounded box gizmos
+#### Rounded box gizmos
 
 Rounded boxes and cubes are great for visualizing regions and colliders.
 
