@@ -8,7 +8,7 @@ fn draw_gizmos(mut gizmos: Gizmos) {
 
 However the only way to customize gizmos was to change their color, which may be limiting for some use cases. Additionally, the meeting points of two lines in a line strip, their *joints*, had little gaps.
 
-As of bevy 0.14, you can change the style of the lines and their joints for each gizmo config group:
+As of Bevy 0.14, you can change the style of the lines and their joints for each gizmo config group:
 
 ```rust
 fn draw_gizmos(mut gizmos: Gizmos) {
