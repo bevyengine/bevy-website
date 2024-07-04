@@ -265,7 +265,7 @@ codegen-backend = true
 codegen-backend = "cranelift"
 ```
 
-This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift?tab=readme-ov-file#download-using-rustup) for
+This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
 details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
 Note that cranelift [currently does not build Bevy on macOS](https://github.com/rust-lang/rustc_codegen_cranelift/issues/1504).
 
