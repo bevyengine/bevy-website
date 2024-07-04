@@ -260,9 +260,11 @@ To activate it for your project, add the following to your `.config/cargo.toml`.
 [unstable]
 codegen-backend = true
 
-# Replace `my_program` with the name of your binary.
-[profile.dev.package.my_program]
+[profile.dev]
 codegen-backend = "cranelift"
+
+[profile.dev.package."*"]
+codegen-backend = "llvm"
 ```
 
 This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
