@@ -64,6 +64,12 @@ number = 14065
 [[areas]]
 name = ["App"]
 [[areas.prs]]
+title = "Refactor App and SubApp internals for better separation"
+number = 9202
+[[areas.prs]]
+title = "Added add_group to PluginGroupBuilder"
+number = 9530
+[[areas.prs]]
 title = "Move PanicHandlerPlugin into bevy_app"
 number = 12640
 [[areas.prs]]
@@ -737,6 +743,12 @@ title = "Poll system information in separate tasks"
 number = 13693
 
 [[areas]]
+name = ["Dev-Tools", "Diagnostics", "Rendering"]
+[[areas.prs]]
+title = "Add pipeline statistics"
+number = 9135
+
+[[areas]]
 name = ["Dev-Tools", "ECS", "Networking"]
 [[areas.prs]]
 title = "Add methods `iter_resources` and `iter_resources_mut`"
@@ -807,6 +819,9 @@ number = 12950
 
 [[areas]]
 name = ["Diagnostics", "Rendering"]
+[[areas.prs]]
+title = "Add error when extract resource build fails"
+number = 4964
 [[areas.prs]]
 title = "fix shadow pass trace"
 number = 12977
@@ -1372,6 +1387,12 @@ number = 12710
 [[areas]]
 name = ["Input"]
 [[areas.prs]]
+title = "also look in just_pressed touches for position"
+number = 7743
+[[areas.prs]]
+title = "Add table showing complexity of methods for Input"
+number = 10126
+[[areas.prs]]
 title = "Prevent panic when multiple Enter inputs received in `text_input` example"
 number = 11872
 [[areas.prs]]
@@ -1732,6 +1753,9 @@ number = 13498
 [[areas]]
 name = ["Reflection"]
 [[areas.prs]]
+title = "bevy_reflect: Recursive registration"
+number = 5781
+[[areas.prs]]
 title = "Add method for querying whether a given short type path is ambiguous"
 number = 11840
 [[areas.prs]]
@@ -1824,6 +1848,12 @@ number = 12971
 
 [[areas]]
 name = ["Rendering"]
+[[areas.prs]]
+title = "Per-Object Motion Blur"
+number = 9924
+[[areas.prs]]
+title = "Meshlet rendering (initial feature)"
+number = 10164
 [[areas.prs]]
 title = "Fix dds feature dependencies in bevy_core_pipeline"
 number = 11962
@@ -2593,6 +2623,9 @@ number = 12802
 [[areas]]
 name = ["UI"]
 [[areas.prs]]
+title = "Add doc comments explaining the different behaviours of alignment and Anchor with text_2d"
+number = 8022
+[[areas.prs]]
 title = "Simplify and improve `overflow_debug` example"
 number = 11875
 [[areas.prs]]
@@ -2721,6 +2754,9 @@ number = 14121
 
 [[areas]]
 name = ["Utils"]
+[[areas.prs]]
+title = "refactor: Extract parallel queue abstraction"
+number = 7348
 [[areas.prs]]
 title = "bevy_utils: Add `BuildHasher` parameter to `bevy_utils::Entry` type alias"
 number = 12308
@@ -2967,4 +3003,3 @@ number = 13954
 [[areas.prs]]
 title = "fix examples color_grading and mobile after BackgroundColor changes"
 number = 14033
-
