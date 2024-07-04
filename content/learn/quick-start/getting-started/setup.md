@@ -246,6 +246,32 @@ channel = "nightly"
 
 For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 
+#### Cranelift
+
+This uses a new nightly-only codegen that is about 30% faster at compiling than LLM. 
+
+To install cranelift on Linux or macOS, run the following.
+```
+rustup component add rustc-codegen-cranelift-preview --toolchain nightly
+```
+
+To activate it for your project, add the following to your `.config/cargo.toml`.
+```toml
+[unstable]
+codegen-backend = true
+
+[profile.dev]
+codegen-backend = "cranelift"
+```
+
+See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift?tab=readme-ov-file#download-using-rustup) for
+details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
+Note that cranelift [currently does not build Bevy on macOS](https://github.com/rust-lang/rustc_codegen_cranelift/issues/1504).
+
+
+While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it.
+When shipping your game, you should compile all dependencies with LLVM.
+
 #### Generic Sharing
 
 Allows crates to share monomorphized generic code instead of duplicating it.
