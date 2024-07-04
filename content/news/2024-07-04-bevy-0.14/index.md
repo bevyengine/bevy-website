@@ -8,7 +8,7 @@ image_subtitle = "A forested scene illustrating Bevy's new volumetric fog, depth
 image_subtitle_link = "https://github.com/IceSentry/bevy_forest_scene"
 +++
 
-Thanks to **256** contributors, **993** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.14** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **256** contributors, **993** pull requests, community reviewers, and our [**generous sponsors**](/donate), we're happy to announce the **Bevy 0.14** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
