@@ -21,7 +21,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Depth of Field**: Cause objects at specific depths to go "out of focus", mimicking the behavior of physical lenses
 - **Per-Object Motion Blur**: Blur objects moving fast relative to the camera
 - **Volumetric Fog / Lighting**: Simulates fog in 3d space, enabling lights to produce beautiful "god rays"
-- **Filmic Color Grading**: Fine tune tonemapping in your game with a complete set of filmic color grading tols
+- **Filmic Color Grading**: Fine tune tonemapping in your game with a complete set of filmic color grading tools
 - **PBR Anisotropy**: Improve rendering of surfaces whose roughness varies along the tangent and bitangent directions of a mesh, such as brushed metal and hair
 - **Auto Exposure**: Configure cameras to dynamically adjust their exposure based on what they are looking at
 - **PCF for Point Lights**: Smooth out point light shadows, improving their quality
