@@ -269,8 +269,6 @@ codegen-backend = "llvm"
 
 This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
 details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
-Note that cranelift [currently does not build Bevy on macOS](https://github.com/rust-lang/rustc_codegen_cranelift/issues/1504).
-
 
 While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it.
 When shipping your game, you should still compile it with LLVM.
