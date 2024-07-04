@@ -20,5 +20,5 @@ To add volumetric fog to a scene, add [`VolumetricFogSettings`] to the camera, a
 
 Try it hands on with our [`volumetric_fog` example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/3d/volumetric_fog.rs).
 
-[`VolumetricFogSettings`]: http://dev-docs.bevyengine.org/bevy/pbr/struct.VolumetricFogSettings.html
-[`VolumetricLight`]: http://dev-docs.bevyengine.org/bevy/pbr/struct.VolumetricLight.html
+[`VolumetricFogSettings`]: https://docs.rs/bevy/0.14/bevy/pbr/struct.VolumetricFogSettings.html
+[`VolumetricLight`]: https://docs.rs/bevy/0.14/bevy/pbr/struct.VolumetricLight.html

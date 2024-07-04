@@ -93,4 +93,4 @@ Yearning for the days of state stacks? Wish that there was a method for re-enter
 All of the state machinery relies *only* on public ECS tools: resources, schedules, and run conditions, making it easy to build on top of.
 We know that state machines are very much a matter of taste; so if our design isn't to your taste consider taking advantage of Bevy's modularity and writing your own abstraction or using one supplied by the community!
 
-[`States`]: http://dev-docs.bevyengine.org/bevy/prelude/trait.States.html
+[`States`]: https://docs.rs/bevy/0.14/bevy/prelude/trait.States.html
