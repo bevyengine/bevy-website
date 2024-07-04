@@ -271,7 +271,7 @@ Note that cranelift [currently does not build Bevy on macOS](https://github.com/
 
 
 While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it.
-When shipping your game, you should compile all dependencies with LLVM.
+When shipping your game, you should still compile it with LLVM.
 
 #### Generic Sharing
 
