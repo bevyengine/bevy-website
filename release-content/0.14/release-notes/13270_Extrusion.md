@@ -48,7 +48,7 @@ You can also get bounding spheres and Axis Aligned Bounding Boxes (AABBs) for ex
 
 Extrusions do not exist in the world of maths only though. They can also be meshed and displayed on the screen!
 
-And again, adding meshing support for your own primitives is made easy by bevy! You simply need to implement meshing for your 2D primitive and then implement [`Extrudable`] for your 2D primitive's [`MeshBuilder`].
+And again, adding meshing support for your own primitives is made easy by Bevy! You simply need to implement meshing for your 2D primitive and then implement [`Extrudable`] for your 2D primitive's [`MeshBuilder`].
 
 When implementing [`Extrudable`], you have to provide information about whether segments of the perimeter of the base shape are to be shaded smooth or flat, and what vertices belong to each of these perimeter segments.
 
