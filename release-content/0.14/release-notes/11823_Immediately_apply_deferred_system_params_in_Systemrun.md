@@ -17,6 +17,6 @@ this API can be great for quickly prototyping with or easily testing your custom
 As a bonus, one-shot systems now apply their commands (and other deferred system params) immediately when run!
 We already have exclusive world access: why introduce delays and subtle bugs?
 
-[`World`]: http://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.World.html
-[`Commands`]: http://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Commands.html
-[`CommandQueue`]: http://dev-docs.bevyengine.org/bevy/ecs/world/struct.CommandQueue.html
+[`World`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.World.html
+[`Commands`]: https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.Commands.html
+[`CommandQueue`]: https://docs.rs/bevy/0.14/bevy/ecs/world/struct.CommandQueue.html
