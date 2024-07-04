@@ -50,9 +50,9 @@
   {% if page.extra.image and page.extra.show_image %}
     <div class="media-content news-content">
       {% if page.extra.image_subtitle %}
-        <img src="{{ page.extra.image }}" alt="{{ page.extra.image_subtitle }}" />
+        <img src="{{ page.extra.image }}" alt="{{ page.extra.image_subtitle }}" style="aspect-ratio: auto 16 / 9" />
       {% else %}
-        <img src="{{ page.extra.image }}" alt="An image representing the article" />
+        <img src="{{ page.extra.image }}" alt="An image representing the article" style="aspect-ratio: auto 16 / 9" />
       {% endif %}
       {% if page.extra.image_subtitle %}
         {% if page.extra.image_subtitle_link %}
