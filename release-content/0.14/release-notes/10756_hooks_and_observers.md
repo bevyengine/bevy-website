@@ -91,7 +91,7 @@ struct Message {
 }
 
 world.observe(|trigger: Trigger<Message>| {
-    println!("{}", message.text);
+    println!("{}", trigger.event().message.text);
 });
 ```
 
