@@ -39,9 +39,9 @@ If you'd like another color space or there are more things you'd like to do to y
 
 Also note that `bevy_color` is intended to operate effectively as a stand-alone crate: feel free to take a dependency on it for your non-Bevy projects as well.
 
-[`LinearRgba`]: http://dev-docs.bevyengine.org/bevy/color/struct.LinearRgba.html
-[`Hsla`]: http://dev-docs.bevyengine.org/bevy/color/struct.Hsla.html
-[`Oklaba`]: http://dev-docs.bevyengine.org/bevy/color/struct.Oklaba.html
-[`Hue`]: http://dev-docs.bevyengine.org/bevy/color/trait.Hue.html
-[`Alpha`]: http://dev-docs.bevyengine.org/bevy/color/trait.Alpha.html
-[`Color`]: http://dev-docs.bevyengine.org/bevy/color/enum.Color.html
+[`LinearRgba`]: https://docs.rs/bevy/0.14/bevy/color/struct.LinearRgba.html
+[`Hsla`]: https://docs.rs/bevy/0.14/bevy/color/struct.Hsla.html
+[`Oklaba`]: https://docs.rs/bevy/0.14/bevy/color/struct.Oklaba.html
+[`Hue`]: https://docs.rs/bevy/0.14/bevy/color/trait.Hue.html
+[`Alpha`]: https://docs.rs/bevy/0.14/bevy/color/trait.Alpha.html
+[`Color`]: https://docs.rs/bevy/0.14/bevy/color/enum.Color.html

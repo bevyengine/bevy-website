@@ -17,7 +17,7 @@ All extrusions are extruded along the Z-axis. This guarantees that an extrusion 
 Since all extrusions with base shapes that implement [`Measured2d`] implement [`Measured3d`], you can easily get the surface area or volume of an extrusion.
 If you have an extrusion of a custom 2D primitive, you can simply implement [`Measured2d`] for your primitive and [`Measured3d`] will be implemented automatically for the extrusion.
 
-Likewise, you can sample the boundary and interior of any extrusion if the base shape of the extrusion implements [`ShapeSample<Output = Vec2>`](http://dev-docs.bevyengine.org/bevy/math/trait.ShapeSample.html) and [`Measured2d`].
+Likewise, you can sample the boundary and interior of any extrusion if the base shape of the extrusion implements [`ShapeSample<Output = Vec2>`](https://docs.rs/bevy/0.14/bevy/math/trait.ShapeSample.html) and [`Measured2d`].
 
 ```rust
 // Create a 2D capsule with radius 1 and length 2, extruded to a depth of 3
@@ -52,15 +52,15 @@ And again, adding meshing support for your own primitives is made easy by bevy! 
 
 When implementing [`Extrudable`], you have to provide information about whether segments of the perimeter of the base shape are to be shaded smooth or flat, and what vertices belong to each of these perimeter segments.
 
-![a 2D heart primitive and its extrusion](heart_extrusion.png)
+![a 2D heart primitive and its extrusion](heart_extrusion.jpg)
 
 The [`Extrudable`] trait allows you to easily implement meshing for extrusions of custom primitives. Of course, you could also implement meshing manually for your extrusion.
 
 If you want to see a full implementation of this, you can check out the [custom primitives example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/math/custom_primitives.rs).
 
-[`Measured2d`]: http://dev-docs.bevyengine.org/bevy/math/prelude/trait.Measured2d.html
-[`Measured3d`]: http://dev-docs.bevyengine.org/bevy/math/prelude/trait.Measured3d.html
-[`Extrudable`]: http://dev-docs.bevyengine.org/bevy/render/mesh/trait.Extrudable.html
-[`Bounded2d`]: http://dev-docs.bevyengine.org/bevy/math/bounding/trait.Bounded2d.html
-[`BoundedExtrusion`]: http://dev-docs.bevyengine.org/bevy/math/bounding/trait.BoundedExtrusion.html
-[`MeshBuilder`]: http://dev-docs.bevyengine.org/bevy/prelude/trait.MeshBuilder.html
+[`Measured2d`]: https://docs.rs/bevy/0.14/bevy/math/prelude/trait.Measured2d.html
+[`Measured3d`]: https://docs.rs/bevy/0.14/bevy/math/prelude/trait.Measured3d.html
+[`Extrudable`]: https://docs.rs/bevy/0.14/bevy/render/mesh/trait.Extrudable.html
+[`Bounded2d`]: https://docs.rs/bevy/0.14/bevy/math/bounding/trait.Bounded2d.html
+[`BoundedExtrusion`]: https://docs.rs/bevy/0.14/bevy/math/bounding/trait.BoundedExtrusion.html
+[`MeshBuilder`]: https://docs.rs/bevy/0.14/bevy/prelude/trait.MeshBuilder.html

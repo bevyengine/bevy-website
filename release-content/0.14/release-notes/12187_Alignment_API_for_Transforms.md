@@ -4,7 +4,7 @@ This allows you to do things like point the front of a spaceship at a planet you
 
 Lets consider a ship where we're going to use the front of the ship and the right wing as local axes:
 
-![before calling Transform::align](align-before-move.png)
+![before calling Transform::align](align-before-move.jpg)
 
 ```rust
 // point the local negative-z axis in the global Y axis direction
@@ -14,7 +14,7 @@ transform.align(Vec3::NEG_Z, Vec3::Y, Vec3::X, Vec3::Z)
 
 `align` will move it to match the desired positions as closely as possible:
 
-![after calling Transform::align](align-after-move.png)
+![after calling Transform::align](align-after-move.jpg)
 
  Note that not all rotations can be constructed and the [documentation](https://docs.rs/bevy/0.14/bevy/transform/components/struct.Transform.html#method.align) explains what happens in such scenarios.
 

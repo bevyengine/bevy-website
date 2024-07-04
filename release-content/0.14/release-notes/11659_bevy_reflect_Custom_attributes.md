@@ -81,4 +81,4 @@ pub struct TestStruct {
 }
 ```
 
-![A custom UI inspector built using the code above in bevy_reactor](./custom_attributes_demo.png)
+![A custom UI inspector built using the code above in bevy_reactor](./custom_attributes_demo.jpg)

@@ -107,7 +107,7 @@ version = "0.1.0"
 edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
 [dependencies]
-bevy = "0.13" # make sure this is the latest version
+bevy = "0.14" # make sure this is the latest version
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).

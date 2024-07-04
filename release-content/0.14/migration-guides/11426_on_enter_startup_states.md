@@ -10,9 +10,8 @@ To migrate, choose one of the following options:
 1. Moving your startup systems to a state, as a variant of the state you're waiting for (e.g. `AppState::Setup`), and then transition out of it once the setup is complete.
 2. Moving your startup systems to a state, and making the other state a [sub state](https://github.com/bevyengine/bevy/blob/v0.14.0-rc.4/examples/state/sub_states.rs) that depends on the startup state's completion (e.g. `SetupState::SetupComplete`).
 
-Bevy 0.13:
-
 ```rust
+// 0.13
 #[derive(States, Default)]
 enum AppState {
     #[default]
@@ -24,13 +23,11 @@ app
    .init_state::<AppState>()
    .add_systems(Startup, initial_setup)
    .add_systems(OnEnter(AppState::InMenu), relies_on_initial_setup);
-```
 
-Bevy 0.14 (solution 1):
-
-```rust
+// 0.14 (Solution 1)
 #[derive(States, Default)]
 enum AppState {
+    // Make this the default instead of `InMenu`.
     #[default]
     Setup
     InMenu,
@@ -46,11 +43,8 @@ app
     .add_systems(OnEnter(AppState::Setup), initial_setup)
     .add_system(Update, transition_to_in_menu.run_if(in_state(AppState::Setup)))
     .add_systems(OnEnter(AppState::InMenu), relies_on_initial_setup);
-```
 
-Bevy 0.14 (solution 2):
-
-```rust
+// 0.14 (Solution 2)
 #[derive(States, Default)]
 enum SetupState {
     #[default]
@@ -70,10 +64,9 @@ fn finish_setup(mut app_state: ResMut<NextState<SetupState>>) {
     app_state.set(SetupState::SetupComplete);
 }
 
-
 app
     .init_state::<SetupState>()
-    // Note that we don't call `init_state` for substates!
+    // Note that we don't call `init_state()` for substates!
     .add_sub_state::<AppState>()
     .add_systems(OnEnter(AppState::InitialSetup), initial_setup)
     .add_system(Update, finish_setup.run_if(in_state(AppState::Setup)))

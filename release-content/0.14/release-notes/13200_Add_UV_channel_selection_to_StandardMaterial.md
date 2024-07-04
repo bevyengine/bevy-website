@@ -2,4 +2,4 @@ Previously, StandardMaterial always defaulted to using ATTRIBUTE_UV_0 for each t
 
 Here's a before and after showing the support of ATTRIBUTE_UV_1 across textures:
 
-![UV Channel Selection](uv_channel_selection.png)
+![UV Channel Selection](uv_channel_selection.jpg)
