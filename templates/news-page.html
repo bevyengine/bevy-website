@@ -50,15 +50,9 @@
   {% if page.extra.image and page.extra.show_image %}
     <div class="media-content news-content">
       {% if page.extra.image_subtitle %}
-        <img src="{{ page.extra.image }}"
-              alt="{{ page.extra.image_subtitle }}"
-              width="926"
-              height="521" />
+        <img src="{{ page.extra.image }}" alt="{{ page.extra.image_subtitle }}" />
       {% else %}
-        <img src="{{ page.extra.image }}"
-              alt="An image representing the article"
-              width="926"
-              height="521" />
+        <img src="{{ page.extra.image }}" alt="An image representing the article" />
       {% endif %}
       {% if page.extra.image_subtitle %}
         {% if page.extra.image_subtitle_link %}
