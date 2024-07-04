@@ -27,4 +27,4 @@ let animation_hen = asset_server.load(GltfAssetLabel::Animation(0).from_asset(he
 Check out [`glTF label docs`] to know which parts you can query for.
 
 [`glTF`]: https://www.khronos.org/gltf/
-[`glTF label docs`]: http://dev-docs.bevyengine.org/bevy/gltf/enum.GltfAssetLabel.html
+[`glTF label docs`]: https://docs.rs/bevy/0.14/bevy/gltf/enum.GltfAssetLabel.html

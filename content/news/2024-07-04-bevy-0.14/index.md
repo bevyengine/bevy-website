@@ -1,15 +1,14 @@
 +++
 title = "Bevy 0.14"
-date = 2024-05-17
+date = 2024-07-04
 [extra]
 image = "cover.jpg"
 show_image = true
 image_subtitle = "A forested scene illustrating Bevy's new volumetric fog, depth of field, and screen-space reflections"
 image_subtitle_link = "https://github.com/IceSentry/bevy_forest_scene"
-public_draft = 1188
 +++
 
-Thanks to **256** contributors, **993** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.14** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **256** contributors, **993** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.14** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -22,7 +21,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Depth of Field**: Cause objects at specific depths to go "out of focus", mimicking the behavior of physical lenses
 - **Per-Object Motion Blur**: Blur objects moving fast relative to the camera
 - **Volumetric Fog / Lighting**: Simulates fog in 3d space, enabling lights to produce beautiful "god rays"
-- **Filmic Color Grading**: Fine tune tonemapping in your game with a complete set of filmic color grading tols
+- **Filmic Color Grading**: Fine tune tonemapping in your game with a complete set of filmic color grading tools
 - **PBR Anisotropy**: Improve rendering of surfaces whose roughness varies along the tangent and bitangent directions of a mesh, such as brushed metal and hair
 - **Auto Exposure**: Configure cameras to dynamically adjust their exposure based on what they are looking at
 - **PCF for Point Lights**: Smooth out point light shadows, improving their quality

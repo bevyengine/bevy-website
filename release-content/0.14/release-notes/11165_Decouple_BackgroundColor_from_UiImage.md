@@ -19,4 +19,4 @@ commands.spawn((
 ));
 ```
 
-[`BackgroundColor`]: http://dev-docs.bevyengine.org/bevy/prelude/struct.BackgroundColor.html
+[`BackgroundColor`]: https://docs.rs/bevy/0.14/bevy/prelude/struct.BackgroundColor.html

@@ -18,4 +18,4 @@ On the other hand they lock your GPU's clock to base speeds for stable results, 
 You can also track individual render/compute passes, groups of passes (e.g. all shadow passes), and individual commands inside passes (like draw calls).
  To do so, instrument them using methods from the [`RecordDiagnostics`](https://docs.rs/bevy/0.14/bevy/render/diagnostic/trait.RecordDiagnostics.html) trait.
 
-[`RenderDiagnosticsPlugin`]: http://dev-docs.bevyengine.org/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html
+[`RenderDiagnosticsPlugin`]: https://docs.rs/bevy/0.14/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html
