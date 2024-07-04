@@ -165,7 +165,7 @@ cargo add bevy -F dynamic_linking
 {% callout(type="warning") %}
 On Windows you must also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 
-In order to run `cargo test --doc`, you must also add `%USERPROFILE%\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib\ ` to your `PATH` environment variable. Replace the part saying `stable` with `nightly` if you're running the nightly compiler.
+In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
 {% end %}
 
 {% callout(type="note") %}
