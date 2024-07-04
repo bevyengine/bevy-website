@@ -18,4 +18,4 @@ Games often want to use objects other than meshes to replace distant models, suc
 
 You can see how this feature is used in the [`visibility_ranges` example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/3d/visibility_range.rs).
 
-[`VisibilityRange`]: http://dev-docs.bevyengine.org/bevy/render/view/struct.VisibilityRange.html
+[`VisibilityRange`]: https://docs.rs/bevy/0.14/bevy/render/view/struct.VisibilityRange.html
