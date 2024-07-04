@@ -69,7 +69,7 @@ impl Component for Targetable {
             let targetable = world.get::<Targetable>(targeted_entity).unwrap();
             for targeting_entity in targetable.targeted_by {
                 // Track down the entity that's targeting us
-                let mut targeting = world.get::<Target>(targeting_entity).unwrap();
+                let mut targeting = world.get_mut::<Target>(targeting_entity).unwrap();
                 // And clear its target, cleaning up any dangling references
                 targeting.0 = None;
             }
