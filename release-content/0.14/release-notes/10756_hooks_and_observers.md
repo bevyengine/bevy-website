@@ -28,7 +28,7 @@ To overcome these limitations, **Bevy 0.14** introduces **Component Lifecycle Ho
 
 #### Component Lifecycle Hooks
 
-[Component Hooks](https://docs.rs/bevy/0.14/ecs/component/struct.ComponentHooks.html) are functions (capable of interacting with the ECS World) registered for a specific component type (as part of the [`Component`] trait impl), which are run automatically in response to "component lifecycle events", such as when that component is added, overwritten, or removed.
+[Component Hooks](https://docs.rs/bevy/0.14/bevy/ecs/component/struct.ComponentHooks.html) are functions (capable of interacting with the ECS World) registered for a specific component type (as part of the [`Component`] trait impl), which are run automatically in response to "component lifecycle events", such as when that component is added, overwritten, or removed.
 
 For a given component type, only one hook can be registered for a given lifecycle event, and it cannot be overwritten.
 
