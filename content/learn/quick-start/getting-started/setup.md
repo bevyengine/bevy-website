@@ -144,7 +144,7 @@ You might think to simply develop in release mode instead, but we recommend agai
 In fact, you may want to optimize your release builds even further by adding the following to your `Cargo.toml`:
 
 ```toml
-# Enable additional optimization in release mode at the cost of compile time.
+# Enable additional optimizations in release mode at the cost of compile time.
 [profile.release]
 lto = "thin"
 codegen-units = 1
