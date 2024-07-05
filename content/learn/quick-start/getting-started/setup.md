@@ -156,7 +156,7 @@ opt-level = "z"
 strip = "debuginfo"
 ```
 
-Then when releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
 
 ### Enable Fast Compiles (Optional)
 
