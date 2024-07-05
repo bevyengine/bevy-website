@@ -141,7 +141,7 @@ opt-level = 3
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
 
-In fact, you may want to optimize your release builds even further by adding the following to your `Cargo.toml`:
+In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
 
 ```toml
 # Enable additional optimizations in release mode at the cost of compile time.
