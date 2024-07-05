@@ -147,7 +147,7 @@ In fact, you may want to optimize your release builds even further by adding the
 # Enable additional optimization in release mode at the cost of compile time.
 [profile.release]
 lto = "thin"
-codgen-units = 1
+codegen-units = 1
 
 # Optimize for size in wasm-release mode.
 [profile.wasm-release]
