@@ -153,7 +153,7 @@ codegen-units = 1
 # Slows compile times, marginal improvements.
 lto = "thin"
 
-# Optimize for size in wasm-release mode.
+# Optimize for size in wasm-release mode to reduce load times and bandwidth usage on web.
 [profile.wasm-release]
 # Use release profile as default values.
 inherits = "release"
