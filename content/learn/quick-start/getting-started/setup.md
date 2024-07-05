@@ -130,16 +130,33 @@ It's not uncommon for debug builds using the default configuration to take multi
 Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add the following to your `Cargo.toml`:
 
 ```toml
-# Enable a small amount of optimization in debug mode
+# Enable a small amount of optimization in debug mode.
 [profile.dev]
 opt-level = 1
 
-# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+# Enable a large amount of optimization in debug mode for dependencies.
 [profile.dev.package."*"]
 opt-level = 3
 ```
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
+
+In fact, you may want to optimize your release builds even further by adding the following to your `Cargo.toml` as well:
+
+```toml
+# Enable additional optimization in release mode at the cost of compile time.
+[profile.release]
+lto = "thin"
+codgen-units = 1
+
+# Optimize for size in wasm-release mode.
+[profile.wasm-release]
+inherits = "release"
+opt-level = "z"
+strip = "debuginfo"
+```
+
+Then when releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
 
 ### Enable Fast Compiles (Optional)
 
