@@ -146,13 +146,21 @@ In fact, you may want to optimize your release builds even further by adding the
 ```toml
 # Enable additional optimizations in release mode at the cost of compile time.
 [profile.release]
-lto = "thin"
+# Enable more optimizations by compiling the entire crate as one unit.
+# Slows compile times, marginal improvements.
 codegen-units = 1
+# Do a second optimization pass over the entire program, including dependencies.
+# Slows compile times, marginal improvements.
+lto = "thin"
 
 # Optimize for size in wasm-release mode.
 [profile.wasm-release]
+# Use release profile as default values.
 inherits = "release"
+# Optimize with size in mind (also try "s", sometimes it is better).
+# This doesn't increase compilation times compared to -O3, great improvements.
 opt-level = "z"
+# Strip all debugging information from the binary to reduce file size.
 strip = "debuginfo"
 ```
 
