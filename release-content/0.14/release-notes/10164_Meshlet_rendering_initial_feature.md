@@ -27,7 +27,7 @@ Next, preprocess your [`Mesh`] into a [`MeshletMesh`]. Currently, this needs to 
 
 Automatic GLTF/scene conversions via Bevy's asset preprocessing system is planned, but unfortunately did not make the cut in time for this release. For now, you'll have to come up with your own asset conversion and management system. If you come up with a good system, let us know!
 
-Now, spawn your entities. In the same vein as `MeshMaterialBundle`, there's a `MeshletMeshMaterialBundle`, which uses a [`MeshletMesh`] instead of the typical [`Mesh`].
+Now, spawn your entities. In the same vein as `MaterialMeshBundle`, there's a `MaterialMeshletMeshBundle`, which uses a [`MeshletMesh`] instead of the typical [`Mesh`].
 
 ```rust
 commands.spawn(MaterialMeshletMeshBundle {
