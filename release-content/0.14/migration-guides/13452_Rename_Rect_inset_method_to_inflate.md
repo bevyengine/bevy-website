@@ -1,1 +1,1 @@
-Replace `Rect::inset()`, `IRect::inset()` and `URect::inset()` calls with `inflate()`.
+`Rect::inset()`, `IRect::inset()`, and `URect::inset()` have been renamed to `inflate()` to fit the actual behavior.

@@ -4,6 +4,7 @@ First, one can sample random points from the boundaries and interiors of a varie
 ![Image of several primitives side-by-side with points randomly sampled from their interiors][sampling-primitives]
 
 In code, this can be performed in a couple different ways, using either the `sample_interior`/`sample_boundary` or `interior_dist`/`boundary_dist` APIs:
+
 ```rust
 use bevy::math::prelude::*;
 use rand::{Rng, SeedableRng};
@@ -25,17 +26,19 @@ let interior_pts: Vec<Vec3> = sphere.interior_dist().sample_iter(rng).take(10000
 // or 100000 random points from the boundary:
 let boundary_pts: Vec<Vec3> = sphere.boundary_dist().sample_iter(rng).take(100000).collect();
 ```
+
 Note that these methods explicitly require an [`Rng`](https://docs.rs/rand/0.8.5/rand/trait.Rng.html) object, giving you control over the randomization strategy and seed.
 
 The currently supported shapes are as follows:
 
 2D: `Circle`, `Rectangle`, `Triangle2d`, `Annulus`, `Capsule2d`.
 
-3D: `Sphere`, `Cuboid`, `Triangle3d`, `Tetrahedron`, `Cylinder`, `Capsule3d`, and extrusions of sampleable 2D shapes (`Extrusion`). 
+3D: `Sphere`, `Cuboid`, `Triangle3d`, `Tetrahedron`, `Cylinder`, `Capsule3d`, and extrusions of sampleable 2D shapes (`Extrusion`).
 
 ---
 
 Similarly, the direction types (`Dir2`, `Dir3`, `Dir3A`) and quaternions (`Quat`) can now be constructed randomly using `from_rng`:
+
 ```rust
 use bevy::math::prelude::*;
 use rand::{random, Rng, SeedableRng};
@@ -54,4 +57,4 @@ let another_direction: Dir3 = rng.gen();
 let yet_another_direction: Dir3 = random();
 ```
 
-[sampling-primitives]: sampling_primitives.png
+[sampling-primitives]: sampling_primitives.jpg

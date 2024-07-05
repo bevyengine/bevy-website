@@ -1,6 +1,6 @@
 Border radius for UI nodes has been a long-requested feature for Bevy. Now it's supported!
 
-To apply border radius to a UI node, there is a new component [`BorderRadius`](https://dev-docs.bevyengine.org/bevy/prelude/struct.BorderRadius.html). The [`NodeBundle`](https://dev-docs.bevyengine.org/bevy/prelude/struct.NodeBundle.html) and [`ButtonBundle`](https://dev-docs.bevyengine.org/bevy/prelude/struct.ButtonBundle.html) bundles have a new field in place for this called `border_radius`. For example:
+To apply border radius to a UI node, there is a new component [`BorderRadius`](https://docs.rs/bevy/0.14/bevy/prelude/struct.BorderRadius.html). [`NodeBundle`](https://docs.rs/bevy/0.14/bevy/prelude/struct.NodeBundle.html) and [`ButtonBundle`](https://docs.rs/bevy/0.14/bevy/prelude/struct.ButtonBundle.html) now have a field for this component called `border_radius`:
 
 ```rs
 commands.spawn(NodeBundle {
@@ -24,6 +24,6 @@ commands.spawn(NodeBundle {
 });
 ```
 
-There's a [new example](https://github.com/bevyengine/bevy/blob/main/examples/ui/rounded_borders.rs) showcasing this new API, a screenshot of which can be seen below:
+There's a [new example](https://github.com/bevyengine/bevy/tree/v0.14.0/examples/ui/rounded_borders.rs) showcasing this new API, a screenshot of which can be seen below:
 
-![`rounded_borders` example](./rounded_borders.png)
+![`rounded_borders` example](./rounded_borders.jpg)

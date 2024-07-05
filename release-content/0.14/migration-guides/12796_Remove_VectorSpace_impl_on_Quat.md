@@ -1,1 +1,0 @@
-`Quat` no longer implements `VectorSpace` as unit quaternions don’t actually form proper vector spaces. If you’re absolutely certain that what you’re doing is correct, convert the `Quat` into a `Vec4` and perform the operations before converting back.

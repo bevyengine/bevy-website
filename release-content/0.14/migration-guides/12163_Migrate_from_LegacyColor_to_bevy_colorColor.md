@@ -137,9 +137,12 @@ Please note that `palettes::css` is not necessarily 1:1 with the constants defin
 
 |0.13|0.14|
 |-|-|
-|`GREEN`|`LIMEGREEN`|
-|`PINK`|`DEEP_PINK`|
+|`CYAN`|`AQUA`|
 |`DARK_GRAY`|`Srgba::gray(0.25)`|
+|`DARK_GREEN`|`Srgba::rgb(0.0, 0.5, 0.0)`|
+|`GREEN`|`LIME`|
+|`LIME_GREEN`|`LIMEGREEN`|
+|`PINK`|`DEEP_PINK`|
 
 #### Switch to `LinearRgba`
 

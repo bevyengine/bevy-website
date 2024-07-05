@@ -1,1 +1,1 @@
-If you were depending on the `PartialOrd` behaviour of `FloatOrd`, it has changed from matching `f32` to matching `FloatOrd`’s `Ord` ordering, never returning `None`.
+`FloatOrd`'s `PartialOrd` implementation used to differ in behavior from its `Ord` implementation, but it has since been fixed so they both now match. The current implementation of `PartialOrd` will never return `None`, as it now falls back to the `Ord` implementation. If you depended on this mismatched behavior, consider using the `PartialOrd` implementation on the inner `f32`.

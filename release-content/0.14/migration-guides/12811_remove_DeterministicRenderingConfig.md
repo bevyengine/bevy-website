@@ -1,1 +1,1 @@
-Removed `DeterministicRenderingConfig`. There shouldn’t be any z fighting anymore in the rendering even without setting `stable_sort_z_fighting`
+`DeterministicRenderingConfig` has been removed because its only property, `stable_sort_z_fighting`, is no longer needed. Z-fighting has been generally removed now that opaque items are binned instead of sorted.

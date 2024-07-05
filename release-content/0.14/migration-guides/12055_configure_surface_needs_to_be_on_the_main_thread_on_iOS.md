@@ -1,1 +1,1 @@
-System `need_new_surfaces` has been renamed `need_surface_configuration` and now also configure the surfaces on window creation or resizing
+The `need_new_surfaces()` system has been renamed `need_surface_configuration()` as part of a bug fix where Bevy apps would crash on iOS when the screen orientation was changed.

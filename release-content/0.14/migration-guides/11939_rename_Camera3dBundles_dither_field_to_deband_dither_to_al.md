@@ -1,1 +1,1 @@
-use the new `deband_dither` field name with `Camera3dBundle`, rather than the old field name, `dither`
+`Camera3dBundle::dither` has been renamed to `deband_dither` to make it consistent with `Camera2dBundle`. If you construct or access this field, you will have to update your usage.
