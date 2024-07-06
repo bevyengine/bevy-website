@@ -178,7 +178,7 @@ wasm-opt -Oz --output output.wasm input.wasm
 Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
 in combination with the optimizations from the previous section.
 
-See the following for more info on optimizing Wasm:
+See the following for more information on optimizing Wasm:
 
 - <https://rustwasm.github.io/book/reference/code-size.html>
 - <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
