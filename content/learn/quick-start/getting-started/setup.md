@@ -166,6 +166,23 @@ strip = "debuginfo"
 
 When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
 
+## Advanced Wasm optimizations
+
+[Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
+that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
+
+```sh
+wasm-opt -Oz --output output.wasm input.wasm
+\```
+
+Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
+in combination with the optimizations from the previous section.
+
+See the following for more info on optimizing Wasm:
+
+- <https://rustwasm.github.io/book/reference/code-size.html>
+- <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
+- <https://rustwasm.github.io/book/game-of-life/code-size.html>
 ### Enable Fast Compiles (Optional)
 
 Bevy can be built just fine using default configuration on stable Rust.
