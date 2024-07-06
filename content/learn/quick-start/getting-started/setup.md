@@ -183,6 +183,7 @@ See the following for more information on optimizing Wasm:
 - <https://rustwasm.github.io/book/reference/code-size.html>
 - <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
 - <https://rustwasm.github.io/book/game-of-life/code-size.html>
+
 ### Enable Fast Compiles (Optional)
 
 Bevy can be built just fine using default configuration on stable Rust.
