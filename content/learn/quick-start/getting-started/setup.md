@@ -147,7 +147,7 @@ In fact, you may want to trade even more compile time for performance in release
 # Enable additional optimizations in release mode at the cost of compile time.
 [profile.release]
 # Enable more optimizations by compiling the entire crate as one unit.
-# Slows compile times, marginal improvements.
+# Significantly slows compile times, marginal improvements.
 codegen-units = 1
 # Do a second optimization pass over the entire program, including dependencies.
 # Slows compile times, marginal improvements.
