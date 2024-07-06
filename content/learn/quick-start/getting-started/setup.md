@@ -150,7 +150,7 @@ In fact, you may want to trade even more compile time for performance in release
 # Significantly slows compile times, marginal improvements.
 codegen-units = 1
 # Do a second optimization pass over the entire program, including dependencies.
-# Slows compile times, marginal improvements.
+# Slightly slows compile times, marginal improvements.
 lto = "thin"
 
 # Optimize for size in wasm-release mode to reduce load times and bandwidth usage on web.
