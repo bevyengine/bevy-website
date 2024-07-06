@@ -173,6 +173,7 @@ that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
 
 ```sh
 wasm-opt -Oz --output output.wasm input.wasm
+```
 
 Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
 in combination with the optimizations from the previous section.
