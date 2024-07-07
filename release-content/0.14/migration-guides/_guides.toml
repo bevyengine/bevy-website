@@ -185,6 +185,12 @@ areas = ["Diagnostics"]
 file_name = "13159_Improve_tracing_layer_customization.md"
 
 [[guides]]
+title = "Generalised ECS reactivity with Observers"
+url = "https://github.com/bevyengine/bevy/pull/10839"
+areas = ["ECS"]
+file_name = "10839_Generalised_ECS_reactivity_with_Observers.md"
+
+[[guides]]
 title = "Immediately apply deferred system params in `System::run`"
 url = "https://github.com/bevyengine/bevy/pull/11823"
 areas = ["ECS"]
