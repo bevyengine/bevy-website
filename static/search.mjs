@@ -1,3 +1,5 @@
+import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs'
+
 document.getElementById("search-dialog").addEventListener('click', function (event) {
     // allow clicking out of the search dialog
     // based on https://stackoverflow.com/a/69421512
