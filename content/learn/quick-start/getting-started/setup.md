@@ -130,16 +130,59 @@ It's not uncommon for debug builds using the default configuration to take multi
 Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add the following to your `Cargo.toml`:
 
 ```toml
-# Enable a small amount of optimization in debug mode
+# Enable a small amount of optimization in debug mode.
 [profile.dev]
 opt-level = 1
 
-# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+# Enable a large amount of optimization in debug mode for dependencies.
 [profile.dev.package."*"]
 opt-level = 3
 ```
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
+
+In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
+
+```toml
+# Enable more optimization in release mode at the cost of compile time.
+[profile.release]
+# Compile the entire crate as one unit.
+# Significantly slows compile times, marginal improvements.
+codegen-units = 1
+# Do a second optimization pass over the entire program, including dependencies.
+# Slightly slows compile times, marginal improvements.
+lto = "thin"
+
+# Optimize for size in wasm-release mode to reduce load times and bandwidth usage on web.
+[profile.wasm-release]
+# Use release profile as default values.
+inherits = "release"
+# Optimize with size in mind (also try "s", sometimes it is better).
+# This doesn't increase compilation times compared to -O3, great improvements.
+opt-level = "z"
+# Strip all debugging information from the binary to reduce file size.
+strip = "debuginfo"
+```
+
+When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+
+#### Advanced Wasm optimizations
+
+[Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
+that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
+
+```sh
+wasm-opt -Oz --output output.wasm input.wasm
+```
+
+Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
+in combination with the optimizations from the previous section.
+
+See the following for more information on optimizing Wasm:
+
+- <https://rustwasm.github.io/book/reference/code-size.html>
+- <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
+- <https://rustwasm.github.io/book/game-of-life/code-size.html>
 
 ### Enable Fast Compiles (Optional)
 
@@ -164,6 +207,8 @@ cargo add bevy -F dynamic_linking
 
 {% callout(type="warning") %}
 On Windows you must also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
+
+In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
 {% end %}
 
 {% callout(type="note") %}

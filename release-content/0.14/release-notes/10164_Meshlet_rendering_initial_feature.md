@@ -2,7 +2,7 @@ After several months of hard work, we're super excited to bring you the experime
 
 This new rendering feature works much like Unreal Engine 5's Nanite renderer. You can take a very high-poly mesh, preprocess it to generate a [`MeshletMesh`] during build time, and then at runtime render huge amounts of geometry - much more than Bevy's standard renderer can support. No explicit LODs are needed - it's all automatic, and near seamless.
 
-This feature is still a WIP, and comes with several constraints compared to Bevy's standard renderer, so be sure to read the docs and report any bugs you encounter. We still a lot left to do, so look forward to more performance improvements (and associated breaking changes) in future releases!
+This feature is still a WIP, and comes with several constraints compared to Bevy's standard renderer, so be sure to read the docs and report any bugs you encounter. We still have a lot left to do, so look forward to more performance improvements (and associated breaking changes) in future releases!
 
 Note that this feature does not use GPU "mesh shaders", so older GPUs are compatible for now. However, they are not recommended, and are likely to become unsupported in the near future.
 
@@ -27,7 +27,7 @@ Next, preprocess your [`Mesh`] into a [`MeshletMesh`]. Currently, this needs to 
 
 Automatic GLTF/scene conversions via Bevy's asset preprocessing system is planned, but unfortunately did not make the cut in time for this release. For now, you'll have to come up with your own asset conversion and management system. If you come up with a good system, let us know!
 
-Now, spawn your entities. In the same vein as `MeshMaterialBundle`, there's a `MeshletMeshMaterialBundle`, which uses a [`MeshletMesh`] instead of the typical [`Mesh`].
+Now, spawn your entities. In the same vein as `MaterialMeshBundle`, there's a `MaterialMeshletMeshBundle`, which uses a [`MeshletMesh`] instead of the typical [`Mesh`].
 
 ```rust
 commands.spawn(MaterialMeshletMeshBundle {
