@@ -26,7 +26,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Auto Exposure**: Configure cameras to dynamically adjust their exposure based on what they are looking at
 - **PCF for Point Lights**: Smooth out point light shadows, improving their quality
 - **Animation blending:** Our new low-level animation graph adds support for animation blending, and sets the stage for first- and third-party graphical, asset-driven animation tools.
-- **ECS Observers and Hooks:** Automatically (and immediately) respond to arbitrary events, such as component addition and removal
+- **ECS Hooks and Observers:** Automatically (and immediately) respond to arbitrary events, such as component addition and removal
 - **Better colors:** type-safe colors make it clear which color space you're operating in, and offer an awesome array of useful methods.
 - **Computed states and substates:** Modeling complex app state is a breeze with these type-safe extensions to our `States` abstraction.
 - **Rounded corners:** Rounding off one of `bevy_ui`'s roughest edges, you can now procedurally set the corner radius on your UI elements.
