@@ -11,7 +11,7 @@ document.getElementById("search-dialog").addEventListener('click', function (eve
 });
 
 document.addEventListener("keydown", event => {
-    if(event.ctrlKey && event.key == "k") {
+    if (event.ctrlKey && event.key == "k") {
         event.preventDefault();
         SEARCH.open();
     }
@@ -23,9 +23,6 @@ class Search {
     $input = document.getElementById("search-dialog__input")
     $results = document.getElementById("search-dialog__results")
     $search_tip_list = document.querySelector("#search-dialog aside ul");
-    // <script> tags are contrived such that elasticlunr and searchIndex will be ready
-    // someday, hopefully: switch to .mjs for searchIndex and elasticlunr
-    index = elasticlunr.Index.load(window.searchIndex);
 
     open() {
         this.$dialog.showModal();
@@ -77,5 +74,4 @@ class Search {
     }
 }
 
-let SEARCH = new Search()
-export default SEARCH;
+window.SEARCH = new Search()
