@@ -144,9 +144,9 @@ You might think to simply develop in release mode instead, but we recommend agai
 In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
 
 ```toml
-# Enable additional optimizations in release mode at the cost of compile time.
+# Enable more optimization in release mode at the cost of compile time.
 [profile.release]
-# Enable more optimizations by compiling the entire crate as one unit.
+# Compile the entire crate as one unit.
 # Significantly slows compile times, marginal improvements.
 codegen-units = 1
 # Do a second optimization pass over the entire program, including dependencies.
@@ -166,7 +166,7 @@ strip = "debuginfo"
 
 When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
 
-## Advanced Wasm optimizations
+#### Advanced Wasm optimizations
 
 [Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
 that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
