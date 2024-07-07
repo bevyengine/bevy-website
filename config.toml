@@ -11,9 +11,8 @@ compile_sass = true
 default_language = "en"
 build_search_index = true
 
-generate_feed = true
-rss_limit = 1000
-highlight_theme = "charcoal"
+generate_feeds = true
+feed_limit = 1000
 
 taxonomies = [
     {name = "news", feed = true},
@@ -29,4 +28,4 @@ highlight_theme = "css"
 # Put all your custom variables here
 
 [search]
-index_format="elasticlunr_javascript"
+index_format="fuse_json"
