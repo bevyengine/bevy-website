@@ -24,7 +24,7 @@
   &::backdrop {
     background-color: rgba($color-grey-800, 0.7);
   }
-  
+
   .search-dialog__close {
     position: absolute;
     right: -24px;
@@ -41,7 +41,7 @@
     aspect-ratio: 3/2;
   }
 
-  form {
+  [role=form] {
     $input-height: 2em;
     display: flex;
     gap: 1em;
@@ -69,6 +69,7 @@
     margin: 0;
     padding: 1em;
     gap: 1em;
+
     a {
       &::before {
         color: $subtitle-color;
@@ -117,9 +118,11 @@
     display: inline;
     margin: 0;
     padding: 0;
+
     li {
       display: none;
     }
+
     li[data-chosen=true] {
       display: inline;
     }

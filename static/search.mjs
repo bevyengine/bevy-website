@@ -4,7 +4,7 @@ document.getElementById("search-dialog").addEventListener('click', function (eve
     // allow clicking out of the search dialog
     // based on https://stackoverflow.com/a/69421512
     var rect = this.getBoundingClientRect();
-    if (!(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+    if (event.target == this && !(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
         && rect.left <= event.clientX && event.clientX <= rect.left + rect.width)) {
         this.close();
     }
@@ -19,15 +19,29 @@ document.addEventListener("keydown", event => {
 
 class Search {
     RESULTS_LIMIT = 10;
+    FUSE_OPTIONS = {
+        keys: ["title", "body"],
+        includeMatches: true,
+        minMatchCharLength: 3,
+    };
+    index = null;
+    previous_search = null;
     $dialog = document.getElementById("search-dialog")
     $input = document.getElementById("search-dialog__input")
     $results = document.getElementById("search-dialog__results")
     $search_tip_list = document.querySelector("#search-dialog aside ul");
 
-    open() {
+    async setup() {
+        this.index ??= await (await fetch("/search_index.en.json")).json();
+        this.fuse ??= new Fuse(this.index, this.FUSE_OPTIONS);
+        console.debug("fetched search index", this.index);
+    }
+
+    async open() {
         this.$dialog.showModal();
         this.change_tip();
-        this.search();
+        await this.setup();
+        await this.search();
     }
 
     close() {
@@ -48,29 +62,25 @@ class Search {
         /** @type {string} */
         const query = this.$input.value;
         console.debug(`search: "${query}"`);
+        if (query == this.previous_search) {
+            // cursor movements trigger this function
+            return;
+        }
+        this.previous_search = query;
         if (query.length == 0) {
             return;
         }
-        /** @type any[] */
-        let results = this.index.search(query, {});
-        results.forEach(result => {
-            result.ref = new URL(result.ref).pathname;
-            let similarity = result.ref
-                .split("/")
-                .map((part, i) => part == current_path[i])
-                .filter(v => v).length - 1;
-            result.score += 0.1 * similarity;
-        });
-        results.sort((a, b) => b.score - a.score);
+        /** @type {{item: any}[]} */
+        let results = this.fuse.search(query);
+        console.debug(results);
+        let results_limit = results.slice(0, this.RESULTS_LIMIT);
         this.$results.innerHTML = "";
-        results.slice(0, this.RESULTS_LIMIT).forEach(result => {
-            const a = document.createElement("a");
-            a.innerText = `${result.doc.title}`;
-            a.role = "listitem";
-            a.href = result.ref;
-            a.setAttribute("data-score", result.score)
-            this.$results.appendChild(a)
-        })
+        results_limit.forEach((result) => {
+            let a = document.createElement("a");
+            a.innerText = result.item.title;
+            a.href = result.item.path;
+            this.$results.appendChild(a);
+        });
     }
 }
 

@@ -29,3 +29,4 @@ highlight_theme = "css"
 
 [search]
 index_format="fuse_json"
+include_path = true
