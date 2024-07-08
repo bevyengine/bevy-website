@@ -293,7 +293,7 @@ For more information, see [The rustup book: Overrides](https://rust-lang.github.
 
 #### Cranelift
 
-This uses a new nightly-only codegen that is about 30% faster at compiling than LLM. 
+This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM. 
 It currently works best on Linux.
 
 To install cranelift, run the following.
