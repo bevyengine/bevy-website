@@ -216,9 +216,9 @@ jobs:
           ref: 'latest'
           path: 'bevy'
 
-      - name: Move Bevy assets to current workspace
-        run: mv bevy/assets ./
-
+      - name: Move Bevy assets to static files
+        # during the real build, this is handled by the generate_wasm_examples.sh script.
+        run: mv bevy/assets static/assets/examples/
       - uses: actions/download-artifact@v4
         with:
           name: generated-assets
