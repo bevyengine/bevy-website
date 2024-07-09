@@ -66,7 +66,7 @@ jobs:
 
       - name: Optimize PNGs
         run: |
-          oxipng -o 4 -s screenshots/*
+          oxipng -o 4 -s -r screenshots
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
