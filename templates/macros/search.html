@@ -27,9 +27,9 @@
           {{ search::search_icon() }}
         </label>
         <input id="search-dialog__input" autofocus onkeyup="SEARCH.search()">
-        <select id="search-dialog__select" onchange="SEARCH.update_placeholder()">
+        <select id="search-dialog__select" onchange="SEARCH.change_placeholder()">
           <option value="everything">Everything</option>
-          <option value="docs">Docs</option>
+          <option value="docs">Documentation</option>
           <option value="assets">Assets</option>
           <option value="examples">Examples</option>
         </select>

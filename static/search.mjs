@@ -41,7 +41,7 @@ class Search {
     async open() {
         this.$dialog.showModal();
         this.change_tip();
-        this.update_placeholder();
+        this.change_placeholder();
         await this.setup();
         await this.search();
     }
@@ -57,6 +57,22 @@ class Search {
         Array.from(this.$search_tip_list.children).forEach(
             (tip, i) => tip.setAttribute("data-chosen", i == choice
             ));
+    }
+
+    change_placeholder() {
+        let second_part = "";
+        switch (this.$select.value) {
+            case "docs":
+                second_part = "'s Documentation";
+                break;
+            case "assets":
+                second_part = "'s Assets";
+                break;
+            case "examples":
+                second_part = "'s Examples";
+                break;
+        }
+        this.$input.setAttribute("placeholder", `Search Bevy${second_part}...`);
     }
 
     async search() {
@@ -85,21 +101,6 @@ class Search {
         });
     }
 
-    update_placeholder() {
-        let second_part = "";
-        switch (this.$select.value) {
-            case "docs":
-                second_part = "'s Documentation";
-                break;
-            case "assets":
-                second_part = "'s Assets";
-                break;
-            case "examples":
-                second_part = "'s Examples";
-                break;
-        }
-        this.$input.setAttribute("placeholder", `Search Bevy${second_part}...`);
-    }
 }
 
 window.SEARCH = new Search()

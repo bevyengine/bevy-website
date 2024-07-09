@@ -101,7 +101,7 @@
       }
 
       &[href^="/examples/"]::before {
-        content: "examples:";
+        content: "examples (webgl):";
       }
 
       &[href^="/examples-webgpu/"]::before {
