@@ -39,11 +39,16 @@ class Search {
     }
 
     async open() {
-        this.$dialog.showModal();
-        this.change_tip();
-        this.change_placeholder();
-        await this.setup();
-        await this.search();
+        if(this.$dialog.getAttribute("open") !== null) {
+            // already open
+            this.$input.focus();
+        } else {
+            this.$dialog.showModal();
+            this.change_tip();
+            this.change_placeholder();
+            await this.setup();
+            await this.search();
+        }
     }
 
     close() {
