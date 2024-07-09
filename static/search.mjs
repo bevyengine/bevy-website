@@ -98,7 +98,7 @@ class Search {
                 second_part = "'s Examples";
                 break;
         }
-        this.$input.setAttribute("placeholder", `Search Bevy${second_part}...`)
+        this.$input.setAttribute("placeholder", `Search Bevy${second_part}...`);
     }
 }
 
