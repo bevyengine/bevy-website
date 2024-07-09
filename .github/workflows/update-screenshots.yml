@@ -56,12 +56,6 @@ jobs:
           sudo apt-get update
           sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
-      - name: Cache oxipng
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/
-          key: ${{ runner.os }}-cargo
-
       - name: Install oxipng
         run: |
           which oxipng || cargo install oxipng
@@ -72,7 +66,7 @@ jobs:
 
       - name: Optimize PNGs
         run: |
-          oxipng -o 4 -s *.png
+          oxipng -o 4 -s screenshots
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
