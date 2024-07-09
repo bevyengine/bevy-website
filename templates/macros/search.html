@@ -26,8 +26,8 @@
         <label aria-label="Search all of Bevy..." for="search-dialog__input">
           {{ search::search_icon() }}
         </label>
-        <input id="search-dialog__input" placeholder="Search all of Bevy..." autofocus onkeyup="SEARCH.search()">
-        <select>
+        <input id="search-dialog__input" autofocus onkeyup="SEARCH.search()">
+        <select id="search-dialog__select" onchange="SEARCH.update_placeholder()">
           <option value="everything">Everything</option>
           <option value="docs">Docs</option>
           <option value="assets">Assets</option>

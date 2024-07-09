@@ -29,6 +29,7 @@ class Search {
     $dialog = document.getElementById("search-dialog")
     $input = document.getElementById("search-dialog__input")
     $results = document.getElementById("search-dialog__results")
+    $select = document.getElementById("search-dialog__select")
     $search_tip_list = document.querySelector("#search-dialog aside ul");
 
     async setup() {
@@ -40,6 +41,7 @@ class Search {
     async open() {
         this.$dialog.showModal();
         this.change_tip();
+        this.update_placeholder();
         await this.setup();
         await this.search();
     }
@@ -81,6 +83,22 @@ class Search {
             a.href = result.item.path;
             this.$results.appendChild(a);
         });
+    }
+
+    update_placeholder() {
+        let second_part = "";
+        switch (this.$select.value) {
+            case "docs":
+                second_part = "'s Documentation";
+                break;
+            case "assets":
+                second_part = "'s Assets";
+                break;
+            case "examples":
+                second_part = "'s Examples";
+                break;
+        }
+        this.$input.setAttribute("placeholder", `Search Bevy${second_part}...`)
     }
 }
 
