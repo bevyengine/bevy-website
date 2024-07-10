@@ -56,12 +56,9 @@ jobs:
           sudo apt-get update
           sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
-      - name: Install cargo-binstall
-        uses: cargo-bins/cargo-binstall@v1.7.4
-
       - name: Install oxipng
         run: |
-          cargo binstall oxipng@9.1.1 --no-confirm
+          cargo install oxipng
 
       - name: Take Screenshots
         run: |
