@@ -61,7 +61,7 @@ jobs:
 
       - name: Install oxipng
         run: |
-          cargo binstall oxipng
+          cargo binstall oxipng --no-confirm
 
       - name: Take Screenshots
         run: |
