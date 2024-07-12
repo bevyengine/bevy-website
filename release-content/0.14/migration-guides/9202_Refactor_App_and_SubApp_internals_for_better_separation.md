@@ -75,7 +75,7 @@ app.insert_sub_app(MySubApp, SubApp::new());
 assert_eq!(app.sub_app(MySubApp).type_id(), TypeId::of::<SubApp>());
 ```
 
-Finally, `App::runner` and `App::main_schedule_label` are now private. It is no longer possible to access the runner function, but you can access the main schedule label using `SubApp::update_schedule`.
+Finally, `App::runner` and `App::main_schedule_label` are now private. It is no longer possible to get the runner closure, but you can get the main schedule label using `SubApp::update_schedule`.
 
 ```rust
 let app = App::new();
