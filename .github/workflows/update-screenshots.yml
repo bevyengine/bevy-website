@@ -58,7 +58,7 @@ jobs:
 
       - name: Install oxipng
         run: |
-          cargo install oxipng
+          cargo install oxipng --version ^9.1.1
 
       - name: Take Screenshots
         run: |
@@ -66,7 +66,7 @@ jobs:
 
       - name: Optimize PNGs
         run: |
-          oxipng -o 6 -s -r screenshots
+          oxipng --opt max --strip safe --recursive screenshots
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
