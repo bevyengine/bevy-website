@@ -37,7 +37,7 @@ fn handle_exit(mut reader: EventReader<AppExit>) {
 }
 ```
 
-Furthermore, `App::run` now returns `AppExit` instead of the unit type `()`. Since `AppExit` implements [`Termination`](https://doc.rust-lang.org/stable/std/process/trait.Termination.html), you can now return it from the main function.
+Furthermore, `App::run()` and `App::runner` now return `AppExit` instead of the unit type `()`. Since `AppExit` implements [`Termination`](https://doc.rust-lang.org/stable/std/process/trait.Termination.html), you can now return it from the main function.
 
 ```rust
 // 0.13
