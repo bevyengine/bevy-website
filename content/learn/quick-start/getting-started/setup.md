@@ -158,7 +158,7 @@ lto = "thin"
 # Default to release profile values.
 inherits = "release"
 # Optimize with size in mind (also try "z", sometimes it is better).
-# Slightly slows compile time, great improvements to file size and runtime performance.
+# Slightly slows compile times, great improvements to file size and runtime performance.
 opt-level = "s"
 # Strip all debugging information from the binary to slightly reduce file size.
 strip = "debuginfo"
