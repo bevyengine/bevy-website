@@ -130,11 +130,11 @@ It's not uncommon for debug builds using the default configuration to take multi
 Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add the following to your `Cargo.toml`:
 
 ```toml
-# Enable a small amount of optimization in debug mode.
+# Enable a small amount of optimization in the dev profile.
 [profile.dev]
 opt-level = 1
 
-# Enable a large amount of optimization in debug mode for dependencies.
+# Enable a large amount of optimization in the dev profile for dependencies.
 [profile.dev.package."*"]
 opt-level = 3
 ```
@@ -144,23 +144,23 @@ You might think to simply develop in release mode instead, but we recommend agai
 In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
 
 ```toml
-# Enable more optimization in release mode at the cost of compile time.
+# Enable more optimization in the release profile at the cost of compile time.
 [profile.release]
 # Compile the entire crate as one unit.
-# Significantly slows compile times, marginal improvements.
+# Slows compile times, marginal improvements.
 codegen-units = 1
 # Do a second optimization pass over the entire program, including dependencies.
-# Slightly slows compile times, marginal improvements.
+# Slows compile times, marginal improvements.
 lto = "thin"
 
-# Optimize for size in wasm-release mode to reduce load times and bandwidth usage on web.
+# Optimize for size in the wasm-release profile to reduce load times and bandwidth usage on web.
 [profile.wasm-release]
-# Use release profile as default values.
+# Default to release profile values.
 inherits = "release"
-# Optimize with size in mind (also try "s", sometimes it is better).
-# This doesn't increase compilation times compared to -O3, great improvements.
-opt-level = "z"
-# Strip all debugging information from the binary to reduce file size.
+# Optimize with size in mind (also try "z", sometimes it is better).
+# Slightly slows compile time, great improvements to file size and runtime performance.
+opt-level = "s"
+# Strip all debugging information from the binary to slightly reduce file size.
 strip = "debuginfo"
 ```
 
