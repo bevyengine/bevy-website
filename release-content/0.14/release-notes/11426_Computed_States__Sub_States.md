@@ -78,7 +78,7 @@ and all of the required machinery will be set up for you.
 App::new()
    .init_state::<GameState>()
    .add_computed_state::<InGame>()
-   .add_substate::<GamePhase>()
+   .add_sub_state::<GamePhase>()
 ```
 
 Just like any other state, computed states and substates work with all of the tools you're used to:
