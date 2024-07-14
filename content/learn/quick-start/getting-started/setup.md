@@ -172,7 +172,7 @@ When releasing for web, you can pass `--profile wasm-release` to `cargo` instead
 that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
 
 ```sh
-wasm-opt -Oz --output output.wasm input.wasm
+wasm-opt -Os --output output.wasm input.wasm
 ```
 
 Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
