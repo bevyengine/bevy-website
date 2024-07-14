@@ -301,7 +301,7 @@ To install cranelift, run the following.
 rustup component add rustc-codegen-cranelift-preview --toolchain nightly
 ```
 
-To activate it for your project, add the following to your `.config/cargo.toml`.
+To activate it for your project, add the following to your `.cargo/config.toml`.
 ```toml
 [unstable]
 codegen-backend = true
