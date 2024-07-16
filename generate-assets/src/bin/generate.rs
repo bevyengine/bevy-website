@@ -74,21 +74,22 @@ fn sort_section(nodes: &mut [AssetNode], latest_bevy_version: &semver::Version) 
         let is_semver_compat = node_semver_compat_with(node, latest_bevy_version);
         let random: u32 = rand::random();
 
-        to_sort.push((node, is_semver_compat, random));
+        let existing_order = match node {
+            AssetNode::Asset(asset) => asset.order.unwrap_or(usize::MAX),
+            _ => continue,
+        };
+
+        to_sort.push((node, existing_order, !is_semver_compat, random));
     }
 
-    to_sort.sort_by_key(|sorts| (!sorts.1, sorts.2));
+    to_sort.sort_by_key(|sorts| (sorts.1, sorts.2, sorts.3));
 
-    for (i, (node, _, _)) in to_sort.into_iter().enumerate() {
+    for (i, (node, _, _, _)) in to_sort.into_iter().enumerate() {
         let AssetNode::Asset(asset) = node else {
             continue;
         };
 
-        if asset.order.is_none() {
-            // Reserve some space in the front for official assets that have been
-            // manually ordered.
-            asset.order = Some(100 + i);
-        }
+        asset.order = Some(i);
     }
 }
 
