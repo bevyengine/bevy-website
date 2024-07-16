@@ -21,4 +21,4 @@ fn main() -> AppExit {
 }
 ```
 
-![App returning a 42 exit code](exit_with_a_42.png)
+![App returning a 42 exit code](exit_with_a_42.jpg)

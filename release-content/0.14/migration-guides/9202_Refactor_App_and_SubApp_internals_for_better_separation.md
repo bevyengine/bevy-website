@@ -75,6 +75,13 @@ app.insert_sub_app(MySubApp, SubApp::new());
 assert_eq!(app.sub_app(MySubApp).type_id(), TypeId::of::<SubApp>());
 ```
 
+Finally, `App::runner` and `App::main_schedule_label` are now private. It is no longer possible to get the runner closure, but you can get the main schedule label using `SubApp::update_schedule`.
+
+```rust
+let app = App::new();
+let label = app.main().update_schedule;
+```
+
 #### 3rd-party traits on `App`
 
 If you implemented an extension trait on `App`, consider also implementing it on `SubApp`:

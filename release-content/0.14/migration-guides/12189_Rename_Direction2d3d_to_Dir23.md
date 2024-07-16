@@ -1,1 +1,1 @@
-The `Direction2d` and `Direction3d` types have been renamed to `Dir2` and `Dir3`.
+The `Direction2d` and `Direction3d` types have been renamed to `Dir2` and `Dir3`. They have been shortened to make them easier to type, and to make them consistent with `glam`'s shorter naming scheme (e.g. `Vec2`, `Mat4`).

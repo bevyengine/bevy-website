@@ -1,1 +1,1 @@
-If you were using `Node2d::MainPass` to order your own custom render node. You now need to order it relative to `Node2d::StartMainPass` or `Node2d::EndMainPass`.
+`Node2d::MainPass` has been split into 3 separate phases: `StartMainPass`, `MainTransparentPass`, and `EndMainPass`. If you previously used `MainPass` to order your own custom nodes, you now need to order them relative to `StartMainPass` and `EndMainPass`.

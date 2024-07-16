@@ -1,1 +1,1 @@
-Windowing backends now need to store their window in the new `WindowWrapper`.
+Windowing backends now need to store their window in the new `WindowWrapper`, so that Bevy can control when it is dropped. This fixes a number of bugs and crashes related to the window being dropped before the pipelined renderer is finished drawing to it.

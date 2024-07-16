@@ -2,20 +2,29 @@ Gizmos in Bevy allow developers to easily draw arbitrary shapes to help debuggin
 
 In 0.14, several new gizmos have been added to [`bevy::gizmos`]:
 
+#### Rounded box gizmos
+
+Rounded boxes and cubes are great for visualizing regions and colliders.
+
+If you set the `corner_radius` or `edge_radius` to a positive value, the corners will be rounded outwards. However, if you provide a negative value, the corners will flip and curve inwards.
+
+![rounded gizmos cuboids](gizmos_rounded_cuboid.jpg)
+![rounded gizmos rectangles](gizmos_rounded_rect.jpg)
+
 #### Grid Gizmos
 
 New grid gizmo types were added with [`Gizmos::grid_2d`] and [`Gizmos::grid`] to draw a plane grid in either 2D or 3D, alongside [`Gizmos::grid_3d`] to draw a 3D grid.
 
 Each grid type can be skewed, scaled and subdivided along its axis, and you can separately control which outer edges to draw.
 
-![Grid gizmos screenshot](grid_gizmos.png)
+![Grid gizmos screenshot](grid_gizmos.jpg)
 
 #### Coordinate Axes Gizmo
 
 The new [`Gizmos::axes`] add a simple way to show the position, orientation and scale of any object from its [`Transform`] plus a base size.
 The size of each axis arrow is proportional to the corresponding axis scale in the provided [`Transform`].
 
-![Axes gizmo screenshot](axes_gizmo.png)
+![Axes gizmo screenshot](axes_gizmo.jpg)
 
 #### Light Gizmos
 
@@ -24,7 +33,7 @@ Most light properties are visually represented by the gizmos, and the gizmo colo
 
 Similar to other retained gizmos, [`ShowLightGizmo`] can be configured per-instance or globally with [`LightGizmoConfigGroup`].
 
-![Light gizmos screenshot](light_gizmos.png)
+![Light gizmos screenshot](light_gizmos.jpg)
 
 [`bevy::gizmos`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/index.html
 [`Gizmos::grid_2d`]: https://docs.rs/bevy/0.14.0/bevy/gizmos/prelude/struct.Gizmos.html#method.grid_2d

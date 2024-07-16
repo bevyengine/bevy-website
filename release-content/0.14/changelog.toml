@@ -1,4 +1,10 @@
 [[areas]]
+name = ["Accessibility", "Rendering"]
+[[areas.prs]]
+title = "Add first person view model example"
+number = 13828
+
+[[areas]]
 name = ["Accessibility", "Windowing"]
 [[areas.prs]]
 title = "Move accessibility setup to accessibility module"
@@ -13,6 +19,9 @@ number = 11707
 title = "Fix docs for quaternion interpolation"
 number = 12014
 [[areas.prs]]
+title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
+number = 11989
+[[areas.prs]]
 title = "fix find_current_keyframe panic"
 number = 12931
 [[areas.prs]]
@@ -21,6 +30,12 @@ number = 13067
 [[areas.prs]]
 title = "new example: sprite animation in response to an event"
 number = 12996
+[[areas.prs]]
+title = "Make the component types of the new animation players clonable."
+number = 13736
+[[areas.prs]]
+title = "Added `get_main_animation` for `AnimationTransitions`"
+number = 14104
 
 [[areas]]
 name = ["Animation", "Assets"]
@@ -41,16 +56,22 @@ title = "`Animatable` for colors"
 number = 12614
 
 [[areas]]
+name = ["Animation", "Rendering"]
+[[areas.prs]]
+title = "don't put previous skin/morph in the morphed_skinned_mesh_layout"
+number = 14065
+
+[[areas]]
 name = ["App"]
 [[areas.prs]]
-title = "Added `add_group` to `PluginGroupBuilder`"
+title = "Refactor App and SubApp internals for better separation"
+number = 9202
+[[areas.prs]]
+title = "Added add_group to PluginGroupBuilder"
 number = 9530
 [[areas.prs]]
 title = "Move PanicHandlerPlugin into bevy_app"
 number = 12640
-[[areas.prs]]
-title = "Refactor `App` and `SubApp` internals for better separation"
-number = 9202
 [[areas.prs]]
 title = "Make `AppExit` more specific about exit reason."
 number = 13022
@@ -66,6 +87,33 @@ number = 13215
 [[areas.prs]]
 title = "Deprecate dynamic plugins"
 number = 13080
+[[areas.prs]]
+title = "Fix bevy_app not compiling without default features"
+number = 13532
+[[areas.prs]]
+title = "Forward exit codes in default app runner"
+number = 13674
+[[areas.prs]]
+title = "Let init_non_send_resource require FromWorld instead of Default"
+number = 13779
+[[areas.prs]]
+title = "Add missing plugins to doc of DefaultPlugins"
+number = 13833
+[[areas.prs]]
+title = "Fix is_plugin_added::<Self>() being true during build"
+number = 13817
+
+[[areas]]
+name = ["App", "ECS"]
+[[areas.prs]]
+title = "Move state installation methods from `bevy_app` to `bevy_state`"
+number = 13637
+[[areas.prs]]
+title = "Ensure that events are updated even when using a bare-bones Bevy App (#13808)"
+number = 13842
+[[areas.prs]]
+title = "Move `StateTransitionSteps` registration to states plugin"
+number = 13939
 
 [[areas]]
 name = ["Assets"]
@@ -180,6 +228,30 @@ number = 13465
 [[areas.prs]]
 title = "Allow `AssetServer::load` to acquire a guard item."
 number = 13051
+[[areas.prs]]
+title = "Add docs to bevy_gltf about loading parts of a Gltf asset"
+number = 13548
+[[areas.prs]]
+title = "glTF labels: add enum to avoid misspelling and keep up-to-date list documented"
+number = 13586
+[[areas.prs]]
+title = "Improvement of AssetServer::load documentation to help find a way to load from file with hash in filename"
+number = 13272
+[[areas.prs]]
+title = "Avoid a panic when loading labelled assets"
+number = 13506
+[[areas.prs]]
+title = "Add labels to Gltf Node and Mesh assets"
+number = 13558
+[[areas.prs]]
+title = "Allow loading assets with custom async behavior"
+number = 13700
+[[areas.prs]]
+title = "Provide more information when a filewatcher failure is hit."
+number = 13715
+[[areas.prs]]
+title = "Improve error handling for `AssetServer::add_async`"
+number = 13745
 
 [[areas]]
 name = ["Assets", "Diagnostics"]
@@ -228,6 +300,21 @@ number = 13002
 [[areas.prs]]
 title = "fix normals computation for gltf"
 number = 13396
+[[areas.prs]]
+title = "Add ImageFormatSetting::Guess to image loader"
+number = 13575
+[[areas.prs]]
+title = "unload unused images that are RenderAssetUsages::RENDER_WORLD"
+number = 13609
+[[areas.prs]]
+title = "add handling of all missing gltf extras: scene, mesh & materials"
+number = 13453
+[[areas.prs]]
+title = "Improve MeshletMesh::from_mesh performance"
+number = 14038
+[[areas.prs]]
+title = "Improve MeshletMesh::from_mesh performance further"
+number = 14038
 
 [[areas]]
 name = ["Audio"]
@@ -249,6 +336,9 @@ number = 12774
 [[areas.prs]]
 title = "Adding explanation for loading additonal audio formats to example"
 number = 12998
+[[areas.prs]]
+title = "Update to `rodio` 0.18"
+number = 13612
 
 [[areas]]
 name = ["Build-System"]
@@ -387,6 +477,18 @@ number = 13274
 [[areas.prs]]
 title = "Add `cargo ci` alias for `ci` tool"
 number = 13280
+[[areas.prs]]
+title = "Refactor `ci_testing` and separate it from `DevToolsPlugin`"
+number = 13513
+[[areas.prs]]
+title = "Regenerate light cluster patch file"
+number = 13655
+[[areas.prs]]
+title = "Shader code paths"
+number = 13908
+[[areas.prs]]
+title = "example showcase: keep the order of the shaders imported"
+number = 14035
 
 [[areas]]
 name = ["Build-System", "Cross-Cutting"]
@@ -427,6 +529,12 @@ name = ["Color"]
 title = "minor oklab/oklch doc nitpicks"
 number = 12196
 [[areas.prs]]
+title = "Solve some oklaba inconsistencies"
+number = 12526
+[[areas.prs]]
+title = "Implement maths and `Animatable` for `Srgba`"
+number = 12649
+[[areas.prs]]
 title = "move wgsl color operations from bevy_pbr to bevy_render"
 number = 13209
 [[areas.prs]]
@@ -441,6 +549,9 @@ number = 13285
 [[areas.prs]]
 title = "Added a Grey trait, and implementations on baked-in colors. Fixes #13206"
 number = 13237
+[[areas.prs]]
+title = "Adds back in way to convert color to u8 array, implemented for the two RGB color types, also renames Color::linear to Color::to_linear."
+number = 13759
 
 [[areas]]
 name = ["Color", "Gizmos"]
@@ -586,9 +697,6 @@ number = 13184
 title = "Determine msrv for every standalone bevy_* crate."
 number = 13211
 [[areas.prs]]
-title = "Add `on_unimplemented` Diagnostics to Most Public Traits"
-number = 13413
-[[areas.prs]]
 title = "Revert \"Add `on_unimplemented` Diagnostics to Most Public Traits\""
 number = 13413
 
@@ -603,6 +711,9 @@ name = ["Cross-Cutting", "ECS"]
 [[areas.prs]]
 title = "Implement clone for most bundles."
 number = 12993
+[[areas.prs]]
+title = "Unrevert (vert?) \"Add `on_unimplemented` Diagnostics to Most Public Traits\""
+number = 13414
 
 [[areas]]
 name = ["Dev-Tools"]
@@ -627,6 +738,9 @@ name = ["Dev-Tools", "Diagnostics"]
 [[areas.prs]]
 title = "Make SystemInfo a Resource"
 number = 12584
+[[areas.prs]]
+title = "Poll system information in separate tasks"
+number = 13693
 
 [[areas]]
 name = ["Dev-Tools", "Diagnostics", "Rendering"]
@@ -706,11 +820,11 @@ number = 12950
 [[areas]]
 name = ["Diagnostics", "Rendering"]
 [[areas.prs]]
-title = "fix shadow pass trace"
-number = 12977
-[[areas.prs]]
 title = "Add error when extract resource build fails"
 number = 4964
+[[areas.prs]]
+title = "fix shadow pass trace"
+number = 12977
 
 [[areas]]
 name = ["ECS"]
@@ -942,6 +1056,138 @@ number = 13475
 [[areas.prs]]
 title = "simple Debug impls for query iterators"
 number = 13476
+[[areas.prs]]
+title = "Refactor command application for more consistency"
+number = 13249
+[[areas.prs]]
+title = "Fix unsoundness in `FilteredEntity{Ref,Mut}` various `get` methods"
+number = 13554
+[[areas.prs]]
+title = "constrain WorldQuery::init_state argument to ComponentInitializer"
+number = 13442
+[[areas.prs]]
+title = "Update docs for NextState"
+number = 13578
+[[areas.prs]]
+title = "Unify transition names to `exited` and `entered`"
+number = 13594
+[[areas.prs]]
+title = "Add ability to clear all components on an entity via EntityWorldMut"
+number = 13588
+[[areas.prs]]
+title = "Simplify state transitions"
+number = 13616
+[[areas.prs]]
+title = "Combine transition systems of `Substates`"
+number = 13626
+[[areas.prs]]
+title = "Clean up substate code a bit"
+number = 13638
+[[areas.prs]]
+title = "Add `on_unimplemented` Diagnostics to Most Public Traits"
+number = 13662
+[[areas.prs]]
+title = "Add `on_unimplemented` Diagnostics to Most Public Traits (#13347)"
+number = 13662
+[[areas.prs]]
+title = "Move utilities from examples to `bevy_state` and add concept of state-scoped entities"
+number = 13649
+[[areas.prs]]
+title = "Generalize `StateTransitionEvent<S>` to allow identity transitions"
+number = 13579
+[[areas.prs]]
+title = "Add dynamic slice based variants of get_many_entities methods"
+number = 13584
+[[areas.prs]]
+title = "Update crate metadata for bevy state"
+number = 13722
+[[areas.prs]]
+title = "Clear messed up feature flag on AppExitStates impl"
+number = 13737
+[[areas.prs]]
+title = "Fix EntityCommands::despawn docs"
+number = 13774
+[[areas.prs]]
+title = "Add more granular system sets for state transition schedule ordering"
+number = 13763
+[[areas.prs]]
+title = "fix docs around `StateTransition` and remove references to `apply_sta…"
+number = 13772
+[[areas.prs]]
+title = "Update serialize flag for bevy_ecs"
+number = 13740
+[[areas.prs]]
+title = "Remove extra call to clear_trackers"
+number = 13762
+[[areas.prs]]
+title = "Revert \"constrain WorldQuery::init_state argument to ComponentInitial…"
+number = 13804
+[[areas.prs]]
+title = "Fix minor typos in query join docs"
+number = 13812
+[[areas.prs]]
+title = "Restore overwrite capabilities of `insert_state`"
+number = 13848
+[[areas.prs]]
+title = "Generalised ECS reactivity with Observers (#10839)"
+number = 13873
+[[areas.prs]]
+title = "remove inaccurate warning from `in_state`"
+number = 13862
+[[areas.prs]]
+title = "Warn about missing `StatesPlugin` when installing states"
+number = 13877
+[[areas.prs]]
+title = "observers example doesn't follow standards"
+number = 13884
+[[areas.prs]]
+title = "Update observer archetype flags for sparse components"
+number = 13886
+[[areas.prs]]
+title = "feat(bevy_app): expose an API to perform updates for a specific sub-app."
+number = 14009
+[[areas.prs]]
+title = "Don't show `.to_bits` in `Display` impl for `Entity`"
+number = 14011
+[[areas.prs]]
+title = "Fixing par_read targetting 0.14 branch"
+number = 14014
+[[areas.prs]]
+title = "AnyOf soundness fix"
+number = 14013
+[[areas.prs]]
+title = "Emit a warning if the result of `EntityCommand::with_entity` is not used"
+number = 14028
+[[areas.prs]]
+title = "add missing sort_unstable_by_key to QueryIter"
+number = 14040
+[[areas.prs]]
+title = "Add missing StaticSystemParam::queue implementation."
+number = 14051
+[[areas.prs]]
+title = "Fix  error in AnyOf"
+number = 14027
+[[areas.prs]]
+title = "Fix `push_children` inserting a `Children` component even when no children are supplied"
+number = 14109
+[[areas.prs]]
+title = "add missing mention of sort_unstable_by_key in QuerySortedIter docs"
+number = 14108
+[[areas.prs]]
+title = "Backport #14083 (deregister events) to 0.14 branch"
+number = 14114
+
+[[areas]]
+name = ["ECS", "Networking"]
+[[areas.prs]]
+title = "Add Hash for Tick"
+number = 13525
+
+[[areas]]
+name = ["ECS", "Networking", "Scenes"]
+[[areas.prs]]
+title = "Make `SceneEntityMapper` constructor/destructor public"
+number = 13630
 
 [[areas]]
 name = ["ECS", "Pointers"]
@@ -963,6 +1209,12 @@ number = 12499
 [[areas.prs]]
 title = "Add Reflect derive to Events and contained types"
 number = 13149
+[[areas.prs]]
+title = "Generalize component reflection to operate on `FilteredEntityRef` and `FilteredEntityMut`, not `EntityRef` and `EntityMut`."
+number = 13549
+[[areas.prs]]
+title = "feat: Reflection implementations on Identifier"
+number = 13648
 
 [[areas]]
 name = ["ECS", "Rendering"]
@@ -993,9 +1245,6 @@ name = ["Editor"]
 [[areas.prs]]
 title = "Add bevy_dev_tools crate"
 number = 11341
-[[areas.prs]]
-title = "Implement the `AnimationGraph`, allowing for multiple animations to be blended together."
-number = 11989
 
 [[areas]]
 name = ["Editor", "Gizmos"]
@@ -1074,6 +1323,15 @@ number = 13401
 [[areas.prs]]
 title = "Inconsistent segments/resolution naming"
 number = 13438
+[[areas.prs]]
+title = "Make gizmos take primitives by ref"
+number = 13534
+[[areas.prs]]
+title = "More gizmos builders"
+number = 13261
+[[areas.prs]]
+title = "Add axes_2d gizmo."
+number = 12334
 
 [[areas]]
 name = ["Gizmos", "Math"]
@@ -1089,6 +1347,12 @@ number = 13482
 [[areas.prs]]
 title = "Add `Triangle3d` / `Tetrahedron` to render_primitives example"
 number = 13504
+[[areas.prs]]
+title = "Implement Rhombus 2D primitive."
+number = 13501
+[[areas.prs]]
+title = "Implemented GizmoPrimitive2d for `Arc2d`, `CircularSegment`, `CircularSector`, and make arc_2d use counter-clockwise angle."
+number = 13610
 
 [[areas]]
 name = ["Gizmos", "Reflection"]
@@ -1101,6 +1365,9 @@ name = ["Gizmos", "Rendering"]
 [[areas.prs]]
 title = "Use LinearRgba in `bevy_gizmos` internals"
 number = 12128
+[[areas.prs]]
+title = "view.inverse_clip_from_world should be world_from_clip"
+number = 13756
 
 [[areas]]
 name = ["Hierarchy"]
@@ -1123,6 +1390,9 @@ name = ["Input"]
 title = "also look in just_pressed touches for position"
 number = 7743
 [[areas.prs]]
+title = "Add table showing complexity of methods for Input"
+number = 10126
+[[areas.prs]]
 title = "Prevent panic when multiple Enter inputs received in `text_input` example"
 number = 11872
 [[areas.prs]]
@@ -1141,9 +1411,6 @@ number = 12100
 title = "Update `Input` to `ButtonInput` in a couple places at keyboard input docs"
 number = 12284
 [[areas.prs]]
-title = "Add table showing complexity of methods for Input"
-number = 10126
-[[areas.prs]]
 title = "Send GamepadEvent for gamepads connected at startup"
 number = 12424
 [[areas.prs]]
@@ -1161,6 +1428,18 @@ number = 13047
 [[areas.prs]]
 title = "Added `ButtonInput` docs usage example"
 number = 13046
+[[areas.prs]]
+title = "rename touchpad to gesture, and add new gestures"
+number = 13660
+[[areas.prs]]
+title = "Fix phantom key presses in winit on focus change (#13299)"
+number = 13696
+
+[[areas]]
+name = ["Input", "Math"]
+[[areas.prs]]
+title = "Added CompassQuadrant and CompassOctant as per #13647"
+number = 13653
 
 [[areas]]
 name = ["Input", "Windowing"]
@@ -1170,6 +1449,9 @@ number = 12367
 [[areas.prs]]
 title = "Deprecate `ReceivedCharacter`"
 number = 12868
+[[areas.prs]]
+title = "flush key_input cache when Bevy loses focus (Adopted)"
+number = 13678
 
 [[areas]]
 name = ["Math"]
@@ -1198,7 +1480,7 @@ number = 11681
 title = "Add note about rotations for `Aabb3d`"
 number = 12315
 [[areas.prs]]
-title = "A 2D rotation type"
+title = "Add `Rotation2d`"
 number = 11658
 [[areas.prs]]
 title = "Add `scale_around_center` method to `BoundingVolume` trait"
@@ -1270,9 +1552,6 @@ number = 13025
 title = "replace std::f32::EPSILON with f32::EPSILON"
 number = 13267
 [[areas.prs]]
-title = "Extrusion"
-number = 13270
-[[areas.prs]]
 title = "Add `AXES` iterators for `Dir` types"
 number = 13305
 [[areas.prs]]
@@ -1299,12 +1578,66 @@ number = 13467
 [[areas.prs]]
 title = "Mention of Vec normalization for Dir::new"
 number = 13483
+[[areas.prs]]
+title = "Example for random sampling"
+number = 13507
+[[areas.prs]]
+title = "Create a primitive sampling showcase example"
+number = 13519
+[[areas.prs]]
+title = "Clarify cone position"
+number = 13568
+[[areas.prs]]
+title = "Implement `ShapeSample` for `Extrusion<T>`"
+number = 13567
+[[areas.prs]]
+title = "Add wireframe toggle to 2d and 3d shapes example"
+number = 13581
+[[areas.prs]]
+title = "Add compass direction constants to `Dir2`"
+number = 13636
+[[areas.prs]]
+title = "`Dir2` -> `Rotation2d` conversions"
+number = 13670
+[[areas.prs]]
+title = "Extrusion bounded"
+number = 13346
+[[areas.prs]]
+title = "Meshable extrusions"
+number = 13676
+[[areas.prs]]
+title = "Meshable extrusions - Part 2"
+number = 13676
+[[areas.prs]]
+title = "Allow creation of random `Rotation2d`"
+number = 13684
+[[areas.prs]]
+title = "Allow `Bounded3d` implementations for custom primitives"
+number = 13688
+[[areas.prs]]
+title = "Rename `Rotation2d` to `Rot2`"
+number = 13694
+[[areas.prs]]
+title = "Extrusion"
+number = 13719
+[[areas.prs]]
+title = "Add segments to `ExtrusionBuilder`"
+number = 13719
+[[areas.prs]]
+title = "Custom primitives example"
+number = 13795
 
 [[areas]]
 name = ["Math", "Reflection"]
 [[areas.prs]]
 title = "Add reflect impls for bevy_math curve structs"
 number = 13348
+[[areas.prs]]
+title = "Move `bevy_math` `Reflect` impls"
+number = 13520
+[[areas.prs]]
+title = "Implemented `Reflect` for (almost) all `bevy_math` types"
+number = 13537
 
 [[areas]]
 name = ["Math", "Rendering"]
@@ -1332,6 +1665,12 @@ number = 13463
 [[areas.prs]]
 title = "Add meshing for `ConicalFrustum`"
 number = 11819
+[[areas.prs]]
+title = "Additional options to mesh primitives"
+number = 13605
+[[areas.prs]]
+title = "Add subdivisions to PlaneMeshBuilder"
+number = 13580
 
 [[areas]]
 name = ["Math", "Transform"]
@@ -1392,6 +1731,9 @@ number = 13164
 [[areas.prs]]
 title = "Add a process for working groups"
 number = 13162
+[[areas.prs]]
+title = "Document the Release Candidate process"
+number = 13718
 
 [[areas]]
 name = ["Modding"]
@@ -1411,6 +1753,9 @@ number = 13498
 [[areas]]
 name = ["Reflection"]
 [[areas.prs]]
+title = "bevy_reflect: Recursive registration"
+number = 5781
+[[areas.prs]]
 title = "Add method for querying whether a given short type path is ambiguous"
 number = 11840
 [[areas.prs]]
@@ -1422,9 +1767,6 @@ number = 12124
 [[areas.prs]]
 title = "Remove unnecessary `impl_reflect_for_btree_map` macro"
 number = 12146
-[[areas.prs]]
-title = "bevy_reflect: Recursive registration"
-number = 5781
 [[areas.prs]]
 title = "Clean up type registrations"
 number = 12314
@@ -1464,6 +1806,12 @@ number = 13271
 [[areas.prs]]
 title = "bevy_reflect: `enum_utility` cleanup"
 number = 13424
+[[areas.prs]]
+title = "Add some missing reflect for volumetric fog types"
+number = 13592
+[[areas.prs]]
+title = "hashing error in bevy_reflect now includes the type (bevyengine#13646)"
+number = 13691
 
 [[areas]]
 name = ["Reflection", "Rendering"]
@@ -1482,6 +1830,9 @@ number = 12464
 [[areas.prs]]
 title = "Fix TypeRegistry use in dynamic scene"
 number = 12715
+[[areas.prs]]
+title = "Map entities from a resource when written to the world."
+number = 13650
 
 [[areas]]
 name = ["Reflection", "Time"]
@@ -1497,6 +1848,12 @@ number = 12971
 
 [[areas]]
 name = ["Rendering"]
+[[areas.prs]]
+title = "Per-Object Motion Blur"
+number = 9924
+[[areas.prs]]
+title = "Meshlet rendering (initial feature)"
+number = 10164
 [[areas.prs]]
 title = "Fix dds feature dependencies in bevy_core_pipeline"
 number = 11962
@@ -1633,9 +1990,6 @@ number = 12369
 title = "stop retrying removed assets"
 number = 12505
 [[areas.prs]]
-title = "Solve some oklaba inconsistencies"
-number = 12526
-[[areas.prs]]
 title = "Add trait for clamping colors"
 number = 12525
 [[areas.prs]]
@@ -1647,9 +2001,6 @@ number = 12538
 [[areas.prs]]
 title = "Implement `Mix` for `Hsva` and `Hwba`"
 number = 12619
-[[areas.prs]]
-title = "Implement maths and `Animatable` for `Srgba`"
-number = 12649
 [[areas.prs]]
 title = "Interpolating hues should use rem_euclid."
 number = 12641
@@ -1665,9 +2016,6 @@ number = 12683
 [[areas.prs]]
 title = "Add iOS to synchronous_pipeline_compilation docs"
 number = 12694
-[[areas.prs]]
-title = "Meshlet rendering (initial feature)"
-number = 10164
 [[areas.prs]]
 title = "Fix CI for wasm atomics"
 number = 12730
@@ -1806,9 +2154,6 @@ number = 13076
 [[areas.prs]]
 title = "Meshlet continuous LOD"
 number = 12755
-[[areas.prs]]
-title = "Per-Object Motion Blur"
-number = 9924
 [[areas.prs]]
 title = "Fix custom pipeline in mesh2d_manual rendering other meshes"
 number = 11477
@@ -1971,6 +2316,168 @@ number = 13480
 [[areas.prs]]
 title = "Update render graph docs"
 number = 13495
+[[areas.prs]]
+title = "add glsl feature for bevy_pbr"
+number = 13516
+[[areas.prs]]
+title = "Implement opt-in sharp screen-space reflections for the deferred renderer, with improved raymarching code."
+number = 13418
+[[areas.prs]]
+title = "revert reflections PR changes to the meshlet example"
+number = 13539
+[[areas.prs]]
+title = "use ssr dynamic offset in volumetric fog bind group"
+number = 13544
+[[areas.prs]]
+title = "add tonemapping LUT bindings for sprite and mesh2d pipelines"
+number = 13262
+[[areas.prs]]
+title = "Set the default target exposure to the minimum value, not 0"
+number = 13562
+[[areas.prs]]
+title = "Run motion blur before TAA to reduce artifacts"
+number = 13574
+[[areas.prs]]
+title = "Fix: Motion blur should sample onscreen fragments with no depth"
+number = 13573
+[[areas.prs]]
+title = "disable gpu preprocessing on android with Adreno 6xx GPU"
+number = 13323
+[[areas.prs]]
+title = "color_grading: update UI when camera settings changed"
+number = 13589
+[[areas.prs]]
+title = "Fix docs for `RenderLayers`"
+number = 13604
+[[areas.prs]]
+title = "Implement motion vectors and TAA for skinned meshes and meshes with morph targets."
+number = 13572
+[[areas.prs]]
+title = "Use correct minimal version of meshopt"
+number = 13551
+[[areas.prs]]
+title = "Add Skybox Motion Vectors"
+number = 13617
+[[areas.prs]]
+title = "Meshlet single pass depth downsampling (SPD)"
+number = 13003
+[[areas.prs]]
+title = "More idiomatic texture atlas builder"
+number = 13238
+[[areas.prs]]
+title = "Extra info on Image debug assertions"
+number = 13628
+[[areas.prs]]
+title = "Move clustering-related types and functions into their own module."
+number = 13640
+[[areas.prs]]
+title = "Normalise matrix naming"
+number = 13489
+[[areas.prs]]
+title = "Update ruzstd requirement from 0.6.0 to 0.7.0"
+number = 13642
+[[areas.prs]]
+title = "Implement PBR anisotropy per `KHR_materials_anisotropy`."
+number = 13450
+[[areas.prs]]
+title = "document need to update Aabb in Mesh::(with_)insert_attribute"
+number = 13349
+[[areas.prs]]
+title = "Rename \"point light\" to \"clusterable object\" in cluster contexts."
+number = 13654
+[[areas.prs]]
+title = "Add `binding()` helper function to `BufferVec`"
+number = 13667
+[[areas.prs]]
+title = "Implement subpixel morphological antialiasing, or SMAA."
+number = 13423
+[[areas.prs]]
+title = "Use `BufferVec` for `gpu_readback` example"
+number = 13668
+[[areas.prs]]
+title = "Skip tonemapping in case it is none"
+number = 13679
+[[areas.prs]]
+title = "Made `Mesh::merge` take a reference of `Mesh`."
+number = 13710
+[[areas.prs]]
+title = "Misc meshlet changes"
+number = 13705
+[[areas.prs]]
+title = "Use TBN in apply_normal_mapping in pbr_prepass"
+number = 13716
+[[areas.prs]]
+title = "Allow mix of hdr and non-hdr cameras to same render target"
+number = 13419
+[[areas.prs]]
+title = "2D top-down camera example"
+number = 12720
+[[areas.prs]]
+title = "Remove unused mip_bias parameter from apply_normal_mapping"
+number = 13752
+[[areas.prs]]
+title = "Meshlet misc"
+number = 13761
+[[areas.prs]]
+title = "Clarify error message due to missing shader file"
+number = 13766
+[[areas.prs]]
+title = "Fix meshlet vertex attribute interpolation"
+number = 13775
+[[areas.prs]]
+title = "Add `from_color` to `StandardMaterial` and `ColorMaterial`"
+number = 13791
+[[areas.prs]]
+title = "Make FOG_ENABLED a shader_def instead of material flag"
+number = 13803
+[[areas.prs]]
+title = "Revert \"Make FOG_ENABLED a shader_def instead of material flag (#13783)\""
+number = 13803
+[[areas.prs]]
+title = "Use dynamic uniform buffer in post processing example"
+number = 13540
+[[areas.prs]]
+title = "Wgpu 0.20"
+number = 13186
+[[areas.prs]]
+title = "Make meshlet processing deterministic"
+number = 13913
+[[areas.prs]]
+title = "Fix meshlet interactions with regular shading passes"
+number = 13816
+[[areas.prs]]
+title = "Fix MeshletMesh material system ordering"
+number = 14016
+[[areas.prs]]
+title = "don't crash without features `bevy_pbr`, `ktx2`, `zstd`"
+number = 14020
+[[areas.prs]]
+title = "Print warning when using llvmpipe"
+number = 13780
+[[areas.prs]]
+title = "typo"
+number = 14037
+[[areas.prs]]
+title = "Fix typo in CPU adapter warning"
+number = 14037
+[[areas.prs]]
+title = "Fix incorrect computation of mips for cluster occlusion lookup"
+number = 14042
+[[areas.prs]]
+title = "Allow phase items not associated with meshes to be binned."
+number = 14029
+[[areas.prs]]
+title = "Fix compile failure in WASM without `wgpu` backend"
+number = 14081
+[[areas.prs]]
+title = "Support operations for render layers and fix equality comparisons"
+number = 13310
+[[areas.prs]]
+title = "Clarify the difference between default render layers and `none` render layers"
+number = 14075
+[[areas.prs]]
+title = "Added feature switch to default Standard Material's new anisotropy texture to off"
+number = 14048
 
 [[areas]]
 name = ["Rendering", "Transform"]
@@ -1995,6 +2502,15 @@ number = 12725
 [[areas.prs]]
 title = "Fix UI elements randomly not appearing after #13277."
 number = 13462
+[[areas.prs]]
+title = "reduce the antialias strength"
+number = 13814
+[[areas.prs]]
+title = "fix panic: invalid SlotMap key used"
+number = 13990
+[[areas.prs]]
+title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
+number = 14017
 
 [[areas]]
 name = ["Rendering", "Utils"]
@@ -2040,6 +2556,9 @@ number = 13062
 [[areas.prs]]
 title = "Remove async-task as a dependency"
 number = 13071
+[[areas.prs]]
+title = "async_compute example: don't block in the task"
+number = 13699
 
 [[areas]]
 name = ["Tasks", "Windowing"]
@@ -2055,12 +2574,21 @@ number = 11936
 [[areas.prs]]
 title = "Calculate AABBs to enable text2d culling"
 number = 11663
+[[areas.prs]]
+title = "fix non-exact text h-alignment"
+number = 13846
+[[areas.prs]]
+title = "text position: use size instead of bounds"
+number = 13858
 
 [[areas]]
 name = ["Time"]
 [[areas.prs]]
 title = "Adds doc note that Timer and Stopwatch must be progressed manually"
 number = 13441
+[[areas.prs]]
+title = "Make time_system public"
+number = 13879
 
 [[areas]]
 name = ["Transform"]
@@ -2073,6 +2601,18 @@ number = 12530
 [[areas.prs]]
 title = "Refactor align example to use `Dir3` random sampling"
 number = 13259
+[[areas.prs]]
+title = "bevy_transform split up to allow feature gate modularity"
+number = 13599
+[[areas.prs]]
+title = "Allow bevy_transform to be used as a barebones dependency"
+number = 13533
+[[areas.prs]]
+title = "Fix links to `Transform` in `Transform` and `GlobalTransform` docs"
+number = 13704
+[[areas.prs]]
+title = "Use a ship in Transform::align example"
+number = 13935
 
 [[areas]]
 name = ["Transform", "UI"]
@@ -2082,6 +2622,9 @@ number = 12802
 
 [[areas]]
 name = ["UI"]
+[[areas.prs]]
+title = "Add doc comments explaining the different behaviours of alignment and Anchor with text_2d"
+number = 8022
 [[areas.prs]]
 title = "Simplify and improve `overflow_debug` example"
 number = 11875
@@ -2173,14 +2716,41 @@ number = 12839
 title = "Upgrade to Taffy 0.4"
 number = 10690
 [[areas.prs]]
-title = "Add doc comments explaining the different behaviours of `alignment` and `Anchor` with `text_2d`"
-number = 8022
-[[areas.prs]]
 title = "Rename `Rect` `inset()` method to `inflate()`"
 number = 13452
 [[areas.prs]]
 title = "Optimize the values for `EMPTY` rect."
 number = 13470
+[[areas.prs]]
+title = "Fix various bugs with UI rounded borders"
+number = 13523
+[[areas.prs]]
+title = "fix rounded borders on buttons"
+number = 13541
+[[areas.prs]]
+title = "Fix UI in WebGPU: call `textureSample` from outside the if"
+number = 13546
+[[areas.prs]]
+title = "Fix image measure function to apply inherent aspect ratio to style sizes"
+number = 13555
+[[areas.prs]]
+title = "Updates default Text font size to 24px"
+number = 13603
+[[areas.prs]]
+title = "make UI text rendering camera driven"
+number = 13697
+[[areas.prs]]
+title = "bug: Fix 9-slice textures with asymmetric borders."
+number = 13921
+[[areas.prs]]
+title = "add PartialEq to Outline"
+number = 14055
+[[areas.prs]]
+title = "fix remaining issues with background color in examples"
+number = 14115
+[[areas.prs]]
+title = "Fix border color in `ui_texture_slice` and `ui_texture_atlas_slice` examples."
+number = 14121
 
 [[areas]]
 name = ["Utils"]
@@ -2235,6 +2805,27 @@ number = 13151
 [[areas.prs]]
 title = "Ensure clean exit"
 number = 13236
+[[areas.prs]]
+title = "fix: upgrade to winit v0.30"
+number = 13366
+[[areas.prs]]
+title = "make sure windows are dropped on main thread"
+number = 13686
+[[areas.prs]]
+title = "13743 app exit hang"
+number = 13744
+[[areas.prs]]
+title = "Correctly check physical size when updating winit"
+number = 13942
+[[areas.prs]]
+title = "apply window scale to window size when creating it"
+number = 13967
+[[areas.prs]]
+title = "Have WindowPosition::Centered take scale_factor_override into account"
+number = 13949
+[[areas.prs]]
+title = "only run one update per frame drawn"
+number = 14023
 
 [[areas]]
 name = []
@@ -2380,9 +2971,35 @@ number = 13085
 title = "Give alt text to Bevy logo"
 number = 13205
 [[areas.prs]]
-title = "typo"
-number = 13342
-[[areas.prs]]
 title = "headless_renderer comments typo fix"
 number = 13342
-
+[[areas.prs]]
+title = "Update itertools requirement from 0.12 to 0.13"
+number = 13526
+[[areas.prs]]
+title = "small improvements on the color_grading example"
+number = 13542
+[[areas.prs]]
+title = "Set ambient_intensity to 0.0 in volumetric_fog example, correct doc comment"
+number = 13531
+[[areas.prs]]
+title = "Swapping back to using From<Color> for StandardMaterial in examples"
+number = 13566
+[[areas.prs]]
+title = "Use standard instruction text / position in various examples"
+number = 13583
+[[areas.prs]]
+title = "Handle wgsl errors in the game of life example"
+number = 13624
+[[areas.prs]]
+title = "Fix a few typos"
+number = 13404
+[[areas.prs]]
+title = "rename the crate bevy_state_macros_official back to its original name"
+number = 13732
+[[areas.prs]]
+title = "Make Observer::with_event (and other variants) unsafe"
+number = 13954
+[[areas.prs]]
+title = "fix examples color_grading and mobile after BackgroundColor changes"
+number = 14033

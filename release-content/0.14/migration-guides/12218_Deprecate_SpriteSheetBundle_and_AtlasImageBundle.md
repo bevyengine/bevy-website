@@ -1,4 +1,4 @@
-`SpriteSheetBundle` has been deprecated. Insert the `TextureAtlas` component alongside a `SpriteBundle` instead.
+`SpriteSheetBundle` has been deprecated as part of a style and maintenance-motivated move towards optional components that add functionality, rather than a proliferation of bundles. Insert the `TextureAtlas` component alongside a `SpriteBundle` instead.
 
 ```rust
 // 0.13

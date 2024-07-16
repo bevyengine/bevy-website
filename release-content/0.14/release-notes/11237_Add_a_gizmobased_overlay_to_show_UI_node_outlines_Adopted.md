@@ -1,9 +1,9 @@
 When working with UI on the web, being able to quickly debug the size of all your boxes is wildly useful.
-We now have a native [layout tool](https://dev-docs.bevyengine.org/bevy/dev_tools/ui_debug_overlay/struct.DebugUiPlugin.html) which adds gizmos outlines to all [Nodes](https://dev-docs.bevyengine.org/bevy/ui/struct.Node.html)
+We now have a native [layout tool](https://docs.rs/bevy/0.14/bevy/dev_tools/ui_debug_overlay/struct.DebugUiPlugin.html) which adds gizmos outlines to all [Nodes](https://docs.rs/bevy/0.14/bevy/ui/struct.Node.html)
 
 An example of what the tool looks like after enabled
 
-![Ui example with the overlay tool enabled](bevy_ui_outlines.png)
+![Ui example with the overlay tool enabled](bevy_ui_outlines.jpg)
 
 ```rust
 use bevy::prelude::*;

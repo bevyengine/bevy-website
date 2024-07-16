@@ -219,6 +219,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Checkout Bevy repo for asset access
+        uses: actions/checkout@v4
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'latest'
+          path: 'bevy'
+
+      - name: Move Bevy assets to static files
+        # during the real build, this is handled by the generate_wasm_examples.sh script.
+        run: mv bevy/assets static/assets/examples/
       - uses: actions/download-artifact@v4
         with:
           name: generated-assets

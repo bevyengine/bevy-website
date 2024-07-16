@@ -37,7 +37,7 @@ fn handle_exit(mut reader: EventReader<AppExit>) {
 }
 ```
 
-Furthermore, `App::run` now returns `AppExit` instead of the unit type `()`. Since `AppExit` implements [`Termination`](https://doc.rust-lang.org/stable/std/process/trait.Termination.html), you can now return it from the main function.
+Furthermore, `App::run()` now returns `AppExit` instead of the unit type `()`. Since `AppExit` implements [`Termination`](https://doc.rust-lang.org/stable/std/process/trait.Termination.html), you can now return it from the main function.
 
 ```rust
 // 0.13
@@ -55,4 +55,17 @@ fn main() {
     // If you want to ignore `AppExit`, you can add a semicolon instead. :)
     App::new().run();
 }
+```
+
+Finally, if you configured a custom `App` runner function, it will now have to return an `AppExit`.
+
+```rust
+let mut app = App::new();
+
+app.set_runner(|_app| {
+    // ...
+
+    // Return success by default, though you may also return an error code.
+    AppExit::Success
+});
 ```

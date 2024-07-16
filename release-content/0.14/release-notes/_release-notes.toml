@@ -1,6 +1,6 @@
 [[release_notes]]
 title = "Virtual Geometry (Experimental)"
-authors = ["@JMS55", "@atlv24", "@ricky26"]
+authors = ["@JMS55", "@atlv24", "@zeux", "@ricky26"]
 url = "https://github.com/bevyengine/bevy/pull/10164"
 file_name = "10164_Meshlet_rendering_initial_feature.md"
 
@@ -21,12 +21,6 @@ title = "Per-Object Motion Blur"
 authors = ["@aevyrie", "@torsteingrindvik"]
 url = "https://github.com/bevyengine/bevy/pull/9924"
 file_name = "9924_PerObject_Motion_Blur.md"
-
-[[release_notes]]
-title = "GPU Frustum Culling"
-authors = ["@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/12889"
-file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
 title = "Filmic Color Grading"
@@ -101,7 +95,7 @@ url = "https://github.com/bevyengine/bevy/pull/12013"
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
-title = "Extruded shapes"
+title = "Extruded Shapes"
 authors = ["@lynn-lumen"]
 url = "https://github.com/bevyengine/bevy/pull/13270"
 file_name = "13270_Extrusion.md"
@@ -117,18 +111,6 @@ authors = [
 ]
 url = "https://github.com/bevyengine/bevy/pull/12211"
 file_name = "New_gizmos_types.md"
-
-[[release_notes]]
-title = "Add `Annulus`-gizmos"
-authors = ["@lynn-lumen"]
-url = "https://github.com/bevyengine/bevy/pull/13233"
-file_name = "13233_Add_Annulusgizmos.md"
-
-[[release_notes]]
-title = "Rounded Box Gizmos"
-authors = ["@lynn-lumen", "@JMS55", "@jgayfer"]
-url = "https://github.com/bevyengine/bevy/pull/11948"
-file_name = "11948_Add_Rounded_box_gizmos.md"
 
 [[release_notes]]
 title = "Gizmo Line Styles and Joints"
@@ -155,16 +137,10 @@ url = "https://github.com/bevyengine/bevy/pull/11535"
 file_name = "11535_Query_Joins.md"
 
 [[release_notes]]
-title = "Computed States & Sub States"
+title = "Computed States & Sub-States"
 authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/11426"
 file_name = "11426_Computed_States__Sub_States.md"
-
-[[release_notes]]
-title = "State Identity Transitions"
-authors = ["@MiniaczQ", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13579"
-file_name = "13579_State_Identity_Transitions.md"
 
 [[release_notes]]
 title = "State Scoped Entities"
@@ -173,13 +149,25 @@ url = "https://github.com/bevyengine/bevy/pull/13649"
 file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
-title = "`Commands` and exclusive world access: working together in harmony"
+title = "State Identity Transitions"
+authors = ["@MiniaczQ", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13579"
+file_name = "13579_State_Identity_Transitions.md"
+
+[[release_notes]]
+title = "GPU Frustum Culling"
+authors = ["@pcwalton"]
+url = "https://github.com/bevyengine/bevy/pull/12889"
+file_name = "12889_Implement_GPU_frustum_culling.md"
+
+[[release_notes]]
+title = "World Command Queue"
 authors = ["@james7132", "@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/11823"
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[release_notes]]
-title = "Run the multi-threaded executor at the end of each system task."
+title = "Reduced Multi-Threaded Execution Overhead"
 authors = ["@chescock", "@james7132"]
 url = "https://github.com/bevyengine/bevy/pull/11906"
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
@@ -221,8 +209,8 @@ url = "https://github.com/bevyengine/bevy/pull/12484"
 file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
 
 [[release_notes]]
-title = "Render Pipeline Statistics"
-authors = ["@LeshaInc", "@alice-i-cecile"]
+title = "Tools for Profiling GPU Performance"
+authors = ["@LeshaInc"]
 url = "https://github.com/bevyengine/bevy/pull/9135"
 file_name = "9135_Add_pipeline_statistics.md"
 
@@ -241,19 +229,12 @@ url = "https://github.com/bevyengine/bevy/pull/12508"
 file_name = "new_math_primitives.md"
 
 [[release_notes]]
-title = "Initial (Manual) Support For WebAssembly Multithreading"
-authors = ["@kettle11", "@mockersf", "@alice-i-cecile", "@daxpedda"]
-url = "https://github.com/bevyengine/bevy/pull/12205"
-file_name = "12205_Get_Bevy_building_for_WebAssembly_with_multithreading.md"
-
-[[release_notes]]
 title = "Improve `Point` and rename it to `VectorSpace`"
 authors = [
 	"@mweatherley",
 	"@bushrat011899",
 	"@JohnTheCoolingFan",
 	"@NthTensor",
-	"@Jondolf",
 	"@IQuick143",
 	"@alice-i-cecile",
 ]
@@ -267,94 +248,10 @@ url = "https://github.com/bevyengine/bevy/pull/12135"
 file_name = "12135_Support_wireframes_for_2D_meshes.md"
 
 [[release_notes]]
-title = "Optimize opaque object rendering by binning them to together"
-authors = ["@pcwalton", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12453"
-file_name = "12453_Improve_performance_by_binning_together_opaque_items_inste.md"
-
-[[release_notes]]
-title = "Support `AsyncSeek` When Loading Assets"
-authors = ["@BeastLe9enD"]
-url = "https://github.com/bevyengine/bevy/pull/12547"
-file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
-
-[[release_notes]]
-title = "`iter_resources` and `iter_resources_mut`"
-authors = ["@matiqo15", "@james7132", "@alice-i-cecile", "@pablo-lua"]
-url = "https://github.com/bevyengine/bevy/pull/12829"
-file_name = "12829_Add_methods_iter_resources_and_iter_resources_mut.md"
-
-[[release_notes]]
-title = "LoadState::Failed now has error info"
-authors = ["@bugsweeper"]
-url = "https://github.com/bevyengine/bevy/pull/12709"
-file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
-
-[[release_notes]]
-title = "Optimized Event Updates"
-authors = ["@james7132", "@alice-i-cecile", "@jdm"]
-url = "https://github.com/bevyengine/bevy/pull/12936"
-file_name = "12936_Optimize_Event_Updates.md"
-
-[[release_notes]]
-title = "`AppExit` Errors"
-authors = ["@Brezak", "@alice-i-cecile"]
-url = "https://github.com/bevyengine/bevy/pull/13022"
-file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
-
-[[release_notes]]
-title = "Improve par_iter and Parallel"
-authors = ["@re0312", "@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12904"
-file_name = "12904_Improve_par_iter_and_Parallel.md"
-
-[[release_notes]]
-title = "Make dynamic_linking a no-op on WASM targets"
-authors = ["@james7132"]
-url = "https://github.com/bevyengine/bevy/pull/12672"
-file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
-
-[[release_notes]]
-title = "Throttle Render Assets"
-authors = ["@robtfm", "@IceSentry", "@mockersf"]
-url = "https://github.com/bevyengine/bevy/pull/12622"
-file_name = "12622_Throttle_render_assets.md"
-
-[[release_notes]]
-title = "GPU BufferVec"
-authors = ["@kristoff3r", "@IceSentry", "@alice-i-cecile", "@pcwalton"]
-url = "https://github.com/bevyengine/bevy/pull/13199"
-file_name = "13199_Add_BufferVec_an_higherperformance_alternative_to_StorageB.md"
-
-[[release_notes]]
-title = "StandardMaterial UV Channel Selection"
-authors = ["@geckoxx"]
-url = "https://github.com/bevyengine/bevy/pull/13200"
-file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
-
-[[release_notes]]
-title = "Remove limit on RenderLayers"
-authors = ["@tychedelia", "@robtfm"]
-url = "https://github.com/bevyengine/bevy/pull/13317"
-file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
-
-[[release_notes]]
-title = "`on_unimplemented` Diagnostics"
-authors = ["@bushrat011899", "@alice-i-cecile", "@Themayu"]
-url = "https://github.com/bevyengine/bevy/pull/13347"
-file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
-
-[[release_notes]]
 title = "Custom Reflect Field Attributes"
 authors = ["@MrGVSV"]
 url = "https://github.com/bevyengine/bevy/pull/11659"
 file_name = "11659_bevy_reflect_Custom_attributes.md"
-
-[[release_notes]]
-title = "Deprecate Dynamic Plugins"
-authors = ["@BD103"]
-url = "https://github.com/bevyengine/bevy/pull/13080"
-file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[release_notes]]
 title = "Query Iteration Sorting"
@@ -367,6 +264,30 @@ title = "SystemBuilder"
 authors = ["@james-j-obrien"]
 url = "https://github.com/bevyengine/bevy/pull/13123"
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
+
+[[release_notes]]
+title = "Throttle Render Assets"
+authors = ["@robtfm", "@IceSentry", "@mockersf"]
+url = "https://github.com/bevyengine/bevy/pull/12622"
+file_name = "12622_Throttle_render_assets.md"
+
+[[release_notes]]
+title = "StandardMaterial UV Channel Selection"
+authors = ["@geckoxx"]
+url = "https://github.com/bevyengine/bevy/pull/13200"
+file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
+
+[[release_notes]]
+title = "Remove limit on RenderLayers"
+authors = ["@tychedelia", "@robtfm", "@UkoeHB"]
+url = "https://github.com/bevyengine/bevy/pull/13317"
+file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
+
+[[release_notes]]
+title = "`on_unimplemented` Diagnostics"
+authors = ["@bushrat011899", "@alice-i-cecile", "@Themayu"]
+url = "https://github.com/bevyengine/bevy/pull/13347"
+file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
 
 [[release_notes]]
 title = "Motion Vectors and TAA for Animated Meshes"
@@ -411,7 +332,37 @@ url = "https://github.com/bevyengine/bevy/pull/13653"
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
 
 [[release_notes]]
+title = "Support `AsyncSeek` When Loading Assets"
+authors = ["@BeastLe9enD"]
+url = "https://github.com/bevyengine/bevy/pull/12547"
+file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
+
+[[release_notes]]
+title = "LoadState::Failed Now Has Error Info"
+authors = ["@bugsweeper"]
+url = "https://github.com/bevyengine/bevy/pull/12709"
+file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
+
+[[release_notes]]
+title = "`AppExit` Errors"
+authors = ["@Brezak", "@alice-i-cecile"]
+url = "https://github.com/bevyengine/bevy/pull/13022"
+file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
+
+[[release_notes]]
+title = "Make dynamic_linking a no-op on WASM targets"
+authors = ["@james7132"]
+url = "https://github.com/bevyengine/bevy/pull/12672"
+file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
+
+[[release_notes]]
+title = "Deprecate Dynamic Plugins"
+authors = ["@BD103"]
+url = "https://github.com/bevyengine/bevy/pull/13080"
+file_name = "13080_Deprecate_dynamic_plugins.md"
+
+[[release_notes]]
 title = "Bevy Working Groups"
-authors = ["@alice-i-cecile", "@Jondolf"]
+authors = ["@alice-i-cecile"]
 url = "https://github.com/bevyengine/bevy/pull/13162"
 file_name = "13162_Add_a_process_for_working_groups.md"

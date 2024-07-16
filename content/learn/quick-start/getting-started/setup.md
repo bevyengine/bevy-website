@@ -107,7 +107,7 @@ version = "0.1.0"
 edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
 [dependencies]
-bevy = "0.13" # make sure this is the latest version
+bevy = "0.14" # make sure this is the latest version
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
@@ -130,16 +130,59 @@ It's not uncommon for debug builds using the default configuration to take multi
 Fortunately, there is a simple fix, and we don't have to give up our fast iterative compiles! Add the following to your `Cargo.toml`:
 
 ```toml
-# Enable a small amount of optimization in debug mode
+# Enable a small amount of optimization in the dev profile.
 [profile.dev]
 opt-level = 1
 
-# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+# Enable a large amount of optimization in the dev profile for dependencies.
 [profile.dev.package."*"]
 opt-level = 3
 ```
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
+
+In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
+
+```toml
+# Enable more optimization in the release profile at the cost of compile time.
+[profile.release]
+# Compile the entire crate as one unit.
+# Slows compile times, marginal improvements.
+codegen-units = 1
+# Do a second optimization pass over the entire program, including dependencies.
+# Slows compile times, marginal improvements.
+lto = "thin"
+
+# Optimize for size in the wasm-release profile to reduce load times and bandwidth usage on web.
+[profile.wasm-release]
+# Default to release profile values.
+inherits = "release"
+# Optimize with size in mind (also try "z", sometimes it is better).
+# Slightly slows compile times, great improvements to file size and runtime performance.
+opt-level = "s"
+# Strip all debugging information from the binary to slightly reduce file size.
+strip = "debuginfo"
+```
+
+When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+
+#### Advanced Wasm optimizations
+
+[Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
+that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
+
+```sh
+wasm-opt -Os --output output.wasm input.wasm
+```
+
+Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
+in combination with the optimizations from the previous section.
+
+See the following for more information on optimizing Wasm:
+
+- <https://rustwasm.github.io/book/reference/code-size.html>
+- <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
+- <https://rustwasm.github.io/book/game-of-life/code-size.html>
 
 ### Enable Fast Compiles (Optional)
 
@@ -164,6 +207,8 @@ cargo add bevy -F dynamic_linking
 
 {% callout(type="warning") %}
 On Windows you must also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
+
+In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
 {% end %}
 
 {% callout(type="note") %}
@@ -246,6 +291,37 @@ channel = "nightly"
 
 For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 
+#### Cranelift
+
+This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM. 
+It currently works best on Linux.
+
+To install cranelift, run the following.
+```
+rustup component add rustc-codegen-cranelift-preview --toolchain nightly
+```
+
+To activate it for your project, add the following to your `.cargo/config.toml`.
+```toml
+[unstable]
+codegen-backend = true
+
+[profile.dev]
+codegen-backend = "cranelift"
+
+[profile.dev.package."*"]
+codegen-backend = "llvm"
+```
+
+This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
+details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
+MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
+
+While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it. 
+Notably, Wasm builds do not work yet.
+
+When shipping your game, you should still compile it with LLVM.
+
 #### Generic Sharing
 
 Allows crates to share monomorphized generic code instead of duplicating it.
@@ -267,6 +343,16 @@ rustflags = [
 ```
 
 </details>
+
+### Improve Runtime Performance (Optional)
+
+Bevy's dependencies do a lot of trace logging that is not relevant for an end user. 
+To improve your runtime performance, you can add the following to the `[dependencies]` section of your Cargo.toml. 
+It will disable detailed log levels on compile time so that they do not need to be filtered out while your app is running.
+
+```toml
+log = { version = "*", features = ["max_level_debug", "release_max_level_warn"] }
+```
 
 ### Build Bevy
 
