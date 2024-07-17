@@ -697,7 +697,6 @@ pub fn get_latest_bevy_version(db: &CratesIoDb) -> anyhow::Result<semver::Versio
         .filter_map(|r| semver::Version::parse(&r.ok()?).ok())
         .collect();
 
-    // Reverse sort
     bevy_versions
         .into_iter()
         .max()
