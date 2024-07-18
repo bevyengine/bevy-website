@@ -765,3 +765,9 @@ title = "Upgrade to `winit` 0.30"
 url = "https://github.com/bevyengine/bevy/pull/13366"
 areas = ["Windowing"]
 file_name = "13366_fix_upgrade_to_winit_v030.md"
+
+[[guides]]
+title = "Separating Finite and Infinite 3d Planes"
+url = "https://github.com/bevyengine/bevy/pull/12426"
+areas = ["Math", "Rendering"]
+file_name = "12426_separating_finite_and_infinite_3d_planes.md"
