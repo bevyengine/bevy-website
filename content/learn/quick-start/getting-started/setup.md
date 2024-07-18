@@ -322,6 +322,11 @@ Notably, Wasm builds do not work yet.
 
 When shipping your game, you should still compile it with LLVM.
 
+{% callout(type="warning") %}
+With Cranelift on Windows, you can end up with very large `target/` folders if you have debug symbols turned on.
+Disable debug symbols by adding `debug = false` under the `[profile.dev.package."*"]` section in your `Cargo.toml`.
+{% end %}
+
 #### Generic Sharing
 
 Allows crates to share monomorphized generic code instead of duplicating it.
