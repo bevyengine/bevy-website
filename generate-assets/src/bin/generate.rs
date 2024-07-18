@@ -64,7 +64,7 @@ fn main() -> anyhow::Result<()> {
 /// - If all else is equal, sort randomly
 fn sort_section(nodes: &mut [AssetNode], latest_bevy_version: &semver::Version) {
     for node in nodes.iter_mut() {
-        if let AssetNode::Section(ref mut section) = node {
+        if let AssetNode::Section(section) = node {
             sort_section(&mut section.content, latest_bevy_version);
         }
     }
