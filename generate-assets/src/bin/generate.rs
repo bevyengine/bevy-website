@@ -72,13 +72,13 @@ fn sort_section(nodes: &mut [AssetNode], latest_bevy_version: &semver::Version) 
     let mut to_sort = vec![];
     for node in nodes {
         let is_semver_compat = node_semver_compat_with(node, latest_bevy_version);
-        let random: u32 = rand::random();
 
         let existing_order = match node {
             AssetNode::Asset(asset) => asset.order.unwrap_or(usize::MAX),
             _ => continue,
         };
 
+        let random: u32 = rand::random();
         to_sort.push((node, existing_order, !is_semver_compat, random));
     }
 
