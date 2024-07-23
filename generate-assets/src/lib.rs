@@ -672,6 +672,37 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
     bevy_crates
 }
 
+/// Get the highest (according to semver) version of Bevy listed in the crates.io database
+pub fn get_latest_bevy_version(db: &CratesIoDb) -> anyhow::Result<semver::Version> {
+    let mut bevy_id_statement = db.prepare(
+        "\
+            SELECT id \
+            FROM crates \
+            WHERE name = 'bevy'\
+        ",
+    )?;
+
+    let bevy_id: String = bevy_id_statement.query_row([], |row| row.get(0))?;
+
+    let mut bevy_versions_statement = db.prepare(
+        "\
+            SELECT num \
+            FROM versions \
+            WHERE crate_id = ?\
+        ",
+    )?;
+
+    let bevy_versions: Vec<semver::Version> = bevy_versions_statement
+        .query_map([bevy_id], |r| r.get::<_, String>(0))?
+        .filter_map(|r| semver::Version::parse(&r.ok()?).ok())
+        .collect();
+
+    bevy_versions
+        .into_iter()
+        .max()
+        .context("Failed to retrieve Bevy versions from crates.io db")
+}
+
 /// Get a prepared statement to get license and version for a crate from the
 /// crates.io database dump.
 ///
