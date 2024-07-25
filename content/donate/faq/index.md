@@ -21,7 +21,7 @@ Please only use names, logos, and links that you have the right and permission t
 
 ## I sponsored but the metrics / names / logos on the donate page haven't updated!
 
-Please wait a little. It might take up to an hour for the automatic update to add you to the credits.
+Please wait a little. It might take up to eight hours for the automatic update to add you to the credits.
 
 ## How are the metrics on the donation page calculated?
 
@@ -29,7 +29,3 @@ The monthly dollar amount is the "raw pledged amount for active monthly donation
 
 1. This number is "pre Stripe fees". This includes credit card fees and Stripes "processing fees", which vary per payment type.
 2. This is the amount we _expect_ to get each month. In practice the payouts will be less, once chargebacks and cancellations are processed.
-
-## Why doesn't the Individual Sponsors section / the "old way to sponsor" contribute to the metrics on the donate page?
-
-Primarily this is because we don't want to conflate Bevy Foundation funds with other funds. The Bevy Foundation does not have direct access to these funds, and for "reporting / transparency" reasons, conflating the two contexts would be confusing for the public (and likely government agencies as well). We plan on deprecating the Individual Sponsors section in the future. It exists today as a courtesy to ensure we aren't quickly changing the rules on our current sponsors.
