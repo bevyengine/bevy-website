@@ -7,6 +7,7 @@
 // code blocks. Without this, Clippy would require front-matter and Tera templates to be surrounded
 // by backticks.
 #![allow(clippy::doc_markdown)]
+#![allow(clippy::doc_lazy_continuation)]
 
 mod learn {
     #[doc = include_str!("../../content/learn/quick-start/_index.md")]
