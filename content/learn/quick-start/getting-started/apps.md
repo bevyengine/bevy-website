@@ -12,7 +12,7 @@ Every Bevy program can be referred to as an [`App`]. The simplest Bevy app looks
 use bevy::prelude::*;
 
 fn main() {
-    App::new().run();
+    App::new().run((), ());
 }
 ```
 
