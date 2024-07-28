@@ -164,28 +164,32 @@ opt-level = 3
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
 
-In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
+<details>
+  <summary>Release Mode Optimizations (Optional)</summary>
 
-```toml
-# Enable more optimization in the release profile at the cost of compile time.
-[profile.release]
-# Compile the entire crate as one unit.
-# Slows compile times, marginal improvements.
-codegen-units = 1
-# Do a second optimization pass over the entire program, including dependencies.
-# Slows compile times, marginal improvements.
-lto = "thin"
+  In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
 
-# Optimize for size in the wasm-release profile to reduce load times and bandwidth usage on web.
-[profile.wasm-release]
-# Default to release profile values.
-inherits = "release"
-# Optimize with size in mind (also try "z", sometimes it is better).
-# Slightly slows compile times, great improvements to file size and runtime performance.
-opt-level = "s"
-# Strip all debugging information from the binary to slightly reduce file size.
-strip = "debuginfo"
-```
+  ```toml
+  # Enable more optimization in the release profile at the cost of compile time.
+  [profile.release]
+  # Compile the entire crate as one unit.
+  # Slows compile times, marginal improvements.
+  codegen-units = 1
+  # Do a second optimization pass over the entire program, including dependencies.
+  # Slows compile times, marginal improvements.
+  lto = "thin"
+
+  # Optimize for size in the wasm-release profile to reduce load times and bandwidth usage on web.
+  [profile.wasm-release]
+  # Default to release profile values.
+  inherits = "release"
+  # Optimize with size in mind (also try "z", sometimes it is better).
+  # Slightly slows compile times, great improvements to file size and runtime performance.
+  opt-level = "s"
+  # Strip all debugging information from the binary to slightly reduce file size.
+  strip = "debuginfo"
+  ```
+</details>
 
 When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
 
