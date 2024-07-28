@@ -6,6 +6,7 @@ members = [
     "generate-community",
     "generate-errors",
     "generate-release",
+    "learning-code-examples",
     "write-rustdoc-hide-lines",
 ]
 
