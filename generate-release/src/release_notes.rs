@@ -66,8 +66,6 @@ pub fn generate_release_notes(
 
         contributors.remove(&author);
 
-        // Make sure the author is always the first in the list
-        let authors = vec![author];
         // Separate the contributors from authors for manual
         // filtering since contributors may include typo fixes
         // and other minor changes unwanted for the author position.
@@ -75,7 +73,7 @@ pub fn generate_release_notes(
 
         notes_metadata.push(generate_metadata_block(
             &title,
-            &authors,
+            &author,
             &contributors,
             pr.number,
             &file_name,
@@ -114,7 +112,7 @@ pub fn generate_release_notes(
 
 fn generate_metadata_block(
     title: &str,
-    authors: &[String],
+    author: &str,
     contributors: &[String],
     pr_number: u64,
     file_name: &str,
@@ -123,7 +121,7 @@ fn generate_metadata_block(
     format!(
         r#"[[release_notes]]
 title = "{title}"
-authors = [{authors}]
+authors = ["{author}",]
 contributors = [{contributors}]
 url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
 file_name = "{file_name}.md"
@@ -131,11 +129,6 @@ file_name = "{file_name}.md"
         contributors = contributors
             .iter()
             .map(|contributor| format!("\"{contributor}\""))
-            .collect::<Vec<_>>()
-            .join(", "),
-        authors = authors
-            .iter()
-            .map(|author| format!("\"{author}\""))
             .collect::<Vec<_>>()
             .join(", "),
         title = title.trim().replace('"', "\\\"")
