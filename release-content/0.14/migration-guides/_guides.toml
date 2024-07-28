@@ -771,3 +771,9 @@ title = "Separating Finite and Infinite 3d Planes"
 url = "https://github.com/bevyengine/bevy/pull/12426"
 areas = ["Math", "Rendering"]
 file_name = "12426_separating_finite_and_infinite_3d_planes.md"
+
+[[guides]]
+title = "Contextually clearing gizmos"
+url = "https://github.com/bevyengine/bevy/pull/10973"
+areas = ["Gizmos"]
+file_name = "10973_Contextually_clearing_gizmos.md"
