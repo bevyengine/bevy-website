@@ -8,6 +8,11 @@ details {
   background-color: rgba($color-white, 0.1);
   overflow: hidden; // prevent clobbering corner radii
 
+  & h1, & h2, & h3, & h4, & h5, & h6 {
+    margin: 0;
+    display: inline;
+  }
+
   >summary {
     cursor: pointer; // this should be the default
     padding-block: calc($h-padding/2);
