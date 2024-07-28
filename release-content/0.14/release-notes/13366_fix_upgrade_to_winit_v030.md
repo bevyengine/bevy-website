@@ -5,9 +5,9 @@
 It's now possible to define a custom `winit` user event, that can be used to trigger App updates,
 and that can be read inside systems to trigger specific behaviors. This is particularly useful to
 send events from outside the `winit` event loop and manage them inside Bevy systems
-(see the `window/custom_winit_event.rs` example).
+(see the [`window/custom_user_event.rs`] example).
 
-[custom_user_event]: https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/window/custom_user_event.rs
+[`window/custom_user_event.rs`]: https://github.com/bevyengine/bevy/blob/release-0.14.0/examples/window/custom_user_event.rs
 
 The `UpdateMode` enum now accepts only two values: `Continuous` and `Reactive`. The latter exposes 3 new properties to enable reactivity to device, user, or window events. The previous `UpdateMode::Reactive` is now equivalent to `UpdateMode::reactive()`, while `UpdateMode::ReactiveLowPower` maps to `UpdateMode::reactive_low_power()`.
 
