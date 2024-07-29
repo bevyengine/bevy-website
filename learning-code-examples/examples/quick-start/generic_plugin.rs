@@ -36,7 +36,7 @@ impl<T> Default for YourPlugin<T> {
 #[derive(Component)]
 pub struct Something;
 
-// Example system using the generic type paremeter
+// Example system using the generic type parameter
 // of `Component` trait.
 pub fn example_system<T: Component>(query: Query<&T>) {
     for _example_component in &query {
