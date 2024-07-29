@@ -46,7 +46,5 @@ pub fn example_system<T: Component>(query: Query<&T>) {
 // ANCHOR_END: generic_plugin
 
 fn main() {
-    App::new()
-        .add_plugins(YourPlugin::<Something>::new())
-        .run();
+    App::new().add_plugins(YourPlugin::<Something>::new()).run();
 }
