@@ -5,6 +5,8 @@ This folder contains all the examples used in the official Bevy website learning
 ## Usage
 
 1. Create an `*.rs` example in `./examples/{LEARNING_MATERIAL}` where `{LEARNING_MATERIAL}` is the official Bevy learning material the example will be used in, e.g., Bevy Book, Quick Start Guide, Advanced Examples, et cetera.
+  > [!TIP]
+  > In these Rust examples you use `// ANCHOR: name` and `// ANCHOR_END: name` to define the snippets that can be used in the pages. You also have `// HIDE` which you can append to the end of a line to hide that line from being parsed / rendered.
 2. Add it to `Cargo.toml` with the format:
 
   ```toml
