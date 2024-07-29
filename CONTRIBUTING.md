@@ -26,7 +26,7 @@ The code in the learning materials (e.g., Bevy Book, Quick Start Guide, Advanced
 
 To validate your code snippets either `./learning-code-examples/validate_examples.sh` (Recommended) or from the root of the project `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
 
-[See the `learning-code-validation` README.md for more info.](./learning-code-validation/README.md)
+[See the `learning-code-examples` README.md for more info.](./learning-code-examples/README.md)
 
 ## Learning material structure
 
