@@ -23,7 +23,7 @@ fn update_people(mut query: Query<&mut Name, With<Person>>) {
 
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}", name.0);
+        println!("hello {}!", name.0);
     }
 }
 
@@ -31,6 +31,7 @@ fn hello_world() {
     println!("hello world!");
 }
 
+// ANCHOR: app_main
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -38,3 +39,4 @@ fn main() {
         .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
         .run();
 }
+// ANCHOR_END: app_main

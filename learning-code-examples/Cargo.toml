@@ -48,3 +48,15 @@ path = "examples/quick-start/getting_started_v9.rs"
 [[example]]
 name = "getting-started-v10"
 path = "examples/quick-start/getting_started_v10.rs"
+
+[[example]]
+name = "position-ecs"
+path = "examples/quick-start/position_ecs.rs"
+
+[[example]]
+name = "mock-entity"
+path = "examples/quick-start/mock_entity.rs"
+
+[[example]]
+name = "generic-plugin"
+path = "examples/quick-start/generic_plugin.rs"

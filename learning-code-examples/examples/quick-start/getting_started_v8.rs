@@ -23,7 +23,7 @@ fn update_people(mut query: Query<&mut Name, With<Person>>) {
 
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}", name.0);
+        println!("hello {}!", name.0);
     }
 }
 
@@ -33,6 +33,7 @@ fn hello_world() {
 
 pub struct HelloPlugin;
 
+// ANCHOR: hello_plugin_implementation
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, add_people);
@@ -41,5 +42,9 @@ impl Plugin for HelloPlugin {
 }
 
 fn main() {
-    App::new().add_plugins((DefaultPlugins, HelloPlugin)).run();
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_plugins(HelloPlugin)
+        .run();
 }
+// ANCHOR_END: hello_plugin_implementation

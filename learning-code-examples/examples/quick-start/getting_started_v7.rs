@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+// ANCHOR: hello_plugin
 pub struct HelloPlugin;
 
 impl Plugin for HelloPlugin {
@@ -7,6 +8,7 @@ impl Plugin for HelloPlugin {
         // add things to your app here
     }
 }
+// ANCHOR_END: hello_plugin
 
 #[derive(Component)]
 struct Person;
@@ -31,7 +33,7 @@ fn update_people(mut query: Query<&mut Name, With<Person>>) {
 
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}", name.0);
+        println!("hello {}!", name.0);
     }
 }
 
@@ -39,10 +41,13 @@ fn hello_world() {
     println!("hello world!");
 }
 
+// ANCHOR: app_main
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, HelloPlugin))
+        .add_plugins(DefaultPlugins)
+        .add_plugins(HelloPlugin)
         .add_systems(Startup, add_people)
         .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
         .run();
 }
+// ANCHOR_END: app_main

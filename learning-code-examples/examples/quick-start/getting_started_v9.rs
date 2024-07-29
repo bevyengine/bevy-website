@@ -21,11 +21,13 @@ fn update_people(mut query: Query<&mut Name, With<Person>>) {
     }
 }
 
+// ANCHOR: greet_people_system
 fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}", name.0);
+        println!("hello {}!", name.0);
     }
 }
+// ANCHOR_END: greet_people_system
 
 pub struct HelloPlugin;
 
@@ -37,5 +39,8 @@ impl Plugin for HelloPlugin {
 }
 
 fn main() {
-    App::new().add_plugins((DefaultPlugins, HelloPlugin)).run();
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_plugins(HelloPlugin)
+        .run();
 }
