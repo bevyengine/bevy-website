@@ -16,7 +16,7 @@
     {%-else-%}
       {%-set_global hidden_line = false-%}
     {%-endif-%}
-    {%-if in_anchor and not hidden_line-%}
+    {%-if in_anchor and not hidden_line and not "// ANCHOR:" in line and not "// ANCHOR_END:" in line-%}
     {%-set_global code = code ~ line ~ "
 "-%}
     {%-endif-%}
