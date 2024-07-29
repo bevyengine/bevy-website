@@ -4,7 +4,7 @@ This folder contains all the examples used in the official Bevy website learning
 
 ## Usage
 
-1. Create an `*.rs` example in `./examples/{LEARNING_MATERIAL}` where `LEARNING_MATERIAL` is the official Bevy learning material the example will be used in, e.g., Bevy Book, Quick Start Guide, Advanced Examples, et cetera.
+1. Create an `*.rs` example in `./examples/{LEARNING_MATERIAL}` where `{LEARNING_MATERIAL}` is the official Bevy learning material the example will be used in, e.g., Bevy Book, Quick Start Guide, Advanced Examples, et cetera.
 2. Add it to `Cargo.toml` with the format:
   ```toml
   [[example]]
