@@ -6,7 +6,33 @@ This folder contains all the examples used in the official Bevy website learning
 
 1. Create an `*.rs` example in `./examples/{LEARNING_MATERIAL}` where `{LEARNING_MATERIAL}` is the official Bevy learning material the example will be used in, e.g., Bevy Book, Quick Start Guide, Advanced Examples, et cetera.
   > [!TIP]
-  > In these Rust examples you use `// ANCHOR: name` and `// ANCHOR_END: name` to define the snippets that can be used in the pages. You also have `// HIDE` which you can append to the end of a line to hide that line from being parsed / rendered.
+  > In these Rust examples you use `// ANCHOR: name` and `// ANCHOR_END: name` to define the snippets that can be used in the pages. These anchors can also be nested; they won't parse the ANCHOR instructions other than the one that is intended to be parsed. You also have `// HIDE` which you can append to the end of a line to hide that line from being parsed / rendered.
+
+  ```rs
+  // ANCHOR: full_program
+  use bevy::prelude::*;
+
+  // ANCHOR: basic_component
+  #[derive(Component)]
+  struct BasicComponent;
+  // ANCHOR_END: basic_component
+
+  // ANCHOR: basic_system
+  fn basic_system(mut commands: Commands) {
+    commands.spawn(BasicComponent);
+    eprintln!("spawning Basic Component"); // HIDE
+  }
+  // ANCHOR_END: basic_system
+
+  // ANCHOR: app_main
+  fn main() {
+    App::new().add_systems(Startup, basic_system).run();
+    eprintln!("app ran"); // HIDE
+  }
+  // ANCHOR_END: app_main
+  // ANCHOR_END: full_program
+  ```
+
 2. Add it to `Cargo.toml` with the format:
 
   ```toml
