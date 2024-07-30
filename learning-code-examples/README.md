@@ -26,7 +26,7 @@ Multi-file examples should follow the scheme of `snake_case/`, with a `main.rs` 
   // ANCHOR: basic_system
   fn basic_system(mut commands: Commands) {
     commands.spawn(BasicComponent);
-    eprintln!("spawning Basic Component"); // HIDE
+    eprintln!("spawning basic component"); // HIDE
   }
   // ANCHOR_END: basic_system
 
