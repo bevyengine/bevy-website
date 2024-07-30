@@ -2,6 +2,7 @@
 name = "learning-code-examples"
 edition = "2021"
 publish = false
+autoexamples = false
 
 [dependencies]
 bevy = "0.14.0"
