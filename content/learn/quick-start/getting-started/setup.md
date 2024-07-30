@@ -23,24 +23,39 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
 
 ### Installing OS Dependencies
 
-#### Linux
+<details>
+  <summary>
 
-Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md)
+  #### Linux
+  </summary>
 
-#### Windows
+  Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md)
+</details>
 
-* Run the [Visual Studio 2019 build tools installer](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
-* For easy setup, select the ```Desktop development with C++``` workload in the installer.
-* For a minimal setup, follow these steps:
-    1. In the installer, navigate to `Individual components`
-    2. Select the latest `MSVC` for your architecture and version of Windows
-    3. Select the latest `Windows SDK` for your version of Windows
-    4. Select the `C++ CMake tools` for Windows component
-    5. Install the components
+<details>
+  <summary>
 
-#### MacOS
+  #### Windows
+  </summary>
 
-Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835)
+  * Run the [Visual Studio 2019 build tools installer](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
+  * For easy setup, select the ```Desktop development with C++``` workload in the installer.
+  * For a minimal setup, follow these steps:
+      1. In the installer, navigate to `Individual components`
+      2. Select the latest `MSVC` for your architecture and version of Windows
+      3. Select the latest `Windows SDK` for your version of Windows
+      4. Select the `C++ CMake tools` for Windows component
+      5. Install the components
+</details>
+
+<details>
+  <summary>
+
+  #### MacOS
+  </summary>
+
+  Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835)
+</details>
 
 ### Code Editor / IDE
 
@@ -98,28 +113,36 @@ The easiest way to add it to your project is to use `cargo add`:
 cargo add bevy
 ```
 
-Alternatively, you can manually add it to your project's Cargo.toml like this:
+<details>
+  <summary>Alternate - Manually Add Bevy to Cargo.toml</summary>
+  You can also manually add it to your project's Cargo.toml like this:
 
-```toml
-[package]
-name = "my_bevy_game"
-version = "0.1.0"
-edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
+  ```toml
+  [package]
+  name = "my_bevy_game"
+  version = "0.1.0"
+  edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
-[dependencies]
-bevy = "0.14" # make sure this is the latest version
-```
+  [dependencies]
+  bevy = "0.14" # make sure this is the latest version
+  ```
+</details>
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
 
-### Cargo Workspaces
+<details>
+  <summary>
 
-If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
+  ### Cargo Workspaces
+  </summary>
 
-```toml
-[workspace]
-resolver = "2" # Important! wgpu/Bevy needs this!
-```
+  If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
+
+  ```toml
+  [workspace]
+  resolver = "2" # Important! wgpu/Bevy needs this!
+  ```
+</details>
 
 ### Compile with Performance Optimizations
 
@@ -141,48 +164,57 @@ opt-level = 3
 
 You might think to simply develop in release mode instead, but we recommend against this as it can worsen the development experience by slowing down recompiles and disabling helpful debug symbols and assertions.
 
-In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
+<details>
+  <summary>Release Mode Optimizations (Optional)</summary>
 
-```toml
-# Enable more optimization in the release profile at the cost of compile time.
-[profile.release]
-# Compile the entire crate as one unit.
-# Slows compile times, marginal improvements.
-codegen-units = 1
-# Do a second optimization pass over the entire program, including dependencies.
-# Slows compile times, marginal improvements.
-lto = "thin"
+  In fact, you may want to trade even more compile time for performance in release mode by adding the following to your `Cargo.toml`:
 
-# Optimize for size in the wasm-release profile to reduce load times and bandwidth usage on web.
-[profile.wasm-release]
-# Default to release profile values.
-inherits = "release"
-# Optimize with size in mind (also try "z", sometimes it is better).
-# Slightly slows compile times, great improvements to file size and runtime performance.
-opt-level = "s"
-# Strip all debugging information from the binary to slightly reduce file size.
-strip = "debuginfo"
-```
+  ```toml
+  # Enable more optimization in the release profile at the cost of compile time.
+  [profile.release]
+  # Compile the entire crate as one unit.
+  # Slows compile times, marginal improvements.
+  codegen-units = 1
+  # Do a second optimization pass over the entire program, including dependencies.
+  # Slows compile times, marginal improvements.
+  lto = "thin"
+
+  # Optimize for size in the wasm-release profile to reduce load times and bandwidth usage on web.
+  [profile.wasm-release]
+  # Default to release profile values.
+  inherits = "release"
+  # Optimize with size in mind (also try "z", sometimes it is better).
+  # Slightly slows compile times, great improvements to file size and runtime performance.
+  opt-level = "s"
+  # Strip all debugging information from the binary to slightly reduce file size.
+  strip = "debuginfo"
+  ```
+</details>
 
 When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
 
-#### Advanced Wasm optimizations
+<details>
+  <summary>
 
-[Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
-that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
+  #### Advanced Wasm optimizations (Optional)
+  </summary>
 
-```sh
-wasm-opt -Os --output output.wasm input.wasm
-```
+  [Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
+  that provides a `wasm-opt` CLI tool for making `.wasm` files smaller and faster:
 
-Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
-in combination with the optimizations from the previous section.
+  ```sh
+  wasm-opt -Os --output output.wasm input.wasm
+  ```
 
-See the following for more information on optimizing Wasm:
+  Note that `wasm-opt` runs very slowly, but it can make a _big_ difference, especially
+  in combination with the optimizations from the previous section.
 
-- <https://rustwasm.github.io/book/reference/code-size.html>
-- <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
-- <https://rustwasm.github.io/book/game-of-life/code-size.html>
+  See the following for more information on optimizing Wasm:
+
+  - <https://rustwasm.github.io/book/reference/code-size.html>
+  - <https://rustwasm.github.io/docs/wasm-bindgen/reference/optimize-size.html>
+  - <https://rustwasm.github.io/book/game-of-life/code-size.html>
+</details>
 
 ### Enable Fast Compiles (Optional)
 
@@ -190,169 +222,196 @@ Bevy can be built just fine using default configuration on stable Rust.
 Unfortunately, the compile times are rather long.
 This section explains how to speed up iterative compiles: the amount of time it takes to rebuild your project after changing a single file.
 
-#### Dynamic Linking
-
-This is the most impactful compilation time decrease!
-You can compile `bevy` as dynamic library, preventing it from having to be statically linked each time you rebuild your project. You can enable this with the `dynamic_linking` feature flag.
-
-```sh
-cargo run --features bevy/dynamic_linking
-```
-
-If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set with this command (edits `Cargo.toml` for you):
-
-```sh
-cargo add bevy -F dynamic_linking
-```
-
-{% callout(type="warning") %}
-On Windows you must also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
-
-In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
-{% end %}
-
-{% callout(type="note") %}
-Shipping your game with dynamic linking enabled is not recommended because it requires you to include `libbevy_dylib` alongside your game, it prevents certain optimizations, and can increase the size of your game.
-If you remove the `dynamic_linking` feature, your game executable can run standalone.
-{% end %}
-
-#### Alternative Linkers
-
-The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy.
-`lld` is _much faster_ at linking than the default Rust linker.
-To install LLD, find your OS below and run the given command.
-
 <details>
-  <summary>LLD Installation</summary>
+  <summary>
 
-* **Ubuntu**: `sudo apt-get install lld clang`
-* **Fedora**: `sudo dnf install lld clang`
-* **Arch**: `sudo pacman -S lld clang`
-* **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
+  #### Dynamic Linking
+  </summary>
+
+  This is the most impactful compilation time decrease!
+  You can compile `bevy` as dynamic library, preventing it from having to be statically linked each time you rebuild your project. You can enable this with the `dynamic_linking` feature flag.
 
   ```sh
-  cargo install -f cargo-binutils
-  rustup component add llvm-tools-preview
+  cargo run --features bevy/dynamic_linking
   ```
 
-* **MacOS**: On MacOS, the default system linker `ld-prime` is faster than LLD.
+  If you don't want to add the `--features bevy/dynamic_linking` to each run, this flag can permanently be set with this command (edits `Cargo.toml` for you):
 
+  ```sh
+  cargo add bevy -F dynamic_linking
+  ```
+
+  {% callout(type="warning") %}
+  On Windows you must also enable the [performance optimizations](#compile-with-performance-optimizations) or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
+
+  In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
+  {% end %}
+
+  {% callout(type="note") %}
+  Shipping your game with dynamic linking enabled is not recommended because it requires you to include `libbevy_dylib` alongside your game, it prevents certain optimizations, and can increase the size of your game.
+  If you remove the `dynamic_linking` feature, your game executable can run standalone.
+  {% end %}
 </details>
 
-Then, add one of the following to your Cargo config at `/path/to/project/.cargo/config.toml` (where `/path/to/project` is the directory which contains `Cargo.toml`) depending on your OS:
+<details>
+  <summary>
 
-```toml
-# for Linux
-[target.x86_64-unknown-linux-gnu]
-linker = "clang"
-rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+  #### Alternative Linkers
+  </summary>
 
-# for Windows
-[target.x86_64-pc-windows-msvc]
-linker = "rust-lld.exe"
-```
+  The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy.
+  `lld` is _much faster_ at linking than the default Rust linker.
+  To install LLD, find your OS below and run the given command.
+
+  <details>
+    <summary>LLD Installation</summary>
+
+  * **Ubuntu**: `sudo apt-get install lld clang`
+  * **Fedora**: `sudo dnf install lld clang`
+  * **Arch**: `sudo pacman -S lld clang`
+  * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
+
+    ```sh
+    cargo install -f cargo-binutils
+    rustup component add llvm-tools-preview
+    ```
+
+  * **MacOS**: On MacOS, the default system linker `ld-prime` is faster than LLD.
+
+  </details>
+
+  Then, add one of the following to your Cargo config at `/path/to/project/.cargo/config.toml` (where `/path/to/project` is the directory which contains `Cargo.toml`) depending on your OS:
+
+  ```toml
+  # for Linux
+  [target.x86_64-unknown-linux-gnu]
+  linker = "clang"
+  rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+  # for Windows
+  [target.x86_64-pc-windows-msvc]
+  linker = "rust-lld.exe"
+  ```
+
+  <details>
+    <summary>Alternative - Mold</summary>
+
+  Mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
+
+  * **Ubuntu**: `sudo apt-get install mold clang`
+  * **Fedora**: `sudo dnf install mold clang`
+  * **Arch**: `sudo pacman -S mold clang`
+  * **Windows**: Support not planned; [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
+  * **MacOS**: Available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
+
+  You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
+
+  ```toml
+  [target.x86_64-unknown-linux-gnu]
+  linker = "clang"
+  rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
+  ```
+
+  {% callout(type="note") %}
+  Disabling `bevy/dynamic_linking` may improve Mold's performance.
+  <sup>[citation needed]</sup>
+  {% end %}
+
+  </details>
+</details>
 
 <details>
-  <summary>Alternative - Mold</summary>
+  <summary>
   
-Mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues.  To install mold, find your OS below and run the given command:
+  #### Nightly Rust Compiler
+  </summary>
 
-* **Ubuntu**: `sudo apt-get install mold clang`
-* **Fedora**: `sudo dnf install mold clang`
-* **Arch**: `sudo pacman -S mold clang`
-* **Windows**: Support not planned; [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
-* **MacOS**: Available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
+  This gives access to the latest performance improvements and "unstable" optimizations, including [generic sharing](#generic-sharing) below.
 
-You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
+  Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
 
-```toml
-[target.x86_64-unknown-linux-gnu]
-linker = "clang"
-rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
-```
+  ```toml
+  [toolchain]
+  channel = "nightly"
+  ```
 
-{% callout(type="note") %}
-Disabling `bevy/dynamic_linking` may improve Mold's performance.
-<sup>[citation needed]</sup>
-{% end %}
-
+  For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 </details>
-
-#### Nightly Rust Compiler
-
-This gives access to the latest performance improvements and "unstable" optimizations, including [generic sharing](#generic-sharing) below.
-
-Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
-
-```toml
-[toolchain]
-channel = "nightly"
-```
-
-For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
-
-#### Cranelift
-
-This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM. 
-It currently works best on Linux.
-
-To install cranelift, run the following.
-```
-rustup component add rustc-codegen-cranelift-preview --toolchain nightly
-```
-
-To activate it for your project, add the following to your `.cargo/config.toml`.
-```toml
-[unstable]
-codegen-backend = true
-
-[profile.dev]
-codegen-backend = "cranelift"
-
-[profile.dev.package."*"]
-codegen-backend = "llvm"
-```
-
-This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
-details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
-MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
-
-While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it. 
-Notably, Wasm builds do not work yet.
-
-When shipping your game, you should still compile it with LLVM.
-
-#### Generic Sharing
-
-Allows crates to share monomorphized generic code instead of duplicating it.
-In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
-This is currently only available on nightly Rust ([see above](#nightly-rust-compiler)).
 
 <details>
-  <summary>Generic sharing setup</summary>
+  <summary>
+  
+  #### Cranelift
+  </summary>
 
-See [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) for a more comprehensive, cross-platform example.
+  This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM. 
+  It currently works best on Linux.
 
-```toml
-# /path/to/project/.cargo/config.toml
-[target.x86_64-unknown-linux-gnu]
-rustflags = [
-  # (Nightly) Make the current crate share its generic instantiations
-  "-Zshare-generics=y",
-]
-```
+  To install cranelift, run the following.
+  ```
+  rustup component add rustc-codegen-cranelift-preview --toolchain nightly
+  ```
 
+  To activate it for your project, add the following to your `.cargo/config.toml`.
+  ```toml
+  [unstable]
+  codegen-backend = true
+
+  [profile.dev]
+  codegen-backend = "cranelift"
+
+  [profile.dev.package."*"]
+  codegen-backend = "llvm"
+  ```
+
+  This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
+  details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
+  MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
+
+  While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it. 
+  Notably, Wasm builds do not work yet.
+
+  When shipping your game, you should still compile it with LLVM.
 </details>
 
-### Improve Runtime Performance (Optional)
+<details>
+  <summary>
 
-Bevy's dependencies do a lot of trace logging that is not relevant for an end user. 
-To improve your runtime performance, you can add the following to the `[dependencies]` section of your Cargo.toml. 
-It will disable detailed log levels on compile time so that they do not need to be filtered out while your app is running.
+  #### Generic Sharing
+  </summary>
 
-```toml
-log = { version = "*", features = ["max_level_debug", "release_max_level_warn"] }
-```
+  Allows crates to share monomorphized generic code instead of duplicating it.
+  In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
+  This is currently only available on nightly Rust ([see above](#nightly-rust-compiler)).
+
+  ##### Generic sharing setup
+
+  See [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) for a more comprehensive, cross-platform example.
+
+  ```toml
+  # /path/to/project/.cargo/config.toml
+  [target.x86_64-unknown-linux-gnu]
+  rustflags = [
+    # (Nightly) Make the current crate share its generic instantiations
+    "-Zshare-generics=y",
+  ]
+  ```
+</details>
+
+<details>
+  <summary>
+  
+  ### Improve Runtime Performance (Optional)
+  </summary>
+
+  Bevy's dependencies do a lot of trace logging that is not relevant for an end user. 
+  To improve your runtime performance, you can add the following to the `[dependencies]` section of your Cargo.toml. 
+  It will disable detailed log levels on compile time so that they do not need to be filtered out while your app is running.
+
+  ```toml
+  log = { version = "*", features = ["max_level_debug", "release_max_level_warn"] }
+  ```
+</details>
 
 ### Build Bevy
 
