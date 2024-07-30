@@ -24,7 +24,7 @@ A local server should start and you should be able to access a local version of 
 
 The code in the learning materials (e.g., Bevy Book, Quick Start Guide, Advanced Examples, etc.) is compiled, formatted, and tested to make sure that the examples work for readers.
 
-To validate your code snippets either `./learning-code-examples/validate_examples.sh` (Recommended) or from the root of the project `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
+To validate your code snippets either run `validate_examples.sh` which resides in the `learning-code-examples` directory (and is the recommended way to use `learning-code-examples`), or from the root of the project run `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
 
 > [!NOTE]
 > [See the `learning-code-examples` README.md for more info.](./learning-code-examples/README.md)
