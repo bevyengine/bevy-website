@@ -2,6 +2,12 @@
 
 This folder contains all the examples used in the official Bevy website learning materials, e.g., Bevy Book, Quick Start Guide, Advanced Examples, et cetera.
 
+## Example File Naming Scheme
+
+Single-file examples should follow the scheme of: `snake_case.rs`, and if it has multiple versions (e.g., the file has stuff added to it over time for a tutorial or such) then it should be suffixed by `_vX` where `X` is the number of the file in the sequence, culminating in `snake_case_v1.rs`, `snake_case_v2.rs`, …, `snake_case_vX.rs`.
+
+Multi-file examples should follow the scheme of `snake_case/`, with a `main.rs` and other files within, and if it has multiple versions then the directory should be suffixed with the version in format `_vX`, similar to single-file examples.
+
 ## Usage
 
 1. Create an `*.rs` example in `./examples/{LEARNING_MATERIAL}` where `{LEARNING_MATERIAL}` is the official Bevy learning material the example will be used in, e.g., Bevy Book, Quick Start Guide, Advanced Examples, et cetera.
