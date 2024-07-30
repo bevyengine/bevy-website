@@ -5,7 +5,7 @@ use contributors::generate_contributors;
 use github_client::BevyRepo;
 use migration_guides::generate_migration_guides;
 use release_notes::generate_release_notes;
-use std::path::PathBuf;
+use std::env::current_exe;
 
 mod changelog;
 mod contributors;
@@ -87,8 +87,15 @@ fn main() -> anyhow::Result<()> {
         BevyRepo::Bevy,
     );
 
-    // WARN this assumes it gets ran from ./generate-release
-    let release_path = PathBuf::from("..")
+    let mut release_path = current_exe()?;
+    // We pop thrice because the executable is
+    // in the workspaces (roots) `target/debug` directory,
+    // so we're effectively finding the directory containing
+    // `target/debug/executable`, which is what we want.
+    for _ in 0..3 {
+        release_path.pop();
+    }
+    let release_path = release_path
         .join("release-content")
         .join(args.release_version);
 
