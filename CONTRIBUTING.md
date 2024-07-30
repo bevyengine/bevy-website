@@ -20,11 +20,14 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-## Testing changes to book code snippets
+## Testing changes to learning material code examples
 
-The code in the book is compiled and tested to make sure that the examples work for readers.
+The code in the learning materials (e.g., Bevy Book, Quick Start Guide, Advanced Examples, etc.) is compiled, formatted, and tested to make sure that the examples work for readers.
 
-To check your local changes, move into the `code-validation` folder of this project using `cd code-validation`, and then run `cargo test`. If you write a new section of the book, you have to add it in `code-validation/src/lib.rs` to enable code validation for it.
+To validate your code snippets either run `validate_examples.sh` which resides in the `learning-code-examples` directory (and is the recommended way to use `learning-code-examples`), or from the root of the project run `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
+
+> [!NOTE]
+> [See the `learning-code-examples` README.md for more info.](./learning-code-examples/README.md)
 
 ## Learning material structure
 
@@ -174,16 +177,17 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
 These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.
 9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
-10. To validate if local code changes are compiling you can `cd` into the `code-validation` folder and test your code using `cargo test`.
-11. To make sure your web-based files (html, markdown) are formatted correctly run the commands: 
+10. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
+11. To make sure your web-based files (html, markdown) are formatted correctly run the commands:
+
     ```
     markdownlint -f -c .github/linters/.markdown-lint.yml .
     djlint
     typos
     ```
+
     in the root directory of your local Bevy website repository. This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.  Note that the CI also includes `editorconfigchecker` but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
-12. To hide lines of code in Zola Rust code blocks of the book you should: a. Mark each line you wish to hide with a `#` with an empty space afterwards like `# //...line_of_code_here...` although you were hiding lines in rustdoc. b. Run the [utility tool](write-rustdoc-hide-lines) in `<ROOT_OF_WEBSITE>/write_rustdoc-hide-lines/` named `write_rustdoc_hide_lines.sh`.
-13. To reference Rust API docs you can use markdown's reference-style links like so:
+12. To reference Rust API docs you can use markdown's reference-style links like so:
    [`HashMap`]
 
    ```md

@@ -30,30 +30,7 @@ It can be useful to allow your users to supply generic types to your plugins. It
 
 You can define a generic plugin like so:
 
-```rust,hide_lines=1-2
-# use bevy::prelude::*;
-# use std::marker::PhantomData;
-// Example with a generic type that implements `Component`
-
-pub struct YourPlugin<T: Component> {
-  pub phantom_t: PhantomData<T>,
-}
-
-impl<T: Component> Plugin for YourPlugin<T> {
-  fn build(&self, app: &mut App) {
-    app.add_systems(Startup, example_system::<T>);
-  }
-
-  // ... your other logic ...
-}
-
-// Example system using your generics
-pub fn example_system<T: Component>(query: Query<Entity, With<T>>) {
-  let entity = query.single();
-
-  // ... any other logic here ...
-}
-```
+{{file_code_block(file="quick-start/generic_plugin.rs", anchor="generic_plugin")}}
 
 A prime example of generic plugins in use is the [Bevy Cellular Automaton Plugin](https://github.com/ManevilleF/bevy_life).
 
