@@ -58,7 +58,7 @@
         {% if tier.reward_logo and donor.logo %}
             {% set_global logo_height = tier.logo_height %}
             {% if donor.square_logo %}
-                {% set_global logo_height = logo_height * 1.666 %}
+                {% set_global logo_height = logo_height * 2.0 %}
             {% endif %}
             {% if donor.logo_scale %}
                 {% set_global logo_height = logo_height * donor.logo_scale %}
