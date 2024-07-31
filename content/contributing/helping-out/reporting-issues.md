@@ -1,5 +1,5 @@
 +++
-title = "Using Github Issues"
+title = "Reporting Issues"
 insert_anchor_links = "right"
 [extra]
 weight = 1
