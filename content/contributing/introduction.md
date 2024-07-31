@@ -44,12 +44,12 @@ Bevy also currently has the following "development process" goals:
 - **Control and consistency over 3rd party code reuse**: Only add a dependency if it is *absolutely* necessary. Every dependency we add decreases our autonomy and consistency. Dependencies also have the potential to increase compile times and risk pulling in sub-dependencies we don't want / need.
 - **Don't re-invent every wheel**: As a counter to the previous point, don't re-invent everything at all costs. If there is a crate in the Rust ecosystem that is the "de-facto" standard (ex: `wgpu` or `winit`), we should heavily consider using it. Bevy should be a positive force in the ecosystem. We should drive the improvements we need into these core ecosystem crates.
 - **Rust-first**: Engine and user-facing code should optimize and encourage Rust-only workflows. Adding additional languages increases internal complexity, fractures the Bevy ecosystem, and makes it harder for users to understand the engine. Never compromise a Rust interface in the interest of compatibility with other languages.
-- **Thoughtful public interfaces over maximal configurability**: Symbols and apis should be private by default. Every public API should be thoughtfully and consistently designed. Don't expose unnecessary internal implementation details. Don't allow users to "shoot themselves in the foot". Favor one "happy path" api over multiple apis for different use cases.
+- **Thoughtful public interfaces over maximal configurability**: Symbols and APIs should be private by default. Every public API should be thoughtfully and consistently designed. Don't expose unnecessary internal implementation details. Don't allow users to "shoot themselves in the foot". Favor one "happy path" API over multiple APIs for different use cases.
 - **Test what you need to**: Write useful tests. Don't write tests that aren't useful. We *generally* aren't strict about unit testing every line of code. We don't want you to waste your time. But at the same time:
     - Most new features should have at least one minimal [example](https://github.com/bevyengine/bevy/tree/main/examples). These also serve as simple integration tests, as they are run as part of our CI process.
     - The more complex or "core" a feature is, the more strict we are about unit tests. Use your best judgement here. We will let you know if your pull request needs more tests. We use Rust's built in [testing framework].
 - **Welcome new contributors**: Invest in new contributors. Help them fill knowledge and skill gaps. Don't ever gatekeep Bevy development according to notions of required skills or credentials. Help new developers find their niche.
-- **Civil discourse**: We need to collectively discuss ideas and the best ideas *should* win. But conversations need to remain respectful at all times. Remember that we're all in this together. Always follow our [Code of Conduct].
+- **Civil discourse**: We need to collectively discuss ideas, and the best ideas *should* win, but conversations need to remain respectful at all times. Remember that we're all in this together and always follow our [Code of Conduct].
 
 [Bevy Organization doc]: https://github.com/bevyengine/bevy/blob/main/docs/the_bevy_organization.md
 [testing framework]: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
@@ -75,4 +75,4 @@ These repositories are owned and managed by [The Bevy Foundation], a non-profit 
 [The Bevy Foundation]: https://bevyengine.org/foundation/
 {% end %}
 
-The `bevy` repo itself contains many smaller subcrates. Most of them can be used by themselves and many of them can be modularly replaced. Feel free to dig around and find one that interests you!
+The `bevy` repo itself contains many smaller subcrates. Several of them can be used by themselves and almost all of them can be modularly replaced. Feel free to dig around and find one that interests you!
