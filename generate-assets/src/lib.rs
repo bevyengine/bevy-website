@@ -6,6 +6,7 @@ use gitlab_client::GitlabClient;
 use serde::Deserialize;
 use std::cmp::Ordering;
 use std::{fs, path::PathBuf, str::FromStr};
+use url::Url;
 
 pub mod github_client;
 pub mod gitlab_client;
@@ -23,6 +24,8 @@ pub struct Asset {
     pub description: String,
     pub order: Option<usize>,
     pub image: Option<String>,
+    #[serde(rename = "crate")]
+    pub crate_name: Option<String>,
     pub licenses: Option<Vec<String>>,
     pub bevy_versions: Option<Vec<String>>,
 
@@ -66,11 +69,13 @@ pub struct Section {
     pub sort_order_reversed: bool,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 pub enum AssetNode {
     Section(Section),
     Asset(Asset),
 }
+
 impl AssetNode {
     pub fn name(&self) -> String {
         match self {
@@ -220,7 +225,10 @@ fn get_extra_metadata(
 ) -> anyhow::Result<()> {
     println!("Getting extra metadata for {}", asset.name);
 
-    let url = url::Url::parse(&asset.link)?;
+    let url = match &asset.crate_name {
+        Some(crate_name) => Url::parse(&format!("https://crates.io/crates/{crate_name}")),
+        None => Url::parse(&asset.link),
+    }?;
     let segments = url.path_segments().map(|c| c.collect::<Vec<_>>()).unwrap();
 
     let metadata = match url.host_str() {
@@ -303,7 +311,7 @@ fn merge_version(version1: Option<String>, version2: Option<String>) -> Option<S
 
 /// Gets metadata from a Github project.
 ///
-/// This algorithm, in order :
+/// This algorithm, in order:
 /// - tries to get metadata from the root `Cargo.toml` file,
 /// - if the license is missing, search the license of the project on Github,
 /// - if metadata is missing, search all `Cargo.toml` files, then tries to get metadata
@@ -461,11 +469,12 @@ fn get_license(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
 
 /// Find any bevy dependency and get the corresponding bevy version from a `Cargo.toml` file.
 ///
-/// This algorithm checks if a dependency to an official bevy crate is found, in order :
+/// This algorithm checks if a dependency to an official bevy crate is found, in order:
 /// - in the (regular) dependencies,
 /// - in the dev dependencies (used for examples, tests and benchmarks),
 /// - in the workspace dependencies.
-///   It doesn't go deeper if a version is already found.
+///
+/// It doesn't go deeper if a version is already found.
 fn get_bevy_version_from_manifest(
     cargo_manifest: &cargo_toml::Manifest,
     bevy_crates: &Option<Vec<String>>,
