@@ -2,7 +2,7 @@
 title = "Reporting Issues"
 insert_anchor_links = "right"
 [extra]
-weight = 1
+weight = 2
 +++
 
 Bevy tracks bugs and feature requests using [Github Issues], which is an issue tracker and discussion space. You can find Bevy's issue page [here](https://github.com/bevyengine/bevy/issues), where you can navigate, filter, and view individual issues.
