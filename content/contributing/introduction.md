@@ -21,7 +21,7 @@ Read on if you're looking for:
 
 We're thrilled to have you along as we build!
 
-## What we're trying to build
+## What We're Trying to Build
 
 Bevy is a completely free and open source game engine built in Rust. It currently has the following design goals:
 
@@ -54,7 +54,7 @@ Bevy also currently has the following "development process" goals:
 [Bevy Organization doc]: https://github.com/bevyengine/bevy/blob/main/docs/the_bevy_organization.md
 [testing framework]: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
 
-## Getting oriented
+## Getting Oriented
 
 Bevy, like any general-purpose game engine, is a large project! It can be a bit overwhelming to start, so here's the bird's-eye view.
 

@@ -7,7 +7,7 @@ weight = 1
 
 Bevy's scope and user base means that it gets a large volume of issues and pull requests. This work all needs to be organized to make it easier to find related issues, figure out where you can help, and to quickly communicate the status of a task at a glance. The continual process of organizing work is called **triage**.
 
-## Classifying issues and PRs
+## Classifying Issues and PRs
 
 Labels are our primary tool for organizing work. You can find a complete list with descriptions [here](https://github.com/bevyengine/bevy/labels). These are a few of the most common, organized by category:
 

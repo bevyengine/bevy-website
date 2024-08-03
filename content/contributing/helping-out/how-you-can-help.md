@@ -1,5 +1,5 @@
 +++
-title = "How you can help"
+title = "How You Can Help"
 insert_anchor_links = "right"
 [extra]
 weight = 1
@@ -25,7 +25,7 @@ Think you've found a bug, missing documentation, or a feature that would help yo
 [Reddit]: https://www.reddit.com/r/bevy
 [itch.io]: https://itch.io/games/tag-bevy
 
-## Reviewing others' work
+## Reviewing Others' Work
 
 **One of the most valuable things you can do is review other people's work.** Bevy relies on community code review to keep the code quality high and the maintenance burden low. Absolutely anyone is welcome to leave reviews, and all reviews are treated with equal weight.
 
@@ -39,7 +39,7 @@ Not even our Project Leads and Maintainers are exempt from reviews! By giving fe
 Interested in reviewing but don't know where to start? Check out [Reviewing Pull Requests](TODO)!
 {% end %}
 
-## Joining a working group
+## Joining a Working Group
 
 Bevy's active initiatives are organized into *temporary working groups*: public, open-membership teams where people work together to tackle a broad-but-scoped goal. Each working group coordinates through a dedicated forum-channel on [Discord], although they also create issues and may use project boards for tangible work that needs to be done.
 
@@ -51,7 +51,7 @@ There are no special requirements to participate in a working group, as well as 
 Anyone can start working group! Check out [Working Groups](TODO) for more information about the process and requirements.
 {% end %}
 
-## Contributing code
+## Contributing Code
 
 We love getting code contributions from the community, and there's plenty of work to go around! If you want to code but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/contributing/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
 
@@ -67,7 +67,7 @@ When working on the engine's code, it's a good idea to introduce yourself in the
 
 Bevy relies heavily on Rust's inline documentation and a collection of up-to-date examples, but both are in constant need of revision and improvement. If you'd like to help us improve our learning materials, take a look at the dedicated sections on [Writing Docs](TODO) and [Creating Examples](TODO).
 
-## Expanding the ecosystem
+## Expanding the Ecosystem
 
 You can improve Bevy's ecosystem by building your own Bevy plugins and crates, or by helping to maintain existing third-party libraries.
 
@@ -77,11 +77,11 @@ Non-trivial, reusable functionality that works well by itself is a good candidat
 Check out our [plugin guidelines](@/learn/quick-start/plugin-development.md) for helpful tips and patterns!
 {% end %}
 
-## Organizing issues and pull requests
+## Organizing Issues and Pull Requests
 
 If nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to hop on [Discord] and ask `@Maintainer` to be added to the Github organization. Anyone interested in helping us keep things neat and tidy is welcome to join. As will be discussed later, this role only requires good faith, a basic understanding of our development process, and a few merged pull requests.
 
-## Teaching others
+## Teaching Others
 
 Bevy is still very young, and light on documentation, tutorials, and accumulated expertise. By helping others with their issues and teaching them about Bevy, you will naturally learn the engine and codebase in greater depth (while also making our community better)!
 
