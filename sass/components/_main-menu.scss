@@ -12,8 +12,6 @@
   &__link {
     @include flex-center;
 
-    $color-blue: #b1d9ff;
-
     position: relative;
     height: var(--header-height);
     font-size: 1.3rem;
@@ -27,7 +25,7 @@
     }
 
     &:hover {
-      color: $color-blue;
+      color: var(--color-baby-blue);
     }
 
     &--active {
@@ -35,7 +33,7 @@
       &,
       &:visited,
       &:active {
-        color: $color-blue;
+        color: var(--color-baby-blue);
       }
     }
 

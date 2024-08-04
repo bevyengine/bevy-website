@@ -92,11 +92,11 @@ div.image-compare {
       border-radius: 50%;
       outline: solid 3px var(--color-white);
       outline-offset: -2.9px;
-      background-color: darken(var(--color-white), 40%);
+      background-color: var(--color-white-darker-40);
 
       &:hover,
       &:active {
-        background-color: darken(var(--color-white), 20%);
+        background-color: var(--color-white-darker-20);
       }
     }
 

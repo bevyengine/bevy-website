@@ -1,5 +1,6 @@
 .tree-menu {
-    var(--hover-color): rgba(var(--color-white), 0.1);
+    // todo
+    $hover-color: rgba(#ffffff, 0.1);
     $item-height: 32px;
     $border-radius: 4px;
     $h-padding: 12px;

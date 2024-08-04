@@ -16,11 +16,17 @@
   }
 
   a {
-    $color: #868686;
+    @media (prefers-color-scheme: dark) {
+      --color: #868686;
+      --lighter-color: #979797;
+    }
+    @media (prefers-color-scheme: light) {
+      --lighter-color: #979797;
+    }
     display: block;
     text-wrap: balance;
     padding-block: 4px;
-    color: $color;
+    color: var(--color);
     text-decoration: none;
     word-break: break-word;
 
@@ -30,7 +36,7 @@
     }
 
     &:hover {
-      color: lighten($color, 20);
+      color: var(--lighter-color);
     }
 
     &[data-active=true] {

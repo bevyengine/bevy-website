@@ -49,10 +49,18 @@ $border-radius: 10px;
     // todo -- swapped these for testing. change light to dark and vice versa when done
     @media (prefers-color-scheme: light) {
       --color-black: #000;
+      --color-blue: #4a6e91;
+      --color-blue-lighter: #537ca3;
+      --color-baby-blue: #b1d9ff;
       --color-white: #ececec;
+      --color-white-darker-60: #5e5e5e;
+      --color-white-darker-40: #8d8d8d;
+      --color-white-darker-20: #bcbcbc;
       --color-grey-800: #232326;
       --color-grey-900: #1e1e22;
       --color-pink: #9f517a;
+      --color-pink-lighter: #b35b89;
+      --color-pink-barely-lighter: #a3537d;
       --color-gold: #d2be4a;
 
       --headerbar-color: #1e1e22;
