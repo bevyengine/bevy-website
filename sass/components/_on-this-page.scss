@@ -34,7 +34,7 @@
     }
 
     &[data-active=true] {
-      color: $color-white;
+      color: var(--color-white);
     }
 
   }

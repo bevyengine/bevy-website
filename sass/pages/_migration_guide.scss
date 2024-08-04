@@ -3,7 +3,7 @@
     margin-top: 2rem;
     padding-top: 2rem;
     margin-bottom: 0.1rem;
-    border-top: solid darken($color-white, 60%) 1px;
+    border-top: solid darken(var(--color-white), 60%) 1px;
   }
 
   p,

@@ -1,5 +1,5 @@
 .tree-menu {
-    $hover-color: rgba($color-white, 0.1);
+    var(--hover-color): rgba(var(--color-white), 0.1);
     $item-height: 32px;
     $border-radius: 4px;
     $h-padding: 12px;
@@ -31,7 +31,7 @@
 
         &:hover {
             opacity: 1.0;
-            background-color: $hover-color;
+            background-color: var(--hover-color);
         }
 
         &--with-chevron {
@@ -53,7 +53,7 @@
         text-wrap: balance;
 
         &, &:focus, &:active, &:hover, &:link, &:visited {
-            color: $color-white;
+            color: var(--color-white);
         }
     }
 
@@ -66,7 +66,7 @@
         user-select: none;
 
         &:hover {
-            background-color: $hover-color;
+            background-color: var(--hover-color);
         }
     }
 
@@ -78,11 +78,11 @@
     &__item--active {
         // Target just the first label, ignore subsection labels
         > .tree-menu__label {
-            background-color: $hover-color;
+            background-color: var(--hover-color);
             opacity: 1.0;
 
             .tree-menu__link {
-                color: $color-white;
+                color: var(--color-white);
             }
         }
     }
@@ -101,6 +101,6 @@
     &__toc {
       grid-row: 2;
       grid-column: 1 / span 2;
-      background-color: rgba($color-black, 0.25);
+      background-color: rgba(var(--color-black), 0.25);
     }
 }

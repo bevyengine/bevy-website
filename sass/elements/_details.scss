@@ -1,11 +1,11 @@
 details {
   $h-padding: 10px;
-  $border: 2px solid $subtitle-color;
+  $border: 2px solid var(--subtitle-color);
   // border: $border;
   border-radius: $border-radius;
   padding: 0 $h-padding;
   margin-block: 1em;
-  background-color: rgba($color-white, 0.1);
+  background-color: rgba(var(--color-white), 0.1);
   overflow: hidden; // prevent clobbering corner radii
 
   & h1, & h2, & h3, & h4, & h5, & h6 {
@@ -18,7 +18,7 @@ details {
     padding-block: calc($h-padding/2);
 
     &:hover {
-      text-shadow: 0 0 0.9px $default-color, 0 0 0.9px $default-color;
+      text-shadow: 0 0 0.9px var(--default-color), 0 0 0.9px var(--default-color);
     }
   }
 

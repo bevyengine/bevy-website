@@ -23,7 +23,7 @@
     &,
     &:visited,
     &:active {
-      color: $color-white;
+      color: var(--color-white);
     }
 
     &:hover {
@@ -67,7 +67,7 @@
     width: $mobile-menu-width;
     bottom: -$bottom-buffer;
     padding-bottom: $bottom-buffer;
-    background-color: $color-grey-900;
+    background-color: var(--color-grey-900);
     z-index: $z-main-menu;
     transform: translateX(0);
     opacity: 0.0;
@@ -88,7 +88,7 @@
       justify-content: space-between;
       padding-left: $padding;
       height: var(--header-height);
-      background-color: $color-grey-800;
+      background-color: var(--color-grey-800);
       border-bottom: 2px solid #313131;
 
       a {
@@ -135,7 +135,7 @@
     }
 
     &__link:hover {
-      background-color: rgba($color-white, 0.05);
+      background-color: rgba(var(--color-white), 0.05);
       border-radius: $border-radius;
     }
   }

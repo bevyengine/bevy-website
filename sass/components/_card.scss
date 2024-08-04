@@ -26,7 +26,7 @@
 }
 
 .card-sponsor-icon {
-  fill: $color-pink;
+  fill: var(--color-pink);
 }
 
 .card-image {
@@ -34,7 +34,7 @@
   overflow: hidden;
   object-fit: cover;
   display: flex;
-  background-color: $default-image-background-color;
+  background-color: var(--default-image-background-color);
   border-top-left-radius: $border-radius;
   border-bottom-left-radius: $border-radius;
   align-content: center;
@@ -74,7 +74,7 @@
   font-weight: 200;
   font-size: 1.4rem;
   font-style: italic;
-  color: $subtitle-color;
+  color: var(--subtitle-color);
   text-decoration: none;
 }
 
@@ -83,7 +83,7 @@
   position: relative;
   font-weight: 300;
   font-size: 1.3rem;
-  color: $default-color;
+  color: var(--default-color);
   text-decoration: none;
   margin-top: 0.4rem;
   overflow: hidden;
@@ -95,7 +95,7 @@
   display: block;
   font-weight: 500;
   font-size: 2.0rem;
-  color: $default-color;
+  color: var(--default-color);
   font-style: normal;
   text-decoration: none;
 }

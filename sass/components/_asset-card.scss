@@ -9,7 +9,7 @@ $asset-card-padding: 0.4rem;
     "banner"
     "desc"
     "tags";
-  color: $color-white;
+  color: var(--color-white);
 
   &__banner {
     grid-area: banner;
@@ -19,8 +19,8 @@ $asset-card-padding: 0.4rem;
     align-self: start;
 
     background: linear-gradient(0deg,
-        $card-hover-background 0%,
-        $default-image-background-color 100%);
+        var(--card-hover-background) 0%,
+        var(--default-image-background-color) 100%);
 
     img {
       width: 100%;
@@ -28,7 +28,7 @@ $asset-card-padding: 0.4rem;
       display: block;
       object-fit: contain;
 
-      background-color: $default-image-background-color;
+      background-color: var(--default-image-background-color);
     }
   }
 

@@ -31,7 +31,7 @@ div.donate-sponsor {
 
     a:visited {
         text-decoration: none;
-        color: $link-color;
+        color: var(--link-color);
     }
 }
 
@@ -77,7 +77,7 @@ div.donate-sponsor {
     margin-bottom: 1rem;
     line-height: 40px;
     border-bottom-width: 4px;
-    border-bottom-color: $color-white;
+    border-bottom-color: var(--color-white);
     border-bottom-style: solid;
 }
 

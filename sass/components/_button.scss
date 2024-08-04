@@ -22,7 +22,7 @@
   &,
   &:hover,
   &:visited {
-    color: $color-white;
+    color: var(--color-white);
     text-decoration: none;
   }
 
@@ -35,11 +35,11 @@
   }
 
   &--pink {
-    background-color: $color-pink;
-    border-color: lighten($color-pink, 13%);
+    background-color: var(--color-pink);
+    border-color: lighten(var(--color-pink), 13%);
 
     &:hover {
-      background-color: darken($color-pink, 3%);
+      background-color: darken(var(--color-pink), 3%);
     }
   }
 }

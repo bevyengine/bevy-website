@@ -36,8 +36,8 @@
     }
 
     &:hover {
-      background-color: rgba($color-white, 0.01);
-      color: $color-white;
+      background-color: rgba(var(--color-white), 0.01);
+      color: var(--color-white);
 
       .docs-footer__dir {
         color: #999;

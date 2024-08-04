@@ -3,11 +3,11 @@
   overflow: hidden;
   border-radius: $border-radius;
   border: 2px solid #383838;
-  background-color: $syntax-theme-background;
+  background-color: var(--syntax-theme-background);
   text-decoration: none;
 
   &:hover {
-    background-color: $card-hover-background;
+    background-color: var(--card-hover-background);
     border: 2px solid #6b6b6b;
   }
 }
@@ -55,7 +55,7 @@
 
 @mixin scrollbar-v {
   $track-width: 4px;
-  $thumb-color: rgba($color-white, 0.2);
+  $thumb-color: rgba(var(--color-white), 0.2);
 
   scrollbar-width: thin;
   scrollbar-color: $thumb-color transparent;

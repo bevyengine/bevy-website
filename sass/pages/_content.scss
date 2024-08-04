@@ -60,7 +60,7 @@ $content-font-size: 1.22rem;
     font-variant-ligatures: none;
     font-size: 1.05rem;
     color: #c8c8c8;
-    background-color: $syntax-theme-background;
+    background-color: var(--syntax-theme-background);
     border-radius: $border-radius;
     padding-bottom: 3px;
     padding-top: 3px;
@@ -72,7 +72,7 @@ $content-font-size: 1.22rem;
   blockquote {
     font-size: 1.1rem;
     color: #b1b1b1;
-    background-color: $syntax-theme-background;
+    background-color: var(--syntax-theme-background);
     border-radius: $border-radius;
     padding: 8px;
     margin: 0px;
@@ -90,20 +90,20 @@ $content-font-size: 1.22rem;
 
 
   a:hover code {
-    background-color: $syntax-theme-background-hover;
+    background-color: var(--syntax-theme-background)-hover;
   }
 
   a.button {
-    color: $color-white;
+    color: var(--color-white);
   }
 
   a {
     text-decoration: none;
-    color: $link-color;
+    color: var(--link-color);
   }
 
   a:hover {
-    text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+    text-shadow: 0 0 0.9px var(--link-hover-shadow-color), 0 0 0.9px var(--link-hover-shadow-color);
   }
 
   pre code {

@@ -17,26 +17,6 @@ $bp-tablet-landscape-up: "(min-width: #{$bp-tablet-landscape})";
 $bp-tablet-landscape-down: "(max-width: #{$bp-desktop - 1})";
 $bp-desktop-up: "(min-width: #{$bp-desktop})";
 
-// Colors
-$color-black: #000;
-$color-white: #ececec;
-$color-grey-800: #232326;
-$color-grey-900: #1e1e22;
-$color-pink: #9f517a;
-$color-gold: #d2be4a;
-
-$headerbar-color: #1e1e22;
-$hover-color: #ececec;
-$hover-shadow-color: #d6d6d6;
-$link-color: #7c90ff;
-$link-hover-shadow-color: #6c82ff;
-$default-color: #ececec;
-$subtitle-color: #999;
-$syntax-theme-background: #2b2c2f;
-$syntax-theme-background-hover: #414247;
-$default-image-background-color: #1b1b1b;
-$card-hover-background: #2f3033;
-
 // Animation
 $duration-fast: 100ms;
 $duration: 250ms;
@@ -65,6 +45,34 @@ $border-radius: 10px;
   @media #{$bp-desktop-up} {
     --header-height: 72px;
   }
+
+    // todo -- swapped these for testing. change light to dark and vice versa when done
+    @media (prefers-color-scheme: light) {
+      --color-black: #000;
+      --color-white: #ececec;
+      --color-grey-800: #232326;
+      --color-grey-900: #1e1e22;
+      --color-pink: #9f517a;
+      --color-gold: #d2be4a;
+
+      --headerbar-color: #1e1e22;
+      --hover-color: #ececec;
+      --hover-shadow-color: #d6d6d6;
+      --link-color: #7c90ff;
+      --link-hover-shadow-color: #6c82ff;
+      --default-color: #ececec;
+      --subtitle-color: #999;
+      --syntax-theme-background: #2b2c2f;
+      --syntax-theme-background-hover: #414247;
+      --default-image-background-color: #1b1b1b;
+      --card-hover-background: #2f3033;
+  }
+  @media (prefers-color-scheme: dark) {
+    --default-color: #f0f;
+    --subtitle-color: #777;
+  }
+
+ 
 }
 
 // Accessibility
