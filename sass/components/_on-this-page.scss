@@ -21,7 +21,8 @@
       --lighter-color: #979797;
     }
     @media (prefers-color-scheme: light) {
-      --lighter-color: #979797;
+      --color: #7a7a7a;
+      --lighter-color: #696969;
     }
     display: block;
     text-wrap: balance;

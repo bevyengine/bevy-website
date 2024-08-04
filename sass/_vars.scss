@@ -47,37 +47,90 @@ $border-radius: 10px;
   }
 
     // todo -- swapped these for testing. change light to dark and vice versa when done
-    @media (prefers-color-scheme: light) {
-      --color-black: #000;
-      --color-blue: #4a6e91;
-      --color-blue-lighter: #537ca3;
-      --color-baby-blue: #b1d9ff;
-      --color-white: #ececec;
-      --color-white-darker-60: #5e5e5e;
-      --color-white-darker-40: #8d8d8d;
-      --color-white-darker-20: #bcbcbc;
-      --color-grey-800: #232326;
-      --color-grey-900: #1e1e22;
-      --color-pink: #9f517a;
-      --color-pink-lighter: #b35b89;
-      --color-pink-barely-lighter: #a3537d;
-      --color-gold: #d2be4a;
-
-      --headerbar-color: #1e1e22;
-      --hover-color: #ececec;
-      --hover-shadow-color: #d6d6d6;
-      --link-color: #7c90ff;
-      --link-hover-shadow-color: #6c82ff;
-      --default-color: #ececec;
-      --subtitle-color: #999;
-      --syntax-theme-background: #2b2c2f;
-      --syntax-theme-background-hover: #414247;
-      --default-image-background-color: #1b1b1b;
-      --card-hover-background: #2f3033;
-  }
   @media (prefers-color-scheme: dark) {
-    --default-color: #f0f;
-    --subtitle-color: #777;
+    --color-black: #000;
+    --color-blue: #4a6e91;
+    --color-blue-lighter: #537ca3;
+    --color-baby-blue: #b1d9ff;
+    --color-white: #ececec;
+    --color-white-darker-60: #5e5e5e;
+    --color-white-darker-40: #8d8d8d;
+    --color-white-darker-20: #bcbcbc;
+    --color-grey-800: #232326;
+    --color-grey-900: #1e1e22;
+    --color-pink: #9f517a;
+    --color-pink-lighter: #b35b89;
+    --color-pink-barely-lighter: #a3537d;
+    --color-gold: #d2be4a;
+    --headerbar-color: #1e1e22;
+    --hover-color: #ececec;
+    --hover-shadow-color: #d6d6d6;
+    --link-color: #7c90ff;
+    --link-hover-shadow-color: #6c82ff;
+    --default-color: #ececec;
+    --subtitle-color: #999;
+    --syntax-theme-background: #2b2c2f;
+    --syntax-theme-background-hover: #414247;
+    --default-image-background-color: #1b1b1b;
+    --card-hover-background: #2f3033;
+    --donate-please: #d2d2d2;
+
+    --callout-accent-color-info: #5944e0;
+    --callout-bg-color-info: #2f2745;
+    --callout-color-info: #f0effb;
+    --callout-accent-color-caution: #e82f5a;
+    --callout-bg-color-caution: #591626;
+    --callout-color-caution: #eed5db;
+    --callout-accent-color-warning: #e4c151;
+    --callout-bg-color-warning: #513903;
+    --callout-color-warning: #fdfdec;
+    --code: #c8c8c8;  
+
+  }
+  @media (prefers-color-scheme: light) {
+    --color-black: #fff;
+    --color-blue: #4a6e91;
+    --color-blue-lighter: #537ca3;
+    --color-baby-blue: #b1d9ff;
+    --color-white: #090909;
+    --color-white-darker-60: #a1a1a1;
+    --color-white-darker-40: #727272;
+    --color-white-darker-20: #434343;
+    --color-grey-800: #efeff4;
+    --color-grey-900: #f4f4f8;
+
+    --color-pink: #9f517a;
+    --color-pink-lighter: #b35b89;
+    --color-pink-barely-lighter: #a3537d;
+    --color-gold: #d2be4a;
+
+    --headerbar-color: #1e1e22;
+    --hover-color: #090909;
+    --hover-shadow-color: #292929;
+    --link-color: #7c90ff;
+    --link-hover-shadow-color: #6c82ff;
+    --default-color: #090909;
+    --subtitle-color: #666;
+    --syntax-theme-background: #d3d0d4;
+    --syntax-theme-background-hover: #bdb8be;
+    --default-image-background-color: #e4e4e4;
+    --card-hover-background: #cccfd0;
+
+    --supporting-text: #2d2d2d;
+
+    --callout-accent-color-info: hsl(248, 72%, 43%);
+    --callout-bg-color-info: hsl(256, 28%, 79%);
+    --callout-color-info: hsl(245, 60%, 04%);
+
+    --callout-accent-color-caution: hsl(346, 80%, 45%);
+    --callout-bg-color-caution: hsl(346, 60%, 78%);
+    --callout-color-caution: hsl(346, 42%, 12%);
+    
+    --callout-accent-color-warning: hsl(46, 73%, 39%);
+    --callout-bg-color-warning: hsl(42, 93%, 84%);
+    --callout-color-warning: hsl(60, 81%, 04%);
+
+    --code: #383838;
   }
 
  

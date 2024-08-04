@@ -9,9 +9,9 @@
     --tertiary-text-color: #9e9e9e;
   }
   @media (prefers-color-scheme: light) {
-    --border-color: #2f3033
-    --secondary-text-color: #8c8c8c;
-    --tertiary-text-color: #9e9e9e;
+    --border-color: #cfccd0;
+    --secondary-text-color: #737373;
+    --tertiary-text-color: #616161;
   }
 
   @media #{$bp-tablet-portrait-up} {
