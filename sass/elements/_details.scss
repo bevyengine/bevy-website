@@ -18,7 +18,7 @@ details {
     padding-block: calc($h-padding/2);
 
     &:hover {
-      text-shadow: 0 0 0.9px var(--default-color), 0 0 0.9px var(--default-color);
+      text-shadow: 0 0 0.9px var(--hover-shadow-color), 0 0 0.9px var(--hover-shadow-color);
     }
   }
 

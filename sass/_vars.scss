@@ -74,7 +74,6 @@ $border-radius: 10px;
     --default-image-background-color: #1b1b1b;
     --card-hover-background: #2f3033;
     --donate-please: #d2d2d2;
-
     --callout-accent-color-info: #5944e0;
     --callout-bg-color-info: #2f2745;
     --callout-color-info: #f0effb;
@@ -89,9 +88,9 @@ $border-radius: 10px;
   }
   @media (prefers-color-scheme: light) {
     --color-black: #fff;
-    --color-blue: #4a6e91;
-    --color-blue-lighter: #537ca3;
-    --color-baby-blue: #b1d9ff;
+    --color-blue: hsl(210, 32%, 47%);
+    --color-blue-lighter: hsl(209, 33%, 52%);
+    --color-baby-blue: hsl(209, 100%, 35%);
     --color-white: #090909;
     --color-white-darker-60: #a1a1a1;
     --color-white-darker-40: #727272;
@@ -99,38 +98,42 @@ $border-radius: 10px;
     --color-grey-800: #efeff4;
     --color-grey-900: #f4f4f8;
 
-    --color-pink: #9f517a;
-    --color-pink-lighter: #b35b89;
-    --color-pink-barely-lighter: #a3537d;
-    --color-gold: #d2be4a;
+    --color-pink: hsl(328, 33%, 73%);
+    --color-pink-lighter: hsl(329, 37%, 67%);
+    --color-pink-barely-lighter: hsl(329, 33%, 68%);
+    --color-gold: hsl(51, 60%, 56%);
 
     --headerbar-color: #1e1e22;
     --hover-color: #090909;
     --hover-shadow-color: #292929;
-    --link-color: #7c90ff;
-    --link-hover-shadow-color: #6c82ff;
+    --link-color: hsl(211, 100%, 36%);
+    --link-hover-shadow-color: hsla(231, 100%, 71%, 25%);
     --default-color: #090909;
     --subtitle-color: #666;
-    --syntax-theme-background: #d3d0d4;
-    --syntax-theme-background-hover: #bdb8be;
     --default-image-background-color: #e4e4e4;
     --card-hover-background: #cccfd0;
-
     --supporting-text: #2d2d2d;
 
     --callout-accent-color-info: hsl(248, 72%, 43%);
     --callout-bg-color-info: hsl(256, 28%, 79%);
     --callout-color-info: hsl(245, 60%, 04%);
-
     --callout-accent-color-caution: hsl(346, 80%, 45%);
     --callout-bg-color-caution: hsl(346, 60%, 78%);
     --callout-color-caution: hsl(346, 42%, 12%);
-    
     --callout-accent-color-warning: hsl(46, 73%, 39%);
     --callout-bg-color-warning: hsl(42, 93%, 84%);
     --callout-color-warning: hsl(60, 81%, 04%);
 
-    --code: #383838;
+    // syntax theme note:
+    // `_syntax-theme.scss` contains the text syntax highlighting colors.
+    // Until those colors are adapted to respond to `prefers-color-scheme`, we
+    // keep the dark code backgrounds abd code text
+    --syntax-theme-background: #2b2c2f;
+    --syntax-theme-background-hover: #414247;
+    --code: #c8c8c8;  
+    //--syntax-theme-background: #d3d0d4;
+    //--syntax-theme-background-hover: #bdb8be;
+    //--code: #383838;
   }
 
  
