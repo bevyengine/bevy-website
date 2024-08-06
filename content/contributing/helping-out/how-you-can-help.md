@@ -8,7 +8,7 @@ weight = 1
 If you've made it to this page, you're probably already convinced that Bevy is a project you'd like to see thrive.
 But how can *you* help?
 
-No matter how experienced you are with Bevy and Rust or what your level of commitment is, there is a way for you to contribute! Take a look at the sections below to find a route that appeals to you (or many!).
+No matter how experienced you are with Bevy and Rust, or what your level of commitment is, there is a way for you to contribute! Take a look at the sections below to find a route that appeals to you (or many!).
 
 ## Battle-testing Bevy
 
