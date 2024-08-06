@@ -8,7 +8,7 @@ weight = 1
 If you've made it to this page, you're probably already convinced that Bevy is a project you'd like to see thrive.
 But how can *you* help?
 
-No matter your experience level with Bevy or Rust or your level of commitment, there is a way for you to contribute! Take a look at the sections that follow to pick a route (or five) that appeal to you.
+No matter how experienced you are with Bevy and Rust or what your level of commitment is, there is a way for you to contribute! Take a look at the sections below to find a route that appeals to you (or many!).
 
 ## Battle-testing Bevy
 
@@ -31,7 +31,7 @@ Think you've found a bug, missing documentation, or a feature that would help yo
 
 You don't need to be an Elder Rustacean to be useful here: anyone can catch missing tests, unclear docs, logic errors, and so on. If you're new to Rust or Bevy, submitting reviews is great way to learn things and acquaint yourself with the internals of the engine.
 
-If you do have specific skills (e.g. advanced familiarity with `unsafe` code, rendering knowledge, or web development experience) or personal experience with a problem, that's fantastic! We suggest trying to prioritize those areas, to ensure we can get appropriate expertise where we need it.
+If you do have specific skills (e.g. advanced familiarity with `unsafe` code, rendering knowledge, or web development experience) or experience with a specific problem, that's fantastic! We suggest trying to prioritize those areas to ensure we get appropriate expertise where we need it.
 
 Not even our Project Leads and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely. 
 
@@ -41,21 +41,21 @@ Interested in reviewing but don't know where to start? Check out [Reviewing Pull
 
 ## Joining a Working Group
 
-Bevy's active initiatives are organized into *temporary working groups*: public, open-membership teams where people work together to tackle a broad-but-scoped goal. Each working group coordinates through a dedicated forum-channel on [Discord], although they also create issues and may use project boards for tangible work that needs to be done.
+Bevy's active initiatives are organized into *temporary working groups*: public, open-membership teams where people work together to tackle a sizeable, well-scoped goal. Each working group coordinates through a dedicated forum-channel on [Discord], but they may also create issues or use project boards to organize and track their progress.
 
-You should consider joining a working group if you're interested in contributing code but don't know where to start or what to work on. Choosing one and asking how to help can be a fantastic way to get up to speed and be immediately useful.
+You should consider joining a working group if you're interested in contributing but don't know where to start or what to work on. Choosing one and asking how to help can be a fantastic way to get up to speed and be immediately useful.
 
-There are no special requirements to participate in a working group, as well as no application, formal membership list, or leadership. Anyone can help, and you should expect to compromise and work together with others to bring a shared vision to life. Working groups are _spaces_, not clubs.
+There are no special requirements to participate in a working group — no applications, formal membership list, or even leadership. Anyone can help, and you should expect to compromise and work together with others to bring your shared vision to life. Working groups are _spaces_, not clubs.
 
 {% callout() %}
-Anyone can start working group! Check out [Working Groups](TODO) for more information about the process and requirements.
+Anyone can start a working group! Check out [Working Groups](TODO) for more information about the process and requirements.
 {% end %}
 
 ## Contributing Code
 
 We love getting code contributions from the community, and there's plenty of work to go around! If you want to code but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/contributing/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
 
-If you already know what you want to work on, make your changes and submit a pull request! The page on [Your First Pull Request](TODO) is there to help if you get stuck.
+If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Your First Pull Request](TODO) is there to help if you get stuck.
 
 {% callout() %}
 When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord] and tell people about your plans. Communicating your progress early and often can help you avoid avoid headaches and disagreements during code review.
@@ -83,7 +83,7 @@ If nothing brings you more satisfaction than seeing every last issue labeled and
 
 ## Teaching Others
 
-Bevy is still very young, and light on documentation, tutorials, and accumulated expertise. By helping others with their issues and teaching them about Bevy, you will naturally learn the engine and codebase in greater depth (while also making our community better)!
+Bevy is still very young, and it's light on documentation, tutorials, and accumulated expertise. By helping others with their issues and teaching them about Bevy, you will naturally learn the engine and codebase in greater depth (while also making our community better)!
 
 Some of the best ways to do this are:
 
