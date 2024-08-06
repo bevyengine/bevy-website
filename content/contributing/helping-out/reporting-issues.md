@@ -2,14 +2,14 @@
 title = "Reporting Issues"
 insert_anchor_links = "right"
 [extra]
-weight = 1
+weight = 2
 +++
 
 Bevy tracks bugs and feature requests using [Github Issues], which is an issue tracker and discussion space. You can find Bevy's issue page [here](https://github.com/bevyengine/bevy/issues), where you can navigate, filter, and view individual issues.
 
 [Github Issues]: https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues
 
-## When to file an issue
+## When to File an Issue
 
 Issues are great for formally tracking the progress of bugs and features. Here are some scenarios where you may choose to use issues:
 
@@ -26,7 +26,7 @@ Before submitting an issue, please check that it has not already been created. [
 
 [Github Search]: https://github.com/search?q=repo%3Abevyengine%2Fbevy&type=issues
 
-### When to create a discussion instead
+## When to Create a Discussion Instead
 
 The Bevy repository also has [Github Discussions] enabled. Here are some scenarios where you may want to create a discussion post instead of an issue:
 
