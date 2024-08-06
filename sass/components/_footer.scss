@@ -7,11 +7,24 @@
     padding: 20px;
   }
 
-  &__social {
-    img {
-      filter: grayscale(1) brightness(800%);
-      &:hover {
-        scale: 110%;
+  @media (prefers-color-scheme: dark) {
+    &__social {
+      img {
+        filter: grayscale(1) brightness(800%);
+        &:hover {
+          scale: 110%;
+        }
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    &__social {
+      img {
+        filter: grayscale(1) brightness(0%);
+        &:hover {
+          scale: 110%;
+        }
       }
     }
   }
