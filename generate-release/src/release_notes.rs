@@ -65,12 +65,17 @@ pub fn generate_release_notes(
 
         contributors.remove(&author);
 
-        // Make sure the author is always the first in the list
-        let mut authors = vec![author];
-        authors.extend(contributors);
+        // Separate the contributors from authors for manual
+        // filtering since contributors may include typo fixes
+        // and other minor changes unwanted for the author position.
+        let contributors: Vec<String> = contributors.into_iter().collect();
 
         notes_metadata.push(generate_metadata_block(
-            &title, &authors, pr.number, &file_name,
+            &title,
+            &author,
+            &contributors,
+            pr.number,
+            &file_name,
         ));
 
         let file_path = path.join(format!("{file_name}.md"));
@@ -119,7 +124,8 @@ pub fn generate_release_notes(
 
 fn generate_metadata_block(
     title: &str,
-    authors: &[String],
+    author: &str,
+    contributors: &[String],
     pr_number: u64,
     file_name: &str,
 ) -> String {
@@ -127,13 +133,14 @@ fn generate_metadata_block(
     format!(
         r#"[[release_notes]]
 title = "{title}"
-authors = [{authors}]
+authors = ["{author}",]
+contributors = [{contributors}]
 url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
 file_name = "{file_name}.md"
 "#,
-        authors = authors
+        contributors = contributors
             .iter()
-            .map(|author| format!("\"{author}\""))
+            .map(|contributor| format!("\"{contributor}\""))
             .collect::<Vec<_>>()
             .join(", "),
         title = title.trim().replace('"', "\\\"")
