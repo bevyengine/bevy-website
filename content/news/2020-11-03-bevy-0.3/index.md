@@ -279,7 +279,7 @@ Bevy had a number of nice performance improvements this release:
 
 Note: these numbers are for getting a component 100,000 times, not for an individual component lookup
 
-![getting an entity's component](ecs_get_component.svg)
+<img alt="getting an entity's component" src="ecs_get_component.svg" class="inverted">
 
 This is where the big wins were. By removing locks and safety checks from Query systems, we were able to _significantly_ reduce the cost of retrieving a specific entity's component from within a system.
 
@@ -300,15 +300,15 @@ Additionally, here are some relevant [ecs_bench_suite](https://github.com/rust-g
 
 #### Component Insertion (in microseconds, smaller is better)
 
-![component insertion](ecs_simple_insert.svg)
+<img alt="component insertion" src="ecs_simple_insert.svg" class="inverted">
 
 #### Component Add/Remove (in milliseconds, smaller is better)
 
-![component add/remove](ecs_add_remove.svg)
+<img alt="component add/remove" src="ecs_add_remove.svg" class="inverted">
 
 #### Fragmented Iteration (in nanoseconds, smaller is better)
 
-![fragmented iteration](ecs_frag_iter.svg)
+<img alt="fragmented iteration" src="ecs_frag_iter.svg" class="inverted">
 
 ### Thread Local Resources
 

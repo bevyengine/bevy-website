@@ -88,6 +88,11 @@ $border-radius: 10px;
     --callout-color-warning: #fdfdec;
     --code: #c8c8c8;  
 
+    .inverted { }
+
+    .inverted-hue120 { }
+    
+    .inverted-hue240 { }
   }
 
 
@@ -142,6 +147,18 @@ $border-radius: 10px;
     //--syntax-theme-background-hover: #bdb8be;
     //--code: #383838;
     --alt-syntax-theme-background: #d0d3d4;
+
+   .inverted {
+      filter: invert(100%) hue-rotate(180deg);
+    }
+
+    .inverted-hue120 {
+      filter: invert(100%) hue-rotate(1200deg);
+    }
+
+    .inverted-hue240 {
+      filter: invert(100%) hue-rotate(240deg);
+    }
   }
 
  

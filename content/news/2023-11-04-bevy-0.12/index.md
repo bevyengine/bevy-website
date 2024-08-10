@@ -202,7 +202,7 @@ Most existing user-facing asset code will either require no changes at all, or m
 
 ### Asset Preprocessing
 
-![image process diagram](image_process.png)
+<img alt="image process diagram" src="bevy-0-12/image_process.png" class="inverted">
 
 Asset preprocessing is the ability to take an input asset of a given type, process it in some way (generally during development time), and then use the result as the final asset in your application. Think of it as an "asset compiler".
 
