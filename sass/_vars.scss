@@ -46,8 +46,9 @@ $border-radius: 10px;
     --header-height: 72px;
   }
 
-    // todo -- swapped these for testing. change light to dark and vice versa when done
+
   @media (prefers-color-scheme: dark) {
+    // dark theme -- original and default
     --color-black: #000;
     --color-blue: #4a6e91;
     --color-blue-lighter: #537ca3;
@@ -57,6 +58,7 @@ $border-radius: 10px;
     --color-white-darker-40: #8d8d8d;
     --color-white-darker-20: #bcbcbc;
     --color-grey-800: #232326;
+    // header color,
     --color-grey-900: #1e1e22;
     --color-pink: #9f517a;
     --color-pink-lighter: #b35b89;
@@ -87,21 +89,24 @@ $border-radius: 10px;
     --code: #c8c8c8;  
 
   }
+
+
   @media (prefers-color-scheme: light) {
+    // 'color-black' and other names are usually inverted compared to white theme
     --color-black: #fff;
-    --color-blue: hsl(210, 32%, 47%);
+    --color-blue: hsl(210, 32%, 67%);
     --color-blue-lighter: hsl(209, 33%, 52%);
     --color-baby-blue: hsl(209, 100%, 35%);
-    --color-white: #090909;
+    --color-white: #030303;
     --color-white-darker-60: #a1a1a1;
     --color-white-darker-40: #727272;
     --color-white-darker-20: #434343;
-    --color-grey-800: #efeff4;
-    --color-grey-900: #f4f4f8;
+    --color-grey-800: #f4f4f8;
+    --color-grey-900: #efeff4;
 
-    --color-pink: hsl(328, 33%, 73%);
+    --color-pink: hsl(328, 33%, 77%);
     --color-pink-lighter: hsl(329, 37%, 67%);
-    --color-pink-barely-lighter: hsl(329, 33%, 68%);
+    --color-pink-barely-lighter: hsl(329, 33%, 73%);
     --color-gold: hsl(51, 60%, 56%);
 
     --headerbar-color: #1e1e22;
@@ -111,7 +116,8 @@ $border-radius: 10px;
     --link-hover-shadow-color: hsla(231, 100%, 71%, 25%);
     --default-color: #090909;
     --subtitle-color: #666;
-    --default-image-background-color: #e4e4e4;
+    //--default-image-background-color: #e4e4e4;
+    --default-image-background-color: #2c2c2c; // originall 1b1b1b 
     --card-hover-background: #cccfd0;
     --supporting-text: #2d2d2d;
 
