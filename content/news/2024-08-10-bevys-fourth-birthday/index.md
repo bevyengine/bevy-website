@@ -39,7 +39,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 * **July 4**: [Bevy 0.14](/news/bevy-0-14/)
   * We added Virtual Geometry, Sharp Screen Space Reflections, Depth of Field, Per-Object Motion Blur, Volumetric Fog / Lighting, Filmic Color Grading, PBR Anisotropy, Auto Exposure, PCF for Point Lights, Animation Blending, ECS Hooks and Observers, Better Colors, Computed States and Sub-States, Rounded UI Corners, and more!
 * **July 20th**: [Bevy Jam #5: Cycles](https://itch.io/jam/bevy-jam-5)
-  * The fifth official Bevy game jam! 224 people joined, 79 people submitted games, and people left 1,607 ratings. [That's a LOT of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees) won!
+  * The fifth official Bevy game jam! 224 people joined, 79 people submitted games, and people left 1,677 ratings (so far). The voting period hasn't ended yet, so [go play and rate some games](https://itch.io/jam/bevy-jam-5/entries)!
 * **August 10**: Bevy is now four years old!
 
 ## A Year By The Numbers
@@ -71,7 +71,7 @@ I'll try not to repeat myself here, but note that I am still extremely proud of 
 
 Getting this spun up occupied a solid chunk of my time this year. I had to learn the intricacies of setting up corporations, researching and selecting the best legal structure, achieving state-level non-profit status, achieving federal-level 501c3 non-profit status (the hard part here was putting together the application, which is _still_ pending five months later), hiring people in Canada as a US company, setting up corporate bank accounts, defining bylaws, conflict of interest policies, articles of incorporation, state and federal tax compliance, maximizing transparency by publicizing structural documents and meeting minutes, I [built a custom crowdfunding platform](/donate/) to cut out overhead ... the list goes on and on. This was exhausting work, but it was also _definitely_ a worthwhile investment.
 
-With The Bevy Foundation in place, Bevy is positioned to live a long and stable life, independent of any one person. It exists to be a central, trusted place to fund and lead the Bevy project. It puts its mission (and specifically the needs of the community) above all else. It is lead by its Board of Directors. By convention there is a 1:1 mapping between Director and Bevy Maintainer ... we want the people actually in the trenches to be in charge of the foundation. This also means that I no longer have absolute authority over Bevy. I _am_ currently the President of the foundation (which by convention is also Bevy's Project Lead). The combination of these two roles gives me a lot of the same authority I've had in the past. But it is now my job to enact the will of the board. And if they no longer think I should hold that position, they can remove me.
+With The Bevy Foundation in place, Bevy is positioned to live a long and stable life, independent of any one person. It exists to be a central, trusted place to fund and lead the Bevy project. It puts its mission (and specifically the needs of the community) above all else. It is lead by its Board of Directors. By convention there is a 1:1 mapping between Director and Bevy Maintainer ... we want the people actually in the trenches to be in charge of the foundation. The board structure also means that I no longer have absolute authority over Bevy. I _am_ currently the President of the foundation (which by convention is also Bevy's Project Lead). The combination of these two roles gives me a lot of the same authority I've had in the past. But it is now my job to enact the will of the board. And if they no longer think I should hold that position, they can remove me.
 
 This also solves our biggest outstanding funding problem: "popularity contest" ad-hoc individual crowdfunding. By directing all funding to the centralized Bevy Foundation, money no longer goes directly to the people with the largest following or the most direct connections to the project. Instead, The Bevy Foundation can choose where it goes based on the needs of the project.
 
@@ -117,6 +117,8 @@ We've made huge strides in renderer performance this year thanks to many targete
 
 Combine that with one of the most modular game engine renderers out there right now, and I think Bevy is well positioned to attract some serious attention in the coming year from both renderer nerds and those interested in making use of top-tier graphics tech.
 
+If you are interested in diving in, check out our vibrant [`#render-dev` Discord channel](https://discord.com/invite/bevy).
+
 ### UI Ecosystem Development
 
 Bevy UI is one of the most exciting spaces in Bevy engine development right now. We have a _ton_ of projects in this space:
@@ -137,11 +139,19 @@ Bevy UI is one of the most exciting spaces in Bevy engine development right now.
 
 As you can probably tell, the Bevy community has gone _very_ wide and covered significant ground. Bevy users now have plenty of solid options for 3rd party Bevy UI frameworks, each taking a different opinionated path.
 
-However it is definitely time to start reeling this in. Bevy needs a high quality official UI framework that the community can rally behind. The newly-established [Next Generation Scene / UI working group](https://discord.com/channels/691052431525675048/1264881140007702558) will distill the lessons learned above and ideally get as many members of the Bevy UI developer community on board for the next generation of official Bevy UI (and Scenes ... it is important to note that we're building a combined Scene / UI framework here ... a unified Bevy data model).
+However it is definitely time to start reeling this in. Bevy needs a high quality official UI framework that the community can rally behind.
 
-As stated in my design document, a lot of the work I have done is built in layers. My goal is to establish consensus on each layer and start merging them quickly. As we go "up" the stack, each layer will become more controversial. Eventually we will reach a point in the stack (ex: reactivity and styles) that will require significant discussion and collaboration amongst the many developers above. That being said, I think there are very few unknowns at this point. We've explored the space and now we just need to steer the ship.
+### Bevy's Upcoming Unified Scene / UI System
 
-The new Scene / UI system will be a MASSIVE upgrade to Bevy's capabilities. Developing Bevy apps (games, UI apps, tools, editors, etc) will be easier and more fun than ever before. Apologies for being grandiose / wearing my marketing hat, but I really think this will position Bevy to be both a top-tier general-purpose app development framework and a next-generation game development framework (reactive scenes will be big and we're [one](https://github.com/SanderMertens/flecs) of the first to do them!).
+The newly-established [Next Generation Scene / UI working group](https://discord.com/channels/691052431525675048/1264881140007702558) will distill the lessons learned above and ideally get as many members of the Bevy UI developer community on board for the next generation of official Bevy UI (and Scenes ... it is important to note that we're building a combined Scene / UI framework here ... a unified Bevy data model).
+
+As stated in my design document, a lot of the work I have done is built in layers. My goal is to establish consensus on each layer and start merging them quickly. As we go "up" the stack, each layer will become more controversial. Eventually we will reach a point in the stack (ex: reactivity and styles) that will require significant discussion and collaboration amongst the many developers above. That being said, I think there are very few unknowns at this point. We've explored the space and we've written plenty of code. Now we just need to steer the ship.
+
+The new Scene / UI system will be a MASSIVE upgrade to Bevy's capabilities. Developing Bevy apps (games, UI apps, tools, editors, etc) will be easier and more fun than ever before. I apologize for being grandiose / wearing my marketing hat, but I really think this will position Bevy to be both a top-tier general-purpose app development framework _and_ a next-generation game development framework (and yes ... game _ENGINE_). 
+
+Reactive scenes will be _big_ and we're [one](https://github.com/SanderMertens/flecs) of the first to do them! We are also positioned to be the first popular engine that allows you to define scenes in code _and_ in asset files (and ultimately visually in the Bevy Editor) using _the same asset format_, thanks to the `bsn!` macro. This will empower developers to use the paradigm that suits them best _and_ to _blend_ paradigms when that suits them.
+
+I am _very_ excited for what this all means for the Bevy developer experience, both as Bevy's Project Lead _and_ as a user of Bevy.
 
 ### Even More Real Projects™ Using Bevy
 
@@ -166,6 +176,14 @@ This was a great year for Bevy "in the real world":
 
 Lots of people using Bevy in production! And those are just the ones I'm personally aware of!
 
+### Bevy ECS Maturity
+
+Unlike previous years, which each saw large and sweeping changes to highly trafficked Bevy ECS APIs ([Schedule v3](/news/bevy-0-10/#ecs-schedule-v3), [Schedule-First APIs](/news/bevy-0-11/#schedule-first-ecs-apis), [Bevy ECS V2](/news/bevy-0-5/#bevy-ecs-v2), etc), this year our core ECS APIs largely remained stable. We were able to layer big new features on top like [Hooks and Observers](/news/bevy-0-14/#ecs-hooks-and-observers), [Dynamic Queries](/news/bevy-0-13/#dynamic-queries), and [One Shot Systems](/news/bevy-0-12/#one-shot-systems) without people needing to rework their code.
+
+I expect this trend to continue going forward. We've spent _years_ iterating on the core Bevy ECS APIs and I think we've finally landed on something that can stand the test of time. Bevy ECS is ergonomic, delightful to use, and fast!
+
+This is also a pattern I expect to see in other areas of the engine: initial rapid and aggressive iteration to find the ideal designs, followed by stability and iterative improvements to solid foundations.
+
 ## There Is Always Room For Improvement
 
 ![improve](improve.svg)
@@ -177,7 +195,7 @@ Yes, another year has passed without the Bevy Editor. We _have_ made significant
 * As mentioned above, we're nearing an MVP of the Next Generation Scene / UI system. This is a cornerstone of the Bevy Editor, both because we will use it to build the UI of the editor _and_ because the Bevy Editor's scene editor will use the new scene system.
 * We are in the process of [implementing the Bevy Remote Protocol](https://github.com/bevyengine/bevy/pull/13563), which will enable the Bevy Editor to communicate and interact with Bevy Apps as they run (even on different machines / platforms).
 * We landed Bevy Asset V2, which will allow the Bevy Editor to drive asset configuration and pre-processing.
-* We have kicked off the [Bevy Editor Prototypes effort](https://github.com/bevyengine/bevy_editor_prototypes/discussions/1), a low-management-overhead / low-design-constraints place for Bevy contributors to work together on editor experiments. This unblocks interested developers from building out editor experiences while we wrap up the foundational pieces. Things have been a bit quiet there recently, but outside of that umbrella there are already a number of Bevy editor prototypes out there: [bevy-web-editor](https://makeshift-bevy-web-editor.vercel.app/), [space_editor](https://github.com/rewin123/space_editor). `@viridia` is [building editor things on top of their UI work](https://discord.com/channels/691052431525675048/692648638823923732/1238326822119149620), and there is also the excellent [BLENVY](https://github.com/kaosat-dev/Blenvy), which turns Blender into a Bevy scene editor!
+* We have kicked off the [Bevy Editor Prototypes effort](https://github.com/bevyengine/bevy_editor_prototypes/discussions/1), a low-management-overhead / low-design-constraints place for Bevy contributors to work together on editor experiments. This unblocks interested developers from building out editor experiences while we wrap up the foundational pieces. Things have been a bit quiet there recently, but outside of that umbrella there are already a number of Bevy editor prototypes out there: [bevy-web-editor](https://makeshift-bevy-web-editor.vercel.app/), [space_editor](https://github.com/rewin123/space_editor), `@viridia` is [building editor things on top of their UI work](https://discord.com/channels/691052431525675048/692648638823923732/1238326822119149620), and there is also the excellent [BLENVY](https://github.com/kaosat-dev/Blenvy), which turns Blender into a Bevy scene editor!
 
 So yes, the Bevy Editor is happening. We're all working toward it as fast as we can. I wanted us to have something usable by our fourth birthday, but sadly we missed that mark.
 
@@ -187,7 +205,7 @@ We could have (and in retrospect probably should have) taken more shortcuts to g
 
 ### Bevy UI Stagnated For Too Long
 
-We're finally starting to reach consensus and make serious progress on the next steps for Bevy UI (see the more positive UI Ecosystem Development section above). That being said, by letting it drag on this long I've also caused a lot of fractured effort. I believe a lack of a strong center of gravity made people feel like if they wanted to see progress, they had to go out and build something on their own. This _did_ yield fruit, as evidenced by the proliferation of 3rd party Bevy UI frameworks. But I think much of that effort could have and should have been invested in a single upstream project. This was a clear lack of leadership on my part. I knew this vacuum existed, but I chose to focus on The Bevy Foundation, Bevy Asset V2, my personal Scene / UI experiments, etc. My [first Scene / UI proposal](https://github.com/bevyengine/bevy/discussions/9538) at the start of the year kicked off a lot of good discussion, but then everyone (including me) went off to do their own things. Well, we've done that ... for too long, and now it is _definitely time to reel things in_. With the [Next Generation Scene / UI working group kickoff](https://github.com/bevyengine/bevy/discussions/14437), I now have the time and the focus to make sure I don't make the same mistake again. I'm going to push for consensus and tangible _upstream_ progress ASAP.
+We're finally starting to reach consensus and make serious progress on the next steps for Bevy UI (see the more positive UI Ecosystem Development section above). That being said, by letting it drag on this long I've also caused a lot of fractured effort. I believe a lack of a strong center of gravity made people feel like if they wanted to see progress, they had to go out and build something on their own. This _did_ yield fruit, as evidenced by the proliferation of 3rd party Bevy UI frameworks. But I think much of that effort could have and should have been invested in a single upstream project. This was a clear lack of leadership on my part. I knew this vacuum existed, but I chose to focus on my personal Scene / UI experiments, The Bevy Foundation, Bevy Asset V2, etc. My [first Scene / UI proposal](https://github.com/bevyengine/bevy/discussions/9538) at the start of the year kicked off a lot of good discussion, but then everyone (including me) went off to do their own things. Well, we've done that ... for too long, and now it is _definitely time to reel things in_. With the [Next Generation Scene / UI working group kickoff](https://github.com/bevyengine/bevy/discussions/14437), I now have the time and the focus to make sure I don't make the same mistake again. I'm going to push for consensus and tangible _upstream_ progress ASAP.
 
 ### We Have Unfilled SME Roles
 
@@ -206,7 +224,7 @@ What gives?
 There is a common thread across all of these areas: they are all "in flux" right now. Another way to interpret "in flux" in this case is "there is an investment, leadership, or vision vacuum". This makes it hard to identify SMEs, as an SME must demonstrate investment, leadership, and vision _before_ we appoint them.
 
 1. **Audio**: Bevy's audio implementation has historically been bare-minimum / just barely enough to cover common scenarios. It has improved over the years, but it is still minimal. We've prioritized other things above it, and nobody has tried to take long term ownership of it until recently. [`bevy_kira_audio`](https://github.com/NiklasEi/bevy_kira_audio) has filled the gap well enough that upstream pressure to improve was further relieved. Fortunately there is now a [Better Audio working group](https://discord.com/channels/691052431525675048/1236113088793677888), so I'm hoping we'll find some SME candidates this way after designs are proposed and implemented.
-2. **UI**: There are a _ton_ of people who have demonstrated investment and vision in 3rd party Bevy UI crates. However because none of these efforts have been blessed, by definition none of these have "aligned vision" with upstream Bevy. Therefore the SME vacuum here is _my fault_ because I've chosen to withhold blessing someone else's vision wholesale in favor of developing my own first through experimentation and research.
+2. **UI**: There are a _ton_ of people who have demonstrated investment and vision in 3rd party Bevy UI crates. However because none of these efforts have been blessed, by definition none of these have "aligned vision" with upstream Bevy. Therefore the SME vacuum here is _my fault_ because I've chosen to withhold blessing someone else's vision wholesale in favor of developing my own vision first through experimentation and research.
 3. **Assets**: This is an area that I've largely claimed for myself over the past couple of years. I haven't done nearly enough work to pull other people in and help make them experts in Bevy Asset V2. And I've since moved on to Scene / UI / Editor work, leaving a big gaping hole in the asset space.
 
 The dominating pattern is Bevy leadership (often me) isn't spending the required time to unblock a space. This has generally been intentional: we've prioritized our many other responsibilities above doing this (or in the case of UI, we've been spending a _ton_ of time trying to unblock the space).
@@ -255,11 +273,13 @@ That being said, here are some of my personal hopes, dreams, and personal priori
 
 We have [plenty of other work in the pipeline](https://github.com/bevyengine/bevy/pulls), but I'm once again choosing to keep this _very_ focused this year to convey my personal priorities.
 
-One last reminder that you should write your own Bevy Birthday blog posts. [Submit them here](https://github.com/bevyengine/bevy-website/issues/1592)!
+One last reminder that Bevy community members should write their own Bevy Birthday blog posts. [Submit them here](https://github.com/bevyengine/bevy-website/issues/1592)!
 
-If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](/community/), and consider [donating to The Bevy Foundation](/donate) to ensure we can continue building and leading this wildly ambitious project.
+If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy) and start participating in the [Bevy Community](/community/).
 
-I'm looking forward to spending another year building Bevy with you all!
+Also _please_ consider [donating to The Bevy Foundation](/donate) to ensure we can continue building and leading this wildly ambitious project. The more funds the have, the more we can scale Bevy development!
+
+To many more years of Bevy!
 
 \- [@cart](https://github.com/cart/)
 
