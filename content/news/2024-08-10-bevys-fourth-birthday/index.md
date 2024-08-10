@@ -173,6 +173,7 @@ This was a great year for Bevy "in the real world":
 * [Zoolitaire](https://apps.apple.com/us/app/zoolitaire/id6479218498) is a released mobile puzzle game
 * [Elevated Arcana](https://elevatedarcana.com/) is an in-development mobile tower defense game.
 * [Ethertia](https://www.youtube.com/watch?v=lFIfp8o0CiI) is a minecraft-like sandbox voxel game
+* [Greenfeet Haven](https://store.steampowered.com/app/2791310/Greenfeet_Haven/): is an in-development "colony sim set in a fantasy world where you start from nothing into the wild".
 
 Lots of people using Bevy in production! And those are just the ones I'm personally aware of!
 
