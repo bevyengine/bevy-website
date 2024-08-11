@@ -1,9 +1,9 @@
----
++++
 title = "Release Process"
 insert_anchor_links = "right"
 [extra]
 weight = 3
----
++++
 
 Bevy uses three-months-long development cycles, delimited by a weeks-long rolling release process.
 
@@ -48,12 +48,12 @@ When making a release, the maintainers follow these checklists:
 6. Write blog post.
 7. Update book.
 8. Bump version number for all crates, using the "Release" workflow.
-   1. Change the commit message to be nicer
+   1. Change the commit message to be nicer.
 9. Create tag on GitHub.
 10. Edit Github Release. Add links to the `Release announcement` and `Migration Guide`.
 11. Bump `latest` tag to most recent release.
-12. Run this workflow to update screenshots: <https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml>. _This will block blog post releases (and take ~40 minutes) so do it early_.
-13. Run this workflow to update wasm examples: <https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml>
+12. Run [the `update-screenshots` workflow] to update screenshots. _This will block blog post releases (and take ~40 minutes) so do it early_.
+13. Run [the `build-wasm-examples` workflow] to update wasm examples.
 
 #### Minor Release
 
@@ -77,16 +77,13 @@ When making a release, the maintainers follow these checklists:
 
 1. Check appropriate milestone.
 2. Close the milestone, open the next one if anything remains and transfer them.
-3. Bump version number for all crates, using the command from the "Release" workflow locally, with `patch` for the new version. At the time of writing this:
-    - `cargo release patch --workspace --no-publish --execute --no-tag --no-confirm --no-push --dependent-version upgrade --exclude ci --exclude errors --exclude bevy_mobile_example --exclude build-wasm-example`
+3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `patch` for the new version.
     - Change the commit message to be nicer
 4. Create tag on GitHub.
 5. Edit Github Release. Add link to the comparison between this patch and the previous version.
 6. Bump `latest` tag to most recent release.
-7. Run this workflow to update screenshots:
-    - <https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml>
-8. Run this workflow to update wasm examples:
-    - <https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml>
+7. Run the [`update-screenshots` workflow] to update screenshots.
+8. Run this [`build-wasm-examples` workflow] to update wasm examples.
 
 #### Patch Release
 
@@ -103,8 +100,7 @@ When making a release, the maintainers follow these checklists:
 
 1. Check appropriate milestone.
 2. Create a branch for the release.
-3. Bump version number for all crates, using the command from the "Release" workflow locally, with `rc` for the new version. At the time of writing this:
-    - `cargo release rc --workspace --no-publish --execute --no-tag --no-confirm --no-push --dependent-version upgrade --exclude ci --exclude errors --exclude bevy_mobile_example --exclude build-wasm-example`
+3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
     - Change the commit message to be nicer
 4. Create tag on GitHub.
 5. Edit Github Release. Add link to the comparison between this rc and the previous version.
@@ -119,3 +115,7 @@ When making a release, the maintainers follow these checklists:
 #### RC Post-Release
 
 1. Update Bevy version used for Bevy book code validation to latest release.
+
+[`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
+[`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
+[the command from the "Release" workflow]: https://github.com/bevyengine/bevy/blob/main/.github/workflows/release.yml
