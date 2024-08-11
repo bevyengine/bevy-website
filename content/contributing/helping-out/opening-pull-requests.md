@@ -44,7 +44,7 @@ If you're new to Bevy, here's the workflow we use:
     * `cargo run -p ci -- lints` - to run formatting and Clippy.
     * `cargo run -p ci -- test` - to run tests.
     * `cargo run -p ci -- doc` - to run doc tests and doc checks.
-    * `cargo run -p ci -- compile` - to check that everything that must compile still does (examples and benches), and that some that shouldn't still don't ([`crates/bevy_ecs_compile_fail_tests`](./crates/bevy_ecs_compile_fail_tests)).
+    * `cargo run -p ci -- compile` - to check that everything that must compile still does (examples and benches), and that some that we want to be sure *don't* compile ([`crates/bevy_ecs_compile_fail_tests`](./crates/bevy_ecs_compile_fail_tests)).
     * to get more information on commands available and what is run, check the [tools/ci crate](./tools/ci).
 4. When working with Markdown (`.md`) files, Bevy's CI will check markdown files (like this one) using [markdownlint](https://github.com/DavidAnson/markdownlint).
 To locally lint your files using the same workflow as our CI:
@@ -67,9 +67,10 @@ If you end up adding a new official Bevy crate to the `bevy` repo:
 
 When contributing, please:
 
+* Prefer small PRs that incrementally improve things.
+* Explain what you're doing and why.
 * Try to loosely follow the workflow in [*Making changes to Bevy*](#making-changes-to-bevy).
 * Consult the [style guide](.github/contributing/engine_style_guide.md) to help keep our code base tidy.
-* Explain what you're doing and why.
 * Document new code with doc comments.
 * Include clear, simple tests.
 * Add or improve the examples when adding new user-facing functionality.
