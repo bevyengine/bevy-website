@@ -7,8 +7,8 @@ weight = 1
 
 Working groups are temporary community initiatives devoted to particularly, complex, large, or important tasks. Some examples include:
 
-- Revamping bevy's Color apis
-- Replacing bevy's render graph
+- Revamping Bevy's color APIs
+- Replacing Bevy's render graph
 - Implementing relations
 - And drafting this Contributing Guide!
 
@@ -45,16 +45,16 @@ If they're in favor, a maintainer will create a forum channel for you and you're
 ## Write A Design Doc
 
 Your initial task is writing up a design doc: laying out the scope of work and general implementation strategy.
-Here's a [solid example of a design doc](https://github.com/bevyengine/bevy/issues/12365), although feel free to use whatever format works best for your team.
+Here's a [solid example of a design doc](https://github.com/Bevyengine/Bevy/issues/12365), although feel free to use whatever format works best for your team.
 
 Once that's ready, get a sign-off on the broad vision and goals from the appropriate SMEs and maintainers.
 This is the primary review step: maintainers and SMEs should be broadly patient and supportive even if they're skeptical until a proper design doc is in hand to evaluate.
 
 ## Implement The Design Doc
 
-With a sign-off in hand, post the design doc to [Github Discussions](https://github.com/bevyengine/bevy/discussions) with the [`C-Design-Doc` label](https://github.com/bevyengine/bevy/discussions?discussions_q=is%3Aopen+label%3A%22C-Design+Doc%22) for archival purposes and begin work on implementation.
+With a sign-off in hand, post the design doc to [Github Discussions](https://github.com/Bevyengine/Bevy/discussions) with the [`C-Design-Doc` label](https://github.com/Bevyengine/Bevy/discussions?discussions_q=is%3Aopen+label%3A%22C-Design+Doc%22) for archival purposes and begin work on implementation.
 Post PRs that you need review on in your group's forum thread, ask for advice, and share the load.
-Controversial PRs are still `S-Controversial`, but with a sign-off-in-priniciple, things should go more smoothly.
+Controversial PRs are still `X-Controversial`, but with a sign-off-in-priniciple, things should go more smoothly.
 
 If work peters out and the initiative dies, maintainers can wind down working groups (in consultation with SMEs and the working group itself).
 This is normal and expected: projects fail for all sorts of reasons!
