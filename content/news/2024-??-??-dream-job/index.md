@@ -149,16 +149,17 @@ None of these things will radically change how `bevy_ui` works, but taken togeth
 In both Rust-focused and gamedev-focused spaces, Bevy is often *defined* by the fact that it's written in Rust.
 But thinking about game engines in this way is a trap, both for Bevy and for the ecosystem as a whole.
 
-Serious people don't sit down, decide that they're going to become professional game developers, and *insist* on using Rust, come hell or high water.
+Overwhelmingly, professional game developers don't decide that they're going to use Rust, look at the options within the set of Rust game engines and then choose one.
 While hobbyists and those seeking to learn Rust *might* choose an engine that way (Rust is delightful and making games is a great way to learn),
-it's a terrible way to run a business and make a living.
+it's an ineffective way to make business-critical decisions!
 
-Instead, they look at the set of *full* set of engines: Unity, Unreal, Godot and dozens more.
+Instead, they look at the set of *full* set of engines and what they have to offer: Unity, Unreal, Godot and dozens more.
 Every team and every project has different needs and idosyncratic preferences: there will never be an ur-engine that others are simply *wrong* for not choosing.
 But if you want to compete within a crowded space, you need to both carve out and communicate a niche: a set of things that you're *uniquely* good at.
 
 Simply being the best, most popular, or most featureful game engine in Rust isn't enough, and frankly, barely matters at all.
 Rust is fantastic, and I think in the long-run it'll be a major advantage, but right now, the game industry perception is that it's immature and slow to develop in.
+
 To survive as anything beyond a hobby engine, you need to attract commercial teams building serious games, built on a budget with mixed teams of programmers, artists and designers.
 While you don't need to be better than the big kids in *every* way, you need to be better than them in some ways, and the *rational* choice for some set of teams needs to be to pick your engine.
 
