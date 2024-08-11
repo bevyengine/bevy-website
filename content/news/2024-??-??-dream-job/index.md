@@ -1,6 +1,6 @@
 +++
 title = "I landed my dream job. Now what?"
-date = 2024-08-10
+date = 2024-TODO-TODO
 authors = ["Alice I. Cecile"]
 [extra]
 github = "alice-i-cecile"
@@ -8,7 +8,7 @@ image = "TODO.svg"
 show_image = true
 +++
 
-So, I landed my dream job. Full-time open source, making a game engine, in Rust. Absolutely no meetings. What more could you ask for?
+So, I landed my dream job. Full-time open source building a game engine in Rust. Absolutely no meetings. What more could you ask for?
 With a very unconventional background (plant ecology, self-taught programming and years of disability), it's flatly astonishing to be [so supported](https://bevyengine.org/donate/): surrounded and empowered by a community making incredible things together.
 
 But now what?
