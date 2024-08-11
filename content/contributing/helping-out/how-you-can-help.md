@@ -12,7 +12,7 @@ No matter how experienced you are with Bevy and Rust, or what your level of comm
 
 ## Battle-testing Bevy
 
-Ultimately, Bevy is a tool that's designed to help people make cool games. Just by _using_ Bevy you're helping us catch bugs, prioritize new features, polish off rough edges, and promote the project. 
+Ultimately, Bevy is a tool that's designed to help people make cool games. Just by *using* Bevy you're helping us catch bugs, prioritize new features, polish off rough edges, and promote the project.
 
 If you're using Bevy, we want to hear from you! Don't hesitate to ask for support on [Github Discussions], [Discord], or [Reddit]. Once you've made something that you're proud of, feel free to drop a link, video, or screenshot in `#showcase` on [Discord]! If you release a game on [itch.io] we'd be thrilled if you tagged it with `bevy`.
 
@@ -33,7 +33,7 @@ You don't need to be an Elder Rustacean to be useful here: anyone can catch miss
 
 If you do have specific skills (e.g. advanced familiarity with `unsafe` code, rendering knowledge, or web development experience) or experience with a specific problem, that's fantastic! We suggest trying to prioritize those areas to ensure we get appropriate expertise where we need it.
 
-Not even our Project Leads and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely. 
+Not even our Project Leads and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
 {% callout() %}
 Interested in reviewing but don't know where to start? Check out [Reviewing Pull Requests](TODO)!
@@ -45,7 +45,7 @@ Bevy's active initiatives are organized into *temporary working groups*: public,
 
 You should consider joining a working group if you're interested in contributing but don't know where to start or what to work on. Choosing one and asking how to help can be a fantastic way to get up to speed and be immediately useful.
 
-There are no special requirements to participate in a working group — no applications, formal membership list, or even leadership. Anyone can help, and you should expect to compromise and work together with others to bring your shared vision to life. Working groups are _spaces_, not clubs.
+There are no special requirements to participate in a working group — no applications, formal membership list, or even leadership. Anyone can help, and you should expect to compromise and work together with others to bring your shared vision to life. Working groups are *spaces*, not clubs.
 
 {% callout() %}
 Anyone can start a working group! Check out [Working Groups](TODO) for more information about the process and requirements.
@@ -59,8 +59,6 @@ If you already know what you want to work on, all you have to do is make your ch
 
 {% callout() %}
 When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord] and tell people about your plans. Communicating your progress early and often can help you avoid avoid headaches and disagreements during code review.
-
-[Discord]: https://discord.gg/bevy
 {% end %}
 
 ## Writing docs and examples
