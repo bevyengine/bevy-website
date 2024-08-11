@@ -30,7 +30,7 @@ Once again run `cargo run`.
 
 You should hopefully notice two things:
 
-* **A window should pop up**. This is because we now have [`WindowPlugin`], which defines the window interface (but doesn't actually know how to make windows), and [`WininitPlugin`] which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window API.
+* **A window should pop up**. This is because we now have [`WindowPlugin`], which defines the window interface (but doesn't actually know how to make windows), and [`WinitPlugin`] which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window API.
 * **Your console is now full of "hello" messages**: This is because [`DefaultPlugins`] adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
 ## Creating your first plugin
