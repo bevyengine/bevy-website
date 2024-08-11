@@ -2,7 +2,7 @@
 title = "The Bevy Organization"
 insert_anchor_links = "right"
 [extra]
-weight = 1
+weight = 2
 +++
 
 The Bevy Organization is the group of people responsible for stewarding the Bevy project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
