@@ -25,6 +25,7 @@ extend-exclude = [
 # Match Whole Word - Case Sensitive
 [default.extend-identifiers]
 ser = "ser" # ron::ser - Serializer
+sme = "SME" # Subject Matter Expert
 
 # Match Inside a Word - Case Insensitive
 [default.extend-words]
