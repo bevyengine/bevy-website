@@ -55,6 +55,6 @@ There are three main places you can check for things to review:
 
 Not even our Project Leads and Maintainers are exempt from reviews and RFCs! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
-Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message the Project Lead (currently @cart) for a Bevy org role to help us keep things tidy.
+Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy org role to help us keep things tidy.
 
 As discussed in our [Bevy Organization doc](TODO), this role only requires good faith and a basic understanding of our development process.
