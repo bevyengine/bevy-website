@@ -83,7 +83,7 @@ Bevy intentionally aims to be inclusive of both complete beginners who have neve
 | **Example-first** | Enthusiastic, wants to create a new version of the game they love. | Exploratory, wants to dive in and see how Bevy holds up in practice. |
 | **Definition-first** | Curious, wants to understand how making games works. | Critical, wants to understand Bevy's unique design choices. |
 
-Each of these requires their own complementary learning paths that branch as soon as they get to the [Learn page](https://bevyengine.org/learn/) to ensure that the first experience that they have with Bevy matches what they need.
+Each of these requires their own complementary learning paths that branch as soon as they get to the [Learn page](@/learn/_index.md) to ensure that the first experience that they have with Bevy matches what they need.
 
 Once users have completed the introductory learning materials in their path of choice, they can begin creating their own games or move on to our advanced examples to see how everything comes together in a realistic way.
 
