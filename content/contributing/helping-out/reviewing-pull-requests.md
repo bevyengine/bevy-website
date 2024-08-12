@@ -35,7 +35,7 @@ It is quite common for reviews to ask for additional changes, but as a reviewer 
 
 It is always acceptable to ask an author to fix an issue or bug in their code, or request they do something differently. It is also fine to request additional documentation or tests, but when you do it's best to outline what exactly is lacking in the current version.
 
-Otherwise please try to avoid asking for additional work unless absolutely necessary, especially if the PR is in an otherwise acceptable stage. The purpose of an open source code review is to assess the code as it is, not to tell the author what to do.
+Otherwise please try to avoid asking for additional work unless absolutely necessary, especially if the PR is in an otherwise acceptable state. The purpose of an open source code review is to assess the code as it is, not to tell the author what to do.
 
 ## Dealing with disagreements
 
