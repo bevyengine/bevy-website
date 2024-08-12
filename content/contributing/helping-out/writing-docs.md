@@ -35,9 +35,9 @@ To check out any local changes you've made:
 
 Your web browser should open and you should be able to access a local version of the `docs.rs` page from there.
 
-:::warning
+{% callout(type="warning") %}
 The code in doc comments is compiled and tested to ensure that the examples work for our readers.
-:::
+{% end %}
 
 Doc-tests run as part of the normal `cargo test` suite. To only run doc-tests, you can use `cargo test --doc`.
 
@@ -55,9 +55,9 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-:::warning
+{% callout(type="warning") %}
 The code in the book is compiled and tested to make sure that the examples work for readers.
-:::
+{% end %}
 
 To check your local changes, move into the `code-validation` folder of this project using `cd code-validation`, and then run `cargo test`. If you write a new section of the book, you have to add it in `code-validation/src/lib.rs` to enable code validation for it.
 
@@ -78,10 +78,10 @@ These users tend to be driven by curiosity, or are aiming to carefully develop a
 Crucially, these paths are independent of the experience levels of the learner!
 Bevy intentionally aims to be inclusive of both complete beginners who have never programmed before, and professionals coming from other engines.
 
-|                      | **Beginner**                                                       | **Professional**                                                     |
-| -------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| **Example-first**    | Enthusiastic, wants to create a new version of the game they love. | Exploratory, wants to dive in and see how Bevy holds up in practice. |
-| **Definition-first** | Curious, wants to understand how making games works.               | Critical, wants to understand Bevy's unique design choices.          |
+| | **Beginner** | **Professional** |
+|-|-|-|
+| **Example-first** | Enthusiastic, wants to create a new version of the game they love. | Exploratory, wants to dive in and see how Bevy holds up in practice. |
+| **Definition-first** | Curious, wants to understand how making games works. | Critical, wants to understand Bevy's unique design choices. |
 
 Each of these requires their own complementary learning paths that branch as soon as they get to the [Learn page](https://bevyengine.org/learn/) to ensure that the first experience that they have with Bevy matches what they need.
 
