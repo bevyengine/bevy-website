@@ -18,7 +18,7 @@ Examples in Bevy should be:
 When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
 Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
-See the [example style guide](.github/contributing/example_style_guide.md) to help make sure the style of your example matches what we're already using.
+See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
 
 More complex demonstrations of functionality are also welcome, but these should be submitted to [bevy-assets](https://github.com/bevyengine/bevy-assets).
 
@@ -30,13 +30,13 @@ Please adhere to the following guidelines when creating or updating an example.
 
 1. Examples should live in an appropriate subfolder of `/examples`.
 2. Examples should be a single file if possible.
-3. Assets live in `./assets`. Try to avoid adding new assets unless strictly necessary to keep the repo small. Don't add "large" asset files.
+3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repo small. Don't add "large" asset files.
 4. Each example should try to follow this order:
    1. Imports
    2. A `fn main()` block
    3. Example logic
 5. Try to structure app / plugin construction in the same fashion as the actual code.
-6. Examples should typically not have tests, as they are not directly reusable by the Bevy user.
+6. Examples should typically not have tests, as those are not directly reusable by the Bevy user.
 
 ### Stylistic preferences
 
@@ -68,7 +68,7 @@ Please adhere to the following guidelines when creating or updating an example.
 
 These examples demonstrate the usage of specific engine features in clear, minimal ways.
 
-1. Focus on demonstrating exactly one feature in an example
+1. Focus on demonstrating exactly one feature in an example.
 2. Try to keep your names divorced from the context of a specific game, and focused on the feature you are demonstrating.
 3. Where they exist, show good alternative approaches to accomplish the same task and explain why you may prefer one over the other.
 4. Examples should have a visible effect when run, either in the command line or a graphical window.
@@ -77,7 +77,7 @@ These examples demonstrate the usage of specific engine features in clear, minim
 
 These examples show how to build simple games in Bevy in a cohesive way.
 
-1. Each of these examples lives in the [/examples/games] folder.
+1. Each of these examples lives in the `/examples/games` folder.
 2. Aim for minimum but viable status: the game should be playable and not obviously buggy but does not need to be polished, featureful, or terribly fun.
 3. Focus on code quality and demonstrating good, extensible patterns for users.
    1. Make good use of enums and states to organize your game logic.
