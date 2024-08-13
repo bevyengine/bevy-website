@@ -10,20 +10,23 @@ weight = 3
 Most changes don't require much "process". If your change is relatively straightforward, just do the following:
 
 1. A community member (that's you!) creates one of the following:
-    * [GitHub Discussions](https://github.com/bevyengine/bevy/discussions): An informal discussion with the community. This is the place to start if you want to propose a feature or specific implementation.
+    * [GitHub Discussions]: An informal discussion with the community. This is the place to start if you want to propose a feature or specific implementation.
     * [Issue](https://github.com/bevyengine/bevy/issues): A formal way for us to track a bug or feature. Please look for duplicates before opening a new issue and consider starting with a Discussion.
     * [Pull Request](https://github.com/bevyengine/bevy/pulls) (or PR for short): A request to merge code changes. This starts our "review process". You are welcome to start with a pull request, but consider starting with an Issue or Discussion for larger changes (or if you aren't certain about a design). We don't want anyone to waste their time on code that didn't have a chance to be merged! But conversely, sometimes PRs are the most efficient way to propose a change. Use your own judgment here.
-2. Other community members review and comment in an ad-hoc fashion. Active subject matter experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord](https://discord.gg/bevy) in an appropriate engine development channel.
+2. Other community members review and comment in an ad-hoc fashion. Active subject matter experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord] in an appropriate engine development channel.
 3. Once they're content with the pull request (design, code quality, documentation, tests), individual reviewers leave "Approved" reviews.
 4. After consensus has been reached (typically two approvals from the community or one for extremely simple changes) and CI passes, the [S-Ready-For-Final-Review](https://github.com/bevyengine/bevy/issues?q=is%3Aopen+is%3Aissue+label%3AS-Ready-For-Final-Review) label is added.
 5. When they find time, someone with merge rights performs a final code review and queues the PR for merging.
+
+[Discord]: https://discord.com/invite/bevy
+[GitHub Discussions]: https://github.com/bevyengine/bevy/discussions
 
 ### Complex changes
 
 Individual contributors often lead major new features and reworks. However these changes require more design work and scrutiny. Complex changes like this tend to go through the following life-cycle:
 
 1. A need or opportunity is identified and an issue is made, laying out the general problem.
-2. As needed, this is discussed further on that issue thread, in cross-linked [GitHub Discussion] threads, or on [Discord] in the Engine Development channels.
+2. As needed, this is discussed further on that issue thread, in cross-linked [GitHub Discussions] threads, or on [Discord] in the Engine Development channels.
 3. Either a Draft Pull Request or an RFC is made. As discussed in the [RFC repo](https://github.com/bevyengine/rfcs), complex features need RFCs, but these can be submitted before or after prototyping work has been started.
 4. If feasible, parts that work on their own (even if they're only useful once the full complex change is merged) get split out into individual PRs to make them easier to review.
 5. The community as a whole helps improve the Draft PR and/or RFC, leaving comments, making suggestions, and submitting pull requests to the original branch.
@@ -44,8 +47,8 @@ If you're new to Bevy, here's the workflow we use:
     * `cargo run -p ci -- lints` - to run formatting and Clippy.
     * `cargo run -p ci -- test` - to run tests.
     * `cargo run -p ci -- doc` - to run doc tests and doc checks.
-    * `cargo run -p ci -- compile` - to check that everything that must compile still does (examples and benches), and that some that we want to be sure *don't* compile ([`crates/bevy_ecs_compile_fail_tests`](./crates/bevy_ecs_compile_fail_tests)).
-    * to get more information on commands available and what is run, check the [tools/ci crate](./tools/ci).
+    * `cargo run -p ci -- compile` - to check that everything that must compile still does (examples and benches), and that some that we want to be sure *don't* compile ([`crates/bevy_ecs/compile_fail`](https://github.com/bevyengine/bevy/tree/main/crates/bevy_ecs/compile_fail)).
+    * to get more information on commands available and what is run, check the [tools/ci crate](https://github.com/bevyengine/bevy/tree/main/tools/ci).
 4. When working with Markdown (`.md`) files, Bevy's CI will check markdown files (like this one) using [markdownlint](https://github.com/DavidAnson/markdownlint).
 To locally lint your files using the same workflow as our CI:
    1. Install [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli).
@@ -62,15 +65,15 @@ To locally lint your files using the same workflow as our CI:
 
 If you end up adding a new official Bevy crate to the `bevy` repo:
 
-1. Add the new crate to the [./tools/publish.sh](./tools/publish.sh) file.
-2. Check if a new cargo feature was added, update [cargo_features.md](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md) as needed.
+1. Add the new crate to the [tools/publish.sh](https://github.com/bevyengine/bevy/blob/main/tools/publish.sh) file.
+2. Check if a new cargo feature was added, update [docs/cargo_features.md](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md) as needed.
 
 When contributing, please:
 
 * Prefer small PRs that incrementally improve things.
 * Explain what you're doing and why.
 * Try to loosely follow the workflow in [*Making changes to Bevy*](#making-changes-to-bevy).
-* Consult the [style guide](.github/contributing/engine_style_guide.md) to help keep our code base tidy.
+* Consult the [style guide](@/contributing/helping-out/creating-examples.md#style-guide) to help keep our code base tidy.
 * Document new code with doc comments.
 * Include clear, simple tests.
 * Add or improve the examples when adding new user-facing functionality.
@@ -87,8 +90,6 @@ Once you have opened your PR, your next task will be to shepherd it through comm
 
 You may find that your reviewers sometimes misunderstand your work, ask for changes you disagree with, or request additional changes you aren't interested in making. If you find yourself disagreeing with a reviewer, it's fine to politely say "no" or indicate that their suggestion would be better left to a follow-up PR.
 
-[Discord]: https://discord.com/invite/bevy
-
 ## Adopting pull requests
 
 Occasionally authors of pull requests get busy or become unresponsive, or project members fail to reply in a timely manner.
@@ -103,6 +104,6 @@ This may sometimes even skip the labeling process since at that point the PR has
 With this label added, it's best practice to fork the original author's branch.
 This ensures that they still get credit for working on it and that the commit history is retained.
 When the new pull request is ready, it should reference the original PR in the description.
-Then notify org members to close the original.
+Then, notify org members to close the original.
 
 * For example, you can reference the original PR by adding the following to your PR description: `Adopted #number-original-pull-request`
