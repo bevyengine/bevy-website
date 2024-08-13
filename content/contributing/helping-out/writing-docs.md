@@ -55,11 +55,15 @@ To check out any local changes you've made:
 
 A local server should start and you should be able to access a local version of the website from there.
 
-:::warning
-The code in the book is compiled and tested to make sure that the examples work for readers.
-:::
+{% callout(type="warning") %}
+The code in the learning materials (e.g., Bevy Book, Quick Start Guide, Advanced Examples, etc.) is compiled, formatted, and tested to make sure that the examples work for readers.
+{% end %}
 
-To check your local changes, move into the `code-validation` folder of this project using `cd code-validation`, and then run `cargo test`. If you write a new section of the book, you have to add it in `code-validation/src/lib.rs` to enable code validation for it.
+To validate your code snippets either run `validate_examples.sh` which resides in the `learning-code-examples` directory (and is the recommended way to use `learning-code-examples`), or from the root of the project run `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
+
+{% callout() %}
+[See the `learning-code-examples` README.md for more info.](https://github.com/bevyengine/bevy-website/blob/main/learning-code-examples/README.md)
+{% end %}
 
 ## Learning material structure
 
