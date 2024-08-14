@@ -18,7 +18,7 @@ Issues are great for formally tracking the progress of bugs and features. Here a
 - You do not have the capacity to work on the change, but want to make it known to others.
 - The change may be controversial, and needs input from Subject Matter Experts and / or maintainers before going forward.
 - You want to track a collection of features in a singular place.
-    - This is known as a tracking issue, and has a dedicated label just for it!
+  - This is known as a tracking issue, and has a dedicated label just for it!
 
 When in doubt, prefer creating an issue over immediately opening a pull request. This allows community members to weigh in before you spend time on work that may be unnecessary.
 
@@ -34,5 +34,5 @@ The Bevy repository also has [Github Discussions] enabled. Here are some scenari
 
 - You have a question about using Bevy.
 - You have an idea on how to improve Bevy.
-    - This is less formal than creating an issue, and should be preferred if the idea is vague.
+  - This is less formal than creating an issue, and should be preferred if the idea is vague.
 - You want to discuss the design of an aspect of Bevy.

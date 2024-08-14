@@ -13,36 +13,36 @@ Labels are our primary tool for organizing work. You can find a complete list wi
 
 - **A**: Area (e.g. `A-Animation`, `A-ECS`, `A-Rendering`, ...).
 - **C**: Category. The most common include:
-    - `C-Bug`: unexpected or incorrect behavior.
-    - `C-Enhancement`: a new feature or meaningful extension of an existing one.
-    - `C-Docs`: an addition or correction to the documentation.
-    - `C-Code-Quality`: a section of code that is hard to understand or change.
-    - `C-Performance`: a change motivated by speed, memory usage, or compile times.
-    - `C-Tracking-Issue`: collects information on a broad development initiative.
-    - `C-Needs-Release-Notes`: work that should be called out in the blog post due to impact. This decision is usually made by maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
-    - `C-Breaking-Change`: a breaking change to Bevy's public API, and should be noted in the migration guide.
+  - `C-Bug`: unexpected or incorrect behavior.
+  - `C-Enhancement`: a new feature or meaningful extension of an existing one.
+  - `C-Docs`: an addition or correction to the documentation.
+  - `C-Code-Quality`: a section of code that is hard to understand or change.
+  - `C-Performance`: a change motivated by speed, memory usage, or compile times.
+  - `C-Tracking-Issue`: collects information on a broad development initiative.
+  - `C-Needs-Release-Notes`: work that should be called out in the blog post due to impact. This decision is usually made by maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
+  - `C-Breaking-Change`: a breaking change to Bevy's public API, and should be noted in the migration guide.
 - **D**: Difficulty. This can either be the estimated level of expertise (not time) to solve an issue or review a pull request. In order, these are:
-    - `D-Trivial`: typos, obviously incorrect one-line bug fixes, code reorganization, and renames.
-    - `D-Straightforward`: simple bug fixes, API improvements, docs, tests, and examples.
-    - `D-Modest`: new features, refactors, and challenging bug fixes.
-    - `D-Complex`: rewrites and unusually complex features.
-    - The `D-Domain-Expert` and `D-Domain-Agnostic` labels are modifiers, which describe if unusually high or low degrees of domain-specific knowledge are required.
-    - The `D-Unsafe` label is applied to any code that touches `unsafe` Rust, which requires special skills and scrutiny.
+  - `D-Trivial`: typos, obviously incorrect one-line bug fixes, code reorganization, and renames.
+  - `D-Straightforward`: simple bug fixes, API improvements, docs, tests, and examples.
+  - `D-Modest`: new features, refactors, and challenging bug fixes.
+  - `D-Complex`: rewrites and unusually complex features.
+  - The `D-Domain-Expert` and `D-Domain-Agnostic` labels are modifiers, which describe if unusually high or low degrees of domain-specific knowledge are required.
+  - The `D-Unsafe` label is applied to any code that touches `unsafe` Rust, which requires special skills and scrutiny.
 - **O**: Operating System (e.g. O-Linux, O-Web, O-Windows, ...).
 - **P**: Priority (e.g. P-Critical, P-High, ...).
-    - Most work is not explicitly categorized by priority; volunteer work mostly occurs on an ad hoc basis depending on contributor interests.
+  - Most work is not explicitly categorized by priority; volunteer work mostly occurs on an ad hoc basis depending on contributor interests.
 - **S**: Status. The most common include:
-    - `S-Needs-Triage`: this issue needs to be labeled.
-    - `S-Adopt-Me`: the original PR author has no intent to complete the PR, and it should be adopted by another contributor.
-    - `S-Blocked`: cannot move forward until something else changes.
-    - `S-Needs-Review`: this PR needs reviewer attention to move forward.
-    - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
-    - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a maintainer to consider merging it.
-- **X**: Controversiality. In order, these are: 
-    - `X-Uncontroversial`: everyone should agree that this is a good idea.
-    - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
-    - `X-Controversial`: there's active disagreement and / or large-scale architectural implications involved.
-    - `X-Blessed`: work that was previously controversial, but whose controversial (but perhaps not technical) elements have been endorsed by the relevant decision makers.
+  - `S-Needs-Triage`: this issue needs to be labeled.
+  - `S-Adopt-Me`: the original PR author has no intent to complete the PR, and it should be adopted by another contributor.
+  - `S-Blocked`: cannot move forward until something else changes.
+  - `S-Needs-Review`: this PR needs reviewer attention to move forward.
+  - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
+  - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a maintainer to consider merging it.
+- **X**: Controversiality. In order, these are:
+  - `X-Uncontroversial`: everyone should agree that this is a good idea.
+  - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
+  - `X-Controversial`: there's active disagreement and / or large-scale architectural implications involved.
+  - `X-Blessed`: work that was previously controversial, but whose controversial (but perhaps not technical) elements have been endorsed by the relevant decision makers.
 
 You can learn more about labels on [Github's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
