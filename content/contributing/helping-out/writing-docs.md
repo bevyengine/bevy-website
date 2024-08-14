@@ -83,10 +83,10 @@ These users tend to be driven by curiosity, or are aiming to carefully develop a
 Crucially, these paths are independent of the experience levels of the learner!
 Bevy intentionally aims to be inclusive of both complete beginners who have never programmed before, and professionals coming from other engines.
 
-| | **Beginner** | **Professional** |
-|-|-|-|
-| **Example-first** | Enthusiastic, wants to create a new version of the game they love. | Exploratory, wants to dive in and see how Bevy holds up in practice. |
-| **Definition-first** | Curious, wants to understand how making games works. | Critical, wants to understand Bevy's unique design choices. |
+|                      | **Beginner**                                                       | **Professional**                                                     |
+| -------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| **Example-first**    | Enthusiastic, wants to create a new version of the game they love. | Exploratory, wants to dive in and see how Bevy holds up in practice. |
+| **Definition-first** | Curious, wants to understand how making games works.               | Critical, wants to understand Bevy's unique design choices.          |
 
 Each of these requires their own complementary learning paths that branch as soon as they get to the [Learn page](@/learn/_index.md) to ensure that the first experience that they have with Bevy matches what they need.
 
@@ -166,7 +166,7 @@ This path should prioritize:
 
 ## Contributor's style guide
 
-When writing and reviewing learning material for The Bevy Book and The Quick Start Guide games, please try to follow these guidelines:
+When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
 
 ### Writing
 
@@ -214,7 +214,7 @@ When writing and reviewing learning material for The Bevy Book and The Quick Sta
 These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.
 9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
-10. To validate if local code changes are compiling you can `cd` into the `code-validation` folder and test your code using `cargo test`.
+10. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
 11. To make sure your web-based files (html, markdown) are formatted correctly run the commands:
 
     ```sh
@@ -224,8 +224,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
     ```
 
     in the root directory of your local Bevy website repository. This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.  Note that the CI also includes `editorconfigchecker` but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
-12. To hide lines of code in Zola Rust code blocks of the book you should: a. Mark each line you wish to hide with a `#` with an empty space afterwards like `# //...line_of_code_here...` although you were hiding lines in rustdoc. b. Run the [utility tool](write-rustdoc-hide-lines) in `<ROOT_OF_WEBSITE>/write_rustdoc-hide-lines/` named `write_rustdoc_hide_lines.sh`.
-13. To reference Rust API docs you can use markdown's reference-style links like so:
+12. To reference Rust API docs you can use markdown's reference-style links like so:
    [`HashMap`]
 
    ```md
