@@ -10,7 +10,7 @@ In rare cases, creating new "game" examples is justified in order to demonstrate
 
 Examples in Bevy should be:
 
-1. **Working:** They must compile and run, and any introduced errors in them should be obvious (through tests, simple results or clearly displayed behavior).
+1. **Working:** They must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
 2. **Clear:** They must use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
 3. **Relevant:** They should explain, through comments or variable names, what they do and how this can be useful to a game developer.
 4. **Minimal:** They should be no larger or complex than is needed to meet the goals of the example.

@@ -6,18 +6,18 @@ weight = 5
 +++
 
 Like every other large, rapidly developing open source library you've ever used, Bevy's documentation can always use improvement.
-This is incredibly valuable, easily distributed work, but requires a bit of guidance:
+This is incredibly valuable, and easily distributed, work that requires a bit of guidance:
 
 * Inaccurate documentation is worse than no documentation: prioritize fixing broken docs.
-* Bevy is remarkably unstable: before tackling a new major documentation project, check in with the community on Discord or GitHub (making an issue about specific missing docs is a great way to plan) about the stability of that feature and upcoming plans to save yourself heartache.
+* Bevy is remarkably unstable; before tackling a new major documentation project, check in with the community on Discord or GitHub (making an issue about specific missing docs is a great way to plan) about the stability of that feature and upcoming plans to save yourself heartache.
 * Code documentation (doc examples and in the examples folder) is easier to maintain because the compiler will tell us when it breaks.
 * Inline documentation should be technical and to the point. Link relevant examples or other explanations if broader context is useful.
-* The Bevy book is hosted on the `bevy-website` repo and targeted towards beginners who are just getting to know Bevy (and perhaps Rust!).
-* Accepted RFCs are not documentation: they serve only as a record of accepted decisions.
+* The Bevy Book is hosted on the `bevy-website` repository and targeted towards beginners who are just getting to know Bevy (and perhaps even Rust!).
+* Accepted RFCs are not documentation; they serve only as a record of accepted decisions.
 
 ## Documentation Sources
 
-There are two main places where we keep docs: inline docs alongside the codebase, and on the bevy website.
+There are two main places where we keep docs: inline docs alongside the codebase, and on the Bevy website.
 
 ### Inline Docs
 
@@ -28,7 +28,7 @@ which has the latest API reference built from the repo on every commit made to t
 
 To check out any local changes you've made:
 
-1. Clone the Bevy Engine git repo and enter that directory:
+1. Clone the Bevy Engine GitHub repository and enter that directory:
     1. `git clone https://github.com/bevyengine/bevy.git`
     2. `cd bevy`
 2. Run `cargo doc --open`
@@ -39,7 +39,7 @@ Your web browser should open and you should be able to access a local version of
 The code in doc comments is compiled and tested to ensure that the examples work for our readers.
 {% end %}
 
-Doc-tests run as part of the normal `cargo test` suite. To only run doc-tests, you can use `cargo test --doc`.
+Doc-tests are run as part of the normal `cargo test` suite. To only run doc-tests, you can use `cargo test --doc`.
 
 ### The Website
 
@@ -48,7 +48,7 @@ We also consider [bevyengine.org](https://bevyengine.org) to be part of our core
 To check out any local changes you've made:
 
 1. [Download Zola v0.18.0](https://www.getzola.org/).
-2. Clone the Bevy Website git repo and enter that directory:
+2. Clone the Bevy Website GitHub repository and enter that directory:
     1. `git clone https://github.com/bevyengine/bevy-website.git`
     2. `cd bevy-website`
 3. Start the Zola server with `zola serve`.
@@ -56,7 +56,7 @@ To check out any local changes you've made:
 A local server should start and you should be able to access a local version of the website from there.
 
 {% callout(type="warning") %}
-The code in the learning materials (e.g., Bevy Book, Quick Start Guide, Advanced Examples, etc.) is compiled, formatted, and tested to make sure that the examples work for readers.
+The code in the learning materials (e.g., The Bevy Book, The Quick Start Guide, Advanced Examples, etc.) is compiled, formatted, and tested to make sure that the examples work for readers.
 
 To validate your code snippets either run `validate_examples.sh` which resides in the `learning-code-examples` directory (and is the recommended way to use `learning-code-examples`), or from the root of the project run `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
 The code in the book is compiled and tested to make sure that the examples work for readers.
@@ -68,14 +68,14 @@ The code in the book is compiled and tested to make sure that the examples work 
 
 ## Learning material structure
 
-As you probably noticed, our introductory learning material is split into two main sections:
+As you have probably noticed, our introductory learning material is split into two main sections:
 
-1. **Bevy Quick Start:** "Get started making your first game now!"
-2. **Bevy Book:** "Understand how Bevy works, and how you can use it"
+1. **The Quick Start Guide:** "Get started making your first game now!"
+2. **The Bevy Book:** "Understand how Bevy works, and how you can use it"
 
 This is intended to cater to two different types of learners, without compromising the experience for either:
 
-* **Example-first:** These users want to dive right in, see everything in action and get a working game as quickly as possible.
+* **Example-first:** These users want to dive right in, see everything in action, and get a working game as quickly as possible.
 These users often have an idea in their mind that they want to start prototyping as quickly as possible.
 * **Definition-first:** These users want to carefully build up a mental model of Bevy, thoroughly understanding each new concept before moving on.
 These users tend to be driven by curiosity, or are aiming to carefully develop a new skill.
@@ -101,11 +101,11 @@ Users following the example-first path will tend to take the following route:
 3. Choose one of the most relevant **quick start games**.
 4. Complete that tutorial.
 5. Dive into making the game they have in mind, accessing the following resources as needed when they encounter road-blocks:
-   1. Official Examples.
-   2. The Bevy book.
+   1. Official examples.
+   2. The Bevy Book.
    3. Community tutorials and template games.
    4. Various community support forums.
-   5. Streams, YouTube channels and blogs.
+   5. Streams, videos, and blogs.
    6. Advanced examples.
 
 Each quick start game should:
@@ -113,7 +113,7 @@ Each quick start game should:
 1. Assume zero existing knowledge of Bevy.
 2. Begin with a initial high-level explanation of what we're trying to build.
 3. Introduce commented code first, then explain what each of the critical terms means as they come up.
-4. Be broken into compilable, playable sections: one per page of the guide.
+4. Be broken into compilable, playable sections; one per page of the guide.
 5. Gradually refactor the code to add more functionality.
 6. End with a list of suggestions (with appropriate links) on how you could extend the game in interesting ways.
 
@@ -121,10 +121,10 @@ This path should prioritize:
 
 1. Rapid time-to-fun.
 2. Functional, good-enough explanations that are tied to the code in front of them.
-3. Relevance of quick-start game to the genre of game they want to make.
+3. Relevance of quick start game to the genre of game they want to make.
 4. High asset quality.
 5. Ease of extending the quick-start game with their own tweaks.
-6. Explaining how to get unstuck, through documentation, community help and filing issues.
+6. Explaining how to get unstuck through documentation, community help, and filing issues.
 
 ### The Bevy Book: the definition-first path
 
@@ -132,18 +132,18 @@ Users following the definition-first path will tend to take the following route:
 
 1. Encounter the Bevy homepage due to social media or word of mouth.
 2. Navigate to the Learn page.
-3. Select the **Bevy book**.
+3. Select **The Bevy Book**.
 4. Read through the book, largely in order.
 5. Once they feel they have a good enough understanding of the engine, they will begin to make their own games, typically by jumping over onto the example-first path.
 6. As they explore, they will also browse:
    1. The source code.
    2. [docs.rs](https://docs.rs/bevy/)
-   3. CONTRIBUTING.md, GitHub issues and pull requests.
+   3. `CONTRIBUTING.md`, GitHub issues, and pull requests.
    4. Release notes.
    5. The engine development channels on Discord.
    6. Advanced examples to see how everything comes together.
 
-Each chapter of the Bevy Book should:
+Each chapter of The Bevy Book should:
 
 1. Have a clear topic, and give a high-level overview of the subtopics it is going to cover and how they fit together.
 2. Be broken down into several sections / pages to focus on detailed topics.
@@ -157,16 +157,16 @@ This path should prioritize:
 3. Connecting concepts to each other in context.
 4. Explaining the technical details of how things work, but only in clearly marked asides.
 5. Communicating all of the supporting development practices that make Bevy productive:
-   1. How to set up your dev environment.
+   1. How to set up your development environment.
    2. Code organization.
    3. Design patterns and best practices.
-   4. Testing, benchmarking and debugging.
+   4. Testing, bench-marking, and debugging.
    5. Contributing to Bevy itself.
-6. Linking to further reading: official examples, `docs.rs` and (very sparingly) source code links.
+6. Linking to further reading such as, official examples, `docs.rs`, and (very sparingly) source code links.
 
 ## Contributor's style guide
 
-When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
+When writing and reviewing learning material for The Bevy Book and The Quick Start Guide games, please try to follow these guidelines:
 
 ### Writing
 
