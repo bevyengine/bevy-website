@@ -55,11 +55,11 @@ To locally lint your files using the same workflow as our CI:
    2. Run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of the Bevy project.
 5. When working with Toml (`.toml`) files, Bevy's CI will check toml files using [taplo](https://taplo.tamasfe.dev/): `taplo fmt --check --diff`
    1. If you use VSCode, install [Even better toml](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) and format your files.
-   2. If you want to use the cli tool, install [taplo-cli](https://taplo.tamasfe.dev/cli/installation/cargo.html) and run `taplo fmt --check --diff` to check for the formatting. Fix any issues by running `taplo fmt` in the root directory of the Bevy project.
+   2. If you want to use the CLI tool, install [taplo-cli](https://taplo.tamasfe.dev/cli/installation/cargo.html) and run `taplo fmt --check --diff` to check for the formatting. Fix any issues by running `taplo fmt` in the root directory of the Bevy project.
 6. Check for typos. Bevy's CI will check for them using [typos](https://github.com/crate-ci/typos).
    1. If you use VSCode, install [Typos Spell Checker](https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode).
-   2. You can also use the cli tool. Install [typos-cli](https://github.com/crate-ci/typos?tab=readme-ov-file#install) and run `typos` to check for typos, and fix them by running `typos -w`.
-7. Push your changes to your fork on Github and open a Pull Request.
+   2. You can also use the CLI tool by installing [typos-cli](https://github.com/crate-ci/typos?tab=readme-ov-file#install) and running `typos` to check for typos, and fix them by running `typos -w`.
+7. Push your changes to your fork on GitHub and open a Pull Request.
 8. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or Project Lead's final judgement.
 9. When your PR is ready to merge, a Maintainer or Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
 
@@ -82,11 +82,11 @@ When contributing, please:
 
 Your first PR will be merged in no time!
 
-No matter how you're helping: thanks for contributing to Bevy!
+No matter how you're helping, thanks for contributing to Bevy!
 
 ## Receiving and Responding To Reviews
 
-Once you have opened your PR, your next task will be to shepherd it through community review so that it can be merged. Ideally it shouldn't be too long before a member of the community reviews your work, but sometimes PRs fall through the cracks. If your PR ends up sitting around for a few weeks with no interest, don't be afraid to solicit reviews on the [Discord].
+Once you have opened your PR, your next task will be to shepherd it through community review so that it can be merged. Ideally it shouldn't be too long before a member of the community reviews your work, but sometimes PRs fall through the cracks. If your PR ends up sitting around for a few weeks with no interest, then don't be afraid to solicit reviews on the [Discord].
 
 You may find that your reviewers sometimes misunderstand your work, ask for changes you disagree with, or request additional changes you aren't interested in making. If you find yourself disagreeing with a reviewer, it's fine to politely say "no" or indicate that their suggestion would be better left to a follow-up PR.
 

@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
-Most [examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) aim to clearly demonstrate a single feature, group of closely related small features, or show how to accomplish a particular task (such as asset loading, creating a custom shader or testing your app).
+Most [examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) aim to clearly demonstrate a single feature, group of closely related small features, or show how to accomplish a particular task (such as asset loading, creating a custom shader, or testing your app).
 In rare cases, creating new "game" examples is justified in order to demonstrate new features that open a complex class of functionality in a way that's hard to demonstrate in isolation or requires additional integration testing.
 
 Examples in Bevy should be:
