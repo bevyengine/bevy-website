@@ -11,9 +11,9 @@ This means that bevy releases a new version roughly once every three to four mon
 
 ## Development Cycles
 
-During a three-month development cycle, maintainers collect important PRs and issues into a github Milestone. Issues included in the milestone are given priority, and the community generally makes a best-effort attempt to merge as many of these as possible over the duration of the cycle.
+During a three-month development cycle, maintainers collect important PRs and issues into a GitHub Milestone. Issues included in the milestone are given priority, and the community generally makes a best-effort attempt to merge as many of these as possible over the duration of the cycle.
 
-In the lead-up to a release, generally about about two and a half months after the previous, we begin to aggressively purge the milestone of things that seem unlikely to be ready in time. The main things that tend to remain are:
+In the lead-up to a release (generally about about two and a half months after the previous) we begin to aggressively purge the milestone of things that seem unlikely to be ready in time. The main things that tend to remain are:
 
 - Quick and easy features under active development.
 - Fixes for important regressions or crashes.
@@ -27,8 +27,8 @@ In the run-up to a release, Bevy publishes a new release candidate about once a 
 
 When publishing a release candidate, we also announce a general target release date. This is generally about one week out. If critical bugs or regressions are discovered during this testing window, we fix them and publish a new release candidate. Then we either
 
-- Announce a new date, if we believe more testing time is needed than the current window.
-- Or keep the same target release date if we believe there is enough time in the current window.
+- Announce a new date, if we believe more testing time is needed than the current window, or
+- Keep the same target release date if we believe there is enough time in the current window.
 
 When we successfully hit a release candidate's target date, we do the final release.
 
@@ -41,7 +41,7 @@ When making a release, the maintainers follow these checklists:
 #### Minor Pre-release
 
 1. Check regressions tag.
-2. Check appropriate milestone, and close it.
+2. Check appropriate milestone and close it.
 3. Check GitHub Projects page for staleness.
 4. Update change log.
 5. Create migration guide.
@@ -50,7 +50,7 @@ When making a release, the maintainers follow these checklists:
 8. Bump version number for all crates, using the "Release" workflow.
    1. Change the commit message to be nicer.
 9. Create tag on GitHub.
-10. Edit Github Release. Add links to the `Release announcement` and `Migration Guide`.
+10. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
 11. Bump `latest` tag to most recent release.
 12. Run [the `update-screenshots` workflow] to update screenshots. _This will block blog post releases (and take ~40 minutes) so do it early_.
 13. Run [the `build-wasm-examples` workflow] to update wasm examples.
@@ -78,9 +78,9 @@ When making a release, the maintainers follow these checklists:
 1. Check appropriate milestone.
 2. Close the milestone, open the next one if anything remains and transfer them.
 3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `patch` for the new version.
-    - Change the commit message to be nicer
+    - Change the commit message to be nicer.
 4. Create tag on GitHub.
-5. Edit Github Release. Add link to the comparison between this patch and the previous version.
+5. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
 6. Bump `latest` tag to most recent release.
 7. Run the [`update-screenshots` workflow] to update screenshots.
 8. Run this [`build-wasm-examples` workflow] to update wasm examples.
@@ -101,9 +101,9 @@ When making a release, the maintainers follow these checklists:
 1. Check appropriate milestone.
 2. Create a branch for the release.
 3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
-    - Change the commit message to be nicer
+    - Change the commit message to be nicer.
 4. Create tag on GitHub.
-5. Edit Github Release. Add link to the comparison between this rc and the previous version.
+5. Edit GitHub Release. Add link to the comparison between this rc and the previous version.
 
 #### RC Release
 

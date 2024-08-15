@@ -25,7 +25,7 @@ Project Leads have the final call on all design and code changes within Bevy. Th
 
 Maintainers have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy project and are often the interface between the Bevy community and the Bevy project. They assist the Project Leads in moderating the community, handling administrative tasks, defining best practices, choosing project direction, and deciding how the project is organized.
 
-Maintainers abide by the following rules described in the section on [Using Github Issues](/B0rPTFF6TUyWrM1SwS7Cng) when merging pull requests.
+Maintainers abide by the rules described in the section on [Using Github Issues](/B0rPTFF6TUyWrM1SwS7Cng) when merging pull requests.
 
 We choose new Maintainers carefully and only after they have proven themselves in the Bevy community. Maintainers must have a proven track record of the following:
 
@@ -33,9 +33,9 @@ We choose new Maintainers carefully and only after they have proven themselves i
 2. **Solid technical skills and code contributions across most engine areas**: Maintainers must be able to evaluate the scope of pull requests, provide complete code reviews, ensure the appropriate people have signed off on a PR, and decide if changes align with our vision for Bevy. This can only be done if Maintainers are technical experts, both generically across engine subject areas, and more specifically in the Bevy codebase.
 3. **Great social skills**: Maintainers regularly deal with and resolve "community issues". They must always present a professional and friendly face. They are representatives of the project and their actions directly reflect our goals and values. Working with them should not be painful.
 4. **Thorough reviews of other peoples' PRs**: Maintainers are the last line of defense when protecting project vision and code quality. They are also often the first people new contributors interact with. They must have a history of leaving thorough and helpful code reviews.
-5. **Ethical and trustworthy behavior**: Maintainers are granted significant administrative permissions. They must be trustable.
+5. **Ethical and trustworthy behavior**: Maintainers are granted significant administrative permissions. They must be trustworthy.
 
-To make it easy to reach consensus, hold a high quality bar, and synchronize vision, we intentionally keep the Maintainer team small. We choose new maintainers carefully and only after they have proven themselves in the Bevy community.
+To make it easy to reach consensus, hold a high quality bar, and synchronize vision, we intentionally keep the Maintainer team small. We choose new Maintainers carefully and only after they have proven themselves in the Bevy community.
 
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to one of our Project Leads or Maintainers. One month after every Bevy release Maintainers and Project Leads will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from all Project Leads and Maintainers.
 
@@ -77,4 +77,4 @@ All Bevy Org members are also Triage Team members. The Triage Team can label and
 
 All Bevy Organization roles (excluding the Triage Team) have the potential for "role rotation". Roles like Project Lead, Maintainer, and SME are intentionally kept in limited supply to ensure a cohesive project vision. However these roles can be taxing, and qualified motivated people deserve a chance to lead. To resolve these issues, we plan on building in "role rotation". What this looks like hasn't yet been determined (as this issue hasn't come up yet and we are still in the process of scaling out our team), but we will try to appropriately balance the needs and desires of both current and future leaders, while also ensuring consistent vision and continuity for Bevy.
 
-Additionally, if you are currently holding a role that you can no longer "meaningfully engage with", please reach out to the Project Leads and Maintainers about rotating out. We intentionally keep leadership roles in short supply to make it easier to establish consensus and encourage a cohesive project vision. If you hold a role but don't engage with it, you are preventing other qualified people from driving the project forward. Note that leaving a role doesn't need to be permanent. If you need to rotate out because your life is currently busy with work / life / school / etc, but later you find more time, we can discuss rotating back in!
+Additionally, if you are currently holding a role that you can no longer "meaningfully engage with", please reach out to the Project Leads and Maintainers about rotating out. If you hold a role but don't engage with it, you are preventing other qualified people from driving the project forward. Note that leaving a role doesn't need to be permanent. If you need to rotate out because your life is currently busy with work / life / school / etc, but later you find more time, we can discuss rotating back in!
