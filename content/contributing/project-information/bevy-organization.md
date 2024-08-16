@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 2
 +++
 
-The Bevy Organization is the group of people responsible for stewarding the Bevy project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
+The Bevy Organization is the group of people responsible for stewarding the Bevy Project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
 
 :::info
 You **do not** need to be a member of the Bevy Organization to contribute to Bevy. Community contributors (this means you) can freely open issues, submit pull requests, and review pull requests.
@@ -23,13 +23,13 @@ Project Leads have the final call on all design and code changes within Bevy. Th
 
 ## Maintainer
 
-Maintainers have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy project and are often the interface between the Bevy community and the Bevy project. They assist the Project Leads in moderating the community, handling administrative tasks, defining best practices, choosing project direction, and deciding how the project is organized.
+Maintainers have merge rights in Bevy repos. They assess the scope of pull requests and whether they fit into the Bevy project's vision. They also serve as representatives of the Bevy Project and are often the interface between the Bevy community and the Bevy Project. They assist the Project Leads in moderating the community, handling administrative tasks, defining best practices, choosing project direction, and deciding how the project is organized.
 
 Maintainers abide by the rules described in the section on [Using Github Issues](/B0rPTFF6TUyWrM1SwS7Cng) when merging pull requests.
 
-We choose new Maintainers carefully and only after they have proven themselves in the Bevy community. Maintainers must have a proven track record of the following:
+We choose new Maintainers carefully, and only after they have proven themselves in the Bevy community. Maintainers must have a proven track record of the following:
 
-1. **A strong understanding of the Bevy project as a whole**: our vision, our development process, and our community
+1. **A strong understanding of the Bevy Project as a whole**: our vision, our development process, and our community
 2. **Solid technical skills and code contributions across most engine areas**: Maintainers must be able to evaluate the scope of pull requests, provide complete code reviews, ensure the appropriate people have signed off on a PR, and decide if changes align with our vision for Bevy. This can only be done if Maintainers are technical experts, both generically across engine subject areas, and more specifically in the Bevy codebase.
 3. **Great social skills**: Maintainers regularly deal with and resolve "community issues". They must always present a professional and friendly face. They are representatives of the project and their actions directly reflect our goals and values. Working with them should not be painful.
 4. **Thorough reviews of other peoples' PRs**: Maintainers are the last line of defense when protecting project vision and code quality. They are also often the first people new contributors interact with. They must have a history of leaving thorough and helpful code reviews.
