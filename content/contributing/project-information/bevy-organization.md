@@ -8,7 +8,7 @@ weight = 2
 The Bevy Organization is the group of people responsible for stewarding the Bevy Project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
 
 {% callout(type="info") %}
-You **do not** need to be a member of the Bevy Organization to contribute to Bevy. Community contributors (this means you) can freely open issues, submit pull requests, and review pull requests.
+Everyone is welcome and encouraged to contribute to Bevy, whether or not they're a Bevy Organization member.Community contributors (this means you) are encouraged to freely open issues, submit pull requests, and review pull requests.
 {% end %}
 
 The Bevy Organization is currently broken up into the following roles:
@@ -69,7 +69,9 @@ Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-or
 
 1. Have actively engaged with Bevy development.
 2. Have demonstrated themselves to be polite and welcoming representatives of the project with an understanding of our goals and direction.
-3. Have asked to join the Bevy Org. Reach out to a Maintainers on [Discord](https://discord.gg/bevy) or email us at <bevyengine@gmail.com> if you are interested. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
+3. Have asked to join the Bevy Org. Reach out to a Maintainers on [Discord](https://discord.gg/bevy) or email us at <bevyengine@gmail.com> if you are interested.
+
+If you've been around the community for a while, just ask! There are no formal responsibilities and this is intended to cover the community of people making Bevy quite broadly.
 
 All Bevy Org members are also Triage Team members. The Triage Team can label and close issues and PRs but do not have merge rights or any special authority within the community.
 
