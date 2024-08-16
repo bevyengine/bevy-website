@@ -35,7 +35,7 @@ We choose new Maintainers carefully, and only after they have proven themselves 
 4. **Thorough reviews of other peoples' PRs**: Maintainers are the last line of defense when protecting project vision and code quality. They are also often the first people new contributors interact with. They must have a history of leaving thorough and helpful code reviews.
 5. **Ethical and trustworthy behavior**: Maintainers are granted significant administrative permissions. They must be trustworthy.
 
-To make it easy to reach consensus, hold a high quality bar, and synchronize vision, we intentionally keep the Maintainer team small. We choose new Maintainers carefully and only after they have proven themselves in the Bevy community.
+To make it easy to reach consensus, hold a high quality bar, and synchronize vision, we intentionally keep the Maintainer team small.
 
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to the Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from the Project Lead and all Maintainers.
 
