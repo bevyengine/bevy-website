@@ -19,7 +19,7 @@ In the lead-up to a release (generally about about two and a half months after t
 - Fixes for important regressions or crashes.
 - Large or impressive features that only need minor polish.
 
-When the milestone is complete, we publish a release candidate (ex. `0.14.0-rc.1`) and begin the release process.
+When the milestone is complete, we open a new working group to handle the release preparations, publish a release candidate (ex. `0.14.0-rc.1`) and begin the release process.
 
 ## Release Candidates
 
