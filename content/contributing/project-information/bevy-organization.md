@@ -7,9 +7,9 @@ weight = 2
 
 The Bevy Organization is the group of people responsible for stewarding the Bevy Project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running the Bevy website, controlling access to secrets, defining and enforcing best practices, etc.
 
-:::info
+{% callout(type="info") %}
 You **do not** need to be a member of the Bevy Organization to contribute to Bevy. Community contributors (this means you) can freely open issues, submit pull requests, and review pull requests.
-:::
+{% end %}
 
 The Bevy Organization is currently broken up into the following roles:
 
@@ -39,9 +39,9 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to one of our Project Leads or Maintainers. One month after every Bevy release Maintainers and Project Leads will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from all Project Leads and Maintainers.
 
-:::info
+{% callout(type="info") %}
 Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of maintainers.
-:::
+{% end %}
 
 ## Subject Matter Expert (SME)
 
@@ -59,9 +59,9 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 
 If you are interested in a SME role and believe you meet these criteria, reach out to one of our Project Leads or Maintainers. One month after every Bevy release Maintainers and Project Leads will evaluate the need for new roles, review candidates, and vote. Bringing in a new SME requires the support of the Project Leads and half of the Maintainers (however unanimous support is preferred).
 
-:::info
+{% callout(type="info") %}
 Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of SMEs.
-:::
+{% end %}
 
 ## Bevy Org Member / Triage Team
 
