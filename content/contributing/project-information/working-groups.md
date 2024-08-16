@@ -5,12 +5,17 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Working groups are temporary community initiatives devoted to particularly complex, large, or important tasks. Some examples include:
+Working groups are temporary community initiatives devoted to particularly complex, large, or important tasks. This might include:
 
-- Revamping Bevy's color APIs
-- Replacing Bevy's render graph
-- Implementing relations
-- And drafting this Contributing Guide!
+- undertaking a major refactor
+- adding an unusually complex new feature
+- upstreaming an ecosystem crate
+- preparing for a new release
+- bootstrapping new major documentation efforts
+
+As you can see, these aren't purely for programming tasks!
+Much of the difficulty, work and controversy involved in maintaining a major game engine centers around mundane or social tasks.
+Coordinating efforts there is just as important!
 
 {% callout(type="info") %}
 You can read more about how to find and join active working groups in the [How You Can Help](todo) section.
