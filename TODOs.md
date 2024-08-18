@@ -5,7 +5,7 @@ TODOs for the light mode theme:
 - [x] Get body text legible
 - [x] Get all text legible
 - [x] Remove un-necessary `-inverted.svg` files
-- [ ] Fix images:
+- [x] Fix images:
     - [x] Hamburger menu
     - [x] /404.html
     - [x] news
@@ -23,6 +23,16 @@ TODOs for the light mode theme:
     - [x] Donate page
     - [x] Error/Warn/Info boxes
     - [x] The rest!
-- [ ] Merge in from `main`
+- [x] Merge in from `main`
+- [x] Check new pages:
+    - [x] Bevy fourth birthday
+    - [x] `contributing/`
+    - [x] Generate assets and look through those, too
+        - [x] generate_assets
+        - [x] generate_examples
+        - [x] generate_errors
+- [ ] Update preview
 - [ ] Theme toggle: https://css-tricks.com/a-complete-guide-to-dark-mode-on-the-web/
+    - [ ] Make MVP as separate project: Three-state Javascript toggle, defaults to dark, except without JS, defaults to prefers-system color scheme
+    - [ ] Retrofit into existing theme
 - [ ] Ping BD103 on the PR once it's ready:
