@@ -17,6 +17,8 @@
   img {
     border-radius: $border-radius;
     max-width: 100%;
+    padding: $border-radius * 1.5;
+    background-color: #232326;
   }
 
   video {
