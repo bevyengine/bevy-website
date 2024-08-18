@@ -21,7 +21,7 @@ Read on if you're looking for:
 
 We're thrilled to have you along as we build!
 
-## What we're trying to build
+## What We're Trying to Build
 
 Bevy is a completely free and open source game engine built in Rust. It currently has the following design goals:
 
@@ -46,15 +46,15 @@ Bevy also currently has the following "development process" goals:
 - **Rust-first**: Engine and user-facing code should optimize and encourage Rust-only workflows. Adding additional languages increases internal complexity, fractures the Bevy ecosystem, and makes it harder for users to understand the engine. Never compromise a Rust interface in the interest of compatibility with other languages.
 - **Thoughtful public interfaces over maximal configurability**: Symbols and APIs should be private by default. Every public API should be thoughtfully and consistently designed. Don't expose unnecessary internal implementation details. Don't allow users to "shoot themselves in the foot". Favor one "happy path" API over multiple APIs for different use cases.
 - **Test what you need to**: Write useful tests. Don't write tests that aren't useful. We *generally* aren't strict about unit testing every line of code. We don't want you to waste your time. But at the same time:
-    - Most new features should have at least one minimal [example](https://github.com/bevyengine/bevy/tree/main/examples). These also serve as simple integration tests, as they are run as part of our CI process.
-    - The more complex or "core" a feature is, the more strict we are about unit tests. Use your best judgement here. We will let you know if your pull request needs more tests. We use Rust's built in [testing framework].
+  - Most new features should have at least one minimal [example](https://github.com/bevyengine/bevy/tree/main/examples). These also serve as simple integration tests, as they are run as part of our CI process.
+  - The more complex or "core" a feature is, the more strict we are about unit tests. Use your best judgement here. We will let you know if your pull request needs more tests. We use Rust's built in [testing framework].
 - **Welcome new contributors**: Invest in new contributors. Help them fill knowledge and skill gaps. Don't ever gatekeep Bevy development according to notions of required skills or credentials. Help new developers find their niche.
 - **Civil discourse**: We need to collectively discuss ideas, and the best ideas *should* win, but conversations need to remain respectful at all times. Remember that we're all in this together and always follow our [Code of Conduct].
 
 [Bevy Organization doc]: https://github.com/bevyengine/bevy/blob/main/docs/the_bevy_organization.md
 [testing framework]: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
 
-## Getting oriented
+## Getting Oriented
 
 Bevy, like any general-purpose game engine, is a large project! It can be a bit overwhelming to start, so here's the bird's-eye view.
 

@@ -16,9 +16,8 @@ pub fn generate_release_notes(
     path: PathBuf,
     client: &GithubClient,
     overwrite_existing: bool,
-    // If this value is true, no issues will be opened.
-    // This is useful for testing the release notes generation without spamming the repo.
-    local: bool,
+    // If this value is false, no issues will be opened.
+    create_issues: bool,
 ) -> anyhow::Result<()> {
     // Get all PRs that need release notes
     let prs = get_merged_prs(client, from, to, Some("C-Needs-Release-Note"))?;
@@ -66,12 +65,17 @@ pub fn generate_release_notes(
 
         contributors.remove(&author);
 
-        // Make sure the author is always the first in the list
-        let mut authors = vec![author];
-        authors.extend(contributors);
+        // Separate the contributors from authors for manual
+        // filtering since contributors may include typo fixes
+        // and other minor changes unwanted for the author position.
+        let contributors: Vec<String> = contributors.into_iter().collect();
 
         notes_metadata.push(generate_metadata_block(
-            &title, &authors, pr.number, &file_name,
+            &title,
+            &author,
+            &contributors,
+            pr.number,
+            &file_name,
         ));
 
         let file_path = path.join(format!("{file_name}.md"));
@@ -92,7 +96,14 @@ pub fn generate_release_notes(
         writeln!(&file, "\n<!-- TODO -->")?;
 
         // Open an issue to remind the author(s) to write the release notes
-        generate_and_open_issue(client, &issue_titles, &pr, &title, &file_path, local);
+        generate_and_open_issue(
+            client,
+            &issue_titles,
+            &pr,
+            &title,
+            &file_path,
+            create_issues,
+        );
     }
 
     // Write the metadata file
@@ -102,12 +113,19 @@ pub fn generate_release_notes(
         writeln!(&mut notes_toml, "{metadata}")?;
     }
 
+    if !create_issues {
+        println!(
+            "No issues were created. If you would like to do so, add the `--create-issues` flag."
+        );
+    }
+
     Ok(())
 }
 
 fn generate_metadata_block(
     title: &str,
-    authors: &[String],
+    author: &str,
+    contributors: &[String],
     pr_number: u64,
     file_name: &str,
 ) -> String {
@@ -115,13 +133,14 @@ fn generate_metadata_block(
     format!(
         r#"[[release_notes]]
 title = "{title}"
-authors = [{authors}]
+authors = ["{author}",]
+contributors = [{contributors}]
 url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
 file_name = "{file_name}.md"
 "#,
-        authors = authors
+        contributors = contributors
             .iter()
-            .map(|author| format!("\"{author}\""))
+            .map(|contributor| format!("\"{contributor}\""))
             .collect::<Vec<_>>()
             .join(", "),
         title = title.trim().replace('"', "\\\"")
@@ -141,7 +160,7 @@ fn generate_and_open_issue(
     pr: &GithubIssuesResponse,
     title: &str,
     file_path: &Path,
-    local: bool,
+    create_issues: bool,
 ) {
     let pr_number = pr.number;
     let issue_title = format!("Write release notes for PR #{pr_number}: {title}");
@@ -181,7 +200,7 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
 
     let labels = vec!["A-Release-Notes", "C-Content", "S-Ready-For-Implementation"];
 
-    if local {
+    if !create_issues {
         println!("Would open issue on GitHub:");
         println!("Title: {}", issue_title);
         println!("Body: {}", issue_body);
