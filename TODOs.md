@@ -4,7 +4,7 @@ TODOs for the light mode theme:
 - [x] Invert most images
 - [x] Get body text legible
 - [x] Get all text legible
-- [ ] Remove un-necessary `-inverted.svg` files
+- [x] Remove un-necessary `-inverted.svg` files
 - [ ] Fix images:
     - [x] Hamburger menu
     - [x] /404.html
@@ -15,11 +15,11 @@ TODOs for the light mode theme:
         - [x] news/community-reflection-on-bevys-third-year/
    - [x] frontmatter
        - Rather than individually addressing each image, I simply changed the CSS
-       - [ ] bevy birthday
-       - [ ] scaling bevy
-       - [ ] webgpu.svg
-       - [ ] foundation
-- [ ] Give the colors another pass; make it look good!
+       - [ ] ~~bevy birthday~~
+       - [ ] ~~scaling bevy~~
+       - [ ] ~~webgpu.svg~~
+       - [ ] ~~foundation~~
+- [x] Give the colors another pass; make it look good!
     - [x] Donate page
     - [x] Error/Warn/Info boxes
     - [x] The rest!
