@@ -7,7 +7,7 @@ weight = 1
 
 Hey, so you're interested in contributing to Bevy! Feel free to pitch in on whatever interests you and we'll be happy to help you contribute.
 
-If you're new here, you should check out our community's [Code of Conduct]. You can also come say hi :wave: to us on [Discord]. It's a nice place to chat about Bevy development, ask questions, and get to know the other contributors and users in a less formal setting.
+If you're new here, you should check out our community's [Code of Conduct]. You can also come say hi 👋to us on [Discord]. It's a nice place to chat about Bevy development, ask questions, and get to know the other contributors and users in a less formal setting.
 
 [Code of Conduct]: https://github.com/bevyengine/bevy/blob/main/CODE_OF_CONDUCT.md
 [Discord]: https://discord.gg/bevy
