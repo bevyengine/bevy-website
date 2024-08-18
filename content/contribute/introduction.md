@@ -50,7 +50,7 @@ Bevy also currently has the following "development process" goals:
   - The more complex, or "core", a feature is, the more strict we are about unit tests. Use your best judgement here, and we will let you know if your pull request needs more tests.
   - We use Rust's built in [testing framework].
 - **Welcome new contributors**: Invest in new contributors. Help them fill knowledge and skill gaps. Don't ever gatekeep Bevy development according to notions of required skills or credentials. Help new developers find their niche.
-- **Civil discourse**: We need to collectively discuss ideas, and the best ideas *should* win, but conversations need to remain respectful at all times. Remember that we're all in this together and always follow our [Code of Conduct].
+- **Civil discourse**: We need to collectively discuss ideas, and the best ideas *should* win, but conversations need to remain respectful at all times. Remember that we're all in this together, and to always follow our [Code of Conduct].
 
 [Bevy Organization]: @/contribute/project-information/bevy-organization.md
 [testing framework]: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
