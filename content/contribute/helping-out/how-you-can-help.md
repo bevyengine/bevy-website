@@ -17,7 +17,7 @@ Ultimately, Bevy is a tool that's designed to help people make cool games. Just 
 If you're using Bevy, we want to hear from you! Don't hesitate to ask for support on [Github Discussions], [Discord], or [Reddit]. Once you've made something that you're proud of, feel free to drop a link, video, or screenshot in `#showcase` on [Discord]! If you release a game on [itch.io] we'd be thrilled if you tagged it with `bevy`.
 
 {% callout() %}
-Think you've found a bug, missing documentation, or a feature that would help you make better games? [File an issue](https://github.com/bevyengine/bevy/issues/new/choose) on the main `bevy` repo! Take a look at the chapter on [Reporting Issues](@/contributing/helping-out/reporting-issues.md) to learn more.
+Think you've found a bug, missing documentation, or a feature that would help you make better games? [File an issue](https://github.com/bevyengine/bevy/issues/new/choose) on the main `bevy` repo! Take a look at the chapter on [Reporting Issues](@/contribute/helping-out/reporting-issues.md) to learn more.
 {% end %}
 
 [GitHub Discussions]: https://github.com/bevyengine/bevy/discussions
@@ -53,7 +53,7 @@ Anyone can start a working group! Check out [Working Groups](TODO) for more info
 
 ## Contributing Code
 
-We love getting code contributions from the community, and there's plenty of work to go around! If you want to code but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/contributing/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
+We love getting code contributions from the community, and there's plenty of work to go around! If you want to code but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/contribute/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
 
 If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Your First Pull Request](TODO) is there to help if you get stuck.
 
