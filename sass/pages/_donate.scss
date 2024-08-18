@@ -58,7 +58,7 @@ div.donate-sponsor {
     margin-top: 10px;
     font-size: 1.3rem;
     font-weight: 500;
-    color: rgb(200, 200, 200);
+    color: var(--color-white);
 }
 
 .donate-header-padding {
@@ -119,6 +119,7 @@ div.donate-sponsor {
     position: relative;
     width: 280px;
     height: 134px;
+    background-color: var(--syntax-theme-background);
 
     &:hover {
         text-shadow: none !important;

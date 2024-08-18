@@ -99,8 +99,8 @@ $border-radius: 16px;
   @media (prefers-color-scheme: light) {
     // 'color-black' and other names are usually inverted compared to white theme
     --color-black: #fff;
-    --color-blue: hsl(210, 32%, 67%);
-    --color-blue-lighter: hsl(209, 33%, 52%);
+    --color-blue: hsl(210, 45%, 77%);
+    --color-blue-lighter: hsl(209, 45%, 66%);
     --color-baby-blue: hsl(209, 100%, 35%);
     --color-white: #030303;
     --color-white-darker-60: #a1a1a1;
@@ -109,9 +109,9 @@ $border-radius: 16px;
     --color-grey-800: #f4f4f8;
     --color-grey-900: #efeff4;
 
-    --color-pink: hsl(328, 33%, 77%);
-    --color-pink-lighter: hsl(329, 37%, 67%);
-    --color-pink-barely-lighter: hsl(329, 33%, 73%);
+    --color-pink: hsl(328, 50%, 77%);
+    --color-pink-lighter: hsl(329, 50%, 63%);
+    --color-pink-barely-lighter: hsl(329, 50%, 60%);
     --color-gold: hsl(51, 60%, 56%);
 
     --headerbar-color: #1e1e22;
@@ -126,14 +126,16 @@ $border-radius: 16px;
     --card-hover-background: #cccfd0;
     --supporting-text: #2d2d2d;
 
-    --callout-accent-color-info: hsl(248, 72%, 43%);
-    --callout-bg-color-info: hsl(256, 28%, 79%);
+    --callout-accent-color-info: hsl(248, 72%, 63%);
+    --callout-bg-color-info: hsl(256, 28%, 89%);
     --callout-color-info: hsl(245, 60%, 04%);
-    --callout-accent-color-caution: hsl(346, 80%, 45%);
-    --callout-bg-color-caution: hsl(346, 60%, 78%);
-    --callout-color-caution: hsl(346, 42%, 12%);
-    --callout-accent-color-warning: hsl(46, 73%, 39%);
-    --callout-bg-color-warning: hsl(42, 93%, 84%);
+    
+    --callout-accent-color-caution: hsl(346, 90%, 49%);
+    --callout-bg-color-caution: hsl(346, 90%, 89%);
+    --callout-color-caution: hsl(346, 72%, 04%);
+    
+    --callout-accent-color-warning: hsl(46, 73%, 49%);
+    --callout-bg-color-warning: hsl(42, 93%, 89%);
     --callout-color-warning: hsl(60, 81%, 04%);
 
     // syntax theme note:
@@ -149,7 +151,7 @@ $border-radius: 16px;
     --alt-syntax-theme-background: #d0d3d4;
 
    .inverted {
-      filter: invert(100%) hue-rotate(180deg);
+      filter: invert(90%) hue-rotate(180deg);
     }
 
     .inverted-hue120 {
