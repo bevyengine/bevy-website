@@ -58,9 +58,7 @@ We love getting code contributions from the community, and there's plenty of wor
 If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Your First Pull Request](TODO) is there to help if you get stuck.
 
 {% callout() %}
-When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord] and tell people about your plans. Communicating your progress early and often can help you avoid avoid headaches and disagreements during code review.
-
-[Discord]: https://discord.gg/bevy
+When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord](https://discord.gg/bevy) and tell people about your plans. Communicating your progress early and often can help you avoid avoid headaches and disagreements during code review.
 {% end %}
 
 ## Writing docs and examples
