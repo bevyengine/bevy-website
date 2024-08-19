@@ -213,9 +213,8 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
 8. Examples should not use or rely on third-party plugins.
 These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.
-9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
-10. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
-11. To make sure your web-based files (html, markdown) are formatted correctly run the commands:
+9. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
+10. To make sure your web-based files (html, markdown) are formatted correctly run the commands:
 
     ```sh
     markdownlint -f -c .github/linters/.markdown-lint.yml .
@@ -224,7 +223,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
     ```
 
     in the root directory of your local Bevy Website repository. This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.  Note that the CI also includes `editorconfigchecker` but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
-12. To reference Rust API docs you can use markdown's reference-style links like so:
+11. To reference Rust API docs you can use markdown's reference-style links like so:
    [`HashMap`]
 
    ```md
