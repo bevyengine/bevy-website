@@ -16,7 +16,7 @@ Issues are great for formally tracking the progress of bugs and features. Here a
 - You want to receive feedback and ideas before writing code for Bevy.
 - You are not sure what is causing a bug, or how to fix it.
 - You do not have the capacity to work on the change, but want to make it known to others.
-- The change may be controversial, and needs input from Subject Matter Experts and / or maintainers before going forward.
+- The change may be controversial, and needs input from Subject Matter Experts and / or Maintainers before going forward.
 - You want to track a collection of features in a singular place.
   - This is known as a tracking issue, and has a dedicated label just for it!
 
