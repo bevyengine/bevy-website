@@ -17,7 +17,7 @@ The Bevy Organization is currently broken up into the following roles:
 
 The Project Lead has the final call on all design and code changes within Bevy. This is to ensure a coherent vision and consistent quality of code. They are responsible for representing the project publicly and interacting with other entities (companies, organizations, etc) on behalf of the project. They choose how the project is organized, which includes how responsibility is delegated. The role of Project Lead implicitly confers power of other roles (Maintainer, Subject Matter Expert, etc).
 
-[Carter Anderson] (`@cart`) is, for now, our singular project lead. He tries to be accountable: open to new ideas and to changing his mind in the face of compelling arguments or community consensus.
+[Carter Anderson] (`@cart`) is, for now, our singular project lead. He tries to be accountable, open to new ideas, and to changing his mind in the face of compelling arguments or community consensus.
 
 [Carter Anderson]: https://github.com/cart
 
