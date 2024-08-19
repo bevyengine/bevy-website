@@ -15,7 +15,7 @@ Working groups are temporary community initiatives devoted to particularly compl
 
 As you can see, these aren't purely for programming tasks!
 Much of the difficulty, work, and controversy involved in maintaining a major game engine centers around mundane or social tasks.
-Coordinating efforts there is just as important!
+Coordinating the efforts for those tasks can be just as important as coordinating the addition of a fancy new feature!
 
 {% callout(type="info") %}
 You can read more about how to find and join active working groups in the [How You Can Help](todo) section.
