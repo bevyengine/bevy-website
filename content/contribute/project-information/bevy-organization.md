@@ -51,7 +51,7 @@ SME approvals count as "votes" on controversial PRs (provided the PR is in their
 
 However, the Project Lead has the right to revert changes merged this way, so it is each SME's responsibility to ensure they have synced up with the Project Lead's vision. Additionally, when approving a design, consensus between SMEs and the Project Lead (and ideally most of the wider Bevy community) is heavily encouraged. Merging without consensus risks fractured project vision and/or ping-ponging between designs. The "larger" the impact of a design, the more critical it is to establish consensus.
 
-We choose new SMEs carefully and only after they have proven themselves in the Bevy community. SMEs must have a proven track record of the following:
+We choose new SMEs carefully, and only after they have proven themselves in the Bevy community. SMEs must have a proven track record of the following:
 
 1. **Designing and contributing to foundational pieces in their subject area**: SMEs are responsible for building and extending the foundations of a given subject area. They must have a history of doing this before becoming an SME.
 2. **Thorough reviews of other peoples' PRs in their subject area**: Within a subject area, SMEs are responsible for guiding people in the correct technical direction and only approving things aligned with that vision. They must have a history of doing this before becoming an SME.
@@ -75,7 +75,7 @@ Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-or
 
 If you've been around the community for a while, just ask! There are no formal responsibilities and this is intended to cover the community of people making Bevy quite broadly.
 
-All Bevy Org members are also Triage Team members. The Triage Team can label and close issues and PRs but do not have merge rights or any special authority within the community.
+All Bevy Org members are also Triage Team members. The Triage Team can label and close issues and PRs, but do not have merge rights or any special authority within the community.
 
 ## Role Rotation
 
