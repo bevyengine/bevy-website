@@ -36,14 +36,14 @@ If you do have specific skills (e.g. advanced familiarity with `unsafe` code, re
 Not even our Project Lead and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
 {% callout() %}
-Interested in reviewing but don't know where to start? Check out [Reviewing Pull Requests](TODO)!
+Interested in reviewing, but don't know where to start? Check out [Reviewing Pull Requests](TODO)!
 {% end %}
 
 ## Joining a Working Group
 
 Bevy's active initiatives are organized into *temporary working groups*: public, open-membership teams where people work together to tackle a sizeable, well-scoped goal. Each working group coordinates through a dedicated forum-channel on [Discord], but they may also create issues or use project boards to organize and track their progress.
 
-You should consider joining a working group if you're interested in contributing but don't know where to start or what to work on. Choosing one and asking how to help can be a fantastic way to get up to speed and be immediately useful.
+You should consider joining a working group if you're interested in contributing, but don't know where to start or what to work on. Choosing one and asking how to help can be a fantastic way to get up to speed and be immediately useful.
 
 There are no special requirements to participate in a working group — no applications, formal membership list, or even leadership. Anyone can help, and you should expect to compromise and work together with others to bring your shared vision to life. Working groups are *spaces*, not clubs.
 
@@ -53,7 +53,7 @@ Anyone can start a working group! Check out [Working Groups](TODO) for more info
 
 ## Contributing Code
 
-We love getting code contributions from the community, and there's plenty of work to go around! If you want to code but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/contribute/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
+We love getting code contributions from the community, and there's plenty of work to go around! If you want to code, but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/contribute/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
 
 If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Your First Pull Request](TODO) is there to help if you get stuck.
 
