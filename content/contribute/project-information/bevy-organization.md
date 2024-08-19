@@ -31,7 +31,7 @@ We choose new Maintainers carefully, and only after they have proven themselves 
 
 1. **A strong understanding of the Bevy Project as a whole**: our vision, our development process, and our community
 2. **Solid technical skills and code contributions across most engine areas**: Maintainers must be able to evaluate the scope of pull requests, provide complete code reviews, ensure the appropriate people have signed off on a PR, and decide if changes align with our vision for Bevy. This can only be done if Maintainers are technical experts, both generically across engine subject areas, and more specifically in the Bevy codebase.
-3. **Great social skills**: Maintainers regularly deal with and resolve "community issues" and serve as moderators on Discord. They must always present a professional and friendly face. They are representatives of the project and their actions directly reflect our goals and values. Working with them should not be painful.
+3. **Great social skills**: Maintainers regularly deal with, and resolve, "community issues", and serve as moderators on Discord. They must always present a professional and friendly face. They are representatives of the project and their actions directly reflect our goals and values. Working with them should not be painful.
 4. **Thorough reviews of other peoples' PRs**: Maintainers are the last line of defense when protecting project vision and code quality. They are also often the first people new contributors interact with. They must have a history of leaving thorough and helpful code reviews.
 5. **Ethical and trustworthy behavior**: Maintainers are granted significant administrative permissions and serve as the board members of the Bevy Foundation. They must be trustworthy and professional.
 
