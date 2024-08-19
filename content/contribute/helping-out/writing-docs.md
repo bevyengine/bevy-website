@@ -24,7 +24,7 @@ There are two main places where we keep docs: inline docs alongside the codebase
 The inline docs for each release are published to [docs.rs](https://docs.rs/bevy).
 
 To view the current docs on `main` before you contribute, you can go to [dev-docs.bevyengine.org](https://dev-docs.bevyengine.org/),
-which has the latest API reference built from the repo on every commit made to the `main` branch.
+which has the latest API reference built from the repository on every commit made to the `main` branch.
 
 To check out any local changes you've made:
 

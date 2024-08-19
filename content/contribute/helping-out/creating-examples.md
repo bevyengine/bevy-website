@@ -30,7 +30,7 @@ Please adhere to the following guidelines when creating or updating an example.
 
 1. Examples should live in an appropriate subfolder of `/examples`.
 2. Examples should be a single file if possible.
-3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repo small. Don't add "large" asset files.
+3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repository small. Don't add "large" asset files.
 4. Each example should try to follow this order:
    1. Imports
    2. A `fn main()` block
