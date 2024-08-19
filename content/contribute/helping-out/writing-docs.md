@@ -187,9 +187,9 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
 
 ### Organizational
 
-1. Carefully organize your work into separate pages, headings, paragraphs and code blocks.
+1. Carefully organize your work into separate pages, headings, paragraphs, and code blocks.
 2. Clearly signal when you are explaining a concept in technical depth so it can be skipped.
-3. Use lists, numbered lists and sub-lists to present information in bite-sized ways.
+3. Use lists, numbered lists, and sub-lists to present information in bite-sized ways.
    1. Refer back to these items by number!
 4. Provide plenty of links, but be sure that what you are linking to is obvious by context.
    1. Link to other sections of the book / example / web page when you mention them.
