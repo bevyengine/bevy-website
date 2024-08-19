@@ -43,7 +43,7 @@ If you're new to Bevy, here's the workflow we use:
 2. Make your changes in a local clone of your fork, typically in its own new branch.
    1. Try to split your work into separate commits, each with a distinct purpose. Be particularly mindful of this when responding to reviews so it's easy to see what's changed.
    2. {% callout() %}
-    Tip: [You can set up a global `.gitignore` file](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer) to exclude your operating system/text editor's special/temporary files. (e.g. `.DS_Store`, `thumbs.db`, `*~`, `*.swp` or `*.swo`) This allows us to keep the `.gitignore` file in the repo uncluttered.
+    Tip: [You can set up a global `.gitignore` file](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer) to exclude your operating system/text editor's special/temporary files. (e.g. `.DS_Store`, `thumbs.db`, `*~`, `*.swp` or `*.swo`) This allows us to keep the `.gitignore` file in the repository uncluttered.
     {% end %}
 
 3. To test CI validations locally, run the `cargo run -p ci` command. This will run most checks that happen in CI, but can take some time. You can also run sub-commands to iterate faster depending on what you're contributing:
@@ -66,7 +66,7 @@ To locally lint your files using the same workflow as our CI:
 8. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or the Project Lead's final judgement.
 9. When your PR is ready to merge, a Maintainer or the Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
 
-If you end up adding a new official Bevy crate to the `bevy` repo:
+If you end up adding a new official Bevy crate to the `bevy` repository:
 
 1. Add the new crate to the [tools/publish.sh](https://github.com/bevyengine/bevy/blob/main/tools/publish.sh) file.
 2. Check if a new cargo feature was added, update [docs/cargo_features.md](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md) as needed.
