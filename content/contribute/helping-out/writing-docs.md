@@ -138,7 +138,7 @@ Users following the definition-first path will tend to take the following route:
 6. As they explore, they will also browse:
    1. The source code.
    2. [docs.rs](https://docs.rs/bevy/)
-   3. `CONTRIBUTING.md`, GitHub issues, and pull requests.
+   3. The Contributing Guide, GitHub issues, and pull requests.
    4. Release notes.
    5. The engine development channels on Discord.
    6. Advanced examples to see how everything comes together.
@@ -166,7 +166,7 @@ This path should prioritize:
 
 ## Contributor's style guide
 
-When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
+When writing and reviewing content for The Bevy Book, The Quick Start Guide, and other related learning materials, please try to follow these guidelines:
 
 ### Writing
 
