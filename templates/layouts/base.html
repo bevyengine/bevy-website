@@ -10,7 +10,7 @@
 
 {% if section_or_page %}
   {# Possible docs root section paths. A temporary workaround. TODO: issue #1181(https://github.com/bevyengine/bevy-website/issues/1181) find a better solution #}
-  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "learn/errors", "contribute"] %}
+  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "learn/errors", "learn/contribute"] %}
   {% for root_section_path in root_section_paths %}
     {% set components = root_section_path | split(pat="/") %}
     {% if section_or_page.components | slice(end=components | length) == components %}
