@@ -14,7 +14,7 @@ Working groups are temporary community initiatives devoted to particularly compl
 - Bootstrapping new major documentation efforts.
 
 As you can see, these aren't purely for programming tasks!
-Much of the difficulty, work and controversy involved in maintaining a major game engine centers around mundane or social tasks.
+Much of the difficulty, work, and controversy involved in maintaining a major game engine centers around mundane or social tasks.
 Coordinating efforts there is just as important!
 
 {% callout(type="info") %}
