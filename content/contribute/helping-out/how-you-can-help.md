@@ -14,7 +14,7 @@ No matter how experienced you are with Bevy and Rust, or what your level of comm
 
 Ultimately, Bevy is a tool that's designed to help people make cool games. Just by *using* Bevy you're helping us catch bugs, prioritize new features, polish off rough edges, and promote the project.
 
-If you're using Bevy, we want to hear from you! Don't hesitate to ask for support on [Github Discussions], [Discord], or [Reddit]. Once you've made something that you're proud of, feel free to drop a link, video, or screenshot in `#showcase` on [Discord]! If you release a game on [itch.io] we'd be thrilled if you tagged it with `bevy`.
+If you're using Bevy, we want to hear from you! Don't hesitate to ask for support on [GitHub Discussions], [Discord], or [Reddit]. Once you've made something that you're proud of, feel free to drop a link, video, or screenshot in `#showcase` on [Discord]! If you release a game on [itch.io] we'd be thrilled if you tagged it with `bevy`.
 
 {% callout() %}
 Think you've found a bug, missing documentation, or a feature that would help you make better games? [File an issue](https://github.com/bevyengine/bevy/issues/new/choose) on the main `bevy` repo! Take a look at the chapter on [Reporting Issues](@/contribute/helping-out/reporting-issues.md) to learn more.
@@ -77,7 +77,7 @@ Check out our [plugin guidelines](@/learn/quick-start/plugin-development.md) for
 
 ## Organizing Issues and Pull Requests
 
-If nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to hop on [Discord] and ask `@Maintainer` to be added to the Github organization. Anyone interested in helping us keep things neat and tidy is welcome to join. As will be discussed later, this role only requires good faith, a basic understanding of our development process, and a few merged pull requests.
+If nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to hop on [Discord] and ask `@Maintainer` to be added to the GitHub organization. Anyone interested in helping us keep things neat and tidy is welcome to join. As will be discussed later, this role only requires good faith, a basic understanding of our development process, and a few merged pull requests.
 
 ## Teaching Others
 
@@ -85,6 +85,6 @@ Bevy is still very young, and it's light on documentation, tutorials, and accumu
 
 Some of the best ways to do this are:
 
-- Answering questions on [Github Discussions], [Discord], and [Reddit](https://www.reddit.com/r/bevy).
+- Answering questions on [GitHub Discussions], [Discord], and [Reddit](https://www.reddit.com/r/bevy).
 - Writing tutorials, guides, and other informal documentation and sharing them on [Bevy Assets](https://github.com/bevyengine/bevy-assets).
 - Streaming, writing blog posts, and creating videos. Share these in the `#devlogs` channel on [Discord]!
