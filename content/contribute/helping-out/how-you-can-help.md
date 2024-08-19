@@ -81,7 +81,7 @@ If nothing brings you more satisfaction than seeing every last issue labeled and
 
 ## Teaching Others
 
-Bevy is still a kid in software years, and it's light on documentation, tutorials, and accumulated expertise. By helping others with their issues and teaching them about Bevy, you will naturally learn the engine and codebase in greater depth (while also making our community better)!
+Bevy is still relatively young, and it's light on documentation, tutorials, and accumulated expertise. By helping others with their issues and teaching them about Bevy, you will naturally learn the engine and codebase in greater depth (while also making our community better)!
 
 Some of the best ways to do this are:
 
