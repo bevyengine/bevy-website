@@ -79,6 +79,14 @@ All Bevy Org members are also Triage Team members. The Triage Team can label and
 
 ## Role Rotation
 
-All Bevy Organization roles (excluding the Triage Team) have the potential for "role rotation". Roles like Project Lead, Maintainer, and SME are intentionally kept in limited supply to ensure a cohesive project vision. However these roles can be taxing, and qualified motivated people deserve a chance to lead. To resolve these issues, we plan on building in "role rotation". What this looks like hasn't yet been determined (as this issue hasn't come up yet and we are still in the process of scaling out our team), but we will try to appropriately balance the needs and desires of both current and future leaders, while also ensuring consistent vision and continuity for Bevy.
+All Bevy Organization roles, excluding the Triage Team, have the potential for "role rotation".
 
-Additionally, if you are currently holding a role that you can no longer "meaningfully engage with", please reach out to the Project Lead and Maintainers about rotating out. If you hold a role but don't engage with it, you are preventing other qualified people from driving the project forward. Note that leaving a role doesn't need to be permanent. If you need to rotate out because your life is currently busy with work / life / school / etc, but later you find more time, we can discuss rotating back in!
+Roles like Project Lead, Maintainer, and SME are intentionally kept in limited supply to ensure a cohesive project vision. However these roles can be taxing, and qualified motivated people deserve a chance to lead.
+
+To resolve these issues, we plan on building in "role rotation". What this looks like hasn't yet been determined (as this issue hasn't come up yet and we are still in the process of scaling out our team), but we will try to appropriately balance the needs and desires of both current and future leaders, while also ensuring consistent vision and continuity for Bevy.
+
+Additionally, if you are currently holding a role that you can no longer "meaningfully engage with", please reach out to the Project Lead and Maintainers about rotating out. If you hold a role but don't engage with it, you are preventing other qualified people from driving the project forward.
+
+{% callout() %}
+Leaving a role doesn't need to be permanent. If you need to rotate out because your life is currently busy with work / life / school / etc, but later you find more time, we can discuss rotating back in!
+{% end %}
