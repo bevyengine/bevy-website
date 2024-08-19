@@ -115,8 +115,6 @@ When making a release, the Maintainers follow these checklists:
 #### RC Post-Release
 
 1. Update Bevy version used for the Bevy Website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
-Commit suggestion
-Add suggestion to batch```
 
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
