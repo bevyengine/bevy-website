@@ -9,7 +9,7 @@ Bevy's scope and user base means that it gets a large volume of issues and pull 
 
 ## Classifying Issues and PRs
 
-Labels are our primary tool for organizing work. You can find a complete list with descriptions [here](https://github.com/bevyengine/bevy/labels). These are a few of the most common, organized by category:
+Labels are our primary tool for organizing work. You can find a complete list with descriptions [here](https://github.com/bevyengine/bevy/labels) for the engine, or [here](https://github.com/bevyengine/bevy-website/labels) for the website. These are a few of the most common, organized by category:
 
 - **A**: Area (e.g. `A-Animation`, `A-ECS`, `A-Rendering`, ...).
 - **C**: Category. The most common include:
