@@ -77,7 +77,7 @@ Check out our [plugin guidelines](@/learn/quick-start/plugin-development.md) for
 
 ## Organizing Issues and Pull Requests
 
-If nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to hop on [Discord] and ask `@Maintainer` to be added to the GitHub organization. Anyone interested in helping us keep things neat and tidy is welcome to join. As will be discussed later, this role only requires good faith, a basic understanding of our development process, and a few merged pull requests.
+If nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to hop on [Discord] and ask a `@Maintainer` to be added to the GitHub organization. Anyone interested in helping us keep things neat and tidy is welcome to join. As will be discussed later, this role only requires good faith, a basic understanding of our development process, and a few merged pull requests.
 
 ## Teaching Others
 
