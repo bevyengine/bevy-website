@@ -97,9 +97,12 @@ You may find that your reviewers sometimes misunderstand your work, ask for chan
 
 Occasionally authors of pull requests get busy or become unresponsive, or project members fail to reply in a timely manner.
 This is a natural part of any open source project.
+
 To avoid blocking these efforts, these pull requests may be *adopted*, where another contributor creates a new pull request with the same content.
+
 If there is an old pull request that is without updates, comment to the organization whether it is appropriate to add the
 *[S-Adopt-Me](https://github.com/bevyengine/bevy/labels/S-Adopt-Me)* label, to indicate that it can be *adopted*.
+
 If you plan on adopting a PR yourself, you can also leave a comment on the PR asking the author if they plan on returning.
 If the author gives permission or simply doesn't respond after a few days, then it can be adopted.
 This may sometimes even skip the labeling process since at that point the PR has been adopted by you.
