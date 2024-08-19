@@ -40,7 +40,7 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to the Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from the Project Lead and all Maintainers.
 
 {% callout(type="info") %}
-Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of Maintainerss.
+Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of Maintainers.
 {% end %}
 
 ## Subject Matter Expert (SME)
