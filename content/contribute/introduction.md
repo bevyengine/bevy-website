@@ -59,9 +59,9 @@ Bevy also currently has the following "development process" goals:
 
 The Bevy Organization expands a little bit beyond just the Bevy engine, which by itself is a large project! It can be a bit overwhelming to start, so here's the bird's-eye view:
 
-The [Github organization] has 2 primary repositories:
+The [GitHub organization] has 2 primary repositories:
 
-[Github organization]: https://github.com/bevyengine
+[GitHub organization]: https://github.com/bevyengine
 
 1. [`bevy`]: This is where the engine itself lives. The bulk of development work occurs here.
 2. [`bevy-website`]: This is where the [official website] is hosted, along with the quick start, news, contributing book, live examples and other bits of polished content we want to show our users.

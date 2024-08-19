@@ -44,7 +44,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `X-Controversial`: there's active disagreement and / or large-scale architectural implications involved.
   - `X-Blessed`: work that was previously controversial, but whose controversial (but perhaps not technical) elements have been endorsed by the relevant decision makers.
 
-You can learn more about labels on [Github's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
+You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
 The rules for how PRs get merged depend on their classification by controversy and difficulty. More difficult PRs will require more careful review from experts, while more controversial PRs will require rewrites to reduce the costs involved and / or sign-off from Subject Matter Experts and maintainers.
 
@@ -106,7 +106,7 @@ PRs that are `S-Adopt-Me` should be left open, but only if they're genuinely mor
 There are several paths for PRs to be closed:
 
 1. Authors may close their own PRs for any reason at any time.
-2. If a PR is clearly spam or malicious, anyone with triage rights is encouraged to close out the PR and report it to Github.
+2. If a PR is clearly spam or malicious, anyone with triage rights is encouraged to close out the PR and report it to GitHub.
 3. If the work has already been done elsewhere, adopted or otherwise obsoleted, anyone with triage rights is encouraged to close out the PR with an explanatory comment.
 4. Anyone may nominate a PR for closure, by bringing it to the attention of the author and / or one of the SMEs / maintainers. Let them press the button, but this is generally well-received and helpful.
 5. SMEs or maintainers may and are encouraged to unilaterally close PRs that fall into one or more of the remaining categories.
