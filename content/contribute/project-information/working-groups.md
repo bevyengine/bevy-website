@@ -33,7 +33,13 @@ When participating in a working group, here are a few things to keep in mind:
 
 ## Life-Cycle of a Working Group
 
-Working groups move through three loose phases: An initial proposal, a period of design and approval, and finally the bulk of the implementation work. These phases are intended to be lightweight, and are sometimes little more than a formality.
+Working groups move through three loose phases:
+
+1. An initial proposal.
+2. A period of design and approval.
+3. And finally the bulk of the implementation work.
+
+These phases are intended to be lightweight, and are sometimes little more than a formality.
 
 ## Make A Proposal
 
