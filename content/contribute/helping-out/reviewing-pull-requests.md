@@ -42,7 +42,7 @@ Otherwise, please try to avoid asking for additional work unless absolutely nece
 With the large number of contributors and reviewers collectively building a complex system, disagreements will inevitably occur. Regardless of whether the disagreement is about naming, performance, or code coverage, the goal should be to reach a compromise amicably.
 
 - **Keep scope in mind**. Trivial cleanup of surrounding area is okay to recommend, but don't expect a contributor to overhaul a portion of Bevy on their own.
-- **Don't be afraid to escalate**. Regardless of what side of the review process you're on, if you feel someone is being unreasonable don't hesitate to tag one of the maintainers or post in a related dev channel in the Discord.
+- **Don't be afraid to escalate**. Regardless of what side of the review process you're on, if you feel someone is being unreasonable don't hesitate to tag one of the Maintainers or post in a related dev channel in the Discord.
 - **Not all review comments will necessarily be addressed**, and that's okay. Feel free to open an issue for further discussion.
 
 ## What to review

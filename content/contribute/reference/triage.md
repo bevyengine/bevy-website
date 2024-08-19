@@ -19,7 +19,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `C-Code-Quality`: a section of code that is hard to understand or change.
   - `C-Performance`: a change motivated by speed, memory usage, or compile times.
   - `C-Tracking-Issue`: collects information on a broad development initiative.
-  - `C-Needs-Release-Notes`: work that should be called out in the blog post due to impact. This decision is usually made by maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
+  - `C-Needs-Release-Notes`: work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
   - `C-Breaking-Change`: a breaking change to Bevy's public API, and should be noted in the migration guide.
 - **D**: Difficulty. This can either be the estimated level of expertise (not time) to solve an issue or review a pull request. In order, these are:
   - `D-Trivial`: typos, obviously incorrect one-line bug fixes, code reorganization, and renames.
@@ -37,7 +37,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `S-Blocked`: cannot move forward until something else changes.
   - `S-Needs-Review`: this PR needs reviewer attention to move forward.
   - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
-  - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a maintainer to consider merging it.
+  - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a Maintainer to consider merging it.
 - **X**: Controversiality. In order, these are:
   - `X-Uncontroversial`: everyone should agree that this is a good idea.
   - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
@@ -46,7 +46,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
 
 You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
-The rules for how PRs get merged depend on their classification by controversy and difficulty. More difficult PRs will require more careful review from experts, while more controversial PRs will require rewrites to reduce the costs involved and / or sign-off from Subject Matter Experts and maintainers.
+The rules for how PRs get merged depend on their classification by controversy and difficulty. More difficult PRs will require more careful review from experts, while more controversial PRs will require rewrites to reduce the costs involved and / or sign-off from Subject Matter Experts and Maintainers.
 
 When making PRs, try to split out more controversial changes from less controversial ones, in order to make your work easier to review and merge. Also consider splitting simple changes from complex ones, since the simple changes can be reviewed and merged much quicker.
 
@@ -108,9 +108,9 @@ There are several paths for PRs to be closed:
 1. Authors may close their own PRs for any reason at any time.
 2. If a PR is clearly spam or malicious, anyone with triage rights is encouraged to close out the PR and report it to GitHub.
 3. If the work has already been done elsewhere, adopted or otherwise obsoleted, anyone with triage rights is encouraged to close out the PR with an explanatory comment.
-4. Anyone may nominate a PR for closure, by bringing it to the attention of the author and / or one of the SMEs / maintainers. Let them press the button, but this is generally well-received and helpful.
-5. SMEs or maintainers may and are encouraged to unilaterally close PRs that fall into one or more of the remaining categories.
-6. In the case of PRs where some members of the community (other than the author) are in favor and some are opposed, any two relevant SMEs or maintainers may act in concert to close the PR.
+4. Anyone may nominate a PR for closure, by bringing it to the attention of the author and / or one of the SMEs / Maintainers. Let them press the button, but this is generally well-received and helpful.
+5. SMEs or Maintainers may and are encouraged to unilaterally close PRs that fall into one or more of the remaining categories.
+6. In the case of PRs where some members of the community (other than the author) are in favor and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
 
@@ -121,6 +121,6 @@ Members of the Triage Team within the Bevy organization have permissions to labe
 1. They have actively engaged with Bevy development in the past.
 2. They have demonstrated themselves to be polite and welcoming representatives of the project with an understanding of its goals and direction.
 
-If that applies to you, then feel free to ask a maintainer on [Discord] or email <bevyengine@gmail.com>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
+If that applies to you, then feel free to ask a Maintainer on [Discord] or email <bevyengine@gmail.com>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
 
 [Discord]: https://discord.gg/bevy
