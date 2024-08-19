@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Hey, so you're interested in contributing to the Bevy Organization's projects! Feel free to pitch in on whatever interests you and we'll be happy to help you contribute.
+Hey, so you're interested in contributing to a Bevy project! Feel free to pitch in on whatever interests you and we'll be happy to help you contribute.
 
 If you're new here, you should check out our community's [Code of Conduct]. You can also come say hi 👋to us on [Discord]. It's a nice place to chat about Bevy development, ask questions, and get to know the other contributors and users in a less formal setting.
 
