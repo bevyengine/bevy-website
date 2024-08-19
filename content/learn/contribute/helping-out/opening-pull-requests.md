@@ -76,7 +76,7 @@ When contributing, please:
 * Prefer small PRs that incrementally improve things.
 * Explain what you're doing and why.
 * Try to loosely follow the workflow in [*Making changes to Bevy*](#making-changes-to-bevy).
-* Consult the [style guide](@/contribute/helping-out/creating-examples.md#style-guide) to help keep our code base tidy.
+* Consult the [style guide](@/learn/contribute/helping-out/creating-examples.md#style-guide) to help keep our code base tidy.
 * Document new code with doc comments.
 * Include clear, simple tests.
 * Add or improve the examples when adding new user-facing functionality.

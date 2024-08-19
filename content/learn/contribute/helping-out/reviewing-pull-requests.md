@@ -23,7 +23,7 @@ If you're new to GitHub, there's a lot of great information on the official [Pul
 
 Focus on giving constructive, actionable feedback that results in real improvements to code quality or end-user experience. If you don't understand why an approach was taken, please ask!
 
-Provide actual code suggestions when that is helpful. Small changes work well as comments or in-line suggestions on specific lines of codes. Larger changes deserve a comment in the main thread, or a pull request to the original author's branch (but please mention that you've made one). When in doubt about a matter of architectural philosophy, please refer back to our page on [What We're Trying to Build](@/contribute/introduction.md#what-we-re-trying-to-build) for guidance.
+Provide actual code suggestions when that is helpful. Small changes work well as comments or in-line suggestions on specific lines of codes. Larger changes deserve a comment in the main thread, or a pull request to the original author's branch (but please mention that you've made one). When in doubt about a matter of architectural philosophy, please refer back to our page on [What We're Trying to Build](@/learn/contribute/introduction.md#what-we-re-trying-to-build) for guidance.
 
 It's okay to leave an approval even if you aren't one-hundred percent confident on all areas of the PR, then just be sure to note your limitations. When Maintainers are evaluating the PR to be merged, they'll make sure that there's good coverage on all of the critical areas. If you can only check that the math is correct, and another reviewer can check everything but the math, we're in good shape!
 
@@ -57,4 +57,4 @@ Not even our Project Lead and Maintainers are exempt from reviews and RFCs! By g
 
 Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy Org role to help us keep things tidy.
 
-As discussed in our page on [The Bevy Organization](@/contribute/project-information/bevy-organization.md), this role only requires good faith and a basic understanding of our development process.
+As discussed in our page on [The Bevy Organization](@/learn/contribute/project-information/bevy-organization.md), this role only requires good faith and a basic understanding of our development process.

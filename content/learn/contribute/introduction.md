@@ -52,7 +52,7 @@ Bevy also currently has the following "development process" goals:
 - **Welcome new contributors**: Invest in new contributors. Help them fill knowledge and skill gaps. Don't ever gatekeep Bevy development according to notions of required skills or credentials. Help new developers find their niche.
 - **Civil discourse**: We need to collectively discuss ideas, and the best ideas *should* win, but conversations need to remain respectful at all times. Remember that we're all in this together, and to always follow our [Code of Conduct].
 
-[The Bevy Organization]: @/contribute/project-information/bevy-organization.md
+[The Bevy Organization]: @/learn/contribute/project-information/bevy-organization.md
 [testing framework]: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
 
 ## Getting Oriented
