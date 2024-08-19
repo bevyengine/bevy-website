@@ -52,8 +52,8 @@ When making a release, the Maintainers follow these checklists:
 9. Create tag on GitHub.
 10. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
 11. Bump `latest` tag to most recent release.
-12. Run [the `update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
-13. Run [the `build-wasm-examples` workflow] to update Wasm examples.
+12. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
+13. Run the [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Minor Release
 
