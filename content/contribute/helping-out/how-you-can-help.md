@@ -33,7 +33,7 @@ You don't need to be an Elder Rustacean to be useful here: anyone can catch miss
 
 If you do have specific skills (e.g. advanced familiarity with `unsafe` code, rendering knowledge, or web development experience) or experience with a specific problem, that's fantastic! We suggest trying to prioritize those areas to ensure we get appropriate expertise where we need it.
 
-Not even our Project Leads and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
+Not even our Project Lead and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
 {% callout() %}
 Interested in reviewing but don't know where to start? Check out [Reviewing Pull Requests](TODO)!
