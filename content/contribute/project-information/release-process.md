@@ -103,7 +103,7 @@ When making a release, the Maintainers follow these checklists:
 3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
     - Change the commit message to be nicer.
 4. Create tag on GitHub.
-5. Edit GitHub Release. Add link to the comparison between this rc and the previous version.
+5. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
 
 #### RC Release
 
