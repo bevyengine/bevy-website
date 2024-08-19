@@ -110,7 +110,7 @@ There are several paths for PRs to be closed:
 3. If the work has already been done elsewhere, adopted, or otherwise obsoleted, anyone with triage rights is encouraged to close out the PR with an explanatory comment.
 4. Anyone may nominate a PR for closure, by bringing it to the attention of the author and / or one of the SMEs / Maintainers. Let them press the button, but this is generally well-received and helpful.
 5. SMEs or Maintainers may, and are encouraged, to unilaterally close PRs that fall into one or more of the remaining categories.
-6. In the case of PRs where some members of the community (other than the author) are in favor and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
+6. In the case of PRs where some members of the community, other than the author, are in favor, and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
 
