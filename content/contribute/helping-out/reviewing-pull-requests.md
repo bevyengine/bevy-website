@@ -49,12 +49,12 @@ With the large number of contributors and reviewers collectively building a comp
 
 There are three main places you can check for things to review:
 
-1. Pull requests which are ready and in need of more reviews on [bevy](https://github.com/bevyengine/bevy/pulls?q=is%3Aopen+is%3Apr+-label%3AS-Ready-For-Final-Review+-draft%3A%3Atrue+-label%3AS-Needs-RFC+-reviewed-by%3A%40me+-author%3A%40me).
-2. Pull requests on [bevy](https://github.com/bevyengine/bevy/pulls) and the [bevy-website](https://github.com/bevyengine/bevy-website/pulls) repos.
+1. Pull requests which are ready and in need of more reviews on the [bevy repository](https://github.com/bevyengine/bevy/pulls?q=is%3Aopen+is%3Apr+-label%3AS-Ready-For-Final-Review+-draft%3A%3Atrue+-label%3AS-Needs-RFC+-reviewed-by%3A%40me+-author%3A%40me).
+2. Pull requests on the [bevy](https://github.com/bevyengine/bevy/pulls) and the [bevy-website](https://github.com/bevyengine/bevy-website/pulls) repositories.
 3. [RFCs](https://github.com/bevyengine/rfcs), which need extensive thoughtful community input on their design.
 
-Not even our Project Leads and Maintainers are exempt from reviews and RFCs! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
+Not even our Project Lead and Maintainers are exempt from reviews and RFCs! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
-Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy org role to help us keep things tidy.
+Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy Org role to help us keep things tidy.
 
-As discussed in our [Bevy Organization doc](TODO), this role only requires good faith and a basic understanding of our development process.
+As discussed in our page on [The Bevy Organization](@/contribute/project-information/bevy-organization.md), this role only requires good faith and a basic understanding of our development process.
