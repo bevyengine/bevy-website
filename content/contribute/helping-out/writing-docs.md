@@ -17,7 +17,7 @@ This is incredibly valuable, and easily distributed, work that requires a bit of
 
 ## Documentation Sources
 
-There are two main places where we keep docs: inline docs alongside the codebase, and on the Bevy website.
+There are two main places where we keep docs: inline docs alongside the codebase, and on the Bevy Website.
 
 ### Inline Docs
 
@@ -223,7 +223,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
     typos
     ```
 
-    in the root directory of your local Bevy website repository. This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.  Note that the CI also includes `editorconfigchecker` but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
+    in the root directory of your local Bevy Website repository. This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.  Note that the CI also includes `editorconfigchecker` but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
 12. To reference Rust API docs you can use markdown's reference-style links like so:
    [`HashMap`]
 
