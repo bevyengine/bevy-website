@@ -45,7 +45,7 @@ Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-or
 
 ## Subject Matter Expert (SME)
 
-Subject Matter Experts are members of the Bevy Organization that have proven themselves to be experts in a given development area (Rendering, Assets, ECS, UI, etc) and have a solid understanding of the Bevy Organization's vision for that area. They are great people to reach out to if you have questions about a given area of Bevy.
+Subject Matter Experts are members of the Bevy Organization that have proven themselves to be experts in a given development area (Rendering, Assets, ECS, UI, etc), and have a solid understanding of the Bevy Organization's vision for that area. They are great people to reach out to if you have questions about a given area of Bevy.
 
 SME approvals count as "votes" on controversial PRs (provided the PR is in their "subject area"). This includes [RFCs](https://github.com/bevyengine/rfcs) and working groups design documents. If a controversial PR has two votes from Subject Matter Experts in that PR's area, it can be merged without Project Lead approval. If a SME creates a PR in their subject area, this does count as a vote. However, the Project Lead has the right to revert changes merged this way, so it is each SME's responsibility to ensure they have synced up with the Project Lead's vision. Additionally, when approving a design, consensus between SMEs and the Project Lead (and ideally most of the wider Bevy community) is heavily encouraged. Merging without consensus risks fractured project vision and/or ping-ponging between designs. The "larger" the impact of a design, the more critical it is to establish consensus.
 
