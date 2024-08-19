@@ -18,7 +18,7 @@ Much of the difficulty, work, and controversy involved in maintaining a major ga
 Coordinating the efforts for those tasks can be just as important as coordinating the addition of a fancy new feature!
 
 {% callout(type="info") %}
-You can read more about how to find, and join, active working groups in the [How You Can Help](todo) section.
+You can read more about how to find, and join, active working groups in the [How You Can Help](@/contribute/helping-out/how-you-can-help.md) section.
 {% end %}
 
 ## Ground Rules
