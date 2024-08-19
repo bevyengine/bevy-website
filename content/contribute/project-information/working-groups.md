@@ -7,11 +7,11 @@ weight = 1
 
 Working groups are temporary community initiatives devoted to particularly complex, large, or important tasks. This might include:
 
-- undertaking a major refactor
-- adding an unusually complex new feature
-- upstreaming an ecosystem crate
-- preparing for a new release
-- bootstrapping new major documentation efforts
+- Undertaking a major refactor.
+- Adding an unusually complex new feature.
+- Upstreaming an ecosystem crate.
+- Preparing for a new release.
+- Bootstrapping new major documentation efforts.
 
 As you can see, these aren't purely for programming tasks!
 Much of the difficulty, work and controversy involved in maintaining a major game engine centers around mundane or social tasks.
