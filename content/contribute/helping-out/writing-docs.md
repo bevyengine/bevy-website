@@ -17,7 +17,7 @@ This is incredibly valuable, and easily distributed, work that requires a bit of
 
 ## Documentation Sources
 
-There are two main places where we keep docs: inline docs alongside the codebase, and on the Bevy Website.
+There are two main places where we keep docs: inline docs alongside the codebase, and on Bevy's website.
 
 ### Inline Docs
 
@@ -48,7 +48,7 @@ We also consider [bevyengine.org](https://bevyengine.org) to be part of our core
 To check out any local changes you've made:
 
 1. [Download Zola v0.18.0](https://www.getzola.org/).
-2. Clone the Bevy Website GitHub repository and enter that directory:
+2. Clone Bevy's website's GitHub repository and enter that directory:
     1. `git clone https://github.com/bevyengine/bevy-website.git`
     2. `cd bevy-website`
 3. Start the Zola server with `zola serve`.
@@ -222,7 +222,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
     typos
     ```
    
-    in the root directory of your local Bevy Website repository.
+    in the root directory of your local Bevy's website's repository.
    
     This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See for installation: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.
     

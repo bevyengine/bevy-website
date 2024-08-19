@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 2
 +++
 
-The Bevy Organization is the group of people responsible for stewarding the Bevy Project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running the Bevy Website, controlling access to secrets, defining, and enforcing best practices, etc.
+The Bevy Organization is the group of people responsible for stewarding the Bevy Project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running Bevy's website, controlling access to secrets, defining, and enforcing best practices, etc.
 
 {% callout(type="info") %}
 Everyone is welcome, and encouraged to contribute to Bevy, whether or not they're a Bevy Organization member. Community contributors (this means you) are encouraged to freely open issues, submit pull requests, and review pull requests.
