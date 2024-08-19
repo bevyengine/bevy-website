@@ -56,7 +56,7 @@ If you're new to Bevy, here's the workflow we use:
 To locally lint your files using the same workflow as our CI:
    1. Install [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli).
    2. Run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of the Bevy project.
-5. When working with TOML (`.toml`) files, Bevy's CI will check TOML files using [taplo](https://taplo.tamasfe.dev/): `taplo fmt --check --diff`
+5. When working with TOML (`.toml`) files, Bevy's CI will check them for style and correctness using [taplo](https://taplo.tamasfe.dev/): `taplo fmt --check --diff`
    1. If you use VSCode, install [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) and format your files.
    2. If you want to use the CLI tool, install [taplo-cli](https://taplo.tamasfe.dev/cli/installation/cargo.html) and run `taplo fmt --check --diff` to check for the formatting. Fix any issues by running `taplo fmt` in the root directory of the Bevy project.
 6. Check for typos. Bevy's CI will check for them using [typos](https://github.com/crate-ci/typos).
