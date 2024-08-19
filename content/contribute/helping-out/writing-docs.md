@@ -8,7 +8,7 @@ weight = 5
 Like every other large, rapidly developing open source library you've ever used, Bevy's documentation can always use improvement.
 This is incredibly valuable, and easily distributed, work that requires a bit of guidance:
 
-* Inaccurate documentation is worse than no documentation: prioritize fixing broken docs.
+* Inaccurate documentation is worse than no documentation; prioritize fixing broken docs.
 * Bevy is remarkably unstable; before tackling a new major documentation project, check in with the community on Discord or GitHub (making an issue about specific missing docs is a great way to plan) about the stability of that feature and upcoming plans to save yourself heartache.
 * Code documentation (doc examples and in the examples folder) is easier to maintain because the compiler will tell us when it breaks.
 * Inline documentation should be technical and to the point. Link relevant examples or other explanations if broader context is useful.
