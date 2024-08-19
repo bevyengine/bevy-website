@@ -25,11 +25,11 @@ You can read more about how to find, and join, active working groups in the [How
 
 When participating in a working group, here are a few things to keep in mind:
 
-- No one is in charge. The founders of a working group do not own it.
-- These are social spaces. Everyone is invited, anyone can drop in to chat.
+- No one is in charge in a working group; the founders of a working group do not own it.
+- These are social spaces where anyone is invited and can drop in to chat.
 - Working groups are "hop-in hop-out". No commitments, minimal crunch, everyone contributes what they can when they can.
-- The goal is consensus. Before going to the SMEs, try to come to a decision all the major stakeholders are content with.
-- Communication is key. Having a group of people who are clued-in to the design process will let you sail through our review process.
+- The decisions made in working groups should be uncontroversial, commonly agreed upon by all major stakeholders, before going to the Subject Matter Expertss. 
+- Communication among the group is great, since a group of people who are clued-in to the design process will let you sail through our review process easier than you would otherwise.
 
 ## Life-Cycle of a Working Group
 
