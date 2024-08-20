@@ -20,7 +20,7 @@ Run `cargo run -p build-templated-pages -- build-example-page` to do this automa
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
 See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
 
-More complex demonstrations of functionality are also welcome, but these should be submitted to [bevy-assets](https://github.com/bevyengine/bevy-assets).
+More complex demonstrations of functionality are also welcome, but these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
 
 ## Style guide
 

@@ -49,8 +49,8 @@ With the large number of contributors and reviewers collectively building a comp
 
 There are three main places you can check for things to review:
 
-1. Pull requests which are ready and in need of more reviews on the [bevy repository](https://github.com/bevyengine/bevy/pulls?q=is%3Aopen+is%3Apr+-label%3AS-Ready-For-Final-Review+-draft%3A%3Atrue+-label%3AS-Needs-RFC+-reviewed-by%3A%40me+-author%3A%40me).
-2. Pull requests on the [bevy](https://github.com/bevyengine/bevy/pulls) and the [bevy-website](https://github.com/bevyengine/bevy-website/pulls) repositories.
+1. Pull requests which are ready and in need of more reviews on the [`bevy` repository](https://github.com/bevyengine/bevy/pulls?q=is%3Aopen+is%3Apr+-label%3AS-Ready-For-Final-Review+-draft%3A%3Atrue+-label%3AS-Needs-RFC+-reviewed-by%3A%40me+-author%3A%40me).
+2. Pull requests on the [`bevy`](https://github.com/bevyengine/bevy/pulls) and the [`bevy-website`](https://github.com/bevyengine/bevy-website/pulls) repositories.
 3. [RFCs](https://github.com/bevyengine/rfcs), which need extensive thoughtful community input on their design.
 
 Not even our Project Lead and Maintainers are exempt from reviews and RFCs! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
