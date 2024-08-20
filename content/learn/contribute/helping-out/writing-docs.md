@@ -209,7 +209,7 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
    3. Lack of polish should serve an end: don't show bad or sloppy practices without a good reason.
    4. Showing how (and why!) to refactor your code is a very powerful teaching tool.
 6. Stick to a consistent style (e.g. for loops vs map) within each example.
-7. If you need to give advice that will only matter to some of your audience (e.g. how to handle an edge case, or support a specific platform), do so in a clearly marked aside (like a callout), or list.
+7. If you need to give advice that will only matter to some of your audience (e.g. how to handle an edge case, or support a specific platform), do so in a clearly marked aside (like a callout) or list.
 8. Examples should not use or rely on third-party plugins.
 These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.

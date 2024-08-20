@@ -25,7 +25,7 @@ Focus on giving constructive, actionable feedback that results in real improveme
 
 Provide actual code suggestions when that is helpful. Small changes work well as comments or in-line suggestions on specific lines of codes. Larger changes deserve a comment in the main thread, or a pull request to the original author's branch (but please mention that you've made one). When in doubt about a matter of architectural philosophy, please refer back to our page on [What We're Trying to Build](@/learn/contribute/introduction.md#what-we-re-trying-to-build) for guidance.
 
-It's okay to leave an approval even if you aren't one-hundred percent confident on all areas of the PR, then just be sure to note your limitations. When Maintainers are evaluating the PR to be merged, they'll make sure that there's good coverage on all of the critical areas. If you can only check that the math is correct, and another reviewer can check everything but the math, we're in good shape!
+It's okay to leave an approval even if you aren't one-hundred percent confident on all areas of the PR, but just be sure to note your limitations. When Maintainers are evaluating the PR to be merged, they'll make sure that there's good coverage on all of the critical areas. If you can only check that the math is correct, and another reviewer can check everything but the math, we're in good shape!
 
 Similarly, if there are areas that would be good to fix, but aren't severe, please consider leaving an approval. The author can address them immediately, or spin it out into follow-up issues or PRs. Large PRs are much more draining for both reviewers and authors, so try to push for a smaller scope with clearly tracked follow-ups.
 

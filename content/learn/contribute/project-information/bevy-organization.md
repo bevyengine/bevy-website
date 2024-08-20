@@ -8,7 +8,7 @@ weight = 2
 The Bevy Organization is the group of people responsible for stewarding the Bevy Project. It handles things like merging pull requests, choosing project direction, managing bugs / issues / feature requests, running Bevy's website, controlling access to secrets, defining, and enforcing best practices, etc.
 
 {% callout(type="info") %}
-Everyone is welcome, and encouraged to contribute to Bevy, whether or not they're a Bevy Organization member. Community contributors (this means you) are encouraged to freely open issues, submit pull requests, and review pull requests.
+Everyone is welcome, and encouraged, to contribute to Bevy, whether or not they're a Bevy Organization member. Community contributors (this means you) are encouraged to freely open issues, submit pull requests, and review pull requests.
 {% end %}
 
 The Bevy Organization is currently broken up into the following roles:
@@ -25,7 +25,7 @@ The Project Lead has the final call on all design and code changes within Bevy. 
 
 Maintainers have merge rights in Bevy repositories. They assess the scope of pull requests and whether they fit into the Bevy Project's vision. They also serve as representatives of the Bevy Project and are often the interface between the Bevy community and the Bevy Project. They assist the Project Lead in moderating the community, handling administrative tasks, defining best practices, choosing project direction, and deciding how the project is organized.
 
-Maintainers abide by the rules described in the section on [Using GitHub Issues](/B0rPTFF6TUyWrM1SwS7Cng) when merging pull requests.
+Maintainers abide by the rules described in the section on [Using GitHub Issues](@/learn/contribute/helping-out/reviewing-pull-requests.md) when merging pull requests.
 
 We choose new Maintainers carefully, and only after they have proven themselves in the Bevy community. Maintainers must have a proven track record of the following:
 
