@@ -23,9 +23,9 @@ If you're new to GitHub, there's a lot of great information on the official [Pul
 
 Focus on giving constructive, actionable feedback that results in real improvements to code quality or end-user experience. If you don't understand why an approach was taken, please ask!
 
-Provide actual code suggestions when that is helpful. Small changes work well as comments or in-line suggestions on specific lines of codes. Larger changes deserve a comment in the main thread, or a pull request to the original author's branch (but please mention that you've made one). When in doubt about a matter of architectural philosophy, please refer back to [What we're trying to build](@/contributing/introduction.md#what-we-re-trying-to-build) for guidance.
+Provide actual code suggestions when that is helpful. Small changes work well as comments or in-line suggestions on specific lines of codes. Larger changes deserve a comment in the main thread, or a pull request to the original author's branch (but please mention that you've made one). When in doubt about a matter of architectural philosophy, please refer back to our page on [What We're Trying to Build](@/learn/contribute/introduction.md#what-we-re-trying-to-build) for guidance.
 
-It's okay to leave an approval even if you aren't 100% confident on all areas of the PR: just be sure to note your limitations. When maintainers are evaluating the PR to be merged, they'll make sure that there's good coverage on all of the critical areas. If you can only check that the math is correct, and another reviewer can check everything but the math, we're in good shape!
+It's okay to leave an approval even if you aren't one-hundred percent confident on all areas of the PR, but just be sure to note your limitations. When Maintainers are evaluating the PR to be merged, they'll make sure that there's good coverage on all of the critical areas. If you can only check that the math is correct, and another reviewer can check everything but the math, we're in good shape!
 
 Similarly, if there are areas that would be good to fix, but aren't severe, please consider leaving an approval. The author can address them immediately, or spin it out into follow-up issues or PRs. Large PRs are much more draining for both reviewers and authors, so try to push for a smaller scope with clearly tracked follow-ups.
 
@@ -42,19 +42,19 @@ Otherwise, please try to avoid asking for additional work unless absolutely nece
 With the large number of contributors and reviewers collectively building a complex system, disagreements will inevitably occur. Regardless of whether the disagreement is about naming, performance, or code coverage, the goal should be to reach a compromise amicably.
 
 - **Keep scope in mind**. Trivial cleanup of surrounding area is okay to recommend, but don't expect a contributor to overhaul a portion of Bevy on their own.
-- **Don't be afraid to escalate**. Regardless of what side of the review process you're on, if you feel someone is being unreasonable don't hesitate to tag one of the maintainers or post in a related dev channel in the Discord.
+- **Don't be afraid to escalate**. Regardless of what side of the review process you're on, if you feel someone is being unreasonable don't hesitate to tag one of the Maintainers or post in a related dev channel in the Discord.
 - **Not all review comments will necessarily be addressed**, and that's okay. Feel free to open an issue for further discussion.
 
 ## What to review
 
 There are three main places you can check for things to review:
 
-1. Pull requests which are ready and in need of more reviews on [bevy](https://github.com/bevyengine/bevy/pulls?q=is%3Aopen+is%3Apr+-label%3AS-Ready-For-Final-Review+-draft%3A%3Atrue+-label%3AS-Needs-RFC+-reviewed-by%3A%40me+-author%3A%40me).
-2. Pull requests on [bevy](https://github.com/bevyengine/bevy/pulls) and the [bevy-website](https://github.com/bevyengine/bevy-website/pulls) repos.
+1. Pull requests which are ready and in need of more reviews on the [`bevy` repository](https://github.com/bevyengine/bevy/pulls?q=is%3Aopen+is%3Apr+-label%3AS-Ready-For-Final-Review+-draft%3A%3Atrue+-label%3AS-Needs-RFC+-reviewed-by%3A%40me+-author%3A%40me).
+2. Pull requests on the [`bevy`](https://github.com/bevyengine/bevy/pulls) and the [`bevy-website`](https://github.com/bevyengine/bevy-website/pulls) repositories.
 3. [RFCs](https://github.com/bevyengine/rfcs), which need extensive thoughtful community input on their design.
 
-Not even our Project Leads and Maintainers are exempt from reviews and RFCs! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
+Not even our Project Lead and Maintainers are exempt from reviews and RFCs! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
-Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy org role to help us keep things tidy.
+Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy Org role to help us keep things tidy.
 
-As discussed in our [Bevy Organization doc](TODO), this role only requires good faith and a basic understanding of our development process.
+As discussed in our page on [The Bevy Organization](@/learn/contribute/project-information/bevy-organization.md), this role only requires good faith and a basic understanding of our development process.

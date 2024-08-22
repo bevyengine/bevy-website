@@ -7,33 +7,39 @@ weight = 1
 
 Working groups are temporary community initiatives devoted to particularly complex, large, or important tasks. This might include:
 
-- undertaking a major refactor
-- adding an unusually complex new feature
-- upstreaming an ecosystem crate
-- preparing for a new release
-- bootstrapping new major documentation efforts
+- Undertaking a major refactor.
+- Adding an unusually complex new feature.
+- Upstreaming an ecosystem crate.
+- Preparing for a new release.
+- Bootstrapping new major documentation efforts.
 
 As you can see, these aren't purely for programming tasks!
-Much of the difficulty, work and controversy involved in maintaining a major game engine centers around mundane or social tasks.
-Coordinating efforts there is just as important!
+Much of the difficulty, work, and controversy involved in maintaining a major game engine centers around mundane or social tasks.
+Coordinating the efforts for those tasks can be just as important as coordinating the addition of a fancy new feature!
 
 {% callout(type="info") %}
-You can read more about how to find and join active working groups in the [How You Can Help](todo) section.
+You can read more about how to find, and join, active working groups in the [How You Can Help](@/learn/contribute/helping-out/how-you-can-help.md) section.
 {% end %}
 
 ## Ground Rules
 
 When participating in a working group, here are a few things to keep in mind:
 
-- No one is in charge. The founders of a working group do not own it.
-- These are social spaces. Everyone is invited, anyone can drop in to chat.
+- No one is in charge in a working group; the founders of a working group do not own it.
+- These are social spaces where anyone is invited and can drop in to chat.
 - Working groups are "hop-in hop-out". No commitments, minimal crunch, everyone contributes what they can when they can.
-- The goal is consensus. Before going to the SMEs, try to come to a decision all the major stakeholders are content with.
-- Communication is key. Having a group of people who are clued-in to the design process will let you sail through our review process.
+- The decisions made in working groups should be uncontroversial among the group, commonly agreed upon by all major stakeholders, before going to the Subject Matter Expertss. 
+- Communication among the group is great, since a group of people who are clued-in to the design process will let you sail through our review process easier than you would otherwise.
 
 ## Life-Cycle of a Working Group
 
-Working groups move through three loose phases: An initial proposal, a period of design and approval, and finally the bulk of the implementation work. These phases are intended to be lightweight, and are sometimes little more than a formality.
+Working groups move through three loose phases:
+
+1. An initial proposal.
+2. A period of design and approval.
+3. And finally the bulk of the implementation work.
+
+These phases are intended to be lightweight, and are sometimes little more than a formality.
 
 ## Make A Proposal
 
@@ -57,13 +63,13 @@ This is the primary review step: Maintainers and SMEs should be broadly patient 
 
 ## Implement The Design Doc
 
-With a sign-off in hand, post the design doc to [Github Discussions](https://github.com/Bevyengine/Bevy/discussions) with the [`C-Design-Doc` label](https://github.com/Bevyengine/Bevy/discussions?discussions_q=is%3Aopen+label%3A%22C-Design+Doc%22) for archival purposes and begin work on implementation.
+With a sign-off in hand, post the design doc to [GitHub Discussions](https://github.com/Bevyengine/Bevy/discussions) with the [`C-Design-Doc` label](https://github.com/Bevyengine/Bevy/discussions?discussions_q=is%3Aopen+label%3A%22C-Design+Doc%22) for archival purposes and begin work on implementation.
 Post PRs that you need review on in your group's forum thread, ask for advice, and share the load.
 Controversial PRs are still `X-Controversial`, but with a sign-off-in-priniciple, things should go more smoothly.
 
 If work peters out and the initiative dies, Maintainers can wind down working groups (in consultation with SMEs and the working group itself).
-This is normal and expected: projects fail for all sorts of reasons!
-However, it's important to both keep the number of working groups relatively small and ensure they're active:
+This is normal and expected— projects fail for all sorts of reasons!
+However, it's important to both keep the number of working groups relatively small and ensure they're active, since
 they serve a vital role in onboarding new contributors.
 
 Once your implementation work laid out in your initial design doc is complete, it's time to wind down the working group.

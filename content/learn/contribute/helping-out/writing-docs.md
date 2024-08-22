@@ -8,7 +8,7 @@ weight = 5
 Like every other large, rapidly developing open source library you've ever used, Bevy's documentation can always use improvement.
 This is incredibly valuable, and easily distributed, work that requires a bit of guidance:
 
-* Inaccurate documentation is worse than no documentation: prioritize fixing broken docs.
+* Inaccurate documentation is worse than no documentation; prioritize fixing broken docs.
 * Bevy is remarkably unstable; before tackling a new major documentation project, check in with the community on Discord or GitHub (making an issue about specific missing docs is a great way to plan) about the stability of that feature and upcoming plans to save yourself heartache.
 * Code documentation (doc examples and in the examples folder) is easier to maintain because the compiler will tell us when it breaks.
 * Inline documentation should be technical and to the point. Link relevant examples or other explanations if broader context is useful.
@@ -17,14 +17,14 @@ This is incredibly valuable, and easily distributed, work that requires a bit of
 
 ## Documentation Sources
 
-There are two main places where we keep docs: inline docs alongside the codebase, and on the Bevy website.
+There are two main places where we keep docs: inline docs alongside the codebase, and on Bevy's website.
 
 ### Inline Docs
 
 The inline docs for each release are published to [docs.rs](https://docs.rs/bevy).
 
 To view the current docs on `main` before you contribute, you can go to [dev-docs.bevyengine.org](https://dev-docs.bevyengine.org/),
-which has the latest API reference built from the repo on every commit made to the `main` branch.
+which has the latest API reference built from the repository on every commit made to the `main` branch.
 
 To check out any local changes you've made:
 
@@ -48,7 +48,7 @@ We also consider [bevyengine.org](https://bevyengine.org) to be part of our core
 To check out any local changes you've made:
 
 1. [Download Zola v0.19.2](https://www.getzola.org/).
-2. Clone the Bevy Website GitHub repository and enter that directory:
+2. Clone Bevy's website GitHub repository and enter that directory:
     1. `git clone https://github.com/bevyengine/bevy-website.git`
     2. `cd bevy-website`
 3. Start the Zola server with `zola serve`.
@@ -138,7 +138,7 @@ Users following the definition-first path will tend to take the following route:
 6. As they explore, they will also browse:
    1. The source code.
    2. [docs.rs](https://docs.rs/bevy/)
-   3. `CONTRIBUTING.md`, GitHub issues, and pull requests.
+   3. The Contributing Guide, GitHub issues, and pull requests.
    4. Release notes.
    5. The engine development channels on Discord.
    6. Advanced examples to see how everything comes together.
@@ -166,7 +166,7 @@ This path should prioritize:
 
 ## Contributor's style guide
 
-When writing and reviewing learning material for the Bevy Book and Quick Start Games, please try to follow these guidelines:
+When writing and reviewing content for The Bevy Book, The Quick Start Guide, and other related learning materials, please try to follow these guidelines:
 
 ### Writing
 
@@ -187,9 +187,9 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
 
 ### Organizational
 
-1. Carefully organize your work into separate pages, headings, paragraphs and code blocks.
+1. Carefully organize your work into separate pages, headings, paragraphs, and code blocks.
 2. Clearly signal when you are explaining a concept in technical depth so it can be skipped.
-3. Use lists, numbered lists and sub-lists to present information in bite-sized ways.
+3. Use lists, numbered lists, and sub-lists to present information in bite-sized ways.
    1. Refer back to these items by number!
 4. Provide plenty of links, but be sure that what you are linking to is obvious by context.
    1. Link to other sections of the book / example / web page when you mention them.
@@ -209,28 +209,32 @@ When writing and reviewing learning material for the Bevy Book and Quick Start G
    3. Lack of polish should serve an end: don't show bad or sloppy practices without a good reason.
    4. Showing how (and why!) to refactor your code is a very powerful teaching tool.
 6. Stick to a consistent style (e.g. for loops vs map) within each example.
-7. If you need to give advice that will only matter to some of your audience (e.g. how to handle an edge case, or support a specific platform), do so in a clearly marked aside or list.
+7. If you need to give advice that will only matter to some of your audience (e.g. how to handle an edge case, or support a specific platform), do so in a clearly marked aside (like a callout) or list.
 8. Examples should not use or rely on third-party plugins.
 These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.
-9. If additional code block attributes like `no_run` or `hide-lines=x-y` need to be specified, you should always order these so that the language is the last attribute. If we would specify `rust,no_run` the syntax highlighting wouldn't work, but changing it to `no_run,rust` makes it work.
-10. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
-11. To make sure your web-based files (html, markdown) are formatted correctly run the commands:
-
+9. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
+10. To make sure your web-based files (html, markdown) are formatted correctly run the commands:
+   
     ```sh
     markdownlint -f -c .github/linters/.markdown-lint.yml .
     djlint
     typos
     ```
-
-    in the root directory of your local Bevy website repository. This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.  Note that the CI also includes `editorconfigchecker` but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
-12. To reference Rust API docs you can use markdown's reference-style links like so:
-   [`HashMap`]
-
-   ```md
-   [`HashMap`]
-
-   [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
-   ```
-
-   [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+   
+    in the root directory of your local Bevy's website's repository.
+   
+    This will format markdown files and tell you the issues in HTML files. In order to run the command you should install `markdownlint-cli`, `djlint`, and `typos-cli`. See for installation: <https://github.com/igorshubovych/markdownlint-cli>, <https://www.djlint.com/docs/getting-started/>, and <https://github.com/crate-ci/typos?tab=readme-ov-file#install>.
+    
+    {% callout() %}
+    The CI also includes `editorconfigchecker`, but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
+    {% end %}
+11. To reference Rust API docs you can use markdown's reference-style links like so: [`HashMap`]
+    
+    ```md
+    [`HashMap`]
+    
+    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+    ```
+    
+    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html

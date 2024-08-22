@@ -20,7 +20,7 @@ Run `cargo run -p build-templated-pages -- build-example-page` to do this automa
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
 See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
 
-More complex demonstrations of functionality are also welcome, but these should be submitted to [bevy-assets](https://github.com/bevyengine/bevy-assets).
+More complex demonstrations of functionality are also welcome, but these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
 
 ## Style guide
 
@@ -30,7 +30,7 @@ Please adhere to the following guidelines when creating or updating an example.
 
 1. Examples should live in an appropriate subfolder of `/examples`.
 2. Examples should be a single file if possible.
-3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repo small. Don't add "large" asset files.
+3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repository small. Don't add "large" asset files.
 4. Each example should try to follow this order:
    1. Imports
    2. A `fn main()` block

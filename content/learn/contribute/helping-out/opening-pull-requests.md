@@ -13,7 +13,7 @@ Most changes don't require much "process". If your change is relatively straight
     * [GitHub Discussions]: An informal discussion with the community. This is the place to start if you want to propose a feature or specific implementation.
     * [Issue](https://github.com/bevyengine/bevy/issues): A formal way for us to track a bug or feature. Please look for duplicates before opening a new issue and consider starting with a Discussion.
     * [Pull Request](https://github.com/bevyengine/bevy/pulls) (or PR for short): A request to merge code changes. This starts our "review process". You are welcome to start with a pull request, but consider starting with an Issue or Discussion for larger changes (or if you aren't certain about a design). We don't want anyone to waste their time on code that didn't have a chance to be merged! But conversely, sometimes PRs are the most efficient way to propose a change. Use your own judgment here.
-2. Other community members review and comment in an ad-hoc fashion. Active subject matter experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord] in an appropriate engine development channel.
+2. Other community members review and comment in an ad-hoc fashion. Active Subject Matter Experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord] in an appropriate engine development channel.
 3. Once they're content with the pull request (design, code quality, documentation, tests), individual reviewers leave "Approved" reviews.
 4. After consensus has been reached (typically two approvals from the community or one for extremely simple changes) and CI passes, the [S-Ready-For-Final-Review](https://github.com/bevyengine/bevy/issues?q=is%3Aopen+is%3Aissue+label%3AS-Ready-For-Final-Review) label is added.
 5. When they find time, someone with merge rights performs a final code review and queues the PR for merging.
@@ -42,7 +42,10 @@ If you're new to Bevy, here's the workflow we use:
   recommendations to [compile with performance optimizations](https://bevyengine.org/learn/quick-start/getting-started/setup/#compile-with-performance-optimizations).
 2. Make your changes in a local clone of your fork, typically in its own new branch.
    1. Try to split your work into separate commits, each with a distinct purpose. Be particularly mindful of this when responding to reviews so it's easy to see what's changed.
-   2. Tip: [You can set up a global `.gitignore` file](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer) to exclude your operating system/text editor's special/temporary files. (e.g. `.DS_Store`, `thumbs.db`, `*~`, `*.swp` or `*.swo`) This allows us to keep the `.gitignore` file in the repo uncluttered.
+   2. {% callout() %}
+    Tip: [You can set up a global `.gitignore` file](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer) to exclude your operating system/text editor's special/temporary files. (e.g. `.DS_Store`, `thumbs.db`, `*~`, `*.swp` or `*.swo`) This allows us to keep the `.gitignore` file in the repository uncluttered.
+    {% end %}
+
 3. To test CI validations locally, run the `cargo run -p ci` command. This will run most checks that happen in CI, but can take some time. You can also run sub-commands to iterate faster depending on what you're contributing:
     * `cargo run -p ci -- lints` - to run formatting and Clippy.
     * `cargo run -p ci -- test` - to run tests.
@@ -53,17 +56,17 @@ If you're new to Bevy, here's the workflow we use:
 To locally lint your files using the same workflow as our CI:
    1. Install [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli).
    2. Run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of the Bevy project.
-5. When working with Toml (`.toml`) files, Bevy's CI will check toml files using [taplo](https://taplo.tamasfe.dev/): `taplo fmt --check --diff`
-   1. If you use VSCode, install [Even better toml](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) and format your files.
+5. When working with TOML (`.toml`) files, Bevy's CI will check them for style and correctness using [taplo](https://taplo.tamasfe.dev/): `taplo fmt --check --diff`
+   1. If you use VSCode, install [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) and format your files.
    2. If you want to use the CLI tool, install [taplo-cli](https://taplo.tamasfe.dev/cli/installation/cargo.html) and run `taplo fmt --check --diff` to check for the formatting. Fix any issues by running `taplo fmt` in the root directory of the Bevy project.
 6. Check for typos. Bevy's CI will check for them using [typos](https://github.com/crate-ci/typos).
    1. If you use VSCode, install [Typos Spell Checker](https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode).
    2. You can also use the CLI tool by installing [typos-cli](https://github.com/crate-ci/typos?tab=readme-ov-file#install) and running `typos` to check for typos, and fix them by running `typos -w`.
 7. Push your changes to your fork on GitHub and open a Pull Request.
-8. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or Project Lead's final judgement.
-9. When your PR is ready to merge, a Maintainer or Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
+8. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or the Project Lead's final judgement.
+9. When your PR is ready to merge, a Maintainer or the Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
 
-If you end up adding a new official Bevy crate to the `bevy` repo:
+If you end up adding a new official Bevy crate to the `bevy` repository:
 
 1. Add the new crate to the [tools/publish.sh](https://github.com/bevyengine/bevy/blob/main/tools/publish.sh) file.
 2. Check if a new cargo feature was added, update [docs/cargo_features.md](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md) as needed.
@@ -73,7 +76,7 @@ When contributing, please:
 * Prefer small PRs that incrementally improve things.
 * Explain what you're doing and why.
 * Try to loosely follow the workflow in [*Making changes to Bevy*](#making-changes-to-bevy).
-* Consult the [style guide](@/contributing/helping-out/creating-examples.md#style-guide) to help keep our code base tidy.
+* Consult the [style guide](@/learn/contribute/helping-out/creating-examples.md#style-guide) to help keep our code base tidy.
 * Document new code with doc comments.
 * Include clear, simple tests.
 * Add or improve the examples when adding new user-facing functionality.
@@ -97,6 +100,7 @@ This is a natural part of any open source project.
 To avoid blocking these efforts, these pull requests may be *adopted*, where another contributor creates a new pull request with the same content.
 If there is an old pull request that is without updates, comment to the organization whether it is appropriate to add the
 *[S-Adopt-Me](https://github.com/bevyengine/bevy/labels/S-Adopt-Me)* label, to indicate that it can be *adopted*.
+
 If you plan on adopting a PR yourself, you can also leave a comment on the PR asking the author if they plan on returning.
 If the author gives permission or simply doesn't respond after a few days, then it can be adopted.
 This may sometimes even skip the labeling process since at that point the PR has been adopted by you.

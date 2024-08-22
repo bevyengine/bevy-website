@@ -52,8 +52,8 @@ When making a release, the Maintainers follow these checklists:
 9. Create tag on GitHub.
 10. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
 11. Bump `latest` tag to most recent release.
-12. Run [the `update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
-13. Run [the `build-wasm-examples` workflow] to update Wasm examples.
+12. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
+13. Run the [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Minor Release
 
@@ -69,7 +69,7 @@ When making a release, the Maintainers follow these checklists:
 #### Minor Post-release
 
 1. Bump version number for all crates to next versions, as `0.X-dev`, using the "Post-release version bump" workflow, to ensure properly displayed version for [Dev Docs](https://dev-docs.bevyengine.org/bevy/index.html).
-2. Update Bevy version used for the Bevy website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
+2. Update Bevy version used for Bevy's website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
 
 ### Patch
 
@@ -103,7 +103,7 @@ When making a release, the Maintainers follow these checklists:
 3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
     - Change the commit message to be nicer.
 4. Create tag on GitHub.
-5. Edit GitHub Release. Add link to the comparison between this rc and the previous version.
+5. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
 
 #### RC Release
 
@@ -114,9 +114,7 @@ When making a release, the Maintainers follow these checklists:
 
 #### RC Post-Release
 
-1. Update Bevy version used for the Bevy website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
-Commit suggestion
-Add suggestion to batch```
+1. Update Bevy version used for Bevy's website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
 
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
