@@ -7,7 +7,7 @@
 {% block page_content %}
   <h1 class="news-title">{{ page.title }}</h1>
   <h2 class="news-subtitle">
-    Posted on {{ page.date | date(format="%B %d, %Y") }} by {% if page.authors %}{% for author in page.authors %}{{ author }}{% endfor %}{% else %}Bevy Contributors{% endif %}
+    Posted on {{ page.date | date(format="%B %-d, %Y") }} by {% if page.authors %}{% for author in page.authors %}{{ author }}{% endfor %}{% else %}Bevy Contributors{% endif %}
     {% if page.extra.twitter or page.extra.github %}
       <span class="news-social-links">
         (
