@@ -155,7 +155,7 @@ This will change. The Editor _is actually my top priority now_ and I aim to make
 
 ### Funding Bevy is Confusing
 
-In the early days, I was the only person meaningfully working on Bevy. It made sense to have the Donate button link directly to my [Github Sponsors page](https://github.com/sponsors/cart). But things have changed! The [Bevy Org](/community/people/#the-bevy-organization) is now huge and there are plenty of people spending significant amounts of time making Bevy awesome. This year to help account for that, we made a new [Donate Page](/community/donate/) that describes the structure of the Bevy Org and provides a list of people accepting sponsorships. The Donate button now links to this page instead of directly to me.
+In the early days, I was the only person meaningfully working on Bevy. It made sense to have the Donate button link directly to my [GitHub Sponsors page](https://github.com/sponsors/cart). But things have changed! The [Bevy Org](/community/people/#the-bevy-organization) is now huge and there are plenty of people spending significant amounts of time making Bevy awesome. This year to help account for that, we made a new [Donate Page](/community/donate/) that describes the structure of the Bevy Org and provides a list of people accepting sponsorships. The Donate button now links to this page instead of directly to me.
 
 However this is still suboptimal. How does a company or individual pick who to sponsor? It takes insider knowledge to know where the money would be "best spent". In the end I'm certain most people will opt for name recognition. And when I am often the public face of the project, that likely often means me. Bevy's funding should not be a popularity contest.
 

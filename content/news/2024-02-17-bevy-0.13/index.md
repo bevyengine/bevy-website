@@ -2387,7 +2387,7 @@ For a complete list of changes, check out the PRs listed below.
 * [fix patches for example showcase after winit update][11058]
 * [finish cleaning up dependency bans job][11059]
 * [Bump actions/upload-artifact from 2 to 4][11014]
-* [Publish dev-docs with Github Pages artifacts (2nd attempt)][10892]
+* [Publish dev-docs with GitHub Pages artifacts (2nd attempt)][10892]
 * [example showcase patches: use default instead of game mode for desktop][11250]
 * [Bump toml_edit in build-template-pages tool][11342]
 * [Miri is failing on latest nightly: pin nightly to last known working version][11421]
