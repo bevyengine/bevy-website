@@ -36,7 +36,7 @@ If you do have specific skills (e.g. advanced familiarity with `unsafe` code, re
 Not even our Project Lead and Maintainers are exempt from reviews! By giving feedback on this work (and related supporting work), you can help us make sure our releases are both high-quality and timely.
 
 {% callout() %}
-Interested in reviewing, but don't know where to start? Check out [Reviewing Pull Requests](TODO)!
+Interested in reviewing, but don't know where to start? Check out [Reviewing Pull Requests](@/learn/contribute/helping-out/reviewing-pull-requests.md)!
 {% end %}
 
 ## Joining a Working Group
@@ -48,14 +48,14 @@ You should consider joining a working group if you're interested in contributing
 There are no special requirements to participate in a working group — no applications, formal membership list, or even leadership. Anyone can help, and you should expect to compromise and work together with others to bring your shared vision to life. Working groups are *spaces*, not clubs.
 
 {% callout() %}
-Anyone can start a working group! Check out [Working Groups](TODO) for more information about the process and requirements.
+Anyone can start a working group! Check out [Working Groups](@/learn/contribute/project-information/working-groups.md) for more information about the process and requirements.
 {% end %}
 
 ## Contributing Code
 
 We love getting code contributions from the community, and there's plenty of work to go around! If you want to code, but don't know what to work on, you should take a look at the open issues. The page on [Triage](@/learn/contribute/reference/triage.md) details several tags that you can use to filter issues by difficulty and area.
 
-If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Your First Pull Request](TODO) is there to help if you get stuck.
+If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Opening Pull Requests](@/learn/contribute/helping-out/opening-pull-requests.md) is there to help if you get stuck.
 
 {% callout() %}
 When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord](https://discord.gg/bevy) and tell people about your plans. Communicating your progress early and often can help you avoid avoid headaches and disagreements during code review.
@@ -63,7 +63,7 @@ When working on the engine's code, it's a good idea to introduce yourself in the
 
 ## Writing docs and examples
 
-Bevy relies heavily on Rust's inline documentation and a collection of up-to-date examples, but both are in constant need of revision and improvement. If you'd like to help us improve our learning materials, take a look at the dedicated sections on [Writing Docs](TODO) and [Creating Examples](TODO).
+Bevy relies heavily on Rust's inline documentation and a collection of up-to-date examples, but both are in constant need of revision and improvement. If you'd like to help us improve our learning materials, take a look at the dedicated sections on [Writing Docs](@/learn/contribute/helping-out/writing-docs.md) and [Creating Examples](@/learn/contribute/helping-out/creating-examples.md).
 
 ## Expanding the Ecosystem
 
