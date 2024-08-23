@@ -41,7 +41,7 @@ Interested in reviewing, but don't know where to start? Check out [Reviewing Pul
 
 ## Joining a Working Group
 
-Bevy's active initiatives are organized into *temporary working groups*: public, open-membership teams where people work together to tackle a sizeable, well-scoped goal. Each working group coordinates through a dedicated forum-channel on [Discord], but they may also create issues or use project boards to organize and track their progress.
+Bevy's active initiatives are organized into *temporary working groups*: public, open-membership teams where people work together to tackle a sizeable, well-scoped goal. Each working group coordinates through a [dedicated forum-channel](https://discord.com/channels/691052431525675048/1235758970703188008) on [Discord], but they may also create issues or use project boards to organize and track their progress.
 
 You should consider joining a working group if you're interested in contributing, but don't know where to start or what to work on. Choosing one and asking how to help can be a fantastic way to get up to speed and be immediately useful.
 
