@@ -16,7 +16,7 @@ Most changes don't require much "process". If your change is relatively straight
 2. Other community members review and comment in an ad-hoc fashion. Active Subject Matter Experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord] in an appropriate engine development channel.
 3. Once they're content with the pull request (design, code quality, documentation, tests), individual reviewers leave "Approved" reviews.
 4. After consensus has been reached (see [Reviewing Pull Requests](@/learn/contribute/helping-out/reviewing-pull-requests.md#how-pull-requests-are-merged) for more on that) and CI passes, the [S-Ready-For-Final-Review](https://github.com/bevyengine/bevy/issues?q=is%3Aopen+is%3Aissue+label%3AS-Ready-For-Final-Review) label is added.
-5. When they find time, a Maintainer, or the Project Lead, performs a final code review and queues the PR for merging.
+5. When they find time, the Project Lead or a Maintainer performs a final code review and queues the PR for merging.
 
 [Discord]: https://discord.com/invite/bevy
 [GitHub Discussions]: https://github.com/bevyengine/bevy/discussions
