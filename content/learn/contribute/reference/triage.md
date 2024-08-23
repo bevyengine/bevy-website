@@ -46,7 +46,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
 
 You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
-The rules for how PRs get merged depend on their classification by controversy and difficulty. More difficult PRs will require more careful review from experts, while more controversial PRs will require rewrites to reduce the costs involved and / or sign-off from Subject Matter Experts and Maintainers.
+[The rules for how PRs get merged](@/learn/contribute/helping-out/reviewing-pull-requests.md#how-pull-requests-are-merged) depend on their classification by controversy and difficulty. More difficult PRs will require more careful review from experts, while more controversial PRs will require rewrites to reduce the costs involved and / or sign-off from Subject Matter Experts and Maintainers.
 
 When making PRs, try to split out more controversial changes from less controversial ones, in order to make your work easier to review and merge. Also consider splitting simple changes from complex ones, since the simple changes can be reviewed and merged much quicker.
 

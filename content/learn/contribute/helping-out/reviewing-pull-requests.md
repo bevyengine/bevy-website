@@ -58,3 +58,18 @@ Not even our Project Lead and Maintainers are exempt from reviews and RFCs! By g
 Finally, if nothing brings you more satisfaction than seeing every last issue labeled and all resolved issues closed, feel free to message @alice-i-cecile or @cart for a Bevy Org role to help us keep things tidy.
 
 As discussed in our page on [The Bevy Organization](@/learn/contribute/project-information/bevy-organization.md), this role only requires good faith and a basic understanding of our development process.
+
+## How Pull Requests are merged
+
+
+Maintainers abide by the following rules when merging pull requests:
+
+1. Trivial PRs can be merged with approval from one community member (including Maintainers).
+2. Relatively uncontroversial PRs can be merged following approval from at least two community members (including Maintainers) with appropriate expertise.
+3. Controversial PRs cannot be merged unless they have the approval of the Project Lead or two Subject Matter Experts (in the "area" of the PR).
+4. If two Maintainers have approved a controversial PR they can "start the clock" on a PR by adding it to [this queue](https://github.com/orgs/bevyengine/projects/6). If 45 days elapse without SME or Project Lead action (approval, feedback or an explicit request to defer), the PR can be merged by maintainers.
+
+{% callout() %}
+To read more on Maintainers, check out our section on them in our [The Bevy Organization](@/learn/contribute/project-information/bevy-organization.md#maintainer) page.
+{% end %}
+

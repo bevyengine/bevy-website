@@ -25,7 +25,7 @@ The Project Lead has the final call on all design and code changes within Bevy. 
 
 Maintainers have merge rights in Bevy repositories. They assess the scope of pull requests and whether they fit into the Bevy Project's vision. They also serve as representatives of the Bevy Project and are often the interface between the Bevy community and the Bevy Project. They assist the Project Lead in moderating the community, handling administrative tasks, defining best practices, choosing project direction, and deciding how the project is organized.
 
-Maintainers abide by the rules described in the section on [Reviewing Pull Requests](@/learn/contribute/helping-out/reviewing-pull-requests.md) when merging pull requests.
+Maintainers abide by the rules described in the section on [Reviewing Pull Requests](@/learn/contribute/helping-out/reviewing-pull-requests.md#how-pull-requests-are-merged) when merging pull requests.
 
 We choose new Maintainers carefully, and only after they have proven themselves in the Bevy community. Maintainers must have a proven track record of the following:
 
