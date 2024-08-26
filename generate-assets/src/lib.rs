@@ -556,7 +556,7 @@ fn search_bevy_in_manifest_dependencies(
 /// Gets the bevy version from the `Cargo.toml` bevy dependency provided.
 ///
 /// Returns the version number if available.
-/// If is is a git dependency, return either "main" or "git" for anything that isn't "main".
+/// If is a git dependency, return either "main" or "git" for anything that isn't "main".
 fn get_bevy_manifest_dependency_version(dep: &cargo_toml::Dependency) -> Option<String> {
     match dep {
         cargo_toml::Dependency::Simple(version) => Some(version.to_string()),

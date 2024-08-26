@@ -13,7 +13,7 @@ This means that Bevy releases a new version roughly once every three to four mon
 
 During a three-month development cycle, Maintainers collect important PRs and issues into a GitHub Milestone. Issues included in the milestone are given priority, and the community generally makes a best-effort attempt to merge as many of these as possible over the duration of the cycle.
 
-In the lead-up to a release (generally about about two and a half months after the previous) we begin to aggressively purge the milestone of things that seem unlikely to be ready in time. The main things that tend to remain are:
+In the lead-up to a release (generally about two and a half months after the previous) we begin to aggressively purge the milestone of things that seem unlikely to be ready in time. The main things that tend to remain are:
 
 - Quick and easy features under active development.
 - Fixes for important regressions or crashes.
