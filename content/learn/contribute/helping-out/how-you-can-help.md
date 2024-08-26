@@ -29,7 +29,7 @@ Think you've found a bug, missing documentation, or a feature that would help yo
 
 **One of the most valuable things you can do is review other people's work.** Bevy relies on community code review to keep the code quality high and the maintenance burden low. Absolutely anyone is welcome to leave reviews, and all reviews are treated with equal weight.
 
-You don't need to be an Elder Rustacean to be useful here: anyone can catch missing tests, unclear docs, logic errors, and so on. If you're new to Rust or Bevy, submitting reviews is great way to learn things and acquaint yourself with the internals of the engine.
+You don't need to be an Elder Rustacean to be useful here: anyone can catch missing tests, unclear docs, logic errors, and so on. If you're new to Rust or Bevy, submitting reviews is a great way to learn things and acquaint yourself with the internals of the engine.
 
 If you do have specific skills (e.g. advanced familiarity with `unsafe` code, rendering knowledge, or web development experience) or experience with a specific problem, that's fantastic! We suggest trying to prioritize those areas to ensure we get appropriate expertise where we need it.
 
@@ -58,7 +58,7 @@ We love getting code contributions from the community, and there's plenty of wor
 If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Opening Pull Requests](@/learn/contribute/helping-out/opening-pull-requests.md) is there to help if you get stuck.
 
 {% callout() %}
-When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord](https://discord.gg/bevy) and tell people about your plans. Communicating your progress early and often can help you avoid avoid headaches and disagreements during code review.
+When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord](https://discord.gg/bevy) and tell people about your plans. Communicating your progress early and often can help you avoid headaches and disagreements during code review.
 {% end %}
 
 ## Writing docs and examples
