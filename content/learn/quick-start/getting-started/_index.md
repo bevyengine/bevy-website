@@ -63,7 +63,7 @@ Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.14" # make sure this is the latest version
+bevy = "0.14.1" # make sure this is the latest version
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
