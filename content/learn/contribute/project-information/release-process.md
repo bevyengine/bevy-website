@@ -77,20 +77,39 @@ When making a release, the Maintainers follow these checklists:
 
 1. Check appropriate milestone.
 2. Close the milestone, open the next one if anything remains and transfer them.
-3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `patch` for the new version.
-    - Change the commit message to be nicer.
-4. Create tag on GitHub.
-5. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
-6. Bump `latest` tag to most recent release.
-7. Run the [`update-screenshots` workflow] to update screenshots.
-8. Run this [`build-wasm-examples` workflow] to update Wasm examples.
+3. Create a new branch `release-0.X.Y` from the `latest` tag, and cherry pick all PRs from the milestone to the new branch
+```sh
+version="0.X.Y"
+
+git checkout latest
+git checkout -b release-$version
+echo
+
+prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number`
+while read -r commit number title <&3; do
+    echo "PR #$number: $title (https://github.com/bevyengine/bevy/pull/$number)"    
+    if git cherry-pick $commit; then
+      echo
+    else
+      echo "please resolve conflict then press enter"
+      read
+    fi
+done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
+```
+4. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `patch` for the new version.
+    - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
+5. Create tag on GitHub.
+6. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
+7. Bump `latest` tag to most recent release.
+8. Run the [`update-screenshots` workflow] to update screenshots.
+9. Run this [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Patch Release
 
 1. Release on crates.io
     - `bash tools/publish.sh`
 2. Announce on:
-    1. Discord: Bevy
+    1. Discord: Bevy, #announcements
 
 #### Patch Post-Release
 
