@@ -39,6 +39,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
 
       - name: Install alsa and udev
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
@@ -56,6 +58,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
       
       - name: Check hide-lines
         run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
@@ -70,6 +74,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
 
       - name: Install alsa and udev
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
@@ -107,6 +113,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
 
       - name: Get current date
         id: date
@@ -148,6 +156,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
 
       - name: "Build Bevy Error Codes"
         run: >
@@ -172,6 +182,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
 
       - name: "Build Bevy Examples"
         run: |
@@ -201,6 +213,8 @@ jobs:
 
       - name: Cache Cargo files
         uses: Leafwing-Studios/cargo-cache@v2
+        with:
+          sweep-cache: true
 
       - name: "Build Bevy Community"
         run: >
