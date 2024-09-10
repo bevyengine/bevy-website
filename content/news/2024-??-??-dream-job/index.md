@@ -1,11 +1,9 @@
 +++
-title = "I landed my dream job. Now what?"
-date = 2024-TODO-TODO
+title = "I landed my dream job making a Rust game engine. Now what?"
+date = 2024-09-TODO
 authors = ["Alice I. Cecile"]
 [extra]
 github = "alice-i-cecile"
-image = "TODO.svg"
-show_image = true
 +++
 
 So I landed my dream job. Full-time open source building a game engine in Rust. Absolutely no meetings. What more could you ask for?
