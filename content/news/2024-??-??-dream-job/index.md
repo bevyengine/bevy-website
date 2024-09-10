@@ -53,10 +53,10 @@ But there would be no *obligation*: no sense that I *must* do these things, or m
 I could be there for the impromptu late night design chats, but still disconnect during date night because, after all, I finished work *hours* ago.
 
 This balance has worked really well for me: letting me drive forward larger initiatives (`bevy_color`! A huge `leafwing-input-manager` refactor! The 0.14 release!) without falling behind on the flood of notifications.
-Would I recommend you use it? Probably not! It requires a egree of flexibility that many organizations won't afford you, you need to be driven and self-motivated and frankly, the work-life boundary is far blurrier than most people can live with.
+Would I recommend you use it? Probably not! It requires a degree of flexibility that many organizations won't afford you, you need to be driven and self-motivated and frankly, the work-life boundary is far blurrier than most people can live with.
 But for someone working full-time in open source? Absolutely!
 
-## Dream Jobs are Still Jobs
+## Dream Jobs Are Still Jobs
 
 So, having worked at the Bevy Foundation for a few months: is this really my dream job? How does it live up to my expectations?
 Despite my boundless idealism, working for a non-profit you care about is not a panacea: if the working conditions suck,
@@ -76,7 +76,7 @@ But it's not perfect, that's all balanced out by:
 - a remarkably public role, where everything I do from day-to-day is visible
 - an incredibly small team of non-volunteers that serve as a backstop for all of the needful but tedious things that need to be done
 - fuzzy work-life boundaries
-- a salary is *much* lower than what I could be making
+- a salary that is *much* lower than what I could be making
 - existential dread caused by relying entirely on [generous donors](https://bevyengine.org/donate) to keep both myself and the project I love afloat
 
 Honestly, it's a lot like founding a startup.
@@ -111,15 +111,15 @@ I've been incredibly pleased to see how they've turned out:
 - a mechanism for ambitious contributors to build consensus and radically change things
 
 The `bevy_color` working group was a wonderful bubbling hub of activity that tackled all of the gnarly corners of writing a color library from scratch,
-the 0.14 release working group really helped take the pressure off of Cart and I, even if it was a slog.
+while the 0.14 release working group really helped take the pressure off of Cart and I, even if it was a slog.
 
 I'm really excited to see what the open groups (relations, text, audio, picking, contributing guide, scenes, render graph and curves) put together over the next year!
 I'll stir the pot periodically to keep things moving along smoothly, but overall I'm delighted by how well this experiment in self-organization has gone.
 
-## Technical Future: UI that doesn't Suck
+## Technical Future: UI That Doesn't Suck
 
 Right now, Bevy has a critical technical limitation: our UI solution sucks.
-While of course you could argue that *all* UI solutions sucks, `bevy_ui` is remarkably underbaked.
+While of course you could argue that *all* UI solutions suck, `bevy_ui` is remarkably underbaked.
 There's too much boilerplate, there are virtually no premade widgets, and most of the hard problems are handed off to the user.
 
 While things *have* improved substantially since Bevy's initial release, `bevy_ui` operates at the same level as HTML: just raw data structures to be manipulated.
@@ -152,8 +152,8 @@ Overwhelmingly, professional game developers don't decide that they're going to 
 While hobbyists and those seeking to learn Rust *might* choose an engine that way (Rust is delightful and making games is a great way to learn),
 it's an ineffective way to make business-critical decisions!
 
-Instead, they look at the set of *full* set of engines and what they have to offer: Unity, Unreal, Godot and dozens more.
-Every team and every project has different needs and idosyncratic preferences: there will never be an ur-engine that others are simply *wrong* for not choosing.
+Instead, they look at the *full* set of engines and what they have to offer: Unity, Unreal, Godot and dozens more.
+Every team and every project has different needs and idiosyncratic preferences: there will never be an ur-engine that others are simply *wrong* for not choosing.
 But if you want to compete within a crowded space, you need to both carve out and communicate a niche: a set of things that you're *uniquely* good at.
 
 Simply being the best, most popular, or most featureful game engine in Rust isn't enough, and frankly, barely matters at all.
