@@ -10,7 +10,7 @@ So I landed my dream job. Full-time open source building a game engine in Rust. 
 With a very unconventional background (plant ecology, self-taught programming and years of disability), it's flatly astonishing to be [supported](https://bevyengine.org/donate/) by such an awesome community: surrounded and empowered by experts and beginners alike making incredible things together.
 
 But now what?
-[Bevy's fourth birthday](../2024-08-10-bevys-fourth-birthday/index.md) has rolled around, and `@cart` has put out a call for others to reflect on the year behind us, and plan for the year ahead.
+[Bevy's fourth birthday](@/news/2024-08-10-bevys-fourth-birthday/index.md) has rolled around, and `@cart` has put out a call for others to reflect on the year behind us, and plan for the year ahead.
 How have my first few months of Serious Employment at the Bevy Foundation gone, and what am I cooking up?
 
 <!-- more -->
