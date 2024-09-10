@@ -10,7 +10,7 @@
 
 {% if section_or_page %}
   {# Possible docs root section paths. A temporary workaround. TODO: issue #1181(https://github.com/bevyengine/bevy-website/issues/1181) find a better solution #}
-  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "learn/errors", "contributing"] %}
+  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "learn/errors", "learn/contribute"] %}
   {% for root_section_path in root_section_paths %}
     {% set components = root_section_path | split(pat="/") %}
     {% if section_or_page.components | slice(end=components | length) == components %}
@@ -63,12 +63,12 @@
     {% set show_nav_toggle = true %}
   {% elif section.path is starting_with("/assets/") %}
     {% set show_nav_toggle = true %}
-  {% elif section.path is starting_with("/contributing/") %}
+  {% elif section.path is starting_with("/contribute/") %}
     {% set show_nav_toggle = true %}
   {% endif %}
 {% elif page %}
   {% if page.path is starting_with("/learn/book/") or page.path is starting_with("/learn/migration-guides/") or page.path is starting_with("/learn/errors/") or page.path
-    is starting_with("/assets/") or page.path is starting_with("/contributing/") %}
+    is starting_with("/assets/") or page.path is starting_with("/contribute/") %}
     {% set show_nav_toggle = true %}
   {% endif %}
 {% endif %}

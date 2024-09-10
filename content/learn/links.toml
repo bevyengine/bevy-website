@@ -20,6 +20,13 @@ image_alt = "Rust logo"
 description = "Learn how to use Bevy's types, traits and methods using the in-depth reference documentation, complete with inline examples."
 
 [[links]]
+title = "Contributing Guide"
+url = "/learn/contribute/introduction"
+image = "/assets/book.svg"
+image_alt = "A slanted book"
+description = "Learn how to best contribute to the Bevy Project."
+
+[[links]]
 title = "Official Examples"
 url = "https://github.com/bevyengine/bevy/tree/latest/examples#examples"
 image = "/assets/github.svg"

@@ -44,7 +44,7 @@ jobs:
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
       - name: Build & run doc tests
-        run: cd code-validation && cargo test
+        run: cd learning-code-examples && ./validate_examples.sh
 
   check-hide-lines:
     runs-on: ubuntu-latest
@@ -256,7 +256,7 @@ jobs:
           path: content/community/people
 
       - name: "Build website"
-        uses: shalzz/zola-deploy-action@v0.18.0
+        uses: shalzz/zola-deploy-action@v0.19.2
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .

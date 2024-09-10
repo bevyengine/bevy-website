@@ -3,6 +3,9 @@ name: Update Screenshots
 on:
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+
 env:
   PER_PAGE: 20
 
@@ -49,16 +52,24 @@ jobs:
           DEBIAN_FRONTEND=noninteractive sudo apt-get install --no-install-recommends -yq \
             libasound2-dev libudev-dev libxkbcommon-x11-0;
 
-      - name: install xvfb, llvmpipe and lavapipe
+      - name: Install xvfb, llvmpipe and lavapipe
         run: |
           sudo apt-get update -y -qq
           sudo add-apt-repository ppa:kisak/turtle -y
           sudo apt-get update
           sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
+      - name: Install oxipng
+        run: |
+          cargo install oxipng --version ^9.1.1
+
       - name: Take Screenshots
         run: |
           xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot --in-ci
+
+      - name: Optimize PNGs
+        run: |
+          oxipng --opt max --strip safe --recursive screenshots
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
