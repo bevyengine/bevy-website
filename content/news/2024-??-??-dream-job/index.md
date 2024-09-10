@@ -8,24 +8,25 @@ image = "TODO.svg"
 show_image = true
 +++
 
-So, I landed my dream job. Full-time open source building a game engine in Rust. Absolutely no meetings. What more could you ask for?
-With a very unconventional background (plant ecology, self-taught programming and years of disability), it's flatly astonishing to be [so supported](https://bevyengine.org/donate/): surrounded and empowered by a community making incredible things together.
+So I landed my dream job. Full-time open source building a game engine in Rust. Absolutely no meetings. What more could you ask for?
+With a very unconventional background (plant ecology, self-taught programming and years of disability), it's flatly astonishing to be [supported](https://bevyengine.org/donate/) by such an awesome community: surrounded and empowered by experts and beginners alike making incredible things together.
 
 But now what?
-[Bevy's fourth birthday](../2024-08-10-bevys-fourth-birthday/index.md) has rolled around, and @cart has put out a call for others to reflect on the year behind us, and plan for the year ahead.
+[Bevy's fourth birthday](../2024-08-10-bevys-fourth-birthday/index.md) has rolled around, and `@cart` has put out a call for others to reflect on the year behind us, and plan for the year ahead.
 How have my first few months of Serious Employment at the Bevy Foundation gone, and what am I cooking up?
 
 ## Quasi-Hobby to Day Job
 
 For years before I started working at the Bevy Foundation, I've helped out around Bevy: writing docs, triaging issues, reviewing PRs, designing complex systems and polishing off rough corners.
 
-I'd pitch in where I could, tackling the million small tasks in moments between working on side projects, the occasional bits of consulting and making sure my home was running smoothly.
-And over the weeks, months, and years that really added up!
-Reading, thinking, communicating: I've never been the sort to write code day after day, or get down and dirty to track down obscure bugs.
+I'd pitch in where I could, tackling the million small tasks in moments between working on side projects, the occasional bits of consulting and making sure life at home was running smoothly.
+And over the years that really added up!
+Reading, thinking, communicating: I've never been the sort to write reams of code for specific subsystems, or to dive into the most obscure bugs.
 But if I listened to people talk about what they needed, chewed on it for a bit, and then passed it on to the people who wanted to help, I found I could be *remarkably* effective!
 
-It was a good groove, but all of a sudden: this was my day job!
-40 hours a week, 8 hours a day, 9-5 Monday to Friday in the office, right?
+It was a good groove.
+But then all of a sudden, working on Bevy was my day job!
+That means 40 hours a week, 8 hours a day, 9-5 Monday to Friday in the office, right?
 Well, okay, sure, no one cares when I work. Or exactly how much I work per day. And we don't even have an office!
 But surely, that was the platonic ideal of what Real Work should look like, and I should be aspiring to it, even if it would forever be out of reach.
 
@@ -36,17 +37,17 @@ I focused on big initiatives, tried to code more, and made *sure* I wasn't worki
 It made me *miserable*.
 Pushing myself to work for long blocks at a time was physically and mentally demanding.
 I had to actively force myself *not* to triage that issue, leave that comment, or tackle that PR.
-And conversations across our team of dozens of globally-distributed contributors simply didn't have the decency to stay nicely confined to a 9-5 schedule!
+And conversations across our team of dozens of globally-distributed contributors simply didn't have the decency to stay nicely confined to my 9-5 schedule!
 
-So, how did I square the circle? The time and freedom to tackle bigger projects was a huge advantage,
-but all those little tasks still mattered!
-And even though a more flexible schedule was probably *good* for me,
+So, how did I square the circle?
+The time and freedom to tackle bigger projects was a huge advantage, but all those little tasks still mattered!
+And even though moving to a more flexible schedule was probably healthy for me,
 I needed to make sure that work didn't consume my whole life.
 
 My solution: **focus tasks**.
 Every work day (but not days off!), I would pick a single task to focus on.
-Writing a piece of documentation, reviewing a complex PR, adding a feature, refactoring a complex bit of code, preparing a design doc, running a Merge Train...
-I would focus on that when I was feeling well, get done what I could, and as soon as my focus broke or the task was completed, that was it. I was *done work* for the day.
+Writing a piece of documentation, reviewing a complex PR, adding a feature, refactoring a complex bit of code, preparing a design doc, running the weekly Merge Train...
+I would focus on that when I was feeling well, get done what I could, and as soon as my focus broke or the task was completed, that was it. I was "done work" for the day.
 
 To complement this, the strict 9-5 M-F schedule would be relaxed. I could work whenever I felt like it (turns out, for me, that's quite a bit):
 tackling the million little things that help keep Bevy ticking along.
@@ -54,7 +55,7 @@ But there would be no *obligation*: no sense that I *must* do these things, or m
 I could be there for the impromptu late night design chats, but still disconnect during date night because, after all, I finished work *hours* ago.
 
 This balance has worked really well for me: letting me drive forward larger initiatives (`bevy_color`! A huge `leafwing-input-manager` refactor! The 0.14 release!) without falling behind on the flood of notifications.
-Would I recommend you use it? Probably not! It requires a remarkable degree of flexibility that many organizations won't afford you, you need to be driven and self-motivation and frankly, the work-life boundary is far blurrier than most people can live with.
+Would I recommend you use it? Probably not! It requires a egree of flexibility that many organizations won't afford you, you need to be driven and self-motivated and frankly, the work-life boundary is far blurrier than most people can live with.
 But for someone working full-time in open source? Absolutely!
 
 ## Dream Jobs are Still Jobs
@@ -67,15 +68,15 @@ On the bright side, I have:
 
 - a mission I believe in
 - a comfortable living (my latest budget says $84k CAD pre-tax)
-- the opportunity to meet and learn from incredible people: within Bevy, with Rust and within game dev more broadly
-- a work-from-home arrangement, with incredible flexibility
+- the opportunity to meet and learn from incredible people: within Bevy, Rust and game dev more broadly
+- a work-from-home arrangement with incredible flexibility
 - huge levels of agency over what I work on
 - generous European-style vacation and sick-leave policies
 
 But it's not perfect, that's all balanced out by:
 
 - a remarkably public role, where everything I do from day-to-day is visible
-- an incredibly small non-volunteer team to serve as a backstop for all of the needful but tedious things that need to be done
+- an incredibly small team of non-volunteers that serve as a backstop for all of the needful but tedious things that need to be done
 - fuzzy work-life boundaries
 - a salary is *much* lower than what I could be making
 - existential dread caused by relying entirely on [generous donors](https://bevyengine.org/donate) to keep both myself and the project I love afloat
@@ -90,7 +91,7 @@ The most striking thing about it though, is the extent to which I have to *keep*
 Rust? ECS? Technical writing? Project management? Input management? Community management?
 
 I can't get complacent and only work within my comfort zone of skillsets that I've mastered.
-There's always more work to be done, areas that need leadership, and brilliant but complex PRs to review.
+There's always a new stalled-out work area that needs leadership, brilliant but complex PRs to review, and thorny problems to cut through.
 Even if my natural proclivities are focused on design and communication, I need to be *fluent* in every single area needed to make games.
 Experts are great, but keeping things moving along means I have to be able to understand what they're saying and integrate it into a broader project context.
 
@@ -158,14 +159,14 @@ Every team and every project has different needs and idosyncratic preferences: t
 But if you want to compete within a crowded space, you need to both carve out and communicate a niche: a set of things that you're *uniquely* good at.
 
 Simply being the best, most popular, or most featureful game engine in Rust isn't enough, and frankly, barely matters at all.
-Rust is fantastic, and I think in the long-run it'll be a major advantage, but right now, the game industry perception is that it's immature and slow to develop in.
+Rust is fantastic, and I think in the long-run it'll be a major advantage, but right now, the game industry perception is that it's immature and slow to develop games using it.
 
 To survive as anything beyond a hobby engine, you need to attract commercial teams building serious games, built on a budget with mixed teams of programmers, artists and designers.
 While you don't need to be better than the big kids in *every* way, you need to be better than them in some ways, and the *rational* choice for some set of teams needs to be to pick your engine.
 
 While we're not the rational choice yet for most projects and teams, I want to set us up for real success in the future.
 In the coming year, I want to network more with gamedevs outside of Rust (say hi!), learn more about the workflows that real indie teams use and challenges that they face.
-While the small improvements trickle in, one PR at a time, I want to set my eyes on the horizon, understand what talented small teams are looking for out of their next engine, and make sure we're building towards those goals.s
+While the small improvements trickle in, one PR at a time, I want to set my eyes on the horizon, understand what talented small teams are looking for out of their next engine, and make sure we're building towards those goals.
 
 No one is writing the next Call of Duty in Bevy (yet!): the requirements around rendering, tooling, training, console support and risk are way too strict.
 But what would it take to convince teams to write the next Factorio, Terraria, Slay the Spire, Hollow Knight or Hades in Bevy?
