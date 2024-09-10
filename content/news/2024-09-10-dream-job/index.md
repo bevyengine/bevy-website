@@ -13,6 +13,8 @@ But now what?
 [Bevy's fourth birthday](../2024-08-10-bevys-fourth-birthday/index.md) has rolled around, and `@cart` has put out a call for others to reflect on the year behind us, and plan for the year ahead.
 How have my first few months of Serious Employment at the Bevy Foundation gone, and what am I cooking up?
 
+<!-- more -->
+
 ## Quasi-Hobby to Day Job
 
 For years before I started working at the Bevy Foundation, I've helped out around Bevy: writing docs, triaging issues, reviewing PRs, designing complex systems and polishing off rough corners.
