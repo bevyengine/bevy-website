@@ -1,6 +1,6 @@
 +++
 title = "I landed my dream job making a Rust game engine. Now what?"
-date = 2024-09-TODO
+date = 2024-09-10
 authors = ["Alice I. Cecile"]
 [extra]
 github = "alice-i-cecile"
