@@ -53,7 +53,7 @@ Here are some things we have coming up!
 * [Improved Text API](https://github.com/bevyengine/bevy/discussions/15014): In preparation for Next Generation Scene / UI, we're reworking our `Text` component APIs to be significantly more straightforward to use.
 * [Cosmic Text Rendering](https://github.com/bevyengine/bevy/pull/10193): We've switched to [cosmic-text](https://github.com/pop-os/cosmic-text) for our text rendering, which improves our ability to handle scripts and ligatures (among other improvements).
 * [Upstreaming bevy_mod_picking](https://github.com/bevyengine/bevy/pull/13677): We're upstreaming aspects of [bevy_mod_picking](https://github.com/aevyrie/bevy_mod_picking/) and porting it to Bevy's new Observer system. This provides APIs for picking (identifying / clicking on / selecting) entities in 2D and 3D space.
-* [Bevy CLI](https://hackmd.io/cCHAfbtaSviU_MDnbNHKxg): We're building a Bevy command line interface, which will be the one-stop-shop for doing things like generating new Bevy project from templates, running the asset preprocessor, running Bevy-specific lints, and more!
+* [Bevy CLI](https://hackmd.io/cCHAfbtaSviU_MDnbNHKxg): We're building a Bevy command line interface, which will be the one-stop-shop for doing things like generating new Bevy projects from templates, running the asset preprocessor, running Bevy-specific lints, and more!
 
 **Bevy 0.15** will be coming out in a month or so, and some of the items above will land in it!
 
