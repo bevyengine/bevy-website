@@ -16,7 +16,7 @@ I also encouraged the Bevy community to write their own reflections on Bevy's fo
 
 ## What is Bevy?
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/quick-start/introduction). You can also check out [Bevy Assets](/assets/) for a library of community-developed plugins, crates, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/quick-start). You can also check out [Bevy Assets](/assets) for a library of community-developed plugins, crates, games, and learning resources.
 
 ## Reflections
 
