@@ -8,7 +8,7 @@ github = "cart"
 youtube = "cartdev"
 +++
 
-[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A month ago was Bevy's Fourth Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Fourth Birthday](https://bevyengine.org/news/bevys-fourth-birthday/) post.
+[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A month ago was Bevy's Fourth Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Fourth Birthday](/news/2024-08-10-bevys-fourth-birthday) post.
 
 I also encouraged the Bevy community to write their own reflections on Bevy's fourth year in a similar style, and to [post them here](https://github.com/bevyengine/bevy-website/issues/1592).
 
