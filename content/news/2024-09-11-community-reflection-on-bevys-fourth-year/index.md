@@ -8,7 +8,7 @@ github = "cart"
 youtube = "cartdev"
 +++
 
-[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A month ago was Bevy's Fourth Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Fourth Birthday](/news/2024-08-10-bevys-fourth-birthday) post.
+[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A month ago was Bevy's Fourth Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Fourth Birthday](/news/bevys-fourth-birthday) post.
 
 I also encouraged the Bevy community to write their own reflections on Bevy's fourth year in a similar style, and to [post them here](https://github.com/bevyengine/bevy-website/issues/1592).
 
@@ -23,9 +23,9 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 We had plenty of responses this year! Here is a central collection of **Bevy's Fourth Birthday** posts:
 
 * **Carter Anderson ([@cart](https://github.com/cart))** <span class="people-role people-role-inline people-role-project-lead">Project Lead</span><span class="people-role people-role-inline people-role-maintainer">Maintainer</span>
-  * [Bevy's Fourth Birthday](/news/2024-08-10-bevys-fourth-birthday)
+  * [Bevy's Fourth Birthday](/news/bevys-fourth-birthday)
 * **Alice Cecile ([@alice-i-cecile](https://github.com/alice-i-cecile))** <span class="people-role people-role-inline people-role-maintainer">Maintainer</span>
-  * [I landed my dream job making a Rust game engine. Now what?](/news/2024-09-10-dream-job)
+  * [I landed my dream job making a Rust game engine. Now what?](/news/dream-job)
 * **Thierry Berger ([@Vrixyz](https://github.com/Vrixyz))**
   * [Happy Bevybirthday](https://thierryberger.com/blog/bevy-4th-birthday/)
 * **BD103 ([@BD103](https://github.com/BD103))**
