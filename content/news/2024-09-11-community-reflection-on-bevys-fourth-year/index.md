@@ -25,7 +25,7 @@ We had plenty of responses this year! Here is a central collection of **Bevy's F
 * **Carter Anderson ([@cart](https://github.com/cart))** <span class="people-role people-role-inline people-role-project-lead">Project Lead</span><span class="people-role people-role-inline people-role-maintainer">Maintainer</span>
   * [Bevy's Fourth Birthday](/news/2024-08-10-bevys-fourth-birthday)
 * **Alice Cecile ([@alice-i-cecile](https://github.com/alice-i-cecile))** <span class="people-role people-role-inline people-role-maintainer">Maintainer</span>
-  * [I landed my dream job making a Rust game engine. Now what?](https://bevyengine.org/news/dream-job/)
+  * [I landed my dream job making a Rust game engine. Now what?](/news/2024-09-10-dream-job)
 * **Thierry Berger ([@Vrixyz](https://github.com/Vrixyz))**
   * [Happy Bevybirthday](https://thierryberger.com/blog/bevy-4th-birthday/)
 * **BD103 ([@BD103](https://github.com/BD103))**
