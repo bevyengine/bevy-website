@@ -117,3 +117,19 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 **Proposed by:** Carter Anderson
 
 **Votes:** Yes by Alice I. Cecile, Rob Swain and François Mockers. No vote from Carter Anderson or James Liu.
+
+## 2024-09-09: More relaxed voting rules
+
+**Proposal:** We should change "(b) an email transmission that is sent with sufficient information to determine the sender’s identity"" in section 5.16 of the Bevy Foundation Bylaws to "(b) an email transmission with sufficient information to determine the sender's identity or a Discord message or vote in an official Bevy channel or private chat where all maintainers are present." At the time of determining the results of a vote, "edits" to digital messages are considered invalid and the Secretary should take screenshots of the results to include in the meeting minutes.
+
+**Proposed by:** Carter Anderson
+
+**Votes:** Yes by Carter Anderson, Alice I. Cecile, Rob Swain and François Mockers. No vote by James Liu.
+
+## 2024-09-09: Recording who voted for which motions in the minutes
+
+**Proposal:** We should change "The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings." in section 8.5 of the Bevy Foundation Bylaws to "The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings. When a decision is not unanimous, the name of each voting board member and the content of their vote must be recorded in the minutes."
+
+**Proposed by:** Carter Anderson
+
+**Votes:** Yes by Carter Anderson, Alice I. Cecile, Rob Swain and François Mockers. No vote by James Liu.
