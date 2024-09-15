@@ -17,10 +17,16 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 
 ## 2024-04-15: Using Thera as our Employer of Record
 
-Proposal: Are we good to move forward with onboarding \[with thera\], given that \[the cost will be $400/month, $200 cheaper than that of Deel\]?
+**Proposal:** Are we good to move forward with onboarding \[with thera\], given that \[the cost will be $400/month, $200 cheaper than that of Deel\]?
 
-Proposed by: Carter Anderson
+**Proposed by:** Carter Anderson
 
-Votes: Yes from Rob Swain, Carter Anderson, Alice I. Cecile, François Mockers. No vote from James Liu.
+**Votes:** Yes from Rob Swain, Carter Anderson, Alice I. Cecile, François Mockers. No vote from James Liu.
 
+## 2024-04-15 Initial job titles
 
+**Proposal:** All in favor of Project Lead (me once we hire me), Staff Engineer (soon to be Alice + future maintainer hires), and Principal for SME hires?
+
+**Proposed by:** Carter Anderson
+
+**Votes:** Unanamious yes
