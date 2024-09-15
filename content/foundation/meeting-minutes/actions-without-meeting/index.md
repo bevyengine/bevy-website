@@ -38,3 +38,11 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 **Proposed by:** Alice I. Cecile
 
 **Votes:** Yes by Carter Anderson, Alice I. Cecile, and Rob Swain. No vote from James Liu and Francois.
+
+## 2024-05-02: Sick leave documentation policy
+
+**Proposal:** Should Bevy Foundation employees require documentation for sick leave?
+
+**Proposed by:** Carter Anderson
+
+**Votes:** No from Rob Swain, Carter Anderson, Alice I. Cecile, James Liu. No vote from François Mockers.
