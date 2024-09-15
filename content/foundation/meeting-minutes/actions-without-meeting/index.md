@@ -6,8 +6,10 @@ title = "Actions by the Board without a Meeting"
 
 Not all actions taken by the board require a formal meeting!
 For the sake of transparency though, we've recorded the actions of the board performed without a meeting here, in chronological order.
+Screenshots are provided for each decision, although for feasibility reasons only the final vote tally is recorded in them (only thumbs up / thumbs down reactions count).
 
-The language here is often informal, but as Secretary I've aimed to capture it directly using `[]` brackets to fill in missing context.
+The language here is often informal, but as Secretary I've captured it directly for maximal transparency and accuracy.
+I've used `[]` brackets to fill in missing context to quotes when it was natural, and have added a `Context` section where it is not.
 
 Only actions where a vote occurs is recorded, and all such votes will be reported (along with the votes of each board member), regardless of if an initiative passes.
 Generally speaking, the Bevy maintainers only act "as the board" when handling foundation business, and vote on matters of relatively high importance or those involving finances.
@@ -18,6 +20,8 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 ## 2024-04-15: Using Thera as our Employer of Record
 
 ![Using Thera as our Employer of Record](thera_employer_of_record.png)
+
+**Context:** In order to readily employee folks from across the world, the Bevy Foundation uses an [employer of record](https://www.oysterhr.com/glossary/eor) to handle local compliance, taxation and benefits.
 
 **Proposal:** Are we good to move forward with onboarding \[with thera\], given that \[the cost will be $400/month, $200 cheaper than that of Deel\]?
 
