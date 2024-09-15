@@ -77,7 +77,7 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 On the topic of Thera fees: I think this cost should be split evenly across those getting paid, as the choice to incorporate in the United States was arbitrary and people outside of the united states should not be penalized for it. Put another way, this is a cost "paid by the Foundation prior to making payouts".
 >
 > > So if we were to start auto-balancing now, this would be the calculation (in USD):
-> 
+>
 > $7,884 (currently monthly net income) - $800 (buffer) = $7,084
 > $7,084 - $400 (current Thera EOR) = $6,684
 > $6,684 / 2 = $3,342
@@ -108,4 +108,12 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 
 **Proposal:** So the proposal is: increase Alice's monthly payments to $6,417.67 CAD ($4,705.28 USD) as soon as Thera can make it possible. Vote on this comment with 👍  or 👎 to officially approve this proposal. Feel free to discuss first if you want to amend the proposal / notice any discrepancies.
 
-**Votes:** Alice abstains. All others voted yes.
+**Votes:** Alice I. Cecile abstains. All others voted yes.
+
+## 2024-07-16: Deprecating legacy sponsors
+
+**Proposal:**  Also: I think it is time to deprecate the "legacy sponsors" section. I've prepped [a branch](https://github.com/bevyengine/bevy-website/pull/1564) but I won't create the PR until we agree
+
+**Proposed by:** Carter Anderson
+
+**Votes:** Yes by Alice I. Cecile, Rob Swain and François Mockers. No vote from Carter Anderson or James Liu.
