@@ -17,13 +17,17 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 
 ## 2024-04-15: Using Thera as our Employer of Record
 
+![Using Thera as our Employer of Record](thera_employer_of_record.png)
+
 **Proposal:** Are we good to move forward with onboarding \[with thera\], given that \[the cost will be $400/month, $200 cheaper than that of Deel\]?
 
 **Proposed by:** Carter Anderson
 
 **Votes:** Yes from Rob Swain, Carter Anderson, Alice I. Cecile, François Mockers. No vote from James Liu.
 
-## 2024-04-15 Initial job titles
+## 2024-04-15: Initial job titles
+
+![Initial job titles](initial_job_titles.png)
 
 **Proposal:** All in favor of Project Lead (me once we hire me), Staff Engineer (soon to be Alice + future maintainer hires), and Principal for SME hires?
 
@@ -33,6 +37,8 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 
 ## 2024-04-18: Usage of the Bevy logo by the unofficial Bevy Playfround
 
+![Usage of the Bevy logo by the unofficial Bevy Playfround](bevy_playground_logo_usage.png)
+
 **Proposal:**  Thumbs up to this message to vote yes to approving [use of the logo](https://discordapp.com/channels/691052431525675048/745355529777315850/1230635309906137098) for [Bevy Playground](https://learnbevy.com/playground).
 
 **Proposed by:** Alice I. Cecile
@@ -41,13 +47,17 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 
 ## 2024-05-02: Sick leave documentation policy
 
+![Sick leave documentation policy](sick_leave_documentation_policy.png)
+
 **Proposal:** Should Bevy Foundation employees require documentation for sick leave?
 
-**Proposed by:** Carter Anderson
+**Proposed by:** Carter Anderson![alt text](image.png)
 
 **Votes:** No from Rob Swain, Carter Anderson, Alice I. Cecile, James Liu. No vote from François Mockers.
 
 ## 2024-06-16: Repaying Cart for initial deposit into bank account
+
+![Repaying Cart for initial deposit into bank account](repaying_cart_initial_deposit.png)
 
 **Context:** The Bevy bank account needed funds in it to be opened. Cart lent the Foundation $2000 USD from his personal account to cover this.
 
@@ -58,6 +68,8 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 **Votes:** Yes by Alice I. Cecile, Rob Swain and François Mockers. No vote from James Liu. Carter Anderson abstained.
 
 ## 2024-07-08: Increasing Alice's salary
+
+![Increasing Alice's salary](increasing_alice_salary.png)
 
 **Context:**
 
@@ -112,6 +124,8 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 
 ## 2024-07-16: Deprecating legacy sponsors
 
+![Deprecating legacy sponsors](deprecating_legacy_sponsors.png)
+
 **Proposal:**  Also: I think it is time to deprecate the "legacy sponsors" section. I've prepped [a branch](https://github.com/bevyengine/bevy-website/pull/1564) but I won't create the PR until we agree
 
 **Proposed by:** Carter Anderson
@@ -120,6 +134,8 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 
 ## 2024-09-09: More relaxed voting rules
 
+![More relaxed voting rules](more_relaxed_voting_rules.png)
+
 **Proposal:** We should change "(b) an email transmission that is sent with sufficient information to determine the sender’s identity"" in section 5.16 of the Bevy Foundation Bylaws to "(b) an email transmission with sufficient information to determine the sender's identity or a Discord message or vote in an official Bevy channel or private chat where all maintainers are present." At the time of determining the results of a vote, "edits" to digital messages are considered invalid and the Secretary should take screenshots of the results to include in the meeting minutes.
 
 **Proposed by:** Carter Anderson
@@ -127,6 +143,8 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 **Votes:** Yes by Carter Anderson, Alice I. Cecile, Rob Swain and François Mockers. No vote by James Liu.
 
 ## 2024-09-09: Recording who voted for which motions in the minutes
+
+![Recording who voted for which motions in the minutes](recording_who_voted.png)
 
 **Proposal:** We should change "The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings." in section 8.5 of the Bevy Foundation Bylaws to "The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings. When a decision is not unanimous, the name of each voting board member and the content of their vote must be recorded in the minutes."
 
