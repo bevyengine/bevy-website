@@ -130,7 +130,7 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 
 ![Deprecating legacy sponsors](deprecating_legacy_sponsors.png)
 
-**Proposal:**  Also: I think it is time to deprecate the "legacy sponsors" section. I've prepped [a branch](https://github.com/bevyengine/bevy-website/pull/1564) but I won't create the PR until we agree
+**Proposal:** Also: I think it is time to deprecate the "legacy sponsors" section. I've prepped [a branch](https://github.com/bevyengine/bevy-website/pull/1564) but I won't create the PR until we agree
 
 **Proposed by:** Carter Anderson
 
