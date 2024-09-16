@@ -39,7 +39,7 @@ The board acts with a majority vote, and a recorded "unanimous" vote means that 
 
 **Votes:** Unanamious yes
 
-## 2024-04-18: Usage of the Bevy logo by the unofficial Bevy Playfround
+## 2024-04-18: Usage of the Bevy logo by the unofficial Bevy Playground
 
 ![Usage of the Bevy logo by the unofficial Bevy Playground](bevy_playground_logo_usage.png)
 
