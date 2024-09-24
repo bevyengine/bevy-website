@@ -53,7 +53,7 @@ The Bevy Maintainers / Bevy Foundation Board Members now also have individual `b
 * Carter Anderson: <cart@bevyengine.org>
 * Alice Cecile: <alice@bevyengine.org>
 * François Mockers: <francois@bevyengine.org>
-* Robert Swain: <rob@bevyengine.rog>
+* Robert Swain: <rob@bevyengine.org>
 * James Liu: <james@bevyengine.org>
 
 ## Please Donate!
