@@ -38,7 +38,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `S-Needs-Review`: this PR needs reviewer attention to move forward.
   - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
   - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a Maintainer to consider merging it.
-  - `S-Needs-Help`: this PRs is almost ready to be merged but blocked on a technical issue. Helping to fix it is welcomed.
+  - `S-Needs-Help`: this PR is almost ready to be merged but blocked on a technical issue. Helping to fix it is welcomed.
 - **X**: Controversiality. In order, these are:
   - `X-Uncontroversial`: everyone should agree that this is a good idea.
   - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
@@ -111,8 +111,8 @@ There are several paths for PRs to be closed:
 4. Anyone may nominate a PR for closure, by bringing it to the attention of the author and / or one of the SMEs / Maintainers. Let them press the button, but this is generally well-received and helpful.
 5. SMEs or Maintainers may, and are encouraged, to unilaterally close PRs that fall into one or more of the remaining categories.
 6. In the case of PRs where some members of the community, other than the author, are in favor, and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
-7. For a PR that has been sitting for a while and became bitrotten, check with the original author if they intend to continue working on it. if not, or without a response, the PR can be labeled with `S-Adopt-Me`, and closed. Tracking adoption progress will happen in a linked issue.
-8. Inactive `X-Controversial` can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be taken.
+7. For a PR that has been sitting for a while and became bitrotten, check with the original author if they intend to continue working on it. If not, or without a response, the PR can be labeled with `S-Adopt-Me`, and closed. Tracking adoption progress will happen in a linked issue.
+8. Inactive `X-Controversial` can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be made.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
 

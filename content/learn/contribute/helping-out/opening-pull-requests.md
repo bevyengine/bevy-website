@@ -153,5 +153,5 @@ Then, notify org members to close the original.
 ## Helping a PR get ready
 
 Without going to the complete adoption of a PR, sometimes the author needs help to get it approved or passing CI.
-Those PRs can be labeled as *[S-Needs-Help](https://github.com/bevyengine/bevy/labels/S-Needs-Help)*, and opening PRs on them is welcomed to fix the last few points, resolve conflicts ro pass CI.
+Those PRs can be labeled as *[S-Needs-Help](https://github.com/bevyengine/bevy/labels/S-Needs-Help)*, and opening PRs on them is welcomed to fix the last few points, resolve conflicts to pass CI.
 You will need to work closely with the original author or one of the maintainer to add your commits to the original PR.
