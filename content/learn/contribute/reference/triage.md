@@ -38,6 +38,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `S-Needs-Review`: this PR needs reviewer attention to move forward.
   - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
   - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a Maintainer to consider merging it.
+  - `S-Needs-Help`: this PRs is almost ready to be merged but blocked on a technical issue. Helping to fix it is welcomed.
 - **X**: Controversiality. In order, these are:
   - `X-Uncontroversial`: everyone should agree that this is a good idea.
   - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
