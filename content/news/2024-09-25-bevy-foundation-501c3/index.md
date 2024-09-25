@@ -1,6 +1,6 @@
 +++
 title = "Bevy Foundation is now a 501(c)(3) Public Charity"
-date = 2024-09-24
+date = 2024-09-25
 authors = ["Carter Anderson"]
 [extra]
 twitter = "cart_cart"
