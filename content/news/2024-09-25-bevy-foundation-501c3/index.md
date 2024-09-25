@@ -32,7 +32,7 @@ As a 501(c)(3) we are now qualified to use [Every.org](https://www.every.org/) a
 We still support Stripe (our old platform) to give people as many options as possible. But we now prefer Every.org and default to it where we can, as it provides _much_ better rates:
 
 | | Every.org | Stripe |
-| | --------- | ------ |
+| ----- | --------- | ------ |
 | Bank Fee | 0% | 0.8% |
 | Subscription Fee | 0% | 0.5% (increasing to 0.7% next year) |
 | Card Fee | 2.2% + $0.30 | 2.2% + $0.30 |
