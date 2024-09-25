@@ -1,7 +1,7 @@
 [package]
 name = "generate-community"
 authors = [
-  "Bevy Contributors <bevyengine@gmail.com>",
+  "Bevy Contributors <support@bevyengine.org>",
 ]
 license = "MIT"
 edition = "2021"

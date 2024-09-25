@@ -71,7 +71,7 @@ Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-or
 
 1. Have actively engaged with Bevy development.
 2. Have demonstrated themselves to be polite and welcoming representatives of the project with an understanding of our goals and direction.
-3. Have asked to join the Bevy Org. Reach out to the Maintainers on [Discord](https://discord.gg/bevy) or email us at <bevyengine@gmail.com> if you are interested.
+3. Have asked to join the Bevy Org. Reach out to the Maintainers on [Discord](https://discord.gg/bevy) or email us at <support@bevyengine.org> if you are interested.
 
 If you've been around the community for a while, just ask! There are no formal responsibilities and this is intended to cover the community of people making Bevy quite broadly.
 

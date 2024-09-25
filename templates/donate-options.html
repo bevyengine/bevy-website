@@ -1,0 +1,67 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+{% set tiers = load_data(path="content/donate/tiers.toml") %}
+
+<div class="media-content" style="padding-top: 10px;">
+    <table>
+        <thead>
+            <tr>
+                <th>Tier</th>
+                <th>Every.org</th>
+                <th>Stripe</th>
+                <th>Name in Credits</th>
+                <th>Link in Credits</th>
+                <th>Logo in Credits</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for tier in tiers.tier %}
+            <tr>
+                <td><b>{{ tier.name }}</b> (${{ tier.amount }} / month)</td>
+                <td>
+                    {% if tier.every_org_link %}
+                        <a href="{{ tier.every_org_link }}">every.org</a>
+                    {% elif tier.every_org_missing %}
+                        {{ tier.every_org_missing }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.stripe_link %}
+                        <a href="{{ tier.stripe_link }}">stripe</a>
+                    {% elif tier.stripe_missing %}
+                        {{ tier.stripe_missing }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.reward_name %}
+                        Yes
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.reward_link %}
+                        Yes
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.reward_logo %}
+                        Yes
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><b>Custom</b></td>
+                <td><a href="https://www.every.org/bevy-foundation?suggestedAmounts=10%2C25%2C50%2C100%2C250&theme_color=6a8fb3&designation=Custom&utm_campaign=donate-link#/donate">every.org</a></td>
+                <td>Not supported right now</td>
+                <td>See tiers</td>
+                <td>See tiers</td>
+                <td>See tiers</td>
+            </tr>
+        </tbody>
+    </table>
+    {{ page.content | safe }}
+</div>
+{% endblock content %}

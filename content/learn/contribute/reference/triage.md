@@ -121,6 +121,6 @@ Members of the Triage Team within the Bevy organization have permissions to labe
 1. They have actively engaged with Bevy development in the past.
 2. They have demonstrated themselves to be polite and welcoming representatives of the project with an understanding of its goals and direction.
 
-If that applies to you, then feel free to ask a Maintainer on [Discord] or email <bevyengine@gmail.com>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
+If that applies to you, then feel free to ask a Maintainer on [Discord] or email <support@bevyengine.org>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
 
 [Discord]: https://discord.gg/bevy
