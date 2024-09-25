@@ -5,7 +5,7 @@ template = "donate-options.html"
 header_message = "Donate"
 +++
 
-## Should I Donate Through Every.org or Stripe?
+## Should I donate through Every.org or Stripe?
 
 The short answer is "use Every.org if you can". Prefer paying directly through your bank if you want to avoid payment processor fees.
 

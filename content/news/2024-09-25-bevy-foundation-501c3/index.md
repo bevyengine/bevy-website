@@ -23,11 +23,11 @@ I am excited to announce that the Bevy Foundation has been granted 501(c)(3) pub
 5. We now must [operate under the constraints of a 501(c)(3) public charity](https://www.501c3.org/what-is-a-501c3/)
 6. We must file a yearly report that outlines our activities (IRS form 990).
 
-I am personally very excited about this. 501(c)(3) public charity status, because of its constraints, buys us more public trust than the more general state level non-profit status. Each donation can go further, and there are now more opportunities for financial support!
+I am personally very excited about this. 501(c)(3) public charity status, because of its constraints, buys us more public trust than the more general state-level non-profit status. Each donation can go further, and there are now more opportunities for financial support!
 
 ## Every.org: our new donation platform
 
-As a 501(c)(3) we are now qualified to use [every.org](https://www.every.org/) as our donation platform. Every.org is _also_ a 501(c)(3) that exists to make 501(c)(3) fundraising as straightforward and cheap as possible. They take _no_ platform fees, and if you pay directly with a bank account, there are _literally_ zero fees. 100% of your donation goes to Bevy Foundation. If you pay with a credit card or a payment processor like Apple Pay, you still pay those platform fees, but they are as low as possible.
+As a 501(c)(3) we are now qualified to use [Every.org](https://www.every.org/) as our donation platform. Every.org is _also_ a 501(c)(3) that exists to make 501(c)(3) fundraising as straightforward and cheap as possible. They take _no_ platform fees, and if you pay directly with a bank account, there are _literally_ zero fees. 100% of your donation goes to Bevy Foundation. If you pay with a credit card or a payment processor like Apple Pay, you still pay those platform fees, but they are as low as possible.
 
 We still support Stripe (our old platform) to give people as many options as possible. But we now prefer Every.org and default to it where we can, as it provides _much_ better rates:
 
