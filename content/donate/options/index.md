@@ -23,15 +23,17 @@ and for _all monthly subscriptions_ they add another 0.5% charge (soon to be 0.7
 
 Every.org has a minimum payment of $10, so we can't offer Bronze through them. This is why the Bronze link on the donate page defaults to Stripe instead of Every.org.
 
+## I donated at a level that lets me add my name / link / logo to the credits. How do I do that?
+
+You have three options:
+
+1. If you donated via Every.org and opted for a public donation, your name will be included automatically. If you set the relevant form values on Stripe, the name and link will be used. If you donated at a level that includes a logo, or you would like to change any of the names / link values that have already been set, see the next two options.
+2. Reach out to <support@bevyengine.org> with the values you want and we will add them. Please provide your name and donation tier to help us find your donation info.
+3. You can [set them yourself here](https://github.com/bevyengine/bevy-donors) by submitting a pull request. See the "Adding/Updating Donor Info" section of the readme.
+
 ## Can I make a one-time donation instead of monthly?
 
 Yup! Every.org supports this. Click the "custom" link in the table above and select "one time".
-
-## I donated at a level that lets me add my name / link / logo to the credits. How do I do that?
-
-Tiers that support names and links allow you to specify them directly in the Stripe form. If you did not do this, contact us at <support@bevyengine.org> with that information and we'll get you added!
-
-Tiers that support logos require reaching out to <support@bevyengine.org>. Send us your logo and your link and we'll add you!
 
 ## How do I cancel my donation subscription?
 
