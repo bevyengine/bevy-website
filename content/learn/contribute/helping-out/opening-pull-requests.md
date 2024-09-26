@@ -136,8 +136,10 @@ This is a natural part of any open source project.
 To avoid blocking these efforts, these pull requests may be *adopted*, where another contributor creates a new pull request with the same content.
 If there is an old pull request that is without updates, comment to the organization whether it is appropriate to add the
 *[S-Adopt-Me](https://github.com/bevyengine/bevy/labels/S-Adopt-Me)* label, to indicate that it can be *adopted*.
+*S-Adopt-Me* PRs should be closed, and a tracking issue opened with the same labels to track their adoptions.
 
-If you plan on adopting a PR yourself, you can also leave a comment on the PR asking the author if they plan on returning.
+If you plan on adopting a PR yourself, mention so in the tracking issue.
+For a PR that hasn't been yet marked as open for adoption, you can also leave a comment on the PR asking the author if they plan on returning.
 If the author gives permission or simply doesn't respond after a few days, then it can be adopted.
 This may sometimes even skip the labeling process since at that point the PR has been adopted by you.
 
@@ -147,3 +149,9 @@ When the new pull request is ready, it should reference the original PR in the d
 Then, notify org members to close the original.
 
 * For example, you can reference the original PR by adding the following to your PR description: `Adopted #number-original-pull-request`
+
+## Helping a PR get ready
+
+Without going to the complete adoption of a PR, sometimes the author needs help to get it approved or passing CI.
+Those PRs can be labeled as *[S-Needs-Help](https://github.com/bevyengine/bevy/labels/S-Needs-Help)*, and opening PRs on them is welcomed to fix the last few points, resolve conflicts to pass CI.
+You will need to work closely with the original author or one of the maintainer to add your commits to the original PR.

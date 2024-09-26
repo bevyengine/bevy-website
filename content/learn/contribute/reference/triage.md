@@ -33,11 +33,12 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - Most work is not explicitly categorized by priority; volunteer work mostly occurs on an ad hoc basis depending on contributor interests.
 - **S**: Status. The most common include:
   - `S-Needs-Triage`: this issue needs to be labeled.
-  - `S-Adopt-Me`: the original PR author has no intent to complete the PR, and it should be adopted by another contributor.
+  - `S-Adopt-Me`: the original PR author has no intent to complete the PR, and it should be adopted by another contributor. This PR should be closed, and have an issue linked to track its adoption.
   - `S-Blocked`: cannot move forward until something else changes.
   - `S-Needs-Review`: this PR needs reviewer attention to move forward.
   - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
   - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a Maintainer to consider merging it.
+  - `S-Needs-Help`: this PR is almost ready to be merged but blocked on a technical issue. Helping to fix it is welcomed.
 - **X**: Controversiality. In order, these are:
   - `X-Uncontroversial`: everyone should agree that this is a good idea.
   - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
@@ -98,10 +99,9 @@ This might happen if:
 3. The PR was successfully adopted.
 4. The work is particularly low quality, and the author is resistant to coaching.
 5. The work adds features or abstraction of limited value, especially in a way that could easily be recreated outside of the engine.
-6. The work has been sitting in review for so long and accumulated so many conflicts that it would be simpler to redo it from scratch.
+6. The work has been sitting in review for so long and accumulated so many conflicts that it needs substantial work to get it in a correct state.
 7. The PR is pointlessly large, and should be broken into multiple smaller PRs for easier review.
-
-PRs that are `S-Adopt-Me` should be left open, but only if they're genuinely more useful to rebase rather than simply use as a reference.
+8. The PR is controversial and hasn't seen activity in the last 6 months.
 
 There are several paths for PRs to be closed:
 
@@ -111,6 +111,8 @@ There are several paths for PRs to be closed:
 4. Anyone may nominate a PR for closure, by bringing it to the attention of the author and / or one of the SMEs / Maintainers. Let them press the button, but this is generally well-received and helpful.
 5. SMEs or Maintainers may, and are encouraged, to unilaterally close PRs that fall into one or more of the remaining categories.
 6. In the case of PRs where some members of the community, other than the author, are in favor, and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
+7. For a PR that has been sitting for a while and became bitrotten, check with the original author if they intend to continue working on it. If not, or without a response, the PR can be labeled with `S-Adopt-Me`, and closed. Tracking adoption progress will happen in a linked issue.
+8. Inactive `X-Controversial` can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be made.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
 
