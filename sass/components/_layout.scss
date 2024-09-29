@@ -8,7 +8,7 @@
     top: 0px;
     width: 100%;
     height: var(--header-height);
-    background-color: $color-grey-900;
+    background-color: var(--color-grey-900);
     border-bottom: 2px solid #2c2c2d;
     z-index: $z-layout-header;
   }
@@ -18,7 +18,7 @@
     padding-top: var(--header-height);
     padding-bottom: 64px;
     flex-grow: 1;
-    background-color: $color-grey-800;
+    background-color: var(--color-grey-800);
   }
 }
 

@@ -39,7 +39,10 @@
 }
 
 .docs-whats-a-bevy {
-  background-color: #00000000 !important;
+  background-color: #00000000;// !important;
+  @media (prefers-color-scheme: light) {
+    filter: invert(100%);
+  }
   height: 2.4rem !important;
   border-radius: unset !important;
 }
