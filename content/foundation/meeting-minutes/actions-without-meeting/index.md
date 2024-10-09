@@ -1,5 +1,9 @@
 +++
 title = "Actions by the Board without a Meeting"
+date = 2024-09-16
+authors = ["Alice I. Cecile"]
+[extra]
+github = "alice-i-cecile"
 +++
 
 <!-- more -->
