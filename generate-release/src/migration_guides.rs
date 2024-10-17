@@ -1,13 +1,34 @@
 use anyhow::Context;
+use serde::Deserialize;
 
 use crate::{
     github_client::{GithubClient, GithubIssuesResponse},
     helpers::{get_merged_prs, get_pr_area},
     markdown::write_markdown_section,
 };
-use std::{collections::BTreeMap, io::Write as IoWrite, path::PathBuf};
+use std::{
+    collections::BTreeMap,
+    fs::{self, OpenOptions},
+    io::Write as IoWrite,
+    path::PathBuf,
+};
 
 type PrsByAreaBTreeMap = BTreeMap<Vec<String>, Vec<(String, GithubIssuesResponse)>>;
+
+#[derive(Deserialize, Clone)]
+struct MigrationGuides {
+    guides: Vec<MigrationGuide>,
+}
+
+#[allow(dead_code)]
+#[derive(Deserialize, Clone)]
+struct MigrationGuide {
+    title: String,
+    prs: Vec<u64>,
+    urls: Vec<String>,
+    areas: Vec<String>,
+    file_name: String,
+}
 
 pub fn generate_migration_guides(
     from: &str,
@@ -25,6 +46,19 @@ pub fn generate_migration_guides(
     // We'll write the file once at the end when all the metdaata is generated
     let mut guides_metadata = Vec::new();
 
+    // If there is metadata that already exists,
+    // and would contain info such as which PR already
+    // has an entry, then get it and use it for that.
+    let preexisting_metadata_file = fs::read_to_string(path.join("_guides.toml")).ok();
+    let preexisting_metadata: Option<MigrationGuides> = match preexisting_metadata_file {
+        Some(file_data) => Some(toml::from_str(file_data.as_str())?),
+        None => None,
+    };
+
+    eprintln!("metadata exists? {}", preexisting_metadata.is_some());
+
+    let mut new_prs = false;
+
     // Write all the separate migration guide files
     for (area, prs) in areas {
         let mut prs = prs;
@@ -34,6 +68,33 @@ pub fn generate_migration_guides(
         prs.sort_by_key(|k| k.1.closed_at);
 
         for (title, pr) in prs {
+            // If a PR is already included in the migration guides,
+            // then do not generate anything for this PR.
+            //
+            // If overwrite_existing is true, then ignore
+            // if the PRs may have already been generated.
+            if preexisting_metadata.is_some() && !overwrite_existing {
+                let preexisting_metadata = preexisting_metadata
+                    .clone()
+                    .expect("that preexisting metadata existed");
+                let mut pr_already_generated = false;
+
+                for migration_guide in preexisting_metadata.guides {
+                    if migration_guide.prs.contains(&pr.number) {
+                        pr_already_generated = true;
+                    }
+                }
+
+                if pr_already_generated {
+                    eprintln!("PR #{} already exists", pr.number);
+                    continue;
+                }
+            }
+
+            // If the code has reached this point then that means
+            // there is new PRs to be recorded.
+            new_prs = true;
+
             // Slugify the title
             let title_slug = title
                 .replace(' ', "_")
@@ -53,10 +114,7 @@ pub fn generate_migration_guides(
             let metadata_block = generate_metadata_block(&title, &file_name, &area, pr.number);
 
             let file_path = path.join(format!("{file_name}.md"));
-            if file_path.exists() && !overwrite_existing {
-                // Skip existing files because we don't want to overwrite changes when regenerating
-                continue;
-            }
+
             if write_migration_file(
                 &file_path,
                 pr.body.as_ref().context("PR has no body")?,
@@ -67,8 +125,15 @@ pub fn generate_migration_guides(
         }
     }
 
+    if !new_prs {
+        return Ok(());
+    }
+
     // Write the metadata file
-    let mut guides_toml = std::fs::File::create(path.join("_guides.toml"))
+    let mut guides_toml = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open(path.join("_guides.toml"))
         .context("Failed to create _guides.toml")?;
     for metadata in guides_metadata {
         writeln!(&mut guides_toml, "{metadata}")?;
@@ -98,7 +163,7 @@ fn get_prs_by_areas(
         let has_breaking_label = pr
             .labels
             .iter()
-            .any(|l| l.name.contains("C-Breaking-Change"));
+            .any(|l| l.name.contains("M-Breaking-Change"));
 
         // We want to check for PRs with the breaking label but without the guide section
         // to make it easier to track down missing guides
@@ -127,7 +192,8 @@ fn generate_metadata_block(
     format!(
         r#"[[guides]]
 title = "{title}"
-url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
+prs = [{pr_number},]
+urls = ["https://github.com/bevyengine/bevy/pull/{pr_number}",]
 areas = [{areas}]
 file_name = "{file_name}.md"
 "#,
