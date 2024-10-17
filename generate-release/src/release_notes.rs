@@ -24,7 +24,6 @@ struct ReleaseNote {
     authors: Vec<String>,
     contributors: Vec<String>,
     prs: Vec<u64>,
-    urls: Vec<String>,
     file_name: String,
 }
 
@@ -202,7 +201,6 @@ title = "{title}"
 authors = ["{author}",]
 contributors = [{contributors}]
 prs = [{pr_number},]
-urls = ["https://github.com/bevyengine/bevy/pull/{pr_number}",]
 file_name = "{file_name}.md"
 "#,
         contributors = contributors

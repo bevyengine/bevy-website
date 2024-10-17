@@ -25,7 +25,6 @@ struct MigrationGuides {
 struct MigrationGuide {
     title: String,
     prs: Vec<u64>,
-    urls: Vec<String>,
     areas: Vec<String>,
     file_name: String,
 }
@@ -193,7 +192,6 @@ fn generate_metadata_block(
         r#"[[guides]]
 title = "{title}"
 prs = [{pr_number},]
-urls = ["https://github.com/bevyengine/bevy/pull/{pr_number}",]
 areas = [{areas}]
 file_name = "{file_name}.md"
 "#,
