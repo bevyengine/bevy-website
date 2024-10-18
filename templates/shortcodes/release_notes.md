@@ -9,7 +9,9 @@
 
 <ul class="release-feature-meta">
   <li>Authors: {{ release_note.authors | join(sep=", ")}}</li>
-  <li><a href="{{ release_note.url }}">Pull Request</a></li>
+  {% for pr in release_note.prs %}
+  <li><a href="https://github.com/bevyengine/bevy/pull/{{ pr }}">PR #{{ pr }}</a></li>
+  {% endfor %}
 </ul>
 
 {{ release_note_body | replace(from='POST_PATH', to=page.colocated_path) | markdown }}

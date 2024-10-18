@@ -11,7 +11,12 @@
 {% for guide in guides_data.guides %}
 {% set guide_body = load_data(path=macros::path_join(path_a=base_path, path_b=guide.file_name)) %}
 
-### [{{ guide.title }}]({{ guide.url }})
+### {{ guide.title }}
+<ul class="migration-guide-pr-list">
+{% for pr in guide.prs %}
+<li><a href="https://github.com/bevyengine/bevy/pull/{{ pr }}">PR #{{ pr }}</a></li>
+{% endfor %}
+</ul>
 
 <div class="migration-guide-area-tags">
 {% for area in guide.areas %}
