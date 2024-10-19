@@ -44,8 +44,9 @@ When making a release, the Maintainers follow these checklists:
 2. Check appropriate milestone and close it.
 3. Check GitHub Projects page for staleness.
 4. Update change log.
-5. Create migration guide.
-6. Write blog post.
+5. Run the [`generate-release`](https://github.com/bevyengine/bevy-website/tree/main/generate-release) tool.
+    1. Create migration guide.
+    2. Write blog post.
 7. Update book.
 8. Bump version number for all crates, using the "Release" workflow.
    1. Change the commit message to be nicer.
