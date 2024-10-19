@@ -47,14 +47,14 @@ When making a release, the Maintainers follow these checklists:
 5. Run the [`generate-release`](https://github.com/bevyengine/bevy-website/tree/main/generate-release) tool.
     1. Create migration guide.
     2. Write blog post.
-7. Update book.
-8. Bump version number for all crates, using the "Release" workflow.
+6. Update book.
+7. Bump version number for all crates, using the "Release" workflow.
    1. Change the commit message to be nicer.
-9. Create tag on GitHub.
-10. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
-11. Bump `latest` tag to most recent release.
-12. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
-13. Run the [`build-wasm-examples` workflow] to update Wasm examples.
+8. Create tag on GitHub.
+9. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
+10. Bump `latest` tag to most recent release.
+11. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
+12. Run the [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Minor Release
 
