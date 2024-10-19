@@ -34,7 +34,7 @@ cargo run -p generate-release -- --from v0.13.0 --to main --release-version 0.14
 
 To generate a release from scratch, run all these commands then add the new migration guide and blog post to their respective `/content` folder. When doing so, it's important to use the `public_draft` feature to hide those pages until the day of the release. For the `public_draft` feature, you'll need to provide it a GitHub issue number, it's recommended to point it to an issue tracker for the current release being worked on. The issue needs to be on the `bevy-website` repo.
 
-When you're merging, or editing, notes and guides, keep in mind that this tool will not regenerate notes or guides that still have a PR number in any note or guide's metadata, contained in the `_<release_notes|migration_guides>.toml`. This means to merge multiple PRs into one note or guide you simply remove one `[[release_notes]]` or `[[guides]]` entry, and move it's PR number to the merged entry that is the sum of all the merged PRs. For editing, this means the other metadata will also not be regenerated if the PR number still exists in the metadata.
+When you're merging, or editing, notes and guides, keep in mind that this tool will not regenerate notes or guides that still have a PR number in any note or guide's metadata, contained in the `_<release_notes|guides>.toml`. This means to merge multiple PRs into one note or guide you simply remove one `[[release_notes]]` or `[[guides]]` entry, and move it's PR number to the merged entry that is the sum of all the merged PRs. For editing, this means the other metadata will also not be regenerated if the PR number still exists in the metadata.
 
 The following sections go in more details on each parts of the process.
 
