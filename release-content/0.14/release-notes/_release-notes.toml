@@ -1,103 +1,103 @@
 [[release_notes]]
 title = "Virtual Geometry (Experimental)"
 authors = ["@JMS55", "@atlv24", "@zeux", "@ricky26"]
-prs = ["10164",]
+prs = ["10164"]
 file_name = "10164_Meshlet_rendering_initial_feature.md"
 
 [[release_notes]]
 title = "Sharp Screen-Space Reflections"
 authors = ["@pcwalton"]
-prs = ["13418",]
+prs = ["13418"]
 file_name = "13418_Implement_optin_sharp_screenspace_reflections_for_the_defe.md"
 
 [[release_notes]]
 title = "Volumetric Fog and Volumetric Lighting (light shafts / god rays)"
 authors = ["@pcwalton"]
-prs = ["13057",]
+prs = ["13057"]
 file_name = "13057_Implement_volumetric_fog_and_volumetric_lighting_also_know.md"
 
 [[release_notes]]
 title = "Per-Object Motion Blur"
 authors = ["@aevyrie", "@torsteingrindvik"]
-prs = ["9924",]
+prs = ["9924"]
 file_name = "9924_PerObject_Motion_Blur.md"
 
 [[release_notes]]
 title = "Filmic Color Grading"
 authors = ["@pcwalton"]
-prs = ["13121",]
+prs = ["13121"]
 file_name = "13121_Implement_filmic_color_grading.md"
 
 [[release_notes]]
 title = "Auto Exposure"
 authors = ["@Kurble", "@alice-i-cecile"]
-prs = ["12792",]
+prs = ["12792"]
 file_name = "12792_Implement_Auto_Exposure_plugin.md"
 
 [[release_notes]]
 title = "Fast Depth of Field"
 authors = ["@pcwalton", "@alice-i-cecile", "@Kurble"]
-prs = ["13009",]
+prs = ["13009"]
 file_name = "13009_Implement_fast_depth_of_field_as_a_postprocessing_effect.md"
 
 [[release_notes]]
 title = "PBR Anisotropy"
 authors = ["@pcwalton"]
-prs = ["13450",]
+prs = ["13450"]
 file_name = "13450_Implement_PBR_anisotropy_per_KHR_materials_anisotropy.md"
 
 [[release_notes]]
 title = "Percentage-Closer Filtering (PCF) for Point Lights"
 authors = ["@pcwalton"]
-prs = ["12910",]
+prs = ["12910"]
 file_name = "12910_Implement_percentagecloser_filtering_PCF_for_point_lights.md"
 
 [[release_notes]]
 title = "Subpixel Morphological Antialiasing (SMAA)"
 authors = ["@pcwalton", "@alice-i-cecile"]
-prs = ["13423",]
+prs = ["13423"]
 file_name = "13423_Implement_subpixel_morphological_antialiasing_or_SMAA.md"
 
 [[release_notes]]
 title = "Visibility Ranges (hierarchical levels of detail / HLODs)"
 authors = ["@pcwalton", "@cart"]
-prs = ["12916",]
+prs = ["12916"]
 file_name = "12916_Implement_visibility_ranges_also_known_as_hierarchical_lev.md"
 
 [[release_notes]]
 title = "ECS Hooks and Observers"
 authors = ["@james-j-obrien", "@cart"]
-prs = ["10839",]
+prs = ["10839"]
 file_name = "10756_hooks_and_observers.md"
 
 [[release_notes]]
 title = "glTF KHR_texture_transform Support"
 authors = ["@janhohenheim", "@yrns", "@Kanabenki"]
-prs = ["11904",]
+prs = ["11904"]
 file_name = "11904_Add_support_for_KHR_texture_transform.md"
 
 [[release_notes]]
 title = "UI Node Border Radius"
 authors = ["@chompaa", "@pablo-lua", "@alice-i-cecile", "@bushrat011899"]
-prs = ["12500",]
+prs = ["12500"]
 file_name = "12500_Add_border_radius_to_UI_nodes_adopted.md"
 
 [[release_notes]]
 title = "Animation Blending with the `AnimationGraph`"
 authors = ["@pcwalton", "@rparrett", "@james7132"]
-prs = ["11989",]
+prs = ["11989"]
 file_name = "11989_Implement_the_AnimationGraph_allowing_for_multiple_animati.md"
 
 [[release_notes]]
 title = "Improved Color API"
 authors = ["@viridia", "@mockersf"]
-prs = ["12013",]
+prs = ["12013"]
 file_name = "12013_Upstreaming_bevy_color.md"
 
 [[release_notes]]
 title = "Extruded Shapes"
 authors = ["@lynn-lumen"]
-prs = ["13270",]
+prs = ["13270"]
 file_name = "13270_Extrusion.md"
 
 [[release_notes]]
@@ -109,109 +109,109 @@ authors = [
 	"@solis-lumine-vorago",
 	"@alice-i-cecile",
 ]
-prs = ["12211",]
+prs = ["12211"]
 file_name = "New_gizmos_types.md"
 
 [[release_notes]]
 title = "Gizmo Line Styles and Joints"
 authors = ["@lynn-lumen"]
-prs = ["12394",]
+prs = ["12394"]
 file_name = "12394_Gizmo_line_styles.md"
 
 [[release_notes]]
 title = "UI Node Outline Gizmos"
 authors = ["@pablo-lua", "@nicopap", "@alice-i-cecile"]
-prs = ["11237",]
+prs = ["11237"]
 file_name = "11237_Add_a_gizmobased_overlay_to_show_UI_node_outlines_Adopted.md"
 
 [[release_notes]]
 title = "Contextually Clearing Gizmos"
 authors = ["@Aceeri"]
-prs = ["10973",]
+prs = ["10973"]
 file_name = "10973_Contextually_clearing_gizmos.md"
 
 [[release_notes]]
 title = "Query Joins"
 authors = ["@hymm"]
-prs = ["11535",]
+prs = ["11535"]
 file_name = "11535_Query_Joins.md"
 
 [[release_notes]]
 title = "Computed States & Sub-States"
 authors = ["@lee-orr", "@marcelchampagne", "@MiniaczQ", "@alice-i-cecile"]
-prs = ["11426",]
+prs = ["11426"]
 file_name = "11426_Computed_States__Sub_States.md"
 
 [[release_notes]]
 title = "State Scoped Entities"
 authors = ["@MiniaczQ", "@alice-i-cecile", "@mockersf"]
-prs = ["13649",]
+prs = ["13649"]
 file_name = "13649_State_Scoped_Entities.md"
 
 [[release_notes]]
 title = "State Identity Transitions"
 authors = ["@MiniaczQ", "@alice-i-cecile"]
-prs = ["13579",]
+prs = ["13579"]
 file_name = "13579_State_Identity_Transitions.md"
 
 [[release_notes]]
 title = "GPU Frustum Culling"
 authors = ["@pcwalton"]
-prs = ["12889",]
+prs = ["12889"]
 file_name = "12889_Implement_GPU_frustum_culling.md"
 
 [[release_notes]]
 title = "World Command Queue"
 authors = ["@james7132", "@james-j-obrien"]
-prs = ["11823",]
+prs = ["11823"]
 file_name = "11823_Immediately_apply_deferred_system_params_in_Systemrun.md"
 
 [[release_notes]]
 title = "Reduced Multi-Threaded Execution Overhead"
 authors = ["@chescock", "@james7132"]
-prs = ["11906",]
+prs = ["11906"]
 file_name = "11906_Run_the_multithreaded_executor_at_the_end_of_each_system_t.md"
 
 [[release_notes]]
 title = "Decouple `BackgroundColor` from `UiImage`"
 authors = ["@benfrankel"]
-prs = ["11165",]
+prs = ["11165"]
 file_name = "11165_Decouple_BackgroundColor_from_UiImage.md"
 
 [[release_notes]]
 title = "Combined WinitEvent"
 authors = ["@UkoeHB"]
-prs = ["12100",]
+prs = ["12100"]
 file_name = "12100_Add_WinitEvent_aggregate_event_for_synchronized_window_eve.md"
 
 [[release_notes]]
 title = "Recursive Reflect Registration"
 authors = ["@MrGVSV", "@soqb", "@cart", "@james7132"]
-prs = ["5781",]
+prs = ["5781"]
 file_name = "5781_bevy_reflect_Recursive_registration.md"
 
 [[release_notes]]
 title = "`Rot2` Type for 2D Rotations"
 authors = ["@Jondolf", "@IQuick143", "@tguichaoua"]
-prs = ["11658",]
+prs = ["11658"]
 file_name = "11658_Add_Rotation2d.md"
 
 [[release_notes]]
 title = "Alignment API for Transforms"
 authors = ["@mweatherley"]
-prs = ["12187",]
+prs = ["12187"]
 file_name = "12187_Alignment_API_for_Transforms.md"
 
 [[release_notes]]
 title = "Random Sampling of Shapes and Directions"
 authors = ["@13ros27", "@mweatherley", "@lynn-lumen"]
-prs = ["12484",]
+prs = ["12484"]
 file_name = "12484_Uniform_point_sampling_methods_for_some_primitive_shapes.md"
 
 [[release_notes]]
 title = "Tools for Profiling GPU Performance"
 authors = ["@LeshaInc"]
-prs = ["9135",]
+prs = ["9135"]
 file_name = "9135_Add_pipeline_statistics.md"
 
 [[release_notes]]
@@ -225,7 +225,7 @@ authors = [
 	"@aristaeus",
 	"@mweatherley",
 ]
-prs = ["12508",]
+prs = ["12508"]
 file_name = "new_math_primitives.md"
 
 [[release_notes]]
@@ -238,131 +238,131 @@ authors = [
 	"@IQuick143",
 	"@alice-i-cecile",
 ]
-prs = ["12747",]
+prs = ["12747"]
 file_name = "12747_Move_Point_out_of_cubic_splines_module_and_expand_it.md"
 
 [[release_notes]]
 title = "2D Mesh Wireframes"
 authors = ["@msvbg", "@IceSentry"]
-prs = ["12135",]
+prs = ["12135"]
 file_name = "12135_Support_wireframes_for_2D_meshes.md"
 
 [[release_notes]]
 title = "Custom Reflect Field Attributes"
 authors = ["@MrGVSV"]
-prs = ["11659",]
+prs = ["11659"]
 file_name = "11659_bevy_reflect_Custom_attributes.md"
 
 [[release_notes]]
 title = "Query Iteration Sorting"
 authors = ["@Victoronz"]
-prs = ["13417",]
+prs = ["13417"]
 file_name = "13417_implement_the_full_set_of_sort_methods_on_QueryIter.md"
 
 [[release_notes]]
 title = "SystemBuilder"
 authors = ["@james-j-obrien"]
-prs = ["13123",]
+prs = ["13123"]
 file_name = "13123_Implement_a_SystemBuilder_for_building_SystemParams.md"
 
 [[release_notes]]
 title = "Throttle Render Assets"
 authors = ["@robtfm", "@IceSentry", "@mockersf"]
-prs = ["12622",]
+prs = ["12622"]
 file_name = "12622_Throttle_render_assets.md"
 
 [[release_notes]]
 title = "StandardMaterial UV Channel Selection"
 authors = ["@geckoxx"]
-prs = ["13200",]
+prs = ["13200"]
 file_name = "13200_Add_UV_channel_selection_to_StandardMaterial.md"
 
 [[release_notes]]
 title = "Remove limit on RenderLayers"
 authors = ["@tychedelia", "@robtfm", "@UkoeHB"]
-prs = ["13317",]
+prs = ["13317"]
 file_name = "13317_12502_Remove_limit_on_RenderLayers.md"
 
 [[release_notes]]
 title = "`on_unimplemented` Diagnostics"
 authors = ["@bushrat011899", "@alice-i-cecile", "@Themayu"]
-prs = ["13347",]
+prs = ["13347"]
 file_name = "13347_Add_on_unimplemented_Diagnostics_to_Most_Public_Traits.md"
 
 [[release_notes]]
 title = "Motion Vectors and TAA for Animated Meshes"
 authors = ["@pcwalton"]
-prs = ["13572",]
+prs = ["13572"]
 file_name = "13572_Implement_motion_vectors_and_TAA_for_skinned_meshes_and_me.md"
 
 [[release_notes]]
 title = "Improved Matrix Naming"
 authors = ["@ricky26"]
-prs = ["13489",]
+prs = ["13489"]
 file_name = "13489_Normalise_matrix_naming.md"
 
 [[release_notes]]
 title = "Typed glTF Labels"
 authors = ["@mockersf", "@rparrett", "@alice-i-cecile"]
-prs = ["13586",]
+prs = ["13586"]
 file_name = "13586_glTF_labels_add_enum_to_avoid_misspelling_and_keep_uptodat.md"
 
 [[release_notes]]
 title = "winit v0.30"
 authors = ["@pietrosophya", "@mockersf"]
-prs = ["13366",]
+prs = ["13366"]
 file_name = "13366_fix_upgrade_to_winit_v030.md"
 
 [[release_notes]]
 title = "Scene, Mesh, and Material glTF Extras"
 authors = ["@kaosat-dev"]
-prs = ["13453",]
+prs = ["13453"]
 file_name = "13453_add_handling_of_all_missing_gltf_extras_scene_mesh__materi.md"
 
 [[release_notes]]
 title = "Resource Entity Mapping in Scenes"
 authors = ["@brandon-reinhart"]
-prs = ["13650",]
+prs = ["13650"]
 file_name = "13650_Map_entities_from_a_resource_when_written_to_the_world.md"
 
 [[release_notes]]
 title = "CompassQuadrant and CompassOctant"
 authors = ["@BobG1983", "@alice-i-cecile"]
-prs = ["13653",]
+prs = ["13653"]
 file_name = "13653_Added_CompassQuadrant_and_CompassOctant_as_per_13647.md"
 
 [[release_notes]]
 title = "Support `AsyncSeek` When Loading Assets"
 authors = ["@BeastLe9enD"]
-prs = ["12547",]
+prs = ["12547"]
 file_name = "12547_Add_AsyncSeek_trait_to_Reader_to_be_able_to_seek_inside_as.md"
 
 [[release_notes]]
 title = "LoadState::Failed Now Has Error Info"
 authors = ["@bugsweeper"]
-prs = ["12709",]
+prs = ["12709"]
 file_name = "12709_Error_info_has_been_added_to_LoadStateFailed.md"
 
 [[release_notes]]
 title = "`AppExit` Errors"
 authors = ["@Brezak", "@alice-i-cecile"]
-prs = ["13022",]
+prs = ["13022"]
 file_name = "13022_Make_AppExit_more_specific_about_exit_reason.md"
 
 [[release_notes]]
 title = "Make dynamic_linking a no-op on WASM targets"
 authors = ["@james7132"]
-prs = ["12672",]
+prs = ["12672"]
 file_name = "12672_Make_dynamic_linking_a_noop_on_wasm_targets.md"
 
 [[release_notes]]
 title = "Deprecate Dynamic Plugins"
 authors = ["@BD103"]
-prs = ["13080",]
+prs = ["13080"]
 file_name = "13080_Deprecate_dynamic_plugins.md"
 
 [[release_notes]]
 title = "Bevy Working Groups"
 authors = ["@alice-i-cecile"]
-prs = ["13162",]
+prs = ["13162"]
 file_name = "13162_Add_a_process_for_working_groups.md"
