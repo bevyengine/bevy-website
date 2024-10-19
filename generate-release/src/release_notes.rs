@@ -210,7 +210,7 @@ fn generate_metadata_block(
 title = "{title}"
 authors = ["{author}",]
 contributors = [{contributors}]
-prs = [{pr_number},]
+prs = [{pr_number}]
 file_name = "{file_name}.md"
 "#,
         contributors = contributors

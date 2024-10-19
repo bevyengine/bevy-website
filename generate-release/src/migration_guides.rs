@@ -202,7 +202,7 @@ fn generate_metadata_block(
     format!(
         r#"[[guides]]
 title = "{title}"
-prs = [{pr_number},]
+prs = [{pr_number}]
 areas = [{areas}]
 file_name = "{file_name}.md"
 "#,
