@@ -1,4 +1,5 @@
 use anyhow::Context;
+use serde::Deserialize;
 
 use crate::{
     github_client::{BevyRepo, GithubClient, GithubIssuesResponse, IssueState},
@@ -6,9 +7,25 @@ use crate::{
 };
 use std::{
     collections::HashSet,
+    fs::{self, OpenOptions},
     io::Write,
     path::{Path, PathBuf},
 };
+
+#[derive(Deserialize, Clone)]
+struct ReleaseNotes {
+    release_notes: Vec<ReleaseNote>,
+}
+
+#[expect(dead_code)]
+#[derive(Deserialize, Clone)]
+struct ReleaseNote {
+    title: String,
+    authors: Vec<String>,
+    contributors: Vec<String>,
+    prs: Vec<u64>,
+    file_name: String,
+}
 
 pub fn generate_release_notes(
     from: &str,
@@ -20,12 +37,12 @@ pub fn generate_release_notes(
     create_issues: bool,
 ) -> anyhow::Result<()> {
     // Get all PRs that need release notes
-    let prs = get_merged_prs(client, from, to, Some("C-Needs-Release-Note"))?;
+    let prs = get_merged_prs(client, from, to, Some("M-Needs-Release-Note"))?;
 
     // Create the directory that will contain all the release notes
     std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
-    // We'll write the file once at the end when all the metdaata is generated
+    // We'll write the file once at the end when all the metadata is generated
     let mut notes_metadata = Vec::new();
 
     // Generate the list of all issues so we don't spam the repo with duplicates
@@ -38,7 +55,51 @@ pub fn generate_release_notes(
         .collect::<HashSet<_>>();
     println!("Found {} issues", issue_titles.len());
 
+    // If there is metadata that already exists,
+    // and would contain info such as which PR already
+    // has an entry, then get it and use it for that.
+    let preexisting_metadata_file = fs::read_to_string(path.join("_release-notes.toml")).ok();
+    // Deserializes the file inside the option into the `ReleaseNotes` struct,
+    // and then transposes / swaps the internal result of that operation to external,
+    // and returns the error of that result if there is one,
+    // else we have our preexisting metadata, ready to use.
+    let preexisting_metadata: Option<ReleaseNotes> = preexisting_metadata_file
+        .as_deref()
+        .map(toml::from_str)
+        .transpose()?;
+
+    eprintln!("metadata exists? {}", preexisting_metadata.is_some());
+
+    let mut new_prs = false;
+
     for (pr, commit, title) in prs {
+        // If a PR is already included in the release notes,
+        // then do not generate anything for this PR.
+        //
+        // If overwrite_existing is true, then ignore
+        // if the PRs may have already been generated.
+        if preexisting_metadata.is_some() && !overwrite_existing {
+            let preexisting_metadata = preexisting_metadata
+                .clone()
+                .expect("that preexisting metadata existed at the _release_notes.toml for this release version");
+            let mut pr_already_generated = false;
+
+            for release_note in preexisting_metadata.release_notes {
+                if release_note.prs.contains(&pr.number) {
+                    pr_already_generated = true;
+                }
+            }
+
+            if pr_already_generated {
+                eprintln!("PR #{} already exists", pr.number);
+                continue;
+            }
+        }
+
+        // If the code has reached this point then that means
+        // there is new PRs to be recorded.
+        new_prs = true;
+
         // Slugify the title
         let title_slug = title
             .replace(' ', "_")
@@ -79,10 +140,6 @@ pub fn generate_release_notes(
         ));
 
         let file_path = path.join(format!("{file_name}.md"));
-        if file_path.exists() && !overwrite_existing {
-            // Skip existing files because we don't want to overwrite changes when regenerating
-            continue;
-        }
 
         let file =
             std::fs::File::create(&file_path).context(format!("Failed to create {file_path:?}"))?;
@@ -106,17 +163,39 @@ pub fn generate_release_notes(
         );
     }
 
-    // Write the metadata file
-    let mut notes_toml = std::fs::File::create(path.join("_release-notes.toml"))
-        .context("Failed to create _guides.toml")?;
-    for metadata in notes_metadata {
-        writeln!(&mut notes_toml, "{metadata}")?;
-    }
-
     if !create_issues {
         println!(
             "No issues were created. If you would like to do so, add the `--create-issues` flag."
         );
+    }
+
+    eprintln!("new prs? {new_prs}");
+
+    // Early return if there is no new PRs
+    // to append to the metadata file.
+    if !new_prs {
+        return Ok(());
+    }
+
+    let mut notes_toml = if overwrite_existing {
+        // Replace and overwrite file.
+        OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(path.join("_release-notes.toml"))
+            .context("Failed to create _release-notes.toml")?
+    } else {
+        // Append to the metadata file,
+        // creating it if necessary.
+        OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open(path.join("_release-notes.toml"))
+            .context("Failed to create _release-notes.toml")?
+    };
+    for metadata in notes_metadata {
+        writeln!(&mut notes_toml, "{metadata}")?;
     }
 
     Ok(())
@@ -135,7 +214,7 @@ fn generate_metadata_block(
 title = "{title}"
 authors = ["{author}",]
 contributors = [{contributors}]
-url = "https://github.com/bevyengine/bevy/pull/{pr_number}"
+prs = [{pr_number}]
 file_name = "{file_name}.md"
 "#,
         contributors = contributors
@@ -204,7 +283,7 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
         println!("Would open issue on GitHub:");
         println!("Title: {}", issue_title);
         println!("Body: {}", issue_body);
-        println!("Labels: {:?}", labels);
+        println!("Labels: {:?}\n\n", labels);
     } else {
         // Open an issue on the `bevy-website` repo
         let response = client
