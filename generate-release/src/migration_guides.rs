@@ -162,7 +162,7 @@ fn get_prs_by_areas(
         let has_breaking_label = pr
             .labels
             .iter()
-            .any(|l| l.name.contains("M-Breaking-Change"));
+            .any(|l| l.name.contains("M-Needs-Migration-Guide"));
 
         // We want to check for PRs with the breaking label but without the guide section
         // to make it easier to track down missing guides
