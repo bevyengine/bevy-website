@@ -73,9 +73,9 @@ pub fn generate_migration_guides(
             // If overwrite_existing is true, then ignore
             // if the PRs may have already been generated.
             if preexisting_metadata.is_some() && !overwrite_existing {
-                let preexisting_metadata = preexisting_metadata
-                    .clone()
-                    .expect("that preexisting metadata existed");
+                let preexisting_metadata = preexisting_metadata.clone().expect(
+                    "that preexisting metadata exists at the _guides.toml for this release version",
+                );
                 let mut pr_already_generated = false;
 
                 for migration_guide in preexisting_metadata.guides {

@@ -77,7 +77,7 @@ pub fn generate_release_notes(
         if preexisting_metadata.is_some() && !overwrite_existing {
             let preexisting_metadata = preexisting_metadata
                 .clone()
-                .expect("that preexisting metadata existed");
+                .expect("that preexisting metadata existed at the _release_notes.toml for this release version");
             let mut pr_already_generated = false;
 
             for release_note in preexisting_metadata.release_notes {
