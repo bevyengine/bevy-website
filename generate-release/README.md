@@ -4,7 +4,7 @@ This CLI tool is used to generate all the skeleton files required to create a ne
 
 For a bit more background see this issue: <https://github.com/bevyengine/bevy-website/issues/1163>
 
-The commands can be run from anywhere inside the workspace folder.
+The commands can be run from anywhere inside the workspace folder. If you have a `.env` file, this will only work if it is located at the root of the workspace.
 
 Each command will generate files in the `/release-content/{release-version}` folder. The `release-version` is an argument to all commands.
 
