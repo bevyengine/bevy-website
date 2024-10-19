@@ -49,10 +49,14 @@ pub fn generate_migration_guides(
     // and would contain info such as which PR already
     // has an entry, then get it and use it for that.
     let preexisting_metadata_file = fs::read_to_string(path.join("_guides.toml")).ok();
-    let preexisting_metadata: Option<MigrationGuides> = match preexisting_metadata_file {
-        Some(file_data) => Some(toml::from_str(file_data.as_str())?),
-        None => None,
-    };
+    // Deserializes the file inside the option into the `MigrationGuides` struct,
+    // and then transposes / swaps the internal result of that operation to external,
+    // and returns the error of that result if there is one,
+    // else we have our preexisting metadata, ready to use.
+    let preexisting_metadata: Option<MigrationGuides> = preexisting_metadata_file
+        .as_deref()
+        .map(toml::from_str)
+        .transpose()?;
 
     eprintln!("metadata exists? {}", preexisting_metadata.is_some());
 
