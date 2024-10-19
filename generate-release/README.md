@@ -81,7 +81,7 @@ Once all those files are generated you'll need to create a new blog post in `/co
 # Let X be the major version, and y the minor version.
 # Change the Bevy release versions below to match this one!
 title = "Bevy X.y"
-# Insert a year in the year, month, day format.
+# Insert a date in the year, month, day format.
 date = YYYY-MM-DD
 [extra]
 # GitHub issue number for tracking this release's
