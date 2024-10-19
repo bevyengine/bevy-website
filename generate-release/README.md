@@ -25,8 +25,8 @@ Here's an example for the commands used to generate the `0.14` release:
 
 ```shell
 cargo run -p generate-release -- --from v0.13.0 --to main --release-version 0.14 migration-guides
-cargo run -p genereate-release -- --from v0.13.0 --to main --release-version 0.14 release-notes
-cargo run -p genereate-release -- --from v0.13.0 --to main --release-version 0.14 changelog
+cargo run -p generate-release -- --from v0.13.0 --to main --release-version 0.14 release-notes
+cargo run -p generate-release -- --from v0.13.0 --to main --release-version 0.14 changelog
 cargo run -p generate-release -- --from v0.13.0 --to main --release-version 0.14 contributors
 ```
 
