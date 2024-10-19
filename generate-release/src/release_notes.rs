@@ -173,13 +173,23 @@ pub fn generate_release_notes(
         return Ok(());
     }
 
-    // Append to the metadata file,
-    // creating it if necessary.
-    let mut notes_toml = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(path.join("_release-notes.toml"))
-        .context("Failed to create _guides.toml")?;
+    let mut notes_toml = if overwrite_existing {
+        // Replace and overwrite file.
+        OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(path.join("_release-notes.toml"))
+            .context("Failed to create _release-notes.toml")?
+    } else {
+        // Append to the metadata file,
+        // creating it if necessary.
+        OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open(path.join("_release-notes.toml"))
+            .context("Failed to create _release-notes.toml")?
+    };
     for metadata in notes_metadata {
         writeln!(&mut notes_toml, "{metadata}")?;
     }

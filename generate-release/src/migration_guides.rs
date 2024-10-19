@@ -128,12 +128,23 @@ pub fn generate_migration_guides(
         return Ok(());
     }
 
-    // Write the metadata file
-    let mut guides_toml = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(path.join("_guides.toml"))
-        .context("Failed to create _guides.toml")?;
+    let mut guides_toml = if overwrite_existing {
+        // Replace and overwrite file.
+        OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(path.join("_guides.toml"))
+            .context("Failed to create _guides.toml")?
+    } else {
+        // Append to the metadata file,
+        // creating it if necessary.
+        OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open(path.join("_guides.toml"))
+            .context("Failed to create _guides.toml")?
+    };
     for metadata in guides_metadata {
         writeln!(&mut guides_toml, "{metadata}")?;
     }
