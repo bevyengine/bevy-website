@@ -108,8 +108,9 @@ jobs:
           key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
 
       - name: "Build Bevy Assets"
-        # Only run if in merge queue or if no cache was found
-        if: ${{ github.event_name == 'merge_group' || !steps.restore-cached-assets.outputs.cache-hit }}
+        # Only run if in merge queue or if no cache was found. `cache-hit` is a string, so we
+        # cannot use normal boolean operators on it, as `!'false' == true`.
+        if: ${{ github.event_name == 'merge_group' || steps.restore-cached-assets.outputs.cache-hit != 'true' }}
         working-directory: generate-assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
