@@ -160,13 +160,6 @@ prs = [14646]
 file_name = "14646_feat_add_insert_if_new_14397.md"
 
 [[release_notes]]
-title = "Expose bevy math ops"
-authors = ["@Lubba-64"]
-contributors = []
-prs = [14863]
-file_name = "14863_Expose_bevy_math_ops.md"
-
-[[release_notes]]
 title = "Allow fog density texture to be scrolled over time with an offset"
 authors = ["@jirisvd"]
 contributors = []
