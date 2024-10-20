@@ -410,13 +410,6 @@ prs = [12095]
 file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md"
 
 [[release_notes]]
-title = "Add UI `GhostNode`"
-authors = ["@villor"]
-contributors = ["@alice-i-cecile", "@UkoeHB"]
-prs = [15341]
-file_name = "15341_Add_UI_GhostNode.md"
-
-[[release_notes]]
 title = "bevy_reflect: Add `DeserializeWithRegistry` and `SerializeWithRegistry`"
 authors = ["@MrGVSV"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
