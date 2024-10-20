@@ -83,13 +83,6 @@ prs = [14106]
 file_name = "14106_Cyclic_splines.md"
 
 [[release_notes]]
-title = "Fast renormalize"
-authors = ["@IQuick143"]
-contributors = ["@Jondolf", "@BD103", "@janhohenheim"]
-prs = [14316]
-file_name = "14316_Fast_renormalize.md"
-
-[[release_notes]]
 title = "Dedicated `Reflect` implementation for `Set`-like things"
 authors = ["@RobWalt"]
 contributors = []
