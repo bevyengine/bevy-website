@@ -227,10 +227,10 @@ areas = ["ECS"]
 file_name = "14459_Require_mut_self_for_Worldincrement_change_tick.md"
 
 [[guides]]
-title = "Add `FilteredAccess::empty` and simplify the implementatin of `update_component_access` for `AnyOf`/`Or`"
+title = "Add `FilteredAccess::empty` and simplify the implementation of `update_component_access` for `AnyOf`/`Or`"
 prs = [14352]
 areas = ["ECS"]
-file_name = "14352_Add_FilteredAccessempty_and_simplify_the_implementatin_of_.md"
+file_name = "14352_Add_FilteredAccessempty_and_simplify_the_implementation_of_.md"
 
 [[guides]]
 title = "Track source location in change detection"
@@ -287,10 +287,10 @@ areas = ["ECS"]
 file_name = "15151_Removed_Type_Parameters_from_Observer.md"
 
 [[guides]]
-title = "Remove redundent information and optimize dynamic allocations in `Table`"
+title = "Remove redundant information and optimize dynamic allocations in `Table`"
 prs = [12929]
 areas = ["ECS"]
-file_name = "12929_Remove_redundent_information_and_optimize_dynamic_allocati.md"
+file_name = "12929_Remove_redundant_information_and_optimize_dynamic_allocati.md"
 
 [[guides]]
 title = "Rename push children to add children"
@@ -488,7 +488,7 @@ file_name = "14720_Consistency_between_Wireframe2d_and_Wireframe.md"
 title = "Fix Gizmos warnings and doc errors when a subset of features are selected"
 prs = [14887]
 areas = ["Gizmos"]
-file_name = "14887_Fix_Gizmos_warnings_and_doc_errors_when_a_subset_of_featur.md"
+file_name = "14887_Fix_Gizmos_warnings_and_doc_errors_when_a_subset_of_features.md"
 
 [[guides]]
 title = "Fix `arc_2d` Gizmos"
@@ -518,7 +518,7 @@ file_name = "14656_Switch_rotation__translation_in_grid_gizmos.md"
 title = "Make TrackedRenderPass::set_vertex_buffer aware of slice size"
 prs = [14916]
 areas = ["Gizmos", "Rendering"]
-file_name = "14916_Make_TrackedRenderPassset_vertex_buffer_aware_of_slice_siz.md"
+file_name = "14916_Make_TrackedRenderPassset_vertex_buffer_aware_of_slice_size.md"
 
 [[guides]]
 title = "Optimize transform propagation"
@@ -680,7 +680,7 @@ file_name = "14267_Add_support_for_skybox_transformation.md"
 title = "Allow volumetric fog to be localized to specific, optionally voxelized, regions."
 prs = [14099]
 areas = ["Rendering"]
-file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionall.md"
+file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
 
 [[guides]]
 title = "Pack multiple vertex and index arrays together into growable buffers."
@@ -908,7 +908,7 @@ file_name = "13859_Change_SceneInstanceReady_to_trigger_an_observer.md"
 title = "explicitly mention `component` in methods on `DynamicSceneBuilder`"
 prs = [15210]
 areas = ["Scenes"]
-file_name = "15210_explicitly_mention_component_in_methods_on_DynamicSceneBui.md"
+file_name = "15210_explicitly_mention_component_in_methods_on_DynamicSceneBuilder.md"
 
 [[guides]]
 title = "Migrate scenes to required components"
