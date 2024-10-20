@@ -506,3 +506,10 @@ authors = ["@Jondolf"]
 contributors = ["@mockersf", "@tbillington", "@aevyrie"]
 prs = [15800]
 file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
+[[release_notes]]
+title = "Required Components"
+authors = ["@cart",]
+contributors = ["@alice-i-cecile", "@killercup", "@BD103"]
+prs = [14791]
+file_name = "14791_Required_Components.md"
+
