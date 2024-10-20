@@ -1,4 +1,4 @@
-The new `Readback` component simplifies the tricky process of getting data back from the GPU to the CPU using an observer based API.
+The new `Readback` component simplifies the tricky process of getting data back from the GPU to the CPU using an observer-based API.
 
 ```rust
 commands.spawn(Readback::buffer(buffer.clone())).observe(
