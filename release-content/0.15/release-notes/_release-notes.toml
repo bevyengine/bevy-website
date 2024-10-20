@@ -139,13 +139,6 @@ prs = [7207]
 file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
 
 [[release_notes]]
-title = "Use `#[doc(fake_variadic)]` to improve docs readability"
-authors = ["@bash"]
-contributors = []
-prs = [14703]
-file_name = "14703_Use_docfake_variadic_to_improve_docs_readability.md"
-
-[[release_notes]]
 title = "bevy_reflect: Reflect remote types"
 authors = ["@MrGVSV"]
 contributors = []
