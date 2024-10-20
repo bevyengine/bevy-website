@@ -1,0 +1,1 @@
+- `IntoSystem::pipe` and `IntoSystem::map` now return `IntoPipeSystem` and `IntoAdapterSystem` instead of `PipeSystem` and `AdapterSystem`. Most notably these types don’t implement `System` but rather only `IntoSystem`.

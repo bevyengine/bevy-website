@@ -1,0 +1,1 @@
+- `Mesh::get_vertex_buffer_data` has been renamed `Mesh::create_packed_vertex_buffer_data` to reflect the fact that it copies data and allocates.

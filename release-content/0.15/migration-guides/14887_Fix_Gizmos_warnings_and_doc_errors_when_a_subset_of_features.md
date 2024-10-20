@@ -1,0 +1,1 @@
+There shouldn’t be any reason to migrate, although if for some reason you use `GizmoMeshConfig` and `bevy_render`  but not `bevy_pbr` or `bevy_sprite` (such that it does nothing), then you will get an error that it no longer exists.

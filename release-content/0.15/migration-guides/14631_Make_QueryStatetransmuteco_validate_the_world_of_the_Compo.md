@@ -1,0 +1,1 @@
+- `QueryState::transmute`, `QueryState::transmute_filtered`, `QueryState::join` and `QueryState::join_filtered` now take a `impl Into<UnsafeWorldCell>` instead of a `&Components`

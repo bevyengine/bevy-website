@@ -1,0 +1,1 @@
+If you were importing `bevy_utils` and setting `default_features` to `false`, but relying on elements which are now gated behind the `std` or `alloc` features, include the relevant feature in your `Cargo.toml`.

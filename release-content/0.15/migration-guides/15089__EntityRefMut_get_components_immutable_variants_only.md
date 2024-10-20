@@ -1,0 +1,1 @@
+- Renamed `FilteredEntityRef::components` to `FilteredEntityRef::accessed_components` and `FilteredEntityMut::components` to `FilteredEntityMut::accessed_components`.

@@ -1,0 +1,7 @@
+- `World::init_component` has been renamed to `register_component`.
+- `World::init_component_with_descriptor` has been renamed to `register_component_with_descriptor`.
+- `World::init_bundle` has been renamed to `register_bundle`.
+- `Components::init_component` has been renamed to `register_component`.
+- `Components::init_component_with_descriptor` has been renamed to `register_component_with_descriptor`.
+- `Components::init_resource` has been renamed to `register_resource`.
+- `Components::init_non_send` had been renamed to `register_non_send`.

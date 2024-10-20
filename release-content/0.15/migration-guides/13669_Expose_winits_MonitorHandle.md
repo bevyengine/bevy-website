@@ -1,0 +1,1 @@
+- `WindowMode` variants now take a `MonitorSelection`, which can be set to `MonitorSelection::Primary` to mirror the old behavior.

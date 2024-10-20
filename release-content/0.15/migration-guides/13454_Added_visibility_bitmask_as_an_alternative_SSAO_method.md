@@ -1,0 +1,1 @@
+SSAO algorithm was changed from GTAO to VBAO (visibility bitmasks). A new field, `constant_object_thickness`, was added to `ScreenSpaceAmbientOcclusion`. `ScreenSpaceAmbientOcclusion` also lost its `Eq` and `Hash` implementations.

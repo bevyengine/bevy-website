@@ -1,0 +1,1 @@
+- `ImageLoader` can no longer be initialized directly through `init_asset_loader`. Now you must use `app.register_asset_loader(ImageLoader::new(supported_compressed_formats))` (check out the implementation of `bevy_render::ImagePlugin`). This only affects you if you are initializing the loader manually and does not affect users of `bevy_render::ImagePlugin`.

@@ -1,0 +1,1 @@
+- Users might have to double check their already existing calls to all the `grid` methods. It should be more intuitive now though.
