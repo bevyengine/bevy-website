@@ -12,4 +12,4 @@ commands
     .observe(save_to_disk(path));
 ```
 
-The observer triggers with a ScreenshotCaptured event containing an Image that can be used for saving to disk, post-processing, or generating thumbnails. This flexible approach makes it easier to capture content from any part of your rendering pipeline, whether it’s a window, an off-screen render target, or a texture in a custom render pass.
+The observer triggers with a `ScreenshotCaptured` event containing an Image that can be used for saving to disk, post-processing, or generating thumbnails. This flexible approach makes it easier to capture content from any part of your rendering pipeline, whether it’s a window, an off-screen render target, or a texture in a custom render pass.
