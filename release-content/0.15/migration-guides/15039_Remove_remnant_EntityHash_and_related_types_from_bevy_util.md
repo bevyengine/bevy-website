@@ -1,0 +1,1 @@
+- Uses of `bevy::utils::{EntityHash, EntityHasher, EntityHashMap, EntityHashSet}` now have to be imported from `bevy::ecs::entity`.

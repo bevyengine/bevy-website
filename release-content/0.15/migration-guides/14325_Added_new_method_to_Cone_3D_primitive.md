@@ -1,0 +1,1 @@
+- Addition of `new` method to the 3D primitive Cone struct.

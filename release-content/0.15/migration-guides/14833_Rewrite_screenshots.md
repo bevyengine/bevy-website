@@ -1,0 +1,1 @@
+`ScreenshotManager` has been removed. To take a screenshot, spawn a `Screenshot` entity with the specified render target and provide an observer targeting the `ScreenshotCaptured` event. See the `window/screenshot` example to see an example.

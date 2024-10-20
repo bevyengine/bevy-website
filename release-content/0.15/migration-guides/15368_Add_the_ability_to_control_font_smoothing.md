@@ -1,0 +1,7 @@
+- `Text` now contains a `font_smoothing: FontSmoothing` property, make sure to include it or add `..default()` when using the struct directly;
+- `FontSizeKey` has been renamed to `FontAtlasKey`, and now also contains the `FontSmoothing` setting;
+- The following methods now take an extra `font_smoothing: FontSmoothing` argument:
+  - `FontAtlas::new()`
+  - `FontAtlasSet::add_glyph_to_atlas()`
+  - `FontAtlasSet::get_glyph_atlas_info()`
+  - `FontAtlasSet::get_outlined_glyph_texture()`

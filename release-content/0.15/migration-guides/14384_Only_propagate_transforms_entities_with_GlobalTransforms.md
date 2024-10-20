@@ -1,0 +1,1 @@
+- To avoid surprising performance pitfalls, `Transform` / `GlobalTransform` propagation is no longer performed down through hierarchies where intermediate parent are missing a `GlobalTransform`. To restore the previous behavior, add `GlobalTransform::default` to intermediate entities.

@@ -1,0 +1,2 @@
+- Consumers of `ReflectMapEntities` will need to call `map_entities` on values prior to inserting them into the world.
+- Implementors of `MapEntities` will need to remove the `mappings` method, which is no longer needed for `ReflectMapEntities` and has been removed from the trait.

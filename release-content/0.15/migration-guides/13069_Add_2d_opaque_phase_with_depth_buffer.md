@@ -1,0 +1,1 @@
+- `ColorMaterial` now contains `AlphaMode2d`. To keep previous behaviour, use `AlphaMode::BLEND`. If you know your sprite is opaque, use `AlphaMode::OPAQUE`
