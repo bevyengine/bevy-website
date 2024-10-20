@@ -55,13 +55,6 @@ prs = [14212]
 file_name = "14212_Component_Lifecycle_Hook__Observer_Trigger_for_replaced_va.md"
 
 [[release_notes]]
-title = "Make `Task`s functional on WASM"
-authors = ["@JoJoJet"]
-contributors = ["@cBournhonesque", "@janhohenheim"]
-prs = [13889]
-file_name = "13889_Make_Tasks_functional_on_WASM.md"
-
-[[release_notes]]
 title = "Allow volumetric fog to be localized to specific, optionally voxelized, regions."
 authors = ["@pcwalton"]
 contributors = ["@alice-i-cecile", "@mockersf"]
