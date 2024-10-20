@@ -1,1 +1,1 @@
-`BreakLineOn` was renamed to `LineBreak`, and paramters named `linebreak_behavior` were renamed to `linebreak`.
+`BreakLineOn` was renamed to `LineBreak`, and parameters named `linebreak_behavior` were renamed to `linebreak`.

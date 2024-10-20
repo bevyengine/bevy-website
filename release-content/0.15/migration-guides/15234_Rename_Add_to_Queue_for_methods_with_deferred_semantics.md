@@ -1,2 +1,2 @@
-- `Commands::add` and `Commands::push` have been replaced with `Commnads::queue`.
+- `Commands::add` and `Commands::push` have been replaced with `Commands::queue`.
 - `ChildBuilder::add_command` has been renamed to `ChildBuilder::queue_command`.

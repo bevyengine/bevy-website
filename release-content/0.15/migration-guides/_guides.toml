@@ -1059,4 +1059,3 @@ title = "Add `bevy_window::Window` options for MacOS"
 prs = [15820]
 areas = ["Windowing"]
 file_name = "15820_Add_bevy_windowWindow_options_for_MacOS.md"
-
