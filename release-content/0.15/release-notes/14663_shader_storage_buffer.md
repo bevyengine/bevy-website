@@ -34,5 +34,3 @@ By declaring `Handle<ShaderStorageBuffer>` on the material using `AsBindGroup`, 
 ```wgsl
 @group(2) @binding(0) var<storage, read> colors: array<vec4<f32>, 5>;
 ```
-
-Storage buffers are especially useful for sharing data between different passes, like generating data in a compute shader that is later used in a material. This allows for flexible workflows, such as updating procedural data on the GPU or using compute-generated values in rendering passes, all without needing to manually manage complex buffer bindings or data upload.
