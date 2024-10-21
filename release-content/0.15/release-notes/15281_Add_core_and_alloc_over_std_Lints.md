@@ -4,7 +4,7 @@
 Bevy relies heavily on Rust's [standard library](https://doc.rust-lang.org/std/), making it challenging to use on embedded, niche
 platforms, and even certain consoles. But what if that _wasn't_ the case?
 
-Bevy's maintainers have undertaken a new initiative to challenge the reliance on the standard
+We've undertaken a new initiative to challenge the reliance on the standard
 library, with the eventual goal of providing a [`no_std`](https://docs.rust-embedded.org/book/intro/no-std.html)
 compatible subset of Bevy which could be used on a much wider range of platforms.
 
