@@ -1,7 +1,7 @@
 <!-- Add `core` and `alloc` over `std` Lints -->
 <!-- https://github.com/bevyengine/bevy/pull/15281 -->
 
-Bevy is entirely dependent on the standard library, making it challenging to use on embedded, niche
+Bevy relies heavily on Rust's [standard library](https://doc.rust-lang.org/std/), making it challenging to use on embedded, niche
 platforms, and even certain consoles. But what if that _wasn't_ the case?
 
 Bevy's maintainers have undertaken a new initiative to challenge the reliance on the standard
