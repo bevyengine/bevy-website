@@ -27,7 +27,7 @@ have the `std` crate, but often do not.
 The reason for this is some platforms simply don't support the features the `std` crate requires,
 such as a filesystem, networking, or threading.
 
-But why should Bevy care about these platforms? The reason is when a new platform is added to Rust,
+But why should Bevy care about these platforms? When a new platform is added to Rust,
 it is often lacking tier 1 support.
 Even modern consoles such as the Nintendo Switch, PlayStation 5, or Xbox Series don't have tier 1
 support due to non-disclosure agreements and platform specifics.
