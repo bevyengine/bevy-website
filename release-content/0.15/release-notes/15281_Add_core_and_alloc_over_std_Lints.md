@@ -8,7 +8,7 @@ We've undertaken a new initiative to challenge the reliance on the standard
 library, with the eventual goal of providing a [`no_std`](https://docs.rust-embedded.org/book/intro/no-std.html)
 compatible subset of Bevy which could be used on a much wider range of platforms.
 
-The first step of this journey is the addition of a new set of lints:
+The first very simple step is to enable a new set of lints:
 
 * [`std_instead_of_core`](https://rust-lang.github.io/rust-clippy/master/index.html#std_instead_of_core)
 * [`std_instead_of_alloc`](https://rust-lang.github.io/rust-clippy/master/index.html#std_instead_of_alloc)
