@@ -1,8 +1,9 @@
 <!-- Add `core` and `alloc` over `std` Lints -->
 <!-- https://github.com/bevyengine/bevy/pull/15281 -->
 
-Bevy relies heavily on Rust's [standard library](https://doc.rust-lang.org/std/), making it challenging to use on embedded, niche
-platforms, and even certain consoles. But what if that _wasn't_ the case?
+Bevy relies heavily on Rust's [standard library](https://doc.rust-lang.org/std/), making it
+challenging to use on embedded, niche platforms, and even certain consoles. But what if that
+_wasn't_ the case?
 
 We've undertaken a new initiative to challenge the reliance on the standard
 library, with the eventual goal of providing a [`no_std`](https://docs.rust-embedded.org/book/intro/no-std.html)
@@ -18,8 +19,8 @@ For those unfamiliar with `no_std` Rust, the standard library, `std`, gets a lot
 from two smaller crates, [`core`](https://doc.rust-lang.org/core/) and [`alloc`](https://doc.rust-lang.org/alloc/).
 The `core` crate is available on every Rust target with very few exceptions, providing the
 fundamental infrastructure that the Rust language relies on, such as iterators, `Result`, and many more.
-While the `alloc` crate provides access to allocation-related functionality, such as `Vec`, `Box`,
-and `String`.
+Complementing that the `alloc` crate provides access to allocation-related functionality, such as
+`Vec`, `Box`, and `String`.
 
 Rust's support for platforms follows a [three tiered policy](https://doc.rust-lang.org/rustc/platform-support.html),
 where tier 1 is guaranteed to work and will always provide the `std` crate, and tiers 2 and 3 _may_
@@ -31,7 +32,8 @@ But why should Bevy care about these platforms? When a new platform is added to 
 it is often lacking tier 1 support.
 Even modern consoles such as the Nintendo Switch, PlayStation 5, or Xbox Series don't have tier 1
 support due to non-disclosure agreements and platform specifics.
-Adding `no_std` support to Bevy will make it easier for commercial teams developing for these platforms to get started and stay up to date.
+Adding `no_std` support to Bevy will make it easier for commercial teams developing for these
+platforms to get started and stay up to date.
 
 Beyond the commercially-relevant modern consoles, there is a vibrant community of embedded and retro
 enthusiasts developing for platforms that may never support the standard library.
