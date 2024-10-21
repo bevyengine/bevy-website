@@ -31,6 +31,7 @@ But why should Bevy care about these platforms? The reason is when a new platfor
 it is often lacking tier 1 support.
 Even modern consoles such as the Nintendo Switch, PlayStation 5, or Xbox Series don't have tier 1
 support due to non-disclosure agreements and platform specifics.
+Adding `no_std` support to Bevy will make it easier for commercial teams developing for these platforms to get started and stay up to date.
 
 Beyond just the current generation of consoles, there is a vibrant community of embedded and retro
 enthusiasts developing for platforms that may never support the standard library.
