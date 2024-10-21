@@ -38,7 +38,7 @@ enthusiasts developing for platforms that may never support the standard library
 Crates such as [`agb`](https://crates.io/crates/agb) and [`psx`](https://crates.io/crates/psx) provide
 support for developing games on the GameBoy Advance and PlayStation One respectively.
 With `no_std` support in Bevy, users may be able to leverage the wider Rust ecosystem to run their
-software on whole new platforms on the frontiers of support.
+software on these platforms.
 
 These lints ensure that when a Bevy maintainer uses functionality from `std` that is _actually_ from
 `core` or `alloc`, they are notified and can use the more fundamental crate instead.
