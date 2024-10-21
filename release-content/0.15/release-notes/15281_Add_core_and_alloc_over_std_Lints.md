@@ -40,11 +40,6 @@ support for developing games on the GameBoy Advance and PlayStation One respecti
 With `no_std` support in Bevy, users may be able to leverage the wider Rust ecosystem to run their
 software on these platforms.
 
-These lints ensure that when a Bevy maintainer uses functionality from `std` that is _actually_ from
-`core` or `alloc`, they are notified and can use the more fundamental crate instead.
-Enabling these lints required a lot of small changes across the whole Bevy library, but doing so
-has revealed the true extent to which Bevy relies on the standard library.
-
 We're still a while away from true `no_std` support in Bevy, but the first few changes have already
 been accepted, with many more lined up for the next release in 0.16.
 
