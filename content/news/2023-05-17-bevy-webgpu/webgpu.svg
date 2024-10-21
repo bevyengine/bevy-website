@@ -68,10 +68,8 @@
         stroke: #0093ff;
       }
 
-      @media (prefers-color-scheme: dark) {
-        .cls-6 {
-          fill: #eeeeee;
-        }
+      .cls-6 {
+        fill: #eeeeee;
       }
     </style>
   </defs>

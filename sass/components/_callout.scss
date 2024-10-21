@@ -16,20 +16,20 @@
 
   &,
   &--info {
-    --callout-accent-color: #5944e0;
-    --callout-bg-color: #2f2745;
-    --callout-color: #f0effb;
+    --callout-accent-color: var(--callout-accent-color-info);
+    --callout-bg-color: var(--callout-bg-color-info);
+    --callout-color: var(--callout-color-info);
   }
 
   &--caution {
-    --callout-accent-color: #e82f5a;
-    --callout-bg-color: #591626;
-    --callout-color: #eed5db;
+    --callout-accent-color: var(--callout-accent-color-caution);
+    --callout-bg-color: var(--callout-bg-color-caution);
+    --callout-color: var(--callout-color-caution);
   }
 
   &--warning {
-    --callout-accent-color: #e4c151;
-    --callout-bg-color: #513903;
-    --callout-color: #fdfdec;
+    --callout-accent-color: var(--callout-accent-color-warning);
+    --callout-bg-color: var(--callout-bg-color-warning);
+    --callout-color: var(--callout-color-warning);
   }
 }
