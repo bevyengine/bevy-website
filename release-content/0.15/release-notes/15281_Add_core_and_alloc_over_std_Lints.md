@@ -21,7 +21,7 @@ fundamental infrastructure that the Rust language relies on, such as iterators, 
 While the `alloc` crate provides access to allocation-related functionality, such as `Vec`, `Box`,
 and `String`.
 
-Rust has built-in support for platforms with a [three tiered policy](https://doc.rust-lang.org/rustc/platform-support.html),
+Rust's support for platforms follows a [three tiered policy](https://doc.rust-lang.org/rustc/platform-support.html),
 where tier 1 is guaranteed to work and will always provide the `std` crate, and tiers 2 and 3 _may_
 have the `std` crate, but often do not.
 The reason for this is some platforms simply don't support the features the `std` crate requires,
