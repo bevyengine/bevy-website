@@ -27,9 +27,9 @@ fn init(mut commands: Commands, asset_server: Res<AssetServer>) {
     })));
 }
 
-// Insert the cursor component to the window. Usually you would insert a different
+// Insert the `CursorIcon` component to the window. Usually you would insert a different
 // image depending on the context (click, hover, etc.), but here we have only one.
-// Using a series of images can achieve an animated look.
+// Using a series of `CursorIcon`s can achieve an animated look.
 fn update(
     mut commands: Commands,
     window: Single<Entity, With<Window>>,
