@@ -48,6 +48,6 @@ has revealed the true extent to which Bevy relies on the standard library.
 We're still a while away from true `no_std` support in Bevy, but the first few changes have already
 been accepted, with many more lined up for the next release in 0.16.
 
-If this work sounds interesting and you'd like to learn more, check out the
+If this work sounds interesting, check out the
 [`no_std` tracking issue](https://github.com/bevyengine/bevy/issues/15460) on GitHub, where you can
 find a list of pull requests, and even prototypes of Bevy running in `no_std` environments.
