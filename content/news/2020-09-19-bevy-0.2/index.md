@@ -32,11 +32,11 @@ We decided to resolve this problem by building a custom async-friendly task syst
 
 ### Total Combined Percent CPU Usage - 8 Core Machine (smaller is better)
 
-![threading cpu usage 8 core](bevy_tasks_1.svg)
+<img alt="threading cpu usage 8 core" src="bevy_tasks_1.svg" class="inverted">
 
 ### Total Combined Percent CPU Usage - 32 Core Machine (smaller is better)
 
-![threading cpu usage 32 core](bevy_tasks_2.svg)
+<img alt="threading cpu usage 32 core" src="bevy_tasks_2.svg" class="inverted">
 
 ## Initial Web Platform Support
 
