@@ -153,10 +153,10 @@ prs = [14833]
 file_name = "14833_Rewrite_screenshots.md"
 
 [[release_notes]]
-title = "SystemParamBuilder - Support dynamic system parameters"
+title = "SystemParamBuilder"
 authors = ["@chescock"]
 contributors = ["@cBournhonesque", "@alice-i-cecile"]
-prs = [14817]
+prs = [14050, 14821, 14818, 15189, 14817]
 file_name = "14817_SystemParamBuilder__Support_dynamic_system_parameters.md"
 
 [[release_notes]]
@@ -387,13 +387,6 @@ authors = ["@RobWalt"]
 contributors = ["@mweatherley", "@NthTensor", "@eckz", "@alice-i-cecile"]
 prs = [14788]
 file_name = "14788_add_curve_utilities_to_create_curves_interpolatingeasing_b.md"
-
-[[release_notes]]
-title = "System param for dynamic resources"
-authors = ["@chescock"]
-contributors = []
-prs = [15189]
-file_name = "15189_System_param_for_dynamic_resources.md"
 
 [[release_notes]]
 title = "Allow a closure to be used as a required component default"
