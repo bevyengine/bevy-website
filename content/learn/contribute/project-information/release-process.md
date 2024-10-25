@@ -120,11 +120,38 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 #### RC Pre-Release
 
 1. Check appropriate milestone.
-2. Create a branch for the release.
-3. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
-    - Change the commit message to be nicer.
-4. Create tag on GitHub.
-5. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
+2. For the first RC, create a new branch `release-0.X.0` for the release from `main`.
+3. For following RCs, cherry pick all merged PRs from the milestone that are not yet in the release branch
+```sh
+version="0.X"
+
+git checkout release-$version.0
+
+# List the last 100 PRs merged in the milestone
+prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 100`
+while read -r commit number title <&3; do
+    # Ignore commits that are already present by sha
+    if git merge-base --is-ancestor $commit HEAD; then
+      continue
+    fi
+    # Ignore commits that are already present by PR number
+    if git log --format=oneline | grep " (#$number)$" > /dev/null; then
+      continue
+    fi
+
+    echo "PR #$number: $title (https://github.com/bevyengine/bevy/pull/$number)"
+    if git cherry-pick $commit; then
+      echo
+    else
+      echo "please resolve conflict then press enter"
+      read
+    fi
+done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
+```
+4. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
+    - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.0-rc.Y`
+5. Create tag on GitHub.
+6. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
 
 #### RC Release
 
