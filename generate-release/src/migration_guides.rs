@@ -1,5 +1,4 @@
 use anyhow::Context;
-use rayon::vec;
 use serde::Deserialize;
 
 use crate::{
