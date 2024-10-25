@@ -136,6 +136,14 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 #### RC Post-Release
 
 1. Update Bevy version used for Bevy's website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
+2. Check that docs.rs was able to build the documentation of all crates
+```shell
+version="0.X.0-rc.Y"
+for crate in `cargo test -p 2>&1 | grep '  bevy'`
+do
+    curl -s -i https://docs.rs/crate/$crate/$version | grep "failed to build" | grep $version
+done
+```
 
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
