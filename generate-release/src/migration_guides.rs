@@ -57,7 +57,7 @@ pub fn generate_migration_guides(
             .as_deref()
             .map(toml::from_str)
             .transpose()?;
-    
+
         eprintln!("metadata exists? {}", preexisting_metadata.is_some());
 
         preexisting_metadata
@@ -125,7 +125,7 @@ pub fn generate_migration_guides(
                 let b_areas = b.areas.clone().into_iter().collect::<Vec<_>>().join(" ");
 
                 a_areas.cmp(&b_areas)
-            },
+            }
             (false, true) => std::cmp::Ordering::Less,
             (true, false) => std::cmp::Ordering::Greater,
             (true, true) => std::cmp::Ordering::Equal,
