@@ -87,7 +87,7 @@ git checkout latest
 git checkout -b release-$version
 echo
 
-prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number`
+prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 100`
 while read -r commit number title <&3; do
     echo "PR #$number: $title (https://github.com/bevyengine/bevy/pull/$number)"    
     if git cherry-pick $commit; then
