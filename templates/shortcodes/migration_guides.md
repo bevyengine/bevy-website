@@ -3,7 +3,6 @@
 {% set base_path = macros::release_path(version=version, path="/migration-guides/") %}
 {% set guides_data = load_data(path=macros::path_join(path_a=base_path, path_b="/_guides.toml")) %}
 {% set previous_area = "" %}
-{% set area_changed = false %}
 
 <aside class="callout callout--warning">
   <p>Bevy relies heavily on improvements in the Rust language and compiler. As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.</p>
@@ -17,7 +16,6 @@
 {% else %}
 {% set area_name = "Without area" %}
 {% endif %}
-
 {% set area_changed = area_name != previous_area %}
 
 {% if area_changed %}
