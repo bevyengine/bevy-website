@@ -11,12 +11,6 @@ areas = []
 file_name = "15973_Remove_AVIF_feature.md"
 
 [[guides]]
-title = "Deprecate `is_playing_animation`"
-prs = [14387]
-areas = ["Animation"]
-file_name = "14387_Deprecate_is_playing_animation.md"
-
-[[guides]]
 title = "Make `AnimationPlayer::start` and `::play` work accordingly to documentation"
 prs = [14546]
 areas = ["Animation"]
