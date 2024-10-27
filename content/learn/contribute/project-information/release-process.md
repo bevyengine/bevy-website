@@ -164,7 +164,7 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 
 1. Update Bevy version used for Bevy's website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
 2. Check that docs.rs was able to build the documentation of all crates
-```shell
+```sh
 version="0.X.0-rc.Y"
 for crate in `cargo test -p 2>&1 | grep '  bevy'`
 do
