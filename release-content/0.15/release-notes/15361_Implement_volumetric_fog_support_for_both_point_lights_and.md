@@ -1,4 +1,4 @@
-Volumetric fog was introduced in Bevy 0.14, where initially, only directional lights could interact with it. In Bevy 0.15, interactions with point lights and spot lights are also supported.
+Volumetric fog was [introduced in Bevy 0.14](https://bevyengine.org/news/bevy-0-14/#volumetric-fog-and-volumetric-lighting-light-shafts-god-rays). Initially, only directional lights could interact with it. In Bevy 0.15, point lights and spot lights work with it too.
 
 To add volumetric fog to your scene, add [VolumetricFog](https://docs.rs/bevy/0.15.0-rc.1/bevy/pbr/struct.VolumetricFog.html) to the camera, and add [VolumetricLight](https://docs.rs/bevy/0.15.0-rc.1/bevy/pbr/struct.VolumetricLight.html) to directional light, point light or spot light that you wish to be volumetric.
 
