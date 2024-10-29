@@ -59,7 +59,9 @@ pub fn generate_migration_guides(
             .transpose()?;
 
         eprintln!("metadata exists? {}", preexisting_metadata.is_some());
-
+// Populate the metadata to be written with the
+// preexisting metadata so that it is not lost,
+// or overwritten.
         preexisting_metadata
             .map(|metadata| metadata.guides)
             .unwrap_or_default()
@@ -117,7 +119,7 @@ pub fn generate_migration_guides(
         }
     }
 
-    // Sort by: Area ASC (empty areas at the end), Title ASC
+    // Sort by: Area in ascending order (empty areas at the end), and Title in ascending order
     guides_metadata.sort_by(|a, b| {
         let areas_cmp = match (a.areas.is_empty(), b.areas.is_empty()) {
             (false, false) => {
@@ -134,7 +136,13 @@ pub fn generate_migration_guides(
         areas_cmp.then_with(|| a.title.cmp(&b.title))
     });
 
-    // Replace and overwrite file.
+    // Create the metadata file, and overwrite it if it already exists.
+    //
+    // Note:
+    // The file, while overwritten,
+    // may still contain the same underlying data gotten from
+    // the preexisting metadata earlier, if overwrite_existing is false,
+    // thus preserving the data even if the file itself is overwritten.
     let mut guides_toml = OpenOptions::new()
         .write(true)
         .truncate(true)
@@ -143,8 +151,11 @@ pub fn generate_migration_guides(
         .context("Failed to create _guides.toml")?;
 
     for metadata in guides_metadata {
-        // Generate the metadata block for this migration
-        // We always re-generate it because we need to keep the ordering if a new migration is added
+        // Generate the metadata block for this migration.
+        //
+        // We always freshly generate and write this data to the file,
+        // rather than appending to the end-of-file,
+        // so that we can maintain proper ordering of the entries.
         let metadata_block = generate_metadata_block(
             &metadata.title,
             &metadata.file_name,
