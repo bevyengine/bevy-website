@@ -340,11 +340,11 @@ prs = [15419]
 file_name = "15419_Gpu_readback.md"
 
 [[release_notes]]
-title = "bevy_reflect: Generic parameter info"
+title = "`TypeInfo` improvements"
 authors = ["@MrGVSV"]
 contributors = []
-prs = [15475]
-file_name = "15475_bevy_reflect_Generic_parameter_info.md"
+prs = [15475, 13321, 13320, 15235]
+file_name = "type_info_improvements.md"
 
 [[release_notes]]
 title = "`Populated` (query) system param"
