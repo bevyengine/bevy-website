@@ -1,17 +1,43 @@
-`cargo-apk` has been replaced with `cargo-ndk`. To build shared object files for the target
-architecture, your command will look like the following example:
+`cargo-apk` has been replaced with `cargo-ndk`.
+
+Before:
+
+```shell
+rustup target add aarch64-linux-android armv7-linux-androideabi
+cargo install cargo-apk
+```
+
+After:
+
+```shell
+rustup target add aarch64-linux-android
+cargo install cargo-ndk
+```
+
+Shared object files must be now built for the target architecture before launching package builds
+with the Gradle wrapper.
+
+Before:
+
+```shell
+cargo apk build --package bevy_mobile_example
+```
+
+After:
+
 ```shell
 cargo ndk -t arm64-v8a -o android_example/app/src/main/jniLibs build --package bevy_mobile_example
+./android_example/gradlew build
 ```
-(replace target and project name as required).
+
+(replace target and project name as required). Note that build output paths have changed. APK builds
+can be found under `app/build/outputs/apk`).
+
+Android Studio may also be used.
 
 Bevy may require the `libc++_shared.so` library to run on Android. This can be manually obtained
 from NDK source, or NDK describes a
 [`build.rs`](https://github.com/bbqsrc/cargo-ndk?tab=readme-ov-file#linking-against-and-copying-libc_sharedso-into-the-relevant-places-in-the-output-directory)
 approach.
-
-After configuration, builds can be launched using `./gradlew build`. Android Studio may also be
-used. Note that build output paths have changed. APK builds can be found under
-`app/build/outputs/apk`).
 
 Applications that still require `NativeActivity` should add the `android-native-activity` feature.
