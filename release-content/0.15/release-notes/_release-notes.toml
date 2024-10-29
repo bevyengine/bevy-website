@@ -347,6 +347,13 @@ prs = [15475]
 file_name = "15475_bevy_reflect_Generic_parameter_info.md"
 
 [[release_notes]]
+title = "bevy_reflect: Add `Type` type"
+authors = ["@MrGVSV"]
+contributors = []
+prs = [14838]
+file_name = "14838_bevy_reflect_add_Type_type.md"
+
+[[release_notes]]
 title = "`Populated` (query) system param"
 authors = ["@MiniaczQ"]
 contributors = ["@alice-i-cecile"]
