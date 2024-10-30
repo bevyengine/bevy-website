@@ -59,9 +59,9 @@ pub fn generate_migration_guides(
             .transpose()?;
 
         eprintln!("metadata exists? {}", preexisting_metadata.is_some());
-// Populate the metadata to be written with the
-// preexisting metadata so that it is not lost,
-// or overwritten.
+        // Populate the metadata to be written with the
+        // preexisting metadata so that it is not lost,
+        // or overwritten.
         preexisting_metadata
             .map(|metadata| metadata.guides)
             .unwrap_or_default()
