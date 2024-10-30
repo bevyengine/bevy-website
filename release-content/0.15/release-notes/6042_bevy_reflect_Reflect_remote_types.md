@@ -2,7 +2,7 @@ The [`bevy_reflect`] crate relies on types implementing [`Reflect`] in order to 
 Fields of structs and enums that don't implement `Reflect` must be specifically ignored with `#[reflect(ignore)]`.
 And due to Rust's [orphan rule], this is often the case for types not owned by the current crate.
 
-Based on [`serde`](https://serde.rs/remote-derive.html), Bevy 0.15 introduces a way to reflect remote types
+Following [`serde`'s example](https://serde.rs/remote-derive.html), Bevy 0.15 introduces a way to reflect remote types
 using a new [`#[reflect_remote(...)]`][reflect_remote] attribute macro.
 This allows users to define a model for reflection to base its behavior on,
 while still operating with the actual type.
