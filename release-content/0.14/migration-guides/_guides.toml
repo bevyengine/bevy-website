@@ -1,46 +1,4 @@
 [[guides]]
-title = "Overhaul `Color`"
-prs = ["12163"]
-areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
-file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
-
-[[guides]]
-title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
-prs = ["14017"]
-areas = ["Rendering", "UI"]
-file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
-
-[[guides]]
-title = "Register missing types manually"
-prs = ["12314"]
-areas = ["Reflection"]
-file_name = "12314_Clean_up_type_registrations.md"
-
-[[guides]]
-title = "`OnEnter` state schedules now run before Startup schedules"
-prs = ["11426"]
-areas = ["App", "ECS"]
-file_name = "11426_on_enter_startup_states.md"
-
-[[guides]]
-title = "Fix `Node2d` typo"
-prs = ["12038"]
-areas = []
-file_name = "12038_fix_some_typos.md"
-
-[[guides]]
-title = "Update to `fixedbitset` 0.5"
-prs = ["12512"]
-areas = []
-file_name = "12512_Update_to_fixedbitset_05.md"
-
-[[guides]]
-title = "Move WASM panic handler from `LogPlugin` to `PanicHandlerPlugin`"
-prs = ["12557"]
-areas = []
-file_name = "12557_refactor_separate_out_PanicHandlerPlugin.md"
-
-[[guides]]
 title = "`AnimationClip` now uses UUIDs and `NoOpTypeIdHash` is now `NoOpHash`"
 prs = ["11707"]
 areas = ["Animation"]
@@ -57,6 +15,12 @@ title = "Multiplying colors by `f32` no longer ignores alpha channel"
 prs = ["12575"]
 areas = ["Animation", "Color", "Math", "Rendering"]
 file_name = "12575_Color_maths_4.md"
+
+[[guides]]
+title = "`OnEnter` state schedules now run before Startup schedules"
+prs = ["11426"]
+areas = ["App", "ECS"]
+file_name = "11426_on_enter_startup_states.md"
 
 [[guides]]
 title = "Separate `SubApp` from `App`"
@@ -147,6 +111,12 @@ title = "Fix leftover references to children when despawning audio entities"
 prs = ["12407"]
 areas = ["Audio"]
 file_name = "12407_Fix_leftover_references_to_children_when_despawning_audio_.md"
+
+[[guides]]
+title = "Overhaul `Color`"
+prs = ["12163"]
+areas = ["Color", "Gizmos", "Rendering", "Text", "UI"]
+file_name = "12163_Migrate_from_LegacyColor_to_bevy_colorColor.md"
 
 [[guides]]
 title = "Move WGSL math constants and color operations from `bevy_pbr` to `bevy_render`"
@@ -341,6 +311,12 @@ areas = ["Gizmos"]
 file_name = "13261_More_gizmos_builders.md"
 
 [[guides]]
+title = "Contextually clearing gizmos"
+prs = ["10973"]
+areas = ["Gizmos"]
+file_name = "10973_Contextually_clearing_gizmos.md"
+
+[[guides]]
 title = "Rename touchpad input to gesture"
 prs = ["13660"]
 areas = ["Input"]
@@ -357,6 +333,12 @@ title = "Add `WinitEvent::KeyboardFocusLost`"
 prs = ["13678"]
 areas = ["Input", "Windowing"]
 file_name = "13678_flush_key_input_cache_when_Bevy_loses_focus_Adopted.md"
+
+[[guides]]
+title = "Separating Finite and Infinite 3d Planes"
+prs = ["12426"]
+areas = ["Math", "Rendering"]
+file_name = "12426_separating_finite_and_infinite_3d_planes.md"
 
 [[guides]]
 title = "Move direction types out of `bevy::math::primitives`"
@@ -443,6 +425,12 @@ areas = ["Math", "Utils"]
 file_name = "12732_Move_FloatOrd_into_bevy_math.md"
 
 [[guides]]
+title = "Register missing types manually"
+prs = ["12314"]
+areas = ["Reflection"]
+file_name = "12314_Clean_up_type_registrations.md"
+
+[[guides]]
 title = "Change `ReflectSerialize` trait bounds"
 prs = ["12024"]
 areas = ["Reflection"]
@@ -471,6 +459,12 @@ title = "Serialize scene with `&TypeRegistry` and rename `serialize_ron()` to `s
 prs = ["12715"]
 areas = ["Reflection", "Scenes"]
 file_name = "12715_Fix_TypeRegistry_use_in_dynamic_scene.md"
+
+[[guides]]
+title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
+prs = ["14017"]
+areas = ["Rendering", "UI"]
+file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
 
 [[guides]]
 title = "Rename `Camera3dBundle::dither` to `deband_dither`"
@@ -767,13 +761,19 @@ areas = ["Windowing"]
 file_name = "13366_fix_upgrade_to_winit_v030.md"
 
 [[guides]]
-title = "Separating Finite and Infinite 3d Planes"
-prs = ["12426"]
-areas = ["Math", "Rendering"]
-file_name = "12426_separating_finite_and_infinite_3d_planes.md"
+title = "Fix `Node2d` typo"
+prs = ["12038"]
+areas = []
+file_name = "12038_fix_some_typos.md"
 
 [[guides]]
-title = "Contextually clearing gizmos"
-prs = ["10973"]
-areas = ["Gizmos"]
-file_name = "10973_Contextually_clearing_gizmos.md"
+title = "Update to `fixedbitset` 0.5"
+prs = ["12512"]
+areas = []
+file_name = "12512_Update_to_fixedbitset_05.md"
+
+[[guides]]
+title = "Move WASM panic handler from `LogPlugin` to `PanicHandlerPlugin`"
+prs = ["12557"]
+areas = []
+file_name = "12557_refactor_separate_out_PanicHandlerPlugin.md"
