@@ -1,7 +1,7 @@
 <!-- Add state scoped events -->
 <!-- https://github.com/bevyengine/bevy/pull/15085 -->
 
-State scoped events will be automatically cleared when exiting a state. Useful when you want to guarantee clean state transitions.
+State scoped events will be automatically cleared when exiting a state (similar to [StateScoped entities](https://bevyengine.org/news/bevy-0-14/#state-scoped-entities)). Useful when you want to guarantee clean state transitions.
 
 Normally, you would configure your event via:
 ```rust
