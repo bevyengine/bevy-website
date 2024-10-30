@@ -1,29 +1,60 @@
-**Bevy 0.15** comes with the much needed reduction of runtime panics when desired system parameters aren't available.
-The new feature **fallible system parameters** allows parameters to safely fail fetching, which in turn will prevent systems from running.
-Now, this does not affect majority of parameters, which are always available.
+<!-- Reduce runtime panics through `SystemParam` validation -->
+<!-- https://github.com/bevyengine/bevy/pull/15276 -->
 
-From the pre-existing `SystemParam`'s 
-`Res<R>`, `ResMut<R>`, `NonSend<S>`, `NonSendMut<S>`
+<!-- `QuerySingle` family of system params -->
+<!-- https://github.com/bevyengine/bevy/pull/15476 -->
 
-System parameters that build on top of other system parameters work on an **AND** basis.
-`DynSystemParam` and `ParamSet` will fail if their respective internal params fail,
-while tuples of params will fail if any of the internal params fail.
+<!-- `Populated` (query) system param -->
+<!-- https://github.com/bevyengine/bevy/pull/15488 -->
 
-Based on this mechanic, a new set of parameters was crated:
+
+**Bevy 0.15** comes with a much needed ergonomic improvement in inaccessible system parameters named *Fallible System Params*.
+Originally, the following piece of code would panic:
+```rust
+#[derive(Resource)]
+struct MyResource;
+
+fn my_system(my_resource: Res<MyResource>) {}
+
+fn main() {
+    let mut app = App::new();
+    app.add_plugins(DefaultPlugins)
+    app.add_systems(my_system);
+    // Panic here: `my_system` cannot fetch `MyResource`, because it was never added.
+    app.run();
+}
+```
+but now, `my_system` simply won't be executed.
+
+This works on all system-based features:
+- Systems & Observers - will be skipped,
+- Run conditions - will be skipped and return `false`.
+
+Behavior in compound systems, like `system_a.pipe(system_b)`, is still in development.
+
+Pre-existing parameters which now benefit from this feature are: `Res` and `ResMut` as well as their non-sync siblings `NonSend` and `NonSendMut`.
+For parameters that build on top of other parameters: tuples, `DynSystemParam` and `ParamSet`; the 
+
+Additionally, few new system params were introduced to simplify existing code:
 - `Single<D, F>` - Works like `Query<D, F>::single`, fails if query contains 0 or more than 1 match,
 - `Option<Single<D, F>>` - Works like `Query<D, F>::single`, fails if query contains more than 1 match,
 - `Populated<D, F>` - Works like a `Query<D, F>`, fails if query contains no matches.
 
-`fallible_params` example
+## Warnings
 
-example
+Fallible system params come with a primitive warning mechanic.
+Currently, systems can behave in one of two ways:
+- (default) warn exactly once,
+- never warn.
 
-Fallible params are still in development and their behavior in compound systems (like `system_a.pipe(system_b)`) is a subject to change.
-
-If system fails to run because of missing parameters, the default behavior will be to emit a warning.
-The warning will show up exactly once, on the first skip.
-Warnings can be disabled on functional systems as following:
+The default can be changed as following:
 ```rust
-app.ass_systems(my_system.never_param_warn())
+// For systems
+app.add_systems(my_system.never_param_warn());
+// For observers
+app.add_observer(my_observer.never_param_warn());
+// For run conditions
+app.add_systems(my_system.run_if(my_condition.never_param_warn()));
 ```
-Currently warnings can either be emitted once or never, but we're looking into expanding this mechanic in subsequent updates!
+
+More elaborate warning mechanics will be develop as we gather feedback about this feature.
