@@ -195,7 +195,7 @@ prs = [15170]
 file_name = "15170_Enabledisable_UI_antialiasing.md"
 
 [[release_notes]]
-title = "Add `EntityRefExcept` and `EntityMutExcept` world queries, in preparation for generalized animation."
+title = "`EntityRefExcept` and `EntityMutExcept`"
 authors = ["@pcwalton"]
 contributors = []
 prs = [15207]
@@ -467,8 +467,7 @@ file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
 
 [[release_notes]]
 title = "Required Components"
-authors = ["@cart",]
+authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@killercup", "@BD103"]
 prs = [14791]
 file_name = "14791_Required_Components.md"
-
