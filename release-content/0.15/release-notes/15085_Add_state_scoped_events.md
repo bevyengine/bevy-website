@@ -3,14 +3,14 @@
 
 State scoped events will be automatically cleared when exiting a state. Useful when you want to guarantee clean state transitions.
 
-Normal way to add an event.
+Normally, you would configure your event via:
 ```rust
 fn setup(app: &mut App) {
     app.add_event::<MyGameEvent>();
 }
 ```
 
-**NEW**: Add a state-scoped event.
+If you want the events to be cleared when you exit a specific state, change this to:
 ```rust
 fn setup(app: &mut App) {
     app.add_state_scoped_event::<MyGameEvent>(GameState::Play);
