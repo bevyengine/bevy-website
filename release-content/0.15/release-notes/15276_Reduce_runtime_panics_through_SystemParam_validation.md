@@ -8,8 +8,7 @@
 <!-- https://github.com/bevyengine/bevy/pull/15488 -->
 
 
-**Bevy 0.15** comes with a much needed ergonomic improvement in inaccessible system parameters named *Fallible System Params*.
-Originally, the following piece of code would panic:
+In Bevy 0.14 and prior, the following code would panic:
 ```rust
 #[derive(Resource)]
 struct MyResource;
