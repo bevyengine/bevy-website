@@ -410,7 +410,7 @@ prs = [15614]
 file_name = "15614_Allow_Worldentity_family_of_functions_to_take_multiple_ent.md"
 
 [[release_notes]]
-title = "Add more tools for traversing hierarchies"
+title = "More tools for traversing hierarchies"
 authors = ["@alice-i-cecile"]
 contributors = ["@atornity", "@ItsDoot", "@villor"]
 prs = [15627]
