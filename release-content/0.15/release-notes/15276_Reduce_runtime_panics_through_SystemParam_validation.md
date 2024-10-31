@@ -24,16 +24,16 @@ fn main() {
     app.run();
 }
 ```
-but now, `my_system` simply won't be executed.
+but in Bevy 0.15, `my_system` simply won't be executed.
 
-This works on all system-based features:
+This works for all system-based features:
 - Systems & Observers - will be skipped,
 - Run conditions - will be skipped and return `false`.
 
-Behavior in compound systems, like `system_a.pipe(system_b)`, is still in development.
+Compound systems, like `system_a.pipe(system_b)`, are currently skipped if any required data is missing.
 
-Pre-existing parameters which now benefit from this feature are: `Res` and `ResMut` as well as their non-sync siblings `NonSend` and `NonSendMut`.
-For parameters that build on top of other parameters: tuples, `DynSystemParam` and `ParamSet`; the 
+Pre-existing parameters which now benefit from this feature are: `Res` and `ResMut` as well as their siblings `NonSend` and `NonSendMut`.
+Parameters that build on top of other parameters: tuples, `DynSystemParam` and `ParamSet` are considered present if and only if all of their system parameters are present.
 
 Additionally, few new system params were introduced to simplify existing code:
 - `Single<D, F>` - Works like `Query<D, F>::single`, fails if query contains 0 or more than 1 match,
@@ -57,4 +57,4 @@ app.add_observer(my_observer.never_param_warn());
 app.add_systems(my_system.run_if(my_condition.never_param_warn()));
 ```
 
-More elaborate warning mechanics will be develop as we gather feedback about this feature.
+Let us know what other warning strategies you'd like!
