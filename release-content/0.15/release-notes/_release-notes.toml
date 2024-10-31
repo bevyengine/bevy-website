@@ -244,10 +244,10 @@ prs = [14920]
 file_name = "14920_Add_cached_run_system_API.md"
 
 [[release_notes]]
-title = "Reduce runtime panics through `SystemParam` validation"
+title = "Fallible system parameters"
 authors = ["@MiniaczQ"]
-contributors = []
-prs = [15276]
+contributors = ["@alice-i-cecile"]
+prs = [15276, 15476, 15488]
 file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
 
 [[release_notes]]
@@ -312,13 +312,6 @@ prs = [12770]
 file_name = "12770_Implement_gamepads_as_entities.md"
 
 [[release_notes]]
-title = "`QuerySingle` family of system params"
-authors = ["@MiniaczQ"]
-contributors = []
-prs = [15476]
-file_name = "15476_QuerySingle_family_of_system_params.md"
-
-[[release_notes]]
 title = "Implement volumetric fog support for both point lights and spotlights"
 authors = ["@Soulghost"]
 contributors = []
@@ -352,13 +345,6 @@ authors = ["@MrGVSV"]
 contributors = []
 prs = [14838]
 file_name = "14838_bevy_reflect_add_Type_type.md"
-
-[[release_notes]]
-title = "`Populated` (query) system param"
-authors = ["@MiniaczQ"]
-contributors = ["@alice-i-cecile"]
-prs = [15488]
-file_name = "15488_Populated_query_system_param.md"
 
 [[release_notes]]
 title = "Runtime required components"
