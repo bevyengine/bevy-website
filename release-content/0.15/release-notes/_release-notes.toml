@@ -132,13 +132,6 @@ prs = [6042]
 file_name = "6042_bevy_reflect_Reflect_remote_types.md"
 
 [[release_notes]]
-title = "feat: add `insert_if_new` (#14397)"
-authors = ["@jpetkau"]
-contributors = ["@SkiFire13", "@alice-i-cecile"]
-prs = [14646]
-file_name = "14646_feat_add_insert_if_new_14397.md"
-
-[[release_notes]]
 title = "Allow fog density texture to be scrolled over time with an offset"
 authors = ["@jirisvd"]
 contributors = []
