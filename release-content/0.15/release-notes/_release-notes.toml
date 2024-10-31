@@ -20,7 +20,7 @@ prs = [14071]
 file_name = "14071_Uniform_mesh_sampling.md"
 
 [[release_notes]]
-title = "Created an EventMutator for when you want to mutate an event before reading"
+title = "`EventMutator`"
 authors = ["@BobG1983"]
 contributors = ["@atornity", "@alice-i-cecile"]
 prs = [13818]
@@ -453,8 +453,7 @@ file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
 
 [[release_notes]]
 title = "Required Components"
-authors = ["@cart",]
+authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@killercup", "@BD103"]
 prs = [14791]
 file_name = "14791_Required_Components.md"
-
