@@ -6,13 +6,13 @@ making it easier to traverse entity hierarchies defined by the [`Parent`] and [`
 
 The full set of methods is now:
 
-- `parent`
-- `children`
-- `root_ancestor`
-- `iter_leaves`
-- `iter_siblings`
+- `parent` (new)
+- `children` (new)
+- `root_ancestor` (new)
+- `iter_leaves` (new)
+- `iter_siblings` (new)
 - `iter_descendants`
-- `iter_descendants_depth_first`
+- `iter_descendants_depth_first` (new)
 - `iter_ancestors`
 
 All of these operations were previously possible, but we hope that this API makes working with hierarchies more pleasant, especially for UI and animation.
