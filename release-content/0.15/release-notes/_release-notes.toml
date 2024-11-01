@@ -202,20 +202,6 @@ prs = [15207]
 file_name = "15207_Add_EntityRefExcept_and_EntityMutExcept_world_queries_in_p.md"
 
 [[release_notes]]
-title = "Add module and supporting documentation to `bevy_assets`"
-authors = ["@alice-i-cecile"]
-contributors = [
-	"@JMS55",
-	"@cart",
-	"@NotAFile",
-	"@bushrat011899",
-	"@janhohenheim",
-	"@TrialDragon",
-]
-prs = [15056]
-file_name = "15056_Add_module_and_supporting_documentation_to_bevy_assets.md"
-
-[[release_notes]]
 title = "bevy_reflect: Add `Reflectable` trait"
 authors = ["@MrGVSV"]
 contributors = ["@alice-i-cecile"]
