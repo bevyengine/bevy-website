@@ -38,6 +38,9 @@ Android Studio may also be used.
 Bevy may require the `libc++_shared.so` library to run on Android. This can be manually obtained
 from NDK source, or NDK describes a
 [`build.rs`](https://github.com/bbqsrc/cargo-ndk?tab=readme-ov-file#linking-against-and-copying-libc_sharedso-into-the-relevant-places-in-the-output-directory)
-approach.
+approach. A suggested solution is also presented in the Bevy mobile example.
 
-Applications that still require `NativeActivity` should add the `android-native-activity` feature.
+Applications that still require `NativeActivity` should:
+1. disable default features in `Cargo.toml`
+2. re-enable all default features _except_ `android-game-activity`
+3. enable the `android-native-activity` feature
