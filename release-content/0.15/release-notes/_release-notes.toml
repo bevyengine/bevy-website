@@ -93,7 +93,7 @@ file_name = "14034_Track_source_location_in_change_detection.md"
 title = "Opportunistically use dense iteration for  archetypal iteration"
 authors = ["@re0312"]
 contributors = ["@alice-i-cecile", "@ItsDoot"]
-prs = [14049]
+prs = [14049, 14673]
 file_name = "14049_Opportunistically_use_dense_iteration_for__archetypal_iter.md"
 
 [[release_notes]]
@@ -165,13 +165,6 @@ authors = ["@RobWalt"]
 contributors = ["@bushrat011899", "@mweatherley"]
 prs = [14976]
 file_name = "14976_Color_gradient_curve.md"
-
-[[release_notes]]
-title = "Opportunistically use dense iter for archetypal iteration in Par_iter"
-authors = ["@re0312"]
-contributors = []
-prs = [14673]
-file_name = "14673_Opportunistically_use_dense_iter_for_archetypal_iteration_.md"
 
 [[release_notes]]
 title = "Add state scoped events"
