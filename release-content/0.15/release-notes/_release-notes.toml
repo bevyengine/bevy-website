@@ -429,3 +429,10 @@ authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@killercup", "@BD103"]
 prs = [14791]
 file_name = "14791_Required_Components.md"
+
+[[release_notes]]
+title = "UI Scrolling"
+authors = ["@Piefayth", "@nicoburns"]
+contributors = []
+prs = [15291]
+file_name = "15291_UI_Scrolling.md"
