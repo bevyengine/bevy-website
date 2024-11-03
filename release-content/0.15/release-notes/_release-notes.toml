@@ -90,7 +90,7 @@ prs = [14034]
 file_name = "14034_Track_source_location_in_change_detection.md"
 
 [[release_notes]]
-title = "Opportunistically use dense iteration for  archetypal iteration"
+title = "Faster iteration when using a mix of sparse set and table components"
 authors = ["@re0312"]
 contributors = ["@alice-i-cecile", "@ItsDoot"]
 prs = [14049, 14673]
