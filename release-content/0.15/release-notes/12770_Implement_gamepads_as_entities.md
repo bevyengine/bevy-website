@@ -1,8 +1,8 @@
 <!-- Implement gamepads as entities -->
 <!-- https://github.com/bevyengine/bevy/pull/12770 -->
 
-Gamepads are surprisingly complex objects: each with their own array of settings and unique identifier.
-To make it easier to work with gamepads, each gamepad is now a distinct entity.
+Gamepads are surprisingly complex objects: each with their own array of settings and unique identifiers.
+To make them easier to work with, each gamepad is now a distinct entity.
 Metadata and the state of each button and axis is stored on the [`Gamepad`] component, and gamepad-specific settings like deadzones and sensitivity can be configured with the [`GamepadSettings`] component.
 
 In Bevy 0.14, you might write:
@@ -63,7 +63,7 @@ fn gamepad_system(
 }
 ```
 
-This design makes adding custom behavior to each gamepad easy, and  opens the door to supporting more advanced features such as rumble and gyroscopic control directly in Bevy in the future!
+Not only does this design make gamepad-specific custom behavior easy, it also opens the door to supporting more advanced features such as rumble and gyroscopic control in the future!
 
 [`Gamepad`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/input/gamepad/struct.Gamepad.html
 [`GamepadSettings`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/input/gamepad/struct.GamepadSettings.html
