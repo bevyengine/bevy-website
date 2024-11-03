@@ -3,7 +3,7 @@
 
 Gamepads are surprisingly complex objects: each with their own array of settings and unique identifiers.
 To make them easier to work with, each gamepad is now a distinct entity.
-Metadata and the state of each button and axis is stored on the [`Gamepad`] component, and gamepad-specific settings like deadzones and sensitivity can be configured with the [`GamepadSettings`] component.
+The state of each button and axis is stored on the [`Gamepad`] component (along with metadata such as the device name supplied by the manufacturer), while gamepad-specific settings like deadzones and sensitivity can be configured with the [`GamepadSettings`] component.
 
 In Bevy 0.14, you might write:
 
