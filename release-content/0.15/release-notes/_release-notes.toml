@@ -284,7 +284,7 @@ prs = [15281]
 file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
 
 [[release_notes]]
-title = "Implement gamepads as entities"
+title = "Gamepads as entities"
 authors = ["@s-puig"]
 contributors = ["@cart"]
 prs = [12770]
