@@ -258,7 +258,7 @@ prs = [15368]
 file_name = "15368_Add_the_ability_to_control_font_smoothing.md"
 
 [[release_notes]]
-title = "Support systems that take references as input"
+title = "Piping data between systems by reference"
 authors = ["@ItsDoot"]
 contributors = ["@SkiFire13"]
 prs = [15184]
