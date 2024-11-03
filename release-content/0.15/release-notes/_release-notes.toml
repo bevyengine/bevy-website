@@ -195,7 +195,7 @@ prs = [15170]
 file_name = "15170_Enabledisable_UI_antialiasing.md"
 
 [[release_notes]]
-title = "Add `EntityRefExcept` and `EntityMutExcept` world queries, in preparation for generalized animation."
+title = "`EntityRefExcept` and `EntityMutExcept`"
 authors = ["@pcwalton"]
 contributors = []
 prs = [15207]
