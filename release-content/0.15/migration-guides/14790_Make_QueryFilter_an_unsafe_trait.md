@@ -1,0 +1,1 @@
+`QueryFilter` is now an `unsafe trait`.  If you were manually implementing it, you will need to verify that the `WorldQuery` implementation is read-only and then add the `unsafe` keyword to the `impl`.

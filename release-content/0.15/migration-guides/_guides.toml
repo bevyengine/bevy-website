@@ -1,0 +1,1055 @@
+[[guides]]
+title = "Fix asset_settings example regression"
+prs = [15945]
+areas = []
+file_name = "15945_Fix_asset_settings_example_regression.md"
+
+[[guides]]
+title = "Remove AVIF feature"
+prs = [15973]
+areas = []
+file_name = "15973_Remove_AVIF_feature.md"
+
+[[guides]]
+title = "Make `AnimationPlayer::start` and `::play` work accordingly to documentation"
+prs = [14546]
+areas = ["Animation"]
+file_name = "14546_Make_AnimationPlayerstart_and_play_work_accordingly_to_doc.md"
+
+[[guides]]
+title = "Implement animation masks, allowing fine control of the targets that animations affect."
+prs = [15013]
+areas = ["Animation"]
+file_name = "15013_Implement_animation_masks_allowing_fine_control_of_the_tar.md"
+
+[[guides]]
+title = "Remove `TransformCurve`"
+prs = [15598]
+areas = ["Animation"]
+file_name = "15598_Remove_TransformCurve.md"
+
+[[guides]]
+title = "Impose a more sensible ordering for animation graph evaluation."
+prs = [15589]
+areas = ["Animation"]
+file_name = "15589_Impose_a_more_sensible_ordering_for_animation_graph_evalua.md"
+
+[[guides]]
+title = "Implement additive blending for animation graphs."
+prs = [15631]
+areas = ["Animation"]
+file_name = "15631_Implement_additive_blending_for_animation_graphs.md"
+
+[[guides]]
+title = "Fix additive blending of quaternions"
+prs = [15662]
+areas = ["Animation"]
+file_name = "15662_Fix_additive_blending_of_quaternions.md"
+
+[[guides]]
+title = "Replace `Handle<AnimationGraph>` component with a wrapper"
+prs = [15742]
+areas = ["Animation"]
+file_name = "15742_Replace_HandleAnimationGraph_component_with_a_wrapper.md"
+
+[[guides]]
+title = "Curve-based animation"
+prs = [15434]
+areas = ["Animation", "Math"]
+file_name = "15434_Curvebased_animation.md"
+
+[[guides]]
+title = "Allow animation clips to animate arbitrary properties."
+prs = [15282]
+areas = ["Animation", "Reflection"]
+file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
+
+[[guides]]
+title = "Remove second generic from `.add_before`, `.add_after`"
+prs = [14285]
+areas = ["App"]
+file_name = "14285_Remove_second_generic_from_add_before_add_after.md"
+
+[[guides]]
+title = "Remove need for EventLoopProxy to be NonSend"
+prs = [14198]
+areas = ["App"]
+file_name = "14198_Remove_need_for_EventLoopProxy_to_be_NonSend.md"
+
+[[guides]]
+title = "Remove deprecated `bevy_dynamic_plugin`"
+prs = [14534]
+areas = ["App"]
+file_name = "14534_Remove_deprecated_bevy_dynamic_plugin.md"
+
+[[guides]]
+title = "Allow ordering variable timesteps around fixed timesteps"
+prs = [14881]
+areas = ["App"]
+file_name = "14881_Allow_ordering_variable_timesteps_around_fixed_timesteps.md"
+
+[[guides]]
+title = "Add features to switch `NativeActivity` and `GameActivity` usage"
+prs = [12095]
+areas = ["App"]
+file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md"
+
+[[guides]]
+title = "AssetServer LoadState API consistency"
+prs = [15237]
+areas = ["Assets"]
+file_name = "15237_AssetServer_LoadState_API_consistency.md"
+
+[[guides]]
+title = "Cleanup unneeded lifetimes in bevy_asset"
+prs = [15546]
+areas = ["Assets"]
+file_name = "15546_Cleanup_unneeded_lifetimes_in_bevy_asset.md"
+
+[[guides]]
+title = "Replace `AsyncSeek` trait by `AsyncSeekForward` for `Reader` to address #12880"
+prs = [14194]
+areas = ["Assets"]
+file_name = "14194_Replace_AsyncSeek_trait_by_AsyncSeekForward_for_Reader_to_.md"
+
+[[guides]]
+title = "bevy_asset: Improve `NestedLoader` API"
+prs = [15509]
+areas = ["Assets"]
+file_name = "15509_bevy_asset_Improve_NestedLoader_API.md"
+
+[[guides]]
+title = "Remove incorrect equality comparisons for asset load error types"
+prs = [15890]
+areas = ["Assets"]
+file_name = "15890_Remove_incorrect_equality_comparisons_for_asset_load_error.md"
+
+[[guides]]
+title = "Faster MeshletMesh deserialization"
+prs = [14193]
+areas = ["Assets", "Rendering"]
+file_name = "14193_Faster_MeshletMesh_deserialization.md"
+
+[[guides]]
+title = "Split `TextureAtlasSources` out of `TextureAtlasLayout` and make `TextureAtlasLayout` serializable"
+prs = [15344]
+areas = ["Assets", "Rendering"]
+file_name = "15344_Split_TextureAtlasSources_out_of_TextureAtlasLayout_and_ma.md"
+
+[[guides]]
+title = "Export glTF skins as a Gltf struct"
+prs = [14343]
+areas = ["Assets", "Scenes"]
+file_name = "14343_Export_glTF_skins_as_a_Gltf_struct.md"
+
+[[guides]]
+title = "Replace `bevy_utils::CowArc` with `atomicow`"
+prs = [14977]
+areas = ["Assets", "Utils"]
+file_name = "14977_Replace_bevy_utilsCowArc_with_atomicow.md"
+
+[[guides]]
+title = "Migrate audio to required components"
+prs = [15573]
+areas = ["Audio", "ECS"]
+file_name = "15573_Migrate_audio_to_required_components.md"
+
+[[guides]]
+title = "Update Grid Gizmo to use Color"
+prs = [14886]
+areas = ["Color", "Gizmos"]
+file_name = "14886_Update_Grid_Gizmo_to_use_Color.md"
+
+[[guides]]
+title = "Rename `bevy_core::name::DebugName` to `bevy_core::name::NameOrEntity`"
+prs = [14211]
+areas = ["Core", "Editor"]
+file_name = "14211_Rename_bevy_corenameDebugName_to_bevy_corenameNameOrEntity.md"
+
+[[guides]]
+title = "Add `core` and `alloc` over `std` Lints"
+prs = [15281]
+areas = ["Cross-Cutting"]
+file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
+
+[[guides]]
+title = "Remove the `Component` trait implementation from `Handle`"
+prs = [15796]
+areas = ["Cross-Cutting"]
+file_name = "15796_Remove_the_Component_trait_implementation_from_Handle.md"
+
+[[guides]]
+title = "Fix floating point math"
+prs = [15239]
+areas = ["Cross-Cutting", "Math"]
+file_name = "15239_Fix_floating_point_math.md"
+
+[[guides]]
+title = "Add custom cursors"
+prs = [14284]
+areas = ["Cross-Cutting", "UI", "Windowing"]
+file_name = "14284_Add_custom_cursors.md"
+
+[[guides]]
+title = "Don't ignore draw errors"
+prs = [13240]
+areas = ["Diagnostics", "Rendering"]
+file_name = "13240_Dont_ignore_draw_errors.md"
+
+[[guides]]
+title = "Created an EventMutator for when you want to mutate an event before reading"
+prs = [13818]
+areas = ["ECS"]
+file_name = "13818_Created_an_EventMutator_for_when_you_want_to_mutate_an_eve.md"
+
+[[guides]]
+title = "Update `trigger_observers` to operate over slices of data"
+prs = [14354]
+areas = ["ECS"]
+file_name = "14354_Update_trigger_observers_to_operate_over_slices_of_data.md"
+
+[[guides]]
+title = "Simplify run conditions"
+prs = [14441]
+areas = ["ECS"]
+file_name = "14441_Simplify_run_conditions.md"
+
+[[guides]]
+title = "Require `&mut self` for `World::increment_change_tick`"
+prs = [14459]
+areas = ["ECS"]
+file_name = "14459_Require_mut_self_for_Worldincrement_change_tick.md"
+
+[[guides]]
+title = "Add `FilteredAccess::empty` and simplify the implementation of `update_component_access` for `AnyOf`/`Or`"
+prs = [14352]
+areas = ["ECS"]
+file_name = "14352_Add_FilteredAccessempty_and_simplify_the_implementation_of_.md"
+
+[[guides]]
+title = "Track source location in change detection"
+prs = [14034]
+areas = ["ECS"]
+file_name = "14034_Track_source_location_in_change_detection.md"
+
+[[guides]]
+title = "Make `QueryState::transmute`&co validate the world of the `&Components` used"
+prs = [14631]
+areas = ["ECS"]
+file_name = "14631_Make_QueryStatetransmuteco_validate_the_world_of_the_Compo.md"
+
+[[guides]]
+title = "Fix soudness issue with Conflicts involving `read_all` and `write_all`"
+prs = [14579]
+areas = ["ECS"]
+file_name = "14579_Fix_soudness_issue_with_Conflicts_involving_read_all_and_w.md"
+
+[[guides]]
+title = "Support more kinds of system params in buildable systems."
+prs = [14050]
+areas = ["ECS"]
+file_name = "14050_Support_more_kinds_of_system_params_in_buildable_systems.md"
+
+[[guides]]
+title = "Add query reborrowing"
+prs = [14690]
+areas = ["ECS"]
+file_name = "14690_Add_query_reborrowing.md"
+
+[[guides]]
+title = "Rename `Commands::register_one_shot_system` -> `register_system`"
+prs = [14910]
+areas = ["ECS"]
+file_name = "14910_Rename_Commandsregister_one_shot_system__register_system.md"
+
+[[guides]]
+title = "Make QueryFilter an unsafe trait"
+prs = [14790]
+areas = ["ECS"]
+file_name = "14790_Make_QueryFilter_an_unsafe_trait.md"
+
+[[guides]]
+title = "EntityRef/Mut get_components (immutable variants only)"
+prs = [15089]
+areas = ["ECS"]
+file_name = "15089__EntityRefMut_get_components_immutable_variants_only.md"
+
+[[guides]]
+title = "Removed Type Parameters from `Observer`"
+prs = [15151]
+areas = ["ECS"]
+file_name = "15151_Removed_Type_Parameters_from_Observer.md"
+
+[[guides]]
+title = "Remove redundant information and optimize dynamic allocations in `Table`"
+prs = [12929]
+areas = ["ECS"]
+file_name = "12929_Remove_redundant_information_and_optimize_dynamic_allocati.md"
+
+[[guides]]
+title = "Rename push children to add children"
+prs = [15196]
+areas = ["ECS"]
+file_name = "15196_Rename_push_children_to_add_children.md"
+
+[[guides]]
+title = "Rename Add to Queue for methods with deferred semantics"
+prs = [15234]
+areas = ["ECS"]
+file_name = "15234_Rename_Add_to_Queue_for_methods_with_deferred_semantics.md"
+
+[[guides]]
+title = "change return type of `World::resource_ref` to `Ref`"
+prs = [15263]
+areas = ["ECS"]
+file_name = "15263_change_return_type_of_Worldresource_ref_to_Ref.md"
+
+[[guides]]
+title = "Support systems that take references as input"
+prs = [15184]
+areas = ["ECS"]
+file_name = "15184_Support_systems_that_take_references_as_input.md"
+
+[[guides]]
+title = "Follow up to cached `run_system`"
+prs = [15410]
+areas = ["ECS"]
+file_name = "15410_Follow_up_to_cached_run_system.md"
+
+[[guides]]
+title = "List components for QueryEntityError::QueryDoesNotMatch"
+prs = [15435]
+areas = ["ECS"]
+file_name = "15435_List_components_for_QueryEntityErrorQueryDoesNotMatch.md"
+
+[[guides]]
+title = "Rename init_component & friends"
+prs = [15454]
+areas = ["ECS"]
+file_name = "15454_Rename_init_component__friends.md"
+
+[[guides]]
+title = "System param validation for observers, system registry and run once"
+prs = [15526]
+areas = ["ECS"]
+file_name = "15526_System_param_validation_for_observers_system_registry_and_.md"
+
+[[guides]]
+title = "15540 Make World::flush_commands private"
+prs = [15553]
+areas = ["ECS"]
+file_name = "15553_15540_Make_Worldflush_commands_private.md"
+
+[[guides]]
+title = "Enable `EntityRef::get_by_id` and friends to take multiple ids and get multiple pointers back"
+prs = [15593]
+areas = ["ECS"]
+file_name = "15593_Enable_EntityRefget_by_id_and_friends_to_take_multiple_ids.md"
+
+[[guides]]
+title = "Rename observe to observe_entity on EntityWorldMut"
+prs = [15616]
+areas = ["ECS"]
+file_name = "15616_Rename_observe_to_observe_entity_on_EntityWorldMut.md"
+
+[[guides]]
+title = "Deprecate `Events::oldest_id`"
+prs = [15658]
+areas = ["ECS"]
+file_name = "15658_Deprecate_Eventsoldest_id.md"
+
+[[guides]]
+title = "Allow `World::entity` family of functions to take multiple entities and get multiple references back"
+prs = [15614]
+areas = ["ECS"]
+file_name = "15614_Allow_Worldentity_family_of_functions_to_take_multiple_ent.md"
+
+[[guides]]
+title = "Deprecate `get_or_spawn`"
+prs = [15652]
+areas = ["ECS"]
+file_name = "15652_Deprecate_get_or_spawn.md"
+
+[[guides]]
+title = "bevy_ecs: Special-case `Entity::PLACEHOLDER` formatting"
+prs = [15839]
+areas = ["ECS"]
+file_name = "15839_bevy_ecs_Specialcase_EntityPLACEHOLDER_formatting.md"
+
+[[guides]]
+title = "Minimal Bubbling Observers"
+prs = [13991]
+areas = ["ECS", "Hierarchy", "Picking"]
+file_name = "13991_Minimal_Bubbling_Observers.md"
+
+[[guides]]
+title = "Change ReflectMapEntities to operate on components before insertion"
+prs = [15422]
+areas = ["ECS", "Networking", "Scenes"]
+file_name = "15422_Change_ReflectMapEntities_to_operate_on_components_before_.md"
+
+[[guides]]
+title = "Bubbling observers traversal should use query data"
+prs = [15385]
+areas = ["ECS", "Picking"]
+file_name = "15385_Bubbling_observers_traversal_should_use_query_data.md"
+
+[[guides]]
+title = "Migrate bevy picking"
+prs = [15690]
+areas = ["ECS", "Picking"]
+file_name = "15690_Migrate_bevy_picking.md"
+
+[[guides]]
+title = "feat: Add `World::get_reflect()` and `World::get_reflect_mut()`"
+prs = [14416]
+areas = ["ECS", "Reflection"]
+file_name = "14416_feat_Add_Worldget_reflect_and_Worldget_reflect_mut.md"
+
+[[guides]]
+title = "Use crate: `disqualified`"
+prs = [15372]
+areas = ["ECS", "Reflection", "Utils"]
+file_name = "15372_Use_crate_disqualified.md"
+
+[[guides]]
+title = "Migrate visibility to required components"
+prs = [15474]
+areas = ["ECS", "Rendering"]
+file_name = "15474_Migrate_visibility_to_required_components.md"
+
+[[guides]]
+title = "Migrate fog volumes to required components"
+prs = [15568]
+areas = ["ECS", "Rendering"]
+file_name = "15568_Migrate_fog_volumes_to_required_components.md"
+
+[[guides]]
+title = "Migrate meshes and materials to required components"
+prs = [15524]
+areas = ["ECS", "Rendering"]
+file_name = "15524_Migrate_meshes_and_materials_to_required_components.md"
+
+[[guides]]
+title = "Migrate motion blur, TAA, SSAO, and SSR to required components"
+prs = [15572]
+areas = ["ECS", "Rendering"]
+file_name = "15572_Migrate_motion_blur_TAA_SSAO_and_SSR_to_required_component.md"
+
+[[guides]]
+title = "Migrate cameras to required components"
+prs = [15641]
+areas = ["ECS", "Rendering"]
+file_name = "15641_Migrate_cameras_to_required_components.md"
+
+[[guides]]
+title = "Synchronize removed components with the render world"
+prs = [15582]
+areas = ["ECS", "Rendering"]
+file_name = "15582_Synchronize_removed_components_with_the_render_world.md"
+
+[[guides]]
+title = "Migrate reflection probes to required components"
+prs = [15737]
+areas = ["ECS", "Rendering"]
+file_name = "15737_Migrate_reflection_probes_to_required_components.md"
+
+[[guides]]
+title = "Migrate `bevy_transform` to required components"
+prs = [14964]
+areas = ["ECS", "Transform"]
+file_name = "14964_Migrate_bevy_transform_to_required_components.md"
+
+[[guides]]
+title = "Deprecate SpatialBundle"
+prs = [15830]
+areas = ["ECS", "Transform"]
+file_name = "15830_Deprecate_SpatialBundle.md"
+
+[[guides]]
+title = "Making `bevy_render` an optional dependency for `bevy_gizmos`"
+prs = [14448]
+areas = ["Gizmos"]
+file_name = "14448_Making_bevy_render_an_optional_dependency_for_bevy_gizmos.md"
+
+[[guides]]
+title = "Consistency between `Wireframe2d` and `Wireframe`"
+prs = [14720]
+areas = ["Gizmos"]
+file_name = "14720_Consistency_between_Wireframe2d_and_Wireframe.md"
+
+[[guides]]
+title = "Fix Gizmos warnings and doc errors when a subset of features are selected"
+prs = [14887]
+areas = ["Gizmos"]
+file_name = "14887_Fix_Gizmos_warnings_and_doc_errors_when_a_subset_of_features.md"
+
+[[guides]]
+title = "Fix `arc_2d` Gizmos"
+prs = [14731]
+areas = ["Gizmos"]
+file_name = "14731_Fix_arc_2d_Gizmos.md"
+
+[[guides]]
+title = "Use `Isometry` in `bevy_gizmos` wherever we can"
+prs = [14676]
+areas = ["Gizmos"]
+file_name = "14676_Use_Isometry_in_bevy_gizmos_wherever_we_can.md"
+
+[[guides]]
+title = "Improve the gizmo for `Plane3d`, reusing grid"
+prs = [14650]
+areas = ["Gizmos"]
+file_name = "14650_Improve_the_gizmo_for_Plane3d_reusing_grid.md"
+
+[[guides]]
+title = "Switch rotation & translation in grid gizmos"
+prs = [14656]
+areas = ["Gizmos", "Math"]
+file_name = "14656_Switch_rotation__translation_in_grid_gizmos.md"
+
+[[guides]]
+title = "Make TrackedRenderPass::set_vertex_buffer aware of slice size"
+prs = [14916]
+areas = ["Gizmos", "Rendering"]
+file_name = "14916_Make_TrackedRenderPassset_vertex_buffer_aware_of_slice_size.md"
+
+[[guides]]
+title = "Optimize transform propagation"
+prs = [14373]
+areas = ["Hierarchy", "Transform"]
+file_name = "14373_Optimize_transform_propagation.md"
+
+[[guides]]
+title = "Only propagate transforms entities with GlobalTransforms."
+prs = [14384]
+areas = ["Hierarchy", "Transform"]
+file_name = "14384_Only_propagate_transforms_entities_with_GlobalTransforms.md"
+
+[[guides]]
+title = "Remove `ReceivedCharacter`"
+prs = [15126]
+areas = ["Input"]
+file_name = "15126_Remove_ReceivedCharacter.md"
+
+[[guides]]
+title = "Implement gamepads as entities"
+prs = [12770]
+areas = ["Input"]
+file_name = "12770_Implement_gamepads_as_entities.md"
+
+[[guides]]
+title = "Picking event ordering"
+prs = [14862]
+areas = ["Input", "Picking", "Windowing"]
+file_name = "14862_Picking_event_ordering.md"
+
+[[guides]]
+title = "Added `new` method to Cone 3D primitive"
+prs = [14325]
+areas = ["Math"]
+file_name = "14325_Added_new_method_to_Cone_3D_primitive.md"
+
+[[guides]]
+title = "Disallow empty cubic and rational curves"
+prs = [14382]
+areas = ["Math"]
+file_name = "14382_Disallow_empty_cubic_and_rational_curves.md"
+
+[[guides]]
+title = "Refactor Bounded2d/Bounded3d to use isometries"
+prs = [14485]
+areas = ["Math"]
+file_name = "14485_Refactor_Bounded2dBounded3d_to_use_isometries.md"
+
+[[guides]]
+title = "Basic integration of cubic spline curves with the Curve API"
+prs = [15469]
+areas = ["Math"]
+file_name = "15469_Basic_integration_of_cubic_spline_curves_with_the_Curve_AP.md"
+
+[[guides]]
+title = "Use `Dir2`/`Dir3` instead of `Vec2`/`Vec3` for `Ray2d::new`/`Ray3d::new`"
+prs = [15735]
+areas = ["Math"]
+file_name = "15735_Use_Dir2Dir3_instead_of_Vec2Vec3_for_Ray2dnewRay3dnew.md"
+
+[[guides]]
+title = "bevy_reflect: Update `EulerRot` to match `glam` 0.29"
+prs = [15402]
+areas = ["Math", "Reflection"]
+file_name = "15402_bevy_reflect_Update_EulerRot_to_match_glam_029.md"
+
+[[guides]]
+title = "rename Drop to bevy::picking::events::DragDrop to unclash std::ops:Drop"
+prs = [14926]
+areas = ["Picking"]
+file_name = "14926_rename_Drop_to_bevypickingeventsDragDrop_to_unclash_stdops.md"
+
+[[guides]]
+title = "bevy_reflect: Nested `TypeInfo` getters"
+prs = [13321]
+areas = ["Reflection"]
+file_name = "13321_bevy_reflect_Nested_TypeInfo_getters.md"
+
+[[guides]]
+title = "Implement FromIterator/IntoIterator for dynamic types"
+prs = [14250]
+areas = ["Reflection"]
+file_name = "14250_Implement_FromIteratorIntoIterator_for_dynamic_types.md"
+
+[[guides]]
+title = "Dedicated `Reflect` implementation for `Set`-like things"
+prs = [13014]
+areas = ["Reflection"]
+file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
+
+[[guides]]
+title = "bevy_reflect: Add `Type` type"
+prs = [14838]
+areas = ["Reflection"]
+file_name = "14838_bevy_reflect_Add_Type_type.md"
+
+[[guides]]
+title = "bevy_reflect: Refactor `serde` module"
+prs = [15107]
+areas = ["Reflection"]
+file_name = "15107_bevy_reflect_Refactor_serde_module.md"
+
+[[guides]]
+title = "bevy_reflect: Add `DynamicTyped` trait"
+prs = [15108]
+areas = ["Reflection"]
+file_name = "15108_bevy_reflect_Add_DynamicTyped_trait.md"
+
+[[guides]]
+title = "bevy_reflect: Replace \"value\" terminology with \"opaque\""
+prs = [15240]
+areas = ["Reflection"]
+file_name = "15240_bevy_reflect_Replace_value_terminology_with_opaque.md"
+
+[[guides]]
+title = "Remove `Return::Unit` variant"
+prs = [15484]
+areas = ["Reflection"]
+file_name = "15484_Remove_ReturnUnit_variant.md"
+
+[[guides]]
+title = "Make `drain` take a mutable borrow instead of `Box<Self>` for reflected `Map`, `List`, and `Set`."
+prs = [15406]
+areas = ["Reflection"]
+file_name = "15406_Make_drain_take_a_mutable_borrow_instead_of_BoxSelf_for_re.md"
+
+[[guides]]
+title = "Serialize and deserialize tuple struct with one field as newtype struct"
+prs = [15628]
+areas = ["Reflection"]
+file_name = "15628_Serialize_and_deserialize_tuple_struct_with_one_field_as_n.md"
+
+[[guides]]
+title = "Use `FromReflect` when extracting entities in dynamic scenes"
+prs = [15174]
+areas = ["Reflection", "Scenes"]
+file_name = "15174_Use_FromReflect_when_extracting_entities_in_dynamic_scenes.md"
+
+[[guides]]
+title = "move ShortName to bevy_reflect"
+prs = [15340]
+areas = ["Reflection", "Utils"]
+file_name = "15340_move_ShortName_to_bevy_reflect.md"
+
+[[guides]]
+title = "Lighting Should Only hold Vec<Entity> instead of TypeId<Vec<Entity>>"
+prs = [14073]
+areas = ["Rendering"]
+file_name = "14073_Lighting_Should_Only_hold_VecEntity_instead_of_TypeIdVecEn.md"
+
+[[guides]]
+title = "Add support for skybox transformation"
+prs = [14267]
+areas = ["Rendering"]
+file_name = "14267_Add_support_for_skybox_transformation.md"
+
+[[guides]]
+title = "Allow volumetric fog to be localized to specific, optionally voxelized, regions."
+prs = [14099]
+areas = ["Rendering"]
+file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
+
+[[guides]]
+title = "Pack multiple vertex and index arrays together into growable buffers."
+prs = [14257]
+areas = ["Rendering"]
+file_name = "14257_Pack_multiple_vertex_and_index_arrays_together_into_growab.md"
+
+[[guides]]
+title = "Add support for environment map transformation"
+prs = [14290]
+areas = ["Rendering"]
+file_name = "14290_Add_support_for_environment_map_transformation.md"
+
+[[guides]]
+title = "Using Cas instead of CAS #14341"
+prs = [14357]
+areas = ["Rendering"]
+file_name = "14357_Using_Cas_instead_of_CAS_14341.md"
+
+[[guides]]
+title = "Move `Msaa` to component"
+prs = [14273]
+areas = ["Rendering"]
+file_name = "14273_Move_Msaa_to_component.md"
+
+[[guides]]
+title = "Add 2d opaque phase with depth buffer"
+prs = [13069]
+areas = ["Rendering"]
+file_name = "13069_Add_2d_opaque_phase_with_depth_buffer.md"
+
+[[guides]]
+title = "Changed `Mesh::attributes*` functions to return `MeshVertexAttribute`"
+prs = [14394]
+areas = ["Rendering"]
+file_name = "14394_Changed_Meshattributes_functions_to_return_MeshVertexAttri.md"
+
+[[guides]]
+title = "Add `RenderSet::FinalCleanup` for `World::clear_entities`"
+prs = [14764]
+areas = ["Rendering"]
+file_name = "14764_Add_RenderSetFinalCleanup_for_Worldclear_entities.md"
+
+[[guides]]
+title = "Add feature requirement info to image loading docs"
+prs = [13712]
+areas = ["Rendering"]
+file_name = "13712_Add_feature_requirement_info_to_image_loading_docs.md"
+
+[[guides]]
+title = "Fix underflow panic in `InitTriInfo`"
+prs = [14893]
+areas = ["Rendering"]
+file_name = "14893_Fix_underflow_panic_in_InitTriInfo.md"
+
+[[guides]]
+title = "Rewrite screenshots."
+prs = [14833]
+areas = ["Rendering"]
+file_name = "14833_Rewrite_screenshots.md"
+
+[[guides]]
+title = "Replace the `wgpu_trace` feature with a field in `bevy_render::settings::WgpuSettings`"
+prs = [14842]
+areas = ["Rendering"]
+file_name = "14842_Replace_the_wgpu_trace_feature_with_a_field_in_bevy_render.md"
+
+[[guides]]
+title = "Refactor `AsBindGroup` to use a associated `SystemParam`."
+prs = [14909]
+areas = ["Rendering"]
+file_name = "14909_Refactor_AsBindGroup_to_use_a_associated_SystemParam.md"
+
+[[guides]]
+title = "Meshlet software raster + start of cleanup"
+prs = [14623]
+areas = ["Rendering"]
+file_name = "14623_Meshlet_software_raster__start_of_cleanup.md"
+
+[[guides]]
+title = "Adds `ShaderStorageBuffer` asset"
+prs = [14663]
+areas = ["Rendering"]
+file_name = "14663_Adds_ShaderStorageBuffer_asset.md"
+
+[[guides]]
+title = "Return `Result`s from `Camera`'s world/viewport conversion methods"
+prs = [14989]
+areas = ["Rendering"]
+file_name = "14989_Return_Results_from_Cameras_worldviewport_conversion_metho.md"
+
+[[guides]]
+title = "Replaced implicit emissive weight with default."
+prs = [13871]
+areas = ["Rendering"]
+file_name = "13871_Replaced_implicit_emissive_weight_with_default.md"
+
+[[guides]]
+title = "Split OrthographicProjection::default into 2d & 3d (Adopted)"
+prs = [15073]
+areas = ["Rendering"]
+file_name = "15073_Split_OrthographicProjectiondefault_into_2d__3d_Adopted.md"
+
+[[guides]]
+title = "Remove OrthographicProjection.scale (adopted)"
+prs = [15075]
+areas = ["Rendering"]
+file_name = "15075_Remove_OrthographicProjectionscale_adopted.md"
+
+[[guides]]
+title = "Rename rendering components for improved consistency and clarity"
+prs = [15035]
+areas = ["Rendering"]
+file_name = "15035_Rename_rendering_components_for_improved_consistency_and_c.md"
+
+[[guides]]
+title = "Migrate lights to required components"
+prs = [15554]
+areas = ["Rendering"]
+file_name = "15554_Migrate_lights_to_required_components.md"
+
+[[guides]]
+title = "Fix Mesh allocator bug and reduce Mesh data copies by two"
+prs = [15566]
+areas = ["Rendering"]
+file_name = "15566_Fix_Mesh_allocator_bug_and_reduce_Mesh_data_copies_by_two.md"
+
+[[guides]]
+title = "Added visibility bitmask as an alternative SSAO method"
+prs = [13454]
+areas = ["Rendering"]
+file_name = "13454_Added_visibility_bitmask_as_an_alternative_SSAO_method.md"
+
+[[guides]]
+title = "Split out bevy_mesh from bevy_render"
+prs = [15666]
+areas = ["Rendering"]
+file_name = "15666_Split_out_bevy_mesh_from_bevy_render.md"
+
+[[guides]]
+title = "Feature-gate all image formats"
+prs = [15586]
+areas = ["Rendering"]
+file_name = "15586_Featuregate_all_image_formats.md"
+
+[[guides]]
+title = "Per-meshlet compressed vertex data"
+prs = [15643]
+areas = ["Rendering"]
+file_name = "15643_Permeshlet_compressed_vertex_data.md"
+
+[[guides]]
+title = "Migrate bevy_sprite to required components"
+prs = [15489]
+areas = ["Rendering"]
+file_name = "15489_Migrate_bevy_sprite_to_required_components.md"
+
+[[guides]]
+title = "Type safe retained render world"
+prs = [15756]
+areas = ["Rendering"]
+file_name = "15756_Type_safe_retained_render_world.md"
+
+[[guides]]
+title = "Move `ImageLoader` and `CompressedImageSaver` to `bevy_image`."
+prs = [15812]
+areas = ["Rendering"]
+file_name = "15812_Move_ImageLoader_and_CompressedImageSaver_to_bevy_image.md"
+
+[[guides]]
+title = "Attempt to remove component from render world if not extracted."
+prs = [15904]
+areas = ["Rendering"]
+file_name = "15904_Attempt_to_remove_component_from_render_world_if_not_extra.md"
+
+[[guides]]
+title = "Improve API for scaling orthographic cameras"
+prs = [15969]
+areas = ["Rendering"]
+file_name = "15969_Improve_API_for_scaling_orthographic_cameras.md"
+
+[[guides]]
+title = "Fix UI texture atlas with offset"
+prs = [13620]
+areas = ["Rendering", "UI"]
+file_name = "13620_Fix_UI_texture_atlas_with_offset.md"
+
+[[guides]]
+title = "use precomputed border values"
+prs = [15163]
+areas = ["Rendering", "UI"]
+file_name = "15163_use_precomputed_border_values.md"
+
+[[guides]]
+title = "Inverse bevy_render bevy_winit dependency and move cursor to bevy_winit"
+prs = [15649]
+areas = ["Rendering", "Windowing"]
+file_name = "15649_Inverse_bevy_render_bevy_winit_dependency_and_move_cursor_.md"
+
+[[guides]]
+title = "Send `SceneInstanceReady` when spawning any kind of scene"
+prs = [11741]
+areas = ["Scenes"]
+file_name = "11741_Send_SceneInstanceReady_when_spawning_any_kind_of_scene.md"
+
+[[guides]]
+title = "Align `Scene::write_to_world_with` to match `DynamicScene::write_to_world_with`"
+prs = [13855]
+areas = ["Scenes"]
+file_name = "13855_Align_Scenewrite_to_world_with_to_match_DynamicScenewrite_.md"
+
+[[guides]]
+title = "Align `Scene::write_to_world_with` to match `DynamicScene::write_to_world_with`"
+prs = [13855]
+areas = ["Scenes"]
+file_name = "13855_Align_Scenewrite_to_world_with_to_match_DynamicScenewrite_.md"
+
+[[guides]]
+title = "Change `SceneInstanceReady` to trigger an observer."
+prs = [13859]
+areas = ["Scenes"]
+file_name = "13859_Change_SceneInstanceReady_to_trigger_an_observer.md"
+
+[[guides]]
+title = "explicitly mention `component` in methods on `DynamicSceneBuilder`"
+prs = [15210]
+areas = ["Scenes"]
+file_name = "15210_explicitly_mention_component_in_methods_on_DynamicSceneBuilder.md"
+
+[[guides]]
+title = "Migrate scenes to required components"
+prs = [15579]
+areas = ["Scenes"]
+file_name = "15579_Migrate_scenes_to_required_components.md"
+
+[[guides]]
+title = "Text rework"
+prs = [15591]
+areas = ["Text"]
+file_name = "15591_Text_rework.md"
+
+[[guides]]
+title = "split up `TextStyle`"
+prs = [15857]
+areas = ["Text"]
+file_name = "15857_split_up_TextStyle.md"
+
+[[guides]]
+title = "Text Rework cleanup"
+prs = [15887]
+areas = ["Text"]
+file_name = "15887_Text_Rework_cleanup.md"
+
+[[guides]]
+title = "Add the ability to control font smoothing"
+prs = [15368]
+areas = ["Text", "UI"]
+file_name = "15368_Add_the_ability_to_control_font_smoothing.md"
+
+[[guides]]
+title = "aligning public apis of Time,Timer and Stopwatch"
+prs = [15962]
+areas = ["Time"]
+file_name = "15962_aligning_public_apis_of_TimeTimer_and_Stopwatch.md"
+
+[[guides]]
+title = "Clean up UiSystem system sets"
+prs = [14228]
+areas = ["UI"]
+file_name = "14228_Clean_up_UiSystem_system_sets.md"
+
+[[guides]]
+title = "Fix error in `bevy_ui` when building without `bevy_text`"
+prs = [14430]
+areas = ["UI"]
+file_name = "14430_Fix_error_in_bevy_ui_when_building_without_bevy_text.md"
+
+[[guides]]
+title = "Remove useless `Direction` field"
+prs = [14793]
+areas = ["UI"]
+file_name = "14793_Remove_useless_Direction_field.md"
+
+[[guides]]
+title = "Rename BreakLineOn to LineBreak"
+prs = [15583]
+areas = ["UI"]
+file_name = "15583_Rename_BreakLineOn_to_LineBreak.md"
+
+[[guides]]
+title = "Add UI `GhostNode`"
+prs = [15341]
+areas = ["UI"]
+file_name = "15341_Add_UI_GhostNode.md"
+
+[[guides]]
+title = "Replace `Handle<M: UiMaterial>` component with  `UiMaterialHandle` wrapper"
+prs = [15740]
+areas = ["UI"]
+file_name = "15740_Replace_HandleM_UiMaterial_component_with__UiMaterialHandl.md"
+
+[[guides]]
+title = "Clip to the UI node's content box"
+prs = [15442]
+areas = ["UI"]
+file_name = "15442_Clip_to_the_UI_nodes_content_box.md"
+
+[[guides]]
+title = "Overflow clip margin"
+prs = [15561]
+areas = ["UI"]
+file_name = "15561_Overflow_clip_margin.md"
+
+[[guides]]
+title = "Migrate UI bundles to required components"
+prs = [15898]
+areas = ["UI"]
+file_name = "15898_Migrate_UI_bundles_to_required_components.md"
+
+[[guides]]
+title = "Merge Style properties into Node. Use ComputedNode for computed properties."
+prs = [15975]
+areas = ["UI"]
+file_name = "15975_Merge_Style_properties_into_Node_Use_ComputedNode_for_comp.md"
+
+[[guides]]
+title = "Explicitly order `CameraUpdateSystem` before `UiSystem::Prepare`"
+prs = [14609]
+areas = ["UI", "Windowing"]
+file_name = "14609_Explicitly_order_CameraUpdateSystem_before_UiSystemPrepare.md"
+
+[[guides]]
+title = "Remove unused type parameter in `Parallel::drain()`"
+prs = [14178]
+areas = ["Utils"]
+file_name = "14178_Remove_unused_type_parameter_in_Paralleldrain.md"
+
+[[guides]]
+title = "Remove remnant `EntityHash` and related types from `bevy_utils`"
+prs = [15039]
+areas = ["Utils"]
+file_name = "15039_Remove_remnant_EntityHash_and_related_types_from_bevy_util.md"
+
+[[guides]]
+title = "Allow `bevy_utils` in `no_std` Contexts"
+prs = [15279]
+areas = ["Utils"]
+file_name = "15279_Allow_bevy_utils_in_no_std_Contexts.md"
+
+[[guides]]
+title = "Remove allocation in `get_short_name`"
+prs = [15294]
+areas = ["Utils"]
+file_name = "15294_Remove_allocation_in_get_short_name.md"
+
+[[guides]]
+title = "Remove unused `default` feature from `bevy_window`"
+prs = [14313]
+areas = ["Windowing"]
+file_name = "14313_Remove_unused_default_feature_from_bevy_window.md"
+
+[[guides]]
+title = "Expose winit's `MonitorHandle`"
+prs = [13669]
+areas = ["Windowing"]
+file_name = "13669_Expose_winits_MonitorHandle.md"
+
+[[guides]]
+title = "move ANDROID_APP to bevy_window"
+prs = [15585]
+areas = ["Windowing"]
+file_name = "15585_move_ANDROID_APP_to_bevy_window.md"
+
+[[guides]]
+title = "Add `bevy_window::Window` options for MacOS"
+prs = [15820]
+areas = ["Windowing"]
+file_name = "15820_Add_bevy_windowWindow_options_for_MacOS.md"

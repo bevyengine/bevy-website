@@ -1,0 +1,3 @@
+- `CursorIcon` is no longer a field in `Window`, but a separate component can be inserted to a window entity. It has been changed to an enum that can hold custom images in addition to system icons.
+- `Cursor` is renamed to `CursorOptions` and `cursor` field of `Window` is renamed to `cursor_options`
+- `CursorIcon` is renamed to `SystemCursorIcon`

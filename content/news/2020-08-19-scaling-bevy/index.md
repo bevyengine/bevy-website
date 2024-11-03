@@ -23,7 +23,7 @@ First, I want to take a moment to highlight just how wild the last week has been
         <img src="2nd_on_hacker_news.png" style="display: block; height: 10rem"/>
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
-        <h4>2,200 Github Stars</h4>
+        <h4>2,200 GitHub Stars</h4>
         <img src="2_2k_stars.png" style="display: block; height: 3rem"/>
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">

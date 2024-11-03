@@ -1,0 +1,1 @@
+- The following functions now return an `Result<_, EntityComponentError>` instead of a `Option<_>`: `EntityRef::get_by_id`, `EntityMut::get_by_id`, `EntityMut::into_borrow_by_id`, `EntityMut::get_mut_by_id`, `EntityMut::into_mut_by_id`, `EntityWorldMut::get_by_id`, `EntityWorldMut::into_borrow_by_id`, `EntityWorldMut::get_mut_by_id`, `EntityWorldMut::into_mut_by_id`

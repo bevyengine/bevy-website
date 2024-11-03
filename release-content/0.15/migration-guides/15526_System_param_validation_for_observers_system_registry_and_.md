@@ -1,0 +1,1 @@
+- `RunSystemOnce::run_system_once` and `RunSystemOnce::run_system_once_with` now return a `Result<Out>` instead of just `Out`

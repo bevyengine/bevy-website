@@ -92,7 +92,12 @@
                 {% continue %}
             {% endif %}
             {% set amount_string = numbers::comma_string(value=tier.amount) %}
-            <a href="{{ tier.donate_link }}" class="card donate-level">
+            {% if tier.every_org_link %}
+                {% set donate_link = tier.every_org_link %}
+            {% elif tier.stripe_link %}
+                {% set donate_link = tier.stripe_link %}
+            {% endif %}
+            <a href="{{ donate_link }}" class="card donate-level">
                 <div class="donate-level-info">
                     <img class="donate-level-icon" alt="donate level icon" src="{{ tier.icon }}"/>
                     <div class="donate-level-text donate-level-{{ tier.name | replace(from=" ", to="_") | lower }}">
@@ -123,7 +128,7 @@
 <div id="corporate-sponsorship" style="display: none">
 <h2 class="donate-header-padding">Corporate Sponsorship</h2>
 <div class="donate-membership-description">
-These tiers exist for individuals or organizations that want to support Bevy in a big way. We <i>highly</i> recommend using bank transfers for payments at these levels to avoid exorbitant credit card processor fees. We provide Stripe links as a convenience, but note that Stripe charges us a 0.5% fee for subscriptions (ex: if you pay $500 / month, they take $2.50 a month). Please <a href="mailto:bevyengine@gmail.com">contact us</a> if you have any questions, or if you would like to discuss other payment options!
+These tiers exist for individuals or organizations that want to support Bevy in a big way. We <i>highly</i> recommend using bank transfers for payments at these levels to avoid exorbitant credit card processor fees. Please <a href="mailto:support@bevyengine.org">contact us</a> if you have any questions, or if you would like to discuss other payment options!
 </div>
 <div class="donate-levels-container">
 <div class="donate-membership-levels">
@@ -132,7 +137,12 @@ These tiers exist for individuals or organizations that want to support Bevy in 
             {% continue %}
         {% endif %}
         {% set amount_string = numbers::comma_string(value=tier.amount) %}
-        <a href="{{ tier.donate_link }}" class="card donate-level">
+        {% if tier.every_org_link %}
+            {% set donate_link = tier.every_org_link %}
+        {% elif tier.stripe_link %}
+            {% set donate_link = tier.stripe_link %}
+        {% endif %}
+        <a href="{{ donate_link }}" class="card donate-level">
             <div class="donate-level-info">
                 <img alt="donate level icon" class="donate-level-icon" src="{{ tier.icon }}"/>
                 <div class="donate-level-text donate-level-{{ tier.name | replace(from="Corporate ", to="") | replace(from=" ", to="_") | lower }}">
@@ -161,7 +171,7 @@ These tiers exist for individuals or organizations that want to support Bevy in 
 </button>
 </div>
 
-<div class="donate-faq-link">See our <a href="/donate/faq">Donation FAQ</a> for more information.</div>
+<div class="donate-faq-link"><a href="/donate/options">Click here</a> for more donation options and FAQs</div>
 {% include "sponsors.html" %}
 </div>
 

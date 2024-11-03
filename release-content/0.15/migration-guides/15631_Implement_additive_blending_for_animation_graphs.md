@@ -1,0 +1,1 @@
+- The `animgraph.ron` format has changed to accommodate the new _additive blending_ feature. You’ll need to change `clip` fields to instances of the new `AnimationNodeType` enum.

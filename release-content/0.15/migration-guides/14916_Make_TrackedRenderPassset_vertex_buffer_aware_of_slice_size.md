@@ -1,0 +1,1 @@
+- `TrackedRenderPass::set_vertex_buffer` function has been modified to update vertex buffers when the same buffer with the same offset is provided, but its size has changed. Some existing code may rely on the previous behavior, which did not update the vertex buffer in this scenario.

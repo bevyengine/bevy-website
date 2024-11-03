@@ -46,7 +46,6 @@ $border-radius: 16px;
     --header-height: 72px;
   }
 
-
   @media (prefers-color-scheme: dark) {
     // dark theme -- original and default
     --color-black: #000;
@@ -86,15 +85,17 @@ $border-radius: 16px;
     --callout-accent-color-warning: #e4c151;
     --callout-bg-color-warning: #513903;
     --callout-color-warning: #fdfdec;
-    --code: #c8c8c8;  
+    --code: #c8c8c8;
 
-    .inverted { }
+    .inverted {
+    }
 
-    .inverted-hue120 { }
-    
-    .inverted-hue240 { }
+    .inverted-hue120 {
+    }
+
+    .inverted-hue240 {
+    }
   }
-
 
   @media (prefers-color-scheme: light) {
     // 'color-black' and other names are usually inverted compared to white theme
@@ -122,18 +123,18 @@ $border-radius: 16px;
     --default-color: #090909;
     --subtitle-color: #666;
     //--default-image-background-color: #e4e4e4;
-    --default-image-background-color: #2c2c2c; // originall 1b1b1b 
+    --default-image-background-color: #2c2c2c; // originall 1b1b1b
     --card-hover-background: #cccfd0;
-    --supporting-text: #2d2d2d;
+    --supporting-text: #bbb;
 
     --callout-accent-color-info: hsl(248, 72%, 63%);
     --callout-bg-color-info: hsl(256, 28%, 89%);
     --callout-color-info: hsl(245, 60%, 04%);
-    
+
     --callout-accent-color-caution: hsl(346, 90%, 49%);
     --callout-bg-color-caution: hsl(346, 90%, 89%);
     --callout-color-caution: hsl(346, 72%, 04%);
-    
+
     --callout-accent-color-warning: hsl(46, 73%, 49%);
     --callout-bg-color-warning: hsl(42, 93%, 89%);
     --callout-color-warning: hsl(60, 81%, 04%);
@@ -144,13 +145,13 @@ $border-radius: 16px;
     // keep the dark code backgrounds abd code text
     --syntax-theme-background: #2b2c2f;
     --syntax-theme-background-hover: #414247;
-    --code: #c8c8c8;  
+    --code: #c8c8c8;
     //--syntax-theme-background: #d3d0d4;
     //--syntax-theme-background-hover: #bdb8be;
     //--code: #383838;
     --alt-syntax-theme-background: #d0d3d4;
 
-   .inverted {
+    .inverted {
       filter: invert(90%) hue-rotate(180deg);
     }
 
@@ -162,8 +163,6 @@ $border-radius: 16px;
       filter: invert(100%) hue-rotate(240deg);
     }
   }
-
- 
 }
 
 // Accessibility

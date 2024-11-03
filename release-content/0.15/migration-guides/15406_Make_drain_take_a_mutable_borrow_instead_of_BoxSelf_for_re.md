@@ -1,0 +1,1 @@
+- `reflect::Map`, `reflect::List`, and `reflect::Set` all now take a `&mut self` instead of a `Box<Self>`. Callers of these traits should add `&mut` before their boxes, and implementers of these traits should update to match.

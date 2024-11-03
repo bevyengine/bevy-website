@@ -3,6 +3,9 @@ name: Update Screenshots
 on:
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+
 env:
   PER_PAGE: 20
 

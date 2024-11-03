@@ -88,7 +88,6 @@ $content-font-size: 1.22rem;
     padding-left: 2.5rem;
   }
 
-
   a:hover code {
     background-color: var(--syntax-theme-background)-hover;
   }
@@ -103,7 +102,8 @@ $content-font-size: 1.22rem;
   }
 
   a:hover {
-    text-shadow: 0 0 0.9px var(--link-hover-shadow-color), 0 0 0.9px var(--link-hover-shadow-color);
+    text-shadow: 0 0 0.9px var(--link-hover-shadow-color),
+      0 0 0.9px var(--link-hover-shadow-color);
   }
 
   pre code {

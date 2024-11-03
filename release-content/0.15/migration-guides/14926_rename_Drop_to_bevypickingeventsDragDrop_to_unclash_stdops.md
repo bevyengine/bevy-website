@@ -1,0 +1,2 @@
+- Rename `Drop` to `DragDrop`
+  - `bevy::picking::events::Drop`  is now `bevy::picking::events::DragDrop`

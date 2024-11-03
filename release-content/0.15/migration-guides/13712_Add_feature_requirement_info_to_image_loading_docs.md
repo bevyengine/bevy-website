@@ -1,0 +1,1 @@
+Image format related entities are feature gated, if there are compilation errors about unknown names there are some of features in list (`exr`, `hdr`, `basis-universal`, `png`, `dds`, `tga`, `jpeg`, `bmp`, `ktx2`, `webp` and `pnm`) should be added.

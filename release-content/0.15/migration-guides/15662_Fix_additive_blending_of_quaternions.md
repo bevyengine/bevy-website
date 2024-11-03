@@ -1,0 +1,1 @@
+This PR changes the implementation of `Quat: Animatable`, which was not used internally by Bevy prior to this release version. If you relied on the old behavior of additive quaternion blending in manual applications, that code will have to be updated, as the old behavior was incorrect.
