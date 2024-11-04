@@ -6,7 +6,7 @@ However, when performing more complicated transformations, such as going from a 
 or composing multiple translations and rotations together, they can get rather unwieldy and difficult to reason about.
 
 The new [`Isometry2d`] and [`Isometry3d`] types introduced in **Bevy 0.15** are a simple yet powerful tool for efficiently describing
-these kinds of transformations. An isometry represents a rotation followed by a translation, similar to a [`Transform`] without scaling.
+these kinds of transformations. An isometry represents a rotation followed by a translation, similar to a [`Transform`] with a scale of 1.
 
 ```rust
 // Create an isometry from a translation and rotation.
