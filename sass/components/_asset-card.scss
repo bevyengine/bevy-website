@@ -21,7 +21,7 @@ $asset-card-padding: 0.4rem;
     background: linear-gradient(
       0deg,
       var(--card-bg-gradient-start-color) 0%,
-      var(--card-img-bg-color) 100%
+      var(--card-bg-gradient-end-color) 100%
     );
 
     img {

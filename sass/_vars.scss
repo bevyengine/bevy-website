@@ -161,6 +161,7 @@ $colors: (
     --card-border-color: var(--color-neutral-600);
     --card-border-hover-color: var(--color-neutral-500);
     --card-bg-gradient-start-color: var(--color-neutral-600);
+    --card-bg-gradient-end-color: var(--color-neutral-800);
     --card-img-bg-color: var(--color-neutral-800);
 
     --code-bg-color: #{lighten(color(neutral, 700), 3%)};
@@ -271,7 +272,8 @@ $colors: (
     --card-border-color: var(--color-neutral-100);
     --card-border-hover-color: var(--color-neutral-200);
     --card-bg-gradient-start-color: var(--color-neutral-200);
-    --card-img-bg-color: var(--color-neutral-400);
+    --card-bg-gradient-end-color: var(--color-neutral-300);
+    --card-img-bg-color: var(--color-neutral-700);
 
     --code-bg-color: #{darken(color(neutral, 50), 3%)};
     --code-bg-hover-color: #{darken(color(neutral, 50), 6%)};
