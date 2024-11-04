@@ -27,9 +27,9 @@ prs = [13818]
 file_name = "13818_Created_an_EventMutator_for_when_you_want_to_mutate_an_eve.md"
 
 [[release_notes]]
-title = "Basic isometry types"
-authors = ["@mweatherley"]
-contributors = []
+title = "Isometry Types"
+authors = ["@mweatherley", "@Jondolf"]
+contributors = ["@RobWalt"]
 prs = [14269]
 file_name = "14269_Basic_isometry_types.md"
 
