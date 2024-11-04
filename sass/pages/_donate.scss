@@ -2,239 +2,243 @@ div.donate-sponsor {
   position: absolute;
   bottom: 0.4rem;
   right: 0.8rem;
+
+  svg {
+    margin-right: 4px;
+  }
 }
 
 .donate-page {
-    font-size: 1.22rem;
-    font-weight: 400;
-    line-height: 1.43;
-    color: var(--supporting-text);
-    font-style: normal;
+  font-size: 1.22rem;
+  font-weight: 400;
+  line-height: 1.43;
+  color: var(--text-color);
+  font-style: normal;
+  text-decoration: none;
+  word-break: break-word;
+
+  h2 {
+    text-align: center;
+    margin-top: 2.2rem;
+    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  a {
     text-decoration: none;
-    word-break: break-word;
+  }
 
-    h2 {
-        text-align: center;
-        margin-top: 2.2rem;
-        margin-bottom: 0.5rem;
-        font-size: 2.2rem;
-    }
-
-    h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    a:visited {
-        text-decoration: none;
-        color: var(--link-color);
-    }
+  a:visited {
+    text-decoration: none;
+    color: var(--link-color);
+  }
 }
 
 .donate-support {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    max-width: 1100px;
-    margin: auto;
-    margin-top: 5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: auto;
+  margin-top: 5rem;
 }
 
 .donate-support-text {
-    width: 500px;
+  width: 500px;
 }
 
 .donate-support-bevy {
-    font-weight: 900;
-    font-size: 5rem;
+  font-weight: 900;
+  font-size: 5rem;
 }
 
 .donate-support-description {
-    margin-top: 10px;
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--color-white);
+  margin-top: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--color-white);
 }
 
 .donate-header-padding {
-    padding-top: 9rem;
+  padding-top: 9rem;
 }
 
 .donate-metrics {
-    height: 200px;
-    width: 400px;
-    margin-top: 30px;
+  height: 200px;
+  width: 400px;
+  margin-top: 30px;
 }
 
 .donate-metric {
-    float: right;
-    clear: right;
-    margin-bottom: 1rem;
-    line-height: 40px;
-    border-bottom-width: 4px;
-    border-bottom-color: var(--color-white);
-    border-bottom-style: solid;
+  float: right;
+  clear: right;
+  margin-bottom: 1rem;
+  line-height: 40px;
+  border-bottom-width: 4px;
+  border-bottom-color: var(--color-white);
+  border-bottom-style: solid;
 }
 
 .donate-number {
-    font-size: 4rem;
-    font-weight: 900;
+  font-size: 4rem;
+  font-weight: 900;
 }
 
 .donate-number-label {
-    display: inline-block;
-    font-size: 2rem;
-    font-weight: 400;
-    width: 160px;
-    text-align: right;
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: 400;
+  width: 160px;
+  text-align: right;
 }
 
 .donate-membership-description {
-    margin: auto;
-    text-align: center;
-    font-size: 1.2rem;
-    max-width: 850px;
-    margin-bottom: 20px;
+  margin: auto;
+  text-align: center;
+  font-size: 1.2rem;
+  max-width: 850px;
+  margin-bottom: 20px;
 }
 
 .donate-levels-container {
-    margin: auto;
-    max-width: 850px;
+  margin: auto;
+  max-width: 850px;
 }
 
 .donate-membership-levels {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 5px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 .donate-level {
-    display: flex;
-    position: relative;
-    width: 280px;
-    height: 134px;
-    background-color: var(--syntax-theme-background);
+  display: flex;
+  position: relative;
+  width: 280px;
+  height: 134px;
+  background-color: var(--code-bg-color);
 
-    &:hover {
-        text-shadow: none !important;
-    }
+  &:hover {
+    text-shadow: none !important;
+  }
 }
 
 .donate-level-info {
-    margin-top: 8px;
-    margin-left: 14px;
+  margin-top: 8px;
+  margin-left: 14px;
 }
 
 .donate-level-icon {
-    width: 70px;
-    float: left;
+  width: 70px;
+  float: left;
 }
 
 .donate-level-corporate {
-    color: rgb(150, 150, 150);
-    font-weight: 500;
-    font-size: 1.2rem;
-    margin-top: -6px;
-    margin-bottom: -12px;
+  color: rgb(150, 150, 150);
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin-top: -6px;
+  margin-bottom: -12px;
 }
 
 .donate-level-text {
-    margin-top: 4px;
-    margin-left: 15px;
-    float: left;
+  margin-top: 4px;
+  margin-left: 15px;
+  float: left;
 }
 
 .donate-level-name {
-    font-weight: 900;
-    font-size: 2.5rem;
+  font-weight: 900;
+  font-size: 2.5rem;
 }
 
 .donate-level-amount {
-    margin-top: -0.8rem;
-    color: #bababa;
-    font-weight: 500;
+  margin-top: -0.8rem;
+  color: #bababa;
+  font-weight: 500;
 }
 
 .donate-level-bronze {
-    color: #9f7d6c;
+  color: #9f7d6c;
 }
 
 .donate-level-silver {
-    color: #bbb;
+  color: #bbb;
 }
 
 .donate-level-gold {
-    color: #c0b04bff;
+  color: #c0b04bff;
 }
 
 .donate-level-platinum {
-    color: #c5c5c5;
+  color: #c5c5c5;
 }
 
 .donate-level-titanium {
-    color: #848484;
+  color: #848484;
 }
 
 .donate-level-diamond {
-    color: #a3daeb;
+  color: #a3daeb;
 }
 
 .donate-level-patron {
-    color: #dcdcdc;
+  color: #dcdcdc;
 }
 
 .donate-corporate-button {
-    display: block;
-    margin-top: 1rem;
-    margin: auto;
-    text-align: center;
-    align-self: center;
-    padding-top: 4px;
-    margin-top: 10px;
-    width: 200px;
-    height: 40px;
+  display: block;
+  margin-top: 1rem;
+  margin: auto;
+  text-align: center;
+  align-self: center;
+  padding-top: 4px;
+  margin-top: 10px;
+  width: 200px;
+  height: 40px;
 }
 
 .tier-rewards {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    column-gap: 8px;
-    position: absolute;
-    width: 100%;
-    height: 30px;
-    bottom: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  column-gap: 8px;
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  bottom: 3px;
 }
 
 .tier-reward {
-    height: 20px;
-    font-size: 0.9rem;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: $border-radius;
-    color: rgb(150, 150, 150);
-    line-height: 1.4rem;
-    padding-left: 8px;
-    padding-right: 8px;
-    height: 24px;
+  height: 20px;
+  font-size: 0.9rem;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: $border-radius;
+  color: rgb(150, 150, 150);
+  line-height: 1.4rem;
+  padding-left: 8px;
+  padding-right: 8px;
+  height: 24px;
 }
 
 .credits-text {
-    text-align: center;
-    width: 75%;
-    margin: auto;
-    font-size: 1.3rem;
+  text-align: center;
+  width: 75%;
+  margin: auto;
+  font-size: 1.3rem;
 }
 
 .donate-faq-link {
-    font-size: 1.4rem;
-    text-align: center;
-    margin-top: 4rem;
+  font-size: 1.4rem;
+  text-align: center;
+  margin-top: 4rem;
 }

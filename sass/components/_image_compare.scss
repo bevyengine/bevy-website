@@ -20,7 +20,7 @@ div.image-compare {
   position: relative;
   border-radius: 10px;
   width: 100%;
-  outline: solid 1px var(--color-grey-900); // fixes border leaking background color
+  outline: solid 1px var(--color-neutral-900); // fixes border leaking background color
   outline-offset: -1px;
 
   // calculated
@@ -32,7 +32,8 @@ div.image-compare {
     font-weight: bolder;
     font-size: 1.8rem;
     width: calc(100% - var(--text-padding));
-    text-shadow: 0 0 2px var(--color-black);
+    text-shadow: 0 0 4px var(--image-compare-text-shadow);
+    color: var(--image-compare-text-color);
   }
 
   &::before {
@@ -92,11 +93,11 @@ div.image-compare {
       border-radius: 50%;
       outline: solid 3px var(--color-white);
       outline-offset: -2.9px;
-      background-color: var(--color-white-darker-40);
+      background-color: var(--color-neutral-600);
 
       &:hover,
       &:active {
-        background-color: var(--color-white-darker-20);
+        background-color: var(--color-neutral-500);
       }
     }
 

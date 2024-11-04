@@ -29,6 +29,7 @@
       font-size: 1.2rem;
       padding: $asset-card-padding;
       width: 100%;
+      color: var(--text-color);
 
       &:focus-visible {
         outline: none;
@@ -39,12 +40,13 @@
   .asset-version-select {
     border-radius: $border-radius;
     border: 2px solid #383838;
-    background-color: var(--syntax-theme-background);
-    font-size: 1.0rem;
-    padding: .4rem;
+    background-color: var(--code-bg-color);
+    font-size: 1rem;
+    padding: 0.4rem;
+    color: var(--text-color);
+    margin-left: 8px;
 
     &:hover {
-      background-color: var(--card-hover-background);
       border: 2px solid #6b6b6b;
     }
 
@@ -70,12 +72,11 @@
     .asset-version-select {
       border-radius: $border-radius;
       border: 2px solid #383838;
-      background-color: var(--syntax-theme-background);
-      font-size: 1.0rem;
-      padding: .4rem;
+      background-color: var(--code-bg-color);
+      font-size: 1rem;
+      padding: 0.4rem;
 
       &:hover {
-        background-color: var(--card-hover-background);
         border: 2px solid #6b6b6b;
       }
     }
@@ -99,13 +100,14 @@
       text-align: center;
       justify-content: center;
       align-items: center;
-      color: var(--default-color);
+      color: var(--text-color);
       height: 48px;
 
       &__img_wrapper {
         display: flex;
         align-items: center;
-        padding: $asset-card-padding 0px $asset-card-padding calc($asset-card-padding * 2);
+        padding: $asset-card-padding 0px $asset-card-padding
+          calc($asset-card-padding * 2);
       }
 
       &__text {

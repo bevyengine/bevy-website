@@ -1,17 +1,25 @@
 .button {
+  --button-bg-color: var(--button-blue-bg-color);
+  --button-bg-hover-color: var(--button-blue-bg-hover-color);
+  --button-border-color: var(--button-blue-border-color);
+  --button-text-color: var(--button-blue-text-color);
 
   display: inline-flex;
   align-items: center;
-  background-color: var(--color-blue);
-  border: 3px solid var(--color-blue-lighter);
+  background-color: var(--button-bg-color);
+  border: 3px solid var(--button-border-color);
   padding: 6px 8px;
   border-radius: $border-radius;
   font-size: 1.2rem;
   font-weight: 500;
   transition: transform $duration-fast;
 
+  img {
+    border-radius: 0 !important;
+  }
+
   &:hover {
-    background-color: var(--color-blue-lighter);
+    background-color: var(--button-bg-hover-color);
   }
 
   &:active {
@@ -21,11 +29,12 @@
   &,
   &:hover,
   &:visited {
-    color: var(--color-white);
+    color: var(--button-text-color);
     text-decoration: none;
   }
 
   &__icon {
+    flex-shrink: 0;
     height: 1.1em;
     width: auto;
     vertical-align: middle;
@@ -34,11 +43,9 @@
   }
 
   &--pink {
-    background-color: var(--color-pink);
-    border-color: var(--color-pink-lighter);
-
-    &:hover {
-      background-color: var(--color-pink-barely-lighter);
-    }
+    --button-bg-color: var(--button-pink-bg-color);
+    --button-bg-hover-color: var(--button-pink-bg-hover-color);
+    --button-border-color: var(--button-pink-border-color);
+    --button-text-color: var(--button-pink-text-color);
   }
 }

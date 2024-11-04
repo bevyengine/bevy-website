@@ -16,18 +16,10 @@
   }
 
   a {
-    @media (prefers-color-scheme: dark) {
-      --color: #868686;
-      --lighter-color: #979797;
-    }
-    @media (prefers-color-scheme: light) {
-      --color: #7a7a7a;
-      --lighter-color: #696969;
-    }
     display: block;
     text-wrap: balance;
     padding-block: 4px;
-    color: var(--color);
+    color: var(--on-this-page-color);
     text-decoration: none;
     word-break: break-word;
 
@@ -37,12 +29,11 @@
     }
 
     &:hover {
-      color: var(--lighter-color);
+      color: var(--on-this-page-hover-color);
     }
 
-    &[data-active=true] {
-      color: var(--color-white);
+    &[data-active="true"] {
+      color: var(--on-this-page-active-color);
     }
-
   }
 }

@@ -6,30 +6,30 @@
   border-top: 4px solid var(--callout-accent-color);
   color: var(--callout-color);
 
-  >:first-child {
+  > :first-child {
     margin-top: 0;
   }
 
-  >:last-child {
+  > :last-child {
     margin-bottom: 0;
   }
 
   &,
   &--info {
-    --callout-accent-color: var(--callout-accent-color-info);
-    --callout-bg-color: var(--callout-bg-color-info);
-    --callout-color: var(--callout-color-info);
+    --callout-accent-color: var(--callout-info-accent-color);
+    --callout-bg-color: var(--callout-info-bg-color);
+    --callout-color: var(--callout-info-color);
   }
 
   &--caution {
-    --callout-accent-color: var(--callout-accent-color-caution);
-    --callout-bg-color: var(--callout-bg-color-caution);
-    --callout-color: var(--callout-color-caution);
+    --callout-accent-color: var(--callout-caution-accent-color);
+    --callout-bg-color: var(--callout-caution-bg-color);
+    --callout-color: var(--callout-caution-color);
   }
 
   &--warning {
-    --callout-accent-color: var(--callout-accent-color-warning);
-    --callout-bg-color: var(--callout-bg-color-warning);
-    --callout-color: var(--callout-color-warning);
+    --callout-accent-color: var(--callout-warning-accent-color);
+    --callout-bg-color: var(--callout-warning-bg-color);
+    --callout-color: var(--callout-warning-color);
   }
 }

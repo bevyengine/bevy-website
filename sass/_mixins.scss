@@ -2,13 +2,13 @@
   display: block;
   overflow: hidden;
   border-radius: $border-radius;
-  border: 2px solid #383838;
-  background-color: var(--alt-syntax-theme-background);
+  border: 2px solid var(--card-border-color);
+  background-color: var(--card-bg-color);
   text-decoration: none;
 
   &:hover {
-    background-color: var(--card-hover-background);
-    border: 2px solid #6b6b6b;
+    background-color: var(--card-bg-hover-color);
+    border: 2px solid var(--card-border-hover-color);
   }
 }
 
@@ -19,7 +19,6 @@
 }
 
 @mixin override-anchor() {
-
   &,
   &:focus,
   &:hover,
@@ -36,9 +35,7 @@
   @if ($lines ==1) {
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-
-  @else {
+  } @else {
     // Ellipsis on second line
     // See: https://css-tricks.com/almanac/properties/l/line-clamp/
     display: -webkit-box;
@@ -48,14 +45,14 @@
 }
 
 @mixin state-checked($id) {
-  ##{$id}-state:checked+[data-#{$id}-state-container] {
+  ##{$id}-state:checked + [data-#{$id}-state-container] {
     @content;
   }
 }
 
 @mixin scrollbar-v {
   $track-width: 4px;
-  $thumb-color: rgba(var(--color-white), 0.2);
+  $thumb-color: rgba(var(--scrollbar-thumb-color), 0.2);
 
   scrollbar-width: thin;
   scrollbar-color: $thumb-color transparent;

@@ -9,8 +9,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "title title"
-      "back  github"
-    ;
+      "back  github";
 
     @media #{$bp-tablet-portrait-up} {
       margin: 24px 0 8px;
@@ -31,11 +30,11 @@
     font-size: 1rem;
 
     @include override-anchor {
-      color: #aaa;
+      color: var(--example-nav-link-color);
     }
 
     &:hover {
-      color: var(--color-white);
+      color: var(--example-nav-link-hover-color);
     }
   }
 

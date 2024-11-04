@@ -9,7 +9,7 @@ $asset-card-padding: 0.4rem;
     "banner"
     "desc"
     "tags";
-  color: var(--color-white);
+  color: var(--text-color);
 
   &__banner {
     grid-area: banner;
@@ -18,9 +18,11 @@ $asset-card-padding: 0.4rem;
     aspect-ratio: 16 / 9;
     align-self: start;
 
-    background: linear-gradient(0deg,
-        var(--card-hover-background) 0%,
-        var(--default-image-background-color) 100%);
+    background: linear-gradient(
+      0deg,
+      var(--card-bg-gradient-start-color) 0%,
+      var(--card-img-bg-color) 100%
+    );
 
     img {
       width: 100%;
@@ -28,7 +30,7 @@ $asset-card-padding: 0.4rem;
       display: block;
       object-fit: contain;
 
-      background-color: var(--default-image-background-color);
+      background-color: var(--card-img-bg-color);
     }
   }
 
@@ -40,7 +42,8 @@ $asset-card-padding: 0.4rem;
     padding: $asset-card-padding;
     font-weight: bold;
     font-size: 1.2rem;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--asset-card-title-bg-color);
+    color: var(--asset-card-title-color);
   }
 
   &__description {
@@ -99,17 +102,18 @@ $asset-card-padding: 0.4rem;
   &__tag-list {
     display: flex;
     align-items: center;
-    gap: .2em;
+    gap: 0.2em;
   }
 
   &__tag {
     display: flex;
     justify-content: center;
 
-    padding: .2em .4em;
-    border-radius: .2em;
-    font-size: .85em;
-    background: rgb(89, 89, 94);
+    padding: 0.2em 0.4em;
+    border-radius: 0.2em;
+    font-size: 0.85em;
+    color: var(--asset-tag-text-color);
+    background: var(--asset-tag-bg-color);
 
     &--supported {
       background-color: rgb(110, 110, 247);

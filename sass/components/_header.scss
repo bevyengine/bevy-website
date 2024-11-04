@@ -78,14 +78,10 @@
         @media #{$bp-tablet-portrait-up} {
           height: 35px;
         }
-
-        @media (prefers-color-scheme: light) {
-          filter: grayscale(1) brightness(0%);
-        }
       }
 
       &:hover {
-        filter: brightness(80%)
+        filter: brightness(80%);
       }
     }
   }

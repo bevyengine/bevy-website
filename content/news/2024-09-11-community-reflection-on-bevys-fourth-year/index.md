@@ -61,4 +61,4 @@ Here is to another year of Bevy!
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" class="inverted" />

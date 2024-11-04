@@ -10,7 +10,7 @@ $menu-switch-padding: 4px;
   grid-template-columns: 1fr 1fr;
   gap: $padding;
   border-radius: $height;
-  background-color: rgba(var(--color-white), 0.05);
+  background-color: var(--menu-switch-bg-color);
   padding: $padding;
   height: $height;
   cursor: pointer;
@@ -24,7 +24,7 @@ $menu-switch-padding: 4px;
     height: $pill-height;
     width: calc(50% - #{$padding * 2});
     border-radius: $pill-height;
-    background-color: var(--color-grey-900);
+    background-color: var(--menu-switch-option-active-bg-color);
     z-index: 0;
     transition: transform $duration;
   }
@@ -39,11 +39,11 @@ $menu-switch-padding: 4px;
     text-align: center;
 
     &--main-menu {
-      opacity: 1.0;
+      color: var(--menu-switch-option-active-text-color);
     }
 
     &--page-menu {
-      opacity: 0.5;
+      color: var(--menu-switch-option-text-color);
     }
   }
 }
@@ -56,11 +56,11 @@ $menu-switch-padding: 4px;
 
     &__option {
       &--main-menu {
-        opacity: 0.5;
+        color: var(--menu-switch-option-text-color);
       }
 
       &--page-menu {
-        opacity: 1.0;
+        color: var(--menu-switch-option-active-text-color);
       }
     }
   }

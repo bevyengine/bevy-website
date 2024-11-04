@@ -20,7 +20,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year of Milestones
 
-![milestones](milestones.svg)
+<img src="milestones.svg" alt="milestones" class="img-in-card" />
 
 * **August 10**: [Bevy 0.1](/news/introducing-bevy/)
   * Bevy's first public release! After months of working incognito, I released Bevy to the world. It was by no means complete, but it had most of the pillars in place to show the world what Bevy is (and could be): a modern and flexible renderer built on top of a modular Render Graph, a custom ECS with unrivaled ergonomics and competitive performance, 2D and 3D rendering features, asset handling, a modular app model that blurs the lines between engine developers and app developers, a custom UI system that integrates deeply with the engine, scenes, hot reloading, and blissfully productive iterative compile times.
@@ -52,7 +52,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year By The Numbers
 
-![numbers](numbers.svg)
+<img src="numbers.svg" alt="numbers" class="img-in-card" />
 
 * **255** unique Bevy contributors on [GitHub](https://github.com/bevyengine)
 * **10,030** [GitHub](https://github.com/bevyengine) stars
@@ -70,7 +70,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## Things I'm Proud Of
 
-![proud](proud.svg)
+<img src="proud.svg" alt="proud" class="img-in-card" />
 
 ### _Our_ Engine
 
@@ -156,7 +156,7 @@ We're starting to see paid Bevy jobs pop up and some of them are resulting in op
 
 ## There is Always Room for Improvement
 
-![improve](improve.svg)
+<img src="improve.svg" alt="improve" class="img-in-card" />
 
 ### Delegating Work and Responsibility
 
@@ -227,7 +227,7 @@ Never thought I'd say those words but here we are. I have a pretty big backlog o
 
 ## The Next Year of Bevy
 
-![next year](next_year.svg)
+<img src="next_year.svg" alt="next year" class="img-in-card" />
 
 Here are some of my plans for the next year:
 
@@ -260,4 +260,4 @@ I'm looking forward to spending the next year with you all!
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" class="inverted"/>

@@ -22,7 +22,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year of Milestones
 
-![milestones](milestones.svg)
+<img src="milestones.svg" alt="milestones" class="img-in-card" />
 
 * **November 4**: [Bevy 0.12](/news/bevy-0-12/)
   * We added Deferred Rendering, Bevy Asset V2, PCF Shadow Filtering, StandardMaterial Light Transmission, Material Extensions, Rusty Shader Imports, Suspend and Resume on Android, Automatic Batching and Instancing of Draw Commands, Renderer Optimizations, One Shot Systems, UI Materials, and more!
@@ -44,7 +44,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year By The Numbers
 
-![numbers](numbers.svg)
+<img src="numbers.svg" alt="numbers" class="img-in-card" />
 
 * **1027** unique Bevy contributors on [GitHub](https://github.com/bevyengine) (up from 741)
 * **34,537** [GitHub](https://github.com/bevyengine) stars (up from 25,222)
@@ -63,7 +63,7 @@ Note that for consistency and clarity all of these numbers are given in "absolut
 
 ## Things I'm Proud Of
 
-![proud](proud.svg)
+<img src="proud.svg" alt="proud" class="img-in-card" />
 
 I'll try not to repeat myself here, but note that I am still extremely proud of the things I outlined in Bevy's [First Birthday](/news/bevys-first-birthday), [Second Birthday](/news/bevys-second-birthday), and [Third Birthday](/news/bevys-third-birthday) posts.
 
@@ -189,7 +189,7 @@ This is also a pattern I expect to see in other areas of the engine: initial rap
 
 ## There Is Always Room For Improvement
 
-![improve](improve.svg)
+<img src="improve.svg" alt="improve" class="img-in-card" />
 
 ### Still No Editor
 
@@ -264,7 +264,7 @@ We did [set up The Bevy Foundation](/news/bevy-foundation/)!
 
 ## The Next Year of Bevy
 
-![next year](next_year.svg)
+<img src="next_year.svg" alt="next year" class="img-in-card" />
 
 The Bevy Community and I take a relatively organic and reactive approach to developing Bevy. It doesn't make sense to outline a long list of "plans" when that isn't really how development works in practice.
 
@@ -286,4 +286,4 @@ To many more years of Bevy!
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" class="inverted" />

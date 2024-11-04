@@ -1,9 +1,9 @@
 html {
-  color: var(--default-color);
+  color: var(--text-color);
   color-scheme: dark;
   font-family: var(--font-family-sans);
   font-size: calc-rem($size-body-mobile);
-  background-color: var(--color-grey-900);
+  background-color: var(--color-neutral-800);
   scroll-padding-top: var(--scroll-padding-top);
 
   * {
