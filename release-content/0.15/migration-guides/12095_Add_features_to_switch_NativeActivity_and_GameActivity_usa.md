@@ -1,4 +1,6 @@
-`cargo-apk` has been replaced with `cargo-ndk`.
+`GameActivity` is now the default activity for Android projects, replacing `NativeActivity`.
+`cargo-apk` has been replaced with `cargo-ndk` since the former is not compatible with
+`GameActivity`.
 
 Before:
 
