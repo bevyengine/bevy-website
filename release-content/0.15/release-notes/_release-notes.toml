@@ -231,7 +231,7 @@ file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
 
 [[release_notes]]
 title = "UI Scrolling"
-authors = ["@Piefayth"]
+authors = ["@Piefayth", "@nicoburns"]
 contributors = []
 prs = [15291]
 file_name = "15291_UI_Scrolling.md"
