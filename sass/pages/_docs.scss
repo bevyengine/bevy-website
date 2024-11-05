@@ -40,9 +40,7 @@
 
 .docs-whats-a-bevy {
   background-color: #00000000; // !important;
-  @media (prefers-color-scheme: light) {
-    filter: invert(85%);
-  }
+  filter: var(--docs-whats-a-bevy-filter);
   height: 2.4rem !important;
   border-radius: unset !important;
 }

@@ -72,10 +72,7 @@
     &__chevron {
         transition: transform $duration;
         transform: rotate(-90deg);
-
-        @media (prefers-color-scheme: light) {
-          filter: invert(65%);
-        }
+        filter: var(--tree-menu-chevron-filter);
     }
 
     &__item--active {
