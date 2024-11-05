@@ -96,6 +96,14 @@ are not automatically given names. For these cases, names can be provided manual
 The same is true for all arguments including `self` arguments: names are not automatically
 generated and must be supplied manually if desired.
 
+Using `FunctionInfo`, a `DynamicFunction` will print out its signature when debug-printed.
+
+```rust
+dbg!(String::len.into_function());
+// Outputs:
+// DynamicFunction(fn alloc::string::String::len(_: &alloc::string::String) -> usize)
+```
+
 #### Manual Construction
 
 For cases where `IntoFunction` won't work, such as for functions with too many arguments
