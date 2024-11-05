@@ -142,7 +142,7 @@ $colors: (
   --html-bg-color: var(--color-neutral-800);
   --link-color: var(--color-blue-link);
   --scrollbar-thumb-color: var(--color-white);
-  --text-color: var(--color-neutral-100);
+  --text-color: var(--color-neutral-200);
   --text-dim-color: var(--color-neutral-300);
 
   --asset-card-title-bg-color: #{rgba($color-black, 0.5)};
@@ -233,7 +233,7 @@ $colors: (
   --table-header-color: var(--color-neutral-800);
   --table-header-text-color: var(--heading-color);
 
-  --tree-menu-chevron-filter: none;
+  --tree-menu-chevron-filter: brightness(70%);
   --tree-menu-label-active-bg-color: var(--color-neutral-600);
   --tree-menu-label-active-color: var(--color-white);
   --tree-menu-label-color: var(--color-neutral-300);

@@ -30,6 +30,10 @@
 
         &:hover {
             background-color: var(--tree-menu-label-active-bg-color);
+
+            .tree-menu__link {
+                color: var(--tree-menu-label-active-color)
+            }
         }
 
         &--with-chevron {
