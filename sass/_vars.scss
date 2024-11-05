@@ -141,7 +141,7 @@ $colors: (
   --hr-color: var(--color-neutral-900);
   --html-bg-color: var(--color-neutral-800);
   --link-color: var(--color-blue-link);
-  --scrollbar-thumb-color: var(--color-white);
+  --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
   --text-color: var(--color-neutral-200);
   --text-dim-color: var(--color-neutral-300);
 
@@ -169,13 +169,13 @@ $colors: (
   --callout-warning-bg-color: #513903;
   --callout-warning-color: #fdfdec;
 
-  --card-bg-color: var(--color-neutral-700);
-  --card-bg-hover-color: #{lighten(color(neutral, 700), 3%)};
+  --card-bg-color: #{lighten(color(neutral, 700), 3%)};
+  --card-bg-hover-color: #{lighten(color(neutral, 700), 6%)};
   --card-border-color: var(--color-neutral-600);
   --card-border-hover-color: var(--color-neutral-500);
   --card-bg-gradient-start-color: var(--color-neutral-600);
   --card-bg-gradient-end-color: var(--color-neutral-800);
-  --card-img-bg-color: var(--color-neutral-800);
+  --card-img-bg-color: #{darken(color(neutral, 800), 2%)};
 
   --code-bg-color: #{lighten(color(neutral, 700), 3%)};
   --code-bg-hover-color: #{lighten(color(neutral, 700), 6%)};
@@ -261,7 +261,7 @@ $colors: (
     --hr-color: var(--color-neutral-100);
     --html-bg-color: var(--color-neutral-100);
     --link-color: #4a33d9;
-    --scrollbar-thumb-color: var(--color-white);
+    --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
     --text-color: var(--color-neutral-600);
     --text-dim-color: var(--color-neutral-400);
 

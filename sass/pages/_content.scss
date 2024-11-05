@@ -10,6 +10,11 @@ $content-font-size: 1.22rem;
   text-decoration: none;
   word-break: break-word;
 
+  h2,
+  h3 {
+    color: var(--heading-color);
+  }
+
   h2 {
     margin-top: 2.2rem;
     margin-bottom: 0.5rem;
