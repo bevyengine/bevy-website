@@ -7,7 +7,7 @@ use crate::{
     markdown::write_markdown_section,
 };
 use std::{
-    collections::BTreeMap,
+    collections::{BTreeMap, BTreeSet},
     fs::{self, OpenOptions},
     io::Write as IoWrite,
     path::PathBuf,
@@ -25,7 +25,7 @@ struct MigrationGuides {
 struct MigrationGuide {
     title: String,
     prs: Vec<u64>,
-    areas: Vec<String>,
+    areas: BTreeSet<String>,
     file_name: String,
 }
 
@@ -42,61 +42,48 @@ pub fn generate_migration_guides(
     // Create the directory that will contain all the migration guides
     std::fs::create_dir_all(&path).context(format!("Failed to create {path:?}"))?;
 
-    // We'll write the file once at the end when all the metdaata is generated
-    let mut guides_metadata = Vec::new();
+    let mut guides_metadata = if overwrite_existing {
+        vec![]
+    } else {
+        // If there is metadata that already exists,
+        // and would contain info such as which PR already
+        // has an entry, then get it and use it for that.
+        let preexisting_metadata_file = fs::read_to_string(path.join("_guides.toml")).ok();
+        // Deserializes the file inside the option into the `MigrationGuides` struct,
+        // and then transposes / swaps the internal result of that operation to external,
+        // and returns the error of that result if there is one,
+        // else we have our preexisting metadata, ready to use.
+        let preexisting_metadata: Option<MigrationGuides> = preexisting_metadata_file
+            .as_deref()
+            .map(toml::from_str)
+            .transpose()?;
 
-    // If there is metadata that already exists,
-    // and would contain info such as which PR already
-    // has an entry, then get it and use it for that.
-    let preexisting_metadata_file = fs::read_to_string(path.join("_guides.toml")).ok();
-    // Deserializes the file inside the option into the `MigrationGuides` struct,
-    // and then transposes / swaps the internal result of that operation to external,
-    // and returns the error of that result if there is one,
-    // else we have our preexisting metadata, ready to use.
-    let preexisting_metadata: Option<MigrationGuides> = preexisting_metadata_file
-        .as_deref()
-        .map(toml::from_str)
-        .transpose()?;
-
-    eprintln!("metadata exists? {}", preexisting_metadata.is_some());
-
-    let mut new_prs = false;
+        eprintln!("metadata exists? {}", preexisting_metadata.is_some());
+        // Populate the metadata to be written with the
+        // preexisting metadata so that it is not lost,
+        // or overwritten.
+        preexisting_metadata
+            .map(|metadata| metadata.guides)
+            .unwrap_or_default()
+    };
 
     // Write all the separate migration guide files
     for (area, prs) in areas {
-        let mut prs = prs;
-        // The PRs inside each area are sorted by close date
-        // This doesn't really matter for the final output,
-        // but it's useful to keep the metadata file in the same order between runs
-        prs.sort_by_key(|k| k.1.closed_at);
-
         for (title, pr) in prs {
             // If a PR is already included in the migration guides,
             // then do not generate anything for this PR.
-            //
-            // If overwrite_existing is true, then ignore
-            // if the PRs may have already been generated.
-            if preexisting_metadata.is_some() && !overwrite_existing {
-                let preexisting_metadata = preexisting_metadata.clone().expect(
-                    "that preexisting metadata exists at the _guides.toml for this release version",
-                );
-                let mut pr_already_generated = false;
+            let mut pr_already_generated = false;
 
-                for migration_guide in preexisting_metadata.guides {
-                    if migration_guide.prs.contains(&pr.number) {
-                        pr_already_generated = true;
-                    }
-                }
-
-                if pr_already_generated {
-                    eprintln!("PR #{} already exists", pr.number);
-                    continue;
+            for migration_guide in guides_metadata.iter() {
+                if migration_guide.prs.contains(&pr.number) {
+                    pr_already_generated = true;
                 }
             }
 
-            // If the code has reached this point then that means
-            // there is new PRs to be recorded.
-            new_prs = true;
+            if pr_already_generated {
+                eprintln!("PR #{} already exists", pr.number);
+                continue;
+            }
 
             // Slugify the title
             let title_slug = title
@@ -112,45 +99,71 @@ pub fn generate_migration_guides(
             // 64 is completely arbitrary but felt long enough and is a nice power of 2
             file_name.truncate(64);
 
-            // Generate the metadata block for this migration
-            // We always re-generate it because we need to keep the ordering if a new migration is added
-            let metadata_block = generate_metadata_block(&title, &file_name, &area, pr.number);
+            // Add the markdown extension
+            file_name = format!("{file_name}.md");
 
-            let file_path = path.join(format!("{file_name}.md"));
+            let file_path = path.join(&file_name);
 
             if write_migration_file(
                 &file_path,
                 pr.body.as_ref().context("PR has no body")?,
                 pr.number,
             )? {
-                guides_metadata.push(metadata_block);
+                guides_metadata.push(MigrationGuide {
+                    title,
+                    prs: vec![pr.number],
+                    areas: area.clone().into_iter().collect(),
+                    file_name,
+                });
             }
         }
     }
 
-    if !new_prs {
-        return Ok(());
-    }
+    // Sort by: Area in ascending order (empty areas at the end), and Title in ascending order
+    guides_metadata.sort_by(|a, b| {
+        let areas_cmp = match (a.areas.is_empty(), b.areas.is_empty()) {
+            (false, false) => {
+                let a_areas = a.areas.clone().into_iter().collect::<Vec<_>>().join(" ");
+                let b_areas = b.areas.clone().into_iter().collect::<Vec<_>>().join(" ");
 
-    let mut guides_toml = if overwrite_existing {
-        // Replace and overwrite file.
-        OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .create(true)
-            .open(path.join("_guides.toml"))
-            .context("Failed to create _guides.toml")?
-    } else {
-        // Append to the metadata file,
-        // creating it if necessary.
-        OpenOptions::new()
-            .append(true)
-            .create(true)
-            .open(path.join("_guides.toml"))
-            .context("Failed to create _guides.toml")?
-    };
+                a_areas.cmp(&b_areas)
+            }
+            (false, true) => std::cmp::Ordering::Less,
+            (true, false) => std::cmp::Ordering::Greater,
+            (true, true) => std::cmp::Ordering::Equal,
+        };
+
+        areas_cmp.then_with(|| a.title.cmp(&b.title))
+    });
+
+    // Create the metadata file, and overwrite it if it already exists.
+    //
+    // Note:
+    // The file, while overwritten,
+    // may still contain the same underlying data gotten from
+    // the preexisting metadata earlier, if overwrite_existing is false,
+    // thus preserving the data even if the file itself is overwritten.
+    let mut guides_toml = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open(path.join("_guides.toml"))
+        .context("Failed to create _guides.toml")?;
+
     for metadata in guides_metadata {
-        writeln!(&mut guides_toml, "{metadata}")?;
+        // Generate the metadata block for this migration.
+        //
+        // We always freshly generate and write this data to the file,
+        // rather than appending to the end-of-file,
+        // so that we can maintain proper ordering of the entries.
+        let metadata_block = generate_metadata_block(
+            &metadata.title,
+            &metadata.file_name,
+            &metadata.areas.into_iter().collect::<Vec<_>>(),
+            &metadata.prs,
+        );
+
+        writeln!(&mut guides_toml, "{metadata_block}")?;
     }
 
     Ok(())
@@ -201,15 +214,20 @@ fn generate_metadata_block(
     title: &str,
     file_name: &String,
     areas: &[String],
-    pr_number: u64,
+    pr_number: &[u64],
 ) -> String {
     format!(
         r#"[[guides]]
 title = "{title}"
-prs = [{pr_number}]
+prs = [{pr_numbers}]
 areas = [{areas}]
-file_name = "{file_name}.md"
+file_name = "{file_name}"
 "#,
+        pr_numbers = pr_number
+            .iter()
+            .map(|pr| pr.to_string())
+            .collect::<Vec<_>>()
+            .join(", "),
         areas = areas
             .iter()
             .map(|area| format!("\"{area}\""))

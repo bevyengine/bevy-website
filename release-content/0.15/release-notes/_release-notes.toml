@@ -20,16 +20,16 @@ prs = [14071]
 file_name = "14071_Uniform_mesh_sampling.md"
 
 [[release_notes]]
-title = "Created an EventMutator for when you want to mutate an event before reading"
+title = "`EventMutator`"
 authors = ["@BobG1983"]
 contributors = ["@atornity", "@alice-i-cecile"]
 prs = [13818]
 file_name = "13818_Created_an_EventMutator_for_when_you_want_to_mutate_an_eve.md"
 
 [[release_notes]]
-title = "Basic isometry types"
-authors = ["@mweatherley"]
-contributors = []
+title = "Isometry Types"
+authors = ["@mweatherley", "@Jondolf"]
+contributors = ["@RobWalt"]
 prs = [14269]
 file_name = "14269_Basic_isometry_types.md"
 
@@ -90,10 +90,10 @@ prs = [14034]
 file_name = "14034_Track_source_location_in_change_detection.md"
 
 [[release_notes]]
-title = "Opportunistically use dense iteration for  archetypal iteration"
+title = "Faster iteration when using a mix of sparse set and table components"
 authors = ["@re0312"]
 contributors = ["@alice-i-cecile", "@ItsDoot"]
-prs = [14049]
+prs = [14049, 14673]
 file_name = "14049_Opportunistically_use_dense_iteration_for__archetypal_iter.md"
 
 [[release_notes]]
@@ -132,13 +132,6 @@ prs = [6042]
 file_name = "6042_bevy_reflect_Reflect_remote_types.md"
 
 [[release_notes]]
-title = "feat: add `insert_if_new` (#14397)"
-authors = ["@jpetkau"]
-contributors = ["@SkiFire13", "@alice-i-cecile"]
-prs = [14646]
-file_name = "14646_feat_add_insert_if_new_14397.md"
-
-[[release_notes]]
 title = "Allow fog density texture to be scrolled over time with an offset"
 authors = ["@jirisvd"]
 contributors = []
@@ -153,10 +146,10 @@ prs = [14833]
 file_name = "14833_Rewrite_screenshots.md"
 
 [[release_notes]]
-title = "SystemParamBuilder - Support dynamic system parameters"
+title = "`SystemParamBuilder`"
 authors = ["@chescock"]
 contributors = ["@cBournhonesque", "@alice-i-cecile"]
-prs = [14817]
+prs = [14050, 14821, 14818, 15189, 14817]
 file_name = "14817_SystemParamBuilder__Support_dynamic_system_parameters.md"
 
 [[release_notes]]
@@ -174,13 +167,6 @@ prs = [14976]
 file_name = "14976_Color_gradient_curve.md"
 
 [[release_notes]]
-title = "Opportunistically use dense iter for archetypal iteration in Par_iter"
-authors = ["@re0312"]
-contributors = []
-prs = [14673]
-file_name = "14673_Opportunistically_use_dense_iter_for_archetypal_iteration_.md"
-
-[[release_notes]]
 title = "Add state scoped events"
 authors = ["@UkoeHB"]
 contributors = []
@@ -195,25 +181,11 @@ prs = [15170]
 file_name = "15170_Enabledisable_UI_antialiasing.md"
 
 [[release_notes]]
-title = "Add `EntityRefExcept` and `EntityMutExcept` world queries, in preparation for generalized animation."
+title = "`EntityRefExcept` and `EntityMutExcept`"
 authors = ["@pcwalton"]
 contributors = []
 prs = [15207]
 file_name = "15207_Add_EntityRefExcept_and_EntityMutExcept_world_queries_in_p.md"
-
-[[release_notes]]
-title = "Add module and supporting documentation to `bevy_assets`"
-authors = ["@alice-i-cecile"]
-contributors = [
-	"@JMS55",
-	"@cart",
-	"@NotAFile",
-	"@bushrat011899",
-	"@janhohenheim",
-	"@TrialDragon",
-]
-prs = [15056]
-file_name = "15056_Add_module_and_supporting_documentation_to_bevy_assets.md"
 
 [[release_notes]]
 title = "bevy_reflect: Add `Reflectable` trait"
@@ -244,10 +216,10 @@ prs = [14920]
 file_name = "14920_Add_cached_run_system_API.md"
 
 [[release_notes]]
-title = "Reduce runtime panics through `SystemParam` validation"
+title = "Fallible system parameters"
 authors = ["@MiniaczQ"]
-contributors = []
-prs = [15276]
+contributors = ["@alice-i-cecile"]
+prs = [15276, 15476, 15488]
 file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
 
 [[release_notes]]
@@ -259,7 +231,7 @@ file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
 
 [[release_notes]]
 title = "UI Scrolling"
-authors = ["@Piefayth"]
+authors = ["@Piefayth", "@nicoburns"]
 contributors = []
 prs = [15291]
 file_name = "15291_UI_Scrolling.md"
@@ -272,7 +244,7 @@ prs = [15368]
 file_name = "15368_Add_the_ability_to_control_font_smoothing.md"
 
 [[release_notes]]
-title = "Support systems that take references as input"
+title = "Passing data into systems by reference"
 authors = ["@ItsDoot"]
 contributors = ["@SkiFire13"]
 prs = [15184]
@@ -305,18 +277,11 @@ prs = [15281]
 file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
 
 [[release_notes]]
-title = "Implement gamepads as entities"
+title = "Gamepads as entities"
 authors = ["@s-puig"]
 contributors = ["@cart"]
 prs = [12770]
 file_name = "12770_Implement_gamepads_as_entities.md"
-
-[[release_notes]]
-title = "`QuerySingle` family of system params"
-authors = ["@MiniaczQ"]
-contributors = []
-prs = [15476]
-file_name = "15476_QuerySingle_family_of_system_params.md"
 
 [[release_notes]]
 title = "Implement volumetric fog support for both point lights and spotlights"
@@ -340,18 +305,18 @@ prs = [15419]
 file_name = "15419_Gpu_readback.md"
 
 [[release_notes]]
-title = "bevy_reflect: Generic parameter info"
+title = "`TypeInfo` improvements"
 authors = ["@MrGVSV"]
 contributors = []
-prs = [15475]
-file_name = "15475_bevy_reflect_Generic_parameter_info.md"
+prs = [15475, 13321, 13320, 15235]
+file_name = "type_info_improvements.md"
 
 [[release_notes]]
-title = "`Populated` (query) system param"
-authors = ["@MiniaczQ"]
-contributors = ["@alice-i-cecile"]
-prs = [15488]
-file_name = "15488_Populated_query_system_param.md"
+title = "bevy_reflect: Add `Type` type"
+authors = ["@MrGVSV"]
+contributors = []
+prs = [14838]
+file_name = "14838_bevy_reflect_add_Type_type.md"
 
 [[release_notes]]
 title = "Runtime required components"
@@ -389,13 +354,6 @@ prs = [14788]
 file_name = "14788_add_curve_utilities_to_create_curves_interpolatingeasing_b.md"
 
 [[release_notes]]
-title = "System param for dynamic resources"
-authors = ["@chescock"]
-contributors = []
-prs = [15189]
-file_name = "15189_System_param_for_dynamic_resources.md"
-
-[[release_notes]]
 title = "Allow a closure to be used as a required component default"
 authors = ["@fluffiac"]
 contributors = []
@@ -424,7 +382,7 @@ prs = [15614]
 file_name = "15614_Allow_Worldentity_family_of_functions_to_take_multiple_ent.md"
 
 [[release_notes]]
-title = "Add more tools for traversing hierarchies"
+title = "More tools for traversing hierarchies"
 authors = ["@alice-i-cecile"]
 contributors = ["@atornity", "@ItsDoot", "@villor"]
 prs = [15627]
@@ -467,8 +425,7 @@ file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
 
 [[release_notes]]
 title = "Required Components"
-authors = ["@cart",]
+authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@killercup", "@BD103"]
 prs = [14791]
 file_name = "14791_Required_Components.md"
-
