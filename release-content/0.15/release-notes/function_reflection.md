@@ -90,8 +90,11 @@ assert!(info.args()[0].is::<&String>());
 assert!(info.return_info().is::<usize>());
 ```
 
-One thing to note is that closures, anonymous functions, function pointers, and all arguments
+One thing to note is that closures, anonymous functions, and function pointers
 are not automatically given names. For these cases, names can be provided manually.
+
+The same is true for all arguments including `self` arguments: names are not automatically
+generated and must be supplied manually if desired.
 
 #### Manual Construction
 
