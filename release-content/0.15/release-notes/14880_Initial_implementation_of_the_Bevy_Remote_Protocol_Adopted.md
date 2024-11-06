@@ -1,10 +1,10 @@
-We have introduced the Bevy Remote Protocol, which allows the ECS of a running
+The Bevy Remote Protocol allows the ECS of a running
 Bevy application to be interacted with remotely. This can be used, for example,
 to inspect and edit entities and their components at runtime. We anticipate 
 that this will be used primarily to create things like inspectors for editing
 and debugging.
 
-The default methods included with the associated plugin include:
+For now, you can use BRP to:
 - getting the serialized values of a set of components from an entity;
 - performing a query for all entities matching a set of components and retrieving
   their associated values;
