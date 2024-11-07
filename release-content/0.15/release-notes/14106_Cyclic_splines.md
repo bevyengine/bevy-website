@@ -12,3 +12,6 @@ The supported spline constructions are:
 - B-splines (`CubicBSpline`),
 - Linear splines (`LinearSpline`).
 
+![A closed loop constructed using a cubic cardinal spline][cyclic-spline]
+
+[cyclic-spline]: cyclic-spline.png
