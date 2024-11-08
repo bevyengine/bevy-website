@@ -92,7 +92,9 @@ By default, **Required Components** will use the `Default` impl for the componen
 ```rust
 #[derive(Component)]
 #[require(Team)] // Team::Red is the default value
-struct Player;
+struct Player {
+    name: String,
+}
 
 #[derive(Default)]
 enum Team {
@@ -107,7 +109,9 @@ This can be overridden by passing in a function that returns the component:
 ```rust
 #[derive(Component)]
 #[require(Team(blue_team)]
-struct Player;
+struct Player {
+    name: String,
+}
 
 fn blue_team() -> Team {
     Team::Blue
@@ -119,16 +123,19 @@ To save space, you can also pass a closure to the require directly:
 ```rust
 #[derive(Component)]
 #[require(Team(|| Team::Blue))]
-struct Player;
+struct Player {
+    name: String,
+}
 ```
 
 ### Isn't this a bit like inheritance?
 
-**Required Components** _can_ be considered a form of inheritance. But it is notably _not_ traditional object-oriented inheritance. Instead it is "inheritance by composition". A `Button` widget can (and should) require `Node` to make it a "UI node". In a way, a `Button` "is a" `Node`. But unlike traditional inheritance:
+**Required Components** _can_ be considered a form of inheritance. But it is notably _not_ traditional object-oriented inheritance. Instead it is "inheritance by composition". A `Button` widget can (and should) require `Node` to make it a "UI node". In a way, a `Button` "is a" `Node` like it would be in traditional inheritance. But unlike traditional inheritance:
 
-1. `Button` and `Node` are still two entirely separate types (with their own data), which you query for separately in the ECS.
-2. A `Button` can require more components in _addition_ to `Node`. You aren't limited to "straight line" standard object-oriented inheritance. Composition is still the dominating pattern.
-3. You don't _need_ to require components to add them. You can still tack on whatever additional components you want during spawn to add behaviors in the normal "composition style".
+1. It is expressed as a "has a" relationship, not an "is a" relationship.
+2. `Button` and `Node` are still two entirely separate types (with their own data), which you query for separately in the ECS.
+3. A `Button` can require more components in _addition_ to `Node`. You aren't limited to "straight line" standard object-oriented inheritance. Composition is still the dominating pattern.
+4. You don't _need_ to require components to add them. You can still tack on whatever additional components you want during spawn to add behaviors in the normal "composition style".
 
 ### What is happening to Bundles?
 
