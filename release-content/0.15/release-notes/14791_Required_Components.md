@@ -317,7 +317,7 @@ commands.spawn((
 ));
 ```
 
-Opt-in Camera render feature components (`MotionBlur`, `TemporalAntiAliasing`, `ScreenSpaceAmbientOcclusion`, and `ScreenSpaceReflections`) now require the relevant camera render feature components. For example, `MotionBlur` now requires `DepthPrepass` and `MotionVectorPrepass`. This makes enabling camera features much easier!
+Bevy has a number of components that enable "camera render features": `MotionBlur`, `TemporalAntiAliasing`, `ScreenSpaceAmbientOcclusion`, and `ScreenSpaceReflections`. Some of these camera features depend on _other_ camera feature components to function. These dependencies are now expressed and enforced using **Required Components**. For example, `MotionBlur` now requires `DepthPrepass` and `MotionVectorPrepass`. This makes enabling camera features much easier!
 
 ```rust
 commands.spawn((
@@ -394,6 +394,8 @@ Scenes previously used raw `Handle<Scene>` components, spawned via `SceneBundle`
 ```rust
 commands.spawn(SceneRoot(some_scene));
 ```
+
+Likewise, there is now `DynamicSceneRoot`, which is exactly like `SceneRoot`, but it wraps `Handle<DynamicScene>` instead of `Handle<Scene>`.
 
 #### Audio
 
