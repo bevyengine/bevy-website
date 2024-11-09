@@ -34,12 +34,12 @@ This inserts all of the components in `PlayerBundle`, including the ones not exp
 1. It is an entirely new set of APIs that developers need to learn. Someone that wants to spawn a `Player` entity needs to know that `PlayerBundle` exists.
 2. Bundle APIs don't exist at runtime after insertion ... they are an additional spawn-only concept that developers need to think about. You don't write `PlayerBundle` behaviors. You write `Player` behaviors.
 3. The `Player` component _needs_ the components in `PlayerBundle` to function as a `Player`. Spawning `Player` on its own is possible, and it likely (depending on the implementation) wouldn't function as intended.
-4. Bundles are always "flat" (by convention). The person defining the `Player` component needs to define _all of the component dependencies_. `Sprite` needs `Transform` and `Visibility`, `Transform` needs `GlobalTransform`, `Visibility` needs `InheritedVisibility` and `ViewVisibility`. This lack of "dependency inheritance" makes defining bundles much harder and error prone than it needs to be. It requires consumers of APIs to be intimately aware of what amounts to implementation details. And when these details change, _the developer of the `Bundle` needs to be aware and update the `Bundle` accordingly_. Nested bundles are supported, but they are a _pain_ for users to work with and we have disallowed them in upstream Bevy bundles for awhile now.
+4. Bundles are always "flat" (by convention). The person defining the `Player` component needs to define _all of the component dependencies_. `Sprite` needs `Transform` and `Visibility`, `Transform` needs `GlobalTransform`, `Visibility` needs `InheritedVisibility` and `ViewVisibility`. This lack of "dependency inheritance" makes defining bundles much harder and error prone than it needs to be. It requires consumers of APIs to be intimately aware of what amounts to implementation details. And when these details change, _the developer of the `Bundle` needs to be aware and update the `Bundle` accordingly_. Nested bundles are supported, but they are a _pain_ for users to work with and we have disallowed them in upstream Bevy bundles for a while now.
 5. `PlayerBundle` is effectively defined by the needs of the `Player` component, but when spawning it is possible to _never mention the `Player` symbol_. Ex: `commands.spawn(PlayerBundle::default())`. This is odd given that `Player` is the "driving concept".
 6. Bundles introduce significant "stutter" to the API. Notice the `player: Player` and `team: Team` in the example above.
 7. Bundles introduce additional (arguably excessive) nesting and `..default()` usage.
 
-Every one of these points has a sizeable impact on what it feels like to use Bevy on a day to day basis. In **Bevy 0.15** we've landed **Required Components**, which solves these problems by fundamentally rethinking how this all works.
+Every one of these points has a sizable impact on what it feels like to use Bevy on a day-to-day basis. In **Bevy 0.15** we've landed **Required Components**, which solves these problems by fundamentally rethinking how this all works.
 
 **Required Components** are the first step in our [Next Generation Scene / UI](https://github.com/bevyengine/bevy/discussions/14437) effort, which aims to make Bevy a best-in-class app / scene / UI development framework. **Required Components** stand on their own as a direct improvement to Bevy developers' lives, but they also help set the stage for making Bevy's upcoming next generation scene system (and the upcoming Bevy Editor) something truly special.
 
@@ -141,18 +141,18 @@ struct Player {
 
 The `Bundle` trait will continue to exist, and it is still the fundamental building block for insert APIs (tuples of components still implement `Bundle`). Developers are still free to define their own custom bundles using the `Bundle` derive. Bundles play nicely with **Required Components**, so you can use them with each other.
 
-That being said, as of Bevy **0.15** we have deprecated all built in bundles like `SpriteBundle`, `NodeBundle`, `PbrBundle`, etc in favor of **Required Components**. In general, **Required Components** are now the preferred / idiomatic approach. We encourage Bevy plugin and app developers to port their bundles over to **Required Components**.
+That being said, as of Bevy **0.15** we have deprecated all built-in bundles like `SpriteBundle`, `NodeBundle`, `PbrBundle`, etc. in favor of **Required Components**. In general, **Required Components** are now the preferred / idiomatic approach. We encourage Bevy plugin and app developers to port their bundles over to **Required Components**.
 
 ### Porting Bevy to Required Components
 
-As mentioned above, _all_ built in Bevy bundles have been deprecated in favor of **Required Components**. We've also made API changes to take advantage of this new paradigm. This does mean breakage in a few places, but the changes are so nice that we think people won't complain too much :)
+As mentioned above, _all_ built-in Bevy bundles have been deprecated in favor of **Required Components**. We've also made API changes to take advantage of this new paradigm. This does mean breakage in a few places, but the changes are so nice that we think people won't complain too much :)
 
 In general, we are moving in the direction specified by our [Next Generation Scene / UI](https://github.com/bevyengine/bevy/discussions/14437) document. Some general design guidelines:
 
 1. When spawning an entity, generally there should be a "driving concept" component.  When implementing a new entity type / behavior, give it a concept name ... that is the name of your "driving component" (ex: the "player" concept is a `Player` component). That component should require any additional components necessary to perform its functionality.
 2. People should think directly in terms of components and their fields when spawning. Prefer using component fields directly on the "concept component" as the "public API" for the feature.
 3. Prefer simple APIs / don't over-componentize. By default, if you need to attach new properties to a concept, just add them as fields to that concept's component. Only break out new components / concepts when you have a good reason, and that reason is motivated by user experience or performance (and weight user experience highly). If a given "concept" (ex: a `Sprite`) is broken up into 10 components, that is _very_ hard for users to reason about and work with.
-4. Instead of using Asset handles directly as components, define new components that hold the necessary handles. Raw asset handles as components were problematic for a variety of reasons (one big one is you can't define context-specific **Required Components** for them), so we have removed the `Component` implementation for `Handle<T>` to encourage (well ... force) people to adopt this pattern.
+4. Instead of using Asset handles directly as components, define new components that hold the necessary handles. Raw asset handles as components were problematic for a variety of reasons (a big one is that you can't define context-specific **Required Components** for them), so we have removed the `Component` implementation for `Handle<T>` to encourage (well ... force) people to adopt this pattern.
 
 #### UI
 
@@ -166,7 +166,7 @@ struct MyNode;
 commands.spawn(MyNode);
 ```
 
-The `Style` component fields have been moved into `Node`. `Style` was never a comprehensive "style sheet", but rather just a collection of properties shared by all UI nodes. A "true" ECS style system would style properties _across_ components (`Node`, `Button`, etc), and we [do have plans to build a true style system](https://github.com/bevyengine/bevy/discussions/14437). All "computed" node properties (such as the size of the node after it has been layed out) have been moved to the `ComputedNode` component.
+The `Style` component fields have been moved into `Node`. `Style` was never a comprehensive "style sheet", but rather just a collection of properties shared by all UI nodes. A "true" ECS style system would style properties _across_ components (`Node`, `Button`, etc), and we [do have plans to build a true style system](https://github.com/bevyengine/bevy/discussions/14437). All "computed" node properties (such as the size of the node after it has been laid out) have been moved to the `ComputedNode` component.
 
 This change has made spawning UI nodes in Bevy _much_ cleaner and clearer:
 
@@ -267,11 +267,11 @@ fn set_name(mut names: Query<&mut TextSpan, With<NameText>>) {
 }
 ```
 
-"Text spans as entities" makes text play nicer with Bevy Scenes (including the upcoming [Next Generation Scene / UI](https://github.com/bevyengine/bevy/discussions/14437) system), and allows it to integrate nicely with existing tools like entity inspectors, animation systems, timers, etc.
+Text spans as entities play nicer with Bevy Scenes (including the upcoming [Next Generation Scene / UI](https://github.com/bevyengine/bevy/discussions/14437) system), and allow it to integrate nicely with existing tools like entity inspectors, animation systems, timers, etc.
 
 #### Sprites
 
-Sprites are largely unchanged. In addition to the **Required Components** port (`Sprite` now requires `Transform`, `Visibility`), we've also done some component consolidation. The `TextureAtlas` component is now an optional `Sprite::texture_atlas` field. Likewise the `ImageScaleMode` component is now a `Sprite::image_mode` field. Spawning sprites is now super simple!
+Sprites are largely unchanged. In addition to the **Required Components** port (`Sprite` now requires `Transform` and `Visibility`), we've also done some component consolidation. The `TextureAtlas` component is now an optional `Sprite::texture_atlas` field. Likewise the `ImageScaleMode` component is now a `Sprite::image_mode` field. Spawning sprites is now super simple!
 
 ```rust
 commands.spawn(Sprite {
@@ -288,11 +288,11 @@ Most Bevy components that are intended to exist in world space now require `Tran
 
 #### Visibility
 
-The `Visibility` component now requires `InheritedVisibility` and `ViewVisibility`, meaning that you can now just require `Visibility` if you want your entity to be visible. Bevy's built in "visible" components, such as `Sprite`, require `Visibility`.
+The `Visibility` component now requires `InheritedVisibility` and `ViewVisibility`, meaning that you can now just require `Visibility` if you want your entity to be visible. Bevy's built-in "visible" components, such as `Sprite`, require `Visibility`.
 
 #### Cameras
 
-The `Camera2d` and `Camera3d` components now each require `Camera`. `Camera` requires the various camera components (`Frustum`, `Transform`, etc). This means, you can spawn a 2D or 3D camera like this:
+The `Camera2d` and `Camera3d` components now each require `Camera`. `Camera` requires the various camera components (`Frustum`, `Transform`, etc.). This means that you can spawn a 2D or 3D camera like this:
 
 ```rust
 commands.spawn(Camera2d::default());
@@ -339,7 +339,7 @@ commands.spawn((
 ));
 ```
 
-Mesh3d requires `Transform` and `Visibility`.
+`Mesh3d` requires `Transform` and `Visibility`.
 
 There are also 2D equivalents:
 
@@ -363,7 +363,7 @@ commands.spawn((
 
 #### Lights
 
-The light port involved no major changes to the component structure. All of the spatial light types (`PointLight`, `DirectionalLight`, `SpotLight`) now require `Transform`, and `Visibility`. And each light component requires the relevant light-specific configuration components (ex: `PointLight` requires `CubemapFrusta` and `CubemapVisibleEntities`).
+The light port involved no major changes to the component structure. All of the spatial light types (`PointLight`, `DirectionalLight`, `SpotLight`) now require `Transform` and `Visibility`, and each light component requires the relevant light-specific configuration components (ex: `PointLight` requires `CubemapFrusta` and `CubemapVisibleEntities`).
 
 Spawning a light of a given type is now as simple as:
 
