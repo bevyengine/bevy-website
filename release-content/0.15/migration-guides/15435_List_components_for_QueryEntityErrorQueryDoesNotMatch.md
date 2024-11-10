@@ -1,0 +1,1 @@
+- `QueryEntityError` now has a lifetime. Convert it to a custom error if you need to store it.

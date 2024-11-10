@@ -1,0 +1,1 @@
+- The serialized format of animation graphs has changed with the addition of animation masks. To upgrade animation graph RON files, add `mask` and `mask_groups` fields as appropriate. (They can be safely set to zero.)

@@ -1,0 +1,2 @@
+- `Wireframe2dConfig`.`default_color` type is now `Color` instead of `Srgba`. Use `.into()` to convert between them.
+- `Wireframe2dColor`.`color` type is now `Color` instead of `Srgba`. Use `.into()` to convert between them.

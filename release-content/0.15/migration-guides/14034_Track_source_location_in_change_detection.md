@@ -1,0 +1,1 @@
+- Added `changed_by` field to many internal ECS functions used with change detection when the `track_change_detection` feature flag is enabled. Use Location::caller() to provide the source of the function call.

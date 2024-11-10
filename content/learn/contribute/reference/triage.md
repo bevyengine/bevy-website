@@ -19,8 +19,6 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `C-Code-Quality`: a section of code that is hard to understand or change.
   - `C-Performance`: a change motivated by speed, memory usage, or compile times.
   - `C-Tracking-Issue`: collects information on a broad development initiative.
-  - `C-Needs-Release-Notes`: work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
-  - `C-Breaking-Change`: a breaking change to Bevy's public API, and should be noted in the migration guide.
 - **D**: Difficulty. This can either be the estimated level of expertise (not time) to solve an issue or review a pull request. In order, these are:
   - `D-Trivial`: typos, obviously incorrect one-line bug fixes, code reorganization, and renames.
   - `D-Straightforward`: simple bug fixes, API improvements, docs, tests, and examples.
@@ -44,6 +42,9 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
   - `X-Controversial`: there's active disagreement and / or large-scale architectural implications involved.
   - `X-Blessed`: work that was previously controversial, but whose controversial (but perhaps not technical) elements have been endorsed by the relevant decision makers.
+- **M**: Meta, for supporting work that needs to be done.
+  - `M-Needs-Release-Note`:  work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
+  - `M-Needs-Migration-Guide`: this is a breaking change to Bevy's public API, and requires advice on how to migrate existing code. These changes cannot be shipped in minor versions!
 
 You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 

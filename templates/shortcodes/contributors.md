@@ -5,7 +5,7 @@
 
 A huge thanks to the {{ data.contributors | length }} contributors that made this release (and associated docs) possible! In random order:
 
-<ul>
+<ul class="contributors">
 {% for contributor in data.contributors %}
 <li>{{ contributor.name }}</li>
 {% endfor %}

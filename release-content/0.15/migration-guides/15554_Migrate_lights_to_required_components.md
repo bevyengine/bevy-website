@@ -1,0 +1,1 @@
+`PointLightBundle`, `SpotLightBundle`, and `DirectionalLightBundle` have been deprecated. Use the `PointLight`, `SpotLight`, and `DirectionalLight` components instead. Adding them will now insert the other components required by them automatically.

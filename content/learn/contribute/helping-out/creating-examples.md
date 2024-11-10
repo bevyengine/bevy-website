@@ -64,6 +64,13 @@ Please adhere to the following guidelines when creating or updating an example.
 6. Prefer structs with named fields over tuple structs except in the case of single-field wrapper types.
 7. Use enum-labels over string-labels for app / schedule / etc. labels.
 
+### Visual guidelines
+
+Examples may be displayed in the [example showcase](https://bevyengine.org/examples/) and a consistent style helps keep things tidy there.
+
+1. Use the default `ClearColor` and `WindowResolution` unless absolutely necessary.
+2. "Instruction Text" should use the default font, color, and size. It should be inset 12 pixels from the edge of the window.
+
 ### "Feature" examples
 
 These examples demonstrate the usage of specific engine features in clear, minimal ways.

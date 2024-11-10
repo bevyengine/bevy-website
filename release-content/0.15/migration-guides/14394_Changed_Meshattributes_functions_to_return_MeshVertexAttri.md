@@ -1,0 +1,1 @@
+- When using the iterator returned by `Mesh::attributes` or `Mesh::attributes_mut` the first value of the tuple is not the `MeshVertexAttribute` instead of `MeshVertexAttributeId`. To access the `MeshVertexAttributeId` use the `MeshVertexAttribute.id` field.

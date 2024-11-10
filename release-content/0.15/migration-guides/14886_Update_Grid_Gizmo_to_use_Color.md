@@ -1,0 +1,1 @@
+This shouldn’t be adding anything that isn’t already in a migration guide? I assume as it uses `impl Into<...>` in the public interfaces that any users of these APIs shouldn’t have to make any code changes.

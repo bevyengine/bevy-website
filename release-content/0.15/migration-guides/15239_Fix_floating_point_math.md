@@ -1,0 +1,2 @@
+- Not a breaking change
+- Projects should use bevy math where applicable

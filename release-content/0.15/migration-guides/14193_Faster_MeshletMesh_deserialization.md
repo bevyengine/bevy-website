@@ -1,0 +1,6 @@
+- Regenerate your `MeshletMesh` assets, as the disk format has changed, and `MESHLET_MESH_ASSET_VERSION` has been bumped
+- `MeshletMesh` fields are now private
+- `MeshletMeshSaverLoad` is now named `MeshletMeshSaverLoader`
+- The `Meshlet`, `MeshletBoundingSpheres`, and `MeshletBoundingSphere` types are now private
+- `MeshletMeshSaveOrLoadError::SerializationOrDeserialization` has been removed
+- Added `MeshletMeshSaveOrLoadError::WrongFileType`, match on this variant if you match on `MeshletMeshSaveOrLoadError`
