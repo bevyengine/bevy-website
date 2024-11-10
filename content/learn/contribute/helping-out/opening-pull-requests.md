@@ -87,6 +87,20 @@ Your first PR will be merged in no time!
 
 No matter how you're helping, thanks for contributing to Bevy!
 
+## git hooks
+
+If you find it annoying to wait for CI on GitHub to tell you that you forgot to format your code or generate the templated files, you might find it convenient to have this error happen earlier.
+
+### Enabling the hooks
+
+```bash
+git config --local core.hooksPath .githooks
+```
+
+### Disabling the hooks
+
+Delete the `hooksPath` from `.git/config`.
+
 ## Style Guide
 
 ### General guidelines
