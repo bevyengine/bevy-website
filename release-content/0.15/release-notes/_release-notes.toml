@@ -223,10 +223,10 @@ prs = [15276, 15476, 15488]
 file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
 
 [[release_notes]]
-title = "Allow animation clips to animate arbitrary properties."
-authors = ["@pcwalton"]
-contributors = []
-prs = [15282]
+title = "Generalized animation"
+authors = ["@pcwalton", "@mweatherley"]
+contributors = ["@MrGVSV", "@aecsocket"]
+prs = [15282, 15434]
 file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
 
 [[release_notes]]
@@ -331,13 +331,6 @@ authors = ["@Jondolf"]
 contributors = []
 prs = [15458]
 file_name = "15458_Runtime_required_components.md"
-
-[[release_notes]]
-title = "Curve-based animation"
-authors = ["@mweatherley"]
-contributors = ["@MrGVSV", "@aecsocket"]
-prs = [15434]
-file_name = "15434_Curvebased_animation.md"
 
 [[release_notes]]
 title = "Add features to switch `NativeActivity` and `GameActivity` usage"
