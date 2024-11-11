@@ -11,10 +11,10 @@ For types that implement the `Ease` trait, the above easing functions can be
 combined with start and end values with the `easing_curve` constructor to build
 a curve that eases between the two in the given way.
 
-These types include:
-- vector types (`f32`, `Vec2`, `Vec3`, ...)
-- direction types (`Dir2`, `Dir3`, `Dir3A`)
-- rotation types (`Rot2`, `Quat`)
+The `Ease` types include:
+- vector types (`f32`, `Vec2`, `Vec3`, ...);
+- direction types (`Dir2`, `Dir3`, `Dir3A`);
+- rotation types (`Rot2`, `Quat`).
 
 So, for example, we can use an easing function to interpolate between two 
 rotations:
