@@ -1,16 +1,17 @@
 <!-- Uniform mesh sampling -->
 <!-- https://github.com/bevyengine/bevy/pull/14071 -->
 
-The surfaces of rendering meshes can be randomly sampled. This can be used, for
-instance, in order to determine the placements of scenery or particle effects.
+The surfaces of meshes can now be randomly sampled. This can be used for things like placing scenery or particle effects.
 
-This is comprised of two individual pieces:
-- The `Mesh::triangles` method allows the extraction of a `Mesh`'s list of 
+This consists of:
+
+1. The `Mesh::triangles` method, which allows the extraction of a `Mesh`'s list of 
   triangles (`Triangle3d`).
-- The `UniformMeshSampler` type allows the creation of a [`Distribution`] that
+2. The `UniformMeshSampler` type, which allows the creation of a [`Distribution`] that
   uniformly samples points in space (`Vec3`) from a collection of triangles.
 
 The functionality comes from putting these together:
+
 ```rust
 let mut rng = StdRng::seed_from_u64(8765309);
 
