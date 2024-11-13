@@ -1,25 +1,21 @@
 <!-- A Curve trait for general interoperation — Part I -->
 <!-- https://github.com/bevyengine/bevy/pull/14630 -->
 
-The new `Curve` trait provides a shared interface for curves in various domains,
-allowing their consumers to use curves of various origins without regard for 
-their underlying implementation details. In other words, a consumer may simply
-take `impl Curve<T>` (or `dyn Curve<T>`) instead of a concrete curve type, leaving
-the curve implementation up to the caller.
+The new `Curve` trait provides a shared interface for curves.
 
-A *curve* in the sense of this API is essentially a value of some type `T`
+`Curve<T>` defines a value of some type `T`
 parametrized by a nonempty closed interval of real numbers. That parameter could,
 for example, represent time, in which case a `Curve<T>` is thought of as a value
-of type `T` that changes over time, as in animation. On the other hand, the parameter
+of type `T` that changes over time, as in animation. The parameter
 could also represent something like distance or displacement, as in gradients and 
-spatial curves. 
+spatial curves.
 
-The curves themselves may be defined in a variety of different ways. A curve may be,
-for example:
-- defined by a function;
-- interpolated from samples;
-- constructed using splines;
-- produced by an easing function.
+The curves themselves may be defined in a variety of ways. For example, a curve may be:
+
+* defined by a function
+* interpolated from samples
+* constructed using splines
+* produced by an easing function
 
 Additionally, the `Curve` API provides adaptors for taking an existing curve and
 modifying its output and/or parametrization. It is similar to the `Iterator` 
@@ -42,15 +38,16 @@ let angle_curve = UnevenSampleAutoCurve::new(timed_angles).unwrap();
 // Interpret these angles as angles of rotation for a `Curve<Rot2>`.
 let rotation_curve = angle_curve.map(Rot2::radians);
 
-// Change the parametrizing interval so that the whole loop happens in
+// Change the parameterizing interval so that the whole loop happens in
 // only 1 second instead of 4.
 let fast_rotation_curve = rotation_curve.reparametrize_linear(Interval::UNIT).unwrap();
 ```
 
 A number of other adaptors are also available. For instance:
-- a curve may be reversed, repeated, or ping-ponged;
-- two curves may be chained together to form a longer curve;
-- two curves may be zipped together to form a curve valued in tuples.
+
+* a curve may be reversed, repeated, or ping-ponged
+* two curves may be chained together to form a longer curve
+* two curves may be zipped together to form a curve valued in tuples
 
 The interface additionally provides facilities for rasterization. These allow
 a curve to be resampled into an approximation derived from sample interpolation
