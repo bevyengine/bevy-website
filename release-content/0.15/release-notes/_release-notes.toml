@@ -326,13 +326,6 @@ prs = [14838]
 file_name = "14838_bevy_reflect_add_Type_type.md"
 
 [[release_notes]]
-title = "Runtime required components"
-authors = ["@Jondolf"]
-contributors = []
-prs = [15458]
-file_name = "15458_Runtime_required_components.md"
-
-[[release_notes]]
 title = "Curve-based animation"
 authors = ["@mweatherley"]
 contributors = ["@MrGVSV", "@aecsocket"]
@@ -354,11 +347,11 @@ prs = [8611]
 file_name = "8611_bevy_reflect_Add_DeserializeWithRegistry_and_SerializeWithR.md"
 
 [[release_notes]]
-title = "Allow a closure to be used as a required component default"
-authors = ["@fluffiac"]
-contributors = []
-prs = [15269]
-file_name = "15269_Allow_a_closure_to_be_used_as_a_required_component_default.md"
+title = "add curve utilities to create curves interpolating/easing between two values"
+authors = ["@RobWalt"]
+contributors = ["@mweatherley", "@NthTensor", "@eckz", "@alice-i-cecile"]
+prs = [14788]
+file_name = "14788_add_curve_utilities_to_create_curves_interpolatingeasing_b.md"
 
 [[release_notes]]
 title = "Implement additive blending for animation graphs."
@@ -410,13 +403,6 @@ prs = [15204]
 file_name = "15204_box_shadow.md"
 
 [[release_notes]]
-title = "Improved text batching"
-authors = ["@ickshonpe"]
-contributors = ["@kristoff3r"]
-prs = [14848]
-file_name = "14848_Improved_text_batching.md"
-
-[[release_notes]]
 title = "Add mesh picking backend and `MeshRayCast` system parameter"
 authors = ["@Jondolf"]
 contributors = ["@mockersf", "@tbillington", "@aevyrie"]
@@ -425,7 +411,7 @@ file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
 
 [[release_notes]]
 title = "Required Components"
-authors = ["@cart"]
-contributors = ["@alice-i-cecile", "@killercup", "@BD103"]
-prs = [14791]
+authors = ["@cart", "@Jondolf"]
+contributors = ["@alice-i-cecile", "@killercup", "@BD103", "@fluffiac"]
+prs = [14791, 15458, 15269]
 file_name = "14791_Required_Components.md"
