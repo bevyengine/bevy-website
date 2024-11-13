@@ -57,7 +57,7 @@ applying numerical methods.
 
 ```rust
 // A curve defined by a function, which may be challenging to store as data.
-let exponential_curve = function_curve(
+let exponential_curve = FunctionCurve::new(
   interval(0.0, 10.0).unwrap(), 
   |t| f32::exp(2.0 * t)
 );

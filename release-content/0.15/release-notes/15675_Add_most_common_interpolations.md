@@ -13,13 +13,13 @@ are often used in "tweening" scenarios to give life to the interpolation.
 * direction types (`Dir2`, `Dir3`, `Dir3A`);
 * rotation types (`Rot2`, `Quat`).
 
-We've also added an `EaseFunction` enum, which defines many common easing functions. The new `easing_curve` constructor uses these as inputs to define a final `Curve` from the given easing parameters.
+We've also added an `EaseFunction` enum, which defines many common easing functions. The new `EasingCurve` type uses these as inputs to define a final `Curve` from the given easing parameters.
 
 For example, we can use an easing function to interpolate between two rotations:
 
 ```rust
 // Ease between no rotation and a rotation of angle PI/2 about the y-axis.
-let rotation_curve = easing_curve(
+let rotation_curve = EasingCurve::new(
     Quat::IDENTITY,
     Quat::from_rotation_y(FRAC_PI_2),
     EaseFunction::ElasticInOut,
