@@ -1,10 +1,6 @@
 <!-- Allow animation clips to animate arbitrary properties. -->
 <!-- https://github.com/bevyengine/bevy/pull/15282 -->
-
-Animation clips offer much greater flexibility in what they can animate and in how
-their curves may be defined.
-
-On the one hand, animation clips can be used to animate arbitrary properties.
+Animation clips can be used to animate arbitrary component properties with arbitrary curves.
 This is driven by an `AnimatableProperty` trait, which reaches into a component
 and selects part of it to modify.
 
