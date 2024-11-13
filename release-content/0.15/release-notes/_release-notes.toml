@@ -383,9 +383,9 @@ file_name = "15627_Add_more_tools_for_traversing_hierarchies.md"
 
 [[release_notes]]
 title = "Add most common interpolations"
-authors = ["@mockersf"]
-contributors = []
-prs = [15675]
+authors = ["@RobWalt", "@mockersf", "@mweatherley"]
+contributors = ["@NthTensor", "@eckz", "@alice-i-cecile"]
+prs = [14788, 15675, 15711]
 file_name = "15675_Add_most_common_interpolations.md"
 
 [[release_notes]]
