@@ -33,7 +33,7 @@ animate the font size of an entity:
 let mut animation_clip = AnimationClip::default();
 
 // Oscillate the font size during the length of the animation.
-let oscillating_curve = function_curve(
+let oscillating_curve = FunctionCurve::new(
     Interval::UNIT, 
     |t| 25.0 * f32::sin(TAU * t) + 50.0
 );
@@ -55,7 +55,7 @@ a `Curve<Vec3>` and uses it to animate the `translation` part of the target's
 
 ```rust
 // Construct a `Curve<Vec3>`` using a built-in easing curve constructor.
-let translation_curve = easing_curve(
+let translation_curve = EasingCurve::new(
     vec3(-10., 2., 0.),
     vec3(6., 2., 0.),
     EaseFunction::CubicInOut,
