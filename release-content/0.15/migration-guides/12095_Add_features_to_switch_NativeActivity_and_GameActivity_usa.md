@@ -1,14 +1,48 @@
-Bevy now uses `GameActivity` as the default `Activity` for Android projects, replacing
-`NativeActivity`. `NativeActivity` is still available, but has been placed behind a feature flag.
+`GameActivity` is now the default activity for Android projects, replacing `NativeActivity`.
+`cargo-apk` has been replaced with `cargo-ndk` since the former is not compatible with
+`GameActivity`.
 
-This change updates Bevy to a more modern Android stack, and includes an SDK minimum version bump to
-[PlayStore's current version
-requirement](https://developer.android.com/distribute/best-practices/develop/target-sdk). We've also
-switched to a [`cargo-ndk`](https://docs.rs/crate/cargo-ndk/3.5.4) based build, which gives us more control by default. Gradle projects for both `GameActivity` and
-`NativeActivity` are provided.
+Before:
 
-`GameActivity` brings with it improvements to game interaction (`SurfaceView` rendering, improved
-touch and input handling), more frequent updates, and access to other parts of the
-[JetPack](https://developer.android.com/jetpack) ecosystem. It is better placed to integrate with
-Rust code without excessive JNI wrangling. You can read more about `GameActivity`
-[here](https://developer.android.com/games/agdk/game-activity).
+```shell
+rustup target add aarch64-linux-android armv7-linux-androideabi
+cargo install cargo-apk
+```
+
+After:
+
+```shell
+rustup target add aarch64-linux-android
+cargo install cargo-ndk
+```
+
+Shared object files must be now built for the target architecture before launching package builds
+with the Gradle wrapper.
+
+Before:
+
+```shell
+cargo apk build --package bevy_mobile_example
+```
+
+After:
+
+```shell
+cargo ndk -t arm64-v8a -o android_example/app/src/main/jniLibs build --package bevy_mobile_example
+./android_example/gradlew build
+```
+
+(replace target and project name as required). Note that build output paths have changed. APK builds
+can be found under `app/build/outputs/apk`).
+
+Android Studio may also be used.
+
+Bevy may require the `libc++_shared.so` library to run on Android. This can be manually obtained
+from NDK source, or NDK describes a
+[`build.rs`](https://github.com/bbqsrc/cargo-ndk?tab=readme-ov-file#linking-against-and-copying-libc_sharedso-into-the-relevant-places-in-the-output-directory)
+approach. A suggested solution is also presented in the Bevy mobile example.
+
+Applications that still require `NativeActivity` should:
+1. disable default features in `Cargo.toml`
+2. re-enable all default features _except_ `android-game-activity`
+3. enable the `android-native-activity` feature

@@ -659,7 +659,7 @@ areas = ["Reflection", "Utils"]
 file_name = "15340_move_ShortName_to_bevy_reflect.md"
 
 [[guides]]
-title = "Lighting Should Only hold Vec<Entity> instead of TypeId<Vec<Entity>>"
+title = "Lighting Should Only hold `Vec<Entity>` instead of `TypeId<Vec<Entity>>`"
 prs = [14073]
 areas = ["Rendering"]
 file_name = "14073_Lighting_Should_Only_hold_VecEntity_instead_of_TypeIdVecEn.md"

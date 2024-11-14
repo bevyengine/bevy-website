@@ -49,7 +49,7 @@ pub fn generate_contributors(
         writeln!(
             output,
             r#"[[contributors]]
-name = "{name}"
+name = '{name}'
 "#
         )?;
     }
