@@ -195,13 +195,6 @@ prs = [5772]
 file_name = "5772_bevy_reflect_Add_Reflectable_trait.md"
 
 [[release_notes]]
-title = "Implement percentage-closer soft shadows (PCSS)."
-authors = ["@pcwalton"]
-contributors = ["@alice-i-cecile", "@torsteingrindvik"]
-prs = [13497]
-file_name = "13497_Implement_percentagecloser_soft_shadows_PCSS.md"
-
-[[release_notes]]
 title = "Added `HeadlessPlugins` (#15203)"
 authors = ["@Wcubed"]
 contributors = []
