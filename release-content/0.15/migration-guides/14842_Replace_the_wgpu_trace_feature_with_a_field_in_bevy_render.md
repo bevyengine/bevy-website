@@ -1,6 +1,12 @@
-- The `bevy/wgpu_trace`, `bevy_render/wgpu_trace`, and `bevy_internal/wgpu_trace` features no longer exist. Remove them from your `Cargo.toml`, CI, tooling, and what-not.
-- Follow the instructions in the updated `docs/debugging.md` file in the repository, under the WGPU Tracing section.
+The `bevy/wgpu_trace` and `bevy_render/wgpu_trace` features have been removed, as WGPU tracing is now enabled during the creation of `bevy_render::RenderPlugin`.
 
-Because of the changes made, you can now generate traces to any path, rather than the hardcoded `%WorkspaceRoot%/wgpu_trace` (where `%WorkspaceRoot%` is… the root of your crate’s workspace) folder.
+{% callout(type="info") %}
+At the time of writing, WGPU has not reimplemented tracing support, so WGPU tracing will not currently work. However, once WGPU has reimplemented tracing support, the steps below should be sufficient to continue generating WGPU traces.
 
-(If WGPU hasn’t restored tracing functionality…) Do note that WGPU has not yet restored tracing functionality. However, once it does, the above should be sufficient to generate new traces.
+You can track the progress of WGPU tracing being reimplemented at [gfx-rs/wgpu#5974](https://github.com/gfx-rs/wgpu/issues/5974).
+{% end %}
+
+To continue generating WGPU traces:
+
+1. Remove any instance of the `bevy/wgpu_trace` or `bevy_render/wgpu_trace` features you may have in any of your `Cargo.toml` files.
+2. Follow the instructions in [`docs/debugging.md`, under the WGPU Tracing section](https://github.com/bevyengine/bevy/blob/release-0.15.0/docs/debugging.md#wgpu-tracing).
