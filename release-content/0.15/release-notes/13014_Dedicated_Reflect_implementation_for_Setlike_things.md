@@ -1,27 +1,39 @@
 <!-- Dedicated `Reflect` implementation for `Set`-like things -->
 <!-- https://github.com/bevyengine/bevy/pull/13014 -->
 
-Up until version 0.14, our `std::collections::HashSet` and `hashbrown::HashSet` didn't enjoy the same level of reflectability as, for example, `std::collections::HashMap`. Now, with version 0.15, these set-like types are fully reflectable!
+Up until version 0.14, our `std::collections::HashSet` and `hashbrown::HashSet`
+didn't enjoy the same level of reflectability as, for example,
+`std::collections::HashMap`. Now, with version 0.15, these set-like types are
+fully reflectable!
 
 ### Why does this matter?
 
-If you're a fan of the excellent `bevy-inspector-egui` plugin crate, you'll now be able to see the contents of your `HashSet`s after updating both the crate to the version compatible with bevy 0.15. This enhancement allows for deeper introspection and easier debugging in your game development workflow.
+If you're a fan of the excellent `bevy-inspector-egui` plugin crate, you might
+have noticed that the contents of sets are not inspectable. This change in the
+bevy crate unblocks improvements to the plugin crate, so you'll finally be able
+to see the contents of your `HashSet`s. This enhancement allows for deeper
+introspection and easier debugging in your game development workflow.
 
-Here is an example of entity connections where this improvement has a good impact:
+Here is an example of entity connections where this improvement will be
+helpful:
 
 ```rust 
+!// previously inspecting this would only show 
+!// 
+!// > "HashSet<Entity, EntityHash> is #[reflect_value], but has no
+!// > InspectorEguiImpl registered in the TypeRegistry. Try calling
+!// > .register_type::<HashSet<Entity, EntityHash>> or add the
+!// > DefaultInspectorConfigPlugin for builtin types."
+!// 
+!// which either didn't work or would need a lot of extra code just to get it
+!// to work
+!// 
+!// After the bevy-inspector-egui update it should just show the entities in a
+!// similar way compared to `Vec`s
+
 #[derive(Component)]
 pub struct Person;
 
-/// previously inspecting this would only show 
-/// 
-/// "HashSet<Entity, EntityHash> is #[reflect_value], but has no
-/// InspectorEguiImpl registered in the TypeRegistry. Try calling
-/// .register_type::<HashSet<Entity, EntityHash>> or add the
-/// DefaultInspectorConfigPlugin for builtin types."
-/// 
-/// which either didn't work or would need a lot of extra code just to get it
-/// to work
 #[derive(Component, Reflect)]
 pub struct Friendships(EntityHashSet<Entity>);
 
