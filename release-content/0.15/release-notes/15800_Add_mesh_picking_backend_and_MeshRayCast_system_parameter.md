@@ -36,60 +36,67 @@ Secondly, you might want to respond dynamically to various pointer-powered event
 Here, we're spawning a simple text node and responding to pointer events.
 
 ```rust
-use bevy::prelude::*;
+fn main() {
+    use bevy::prelude::*;
 
-let app = App::new()
-    .add_plugins(DefaultPlugins)
-    .add_systems(Startup, spawn_buttons)
-    .add_systems(Update, update_counter_display)
-    // Observers added globally will watch for events sent to *any* entity
-    .add_observer(change_text_color_on_hover)
-    .add_observer(reset_text_color);
-
-fn change_text_color_on_hover(out: Trigger<Pointer<Out>>, mut text_colors: Query<&mut TextColor>){
-    if let Ok(mut text_color) = text_colors.get_mut(over.entity()){
-        text_color.0 = Color::gray(0.8);
-    }
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, setup)
+        .add_systems(Update, update_counter_display)
+        // Observers added globally will watch for events sent to *any* entity
+        .add_observer(change_text_color_on_hover)
+        .add_observer(reset_text_color)
+        .run();
 }
 
-
-fn reset_text_color(over: Trigger<Pointer<Out>>, mut text_colors: Query<&mut TextColor>){
-    if let Ok(mut text_color) = text_colors.get_mut(out.entity()){
-        text_color.0 = Color::gray(0.5);
+fn change_text_color_on_hover(
+    over: Trigger<Pointer<Over>>,
+    mut text_colors: Query<&mut TextColor>,
+) {
+    if let Ok(mut text_color) = text_colors.get_mut(over.entity()) {
+        *text_color = Srgba::RED.into();
     }
 }
-
+fn reset_text_color(out: Trigger<Pointer<Out>>, mut text_colors: Query<&mut TextColor>) {
+    if let Ok(mut text_color) = text_colors.get_mut(out.entity()) {
+        *text_color = TextColor::default();
+    }
+}
 #[derive(Component)]
 struct Counter(i32);
-
-fn spawn_buttons(mut commands: Commands){
-    commands.spawn((Text::new("Counter: 0"), Counter(0)));
-
+fn setup(mut commands: Commands) {
+    commands.spawn(Camera2d::default());
+    // Root node
     commands
-        .spawn((
-            Text::new("Count up :)"),
-        )
-        // Observers added to a single entity only watch for events to that specific entity
-        .observe(|_click: Trigger<Pointer<Click>>, counter_query: Query<&mut Counter>| {
-            if let Ok(mut counter) = counter_query.get_single_mut(){
-                counter.0 += 1;
-            }
-        }));
-
-    commands
-        .spawn((
-            Text::new("Count down :("),
-        )
-        .observe(|_click: Trigger<Pointer<Click>>, counter_query: Query<&mut Counter>| {
-            if let Ok(mut counter) = counter_query.get_single_mut(){
-                counter.0 -= 1;
-            }
-        }));
+        .spawn(Node {
+            flex_direction: FlexDirection::Column,
+            ..Default::default()
+        })
+        .with_children(|builder| {
+            builder.spawn((Text::new("Counter: 0"), Counter(0)));
+            builder
+                .spawn((Text::new("Count up :)"),))
+                // Observers added to a single entity only watch for events to that specific entity
+                .observe(
+                    |_click: Trigger<Pointer<Click>>,
+                     mut counter_query: Query<&mut Counter>| {
+                        if let Ok(mut counter) = counter_query.get_single_mut() {
+                            counter.0 += 1;
+                        }
+                    },
+                );
+            builder.spawn((Text::new("Count down :("),)).observe(
+                |_click: Trigger<Pointer<Click>>, mut counter_query: Query<&mut Counter>| {
+                    if let Ok(mut counter) = counter_query.get_single_mut() {
+                        counter.0 -= 1;
+                    }
+                },
+            );
+        });
 }
-
 // Systems with the new `Single` system param are skipped if their query doesn't return exactly one elemnent
-fn update_counter(singleton_query: Single<(&mut Text, &Counter)>){
-    let (mut text, counter) = singleton_query;
+fn update_counter_display(singleton_query: Single<(&mut Text, &Counter)>) {
+    let (mut text, counter) = singleton_query.into_inner();
     *text = Text::new(format!("Counter: {}", counter.0));
 }
 ```
