@@ -1,6 +1,5 @@
 <!-- Add features to switch `NativeActivity` and `GameActivity` usage -->
 <!-- https://github.com/bevyengine/bevy/pull/12095 -->
-
 Bevy now uses `GameActivity` as the default `Activity` for Android projects, replacing
 `NativeActivity`. `NativeActivity` is still available, but has been placed behind a feature flag.
 
