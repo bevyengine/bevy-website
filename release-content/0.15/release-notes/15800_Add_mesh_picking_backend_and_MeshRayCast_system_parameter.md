@@ -1,7 +1,7 @@
 <!-- Add mesh picking backend and `MeshRayCast` system parameter -->
 <!-- https://github.com/bevyengine/bevy/pull/15800 -->
 
-TODO: Laser beam image
+![A collection of geometric shapes, with a pointer showing a point on a hovered mesh. The indicator is perpendicular to the surface.](mesh_picking.png)
 
 Being able to click on objects to select them is a vital and seemingly simple task in any game.
 Since 2020, doing this in Bevy has largely meant pulling in `@aevyrie`'s beloved ecosystem crate, [`bevy_mod_picking`] and it's simple raycasting companion [`bevy_mod_raycast`].
