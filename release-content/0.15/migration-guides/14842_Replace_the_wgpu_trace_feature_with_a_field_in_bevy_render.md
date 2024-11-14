@@ -9,4 +9,4 @@ You can track the progress of WGPU tracing being reimplemented at [gfx-rs/wgpu#5
 To continue generating WGPU traces:
 
 1. Remove any instance of the `bevy/wgpu_trace` or `bevy_render/wgpu_trace` features you may have in any of your `Cargo.toml` files.
-2. Follow the instructions in `docs/debugging.md` file in the repository, under the WGPU Tracing section.
+2. Follow the instructions in [`docs/debugging.md`, under the WGPU Tracing section](https://github.com/bevyengine/bevy/blob/release-0.15.0/docs/debugging.md#wgpu-tracing).
