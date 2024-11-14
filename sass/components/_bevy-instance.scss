@@ -9,6 +9,7 @@
     left: 50%;
     width: 250px;
     transform: translateX(-50%);
+    display: none;
 
     &:empty {
       display: none;

@@ -223,10 +223,10 @@ prs = [15276, 15476, 15488]
 file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
 
 [[release_notes]]
-title = "Allow animation clips to animate arbitrary properties."
-authors = ["@pcwalton"]
-contributors = []
-prs = [15282]
+title = "Generalized animation"
+authors = ["@pcwalton", "@mweatherley"]
+contributors = ["@MrGVSV", "@aecsocket"]
+prs = [15282, 15434]
 file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
 
 [[release_notes]]
@@ -383,9 +383,9 @@ file_name = "15627_Add_more_tools_for_traversing_hierarchies.md"
 
 [[release_notes]]
 title = "Add most common interpolations"
-authors = ["@mockersf"]
-contributors = []
-prs = [15675]
+authors = ["@RobWalt", "@mockersf", "@mweatherley"]
+contributors = ["@NthTensor", "@eckz", "@alice-i-cecile"]
+prs = [14788, 15675, 15711]
 file_name = "15675_Add_most_common_interpolations.md"
 
 [[release_notes]]
@@ -401,13 +401,6 @@ authors = ["@ickshonpe"]
 contributors = []
 prs = [15204]
 file_name = "15204_box_shadow.md"
-
-[[release_notes]]
-title = "Improved text batching"
-authors = ["@ickshonpe"]
-contributors = ["@kristoff3r"]
-prs = [14848]
-file_name = "14848_Improved_text_batching.md"
 
 [[release_notes]]
 title = "Add mesh picking backend and `MeshRayCast` system parameter"

@@ -142,7 +142,7 @@ $colors: (
   --html-bg-color: var(--color-neutral-800);
   --link-color: var(--color-blue-link);
   --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
-  --text-color: var(--color-neutral-200);
+  --text-color: #d2d2d2;
   --text-dim-color: var(--color-neutral-300);
 
   --asset-card-title-bg-color: #{rgba($color-black, 0.5)};
@@ -262,7 +262,7 @@ $colors: (
     --html-bg-color: var(--color-neutral-100);
     --link-color: #4a33d9;
     --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
-    --text-color: var(--color-neutral-600);
+    --text-color: var(--color-neutral-700);
     --text-dim-color: var(--color-neutral-400);
 
     --asset-card-title-bg-color: #{rgba($color-white, 0.7)};
