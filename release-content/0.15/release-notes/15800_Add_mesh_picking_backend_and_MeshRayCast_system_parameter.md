@@ -33,9 +33,65 @@ If you haven't used `bevy_picking`'s predecessor, there are two important and st
 First, you might want to quickly update the state of your objects (be they UI or game objects) based on what is being done to them, typically highlighting them or changing their color. For that, simply match against the [`PickingInteraction`] component.
 
 Secondly, you might want to respond dynamically to various pointer-powered events. For that, we recommend using observers (which replaced the existing `bevy_event_listener` solution during the upstreaming process).
+Here, we're spawning a simple text node and responding to pointer events.
 
 ```rust
-TODO
+use bevy::prelude::*;
+
+let app = App::new()
+    .add_plugins(DefaultPlugins)
+    .add_systems(Startup, spawn_buttons)
+    .add_systems(Update, update_counter_display)
+    // Observers added globally will watch for events sent to *any* entity
+    .add_observer(change_text_color_on_hover)
+    .add_observer(reset_text_color);
+
+fn change_text_color_on_hover(out: Trigger<Pointer<Out>>, mut text_colors: Query<&mut TextColor>){
+    if let Ok(mut text_color) = text_colors.get_mut(over.entity()){
+        text_color.0 = Color::gray(0.8);
+    }
+}
+
+
+fn reset_text_color(over: Trigger<Pointer<Out>>, mut text_colors: Query<&mut TextColor>){
+    if let Ok(mut text_color) = text_colors.get_mut(out.entity()){
+        text_color.0 = Color::gray(0.5);
+    }
+}
+
+#[derive(Component)]
+struct Counter(i32);
+
+fn spawn_buttons(mut commands: Commands){
+    commands.spawn((Text::new("Counter: 0"), Counter(0)));
+
+    commands
+        .spawn((
+            Text::new("Count up :)"),
+        )
+        // Observers added to a single entity only watch for events to that specific entity
+        .observe(|_click: Trigger<Pointer<Click>>, counter_query: Query<&mut Counter>| {
+            if let Ok(mut counter) = counter_query.get_single_mut(){
+                counter.0 += 1;
+            }
+        }));
+
+    commands
+        .spawn((
+            Text::new("Count down :("),
+        )
+        .observe(|_click: Trigger<Pointer<Click>>, counter_query: Query<&mut Counter>| {
+            if let Ok(mut counter) = counter_query.get_single_mut(){
+                counter.0 -= 1;
+            }
+        }));
+}
+
+// Systems with the new `Single` system param are skipped if their query doesn't return exactly one elemnent
+fn update_counter(singleton_query: Single<(&mut Text, &Counter)>){
+    let (mut text, counter) = singleton_query;
+    *text = Text::new(format!("Counter: {}", counter.0));
+}
 ```
 
 If you want to control how an entity interacts with picking, add the [`PickingBehavior`] component to them and configure it to meet your needs.
