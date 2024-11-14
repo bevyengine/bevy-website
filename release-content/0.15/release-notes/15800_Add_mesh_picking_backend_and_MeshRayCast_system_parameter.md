@@ -1,6 +1,8 @@
 <!-- Add mesh picking backend and `MeshRayCast` system parameter -->
 <!-- https://github.com/bevyengine/bevy/pull/15800 -->
 
+TODO: Laser beam image
+
 Being able to click on objects to select them is a vital and seemingly simple task in any game.
 Since 2020, doing this in Bevy has largely meant pulling in `@aevyrie`'s beloved ecosystem crate, [`bevy_mod_picking`] and it's simple raycasting companion [`bevy_mod_raycast`].
 
@@ -24,6 +26,20 @@ In Bevy 0.15, we're shipping with UI, sprite and mesh backends. Each of these co
 
 We expect both [`bevy_rapier`] and [`avian`] (the two most popular ecosystem physics crates for Bevy) to update their accelerated mesh picking implementations to work with the newly upstreamed API. Unless you're debugging, building an editor or really care about the exact triangles of raw meshes, you should use one of those crates for efficient mesh picking.
 
+## Usage
+
+If you haven't used `bevy_picking`'s predecessor, there are two important and straightforward ways to get started with the API.
+
+First, you might want to quickly update the state of your objects (be they UI or game objects) based on what is being done to them, typically highlighting them or changing their color. For that, simply match against the [`PickingInteraction`] component.
+
+Secondly, you might want to respond dynamically to various pointer-powered events. For that, we recommend using observers (which replaced the existing `bevy_event_listener` solution during the upstreaming process).
+
+```rust
+TODO
+```
+
+If you want to control how an entity interacts with picking, add the [`PickingBehavior`] component to them and configure it to meet your needs.
+
 [`bevy_mod_picking`]: https://crates.io/crates/bevy_mod_picking/
 [`bevy_mod_raycast`]: https://crates.io/crates/bevy_mod_raycast/
 [Foresight Spatial Labs]: https://www.fslabs.ca/
@@ -35,3 +51,4 @@ We expect both [`bevy_rapier`] and [`avian`] (the two most popular ecosystem phy
 [`PickingInteraction`]: https://docs.rs/bevy/0.15.0/bevy/picking/focus/enum.PickingInteraction.html
 [`bevy_rapier`]: https://crates.io/crates/bevy_rapier3d
 [`avian`]: https://crates.io/crates/avian3d
+[`PickingBehavior`]: https://docs.rs/bevy/0.15.0/bevy/picking/struct.PickingBehavior.html
