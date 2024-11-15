@@ -4,9 +4,9 @@
 ![A collection of geometric shapes, with a pointer showing a point on a hovered mesh. The indicator is perpendicular to the surface.](mesh_picking.png)
 
 Being able to click on objects to select them is a vital and seemingly simple task in any game.
-Since 2020, doing this in Bevy has largely meant pulling in `@aevyrie`'s beloved ecosystem crate, [`bevy_mod_picking`] and it's simple raycasting companion [`bevy_mod_raycast`].
+Since 2020, doing this in Bevy has largely meant pulling in `@aevyrie`'s beloved ecosystem crate, [`bevy_mod_picking`] and its simple raycasting companion [`bevy_mod_raycast`].
 
-Over the years, this crate has been refined and battle-tested, both by [Foresight Spatial Labs] (a CAD-creating, Bevy-using company co-founded by Aevyrie) and
+Over the years, this crate has been refined and battle-tested, both by [Foresight Spatial Labs] (a CAD-creating, Bevy-using company where Aevyrie works) and
 the broader open source community of game developers that have used it for everything from first-person-shooters to point-and-click adventures.
 Bevy is thrilled to have had the chance to work with the team behind [`bevy_mod_picking`] and have adopted the project wholesale into Bevy itself.
 Integrating a large project is a ton of work, and we're incredibly grateful to the contributors who have made `bevy_picking` a stable, first-class feature of the engine.
@@ -18,7 +18,7 @@ The new `bevy_picking` crate follows the existing modular architecture closely:
 3. The hit information from each backend is combined and sorted to produce a coherent [`HoverMap`], which lists which entities each pointer is hovering over.
 4. High level events (both ordinary events and observers!) are emitted for each hovered entity, capturing complex behavior such as clicking, dragging or releasing various objects.
 
-In Bevy 0.15, we're shipping with UI, sprite and mesh backends. Each of these comes with its own caveats for now:
+In Bevy 0.15, we're shipping three first-party picking backends for UI, sprites, and meshes. Each of these comes with its own caveats for now:
 
 - UI: both the legacy [`Interaction`] and new [`PickingInteraction`] components exist [for now](https://github.com/bevyengine/bevy/issues/15550), with subtle behavioral differences.
 - Sprites: picking always uses the full rectangle, and [alpha transparency is not taken into account](https://github.com/bevyengine/bevy/issues/14929).
@@ -101,7 +101,7 @@ fn update_counter_display(singleton_query: Single<(&mut Text, &Counter)>) {
 }
 ```
 
-If you want to control how an entity interacts with picking, add the [`PickingBehavior`] component to them and configure it to meet your needs.
+If you want to override how an entity interacts with picking, add the [`PickingBehavior`] component to them and configure it to meet your needs.
 
 [`bevy_mod_picking`]: https://crates.io/crates/bevy_mod_picking/
 [`bevy_mod_raycast`]: https://crates.io/crates/bevy_mod_raycast/
