@@ -21,6 +21,6 @@ However we learned pretty quickly that clearing every frame had major downsides:
 In **Bevy 0.15** we switched to a "retained Render World". We no longer clear each frame. We no longer rely on a shared entity ID space. Instead:
 
 1. Each world has its own entities
-2. For entities that are related, we store that relationship as components (ex: Render World entities have a `MainEntity` component and Main World entities have a `RenderEntity` component). If a Main World entity is despawned, we despawn the relevant entity in the Render World.
+2. For entities that are related, we store that relationship as components (ex: Render World entities have a `MainEntity` component and Main World entities have a `RenderEntity` component). If a Main World entity with `SyncToRenderWorld` is spawned, we spawn an equivalent in the Render World. If a Main World entity is despawned, we despawn the relevant entity in the Render World.
 
 Ensuring synchronization is perfect is _not_ an easy problem. Plugging all of the holes took a lot of time this cycle and we will likely continue to evolve our synchronization strategy in the future. But we think "retained" is fundamentally better for Bevy, and we're excited to have this foundation laid!
