@@ -319,13 +319,6 @@ prs = [14838]
 file_name = "14838_bevy_reflect_add_Type_type.md"
 
 [[release_notes]]
-title = "Curve-based animation"
-authors = ["@mweatherley"]
-contributors = ["@MrGVSV", "@aecsocket"]
-prs = [15434]
-file_name = "15434_Curvebased_animation.md"
-
-[[release_notes]]
 title = "Add features to switch `NativeActivity` and `GameActivity` usage"
 authors = ["@Litttlefish"]
 contributors = ["@richchurcher", "@mockersf", "@BD103"]
@@ -338,13 +331,6 @@ authors = ["@MrGVSV"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
 prs = [8611]
 file_name = "8611_bevy_reflect_Add_DeserializeWithRegistry_and_SerializeWithR.md"
-
-[[release_notes]]
-title = "add curve utilities to create curves interpolating/easing between two values"
-authors = ["@RobWalt"]
-contributors = ["@mweatherley", "@NthTensor", "@eckz", "@alice-i-cecile"]
-prs = [14788]
-file_name = "14788_add_curve_utilities_to_create_curves_interpolatingeasing_b.md"
 
 [[release_notes]]
 title = "Implement additive blending for animation graphs."
