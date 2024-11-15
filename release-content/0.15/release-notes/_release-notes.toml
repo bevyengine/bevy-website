@@ -247,10 +247,10 @@ file_name = "15184_Support_systems_that_take_references_as_input.md"
 title = "Initial implementation of the Bevy Remote Protocol (Adopted)"
 authors = ["@mweatherley"]
 contributors = [
-	"@DragonGamesStudios",
-	"@MrGVSV",
-	"@ChristopherBiscardi",
-	"@pcwalton",
+    "@DragonGamesStudios",
+    "@MrGVSV",
+    "@ChristopherBiscardi",
+    "@pcwalton",
 ]
 prs = [14880]
 file_name = "14880_Initial_implementation_of_the_Bevy_Remote_Protocol_Adopted.md"
@@ -301,7 +301,24 @@ file_name = "15419_Gpu_readback.md"
 title = "Function reflection"
 authors = ["@MrGVSV", "@nixpulvis", "@hooded-shrimp"]
 contributors = []
-prs = [13152, 14098, 14141, 14174, 14201, 14641, 14647, 14666, 14704, 14813, 15086, 15145, 15147, 15148, 15205, 15484]
+prs = [
+    13152,
+    14098,
+    14141,
+    14174,
+    14201,
+    14641,
+    14647,
+    14666,
+    14704,
+    14813,
+    15086,
+    15145,
+    15147,
+    15148,
+    15205,
+    15484,
+]
 file_name = "function_reflection.md"
 
 [[release_notes]]
@@ -382,10 +399,10 @@ prs = [15204]
 file_name = "15204_box_shadow.md"
 
 [[release_notes]]
-title = "Add mesh picking backend and `MeshRayCast` system parameter"
-authors = ["@Jondolf"]
-contributors = ["@mockersf", "@tbillington", "@aevyrie"]
-prs = [15800]
+title = "`bevy_picking`: selecting objects by clicking on them"
+authors = ["@aevyrie", "@NthTensor", "@TotalKrill", "@jnhyatt", "@Jondolf"]
+contributors = ["@alice-i-cecile", "@mockersf", "@tbillington", "@kivi"]
+prs = [13677, 14686, 14695, 14757, 15800]
 file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
 
 [[release_notes]]
