@@ -52,7 +52,7 @@ fn setup_scene(
 ) {
     // UI text that prints a message when clicked:
     commands
-        .spawn((Text::new("Click Me!"), Node::default()))
+        .spawn(Text::new("Click Me!"))
         .observe(on_click_print_hello);
 
     // A cube that spins when dragged:
