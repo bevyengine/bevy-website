@@ -36,68 +36,47 @@ Secondly, you might want to respond dynamically to various pointer-powered event
 Here, we're spawning a simple text node and responding to pointer events.
 
 ```rust
-fn main() {
-    use bevy::prelude::*;
+use bevy::prelude::*;
 
+fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_systems(Startup, setup)
-        .add_systems(Update, update_counter_display)
-        // Observers added globally will watch for events sent to *any* entity
-        .add_observer(change_text_color_on_hover)
-        .add_observer(reset_text_color)
+        .add_plugins((DefaultPlugins, MeshPickingPlugin))
+        .add_systems(Startup, setup_scene)
         .run();
 }
 
-fn change_text_color_on_hover(
-    over: Trigger<Pointer<Over>>,
-    mut text_colors: Query<&mut TextColor>,
+fn setup_scene(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    if let Ok(mut text_color) = text_colors.get_mut(over.entity()) {
-        *text_color = Srgba::RED.into();
-    }
-}
-fn reset_text_color(out: Trigger<Pointer<Out>>, mut text_colors: Query<&mut TextColor>) {
-    if let Ok(mut text_color) = text_colors.get_mut(out.entity()) {
-        *text_color = TextColor::default();
-    }
-}
-#[derive(Component)]
-struct Counter(i32);
-fn setup(mut commands: Commands) {
-    commands.spawn(Camera2d::default());
-    // Root node
+    // UI text that prints a message when clicked:
     commands
-        .spawn(Node {
-            flex_direction: FlexDirection::Column,
-            ..Default::default()
-        })
-        .with_children(|builder| {
-            builder.spawn((Text::new("Counter: 0"), Counter(0)));
-            builder
-                .spawn((Text::new("Count up :)"),))
-                // Observers added to a single entity only watch for events to that specific entity
-                .observe(
-                    |_click: Trigger<Pointer<Click>>,
-                     mut counter_query: Query<&mut Counter>| {
-                        if let Ok(mut counter) = counter_query.get_single_mut() {
-                            counter.0 += 1;
-                        }
-                    },
-                );
-            builder.spawn((Text::new("Count down :("),)).observe(
-                |_click: Trigger<Pointer<Click>>, mut counter_query: Query<&mut Counter>| {
-                    if let Ok(mut counter) = counter_query.get_single_mut() {
-                        counter.0 -= 1;
-                    }
-                },
-            );
-        });
+        .spawn((Text::new("Click Me!"), Node::default()))
+        .observe(on_click_print_hello);
+
+    // A cube that spins when dragged:
+    commands
+        .spawn((
+            Mesh3d(meshes.add(Cuboid::default())),
+            MeshMaterial3d(materials.add(Color::WHITE)),
+        ))
+        // Picking observers work with *any* entity that has a picking backend running.
+        // Try adding this `on_drag_spin` observer to the UI text! :)
+        .observe(on_drag_spin);
+
+    // Light and camera
+    commands.spawn((PointLight::default(), Transform::from_xyz(4.0, 8.0, 4.0)));
+    commands.spawn((Camera3d::default(), Transform::from_xyz(0.0, 2.0, 9.0)));
 }
-// Systems with the new `Single` system param are skipped if their query doesn't return exactly one elemnent
-fn update_counter_display(singleton_query: Single<(&mut Text, &Counter)>) {
-    let (mut text, counter) = singleton_query.into_inner();
-    *text = Text::new(format!("Counter: {}", counter.0));
+
+fn on_click_print_hello(click: Trigger<Pointer<Click>>) {
+    println!("{} was clicked!", click.entity());
+}
+
+fn on_drag_spin(drag: Trigger<Pointer<Drag>>, mut transforms: Query<&mut Transform>) {
+    let mut transform = transforms.get_mut(drag.entity()).unwrap();
+    transform.rotate_y(drag.delta.x * 0.02);
 }
 ```
 
