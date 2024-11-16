@@ -54,7 +54,7 @@ pub fn extract_clusters(
 }
 
 // in main world, when spawning
-world.spawn(Clusters::default(), Camera::default(), SyncToRenderWorld)
+world.spawn((Clusters::default(), Camera::default(), SyncToRenderWorld))
 ```
 
 ### Looking up main world entities in the render world
@@ -74,7 +74,7 @@ pub fn inspect_clusters(
 
 ### General advice for working with main and render world entities
 
-When working with entities from both worlds it can be confusing. If you are every in a scenario where this isn't entirely clear (for example, when working on custom extraction code in the render world), we advice that you use `RenderEntity` and `MainEntity` as simple wrappers around `Entity`. Mixing these up can become a real headache and lead to some non-obvious errors.
+When working with entities from both worlds it can be confusing. If you are every in a scenario where this isn't entirely clear (for example, when working on custom extraction code in the render world), we advise that you use `RenderEntity` and `MainEntity` as simple wrappers around `Entity`. Mixing these up can become a real headache and lead to some non-obvious errors.
 
 ```rust
 // render world 0.14
