@@ -34,7 +34,7 @@ pub fn extract_clusters(
     }
 }
 ```
-An extract query in the render world queries for entities and components in the main world. Here `entity` is a main world entity and `get_or_spawn(main_world_entity).insert(...)` potentially inserts components on the wrong entity. Remember, there is no longer a one-to-one correspondance between the main and render world entities. Moreover `get_or_spawn` has been deprecated.
+An extract query in the render world queries for entities and components in the main world. Here `entity` is a main world entity and `get_or_spawn(main_world_entity).insert(...)` potentially inserts components on the wrong entity. Remember, there is no longer a one-to-one correspondence between the main and render world entities. Moreover `get_or_spawn` has been deprecated.
 
 In 0.15, you should use `RenderEntity` in place of `Entity` to get the correct entity in the render world. For entities to have a `RenderEntity` they need to be synced first. This can be done either via `WorldSyncPlugin` or adding the `SyncToRenderWorld` to the main world entity.
 
