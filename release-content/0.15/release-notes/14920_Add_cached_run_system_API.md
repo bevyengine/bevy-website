@@ -3,7 +3,7 @@
 **Bevy 0.15** introduces a new "cached" API for running one-shot systems:
 
 ```rust
-// Run a system without registering it first:
+// Run a system without manually registering it first:
 commands.run_system_cached(foo);
 commands.run_system_cached_with(bar, 42);
 
