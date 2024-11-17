@@ -1,6 +1,6 @@
 [[release_notes]]
 title = "Cosmic text"
-authors = ["@TotalKrill"]
+authors = ["@tigregalis", "@TotalKrill"]
 contributors = [
     "@tigregalis",
     "@alice-i-cecile",
@@ -39,6 +39,13 @@ authors = ["@NthTensor"]
 contributors = ["@cart", "@alice-i-cecile", "@torsteingrindvik"]
 prs = [13991]
 file_name = "13991_Minimal_Bubbling_Observers.md"
+
+[[release_notes]]
+title = "Retained Rendering World"
+authors = ["@re0312", "@trashtalk217", "@kristoff3r", "@tychedelia"]
+contributors = []
+prs = [14449, 15320, 15582, 15756]
+file_name = "15320_Retained_Rendering.md"
 
 [[release_notes]]
 title = "Start a built-in postprocessing stack, and implement chromatic aberration in it."
@@ -418,3 +425,10 @@ authors = ["@JMS55"]
 contributors = ["@zeux", "@atlv24"]
 prs = [14193, 14623, 15023, 15084, 15643, 15846, 15886, 15955, 16049, 16111]
 file_name = "virtual_geometry.md"
+
+[[release_notes]]
+title = "Shader storage buffer asset"
+authors = ["@tychedelia"]
+contributors = ["@IceSentry"]
+prs = [14663]
+file_name = "14663_shader_storage_buffer.md"
