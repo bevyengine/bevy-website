@@ -418,3 +418,10 @@ authors = ["@cart", "@Jondolf"]
 contributors = ["@alice-i-cecile", "@killercup", "@BD103", "@fluffiac"]
 prs = [14791, 15458, 15269]
 file_name = "14791_Required_Components.md"
+
+[[release_notes]]
+title = "Shader storage buffer asset"
+authors = ["@tychedelia"]
+contributors = ["@IceSentry"]
+prs = [14663]
+file_name = "14663_shader_storage_buffer.md"
