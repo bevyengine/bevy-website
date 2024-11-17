@@ -41,6 +41,13 @@ prs = [13991]
 file_name = "13991_Minimal_Bubbling_Observers.md"
 
 [[release_notes]]
+title = "Retained Rendering World"
+authors = ["@re0312", "@trashtalk217", "@kristoff3r", "@tychedelia"]
+contributors = []
+prs = [14449, 15320, 15582, 15756]
+file_name = "15320_Retained_Rendering.md"
+
+[[release_notes]]
 title = "Start a built-in postprocessing stack, and implement chromatic aberration in it."
 authors = ["@pcwalton"]
 contributors = []
