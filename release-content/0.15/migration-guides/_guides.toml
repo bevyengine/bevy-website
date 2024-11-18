@@ -919,7 +919,7 @@ file_name = "15579_Migrate_scenes_to_required_components.md"
 
 [[guides]]
 title = "Text rework"
-prs = [15591]
+prs = [15591, 15887]
 areas = ["Text"]
 file_name = "15591_Text_rework.md"
 
