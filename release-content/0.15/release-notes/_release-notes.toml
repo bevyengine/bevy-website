@@ -181,13 +181,6 @@ prs = [15085]
 file_name = "15085_Add_state_scoped_events.md"
 
 [[release_notes]]
-title = "Enable/disable UI anti-aliasing"
-authors = ["@patrickariel"]
-contributors = []
-prs = [15170]
-file_name = "15170_Enabledisable_UI_antialiasing.md"
-
-[[release_notes]]
 title = "`EntityRefExcept` and `EntityMutExcept`"
 authors = ["@pcwalton"]
 contributors = []
@@ -235,13 +228,6 @@ authors = ["@Piefayth", "@nicoburns"]
 contributors = []
 prs = [15291]
 file_name = "15291_UI_Scrolling.md"
-
-[[release_notes]]
-title = "Add the ability to control font smoothing"
-authors = ["@coreh"]
-contributors = []
-prs = [15368]
-file_name = "15368_Add_the_ability_to_control_font_smoothing.md"
 
 [[release_notes]]
 title = "Passing data into systems by reference"
