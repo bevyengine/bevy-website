@@ -5,7 +5,6 @@
 ```rust
 // Run a system without manually registering it first:
 commands.run_system_cached(foo);
-commands.run_system_cached_with(bar, 42);
 
 // Reuse a registered system automatically:
 let id1 = world.register_system_cached(quux);
