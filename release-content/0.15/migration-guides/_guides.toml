@@ -1002,12 +1002,6 @@ areas = ["UI"]
 file_name = "15898_Migrate_UI_bundles_to_required_components.md"
 
 [[guides]]
-title = "Merge Style properties into Node. Use ComputedNode for computed properties."
-prs = [15975]
-areas = ["UI"]
-file_name = "15975_Merge_Style_properties_into_Node_Use_ComputedNode_for_comp.md"
-
-[[guides]]
 title = "Explicitly order `CameraUpdateSystem` before `UiSystem::Prepare`"
 prs = [14609]
 areas = ["UI", "Windowing"]
