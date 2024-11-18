@@ -2,7 +2,7 @@ The `Text` API in Bevy has been overhauled in several ways as part of Bevy 0.15.
 There are several major changes to consider:
 
 - `ab_glyph` has been replaced with `cosmic-text`. These changes are mostly internal and the majority of users will not interact with either text backend directly.
-- each text section is now stored as a distinct entity within the standard hierarchy, rather than as a `Vec<TextSection>` on the `Text` component. Children of `Text`/`Text2d` entities with `Text` `Text2d` components will act as additional text sections.
+- each text section is now stored as a distinct entity within the standard hierarchy, rather than as a `Vec<TextSection>` on the `Text` component. Children of `Text`/`Text2d` entities with `TextSpan` components will act as additional text sections.
 - like other aspects of Bevy's API, required components have replaced bundles
 
 ## `TextBundle` and text styling
