@@ -21,7 +21,7 @@ So, for example, suppose you write some code that registers and runs a system wh
 
 ## Limitations
 
-This approach only works if we can guarantee that different systems are never cached under the same `CachedSystemId<S>`. In other words, there should be no more than 1 distinct system of type `S`. This is true when `size_of::<S>() == 0` (aka `S` is a ZST), which is almost always true in practice. Thus, to enforce correctness, the new API will give you a compile-time error if you pass in a non-ZST function like a function pointer or a capturing closure.
+This approach only works if we can guarantee that different systems are never cached under the same `CachedSystemId<S>`. In other words, there should be no more than 1 distinct system of type `S`. This is true when `size_of::<S>() == 0`, which is almost always true in practice. Thus, to enforce correctness, the new API will give you a compile-time error if you try to use a non-zero-sized function (like a function pointer or a capturing closure).
 
 ## Comparison to `run_system_once`
 
