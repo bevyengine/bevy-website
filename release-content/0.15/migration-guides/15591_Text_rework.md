@@ -14,7 +14,7 @@ Add the `Text` component to set the string displayed.
 and are automatically added whenever `Text` is.
 Set those values to change the text section's style.
 
-Like elsewhere in Bevy, there is no style inheritance. Consider writing your own abstraction for this if this is something you'd like to use.
+Like elsewhere in Bevy, there is no style inheritance. Consider [writing your own abstraction for this](https://github.com/viridia/thorium_ui/blob/main/crates/thorium_ui_controls/src/text_styles.rs) if this is something you'd like to use.
 
 To control the layout of a `Text` section, modify the properties of its `Node`.
 
