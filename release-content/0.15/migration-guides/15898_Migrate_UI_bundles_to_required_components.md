@@ -1,4 +1,53 @@
-- Replace all uses of `NodeBundle` with `Node`. e.g.
+`NodeBundle` has been replaced with `Node` (and its associated required components).
+
+Simultaneously, the fields and behavior of `Style` have been moved to `Node`, and the largely internal values previously stored there are now found on `ComputedNode`.
+
+To migrate, first move any fields set on `Style` into `Node` and replace all `Style` component usage with `Node`.
+
+Before:
+
+```rust
+commands.spawn((
+    Node::default(),
+    Style {
+        width:  Val::Px(100.),
+        ..default()
+    },
+));
+```
+
+After:
+
+```rust
+commands.spawn(Node {
+    width:  Val::Px(100.),
+    ..default()
+});
+```
+
+For any usage of the “computed node properties” that used to live on `Node`, use `ComputedNode` instead:
+
+Before:
+
+```rust
+fn system(nodes: Query<&Node>) {
+    for node in &nodes {
+        let computed_size = node.size();
+    }
+}
+```
+
+After:
+
+```rust
+fn system(computed_nodes: Query<&ComputedNode>) {
+    for computed_node in &computed_nodes {
+        let computed_size = computed_node.size();
+    }
+}
+```
+
+Then, replace all uses of `NodeBundle` with `Node`. e.g.
 
 ```diff
      commands
@@ -19,9 +68,51 @@
 
 - Replace all uses of `ButtonBundle` with `Button`. e.g.
 
-```diff
-                     .spawn((
--                        ButtonBundle {
+```diffMove any fields set on `Style` into `Node` and replace all `Style` component usage with `Node`.
+
+Before:
+
+```rust
+commands.spawn((
+    Node::default(),
+    Style {
+        width:  Val::Px(100.),
+        ..default()
+    },
+));
+```
+
+After:
+
+```rust
+commands.spawn(Node {
+    width:  Val::Px(100.),
+    ..default()
+});
+```
+
+For any usage of the “computed node properties” that used to live on `Node`, use `ComputedNode` instead:
+
+Before:
+
+```rust
+fn system(nodes: Query<&Node>) {
+    for node in &nodes {
+        let computed_size = node.size();
+    }
+}
+```
+
+After:
+
+```rust
+fn system(computed_nodes: Query<&ComputedNode>) {
+    for computed_node in &computed_nodes {
+        let computed_size = computed_node.size();
+    }
+}
+```
+      ButtonBundle {
 -                            style: Style {
 -                                width: Val::Px(w),
 -                                height: Val::Px(h),

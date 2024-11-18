@@ -997,7 +997,7 @@ file_name = "15561_Overflow_clip_margin.md"
 
 [[guides]]
 title = "Migrate UI bundles to required components"
-prs = [15898]
+prs = [15898, 15975]
 areas = ["UI"]
 file_name = "15898_Migrate_UI_bundles_to_required_components.md"
 
