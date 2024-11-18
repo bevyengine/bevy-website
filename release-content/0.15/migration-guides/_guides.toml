@@ -132,12 +132,6 @@ areas = ["Assets"]
 file_name = "15890_Remove_incorrect_equality_comparisons_for_asset_load_error.md"
 
 [[guides]]
-title = "Faster MeshletMesh deserialization"
-prs = [14193]
-areas = ["Assets", "Rendering"]
-file_name = "14193_Faster_MeshletMesh_deserialization.md"
-
-[[guides]]
 title = "Split `TextureAtlasSources` out of `TextureAtlasLayout` and make `TextureAtlasLayout` serializable"
 prs = [15344]
 areas = ["Assets", "Rendering"]
@@ -756,12 +750,6 @@ areas = ["Rendering"]
 file_name = "14909_Refactor_AsBindGroup_to_use_a_associated_SystemParam.md"
 
 [[guides]]
-title = "Meshlet software raster + start of cleanup"
-prs = [14623]
-areas = ["Rendering"]
-file_name = "14623_Meshlet_software_raster__start_of_cleanup.md"
-
-[[guides]]
 title = "Adds `ShaderStorageBuffer` asset"
 prs = [14663]
 areas = ["Rendering"]
@@ -828,12 +816,6 @@ areas = ["Rendering"]
 file_name = "15586_Featuregate_all_image_formats.md"
 
 [[guides]]
-title = "Per-meshlet compressed vertex data"
-prs = [15643]
-areas = ["Rendering"]
-file_name = "15643_Permeshlet_compressed_vertex_data.md"
-
-[[guides]]
 title = "Migrate bevy_sprite to required components"
 prs = [15489]
 areas = ["Rendering"]
@@ -862,6 +844,12 @@ title = "Improve API for scaling orthographic cameras"
 prs = [15969]
 areas = ["Rendering"]
 file_name = "15969_Improve_API_for_scaling_orthographic_cameras.md"
+
+[[guides]]
+title = "Virtual Geometry changes"
+prs = [14193, 14623, 15023, 15084, 15643, 15846, 15886, 15955, 16049, 16111]
+areas = ["Rendering"]
+file_name = "virtual_geometry.md"
 
 [[guides]]
 title = "Fix UI texture atlas with offset"

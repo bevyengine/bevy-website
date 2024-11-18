@@ -399,6 +399,13 @@ prs = [14791, 15458, 15269]
 file_name = "14791_Required_Components.md"
 
 [[release_notes]]
+title = "Virtual Geometry Improvements"
+authors = ["@JMS55"]
+contributors = ["@zeux", "@atlv24"]
+prs = [14193, 14623, 15023, 15084, 15643, 15846, 15886, 15955, 16049, 16111]
+file_name = "virtual_geometry.md"
+
+[[release_notes]]
 title = "Shader storage buffer asset"
 authors = ["@tychedelia"]
 contributors = ["@IceSentry"]
