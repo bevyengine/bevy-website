@@ -202,13 +202,6 @@ prs = [5772]
 file_name = "5772_bevy_reflect_Add_Reflectable_trait.md"
 
 [[release_notes]]
-title = "Added `HeadlessPlugins` (#15203)"
-authors = ["@Wcubed"]
-contributors = []
-prs = [15260]
-file_name = "15260_Added_HeadlessPlugins_15203.md"
-
-[[release_notes]]
 title = "Add cached `run_system` API"
 authors = ["@benfrankel"]
 contributors = []
