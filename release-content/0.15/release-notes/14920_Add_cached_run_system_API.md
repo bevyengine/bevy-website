@@ -1,6 +1,6 @@
 # Cached one-shot systems
 
-**Bevy 0.15** introduces a new "cached" API for running one-shot systems:
+**Bevy 0.15** introduces a convenient new "cached" API for running one-shot systems:
 
 ```rust
 // Run a system without manually registering it first:
