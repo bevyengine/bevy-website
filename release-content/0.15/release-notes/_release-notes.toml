@@ -48,7 +48,7 @@ prs = [14449, 15320, 15582, 15756]
 file_name = "15320_Retained_Rendering.md"
 
 [[release_notes]]
-title = "Start a built-in postprocessing stack, and implement chromatic aberration in it."
+title = "Chromatic Aberration"
 authors = ["@pcwalton"]
 contributors = []
 prs = [13695]
@@ -60,13 +60,6 @@ authors = ["@BigWingBeat"]
 contributors = []
 prs = [14212]
 file_name = "14212_Component_Lifecycle_Hook__Observer_Trigger_for_replaced_va.md"
-
-[[release_notes]]
-title = "Allow volumetric fog to be localized to specific, optionally voxelized, regions."
-authors = ["@pcwalton"]
-contributors = ["@alice-i-cecile", "@mockersf"]
-prs = [14099]
-file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
 
 [[release_notes]]
 title = "Pack multiple vertex and index arrays together into growable buffers."
@@ -137,13 +130,6 @@ authors = ["@MrGVSV"]
 contributors = []
 prs = [6042]
 file_name = "6042_bevy_reflect_Reflect_remote_types.md"
-
-[[release_notes]]
-title = "Allow fog density texture to be scrolled over time with an offset"
-authors = ["@jirisvd"]
-contributors = []
-prs = [14868]
-file_name = "14868_Allow_fog_density_texture_to_be_scrolled_over_time_with_an.md"
 
 [[release_notes]]
 title = "Rewrite screenshots."
@@ -270,11 +256,18 @@ prs = [13454]
 file_name = "13454_vbao.md"
 
 [[release_notes]]
-title = "Implement volumetric fog support for both point lights and spotlights"
+title = "Volumetric Fog Support for Point Lights and Spotlights"
 authors = ["@Soulghost"]
 contributors = []
 prs = [15361]
 file_name = "15361_Implement_volumetric_fog_support_for_both_point_lights_and.md"
+
+[[release_notes]]
+title = "Fog Volumes"
+authors = ["@pcwalton", "@jirisvd"]
+contributors = ["@alice-i-cecile", "@mockersf"]
+prs = [14099, 14868]
+file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
 
 [[release_notes]]
 title = "feat(gltf): add name component to gltf mesh primitive"
