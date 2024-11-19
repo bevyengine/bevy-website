@@ -46,7 +46,7 @@ Style {
 After:
 
 ```rust
-Style {
+Node {
     width:  Val::Px(100.),
     ..default()
 }
