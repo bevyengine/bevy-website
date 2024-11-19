@@ -17,7 +17,7 @@ introspection and easier debugging in your game development workflow.
 Here is an example of entity connections where this improvement will be
 helpful:
 
-```rust 
+```rust
 !// previously inspecting this would only show 
 !// 
 !// > "HashSet<Entity, EntityHash> is #[reflect_value], but has no
@@ -35,7 +35,7 @@ helpful:
 pub struct Person;
 
 #[derive(Component, Reflect)]
-pub struct Friendships(EntityHashSet<Entity>);
+pub struct Friendships(HashSet<Entity>);
 
 fn spawn_friends(mut commands: Commands) {
     let adelia = commands.spawn(Name::new("Adelia")).id();
@@ -44,10 +44,10 @@ fn spawn_friends(mut commands: Commands) {
 
     commands
         .entity(adelia)
-        .insert(Friendships(EntityHashSet::from_iter([diego, reyna])));
+        .insert(Friendships(HashSet::from_iter([diego, reyna])));
     commands
         .entity(diego)
-        .insert(Friendships(EntityHashSet::from_iter([adelia])));
+        .insert(Friendships(HashSet::from_iter([adelia])));
 }
 ```
 
