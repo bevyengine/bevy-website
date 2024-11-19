@@ -78,7 +78,7 @@ file_name = "14106_Cyclic_splines.md"
 [[release_notes]]
 title = "Dedicated `Reflect` implementation for `Set`-like things"
 authors = ["@RobWalt"]
-contributors = []
+contributors = ["@SkiFire13", "@MrGVSV"]
 prs = [13014]
 file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
 
