@@ -34,10 +34,15 @@ prs = [14269]
 file_name = "14269_Basic_isometry_types.md"
 
 [[release_notes]]
-title = "Minimal Bubbling Observers"
+title = "Bubbling Observers"
 authors = ["@NthTensor"]
-contributors = ["@cart", "@alice-i-cecile", "@torsteingrindvik"]
-prs = [13991]
+contributors = [
+    "@cart",
+    "@alice-i-cecile",
+    "@torsteingrindvik",
+    "@BenjaminBrienen",
+]
+prs = [13991, 15385]
 file_name = "13991_Minimal_Bubbling_Observers.md"
 
 [[release_notes]]
