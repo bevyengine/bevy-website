@@ -48,7 +48,7 @@ prs = [14449, 15320, 15582, 15756]
 file_name = "15320_Retained_Rendering.md"
 
 [[release_notes]]
-title = "Start a built-in postprocessing stack, and implement chromatic aberration in it."
+title = "Chromatic Aberration"
 authors = ["@pcwalton"]
 contributors = []
 prs = [13695]
