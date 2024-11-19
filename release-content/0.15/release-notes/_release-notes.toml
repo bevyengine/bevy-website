@@ -132,13 +132,6 @@ prs = [6042]
 file_name = "6042_bevy_reflect_Reflect_remote_types.md"
 
 [[release_notes]]
-title = "Allow fog density texture to be scrolled over time with an offset"
-authors = ["@jirisvd"]
-contributors = []
-prs = [14868]
-file_name = "14868_Allow_fog_density_texture_to_be_scrolled_over_time_with_an.md"
-
-[[release_notes]]
 title = "Rewrite screenshots."
 authors = ["@tychedelia"]
 contributors = ["@kristoff3r"]
@@ -264,9 +257,9 @@ file_name = "15361_Implement_volumetric_fog_support_for_both_point_lights_and.md
 
 [[release_notes]]
 title = "Fog Volumes"
-authors = ["@pcwalton"]
+authors = ["@pcwalton", "@jirisvd"]
 contributors = ["@alice-i-cecile", "@mockersf"]
-prs = [14099]
+prs = [14099, 14868]
 file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
 
 [[release_notes]]
