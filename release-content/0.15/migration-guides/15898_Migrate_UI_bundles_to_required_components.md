@@ -38,7 +38,7 @@ Before:
 
 ```rust
 Style {
-    width:  Val::Px(100.),
+    width: Val::Px(100.),
     ..default()
 }
 ```
@@ -47,7 +47,7 @@ After:
 
 ```rust
 Node {
-    width:  Val::Px(100.),
+    width: Val::Px(100.),
     ..default()
 }
 ```
