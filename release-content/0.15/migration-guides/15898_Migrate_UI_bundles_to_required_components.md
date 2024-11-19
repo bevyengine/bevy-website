@@ -78,9 +78,9 @@ After:
 ```rust
      commands
         .spawn(Node {
-                 width: Val::Percent(100.),
-                 align_items: AlignItems::Center,
-                 justify_content: JustifyContent::Center,
-                 ..default()
-             });
+            width: Val::Percent(100.),
+            align_items: AlignItems::Center,
+            justify_content: JustifyContent::Center,
+            ..default()
+        });
 ```
