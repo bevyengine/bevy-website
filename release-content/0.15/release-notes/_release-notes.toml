@@ -330,9 +330,9 @@ file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md
 
 [[release_notes]]
 title = "bevy_reflect: Add `DeserializeWithRegistry` and `SerializeWithRegistry`"
-authors = ["@MrGVSV"]
+authors = ["@MrGVSV", "@aecsocket"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
-prs = [8611]
+prs = [8611, 15482, 15548]
 file_name = "8611_bevy_reflect_Add_DeserializeWithRegistry_and_SerializeWithR.md"
 
 [[release_notes]]
@@ -404,10 +404,3 @@ authors = ["@tychedelia"]
 contributors = ["@IceSentry"]
 prs = [14663]
 file_name = "14663_shader_storage_buffer.md"
-
-[[release_notes]]
-title = "Reflect de/serializer processors"
-authors = ["@aecsocket"]
-contributors = ["@aecsocket"]
-prs = [15482, 15548]
-file_name = "15482_reflect_serde_processors.md"
