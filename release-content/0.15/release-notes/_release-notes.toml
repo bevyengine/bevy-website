@@ -78,7 +78,7 @@ file_name = "14106_Cyclic_splines.md"
 [[release_notes]]
 title = "Dedicated `Reflect` implementation for `Set`-like things"
 authors = ["@RobWalt"]
-contributors = []
+contributors = ["@SkiFire13", "@MrGVSV"]
 prs = [13014]
 file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
 
@@ -254,10 +254,10 @@ file_name = "15184_Support_systems_that_take_references_as_input.md"
 title = "Initial implementation of the Bevy Remote Protocol (Adopted)"
 authors = ["@mweatherley"]
 contributors = [
-	"@DragonGamesStudios",
-	"@MrGVSV",
-	"@ChristopherBiscardi",
-	"@pcwalton",
+    "@DragonGamesStudios",
+    "@MrGVSV",
+    "@ChristopherBiscardi",
+    "@pcwalton",
 ]
 prs = [14880]
 file_name = "14880_Initial_implementation_of_the_Bevy_Remote_Protocol_Adopted.md"
@@ -308,7 +308,24 @@ file_name = "15419_Gpu_readback.md"
 title = "Function reflection"
 authors = ["@MrGVSV", "@nixpulvis", "@hooded-shrimp"]
 contributors = []
-prs = [13152, 14098, 14141, 14174, 14201, 14641, 14647, 14666, 14704, 14813, 15086, 15145, 15147, 15148, 15205, 15484]
+prs = [
+    13152,
+    14098,
+    14141,
+    14174,
+    14201,
+    14641,
+    14647,
+    14666,
+    14704,
+    14813,
+    15086,
+    15145,
+    15147,
+    15148,
+    15205,
+    15484,
+]
 file_name = "function_reflection.md"
 
 [[release_notes]]
