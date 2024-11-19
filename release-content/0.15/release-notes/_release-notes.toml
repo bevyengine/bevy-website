@@ -323,9 +323,9 @@ file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md
 
 [[release_notes]]
 title = "bevy_reflect: Add `DeserializeWithRegistry` and `SerializeWithRegistry`"
-authors = ["@MrGVSV"]
+authors = ["@MrGVSV", "@aecsocket"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
-prs = [8611]
+prs = [8611, 15482, 15548]
 file_name = "8611_bevy_reflect_Add_DeserializeWithRegistry_and_SerializeWithR.md"
 
 [[release_notes]]
