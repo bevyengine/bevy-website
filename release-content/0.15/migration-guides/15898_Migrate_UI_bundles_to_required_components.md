@@ -1,31 +1,14 @@
 `NodeBundle` has been replaced with `Node` (and its associated required components).
-
 Simultaneously, the fields and behavior of `Style` have been moved to `Node`, and the largely internal values previously stored there are now found on `ComputedNode`.
 
-To migrate, first move any fields set on `Style` into `Node` and replace all `Style` component usage with `Node`.
+It will be easiest to migrate if you replace `Node` with `ComputedNode` first, then `Style` with `Node`, and finally `NodeBundle` with `Node`.
 
-Before:
+## `Node` -> `ComputedNode`
 
-```rust
-commands.spawn((
-    Node::default(),
-    Style {
-        width:  Val::Px(100.),
-        ..default()
-    },
-));
-```
+For any usage of the “computed node properties” that used to live on `Node`, use `ComputedNode` instead.
+This is a trivial find-and-replace rename.
 
-After:
-
-```rust
-commands.spawn(Node {
-    width:  Val::Px(100.),
-    ..default()
-});
-```
-
-For any usage of the “computed node properties” that used to live on `Node`, use `ComputedNode` instead:
+If you were ever explicitly adding `Node` (now `ComputedNode`) to your UI bundles, you can remove this, as it is now required by `Node` (previously `Style`).
 
 Before:
 
@@ -47,116 +30,57 @@ fn system(computed_nodes: Query<&ComputedNode>) {
 }
 ```
 
-Then, replace all uses of `NodeBundle` with `Node`. e.g.
+## `Style` -> `Node`
 
-```diff
+All of the values of `Style` now live on `Node`. This is a find-and-replace rename.
+
+Before:
+
+```rust
+Style {
+    width:  Val::Px(100.),
+    ..default()
+}
+```
+
+After:
+
+```rust
+Style {
+    width:  Val::Px(100.),
+    ..default()
+}
+```
+
+## `NodeBundle` -> `Node`
+
+Finally, replace all uses of `NodeBundle` with `Node`.
+All other components in `NodeBundle` are now added implicitly via required components.
+Adding them to your bundles manually will overwrite the default values.
+
+Before:
+
+```rust
      commands
--        .spawn(NodeBundle {
--            style: Style {
-+        .spawn((
-+            Node::default(),
-+            Style {
+        .spawn(NodeBundle {
+            style: Style {
                  width: Val::Percent(100.),
                  align_items: AlignItems::Center,
                  justify_content: JustifyContent::Center,
                  ..default()
              },
--            ..default()
--        })
-+        ))
-```
-
-- Replace all uses of `ButtonBundle` with `Button`. e.g.
-
-```diffMove any fields set on `Style` into `Node` and replace all `Style` component usage with `Node`.
-
-Before:
-
-```rust
-commands.spawn((
-    Node::default(),
-    Style {
-        width:  Val::Px(100.),
-        ..default()
-    },
-));
+            ..default()
+        });
 ```
 
 After:
 
 ```rust
-commands.spawn(Node {
-    width:  Val::Px(100.),
-    ..default()
-});
-```
-
-For any usage of the “computed node properties” that used to live on `Node`, use `ComputedNode` instead:
-
-Before:
-
-```rust
-fn system(nodes: Query<&Node>) {
-    for node in &nodes {
-        let computed_size = node.size();
-    }
-}
-```
-
-After:
-
-```rust
-fn system(computed_nodes: Query<&ComputedNode>) {
-    for computed_node in &computed_nodes {
-        let computed_size = computed_node.size();
-    }
-}
-```
-      ButtonBundle {
--                            style: Style {
--                                width: Val::Px(w),
--                                height: Val::Px(h),
--                                // horizontally center child text
--                                justify_content: JustifyContent::Center,
--                                // vertically center child text
--                                align_items: AlignItems::Center,
--                                margin: UiRect::all(Val::Px(20.0)),
--                                ..default()
--                            },
--                            image: image.clone().into(),
-+                        Button,
-+                        Style {
-+                            width: Val::Px(w),
-+                            height: Val::Px(h),
-+                            // horizontally center child text
-+                            justify_content: JustifyContent::Center,
-+                            // vertically center child text
-+                            align_items: AlignItems::Center,
-+                            margin: UiRect::all(Val::Px(20.0)),
-                             ..default()
-                         },
-+                        UiImage::from(image.clone()),
-                         ImageScaleMode::Sliced(slicer.clone()),
-                     ))
-```
-
-- Replace all uses of `ImageBundle` with `UiImage`. e.g.
-
-```diff
--    commands.spawn(ImageBundle {
--        image: UiImage {
-+    commands.spawn((
-+        UiImage {
-             texture: metering_mask,
-             ..default()
-         },
--        style: Style {
-+        Style {
-             width: Val::Percent(100.0),
-             height: Val::Percent(100.0),
-             ..default()
-         },
--        ..default()
--    });
-+    ));
+     commands
+        .spawn(Node {
+                 width: Val::Percent(100.),
+                 align_items: AlignItems::Center,
+                 justify_content: JustifyContent::Center,
+                 ..default()
+             });
 ```
