@@ -25,7 +25,7 @@ impl <E> Event for Pointer<E>{
 
 This means that, unless you call [`Trigger::propagate(false)`], pointer events will be replicated up the hierarchy (accessing the `Entity` stored in the [`Parent`] component) until it reaches the entity root.
 
-Any type that implements the [`Traversal`] trait can be used as the associated type, and can access arbitrary read-only query data from the world.
+Any type that implements the [`Traversal`] trait can be used as the associated type and can access arbitrary read-only query data from the world.
 While using the standard entity hierarchy is a sensible choice for *many* applications, bubbling can be used for arbitrary event propagation using your own [proto-relations].
 Let us know what you cook up: user feedback is indispensable for building a better Bevy!
 
