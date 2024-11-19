@@ -263,6 +263,13 @@ prs = [12770, 16222, 16233]
 file_name = "12770_Implement_gamepads_as_entities.md"
 
 [[release_notes]]
+title = "Visibility Bitmask Ambient Occlusion (VBAO)"
+authors = ["@dragostis"]
+contributors = []
+prs = [13454]
+file_name = "13454_vbao.md"
+
+[[release_notes]]
 title = "Implement volumetric fog support for both point lights and spotlights"
 authors = ["@Soulghost"]
 contributors = []
