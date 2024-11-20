@@ -1,7 +1,7 @@
 <!-- Add Support for Triggering Events via `AnimationEvent`s -->
 <!-- https://github.com/bevyengine/bevy/pull/15538 -->
 
-Sometimes it is useful for animations to drive game logic. In **Bevy 0.15** we've added "animation event" support to [`AnimationClip`], which means that you can trigger a specific [`Event`] at a given point in time during [`AnimationClip`] playback:
+Triggering gameplay events at specific points in an animation is a common pattern for synchronizing the visual, audible and mechanical parts of your game. In **Bevy 0.15** we've added "animation event" support to [`AnimationClip`], which means that you can trigger a specific [`Event`] at a given point in time during [`AnimationClip`] playback:
 
 ```rust
 #[derive(Event, Clone)]
