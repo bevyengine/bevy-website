@@ -1,7 +1,7 @@
 <!-- Add Support for Triggering Events via `AnimationEvent`s -->
 <!-- https://github.com/bevyengine/bevy/pull/15538 -->
 
-Sometimes it is useful for animations to drive game logic. In **Bevy 0.15** we've added "animation event" support to [`AnimatonClip`], which means that you can trigger a specific [`Event`] at a given point in time during [`AnimationClip`] playback:
+Sometimes it is useful for animations to drive game logic. In **Bevy 0.15** we've added "animation event" support to [`AnimationClip`], which means that you can trigger a specific [`Event`] at a given point in time during [`AnimationClip`] playback:
 
 ```rust
 #[derive(Event, Clone)]
@@ -29,3 +29,6 @@ animation_clip.add_event_to_target(AnimationTargetId::from_iter(["LeftLeg", "Lef
 This enables things like "triggering a dust effect each time a foot touches the ground in an animation":
 
 <video controls><source src="animated_fox.mp4" type="video/mp4"/></video>
+
+[`AnimationClip`]: https://dev-docs.bevyengine.org/bevy/animation/struct.AnimationClip.html
+[`Event`]: https://dev-docs.bevyengine.org/bevy/ecs/event/trait.Event.html
