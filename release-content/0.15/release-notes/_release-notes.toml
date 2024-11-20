@@ -349,8 +349,8 @@ prs = [15631]
 file_name = "15631_Implement_additive_blending_for_animation_graphs.md"
 
 [[release_notes]]
-title = "Add Support for Triggering Events via `AnimationEvent`s"
-authors = ["@atornity"]
+title = "Animation Events"
+authors = ["@atornity", "@cart"]
 contributors = ["@mweatherley", "@ChristopherBiscardi", "@mockersf"]
 prs = [15538]
 file_name = "15538_Add_Support_for_Triggering_Events_via_AnimationEvents.md"
