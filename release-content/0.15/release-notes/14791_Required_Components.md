@@ -1,3 +1,5 @@
+![Graph image of sprite component requiring transform component](required_component.svg)
+
 First: buckle up because **Required Components** is one of the most profound improvements to the Bevy API surface since Bevy was first released.
 
 Since Bevy's creation, `Bundle` has been our abstraction for spawning an entity of a given "type". A `Bundle` is just a Rust type, where each field is a `Component`:
