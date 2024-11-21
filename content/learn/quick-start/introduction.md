@@ -25,7 +25,7 @@ Bevy has the following design goals:
 * **Fast**: App logic should run quickly, and when possible, in parallel
 * **Productive**: Changes should compile quickly... waiting isn't fun
 
-Bevy is [built in the open by volunteers](https://github.com/bevyengine/bevy/blob/main/CONTRIBUTING.md) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
+Bevy is [built in the open by volunteers](https://bevyengine.org/learn/contribute/introduction) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
 
 For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
 
