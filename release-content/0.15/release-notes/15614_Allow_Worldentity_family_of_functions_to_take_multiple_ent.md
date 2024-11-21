@@ -27,7 +27,7 @@ In previous versions of Bevy, you could grab multiple entities from a `World` us
 As you can see, that's a lot of functions with very long names! But the gist of them is that we want to support the ability to
 give a bunch of entity IDs, and receive a bunch of entity references. Surely there's a better way!
 
-So in `0.15`, all of those functions have been deprecated and now all you need is
+In `0.15`, all of those functions have been deprecated and now all you need is
 the panicking `World::entity`/`World::entity_mut` or the non-panicking `World::get_entity`/`World::get_entity_mut`:
 
 ```rust
