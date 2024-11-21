@@ -54,3 +54,12 @@ let ids = EntityHashSet::from_iter([e1, e2]);
 let eref_map: EntityHashMap<EntityRef> = world.entity(&ids);
 let emut_map: EntityHashMap<EntityMut> = world.entity_mut(&ids);
 ```
+
+It might *feel* like magic, but it's all standard Rust code! The `Entity` id
+parameter that the `World::entity` family of functions accept was changed to
+instead accept anything that implements a newly introduced trait:
+[`WorldEntityFetch`][WorldEntityFetch]. Check out the trait and
+[`World::entity`][World::entity] to learn more about how it was accomplished.
+
+[WorldEntityFetch]: https://docs.rs/bevy/0.15.0-rc.3/bevy/ecs/world/trait.WorldEntityFetch.html
+[World::entity]: https://docs.rs/bevy/0.15.0-rc.3/bevy/ecs/prelude/struct.World.html#method.entity
