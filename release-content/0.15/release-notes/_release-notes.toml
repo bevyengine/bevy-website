@@ -419,6 +419,13 @@ prs = [14663]
 file_name = "14663_shader_storage_buffer.md"
 
 [[release_notes]]
+title = "Accumulated mouse inputs"
+authors = ["@Aztro-dev", "@alice-i-cecile"]
+contributors = []
+prs = [14044]
+file_name = "14044_Accumulated_mouse_inputs.md"
+
+[[release_notes]]
 title = "Stable interpolation and smooth following"
 authors = ["@mweatherley"]
 contributors = []
