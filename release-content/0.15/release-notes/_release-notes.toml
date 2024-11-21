@@ -384,7 +384,7 @@ prs = [14876]
 file_name = "14876_Add_Order_Independent_Transparency.md"
 
 [[release_notes]]
-title = "box shadow"
+title = "Box shadows"
 authors = ["@ickshonpe"]
 contributors = []
 prs = [15204]
