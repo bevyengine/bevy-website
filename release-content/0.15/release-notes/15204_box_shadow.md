@@ -21,7 +21,10 @@ pub struct BoxShadow {
     pub x_offset: Val,
     /// Vertical offset
     pub y_offset: Val,
-    /// Horizontal difference in size from the occluding uninode
+    /// How much the shadow should spread outward.
+    ///
+    /// Negative values will make the shadow shrink inwards.
+    /// Percentage values are based on the width of the UI node.
     pub spread_radius: Val,
     /// Blurriness of the shadow
     pub blur_radius: Val,
