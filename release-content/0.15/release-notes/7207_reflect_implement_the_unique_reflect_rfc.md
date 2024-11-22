@@ -30,7 +30,7 @@ It allows for both concrete types and dynamic types to be used interchangeably.
 
 `Reflect`, on the other hand, has become a much stricter trait.
 It's a subset of `PartialReflect` that guarantees the underlying type beneath the trait object
-is exactly thr concrete type it says it is.
+is exactly the concrete type it says it is.
 
 This split allows reflection-based APIs and user code to be more explicit about the dynamic-ness of
 the trait objects they're working with. It moves the knowledge of whether a type is dynamic or not
