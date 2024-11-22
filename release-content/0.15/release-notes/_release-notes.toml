@@ -1,57 +1,9 @@
 [[release_notes]]
-title = "Cosmic text"
-authors = ["@tigregalis", "@TotalKrill"]
-contributors = [
-    "@tigregalis",
-    "@alice-i-cecile",
-    "@nicoburns",
-    "@rparrett",
-    "@Dimchikkk",
-    "@bytemunch",
-]
-prs = [10193]
-file_name = "10193_Cosmic_text.md"
-
-[[release_notes]]
-title = "Uniform mesh sampling"
-authors = ["@mweatherley"]
-contributors = ["@alice-i-cecile"]
-prs = [14071]
-file_name = "14071_Uniform_mesh_sampling.md"
-
-[[release_notes]]
-title = "`EventMutator`"
-authors = ["@BobG1983"]
-contributors = ["@atornity", "@alice-i-cecile"]
-prs = [13818]
-file_name = "13818_Created_an_EventMutator_for_when_you_want_to_mutate_an_eve.md"
-
-[[release_notes]]
-title = "Isometry Types"
-authors = ["@mweatherley", "@Jondolf"]
-contributors = ["@RobWalt"]
-prs = [14269]
-file_name = "14269_Basic_isometry_types.md"
-
-[[release_notes]]
-contributors = [
-    "@aevyrie",
-    "@cart",
-    "@alice-i-cecile",
-    "@torsteingrindvik",
-    "@BenjaminBrienen",
-]
-title = "Bubbling Observers"
-authors = ["@NthTensor"]
-prs = [13991, 15385]
-file_name = "13991_Minimal_Bubbling_Observers.md"
-
-[[release_notes]]
-title = "Retained Rendering World"
-authors = ["@re0312", "@trashtalk217", "@kristoff3r", "@tychedelia"]
-contributors = []
-prs = [14449, 15320, 15582, 15756]
-file_name = "15320_Retained_Rendering.md"
+title = "Required Components"
+authors = ["@cart", "@Jondolf"]
+contributors = ["@alice-i-cecile", "@killercup", "@BD103", "@fluffiac"]
+prs = [14791, 15458, 15269]
+file_name = "14791_Required_Components.md"
 
 [[release_notes]]
 title = "Chromatic Aberration"
@@ -59,200 +11,6 @@ authors = ["@pcwalton"]
 contributors = []
 prs = [13695]
 file_name = "13695_Start_a_builtin_postprocessing_stack_and_implement_chromat.md"
-
-[[release_notes]]
-title = "Component Lifecycle Hook & Observer Trigger for replaced values"
-authors = ["@BigWingBeat"]
-contributors = []
-prs = [14212]
-file_name = "14212_Component_Lifecycle_Hook__Observer_Trigger_for_replaced_va.md"
-
-[[release_notes]]
-title = "Pack multiple vertex and index arrays together into growable buffers."
-authors = ["@pcwalton"]
-contributors = ["@atlv24"]
-prs = [14257, 15566, 15569]
-file_name = "14257_Pack_multiple_vertex_and_index_arrays_together_into_growab.md"
-
-[[release_notes]]
-title = "Cyclic splines"
-authors = ["@mweatherley"]
-contributors = []
-prs = [14106]
-file_name = "14106_Cyclic_splines.md"
-
-[[release_notes]]
-title = "Dedicated `Reflect` implementation for `Set`-like things"
-authors = ["@RobWalt"]
-contributors = ["@SkiFire13", "@MrGVSV"]
-prs = [13014]
-file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
-
-[[release_notes]]
-title = "Track source location in change detection"
-authors = ["@aevyrie"]
-contributors = ["@BD103", "@MrGVSV"]
-prs = [14034]
-file_name = "14034_Track_source_location_in_change_detection.md"
-
-[[release_notes]]
-title = "Faster iteration when using a mix of sparse set and table components"
-authors = ["@re0312"]
-contributors = ["@alice-i-cecile", "@ItsDoot"]
-prs = [14049, 14673]
-file_name = "14049_Opportunistically_use_dense_iteration_for__archetypal_iter.md"
-
-[[release_notes]]
-title = "Expose winit's `MonitorHandle`"
-authors = ["@tychedelia"]
-contributors = ["@alice-i-cecile", "@killercup"]
-prs = [13669]
-file_name = "13669_Expose_winits_MonitorHandle.md"
-
-[[release_notes]]
-title = "A Curve trait for general interoperation — Part I"
-authors = ["@mweatherley"]
-contributors = ["@alice-i-cecile"]
-prs = [14630]
-file_name = "14630_A_Curve_trait_for_general_interoperation__Part_I.md"
-
-[[release_notes]]
-title = "Add custom cursors"
-authors = ["@eero-lehtinen"]
-contributors = ["@alice-i-cecile", "@janhohenheim"]
-prs = [14284]
-file_name = "14284_Add_custom_cursors.md"
-
-[[release_notes]]
-title = "reflect: implement the unique reflect rfc"
-authors = ["@soqb"]
-contributors = ["@alice-i-cecile", "@MrGVSV"]
-prs = [7207]
-file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
-
-[[release_notes]]
-title = "bevy_reflect: Reflect remote types"
-authors = ["@MrGVSV"]
-contributors = []
-prs = [6042]
-file_name = "6042_bevy_reflect_Reflect_remote_types.md"
-
-[[release_notes]]
-title = "Rewrite screenshots."
-authors = ["@tychedelia"]
-contributors = ["@kristoff3r"]
-prs = [14833]
-file_name = "14833_Rewrite_screenshots.md"
-
-[[release_notes]]
-title = "`SystemParamBuilder`"
-authors = ["@chescock"]
-contributors = ["@cBournhonesque", "@alice-i-cecile"]
-prs = [14050, 14821, 14818, 15189, 14817]
-file_name = "14817_SystemParamBuilder__Support_dynamic_system_parameters.md"
-
-[[release_notes]]
-title = "Implement animation masks, allowing fine control of the targets that animations affect."
-authors = ["@pcwalton"]
-contributors = []
-prs = [15013]
-file_name = "15013_Implement_animation_masks_allowing_fine_control_of_the_tar.md"
-
-[[release_notes]]
-title = "Color gradient curve"
-authors = ["@RobWalt"]
-contributors = ["@bushrat011899", "@mweatherley"]
-prs = [14976]
-file_name = "14976_Color_gradient_curve.md"
-
-[[release_notes]]
-title = "Add state scoped events"
-authors = ["@UkoeHB"]
-contributors = []
-prs = [15085]
-file_name = "15085_Add_state_scoped_events.md"
-
-[[release_notes]]
-title = "`EntityRefExcept` and `EntityMutExcept`"
-authors = ["@pcwalton"]
-contributors = []
-prs = [15207]
-file_name = "15207_Add_EntityRefExcept_and_EntityMutExcept_world_queries_in_p.md"
-
-[[release_notes]]
-title = "bevy_reflect: Add `Reflectable` trait"
-authors = ["@MrGVSV"]
-contributors = ["@alice-i-cecile"]
-prs = [5772]
-file_name = "5772_bevy_reflect_Add_Reflectable_trait.md"
-
-[[release_notes]]
-title = "Add cached `run_system` API"
-authors = ["@benfrankel"]
-contributors = []
-prs = [14920]
-file_name = "14920_Add_cached_run_system_API.md"
-
-[[release_notes]]
-title = "Fallible system parameters"
-authors = ["@MiniaczQ"]
-contributors = ["@alice-i-cecile"]
-prs = [15276, 15476, 15488]
-file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
-
-[[release_notes]]
-title = "Generalized animation"
-authors = ["@pcwalton", "@mweatherley"]
-contributors = ["@MrGVSV", "@aecsocket"]
-prs = [15282, 15434]
-file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
-
-[[release_notes]]
-title = "UI Scrolling"
-authors = ["@Piefayth", "@nicoburns"]
-contributors = []
-prs = [15291]
-file_name = "15291_UI_Scrolling.md"
-
-[[release_notes]]
-title = "Passing data into systems by reference"
-authors = ["@ItsDoot"]
-contributors = ["@SkiFire13"]
-prs = [15184]
-file_name = "15184_Support_systems_that_take_references_as_input.md"
-
-[[release_notes]]
-title = "Initial implementation of the Bevy Remote Protocol (Adopted)"
-authors = ["@mweatherley"]
-contributors = [
-    "@DragonGamesStudios",
-    "@MrGVSV",
-    "@ChristopherBiscardi",
-    "@pcwalton",
-]
-prs = [14880]
-file_name = "14880_Initial_implementation_of_the_Bevy_Remote_Protocol_Adopted.md"
-
-[[release_notes]]
-title = "List components for QueryEntityError::QueryDoesNotMatch"
-authors = ["@SpecificProtagonist"]
-contributors = ["@atornity", "@alice-i-cecile"]
-prs = [15435]
-file_name = "15435_List_components_for_QueryEntityErrorQueryDoesNotMatch.md"
-
-[[release_notes]]
-title = "Add `core` and `alloc` over `std` Lints"
-authors = ["@bushrat011899"]
-contributors = ["@mockersf"]
-prs = [15281]
-file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
-
-[[release_notes]]
-title = "Gamepads as entities"
-authors = ["@s-puig", "@Shatur"]
-contributors = ["@cart", "@alice-i-cecile"]
-prs = [12770, 16222, 16233]
-file_name = "12770_Implement_gamepads_as_entities.md"
 
 [[release_notes]]
 title = "Visibility Bitmask Ambient Occlusion (VBAO)"
@@ -276,18 +34,169 @@ prs = [14099, 14868]
 file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
 
 [[release_notes]]
-title = "feat(gltf): add name component to gltf mesh primitive"
-authors = ["@Soulghost"]
-contributors = ["@alice-i-cecile"]
-prs = [13912]
-file_name = "13912_featgltf_add_name_component_to_gltf_mesh_primitive.md"
+title = "Order Independent Transparency"
+authors = ["@IceSentry"]
+contributors = ["@kristoff3r", "@tychedelia", "@JMS55"]
+prs = [14876]
+file_name = "14876_Add_Order_Independent_Transparency.md"
 
 [[release_notes]]
-title = "Gpu readback"
-authors = ["@tychedelia"]
-contributors = ["@kristoff3r", "@IceSentry"]
-prs = [15419]
-file_name = "15419_Gpu_readback.md"
+title = "Entity Picking / Selection"
+authors = ["@aevyrie", "@NthTensor", "@TotalKrill", "@jnhyatt", "@Jondolf"]
+contributors = ["@alice-i-cecile", "@mockersf", "@tbillington", "@kivi"]
+prs = [13677, 14686, 14695, 14757, 15800]
+file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
+
+[[release_notes]]
+title = "Bubbling Observers"
+authors = ["@NthTensor"]
+contributors = [
+    "@aevyrie",
+    "@cart",
+    "@alice-i-cecile",
+    "@torsteingrindvik",
+    "@BenjaminBrienen",
+]
+prs = [13991, 15385]
+file_name = "13991_Minimal_Bubbling_Observers.md"
+
+[[release_notes]]
+title = "Virtual Geometry Improvements"
+authors = ["@JMS55"]
+contributors = ["@zeux", "@atlv24"]
+prs = [14193, 14623, 15023, 15084, 15643, 15846, 15886, 15955, 16049, 16111]
+file_name = "virtual_geometry.md"
+
+[[release_notes]]
+title = "Animation Masks"
+authors = ["@pcwalton"]
+contributors = []
+prs = [15013]
+file_name = "15013_Implement_animation_masks_allowing_fine_control_of_the_tar.md"
+
+[[release_notes]]
+title = "Generalized Animation"
+authors = ["@pcwalton", "@mweatherley"]
+contributors = ["@MrGVSV", "@aecsocket"]
+prs = [15282, 15434]
+file_name = "15282_Allow_animation_clips_to_animate_arbitrary_properties.md"
+
+[[release_notes]]
+title = "Animation Graph: Additive Blending"
+authors = ["@pcwalton"]
+contributors = []
+prs = [15631]
+file_name = "15631_Implement_additive_blending_for_animation_graphs.md"
+
+[[release_notes]]
+title = "Animation Events"
+authors = ["@atornity", "@cart"]
+contributors = ["@mweatherley", "@ChristopherBiscardi", "@mockersf"]
+prs = [15538]
+file_name = "15538_Add_Support_for_Triggering_Events_via_AnimationEvents.md"
+
+[[release_notes]]
+title = "Bevy Remote Protocol (BRP)"
+authors = ["@mweatherley"]
+contributors = [
+    "@DragonGamesStudios",
+    "@MrGVSV",
+    "@ChristopherBiscardi",
+    "@pcwalton",
+]
+prs = [14880]
+file_name = "14880_Initial_implementation_of_the_Bevy_Remote_Protocol_Adopted.md"
+
+[[release_notes]]
+title = "Gamepads as Entities"
+authors = ["@s-puig", "@Shatur"]
+contributors = ["@cart", "@alice-i-cecile"]
+prs = [12770, 16222, 16233]
+file_name = "12770_Implement_gamepads_as_entities.md"
+
+[[release_notes]]
+title = "box shadow"
+authors = ["@ickshonpe"]
+contributors = []
+prs = [15204]
+file_name = "15204_box_shadow.md"
+
+[[release_notes]]
+title = "Cosmic Text"
+authors = ["@tigregalis", "@TotalKrill"]
+contributors = [
+    "@tigregalis",
+    "@alice-i-cecile",
+    "@nicoburns",
+    "@rparrett",
+    "@Dimchikkk",
+    "@bytemunch",
+]
+prs = [10193]
+file_name = "10193_Cosmic_text.md"
+
+[[release_notes]]
+title = "UI Scrolling"
+authors = ["@Piefayth", "@nicoburns"]
+contributors = []
+prs = [15291]
+file_name = "15291_UI_Scrolling.md"
+
+[[release_notes]]
+title = "Retained Rendering World"
+authors = ["@re0312", "@trashtalk217", "@kristoff3r", "@tychedelia"]
+contributors = []
+prs = [14449, 15320, 15582, 15756]
+file_name = "15320_Retained_Rendering.md"
+
+[[release_notes]]
+title = "The Curve Trait"
+authors = ["@mweatherley"]
+contributors = ["@alice-i-cecile"]
+prs = [14630]
+file_name = "14630_A_Curve_trait_for_general_interoperation__Part_I.md"
+
+[[release_notes]]
+title = "Common Easing Functions"
+authors = ["@RobWalt", "@mockersf", "@mweatherley"]
+contributors = ["@NthTensor", "@eckz", "@alice-i-cecile"]
+prs = [14788, 15675, 15711]
+file_name = "15675_Add_most_common_interpolations.md"
+
+[[release_notes]]
+title = "Cyclic splines"
+authors = ["@mweatherley"]
+contributors = []
+prs = [14106]
+file_name = "14106_Cyclic_splines.md"
+
+[[release_notes]]
+title = "Color gradient curve"
+authors = ["@RobWalt"]
+contributors = ["@bushrat011899", "@mweatherley"]
+prs = [14976]
+file_name = "14976_Color_gradient_curve.md"
+
+[[release_notes]]
+title = "reflect: implement the unique reflect rfc"
+authors = ["@soqb"]
+contributors = ["@alice-i-cecile", "@MrGVSV"]
+prs = [7207]
+file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
+
+[[release_notes]]
+title = "bevy_reflect: Reflect remote types"
+authors = ["@MrGVSV"]
+contributors = []
+prs = [6042]
+file_name = "6042_bevy_reflect_Reflect_remote_types.md"
+
+[[release_notes]]
+title = "bevy_reflect: Add `Reflectable` trait"
+authors = ["@MrGVSV"]
+contributors = ["@alice-i-cecile"]
+prs = [5772]
+file_name = "5772_bevy_reflect_Add_Reflectable_trait.md"
 
 [[release_notes]]
 title = "Function reflection"
@@ -328,7 +237,154 @@ prs = [14838]
 file_name = "14838_bevy_reflect_add_Type_type.md"
 
 [[release_notes]]
-title = "Add features to switch `NativeActivity` and `GameActivity` usage"
+title = "Dedicated `Reflect` implementation for `Set`-like things"
+authors = ["@RobWalt"]
+contributors = ["@SkiFire13", "@MrGVSV"]
+prs = [13014]
+file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
+
+[[release_notes]]
+title = "Track source location in change detection"
+authors = ["@aevyrie"]
+contributors = ["@BD103", "@MrGVSV"]
+prs = [14034]
+file_name = "14034_Track_source_location_in_change_detection.md"
+
+[[release_notes]]
+title = "Faster iteration when using a mix of sparse set and table components"
+authors = ["@re0312"]
+contributors = ["@alice-i-cecile", "@ItsDoot"]
+prs = [14049, 14673]
+file_name = "14049_Opportunistically_use_dense_iteration_for__archetypal_iter.md"
+
+[[release_notes]]
+title = "Expose winit's `MonitorHandle`"
+authors = ["@tychedelia"]
+contributors = ["@alice-i-cecile", "@killercup"]
+prs = [13669]
+file_name = "13669_Expose_winits_MonitorHandle.md"
+
+[[release_notes]]
+title = "Add custom cursors"
+authors = ["@eero-lehtinen"]
+contributors = ["@alice-i-cecile", "@janhohenheim"]
+prs = [14284]
+file_name = "14284_Add_custom_cursors.md"
+
+[[release_notes]]
+title = "Uniform mesh sampling"
+authors = ["@mweatherley"]
+contributors = ["@alice-i-cecile"]
+prs = [14071]
+file_name = "14071_Uniform_mesh_sampling.md"
+
+[[release_notes]]
+title = "`EventMutator`"
+authors = ["@BobG1983"]
+contributors = ["@atornity", "@alice-i-cecile"]
+prs = [13818]
+file_name = "13818_Created_an_EventMutator_for_when_you_want_to_mutate_an_eve.md"
+
+[[release_notes]]
+title = "Isometry Types"
+authors = ["@mweatherley", "@Jondolf"]
+contributors = ["@RobWalt"]
+prs = [14269]
+file_name = "14269_Basic_isometry_types.md"
+
+[[release_notes]]
+title = "Component Lifecycle Hook & Observer Trigger for replaced values"
+authors = ["@BigWingBeat"]
+contributors = []
+prs = [14212]
+file_name = "14212_Component_Lifecycle_Hook__Observer_Trigger_for_replaced_va.md"
+
+[[release_notes]]
+title = "Pack multiple vertex and index arrays together into growable buffers."
+authors = ["@pcwalton"]
+contributors = ["@atlv24"]
+prs = [14257, 15566, 15569]
+file_name = "14257_Pack_multiple_vertex_and_index_arrays_together_into_growab.md"
+
+[[release_notes]]
+title = "Rewrite screenshots."
+authors = ["@tychedelia"]
+contributors = ["@kristoff3r"]
+prs = [14833]
+file_name = "14833_Rewrite_screenshots.md"
+
+[[release_notes]]
+title = "`SystemParamBuilder`"
+authors = ["@chescock"]
+contributors = ["@cBournhonesque", "@alice-i-cecile"]
+prs = [14050, 14821, 14818, 15189, 14817]
+file_name = "14817_SystemParamBuilder__Support_dynamic_system_parameters.md"
+
+[[release_notes]]
+title = "State Scoped Events"
+authors = ["@UkoeHB"]
+contributors = []
+prs = [15085]
+file_name = "15085_Add_state_scoped_events.md"
+
+[[release_notes]]
+title = "`EntityRefExcept` and `EntityMutExcept`"
+authors = ["@pcwalton"]
+contributors = []
+prs = [15207]
+file_name = "15207_Add_EntityRefExcept_and_EntityMutExcept_world_queries_in_p.md"
+
+[[release_notes]]
+title = "Add cached `run_system` API"
+authors = ["@benfrankel"]
+contributors = []
+prs = [14920]
+file_name = "14920_Add_cached_run_system_API.md"
+
+[[release_notes]]
+title = "Fallible system parameters"
+authors = ["@MiniaczQ"]
+contributors = ["@alice-i-cecile"]
+prs = [15276, 15476, 15488]
+file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
+
+[[release_notes]]
+title = "Passing data into systems by reference"
+authors = ["@ItsDoot"]
+contributors = ["@SkiFire13"]
+prs = [15184]
+file_name = "15184_Support_systems_that_take_references_as_input.md"
+
+[[release_notes]]
+title = "List components for QueryEntityError::QueryDoesNotMatch"
+authors = ["@SpecificProtagonist"]
+contributors = ["@atornity", "@alice-i-cecile"]
+prs = [15435]
+file_name = "15435_List_components_for_QueryEntityErrorQueryDoesNotMatch.md"
+
+[[release_notes]]
+title = "Add `core` and `alloc` over `std` Lints"
+authors = ["@bushrat011899"]
+contributors = ["@mockersf"]
+prs = [15281]
+file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
+
+[[release_notes]]
+title = "feat(gltf): add name component to gltf mesh primitive"
+authors = ["@Soulghost"]
+contributors = ["@alice-i-cecile"]
+prs = [13912]
+file_name = "13912_featgltf_add_name_component_to_gltf_mesh_primitive.md"
+
+[[release_notes]]
+title = "GPU Readback"
+authors = ["@tychedelia"]
+contributors = ["@kristoff3r", "@IceSentry"]
+prs = [15419]
+file_name = "15419_Gpu_readback.md"
+
+[[release_notes]]
+title = "Android: Configurable `GameActivity` and `NativeActivity`"
 authors = ["@Litttlefish"]
 contributors = ["@richchurcher", "@mockersf", "@BD103"]
 prs = [12095]
@@ -340,20 +396,6 @@ authors = ["@MrGVSV", "@aecsocket"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
 prs = [8611, 15482, 15548]
 file_name = "8611_bevy_reflect_Add_DeserializeWithRegistry_and_SerializeWithR.md"
-
-[[release_notes]]
-title = "Implement additive blending for animation graphs."
-authors = ["@pcwalton"]
-contributors = []
-prs = [15631]
-file_name = "15631_Implement_additive_blending_for_animation_graphs.md"
-
-[[release_notes]]
-title = "Animation Events"
-authors = ["@atornity", "@cart"]
-contributors = ["@mweatherley", "@ChristopherBiscardi", "@mockersf"]
-prs = [15538]
-file_name = "15538_Add_Support_for_Triggering_Events_via_AnimationEvents.md"
 
 [[release_notes]]
 title = "Allow `World::entity` family of functions to take multiple entities and get multiple references back"
@@ -368,48 +410,6 @@ authors = ["@alice-i-cecile"]
 contributors = ["@atornity", "@ItsDoot", "@villor"]
 prs = [15627]
 file_name = "15627_Add_more_tools_for_traversing_hierarchies.md"
-
-[[release_notes]]
-title = "Add most common interpolations"
-authors = ["@RobWalt", "@mockersf", "@mweatherley"]
-contributors = ["@NthTensor", "@eckz", "@alice-i-cecile"]
-prs = [14788, 15675, 15711]
-file_name = "15675_Add_most_common_interpolations.md"
-
-[[release_notes]]
-title = "Add Order Independent Transparency"
-authors = ["@IceSentry"]
-contributors = ["@kristoff3r", "@tychedelia", "@JMS55"]
-prs = [14876]
-file_name = "14876_Add_Order_Independent_Transparency.md"
-
-[[release_notes]]
-title = "Box shadows"
-authors = ["@ickshonpe"]
-contributors = []
-prs = [15204]
-file_name = "15204_box_shadow.md"
-
-[[release_notes]]
-title = "`bevy_picking`: selecting objects by clicking on them"
-authors = ["@aevyrie", "@NthTensor", "@TotalKrill", "@jnhyatt", "@Jondolf"]
-contributors = ["@alice-i-cecile", "@mockersf", "@tbillington", "@kivi"]
-prs = [13677, 14686, 14695, 14757, 15800]
-file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
-
-[[release_notes]]
-title = "Required Components"
-authors = ["@cart", "@Jondolf"]
-contributors = ["@alice-i-cecile", "@killercup", "@BD103", "@fluffiac"]
-prs = [14791, 15458, 15269]
-file_name = "14791_Required_Components.md"
-
-[[release_notes]]
-title = "Virtual Geometry Improvements"
-authors = ["@JMS55"]
-contributors = ["@zeux", "@atlv24"]
-prs = [14193, 14623, 15023, 15084, 15643, 15846, 15886, 15955, 16049, 16111]
-file_name = "virtual_geometry.md"
 
 [[release_notes]]
 title = "Shader storage buffer asset"
