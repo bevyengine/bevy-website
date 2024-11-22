@@ -7,7 +7,7 @@
 
 The `MeshAllocatorSettings` resource allows tuning slab sizes, growth rate, and cut-offs to best fit your application's needs. The defaults should already be a significant win for most scenes.
 
-WebGL 2 does not support packing vertex buffers together, so only index buffers get combined on this platform.
+WebGL2 does not support packing vertex buffers together, so only index buffers get combined on this platform.
 
 Some measurements on the [Bistro] scene:
 
