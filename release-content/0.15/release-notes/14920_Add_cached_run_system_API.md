@@ -31,10 +31,10 @@ let id2 = world.register_system_cached(quux);
 assert!(id1 == id2);
 ```
 
-## Comparison to `run_system_once`
+### Comparison to `run_system_once`
 
 There were two ways to run one-shot systems, and now there are three. The approach taken by `run_system_once` is to set up a system, run it once, and then tear it down. This means that `run_system_once` _does_ avoid the memory leak problem. However, any system parameters like `Local` and `EventReader` that rely on persistent state between runs will be broken; and any system parameters like `Query` that rely on cached computations to improve performance will have to rebuild their cache each time, which can be costly. As a consequence, `run_system_once` is only recommended for diagnostic use (e.g. unit tests), and `run_system` or `run_system_cached` should be preferred for "real" code.
 
-## Limitations
+### Limitations
 
 The cached API can only work if it can guarantee that different systems are never cached under the same `CachedSystemId<S>`. In other words, there should be no more than 1 distinct system of type `S`. This is true when `size_of::<S>() == 0`, which is almost always true in practice. Thus, to enforce correctness, the new API will give you a compile-time error if you try to use a non-zero-sized function (like a function pointer or a capturing closure).

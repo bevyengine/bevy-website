@@ -26,7 +26,7 @@ In Bevy 0.15, we're shipping three first-party picking backends for UI, sprites,
 
 We expect both [`bevy_rapier`] and [`avian`] (the two most popular ecosystem physics crates for Bevy) to add their own accelerated collider picking backends to work with the newly upstreamed API. Unless you're debugging, building an editor or really care about the exact triangles of raw meshes, you should use one of those crates for efficient mesh picking.
 
-## Usage
+### Usage
 
 If you haven't used `bevy_picking`'s predecessor, there are two important and straightforward ways to get started with the API.
 
