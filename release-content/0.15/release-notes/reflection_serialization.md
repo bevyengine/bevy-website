@@ -155,6 +155,22 @@ asset paths.
 The processors take priority over all other serde logic, including `De/SerializeWithRegistry`, so it
 can be used to override any reflect serialization logic.
 
+#### Contextual Serialization Errors
+
+Sometimes when working with the reflection serializer and deserializer, 
+it can be difficult to track down the source of an error. 
+Since we can't tell whether a type can be serialized or not until runtime, 
+an un-serializable type might slip into a type that is supposed to be serializable.
+
+In Bevy 0.15, a new default [`debug`] feature has been added to the `bevy_reflect` crate,
+which allows the serializers and deserializers to retain contextual information in order to
+provide the type's "stack" when an error occurs.
+
+These messages can be used to more easily track down the source of the error:
+
+```
+type `bevy_utils::Instant` did not register the `ReflectSerialize` type data. For certain types, this may need to be registered manually using `register_type_data` (stack: `bevy_time::time::Time<bevy_time::real::Real>` -> `bevy_time::real::Real` -> `bevy_utils::Instant`)
+```
 
 [`bevy_reflect`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/
 [`Reflect`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/trait.Reflect.html
@@ -167,3 +183,4 @@ can be used to override any reflect serialization logic.
 [`ReflectDeserializeWithRegistry`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/serde/trait.ReflectDeserializeWithRegistry.html
 [`ReflectDeserializerProcessor`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/serde/trait.ReflectDeserializerProcessor.html
 [`ReflectSerializerProcessor`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/serde/trait.ReflectSerializerProcessor.html
+[`debug`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/index.html#debug

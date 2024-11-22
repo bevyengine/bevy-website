@@ -338,7 +338,7 @@ file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md
 title = "Reflection serialization improvements"
 authors = ["@MrGVSV", "@aecsocket"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
-prs = [8611, 15482, 15548]
+prs = [8611, 15482, 15548, 13888]
 file_name = "reflection_serialization.md"
 
 [[release_notes]]
