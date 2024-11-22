@@ -3,7 +3,7 @@
 
 <!-- TODO -->
 
-**Bevy 0.15** changes the way meshes are stored on the GPU to greatly improve performance. Instead of separate vertex and index buffers for every mesh individually as done in Bevy 0.14, now they are coalesced into 'slabs' of configurable size. This cuts down on how frequently we need to change bind groups, winning us up to 2x speedups!
+**Bevy 0.15** changes the way meshes are stored on the GPU to greatly improve CPU performance. Instead of using separate vertex and index buffers for every mesh as is done in Bevy 0.14, now they are coalesced respectively into 'slabs' of configurable size. This cuts down on how frequently we need to change bind groups, winning us up to 2x speedups!
 
 The `MeshAllocatorSettings` resource allows tuning slab sizes, growth rate, and cut-offs to best fit your application's needs. The defaults should already be a significant win for most scenes.
 
