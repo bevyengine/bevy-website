@@ -39,7 +39,7 @@ Additionally, few new system params were introduced to simplify existing code:
 - `Option<Single<D, F>>` - Works like `Query<D, F>::single`, fails if query contains more than 1 match,
 - [`Populated<D, F>`] - Works like a `Query<D, F>`, fails if query contains no matches.
 
-## Warnings
+### Warnings
 
 Fallible system params come with a primitive warning mechanic.
 Currently, systems can behave in one of two ways:

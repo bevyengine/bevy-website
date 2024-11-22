@@ -1,6 +1,6 @@
 [[release_notes]]
 title = "Cosmic text"
-authors = ["@TotalKrill"]
+authors = ["@tigregalis", "@TotalKrill"]
 contributors = [
     "@tigregalis",
     "@alice-i-cecile",
@@ -34,14 +34,27 @@ prs = [14269]
 file_name = "14269_Basic_isometry_types.md"
 
 [[release_notes]]
-title = "Minimal Bubbling Observers"
+contributors = [
+    "@aevyrie",
+    "@cart",
+    "@alice-i-cecile",
+    "@torsteingrindvik",
+    "@BenjaminBrienen",
+]
+title = "Bubbling Observers"
 authors = ["@NthTensor"]
-contributors = ["@cart", "@alice-i-cecile", "@torsteingrindvik"]
-prs = [13991]
+prs = [13991, 15385]
 file_name = "13991_Minimal_Bubbling_Observers.md"
 
 [[release_notes]]
-title = "Start a built-in postprocessing stack, and implement chromatic aberration in it."
+title = "Retained Rendering World"
+authors = ["@re0312", "@trashtalk217", "@kristoff3r", "@tychedelia"]
+contributors = []
+prs = [14449, 15320, 15582, 15756]
+file_name = "15320_Retained_Rendering.md"
+
+[[release_notes]]
+title = "Chromatic Aberration"
 authors = ["@pcwalton"]
 contributors = []
 prs = [13695]
@@ -55,17 +68,10 @@ prs = [14212]
 file_name = "14212_Component_Lifecycle_Hook__Observer_Trigger_for_replaced_va.md"
 
 [[release_notes]]
-title = "Allow volumetric fog to be localized to specific, optionally voxelized, regions."
-authors = ["@pcwalton"]
-contributors = ["@alice-i-cecile", "@mockersf"]
-prs = [14099]
-file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
-
-[[release_notes]]
 title = "Pack multiple vertex and index arrays together into growable buffers."
 authors = ["@pcwalton"]
-contributors = []
-prs = [14257]
+contributors = ["@atlv24"]
+prs = [14257, 15566, 15569]
 file_name = "14257_Pack_multiple_vertex_and_index_arrays_together_into_growab.md"
 
 [[release_notes]]
@@ -78,7 +84,7 @@ file_name = "14106_Cyclic_splines.md"
 [[release_notes]]
 title = "Dedicated `Reflect` implementation for `Set`-like things"
 authors = ["@RobWalt"]
-contributors = []
+contributors = ["@SkiFire13", "@MrGVSV"]
 prs = [13014]
 file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
 
@@ -132,13 +138,6 @@ prs = [6042]
 file_name = "6042_bevy_reflect_Reflect_remote_types.md"
 
 [[release_notes]]
-title = "Allow fog density texture to be scrolled over time with an offset"
-authors = ["@jirisvd"]
-contributors = []
-prs = [14868]
-file_name = "14868_Allow_fog_density_texture_to_be_scrolled_over_time_with_an.md"
-
-[[release_notes]]
 title = "Rewrite screenshots."
 authors = ["@tychedelia"]
 contributors = ["@kristoff3r"]
@@ -174,13 +173,6 @@ prs = [15085]
 file_name = "15085_Add_state_scoped_events.md"
 
 [[release_notes]]
-title = "Enable/disable UI anti-aliasing"
-authors = ["@patrickariel"]
-contributors = []
-prs = [15170]
-file_name = "15170_Enabledisable_UI_antialiasing.md"
-
-[[release_notes]]
 title = "`EntityRefExcept` and `EntityMutExcept`"
 authors = ["@pcwalton"]
 contributors = []
@@ -193,20 +185,6 @@ authors = ["@MrGVSV"]
 contributors = ["@alice-i-cecile"]
 prs = [5772]
 file_name = "5772_bevy_reflect_Add_Reflectable_trait.md"
-
-[[release_notes]]
-title = "Implement percentage-closer soft shadows (PCSS)."
-authors = ["@pcwalton"]
-contributors = ["@alice-i-cecile", "@torsteingrindvik"]
-prs = [13497]
-file_name = "13497_Implement_percentagecloser_soft_shadows_PCSS.md"
-
-[[release_notes]]
-title = "Added `HeadlessPlugins` (#15203)"
-authors = ["@Wcubed"]
-contributors = []
-prs = [15260]
-file_name = "15260_Added_HeadlessPlugins_15203.md"
 
 [[release_notes]]
 title = "Add cached `run_system` API"
@@ -237,13 +215,6 @@ prs = [15291]
 file_name = "15291_UI_Scrolling.md"
 
 [[release_notes]]
-title = "Add the ability to control font smoothing"
-authors = ["@coreh"]
-contributors = []
-prs = [15368]
-file_name = "15368_Add_the_ability_to_control_font_smoothing.md"
-
-[[release_notes]]
 title = "Passing data into systems by reference"
 authors = ["@ItsDoot"]
 contributors = ["@SkiFire13"]
@@ -254,10 +225,10 @@ file_name = "15184_Support_systems_that_take_references_as_input.md"
 title = "Initial implementation of the Bevy Remote Protocol (Adopted)"
 authors = ["@mweatherley"]
 contributors = [
-	"@DragonGamesStudios",
-	"@MrGVSV",
-	"@ChristopherBiscardi",
-	"@pcwalton",
+    "@DragonGamesStudios",
+    "@MrGVSV",
+    "@ChristopherBiscardi",
+    "@pcwalton",
 ]
 prs = [14880]
 file_name = "14880_Initial_implementation_of_the_Bevy_Remote_Protocol_Adopted.md"
@@ -284,11 +255,25 @@ prs = [12770, 16222, 16233]
 file_name = "12770_Implement_gamepads_as_entities.md"
 
 [[release_notes]]
-title = "Implement volumetric fog support for both point lights and spotlights"
+title = "Visibility Bitmask Ambient Occlusion (VBAO)"
+authors = ["@dragostis"]
+contributors = []
+prs = [13454]
+file_name = "13454_vbao.md"
+
+[[release_notes]]
+title = "Volumetric Fog Support for Point Lights and Spotlights"
 authors = ["@Soulghost"]
 contributors = []
 prs = [15361]
 file_name = "15361_Implement_volumetric_fog_support_for_both_point_lights_and.md"
+
+[[release_notes]]
+title = "Fog Volumes"
+authors = ["@pcwalton", "@jirisvd"]
+contributors = ["@alice-i-cecile", "@mockersf"]
+prs = [14099, 14868]
+file_name = "14099_Allow_volumetric_fog_to_be_localized_to_specific_optionally.md"
 
 [[release_notes]]
 title = "feat(gltf): add name component to gltf mesh primitive"
@@ -308,7 +293,24 @@ file_name = "15419_Gpu_readback.md"
 title = "Function reflection"
 authors = ["@MrGVSV", "@nixpulvis", "@hooded-shrimp"]
 contributors = []
-prs = [13152, 14098, 14141, 14174, 14201, 14641, 14647, 14666, 14704, 14813, 15086, 15145, 15147, 15148, 15205, 15484]
+prs = [
+    13152,
+    14098,
+    14141,
+    14174,
+    14201,
+    14641,
+    14647,
+    14666,
+    14704,
+    14813,
+    15086,
+    15145,
+    15147,
+    15148,
+    15205,
+    15484,
+]
 file_name = "function_reflection.md"
 
 [[release_notes]]
@@ -326,13 +328,6 @@ prs = [14838]
 file_name = "14838_bevy_reflect_add_Type_type.md"
 
 [[release_notes]]
-title = "Curve-based animation"
-authors = ["@mweatherley"]
-contributors = ["@MrGVSV", "@aecsocket"]
-prs = [15434]
-file_name = "15434_Curvebased_animation.md"
-
-[[release_notes]]
 title = "Add features to switch `NativeActivity` and `GameActivity` usage"
 authors = ["@Litttlefish"]
 contributors = ["@richchurcher", "@mockersf", "@BD103"]
@@ -341,17 +336,10 @@ file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md
 
 [[release_notes]]
 title = "bevy_reflect: Add `DeserializeWithRegistry` and `SerializeWithRegistry`"
-authors = ["@MrGVSV"]
+authors = ["@MrGVSV", "@aecsocket"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
-prs = [8611]
+prs = [8611, 15482, 15548]
 file_name = "8611_bevy_reflect_Add_DeserializeWithRegistry_and_SerializeWithR.md"
-
-[[release_notes]]
-title = "add curve utilities to create curves interpolating/easing between two values"
-authors = ["@RobWalt"]
-contributors = ["@mweatherley", "@NthTensor", "@eckz", "@alice-i-cecile"]
-prs = [14788]
-file_name = "14788_add_curve_utilities_to_create_curves_interpolatingeasing_b.md"
 
 [[release_notes]]
 title = "Implement additive blending for animation graphs."
@@ -361,8 +349,8 @@ prs = [15631]
 file_name = "15631_Implement_additive_blending_for_animation_graphs.md"
 
 [[release_notes]]
-title = "Add Support for Triggering Events via `AnimationEvent`s"
-authors = ["@atornity"]
+title = "Animation Events"
+authors = ["@atornity", "@cart"]
 contributors = ["@mweatherley", "@ChristopherBiscardi", "@mockersf"]
 prs = [15538]
 file_name = "15538_Add_Support_for_Triggering_Events_via_AnimationEvents.md"
@@ -396,17 +384,17 @@ prs = [14876]
 file_name = "14876_Add_Order_Independent_Transparency.md"
 
 [[release_notes]]
-title = "box shadow"
+title = "Box shadows"
 authors = ["@ickshonpe"]
 contributors = []
 prs = [15204]
 file_name = "15204_box_shadow.md"
 
 [[release_notes]]
-title = "Add mesh picking backend and `MeshRayCast` system parameter"
-authors = ["@Jondolf"]
-contributors = ["@mockersf", "@tbillington", "@aevyrie"]
-prs = [15800]
+title = "`bevy_picking`: selecting objects by clicking on them"
+authors = ["@aevyrie", "@NthTensor", "@TotalKrill", "@jnhyatt", "@Jondolf"]
+contributors = ["@alice-i-cecile", "@mockersf", "@tbillington", "@kivi"]
+prs = [13677, 14686, 14695, 14757, 15800]
 file_name = "15800_Add_mesh_picking_backend_and_MeshRayCast_system_parameter.md"
 
 [[release_notes]]
@@ -415,3 +403,31 @@ authors = ["@cart", "@Jondolf"]
 contributors = ["@alice-i-cecile", "@killercup", "@BD103", "@fluffiac"]
 prs = [14791, 15458, 15269]
 file_name = "14791_Required_Components.md"
+
+[[release_notes]]
+title = "Virtual Geometry Improvements"
+authors = ["@JMS55"]
+contributors = ["@zeux", "@atlv24"]
+prs = [14193, 14623, 15023, 15084, 15643, 15846, 15886, 15955, 16049, 16111]
+file_name = "virtual_geometry.md"
+
+[[release_notes]]
+title = "Shader storage buffer asset"
+authors = ["@tychedelia"]
+contributors = ["@IceSentry"]
+prs = [14663]
+file_name = "14663_shader_storage_buffer.md"
+
+[[release_notes]]
+title = "Accumulated mouse inputs"
+authors = ["@Aztro-dev", "@alice-i-cecile"]
+contributors = []
+prs = [14044]
+file_name = "14044_Accumulated_mouse_inputs.md"
+
+[[release_notes]]
+title = "Stable interpolation and smooth following"
+authors = ["@mweatherley"]
+contributors = []
+prs = [13741]
+file_name = "13741_Stable_interpolation_and_smooth_following.md"

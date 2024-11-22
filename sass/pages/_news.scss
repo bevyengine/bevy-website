@@ -42,16 +42,25 @@
 }
 
 .release-feature-authors {
-  margin-top: -0.5rem !important;
+  margin-top: -0.8rem !important;
   font-style: italic;
   color: var(--text-dim-color);
 }
 
 .release-feature-meta {
   @extend .release-feature-authors;
+  display: flex;
+  gap: 5px;
+  font-size: 1.0rem;
+  flex-wrap: wrap;
+}
 
-  padding: 0 !important;
-  list-style: none;
+.release-feature-meta-item {
+  color: #b8b8b8 !important;
+}
+
+.release-feature-meta-title {
+  margin-right: 4px;
 }
 
 .news-image-subtitle {
