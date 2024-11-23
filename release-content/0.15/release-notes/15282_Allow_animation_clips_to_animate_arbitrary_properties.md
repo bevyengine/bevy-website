@@ -1,50 +1,22 @@
 <!-- Allow animation clips to animate arbitrary properties. -->
 <!-- https://github.com/bevyengine/bevy/pull/15282 -->
-Animation clips can be used to animate arbitrary component properties with arbitrary curves.
-This is driven by an `AnimatableProperty` trait, which reaches into a component
-and selects part of it to modify.
+Animation clips can now be used to animate component properties with arbitrary curves.
 
-For example:
 ```rust
-// A marker struct that we can use to target font size with animations.
-// This pattern is typical.
-#[derive(Reflect)]
-struct FontSizeProperty;
-
-impl AnimatableProperty for FontSizeProperty {
-    // The `TextFont` component is what will actually be modified by animation.
-    type Component = TextFont;
-
-    // In order to drive the animation of the font size, we will need something
-    // that outputs an `f32`.
-    type Property = f32;
-
-    // This reaches into the `TextFont` component and grabs the font size.
-    fn get_mut(component: &mut Self::Component) -> Option<&mut Self::Property> {
-        Some(&mut component.font_size)
-    }
-}
-```
-
-In concert with the new `Curve` API, this allows any `Curve<f32>` to be used to
-animate the font size of an entity:
-```rust
-// Create a new animation clip to hold our animation.
-let mut animation_clip = AnimationClip::default();
-
-// Oscillate the font size during the length of the animation.
-let oscillating_curve = FunctionCurve::new(
-    Interval::UNIT, 
-    |t| 25.0 * f32::sin(TAU * t) + 50.0
-);
-
-// The curve itself is a `Curve<f32>`, and the usage of `FontSizeProperty` tells
-// the animation system how to use that curve to actually animate something.
 animation_clip.add_curve_to_target(
     animation_target_id,
-    AnimatableCurve::<FontSizeProperty, _>::from_curve(oscillating_curve)
+    AnimatableCurve::new(
+        AnimatedProperty::new(|font: &mut TextFont| &mut font.font_size),
+        // Oscillate the font size during the length of the animation.
+        FunctionCurve::new(
+            Interval::UNIT, 
+            |t| 25.0 * f32::sin(TAU * t) + 50.0
+        )
+    )
 );
 ```
+
+This uses the new `Curve` API, which supports arbitrary curve types.
 
 <video controls><source src="animated-font-size.mp4" type="video/mp4"/></video>
 
