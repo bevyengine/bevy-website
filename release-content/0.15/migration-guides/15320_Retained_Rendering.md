@@ -3,15 +3,21 @@
 <!-- https://github.com/bevyengine/bevy/pull/15320 Adopted PR -->
 <!-- https://github.com/bevyengine/bevy/pull/15582 Synchronized Removed Components -->
 <!-- https://github.com/bevyengine/bevy/pull/15756 Type Safe Retained Render World -->
-With the advent of the retained render world, collections that contain references to `Entity` that are extracted into the render world have been changed to contain `MainEntity` in order to prevent errors where a render world entity id is used to look up an item by accident. Custom rendering code may need to be changed to query for `&MainEntity` in order to look up the correct item from such a collection. Additionally, users who implement their own extraction logic for collections of main world entity should strongly consider extracting into a different collection that uses `MainEntity` as a key.
 
-Additionally, render phases now require specifying both the `Entity` and `MainEntity` for a given `PhaseItem`. Custom render phases should ensure `MainEntity` is available when queuing a phase item.
+With the advent of the retained render world, entities are no longer despawned at the end of every frame.
+Extracted entities with the `TemporaryRenderEntity` component will be despawned at the end of every frame like before.
+
+In order to make this possible, the `Entity` identifiers in the main and the extracted version in render world are no longer guaranteed to line up. As a result:
+
+- all tools to spawn entities with a precise `Entity` id are in the process of being deprecated and will be removed
+- collections that contain references to `Entity` that are extracted into the render world have been changed to contain `MainEntity` in order to prevent errors where a render world entity id is used to look up an item by accident. Custom rendering code may need to be changed to query for `&MainEntity` in order to look up the correct item from such a collection
+  - users who implement their own extraction logic for collections of main world entity should strongly consider extracting into a different collection that uses `MainEntity` as a key.
+- render phases now require specifying both the `Entity` and `MainEntity` for a given `PhaseItem`. Custom render phases should ensure `MainEntity` is available when queuing a phase item
 
 Renderers can now check `RenderVisibleEntities` to avoid rendering items that are not visible from a view. `RenderVisibleMeshEntities`, `RenderCubemapVisibleEntities`, and `RenderCascadeVisibleEntities` are also available for more fine-grained control.
 
-The retained render world is a complex change: migrating might take one of a few different forms depending on the patterns you're using.
-
-For every example, we specify in which world the code is run. Most of the changes affect render world code, so for the average Bevy user who's using Bevy's high-level rendering APIs, these changes are unlikely to affect your code.
+To guide you further, let's take a look at a few common patterns.
+For every example, we specify in which world the code is run.
 
 ### Spawning entities in the render world
 
