@@ -822,12 +822,6 @@ areas = ["Rendering"]
 file_name = "15489_Migrate_bevy_sprite_to_required_components.md"
 
 [[guides]]
-title = "Type safe retained render world"
-prs = [15756]
-areas = ["Rendering"]
-file_name = "15756_Type_safe_retained_render_world.md"
-
-[[guides]]
 title = "Move `ImageLoader` and `CompressedImageSaver` to `bevy_image`."
 prs = [15812]
 areas = ["Rendering"]

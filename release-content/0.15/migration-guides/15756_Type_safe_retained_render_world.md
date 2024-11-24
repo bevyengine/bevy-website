@@ -1,5 +1,0 @@
-With the advent of the retained render world, collections that contain references to `Entity` that are extracted into the render world have been changed to contain `MainEntity` in order to prevent errors where a render world entity id is used to look up an item by accident. Custom rendering code may need to be changed to query for `&MainEntity` in order to look up the correct item from such a collection. Additionally, users who implement their own extraction logic for collections of main world entity should strongly consider extracting into a different collection that uses `MainEntity` as a key.
-
-Additionally, render phases now require specifying both the `Entity` and `MainEntity` for a given `PhaseItem`. Custom render phases should ensure `MainEntity` is available when queuing a phase item.
-
-Renderers can now check `RenderVisibleEntities` to avoid rendering items that are not visible from a view. `RenderVisibleMeshEntities`, `RenderCubemapVisibleEntities`, and `RenderCascadeVisibleEntities` are also available for more fine-grained control.
