@@ -7,7 +7,7 @@ The new `Curve` trait provides a shared interface for curves.
 parametrized by a nonempty closed interval of real numbers. That parameter could,
 for example, represent time, in which case a `Curve<T>` is thought of as a value
 of type `T` that changes over time, as in animation. The parameter
-could also represent something like distance or displacement, as in gradients and 
+could also represent something like distance or displacement, as in color gradients and
 spatial curves.
 
 The curves themselves may be defined in a variety of ways. For example, a curve may be:
@@ -17,8 +17,11 @@ The curves themselves may be defined in a variety of ways. For example, a curve 
 * constructed using splines
 * produced by an easing function
 
+Additionally, [`EasingCurve`]s are designed for smoothly transitioning between a start and an end value (like in procedural animation or UI tweening).
+Bevy 0.15 provides 33 (!) prebuilt [`EaseFunction`]s: linear, quadratic, elastic and much much more.
+
 Additionally, the `Curve` API provides adaptors for taking an existing curve and
-modifying its output and/or parametrization. It is similar to the `Iterator` 
+modifying its output and/or parametrization. It is similar to the `Iterator`
 interface in this way.
 
 For example:
@@ -67,9 +70,6 @@ let exponential_curve = FunctionCurve::new(
 // Internally, this just holds the samples and the parameter interval.
 let raster_curve = exponential_curve.resample_auto(100).unwrap();
 ```
-
-[`EasingCurve`]s are designed for smoothly transitioning between a start and an end value (like in procedural animation or UI tweening).
-Bevy 0.15 provides 33 (!) prebuilt [`EaseFunction`]s: linear, quadratic, elastic and much much more.
 
 [`EasingCurve`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/curve/struct.EasingCurve.html
 [`EaseFunction`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/curve/enum.EaseFunction.html
