@@ -7,7 +7,7 @@ What's changing, and the domain that it's changing *over* are both incredibly fl
 You might choose to set `T` to store colors, creating a powerful abstraction for [color gradients](https://docs.rs/bevy/0.15.0/bevy/color/struct.ColorCurve.html), position, or the experience your player needs to level up.
 
 As we vary the progress parameter `t`, we could be representing time (like for animation),
-or something like distance or displacement as for curves that are mapped into 2D or 3D space,
+or something like distance as for curves that are mapped into 2D or 3D space,
 or a fraction of progress between a starting and ending value.
 
 ## Constructing Curves
