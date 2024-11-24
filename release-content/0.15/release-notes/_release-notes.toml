@@ -152,8 +152,8 @@ file_name = "15320_Retained_Rendering.md"
 [[release_notes]]
 title = "The Curve Trait"
 authors = ["@mweatherley"]
-contributors = ["@alice-i-cecile"]
-prs = [14630]
+contributors = ["@alice-i-cecile", "@RobWalt", "@mockersf", "@cart"]
+prs = [14630, 14976, 15675, 16637]
 file_name = "14630_A_Curve_trait_for_general_interoperation__Part_I.md"
 
 [[release_notes]]
