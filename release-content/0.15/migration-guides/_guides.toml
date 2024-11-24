@@ -6,12 +6,6 @@ prs = [14449, 15320, 15582, 15756]
 file_name = "15320_Retained_Rendering.md"
 
 [[guides]]
-title = "Fix asset_settings example regression"
-prs = [15945]
-areas = []
-file_name = "15945_Fix_asset_settings_example_regression.md"
-
-[[guides]]
 title = "Remove AVIF feature"
 prs = [15973]
 areas = ["Rendering"]
