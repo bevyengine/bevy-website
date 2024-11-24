@@ -272,6 +272,13 @@ prs = [14284]
 file_name = "14284_Add_custom_cursors.md"
 
 [[release_notes]]
+title = "reflect: implement the unique reflect rfc"
+authors = ["@soqb", "@nicopap"]
+contributors = ["@alice-i-cecile", "@MrGVSV"]
+prs = [7207]
+file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
+
+[[release_notes]]
 title = "Uniform mesh sampling"
 authors = ["@mweatherley"]
 contributors = ["@alice-i-cecile"]
