@@ -83,6 +83,4 @@ let raster_curve = exponential_curve.resample_auto(100).unwrap();
 ```
 
 [`Curve<T>`]: https://docs.rs/bevy/0.15.0/bevy/math/trait.Curve.html
-[`EasingCurve`]: https://docs.rs/bevy/0.15.0/bevy/math/curve/struct.EasingCurve.html
-[`EaseFunction`]: https://docs.rs/bevy/0.15.0/bevy/math/curve/enum.EaseFunction.html
 [`Curve::sample`]: https://docs.rs/bevy/0.15.0/bevy/math/trait.Curve.html#method.sample
