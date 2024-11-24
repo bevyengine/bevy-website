@@ -14,7 +14,7 @@ file_name = "15945_Fix_asset_settings_example_regression.md"
 [[guides]]
 title = "Remove AVIF feature"
 prs = [15973]
-areas = []
+areas = ["Rendering"]
 file_name = "15973_Remove_AVIF_feature.md"
 
 [[guides]]
