@@ -22,6 +22,7 @@ modifying its output and/or parametrization. It is similar to the `Iterator`
 interface in this way.
 
 For example:
+
 ```rust
 let timed_angles = [
   (0.0, 0.0),
@@ -66,3 +67,9 @@ let exponential_curve = FunctionCurve::new(
 // Internally, this just holds the samples and the parameter interval.
 let raster_curve = exponential_curve.resample_auto(100).unwrap();
 ```
+
+[`EasingCurve`]s are designed for smoothly transitioning between a start and an end value (like in procedural animation or UI tweening).
+Bevy 0.15 provides 33 (!) prebuilt [`EaseFunction`]s: linear, quadratic, elastic and much much more.
+
+[`EasingCurve`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/curve/struct.EasingCurve.html
+[`EaseFunction`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/curve/enum.EaseFunction.html
