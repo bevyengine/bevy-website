@@ -17,7 +17,20 @@ To update an existing Bevy App or Plugin to **Bevy 0.15**, check out our [0.14 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- TODO
+- Required Components
+- Entity Picking / Selection
+- Animation: generalized entity animation, animation masks, additive blending, animation events
+- Curves: the `Curve` trait, cyclic splines, common easing functions, color gradient curves
+- Reflection: Function reflection, unique reflect, remote type reflection
+- Bevy Remote Protocol (BRP)
+- VBAO
+- Chromatic Aberration
+- Volumetric Fog Improvements: Fog Volumes. Support for Point Lights and Spotlights.
+- Order Independent Transparency
+- Improved Text Rendering: Cosmic Text
+- Gamepads as Entities
+- UI Box Shadows
+
 
 As is now tradition, Bevy 0.15 was prepared using a **release candidate** process to help ensure that you can upgrade right away with peace of mind.
 We've worked closely with both plugin authors and ordinary users to catch critical bugs, round the rough corners off our new features, and refine the migration guide.
