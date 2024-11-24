@@ -22,7 +22,7 @@ In Bevy 0.15, we're shipping three first-party picking backends for UI, sprites,
 
 - UI: both the legacy [`Interaction`] and new [`PickingInteraction`] components exist [for now](https://github.com/bevyengine/bevy/issues/15550), with subtle behavioral differences.
 - Sprites: picking always uses the full rectangle, and [alpha transparency is not taken into account](https://github.com/bevyengine/bevy/issues/14929).
-- Mesh: this is a naive raycast against the full mesh. If you run into performance problems here, you should use simplified meshes and an acceleration data structure like a BVH to speed this up. As a result, this functionality is currently disabled by default. It can be enabled by enabling the [`MeshPickingPlugin`].
+- Mesh: this is a naive raycast against the full mesh. If you run into performance problems here, you should use simplified meshes and an acceleration data structure like a [BVH](https://en.wikipedia.org/wiki/Bounding_volume_hierarchy) to speed this up. As a result, this functionality is currently disabled by default. It can be enabled by enabling the [`MeshPickingPlugin`].
 
 We expect both [`bevy_rapier`] and [`avian`] (the two most popular ecosystem physics crates for Bevy) to add their own accelerated collider picking backends to work with the newly upstreamed API. Unless you're debugging, building an editor or really care about the exact triangles of raw meshes, you should use one of those crates for efficient mesh picking.
 
