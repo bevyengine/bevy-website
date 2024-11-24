@@ -62,7 +62,7 @@ A number of other adaptors are also available. For instance:
 Sampling is the process of asking "what is the value of this curve at some particular value of `t`".
 Doing so is simple: just call [`Curve::sample`]!
 
-Curves can also be rasterized into regular, discretized intervals.
+Much like how vector graphics can be rasterized into pixesl, curves can be rasterized into regular, discretized intervals.
 By resampling into an approximation derived from sample interpolation
 on the original curve, we can make curves of diverse origin
 uniform at the level of data.
