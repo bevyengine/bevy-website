@@ -25,7 +25,7 @@ Take a look at the constructors on the [`Curve<T>`] trait for more details.
 
 Procedurally modifying curves is a powerful tool for both creating curves with the desired behavior and dynamically altering them.
 
-Bey 0.15 provides a number of flexible adaptors for taking an existing curve and
+Bevy 0.15 provides a number of flexible adaptors for taking an existing curve and
 modifying its output and/or parametrization.
 
 For example:
