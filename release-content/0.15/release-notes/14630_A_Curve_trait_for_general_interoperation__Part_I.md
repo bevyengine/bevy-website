@@ -10,9 +10,6 @@ As we vary the progress parameter `t`, we could be representing time (like for a
 or something like distance or displacement as for curves that are mapped into 2D or 3D space,
 or a fraction of progress between a starting and ending value.
 
-Curves that interpolate between a start and end value are called [`EasingCurve`]s. They're great for procedural animation or UI tweening,
-and Bevy 0.15 provides 33 (!) prebuilt [`EaseFunction`]s: linear, quadratic, elastic and much much more.
-
 ## Constructing Curves
 
 Each curve made be defined in a variety of ways. For example, a curve may be:
