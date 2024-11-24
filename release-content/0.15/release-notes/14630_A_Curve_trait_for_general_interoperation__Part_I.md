@@ -1,28 +1,35 @@
 <!-- A Curve trait for general interoperation — Part I -->
 <!-- https://github.com/bevyengine/bevy/pull/14630 -->
 
-The new `Curve` trait provides a shared interface for curves.
+The new [`Curve<T>`] trait provides a shared interface for curves, describing how values of type `T` change as we vary a `f32` parameter `t` over some domain.
 
-`Curve<T>` defines a value of some type `T`
-parametrized by a nonempty closed interval of real numbers. That parameter could,
-for example, represent time, in which case a `Curve<T>` is thought of as a value
-of type `T` that changes over time, as in animation. The parameter
-could also represent something like distance or displacement, as in color gradients and
-spatial curves.
+What's changing, and the domain that it's changing *over* are both incredibly flexible.
+You might choose to set `T` to store colors, creating a powerful abstraction for [color gradients](https://docs.rs/bevy/0.15.0/bevy/color/struct.ColorCurve.html), position, or the experience your player needs to level up.
 
-The curves themselves may be defined in a variety of ways. For example, a curve may be:
+As we vary the progress parameter `t`, we could be representing time (like for animation),
+or something like distance or displacement as for curves that are mapped into 2D or 3D space,
+or a fraction of progress between a starting and ending value.
+
+Curves that interpolate between a start and end value are called [`EasingCurve`]s. They're great for procedural animation or UI tweening,
+and Bevy 0.15 provides 33 (!) prebuilt [`EaseFunction`]s: linear, quadratic, elastic and much much more.
+
+## Constructing Curves
+
+Each curve made be defined in a variety of ways. For example, a curve may be:
 
 * defined by a function
 * interpolated from samples
 * constructed using splines
 * produced by an easing function
 
-Additionally, [`EasingCurve`]s are designed for smoothly transitioning between a start and an end value (like in procedural animation or UI tweening).
-Bevy 0.15 provides 33 (!) prebuilt [`EaseFunction`]s: linear, quadratic, elastic and much much more.
+Take a look at the constructors on the [`Curve<T>`] trait for more details.
 
-Additionally, the `Curve` API provides adaptors for taking an existing curve and
-modifying its output and/or parametrization. It is similar to the `Iterator`
-interface in this way.
+## Modifying curves
+
+Procedurally modifying curves is a powerful tool for both creating curves with the desired behavior and dynamically altering them.
+
+Bey 0.15 provides a number of flexible adaptors for taking an existing curve and
+modifying its output and/or parametrization.
 
 For example:
 
@@ -53,11 +60,18 @@ A number of other adaptors are also available. For instance:
 * two curves may be chained together to form a longer curve
 * two curves may be zipped together to form a curve valued in tuples
 
-The interface additionally provides facilities for rasterization. These allow
-a curve to be resampled into an approximation derived from sample interpolation
-on the original curve; in practice, this is useful when curves of diverse origin
-need to be made uniform at the level of data - e.g. in serialization or when
-applying numerical methods.
+## Sampling from curves
+
+Sampling is the process of asking "what is the value of this curve at some particular value of `t`".
+Doing so is simple: just call [`Curve::sample`]!
+
+Curves can also be rasterized into regular, discretized intervals.
+By resampling into an approximation derived from sample interpolation
+on the original curve, we can make curves of diverse origin
+uniform at the level of data.
+
+While this may seem exotic, this technique is critical for serializing curves or
+approximating properties via numerical methods.
 
 ```rust
 // A curve defined by a function, which may be challenging to store as data.
@@ -71,5 +85,7 @@ let exponential_curve = FunctionCurve::new(
 let raster_curve = exponential_curve.resample_auto(100).unwrap();
 ```
 
-[`EasingCurve`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/curve/struct.EasingCurve.html
-[`EaseFunction`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/curve/enum.EaseFunction.html
+[`Curve<T>`]: https://docs.rs/bevy/0.15.0/bevy/math/trait.Curve.html
+[`EasingCurve`]: https://docs.rs/bevy/0.15.0/bevy/math/curve/struct.EasingCurve.html
+[`EaseFunction`]: https://docs.rs/bevy/0.15.0/bevy/math/curve/enum.EaseFunction.html
+[`Curve::sample`]: https://docs.rs/bevy/0.15.0/bevy/math/trait.Curve.html#method.sample

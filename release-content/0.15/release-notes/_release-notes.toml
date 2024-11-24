@@ -171,13 +171,6 @@ prs = [14106]
 file_name = "14106_Cyclic_splines.md"
 
 [[release_notes]]
-title = "Color gradient curve"
-authors = ["@RobWalt"]
-contributors = ["@bushrat011899", "@mweatherley"]
-prs = [14976]
-file_name = "14976_Color_gradient_curve.md"
-
-[[release_notes]]
 title = "reflect: implement the unique reflect rfc"
 authors = ["@soqb"]
 contributors = ["@alice-i-cecile", "@MrGVSV"]
