@@ -4,7 +4,7 @@
 <!-- https://github.com/bevyengine/bevy/pull/15582 Synchronized Removed Components -->
 <!-- https://github.com/bevyengine/bevy/pull/15756 Type Safe Retained Render World -->
 
-With the advent of the retained render world, entities are no longer despawned at the end of every frame.
+With the advent of the retained render world, entities are no longer despawned at the end of every frame in the render world.
 Extracted entities with the `TemporaryRenderEntity` component will be despawned at the end of every frame like before.
 
 In order to make this possible, the `Entity` identifiers in the main and the extracted version in render world are no longer guaranteed to line up. As a result:
