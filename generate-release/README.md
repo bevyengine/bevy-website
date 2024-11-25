@@ -15,7 +15,7 @@ To create issues for the `release-notes` subcommand, you need to pass the `--cre
 Before running the command, you'll need to generate a GitHub API token at <https://github.com/settings/tokens>. It's easier to use classic tokens.
 The token must have `repo` permissions to be able to open issues (and PRs) on your behalf.
 
-Then add it to a file called `.env` like so:
+Then add it to a file called `.env` (stored in the root `bevy-website` folder) like so:
 
 ```env
 GITHUB_TOKEN=token_string_copied_from_github
