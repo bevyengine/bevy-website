@@ -29,12 +29,6 @@ areas = ["Animation"]
 file_name = "15589_Impose_a_more_sensible_ordering_for_animation_graph_evalua.md"
 
 [[guides]]
-title = "Incorporate all node weights in additive blending"
-prs = [16279]
-areas = ["Animation"]
-file_name = "16279_Incorporate_all_node_weights_in_additive_blending.md"
-
-[[guides]]
 title = "Make `AnimationPlayer::start` and `::play` work accordingly to documentation"
 prs = [14546]
 areas = ["Animation"]
@@ -377,12 +371,6 @@ areas = ["ECS"]
 file_name = "14354_Update_trigger_observers_to_operate_over_slices_of_data.md"
 
 [[guides]]
-title = "Use the fully qualified name for `Component` in the `require` attribute"
-prs = [16378]
-areas = ["ECS"]
-file_name = "16378_Use_the_fully_qualified_name_for_Component_in_the_require_.md"
-
-[[guides]]
 title = "bevy_ecs: Special-case `Entity::PLACEHOLDER` formatting"
 prs = [15839]
 areas = ["ECS"]
@@ -633,12 +621,6 @@ title = "Add flags to `SpritePlugin` and `UiPlugin` to allow disabling their pic
 prs = [16473]
 areas = ["Picking"]
 file_name = "16473_Add_flags_to_SpritePlugin_and_UiPlugin_to_allow_disabling_.md"
-
-[[guides]]
-title = "Fix `bevy_picking` plugin suffixes"
-prs = [16082]
-areas = ["Picking"]
-file_name = "16082_Fix_bevy_picking_plugin_suffixes.md"
 
 [[guides]]
 title = "rename Drop to bevy::picking::events::DragDrop to unclash std::ops:Drop"
@@ -935,12 +917,6 @@ areas = ["Rendering"]
 file_name = "15666_Split_out_bevy_mesh_from_bevy_render.md"
 
 [[guides]]
-title = "Type safe retained render world"
-prs = [15756]
-areas = ["Rendering"]
-file_name = "15756_Type_safe_retained_render_world.md"
-
-[[guides]]
 title = "Using Cas instead of CAS #14341"
 prs = [14357]
 areas = ["Rendering"]
@@ -1175,14 +1151,7 @@ areas = ["Windowing"]
 file_name = "15585_move_ANDROID_APP_to_bevy_window.md"
 
 [[guides]]
-title = "Fix asset_settings example regression"
-prs = [15945]
-areas = []
-file_name = "15945_Fix_asset_settings_example_regression.md"
-
-[[guides]]
 title = "Remove `accesskit` re-export from `bevy_a11y`"
 prs = [16257]
 areas = []
 file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
-
