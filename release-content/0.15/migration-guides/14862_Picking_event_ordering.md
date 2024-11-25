@@ -1,6 +1,7 @@
 For users switching from `bevy_mod_picking` to `bevy_picking`:
 
 - Instead of adding an `On<T>` component, use `.observe(|trigger: Trigger<T>|)`. You may now apply multiple handlers to the same entity using this command.
+- Note that you may need to add the non default `MeshPickingPlugin` if you using picking on meshes
 - Pointer interaction events now have semi-deterministic ordering which (more or less) aligns with the order of the raw input stream. Consult the docs on `bevy_picking::event::pointer_events` for current information. You may need to adjust your event handling logic accordingly.
 - `PointerCancel` has been replaced with `Pointer<Canceled>`, which now has the semantics of an OS touch pointer cancel event.
 - `InputMove` and `InputPress` have been merged into `PointerInput`. The use remains exactly the same.
