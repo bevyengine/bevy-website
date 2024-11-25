@@ -4,7 +4,7 @@
 The new [`Curve<T>`] trait provides a shared interface for curves, describing how values of type `T` change as we vary a `f32` parameter `t` over some domain.
 
 What's changing, and the domain that it's changing *over* are both incredibly flexible.
-You might choose to set `T` to store anything from position, to damage to colors (like we did to create) a powerful abstraction for [color gradients](https://docs.rs/bevy/0.15.0/bevy/color/struct.ColorCurve.html).
+You might choose to set `T` to store anything from position, to damage to colors (like we did to create a powerful abstraction for [color gradients](https://docs.rs/bevy/0.15.0/bevy/color/struct.ColorCurve.html)).
 
 As we vary the progress parameter `t`, we could be representing time (like for animation),
 or something like distance as for curves that are mapped into 2D or 3D space,
