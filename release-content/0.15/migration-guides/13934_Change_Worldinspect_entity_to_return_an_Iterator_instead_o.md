@@ -1,0 +1,1 @@
+- `World::inspect_entity` now returns an `Iterator` instead of a `Vec`. If you need a `Vec`, immediately collect the iterator: `world.inspect_entity(entity).collect<Vec<_>>()`

@@ -1,4 +1,10 @@
 [[guides]]
+title = "Bump `accesskit` to 0.16"
+prs = [14091]
+areas = ["Accessibility", "UI"]
+file_name = "14091_Bump_accesskit_to_016.md"
+
+[[guides]]
 title = "Deprecate `is_playing_animation`"
 prs = [14387]
 areas = ["Animation"]
@@ -89,6 +95,12 @@ areas = ["App"]
 file_name = "14285_Remove_second_generic_from_add_before_add_after.md"
 
 [[guides]]
+title = "Handle `Ctrl+C` in the terminal properly"
+prs = [14001]
+areas = ["App", "Windowing"]
+file_name = "14001_Handle_CtrlC_in_the_terminal_properly.md"
+
+[[guides]]
 title = "AssetServer LoadState API consistency"
 prs = [15237]
 areas = ["Assets"]
@@ -99,6 +111,24 @@ title = "Cleanup unneeded lifetimes in bevy_asset"
 prs = [15546]
 areas = ["Assets"]
 file_name = "15546_Cleanup_unneeded_lifetimes_in_bevy_asset.md"
+
+[[guides]]
+title = "Generalized `Into<AssetSourceId>` and `Into<AssetPath>` Implementations over Lifetime"
+prs = [10823]
+areas = ["Assets"]
+file_name = "10823_Generalized_IntoAssetSourceId_and_IntoAssetPath_Implementa.md"
+
+[[guides]]
+title = "Improve error handling for `AssetServer::add_async`"
+prs = [13745]
+areas = ["Assets"]
+file_name = "13745_Improve_error_handling_for_AssetServeradd_async.md"
+
+[[guides]]
+title = "Optimize common usages of `AssetReader`"
+prs = [14082]
+areas = ["Assets"]
+file_name = "14082_Optimize_common_usages_of_AssetReader.md"
 
 [[guides]]
 title = "Remove incorrect equality comparisons for asset load error types"
@@ -117,6 +147,12 @@ title = "bevy_asset: Improve `NestedLoader` API"
 prs = [15509]
 areas = ["Assets"]
 file_name = "15509_bevy_asset_Improve_NestedLoader_API.md"
+
+[[guides]]
+title = "Make gLTF node children Handle instead of objects"
+prs = [13707]
+areas = ["Assets", "Rendering"]
+file_name = "13707_Make_gLTF_node_children_Handle_instead_of_objects.md"
 
 [[guides]]
 title = "Split `TextureAtlasSources` out of `TextureAtlasLayout` and make `TextureAtlasLayout` serializable"
@@ -147,6 +183,12 @@ title = "Use `en-us` locale for `typos`"
 prs = [16037]
 areas = ["Build-System", "Cross-Cutting"]
 file_name = "16037_Use_enus_locale_for_typos.md"
+
+[[guides]]
+title = "Adds back in way to convert color to u8 array, implemented for the two RGB color types, also renames Color::linear to Color::to_linear."
+prs = [13759]
+areas = ["Color"]
+file_name = "13759_Adds_back_in_way_to_convert_color_to_u8_array_implemented_.md"
 
 [[guides]]
 title = "Update Grid Gizmo to use Color"
@@ -209,6 +251,12 @@ areas = ["ECS"]
 file_name = "14352_Add_FilteredAccessempty_and_simplify_the_implementation_of_.md"
 
 [[guides]]
+title = "Add `mappings` to `EntityMapper`"
+prs = [13727]
+areas = ["ECS"]
+file_name = "13727_Add_mappings_to_EntityMapper.md"
+
+[[guides]]
 title = "Add query reborrowing"
 prs = [14690]
 areas = ["ECS"]
@@ -219,6 +267,12 @@ title = "Allow `World::entity` family of functions to take multiple entities and
 prs = [15614]
 areas = ["ECS"]
 file_name = "15614_Allow_Worldentity_family_of_functions_to_take_multiple_ent.md"
+
+[[guides]]
+title = "Change World::inspect_entity to return an Iterator instead of Vec"
+prs = [13934]
+areas = ["ECS"]
+file_name = "13934_Change_Worldinspect_entity_to_return_an_Iterator_instead_o.md"
 
 [[guides]]
 title = "Created an EventMutator for when you want to mutate an event before reading"
@@ -279,6 +333,12 @@ title = "Make `QueryState::transmute`&co validate the world of the `&Components`
 prs = [14631]
 areas = ["ECS"]
 file_name = "14631_Make_QueryStatetransmuteco_validate_the_world_of_the_Compo.md"
+
+[[guides]]
+title = "Re-name and Extend Run Conditions API"
+prs = [13784]
+areas = ["ECS"]
+file_name = "13784_Rename_and_Extend_Run_Conditions_API.md"
 
 [[guides]]
 title = "Remove redundant information and optimize dynamic allocations in `Table`"
@@ -371,6 +431,12 @@ areas = ["ECS"]
 file_name = "14354_Update_trigger_observers_to_operate_over_slices_of_data.md"
 
 [[guides]]
+title = "`IntoSystemConfigs::chain_ignore_deferred`'s return type fix"
+prs = [13919]
+areas = ["ECS"]
+file_name = "13919_IntoSystemConfigschain_ignore_deferreds_return_type_fix.md"
+
+[[guides]]
 title = "bevy_ecs: Special-case `Entity::PLACEHOLDER` formatting"
 prs = [15839]
 areas = ["ECS"]
@@ -381,6 +447,12 @@ title = "change return type of `World::resource_ref` to `Ref`"
 prs = [15263]
 areas = ["ECS"]
 file_name = "15263_change_return_type_of_Worldresource_ref_to_Ref.md"
+
+[[guides]]
+title = "Merge `BuildWorldChildren` and `BuildChildren` traits."
+prs = [14052]
+areas = ["ECS", "Hierarchy"]
+file_name = "14052_Merge_BuildWorldChildren_and_BuildChildren_traits.md"
 
 [[guides]]
 title = "Minimal Bubbling Observers"
@@ -521,6 +593,12 @@ areas = ["Gizmos"]
 file_name = "14676_Use_Isometry_in_bevy_gizmos_wherever_we_can.md"
 
 [[guides]]
+title = "Use u32 for all resolution/subdivision fields in bevy_gizmos"
+prs = [13927]
+areas = ["Gizmos"]
+file_name = "13927_Use_u32_for_all_resolutionsubdivision_fields_in_bevy_gizmo.md"
+
+[[guides]]
 title = "Switch rotation & translation in grid gizmos"
 prs = [14656]
 areas = ["Gizmos", "Math"]
@@ -611,10 +689,22 @@ areas = ["Math"]
 file_name = "15735_Use_Dir2Dir3_instead_of_Vec2Vec3_for_Ray2dnewRay3dnew.md"
 
 [[guides]]
+title = "Use a well defined type for sides in RegularPolygon"
+prs = [13837]
+areas = ["Math"]
+file_name = "13837_Use_a_well_defined_type_for_sides_in_RegularPolygon.md"
+
+[[guides]]
 title = "bevy_reflect: Update `EulerRot` to match `glam` 0.29"
 prs = [15402]
 areas = ["Math", "Reflection"]
 file_name = "15402_bevy_reflect_Update_EulerRot_to_match_glam_029.md"
+
+[[guides]]
+title = "Use u32 for resolution/subdivision in primitive meshing"
+prs = [13930]
+areas = ["Math", "Rendering"]
+file_name = "13930_Use_u32_for_resolutionsubdivision_in_primitive_meshing.md"
 
 [[guides]]
 title = "Add flags to `SpritePlugin` and `UiPlugin` to allow disabling their picking backend (without needing to disable features)."
@@ -695,6 +785,12 @@ areas = ["Reflection"]
 file_name = "15240_bevy_reflect_Replace_value_terminology_with_opaque.md"
 
 [[guides]]
+title = "reflect: implement the unique reflect rfc"
+prs = [7207]
+areas = ["Reflection"]
+file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
+
+[[guides]]
 title = "Use `FromReflect` when extracting entities in dynamic scenes"
 prs = [15174]
 areas = ["Reflection", "Scenes"]
@@ -737,6 +833,12 @@ areas = ["Rendering"]
 file_name = "14267_Add_support_for_skybox_transformation.md"
 
 [[guides]]
+title = "Added feature switch to default Standard Material's new anisotropy texture to off"
+prs = [14048]
+areas = ["Rendering"]
+file_name = "14048_Added_feature_switch_to_default_Standard_Materials_new_ani.md"
+
+[[guides]]
 title = "Added visibility bitmask as an alternative SSAO method"
 prs = [13454]
 areas = ["Rendering"]
@@ -753,6 +855,12 @@ title = "Adds `ShaderStorageBuffer` asset"
 prs = [14663]
 areas = ["Rendering"]
 file_name = "14663_Adds_ShaderStorageBuffer_asset.md"
+
+[[guides]]
+title = "Allow mix of hdr and non-hdr cameras to same render target"
+prs = [13419]
+areas = ["Rendering"]
+file_name = "13419_Allow_mix_of_hdr_and_nonhdr_cameras_to_same_render_target.md"
 
 [[guides]]
 title = "Allow volumetric fog to be localized to specific, optionally voxelized, regions."
@@ -929,6 +1037,18 @@ areas = ["Rendering"]
 file_name = "virtual_geometry.md"
 
 [[guides]]
+title = "Wgpu 0.20"
+prs = [13186]
+areas = ["Rendering"]
+file_name = "13186_Wgpu_020.md"
+
+[[guides]]
+title = "check sampler type in as_bind_group derives"
+prs = [12637]
+areas = ["Rendering"]
+file_name = "12637_check_sampler_type_in_as_bind_group_derives.md"
+
+[[guides]]
 title = "cleanup bevy_render/lib.rs"
 prs = [16481]
 areas = ["Rendering"]
@@ -939,6 +1059,18 @@ title = "Fix UI texture atlas with offset"
 prs = [13620]
 areas = ["Rendering", "UI"]
 file_name = "13620_Fix_UI_texture_atlas_with_offset.md"
+
+[[guides]]
+title = "Make default behavior for `BackgroundColor` and `BorderColor` more intuitive"
+prs = [14017]
+areas = ["Rendering", "UI"]
+file_name = "14017_Make_default_behavior_for_BackgroundColor_and_BorderColor_.md"
+
+[[guides]]
+title = "Optional UI rendering"
+prs = [8997]
+areas = ["Rendering", "UI"]
+file_name = "8997_Optional_UI_rendering.md"
 
 [[guides]]
 title = "use precomputed border values"
@@ -989,6 +1121,12 @@ areas = ["Scenes"]
 file_name = "15210_explicitly_mention_component_in_methods_on_DynamicSceneBuilder.md"
 
 [[guides]]
+title = "Support `on_thread_spawn` and `on_thread_destroy` for `TaskPoolPlugin`"
+prs = [13045]
+areas = ["Tasks"]
+file_name = "13045_Support_on_thread_spawn_and_on_thread_destroy_for_TaskPool.md"
+
+[[guides]]
 title = "Text Rework cleanup"
 prs = [15887]
 areas = ["Text"]
@@ -1001,6 +1139,12 @@ areas = ["Text"]
 file_name = "15591_Text_rework.md"
 
 [[guides]]
+title = "Uncouple `DynamicTextureAtlasBuilder` from assets"
+prs = [13717]
+areas = ["Text"]
+file_name = "13717_Uncouple_DynamicTextureAtlasBuilder_from_assets.md"
+
+[[guides]]
 title = "split up `TextStyle`"
 prs = [15857]
 areas = ["Text"]
@@ -1011,6 +1155,12 @@ title = "Add the ability to control font smoothing"
 prs = [15368]
 areas = ["Text", "UI"]
 file_name = "15368_Add_the_ability_to_control_font_smoothing.md"
+
+[[guides]]
+title = "Cosmic text"
+prs = [10193]
+areas = ["Text", "UI"]
+file_name = "10193_Cosmic_text.md"
 
 [[guides]]
 title = "aligning public apis of Time,Timer and Stopwatch"
@@ -1091,6 +1241,12 @@ areas = ["UI"]
 file_name = "15740_Replace_HandleM_UiMaterial_component_with__UiMaterialHandl.md"
 
 [[guides]]
+title = "Simplified `ui_stack_system`"
+prs = [9889]
+areas = ["UI"]
+file_name = "9889_Simplified_ui_stack_system.md"
+
+[[guides]]
 title = "UiImage -> ImageNode, UiImageSize -> ImageNodeSize"
 prs = [16271]
 areas = ["UI"]
@@ -1149,6 +1305,12 @@ title = "move ANDROID_APP to bevy_window"
 prs = [15585]
 areas = ["Windowing"]
 file_name = "15585_move_ANDROID_APP_to_bevy_window.md"
+
+[[guides]]
+title = "Add Display implementation to DebugName."
+prs = [13760]
+areas = []
+file_name = "13760_Add_Display_implementation_to_DebugName.md"
 
 [[guides]]
 title = "Remove `accesskit` re-export from `bevy_a11y`"

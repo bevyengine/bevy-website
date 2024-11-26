@@ -1,0 +1,1 @@
+`UiPlugin` has a new field `enable_rendering`. If set to false, the UI’s rendering systems won’t be added to the `RenderApp` and no UI elements will be drawn. The layout and interaction components will still be updated as normal.
