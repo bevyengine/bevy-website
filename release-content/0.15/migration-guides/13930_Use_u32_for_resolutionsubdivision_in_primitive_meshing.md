@@ -1,0 +1,1 @@
+- All primitive mesh builders now take `u32` instead of `usize` for their resolution/subdivision/segment counts

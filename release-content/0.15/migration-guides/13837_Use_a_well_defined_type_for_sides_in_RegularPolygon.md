@@ -1,0 +1,1 @@
+- `RegularPolygon` now uses `u32` instead of `usize` for the number of sides
