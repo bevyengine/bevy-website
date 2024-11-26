@@ -1,7 +1,7 @@
-> 
-This section is optional. If there are no breaking changes, you can delete this section.
+Some commands and methods for adding children to an entity were renamed for consistency.
 
-
-- If this PR is a breaking change (relative to the last release of Bevy), describe how a user might need to migrate their code to support these changes
-
-rename any use of `push_children()` to the updated `add_children()`
+|0.14|0.15|
+|-|-|
+|`EntityCommands::push_children`|`add_children`|
+|`PushChild`|`AddChild`|
+|`PushChildren`|`AddChildren`|
