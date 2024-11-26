@@ -719,12 +719,6 @@ areas = ["Picking"]
 file_name = "16473_Add_flags_to_SpritePlugin_and_UiPlugin_to_allow_disabling_.md"
 
 [[guides]]
-title = "Fix `bevy_picking` plugin suffixes"
-prs = [16082]
-areas = ["Picking"]
-file_name = "16082_Fix_bevy_picking_plugin_suffixes.md"
-
-[[guides]]
 title = "rename Drop to bevy::picking::events::DragDrop to unclash std::ops:Drop"
 prs = [14926]
 areas = ["Picking"]
