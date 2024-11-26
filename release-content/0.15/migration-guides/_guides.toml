@@ -1325,14 +1325,7 @@ areas = []
 file_name = "13760_Add_Display_implementation_to_DebugName.md"
 
 [[guides]]
-title = "Fix asset_settings example regression"
-prs = [15945]
-areas = []
-file_name = "15945_Fix_asset_settings_example_regression.md"
-
-[[guides]]
 title = "Remove `accesskit` re-export from `bevy_a11y`"
 prs = [16257]
 areas = []
 file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
-
