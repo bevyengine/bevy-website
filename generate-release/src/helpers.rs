@@ -19,21 +19,16 @@ pub fn get_merged_prs(
         .context("Failed to get commits")?;
     println!("Found {} commits", commits.len());
 
-    println!("Getting list of all merged PRs from {from} to {to} with label {label:?}");
+    println!("Getting list of all merged PRs with label {label:?}");
 
     let base_commit = client.get_commit(from, BevyRepo::Bevy)?;
     let base_commit_date = &base_commit.commit.committer.date[0..10];
 
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
-    let prs = client.get_issues_and_prs(
-        BevyRepo::Bevy,
-        IssueState::Merged,
-        Some(base_commit_date),
-        label,
-    )?;
+    // We can't set a `since` date, as the PRs requested are filtered by date opened, not date merged
+    let prs = client.get_issues_and_prs(BevyRepo::Bevy, IssueState::Merged, None, label)?;
     println!(
-        "Found {} merged PRs and {} commits since {} (the base commit date)",
-        prs.len(),
+        "Found {} commits since {} (the base commit date)",
         commits.len(),
         base_commit_date
     );
