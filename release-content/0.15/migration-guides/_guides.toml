@@ -431,12 +431,6 @@ areas = ["ECS"]
 file_name = "14354_Update_trigger_observers_to_operate_over_slices_of_data.md"
 
 [[guides]]
-title = "Use the fully qualified name for `Component` in the `require` attribute"
-prs = [16378]
-areas = ["ECS"]
-file_name = "16378_Use_the_fully_qualified_name_for_Component_in_the_require_.md"
-
-[[guides]]
 title = "`IntoSystemConfigs::chain_ignore_deferred`'s return type fix"
 prs = [13919]
 areas = ["ECS"]
