@@ -1,0 +1,5 @@
+- `Text2dBounds` has been replaced with `TextBounds`, and it now accepts `Option`s to the bounds, instead of using `f32::INFINITY` to inidicate lack of bounds
+- Textsizes should be changed, dividing the current size with 1.2 will result in the same size as before.
+- `TextSettings` struct is removed
+- Feature `subpixel_alignment` has been removed since cosmic-text already does this automatically
+- TextBundles and things rendering texts requires the `CosmicBuffer` Component on them as well
