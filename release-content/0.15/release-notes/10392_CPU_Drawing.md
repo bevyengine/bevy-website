@@ -54,8 +54,7 @@ fn my_system(mut images: ResMut<Assets<Image>>, mut commands: Commands) {
 ```
 
 Note: The [`Color`]-based methods are lossy. They have to convert to/from the
-[`Image`]'s [`TextureFormat`]. Round-trips will not work. The color you read back
-will not be identical to the color you wrote.
+[`Image`]'s [`TextureFormat`]. If you read back the color you wrote, it will be slightly different.
 
 [`Image`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/prelude/struct.Image.html
 [`TextureFormat`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/render/render_resource/enum.TextureFormat.html
