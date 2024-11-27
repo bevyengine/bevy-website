@@ -8,7 +8,7 @@ access to the raw data bytes of an [`Image`], but you had to compute the byte
 offset corresponding to your desired pixel coordinate, make sure to encode your
 bytes with respect to the [`TextureFormat`], etc. Very low level!
 
-In Bevy 0.15, there are now nice user-friendly APIs for reading and writing the
+In Bevy 0.15, there are now user-friendly APIs for reading and writing the
 colors of pixels in an [`Image`]. The tricky low-level details are dealt with
 for you! You can even use `bevy_color`'s fancy color space APIs!
 
