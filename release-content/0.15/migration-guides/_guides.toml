@@ -1317,3 +1317,15 @@ title = "Remove `accesskit` re-export from `bevy_a11y`"
 prs = [16257]
 areas = []
 file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
+
+[[guides]]
+title = "Deprecate `LoadAndSave` Asset Processor"
+prs = [15090]
+areas = ["Asset"]
+file_name = "15090_Deprecate_LoadAndSave_Asset_Processor.md"
+
+[[guides]]
+title = "`AssetReader::read` now returns an opaque type"
+prs = [14082]
+areas = ["Asset"]
+file_name = "14082_AssetReader_read_now_returns_an_opaque_type.md"
