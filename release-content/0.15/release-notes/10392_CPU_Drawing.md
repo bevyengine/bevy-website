@@ -15,7 +15,6 @@ for you! You can even use `bevy_color`'s fancy color space APIs!
 ```rust
 fn my_system(mut images: ResMut<Assets<Image>>, mut commands: Commands) {
     // Create a new image.
-    // (This is the same as before)
     let mut image = Image::new_fill(
         // 64x64 size
         Extent3d {
