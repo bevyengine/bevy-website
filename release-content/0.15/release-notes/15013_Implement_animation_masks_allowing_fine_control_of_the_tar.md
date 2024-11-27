@@ -4,7 +4,7 @@
 Animations now support masking out animation targets (joints).
 This is implemented at the level of animation blend graphs (`AnimationGraph`)
 and can be used to play different animations on separate parts of the
-same model without interfering with one another. This may come up, for example, 
-if you need a character to play separate animations on its upper and lower body.
+same model without interfering with one another. For example, you can play separate animations on a character's upper and lower body.
 
+In this video, the fox's head and legs are playing two separate animations, thanks to animation masks:
 <video controls><source src="masked-animation.mp4" type="video/mp4"/></video>
