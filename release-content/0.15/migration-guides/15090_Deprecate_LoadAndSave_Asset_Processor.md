@@ -1,0 +1,2 @@
+- Replace `LoadAndSave<L, S>` with `LoadTransformAndSave<L, IdentityAssetTransformer<<L as AssetLoader>::Asset>, S>`
+- Replace `LoadAndSaveSettings<L, S>` with `LoadTransformAndSaveSettings<L, (), S>`
