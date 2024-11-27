@@ -1,5 +1,5 @@
 There are many situations where you might want to just set the color of pixels
-from CPU code.  Procedural assets, certain art styles, … or maybe just because
+from CPU code.  Procedural assets, certain art styles, or simply because
 it is easier. No need to bother with shaders and materials, when you just want
 to change a few specific pixels!
 
