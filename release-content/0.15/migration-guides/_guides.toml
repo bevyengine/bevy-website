@@ -1315,7 +1315,7 @@ file_name = "13760_Add_Display_implementation_to_DebugName.md"
 [[guides]]
 title = "Remove `accesskit` re-export from `bevy_a11y`"
 prs = [16257]
-areas = []
+areas = ["Accessibility"]
 file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
 
 [[guides]]
