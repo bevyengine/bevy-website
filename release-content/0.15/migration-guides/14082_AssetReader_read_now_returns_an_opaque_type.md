@@ -1,4 +1,4 @@
-The trait method `bevy_asset::io::AssetReader::read` (and `read_meta`) now return an opaque type instead of a boxed trait object. Implementors of these methods should change the type signatures appropriately
+The trait method `bevy_asset::io::AssetReader::read` (and `read_meta`) now return an opaque type instead of a boxed trait object. Implementors of these methods should change the type signatures appropriately:
 
 ```rust
 impl AssetReader for MyReader {
@@ -15,7 +15,7 @@ impl AssetReader for MyReader {
 }
 ```
 
-`bevy::asset::io::Reader` is now a trait, rather than a type alias for a trait object. Implementors of `AssetLoader::load` will need to adjust the method signature accordingly
+`bevy::asset::io::Reader` is now a trait, rather than a type alias for a trait object. Implementors of `AssetLoader::load` will need to adjust the method signature accordingly:
 
 ```rust
 impl AssetLoader for MyLoader {
