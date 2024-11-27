@@ -41,6 +41,13 @@ prs = [14876]
 file_name = "14876_Add_Order_Independent_Transparency.md"
 
 [[release_notes]]
+title = "User-Friendly CPU Drawing"
+authors = ["@inodentry"]
+contributors = []
+prs = [10392]
+file_name = "10392_CPU_Drawing.md"
+
+[[release_notes]]
 title = "Entity Picking / Selection"
 authors = ["@aevyrie", "@NthTensor", "@TotalKrill", "@jnhyatt", "@Jondolf"]
 contributors = ["@alice-i-cecile", "@mockersf", "@tbillington", "@kivi"]
