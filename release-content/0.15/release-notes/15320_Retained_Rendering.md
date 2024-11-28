@@ -3,7 +3,7 @@
 <!-- https://github.com/bevyengine/bevy/pull/15320 Adopted PR -->
 <!-- https://github.com/bevyengine/bevy/pull/15582 Synchronized Removed Components -->
 <!-- https://github.com/bevyengine/bevy/pull/15756 Type Safe Retained Render World -->
-For awhile now, Bevy [has had a "parallel pipelined renderer"](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render). To enable this, we added a Render World, in addition to the Main World (a `World` holds ECS data like Entities, Components, and Resources). The Main World is the source of truth for app logic. While the Render World is rendering the current frame, the Main World can be simulating the next frame. There is a brief "extract step", where we synchronize the two and copy relevant data from the Main World to the Render World.
+For awhile now, Bevy has had a ["parallel pipelined renderer"](/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render). To enable this, we added a Render World, in addition to the Main World (a `World` holds ECS data like Entities, Components, and Resources). The Main World is the source of truth for app logic. While the Render World is rendering the current frame, the Main World can be simulating the next frame. There is a brief "extract step", where we synchronize the two and copy relevant data from the Main World to the Render World.
 
 In previous versions of Bevy, we employed an "immediate mode" approach to Main World -> Render World synchronization: we fully cleared the Render World entities every frame. This accomplished a couple of things:
 

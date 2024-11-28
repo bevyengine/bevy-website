@@ -1,4 +1,4 @@
-The glTF 3D model file format allows single mesh to be associated with multiple materials. For example, a teapot may consist of a single mesh, yet each part can have a different material. When a single mesh is assigned multiple materials, it is divided into several primitive nodes, with each primitive assigned a unique material.
+The glTF 3D model file format allows a single mesh to be associated with multiple materials. For example, a teapot may consist of a single mesh, yet each part may have a different material. When a single mesh is assigned multiple materials, it is divided into several primitive nodes, with each primitive assigned a unique material.
 
 ```json
 {
@@ -39,13 +39,13 @@ fn find_top_material_and_mesh(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
     time: Res<Time>,
-    mat_query: Query<(
+    mesh_materials: Query<(
         &MeshMaterial3d<StandardMaterial>,
         &Mesh3d,
         &GltfMaterialName,
     )>,
 ) {
-    for (mat_handle, mesh_handle, name) in mat_query.iter() {
+    for (mat_handle, mesh_handle, name) in &mesh_materials {
         // locate the material and associated submesh by name
         if name.0 == "Top" {
             if let Some(material) = materials.get_mut(mat_handle) {

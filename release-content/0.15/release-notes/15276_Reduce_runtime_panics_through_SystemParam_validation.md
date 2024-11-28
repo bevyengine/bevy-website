@@ -23,11 +23,12 @@ fn main() {
     app.run();
 }
 ```
-but in Bevy 0.15, `my_system` simply won't be executed.
+but in Bevy 0.15, `my_system` simply won't be executed and a warning will be logged.
 
 This works for all system-based features:
-- Systems & Observers - will be skipped,
-- Run conditions - will be skipped and return `false`.
+
+- Systems and Observers will be skipped.
+- Run Conditions will be skipped and return `false`.
 
 Compound systems, like `system_a.pipe(system_b)`, are currently skipped if any required data is missing.
 

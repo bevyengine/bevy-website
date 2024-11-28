@@ -11,7 +11,7 @@ While this has always been possible, it was quite onerous:
 // using a system-local `EventCursor`, previously called `ManualEventReader`.
 fn mutate_events(mut events: ResMut<Events<MyEvent>>, mut local_cursor: Local<EventCursor<MyEvent>>){    
     for event in local_cursor.read_mut(&mut *events){
-        event.mutate();
+        event.some_mutation();
     }
 }
 ```
@@ -21,7 +21,7 @@ Now, you can simply use the new [`EventMutator`] system param, which keeps track
 ```rust
 fn mutate_events(mut event_mutator: EventMutator<MyEvent>>){    
     for event in event_mutator.read(){
-        event.mutate();
+        event.some_mutation();
     }
 }
 ```

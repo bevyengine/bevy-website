@@ -122,7 +122,7 @@ prs = [12770, 16222, 16233]
 file_name = "12770_Implement_gamepads_as_entities.md"
 
 [[release_notes]]
-title = "box shadow"
+title = "Box Shadows"
 authors = ["@ickshonpe"]
 contributors = []
 prs = [15204]
@@ -157,7 +157,7 @@ prs = [14449, 15320, 15582, 15756]
 file_name = "15320_Retained_Rendering.md"
 
 [[release_notes]]
-title = "The Curve Trait"
+title = "Curves"
 authors = ["@mweatherley"]
 contributors = ["@alice-i-cecile", "@RobWalt", "@mockersf", "@cart"]
 prs = [14630, 14976, 15675, 16637]
@@ -171,35 +171,35 @@ prs = [14788, 15675, 15711]
 file_name = "15675_Add_most_common_interpolations.md"
 
 [[release_notes]]
-title = "Cyclic splines"
+title = "Cyclic Splines"
 authors = ["@mweatherley"]
 contributors = []
 prs = [14106]
 file_name = "14106_Cyclic_splines.md"
 
 [[release_notes]]
-title = "reflect: implement the unique reflect rfc"
-authors = ["@soqb"]
+title = "`PartialReflect`"
+authors = ["@soqb", "@nicopap"]
 contributors = ["@alice-i-cecile", "@MrGVSV"]
 prs = [7207]
 file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
 
 [[release_notes]]
-title = "bevy_reflect: Reflect remote types"
+title = "Reflect Remote Types"
 authors = ["@MrGVSV"]
 contributors = []
 prs = [6042]
 file_name = "6042_bevy_reflect_Reflect_remote_types.md"
 
 [[release_notes]]
-title = "bevy_reflect: Add `Reflectable` trait"
+title = "The `Reflectable` Trait"
 authors = ["@MrGVSV"]
 contributors = ["@alice-i-cecile"]
 prs = [5772]
 file_name = "5772_bevy_reflect_Add_Reflectable_trait.md"
 
 [[release_notes]]
-title = "Function reflection"
+title = "Function Reflection"
 authors = ["@MrGVSV", "@nixpulvis", "@hooded-shrimp"]
 contributors = []
 prs = [
@@ -223,35 +223,35 @@ prs = [
 file_name = "function_reflection.md"
 
 [[release_notes]]
-title = "`TypeInfo` improvements"
+title = "`TypeInfo` Improvements"
 authors = ["@MrGVSV"]
 contributors = []
 prs = [15475, 13321, 13320, 15235]
 file_name = "type_info_improvements.md"
 
 [[release_notes]]
-title = "bevy_reflect: Add `Type` type"
+title = "The `Type` Type"
 authors = ["@MrGVSV"]
 contributors = []
 prs = [14838]
 file_name = "14838_bevy_reflect_add_Type_type.md"
 
 [[release_notes]]
-title = "Dedicated `Reflect` implementation for `Set`-like things"
+title = "Reflection support for Sets"
 authors = ["@RobWalt"]
 contributors = ["@SkiFire13", "@MrGVSV"]
 prs = [13014]
 file_name = "13014_Dedicated_Reflect_implementation_for_Setlike_things.md"
 
 [[release_notes]]
-title = "Track source location in change detection"
+title = "Change Detection Source Location Tracking"
 authors = ["@aevyrie"]
 contributors = ["@BD103", "@MrGVSV"]
 prs = [14034]
 file_name = "14034_Track_source_location_in_change_detection.md"
 
 [[release_notes]]
-title = "Faster iteration when using a mix of sparse set and table components"
+title = "Optimized Iteration of Mixed Sparse Set and Table Components"
 authors = ["@re0312"]
 contributors = ["@alice-i-cecile", "@ItsDoot"]
 prs = [14049, 14673]
@@ -265,21 +265,14 @@ prs = [13669]
 file_name = "13669_Expose_winits_MonitorHandle.md"
 
 [[release_notes]]
-title = "Add custom cursors"
+title = "Custom Cursors"
 authors = ["@eero-lehtinen"]
 contributors = ["@alice-i-cecile", "@janhohenheim"]
 prs = [14284]
 file_name = "14284_Add_custom_cursors.md"
 
 [[release_notes]]
-title = "reflect: implement the unique reflect rfc"
-authors = ["@soqb", "@nicopap"]
-contributors = ["@alice-i-cecile", "@MrGVSV"]
-prs = [7207]
-file_name = "7207_reflect_implement_the_unique_reflect_rfc.md"
-
-[[release_notes]]
-title = "Uniform mesh sampling"
+title = "Uniform Mesh Sampling"
 authors = ["@mweatherley"]
 contributors = ["@alice-i-cecile"]
 prs = [14071]
@@ -300,7 +293,7 @@ prs = [14269]
 file_name = "14269_Basic_isometry_types.md"
 
 [[release_notes]]
-title = "Component Lifecycle Hook & Observer Trigger for replaced values"
+title = "Lifecycle Hook & Observer Trigger for Replaced Values"
 authors = ["@BigWingBeat"]
 contributors = []
 prs = [14212]
@@ -342,42 +335,42 @@ prs = [15207]
 file_name = "15207_Add_EntityRefExcept_and_EntityMutExcept_world_queries_in_p.md"
 
 [[release_notes]]
-title = "Add cached `run_system` API"
+title = "Cached One-shot Systems"
 authors = ["@benfrankel"]
 contributors = []
 prs = [14920]
 file_name = "14920_Add_cached_run_system_API.md"
 
 [[release_notes]]
-title = "Fallible system parameters"
+title = "Fallible System Parameters"
 authors = ["@MiniaczQ"]
 contributors = ["@alice-i-cecile"]
 prs = [15276, 15476, 15488]
 file_name = "15276_Reduce_runtime_panics_through_SystemParam_validation.md"
 
 [[release_notes]]
-title = "Passing data into systems by reference"
+title = "Passing Data Into Systems By Reference"
 authors = ["@ItsDoot"]
 contributors = ["@SkiFire13"]
 prs = [15184]
 file_name = "15184_Support_systems_that_take_references_as_input.md"
 
 [[release_notes]]
-title = "List components for QueryEntityError::QueryDoesNotMatch"
+title = "List Components in QueryEntityError::QueryDoesNotMatch"
 authors = ["@SpecificProtagonist"]
 contributors = ["@atornity", "@alice-i-cecile"]
 prs = [15435]
 file_name = "15435_List_components_for_QueryEntityErrorQueryDoesNotMatch.md"
 
 [[release_notes]]
-title = "Add `core` and `alloc` over `std` Lints"
+title = "`no_std` Progress"
 authors = ["@bushrat011899"]
 contributors = ["@mockersf"]
 prs = [15281]
 file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
 
 [[release_notes]]
-title = "feat(gltf): add name component to gltf mesh primitive"
+title = "`GltfMaterialName` Component"
 authors = ["@Soulghost"]
 contributors = ["@alice-i-cecile"]
 prs = [13912]
@@ -398,42 +391,42 @@ prs = [12095]
 file_name = "12095_Add_features_to_switch_NativeActivity_and_GameActivity_usa.md"
 
 [[release_notes]]
-title = "Reflection serialization improvements"
+title = "Reflection Serialization Improvements"
 authors = ["@MrGVSV", "@aecsocket"]
 contributors = ["@aecsocket", "@alice-i-cecile"]
 prs = [8611, 15482, 15548, 13888]
 file_name = "reflection_serialization.md"
 
 [[release_notes]]
-title = "Allow `World::entity` family of functions to take multiple entities and get multiple references back"
+title = "Simplified Multi-Entity Access"
 authors = ["@ItsDoot"]
 contributors = []
 prs = [15614]
 file_name = "15614_Allow_Worldentity_family_of_functions_to_take_multiple_ent.md"
 
 [[release_notes]]
-title = "More tools for traversing hierarchies"
+title = "Hierarchy Traversal Tools"
 authors = ["@alice-i-cecile"]
 contributors = ["@atornity", "@ItsDoot", "@villor"]
 prs = [15627]
 file_name = "15627_Add_more_tools_for_traversing_hierarchies.md"
 
 [[release_notes]]
-title = "Shader storage buffer asset"
+title = "Shader Storage Buffer Asset"
 authors = ["@tychedelia"]
 contributors = ["@IceSentry"]
 prs = [14663]
 file_name = "14663_shader_storage_buffer.md"
 
 [[release_notes]]
-title = "Accumulated mouse inputs"
+title = "Accumulated Mouse Inputs"
 authors = ["@Aztro-dev", "@alice-i-cecile"]
 contributors = []
 prs = [14044]
 file_name = "14044_Accumulated_mouse_inputs.md"
 
 [[release_notes]]
-title = "Stable interpolation and smooth following"
+title = "Stable Interpolation and Smooth Following"
 authors = ["@mweatherley"]
 contributors = []
 prs = [13741]

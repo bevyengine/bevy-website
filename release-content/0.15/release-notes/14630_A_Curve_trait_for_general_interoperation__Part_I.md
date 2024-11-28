@@ -4,13 +4,13 @@
 The new [`Curve<T>`] trait provides a shared interface for curves, describing how values of type `T` change as we vary a `f32` parameter `t` over some domain.
 
 What's changing, and the domain that it's changing *over* are both incredibly flexible.
-You might choose to set `T` to store anything from position, to damage to colors (like we did to create a powerful abstraction for [color gradients](https://docs.rs/bevy/0.15.0/bevy/color/struct.ColorCurve.html)).
+You might choose to set the generic parameter `T` to anything from position, to damage, to colors (like we did to create a powerful abstraction for [color gradients](https://docs.rs/bevy/0.15.0/bevy/color/struct.ColorCurve.html)).
 
-As we vary the progress parameter `t`, we could be representing time (like for animation),
-or something like distance as for curves that are mapped into 2D or 3D space,
-or a fraction of progress between a starting and ending value.
+The progress parameter `t` often represents time (like in animation), but it can also represent things like
+a fraction/percentage of progress between a starting and ending value or
+distance (such as curves that are mapped into 2D or 3D space),
 
-## Constructing Curves
+### Constructing Curves
 
 Each curve made be defined in a variety of ways. For example, a curve may be:
 
@@ -21,7 +21,7 @@ Each curve made be defined in a variety of ways. For example, a curve may be:
 
 Take a look at the constructors on the [`Curve<T>`] trait for more details.
 
-## Modifying curves
+### Modifying curves
 
 Procedurally modifying curves is a powerful tool for both creating curves with the desired behavior and dynamically altering them.
 
@@ -51,16 +51,16 @@ let rotation_curve = angle_curve.map(Rot2::radians);
 let fast_rotation_curve = rotation_curve.reparametrize_linear(Interval::UNIT).unwrap();
 ```
 
-A number of other adaptors are also available. For instance:
+A number of other adaptors are available. For instance:
 
 * a curve may be reversed, repeated, or ping-ponged
 * two curves may be chained together to form a longer curve
 * two curves may be zipped together to form a curve valued in tuples
 
-## Sampling from curves
+### Sampling from curves
 
 Sampling is the process of asking "what is the value of this curve at some particular value of `t`".
-Doing so is simple: just call [`Curve::sample`]!
+To do so, just call [`Curve::sample`]!
 
 Much like how vector graphics can be rasterized into pixels, curves can be rasterized into regular, discretized intervals.
 By resampling into an approximation derived from sample interpolation
