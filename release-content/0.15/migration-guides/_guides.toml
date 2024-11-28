@@ -1157,12 +1157,6 @@ areas = ["UI"]
 file_name = "14228_Clean_up_UiSystem_system_sets.md"
 
 [[guides]]
-title = "Clip to the UI node's content box"
-prs = [15442]
-areas = ["UI"]
-file_name = "15442_Clip_to_the_UI_nodes_content_box.md"
-
-[[guides]]
 title = "Migrate UI bundles to required components"
 prs = [15898, 15975]
 areas = ["UI"]
@@ -1182,7 +1176,7 @@ file_name = "16375_Only_use_physical_coords_internally_in_bevy_ui.md"
 
 [[guides]]
 title = "Overflow clip margin"
-prs = [15561]
+prs = [15442, 15561]
 areas = ["UI"]
 file_name = "15561_Overflow_clip_margin.md"
 
