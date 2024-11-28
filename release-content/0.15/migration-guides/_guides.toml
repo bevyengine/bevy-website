@@ -611,12 +611,6 @@ areas = ["Hierarchy", "Transform"]
 file_name = "14384_Only_propagate_transforms_entities_with_GlobalTransforms.md"
 
 [[guides]]
-title = "Optimize transform propagation"
-prs = [14373]
-areas = ["Hierarchy", "Transform"]
-file_name = "14373_Optimize_transform_propagation.md"
-
-[[guides]]
 title = "Gamepad improvements"
 prs = [16222]
 areas = ["Input"]
