@@ -233,8 +233,8 @@ areas = ["Diagnostics", "Rendering"]
 file_name = "13240_Dont_ignore_draw_errors.md"
 
 [[guides]]
-title = "15540 Make World::flush_commands private"
-prs = [15553]
+title = "Make World::flush_commands private"
+prs = [15540, 15553]
 areas = ["ECS"]
 file_name = "15553_15540_Make_Worldflush_commands_private.md"
 
