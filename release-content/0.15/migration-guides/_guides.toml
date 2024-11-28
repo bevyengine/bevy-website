@@ -887,12 +887,6 @@ areas = ["Rendering"]
 file_name = "15566_Fix_Mesh_allocator_bug_and_reduce_Mesh_data_copies_by_two.md"
 
 [[guides]]
-title = "Fix underflow panic in `InitTriInfo`"
-prs = [14893]
-areas = ["Rendering"]
-file_name = "14893_Fix_underflow_panic_in_InitTriInfo.md"
-
-[[guides]]
 title = "Improve API for scaling orthographic cameras"
 prs = [15969]
 areas = ["Rendering"]
