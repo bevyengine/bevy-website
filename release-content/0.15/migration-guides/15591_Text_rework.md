@@ -38,7 +38,7 @@ After:
 ```rust
 fn refresh_text(
     query: Query<Entity, With<TimeText>>,
-    mut writer: UiTextWriter,
+    mut writer: TextUiWriter,
     time: Res<Time>
 ) {
     let entity = query.single();

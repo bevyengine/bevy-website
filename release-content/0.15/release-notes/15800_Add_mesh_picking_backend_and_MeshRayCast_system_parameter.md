@@ -22,52 +22,31 @@ In Bevy 0.15, we're shipping three first-party picking backends for UI, sprites,
 
 - UI: both the legacy [`Interaction`] and new [`PickingInteraction`] components exist [for now](https://github.com/bevyengine/bevy/issues/15550), with subtle behavioral differences.
 - Sprites: picking always uses the full rectangle, and [alpha transparency is not taken into account](https://github.com/bevyengine/bevy/issues/14929).
-- Mesh: this is a naive raycast against the full mesh. If you run into performance problems here, you should use simplified meshes and an acceleration data structure like a BVH to speed this up. As a result, this functionality is currently disabled by default.
+- Mesh: this is a naive raycast against the full mesh. If you run into performance problems here, you should use simplified meshes and an acceleration data structure like a [BVH](https://en.wikipedia.org/wiki/Bounding_volume_hierarchy) to speed this up. As a result, this functionality is currently disabled by default. It can be enabled by adding the [`MeshPickingPlugin`].
 
 We expect both [`bevy_rapier`] and [`avian`] (the two most popular ecosystem physics crates for Bevy) to add their own accelerated collider picking backends to work with the newly upstreamed API. Unless you're debugging, building an editor or really care about the exact triangles of raw meshes, you should use one of those crates for efficient mesh picking.
 
 ### Usage
 
-If you haven't used `bevy_picking`'s predecessor, there are two important and straightforward ways to get started with the API.
+There are two good ways to get started with the API:
 
-First, you might want to quickly update the state of your objects (be they UI or game objects) based on what is being done to them, typically highlighting them or changing their color. For that, simply match against the [`PickingInteraction`] component.
+First, you might want to quickly update the state of your objects (be they UI or game objects) based on what is being done to them, typically highlighting them or changing their color. For that, simply query for changes to the [`PickingInteraction`] component, which will change based on the current picking state.
 
-Secondly, you might want to respond dynamically to various pointer-powered events. For that, we recommend using observers (which replaced the existing `bevy_event_listener` solution during the upstreaming process).
-Here, we're spawning a simple text node and responding to pointer events.
+Second, you might want to respond dynamically to various pointer-powered events. For that, we recommend using observers. Here, we're spawning a simple text node and responding to pointer events:
 
 ```rust
-use bevy::prelude::*;
+// UI text that prints a message when clicked:
+commands
+    .spawn(Text::new("Click Me!"))
+    .observe(on_click_print_hello);
 
-fn main() {
-    App::new()
-        .add_plugins((DefaultPlugins, MeshPickingPlugin))
-        .add_systems(Startup, setup_scene)
-        .run();
-}
-
-fn setup_scene(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    // UI text that prints a message when clicked:
-    commands
-        .spawn(Text::new("Click Me!"))
-        .observe(on_click_print_hello);
-
-    // A cube that spins when dragged:
-    commands
-        .spawn((
-            Mesh3d(meshes.add(Cuboid::default())),
-            MeshMaterial3d(materials.add(Color::WHITE)),
-        ))
-        // Picking observers work with *any* entity that has a picking backend running.
-        // Try adding this `on_drag_spin` observer to the UI text! :)
-        .observe(on_drag_spin);
-
-    // Light and camera
-    commands.spawn((PointLight::default(), Transform::from_xyz(4.0, 8.0, 4.0)));
-    commands.spawn((Camera3d::default(), Transform::from_xyz(0.0, 2.0, 9.0)));
+// A cube that spins when dragged:
+commands
+    .spawn((
+        Mesh3d(meshes.add(Cuboid::default())),
+        MeshMaterial3d(materials.add(Color::WHITE)),
+    ))
+    .observe(on_drag_spin);
 }
 
 fn on_click_print_hello(click: Trigger<Pointer<Click>>) {
@@ -94,3 +73,4 @@ If you want to override how an entity interacts with picking, add the [`PickingB
 [`bevy_rapier`]: https://crates.io/crates/bevy_rapier3d
 [`avian`]: https://crates.io/crates/avian3d
 [`PickingBehavior`]: https://docs.rs/bevy/0.15.0/bevy/picking/struct.PickingBehavior.html
+[`MeshPickingPlugin`]: https://docs.rs/bevy/0.15.0/bevy/picking/mesh_picking/struct.MeshPickingPlugin.html

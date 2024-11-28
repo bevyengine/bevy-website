@@ -19,33 +19,28 @@ pub fn get_merged_prs(
         .context("Failed to get commits")?;
     println!("Found {} commits", commits.len());
 
-    println!("Getting list of all merged PRs from {from} to {to} with label {label:?}");
+    println!("Getting list of all merged PRs with label {label:?}");
 
     let base_commit = client.get_commit(from, BevyRepo::Bevy)?;
     let base_commit_date = &base_commit.commit.committer.date[0..10];
 
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
-    let prs = client.get_issues_and_prs(
-        BevyRepo::Bevy,
-        IssueState::Merged,
-        Some(base_commit_date),
-        label,
-    )?;
+    // We can't set a `since` date, as the PRs requested are filtered by date opened, not date merged
+    let prs = client.get_issues_and_prs(BevyRepo::Bevy, IssueState::Merged, None, label)?;
     println!(
-        "Found {} merged PRs and {} commits since {} (the base commit date)",
-        prs.len(),
+        "Found {} commits since {} (the base commit date)",
         commits.len(),
         base_commit_date
     );
 
     let mut out = vec![];
     for commit in &commits {
-        let Some(title) = get_pr_title_from_commit(commit) else {
+        let Some((title, number)) = get_title_parts_from_commit(commit) else {
             continue;
         };
 
         // Get the PR associated with the commit based on it's title
-        let Some(pr) = prs.iter().find(|pr| pr.title.contains(&title)) else {
+        let Some(pr) = prs.iter().find(|pr| pr.number == number) else {
             // If there's no label, then not finding a PR is an issue because this means we want all PRs
             // If there's a label then it just means the commit is not a PR with the label
             if label.is_none() {
@@ -62,22 +57,25 @@ pub fn get_merged_prs(
     Ok(out)
 }
 
-fn get_pr_title_from_commit(commit: &GithubCommitResponse) -> Option<String> {
+/// Parses the commit message and returns the text without the PR number and the PR
+/// number.
+fn get_title_parts_from_commit(commit: &GithubCommitResponse) -> Option<(String, u64)> {
     let mut message_lines = commit.commit.message.lines();
 
     // Title is always the first line of a commit message
     let title = message_lines.next().expect("Commit message empty");
 
-    // Get the pr number at the end of the title
-    let re = Regex::new(r"\(#([\d]*)\)").unwrap();
+    // Capture the title leading up to the PR number and the PR number
+    let re = Regex::new(r"(.+?)\(#([\d]*)\)$").unwrap();
     let Some(cap) = re.captures_iter(title).last() else {
         // This means there wasn't a PR associated with the commit
         return None;
     };
-    // remove PR number from title
-    let title = title.replace(&cap[0].to_string(), "");
-    let title = title.trim_end();
-    Some(title.to_string())
+
+    let title = cap[1].trim_end().to_string();
+    let number = cap[2].parse().unwrap();
+
+    Some((title, number))
 }
 
 /// Returns all the area label for a PR as a list separated with ' + '

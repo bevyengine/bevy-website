@@ -17,12 +17,21 @@ To update an existing Bevy App or Plugin to **Bevy 0.15**, check out our [0.14 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- TODO
+- **Required Components**: A rethink of how spawning entities works that significantly improves the Bevy user experience
+- **Entity Picking / Selection**: A modular system for selecting entities across contexts
+- **Animation Improvements**: generalized entity animation, animation masks, additive blending, and animation events
+- **Curves**: a new `Curve` trait, cyclic splines, common easing functions, color gradient curves
+- **Reflection Improvements**: Function reflection, unique reflect, remote type reflection
+- **Bevy Remote Protocol (BRP)**: A new protocol that allows external clients (such as editors) to interact with running Bevy games
+- **Visibility Bitmask Ambient Occlusion (VBAO)**: An improved GTAO algorithm that improves ambient occlusion quality
+- **Chromatic Aberration**: A new post processing effect that simulates lenses that fail to focus light to a single point
+- **Volumetric Fog Improvements**: "Fog volumes" that define where volumetric fog is rendered (and what form it takes), along with Point Lights and Spotlight compatibility
+- **Order Independent Transparency**: A new opt-in transparency algorithm that improves the stability / quality of transparent objects as their distance from the camera changes
+- **Improved Text Rendering**: We've switched to Cosmic Text for our text rendering, which significantly improves our ability to render text, especially for non-Latin-based languages that require font shaping and bidirectional text
+- **Gamepads as Entities**: Gamepads are now represented as entities, making them much easier to interact with
+- **UI Box Shadows**: Bevy UI nodes can now render configurable box shadows
 
-As is now tradition, Bevy 0.15 was prepared using a **release candidate** process to help ensure that you can upgrade right away with peace of mind.
-We've worked closely with both plugin authors and ordinary users to catch critical bugs, round the rough corners off our new features, and refine the migration guide.
-As we prepared fixes, we've [shipped new release candidates on crates.io](https://crates.io/crates/bevy/versions?sort=date), letting core ecosystem crates update and listening closely for show-stopping problems.
-Thank you so much to [everyone who helped out](https://discord.com/channels/691052431525675048/1295069829740499015): these efforts are a vital step towards making Bevy something that teams large and small can trust to work reliably.
+Bevy 0.15 was prepared using our new **release candidate** process to help ensure that you can upgrade right away with peace of mind. We worked closely with both plugin authors and ordinary users to catch critical bugs, polish new features, and refine the migration guide. For each release candidate, we prepared fixes, [shipped a new release candidate on crates.io](https://crates.io/crates/bevy/versions?sort=date), let core ecosystem crates update, and listened closely for show-stopping problems. A huge thanks to [everyone who helped out](https://discord.com/channels/691052431525675048/1295069829740499015)! These efforts are a vital step towards making Bevy something that teams large and small can trust to work reliably.
 
 <!-- more -->
 

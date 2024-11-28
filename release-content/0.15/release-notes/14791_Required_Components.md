@@ -110,7 +110,7 @@ This can be overridden by passing in a function that returns the component:
 
 ```rust
 #[derive(Component)]
-#[require(Team(blue_team)]
+#[require(Team(blue_team))]
 struct Player {
     name: String,
 }

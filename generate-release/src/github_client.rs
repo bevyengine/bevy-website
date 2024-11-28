@@ -198,19 +198,6 @@ impl GithubClient {
 
             prs.append(&mut prs_in_page);
             page += 1;
-            if let Some(pr) = prs.last() {
-                if let Some(datetime_utc) = datetime_utc {
-                    if let Some(closed_at) = pr.closed_at {
-                        if closed_at < datetime_utc {
-                            println!(
-                                "\x1b[93mSkipping PR closed before the target datetime {}\x1b[0m",
-                                closed_at
-                            );
-                            break;
-                        }
-                    }
-                }
-            }
         }
 
         // Make sure the older PRs from the last page aren't returned

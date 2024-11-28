@@ -12,7 +12,7 @@ the debugging issue while still maintaining the benefits of `TypeId`: [`Type`].
 [`Type`] is a simple wrapper around `TypeId` that also stores the [`TypePathTable`].
 Like `TypeId` it's `Copy`, `Eq`, and `Hash`, delegating to the underlying `TypeId` for the latter
 two. But unlike `TypeId`, its `Debug` implementation will print the [type path] of the type it represents.
-This debuggability comes a cost of an extra 32 bytes, but may often be well worth it,
+This debuggability comes at the cost of an extra 32 bytes, but may often be well worth it,
 especially if that data would have been stored elsewhere anyway.
 
 It can be constructed from any type that implements [`TypePath`]:

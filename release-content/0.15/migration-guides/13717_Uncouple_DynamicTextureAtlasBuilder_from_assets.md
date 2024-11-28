@@ -1,0 +1,2 @@
+- Replace the `glyph_id` and `subpixel_offset` of a few text atlas APIs by a single `place_glyph: PlacedGlyph` parameter trivially combining the two.
+- `DynamicTextureAtlasBuilder::add_texture` now takes a `&mut Image`, rather than a `Handle<Image>`. To access this, fetch the underlying image using `Assets<Image>::get_mut`.

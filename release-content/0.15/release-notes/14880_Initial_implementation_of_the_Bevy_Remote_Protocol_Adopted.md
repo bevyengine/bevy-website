@@ -2,38 +2,36 @@ The Bevy Remote Protocol allows the ECS of a running
 Bevy application to be interacted with remotely. This can be used, for example,
 to inspect and edit entities and their components at runtime. We anticipate 
 that this will be used to create things like inspectors which monitor the
-content of the ECS from a separate process; the Bevy editor *may* also use
-such an architecture eventually, although this is still highly experimental.
+content of the ECS from a separate process. We're planning on using BRP in the
+upcoming Bevy Editor to communicate with remote Bevy apps.
 
-For now, you can use BRP to:
-- get the serialized values of a set of components from an entity;
-- perform a query for all entities matching a set of components and retrieving
-  their associated values;
-- create a new entity with a given set of component values;
-- despawn an entity;
-- insert a set of components into an entity;
-- remove a set of components from an entity;
-- reparent one or more entities;
-- list the components registered in the ECS or present on an entity.
+Currently, you can use BRP to:
 
-The functionality itself is split up between plugins; the `RemotePlugin` handles 
-the processing of remote requests and is separate from the transport.  An HTTP 
-transport is provided by default by the `RemoteHttpPlugin`.
+- Get the serialized values of a set of components from an entity
+- Perform a query for all entities matching a set of components and retrieve the matching values
+- Create a new entity with a given set of component values
+- For a given entity, insert or remove a set of components
+- Despawn an entity
+- Reparent one or more entities
+- List the components registered in the ECS or present on an entity
+
+Here is the minimal app setup required to use BRP over HTTP:
 
 ```rust
-// Minimal app setup required to use BRP over HTTP
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        // process remote requests:
-        .add_plugins(RemotePlugin::default())
-        // accept remote requests over HTTP:
-        .add_plugins(RemoteHttpPlugin::default())
+        .add_plugins((
+            DefaultPlugins,
+            // The "core" plugin, which handles remote requests provided by transports
+            RemotePlugin::default(),
+            // Provides remote request transport via HTTP
+            RemoteHttpPlugin::default(),
+        ))
         .run();
 }
 ```
 
-Sample request:
+Here is a sample request:
 ```json
 {
     "method": "bevy/get",
@@ -47,7 +45,7 @@ Sample request:
 }
 ```
 
-Sample response:
+And here is a sample response:
 ```json
 {
     "jsonrpc": "2.0",
