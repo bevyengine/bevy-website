@@ -1169,12 +1169,6 @@ areas = ["UI"]
 file_name = "15442_Clip_to_the_UI_nodes_content_box.md"
 
 [[guides]]
-title = "Fix error in `bevy_ui` when building without `bevy_text`"
-prs = [14430]
-areas = ["UI"]
-file_name = "14430_Fix_error_in_bevy_ui_when_building_without_bevy_text.md"
-
-[[guides]]
 title = "Migrate UI bundles to required components"
 prs = [15898, 15975]
 areas = ["UI"]
