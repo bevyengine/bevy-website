@@ -1,1 +1,1 @@
-<!-- TODO -->
+`RecursiveDependencyLoadState::Failed` now stores error information about the first encountered erorr, rather than being a unit struct.
