@@ -2,8 +2,6 @@
 <!-- https://github.com/bevyengine/bevy/pull/12770 -->
 
 Gamepads are now represented as entities, which makes them easier to work with!
-
-
 The [`Gamepad`] component provides button and axis state, as well as metadata such as the vendor and product ID.
 The [`GamepadSettings`] component provides configurable settings for a given [`Gamepad`], such as deadzones and sensitivity. The name of the gamepad is now stored in Bevy's standard [`Name`] component.
 
