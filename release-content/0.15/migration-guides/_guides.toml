@@ -125,12 +125,6 @@ areas = ["Assets"]
 file_name = "13745_Improve_error_handling_for_AssetServeradd_async.md"
 
 [[guides]]
-title = "Optimize common usages of `AssetReader`"
-prs = [14082]
-areas = ["Assets"]
-file_name = "14082_Optimize_common_usages_of_AssetReader.md"
-
-[[guides]]
 title = "Remove incorrect equality comparisons for asset load error types"
 prs = [15890]
 areas = ["Assets"]
