@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.15"
-date = 2024-12-31 # TODO, fix date
+date = 2024-11-29
 draft = true
 [extra]
 image = "cover.jpg" # TODO, add cover image
