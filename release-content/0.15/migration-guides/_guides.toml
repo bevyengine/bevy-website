@@ -449,12 +449,6 @@ areas = ["ECS"]
 file_name = "15263_change_return_type_of_Worldresource_ref_to_Ref.md"
 
 [[guides]]
-title = "Merge `BuildWorldChildren` and `BuildChildren` traits."
-prs = [14052]
-areas = ["ECS", "Hierarchy"]
-file_name = "14052_Merge_BuildWorldChildren_and_BuildChildren_traits.md"
-
-[[guides]]
 title = "Minimal Bubbling Observers"
 prs = [13991]
 areas = ["ECS", "Hierarchy", "Picking"]
