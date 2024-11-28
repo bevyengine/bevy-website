@@ -41,12 +41,6 @@ areas = ["Animation"]
 file_name = "14546_Make_AnimationPlayerstart_and_play_work_accordingly_to_doc.md"
 
 [[guides]]
-title = "Remove `TransformCurve`"
-prs = [15598]
-areas = ["Animation"]
-file_name = "15598_Remove_TransformCurve.md"
-
-[[guides]]
 title = "Replace `Handle<AnimationGraph>` component with a wrapper"
 prs = [15742]
 areas = ["Animation"]
