@@ -29,7 +29,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Order Independent Transparency**: A new opt-in transparency algorithm that improves the stability / quality of transparent objects as their distance from the camera changes.
 - **Improved Text Rendering**: We've switched to Cosmic Text for our text rendering, which significantly improves our ability to render text, especially for non-Latin-based languages that require font shaping and bidirectional text.
 - **Gamepads as Entities**: Gamepads are now represented as entities, making them much easier to interact with.
-- **UI Box Shadows**: Bevy UI nodes can now render configurable box shadows
+- **UI Box Shadows**: Bevy UI nodes can now render configurable box shadows.
 
 Bevy 0.15 was prepared using our new **release candidate** process to help ensure that you can upgrade right away with peace of mind. We worked closely with both plugin authors and ordinary users to catch critical bugs, polish new features, and refine the migration guide. For each release candidate, we prepared fixes, [shipped a new release candidate on crates.io](https://crates.io/crates/bevy/versions?sort=date), let core ecosystem crates update, and listened closely for show-stopping problems. A huge thanks to [everyone who helped out](https://discord.com/channels/691052431525675048/1295069829740499015)! These efforts are a vital step towards making Bevy something that teams large and small can trust to work reliably.
 
