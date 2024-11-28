@@ -41,12 +41,6 @@ areas = ["Animation"]
 file_name = "14546_Make_AnimationPlayerstart_and_play_work_accordingly_to_doc.md"
 
 [[guides]]
-title = "Remove `TransformCurve`"
-prs = [15598]
-areas = ["Animation"]
-file_name = "15598_Remove_TransformCurve.md"
-
-[[guides]]
 title = "Replace `Handle<AnimationGraph>` component with a wrapper"
 prs = [15742]
 areas = ["Animation"]
@@ -123,12 +117,6 @@ title = "Improve error handling for `AssetServer::add_async`"
 prs = [13745]
 areas = ["Assets"]
 file_name = "13745_Improve_error_handling_for_AssetServeradd_async.md"
-
-[[guides]]
-title = "Optimize common usages of `AssetReader`"
-prs = [14082]
-areas = ["Assets"]
-file_name = "14082_Optimize_common_usages_of_AssetReader.md"
 
 [[guides]]
 title = "Remove incorrect equality comparisons for asset load error types"
@@ -239,8 +227,8 @@ areas = ["Diagnostics", "Rendering"]
 file_name = "13240_Dont_ignore_draw_errors.md"
 
 [[guides]]
-title = "15540 Make World::flush_commands private"
-prs = [15553]
+title = "Make World::flush_commands private"
+prs = [15540, 15553]
 areas = ["ECS"]
 file_name = "15553_15540_Make_Worldflush_commands_private.md"
 
@@ -449,12 +437,6 @@ areas = ["ECS"]
 file_name = "15263_change_return_type_of_Worldresource_ref_to_Ref.md"
 
 [[guides]]
-title = "Merge `BuildWorldChildren` and `BuildChildren` traits."
-prs = [14052]
-areas = ["ECS", "Hierarchy"]
-file_name = "14052_Merge_BuildWorldChildren_and_BuildChildren_traits.md"
-
-[[guides]]
 title = "Minimal Bubbling Observers"
 prs = [13991]
 areas = ["ECS", "Hierarchy", "Picking"]
@@ -615,12 +597,6 @@ title = "Only propagate transforms entities with GlobalTransforms."
 prs = [14384]
 areas = ["Hierarchy", "Transform"]
 file_name = "14384_Only_propagate_transforms_entities_with_GlobalTransforms.md"
-
-[[guides]]
-title = "Optimize transform propagation"
-prs = [14373]
-areas = ["Hierarchy", "Transform"]
-file_name = "14373_Optimize_transform_propagation.md"
 
 [[guides]]
 title = "Gamepad improvements"
@@ -905,12 +881,6 @@ areas = ["Rendering"]
 file_name = "15566_Fix_Mesh_allocator_bug_and_reduce_Mesh_data_copies_by_two.md"
 
 [[guides]]
-title = "Fix underflow panic in `InitTriInfo`"
-prs = [14893]
-areas = ["Rendering"]
-file_name = "14893_Fix_underflow_panic_in_InitTriInfo.md"
-
-[[guides]]
 title = "Improve API for scaling orthographic cameras"
 prs = [15969]
 areas = ["Rendering"]
@@ -1181,18 +1151,6 @@ areas = ["UI"]
 file_name = "14228_Clean_up_UiSystem_system_sets.md"
 
 [[guides]]
-title = "Clip to the UI node's content box"
-prs = [15442]
-areas = ["UI"]
-file_name = "15442_Clip_to_the_UI_nodes_content_box.md"
-
-[[guides]]
-title = "Fix error in `bevy_ui` when building without `bevy_text`"
-prs = [14430]
-areas = ["UI"]
-file_name = "14430_Fix_error_in_bevy_ui_when_building_without_bevy_text.md"
-
-[[guides]]
 title = "Migrate UI bundles to required components"
 prs = [15898, 15975]
 areas = ["UI"]
@@ -1212,7 +1170,7 @@ file_name = "16375_Only_use_physical_coords_internally_in_bevy_ui.md"
 
 [[guides]]
 title = "Overflow clip margin"
-prs = [15561]
+prs = [15442, 15561]
 areas = ["UI"]
 file_name = "15561_Overflow_clip_margin.md"
 

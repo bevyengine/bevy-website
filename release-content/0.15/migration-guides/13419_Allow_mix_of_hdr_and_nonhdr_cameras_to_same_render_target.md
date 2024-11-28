@@ -1,2 +1,1 @@
-- 
-  - Change `CameraOutputMode` to use `ClearColorConfig` instead of `LoadOp`.
+Change `CameraOutputMode` to use `ClearColorConfig` instead of `LoadOp`.
