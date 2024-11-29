@@ -1,4 +1,4 @@
-`bevy_reflect`] is powered by many different traits working together
+[`bevy_reflect`] is powered by many different traits working together
 to provide the full reflection API. These include traits like [`Reflect`], but also other traits
 like [`TypePath`], [`Typed`], and [`GetTypeRegistration`].
 
