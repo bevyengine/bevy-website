@@ -300,14 +300,14 @@ prs = [14212]
 file_name = "14212_Component_Lifecycle_Hook__Observer_Trigger_for_replaced_va.md"
 
 [[release_notes]]
-title = "Pack multiple vertex and index arrays together into growable buffers."
+title = "Pack multiple vertex and index arrays together into growable buffers"
 authors = ["@pcwalton"]
 contributors = ["@atlv24"]
 prs = [14257, 15566, 15569]
 file_name = "14257_Pack_multiple_vertex_and_index_arrays_together_into_growab.md"
 
 [[release_notes]]
-title = "Rewrite screenshots."
+title = "Rewrite screenshots"
 authors = ["@tychedelia"]
 contributors = ["@kristoff3r"]
 prs = [14833]
