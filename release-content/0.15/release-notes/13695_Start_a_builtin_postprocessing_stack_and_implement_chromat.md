@@ -5,7 +5,7 @@ We've added [chromatic aberration](https://en.wikipedia.org/wiki/Chromatic_aberr
 
 ![chromatic aberration](chromatic_aberration.png)
 
-To use it, add the [`ChromaticAberration`](https://dev-docs.bevyengine.org/bevy/core_pipeline/post_process/struct.ChromaticAberration.html) component to your camera:
+To use it, add the [`ChromaticAberration`](https://docs.rs/bevy/0.15/bevy/core_pipeline/post_process/struct.ChromaticAberration.html) component to your camera:
 
 ```rust
 commands.spawn((Camera3d::default(), ChromaticAberration));

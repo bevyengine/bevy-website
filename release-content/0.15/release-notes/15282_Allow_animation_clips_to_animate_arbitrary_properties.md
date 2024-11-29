@@ -41,7 +41,7 @@ Bevy's internal animation handling for things like GLTF animations uses the same
 If you need more complicated logic than "animate a specific component field", you can implement [`AnimatableProperty`], which can be used in
 [`AnimatableCurve`] in place of [`animated_field!`].
 
-[`AnimationClip`]: https://dev-docs.bevyengine.org/bevy/animation/struct.AnimationClip.html
-[`AnimatableProperty`]: https://dev-docs.bevyengine.org/bevy/animation/animation_curves/trait.AnimatableProperty.html
-[`AnimatableCurve`]: https://dev-docs.bevyengine.org/bevy/animation/animation_curves/struct.AnimatableCurve.html
-[`animated_field!`]: https://dev-docs.bevyengine.org/bevy/animation/macro.animated_field.html
+[`AnimationClip`]: https://docs.rs/bevy/0.15/bevy/animation/struct.AnimationClip.html
+[`AnimatableProperty`]: https://docs.rs/bevy/0.15/bevy/animation/animation_curves/trait.AnimatableProperty.html
+[`AnimatableCurve`]: https://docs.rs/bevy/0.15/bevy/animation/animation_curves/struct.AnimatableCurve.html
+[`animated_field!`]: https://docs.rs/bevy/0.15/bevy/animation/macro.animated_field.html

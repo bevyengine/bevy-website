@@ -30,5 +30,5 @@ This enables things like "triggering a dust effect each time a foot touches the 
 
 <video controls><source src="animated_fox.mp4" type="video/mp4"/></video>
 
-[`AnimationClip`]: https://dev-docs.bevyengine.org/bevy/animation/struct.AnimationClip.html
-[`Event`]: https://dev-docs.bevyengine.org/bevy/ecs/event/trait.Event.html
+[`AnimationClip`]: https://docs.rs/bevy/0.15/bevy/animation/struct.AnimationClip.html
+[`Event`]: https://docs.rs/bevy/0.15/bevy/ecs/event/trait.Event.html
