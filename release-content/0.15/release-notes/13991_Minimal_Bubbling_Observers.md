@@ -27,4 +27,5 @@ Let us know what you cook up: user feedback is indispensable for building a bett
 [`Pointer<E>`]: https://docs.rs/bevy/0.15.0/bevy/picking/events/struct.Pointer.html
 [`Trigger::propagate(false)`]: https://docs.rs/bevy/0.15.0/bevy/ecs/prelude/struct.Trigger.html#method.propagate
 [`Parent`]: https://docs.rs/bevy/0.15.0/bevy/hierarchy/struct.Parent.html
+[`Traversal`]: https://docs.rs/bevy/0.15.0/bevy/ecs/traversal/trait.Traversal.html
 [proto-relations]: https://github.com/bevyengine/bevy/issues/3742
