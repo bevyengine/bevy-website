@@ -8,7 +8,7 @@ image_subtitle = "A snake statue in volumetric fog illuminated by volumetric lig
 image_subtitle_link = "https://sketchfab.com/3d-models/snake-statue-794b77a3e4654a669cf259d20dc89ec7"
 +++
 
-Thanks to 195 contributors, 1203 pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.15** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **195** contributors, **1203** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.15** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
