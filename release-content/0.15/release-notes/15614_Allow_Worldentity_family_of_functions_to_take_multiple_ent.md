@@ -61,5 +61,5 @@ instead accept anything that implements a newly introduced trait:
 [`WorldEntityFetch`][WorldEntityFetch]. Check out the trait and
 [`World::entity`][World::entity] to learn more about how it was accomplished.
 
-[WorldEntityFetch]: https://docs.rs/bevy/0.15.0-rc.3/bevy/ecs/world/trait.WorldEntityFetch.html
-[World::entity]: https://docs.rs/bevy/0.15.0-rc.3/bevy/ecs/prelude/struct.World.html#method.entity
+[WorldEntityFetch]: https://docs.rs/bevy/0.15/bevy/ecs/world/trait.WorldEntityFetch.html
+[World::entity]: https://docs.rs/bevy/0.15/bevy/ecs/prelude/struct.World.html#method.entity

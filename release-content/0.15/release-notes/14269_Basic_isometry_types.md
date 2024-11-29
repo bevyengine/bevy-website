@@ -41,8 +41,8 @@ providing a convenient way to use these APIs when you already have access to ent
 
 Note that unlike [`Transform`], these isometry types are *not* components. They are purely convenience types for math.
 
-[`Isometry2d`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/math/struct.Isometry2d.html
-[`Isometry3d`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/math/struct.Isometry3d.html
-[`Transform`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/transform/components/struct.Transform.html
-[`GlobalTransform`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/transform/components/struct.GlobalTransform.html
-[`to_isometry`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/transform/components/struct.Transform.html#method.to_isometry
+[`Isometry2d`]: https://docs.rs/bevy/0.15/bevy/math/struct.Isometry2d.html
+[`Isometry3d`]: https://docs.rs/bevy/0.15/bevy/math/struct.Isometry3d.html
+[`Transform`]: https://docs.rs/bevy/0.15/bevy/transform/components/struct.Transform.html
+[`GlobalTransform`]: https://docs.rs/bevy/0.15/bevy/transform/components/struct.GlobalTransform.html
+[`to_isometry`]: https://docs.rs/bevy/0.15/bevy/transform/components/struct.Transform.html#method.to_isometry
