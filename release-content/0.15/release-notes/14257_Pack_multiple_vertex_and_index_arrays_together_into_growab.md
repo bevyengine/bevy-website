@@ -16,4 +16,4 @@ Render system time improves from 6.57 ms to 3.54 ms (1.86x speedup)
 Opaque pass time improves from 4.64 ms to 2.33 ms (1.99x speedup)
 
 [Bistro]: https://github.com/DGriffin91/bevy_bistro_scene
-[`MeshAllocatorSettings`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/render/mesh/allocator/struct.MeshAllocatorSettings.html
+[`MeshAllocatorSettings`]: https://docs.rs/bevy/0.15/bevy/render/mesh/allocator/struct.MeshAllocatorSettings.html

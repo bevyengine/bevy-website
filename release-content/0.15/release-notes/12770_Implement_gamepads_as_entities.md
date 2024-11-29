@@ -65,6 +65,6 @@ fn gamepad_system(gamepads: Query<&Gamepad>) {
 
 Much better!
 
-[`Gamepad`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/input/gamepad/struct.Gamepad.html
-[`GamepadSettings`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/input/gamepad/struct.GamepadSettings.html
-[`Name`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/core/struct.Name.html
+[`Gamepad`]: https://docs.rs/bevy/0.15/bevy/input/gamepad/struct.Gamepad.html
+[`GamepadSettings`]: https://docs.rs/bevy/0.15/bevy/input/gamepad/struct.GamepadSettings.html
+[`Name`]: https://docs.rs/bevy/0.15/bevy/core/struct.Name.html

@@ -2,7 +2,7 @@ Volumetric fog was [introduced in Bevy 0.14](https://bevyengine.org/news/bevy-0-
 
 ![volumetric fog](volumetric_fog.jpg)
 
-To add volumetric fog to your scene, add [VolumetricFog](https://docs.rs/bevy/0.15.0-rc.1/bevy/pbr/struct.VolumetricFog.html) to the camera, and add [VolumetricLight](https://docs.rs/bevy/0.15.0-rc.1/bevy/pbr/struct.VolumetricLight.html) to directional light, point light, or spot light that you wish to be volumetric.
+To add volumetric fog to your scene, add [VolumetricFog](https://docs.rs/bevy/0.15/bevy/pbr/struct.VolumetricFog.html) to the camera, and add [VolumetricLight](https://docs.rs/bevy/0.15/bevy/pbr/struct.VolumetricLight.html) to directional light, point light, or spot light that you wish to be volumetric.
 
 ```rust
 // Add VolumetricFog to the camera.
