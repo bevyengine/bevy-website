@@ -5,7 +5,7 @@ There are several major changes to consider:
 - each text section is now stored as a distinct entity within the standard hierarchy, rather than as a `Vec<TextSection>` on the `Text` component. Children of `Text`/`Text2d` entities with `TextSpan` components will act as additional text sections.
 - like other aspects of Bevy's API, required components have replaced bundles
 
-## `TextBundle` and text styling
+#### `TextBundle` and text styling
 
 `TextBundle` has been removed.
 Add the `Text` component to set the string displayed.
@@ -18,7 +18,7 @@ Like elsewhere in Bevy, there is no style inheritance. Consider [writing your ow
 
 To control the layout of a `Text` section, modify the properties of its `Node`.
 
-## Accessing text spans by index
+#### Accessing text spans by index
 
 Previously, text sections were elements of a vector stored within `Text`.
 Now, they are stored as distinct entities under the same `Parent`.
@@ -48,7 +48,7 @@ fn refresh_text(
 
 2D equivalents (`Text2dReader` and `Text2dWriter`) also exist.
 
-## Internal layout information
+#### Internal layout information
 
 `TextBundle` additional fields have been moved into the `TextNodeFlags` component,
 while `Text2dBundle`'s additional fields turned into the `TextBounds` and `Anchor` components.

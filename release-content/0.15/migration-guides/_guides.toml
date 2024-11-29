@@ -5,6 +5,12 @@ areas = ["Accessibility", "UI"]
 file_name = "14091_Bump_accesskit_to_016.md"
 
 [[guides]]
+title = "Remove `accesskit` re-export from `bevy_a11y`"
+prs = [16257]
+areas = ["Accessibility"]
+file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
+
+[[guides]]
 title = "Deprecate `is_playing_animation`"
 prs = [14387]
 areas = ["Animation"]
@@ -135,6 +141,18 @@ title = "bevy_asset: Improve `NestedLoader` API"
 prs = [15509]
 areas = ["Assets"]
 file_name = "15509_bevy_asset_Improve_NestedLoader_API.md"
+
+[[guides]]
+title = "Deprecate `LoadAndSave` Asset Processor"
+prs = [15090]
+areas = ["Assets"]
+file_name = "15090_Deprecate_LoadAndSave_Asset_Processor.md"
+
+[[guides]]
+title = "`AssetReader::read` now returns an opaque type"
+prs = [14082]
+areas = ["Assets"]
+file_name = "14082_AssetReader_read_now_returns_an_opaque_type.md"
 
 [[guides]]
 title = "Make gLTF node children Handle instead of objects"
@@ -1269,21 +1287,3 @@ title = "Add Display implementation to DebugName."
 prs = [13760]
 areas = []
 file_name = "13760_Add_Display_implementation_to_DebugName.md"
-
-[[guides]]
-title = "Remove `accesskit` re-export from `bevy_a11y`"
-prs = [16257]
-areas = ["Accessibility"]
-file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
-
-[[guides]]
-title = "Deprecate `LoadAndSave` Asset Processor"
-prs = [15090]
-areas = ["Asset"]
-file_name = "15090_Deprecate_LoadAndSave_Asset_Processor.md"
-
-[[guides]]
-title = "`AssetReader::read` now returns an opaque type"
-prs = [14082]
-areas = ["Asset"]
-file_name = "14082_AssetReader_read_now_returns_an_opaque_type.md"

@@ -49,3 +49,4 @@ fn deserialize(&mut self, r: &TypeRegistration, d: &mut dyn erased_serde::Deseri
 ```
 
 A similar processor system should also be added to the serialization side, but that’s for another PR. Ideally, both PRs will be in the same release, since one isn’t very useful without the other.
+</details>

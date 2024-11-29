@@ -30,7 +30,12 @@ $content-font-size: 1.22rem;
   }
 
   h4 {
-    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+
+    code {
+      font-size: inherit;
+    }
   }
 
   pre {

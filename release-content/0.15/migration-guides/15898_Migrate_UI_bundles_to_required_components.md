@@ -3,7 +3,7 @@ Simultaneously, the fields and behavior of `Style` have been moved to `Node`, an
 
 It will be easiest to migrate if you replace `Node` with `ComputedNode` first, then `Style` with `Node`, and finally `NodeBundle` with `Node`.
 
-## `Node` -> `ComputedNode`
+#### `Node` -> `ComputedNode`
 
 For any usage of the “computed node properties” that used to live on `Node`, use `ComputedNode` instead.
 This is a trivial find-and-replace rename.
@@ -30,7 +30,7 @@ fn system(computed_nodes: Query<&ComputedNode>) {
 }
 ```
 
-## `Style` -> `Node`
+#### `Style` -> `Node`
 
 All of the values of `Style` now live on `Node`. This is a find-and-replace rename.
 
@@ -52,7 +52,7 @@ Node {
 }
 ```
 
-## `NodeBundle` -> `Node`
+#### `NodeBundle` -> `Node`
 
 Finally, replace all uses of `NodeBundle` with `Node`.
 All other components in `NodeBundle` are now added implicitly via required components.
