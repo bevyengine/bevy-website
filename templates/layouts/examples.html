@@ -1,0 +1,34 @@
+{% extends "layouts/page-with-menu.html" %}
+{% import "macros/assets.html" as assets_macros %}
+{% block page_name %}Examples{% endblock page_name %}
+{% block mobile_page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock mobile_page_menu %}
+{% block page_menu %}{{ assets_macros::assets_menu(prefix="page-menu", root=section) }}{% endblock page_menu %}
+{% block page_content %}
+  <div class="assets">
+    <div class="assets-intro media-content">
+      {% block intro %}{% endblock intro %}
+    </div>
+    <div class="assets-search">
+      <input class="assets-search__input"
+              type="text"
+              id="assets-search"
+              placeholder="Search Example">
+    </div>
+    {% for subsection in section.subsections %}
+      {% set section = get_section(path=subsection) %}
+      <h1 class="asset-section" id="{{ section.title | slugify }}">
+        {{ section.title }}<a class="anchor-link" href="#{{ section.title | slugify }}">#</a>
+      </h1>
+      {% if section.pages %}
+        <div class="item-grid item-grid--multi-cols">
+          {% set pages = section.pages %}
+          {% if section.extra.sort_order_reversed %}
+            {% set pages = section.pages | reverse %}
+          {% endif %}
+          {% for post in pages %}{{ assets_macros::card(post=post) }}{% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <script type="module">import '/assets.js'</script>
+{% endblock page_content %}
