@@ -98,7 +98,7 @@ struct Player {
     name: String,
 }
 
-#[derive(Default)]
+#[derive(Component, Default)]
 enum Team {
     #[default]
     Red,
