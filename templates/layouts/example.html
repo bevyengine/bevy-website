@@ -45,79 +45,79 @@
     {% endfor %}
   </div>
   <script type="module">
-  {#
-    // Hi curious user!
-    // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
-    // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
-    // workaround until Bevy has an in-engine mode for showing loading feedback. See:
-    // https://github.com/bevyengine/bevy-website/pull/355
-  #}
+    {#
+      // Hi curious user!
+      // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
+      // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
+      // workaround until Bevy has an in-engine mode for showing loading feedback. See:
+      // https://github.com/bevyengine/bevy-website/pull/355
+    #}
 
-  import { progressiveFetch } from '/tools.js';
-  import '/restart-audio-context.js'
-  import init from '{% block wasm_base_url %}{% endblock wasm_base_url %}/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
+    import { progressiveFetch } from '/tools.js';
+    import '/restart-audio-context.js'
+    import init from '{% block wasm_base_url %}{% endblock wasm_base_url %}/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
 
-  const canvasEl = document.getElementById('bevy');
+    const canvasEl = document.getElementById('bevy');
 
-  let once = false;
-  const observer_callback = (_mutations, _observer) => {
-    if (!once) {
-      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
-      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
-      once = true;
-    }
-  };
-
-  const observer = new MutationObserver(observer_callback);
-
-  const config = { attributeFilter: ['width', 'height'] };
-
-  observer.observe(canvasEl, config);
-
-  const progressStatusEl = document.querySelector('[data-progress-status]');
-  const progressFileEl = document.querySelector('[data-progress-file]');
-  const progressBarEl = document.querySelector('[data-progress-bar]');
-  let hideProgressTimeoutId;
-
-  async function loadingBarFetch(resource) {
-    return progressiveFetch(resource, {
-      start: ({ filename }) => {
-        progressStatusEl.style.display = 'block';
-        progressFileEl.textContent = filename;
-
-        if (hideProgressTimeoutId) {
-          clearTimeout(hideProgressTimeoutId);
-        }
-      },
-      update: ({ isIndeterminate, loadedPercent }) => {
-        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
-        progressBarEl.style.width = loadedPercent + '%';
-      },
-      finish: () => {
-        {#
-          // This is a little hack to avoid progress-bar flashing between assets. The thing
-          // is that we don't know how many assets are going to load, so we don't know which
-          // one is the last one. If a new asset starts loading within 50ms, then this timeout
-          // is cleared and the progress element stays visible, avoiding the flashing.
-          // The downside is that the progress bar shows for a brief moment once the wasm starts.
-        #}
-        hideProgressTimeoutId = setTimeout(() => {
-          progressStatusEl.style.display = 'none';
-        }, 50);
+    let once = false;
+    const observer_callback = (_mutations, _observer) => {
+      if (!once) {
+        // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+        canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+        once = true;
       }
-    })
-  }
-  window.bevyLoadingBarFetch = loadingBarFetch;
+    };
 
-  {#
-    // The following .catch() is a simple filter to remove an exception thrown by winit in
-    // its normal control flow. This exception will always be thrown and is not an error.
-    // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
-  #}
-  init().catch((error) => {
-    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
-      throw error;
+    const observer = new MutationObserver(observer_callback);
+
+    const config = { attributeFilter: ['width', 'height'] };
+
+    observer.observe(canvasEl, config);
+
+    const progressStatusEl = document.querySelector('[data-progress-status]');
+    const progressFileEl = document.querySelector('[data-progress-file]');
+    const progressBarEl = document.querySelector('[data-progress-bar]');
+    let hideProgressTimeoutId;
+
+    async function loadingBarFetch(resource) {
+      return progressiveFetch(resource, {
+        start: ({ filename }) => {
+          progressStatusEl.style.display = 'block';
+          progressFileEl.textContent = filename;
+
+          if (hideProgressTimeoutId) {
+            clearTimeout(hideProgressTimeoutId);
+          }
+        },
+        update: ({ isIndeterminate, loadedPercent }) => {
+          progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+          progressBarEl.style.width = loadedPercent + '%';
+        },
+        finish: () => {
+          {#
+            // This is a little hack to avoid progress-bar flashing between assets. The thing
+            // is that we don't know how many assets are going to load, so we don't know which
+            // one is the last one. If a new asset starts loading within 50ms, then this timeout
+            // is cleared and the progress element stays visible, avoiding the flashing.
+            // The downside is that the progress bar shows for a brief moment once the wasm starts.
+          #}
+          hideProgressTimeoutId = setTimeout(() => {
+            progressStatusEl.style.display = 'none';
+          }, 50);
+        }
+      })
     }
-  });
-</script>
+    window.bevyLoadingBarFetch = loadingBarFetch;
+
+    {#
+      // The following .catch() is a simple filter to remove an exception thrown by winit in
+      // its normal control flow. This exception will always be thrown and is not an error.
+      // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
+    #}
+    init().catch((error) => {
+      if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+        throw error;
+      }
+    });
+  </script>
 {% endblock content %}
