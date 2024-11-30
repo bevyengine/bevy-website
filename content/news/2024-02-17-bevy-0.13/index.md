@@ -1851,7 +1851,7 @@ For a complete list of changes, check out the PRs listed below.
 * [derive asset for enums][10410]
 * [Ensure consistency between Un/Typed `AssetId` and `Handle`][10628]
 * [Fix Asset Loading Bug][10698]
-* [remove double-hasing of typeid for handle][10699]
+* [remove double-hashing of typeid for handle][10699]
 * [AssetMetaMode][10623]
 * [Fix GLTF scene dependencies and make full scene renders predictable][10745]
 * [Print precise and correct watch warnings (and only when necessary)][10787]
@@ -2280,7 +2280,7 @@ For a complete list of changes, check out the PRs listed below.
 * [Minimize small allocations by dropping the tick Vecs from Resources][11226]
 * [Change Entity::generation from u32 to NonZeroU32 for niche optimization][9907]
 * [fix B0003 example and update logs][11162]
-* [Unified identifer for entities & relations][9797]
+* [Unified identifier for entities & relations][9797]
 * [Simplify conditions][11316]
 * [Add example using `State` in docs][11319]
 * [Skip rehashing TypeIds][11268]
@@ -2428,7 +2428,7 @@ For a complete list of changes, check out the PRs listed below.
 ### A-Core
 
 * [Derive `Debug` for `Framecount`][11573]
-* [Don't unconditionally enable bevy_render or bevy_assets if mutli-threaded feature is enabled][11726]
+* [Don't unconditionally enable bevy_render or bevy_assets if multi-threaded feature is enabled][11726]
 
 ### A-Windowing
 
@@ -2539,7 +2539,7 @@ For a complete list of changes, check out the PRs listed below.
 * [Remove unnecessary parentheses][10990]
 * [Replace deprecated elements][10999]
 * [Simplify equality assertions][10988]
-* [Add Solus package requrements to linux_dependencies.md][10996]
+* [Add Solus package requirements to linux_dependencies.md][10996]
 * [Update base64 requirement from 0.13.0 to 0.21.5][10336]
 * [Update sysinfo version to 0.30.0][11071]
 * [Remove unnecessary parens][11075]
