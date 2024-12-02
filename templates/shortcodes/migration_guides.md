@@ -33,8 +33,7 @@
 <li class="migration-guide-meta__area">{{ area }}</li>
 {% endfor %}
 </ul>
-
-{{ guide_body }}
+{{ guide_body | markdown }}
 
 {% endfor %}
 </div>
