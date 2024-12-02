@@ -59,5 +59,5 @@ app.add_systems(my_system.run_if(my_condition.never_param_warn()));
 
 Let us know what other warning strategies you'd like!
 
-[`Single<D, F>`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/ecs/prelude/struct.Single.html
-[`Populated<D, F>`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/ecs/prelude/struct.Populated.html
+[`Single<D, F>`]: https://docs.rs/bevy/0.15/bevy/ecs/prelude/struct.Single.html
+[`Populated<D, F>`]: https://docs.rs/bevy/0.15/bevy/ecs/prelude/struct.Populated.html

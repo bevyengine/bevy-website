@@ -9,4 +9,4 @@ Stable, smooth camera controllers have never been easier.
 
 [lerping]: https://en.wikipedia.org/wiki/Linear_interpolation
 [Freya Holmer explains]: https://www.youtube.com/watch?v=LSNQuFEDOyQ
-[`StableInterpolate`]: https://docs.rs/bevy/0.15.0-rc.3/bevy/math/trait.StableInterpolate.html
+[`StableInterpolate`]: https://docs.rs/bevy/0.15/bevy/math/trait.StableInterpolate.html

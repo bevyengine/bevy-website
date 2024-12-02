@@ -18,9 +18,9 @@ fn gamepad_system(
         if button_inputs.just_pressed(
             GamepadButton::new(gamepad, GamepadButtonType::South)
         ) {
-            println!("just pressed South");
-        } 
-         
+            info!("just pressed South");
+        }
+
         let right_trigger = button_axes
            .get(GamepadButton::new(
                gamepad,
@@ -28,14 +28,14 @@ fn gamepad_system(
            ))
            .unwrap();
         if right_trigger.abs() > 0.01 {
-            info!("RightTrigger2 value is {}", right_trigger);      
+            info!("RightTrigger2 value is {}", right_trigger);
         }
 
         let left_stick_x = axes
            .get(GamepadAxis::new(gamepad, GamepadAxisType::LeftStickX))
            .unwrap();
         if left_stick_x.abs() > 0.01 {
-            info!("LeftStickX value is {}", left_stick_x);        
+            info!("LeftStickX value is {}", left_stick_x);
         }
     }
 }
@@ -46,18 +46,18 @@ In 0.15, we can write this much more simply as:
 ```rust
 fn gamepad_system(gamepads: Query<&Gamepad>) {
     for gamepad in &gamepads {
-      if gamepad.just_pressed(GamepadButton::South) {
+        if gamepad.just_pressed(GamepadButton::South) {
             println!("just pressed South");
-        } 
-         
+        }
+
         let right_trigger = gamepad.get(GamepadButton::RightTrigger2).unwrap();
         if right_trigger.abs() > 0.01 {
-            info!("RightTrigger2 value is {}", right_trigger);      
+            info!("RightTrigger2 value is {}", right_trigger);
         }
 
         let left_stick_x = gamepad.get(GamepadAxis::LeftStickX).unwrap();
         if left_stick_x.abs() > 0.01 {
-            info!("LeftStickX value is {}", left_stick_x);        
+            info!("LeftStickX value is {}", left_stick_x);
         }
     }
 }
@@ -65,6 +65,6 @@ fn gamepad_system(gamepads: Query<&Gamepad>) {
 
 Much better!
 
-[`Gamepad`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/input/gamepad/struct.Gamepad.html
-[`GamepadSettings`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/input/gamepad/struct.GamepadSettings.html
-[`Name`]: https://docs.rs/bevy/0.15.0-rc.2/bevy/core/struct.Name.html
+[`Gamepad`]: https://docs.rs/bevy/0.15/bevy/input/gamepad/struct.Gamepad.html
+[`GamepadSettings`]: https://docs.rs/bevy/0.15/bevy/input/gamepad/struct.GamepadSettings.html
+[`Name`]: https://docs.rs/bevy/0.15/bevy/core/struct.Name.html

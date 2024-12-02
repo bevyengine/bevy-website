@@ -14,6 +14,6 @@ commands
     }));
 ```
 
-[`CursorIcon`]: https://dev-docs.bevyengine.org/bevy/winit/cursor/enum.CursorIcon.html
-[`CustomCursor`]: https://dev-docs.bevyengine.org/bevy/winit/cursor/enum.CustomCursor.html
-[`Window`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Window.html
+[`CursorIcon`]: https://docs.rs/bevy/0.15/bevy/winit/cursor/enum.CursorIcon.html
+[`CustomCursor`]: https://docs.rs/bevy/0.15/bevy/winit/cursor/enum.CustomCursor.html
+[`Window`]: https://docs.rs/bevy/0.15/bevy/prelude/struct.Window.html

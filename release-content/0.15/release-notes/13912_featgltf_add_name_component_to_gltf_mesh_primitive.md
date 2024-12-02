@@ -32,7 +32,7 @@ The glTF 3D model file format allows a single mesh to be associated with multipl
 }
 ```
 
-In Bevy 0.14 and before, these primitives are named using the format "Mesh.Index", which complicates querying. A new component [GltfMaterialName](https://docs.rs/bevy/0.15.0-rc.1/bevy/gltf/struct.GltfMaterialName.html) is now added to each primitive node that has a material, letting you quickly look up the primitive by using the this component with the material name.
+In Bevy 0.14 and before, these primitives are named using the format "Mesh.Index", which complicates querying. A new component [GltfMaterialName](https://docs.rs/bevy/0.15/bevy/gltf/struct.GltfMaterialName.html) is now added to each primitive node that has a material, letting you quickly look up the primitive by using the this component with the material name.
 
 ```rust
 fn find_top_material_and_mesh(

@@ -5,6 +5,12 @@ areas = ["Accessibility", "UI"]
 file_name = "14091_Bump_accesskit_to_016.md"
 
 [[guides]]
+title = "Remove `accesskit` re-export from `bevy_a11y`"
+prs = [16257]
+areas = ["Accessibility"]
+file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
+
+[[guides]]
 title = "Deprecate `is_playing_animation`"
 prs = [14387]
 areas = ["Animation"]
@@ -137,6 +143,18 @@ areas = ["Assets"]
 file_name = "15509_bevy_asset_Improve_NestedLoader_API.md"
 
 [[guides]]
+title = "Deprecate `LoadAndSave` Asset Processor"
+prs = [15090]
+areas = ["Assets"]
+file_name = "15090_Deprecate_LoadAndSave_Asset_Processor.md"
+
+[[guides]]
+title = "`AssetReader::read` now returns an opaque type"
+prs = [14082]
+areas = ["Assets"]
+file_name = "14082_AssetReader_read_now_returns_an_opaque_type.md"
+
+[[guides]]
 title = "Make gLTF node children Handle instead of objects"
 prs = [13707]
 areas = ["Assets", "Rendering"]
@@ -189,12 +207,6 @@ title = "Rename `bevy_core::name::DebugName` to `bevy_core::name::NameOrEntity`"
 prs = [14211]
 areas = ["Core", "Editor"]
 file_name = "14211_Rename_bevy_corenameDebugName_to_bevy_corenameNameOrEntity.md"
-
-[[guides]]
-title = "Add `core` and `alloc` over `std` Lints"
-prs = [15281]
-areas = ["Cross-Cutting"]
-file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
 
 [[guides]]
 title = "Remove the `Component` trait implementation from `Handle`"
@@ -471,12 +483,6 @@ title = "`ReflectBundle::remove` improvement"
 prs = [16139]
 areas = ["ECS", "Reflection"]
 file_name = "16139_ReflectBundleremove_improvement.md"
-
-[[guides]]
-title = "feat: Add `World::get_reflect()` and `World::get_reflect_mut()`"
-prs = [14416]
-areas = ["ECS", "Reflection"]
-file_name = "14416_feat_Add_Worldget_reflect_and_Worldget_reflect_mut.md"
 
 [[guides]]
 title = "Use crate: `disqualified`"
@@ -1269,21 +1275,3 @@ title = "Add Display implementation to DebugName."
 prs = [13760]
 areas = []
 file_name = "13760_Add_Display_implementation_to_DebugName.md"
-
-[[guides]]
-title = "Remove `accesskit` re-export from `bevy_a11y`"
-prs = [16257]
-areas = ["Accessibility"]
-file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
-
-[[guides]]
-title = "Deprecate `LoadAndSave` Asset Processor"
-prs = [15090]
-areas = ["Asset"]
-file_name = "15090_Deprecate_LoadAndSave_Asset_Processor.md"
-
-[[guides]]
-title = "`AssetReader::read` now returns an opaque type"
-prs = [14082]
-areas = ["Asset"]
-file_name = "14082_AssetReader_read_now_returns_an_opaque_type.md"
