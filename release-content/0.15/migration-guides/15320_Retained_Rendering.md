@@ -19,11 +19,11 @@ Renderers can now check `RenderVisibleEntities` to avoid rendering items that ar
 To guide you further, let's take a look at a few common patterns.
 For every example, we specify in which world the code is run.
 
-### Spawning entities in the render world
+#### Spawning entities in the render world
 
 Previously, if you spawned an entity with `world.spawn(...)`, `commands.spawn(...)` or some other method in the rendering world, it would be despawned at the end of each frame. In 0.15, this is no longer the case and so your old code could leak entities. This can be mitigated by either re-architecting your code to no longer continuously spawn entities (like you're used to in the main world), or by adding the `bevy_render::world_sync::TemporaryRenderEntity` component to the entity you're spawning. Entities tagged with `TemporaryRenderEntity` will be removed at the end of each frame (like before).
 
-### Extract components with `ExtractComponentPlugin`
+#### Extract components with `ExtractComponentPlugin`
 
 ```rust
 // main world
@@ -32,7 +32,7 @@ app.add_plugins(ExtractComponentPlugin::<ComponentToExtract>::default());
 
 `ExtractComponentPlugin` has been changed to automatically sync entities with `ComponentToExtract`. This is done via the new `WorldSyncPlugin`. Any code using `ExtractComponentPlugin` will not require any changes.
 
-### Manual extraction using `Extract<Query<(Entity, ...)>>`
+#### Manual extraction using `Extract<Query<(Entity, ...)>>`
 
 ```rust
 // in render world, inspired by bevy_pbr/src/cluster/mod.rs
@@ -70,7 +70,7 @@ pub fn extract_clusters(
 world.spawn((Clusters::default(), Camera::default(), SyncToRenderWorld))
 ```
 
-### Looking up main world entities in the render world
+#### Looking up main world entities in the render world
 
 In order to get the main world entity from a render world entity. It works much the same. Every synced render world entity has a `MainEntity` component you can query for that returns the correct main world entity.
 
@@ -85,7 +85,7 @@ pub fn inspect_clusters(
 }
 ```
 
-### General advice for working with main and render world entities
+#### General advice for working with main and render world entities
 
 When working with entities from both worlds it can be confusing. If you are every in a scenario where this isn't entirely clear (for example, when working on custom extraction code in the render world), we advise that you use `RenderEntity` and `MainEntity` as simple wrappers around `Entity`. Mixing these up can become a real headache and lead to some non-obvious errors.
 
