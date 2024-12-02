@@ -728,7 +728,7 @@ pub fn get_metadata_from_cratesio_statement(
         FROM ( \
             SELECT version_id, license, major, \
                 CAST(SUBSTR(minor_and_patch,0,second_point) AS INTEGER) minor, \
-                SUBSTR(minor_and_patch,second_point+1) patch \
+                CAST(SUBSTR(minor_and_patch,second_point+1) AS INTEGER) patch \
             FROM ( \
                 SELECT version_id, license, major, minor_and_patch, \
                     INSTR(minor_and_patch, '.') second_point \
