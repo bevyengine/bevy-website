@@ -1,3 +1,7 @@
-`bevy_render::mesh::morph::inherit_weights` is now `bevy_render::mesh::inherit_weights`
+`bevy_render::mesh::morph::inherit_weights` has been moved to `bevy_render::mesh::inherit_weights`.
 
-if you were using `Mesh::compute_aabb`, you will need to `use bevy_render::mesh::MeshAabb;` now
+`Mesh::compute_aabb` has been moved to the new `MeshAabb` trait. You may need to import it.
+
+```rust
+use bevy::render::mesh::MeshAabb;
+```
