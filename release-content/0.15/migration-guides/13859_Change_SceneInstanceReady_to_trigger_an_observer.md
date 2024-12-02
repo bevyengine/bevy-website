@@ -1,16 +1,16 @@
-If you have a system which read `SceneInstanceReady` events:
+If you have a system which reads `SceneInstanceReady` events, it must be rewritten as an observer or entity observer.
 
-> 
-`fn ready_system(ready_events: EventReader<'_, '_, SceneInstanceReady>) {`
+```rust
+// 0.14
+fn ready_system(ready_events: EventReader<'_, '_, SceneInstanceReady>) {
+    // ...
+}
 
-
-It must be rewritten as an observer:
-
-> 
-`commands.observe(|trigger: Trigger<SceneInstanceReady>| {`
-
-
-Or, if you were expecting the event in relation to a specific entity or entities, as an entity observer:
-
-> 
-`commands.entity(entity).observe(|trigger: Trigger<SceneInstanceReady>| {`
+// 0.15
+commands.observe(|trigger: Trigger<SceneInstanceReady>| {
+    // ...
+});
+commands.entity(entity).observe(|trigger: Trigger<SceneInstanceReady>| {
+    // ...
+});
+```

@@ -209,12 +209,6 @@ areas = ["Core", "Editor"]
 file_name = "14211_Rename_bevy_corenameDebugName_to_bevy_corenameNameOrEntity.md"
 
 [[guides]]
-title = "Add `core` and `alloc` over `std` Lints"
-prs = [15281]
-areas = ["Cross-Cutting"]
-file_name = "15281_Add_core_and_alloc_over_std_Lints.md"
-
-[[guides]]
 title = "Remove the `Component` trait implementation from `Handle`"
 prs = [15796]
 areas = ["Cross-Cutting"]
@@ -489,12 +483,6 @@ title = "`ReflectBundle::remove` improvement"
 prs = [16139]
 areas = ["ECS", "Reflection"]
 file_name = "16139_ReflectBundleremove_improvement.md"
-
-[[guides]]
-title = "feat: Add `World::get_reflect()` and `World::get_reflect_mut()`"
-prs = [14416]
-areas = ["ECS", "Reflection"]
-file_name = "14416_feat_Add_Worldget_reflect_and_Worldget_reflect_mut.md"
 
 [[guides]]
 title = "Use crate: `disqualified`"
