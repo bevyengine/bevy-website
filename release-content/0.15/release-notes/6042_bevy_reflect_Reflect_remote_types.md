@@ -45,8 +45,8 @@ While this feature has many aspects complete, including generic support, enum su
 there are still some limitations we hope to address in future releases,
 including support for reflecting a remote type with private fields.
 
-[`bevy_reflect`]: https://docs.rs/bevy/0.15/bevy_reflect/
-[`Reflect`]: https://docs.rs/bevy/0.15/bevy_reflect/trait.Reflect.html
+[`bevy_reflect`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/
+[`Reflect`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/trait.Reflect.html
 [orphan rule]: https://doc.rust-lang.org/book/ch10-02-traits.html#implementing-a-trait-on-a-type
-[reflect_remote]: https://docs.rs/bevy/0.15/bevy_reflect/attr.reflect_remote.html
-[`ReflectRemote`]: https://docs.rs/bevy/0.15/bevy_reflect/trait.ReflectRemote.html
+[reflect_remote]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/attr.reflect_remote.html
+[`ReflectRemote`]: https://docs.rs/bevy_reflect/0.15/bevy_reflect/trait.ReflectRemote.html
