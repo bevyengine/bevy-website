@@ -785,6 +785,12 @@ areas = ["Reflection", "Utils"]
 file_name = "15340_move_ShortName_to_bevy_reflect.md"
 
 [[guides]]
+title = "Retained Rendering"
+prs = [15320]
+areas = ["Rendering"]
+file_name = "15320_Retained_Rendering.md"
+
+[[guides]]
 title = "Add 2d opaque phase with depth buffer"
 prs = [13069]
 areas = ["Rendering"]
