@@ -7,4 +7,4 @@ use bevy::render::texture::BevyDefault;
 use bevy::image::BevyDefault;
 ```
 
-This is an incomprehensive list of other types may be affected for searchability: `CompressedImageFormats`, `ExrTextureLoader`, `HdrTextureLoader`, `Image`, `ImageAddressMode`, `ImageFilterMode`, `ImageLoader`, `ImageLoaderSettings`, `ImageSampler`, `ImageSamplerDescriptor`, `ImageType`, `TextureError`, `TextureFormatPixelInfo`.
+For searchability, this is a non-comprehensive list of other types may be affected: `CompressedImageFormats`, `ExrTextureLoader`, `HdrTextureLoader`, `Image`, `ImageAddressMode`, `ImageFilterMode`, `ImageLoader`, `ImageLoaderSettings`, `ImageSampler`, `ImageSamplerDescriptor`, `ImageType`, `TextureError`, `TextureFormatPixelInfo`.
