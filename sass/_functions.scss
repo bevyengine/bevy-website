@@ -4,3 +4,7 @@
 @function calc-rem($size) {
   @return math.div($size, $size-body) * 1rem;
 }
+
+@function color($color, $n) {
+  @return map-get(map-get($colors, $color), $n);
+}

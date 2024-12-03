@@ -5,10 +5,15 @@ $content-font-size: 1.22rem;
   font-size: $content-font-size;
   font-weight: 400;
   line-height: 1.43;
-  color: #d2d2d2;
+  color: var(--text-color);
   font-style: normal;
   text-decoration: none;
   word-break: break-word;
+
+  h2,
+  h3 {
+    color: var(--heading-color);
+  }
 
   h2 {
     margin-top: 2.2rem;
@@ -55,7 +60,7 @@ $content-font-size: 1.22rem;
   a:link code {
     font-family: var(--font-family-mono);
     font-variant-ligatures: none;
-    color: #e4c151;
+    color: var(--code-link-color);
     font-style: normal;
     text-decoration: none;
   }
@@ -64,20 +69,18 @@ $content-font-size: 1.22rem;
     font-family: var(--font-family-mono);
     font-variant-ligatures: none;
     font-size: 1.05rem;
-    color: #c8c8c8;
-    background-color: $syntax-theme-background;
-    border-radius: $border-radius;
-    padding-bottom: 3px;
-    padding-top: 3px;
-    padding-left: 8px;
-    padding-right: 8px;
+    color: var(--code-text-color);
+    background-color: var(--code-bg-color);
+    border-radius: 4px;
+    padding-block: 2px;
+    padding-inline: 6px;
     text-decoration: none;
   }
 
   blockquote {
     font-size: 1.1rem;
-    color: #b1b1b1;
-    background-color: $syntax-theme-background;
+    color: var(--text-dim-color);
+    background-color: var(--code-bg-color);
     border-radius: $border-radius;
     padding: 8px;
     margin: 0px;
@@ -93,23 +96,23 @@ $content-font-size: 1.22rem;
     padding-left: 2.5rem;
   }
 
-
   a:hover code {
-    background-color: $syntax-theme-background-hover;
+    background-color: var(--code-bg-hover-color);
   }
 
   a.button {
-    color: $color-white;
+    color: var(--color-white);
   }
 
   a {
     text-decoration: none;
-    color: $link-color;
+    color: var(--link-color);
   }
 
-  a:hover {
-    text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
-  }
+  // a:hover {
+  //   text-shadow: 0 0 0.9px var(--link-hover-shadow-color),
+  //     0 0 0.9px var(--link-hover-shadow-color);
+  // }
 
   pre code {
     padding-bottom: 0px;

@@ -6,7 +6,7 @@ $size-body-mobile: 14px; // Size for mobile
 $bp-phone-landscape: 480px; // Mobile-landscape (and larger)
 $bp-tablet-portrait: 768px; // Tablet-portrait (and larger)
 $bp-tablet-landscape: 992px; // Tablet-landscape (and larger)
-$bp-desktop: 1200px; // Laptops (and langer)
+$bp-desktop: 1200px; // Laptops (and larger)
 
 $bp-phone-portrait-only: "(max-width: #{$bp-phone-landscape - 1})";
 $bp-phone-landscape-up: "(min-width: #{$bp-phone-landscape})";
@@ -16,26 +16,6 @@ $bp-tablet-portrait-down: "(max-width: #{$bp-tablet-landscape - 1})";
 $bp-tablet-landscape-up: "(min-width: #{$bp-tablet-landscape})";
 $bp-tablet-landscape-down: "(max-width: #{$bp-desktop - 1})";
 $bp-desktop-up: "(min-width: #{$bp-desktop})";
-
-// Colors
-$color-black: #000;
-$color-white: #ececec;
-$color-grey-800: #232326;
-$color-grey-900: #1e1e22;
-$color-pink: #9f517a;
-$color-gold: #d2be4a;
-
-$headerbar-color: #1e1e22;
-$hover-color: #ececec;
-$hover-shadow-color: #d6d6d6;
-$link-color: #7c90ff;
-$link-hover-shadow-color: #6c82ff;
-$default-color: #ececec;
-$subtitle-color: #999;
-$syntax-theme-background: #2b2c2f;
-$syntax-theme-background-hover: #414247;
-$default-image-background-color: #1b1b1b;
-$card-hover-background: #2f3033;
 
 // Animation
 $duration-fast: 100ms;
@@ -52,11 +32,76 @@ $mobile-menu-width: 300px;
 $content-top-margin: 30px;
 $border-radius: 10px;
 
+// Colors
+// Generated with the help of https://www.tints.dev
+// TODO: We could just use CSS variables once "relative colors" has wider
+// support (in 2025?). As this would allow us lighten/darken directly using CSS
+// vars. See: https://caniuse.com/?search=relative%20colors and
+// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors
+$color-white: #fff;
+$color-black: #000;
+$color-blue-link: #7c90ff;
+$colors: (
+  neutral: (
+    50: #efeff0,
+    100: #dfdfe2,
+    200: #bfbfc4,
+    300: #8f8f98,
+    400: #6f6f7a,
+    500: #4e4e57,
+    600: #39393e,
+    700: #232326,
+    800: #1e1e22,
+    900: #0c0c0d,
+    950: #050505,
+  ),
+  blue: (
+    50: #e8f2fc,
+    100: #d4e6f7,
+    200: #adcceb,
+    300: #8ab3db,
+    400: #6a99c8,
+    500: #4b80b4,
+    600: #456687,
+    700: #2d4d6c,
+    800: #1b334b,
+    900: #0c1a27,
+    950: #050d14,
+  ),
+);
+
 // CSS Vars
 :root {
   // Typography
   --font-family-sans: "Fira Sans", sans-serif;
   --font-family-mono: "Fira Mono", monospace;
+
+  // Colors
+  --color-black: #{$color-black};
+  --color-white: #{$color-white};
+  --color-blue-link: #{$color-blue-link};
+  --color-neutral-50: #{color(neutral, 50)};
+  --color-neutral-100: #{color(neutral, 100)};
+  --color-neutral-200: #{color(neutral, 200)};
+  --color-neutral-300: #{color(neutral, 300)};
+  --color-neutral-400: #{color(neutral, 400)};
+  --color-neutral-500: #{color(neutral, 500)};
+  --color-neutral-600: #{color(neutral, 600)};
+  --color-neutral-700: #{color(neutral, 700)};
+  --color-neutral-800: #{color(neutral, 800)};
+  --color-neutral-900: #{color(neutral, 900)};
+  --color-neutral-950: #{color(neutral, 950)};
+  --color-blue-50: #{color(blue, 50)};
+  --color-blue-100: #{color(blue, 100)};
+  --color-blue-200: #{color(blue, 200)};
+  --color-blue-300: #{color(blue, 300)};
+  --color-blue-400: #{color(blue, 400)};
+  --color-blue-500: #{color(blue, 500)};
+  --color-blue-600: #{color(blue, 600)};
+  --color-blue-700: #{color(blue, 700)};
+  --color-blue-800: #{color(blue, 800)};
+  --color-blue-900: #{color(blue, 900)};
+  --color-blue-950: #{color(blue, 950)};
 
   // Header
   --header-height: 60px;
@@ -65,7 +110,288 @@ $border-radius: 10px;
   @media #{$bp-desktop-up} {
     --header-height: 72px;
   }
+
+  // Theme
+  // (shared between light and dark)
+  --header-bg-color: var(--color-neutral-800);
+  --table-border-radius: 4px;
+
+  --image-compare-text-color: var(--color-neutral-100);
+  --image-compare-text-shadow: #{rgba($color-black, 0.75)};
+
+  --main-menu-active-color: var(--color-blue-200);
+  --main-menu-backdrop-color: #{rgba($color-black, 0.2)};
+  --main-menu-link-hover-color: #{rgba($color-white, 0.05)};
+  --main-menu-text-color: var(--color-white);
+
+  // Dark Theme
+  // This eventually should go inside a `@media (prefers-color-scheme: dark) {}`
+  // media query block. But for now it's the default theme for everyone. The
+  // idea is to progressively improve the light theme quality before enabling
+  // "whole site level" light or dark theme. Meanwhile light theme only works in
+  // selected sections.
+  --anchor-link-color: var(--color-neutral-500);
+  --content-bg-color: var(--color-neutral-700);
+  --docs-whats-a-bevy-filter: none;
+  --focus-outline: solid #{color(blue, 300)} 3px;
+  --footer-image-filter: grayscale(1) brightness(800%);
+  --foundation-logo-filter: none;
+  --header-border-color: #2c2c2d;
+  --heading-color: var(--color-neutral-50);
+  --hr-color: var(--color-neutral-900);
+  --html-bg-color: var(--color-neutral-800);
+  --link-color: var(--color-blue-link);
+  --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
+  --text-color: #d2d2d2;
+  --text-dim-color: var(--color-neutral-300);
+
+  --asset-card-title-bg-color: #{rgba($color-black, 0.5)};
+  --asset-card-title-color: var(--color-white);
+  --asset-tag-bg-color: var(--color-neutral-600);
+  --asset-tag-text-color: var(--color-white);
+
+  --button-blue-bg-color: var(--color-blue-600);
+  --button-blue-bg-hover-color: #{darken(color(blue, 600), 3%)};
+  --button-blue-border-color: var(--color-blue-400);
+  --button-blue-text-color: var(--color-white);
+  --button-pink-bg-color: #9f517a;
+  --button-pink-bg-hover-color: #954c72;
+  --button-pink-border-color: #ba789b;
+  --button-pink-text-color: var(--color-white);
+
+  --callout-caution-accent-color: #e82f5a;
+  --callout-caution-bg-color: #591626;
+  --callout-caution-color: #eed5db;
+  --callout-info-accent-color: var(--color-blue-400);
+  --callout-info-bg-color: #2f2745;
+  --callout-info-color: var(--color-blue-100);
+  --callout-warning-accent-color: #e4c151;
+  --callout-warning-bg-color: #513903;
+  --callout-warning-color: #fdfdec;
+
+  --card-bg-color: #{lighten(color(neutral, 700), 3%)};
+  --card-bg-hover-color: #{lighten(color(neutral, 700), 6%)};
+  --card-border-color: var(--color-neutral-600);
+  --card-border-hover-color: var(--color-neutral-500);
+  --card-bg-gradient-start-color: var(--color-neutral-600);
+  --card-bg-gradient-end-color: var(--color-neutral-800);
+  --card-img-bg-color: #{darken(color(neutral, 800), 2%)};
+
+  --code-bg-color: #{lighten(color(neutral, 700), 3%)};
+  --code-bg-hover-color: #{lighten(color(neutral, 700), 6%)};
+  --code-incorrect-border-color: red;
+  --code-link-color: #e4c151;
+  --code-text-color: var(--color-neutral-200);
+  --code-text-dim-color: var(--color-neutral-400);
+
+  --code-aaa: #c0c5ce;
+  --code-ccc: #c594c5;
+  --code-ddd: #6699cc;
+  --code-eee: #dfc479;
+  --code-fff: #eff1f5;
+  --code-ggg: #e79e6d;
+  --code-hhh: #8fa1b3;
+  --code-iii: #b48ead;
+  --code-jjj: #9fc37f;
+  --code-kkk: #e0858d;
+  --code-lll: #d08770;
+  --code-mmm: #a3be8c;
+  --code-nnn: #bf616a;
+  --code-ooo: #4f5b66;
+  --code-ppp: #96b5b4;
+  --code-qqq: #ab7967;
+  --code-rrr: #2b303b;
+  --code-sss: #f92672;
+  --code-ttt: #a6e22e;
+  --code-uuu: #967efb;
+  --code-vvv: #565656;
+  --code-www: #9fc37f;
+  --code-xxx: #56b6c2;
+  --code-yyy: #d19a66;
+  --code-zzz: #d1af8f;
+
+  --docs-footer-color: var(--color-neutral-300);
+  --docs-footer-dir-color: var(--color-neutral-400);
+  --docs-footer-dir-hover-color: var(--color-neutral-300);
+  --docs-footer-hover-color: var(--color-neutral-100);
+  --docs-footer-hover-bg-color: #{rgba($color-white, 0.01)};
+  --docs-footer-border-color: var(--color-neutral-600);
+
+  --example-nav-link-color: var(--color-neutral-100);
+  --example-nav-link-hover-color: var(--color-white);
+
+  --menu-switch-bg-color: #{rgba($color-white, 0.05)};
+  --menu-switch-option-active-bg-color: var(--color-neutral-800);
+  --menu-switch-option-active-text-color: var(--color-white);
+  --menu-switch-option-text-color: var(--color-neutral-300);
+
+  --on-this-page-color: var(--color-neutral-300);
+  --on-this-page-hover-color: var(--color-white);
+  --on-this-page-active-color: var(--color-white);
+
+  --table-border-color: var(--color-neutral-500);
+  --table-header-color: var(--color-neutral-800);
+  --table-header-text-color: var(--heading-color);
+
+  --tree-menu-chevron-filter: brightness(70%);
+  --tree-menu-label-active-bg-color: var(--color-neutral-600);
+  --tree-menu-label-active-color: var(--color-white);
+  --tree-menu-label-color: var(--color-neutral-300);
+  --tree-menu-toc-bg-color: #{darken(color(neutral, 600), 5%)};
+  --tree-menu-toggle-hover-color: var(--color-neutral-500);
+
+  .inverted {
+  }
 }
 
-// Accessibility
-$focus-outline: solid #b1d9ff 3px;
+// Light Theme
+// We default to a dark theme even when the user prefers a light theme, as the
+// light theme quality is not good enough. So, only some selected sections are
+// styled in light mode.
+.light-mode {
+  @media (prefers-color-scheme: light) {
+    --anchor-link-color: var(--color-neutral-200);
+    --content-bg-color: #{darken($color-white, 3%)};
+    --docs-whats-a-bevy-filter: invert(85%);
+    --focus-outline: solid #{color(blue, 500)} 3px;
+    --footer-image-filter: grayscale(1) brightness(0%);
+    --foundation-logo-filter: invert(80%);
+    --header-border-color: var(--color-neutral-400);
+    --heading-color: var(--color-neutral-950);
+    --hr-color: var(--color-neutral-100);
+    --html-bg-color: var(--color-neutral-100);
+    --link-color: #4a33d9;
+    --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
+    --text-color: var(--color-neutral-700);
+    --text-dim-color: var(--color-neutral-400);
+
+    --asset-card-title-bg-color: #{rgba($color-white, 0.7)};
+    --asset-card-title-color: var(--color-black);
+    --asset-tag-bg-color: var(--color-neutral-100);
+    --asset-tag-text-color: var(--color-neutral-600);
+
+    --button-blue-bg-color: var(--color-blue-600);
+    --button-blue-bg-hover-color: #{darken(color(blue, 600), 3%)};
+    --button-blue-border-color: var(--color-blue-400);
+    --button-blue-text-color: var(--color-white);
+    --button-pink-bg-color: #9f517a;
+    --button-pink-bg-hover-color: #954c72;
+    --button-pink-border-color: #ba789b;
+    --button-pink-text-color: var(--color-white);
+
+    --callout-caution-accent-color: #ed0c41;
+    --callout-caution-bg-color: #fccad5;
+    --callout-caution-color: #2a0109;
+    --callout-info-accent-color: var(--color-blue-400);
+    --callout-info-bg-color: var(--color-blue-100);
+    --callout-info-color: #040126;
+    --callout-warning-accent-color: #f0d106;
+    --callout-warning-bg-color: #fdedc9;
+    --callout-warning-color: #362a02;
+
+    --card-bg-color: var(--color-white);
+    --card-bg-hover-color: #{darken($color-white, 3%)};
+    --card-border-color: var(--color-neutral-100);
+    --card-border-hover-color: var(--color-neutral-200);
+    --card-bg-gradient-start-color: var(--color-neutral-200);
+    --card-bg-gradient-end-color: var(--color-neutral-300);
+    --card-img-bg-color: var(--color-neutral-700);
+
+    --code-bg-color: #{darken(color(neutral, 50), 3%)};
+    --code-bg-hover-color: #{darken(color(neutral, 50), 6%)};
+    --code-incorrect-border-color: red;
+    --code-link-color: #d58c00;
+    --code-text-color: var(--color-neutral-900);
+    --code-text-dim-color: var(--color-neutral-300);
+
+    --code-aaa: #5078a4;
+    --code-ccc: #b45eb4;
+    --code-ddd: #498bcc;
+    --code-eee: #d49d06;
+    --code-fff: #eff1f5;
+    --code-ggg: #d67b3e;
+    --code-hhh: #6e91b5;
+    --code-iii: #ae3698;
+    --code-jjj: #6eba2c;
+    --code-kkk: #e0858d;
+    --code-lll: #d08770;
+    --code-mmm: #81ba50;
+    --code-nnn: #bf616a;
+    --code-ooo: #4f5b66;
+    --code-ppp: #68b1af;
+    --code-qqq: #ab7967;
+    --code-rrr: #2b303b;
+    --code-sss: #f92672;
+    --code-ttt: #a6e22e;
+    --code-uuu: #967efb;
+    --code-vvv: #565656;
+    --code-www: #5ea91c;
+    --code-xxx: #2aa5a9;
+    --code-yyy: #d0721a;
+    --code-zzz: #df9754;
+
+    --docs-footer-border-color: var(--color-neutral-100);
+    --docs-footer-color: var(--color-neutral-600);
+    --docs-footer-dir-color: var(--color-neutral-400);
+    --docs-footer-dir-hover-color: var(--color-neutral-500);
+    --docs-footer-hover-bg-color: #{rgba($color-black, 0.02)};
+    --docs-footer-hover-color: var(--color-black);
+
+    --example-nav-link-color: var(--color-neutral-400);
+    --example-nav-link-hover-color: var(--color-black);
+
+    @media #{$bp-tablet-landscape-down} {
+      --main-menu-active-color: var(--color-blue-600);
+      --main-menu-link-hover-color: #{rgba($color-black, 0.03)};
+      --main-menu-text-color: var(--color-neutral-500);
+    }
+
+    --menu-switch-bg-color: var(--color-neutral-100);
+    --menu-switch-option-active-bg-color: var(--color-white);
+    --menu-switch-option-active-text-color: var(--color-black);
+    --menu-switch-option-text-color: var(--color-neutral-500);
+
+    --on-this-page-color: var(--color-neutral-300);
+    --on-this-page-hover-color: var(--color-black);
+    --on-this-page-active-color: var(--color-black);
+
+    --table-border-color: var(--color-neutral-300);
+    --table-header-color: var(--color-neutral-200);
+    --table-header-text-color: var(--heading-color);
+
+    --tree-menu-chevron-filter: invert(65%);
+    --tree-menu-label-active-bg-color: var(--color-neutral-100);
+    --tree-menu-label-active-color: var(--color-black);
+    --tree-menu-label-color: var(--color-neutral-600);
+    --tree-menu-toc-bg-color: #{lighten(color(neutral, 100), 5%)};
+    --tree-menu-toggle-hover-color: var(--color-neutral-200);
+
+    .inverted {
+      filter: invert(90%) hue-rotate(180deg);
+    }
+
+    // News Hacks
+    .news-content__hero-image,
+    .img-in-card {
+      @media (prefers-color-scheme: light) {
+        padding: 16px;
+        background-color: var(--color-neutral-700);
+        border-radius: $border-radius;
+      }
+    }
+
+    .news-image-subtitle {
+      color: var(--color-white);
+
+      a {
+        &,
+        &:focus,
+        &:hover,
+        &:active &:link,
+        &:visited {
+          color: var(--color-blue-300) !important;
+        }
+      }
+    }
+  }
+}

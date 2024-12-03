@@ -16,11 +16,10 @@
   }
 
   a {
-    $color: #868686;
     display: block;
     text-wrap: balance;
     padding-block: 4px;
-    color: $color;
+    color: var(--on-this-page-color);
     text-decoration: none;
     word-break: break-word;
 
@@ -30,12 +29,11 @@
     }
 
     &:hover {
-      color: lighten($color, 20);
+      color: var(--on-this-page-hover-color);
     }
 
-    &[data-active=true] {
-      color: $color-white;
+    &[data-active="true"] {
+      color: var(--on-this-page-active-color);
     }
-
   }
 }

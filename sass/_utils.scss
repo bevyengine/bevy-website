@@ -4,8 +4,9 @@
 
 // Visual outline on focused elements, for accessibility
 *:focus-visible {
-  border-radius: 5px;
-  outline: $focus-outline;
+  border-radius: 4px;
+  outline: var(--focus-outline);
+  outline-offset: 4px;
 }
 
 .section {
@@ -30,7 +31,7 @@ body:not(.show_drafts) .public_draft:not(.active_draft) {
   display: none !important;
 }
 
-.public_draft>div>a {
+.public_draft > div > a {
   color: #c8c864 !important;
 }
 
@@ -45,12 +46,13 @@ body:not(.show_drafts) .public_draft:not(.active_draft) {
 .anchor-link:link,
 .anchor-link:visited {
   margin-left: 0.3rem;
-  color: #737373;
+  color: var(--anchor-link-color);
   text-shadow: none;
-  font-weight: 500;
+  font-weight: 300;
+  text-decoration: none;
 }
 
-.public_draft>div>a {
+.public_draft > div > a {
   color: #c8c864 !important;
 }
 

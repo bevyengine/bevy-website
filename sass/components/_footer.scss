@@ -9,7 +9,7 @@
 
   &__social {
     img {
-      filter: grayscale(1) brightness(800%);
+      filter: var(--footer-image-filter);
       &:hover {
         scale: 110%;
       }

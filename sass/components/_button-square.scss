@@ -6,14 +6,9 @@
 
   &:hover {
     &:before {
-      $padding: 8px;
-
       content: "";
       position: absolute;
-      top: $padding;
-      right: $padding;
-      bottom: $padding;
-      left: $padding;
+      inset: 8px;
       background-color: rgba($color-white, 0.05);
       border-radius: $border-radius;
     }

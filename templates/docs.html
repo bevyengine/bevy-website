@@ -2,6 +2,8 @@
 {% import "macros/docs.html" as docs_macros %}
 {% import "macros/base.html" as base_macros %}
 
+{% block theme %}light-mode{% endblock theme %}
+
 {% block head_extensions %}
   {% set_global ancestor_is_public_draft = false %}
 

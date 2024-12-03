@@ -17,6 +17,12 @@
   width: 100%;
   min-width: 0;
 
+  h1,
+  h2,
+  h3 {
+    color: var(--heading-color);
+  }
+
   h1 {
     font-size: 2.4rem;
     margin: 0 0 16px;
@@ -39,7 +45,8 @@
 }
 
 .docs-whats-a-bevy {
-  background-color: #00000000 !important;
+  background-color: #00000000; // !important;
+  filter: var(--docs-whats-a-bevy-filter);
   height: 2.4rem !important;
   border-radius: unset !important;
 }
