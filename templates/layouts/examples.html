@@ -8,7 +8,7 @@
     <div class="assets-intro media-content">
       {% block intro %}{% endblock intro %}
     </div>
-    <div class="assets-search">
+    <div class="assets-search hidden" data-assets-filters>
       <input class="assets-search__input"
               type="text"
               id="assets-search"
@@ -30,5 +30,5 @@
       {% endif %}
     {% endfor %}
   </div>
-  <script type="module">import '/assets.js'</script>
+  <script type="module">import '/assets.js';</script>
 {% endblock page_content %}
