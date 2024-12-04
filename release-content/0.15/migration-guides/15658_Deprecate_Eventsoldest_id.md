@@ -1,0 +1,2 @@
+- Change usages of `Events::oldest_id` to `Events::oldest_event_count`
+- If `Events::oldest_id` was used to get the actual oldest `EventId::id`, note that the deprecated method never reliably did that in the first place as the buffers may contain no id currently.

@@ -251,6 +251,7 @@ div.incorrect-image {
 
 .z-meta.z-generic.z-rust,
 .z-entity.z-name.z-struct.z-rust,
+.z-entity.z-name.z-enum.z-rust,
 .z-entity.z-name.z-impl.z-rust {
     color: #dfc479;
 }
@@ -284,7 +285,8 @@ div.incorrect-image {
     color: #d19a66;
 }
 
-.z-meta.z-annotation.z-parameters.z-rust {
+.z-meta.z-annotation.z-parameters.z-rust,
+.z-variable.z-function.z-rust {
 
     .z-begin,
     .z-end,

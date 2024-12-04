@@ -1,0 +1,1 @@
+- Since we have added a new filed to the `EnvironmentMapLight` struct, users will need to include `..default()` or some rotation value in their initialization code.

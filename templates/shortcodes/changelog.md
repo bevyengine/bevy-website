@@ -17,7 +17,7 @@ For a complete list of changes, check out the PRs listed below.
 
 <ul class="pr-list">
 {% for pr in area.prs %}
-<li class="pr-list__item"><a href="https://github.com/bevyengine/bevy/pull/{{pr.number}}">{{pr.title | markdown}}</a></li>
+<li class="pr-list__item"><a href="https://github.com/bevyengine/bevy/pull/{{pr.number}}">{{pr.title | escape | markdown}}</a></li>
 {% endfor %}
 </ul>
 {% endfor %}

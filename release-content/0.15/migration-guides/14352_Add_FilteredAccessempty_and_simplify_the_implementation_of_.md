@@ -1,0 +1,1 @@
+- The behaviour of `AnyOf<()>` and `Or<()>` has been changed to match no archetypes rather than all archetypes to naturally match the corresponding logical operation. Consider replacing them with `()` instead.

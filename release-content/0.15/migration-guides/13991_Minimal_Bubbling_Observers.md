@@ -1,0 +1,3 @@
+- Manual implementations of `Event` should add associated type `Traverse = TraverseNone` and associated constant `AUTO_PROPAGATE = false`;
+- `Trigger::new` has new field `propagation: &mut Propagation` which provides the bubbling state.
+- `ObserverRunner` now takes the same `&mut Propagation` as a final parameter.
