@@ -2,9 +2,9 @@
   {% set lower_current_path = current_path | lower %}
   {% set home = "/" %}
   {% if path == "" %}
-    {% set route = "/"~name %}
+    {% set route = "/"~name~"/" %}
   {% else %}
-    {% set route = path %}
+    {% set route = path~"/" %}
   {% endif %}
   {% set currently_home = path == home and lower_current_path == home %}
   {% set is_active = lower_current_path is starting_with("/"~name | lower) or currently_home %}
