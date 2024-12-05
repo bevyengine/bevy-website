@@ -25,7 +25,6 @@ function otp_set_active(id_or_node){
     id = id_or_node;
   }
   id = "#" + id;
-
   document.querySelectorAll(".on-this-page a").forEach(a => {
     a.setAttribute("data-active", a.getAttribute("href").includes(id));
   });
