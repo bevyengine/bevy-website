@@ -30,6 +30,10 @@ function otp_set_active(id_or_node){
   });
 }
 
+let headerHeight = getComputedStyle(document.body).getPropertyValue(
+  "--header-height"
+);
+
 let otp_observer =  new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
@@ -43,7 +47,7 @@ let otp_observer =  new IntersectionObserver(
       otp_set_active(intersecting[0]);
     }
   }, {
-    rootMargin: "0px 0px 20% 0px",
+    rootMargin: `-${headerHeight} 0px 20% 0px`,
     threshold: 1.0,
   });
 
