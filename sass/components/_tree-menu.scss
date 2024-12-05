@@ -55,6 +55,10 @@
         &, &:focus, &:active, &:hover, &:link, &:visited {
             color: $color-white;
         }
+
+        &[data-active=true] {
+          color: $color-white;
+        }
     }
 
     &__toggle {
