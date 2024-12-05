@@ -23,6 +23,8 @@
 ## {{ area_name }}
 {% endif %}
 
+{% if not area_changed %}<hr>{% endif %}
+
 ### {{ guide.title }}
 
 <ul class="migration-guide-meta">
@@ -37,4 +39,5 @@
 {{ guide_body }}
 
 {% endfor %}
+
 </div>
