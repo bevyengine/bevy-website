@@ -25,14 +25,17 @@
 
 ### {{ guide.title }}
 
-<ul class="migration-guide-meta">
-{% for pr in guide.prs %}
-<li class="migration-guide-meta__pr"><a href="https://github.com/bevyengine/bevy/pull/{{ pr }}">PR #{{ pr }}</a></li>
-{% endfor %}
-{% for area in guide.areas %}
-<li class="migration-guide-meta__area">{{ area }}</li>
-{% endfor %}
-</ul>
+<div class="heading-meta">
+  <div>
+    <span class="heading-meta__title">Areas:</span>
+    {% for area in guide.areas %}<span class="heading-meta__item">{{ area }}</span>{% if not loop.last %}, {% else %}. {% endif %}{% endfor %}
+  </div>
+  <div>
+    <span class="heading-meta__title"> PRs:</span>
+    {% for pr in guide.prs %}<a class="heading-meta__item" href="https://github.com/bevyengine/bevy/pull/{{ pr }}">#{{ pr }}</a>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+</div>
 
 {{ guide_body }}
 
