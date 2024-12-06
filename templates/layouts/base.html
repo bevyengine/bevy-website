@@ -192,41 +192,22 @@
       <footer class="print:hidden">
         {% block footer_extensions %}{% endblock footer_extensions %}
         <div class="footer__social-container">
-          <a class="footer__social" href="https://github.com/bevyengine/bevy">
-            <img src="/assets/github-mark-white.svg"
-                  alt="Bevy engine's GitHub repo"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://discord.gg/bevy">
-            <img src="/assets/discord.svg"
-                  alt="Bevy Discord server"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://mastodon.social/@bevy">
-            <img src="/assets/mastodon-logo-purple.svg"
-                  alt="Bevy Mastodon account"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://twitter.com/BevyEngine">
-            <img src="/assets/twitter.svg"
-                  alt="Bevy Twitter account"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
-            <img src="/assets/reddit.svg"
-                  alt="Bevy subreddit"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="/atom.xml">
+          {% set community_links = load_data(path="content/community/links.toml") %}
+          {% for link in community_links.links %}
+            {% if link.show_in_footer %}
+              <a class="footer__social" href="{{ link.url }}" title="{{ link.title }}">
+                <img src="{{ link.image }}"
+                      alt="{{ link.image_alt }}"
+                      width="24"
+                      height="24" />
+              </a>
+            {% endif %}
+          {% endfor %}
+          <a class="footer__social" href="/atom.xml" title="Bevy news feed">
             <img src="/assets/feed.svg"
                   alt="Bevy news feed"
-                  width="32"
-                  height="32" />
+                  width="24"
+                  height="24" />
           </a>
         </div>
       </footer>
