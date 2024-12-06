@@ -142,6 +142,8 @@ if (versionsSelect) {
 
 }
 
+document.querySelector('[data-assets-filters]').classList.remove('hidden');
+
 document
     .querySelector('#assets-filter')
     .addEventListener("change", (item) => {
