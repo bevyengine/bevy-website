@@ -1,5 +1,7 @@
 .migration-guide {
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     color: #eee;
   }
 
@@ -19,7 +21,11 @@
   }
 
   h3 {
-    margin-block: 2rem 0.5rem;
+    margin-block: 2rem 1rem;
+  }
+
+  .heading-meta {
+    margin-bottom: 1rem;
   }
 
   hr {
@@ -31,28 +37,6 @@
     font-size: 0;
     border: 0;
     margin-block: 2rem;
-  }
-}
-
-.migration-guide-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  padding: 0px !important;
-  margin: 0px 0px 1rem !important;
-
-  li {
-    font-size: 0.9rem;
-  }
-
-  &__area {
-    padding: 0.2rem 0.3rem;
-    line-height: 1;
-    border-radius: 0.2rem;
-    border-style: solid;
-    border-width: 1px;
-    color: #888;
   }
 }
 
