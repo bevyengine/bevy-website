@@ -18,32 +18,34 @@ let otp_state = new Map();
  * @param {string | HTMLElement} id_or_node 
  */
 function otp_set_active(id_or_node){
-  let id = "";
-  if(typeof id_or_node == "object"){
-    id = id_or_node.getAttribute("id");
-  } else {
-    id = id_or_node;
-  }
-  id = "#" + id;
+  let id = `#${id_or_node instanceof HTMLElement ? id_or_node.getAttribute("id") : id_or_node}`;
+
   document.querySelectorAll(".on-this-page a").forEach(a => {
     a.setAttribute("data-active", a.getAttribute("href").includes(id));
   });
 }
+
+let headerHeight = getComputedStyle(document.body).getPropertyValue(
+  "--header-height"
+);
 
 let otp_observer =  new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
       otp_state.set(entry.target, entry.isIntersecting);
     });
+
     let intersecting = Array.from(otp_state)
       .filter(([_el, inter]) => inter)
       .map(([el, _inter]) => el);
-    intersecting.sort((element) => -element.getBoundingClientRect().y);
+
+    intersecting.sort((a, b) => a.getBoundingClientRect().y - b.getBoundingClientRect().y);
+
     if (intersecting.length > 0) {
       otp_set_active(intersecting[0]);
     }
   }, {
-    rootMargin: "0px 0px 20% 0px",
+    rootMargin: `-${headerHeight} 0px 20% 0px`,
     threshold: 1.0,
   });
 
