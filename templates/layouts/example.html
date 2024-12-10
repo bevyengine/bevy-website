@@ -39,8 +39,8 @@
       </div>
       
       {% for shader in page.extra.shader_code_paths %}
-        <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{loop.index}}">
-        <label class="tabs__label" for="tab{{loop.index}}">{{ shader }}</label>
+        <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
+        <label class="tabs__label" for="tab{{ loop.index }}">{{ shader }}</label>
         <div class="tabs__panel" tabindex="1">
           <div class="example__code media-content">
             {% set code = load_data(path="static/assets/examples/" ~ shader) %}
