@@ -48,6 +48,19 @@ body:not(.show_drafts) .public_draft:not(.active_draft) {
   color: #737373;
   text-shadow: none;
   font-weight: 500;
+  opacity: 0;
+  transition: opacity $duration;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  &:hover .anchor-link {
+    opacity: 1;
+  }
 }
 
 .public_draft>div>a {
