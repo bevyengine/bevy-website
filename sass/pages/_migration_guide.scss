@@ -22,8 +22,21 @@
 
   h3 {
     margin-block: 2rem 1rem;
-    padding-top: 2rem;
-    border-top: solid rgba(#fff, 0.05) 1px;
+  }
+
+  .heading-meta {
+    margin-bottom: 1rem;
+  }
+
+  hr {
+    $color: rgba(#fff, 0.05);
+
+    height: 1px;
+    color: $color;
+    background: $color;
+    font-size: 0;
+    border: 0;
+    margin-block: 2rem;
   }
 }
 
