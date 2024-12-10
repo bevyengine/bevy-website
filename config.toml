@@ -26,5 +26,8 @@ taxonomies = [
 highlight_code = true
 highlight_theme = "css"
 
+# Load extra syntaxes (e.g. WGSL) for syntax highlighting
+extra_syntaxes_and_themes = ["syntaxes"]
+
 [extra]
 # Put all your custom variables here
