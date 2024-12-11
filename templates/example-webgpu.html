@@ -2,8 +2,9 @@
 
 {% block examples_url %}/examples-webgpu{% endblock examples_url %}
 {% block wasm_base_url %}https://bevy-webgpu-examples.pages.dev{% endblock wasm_base_url %}
-{% block intro %}
-<h2 class="warning">Support Warning</h2>
+{% block callout_modifier %}warning{% endblock callout_modifier %}
+{% block callout %}
+<strong>Support Warning.</strong>
 WebGPU is currently only supported on Chrome starting with version 113, and only on desktop.
-If they don't work on your configuration, you can check the WebGL2 examples <a href="/examples">here</a>.
+If the example doesn't work on your configuration, you can check the WebGL2 examples <a href="/examples">here</a>.
 {% endblock intro %}
