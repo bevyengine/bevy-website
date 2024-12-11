@@ -12,10 +12,6 @@
         <i class="icon icon--github"></i> View in GitHub
       </a>
     </div>
-    <div class="assets-intro media-content">
-      {% block intro %}{% endblock intro %}
-    </div>
-    <br />
     <div class="example__canvas bevy-instance">
       <div class="bevy-instance__progress-status" data-progress-status>
         <div class="bevy-instance__progress-file" data-progress-file></div>
@@ -24,25 +20,35 @@
         </div>
       </div>
       <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
+      <aside class="example__callout media-content callout callout--plain callout--{% block callout_modifier %}{% endblock callout_modifier %}">
+        {% block callout %}{% endblock callout %}
+      </aside>
     </div>
     
-    <div class="example__code media-content">
+    <div class="example__code-tabs tabs">
       {% set filename = page.extra.code_path | split(pat="/") | last %}
-      {{ filename }}:
-      
-      {% set code = load_data(path=page.extra.code_path) %}
-      {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
-      {{ code_md | markdown(inline=true) | safe }}
-    </div>
-    {% for shader in page.extra.shader_code_paths %}
-      <div class="example__code media-content">
-        {{ shader }}:
-
-        {% set code = load_data(path="static/assets/examples/" ~ shader) %}
-        {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
-        {{ code_md | markdown(inline=true) | safe }}
+      <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" checked="checked">
+      <label class="tabs__label" for="tab0">{{ filename }}</label>
+      <div class="tabs__panel" tabindex="1">
+        <div class="example__code media-content">
+          {% set code = load_data(path=page.extra.code_path) %}
+          {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
+          {{ code_md | markdown(inline=true) | safe }}
+        </div>
       </div>
-    {% endfor %}
+      
+      {% for shader in page.extra.shader_code_paths %}
+        <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
+        <label class="tabs__label" for="tab{{ loop.index }}">{{ shader }}</label>
+        <div class="tabs__panel" tabindex="1">
+          <div class="example__code media-content">
+            {% set code = load_data(path="static/assets/examples/" ~ shader) %}
+            {% set code_md = "```wgsl" ~ newline ~ code ~ "```" %}
+            {{ code_md | markdown(inline=true) | safe }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
   <script type="module">
     {#
