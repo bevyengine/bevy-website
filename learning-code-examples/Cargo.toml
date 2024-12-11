@@ -5,7 +5,7 @@ publish = false
 autoexamples = false
 
 [dependencies]
-bevy = "0.14.0"
+bevy = "0.15.0"
 
 [lints]
 workspace = true
