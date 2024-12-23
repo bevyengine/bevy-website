@@ -12,7 +12,7 @@ distance (such as curves that are mapped into 2D or 3D space),
 
 ### Constructing Curves
 
-Each curve made be defined in a variety of ways. For example, a curve may be:
+Each curve may be defined in a variety of ways. For example, a curve may be:
 
 * defined by a function
 * interpolated from samples
