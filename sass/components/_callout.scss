@@ -1,6 +1,6 @@
 .callout {
   margin-block: 32px;
-  padding: 16px;
+  padding: 12px 16px;
   border-radius: 4px;
   background-color: var(--callout-bg-color);
   border-top: 4px solid var(--callout-accent-color);
@@ -12,6 +12,10 @@
 
   >:last-child {
     margin-bottom: 0;
+  }
+
+  &--plain {
+    border-top: 0;
   }
 
   &,
