@@ -1,0 +1,27 @@
+diff --git a/tools/build-wasm-example/src/main.rs b/tools/build-wasm-example/src/main.rs
+index 1162aaece..5bb4a8607 100644
+--- a/tools/build-wasm-example/src/main.rs
++++ b/tools/build-wasm-example/src/main.rs
+@@ -73,15 +73,20 @@ fn main() {
+             parameters.push("--features");
+             parameters.push(&features_string);
+         }
++        let profile = if cli.optimize_size {
++            "wasm-release"
++        } else {
++            "release"
++        };
+         let cmd = cmd!(
+             sh,
+-            "cargo build {parameters...} --profile release --target wasm32-unknown-unknown --example {example}"
++            "cargo build {parameters...} --profile {profile} --target wasm32-unknown-unknown --example {example}"
+         );
+         cmd.run().expect("Error building example");
+ 
+         cmd!(
+             sh,
+-            "wasm-bindgen --out-dir examples/wasm/target --out-name wasm_example --target web target/wasm32-unknown-unknown/release/examples/{example}.wasm"
++            "wasm-bindgen --out-dir examples/wasm/target --out-name wasm_example --target web target/wasm32-unknown-unknown/{profile}/examples/{example}.wasm"
+         )
+         .run()
+         .expect("Error creating wasm binding");
