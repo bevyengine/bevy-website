@@ -74,6 +74,10 @@ jobs:
         run: |
           cargo install oxipng --version ^9.1.1
 
+      - name: Create screenshot directory
+        run: |
+          mkdir screenshots
+
       - name: Take Screenshots
         run: |
           xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot-frame 400 --fixed-frame-time 0.0125 --stop-frame 450 --in-ci
