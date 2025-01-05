@@ -5,6 +5,7 @@ on:
 
 permissions:
   pull-requests: write
+  contents: write
 
 env:
   PER_PAGE: 20
@@ -31,7 +32,7 @@ jobs:
   take-screenshots:
     name: Take Screenshots
     needs: prepare-pages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         page: ${{ fromJSON(needs.prepare-pages.outputs.pages) }}
