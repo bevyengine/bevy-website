@@ -44,6 +44,16 @@ jobs:
           repository: 'bevyengine/bevy'
           ref: 'latest'
 
+      - name: Checkout patches
+        uses: actions/checkout@v4
+        with:
+          ref: 'temp-reduce-wasm-size'
+          path: 'temp-patches'  
+  
+      - name: Apply patches
+        run: |
+          git apply --ignore-whitespace temp-patches/desktop-mode.patch
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
