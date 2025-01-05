@@ -83,6 +83,7 @@ jobs:
           xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot-frame 400 --fixed-frame-time 0.0125 --stop-frame 450 --in-ci
 
       - name: Optimize PNGs
+        continue-on-error: true
         run: |
           oxipng --opt max --strip safe --recursive screenshots
 
