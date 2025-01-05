@@ -53,6 +53,8 @@ jobs:
       - name: Apply patches
         run: |
           git apply --ignore-whitespace temp-patches/desktop-mode.patch
+          git apply --ignore-whitespace temp-patches/remove-monitor-info-example.patch
+          git apply --ignore-whitespace temp-patches/remove-remote-protocol-examples.patch
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable

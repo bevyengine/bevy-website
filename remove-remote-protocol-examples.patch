@@ -1,0 +1,35 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index f773ad40b..6ac0a1c68 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -3651,30 +3651,6 @@ description = "Demonstrates volumetric fog and lighting"
+ category = "3D Rendering"
+ wasm = true
+ 
+-[[example]]
+-name = "client"
+-path = "examples/remote/client.rs"
+-doc-scrape-examples = true
+-required-features = ["bevy_remote"]
+-
+-[package.metadata.example.client]
+-name = "client"
+-description = "A simple command line client that can control Bevy apps via the BRP"
+-category = "Remote Protocol"
+-wasm = false
+-
+-[[example]]
+-name = "server"
+-path = "examples/remote/server.rs"
+-doc-scrape-examples = true
+-required-features = ["bevy_remote"]
+-
+-[package.metadata.example.server]
+-name = "server"
+-description = "A Bevy app that you can connect to with the BRP and edit"
+-category = "Remote Protocol"
+-wasm = false
+-
+ [[example]]
+ name = "anisotropy"
+ path = "examples/3d/anisotropy.rs"
