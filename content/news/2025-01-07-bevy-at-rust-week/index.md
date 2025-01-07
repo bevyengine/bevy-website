@@ -37,7 +37,7 @@ Now, for the details:
 
 If you'd like to attend, add yourself to [this spreadsheet](https://docs.google.com/spreadsheets/d/1-WwFHj2GdZ8quon7V5z8XNVQDDYvme7_-QzfBGelRBA/edit?usp=sharing). We have limited slots (about 20), and people need to make travel arrangements: please be considerate when indicating your level of committedness! If you later find you cannot attend, please remove yourself from this list so we can free up space for others.
 
-Maintainers and SMEs will be prioritized, but beyond that, selection will be random. Once we have a full list, we'll go through the list (sorted by committedness, then randomly within that) and get a final confirmation from each person who has signed up before forwarding the list to the RustWeek organizers.
+Maintainers and SMEs will be prioritized, but beyond that, selection will be random. After the spreadsheet has been live for a week, we'll go through the list (sorted by committedness, then randomly within that) and get a final confirmation from each person who has signed up before forwarding the final attendee list to the RustWeek organizers.
 
 We're incredibly grateful for this opportunity, and would love to help defray the costs for the organizers and have funds to support contributors with travel costs. If you or your company would like to provide funds for this, read over the [sponsorship prospectus](https://rustweek.org/resources/sponsorship-prospectus-rustweek-2025.pdf) that they've provided to us. To coordinate the details, email us at `support@bevyengine.org` + `sponsors@rustnl.org`.
 
