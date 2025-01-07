@@ -30,9 +30,10 @@ Now, for the details:
   - Unconf attendees also invited to the 10 Years of Rust Celebration beforehand on May 15th!
 - **How much:** Free!
   - You do need to pay for your own travel and lodging. We'll help coordinate hotel sharing for those who are interested.
+  - Renting a bike is recommended: the Netherlands is great fun with one and it was extremely useful for RustNL 2024. We'll try to coordinate a group deal!
   - Bevy and RustWeek would like to offer some financial support to contributors who need it: email or DM us if this would make life easier for you <3
 
-If you'd like to attend, add yourself to [this spreadsheet](TODO). We have limited slots (about 20), and people need to make travel arrangements: please only add yourself if you're relatively certain you can and will attend! If you later find you cannot attend, please remove yourself from this list so we can free up space for others.
+If you'd like to attend, add yourself to [this spreadsheet](https://docs.google.com/spreadsheets/d/1-WwFHj2GdZ8quon7V5z8XNVQDDYvme7_-QzfBGelRBA/edit?usp=sharing). We have limited slots (about 20), and people need to make travel arrangements: please be considerate when indicating your level of committedness! If you later find you cannot attend, please remove yourself from this list so we can free up space for others.
 
 We're incredibly grateful for this opportunity, and would love to help defray the costs for the organizers and have funds to support contributors with travel costs. If you or your company would like to provide funds for this, read over the [sponsorship prospectus](https://rustweek.org/resources/sponsorship-prospectus-rustweek-2025.pdf) that they've provided to us. To coordinate the details, email us at `support@bevyengine.org` + `sponsors@rustnl.org`.
 
