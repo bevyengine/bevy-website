@@ -15,6 +15,7 @@ Now, for the details:
 - **Who:** Anyone who is actively contributing to Bevy or the surrounding Rust game dev ecosystem.
   - If you're focused on Bevy's dependencies (`winit`, `wgpu` and so much more) please come hang out with us: we'd love to have you!
   - Experienced users are welcome too: share your hopes, dreams, complaints and frustrations about Bevy
+  - If you have dietary restrictions or need accommodations of any form, please reach out to the RustWeek organizers and we'll do our best to meet your needs.
 - **What:** work on Bevy building and improving your favorite open source Rust game engine.
   - What exactly will we work on? Who knows!
   - There will be mad science.
@@ -22,6 +23,7 @@ Now, for the details:
   - It *will* be fun.
 - **Where:** Utrecht, The Netherlands
   - De Utrechtse Stadsvrijheid, to be exact.
+  - If you need help with letters of invitation or visas, let us know ASAP and we'll help get you sorted.
 - **When:** May 16th and 17th, 2025
   - That's Friday and Saturday, with a bonus event on Thursday afternoon and evening.
   - The conference beforehand is great (Alice is giving a talk!), but totally optional.
