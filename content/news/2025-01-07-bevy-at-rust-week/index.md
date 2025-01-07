@@ -42,3 +42,5 @@ Maintainers and SMEs will be prioritized, but beyond that, selection will be ran
 We're incredibly grateful for this opportunity, and would love to help defray the costs for the organizers and have funds to support contributors with travel costs. If you or your company would like to provide funds for this, read over the [sponsorship prospectus](https://rustweek.org/resources/sponsorship-prospectus-rustweek-2025.pdf) that they've provided to us. To coordinate the details, email us at `support@bevyengine.org` + `sponsors@rustnl.org`.
 
 That's all for now: see you in the Netherlands!
+
+P.S. Bevy can also [select one side-track talk for the main conference](https://rustweek.org/unconf/#conf). If you're interested in attending the conference, and would like to give a talk to a broader audience, please let us know!
