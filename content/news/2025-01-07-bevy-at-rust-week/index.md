@@ -13,7 +13,7 @@ github = "alice-i-cecile"
 Now, for the details:
 
 - **Who:** Anyone who is actively contributing to Bevy or the surrounding Rust game dev ecosystem.
-  - If you're focused on Bevy's dependencies (`winit`, `wgpu` and so much more) please come hang out with us: we'd love to have you!
+  - If you're focused on Bevy's dependencies (`winit`, `wgpu` and so many more) please come hang out with us: we'd love to have you!
   - Experienced users are welcome too: share your hopes, dreams, complaints and frustrations about Bevy
   - If you have dietary restrictions or need accommodations of any form, please reach out to the RustWeek organizers and we'll do our best to meet your needs.
 - **What:** work on Bevy building and improving your favorite open source Rust game engine.
