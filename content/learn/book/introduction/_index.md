@@ -12,4 +12,4 @@ status = 'hidden'
 
 While this guide is not designed to be read in sequence, it is still recommended to do so. This book gives a surface level overview first with very simple examples and then explores Rust's type system magic. Astute readers may skip to more interesting chapters.
 
-It is recommended to read atleast the ECS chapter.
+It is recommended to read at least the ECS chapter.
