@@ -57,6 +57,8 @@ We love getting code contributions from the community, and there's plenty of wor
 
 If you already know what you want to work on, all you have to do is make your changes and submit a pull request! The page on [Opening Pull Requests](@/learn/contribute/helping-out/opening-pull-requests.md) is there to help if you get stuck.
 
+Before submitting a pull request, make sure to run `cargo run -p ci` to ensure that your code is formatted and free of warnings.
+
 {% callout() %}
 When working on the engine's code, it's a good idea to introduce yourself in the `#engine-dev` channel on [Discord](https://discord.gg/bevy) and tell people about your plans. Communicating your progress early and often can help you avoid headaches and disagreements during code review.
 {% end %}
