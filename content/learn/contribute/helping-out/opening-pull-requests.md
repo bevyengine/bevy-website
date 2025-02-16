@@ -10,7 +10,7 @@ weight = 3
 Most changes don't require much "process". If your change is relatively straightforward, just do the following:
 
 1. A community member (that's you!) creates one of the following:
-   * [GitHub Discussion]: An informal discussion with the community.
+   * [GitHub Discussions]: An informal discussion with the community.
 
       This is the place to start if you want to propose a feature or specific implementation.
    * [Issue](https://github.com/bevyengine/bevy/issues): A formal way for us to track a bug or feature.
@@ -27,7 +27,7 @@ Most changes don't require much "process". If your change is relatively straight
 5. When they find time, the Project Lead or a Maintainer performs a final code review and queues the PR for merging.
 
 [Discord]: https://discord.com/invite/bevy
-[GitHub Discussion]: https://github.com/bevyengine/bevy/discussions
+[GitHub Discussions]: https://github.com/bevyengine/bevy/discussions
 
 ### Complex changes
 
