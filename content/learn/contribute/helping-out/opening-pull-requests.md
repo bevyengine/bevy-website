@@ -10,10 +10,22 @@ weight = 3
 Most changes don't require much "process". If your change is relatively straightforward, just do the following:
 
 1. A community member (that's you!) creates one of the following:
-    * [GitHub Discussions]: An informal discussion with the community. This is the place to start if you want to propose a feature or specific implementation.
-    * [Issue](https://github.com/bevyengine/bevy/issues): A formal way for us to track a bug or feature. Please look for duplicates before opening a new issue and consider starting with a Discussion.
-    * [Pull Request](https://github.com/bevyengine/bevy/pulls) (or PR for short): A request to merge code changes. This starts our "review process". You are welcome to start with a pull request, but consider starting with an Issue or Discussion for larger changes (or if you aren't certain about a design). We don't want anyone to waste their time on code that didn't have a chance to be merged! But conversely, sometimes PRs are the most efficient way to propose a change. Use your own judgment here.
-2. Other community members review and comment in an ad-hoc fashion. Active Subject Matter Experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord] in an appropriate engine development channel.
+   * [GitHub Discussions]: An informal discussion with the community.
+
+      This is the place to start if you want to propose a feature or specific implementation.
+
+   * [Issue](https://github.com/bevyengine/bevy/issues): A formal way for us to track a bug or feature.
+
+      Please look for duplicates before opening a new issue and consider starting with a Discussion.
+
+   * [Pull Request](https://github.com/bevyengine/bevy/pulls) (or PR for short): A request to merge code changes.
+
+      This starts our review process. You are welcome to start with a pull request, but consider an Issue or Discussion for larger changes (or if you aren't certain about a design). We don't want anyone to waste their time on code that didn't have a chance to be merged! But conversely, sometimes PRs are the most efficient way to propose a change. Use your own judgment here.
+
+2. Other community members review and comment in an ad-hoc fashion.
+
+   Active Subject Matter Experts may be pulled into a thread using `@mentions`. If your PR has been quiet for a while and is ready for review, feel free to leave a message to "bump" the thread, or bring it up on [Discord] in an appropriate engine development channel.
+
 3. Once they're content with the pull request (design, code quality, documentation, tests), individual reviewers leave "Approved" reviews.
 4. After consensus has been reached (see [Reviewing Pull Requests](@/learn/contribute/helping-out/reviewing-pull-requests.md#how-pull-requests-are-merged) for more on that) and CI passes, the [S-Ready-For-Final-Review](https://github.com/bevyengine/bevy/issues?q=is%3Aopen+is%3Aissue+label%3AS-Ready-For-Final-Review) label is added.
 5. When they find time, the Project Lead or a Maintainer performs a final code review and queues the PR for merging.
@@ -37,34 +49,44 @@ Individual contributors often lead major new features and reworks. However these
 Bevy is actively open to code contributions from community members.
 If you're new to Bevy, here's the workflow we use:
 
-1. Fork the `bevyengine/bevy` repository on GitHub. You'll need to create a GitHub account if you don't have one already.
-    1. Copy `.cargo/config_fast_builds.toml` to `.cargo/config.toml`. Then update the file and follow the general
-  recommendations to [compile with performance optimizations](https://bevyengine.org/learn/quick-start/getting-started/setup/#compile-with-performance-optimizations).
-2. Make your changes in a local clone of your fork, typically in its own new branch.
-   1. Try to split your work into separate commits, each with a distinct purpose. Be particularly mindful of this when responding to reviews so it's easy to see what's changed.
-   2. {% callout() %}
-    Tip: [You can set up a global `.gitignore` file](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer) to exclude your operating system/text editor's special/temporary files. (e.g. `.DS_Store`, `thumbs.db`, `*~`, `*.swp` or `*.swo`) This allows us to keep the `.gitignore` file in the repository uncluttered.
+1. Fork the [`bevyengine/bevy`](https://github.com/bevyengine/bevy) repository on GitHub. You'll need to create a GitHub account if you don't have one already.
+2. (Optional) Copy `.cargo/config_fast_builds.toml` to `.cargo/config.toml`. Then update the file and follow the general recommendations to [compile with performance optimizations](https://bevyengine.org/learn/quick-start/getting-started/setup/#compile-with-performance-optimizations).
+3. Make your changes in a local clone of your fork, typically in its own new branch.
+
+   Try to split your work into separate commits, each with a distinct purpose. Be particularly mindful of this when responding to reviews so that it's easy to see what's changed.
+
+   {% callout() %}
+   Tip: [You can set up a global `.gitignore` file](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer) to exclude your operating system/text editor's special/temporary files. (e.g. `.DS_Store`, `thumbs.db`, `*~`, `*.swp` or `*.swo`) This allows us to keep the `.gitignore` file in the repository uncluttered.
     {% end %}
 
-3. To test CI validations locally, run the `cargo run -p ci` command. This will run most checks that happen in CI, but can take some time. You can also run sub-commands to iterate faster depending on what you're contributing:
+4. To test CI validations locally, run the `cargo run -p ci` command.
+
+   This will run most checks that happen in CI, but can take some time. You can also run sub-commands to iterate faster depending on what you're contributing:
+
     * `cargo run -p ci -- lints` - to run formatting and Clippy.
     * `cargo run -p ci -- test` - to run tests.
     * `cargo run -p ci -- doc` - to run doc tests and doc checks.
-    * `cargo run -p ci -- compile` - to check that everything that must compile still does (examples and benches), and that some that we want to be sure *don't* compile ([`crates/bevy_ecs/compile_fail`](https://github.com/bevyengine/bevy/tree/main/crates/bevy_ecs/compile_fail)).
-    * to get more information on commands available and what is run, check the [tools/ci crate](https://github.com/bevyengine/bevy/tree/main/tools/ci).
-4. When working with Markdown (`.md`) files, Bevy's CI will check markdown files (like this one) using [markdownlint](https://github.com/DavidAnson/markdownlint).
-To locally lint your files using the same workflow as our CI:
+    * `cargo run -p ci -- compile` - to check that everything that must compile still does (examples and benches), and that some that we want to be sure *don't* compile ([`crates/bevy_ecs/compile_fail`](https://github.com/bevyengine/bevy/tree/main/crates/bevy_ecs/compile_fail)) does not.
+
+    To get more information on commands available and what is run, check the [tools/ci crate](https://github.com/bevyengine/bevy/tree/main/tools/ci).
+5. When working with Markdown (`.md`) files, Bevy's CI will check markdown files (like this one) using [markdownlint](https://github.com/DavidAnson/markdownlint).
+
+   To locally lint your files using the same workflow as our CI:
+
    1. Install [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli).
    2. Run `markdownlint -f -c .github/linters/.markdown-lint.yml .` in the root directory of the Bevy project.
-5. When working with TOML (`.toml`) files, Bevy's CI will check them for style and correctness using [taplo](https://taplo.tamasfe.dev/): `taplo fmt --check --diff`
-   1. If you use VSCode, install [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) and format your files.
-   2. If you want to use the CLI tool, install [taplo-cli](https://taplo.tamasfe.dev/cli/installation/cargo.html) and run `taplo fmt --check --diff` to check for the formatting. Fix any issues by running `taplo fmt` in the root directory of the Bevy project.
-6. Check for typos. Bevy's CI will check for them using [typos](https://github.com/crate-ci/typos).
-   1. If you use VSCode, install [Typos Spell Checker](https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode).
-   2. You can also use the CLI tool by installing [typos-cli](https://github.com/crate-ci/typos?tab=readme-ov-file#install) and running `typos` to check for typos, and fix them by running `typos -w`.
-7. Push your changes to your fork on GitHub and open a Pull Request.
-8. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or the Project Lead's final judgement.
-9. When your PR is ready to merge, a Maintainer or the Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
+6. When working with TOML (`.toml`) files, Bevy's CI will check them for style and correctness using [taplo](https://taplo.tamasfe.dev/).
+
+   To locally lint your files using the same workflow as our CI:
+
+   * If you use VS Code, install [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) and format your files.
+   * If you want to use the CLI tool, install [taplo-cli](https://taplo.tamasfe.dev/cli/installation/cargo.html) and run `taplo fmt --check --diff` to check for the formatting. Fix any issues by running `taplo fmt` in the root directory of the Bevy project.
+7. Check for typos. Bevy's CI will check for them using [typos](https://github.com/crate-ci/typos).
+   * If you use VS Code, install [Typos Spell Checker](https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode).
+   * You can also use the CLI tool by installing [typos-cli](https://github.com/crate-ci/typos?tab=readme-ov-file#install) and running `typos` to check for typos, and fix them by running `typos -w`.
+8. Push your changes to your fork on GitHub and open a Pull Request.
+9. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or the Project Lead's final judgement.
+10. When your PR is ready to merge, a Maintainer or the Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
 
 If you end up adding a new official Bevy crate to the `bevy` repository:
 
@@ -111,15 +133,15 @@ Some areas mentioned in the [Rust API guidelines][Rust API guidelines] we do not
 
 > All items have a rustdoc example
 
-- This guideline is too strong and not applicable for everything inside of the Bevy game engine. For functionality that requires more context or needs a more interactive demonstration (such as rendering or input features), make use of the `examples` folder instead.
+* This guideline is too strong and not applicable for everything inside of the Bevy game engine. For functionality that requires more context or needs a more interactive demonstration (such as rendering or input features), make use of the `examples` folder instead.
 
 > Examples use ?, not try!, not unwrap
 
-- This guideline is usually reasonable, but not always required.
+* This guideline is usually reasonable, but not always required.
 
 > Only smart pointers implement Deref and DerefMut
 
-- Generally a good rule of thumb, but we're probably going to deliberately violate this for single-element wrapper types like `Life(u32)`. The behavior is still predictable and it significantly improves ergonomics / new user comprehension.
+* Generally a good rule of thumb, but we're probably going to deliberately violate this for single-element wrapper types like `Life(u32)`. The behavior is still predictable and it significantly improves ergonomics / new user comprehension.
 
 [Rust API guidelines]: https://rust-lang.github.io/api-guidelines/about.html
 
@@ -133,7 +155,9 @@ You may find that your reviewers sometimes misunderstand your work, ask for chan
 
 Occasionally authors of pull requests get busy or become unresponsive, or project members fail to reply in a timely manner.
 This is a natural part of any open source project.
-To avoid blocking these efforts, these pull requests may be *adopted*, where another contributor creates a new pull request with the same content.
+
+To unblock progress on these efforts, another contributor may *adopt* the pull request. This involves creating a new pull request based on the original, addressing any outstanding feedback, fixing any merge conflicts that have arisen, and performing any additional work required to bring it to completion.
+
 If there is an old pull request that is without updates, comment to the organization whether it is appropriate to add the
 *[S-Adopt-Me](https://github.com/bevyengine/bevy/labels/S-Adopt-Me)* label, to indicate that it can be *adopted*.
 *S-Adopt-Me* PRs should be closed, and a tracking issue opened with the same labels to track their adoptions.
@@ -145,10 +169,8 @@ This may sometimes even skip the labeling process since at that point the PR has
 
 With this label added, it's best practice to fork the original author's branch.
 This ensures that they still get credit for working on it and that the commit history is retained.
-When the new pull request is ready, it should reference the original PR in the description.
+When the new pull request is ready, it should reference the original PR in the description like this: `Adopted #number-original-pull-request`. Copy any other important content such as migration guides from the old description.
 Then, notify org members to close the original.
-
-* For example, you can reference the original PR by adding the following to your PR description: `Adopted #number-original-pull-request`
 
 ## Helping a PR get ready
 
