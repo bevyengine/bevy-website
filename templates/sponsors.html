@@ -96,8 +96,7 @@
         <h2 class="past-donors-title">Past Donors</h2>
         <div class="past-donor">
         {% for donor in past_donors %}
-            {% set name = donor.name | escape | replace(from=" ", to="&nbsp;") %}
-            {% if loop.last %}{{ name | safe }}{% else %}{{ name | safe }},{% endif %}
+            {{ donor.name | escape | replace(from=" ", to="&nbsp;") | safe }}{% if not loop.last %},{% endif %}
         {% endfor %}
         </div>
     {% endif %}
