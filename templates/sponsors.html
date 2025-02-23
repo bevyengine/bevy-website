@@ -91,28 +91,12 @@
 {% endfor %}
 
 {% if donors.donor %}
-    {% set_global first = true %}
-    {% set sorted_donors = donors.donor | sort(attribute="amount") | reverse %}
-    {% set_global past_donor_exists = false %}
-    {% for donor in sorted_donors %}
-        {% if donor.past %}
-            {% set_global past_donor_exists = true %}
-        {% endif %}
-    {% endfor %}
-    {% if past_donor_exists %}
+    {% set past_donors = donors.donor | filter(attribute="past", value=true) | filter(attribute="name") | sort(attribute="amount") | reverse %}
+    {% if past_donors %}
         <h2 class="past-donors-title">Past Donors</h2>
         <div class="past-donor">
-        {% for donor in sorted_donors %}
-            {% if not donor.past %}
-                {% continue %}
-            {% endif %}
-            {% if not donor.name %}
-                {% continue %}
-            {% endif %}
-            {% if first %}{{ donor.name }}{% else %} , {{ donor.name }}{% endif %}
-            {% if first %}
-                {% set_global first = false %}
-            {% endif %}
+        {% for donor in past_donors %}
+            {{ donor.name | escape | replace(from=" ", to="&nbsp;") | safe }}{% if not loop.last %},{% endif %}
         {% endfor %}
         </div>
     {% endif %}
