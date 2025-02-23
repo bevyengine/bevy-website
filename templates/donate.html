@@ -1,10 +1,6 @@
 {% import "macros/numbers.html" as numbers %}
 {% extends "layouts/base.html" %}
 
-{% block head_extensions %}
-    <script src="/donate.js"></script>
-{% endblock head_extensions %}
-
 {% block content %}
 
 {% set donors = load_data(path="content/donate/donors.toml") %}
@@ -83,6 +79,8 @@
     </div>
 </div>
 
+<input id="donate-view-state" class="hidden" type="checkbox">
+<div data-donate-view-state-container>
 <div id="membership">
 <h2 class="donate-header-padding">Membership</h2>
 <div class="donate-levels-container">
@@ -120,12 +118,12 @@
         {% endfor %}
     </div>
 </div>
-<button type="button" class="card donate-corporate-button" onclick="show_corporate()">
+<label for="donate-view-state" class="card donate-corporate-button">
     Corporate Tiers 
-</button>
+</label>
 </div>
 
-<div id="corporate-sponsorship" style="display: none">
+<div id="corporate-sponsorship">
 <h2 class="donate-header-padding">Corporate Sponsorship</h2>
 <div class="donate-membership-description">
 These tiers exist for individuals or organizations that want to support Bevy in a big way. We <i>highly</i> recommend using bank transfers for payments at these levels to avoid exorbitant credit card processor fees. Please <a href="mailto:support@bevyengine.org">contact us</a> if you have any questions, or if you would like to discuss other payment options!
@@ -166,9 +164,10 @@ These tiers exist for individuals or organizations that want to support Bevy in 
     {% endfor %}
 </div>
 </div>
-<button type="button" class="card donate-corporate-button" onclick="show_membership()">
+<label for="donate-view-state" class="card donate-corporate-button">
     Individual Tiers
-</button>
+</label>
+</div>
 </div>
 
 <div class="donate-faq-link"><a href="/donate/options">Click here</a> for more donation options and FAQs</div>

@@ -242,3 +242,21 @@ div.donate-sponsor {
   text-align: center;
   margin-top: 4rem;
 }
+
+#membership {
+  display: block;
+}
+
+#corporate-sponsorship {
+  display: none;
+}
+
+@include state-checked("donate-view") {
+    #membership {
+        display: none;
+    }
+
+    #corporate-sponsorship {
+        display: block;
+    }
+}

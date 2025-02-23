@@ -1,0 +1,65 @@
+.tabs {
+  $h-padding: 16px;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  &__radio {
+    position: absolute;
+    opacity: 0;
+  }
+
+  &__label {
+    width: 100%;
+    cursor: pointer;
+    text-align: center;
+    text-wrap: nowrap;
+    padding: 12px $h-padding;
+    position: relative;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: rgba(#fff, 0.05);
+    }
+
+    &:active {
+      background-color: rgba(#fff, 0.1);
+    }
+
+    &:after {
+      content: "";
+      display: block;
+      height: 2px;
+      border-radius: 2px;
+      background-color: transparent;
+      position: absolute;
+      bottom: 0px;
+      left: $h-padding;
+      right: $h-padding;
+      transition: background-color $duration;
+    }
+  }
+
+  &__panel {
+    display: none;
+    width: 100%;
+  }
+}
+
+.tabs__radio:checked + .tabs__label:after {
+  background-color: $color-blue-link;
+}
+
+.tabs__radio:checked + .tabs__label + .tabs__panel {
+  display: block;
+}
+
+@media #{$bp-tablet-portrait-up} {
+  .tabs__panel {
+    order: 99;
+  }
+
+  .tabs__label {
+    width: min-content;
+  }
+}

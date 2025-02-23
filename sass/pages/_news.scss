@@ -47,22 +47,6 @@
   color: var(--text-dim-color);
 }
 
-.release-feature-meta {
-  @extend .release-feature-authors;
-  display: flex;
-  gap: 5px;
-  font-size: 1.0rem;
-  flex-wrap: wrap;
-}
-
-.release-feature-meta-item {
-  color: #b8b8b8 !important;
-}
-
-.release-feature-meta-title {
-  margin-right: 4px;
-}
-
 .news-image-subtitle {
   color: var(--text-dim-color);
   font-style: italic;

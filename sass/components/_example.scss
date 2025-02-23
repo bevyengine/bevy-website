@@ -4,7 +4,7 @@
   &__header {
     display: grid;
     gap: 8px;
-    margin: 16px 0 8px;
+    margin: 16px 0 16px;
     align-items: baseline;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
@@ -12,7 +12,7 @@
       "back  github";
 
     @media #{$bp-tablet-portrait-up} {
-      margin: 24px 0 8px;
+      margin: 32px 0 16px;
       grid-template-areas: "back title github";
       grid-template-columns: 150px 1fr 150px;
     }
@@ -45,5 +45,15 @@
   &__github {
     grid-area: github;
     text-align: right;
+  }
+
+  &__code-tabs {
+    margin-top: 16px;
+  }
+
+  &__callout {
+    margin-top: 2px;
+    margin-block: 4px 16px !important;
+    font-size: 1rem !important;
   }
 }

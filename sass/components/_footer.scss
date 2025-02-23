@@ -3,15 +3,23 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 25px;
-    padding: 20px;
+    flex-wrap: wrap;
+    padding: 32px 16px;
   }
 
   &__social {
+    padding: 12px;
+
     img {
       filter: var(--footer-image-filter);
-      &:hover {
+      transition: scale $duration, opacity $duration;
+      opacity: 0.65;
+    }
+
+    &:hover {
+      img {
         scale: 110%;
+        opacity: 1;
       }
     }
   }

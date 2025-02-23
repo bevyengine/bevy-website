@@ -21,31 +21,22 @@
   }
 
   h3 {
-    margin-block: 2rem 0.5rem;
-    padding-top: 2rem;
-    border-top: solid var(--hr-color) 1px;
-  }
-}
-
-.migration-guide-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  padding: 0px !important;
-  margin: 0px 0px 1rem !important;
-
-  li {
-    font-size: 0.9rem;
+    margin-block: 2rem 1rem;
   }
 
-  &__area {
-    padding: 0.2rem 0.3rem;
-    line-height: 1;
-    border-radius: 0.2rem;
-    border-style: solid;
-    border-width: 1px;
-    color: var(--color-neutral-300);
+  .heading-meta {
+    margin-bottom: 1rem;
+  }
+
+  hr {
+    $color: rgba(#fff, 0.05);
+
+    height: 1px;
+    color: $color;
+    background: $color;
+    font-size: 0;
+    border: 0;
+    margin-block: 2rem;
   }
 }
 

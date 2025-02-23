@@ -248,7 +248,7 @@ impl GithubClient {
             IssueState::Merged => responses.retain(|pr| {
                 pr.pull_request
                     .as_ref()
-                    .map_or(false, |pr| pr.merged_at.is_some())
+                    .is_some_and(|pr| pr.merged_at.is_some())
             }),
             IssueState::All => (),
         };
