@@ -26,7 +26,7 @@
       <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
     </div>
     
-    <div class="example__code media-content">
+    <div class="example__code media-content" data-pagefind-weight="0.75">
       {% set filename = page.extra.code_path | split(pat="/") | last %}
       {{ filename }}:
       
@@ -35,7 +35,7 @@
       {{ code_md | markdown(inline=true) | safe }}
     </div>
     {% for shader in page.extra.shader_code_paths %}
-      <div class="example__code media-content">
+      <div class="example__code media-content" data-pagefind-weight="0.75">
         {{ shader }}:
 
         {% set code = load_data(path="static/assets/examples/" ~ shader) %}

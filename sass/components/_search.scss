@@ -1,0 +1,33 @@
+.search {
+  &--visible {
+    .search__dialog {
+      display: block;
+    }
+
+    .search__backdrop {
+      @include backdrop-visible();
+    }
+  }
+
+  &__backdrop {
+    @include backdrop($z-search-backdrop);
+  }
+
+  &__dialog {
+    display: none;
+    width: 100%;
+    max-width: 1000px;
+    padding: 16px;
+    min-height: 400px;
+    max-height: calc(100% - 320px);
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 2px solid #2c2c2d;
+    position: fixed;
+    top: 160px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: $z-search;
+    background-color: #1e1e22;
+  }
+}

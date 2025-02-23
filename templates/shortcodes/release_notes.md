@@ -10,7 +10,7 @@
 <div class="release-feature-meta">
   <div>
     <span class="release-feature-meta-title">Authors:</span>
-    {% for author in release_note.authors %}{% if author is starting_with("@") %}<a href="https://github.com/{{ author | trim_start_matches(pat="@") }}" class="release-feature-meta-item">{{ author }}</a>{% else %}<span class="release-feature-meta-item">{{ author }}</span>{% endif %}{% if not loop.last %},{% endif %}
+    {% for author in release_note.authors %}{% if author is starting_with("@") %}<a href="https://github.com/{{ author | trim_start_matches(pat="@") }}" class="release-feature-meta-item" data-pagefind-meta="contributor">{{ author }}</a>{% else %}<span class="release-feature-meta-item">{{ author }}</span>{% endif %}{% if not loop.last %},{% endif %}
     {% endfor %}
   </div>
   <div>
