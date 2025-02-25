@@ -239,7 +239,22 @@
     <div class="search" data-search>
       <div class="search__backdrop" data-search-backdrop></div>
       <div class="search__dialog" data-search-dialog>
-        <input type="text">
+        <div class="search__header">
+          <input type="text" data-search-input>
+          <div class="search__close" data-search-close>X</div>
+        </div>
+        <div class="search__results" data-search-results></div>
+        <template data-search-result-tpl>
+          <div class="search-result">
+            <a data-search-result-title></a>
+            <div data-search-result-sub-results></div>
+          </div>
+        </template>
+        <template data-search-no-results-tpl>
+          <div class="search-no-results">
+            No results
+          </div>
+        </template>
       </div>
     </div>
     <script>

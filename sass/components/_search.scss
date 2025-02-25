@@ -30,4 +30,28 @@
     z-index: $z-search;
     background-color: #1e1e22;
   }
+
+  &__header {
+    display: flex;
+    position: sticky;
+    top: 0px;
+  }
+
+  &__close {
+    @include flex-center;
+
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+  }
+
+  &__results {
+    overflow-y: auto;
+  }
+
+  &__results {
+    display: flex;
+    flex-direction: column;
+    gap: 8;
+  }
 }
