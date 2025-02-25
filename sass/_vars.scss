@@ -133,7 +133,7 @@ $colors: (
   --anchor-link-color: var(--color-neutral-500);
   --content-bg-color: var(--color-neutral-700);
   --docs-whats-a-bevy-filter: none;
-  --focus-outline: solid #{color(blue, 300)} 3px;
+  --focus-outline: solid var(--color-blue-300) 3px;
   --footer-image-filter: grayscale(1) brightness(800%);
   --foundation-logo-filter: none;
   --header-border-color: #2c2c2d;
@@ -142,7 +142,7 @@ $colors: (
   --html-bg-color: var(--color-neutral-800);
   --link-color: var(--color-blue-link);
   --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
-  --text-color: #d2d2d2;
+  --text-color: var(--color-neutral-100);
   --text-dim-color: var(--color-neutral-300);
 
   --asset-card-title-bg-color: #{rgba($color-black, 0.5)};
@@ -210,6 +210,8 @@ $colors: (
   --code-yyy: #d19a66;
   --code-zzz: #d1af8f;
 
+  --details-bg-color: var(--color-white);
+
   --docs-footer-color: var(--color-neutral-300);
   --docs-footer-dir-color: var(--color-neutral-400);
   --docs-footer-dir-hover-color: var(--color-neutral-300);
@@ -253,7 +255,7 @@ $colors: (
     --anchor-link-color: var(--color-neutral-200);
     --content-bg-color: #{darken($color-white, 3%)};
     --docs-whats-a-bevy-filter: invert(85%);
-    --focus-outline: solid #{color(blue, 500)} 3px;
+    --focus-outline: solid var(--color-blue-500) 3px;
     --footer-image-filter: grayscale(1) brightness(0%);
     --foundation-logo-filter: invert(80%);
     --header-border-color: var(--color-neutral-400);
@@ -330,6 +332,8 @@ $colors: (
     --code-yyy: #d0721a;
     --code-zzz: #df9754;
 
+    --details-bg-color: var(--color-black);
+
     --docs-footer-border-color: var(--color-neutral-100);
     --docs-footer-color: var(--color-neutral-600);
     --docs-footer-dir-color: var(--color-neutral-400);
@@ -351,7 +355,7 @@ $colors: (
     --menu-switch-option-active-text-color: var(--color-black);
     --menu-switch-option-text-color: var(--color-neutral-500);
 
-    --on-this-page-color: var(--color-neutral-300);
+    --on-this-page-color: var(--color-neutral-400);
     --on-this-page-hover-color: var(--color-black);
     --on-this-page-active-color: var(--color-black);
 

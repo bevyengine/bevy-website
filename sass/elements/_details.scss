@@ -3,7 +3,7 @@ details {
   border-radius: $border-radius;
   padding: 0 $h-padding;
   margin-block: 1em;
-  background-color: rgba(var(--color-white), 0.1);
+  background-color: unquote("rgb(from var(--details-bg-color) r g b / 0.05)");
   overflow: hidden; // prevent clobbering corner radii
 
   & h1,
