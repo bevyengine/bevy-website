@@ -8,7 +8,7 @@
   flex-wrap: wrap;
 
   &__item {
-    color: #b8b8b8 !important;
+    color: var(--heading-meta-item-color) !important;
   }
 
   &__title {

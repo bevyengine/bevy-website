@@ -49,7 +49,7 @@
 
 .feature-image {
   height: 24rem;
-  background-color: #2b2c2f;
+  background-color: var(--feature-image-bg-color);
   border-radius: 4rem;
   display: flex;
   align-items: center;

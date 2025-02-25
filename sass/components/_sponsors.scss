@@ -7,18 +7,18 @@
   &--corporate_bronze,
   &--diamond,
   &--titanium {
-    background-color: var(--color-neutral-700);
+    background-color: var(--sponsor-vip-bg-color);
     border-radius: 8px;
     padding: 24px 24px 8px;
 
     .sponsors {
       &__title {
-        color: var(--color-neutral-100);
+        color: var(--sponsor-vip-title-color);
         margin: 0 0 16px;
       }
 
       &__name {
-        color: var(--color-blue-link);
+        color: var(--sponsor-vip-name-color);
       }
     }
   }
@@ -54,21 +54,21 @@
   &__name {
     display: block;
     margin: 0 10px 10px;
-    color: rgb(150, 150, 150);
+    color: var(--sponsor-name-color);
     font-size: 1.25rem;
   }
 
   &__link {
     display: block;
     margin: 0 15px 15px;
-    color: var(--link-color);
+    color: var(--sponsor-link-color);
     font-size: 1.5rem;
   }
 
   &__amount {
     margin-top: -4px;
     font-size: 1.2rem;
-    color: rgb(150, 150, 150);
+    color: var(--sponsor-amount-color);
   }
 
   &__content {
@@ -108,5 +108,5 @@
 
 .past-donor {
   font-size: 1rem;
-  color: rgb(150, 150, 150);
+  color: var(--sponsor-past-donor-color);
 }

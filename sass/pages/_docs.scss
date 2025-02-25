@@ -4,14 +4,6 @@
   min-height: 500px;
 }
 
-.docs-page-subtitle {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: #999999;
-  font-style: italic;
-  vertical-align: middle;
-}
-
 .docs-content {
   position: relative;
   width: 100%;
@@ -45,7 +37,6 @@
 }
 
 .docs-whats-a-bevy {
-  background-color: #00000000; // !important;
   filter: var(--docs-whats-a-bevy-filter);
   height: 2.4rem !important;
   border-radius: unset !important;

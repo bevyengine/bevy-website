@@ -4,26 +4,23 @@
 }
 
 div.incorrect {
-  $incorrect_block_background_color: #481e21;
   position: relative;
-  background-color: $incorrect_block_background_color;
-  border-left: 10px solid darkred;
+  background-color: var(--code-incorrect-bg-color);
+  border-left: 10px solid var(--code-incorrect-border-color);
   border-radius: 10px;
   padding-right: 55px;
 
   .z-code,
   .z-code code {
-    background-color: $incorrect_block_background_color;
+    background-color: var(--code-incorrect-bg-color);
   }
 }
 
 div.incorrect:hover {
-  border-color: var(--code-incorrect-border-color);
+  border-color: var(--code-incorrect-border-hover-color);
 
   img {
-    /* SVG filter color for red */
-    filter: invert(10%) sepia(85%) saturate(7491%) hue-rotate(5deg)
-      brightness(116%) contrast(114%);
+    filter: var(--code-incorrect-img-hover-filter);
   }
 }
 
@@ -36,9 +33,7 @@ div.incorrect-image {
   img {
     width: 35px;
     height: 35px;
-    /* SVG filter color for firebrick red */
-    filter: invert(11%) sepia(57%) saturate(5143%) hue-rotate(350deg)
-      brightness(118%) contrast(87%);
+    filter: var(--code-incorrect-img-filter);
   }
 }
 

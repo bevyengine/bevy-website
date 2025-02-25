@@ -141,7 +141,7 @@ div.donate-sponsor {
 }
 
 .donate-level-corporate {
-  color: rgb(150, 150, 150);
+  color: var(--donate-level-corporate-color);
   font-weight: 500;
   font-size: 1.2rem;
   margin-top: -6px;
@@ -161,36 +161,36 @@ div.donate-sponsor {
 
 .donate-level-amount {
   margin-top: -0.8rem;
-  color: #bababa;
+  color: var(--donate-level-amount-color);
   font-weight: 500;
 }
 
 .donate-level-bronze {
-  color: #9f7d6c;
+  color: var(--donate-level-bronze-color);
 }
 
 .donate-level-silver {
-  color: #bbb;
+  color: var(--donate-level-silver-color);
 }
 
 .donate-level-gold {
-  color: #c0b04bff;
+  color: var(--donate-level-gold-color);
 }
 
 .donate-level-platinum {
-  color: #c5c5c5;
+  color: var(--donate-level-platinum-color);
 }
 
 .donate-level-titanium {
-  color: #848484;
+  color: var(--donate-level-titanium-color);
 }
 
 .donate-level-diamond {
-  color: #a3daeb;
+  color: var(--donate-level-diamond-color);
 }
 
 .donate-level-patron {
-  color: #dcdcdc;
+  color: var(--donate-level-patron-color);
 }
 
 .donate-corporate-button {
@@ -223,7 +223,7 @@ div.donate-sponsor {
   border-width: 1px;
   border-style: solid;
   border-radius: $border-radius;
-  color: rgb(150, 150, 150);
+  color: var(--donate-tier-reward-color);
   line-height: 1.4rem;
   padding-left: 8px;
   padding-right: 8px;
@@ -252,11 +252,11 @@ div.donate-sponsor {
 }
 
 @include state-checked("donate-view") {
-    #membership {
-        display: none;
-    }
+  #membership {
+    display: none;
+  }
 
-    #corporate-sponsorship {
-        display: block;
-    }
+  #corporate-sponsorship {
+    display: block;
+  }
 }

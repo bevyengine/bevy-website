@@ -85,7 +85,7 @@ $asset-card-padding: 0.4rem;
     svg {
       height: 1.2rem;
       width: 1.2rem;
-      fill: rgb(149, 149, 157);
+      fill: var(--asset-card-tag-icon-color);
     }
   }
 
@@ -116,7 +116,7 @@ $asset-card-padding: 0.4rem;
     background: var(--asset-tag-bg-color);
 
     &--supported {
-      background-color: rgb(110, 110, 247);
+      background-color: var(--asset-card-supported-color);
     }
   }
 }

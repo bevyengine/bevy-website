@@ -39,15 +39,15 @@
 
   .asset-version-select {
     border-radius: $border-radius;
-    border: 2px solid #383838;
-    background-color: var(--code-bg-color);
+    border: 2px solid var(--asset-version-select-border-color);
+    background-color: var(--asset-version-select-bg-color);
     font-size: 1rem;
     padding: 0.4rem;
     color: var(--text-color);
     margin-left: 8px;
 
     &:hover {
-      border: 2px solid #6b6b6b;
+      border: 2px solid var(--asset-version-select-bg-hover-color);
     }
 
     .item-grid {
@@ -71,13 +71,13 @@
 
     .asset-version-select {
       border-radius: $border-radius;
-      border: 2px solid #383838;
-      background-color: var(--code-bg-color);
+      border: 2px solid var(--asset-version-select-border-color);
+      background-color: var(--asset-version-select-bg-color);
       font-size: 1rem;
       padding: 0.4rem;
 
       &:hover {
-        border: 2px solid #6b6b6b;
+        border: 2px solid var(--asset-version-select-bg-hover-color);
       }
     }
   }

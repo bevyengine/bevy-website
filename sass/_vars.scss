@@ -123,6 +123,7 @@ $colors: (
   --main-menu-backdrop-color: #{rgba($color-black, 0.2)};
   --main-menu-link-hover-color: #{rgba($color-white, 0.05)};
   --main-menu-text-color: var(--color-white);
+  --main-menu-box-shadow-color: #{rgba($color-black, 0.3)};
 
   // Dark Theme
   // This eventually should go inside a `@media (prefers-color-scheme: dark) {}`
@@ -133,22 +134,47 @@ $colors: (
   --anchor-link-color: var(--color-neutral-500);
   --content-bg-color: var(--color-neutral-700);
   --docs-whats-a-bevy-filter: none;
+  --feature-image-bg-color: #2b2c2f;
   --focus-outline: solid var(--color-blue-300) 3px;
   --footer-image-filter: grayscale(1) brightness(800%);
   --foundation-logo-filter: none;
   --header-border-color: #2c2c2d;
+  --header-message-color: #868686;
   --heading-color: var(--color-neutral-50);
-  --hr-color: var(--color-neutral-900);
+  --heading-meta-item-color: var(--color-neutral-200);
   --html-bg-color: var(--color-neutral-800);
   --link-color: var(--color-blue-link);
+  --news-fun-list-color: #a0c5e7;
   --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
   --text-color: var(--color-neutral-100);
   --text-dim-color: var(--color-neutral-300);
+  --warning-color: #c8c864;
 
   --asset-card-title-bg-color: #{rgba($color-black, 0.5)};
   --asset-card-title-color: var(--color-white);
+  --asset-card-tag-icon-color: rgb(149, 149, 157);
+  --asset-card-supported-color: rgb(110, 110, 247);
   --asset-tag-bg-color: var(--color-neutral-600);
   --asset-tag-text-color: var(--color-white);
+  --asset-version-select-bg-color: var(--code-bg-color);
+  --asset-version-select-bg-hover-color: #6b6b6b;
+  --asset-version-select-border-color: #383838;
+
+  --bevy-instance-canvas-color: #2b2c2f;
+  --bevy-instance-text-shadow-color: var(--color-black);
+  --bevy-instance-progress-track-color: #555;
+  --bevy-instance-progress-bar-color: #799bbb;
+  // Generated using: https://stripesgenerator.com
+  --bevy-instance-progress-bar-stripes: linear-gradient(
+    131deg,
+    #799bbb 25%,
+    #597899 25%,
+    #597899 50%,
+    #799bbb 50%,
+    #799bbb 75%,
+    #597899 75%,
+    #597899 100%
+  );
 
   --button-blue-bg-color: var(--color-blue-600);
   --button-blue-bg-hover-color: #{darken(color(blue, 600), 3%)};
@@ -158,6 +184,7 @@ $colors: (
   --button-pink-bg-hover-color: #954c72;
   --button-pink-border-color: #ba789b;
   --button-pink-text-color: var(--color-white);
+  --button-square-bg-color: var(--color-white);
 
   --callout-caution-accent-color: #e82f5a;
   --callout-caution-bg-color: #591626;
@@ -176,10 +203,17 @@ $colors: (
   --card-bg-gradient-start-color: var(--color-neutral-600);
   --card-bg-gradient-end-color: var(--color-neutral-800);
   --card-img-bg-color: #{darken(color(neutral, 800), 2%)};
+  --card-sponsor-icon-color: #b13376;
 
   --code-bg-color: #{lighten(color(neutral, 700), 3%)};
   --code-bg-hover-color: #{lighten(color(neutral, 700), 6%)};
-  --code-incorrect-border-color: red;
+  --code-incorrect-bg-color: #481e21;
+  --code-incorrect-border-color: darkred;
+  --code-incorrect-border-hover-color: red;
+  --code-incorrect-img-hover-filter: invert(10%) sepia(85%) saturate(7491%)
+    hue-rotate(5deg) brightness(116%) contrast(114%); // red
+  --code-incorrect-img-filter: invert(11%) sepia(57%) saturate(5143%)
+    hue-rotate(350deg) brightness(118%) contrast(87%); // firebrick red
   --code-link-color: #e4c151;
   --code-text-color: var(--color-neutral-200);
   --code-text-dim-color: var(--color-neutral-400);
@@ -219,8 +253,22 @@ $colors: (
   --docs-footer-hover-bg-color: #{rgba($color-white, 0.01)};
   --docs-footer-border-color: var(--color-neutral-600);
 
-  --example-nav-link-color: var(--color-neutral-100);
+  --donate-level-corporate-color: rgb(150, 150, 150);
+  --donate-level-amount-color: #bababa;
+  --donate-level-bronze-color: #9f7d6c;
+  --donate-level-silver-color: #bbb;
+  --donate-level-gold-color: #c0b04bff;
+  --donate-level-platinum-color: #c5c5c5;
+  --donate-level-titanium-color: #848484;
+  --donate-level-diamond-color: #a3daeb;
+  --donate-level-patron-color: #dcdcdc;
+  --donate-tier-reward-color: rgb(150, 150, 150);
+
+  --example-nav-link-color: var(--color-neutral-200);
   --example-nav-link-hover-color: var(--color-white);
+
+  --hr-color: var(--color-white);
+  --hr-color-legacy: var(--color-neutral-900);
 
   --menu-switch-bg-color: #{rgba($color-white, 0.05)};
   --menu-switch-option-active-bg-color: var(--color-neutral-800);
@@ -231,9 +279,27 @@ $colors: (
   --on-this-page-hover-color: var(--color-white);
   --on-this-page-active-color: var(--color-white);
 
+  --people-role-lead-color: rgb(200, 200, 50);
+  --people-role-maintainer-color: rgb(242, 103, 255);
+  --people-role-sme-color: rgb(80, 200, 50);
+
+  --sponsor-vip-bg-color: var(--color-neutral-700);
+  --sponsor-vip-title-color: var(--color-neutral-100);
+  --sponsor-vip-name-color: var(--color-blue-link);
+  --sponsor-name-color: rgb(150, 150, 150);
+  --sponsor-link-color: var(--link-color);
+  --sponsor-amount-color: rgb(150, 150, 150);
+  --sponsor-past-donor-color: rgb(150, 150, 150);
+
   --table-border-color: var(--color-neutral-500);
   --table-header-color: var(--color-neutral-800);
   --table-header-text-color: var(--heading-color);
+
+  --tabs-bg-color: var(--color-white);
+  --tabs-highlight-color: var(--color-blue-link);
+
+  --todo-bg-color: hsla(50, 50, 50, 0.3);
+  --todo-border-color: hsla(50, 75, 50, 0.5);
 
   --tree-menu-chevron-filter: brightness(70%);
   --tree-menu-label-active-bg-color: var(--color-neutral-600);
@@ -260,12 +326,13 @@ $colors: (
     --foundation-logo-filter: invert(80%);
     --header-border-color: var(--color-neutral-400);
     --heading-color: var(--color-neutral-950);
-    --hr-color: var(--color-neutral-100);
+    --heading-meta-item-color: var(--color-neutral-600);
     --html-bg-color: var(--color-neutral-100);
     --link-color: #4a33d9;
     --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
     --text-color: var(--color-neutral-700);
     --text-dim-color: var(--color-neutral-400);
+    --warning-color: #b3b318;
 
     --asset-card-title-bg-color: #{rgba($color-white, 0.7)};
     --asset-card-title-color: var(--color-black);
@@ -344,6 +411,9 @@ $colors: (
     --example-nav-link-color: var(--color-neutral-400);
     --example-nav-link-hover-color: var(--color-black);
 
+    --hr-color: var(--color-black);
+    --hr-color-legacy: var(--color-neutral-100);
+
     @media #{$bp-tablet-landscape-down} {
       --main-menu-active-color: var(--color-blue-600);
       --main-menu-link-hover-color: #{rgba($color-black, 0.03)};
@@ -362,6 +432,9 @@ $colors: (
     --table-border-color: var(--color-neutral-300);
     --table-header-color: var(--color-neutral-200);
     --table-header-text-color: var(--heading-color);
+
+    --tabs-bg-color: var(--color-black);
+    --tabs-highlight-color: var(--color-blue-link);
 
     --tree-menu-chevron-filter: invert(65%);
     --tree-menu-label-active-bg-color: var(--color-neutral-100);

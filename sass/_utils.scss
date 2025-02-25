@@ -24,7 +24,7 @@
 }
 
 .warning {
-  color: #c8c864;
+  color: var(--warning-color);
 }
 
 body:not(.show_drafts) .public_draft:not(.active_draft) {
@@ -32,7 +32,7 @@ body:not(.show_drafts) .public_draft:not(.active_draft) {
 }
 
 .public_draft > div > a {
-  color: #c8c864 !important;
+  color: var(--warning-color) !important;
 }
 
 .draft-header {
@@ -65,7 +65,7 @@ h6 {
 }
 
 .public_draft > div > a {
-  color: #c8c864 !important;
+  color: var(--warning-color) !important;
 }
 
 .draft-header {
