@@ -6,11 +6,11 @@
   border-top: 4px solid var(--callout-accent-color);
   color: var(--callout-color);
 
-  >:first-child {
+  > :first-child {
     margin-top: 0;
   }
 
-  >:last-child {
+  > :last-child {
     margin-bottom: 0;
   }
 
@@ -20,20 +20,20 @@
 
   &,
   &--info {
-    --callout-accent-color: #5944e0;
-    --callout-bg-color: #2f2745;
-    --callout-color: #f0effb;
+    --callout-accent-color: var(--callout-info-accent-color);
+    --callout-bg-color: var(--callout-info-bg-color);
+    --callout-color: var(--callout-info-color);
   }
 
   &--caution {
-    --callout-accent-color: #e82f5a;
-    --callout-bg-color: #591626;
-    --callout-color: #eed5db;
+    --callout-accent-color: var(--callout-caution-accent-color);
+    --callout-bg-color: var(--callout-caution-bg-color);
+    --callout-color: var(--callout-caution-color);
   }
 
   &--warning {
-    --callout-accent-color: #e4c151;
-    --callout-bg-color: #513903;
-    --callout-color: #fdfdec;
+    --callout-accent-color: var(--callout-warning-accent-color);
+    --callout-bg-color: var(--callout-warning-bg-color);
+    --callout-color: var(--callout-warning-color);
   }
 }

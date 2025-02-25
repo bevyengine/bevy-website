@@ -54,28 +54,28 @@
 }
 
 .people-role-inline {
-  font-size: 1.0rem;
+  font-size: 1rem;
   margin-right: 0.2rem;
 }
 
 .people-role-top-level {
   display: block;
   float: left;
-  font-size: 1.0rem;
+  font-size: 1rem;
   margin-right: 0.2rem;
 }
 
 .people-role-project-lead {
-  border-color: rgb(200, 200, 50);
-  color: rgb(200, 200, 50);
+  border-color: var(--people-role-lead-color);
+  color: var(--people-role-lead-color);
 }
 
 .people-role-maintainer {
-  border-color: rgb(242, 103, 255);
-  color: rgb(242, 103, 255);
+  border-color: var(--people-role-maintainer-color);
+  color: var(--people-role-maintainer-color);
 }
 
 .people-role-sme {
-  border-color: rgb(80, 200, 50);
-  color: rgb(80, 200, 50);
+  border-color: var(--people-role-sme-color);
+  color: var(--people-role-sme-color);
 }

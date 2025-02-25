@@ -23,6 +23,7 @@
     margin: 0;
     font-size: 1.75rem;
     text-align: center;
+    color: var(--heading-color);
   }
 
   &__back,
@@ -30,11 +31,11 @@
     font-size: 1rem;
 
     @include override-anchor {
-      color: #aaa;
+      color: var(--example-nav-link-color);
     }
 
     &:hover {
-      color: $color-white;
+      color: var(--example-nav-link-hover-color);
     }
   }
 

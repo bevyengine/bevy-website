@@ -11,7 +11,7 @@
     padding: 12px;
 
     img {
-      filter: grayscale(1) brightness(800%);
+      filter: var(--footer-image-filter);
       transition: scale $duration, opacity $duration;
       opacity: 0.65;
     }

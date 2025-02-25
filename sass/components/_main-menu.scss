@@ -12,8 +12,6 @@
   &__link {
     @include flex-center;
 
-    $color-blue: #b1d9ff;
-
     position: relative;
     height: var(--header-height);
     font-size: 1.3rem;
@@ -23,19 +21,18 @@
     &,
     &:visited,
     &:active {
-      color: $color-white;
+      color: var(--main-menu-text-color);
     }
 
     &:hover {
-      color: $color-blue;
+      color: var(--main-menu-active-color);
     }
 
     &--active {
-
       &,
       &:visited,
       &:active {
-        color: $color-blue;
+        color: var(--main-menu-active-color);
       }
     }
 
@@ -47,8 +44,9 @@
 
     // Instead we have the outline on the text inside the link
     &:focus-visible span {
-      border-radius: 5px;
-      outline: $focus-outline;
+      border-radius: 4px;
+      outline: var(--focus-outline);
+      outline-offset: 4px;
     }
   }
 }
@@ -67,12 +65,12 @@
     width: $mobile-menu-width;
     bottom: -$bottom-buffer;
     padding-bottom: $bottom-buffer;
-    background-color: $color-grey-900;
+    background-color: var(--color-neutral-800);
     z-index: $z-main-menu;
     transform: translateX(0);
-    opacity: 0.0;
+    opacity: 0;
     transition: transform $duration, opacity $duration;
-    box-shadow: 0px 0px 16px rgba(#000, 0.3);
+    box-shadow: 0px 0px 16px var(--main-menu-box-shadow-color);
 
     &--with-page-menu {
       --main-menu-switch-height: 56px;
@@ -88,8 +86,8 @@
       justify-content: space-between;
       padding-left: $padding;
       height: var(--header-height);
-      background-color: $color-grey-800;
-      border-bottom: 2px solid #313131;
+      background-color: var(--header-bg-color);
+      border-bottom: 2px solid var(--header-border-color);
 
       a {
         display: flex;
@@ -105,7 +103,9 @@
 
     &__content {
       position: relative;
-      height: calc(100% - var(--header-height) - var(--main-menu-switch-height));
+      height: calc(
+        100% - var(--header-height) - var(--main-menu-switch-height)
+      );
       overflow-x: hidden;
     }
 
@@ -135,7 +135,7 @@
     }
 
     &__link:hover {
-      background-color: rgba($color-white, 0.05);
+      background-color: var(--main-menu-link-hover-color);
       border-radius: $border-radius;
     }
   }
@@ -143,7 +143,7 @@
   @include state-checked("mobile-menu") {
     .main-menu {
       transform: translateX($mobile-menu-width);
-      opacity: 1.0;
+      opacity: 1;
     }
   }
 
@@ -163,7 +163,6 @@
 // MODE: Desktop Menu
 @media #{$bp-desktop-up} {
   .main-menu {
-
     &__header,
     &__page-menu-switch,
     &__page-menu,

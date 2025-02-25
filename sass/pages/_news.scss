@@ -1,4 +1,5 @@
 .news-title {
+  color: var(--heading-color);
   font-size: 2.8rem;
   font-weight: 800;
   margin-bottom: 0px;
@@ -10,7 +11,7 @@
   font-size: 1.22rem;
   font-weight: 200;
   font-style: italic;
-  color: $subtitle-color;
+  color: var(--text-dim-color);
 }
 
 .news-content {
@@ -37,19 +38,19 @@
 
 .news-social-link {
   font-size: 1.1rem;
-  color: $default-color;
+  color: var(--text-color);
 }
 
 .release-feature-authors {
   margin-top: -0.8rem !important;
   font-style: italic;
-  color: $subtitle-color;
+  color: var(--text-dim-color);
 }
 
 .news-image-subtitle {
-  color: $subtitle-color;
+  color: var(--text-dim-color);
   font-style: italic;
-  font-size: 1.0rem;
+  font-size: 1rem;
   margin-top: -0.3rem;
   text-align: center;
 }
