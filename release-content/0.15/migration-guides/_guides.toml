@@ -221,7 +221,7 @@ areas = ["Cross-Cutting", "Math"]
 file_name = "15239_Fix_floating_point_math.md"
 
 [[guides]]
-title = "Don't reëxport `bevy_image` from `bevy_render`"
+title = "Don't re-export `bevy_image` from `bevy_render`"
 prs = [16163]
 areas = ["Cross-Cutting", "Rendering"]
 file_name = "16163_Dont_reëxport_bevy_image_from_bevy_render.md"
