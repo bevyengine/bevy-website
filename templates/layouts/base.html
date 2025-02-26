@@ -218,7 +218,7 @@
         </div>
       </footer>
     </div>
-    <div class="search" data-search>
+    <div class="search" data-search-wrapper>
       <div class="search__backdrop" data-search-backdrop></div>
       <div class="search__dialog" data-search-dialog>
         <div class="search__header">
@@ -228,9 +228,13 @@
         <div class="search__results" data-search-results></div>
         <template data-search-result-tpl>
           <div class="search-result">
-            <a data-search-result-title></a>
-            <div data-search-result-sub-results></div>
+            <a data-title></a>
+            <ul class="search-result__sub-results" data-sub-results></ul>
+            <div class="search-result__more hidden" data-more></div>
           </div>
+        </template>
+        <template data-search-sub-result-tpl>
+          <li><a data-title></a>: <span data-excerpt>${sub.excerpt}</span></li>
         </template>
         <template data-search-no-results-tpl>
           <div class="search-no-results">
