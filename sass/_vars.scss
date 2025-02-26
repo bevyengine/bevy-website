@@ -67,18 +67,6 @@ $border-radius: 10px;
   @media #{$bp-desktop-up} {
     --header-height: 72px;
   }
-
-  --pagefind-ui-scale: 1;
-  --pagefind-ui-primary: #eeeeee;
-  --pagefind-ui-text: #eeeeee;
-  --pagefind-ui-background: #152028;
-  --pagefind-ui-border: #152028;
-  --pagefind-ui-tag: #152028;
-  --pagefind-ui-border-width: 2px;
-  --pagefind-ui-border-radius: 8px;
-  --pagefind-ui-image-border-radius: 8px;
-  --pagefind-ui-image-box-ratio: 3 / 2;
-  --pagefind-ui-font: sans-serif;
 }
 
 // Accessibility
