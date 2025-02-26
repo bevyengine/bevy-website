@@ -1,0 +1,21 @@
+{% macro get_attributes(path) -%}
+  {% if path is starting_with("/learn/quick-start/") %}
+    {% set tag = 'Quick Start' %}
+  {% elif path is starting_with("/learn/book/") %}
+    {% set tag = 'Book' %}
+  {% elif path is starting_with("/learn/migration-guides/") %}
+    {% set tag = 'Migrations' %}
+  {% elif path is starting_with("/learn/contribute/") %}
+    {% set tag = 'Contribute' %}
+  {% elif path is starting_with("/learn/errors/") %}
+    {% set tag = 'Errors' %}
+  {% elif path is starting_with("/news/") and path != '/news/' %}
+    {% set tag = 'News' %}
+  {% elif path is starting_with("/examples/") and path != '/examples/' %}
+    {% set tag = 'Examples' %}
+  {% endif %}
+
+  {% if tag %}
+    data-pagefind-body data-pagefind-filter="tag:{{ tag }}"
+  {% endif %}
+{%- endmacro card %}

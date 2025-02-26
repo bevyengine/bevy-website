@@ -14,11 +14,22 @@ function debounce(callback, wait) {
 }
 
 class Search {
-  /** @readonly */
+  /** @private @readonly */
   CLASS_VISIBLE = "search--visible";
+  /** @private @readonly */
+  tags = {
+    'Quick Start': true,
+    // Book: true,
+    Examples: true,
+    Migrations: true,
+    News: false,
+    Contribute: false,
+    Errors: false,
+  };
 
   constructor(
     /** @type {Pagefind} */ pagefind,
+    /** @type {Set<string>} */ pagefindTags,
     /** @type {HTMLElement} */ searchEl,
     /** @type {HTMLElement} */ searchBackdropEl,
     /** @type {HTMLElement} */ searchDialogEl,
@@ -47,14 +58,14 @@ class Search {
     /** @private @readonly @property {HTMLTemplateElement} */
     this.searchResultTplEl = searchResultTplEl;
 
+    Object.keys(this.tags).forEach((tag) => {
+      if (!pagefindTags.has(tag)) {
+        console.warn(`Tag "${tag}" not found in Pagefind search index.`);
+      }
+    });
+
     // Setup event listeners
     window.addEventListener("keydown", (event) => {
-      if (["ArrowRight", "ArrowLeft"].includes(event.code)) {
-        console.info(event.code);
-        event.stopPropagation();
-        event.preventDefault();
-      }
-
       if (event.code === "Escape" && this.isOpen()) {
         event.stopPropagation();
         event.preventDefault();
@@ -65,6 +76,12 @@ class Search {
         event.stopPropagation();
         event.preventDefault();
         this.show();
+      }
+    });
+
+    this.searchInputEl.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "ArrowLeft"].includes(event.code)) {
+        event.stopPropagation();
       }
     });
 
@@ -192,10 +209,19 @@ window.addEventListener("load", async () => {
     try {
       // @ts-ignore
       const pagefind = await import("/pagefind/pagefind.js");
-      await pagefind.options({ baseUrl: "/" });
+      const filters = await pagefind.filters();
+
+      await pagefind.options({
+        baseUrl: "/",
+        ranking: {
+          pageLength: 0.5, // Favor longer pages
+          termSaturation: 1.0, // Saturate faster repeating terms
+        }
+      });
 
       new Search(
         pagefind,
+        new Set(Object.keys(filters.tag)),
         searchEl,
         searchBackdropEl,
         searchDialogEl,
