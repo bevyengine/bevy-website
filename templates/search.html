@@ -1,0 +1,48 @@
+<div class="search" data-search-wrapper>
+  <div class="search__backdrop" data-search-backdrop></div>
+  <div class="search__dialog" data-search-dialog>
+    <div class="search__header">
+      <div class="search__header-top">
+        <input class="search__input" type="text" data-search-input />
+        <div class="search__close" data-search-close>Close</div>
+      </div>
+      <div class="search__categories" data-search-categories></div>
+    </div>
+    <div class="search__content hidden" data-search-content>
+      <div class="search-no-results hidden" data-search-no-results>
+        <div>
+          No results found for "<span data-search-term></span>".<br />
+          :-(
+        </div>
+      </div>
+      <div class="search__results hidden" data-search-results></div>
+    </div>
+    <div class="search__tip">
+      <strong>Tip</strong>: Press <kbd>s</kbd> to open the search dialog, and
+      <kbd>Escape</kbd> to close it.
+    </div>
+    <template data-search-category-tpl>
+      <div class="search-category" data-category></div>
+    </template>
+    <template data-search-result-tpl>
+      <div class="search-result">
+        <div class="search-result__header">
+          <a class="search-result__title" data-title></a>
+          <div
+            class="search-result__category search-category search-category--active search-category--compact"
+            data-category
+          ></div>
+        </div>
+        <p class="search-result__excerpt hidden" data-compact-excerpt></p>
+        <ul class="search-result__sub-results hidden" data-sub-results></ul>
+        <div class="search-result__more hidden" data-more></div>
+      </div>
+    </template>
+    <template data-search-sub-result-tpl>
+      <li>
+        <a class="search-result__title" data-title></a>
+        <span class="search-result__excerpt" data-excerpt></span>
+      </li>
+    </template>
+  </div>
+</div>

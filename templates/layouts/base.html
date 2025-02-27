@@ -89,11 +89,7 @@
     <meta property="og:description"
           content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
-
-    <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-    <script src="/pagefind/pagefind-ui.js"></script>
     <script type="module" src="/search.mjs"></script>
-
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
     {% if ancestor_is_public_draft or section_or_page and section_or_page.extra and section_or_page.extra.public_draft %}
@@ -218,31 +214,7 @@
         </div>
       </footer>
     </div>
-    <div class="search" data-search-wrapper>
-      <div class="search__backdrop" data-search-backdrop></div>
-      <div class="search__dialog" data-search-dialog>
-        <div class="search__header">
-          <input class="search__input" type="text" data-search-input>
-          <div class="search__close" data-search-close>X</div>
-        </div>
-        <div class="search__results" data-search-results></div>
-        <template data-search-result-tpl>
-          <div class="search-result">
-            <a data-title></a>
-            <ul class="search-result__sub-results" data-sub-results></ul>
-            <div class="search-result__more hidden" data-more></div>
-          </div>
-        </template>
-        <template data-search-sub-result-tpl>
-          <li><a data-title></a>: <span data-excerpt>${sub.excerpt}</span></li>
-        </template>
-        <template data-search-no-results-tpl>
-          <div class="search-no-results">
-            No results
-          </div>
-        </template>
-      </div>
-    </div>
+    {% include "search.html" %}
     <script>
     const search_params = new URLSearchParams(window.location.search);
     if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {

@@ -30,7 +30,7 @@
       <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" checked="checked">
       <label class="tabs__label" for="tab0">{{ filename }}</label>
       <div class="tabs__panel" tabindex="1">
-        <div class="example__code media-content" data-pagefind-weight="0.5">
+        <div class="example__code media-content" data-pagefind-weight="0.25">
           {% set code = load_data(path=page.extra.code_path) %}
           {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
           {{ code_md | markdown(inline=true) | safe }}
@@ -41,7 +41,7 @@
         <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
         <label class="tabs__label" for="tab{{ loop.index }}">{{ shader }}</label>
         <div class="tabs__panel" tabindex="1">
-          <div class="example__code media-content" data-pagefind-weight="0.5">
+          <div class="example__code media-content" data-pagefind-weight="0.25">
             {% set code = load_data(path="static/assets/examples/" ~ shader) %}
             {% set code_md = "```wgsl" ~ newline ~ code ~ "```" %}
             {{ code_md | markdown(inline=true) | safe }}
