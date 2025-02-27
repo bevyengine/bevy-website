@@ -118,6 +118,10 @@
   cursor: pointer;
   user-select: none;
 
+  &:hover {
+    background-color: rgba(#fff, 0.1);
+  }
+
   &--quickstart,
   &--book {
     --search-category-bg-color: #607531;
@@ -142,15 +146,23 @@
     --search-category-bg-color: #78527e;
   }
 
+  &--active {
+    background-color: var(--search-category-bg-color);
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: unquote('hsl(from var(--search-category-bg-color) h s calc(l + 4))');
+    }
+  }
+
   &--compact {
     padding: 2px 3px;
     font-size: calc-rem(14px);
     cursor: default;
-  }
 
-  &--active {
-    background-color: var(--search-category-bg-color);
-    border: 1px solid transparent;
+    &:hover {
+      background-color: var(--search-category-bg-color);
+    }
   }
 }
 
