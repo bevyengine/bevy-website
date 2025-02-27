@@ -123,6 +123,8 @@
     min-height: 100px;
     text-align: center;
     word-break: break-word;
+    font-size: calc-rem(20px);
+    color: #ccc;
   }
 
   &__tip {
@@ -157,7 +159,7 @@
   }
 
   &--examples {
-    --search-category-bg-color: #885826;
+    --search-category-bg-color: #885d26;
   }
 
   &--migrations {
