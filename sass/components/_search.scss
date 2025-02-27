@@ -117,6 +117,14 @@
     gap: 8px;
   }
 
+  &__no-results {
+    @include flex-center;
+  
+    min-height: 100px;
+    text-align: center;
+    word-break: break-word;
+  }
+
   &__tip {
     color: #aaa;
     border-top: 1px solid $border-color;
@@ -186,14 +194,6 @@
       background-color: var(--search-category-bg-color);
     }
   }
-}
-
-.search-no-results {
-  @include flex-center;
-
-  min-height: 100px;
-  text-align: center;
-  word-break: break-word;
 }
 
 .search-result {
