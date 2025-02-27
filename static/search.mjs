@@ -230,13 +230,16 @@ class Search {
 }
 
 class SearchCategories {
+  /** @private @readonly */
+  STORAGE_KEY = "bevy-search-categories";
+
   constructor(
     /** @type {string[]} */ pagefindCategories,
     /** @type {string[]} */ categoriesOrder,
-    /** @type {string[]} */ categoriesChecked
+    /** @type {string[]} */ defaultCheckedCategories
   ) {
     // Log warnings if order/checked categories don't match with the Pagefind categories
-    [...categoriesOrder, ...categoriesChecked].forEach((category) => {
+    [...categoriesOrder, ...defaultCheckedCategories].forEach((category) => {
       if (!pagefindCategories.includes(category)) {
         console.warn(
           `Category "${category}" not found in Pagefind search index.`
@@ -247,11 +250,15 @@ class SearchCategories {
     /** @private @readonly @property {string[]}*/
     this.order = categoriesOrder;
 
+    const checkedCategories = this.getInitialCheckedCategories(
+      defaultCheckedCategories
+    );
+
     /** @private @readonly @property {Record<string, Category>}*/
     this.categories = Object.fromEntries(
       pagefindCategories.map((name) => {
         const id = getCategoryId(name);
-        return [id, { id, name, checked: categoriesChecked.includes(name) }];
+        return [id, { id, name, checked: checkedCategories.includes(name) }];
       })
     );
   }
@@ -271,13 +278,35 @@ class SearchCategories {
       );
     });
   }
-  
+
+  /**
+   * @private
+   * @returns {string[]}
+   */
+  getInitialCheckedCategories(/** @type {string[]} */ fallback) {
+    try {
+      // Load categories status from localStorage
+      const savedCategoriesRaw = localStorage.getItem(this.STORAGE_KEY);
+
+      if (savedCategoriesRaw) {
+        const savedCategories = JSON.parse(savedCategoriesRaw);
+        return Object.values(savedCategories)
+          .filter(({ checked }) => checked)
+          .map(({ name }) => name);
+      }
+    } catch {}
+
+    return fallback;
+  }
+
   /**
    * @returns {boolean}
    */
   toggle(/** @type {string} */ id) {
     const category = this.categories[id];
     category.checked = !category.checked;
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.categories));
+
     return category.checked;
   }
 }
