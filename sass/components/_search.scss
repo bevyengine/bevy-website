@@ -102,7 +102,7 @@
   &__tip {
     color: #aaa;
     border-top: 1px solid $border-color;
-    padding: 4px 12px;
+    padding: 6px 12px;
     font-size: calc-rem(14px);
   }
 }
@@ -111,7 +111,7 @@
   --search-category-bg-color: #666;
 
   background-color: transparent;
-  border: 1px solid #666;
+  border: 1px solid #555;
   font-size: calc-rem(16px);
   padding: 4px 6px;
   border-radius: 4px;
@@ -148,16 +148,20 @@
 
   &--active {
     background-color: var(--search-category-bg-color);
-    border: 1px solid transparent;
+    border-color: unquote(
+      "hsl(from var(--search-category-bg-color) h s calc(l + 10))"
+    );
 
     &:hover {
-      background-color: unquote('hsl(from var(--search-category-bg-color) h s calc(l + 4))');
+      background-color: unquote(
+        "hsl(from var(--search-category-bg-color) h s calc(l + 4))"
+      );
     }
   }
 
   &--compact {
     padding: 2px 3px;
-    font-size: calc-rem(14px);
+    font-size: calc-rem(12px);
     cursor: default;
 
     &:hover {
@@ -187,13 +191,22 @@
     margin-bottom: 4px;
   }
 
-  &__title {
+  &__title,
+  &__sub-title {
     @include override-anchor {
       color: #fff;
     }
 
+    font-weight: 500;
     display: block;
+  }
+
+  &__title {
     font-size: calc-rem(16px);
+  }
+
+  &__sub-title {
+    font-size: calc-rem(14px);
   }
 
   &__sub-results {
@@ -213,6 +226,7 @@
     margin: 4px 0 0;
     color: #888;
     font-size: calc-rem(14px);
+    line-height: 1.4;
 
     mark {
       padding: 2px 4px;
