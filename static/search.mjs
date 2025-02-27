@@ -37,6 +37,7 @@ class Search {
     /** @type {HTMLElement} */ noResultsEl,
     /** @type {HTMLElement} */ closeEl,
     /** @type {HTMLInputElement} */ inputEl,
+    /** @type {HTMLElement} */ clearFilterEl,
     /** @type {SearchTpl} */ searchTpl
   ) {
     /** @private @readonly @property {Pagefind} */
@@ -61,6 +62,8 @@ class Search {
     this.closeEl = closeEl;
     /** @private @readonly @property {HTMLInputElement} */
     this.inputEl = inputEl;
+    /** @private @readonly @property {HTMLElement} */
+    this.clearFilterEl = clearFilterEl;
     /** @private @readonly @property {SearchTpl} */
     this.searchTpl = searchTpl;
 
@@ -109,8 +112,21 @@ class Search {
       "input",
       debounce(() => this.search(), 500)
     );
+
+    this.clearFilterEl.addEventListener("click", () => this.clearInput());
     this.closeEl.addEventListener("click", () => this.hide());
     this.backdropEl.addEventListener("click", () => this.hide());
+  }
+
+  /**
+   * @private
+   * @returns {void}
+   */
+  clearInput() {
+    this.inputEl.value = "";
+    this.inputEl.focus();
+    this.clearFilterEl.classList.add("hidden");
+    this.resetContentState(true);
   }
 
   /**
@@ -133,6 +149,8 @@ class Search {
    */
   async search() {
     const term = this.inputEl.value.trim();
+
+    this.clearFilterEl.classList.toggle("hidden", term === "");
 
     if (term === "") {
       this.resetContentState(true);
@@ -434,6 +452,7 @@ window.addEventListener("load", async () => {
   const noResultsEl = getEl("no-results");
   const closeEl = getEl("close");
   const inputEl = getEl("input");
+  const clearFilterEl = getEl("clear-filter");
   const categoryTplEl = getEl("category-tpl");
   const resultTplEl = getEl("result-tpl");
   const subResultTplEl = getEl("sub-result-tpl");
@@ -448,6 +467,7 @@ window.addEventListener("load", async () => {
     noResultsEl instanceof HTMLElement &&
     closeEl instanceof HTMLElement &&
     inputEl instanceof HTMLInputElement &&
+    clearFilterEl instanceof HTMLElement &&
     categoryTplEl instanceof HTMLTemplateElement &&
     resultTplEl instanceof HTMLTemplateElement &&
     subResultTplEl instanceof HTMLTemplateElement
@@ -490,6 +510,7 @@ window.addEventListener("load", async () => {
         noResultsEl,
         closeEl,
         inputEl,
+        clearFilterEl,
         new SearchTpl(categoryTplEl, resultTplEl, subResultTplEl)
       );
     } catch (err) {

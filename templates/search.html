@@ -3,7 +3,12 @@
   <div class="search__dialog" data-search-dialog>
     <div class="search__header">
       <div class="search__header-top">
-        <input class="search__input" type="text" data-search-input />
+        <div class="search__input-wrapper">
+          <input class="search__input" type="text" data-search-input />
+          <div class="search__clear-filter hidden" data-search-clear-filter>
+            <i class="icon icon--times"></i>
+          </div>
+        </div>
         <div class="search__close" data-search-close>Close</div>
       </div>
       <div class="search__categories" data-search-categories></div>
