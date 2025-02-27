@@ -39,7 +39,7 @@
     transform: translateX(-50%);
     z-index: $z-search;
     background-color: #1e1e22;
-    box-shadow: 0px 16px 40px rgba(#000, 0.3);
+    box-shadow: 0px 16px 40px rgba(#000, 0.35);
   }
 
   &__header {
@@ -138,26 +138,29 @@
 
   background-color: transparent;
   border: 1px solid #555;
-  font-size: calc-rem(16px);
-  padding: 4px 6px;
+  font-size: calc-rem(18px);
+  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
+  color: #aaa;
 
   &:hover {
+    color: #fff;
     background-color: rgba(#fff, 0.1);
   }
 
   &--quickstart,
   &--book {
-    --search-category-bg-color: #607531;
+    --search-category-bg-color: #537134;
   }
 
   &--examples {
-    --search-category-bg-color: #a66826;
+    --search-category-bg-color: #885826;
   }
+
   &--migrations {
-    --search-category-bg-color: #477084;
+    --search-category-bg-color: #2b5e77;
   }
 
   &--errors {
@@ -165,7 +168,7 @@
   }
 
   &--news {
-    --search-category-bg-color: #265b75;
+    --search-category-bg-color: #2c5580;
   }
 
   &--contribute {
@@ -174,6 +177,7 @@
 
   &--active {
     background-color: var(--search-category-bg-color);
+    color: unquote("hsl(from var(--search-category-bg-color) h s 90)");
     border-color: unquote(
       "hsl(from var(--search-category-bg-color) h s calc(l + 10))"
     );
@@ -186,9 +190,10 @@
   }
 
   &--compact {
-    padding: 2px 3px;
-    font-size: calc-rem(12px);
+    padding: 2px 4px;
+    font-size: calc-rem(14px);
     cursor: default;
+    border-radius: 2px;
 
     &:hover {
       background-color: var(--search-category-bg-color);
@@ -197,8 +202,7 @@
 }
 
 .search-result {
-  background-color: rgba(#000, 0.1);
-  border: 1px solid rgba(#fff, 0.1);
+  background-color: rgba(#000, 0.15);
   border-radius: 8px;
   padding: 8px;
 
@@ -220,19 +224,20 @@
   }
 
   &__title {
-    font-size: calc-rem(16px);
+    font-size: calc-rem(24px);
   }
 
   &__sub-title {
-    font-size: calc-rem(14px);
+    font-size: calc-rem(20px);
+    font-weight: 400;
   }
 
   &__sub-results {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin: 0;
-    padding-left: 16px;
+    margin: 8px 0 0;
+    padding-left: 24px;
 
     li {
       list-style: disclosure-closed;
@@ -243,13 +248,13 @@
     @include text-ellipsis(2);
     margin: 4px 0 0;
     color: #888;
-    font-size: calc-rem(14px);
+    font-size: calc-rem(16px);
     line-height: 1.4;
 
     mark {
       padding: 2px 4px;
       background-color: rgba(#fff, 0.1);
-      color: #fff;
+      color: #ddd;
       border-radius: 4px;
       font-size: 0.95em;
     }
