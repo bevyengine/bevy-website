@@ -183,6 +183,7 @@ class Search {
    */
   resetContentState(/** @type {boolean} */ hideContentWrapper = false) {
     this.contentEl.classList.toggle("hidden", hideContentWrapper);
+    this.contentEl.scrollTop = 0;
     this.resultsEl.innerHTML = "";
     this.resultsEl.classList.add("hidden");
     this.noResultsEl.classList.add("hidden");
