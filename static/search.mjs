@@ -1,4 +1,6 @@
 // @ts-check
+import { debounce } from "/tools.js";
+
 /**
  * @typedef Pagefind
  * @prop {(term: string, options: any) => Promise<any>} search
@@ -9,15 +11,6 @@
  * @prop {string} name
  * @prop {boolean} checked
  */
-
-function debounce(callback, wait) {
-  let timeoutId;
-
-  return (...args) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback(...args), wait);
-  };
-}
 
 /**
  * @returns string
