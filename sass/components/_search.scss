@@ -140,7 +140,7 @@
   --search-category-bg-color: #666;
 
   background-color: transparent;
-  border: 1px solid #555;
+  border: 1px solid #444;
   font-size: calc-rem(18px);
   padding: 4px 8px;
   border-radius: 4px;
@@ -211,8 +211,9 @@
 
   &__header {
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
+    gap: 8px;
     margin-bottom: 4px;
   }
 
@@ -233,6 +234,10 @@
   &__sub-title {
     font-size: calc-rem(20px);
     font-weight: 400;
+  }
+
+  &__category {
+    flex-shrink: 0;
   }
 
   &__sub-results {

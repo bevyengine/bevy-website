@@ -157,8 +157,11 @@ class Search {
       return;
     }
 
+    let caretPosition = this.inputEl.selectionStart;
+
     try {
       this.searchEl.classList.add(this.CLASS_SEARCHING);
+      this.inputEl.disabled = true;
 
       const { results: allResults } = await this.pagefind.search(term, {
         filters: {
@@ -185,6 +188,9 @@ class Search {
       console.error(`Failed to search for term: "${term}"`, err);
     } finally {
       this.searchEl.classList.remove(this.CLASS_SEARCHING);
+      this.inputEl.disabled = false;
+      this.inputEl.focus();
+      this.inputEl.setSelectionRange(caretPosition, caretPosition);
     }
   }
 
