@@ -9,7 +9,7 @@
             <i class="icon icon--times"></i>
           </div>
         </div>
-        <div class="search__close" data-search-close>Close</div>
+        <div class="search__close button" data-search-close>Close</div>
       </div>
       <div class="search__categories" data-search-categories></div>
     </div>
@@ -24,10 +24,22 @@
     </div>
     <div class="search__tip">
       <strong>Tip</strong>: Press <kbd>S</kbd> to open the search dialog, and
-      <kbd>Escape</kbd> to close it.
+      <kbd>Esc</kbd> to close it. Use <kbd>&uarr;/&darr;</kbd> to select a result, and <kbd>Enter</kbd> to navigate.
     </div>
     <template data-search-category-tpl>
       <div class="search-category" data-category></div>
+    </template>
+    <template data-search-result-compact-tpl>
+      <a class="search-result search-result--compact" data-wrapper data-search-result>
+        <div class="search-result__header">
+          <h3 class="search-result__title" data-title></h3>
+          <div
+            class="search-result__category search-category search-category--active search-category--compact"
+            data-category
+          ></div>
+        </div>
+        <p class="search-result__excerpt" data-excerpt></p>
+      </a>
     </template>
     <template data-search-result-tpl>
       <div class="search-result">
@@ -38,16 +50,15 @@
             data-category
           ></div>
         </div>
-        <p class="search-result__excerpt hidden" data-compact-excerpt></p>
-        <ul class="search-result__sub-results hidden" data-sub-results></ul>
+        <div class="search-result__sub-results" data-sub-results></div>
         <div class="search-result__more hidden" data-more></div>
       </div>
     </template>
     <template data-search-sub-result-tpl>
-      <li>
-        <a class="search-result__sub-title" data-title></a>
+      <a class="search-result__sub-item" data-link data-search-result>
+        <h4 class="search-result__sub-title" data-title></h4>
         <span class="search-result__excerpt" data-excerpt></span>
-      </li>
+      </a>
     </template>
   </div>
 </div>

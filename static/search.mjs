@@ -25,6 +25,12 @@ class Search {
   /** @private @readonly */
   CLASS_SEARCHING = "search--searching";
 
+  // Up/down arrows navigation
+  /** @private @type {HTMLElement[] | undefined} */
+  results = undefined;
+  /** @private @type {HTMLElement | undefined} */
+  activeResult = undefined;
+
   constructor(
     /** @type {Pagefind} */ pagefind,
     /** @type {SearchCategories} */ categories,
@@ -93,11 +99,34 @@ class Search {
         this.hide();
       }
 
+      // Results keyboard navigations
+      if (event.code === "ArrowDown" && this.results) {
+        this.focusNext();
+        event.preventDefault();
+      }
+
+      if (event.code === "ArrowUp" && this.results) {
+        this.focusPrevious();
+        event.preventDefault();
+      }
+
+      // Avoid global left/right arrow navigation
+      if (["ArrowRight", "ArrowLeft"].includes(event.code)) {
+        console.info("prevent arrows events");
+        event.stopPropagation();
+      }
+
       // Open with `S`
-      if (event.code === "KeyS" && !this.isOpen()) {
+      if (event.code === "KeyS" && this.inputEl !== document.activeElement) {
         event.stopPropagation();
         event.preventDefault();
-        this.show();
+
+        if (!this.isOpen()) {
+          this.show();
+        } else {
+          this.inputEl.focus();
+          this.inputEl.select();
+        }
       }
     });
 
@@ -127,6 +156,56 @@ class Search {
     this.inputEl.focus();
     this.clearFilterEl.classList.add("hidden");
     this.resetContentState(true);
+  }
+
+  /**
+   * @private
+   * @returns {void}
+   */
+  focusNext() {
+    if (!this.results) {
+      return;
+    }
+
+    if (!this.activeResult) {
+      this.activeResult = this.results[0];
+    } else {
+      const idx = this.results.indexOf(this.activeResult);
+      const next = this.results[idx + 1];
+
+      if (next) {
+        this.activeResult = next;
+      } else {
+        this.activeResult = this.results[0];
+      }
+    }
+
+    this.activeResult.focus();
+  }
+
+  /**
+   * @private
+   * @returns {void}
+   */
+  focusPrevious() {
+    if (!this.results) {
+      return;
+    }
+
+    if (!this.activeResult) {
+      this.activeResult = this.results[this.results.length - 1];
+    } else {
+      const idx = this.results.indexOf(this.activeResult);
+      const prev = this.results[idx - 1];
+
+      if (prev) {
+        this.activeResult = prev;
+      } else {
+        this.activeResult = this.results[this.results.length - 1];
+      }
+    }
+
+    this.activeResult.focus();
   }
 
   /**
@@ -229,6 +308,10 @@ class Search {
     data.forEach((item) => {
       this.resultsEl.appendChild(this.searchTpl.createResultEl(item));
     });
+
+    this.results = Array.from(
+      this.resultsEl.querySelectorAll("[data-search-result]")
+    );
   }
 
   /**
@@ -331,11 +414,14 @@ class SearchCategories {
 class SearchTpl {
   constructor(
     /** @type {HTMLTemplateElement} */ categoryTplEl,
+    /** @type {HTMLTemplateElement} */ resultCompactTplEl,
     /** @type {HTMLTemplateElement} */ resultTplEl,
     /** @type {HTMLTemplateElement} */ subResultTplEl
   ) {
     /** @private @readonly @property {HTMLTemplateElement} */
     this.categoryTplEl = categoryTplEl;
+    /** @private @readonly @property {HTMLTemplateElement} */
+    this.resultCompactTplEl = resultCompactTplEl;
     /** @private @readonly @property {HTMLTemplateElement} */
     this.resultTplEl = resultTplEl;
     /** @private @readonly @property {HTMLTemplateElement} */
@@ -346,15 +432,19 @@ class SearchTpl {
    * @returns {DocumentFragment}
    */
   createResultEl(/** @type {any} */ item) {
-    /** @type {DocumentFragment} */
-    const resultEl = this.resultTplEl.content.cloneNode(true);
-    const titleEl = resultEl.querySelector("[data-title]");
-    const categoryEl = resultEl.querySelector("[data-category]");
     const isCompact =
       item.sub_results.length === 1 && item.sub_results[0].url === item.url;
 
+    const resultEl = /** @type {DocumentFragment} */ (
+      isCompact
+        ? this.resultCompactTplEl.content.cloneNode(true)
+        : this.resultTplEl.content.cloneNode(true)
+    );
+
+    const titleEl = resultEl.querySelector("[data-title]");
+    const categoryEl = resultEl.querySelector("[data-category]");
+
     if (titleEl) {
-      titleEl.setAttribute("href", item.url);
       titleEl.innerHTML = item.meta.title;
     }
 
@@ -369,19 +459,22 @@ class SearchTpl {
     }
 
     if (isCompact) {
-      const compactExcerptEl = resultEl.querySelector("[data-compact-excerpt]");
+      const wrapperEl = resultEl.querySelector("[data-wrapper]");
+      const excerptEl = resultEl.querySelector("[data-excerpt]");
 
-      if (compactExcerptEl) {
-        compactExcerptEl.innerHTML = item.sub_results[0].excerpt;
-        compactExcerptEl.classList.remove("hidden");
+      wrapperEl?.setAttribute("href", item.url);
+
+      if (excerptEl) {
+        excerptEl.innerHTML = item.sub_results[0].excerpt;
       }
     } else {
       const subResultsEl = resultEl.querySelector("[data-sub-results]");
       const moreEl = resultEl.querySelector("[data-more]");
       const maxSubResults = 5;
 
+      titleEl?.setAttribute("href", item.url);
+
       if (subResultsEl) {
-        subResultsEl.classList.remove("hidden");
         item.sub_results.slice(0, maxSubResults).forEach((sub) => {
           subResultsEl.appendChild(
             this.createSubResultEl(sub.title, sub.url, sub.excerpt)
@@ -407,13 +500,18 @@ class SearchTpl {
     /** @type {string} */ url,
     /** @type {string} */ excerpt
   ) {
-    /** @type {DocumentFragment} */
-    const subResultEl = this.subResultTplEl.content.cloneNode(true);
+    const subResultEl = /** @type {DocumentFragment} */ (
+      this.subResultTplEl.content.cloneNode(true)
+    );
+    const linkEl = subResultEl.querySelector("[data-link]");
     const titleEl = subResultEl.querySelector("[data-title]");
     const subResultsEl = subResultEl.querySelector("[data-excerpt]");
 
+    if (linkEl) {
+      linkEl.setAttribute("href", url);
+    }
+
     if (titleEl) {
-      titleEl.setAttribute("href", url);
       titleEl.innerHTML = title.replace(/[#\s]+$/, "");
     }
 
@@ -428,8 +526,9 @@ class SearchTpl {
    * @returns {DocumentFragment}
    */
   createCategoryEl(/** @type {Category} */ category) {
-    /** @type {DocumentFragment} */
-    const el = this.categoryTplEl.content.cloneNode(true);
+    const el = /** @type {DocumentFragment} */ (
+      this.categoryTplEl.content.cloneNode(true)
+    );
     const categoryEl = el.querySelector("[data-category]");
 
     if (categoryEl instanceof HTMLElement) {
@@ -442,7 +541,7 @@ class SearchTpl {
       }
     }
 
-    return categoryEl;
+    return el;
   }
 }
 
@@ -460,6 +559,7 @@ window.addEventListener("load", async () => {
   const inputEl = getEl("input");
   const clearFilterEl = getEl("clear-filter");
   const categoryTplEl = getEl("category-tpl");
+  const resultCompactTplEl = getEl("result-compact-tpl");
   const resultTplEl = getEl("result-tpl");
   const subResultTplEl = getEl("sub-result-tpl");
 
@@ -475,6 +575,7 @@ window.addEventListener("load", async () => {
     inputEl instanceof HTMLInputElement &&
     clearFilterEl instanceof HTMLElement &&
     categoryTplEl instanceof HTMLTemplateElement &&
+    resultCompactTplEl instanceof HTMLTemplateElement &&
     resultTplEl instanceof HTMLTemplateElement &&
     subResultTplEl instanceof HTMLTemplateElement
   ) {
@@ -517,7 +618,12 @@ window.addEventListener("load", async () => {
         closeEl,
         inputEl,
         clearFilterEl,
-        new SearchTpl(categoryTplEl, resultTplEl, subResultTplEl)
+        new SearchTpl(
+          categoryTplEl,
+          resultCompactTplEl,
+          resultTplEl,
+          subResultTplEl
+        )
       );
     } catch (err) {
       console.error("Failed to initialize Pagefind.", err);
