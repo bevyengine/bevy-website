@@ -1,0 +1,67 @@
+.search-category {
+  --search-category-bg-color: #666;
+
+  background-color: transparent;
+  border: 1px solid #444;
+  font-size: calc-rem(18px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  color: #aaa;
+
+  &:hover {
+    color: #fff;
+    background-color: rgba(#fff, 0.1);
+  }
+
+  &--quickstart,
+  &--book {
+    --search-category-bg-color: #537134;
+  }
+
+  &--examples {
+    --search-category-bg-color: #885d26;
+  }
+
+  &--migrations {
+    --search-category-bg-color: #2b5e77;
+  }
+
+  &--errors {
+    --search-category-bg-color: #953562;
+  }
+
+  &--news {
+    --search-category-bg-color: #2c5580;
+  }
+
+  &--contribute {
+    --search-category-bg-color: #78527e;
+  }
+
+  &--active {
+    background-color: var(--search-category-bg-color);
+    color: unquote("hsl(from var(--search-category-bg-color) h s 90)");
+    border-color: unquote(
+      "hsl(from var(--search-category-bg-color) h s calc(l + 10))"
+    );
+
+    &:hover {
+      background-color: unquote(
+        "hsl(from var(--search-category-bg-color) h s calc(l + 4))"
+      );
+    }
+  }
+
+  &--compact {
+    padding: 2px 4px;
+    font-size: calc-rem(14px);
+    cursor: default;
+    border-radius: 2px;
+
+    &:hover {
+      background-color: var(--search-category-bg-color);
+    }
+  }
+}
