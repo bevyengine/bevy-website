@@ -128,11 +128,14 @@ class Search {
 
     // Same page navigation should close the dialog
     this.dialogEl.addEventListener("click", (event) => {
-      if (event.target instanceof HTMLAnchorElement && event.target.hasAttribute('data-search-result')) {
+      if (
+        event.target instanceof HTMLAnchorElement &&
+        event.target.hasAttribute("data-search-result")
+      ) {
         const maybeUrl = event.target.getAttribute("href");
-        
+
         if (maybeUrl) {
-          const newPath = maybeUrl.split('#')[0];
+          const newPath = maybeUrl.split("#")[0];
 
           if (window.location.pathname === newPath) {
             this.hide();
@@ -635,6 +638,8 @@ window.addEventListener("load", async () => {
       console.error("Failed to initialize Pagefind.", err);
     }
   } else {
-    console.error("Not all the elements needed to build the Search dialog were found.");
+    console.error(
+      "Not all the elements needed to build the Search dialog were found."
+    );
   }
 });
