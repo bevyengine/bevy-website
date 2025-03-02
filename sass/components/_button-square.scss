@@ -4,6 +4,11 @@
   position: relative;
   cursor: pointer;
 
+  * {
+    // Don't capture events on sub-elements
+    pointer-events: none;
+  }
+
   &:hover {
     &:before {
       $padding: 8px;

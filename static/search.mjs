@@ -150,6 +150,16 @@ class Search {
     this.clearFilterEl.addEventListener("click", () => this.clearInput());
     this.closeEl.addEventListener("click", () => this.hide());
     this.backdropEl.addEventListener("click", () => this.hide());
+
+    // Open the dialog when any "trigger" element is clicked
+    window.addEventListener("click", (event) => {
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.hasAttribute("data-search-open")
+      ) {
+        this.show();
+      }
+    });
   }
 
   /**

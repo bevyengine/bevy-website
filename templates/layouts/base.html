@@ -89,6 +89,7 @@
     <meta property="og:description"
           content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+    <noscript><style>.js-only { display: none; }</style></noscript>
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
     {% if ancestor_is_public_draft or section_or_page and section_or_page.extra and section_or_page.extra.public_draft %}
@@ -130,13 +131,16 @@
                 role="navigation"
                 data-page-menu-switch-state-container>
             <div class="main-menu__header">
-              <a href="/">
+              <a class="main-menu__logo" href="/">
                 <img class="logo"
                       src="/assets/bevy_logo_dark.svg"
                       alt="Bevy Engine"
                       width="520"
                       height="130">
               </a>
+              <div class="button-square button-square--header js-only" data-search-open>
+                <i class="icon icon--search" alt="Search"></i>
+              </div>
               <label class="button-square button-square--header" for="mobile-menu-state">
                 <img src="/assets/icon-times.svg"
                       alt="A saltire or x-cross"
@@ -165,7 +169,10 @@
             </div>
           </nav>
           <div class="header__cta-container">
-            <a class="button button--pink header__cta" href="/donate">Donate
+            <div class="header__cta header__cta--search button-square button-square--header js-only" data-search-open>
+              <i class="icon icon--search" alt="Search"></i>
+            </div>
+            <a class="header__cta button button--pink" href="/donate">Donate
               <img class="button__icon"
                     src="/assets/heart.svg"
                     alt="heart icon"
