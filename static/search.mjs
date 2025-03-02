@@ -130,6 +130,21 @@ class Search {
       }
     });
 
+    // Same page navigation should close the dialog
+    this.dialogEl.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLAnchorElement && event.target.hasAttribute('data-search-result')) {
+        const maybeUrl = event.target.getAttribute("href");
+        
+        if (maybeUrl) {
+          const newPath = maybeUrl.split('#')[0];
+
+          if (window.location.pathname === newPath) {
+            this.hide();
+          }
+        }
+      }
+    });
+
     // Ensure search input doesn't trigger global shortcuts
     this.inputEl.addEventListener("keydown", (event) => {
       if (["ArrowRight", "ArrowLeft"].includes(event.code)) {
