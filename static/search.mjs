@@ -112,12 +112,6 @@ class Search {
         event.preventDefault();
       }
 
-      // Avoid global left/right arrow navigation
-      if (["ArrowRight", "ArrowLeft"].includes(event.code)) {
-        console.info("prevent arrows events");
-        event.stopPropagation();
-      }
-
       // Open with `S`
       if (event.code === "KeyS" && this.inputEl !== document.activeElement) {
         event.stopPropagation();
@@ -144,13 +138,6 @@ class Search {
             this.hide();
           }
         }
-      }
-    });
-
-    // Ensure search input doesn't trigger global shortcuts
-    this.inputEl.addEventListener("keydown", (event) => {
-      if (["ArrowRight", "ArrowLeft"].includes(event.code)) {
-        event.stopPropagation();
       }
     });
 
@@ -567,7 +554,7 @@ class SearchTpl {
 window.addEventListener("load", async () => {
   const getEl = (/** @type {string} */ id) =>
     document.querySelector(`[data-search-${id}]`);
-  const searchEl = getEl("wrapper");
+  const searchEl = document.querySelector(`[data-search]`);
   const backdropEl = getEl("backdrop");
   const dialogEl = getEl("dialog");
   const categoriesEl = getEl("categories");
