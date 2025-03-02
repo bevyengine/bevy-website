@@ -21,9 +21,11 @@ function getCategoryId(/** @type {string} */ category) {
 
 class Search {
   /** @private @readonly */
-  CLASS_VISIBLE = "search--visible";
+  CLASS_NO_SCROLL = "no-scroll";
   /** @private @readonly */
   CLASS_SEARCHING = "search--searching";
+  /** @private @readonly */
+  CLASS_VISIBLE = "search--visible";
 
   // Up/down arrows navigation
   /** @private @type {HTMLElement[] | undefined} */
@@ -227,6 +229,7 @@ class Search {
    * @returns {void}
    */
   hide() {
+    document.body.classList.remove(this.CLASS_NO_SCROLL);
     this.searchEl.classList.remove(this.CLASS_VISIBLE);
   }
 
@@ -304,6 +307,7 @@ class Search {
    * @returns {void}
    */
   show() {
+    document.body.classList.add(this.CLASS_NO_SCROLL);
     this.searchEl.classList.add(this.CLASS_VISIBLE);
     this.inputEl.focus();
     this.inputEl.value = "";
