@@ -88,6 +88,13 @@
 
   &__input {
     width: 100%;
+    display: block;
+    border-radius: 8px;
+    border: 2px solid #383838;
+    background-color: #2b2c2f;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: .4rem;
   }
 
   &__clear-filter {
@@ -103,12 +110,6 @@
   }
 
   &__close {
-    @include flex-center;
-
-    padding: 0px 8px;
-    height: 32px;
-    border-radius: 4px;
-    border: 1px solid rgba(#fff, 0.1);
     cursor: pointer;
   }
 
