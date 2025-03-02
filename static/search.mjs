@@ -635,6 +635,6 @@ window.addEventListener("load", async () => {
       console.error("Failed to initialize Pagefind.", err);
     }
   } else {
-    console.error("Search elements not found.");
+    console.error("Not all the elements needed to build the Search dialog were found.");
   }
 });
