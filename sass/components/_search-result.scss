@@ -32,9 +32,10 @@
       color: #fff;
     }
 
+    display: block;
     margin: 0;
     font-weight: 500;
-    display: block;
+    word-break: break-word;
   }
 
   &__title {
