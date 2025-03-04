@@ -68,6 +68,7 @@ $border-radius: 10px;
   --color-neutral-75: #bfbfbf;
   --color-neutral-78: #c8c8c8;
   --color-neutral-82: #d2d2d2;
+  --color-neutral-86: #dcdcdc;
   --color-neutral-93: #ececec;
   --color-neutral-96: #f0effb;
   --color-neutral-97: #f7f7f7;
@@ -87,6 +88,7 @@ $border-radius: 10px;
   --color-blue-74: #7c90ff;
   --color-blue-85: #b3daff;
   --color-blue-85b: #b1d9ff;
+  --color-blue-90: #cee7ff;
 
   --color-blue-link: var(--color-blue-74);
 
@@ -207,14 +209,15 @@ $border-radius: 10px;
 
   --docs-heading-color: var(--color-neutral-93);
   --docs-whats-a-bevy-filter: none;
+
+  --docs-footer-border-color: var(--color-neutral-19);
   --docs-footer-color: var(--color-neutral-61);
   --docs-footer-dir-color: var(--color-neutral-40);
   --docs-footer-dir-hover-color: var(--color-neutral-60b);
   --docs-footer-edit-color: var(--color-neutral-55);
   --docs-footer-edit-hover-color: var(--color-neutral-75);
-  --docs-footer-hover-color: var(--color-neutral-93);
   --docs-footer-hover-bg-color: #{unquote('rgb(from var(--color-neutral-93) r g b / 0.01)')};
-  --docs-footer-border-color: var(--color-neutral-19);
+  --docs-footer-hover-color: var(--color-neutral-93);
 
   --donate-text-color: var(--color-neutral-82);
   --donate-link-color: var(--color-blue-link);
@@ -326,8 +329,8 @@ $border-radius: 10px;
   --tabs-bg-color: var(--color-white);
   --tabs-highlight-color: var(--color-blue-link);
 
-  --todo-bg-color: hsla(50, 50, 50, 0.3);
-  --todo-border-color: hsla(50, 75, 50, 0.5);
+  --todo-bg-color: rgba(191, 170, 64, 0.3);
+  --todo-border-color: rgba(223, 191, 32, 0.5);
 
   --tree-menu-chevron-filter: brightness(70%);
   --tree-menu-label-active-bg-color: #{unquote('rgb(from var(--color-neutral-93) r g b / 0.1)')};
@@ -348,48 +351,32 @@ $border-radius: 10px;
 // styled in light mode.
 .light-mode {
   @media (prefers-color-scheme: light) {
-    --color-blue-link: #4a33d9;
-
-    --anchor-link-color: var(--color-neutral-75);
-
-    --asset-card-title-bg-color: #{unquote('rgb(from var(--color-white) r g b / 0.7)')};
-    --asset-card-title-color: var(--color-black);
-    --asset-tag-bg-color: var(--color-neutral-82);
-    --asset-tag-text-color: var(--color-neutral-22);
+    --color-blue-link: var(--color-blue-57);
 
     --callout-caution-accent-color: #ed0c41;
     --callout-caution-bg-color: #fccad5;
     --callout-caution-color: #2a0109;
-    --callout-info-accent-color: var(--color-blue-45);
-    --callout-info-bg-color: var(--color-blue-85b);
+    --callout-info-accent-color: var(--color-blue-57);
+    --callout-info-bg-color: var(--color-blue-90);
     --callout-info-color: #040126;
     --callout-warning-accent-color: #f0d106;
     --callout-warning-bg-color: #fdedc9;
     --callout-warning-color: #362a02;
 
-    --card-bg-color: var(--color-white);
-    --card-bg-hover-color: var(--color-neutral-97);
-    --card-border-color: var(--color-neutral-82);
-    --card-border-hover-color: var(--color-neutral-75);
-    --card-bg-gradient-start-color: var(--color-neutral-75);
-    --card-bg-gradient-end-color: var(--color-neutral-61);
-    --card-img-bg-color: var(--color-neutral-14);
-
-    --code-bg-color: var(--color-neutral-18);
+    --code-bg-color: var(--color-neutral-93);
     --code-incorrect-border-color: red;
-    --code-text-color: var(--color-neutral-11);
     --code-text-dim-color: var(--color-neutral-61);
 
     --code-aaa: #5078a4;
-    --code-ccc: #b45eb4;
+    --code-ccc: #b041a3;
     --code-ddd: #498bcc;
-    --code-eee: #d49d06;
+    --code-eee: #c58908;
     --code-fff: #eff1f5;
     --code-ggg: #d67b3e;
     --code-hhh: #6e91b5;
     --code-iii: #ae3698;
-    --code-jjj: #6eba2c;
-    --code-kkk: #e0858d;
+    --code-jjj: #64ae23;
+    --code-kkk: #d1767d;
     --code-lll: #d08770;
     --code-mmm: #81ba50;
     --code-nnn: #bf616a;
@@ -403,29 +390,29 @@ $border-radius: 10px;
     --code-vvv: #565656;
     --code-www: #5ea91c;
     --code-xxx: #2aa5a9;
-    --code-yyy: #d0721a;
-    --code-zzz: #df9754;
+    --code-yyy: #cd5d12;
+    --code-zzz: #ce8c4e;
 
-    --details-bg-color: var(--color-black);
+    --details-bg-color: var(--color-neutral-17);
+    --details-text-shadow-color: var(--color-neutral-17);
 
-    --docs-footer-border-color: var(--color-neutral-82);
-    --docs-footer-color: var(--color-neutral-22);
-    --docs-footer-dir-color: var(--color-neutral-45);
-    --docs-footer-dir-hover-color: var(--color-neutral-33);
-    --docs-footer-hover-bg-color: #{unquote('rgb(from var(--color-black) r g b / 0.02)')};
-    --docs-footer-hover-color: var(--color-black);
-
+    --docs-heading-color: var(--color-neutral-17);
     --docs-whats-a-bevy-filter: invert(85%);
 
-    --example-nav-link-color: var(--color-neutral-45);
-    --example-nav-link-hover-color: var(--color-black);
+    --docs-footer-border-color: var(--color-neutral-82);
+    --docs-footer-color: var(--color-neutral-33);
+    --docs-footer-dir-color: var(--color-neutral-53);
+    --docs-footer-dir-hover-color: var(--color-neutral-33);
+    --docs-footer-edit-color: var(--color-neutral-50);
+    --docs-footer-edit-hover-color: var(--color-neutral-33);
+    --docs-footer-hover-bg-color: #{unquote('rgb(from var(--color-black) r g b / 0.01)')};
+    --docs-footer-hover-color: var(--color-black);
 
-    --focus-outline: solid var(--color-blue-47) 3px;
+    --focus-outline: solid var(--color-blue-57) 3px;
 
-    --footer-image-filter: grayscale(1) brightness(0%);
+    --footer-image-filter: grayscale(1) brightness(10%);
 
-    --foundation-logo-filter: invert(80%);
-
+    --heading-meta-text-color: var(--color-neutral-50);
     --heading-meta-item-color: var(--color-neutral-22);
 
     --html-bg-color: var(--color-neutral-82);
@@ -434,18 +421,29 @@ $border-radius: 10px;
     --layout-header-border-color: var(--color-neutral-45);
 
     @media #{$bp-tablet-landscape-down} {
-      --main-menu-active-color: var(--color-blue-40);
+      --main-menu-active-color: var(--color-blue-57);
       --main-menu-link-hover-color: #{unquote('rgb(from var(--color-black) r g b / 0.03)')};
       --main-menu-text-color: var(--color-neutral-33);
     }
 
-    --menu-switch-bg-color: var(--color-neutral-82);
+    --main-menu-mobile-bg-color: var(--color-neutral-97);
+
+    --media-content-blockquote-bg-color: var(--color-neutral-93);
+    --media-content-blockquote-text-color: var(--color-neutral-18);
+    --media-content-code-bg-color: var(--color-neutral-93);
+    --media-content-code-text-color: var(--color-neutral-17);
+    --media-content-link-code-color: #d77c08;
+    --media-content-text-color: var(--color-neutral-27);
+
+    --menu-switch-bg-color: var(--color-neutral-86);
     --menu-switch-option-active-bg-color: var(--color-white);
     --menu-switch-option-active-text-color: var(--color-black);
     --menu-switch-option-text-color: var(--color-neutral-33);
 
+    --migration-guide-hr-color-legacy: var(--color-neutral-50);
     --migration-guide-hr-color: var(--color-black);
-    --migration-guide-hr-color-legacy: var(--color-neutral-82);
+    --migration-guide-legacy-area-tags-color: var(--color-neutral-50);
+    --migration-guide-title-color: var(--color-neutral-13);
 
     --on-this-page-color: var(--color-neutral-45);
     --on-this-page-hover-color: var(--color-black);
@@ -453,20 +451,17 @@ $border-radius: 10px;
 
     --scrollbar-thumb-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
 
-    --table-border-color: var(--color-neutral-61);
-    --table-header-color: var(--color-neutral-75);
-
-    --tabs-bg-color: var(--color-black);
-    --tabs-highlight-color: var(--color-blue-link);
+    --todo-bg-color: rgba(191, 170, 64, 0.3);
+    --todo-border-color: rgba(223, 191, 32, 0.5);
 
     --tree-menu-chevron-filter: invert(65%);
-    --tree-menu-label-active-bg-color: var(--color-neutral-82);
+    --tree-menu-label-active-bg-color: var(--color-neutral-86);
     --tree-menu-label-active-color: var(--color-black);
-    --tree-menu-label-color: var(--color-neutral-22);
-    --tree-menu-toc-bg-color: red;
+    --tree-menu-label-color: var(--color-neutral-33);
+    --tree-menu-toc-bg-color: var(--color-neutral-93);
     --tree-menu-toggle-hover-color: var(--color-neutral-75);
 
-    --warning-color: #b3b318;
+    --warning-color: rgb(179, 158, 24);
 
     .inverted {
       filter: invert(90%) hue-rotate(180deg);
