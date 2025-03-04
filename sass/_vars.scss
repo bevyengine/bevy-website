@@ -68,7 +68,7 @@ $border-radius: 10px;
   --color-neutral-75: #bfbfbf;
   --color-neutral-78: #c8c8c8;
   --color-neutral-82: #d2d2d2;
-  --color-neutral-86: #dcdcdc;
+  --color-neutral-88: #e1e1e1;
   --color-neutral-93: #ececec;
   --color-neutral-96: #f0effb;
   --color-neutral-97: #f7f7f7;
@@ -435,7 +435,7 @@ $border-radius: 10px;
     --media-content-link-code-color: #d77c08;
     --media-content-text-color: var(--color-neutral-27);
 
-    --menu-switch-bg-color: var(--color-neutral-86);
+    --menu-switch-bg-color: var(--color-neutral-88);
     --menu-switch-option-active-bg-color: var(--color-white);
     --menu-switch-option-active-text-color: var(--color-black);
     --menu-switch-option-text-color: var(--color-neutral-33);
@@ -455,7 +455,7 @@ $border-radius: 10px;
     --todo-border-color: rgba(223, 191, 32, 0.5);
 
     --tree-menu-chevron-filter: invert(65%);
-    --tree-menu-label-active-bg-color: var(--color-neutral-86);
+    --tree-menu-label-active-bg-color: var(--color-neutral-88);
     --tree-menu-label-active-color: var(--color-black);
     --tree-menu-label-color: var(--color-neutral-33);
     --tree-menu-toc-bg-color: var(--color-neutral-93);
