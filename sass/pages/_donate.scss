@@ -1,11 +1,11 @@
 div.donate-sponsor {
-    position: absolute;
-    bottom: 0.4rem;
-    right: 0.8rem;
+  position: absolute;
+  bottom: 0.4rem;
+  right: 0.8rem;
 
-    svg {
-        margin-right: 4px;
-    }
+  svg {
+    margin-right: 4px;
+  }
 }
 
 .donate-page {
@@ -244,11 +244,11 @@ div.donate-sponsor {
 }
 
 #membership {
-    display: block;
+  display: block;
 }
 
 #corporate-sponsorship {
-    display: none;
+  display: none;
 }
 
 @include state-checked("donate-view") {
