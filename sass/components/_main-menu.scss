@@ -13,7 +13,7 @@
     @include flex-center;
 
     position: relative;
-    height: var(--header-height);
+    height: var(--layout-header-height);
     font-size: 1.3rem;
     font-weight: 500;
     text-decoration: none;
@@ -45,7 +45,7 @@
     // Instead we have the outline on the text inside the link
     &:focus-visible span {
       border-radius: 4px;
-      outline: var(--focus-outline);
+      outline: var(--main-menu-link-outline);
       outline-offset: 4px;
     }
   }
@@ -65,12 +65,12 @@
     width: $mobile-menu-width;
     bottom: -$bottom-buffer;
     padding-bottom: $bottom-buffer;
-    background-color: var(--color-neutral-800);
+    background-color: var(--main-menu-mobile-bg-color);
     z-index: $z-main-menu;
     transform: translateX(0);
     opacity: 0;
     transition: transform $duration, opacity $duration;
-    box-shadow: 0px 0px 16px var(--main-menu-box-shadow-color);
+    box-shadow: 0px 0px 16px var(--main-menu-mobile-box-shadow-color);
 
     &--with-page-menu {
       --main-menu-switch-height: 56px;
@@ -85,9 +85,9 @@
       align-items: center;
       justify-content: space-between;
       padding-left: $padding;
-      height: var(--header-height);
-      background-color: var(--header-bg-color);
-      border-bottom: 2px solid var(--header-border-color);
+      height: var(--layout-header-height);
+      background-color: var(--layout-header-bg-color);
+      border-bottom: 2px solid var(--layout-header-border-color);
 
       a {
         display: flex;
@@ -104,7 +104,7 @@
     &__content {
       position: relative;
       height: calc(
-        100% - var(--header-height) - var(--main-menu-switch-height)
+        100% - var(--layout-header-height) - var(--main-menu-switch-height)
       );
       overflow-x: hidden;
     }
@@ -174,7 +174,7 @@
       @include flex-center;
 
       padding: 0 8px;
-      height: var(--header-height);
+      height: var(--layout-header-height);
       font-size: 1.3rem;
       font-weight: 500;
       text-decoration: none;

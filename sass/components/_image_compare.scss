@@ -15,12 +15,12 @@ div.image-compare {
   --text-padding: 10px;
   --gap: 3px;
   --range-thumb-diametre: 16px;
-  background-color: var(--color-white); // gap color;
+  background-color: var(--image-compare-gap-color); // gap color;
 
   position: relative;
   border-radius: 10px;
   width: 100%;
-  outline: solid 1px var(--color-neutral-900); // fixes border leaking background color
+  outline: solid 1px var(--image-compare-outline-color); // fixes border leaking background color
   outline-offset: -1px;
 
   // calculated
@@ -32,8 +32,7 @@ div.image-compare {
     font-weight: bolder;
     font-size: 1.8rem;
     width: calc(100% - var(--text-padding));
-    text-shadow: 0 0 4px var(--image-compare-text-shadow);
-    color: var(--image-compare-text-color);
+    text-shadow: 0 0 2px var(--image-compare-text-shadow-color);
   }
 
   &::before {
@@ -91,13 +90,13 @@ div.image-compare {
       width: var(--range-thumb-diametre);
       height: var(--range-thumb-diametre);
       border-radius: 50%;
-      outline: solid 3px var(--color-white);
+      outline: solid 3px var(--image-compare-thumb-outline-color);
       outline-offset: -2.9px;
-      background-color: var(--color-neutral-600);
+      background-color: var(--image-compare-thumb-bg-color);
 
       &:hover,
       &:active {
-        background-color: var(--color-neutral-500);
+        background-color: var(--image-compare-thumb-bg-hover-color);
       }
     }
 

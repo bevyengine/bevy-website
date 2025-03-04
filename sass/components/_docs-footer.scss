@@ -94,11 +94,11 @@
     font-size: 0.9rem;
 
     @include override-anchor {
-      color: var(--docs-footer-color);
+      color: var(--docs-footer-edit-color);
     }
 
     &:hover {
-      color: var(--docs-footer-hover-color);
+      color: var(--docs-footer-edit-hover-color);
     }
 
     .icon {

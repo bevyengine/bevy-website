@@ -9,7 +9,7 @@ $asset-card-padding: 0.4rem;
     "banner"
     "desc"
     "tags";
-  color: var(--text-color);
+  color: var(--asset-card-text-color);
 
   &__banner {
     grid-area: banner;
@@ -20,8 +20,8 @@ $asset-card-padding: 0.4rem;
 
     background: linear-gradient(
       0deg,
-      var(--card-bg-gradient-start-color) 0%,
-      var(--card-bg-gradient-end-color) 100%
+      var(--asset-card-bg-gradient-start-color) 0%,
+      var(--asset-card-bg-gradient-end-color) 100%
     );
 
     img {
@@ -30,7 +30,7 @@ $asset-card-padding: 0.4rem;
       display: block;
       object-fit: contain;
 
-      background-color: var(--card-img-bg-color);
+      background-color: var(--asset-card-img-bg-color);
     }
   }
 
@@ -112,11 +112,7 @@ $asset-card-padding: 0.4rem;
     padding: 0.2em 0.4em;
     border-radius: 0.2em;
     font-size: 0.85em;
-    color: var(--asset-tag-text-color);
-    background: var(--asset-tag-bg-color);
-
-    &--supported {
-      background-color: var(--asset-card-supported-color);
-    }
+    color: var(--asset-card-tag-text-color);
+    background: var(--asset-card-tag-bg-color);
   }
 }

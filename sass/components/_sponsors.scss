@@ -3,26 +3,6 @@
   max-width: 900px;
   margin: 0 auto;
 
-  &--corporate_platinum,
-  &--corporate_bronze,
-  &--diamond,
-  &--titanium {
-    background-color: var(--sponsor-vip-bg-color);
-    border-radius: 8px;
-    padding: 24px 24px 8px;
-
-    .sponsors {
-      &__title {
-        color: var(--sponsor-vip-title-color);
-        margin: 0 0 16px;
-      }
-
-      &__name {
-        color: var(--sponsor-vip-name-color);
-      }
-    }
-  }
-
   &:not(:last-child) {
     margin-bottom: 56px;
   }
@@ -54,21 +34,21 @@
   &__name {
     display: block;
     margin: 0 10px 10px;
-    color: var(--sponsor-name-color);
+    color: var(--sponsors-name-color);
     font-size: 1.25rem;
   }
 
   &__link {
     display: block;
     margin: 0 15px 15px;
-    color: var(--sponsor-link-color);
+    color: var(--sponsors-link-color);
     font-size: 1.5rem;
   }
 
   &__amount {
     margin-top: -4px;
     font-size: 1.2rem;
-    color: var(--sponsor-amount-color);
+    color: var(--sponsors-amount-color);
   }
 
   &__content {
@@ -108,5 +88,5 @@
 
 .past-donor {
   font-size: 1rem;
-  color: var(--sponsor-past-donor-color);
+  color: var(--sponsors-past-donor-color);
 }

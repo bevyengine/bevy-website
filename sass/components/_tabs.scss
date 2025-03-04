@@ -17,7 +17,6 @@
     padding: 12px $h-padding;
     position: relative;
     border-radius: 8px;
-    color: var(--text-color);
 
     &:hover {
       background-color: unquote("rgb(from var(--tabs-bg-color) r g b / 0.05)");

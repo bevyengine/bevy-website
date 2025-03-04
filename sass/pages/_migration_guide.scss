@@ -2,7 +2,7 @@
   h1,
   h2,
   h3 {
-    color: var(--heading-color);
+    color: var(--migration-guide-title-color);
   }
 
   h2 {
@@ -29,7 +29,7 @@
   }
 
   hr {
-    $color: "rgb(from var(--hr-color) r g b / 0.05)";
+    $color: "rgb(from var(--migration-guide-hr-color) r g b / 0.05)";
 
     height: 1px;
     color: unquote($color);
@@ -45,14 +45,14 @@
     margin-top: 2rem;
     padding-top: 2rem;
     margin-bottom: 0.1rem;
-    border-top: solid var(--hr-color-legacy) 1px;
+    border-top: solid var(--migration-guide-hr-color-legacy) 1px;
   }
 
   .migration-guide-area-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.2rem;
-    color: var(--color-neutral-300);
+    color: var(--migration-guide-legacy-area-tags-color);
   }
 
   .migration-guide-area-tag {

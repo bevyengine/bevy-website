@@ -7,18 +7,18 @@
     position: fixed;
     top: 0px;
     width: 100%;
-    height: var(--header-height);
-    background-color: var(--header-bg-color);
-    border-bottom: 2px solid var(--header-border-color);
+    height: var(--layout-header-height);
+    background-color: var(--layout-header-bg-color);
+    border-bottom: 2px solid var(--layout-header-border-color);
     z-index: $z-layout-header;
   }
 
   &__content {
     width: 100%;
-    padding-top: var(--header-height);
+    padding-top: var(--layout-header-height);
     padding-bottom: 64px;
     flex-grow: 1;
-    background-color: var(--content-bg-color);
+    background-color: var(--layout-content-bg-color);
   }
 }
 

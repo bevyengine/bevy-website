@@ -5,15 +5,10 @@ $content-font-size: 1.22rem;
   font-size: $content-font-size;
   font-weight: 400;
   line-height: 1.43;
-  color: var(--text-color);
+  color: var(--media-content-text-color);
   font-style: normal;
   text-decoration: none;
   word-break: break-word;
-
-  h2,
-  h3 {
-    color: var(--heading-color);
-  }
 
   h2 {
     margin-top: 2.2rem;
@@ -60,17 +55,21 @@ $content-font-size: 1.22rem;
   a:link code {
     font-family: var(--font-family-mono);
     font-variant-ligatures: none;
-    color: var(--code-link-color);
+    color: var(--media-content-link-code-color);
     font-style: normal;
     text-decoration: none;
+  }
+
+  a:hover code {
+    background-color: var(--media-content-link-code-hover-color);
   }
 
   code {
     font-family: var(--font-family-mono);
     font-variant-ligatures: none;
     font-size: 1.05rem;
-    color: var(--code-text-color);
-    background-color: var(--code-bg-color);
+    color: var(--media-content-code-text-color);
+    background-color: var(--media-content-code-bg-color);
     border-radius: 4px;
     padding-block: 2px;
     padding-inline: 6px;
@@ -79,8 +78,8 @@ $content-font-size: 1.22rem;
 
   blockquote {
     font-size: 1.1rem;
-    color: var(--text-dim-color);
-    background-color: var(--code-bg-color);
+    color: var(--media-content-blockquote-text-color);
+    background-color: var(--media-content-blockquote-bg-color);
     border-radius: $border-radius;
     padding: 8px;
     margin: 0px;
@@ -96,23 +95,19 @@ $content-font-size: 1.22rem;
     padding-left: 2.5rem;
   }
 
-  a:hover code {
-    background-color: var(--code-bg-hover-color);
-  }
-
   a.button {
-    color: var(--color-white);
+    color: var(--media-content-button-text-color);
   }
 
   a {
     text-decoration: none;
-    color: var(--link-color);
+    color: var(--media-content-link-color);
   }
 
-  // a:hover {
-  //   text-shadow: 0 0 0.9px var(--link-hover-shadow-color),
-  //     0 0 0.9px var(--link-hover-shadow-color);
-  // }
+  a:hover {
+    text-shadow: 0 0 0.9px var(--media-content-link-hover-shadow-color),
+      0 0 0.9px var(--media-content-link-hover-shadow-color);
+  }
 
   pre code {
     padding-bottom: 0px;
@@ -120,8 +115,4 @@ $content-font-size: 1.22rem;
     padding-left: 0px;
     padding-right: 0px;
   }
-}
-
-.fun-list {
-  color: var(--news-fun-list-color);
 }

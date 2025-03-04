@@ -69,33 +69,11 @@
   line-height: 1rem;
 }
 
-.card-subtitle {
-  display: block;
-  font-weight: 200;
-  font-size: 1.4rem;
-  font-style: italic;
-  color: var(--text-dim-color);
-  text-decoration: none;
-}
-
-.card-description {
-  display: block;
-  position: relative;
-  font-weight: 300;
-  font-size: 1.3rem;
-  color: var(--text-color);
-  text-decoration: none;
-  margin-top: 0.4rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 100px;
-}
-
 .card-title {
   display: block;
   font-weight: 500;
   font-size: 2rem;
-  color: var(--text-color);
+  color: var(--card-title-color);
   font-style: normal;
   text-decoration: none;
 }

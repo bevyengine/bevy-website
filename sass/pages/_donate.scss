@@ -12,7 +12,7 @@ div.donate-sponsor {
   font-size: 1.22rem;
   font-weight: 400;
   line-height: 1.43;
-  color: var(--text-color);
+  color: var(--donate-text-color);
   font-style: normal;
   text-decoration: none;
   word-break: break-word;
@@ -35,7 +35,7 @@ div.donate-sponsor {
 
   a:visited {
     text-decoration: none;
-    color: var(--link-color);
+    color: var(--donate-link-color);
   }
 }
 
@@ -62,7 +62,7 @@ div.donate-sponsor {
   margin-top: 10px;
   font-size: 1.3rem;
   font-weight: 500;
-  color: var(--color-white);
+  color: var(--donate-description-color);
 }
 
 .donate-header-padding {
@@ -81,7 +81,7 @@ div.donate-sponsor {
   margin-bottom: 1rem;
   line-height: 40px;
   border-bottom-width: 4px;
-  border-bottom-color: var(--color-white);
+  border-bottom-color: var(--donate-metric-color);
   border-bottom-style: solid;
 }
 
@@ -123,7 +123,7 @@ div.donate-sponsor {
   position: relative;
   width: 280px;
   height: 134px;
-  background-color: var(--code-bg-color);
+  background-color: var(--donate-level-bg-color);
 
   &:hover {
     text-shadow: none !important;

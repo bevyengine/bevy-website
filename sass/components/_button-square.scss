@@ -17,7 +17,7 @@
   }
 
   &--header {
-    width: calc(var(--header-height) - 8px);
-    height: var(--header-height);
+    width: calc(var(--layout-header-height) - 8px);
+    height: var(--layout-header-height);
   }
 }
