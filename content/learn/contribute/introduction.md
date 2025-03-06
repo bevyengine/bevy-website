@@ -77,3 +77,9 @@ These repositories are owned and managed by [The Bevy Foundation], a non-profit 
 {% end %}
 
 The `bevy` repository itself contains many smaller subcrates. Several of them can be used by themselves and almost all of them can be modularly replaced. Feel free to dig around and find one that interests you!
+
+## Vital resources
+
+If you're working on the engine (or simply using `main` in your project),
+the [Dev Docs](https://dev-docs.bevyengine.org/bevy/index.html),
+a prebuilt version of the docs for the latest `main` that shows docs for all of Bevy's internals.
