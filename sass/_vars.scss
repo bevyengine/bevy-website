@@ -340,7 +340,7 @@ $border-radius: 10px;
 
   --warning-color: #c8c864;
 
-  .inverted {
+  .invertable {
   }
 }
 
@@ -462,7 +462,7 @@ $border-radius: 10px;
 
     --warning-color: rgb(179, 158, 24);
 
-    .inverted {
+    .invertable {
       filter: invert(90%) hue-rotate(180deg);
     }
 

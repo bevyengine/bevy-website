@@ -162,11 +162,11 @@ Bevy ECS does both of these things about as well as it can. According to the pop
 
 #### System Iteration (in nanoseconds, less is better)
 
-<img alt="ecs iter performance graph" src="ecs_iter.svg" class="inverted">
+<img alt="ecs iter performance graph" src="ecs_iter.svg" class="invertable">
 
 #### World Setup (in nanoseconds, less is better)
 
-<img alt="ecs iter performance graph" src="ecs_build.svg" class="inverted">
+<img alt="ecs iter performance graph" src="ecs_build.svg" class="invertable">
 
 Note that `ecs_bench` is a single threaded benchmark, so it doesn't illustrate the multi-threading capabilities of these framework. And as always, please be aware that `ecs_bench` is a micro benchmark and it doesn't illustrate the performance of a complex game. There is a lot of nuance in the ECS performance space and each of the ECS implementations above will perform differently under different workloads.
 
@@ -1198,4 +1198,4 @@ If any of this sounds interesting to you, I encourage you to check out [Bevy on 
 
 I want Bevy to become a vibrant developer community ... thats actually why I chose the name! A Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 2.0rem" class="inverted"/>
+<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 2.0rem" class="invertable"/>
