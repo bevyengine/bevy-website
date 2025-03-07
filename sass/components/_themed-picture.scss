@@ -9,18 +9,20 @@
   }
 
   &__dark {
-    display: initial;
+    display: block;
   }
 }
 
 .light-mode {
-  .themed-picture {
-    &__light {
-      display: initial;
-    }
+  @media (prefers-color-scheme: light) {
+    .themed-picture {
+      &__light {
+        display: block !important;
+      }
 
-    &__dark {
-      display: none !important;
+      &__dark {
+        display: none !important;
+      }
     }
   }
 }
