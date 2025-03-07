@@ -9,7 +9,7 @@
   }
 
   &__dark {
-    display: block;
+    display: inline-block;
   }
 }
 
@@ -17,7 +17,7 @@
   @media (prefers-color-scheme: light) {
     .themed-picture {
       &__light {
-        display: block !important;
+        display: inline-block !important;
       }
 
       &__dark {
