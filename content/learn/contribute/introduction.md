@@ -77,3 +77,14 @@ These repositories are owned and managed by [The Bevy Foundation], a non-profit 
 {% end %}
 
 The `bevy` repository itself contains many smaller subcrates. Several of them can be used by themselves and almost all of them can be modularly replaced. Feel free to dig around and find one that interests you!
+
+## Vital resources
+
+If you're working on the engine (or simply using `main` in your project),
+the [Dev Docs](https://dev-docs.bevyengine.org/bevy/index.html),
+a prebuilt version of the docs for the latest `main` that shows docs for all of Bevy's internals.
+
+If you're making rendering changes, testing your changes across all of the examples and platforms can be incredibly tedious.
+Use the [bevy-example-runner](https://github.com/TheBevyFlock/bevy-example-runner) to automate this!
+Simply open an issue in that repository with your issue number in the title (and an empty body) and it'll kick off a run.
+This uses a *ton* of CI resources, so be kind to the planet and try to do some quick local validation first.
