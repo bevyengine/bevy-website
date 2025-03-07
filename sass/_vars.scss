@@ -207,7 +207,6 @@ $border-radius: 10px;
   --details-bg-color: var(--color-neutral-93);
   --details-text-shadow-color: var(--color-neutral-93);
 
-  --docs-heading-color: var(--color-neutral-93);
   --docs-whats-a-bevy-filter: none;
 
   --docs-footer-border-color: var(--color-neutral-19);
@@ -278,7 +277,7 @@ $border-radius: 10px;
   --main-menu-link-outline: var(--focus-outline);
   --main-menu-mobile-bg-color: var(--color-neutral-13);
   --main-menu-mobile-box-shadow-color: #{unquote('rgb(from var(--color-black) r g b / 0.3)')};
-  --main-menu-text-color: var(--color-white);
+  --main-menu-text-color: var(--color-neutral-93);
 
   --media-content-blockquote-bg-color: var(--color-neutral-18);
   --media-content-blockquote-text-color: var(--color-neutral-69);
@@ -396,7 +395,6 @@ $border-radius: 10px;
     --details-bg-color: var(--color-neutral-17);
     --details-text-shadow-color: var(--color-neutral-17);
 
-    --docs-heading-color: var(--color-neutral-17);
     --docs-whats-a-bevy-filter: invert(85%);
 
     --docs-footer-border-color: var(--color-neutral-82);
@@ -416,6 +414,7 @@ $border-radius: 10px;
     --heading-meta-item-color: var(--color-neutral-22);
 
     --html-bg-color: var(--color-neutral-82);
+    --html-text-color: var(--color-neutral-13);
 
     --layout-content-bg-color: var(--color-neutral-97);
     --layout-header-border-color: var(--color-neutral-45);

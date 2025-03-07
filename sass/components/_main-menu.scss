@@ -44,9 +44,8 @@
 
     // Instead we have the outline on the text inside the link
     &:focus-visible span {
-      border-radius: 4px;
+      border-radius: 5px;
       outline: var(--main-menu-link-outline);
-      outline-offset: 4px;
     }
   }
 }

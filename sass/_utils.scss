@@ -4,9 +4,8 @@
 
 // Visual outline on focused elements, for accessibility
 *:focus-visible {
-  border-radius: 4px;
+  border-radius: 5px;
   outline: var(--focus-outline);
-  outline-offset: 2px;
 }
 
 .section {

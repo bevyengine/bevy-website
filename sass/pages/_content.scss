@@ -70,9 +70,8 @@ $content-font-size: 1.22rem;
     font-size: 1.05rem;
     color: var(--media-content-code-text-color);
     background-color: var(--media-content-code-bg-color);
-    border-radius: 4px;
-    padding-block: 2px;
-    padding-inline: 6px;
+    border-radius: $border-radius;
+    padding: 3px 8px;
     text-decoration: none;
   }
 
