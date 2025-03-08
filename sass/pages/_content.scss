@@ -61,7 +61,7 @@ $content-font-size: 1.22rem;
   }
 
   a:hover code {
-    background-color: var(--media-content-link-code-hover-color);
+    background-color: var(--media-content-link-code-hover-bg-color);
   }
 
   code {
@@ -104,8 +104,7 @@ $content-font-size: 1.22rem;
   }
 
   a:hover {
-    text-shadow: 0 0 0.9px var(--media-content-link-hover-shadow-color),
-      0 0 0.9px var(--media-content-link-hover-shadow-color);
+    text-shadow: 0 0 0.9px currentColor, 0 0 0.9px currentColor;
   }
 
   pre code {

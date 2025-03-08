@@ -284,9 +284,8 @@ $border-radius: 10px;
   --media-content-code-bg-color: var(--color-neutral-18);
   --media-content-code-text-color: var(--color-neutral-78);
   --media-content-link-code-color: #e4c151;
-  --media-content-link-code-hover-color: var(--color-neutral-27);
+  --media-content-link-code-hover-bg-color: var(--color-neutral-27);
   --media-content-link-color: var(--color-blue-link);
-  --media-content-link-hover-shadow-color: var(--color-blue-71);
   --media-content-text-color: var(--color-neutral-82);
 
   --menu-switch-bg-color: #{unquote('rgb(from var(--color-white) r g b / 0.05)')};
@@ -431,6 +430,7 @@ $border-radius: 10px;
     --media-content-code-bg-color: var(--color-neutral-93);
     --media-content-code-text-color: var(--color-neutral-17);
     --media-content-link-code-color: #d77c08;
+    --media-content-link-code-hover-bg-color: var(--color-neutral-88);
     --media-content-text-color: var(--color-neutral-27);
 
     --menu-switch-bg-color: var(--color-neutral-88);
