@@ -1,14 +1,14 @@
 .heading-meta {
   margin-top: -0.8rem !important;
   font-style: italic;
-  color: $subtitle-color;
+  color: var(--heading-meta-text-color);
   display: flex;
   gap: 5px;
   font-size: 1rem;
   flex-wrap: wrap;
 
   &__item {
-    color: #b8b8b8 !important;
+    color: var(--heading-meta-item-color) !important;
   }
 
   &__title {

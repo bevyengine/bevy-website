@@ -76,7 +76,7 @@
 {% set newline = "
 " %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="{% block theme %}{% endblock theme %}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -112,11 +112,14 @@
           </label>
           <div class="header__left-block">
             <a class="header__logo" href="/">
-              <img class="logo"
-                    src="/assets/bevy_logo_dark.svg"
-                    alt="Bevy Engine"
-                    width="520"
-                    height="130">
+              <picture class="logo">
+                <img src="/assets/bevy_logo_dark.svg"
+                  class="logo"
+                  alt="Bevy logo"
+                  width="520"
+                  height="130"
+                />
+              </picture>
             </a>
             <div class="header__message">
               {{ base_macros::page_header_message(section_or_page=section_or_page) }}
@@ -128,11 +131,14 @@
                 data-page-menu-switch-state-container>
             <div class="main-menu__header">
               <a href="/">
-                <img class="logo"
-                      src="/assets/bevy_logo_dark.svg"
-                      alt="Bevy Engine"
-                      width="520"
-                      height="130">
+                <picture class="logo">
+                  <img class="logo"
+                        src="/assets/bevy_logo_dark.svg"
+                        alt="Bevy Engine"
+                        width="520"
+                        height="130"
+                  />
+                </picture>
               </a>
               <label class="button-square button-square--header" for="mobile-menu-state">
                 <img src="/assets/icon-times.svg"

@@ -16,7 +16,7 @@
   &__img-wrapper {
     @include flex-center;
 
-    background-color: $default-image-background-color;
+    background-color: var(--link-card-img-bg-color);
     padding: 1rem;
 
     @media #{$bp-phone-landscape-up} {
@@ -54,9 +54,9 @@
   &__title {
     margin: 0;
     line-height: 1.1;
-    font-size: 2.0rem;
+    font-size: 2rem;
     font-weight: 500;
-    color: $default-color;
+    color: var(--link-card-title-color);
     font-style: normal;
     margin-bottom: 4px;
   }
@@ -65,14 +65,14 @@
     font-size: 1.4rem;
     font-weight: 200;
     font-style: italic;
-    color: $subtitle-color;
+    color: var(--link-card-subtitle-color);
   }
 
   &__description {
     margin: 0.4rem 0 0;
     font-size: 1.3rem;
     font-weight: 300;
-    color: $default-color;
+    color: var(--link-card-text-color);
     text-decoration: none;
 
     &--ellipsis {

@@ -105,7 +105,7 @@ As a quick callout, pipelined rendering doesn't _actually_ happen in parallel ye
 
 <div class="release-feature-authors">authors: @cart</div>
 
-![render graph](render_graph.svg)
+<img alt="render graph" src="render_graph.svg" class="invertable">
 
 The New Bevy Renderer has a Render Graph, [much like the old Bevy renderer](/news/introducing-bevy/#render-graph). Render Graphs are a way to logically model GPU command construction in a modular way. Graph Nodes pass GPU resources like Textures and Buffers (and sometimes Entities) to each other, forming a directed acyclic graph. When a Graph Node runs, it uses its graph inputs and the Render World to construct GPU command lists.
 
@@ -215,7 +215,7 @@ We also have big plans to make [`Material`] even better:
 
 <div class="release-feature-authors">authors: Rob Swain (@superdump)</div>
 
-[![view frustum](ViewFrustum.svg)](https://en.wikipedia.org/wiki/Viewing_frustum#/media/File:ViewFrustum.svg)
+[<img alt="view frustum" src="ViewFrustum.svg" class="invertable">](https://en.wikipedia.org/wiki/Viewing_frustum#/media/File:ViewFrustum.svg)
 
 Drawing things is expensive! It requires writing data from the CPU to the GPU, constructing draw calls, and running shaders. We can save a lot of time by _not_ drawing things that the camera can't see. "Frustum culling" is the act of excluding objects that are outside the bounds of the camera's "view frustum", to avoid wasting work drawing them. For large scenes, this can be the difference between a crisp 60 frames per second and chugging to a grinding halt.
 

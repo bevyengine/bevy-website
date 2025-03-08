@@ -5,7 +5,7 @@ $content-font-size: 1.22rem;
   font-size: $content-font-size;
   font-weight: 400;
   line-height: 1.43;
-  color: #d2d2d2;
+  color: var(--media-content-text-color);
   font-style: normal;
   text-decoration: none;
   word-break: break-word;
@@ -55,29 +55,30 @@ $content-font-size: 1.22rem;
   a:link code {
     font-family: var(--font-family-mono);
     font-variant-ligatures: none;
-    color: #e4c151;
+    color: var(--media-content-link-code-color);
     font-style: normal;
     text-decoration: none;
+  }
+
+  a:hover code {
+    background-color: var(--media-content-link-code-hover-bg-color);
   }
 
   code {
     font-family: var(--font-family-mono);
     font-variant-ligatures: none;
     font-size: 1.05rem;
-    color: #c8c8c8;
-    background-color: $syntax-theme-background;
+    color: var(--media-content-code-text-color);
+    background-color: var(--media-content-code-bg-color);
     border-radius: $border-radius;
-    padding-bottom: 3px;
-    padding-top: 3px;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding: 3px 8px;
     text-decoration: none;
   }
 
   blockquote {
     font-size: 1.1rem;
-    color: #b1b1b1;
-    background-color: $syntax-theme-background;
+    color: var(--media-content-blockquote-text-color);
+    background-color: var(--media-content-blockquote-bg-color);
     border-radius: $border-radius;
     padding: 8px;
     margin: 0px;
@@ -93,22 +94,17 @@ $content-font-size: 1.22rem;
     padding-left: 2.5rem;
   }
 
-
-  a:hover code {
-    background-color: $syntax-theme-background-hover;
-  }
-
   a.button {
-    color: $color-white;
+    color: var(--media-content-button-text-color);
   }
 
   a {
     text-decoration: none;
-    color: $link-color;
+    color: var(--media-content-link-color);
   }
 
   a:hover {
-    text-shadow: 0 0 0.9px $link-hover-shadow-color, 0 0 0.9px $link-hover-shadow-color;
+    text-shadow: 0 0 0.9px currentColor, 0 0 0.9px currentColor;
   }
 
   pre code {
@@ -117,8 +113,4 @@ $content-font-size: 1.22rem;
     padding-left: 0px;
     padding-right: 0px;
   }
-}
-
-.fun-list {
-  color: #a0c5e7;
 }

@@ -6,21 +6,18 @@
 
   &:hover {
     &:before {
-      $padding: 8px;
-
       content: "";
       position: absolute;
-      top: $padding;
-      right: $padding;
-      bottom: $padding;
-      left: $padding;
-      background-color: rgba($color-white, 0.05);
+      inset: 8px;
+      background-color: unquote(
+        "rgb(from var(--button-square-bg-color) r g b / 0.05)"
+      );
       border-radius: $border-radius;
     }
   }
 
   &--header {
-    width: calc(var(--header-height) - 8px);
-    height: var(--header-height);
+    width: calc(var(--layout-header-height) - 8px);
+    height: var(--layout-header-height);
   }
 }
