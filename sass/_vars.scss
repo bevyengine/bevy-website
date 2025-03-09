@@ -25,6 +25,8 @@ $duration: 250ms;
 $z-layout-header: 800;
 $z-main-menu-backdrop: 900;
 $z-main-menu: 1000;
+$z-search-backdrop: 1100;
+$z-search: 1200;
 
 // General
 $max-width: 1200px;
@@ -123,6 +125,8 @@ $border-radius: 10px;
   --asset-version-select-bg-color: var(--color-neutral-19);
   --asset-version-select-border-color: var(--color-neutral-22);
   --asset-version-select-border-hover-color: var(--color-neutral-42);
+
+  --backdrop-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
 
   --bevy-instance-canvas-color: var(--color-neutral-18);
   --bevy-instance-text-shadow-color: var(--color-black);
@@ -271,7 +275,6 @@ $border-radius: 10px;
   --link-card-text-color: var(--color-neutral-93);
 
   --main-menu-active-color: var(--color-blue-85);
-  --main-menu-backdrop-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
   --main-menu-link-hover-color: #{unquote('rgb(from var(--color-white) r g b / 0.05)')};
   --main-menu-link-outline: var(--focus-outline);
   --main-menu-mobile-bg-color: var(--color-neutral-13);
