@@ -1,6 +1,8 @@
 .migration-guide {
-  h1, h2, h3 {
-    color: #eee;
+  h1,
+  h2,
+  h3 {
+    color: var(--migration-guide-title-color);
   }
 
   h2 {
@@ -19,40 +21,22 @@
   }
 
   h3 {
-    margin-block: 2rem 0.5rem;
+    margin-block: 2rem 1rem;
+  }
+
+  .heading-meta {
+    margin-bottom: 1rem;
   }
 
   hr {
-    $color: rgba(#fff, 0.05);
+    $color: "rgb(from var(--migration-guide-hr-color) r g b / 0.05)";
 
     height: 1px;
-    color: $color;
-    background: $color;
+    color: unquote($color);
+    background: unquote($color);
     font-size: 0;
     border: 0;
     margin-block: 2rem;
-  }
-}
-
-.migration-guide-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  padding: 0px !important;
-  margin: 0px 0px 1rem !important;
-
-  li {
-    font-size: 0.9rem;
-  }
-
-  &__area {
-    padding: 0.2rem 0.3rem;
-    line-height: 1;
-    border-radius: 0.2rem;
-    border-style: solid;
-    border-width: 1px;
-    color: #888;
   }
 }
 
@@ -61,14 +45,14 @@
     margin-top: 2rem;
     padding-top: 2rem;
     margin-bottom: 0.1rem;
-    border-top: solid darken($color-white, 60%) 1px;
+    border-top: solid var(--migration-guide-hr-color-legacy) 1px;
   }
 
   .migration-guide-area-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.2rem;
-    color: gray;
+    color: var(--migration-guide-legacy-area-tags-color);
   }
 
   .migration-guide-area-tag {

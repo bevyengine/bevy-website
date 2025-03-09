@@ -1,24 +1,27 @@
 details {
   $h-padding: 10px;
-  $border: 2px solid $subtitle-color;
-  // border: $border;
   border-radius: $border-radius;
   padding: 0 $h-padding;
   margin-block: 1em;
-  background-color: rgba($color-white, 0.1);
+  background-color: unquote("rgb(from var(--details-bg-color) r g b / 0.1)");
   overflow: hidden; // prevent clobbering corner radii
 
-  & h1, & h2, & h3, & h4, & h5, & h6 {
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
     margin: 0;
     display: inline;
   }
 
-  >summary {
+  > summary {
     cursor: pointer; // this should be the default
     padding-block: calc($h-padding/2);
 
     &:hover {
-      text-shadow: 0 0 0.9px $default-color, 0 0 0.9px $default-color;
+      text-shadow: 0 0 0.9px var(--details-text-shadow-color), 0 0 0.9px var(--details-text-shadow-color);
     }
   }
 
@@ -27,47 +30,25 @@ details {
   // also, to avoid these styles, put the block in a <div>
   $big-blocks: ":is(pre.z-code, .callout)";
 
-  >#{$big-blocks} {
+  > #{$big-blocks} {
     // push big blocks to the edge and remove their corners
     margin-inline: -$h-padding;
     padding-inline: $h-padding !important;
     border-radius: 0 !important;
   }
 
-  >summary+#{$big-blocks} {
+  > summary + #{$big-blocks} {
     // remove margin on leading...
     margin-top: 0;
   }
 
-  >#{$big-blocks}:last-child {
+  > #{$big-blocks}:last-child {
     // ...and trailing big blocks
     margin-bottom: 0;
   }
 
-
   // tighten trailing <p>
-  >p:last-child {
+  > p:last-child {
     margin-bottom: $h-padding;
-  }
-
-  &.lowprofile {
-    border: none;
-    border-radius: 0;
-    background-color: transparent;
-
-    >summary {
-      font-weight: normal;
-    }
-
-    // since there's no background colour this looks normal
-    // <details> has it's own margin
-    :last-child {
-      margin-bottom: 0;
-    }
-
-    &[open] {
-      border-left: $border;
-      padding-left: calc($h-padding - 2px);
-    }
   }
 }

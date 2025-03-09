@@ -38,14 +38,14 @@
 
   .asset-version-select {
     border-radius: $border-radius;
-    border: 2px solid #383838;
-    background-color: $syntax-theme-background;
-    font-size: 1.0rem;
-    padding: .4rem;
+    border: 2px solid var(--asset-version-select-border-color);
+    background-color: var(--asset-version-select-bg-color);
+    font-size: 1rem;
+    padding: 0.4rem;
+    margin-left: 8px;
 
     &:hover {
-      background-color: $card-hover-background;
-      border: 2px solid #6b6b6b;
+      border: 2px solid var(--asset-version-select-border-hover-color);
     }
 
     .item-grid {
@@ -69,14 +69,13 @@
 
     .asset-version-select {
       border-radius: $border-radius;
-      border: 2px solid #383838;
-      background-color: $syntax-theme-background;
-      font-size: 1.0rem;
-      padding: .4rem;
+      border: 2px solid var(--asset-version-select-border-color);
+      background-color: var(--asset-version-select-bg-color);
+      font-size: 1rem;
+      padding: 0.4rem;
 
       &:hover {
-        background-color: $card-hover-background;
-        border: 2px solid #6b6b6b;
+        border: 2px solid var(--asset-version-select-bg-hover-color);
       }
     }
   }
@@ -99,13 +98,14 @@
       text-align: center;
       justify-content: center;
       align-items: center;
-      color: $default-color;
+      color: var(--asset-suggestion-item-text-color);
       height: 48px;
 
       &__img_wrapper {
         display: flex;
         align-items: center;
-        padding: $asset-card-padding 0px $asset-card-padding calc($asset-card-padding * 2);
+        padding: $asset-card-padding 0px $asset-card-padding
+          calc($asset-card-padding * 2);
       }
 
       &__text {

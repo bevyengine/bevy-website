@@ -10,7 +10,7 @@
   font-size: 1.22rem;
   font-weight: 200;
   font-style: italic;
-  color: $subtitle-color;
+  color: var(--news-subtitle-color);
 }
 
 .news-content {
@@ -37,35 +37,23 @@
 
 .news-social-link {
   font-size: 1.1rem;
-  color: $default-color;
+  color: var(--news-social-link-color);
 }
 
 .release-feature-authors {
   margin-top: -0.8rem !important;
   font-style: italic;
-  color: $subtitle-color;
-}
-
-.release-feature-meta {
-  @extend .release-feature-authors;
-  display: flex;
-  gap: 5px;
-  font-size: 1.0rem;
-  flex-wrap: wrap;
-}
-
-.release-feature-meta-item {
-  color: #b8b8b8 !important;
-}
-
-.release-feature-meta-title {
-  margin-right: 4px;
+  color: var(--news-feature-authors-color);
 }
 
 .news-image-subtitle {
-  color: $subtitle-color;
+  color: var(--news-feature-image-subtitle);
   font-style: italic;
-  font-size: 1.0rem;
+  font-size: 1rem;
   margin-top: -0.3rem;
   text-align: center;
+}
+
+.fun-list {
+  color: var(--news-fun-list-color);
 }

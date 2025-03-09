@@ -12,7 +12,7 @@ youtube = "cartdev"
 
 It is with excitement that I unveil to the world ...
 
-<img src="bevy_foundation.svg" alt="Bevy Foundation Logo" style="margin-top: 2rem; margin-bottom: 2rem;" />
+<img src="bevy_foundation.svg" alt="Bevy Foundation Logo" style="margin-top: 2rem; margin-bottom: 2rem;" class="img-in-card" />
 
 The [**Bevy Foundation**](/foundation) is the next step in our journey to build a world class free and open source game engine. **Bevy Foundation** is a non-profit organization formed in Washington State, with a pending federal 501(c)(3) tax-exemption application (more on this later).
 

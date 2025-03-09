@@ -26,7 +26,7 @@ function otp_set_active(id_or_node){
 }
 
 let headerHeight = getComputedStyle(document.body).getPropertyValue(
-  "--header-height"
+  "--layout-header-height"
 );
 
 let otp_observer =  new IntersectionObserver(
