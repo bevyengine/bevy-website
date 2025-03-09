@@ -463,7 +463,7 @@ This _significantly_ reduces iterative compile times. Check out how long it take
 
 ### Time To Compile Change To 3d_scene Example (in seconds, less is better)
 
-![fast_compiles](fast_compiles.svg)
+<img alt="fast_compiles" src="fast_compiles.svg" class="invertable">
 
 We added a cargo feature to easily enable dynamic linking during development
 
@@ -513,11 +513,11 @@ For the first optimization round, I incrementalized as much as I could:
 
 #### Frame Time to Draw 10,000 Static Sprites (in milliseconds, less is better)
 
-![bevy_round1_static](bevy_round1_static.svg)
+<img alt="bevy_round1_static" src="bevy_round1_static.svg" class="invertable">
 
 #### Frame Time to Draw 10,000 Moving Sprites (in milliseconds, less is better)
 
-![bevy_round1_dynamic](bevy_round1_dynamic.svg)
+<img alt="bevy_round1_dynamic" src="bevy_round1_dynamic.svg" class="invertable">
 
 ### Optimize Text Rendering (and other immediate rendering)
 
@@ -525,7 +525,7 @@ Text Rendering (and anything else that used the `SharedBuffers` immediate-render
 
 #### Frame Time to Draw "text_debug" Example  (in milliseconds, less is better)
 
-![text_rendering](text_rendering.svg)
+<img alt="text_rendering" src="text_rendering.svg" class="invertable">
 
 ### Mailbox Vsync
 

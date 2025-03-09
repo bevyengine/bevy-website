@@ -5,7 +5,7 @@ kbd {
   margin-inline: 0.1em;
   line-height: 1;
   border-radius: 0.3em;
-  border: 1px solid #888;
+  border: 1px solid var(--kbd-border-color);
   min-width: 2.5ch;
   display: inline-block;
   text-align: center;

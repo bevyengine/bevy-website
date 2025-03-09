@@ -20,7 +20,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year of Milestones
 
-![milestones](milestones.svg)
+<img src="milestones.svg" alt="milestones" class="img-in-card" />
 
 * **January 1**: Alice Cecile (@alice-i-cecile) gets scoped merge rights for documentation work.
 * **January 8**: [Bevy 0.6](/news/bevy-0-6)
@@ -47,7 +47,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year By The Numbers
 
-![numbers](numbers.svg)
+<img src="numbers.svg" alt="numbers" class="img-in-card" />
 
 * **470** unique Bevy contributors on [GitHub](https://github.com/bevyengine) (up from 255)
 * **17,830** [GitHub](https://github.com/bevyengine) stars (up from 10,030)
@@ -67,7 +67,7 @@ Note that for consistency and clarity all of these numbers are given in "absolut
 
 ## Things I'm Proud Of
 
-![proud](proud.svg)
+<img src="proud.svg" alt="proud" class="img-in-card" />
 
 I'll try not to repeat myself here, but note that I am still extremely proud of the [things I outlined in last year's retrospective](/news/bevys-first-birthday).
 
@@ -130,7 +130,7 @@ Of course, my "Bevy is still young and we make breaking changes regularly" warni
 
 ## There Is Always Room For Improvement
 
-![improve](improve.svg)
+<img src="improve.svg" alt="improve" class="img-in-card" />
 
 ### Bevy 0.6 Took Too long
 
@@ -190,7 +190,7 @@ I think we made the right calls here: we had a lot of foundational work to do, e
 
 ## The Next Year of Bevy
 
-![next year](next_year.svg)
+<img src="next_year.svg" alt="next year" class="img-in-card" />
 
 Here are some of our "big ticket" items planned for the next year. I'm keeping this list smaller and more scoped than last year because some of these items are _huge_ efforts and I was clearly overconfident in my predictions last year. That being said, I think we now have a better understanding of where we are in our "tech tree", we've started scaling out the Bevy Org and delegating effectively, and we are more capable of prioritizing these things (instead of needing to direct efforts to other foundational pieces). I believe we will make all of these things happen.
 
@@ -211,4 +211,4 @@ This year is going to be a big one for Bevy. I'm looking forward to spending it 
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" class="invertable" />

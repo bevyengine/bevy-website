@@ -2,6 +2,8 @@
 {% import "macros/docs.html" as docs_macros %}
 {% import "macros/base.html" as base_macros %}
 
+{% block theme %}light-mode{% endblock theme %}
+
 {% block head_extensions %}
   {% set_global ancestor_is_public_draft = false %}
 
@@ -93,9 +95,6 @@
       {% endfor %}
       <h1>
         {{ section_or_page.extra.long_title | default(value=section_or_page.title) | safe }}
-        {% if section_or_page.extra.subtitle %}
-          <span class="docs-page-subtitle">{{ section_or_page.extra.subtitle }}</span>
-        {% endif %}
       </h1>
       <div class="media-content">
         {{ section_or_page.content | safe }}

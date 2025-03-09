@@ -19,7 +19,7 @@
   &__progress-file {
     margin-bottom: 4px;
     font-weight: normal;
-    text-shadow: 1px 1px 1px #000;
+    text-shadow: 1px 1px 1px var(--bevy-instance-text-shadow-color);
     font-size: 0.85rem;
     word-break: break-all;
   }
@@ -28,7 +28,7 @@
     width: 100%;
     height: 4px;
     border-radius: 4px;
-    background-color: #555;
+    background-color: var(--bevy-instance-progress-track-color);
 
     &:not(:last-child) {
       margin-bottom: 2px;
@@ -38,7 +38,7 @@
   &__progress-bar {
     height: 4px;
     min-width: 4px;
-    background-color: #799bbb;
+    background-color: var(--bevy-instance-progress-bar-color);
     border-radius: 4px;
     width: 0px;
 
@@ -54,8 +54,8 @@
       }
 
       // Generated using: https://stripesgenerator.com
-      background-image: linear-gradient(131deg, #799bbb 25%, #597899 25%, #597899 50%, #799bbb 50%, #799bbb 75%, #597899 75%, #597899 100%);
-      background-size: 26.50px 30.49px;
+      background-image: var(--bevy-instance-progress-bar-stripes);
+      background-size: 26.5px 30.49px;
 
       // Animate background
       animation-duration: 1s;
@@ -70,6 +70,6 @@
     width: 100% !important;
     height: auto !important;
     border-radius: $border-radius;
-    background: #2b2c2f;
+    background: var(--bevy-instance-canvas-color);
   }
 }

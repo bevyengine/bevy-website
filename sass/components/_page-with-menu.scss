@@ -31,8 +31,8 @@
     @include scrollbar-v;
 
     position: sticky;
-    top: calc(var(--header-height) + #{$margin-top});
-    height: calc(100vh - var(--header-height) - #{$margin-top * 2});
+    top: calc(var(--layout-header-height) + #{$margin-top});
+    height: calc(100vh - var(--layout-header-height) - #{$margin-top * 2});
     overflow-y: auto;
     padding-bottom: $margin-top;
   }

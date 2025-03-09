@@ -10,7 +10,7 @@
     text-decoration: none;
 
     &:focus {
-      outline: $focus-outline;
+      outline: var(--focus-outline);
     }
 
     &:hover {
@@ -49,7 +49,7 @@
     position: relative;
 
     &:focus {
-      outline: $focus-outline;
+      outline: var(--focus-outline);
     }
 
     &:before {

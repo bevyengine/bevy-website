@@ -30,11 +30,11 @@
     font-size: 1rem;
 
     @include override-anchor {
-      color: #aaa;
+      color: var(--example-nav-link-color);
     }
 
     &:hover {
-      color: $color-white;
+      color: var(--example-nav-link-hover-color);
     }
   }
 

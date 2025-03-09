@@ -22,7 +22,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year of Milestones
 
-![milestones](milestones.svg)
+<img src="milestones.svg" alt="milestones" class="img-in-card" />
 
 * **August 19**: [Bevy Jam #2: Combine](https://itch.io/jam/bevy-jam-2)
   * The second official Bevy game jam! 404 people joined, 85 people submitted games, and people left 2,674 ratings. [USA Football League Scouting Combine XLV](https://ramirezmike2.itch.io/usa-football-league-scouting-combine-xlv) won!
@@ -43,7 +43,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year By The Numbers
 
-![numbers](numbers.svg)
+<img src="numbers.svg" alt="numbers" class="img-in-card" />
 
 * **741** unique Bevy contributors on [GitHub](https://github.com/bevyengine) (up from 470)
 * **25,222** [GitHub](https://github.com/bevyengine) stars (up from 17,830)
@@ -63,7 +63,7 @@ Note that for consistency and clarity all of these numbers are given in "absolut
 
 ## Things I'm Proud Of
 
-![proud](proud.svg)
+<img src="proud.svg" alt="proud" class="img-in-card" />
 
 I'll try not to repeat myself here, but note that I am still extremely proud of the things I outlined in Bevy's [First Birthday](/news/bevys-first-birthday) and [Second Birthday](/news/bevys-second-birthday) posts.
 
@@ -123,7 +123,7 @@ I am very fortunate to work with such capable people. Bevy would be a very diffe
 
 ## There Is Always Room For Improvement
 
-![improve](improve.svg)
+<img src="improve.svg" alt="improve" class="img-in-card" />
 
 ### I Want to Write More (of my own) Code
 
@@ -210,7 +210,7 @@ We did not replace the Bevy Book with the New Bevy Book. We _have_ however, fina
 
 ## The Next Year of Bevy
 
-![next year](next_year.svg)
+<img src="next_year.svg" alt="next year" class="img-in-card" />
 
 I am no longer outlining explicit "plans for the next year", as I have twice now been pretty bad at making predictions. The Bevy Community and I take a relatively organic and reactive approach to developing Bevy. It doesn't make sense to outline a long list of "plans" when that isn't really how development works in practice.
 
@@ -231,4 +231,4 @@ I'm looking forward to spending another year building Bevy with you all!
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" class="invertable" />

@@ -19,11 +19,11 @@
     border-radius: 8px;
 
     &:hover {
-      background-color: rgba(#fff, 0.05);
+      background-color: unquote("rgb(from var(--tabs-bg-color) r g b / 0.05)");
     }
 
     &:active {
-      background-color: rgba(#fff, 0.1);
+      background-color: unquote("rgb(from var(--tabs-bg-color) r g b / 0.1)");
     }
 
     &:after {
@@ -47,7 +47,7 @@
 }
 
 .tabs__radio:checked + .tabs__label:after {
-  background-color: $link-color;
+  background-color: var(--tabs-highlight-color);
 }
 
 .tabs__radio:checked + .tabs__label + .tabs__panel {

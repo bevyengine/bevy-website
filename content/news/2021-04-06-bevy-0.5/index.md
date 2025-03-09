@@ -147,7 +147,7 @@ app.register_component(
 
 This benchmark illustrates adding and removing a single 4x4 matrix component 10,000 times from an entity that has 5 other 4x4 matrix components. The "other" components are included to help illustrate the cost of "table storage" (used by Bevy 0.4, Bevy 0.5 (Table), and Legion), which requires moving the "other" components to a new table.
 
-![component add/remove](add_remove_big.svg)
+<img alt="component add/remove" src="add_remove_big.svg" class="invertable">
 
 You may have noticed that **Bevy 0.5 (Table)** is also _way_ faster than **Bevy 0.4**, even though they both use "table storage". This is largely a result of the new [Archetype Graph](https://github.com/bevyengine/bevy/pull/1525), which significantly cuts the cost of archetype changes.
 
@@ -181,7 +181,7 @@ We have achieved some pretty significant performance wins as a result of the new
 
 This benchmark runs a query that matches 5 entities within a single archetype and _doesn't_ match 100 other archetypes. This is a reasonable test of "real world" queries in games, which generally have many different entity "types", most of which _don't_ match a given query. This test uses "table storage" across the board.
 
-![sparse_frag_iter](sparse_frag_iter.svg)
+<img alt="sparse_frag_iter" src="sparse_frag_iter.svg" class="invertable">
 
 **Bevy 0.5** marks a huge improvement for cases like this, thanks to the new "stateful queries". **Bevy 0.4** needs to check every archetype each time the iterator is run, whereas **Bevy 0.5** amortizes that cost to zero.
 
@@ -189,7 +189,7 @@ This benchmark runs a query that matches 5 entities within a single archetype an
 
 This is the [ecs_bench_suite](https://github.com/rust-gamedev/ecs_bench_suite) `frag_iter` benchmark. It runs a query on 27 archetypes with 20 entities each. However unlike the "Sparse Fragmented Iterator Benchmark", there are no "unmatched" archetypes. This test uses "table storage" across the board.
 
-![frag_iter](frag_iter.svg)
+<img alt="frag_iter" src="frag_iter.svg" class="invertable">
 
 The gains here compared to the last benchmark are smaller because there aren't any unmatched archetypes. However **Bevy 0.5** still gets a nice boost due to better iterator/query impls, amortizing the cost of matched archetypes to zero, and for_each iterators.
 
