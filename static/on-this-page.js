@@ -20,8 +20,8 @@ let otp_state = new Map();
 function otp_set_active(id_or_node){
   let id = `#${id_or_node instanceof HTMLElement ? id_or_node.getAttribute("id") : id_or_node}`;
 
-  document.querySelectorAll(".on-this-page a").forEach(a => {
-    a.setAttribute("data-active", a.getAttribute("href") == id);
+  document.querySelectorAll("[data-on-this-page] a").forEach(a => {
+    a.setAttribute("data-active", a.getAttribute("href").includes(id));
   });
 }
 
