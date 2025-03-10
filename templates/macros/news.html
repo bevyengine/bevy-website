@@ -33,7 +33,7 @@
 {% endmacro %}
 {% macro news_menu(toc, max_levels) %}
   {% if toc %}
-    <ul class="tree-menu on-this-page">
+    <ul class="tree-menu" data-on-this-page>
       {% for header in toc %}{{ self::news_menu_row(header=header, max_levels=max_levels, level=1) }}{% endfor %}
     </ul>
   {% endif %}
