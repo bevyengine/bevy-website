@@ -111,7 +111,11 @@ class Search {
       }
 
       // Open with `S`
-      if (event.code === "KeyS" && this.inputEl !== document.activeElement) {
+      const isSomeTextInputFocused =
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement;
+
+      if (event.code === "KeyS" && !isSomeTextInputFocused) {
         event.stopPropagation();
         event.preventDefault();
 
