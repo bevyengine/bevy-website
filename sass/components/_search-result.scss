@@ -1,8 +1,8 @@
 .search-result {
-  $hover-bg: rgba(#fff, 0.04);
+  $hover-bg: unquote('rgb(from var(--search-result-bg-hover-color) r g b / 0.04)');
 
   display: block;
-  background-color: rgba(#000, 0.15);
+  background-color: #{unquote('rgb(from var(--search-result-bg-color) r g b / 0.15)')};
   border-radius: 8px;
   padding: 8px;
 
@@ -29,7 +29,7 @@
   &__title,
   &__sub-title {
     @include override-anchor {
-      color: #fff;
+      color: var(--search-result-title-color);
     }
 
     display: block;
@@ -59,7 +59,7 @@
       left: -16px;
       font-size: calc-rem(20px);
       font-weight: 400;
-      color: #ccc;
+      color: var(--search-result-hash-sign-color);
     }
 
     &:hover {
@@ -90,14 +90,14 @@
   &__excerpt {
     @include text-ellipsis(2);
     margin: 4px 0 0;
-    color: #888;
+    color: var(--search-result-excerpt-color);
     font-size: calc-rem(16px);
     line-height: 1.4;
 
     mark {
       padding: 2px 4px;
-      background-color: rgba(#fff, 0.1);
-      color: #ddd;
+      background-color: #{unquote('rgb(from var(--search-result-excerpt-term-bg-color) r g b / 0.1)')};
+      color: var(--search-result-excerpt-term-color);
       border-radius: 4px;
       font-size: 0.95em;
     }

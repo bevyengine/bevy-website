@@ -1,6 +1,4 @@
 .search {
-  $border-color: #2c2c2d;
-
   &--searching {
     .search__header,
     .search__content {
@@ -34,13 +32,13 @@
     max-height: calc(100% - var(--search-dialog-v-padding) * 2);
     overflow: hidden;
     border-radius: 8px;
-    border: 2px solid $border-color;
+    border: 2px solid var(--search-border-color);
     position: fixed;
     top: var(--search-dialog-v-padding);
     left: 50%;
     transform: translateX(-50%);
     z-index: $z-search;
-    background-color: #1e1e22;
+    background-color: var(--search-bg-color);
     box-shadow: 0px 16px 40px rgba(#000, 0.35);
 
     @media #{$bp-tablet-landscape-up} {
@@ -53,7 +51,7 @@
     flex-direction: column;
     gap: 8px;
     padding: 12px;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid var(--search-border-color);
   }
 
   &__header-top {
@@ -68,18 +66,6 @@
     gap: 8px;
   }
 
-  &__category {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 6px 2px 2px;
-    user-select: none;
-    border: 1px solid #666;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: calc-rem(14px);
-  }
-
   &__input-wrapper {
     position: relative;
     display: flex;
@@ -90,8 +76,8 @@
     width: 100%;
     display: block;
     border-radius: 8px;
-    border: 2px solid #383838;
-    background-color: #2b2c2f;
+    border: 2px solid var(--search-input-border-color);
+    background-color: var(--search-input-bg-color);
     text-decoration: none;
     font-size: 1.2rem;
     padding: 0.4rem;
@@ -107,6 +93,7 @@
     width: 40px;
     cursor: pointer;
     font-size: 16px;
+    color: var(--search-clear-icon-color);
   }
 
   &__close {
@@ -132,12 +119,12 @@
     text-align: center;
     word-break: break-word;
     font-size: calc-rem(20px);
-    color: #ccc;
+    color: var(--search-no-results-color);
   }
 
   &__tip {
-    color: #aaa;
-    border-top: 1px solid $border-color;
+    color: var(--search-tip-color);
+    border-top: 1px solid var(--search-border-color);
     padding: 6px 12px;
     font-size: calc-rem(14px);
     font-weight: 300;

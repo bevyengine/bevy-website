@@ -317,6 +317,34 @@ $border-radius: 10px;
   --people-role-maintainer-color: rgb(242, 103, 255);
   --people-role-sme-color: rgb(80, 200, 50);
 
+  --search-bg-color: var(--color-neutral-13);
+  --search-clear-icon-color: var(--color-neutral-93);
+  --search-border-color: var(--color-neutral-17);
+  --search-input-bg-color: var(--color-neutral-18);
+  --search-input-border-color: var(--color-neutral-22);
+  --search-no-results-color: var(--color-neutral-75);
+  --search-tip-color: var(--color-neutral-67);
+
+  --search-category-default-bg-color: var(--color-neutral-40);
+  --search-category-default-bg-hover-color: var(--color-white);
+  --search-category-border-color: var(--color-neutral-27);
+  --search-category-text-color: var(--color-neutral-67);
+  --search-category-text-hover-color: var(--color-white);
+  --search-category-cat-book-bg-color: #537134;
+  --search-category-cat-examples-bg-color: #885d26;
+  --search-category-cat-migrations-bg-color: #2b5e77;
+  --search-category-cat-errors-bg-color: #953562;
+  --search-category-cat-news-bg-color: #2c5580;
+  --search-category-cat-contribute-bg-color: #78527e;
+
+  --search-result-bg-color: var(--color-black);
+  --search-result-bg-hover-color: var(--color-white);
+  --search-result-title-color: var(--color-white);
+  --search-result-hash-sign-color: var(--color-neutral-75);
+  --search-result-excerpt-color: var(--color-neutral-53);
+  --search-result-excerpt-term-bg-color: var(--color-white);
+  --search-result-excerpt-term-color: var(--color-neutral-82);
+
   --scrollbar-thumb-color: #{unquote('rgb(from var(--color-white) r g b / 0.2)')};
 
   --sponsors-name-color: var(--color-neutral-59);
