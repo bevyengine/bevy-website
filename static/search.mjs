@@ -311,6 +311,7 @@ class Search {
     this.searchEl.classList.add(this.CLASS_VISIBLE);
     this.inputEl.focus();
     this.inputEl.value = "";
+    this.clearFilterEl.classList.add("hidden");
     this.resetContentState(true);
   }
 
