@@ -3,7 +3,6 @@ title = "Community Reflection on Bevy's Third Year"
 date = 2023-09-21
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++

@@ -3,7 +3,6 @@ title = "Introducing Bevy 0.1"
 date = 2020-08-10
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++
