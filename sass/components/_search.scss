@@ -95,6 +95,9 @@
     cursor: pointer;
     font-size: 16px;
     color: var(--search-clear-icon-color);
+    background-color: transparent;
+    border-radius: 8px;
+    border: 0;
   }
 
   &__close {
