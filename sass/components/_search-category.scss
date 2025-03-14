@@ -5,7 +5,7 @@
   border: 1px solid var(--search-category-border-color);
   font-size: calc-rem(18px);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   user-select: none;
   color: var(--search-category-text-color);
@@ -61,7 +61,7 @@
     padding: 2px 4px;
     font-size: calc-rem(14px);
     cursor: default;
-    border-radius: 2px;
+    border-radius: 4px;
 
     &:hover {
       background-color: var(--search-category-bg-color);
