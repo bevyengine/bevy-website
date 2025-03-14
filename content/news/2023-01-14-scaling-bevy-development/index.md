@@ -3,7 +3,6 @@ title = "Scaling Bevy Development"
 date = 2023-01-14
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "scaling_bevy.svg"
