@@ -14,6 +14,14 @@ import { SearchTpl } from "./search-tpl.mjs";
  * @prop {boolean} checked
  */
 
+/** @type {SearchDialog | undefined} */
+let searchDialog;
+
+/** @returns boolean */
+function isSearchOpen() {
+  return searchDialog?.isOpen() ?? false;
+}
+
 window.addEventListener("load", async () => {
   const getEl = (/** @type {string} */ id) =>
     document.querySelector(`[data-search-${id}]`);
@@ -67,7 +75,7 @@ window.addEventListener("load", async () => {
 
       await pagefind.options({ baseUrl: "/" });
 
-      new SearchDialog(
+      searchDialog = new SearchDialog(
         pagefind,
         categories,
         searchEl,
@@ -96,3 +104,5 @@ window.addEventListener("load", async () => {
     );
   }
 });
+
+export { isSearchOpen };

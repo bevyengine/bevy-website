@@ -1,10 +1,9 @@
 // these helpers should be totally optional. if someone disables this javascript in their browser,
 // core functionality should not be affected.
+import { isSearchOpen } from "./search.mjs";
 
 function navigateDocsNext(/** @type {KeyboardEvent} */ e) {
-    const searchEl = document.querySelector(`[data-search]`);
-
-    if (searchEl && searchEl.classList.contains('search--visible')) {
+    if (isSearchOpen()) {
         return;
     }
 
