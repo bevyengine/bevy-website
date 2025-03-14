@@ -3,7 +3,6 @@ title = "Bevy 0.2"
 date = 2020-09-19
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "matching_squares.png"

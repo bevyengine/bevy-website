@@ -3,14 +3,13 @@ title = "Bevy's First Birthday"
 date = 2021-08-10
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "bevy_birthday.svg"
 show_image = true
 +++
 
-[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator, lead developer, and project manager) with some exciting news:
+[@cart](https://bsky.app/profile/cart.work) here (Bevy's creator, lead developer, and project manager) with some exciting news:
 
 Today is Bevy's first birthday! And what a year it has been! Now seems like as good a time as any to look back on how far we've come, reflect a bit, and start thinking about what the next year of Bevy development will look like.
 

@@ -3,7 +3,6 @@ title = "Bevy's Second Birthday"
 date = 2022-08-10
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "bevy_birthday.svg"

@@ -3,7 +3,6 @@ title = "Scaling Bevy"
 date = 2020-08-19
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "balance-scale.svg"
