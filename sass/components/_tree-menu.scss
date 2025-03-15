@@ -57,6 +57,10 @@
         &, &:focus, &:active, &:hover, &:link, &:visited {
             color: var(--tree-menu-label-color);
         }
+
+        &[data-active=true] {
+          color: var(--tree-menu-active-color);
+        }
     }
 
     &__toggle {
