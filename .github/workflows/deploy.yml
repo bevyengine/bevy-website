@@ -56,7 +56,7 @@ jobs:
 
       # See: https://github.com/CloudCannon/pagefind/issues/675#issuecomment-2267210534
       - name: "Search (2/3): Change permissions"
-        run: echo "$(whoami):$(id -gn)" | xargs -I {} sudo chown -R {} build
+        run: echo "$(whoami):$(id -gn)" | xargs -I {} sudo chown -R {} public
 
       - name: "Search (3/3): Build Index"
         run: npx --yes pagefind --output-path public/pagefind
