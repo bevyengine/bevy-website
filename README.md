@@ -42,7 +42,8 @@ To generate the index for local development, download the [Pagefind binary](http
 ```sh
 rm -rf public
 zola build
-./pagefind
+./pagefind --with-playground
 ```
 
 This will create the `/static/pagefind` folder which contains the index and JS library.
+You can access `http://127.0.0.1:1111/pagefind/playground/` to debug search issues.
