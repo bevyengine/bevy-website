@@ -73,8 +73,6 @@ window.addEventListener("load", async () => {
         ["Quick Start", "Examples"]
       );
 
-      await pagefind.options({ baseUrl: "/" });
-
       searchDialog = new SearchDialog(
         pagefind,
         categories,
