@@ -55,7 +55,7 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: "Build Search Index (2/2)"
-        run: npx --yes pagefind
+        run: npx --yes pagefind --output-path public/pagefind
 
       - name: "Deploy"
         # if: github.repository_owner == 'bevyengine'
