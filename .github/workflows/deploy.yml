@@ -1,11 +1,12 @@
 name: Deploy
 
-on:
-  push:
-    branches: [main]
-  schedule:
-    - cron:  '0 0 * * *'
-  workflow_dispatch:
+on: workflow_dispatch
+# on:
+#   push:
+#     branches: [main]
+#   schedule:
+#     - cron:  '0 0 * * *'
+#   workflow_dispatch:
 
 jobs:
   build_and_deploy:
