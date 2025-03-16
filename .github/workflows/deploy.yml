@@ -24,10 +24,10 @@ jobs:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.date.outputs.date }}
 
-      - name: "Build Bevy Assets"
-        run: cd generate-assets && ./generate_assets.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: "Build Bevy Assets"
+      #   run: cd generate-assets && ./generate_assets.sh
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
@@ -51,9 +51,11 @@ jobs:
           BUILD_ONLY: true
           BUILD_DIR: .
 
-      - name: "Build Search Index"
+      - name: "Build Search Index (1/2)"
         uses: actions/setup-node@v4
-      - run: npx --yes pagefind
+
+      - name: "Build Search Index (2/2)"
+        run: npx --yes pagefind
 
       - name: "Deploy"
         if: github.repository_owner == 'bevyengine'
