@@ -58,7 +58,7 @@ jobs:
         run: npx --yes pagefind
 
       - name: "Deploy"
-        if: github.repository_owner == 'bevyengine'
+        # if: github.repository_owner == 'bevyengine'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.CART_PAT }}
