@@ -40,7 +40,7 @@ class SearchTpl {
     }
 
     if (categoryEl) {
-      if (item.filters.category.length > 0) {
+      if (item.filters.category?.length > 0) {
         const category = item.filters.category[0];
         categoryEl.innerHTML = category;
         categoryEl.classList.add(`search-category--${getCategoryId(category)}`);
