@@ -257,10 +257,7 @@ class SearchDialog {
 
       // Reduce results set
       const maxResults = 20;
-      const minScore = 0.5;
-      const results = allResults
-        .filter(({ score }) => score > minScore)
-        .slice(0, maxResults);
+      const results = allResults.slice(0, maxResults);
 
       if (results.length > 0) {
         await this.showResults(results);
