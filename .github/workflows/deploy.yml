@@ -1,12 +1,11 @@
 name: Deploy
 
-on: workflow_dispatch
-# on:
-#   push:
-#     branches: [main]
-#   schedule:
-#     - cron:  '0 0 * * *'
-#   workflow_dispatch:
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron:  '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,10 +23,10 @@ jobs:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.date.outputs.date }}
 
-      # - name: "Build Bevy Assets"
-      #   run: cd generate-assets && ./generate_assets.sh
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Build Bevy Assets"
+        run: cd generate-assets && ./generate_assets.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
@@ -75,7 +74,7 @@ jobs:
           key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
 
   deploy:
-    # if: github.repository_owner == 'bevyengine'
+    if: github.repository_owner == 'bevyengine'
     runs-on: ubuntu-latest
     needs: build
     permissions:
