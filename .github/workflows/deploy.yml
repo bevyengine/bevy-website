@@ -9,7 +9,7 @@ on: workflow_dispatch
 #   workflow_dispatch:
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -61,11 +61,11 @@ jobs:
       - name: "Search (3/3): Build Index"
         run: npx --yes pagefind --output-path public/pagefind
 
-      - name: "Deploy"
-        # if: github.repository_owner == 'bevyengine'
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload GitHub Pages Artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.CART_PAT }}
+          path: public/
 
       # Caches output of generate-assets for use in ci.yml
       - name: Update generate-assets cache
@@ -73,3 +73,14 @@ jobs:
         with:
           path: content/assets
           key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
+
+  deploy:
+    # if: github.repository_owner == 'bevyengine'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.CART_PAT }}
