@@ -1,11 +1,12 @@
 name: Deploy
 
-on:
-  push:
-    branches: [main]
-  schedule:
-    - cron:  '0 0 * * *'
-  workflow_dispatch:
+on: workflow_dispatch
+# on:
+#   push:
+#     branches: [main]
+#   schedule:
+#     - cron:  '0 0 * * *'
+#   workflow_dispatch:
 
 jobs:
   build_and_deploy:
@@ -23,10 +24,10 @@ jobs:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.date.outputs.date }}
 
-      - name: "Build Bevy Assets"
-        run: cd generate-assets && ./generate_assets.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: "Build Bevy Assets"
+      #   run: cd generate-assets && ./generate_assets.sh
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Build Bevy Error Codes"
         run: cd generate-errors && ./generate_errors.sh
@@ -61,7 +62,7 @@ jobs:
         run: npx --yes pagefind --output-path public/pagefind
 
       - name: "Deploy"
-        if: github.repository_owner == 'bevyengine'
+        # if: github.repository_owner == 'bevyengine'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.CART_PAT }}
