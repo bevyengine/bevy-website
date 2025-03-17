@@ -50,11 +50,11 @@ jobs:
           BUILD_ONLY: true
           BUILD_DIR: .
 
-      - name: "Search (1/3): Setup Node"
+      - name: "Search (1/3): Setup Node.js"
         uses: actions/setup-node@v4
 
       # See: https://github.com/CloudCannon/pagefind/issues/675#issuecomment-2267210534
-      - name: "Search (2/3): Change permissions"
+      - name: "Search (2/3): Change `public` Permissions"
         run: echo "$(whoami):$(id -gn)" | xargs -I {} sudo chown -R {} public
 
       - name: "Search (3/3): Build Index"
