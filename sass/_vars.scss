@@ -32,6 +32,16 @@ $mobile-menu-width: 300px;
 $content-top-margin: 30px;
 $border-radius: 10px;
 
+// Colors
+// These colors are *temporarily* defined as SASS variables. They should be
+// replaced with CSS variables once CSS Relative Colors support is *widely
+// available*. We define these as SASS variables so that they can be used with
+// the `sass:color` package to derive new colors. If a color is not going to be
+// used to derive a new color, then CSS vars should be used instead.
+//
+// See PR:
+// See Relative Colors support: https://caniuse.com/css-relative-colors
+
 // CSS Vars
 :root {
   // Typography
