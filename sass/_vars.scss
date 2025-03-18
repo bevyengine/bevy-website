@@ -33,6 +33,9 @@ $content-top-margin: 30px;
 $border-radius: 10px;
 
 // Colors
+// If you're reading this in late 2025 (or later), check the PR because these
+// changes probably can be reverted.
+//
 // These colors are *temporarily* defined as SASS variables. They should be
 // replaced with CSS variables once CSS Relative Colors support is *widely
 // available*. We define these as SASS variables so that they can be used with
