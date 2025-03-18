@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // Typography
 $size-body: 16px; // Usual browser default size
 $size-body-mobile: 14px; // Size for mobile
@@ -39,8 +41,12 @@ $border-radius: 10px;
 // the `sass:color` package to derive new colors. If a color is not going to be
 // used to derive a new color, then CSS vars should be used instead.
 //
-// See PR:
+// See PR: https://github.com/bevyengine/bevy-website/pull/1953
 // See Relative Colors support: https://caniuse.com/css-relative-colors
+$color-neutral-17: #2c2c2d;
+$color-neutral-93: #ececec;
+$color-black: #000;
+$color-white: #fff;
 
 // CSS Vars
 :root {
@@ -52,7 +58,7 @@ $border-radius: 10px;
   --color-neutral-11: #1b1b1b;
   --color-neutral-13: #1e1e22;
   --color-neutral-14: #232326;
-  --color-neutral-17: #2c2c2d;
+  --color-neutral-17: #{$color-neutral-17};
   --color-neutral-18: #2b2c2f;
   --color-neutral-19: #2f3033;
   --color-neutral-22: #383838;
@@ -79,12 +85,12 @@ $border-radius: 10px;
   --color-neutral-78: #c8c8c8;
   --color-neutral-82: #d2d2d2;
   --color-neutral-88: #e1e1e1;
-  --color-neutral-93: #ececec;
+  --color-neutral-93: #{$color-neutral-93};
   --color-neutral-96: #f0effb;
   --color-neutral-97: #f7f7f7;
 
-  --color-black: #000;
-  --color-white: #fff;
+  --color-black: #{$color-black};
+  --color-white: #{$color-white};
 
   // Blues by lightness
   --color-blue-21: #2f2745;
@@ -123,7 +129,7 @@ $border-radius: 10px;
   --asset-card-img-bg-color: var(--color-neutral-11);
   --asset-card-tag-icon-color: var(--color-neutral-60);
   --asset-card-text-color: var(--color-neutral-93);
-  --asset-card-title-bg-color: #{unquote('rgb(from var(--color-black) r g b / 0.5)')};
+  --asset-card-title-bg-color: #{rgba($color-black, 0.5)};
   --asset-card-title-color: var(--color-neutral-93);
   --asset-card-tag-bg-color: var(--color-neutral-36);
   --asset-card-tag-text-color: var(--color-neutral-93);
@@ -158,7 +164,7 @@ $border-radius: 10px;
   --button-pink-bg-hover-color: #954c72;
   --button-pink-border-color: #ba789b;
   --button-pink-text-color: var(--color-neutral-93);
-  --button-square-bg-color: var(--color-neutral-93);
+  --button-square-bg-color: #{rgba($color-neutral-93, 0.05)};
 
   --callout-caution-accent-color: #e82f5a;
   --callout-caution-bg-color: #591626;
@@ -214,7 +220,7 @@ $border-radius: 10px;
   --code-yyy: #d19a66;
   --code-zzz: #d1af8f;
 
-  --details-bg-color: var(--color-neutral-93);
+  --details-bg-color: #{rgba($color-neutral-93, 0.1)};
   --details-text-shadow-color: var(--color-neutral-93);
 
   --docs-whats-a-bevy-filter: none;
@@ -225,7 +231,7 @@ $border-radius: 10px;
   --docs-footer-dir-hover-color: var(--color-neutral-60b);
   --docs-footer-edit-color: var(--color-neutral-55);
   --docs-footer-edit-hover-color: var(--color-neutral-75);
-  --docs-footer-hover-bg-color: #{unquote('rgb(from var(--color-neutral-93) r g b / 0.01)')};
+  --docs-footer-hover-bg-color: #{rgba($color-neutral-93, 0.01)};
   --docs-footer-hover-color: var(--color-neutral-93);
 
   --donate-text-color: var(--color-neutral-82);
@@ -281,11 +287,11 @@ $border-radius: 10px;
   --link-card-text-color: var(--color-neutral-93);
 
   --main-menu-active-color: var(--color-blue-85);
-  --main-menu-backdrop-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
-  --main-menu-link-hover-color: #{unquote('rgb(from var(--color-white) r g b / 0.05)')};
+  --main-menu-backdrop-color: #{rgba($color-black, 0.2)};
+  --main-menu-link-hover-color: #{rgba($color-white, 0.05)};
   --main-menu-link-outline: var(--focus-outline);
   --main-menu-mobile-bg-color: var(--color-neutral-13);
-  --main-menu-mobile-box-shadow-color: #{unquote('rgb(from var(--color-black) r g b / 0.3)')};
+  --main-menu-mobile-box-shadow-color: #{rgba($color-black, 0.3)};
   --main-menu-text-color: var(--color-neutral-93);
 
   --media-content-blockquote-bg-color: var(--color-neutral-18);
@@ -298,13 +304,13 @@ $border-radius: 10px;
   --media-content-link-color: var(--color-blue-link);
   --media-content-text-color: var(--color-neutral-82);
 
-  --menu-switch-bg-color: #{unquote('rgb(from var(--color-white) r g b / 0.05)')};
+  --menu-switch-bg-color: #{rgba($color-white, 0.05)};
   --menu-switch-option-active-bg-color: var(--color-neutral-13);
   --menu-switch-option-active-text-color: var(--color-white);
   --menu-switch-option-text-color: var(--color-neutral-61);
 
   --migration-guide-hr-color-legacy: var(--color-neutral-33b);
-  --migration-guide-hr-color: var(--color-white);
+  --migration-guide-hr-color: #{rgba($color-white, 0.05)};
   --migration-guide-legacy-area-tags-color: var(--color-neutral-50);
   --migration-guide-title-color: var(--color-neutral-93);
 
@@ -322,7 +328,7 @@ $border-radius: 10px;
   --people-role-maintainer-color: rgb(242, 103, 255);
   --people-role-sme-color: rgb(80, 200, 50);
 
-  --scrollbar-thumb-color: #{unquote('rgb(from var(--color-white) r g b / 0.2)')};
+  --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
 
   --sponsors-name-color: var(--color-neutral-59);
   --sponsors-link-color: var(--color-blue-link);
@@ -334,17 +340,19 @@ $border-radius: 10px;
   --table-header-color: var(--color-neutral-13);
 
   --tabs-bg-color: var(--color-white);
+  --tabs-bg-hover-color: #{rgba($color-white, 0.05)};
+  --tabs-bg-active-color: #{rgba($color-white, 0.1)};
   --tabs-highlight-color: var(--color-blue-link);
 
   --todo-bg-color: rgba(191, 170, 64, 0.3);
   --todo-border-color: rgba(223, 191, 32, 0.5);
 
   --tree-menu-chevron-filter: brightness(70%);
-  --tree-menu-label-active-bg-color: #{unquote('rgb(from var(--color-neutral-93) r g b / 0.1)')};
+  --tree-menu-label-active-bg-color: #{rgba($color-neutral-93, 0.1)};
   --tree-menu-label-active-color: var(--color-neutral-93);
   --tree-menu-label-color: var(--color-neutral-61);
-  --tree-menu-toc-bg-color: #{unquote('rgb(from var(--color-black) r g b / 0.25)')};
-  --tree-menu-toggle-hover-color: #{unquote('rgb(from var(--color-neutral-93) r g b / 0.1)')};
+  --tree-menu-toc-bg-color: #{rgba($color-black, 0.25)};
+  --tree-menu-toggle-hover-color: #{rgba($color-neutral-93, 0.1)};
 
   --warning-color: #c8c864;
 
@@ -400,7 +408,7 @@ $border-radius: 10px;
     --code-yyy: #cd5d12;
     --code-zzz: #ce8c4e;
 
-    --details-bg-color: var(--color-neutral-17);
+    --details-bg-color: #{rgba($color-neutral-17, 0.1)};
     --details-text-shadow-color: var(--color-neutral-17);
 
     --docs-whats-a-bevy-filter: invert(85%);
@@ -411,7 +419,7 @@ $border-radius: 10px;
     --docs-footer-dir-hover-color: var(--color-neutral-33);
     --docs-footer-edit-color: var(--color-neutral-50);
     --docs-footer-edit-hover-color: var(--color-neutral-33);
-    --docs-footer-hover-bg-color: #{unquote('rgb(from var(--color-black) r g b / 0.01)')};
+    --docs-footer-hover-bg-color: #{rgba($color-black, 0.01)};
     --docs-footer-hover-color: var(--color-black);
 
     --focus-outline: solid var(--color-blue-57) 3px;
@@ -429,7 +437,7 @@ $border-radius: 10px;
 
     @media #{$bp-tablet-landscape-down} {
       --main-menu-active-color: var(--color-blue-57);
-      --main-menu-link-hover-color: #{unquote('rgb(from var(--color-black) r g b / 0.03)')};
+      --main-menu-link-hover-color: #{rgba($color-black, 0.03)};
       --main-menu-text-color: var(--color-neutral-33);
     }
 
@@ -449,7 +457,7 @@ $border-radius: 10px;
     --menu-switch-option-text-color: var(--color-neutral-33);
 
     --migration-guide-hr-color-legacy: var(--color-neutral-50);
-    --migration-guide-hr-color: var(--color-black);
+    --migration-guide-hr-color: #{rgba($color-black, 0.05)};
     --migration-guide-legacy-area-tags-color: var(--color-neutral-50);
     --migration-guide-title-color: var(--color-neutral-13);
 
@@ -457,7 +465,7 @@ $border-radius: 10px;
     --on-this-page-hover-color: var(--color-black);
     --on-this-page-active-color: var(--color-black);
 
-    --scrollbar-thumb-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
+    --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
 
     --todo-bg-color: rgba(191, 170, 64, 0.3);
     --todo-border-color: rgba(223, 191, 32, 0.5);

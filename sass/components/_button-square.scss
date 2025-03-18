@@ -9,9 +9,7 @@
       content: "";
       position: absolute;
       inset: 8px;
-      background-color: unquote(
-        "rgb(from var(--button-square-bg-color) r g b / 0.05)"
-      );
+      background-color: var(--button-square-bg-color);
       border-radius: $border-radius;
     }
   }
