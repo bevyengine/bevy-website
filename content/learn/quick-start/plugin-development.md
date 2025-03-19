@@ -50,6 +50,18 @@ To avoid long build times in your plugin and in projects using it, you should ai
 - Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
 - Put optional functionality and dependencies behind a [cargo feature](https://doc.rust-lang.org/cargo/reference/features.html).
 
+## `no_std` Compatibility
+
+Since the release of Bevy 0.16, it is now possible to use Bevy in a [`no_std`](https://doc.rust-lang.org/stable/reference/names/preludes.html#the-no_std-attribute) context.
+If you don't want to or can't support `no_std` in your plugin, you'll likely want to enable the `std` feature in Bevy to regain some functionality that was previously included by default.
+
+```toml
+bevy = { version = "0.16", default-features = false, features = ["std"] }
+```
+
+If you _do_ want to pursue `no_std` support, please refer to the `no_std` example in `examples/no_std/library`.
+This example includes recommended feature flags and some helpful tips for working with `no_std` Bevy.
+
 ## Tests and CI
 
 Tests are always good! For CI, you can check out [this example](https://github.com/actions-rs/meta/blob/master/recipes/quickstart.md) for a quick start using GitHub Actions. As Bevy has additional Linux dependencies, you should install them before building your project ([here is how Bevy is doing it](https://github.com/bevyengine/bevy/blob/9788b386c7846c99978ab5c1a33698ec5a471d84/.github/workflows/ci.yml#L40)). Even if you don't have many (or any) tests, setting up CI will compile check your plugin and ensure a basic level of quality.
