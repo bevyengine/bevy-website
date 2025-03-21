@@ -29,11 +29,9 @@
   }
 
   hr {
-    $color: "rgb(from var(--migration-guide-hr-color) r g b / 0.05)";
-
     height: 1px;
-    color: unquote($color);
-    background: unquote($color);
+    color: var(--migration-guide-hr-color);
+    background: var(--migration-guide-hr-color);
     font-size: 0;
     border: 0;
     margin-block: 2rem;
