@@ -479,12 +479,6 @@ areas = ["ECS"]
 file_name = "18250_Update_statestates_example_to_use_children_macro.md"
 
 [[guides]]
-title = "Update testbed_ui to use Improved Spawning API"
-prs = [18329]
-areas = ["ECS"]
-file_name = "18329_Update_testbed_ui_to_use_Improved_Spawning_API.md"
-
-[[guides]]
 title = "Update text2d example to use children macro"
 prs = [18317]
 areas = ["ECS"]
