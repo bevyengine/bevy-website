@@ -118,20 +118,6 @@ prs = [16810]
 file_name = "16810_Add_AssetChanged_query_filter.md"
 
 [[release_notes]]
-title = "Add `no_std` support to `bevy_ecs`"
-authors = ["@bushrat011899"]
-contributors = ["@alice-i-cecile", "@Victoronz"]
-prs = [16758]
-file_name = "16758_Add_no_std_support_to_bevy_ecs.md"
-
-[[release_notes]]
-title = "Add `no_std` support to `bevy_app`"
-authors = ["@bushrat011899"]
-contributors = ["@alice-i-cecile"]
-prs = [16874]
-file_name = "16874_Add_no_std_support_to_bevy_app.md"
-
-[[release_notes]]
 title = "Anamorphic Bloom"
 authors = ["@aevyrie"]
 contributors = []
