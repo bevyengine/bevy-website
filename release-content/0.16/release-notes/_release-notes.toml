@@ -270,10 +270,3 @@ authors = ["@tychedelia"]
 contributors = []
 prs = [17953]
 file_name = "17953_Add_support_for_experimental_WESL_shader_source.md"
-
-[[release_notes]]
-title = "Link iOS example with `rustc`, and avoid C trampoline"
-authors = ["@madsmtm"]
-contributors = ["@mockersf"]
-prs = [14780]
-file_name = "14780_Link_iOS_example_with_rustc_and_avoid_C_trampoline.md"
