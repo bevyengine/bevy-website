@@ -62,10 +62,10 @@ prs = [16589, 17043, 17753, 18144, 18454]
 file_name = "16589_Fallible_systems.md"
 
 [[release_notes]]
-title = "Use multidraw for opaque meshes when GPU culling is in use."
+title = "GPU-driven rendering"
 authors = ["@pcwalton"]
 contributors = []
-prs = [16427]
+prs = [16427]                                                                     # TODO: there are way more that need to be included here
 file_name = "16427_Use_multidraw_for_opaque_meshes_when_GPU_culling_is_in_use.md"
 
 [[release_notes]]
