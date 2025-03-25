@@ -431,66 +431,6 @@ areas = ["ECS"]
 file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
 
 [[guides]]
-title = "Update Component docs to point to Relationship trait"
-prs = [18179]
-areas = ["ECS"]
-file_name = "18179_Update_Component_docs_to_point_to_Relationship_trait.md"
-
-[[guides]]
-title = "Update breakout example's stepping plugin to use children"
-prs = [18271]
-areas = ["ECS"]
-file_name = "18271_Update_breakout_examples_stepping_plugin_to_use_children.md"
-
-[[guides]]
-title = "Update computed_states example to use children macro"
-prs = [18290]
-areas = ["ECS"]
-file_name = "18290_Update_computed_states_example_to_use_children_macro.md"
-
-[[guides]]
-title = "Update custom_transitions and sub_states examples to use children macro"
-prs = [18292]
-areas = ["ECS"]
-file_name = "18292_Update_custom_transitions_and_sub_states_examples_to_use_c.md"
-
-[[guides]]
-title = "Update gamepad_viewer to use children macro"
-prs = [18282]
-areas = ["ECS"]
-file_name = "18282_Update_gamepad_viewer_to_use_children_macro.md"
-
-[[guides]]
-title = "Update render_primitives example for children! macro"
-prs = [18268]
-areas = ["ECS"]
-file_name = "18268_Update_render_primitives_example_for_children_macro.md"
-
-[[guides]]
-title = "Update shader_prepass, testbed_2d, and first_person_view_model examples to use children! macro"
-prs = [18270]
-areas = ["ECS"]
-file_name = "18270_Update_shader_prepass_testbed_2d_and_first_person_view_mod.md"
-
-[[guides]]
-title = "Update state/states example to use children! macro"
-prs = [18250]
-areas = ["ECS"]
-file_name = "18250_Update_statestates_example_to_use_children_macro.md"
-
-[[guides]]
-title = "Update text2d example to use children macro"
-prs = [18317]
-areas = ["ECS"]
-file_name = "18317_Update_text2d_example_to_use_children_macro.md"
-
-[[guides]]
-title = "Update text_input and virtual_time examples to use Improved Spawning API"
-prs = [18249]
-areas = ["ECS"]
-file_name = "18249_Update_text_input_and_virtual_time_examples_to_use_Improve.md"
-
-[[guides]]
 title = "Use register_dynamic for merging"
 prs = [18028]
 areas = ["ECS"]
@@ -652,11 +592,6 @@ prs = [16938]
 areas = ["Math", "Reflection"]
 file_name = "16938_Make_bevy_reflect_feature_of_bevy_math_nondefault.md"
 
-[[guides]]
-title = "small documentation update and issue template fix"
-prs = [17054]
-areas = ["Meta", "States"]
-file_name = "17054_small_documentation_update_and_issue_template_fix.md"
 
 [[guides]]
 title = "Add flags to `SpritePlugin` and `UiPlugin` to allow disabling their picking backend (without needing to disable features)."
@@ -1209,12 +1144,6 @@ title = "Rename `trigger.entity()` to `trigger.target()`"
 prs = [16716]
 areas = []
 file_name = "16716_Rename_triggerentity_to_triggertarget.md"
-
-[[guides]]
-title = "Update sprite_slice, spatial_audio_3d, spatial_audio_2d examples to use children macro"
-prs = [18318]
-areas = []
-file_name = "18318_Update_sprite_slice_spatial_audio_3d_spatial_audio_2d_exam.md"
 
 [[guides]]
 title = "Use 4-byte LightmapSlabIndex for batching instead of 16-byte AssetId<Image>"
