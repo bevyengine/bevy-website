@@ -7,9 +7,9 @@ file_name = "16502_Multiple_box_shadow_support.md"
 
 [[release_notes]]
 title = "Entity cloning"
-authors = ["@eugineerd"]
+authors = ["@eugineerd", "@JaySpruce"]
 contributors = []
-prs = [16132]
+prs = [16132, 16826]
 file_name = "16132_Entity_cloning.md"
 
 [[release_notes]]
@@ -88,13 +88,6 @@ authors = ["@SpecificProtagonist"]
 contributors = ["@alice-i-cecile"]
 prs = [16778]
 file_name = "16778_Event_source_location_tracking.md"
-
-[[release_notes]]
-title = "Extend cloning functionality and add convenience methods to `EntityWorldMut` and `EntityCommands`"
-authors = ["@JaySpruce"]
-contributors = []
-prs = [16826]
-file_name = "16826_Extend_cloning_functionality_and_add_convenience_methods_t.md"
 
 [[release_notes]]
 title = "track_change_detection: Also track spawns/despawns"
