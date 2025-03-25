@@ -42,9 +42,9 @@ file_name = "16372_Add_Immutable_Component_Support.md"
 
 [[release_notes]]
 title = "Add \"bevy_input_focus\" crate."
-authors = ["@viridia"]
+authors = ["@viridia", "@alice-i-cecile"]
 contributors = []
-prs = [15611]
+prs = [15611, 16795]
 file_name = "15611_Add_bevy_input_focus_crate.md"
 
 [[release_notes]]
@@ -95,13 +95,6 @@ authors = ["@JaySpruce"]
 contributors = []
 prs = [16826]
 file_name = "16826_Extend_cloning_functionality_and_add_convenience_methods_t.md"
-
-[[release_notes]]
-title = "Tab navigation framework for bevy_input_focus."
-authors = ["@viridia"]
-contributors = ["@alice-i-cecile"]
-prs = [16795]
-file_name = "16795_Tab_navigation_framework_for_bevy_input_focus.md"
 
 [[release_notes]]
 title = "track_change_detection: Also track spawns/despawns"
