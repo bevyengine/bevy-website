@@ -27,13 +27,6 @@ prs = [16388]
 file_name = "16388_Add_optional_transparency_passthrough_for_sprite_backend_w.md"
 
 [[release_notes]]
-title = "Move required components doc to type doc"
-authors = ["@SpecificProtagonist"]
-contributors = ["@alice-i-cecile", "@JMS55"]
-prs = [16575]
-file_name = "16575_Move_required_components_doc_to_type_doc.md"
-
-[[release_notes]]
 title = "Retained `Gizmo`s"
 authors = ["@tim-blackbird"]
 contributors = []
