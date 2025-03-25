@@ -237,13 +237,6 @@ prs = [17840]
 file_name = "17840_Parallel_Transform_Propagation.md"
 
 [[release_notes]]
-title = "Upgrade to Rust Edition 2024"
-authors = ["@bushrat011899"]
-contributors = ["@mockersf"]
-prs = [17967]
-file_name = "17967_Upgrade_to_Rust_Edition_2024.md"
-
-[[release_notes]]
 title = "BRP resource methods"
 authors = ["@mweatherley"]
 contributors = []
