@@ -188,13 +188,6 @@ prs = [17840]
 file_name = "17840_Parallel_Transform_Propagation.md"
 
 [[release_notes]]
-title = "BRP resource methods"
-authors = ["@mweatherley"]
-contributors = []
-prs = [17423]
-file_name = "17423_BRP_resource_methods.md"
-
-[[release_notes]]
 title = "Stop automatically generating meta files for assets while using asset processing."
 authors = ["@andriyDev"]
 contributors = []
