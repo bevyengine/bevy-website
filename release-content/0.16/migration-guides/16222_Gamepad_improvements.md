@@ -1,0 +1,2 @@
+- `Gamepad` fields are now public.
+- Instead of using `Gamepad` delegates like `Gamepad::just_pressed`, call these methods directly on the fields.

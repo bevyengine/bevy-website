@@ -1,0 +1,1 @@
+- `EasingFunction::Steps` now uses a `StepConfig` instead of a raw `usize`. You can replicate the previous behavior by replaceing `EasingFunction::Steps(10)` with `EasingFunction::Steps(StepConfig::new(10))`.

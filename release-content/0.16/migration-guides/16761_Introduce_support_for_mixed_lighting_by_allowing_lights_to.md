@@ -1,0 +1,2 @@
+- The `AmbientLight` resource, the `IrradianceVolume` component, and the `EnvironmentMapLight` component now have `affects_lightmapped_meshes` fields. If you don’t need to use that field (for example, if you aren’t using lightmaps), you can safely set the field to true.
+- `DirectionalLight`, `PointLight`, and `SpotLight` now have `affects_lightmapped_mesh_diffuse` fields. If you don’t need to use that field (for example, if you aren’t using lightmaps), you can safely set the field to true.

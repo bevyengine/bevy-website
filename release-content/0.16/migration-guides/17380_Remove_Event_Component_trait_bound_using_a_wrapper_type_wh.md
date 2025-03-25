@@ -1,0 +1,1 @@
+The `Event` trait no longer requires the `Component` trait. If you were relying on this behavior, change your trait bounds from `Event` to `Event + Component`. If you also want your `Event` type to implement `Component`, add a derive.

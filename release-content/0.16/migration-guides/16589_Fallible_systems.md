@@ -1,0 +1,1 @@
+This change should be pretty much non-breaking, except for users who have implemented their own custom executors. Those users should use `ScheduleSystem` in place of `BoxedSystem<(), ()>` and import the `System` trait where needed. They can choose to do whatever they wish with the result.

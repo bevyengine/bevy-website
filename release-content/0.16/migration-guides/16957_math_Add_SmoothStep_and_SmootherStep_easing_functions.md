@@ -1,0 +1,1 @@
+This version of bevy marks `EaseFunction` as `#[non_exhaustive]` to that future changes to add more easing functions will be non-breaking.  If you were exhaustively matching that enum – which you probably weren’t – you’ll need to add a catch-all (`_ =>`) arm to cover unknown easing functions.

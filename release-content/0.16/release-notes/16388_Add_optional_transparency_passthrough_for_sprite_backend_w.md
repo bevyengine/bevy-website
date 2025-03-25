@@ -1,3 +1,5 @@
+<!-- Add optional transparency passthrough for sprite backend with bevy_picking -->
+<!-- https://github.com/bevyengine/bevy/pull/16388 -->
 In most cases when working on a game, you don't want clicks over the transparent part of sprites to count as a click on that sprite. This is especially true if you're working on a 2D game with a lot of overlapping sprites which have transparent regions.
 
 In previous versions of bevy, sprite interactions were handled as simple bounding box checks. If your cursor was within the boundary of the sprite box, and this rect was in front of another sprite, then even if the area of the sprite is fully transparent, then it would block interactions with the sprites behind it.

@@ -1,0 +1,1 @@
+`EntityHashSet` and `EntityHashMap` are no longer re-exported in `bevy_ecs::entity` directly. If you were not using `bevy_ecs` / `bevy`’s `prelude`, you can access them through their now-public modules, `hash_set` and `hash_map` instead.

@@ -1,0 +1,1 @@
+If you were importing `tracing` via `bevy::utils::tracing`, instead use `bevy::log::tracing`. Note that many items within `tracing` are also directly re-exported from `bevy::log` as well, so you may only need `bevy::log` for the most common items  (e.g., `warn!`, `trace!`, etc.). This also applies to the `log_once!` family of macros.

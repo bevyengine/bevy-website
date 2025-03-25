@@ -1,0 +1,1 @@
+- The _batch set key_ is now separate from the _bin key_ in `BinnedPhaseItem`. The batch set key is used to collect multidrawable meshes together. If you aren’t using the multidraw feature, you can safely set the batch set key to `()`.

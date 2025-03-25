@@ -1,0 +1,6 @@
+- Bevy has upgraded to [wgpu v24](https://github.com/gfx-rs/wgpu/blob/trunk/CHANGELOG.md#v2400-2025-01-15).
+- When using the DirectX 12 rendering backend, the new priority system for choosing a shader compiler is as follows:
+  - If the `WGPU_DX12_COMPILER` environment variable is set at runtime, it is used
+  - Else if the new `statically-linked-dxc` feature is enabled, a custom version of DXC will be statically linked into your app at compile time.
+  - Else Bevy will look in the app’s working directory for `dxcompiler.dll` and `dxil.dll` at runtime.
+  - Else if they are missing, Bevy will fall back to FXC (not recommended)
