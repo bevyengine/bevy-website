@@ -1,0 +1,3 @@
+- `ParamWarnPolicy::Once` has been renamed to `ParamWarnPolicy::Warn`.
+- `ParamWarnPolicy::param_warn_once` has been renamed to `ParamWarnPolicy::warn_param_missing`.
+- `ParamWarnPolicy::never_param_warn` has been renamed to `ParamWarnPolicy::ignore_param_missing`.

@@ -1,0 +1,1 @@
+- `IntoSystemConfigs` has been removed for `BoxedSystem<(), ()>`. Either use `InfallibleSystemWrapper` before boxing or make your system return `bevy::ecs::prelude::Result`.

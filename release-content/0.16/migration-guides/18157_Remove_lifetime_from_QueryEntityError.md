@@ -1,0 +1,2 @@
+- `QueryEntityError::QueryDoesNotMatch.1` is of type `ArchetypeId` instead of `UnsafeWorldCell`. It is up to the caller to obtain an `UnsafeWorldCell` now.
+- `QueryEntityError` no longer has a lifetime parameter, remove it from type signatures where required.

@@ -1,0 +1,2 @@
+- `ExtractedSprites` is now using `MainEntityHashMap` for storage, which is keyed on `MainEntity`.
+- The render world entity corresponding to an `ExtractedSprite` is now stored in the `render_entity` member of it.

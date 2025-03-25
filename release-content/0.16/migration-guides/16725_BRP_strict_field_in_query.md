@@ -1,0 +1,1 @@
+- `BrpQueryParams` now has `strict` boolean field. It serfs as a flag to fail when encountering an invalid component rather than skipping it. Defaults to false.

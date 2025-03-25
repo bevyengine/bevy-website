@@ -1,0 +1,2 @@
+- `&EntityCloner` in component clone handlers is changed to `&mut ComponentCloneCtx` to better separate data.
+- Changed `EntityCloneHandler` from enum to struct and added convenience functions to add default clone and reflect handler more easily.

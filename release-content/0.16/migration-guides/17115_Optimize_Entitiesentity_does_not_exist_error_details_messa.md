@@ -1,0 +1,1 @@
+The errors `EntityFetchError::NoSuchEntity` and `QueryEntityError::NoSuchEntity` now contain an `EntityDoesNotExistDetails` struct instead of an `UnsafeWorldCell`. If you were just printing these, they should work identically.

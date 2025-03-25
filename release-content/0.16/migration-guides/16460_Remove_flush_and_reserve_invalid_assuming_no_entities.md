@@ -1,0 +1,1 @@
+- exchange `Entities::flush_and_reserve_invalid_assuming_no_entities` for `reserve` and `flush_as_invalid` and notify us if that’s insufficient

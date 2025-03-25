@@ -1,0 +1,1 @@
+- `GpuImage::size` is now an `Extent3d`. To easily get 2D size, use `size_2d()`.

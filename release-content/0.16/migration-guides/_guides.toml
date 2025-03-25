@@ -1,0 +1,1242 @@
+[[guides]]
+title = "Replace bevy_a11y::Focus with InputFocus"
+prs = [16863]
+areas = ["Accessibility", "Input", "UI"]
+file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
+
+[[guides]]
+title = "Incorporate all node weights in additive blending"
+prs = [16279]
+areas = ["Animation"]
+file_name = "16279_Incorporate_all_node_weights_in_additive_blending.md"
+
+[[guides]]
+title = "Add ways to configure `EasingFunction::Steps` via new `StepConfig`"
+prs = [17752]
+areas = ["Animation", "Math"]
+file_name = "17752_Add_ways_to_configure_EasingFunctionSteps_via_new_StepConf.md"
+
+[[guides]]
+title = "Fix `EaseFunction::Exponential*` to exactly hit (0, 0) and (1, 1)"
+prs = [16910]
+areas = ["Animation", "Math"]
+file_name = "16910_Fix_EaseFunctionExponential_to_exactly_hit_0_0_and_1_1.md"
+
+[[guides]]
+title = "Headless by features"
+prs = [16401]
+areas = ["App"]
+file_name = "16401_Headless_by_features.md"
+
+[[guides]]
+title = "Make adding a subasset label return a result for if there is a duplicate label."
+prs = [18013]
+areas = ["Assets"]
+file_name = "18013_Make_adding_a_subasset_label_return_a_result_for_if_there_.md"
+
+[[guides]]
+title = "Remove `labeled_assets` from `LoadedAsset` and `ErasedLoadedAsset`"
+prs = [15481]
+areas = ["Assets"]
+file_name = "15481_Remove_labeled_assets_from_LoadedAsset_and_ErasedLoadedAss.md"
+
+[[guides]]
+title = "Remove the `meta` field from `LoadedAsset` and `ErasedLoadedAsset`."
+prs = [15487]
+areas = ["Assets"]
+file_name = "15487_Remove_the_meta_field_from_LoadedAsset_and_ErasedLoadedAss.md"
+
+[[guides]]
+title = "Weak handle migration"
+prs = [17695]
+areas = ["Assets"]
+file_name = "17695_Weak_handle_migration.md"
+
+[[guides]]
+title = "Add `AssetChanged` query filter"
+prs = [16810]
+areas = ["Assets", "ECS"]
+file_name = "16810_Add_AssetChanged_query_filter.md"
+
+[[guides]]
+title = "Add ability to mute audio sinks"
+prs = [16813]
+areas = ["Audio"]
+file_name = "16813_Add_ability_to_mute_audio_sinks.md"
+
+[[guides]]
+title = "Rename AudioSinkPlayback::toggle to toggle_playback"
+prs = [16837]
+areas = ["Audio"]
+file_name = "16837_Rename_AudioSinkPlaybacktoggle_to_toggle_playback.md"
+
+[[guides]]
+title = "Support decibels in bevy_audio::Volume"
+prs = [17605]
+areas = ["Audio"]
+file_name = "17605_Support_decibels_in_bevy_audioVolume.md"
+
+[[guides]]
+title = "Add `no_std` support to `bevy`"
+prs = [17955]
+areas = ["Cross-Cutting"]
+file_name = "17955_Add_no_std_support_to_bevy.md"
+
+[[guides]]
+title = "Move `hashbrown` and `foldhash` out of `bevy_utils`"
+prs = [17460]
+areas = ["Cross-Cutting"]
+file_name = "17460_Move_hashbrown_and_foldhash_out_of_bevy_utils.md"
+
+[[guides]]
+title = "Support for non-browser `wasm`"
+prs = [17499]
+areas = ["Cross-Cutting"]
+file_name = "17499_Support_for_nonbrowser_wasm.md"
+
+[[guides]]
+title = "Upgrade to Rust Edition 2024"
+prs = [17967]
+areas = ["Cross-Cutting"]
+file_name = "17967_Upgrade_to_Rust_Edition_2024.md"
+
+[[guides]]
+title = "Don't reëxport `bevy_image` from `bevy_render`"
+prs = [16163]
+areas = ["Cross-Cutting", "Rendering"]
+file_name = "16163_Dont_reëxport_bevy_image_from_bevy_render.md"
+
+[[guides]]
+title = "BRP strict field in query"
+prs = [16725]
+areas = ["Dev-Tools"]
+file_name = "16725_BRP_strict_field_in_query.md"
+
+[[guides]]
+title = "Rename `track_change_detection` flag to `track_location`"
+prs = [17075]
+areas = ["Dev-Tools", "ECS"]
+file_name = "17075_Rename_track_change_detection_flag_to_track_location.md"
+
+[[guides]]
+title = "Draw the UI debug overlay using the UI renderer"
+prs = [16693]
+areas = ["Dev-Tools", "UI"]
+file_name = "16693_Draw_the_UI_debug_overlay_using_the_UI_renderer.md"
+
+[[guides]]
+title = "Allow users to customize history length in `FrameTimeDiagnosticsPlugin`"
+prs = [17259]
+areas = ["Diagnostics"]
+file_name = "17259_Allow_users_to_customize_history_length_in_FrameTimeDiagno.md"
+
+[[guides]]
+title = "Prefer `Display` over `Debug`"
+prs = [16112]
+areas = ["Diagnostics"]
+file_name = "16112_Prefer_Display_over_Debug.md"
+
+[[guides]]
+title = "Event source location tracking"
+prs = [16778]
+areas = ["Diagnostics", "ECS"]
+file_name = "16778_Event_source_location_tracking.md"
+
+[[guides]]
+title = "Add `EntityDoesNotExistError`, replace cases of `Entity` as an error, do some easy Resultification"
+prs = [17855]
+areas = ["ECS"]
+file_name = "17855_Add_EntityDoesNotExistError_replace_cases_of_Entity_as_an_.md"
+
+[[guides]]
+title = "Add more methods to `RelationshipSourceCollection`"
+prs = [18421]
+areas = ["ECS"]
+file_name = "18421_Add_more_methods_to_RelationshipSourceCollection.md"
+
+[[guides]]
+title = "Cache systems by `S` instead of `S::System`"
+prs = [16694]
+areas = ["ECS"]
+file_name = "16694_Cache_systems_by_S_instead_of_SSystem.md"
+
+[[guides]]
+title = "Change `World::try_despawn` and `World::try_insert_batch` to return `Result`"
+prs = [17376]
+areas = ["ECS"]
+file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_retur.md"
+
+[[guides]]
+title = "Convert to fallible system in IntoSystemConfigs"
+prs = [17051]
+areas = ["ECS"]
+file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
+
+[[guides]]
+title = "Create new `NonSendMarker`"
+prs = [18301]
+areas = ["ECS"]
+file_name = "18301_Create_new_NonSendMarker.md"
+
+[[guides]]
+title = "Define system param validation on a per-system parameter basis"
+prs = [18504]
+areas = ["ECS"]
+file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_ba.md"
+
+[[guides]]
+title = "Deprecate `insert_or_spawn` function family"
+prs = [18147]
+areas = ["ECS"]
+file_name = "18147_Deprecate_insert_or_spawn_function_family.md"
+
+[[guides]]
+title = "Deprecated Query::many and many_mut"
+prs = [18183]
+areas = ["ECS"]
+file_name = "18183_Deprecated_Querymany_and_many_mut.md"
+
+[[guides]]
+title = "Encapsulate `cfg(feature = \"track_location\")` in a type."
+prs = [17602]
+areas = ["ECS"]
+file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
+
+[[guides]]
+title = "Fallible systems"
+prs = [16589]
+areas = ["ECS"]
+file_name = "16589_Fallible_systems.md"
+
+[[guides]]
+title = "Fix unsoundness in `QueryIter::sort_by`"
+prs = [17826]
+areas = ["ECS"]
+file_name = "17826_Fix_unsoundness_in_QueryItersort_by.md"
+
+[[guides]]
+title = "Flush commands after every mutation in `WorldEntityMut`"
+prs = [16219]
+areas = ["ECS"]
+file_name = "16219_Flush_commands_after_every_mutation_in_WorldEntityMut.md"
+
+[[guides]]
+title = "Generic system config"
+prs = [17962]
+areas = ["ECS"]
+file_name = "17962_Generic_system_config.md"
+
+[[guides]]
+title = "Implement SpawnableList for Vec<Bundle>"
+prs = [18259]
+areas = ["ECS"]
+file_name = "18259_Implement_SpawnableList_for_VecBundle.md"
+
+[[guides]]
+title = "Improved Command Errors"
+prs = [17215]
+areas = ["ECS"]
+file_name = "17215_Improved_Command_Errors.md"
+
+[[guides]]
+title = "Improved Spawn APIs and Bundle Effects"
+prs = [17521]
+areas = ["ECS"]
+file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
+
+[[guides]]
+title = "Introduce methods on QueryState to obtain a Query"
+prs = [15858]
+areas = ["ECS"]
+file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
+
+[[guides]]
+title = "Isolate component registration"
+prs = [17671]
+areas = ["ECS"]
+file_name = "17671_Isolate_component_registration.md"
+
+[[guides]]
+title = "Make Query::single (and friends) return a Result"
+prs = [18082]
+areas = ["ECS"]
+file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
+
+[[guides]]
+title = "Make system param validation rely on the unified ECS error handling via the GLOBAL_ERROR_HANDLER"
+prs = [18454]
+areas = ["ECS"]
+file_name = "18454_Make_system_param_validation_rely_on_the_unified_ECS_error.md"
+
+[[guides]]
+title = "Move `Item` and `fetch` to `QueryData` from `WorldQuery`"
+prs = [17679]
+areas = ["ECS"]
+file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
+
+[[guides]]
+title = "Move `Name` out of `bevy_core`"
+prs = [16894]
+areas = ["ECS"]
+file_name = "16894_Move_Name_out_of_bevy_core.md"
+
+[[guides]]
+title = "Move `Resource` trait to its own file"
+prs = [17469]
+areas = ["ECS"]
+file_name = "17469_Move_Resource_trait_to_its_own_file.md"
+
+[[guides]]
+title = "Optimize `Entities::entity_does_not_exist_error_details_message`, remove `UnsafeWorldCell` from error"
+prs = [17115]
+areas = ["ECS"]
+file_name = "17115_Optimize_Entitiesentity_does_not_exist_error_details_messa.md"
+
+[[guides]]
+title = "Parent -> ChildOf"
+prs = [17427]
+areas = ["ECS"]
+file_name = "17427_Parent__ChildOf.md"
+
+[[guides]]
+title = "Queued component registration"
+prs = [18173]
+areas = ["ECS"]
+file_name = "18173_Queued_component_registration.md"
+
+[[guides]]
+title = "Refactor hierarchy-related commands to remove structs"
+prs = [17029]
+areas = ["ECS"]
+file_name = "17029_Refactor_hierarchyrelated_commands_to_remove_structs.md"
+
+[[guides]]
+title = "Refactored `ComponentHook` Parameters into `HookContext`"
+prs = [17503]
+areas = ["ECS"]
+file_name = "17503_Refactored_ComponentHook_Parameters_into_HookContext.md"
+
+[[guides]]
+title = "Relationships (non-fragmenting, one-to-many)"
+prs = [17398]
+areas = ["ECS"]
+file_name = "17398_Relationships_nonfragmenting_onetomany.md"
+
+[[guides]]
+title = "Remove ChildOf::get and Deref impl"
+prs = [18080]
+areas = ["ECS"]
+file_name = "18080_Remove_ChildOfget_and_Deref_impl.md"
+
+[[guides]]
+title = "Remove Event: Component trait bound using a wrapper type which impls Component"
+prs = [17380]
+areas = ["ECS"]
+file_name = "17380_Remove_Event_Component_trait_bound_using_a_wrapper_type_wh.md"
+
+[[guides]]
+title = "Remove `petgraph` from `bevy_ecs`"
+prs = [15519]
+areas = ["ECS"]
+file_name = "15519_Remove_petgraph_from_bevy_ecs.md"
+
+[[guides]]
+title = "Remove deprecated ECS items"
+prs = [16853]
+areas = ["ECS"]
+file_name = "16853_Remove_deprecated_ECS_items.md"
+
+[[guides]]
+title = "Remove deprecated `component_reads_and_writes`"
+prs = [16348]
+areas = ["ECS"]
+file_name = "16348_Remove_deprecated_component_reads_and_writes.md"
+
+[[guides]]
+title = "Remove flush_and_reserve_invalid_assuming_no_entities"
+prs = [16460]
+areas = ["ECS"]
+file_name = "16460_Remove_flush_and_reserve_invalid_assuming_no_entities.md"
+
+[[guides]]
+title = "Remove lifetime from `QueryEntityError`"
+prs = [18157]
+areas = ["ECS"]
+file_name = "18157_Remove_lifetime_from_QueryEntityError.md"
+
+[[guides]]
+title = "Remove unsound `Clone` impl for `EntityMutExcept`"
+prs = [17032]
+areas = ["ECS"]
+file_name = "17032_Remove_unsound_Clone_impl_for_EntityMutExcept.md"
+
+[[guides]]
+title = "Remove unused generic in `DeferredWorld::trigger`"
+prs = [16911]
+areas = ["ECS"]
+file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
+
+[[guides]]
+title = "Renamed `EventWriter::send` methods to `write`."
+prs = [17977]
+areas = ["ECS"]
+file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
+
+[[guides]]
+title = "Renamed members of `ParamWarnPolicy` to reflect new behaviour."
+prs = [17311]
+areas = ["ECS"]
+file_name = "17311_Renamed_members_of_ParamWarnPolicy_to_reflect_new_behaviou.md"
+
+[[guides]]
+title = "Replace VisitEntities with MapEntities"
+prs = [18432]
+areas = ["ECS"]
+file_name = "18432_Replace_VisitEntities_with_MapEntities.md"
+
+[[guides]]
+title = "Run observers before hooks for `on_replace` and `on_remove`"
+prs = [16499]
+areas = ["ECS"]
+file_name = "16499_Run_observers_before_hooks_for_on_replace_and_on_remove.md"
+
+[[guides]]
+title = "Shorten the 'world lifetime returned from `QueryLens::query()`."
+prs = [17694]
+areas = ["ECS"]
+file_name = "17694_Shorten_the_world_lifetime_returned_from_QueryLensquery.md"
+
+[[guides]]
+title = "Split `Component::register_component_hooks` into individual methods"
+prs = [17685]
+areas = ["ECS"]
+file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
+
+[[guides]]
+title = "Support non-Vec data structures in relations"
+prs = [17447]
+areas = ["ECS"]
+file_name = "17447_Support_nonVec_data_structures_in_relations.md"
+
+[[guides]]
+title = "Support using FilteredResources with ReflectResource."
+prs = [15624]
+areas = ["ECS"]
+file_name = "15624_Support_using_FilteredResources_with_ReflectResource.md"
+
+[[guides]]
+title = "Turn `apply_deferred` into a ZST System"
+prs = [16642]
+areas = ["ECS"]
+file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
+
+[[guides]]
+title = "Update Component docs to point to Relationship trait"
+prs = [18179]
+areas = ["ECS"]
+file_name = "18179_Update_Component_docs_to_point_to_Relationship_trait.md"
+
+[[guides]]
+title = "Update breakout example's stepping plugin to use children"
+prs = [18271]
+areas = ["ECS"]
+file_name = "18271_Update_breakout_examples_stepping_plugin_to_use_children.md"
+
+[[guides]]
+title = "Update computed_states example to use children macro"
+prs = [18290]
+areas = ["ECS"]
+file_name = "18290_Update_computed_states_example_to_use_children_macro.md"
+
+[[guides]]
+title = "Update custom_transitions and sub_states examples to use children macro"
+prs = [18292]
+areas = ["ECS"]
+file_name = "18292_Update_custom_transitions_and_sub_states_examples_to_use_c.md"
+
+[[guides]]
+title = "Update gamepad_viewer to use children macro"
+prs = [18282]
+areas = ["ECS"]
+file_name = "18282_Update_gamepad_viewer_to_use_children_macro.md"
+
+[[guides]]
+title = "Update render_primitives example for children! macro"
+prs = [18268]
+areas = ["ECS"]
+file_name = "18268_Update_render_primitives_example_for_children_macro.md"
+
+[[guides]]
+title = "Update shader_prepass, testbed_2d, and first_person_view_model examples to use children! macro"
+prs = [18270]
+areas = ["ECS"]
+file_name = "18270_Update_shader_prepass_testbed_2d_and_first_person_view_mod.md"
+
+[[guides]]
+title = "Update state/states example to use children! macro"
+prs = [18250]
+areas = ["ECS"]
+file_name = "18250_Update_statestates_example_to_use_children_macro.md"
+
+[[guides]]
+title = "Update testbed_ui to use Improved Spawning API"
+prs = [18329]
+areas = ["ECS"]
+file_name = "18329_Update_testbed_ui_to_use_Improved_Spawning_API.md"
+
+[[guides]]
+title = "Update text2d example to use children macro"
+prs = [18317]
+areas = ["ECS"]
+file_name = "18317_Update_text2d_example_to_use_children_macro.md"
+
+[[guides]]
+title = "Update text_input and virtual_time examples to use Improved Spawning API"
+prs = [18249]
+areas = ["ECS"]
+file_name = "18249_Update_text_input_and_virtual_time_examples_to_use_Improve.md"
+
+[[guides]]
+title = "Use register_dynamic for merging"
+prs = [18028]
+areas = ["ECS"]
+file_name = "18028_Use_register_dynamic_for_merging.md"
+
+[[guides]]
+title = "add Entity default to the entity set wrappers"
+prs = [18319]
+areas = ["ECS"]
+file_name = "18319_add_Entity_default_to_the_entity_set_wrappers.md"
+
+[[guides]]
+title = "impl EntityBorrow for more types"
+prs = [16917]
+areas = ["ECS"]
+file_name = "16917_impl_EntityBorrow_for_more_types.md"
+
+[[guides]]
+title = "implement EntitySet and iter_many_unique methods"
+prs = [16547]
+areas = ["ECS"]
+file_name = "16547_implement_EntitySet_and_iter_many_unique_methods.md"
+
+[[guides]]
+title = "make EntityHashMap and EntityHashSet proper types"
+prs = [16912]
+areas = ["ECS"]
+file_name = "16912_make_EntityHashMap_and_EntityHashSet_proper_types.md"
+
+[[guides]]
+title = "make various entity wrapper type modules public"
+prs = [18248]
+areas = ["ECS"]
+file_name = "18248_make_various_entity_wrapper_type_modules_public.md"
+
+[[guides]]
+title = "one shot system cleanup"
+prs = [16516]
+areas = ["ECS"]
+file_name = "16516_one_shot_system_cleanup.md"
+
+[[guides]]
+title = "rename enqueue_command  to queue_command  for consistency"
+prs = [16753]
+areas = ["ECS"]
+file_name = "16753_rename_enqueue_command__to_queue_command__for_consistency.md"
+
+[[guides]]
+title = "Make `ComponentTicks` field public"
+prs = [16269]
+areas = ["ECS", "Networking"]
+file_name = "16269_Make_ComponentTicks_field_public.md"
+
+[[guides]]
+title = "Improved Entity Mapping and Cloning"
+prs = [17687]
+areas = ["ECS", "Networking", "Scenes"]
+file_name = "17687_Improved_Entity_Mapping_and_Cloning.md"
+
+[[guides]]
+title = "Add Immutable `Component` Support"
+prs = [16372]
+areas = ["ECS", "Reflection"]
+file_name = "16372_Add_Immutable_Component_Support.md"
+
+[[guides]]
+title = "Faster entity cloning"
+prs = [16717]
+areas = ["ECS", "Reflection"]
+file_name = "16717_Faster_entity_cloning.md"
+
+[[guides]]
+title = "FilteredResource returns a Result instead of a simple Option"
+prs = [18265]
+areas = ["ECS", "Reflection"]
+file_name = "18265_FilteredResource_returns_a_Result_instead_of_a_simple_Opti.md"
+
+[[guides]]
+title = "`ReflectBundle::remove` improvement"
+prs = [16139]
+areas = ["ECS", "Reflection"]
+file_name = "16139_ReflectBundleremove_improvement.md"
+
+[[guides]]
+title = "Add compile-time dyn compatible checks for `DynEq`, `DynHash`"
+prs = [17254]
+areas = ["ECS", "Utils"]
+file_name = "17254_Add_compiletime_dyn_compatible_checks_for_DynEq_DynHash.md"
+
+[[guides]]
+title = "Gamepad improvements"
+prs = [16222]
+areas = ["Input"]
+file_name = "16222_Gamepad_improvements.md"
+
+[[guides]]
+title = "Scale input to account for deadzones"
+prs = [17015]
+areas = ["Input"]
+file_name = "17015_Scale_input_to_account_for_deadzones.md"
+
+[[guides]]
+title = "Use `Name` component for gamepad"
+prs = [16233]
+areas = ["Input"]
+file_name = "16233_Use_Name_component_for_gamepad.md"
+
+[[guides]]
+title = "Expose `text` field from winit in `KeyboardInput`"
+prs = [16864]
+areas = ["Input", "Text", "UI"]
+file_name = "16864_Expose_text_field_from_winit_in_KeyboardInput.md"
+
+[[guides]]
+title = "Fix atan2 docs"
+prs = [16673]
+areas = ["Math"]
+file_name = "16673_Fix_atan2_docs.md"
+
+[[guides]]
+title = "Fix rounding in steps easing function"
+prs = [17743]
+areas = ["Math"]
+file_name = "17743_Fix_rounding_in_steps_easing_function.md"
+
+[[guides]]
+title = "Improve cubic segment bezier functionality"
+prs = [17645]
+areas = ["Math"]
+file_name = "17645_Improve_cubic_segment_bezier_functionality.md"
+
+[[guides]]
+title = "Refactor non-core Curve methods into extension traits"
+prs = [16930]
+areas = ["Math"]
+file_name = "16930_Refactor_noncore_Curve_methods_into_extension_traits.md"
+
+[[guides]]
+title = "Rename `Rot2::angle_between` to `Rot2::angle_to`"
+prs = [16327]
+areas = ["Math"]
+file_name = "16327_Rename_Rot2angle_between_to_Rot2angle_to.md"
+
+[[guides]]
+title = "Reworked Segment types into their cartesian forms"
+prs = [17404]
+areas = ["Math"]
+file_name = "17404_Reworked_Segment_types_into_their_cartesian_forms.md"
+
+[[guides]]
+title = "Use `IntoIterator` instead of `Into<Vec<..>>` in cubic splines interfaces"
+prs = [16402]
+areas = ["Math"]
+file_name = "16402_Use_IntoIterator_instead_of_IntoVec_in_cubic_splines_inter.md"
+
+[[guides]]
+title = "[math] Add `SmoothStep` and `SmootherStep` easing functions"
+prs = [16957]
+areas = ["Math"]
+file_name = "16957_math_Add_SmoothStep_and_SmootherStep_easing_functions.md"
+
+[[guides]]
+title = "Make `bevy_reflect` feature of `bevy_math` non-default"
+prs = [16938]
+areas = ["Math", "Reflection"]
+file_name = "16938_Make_bevy_reflect_feature_of_bevy_math_nondefault.md"
+
+[[guides]]
+title = "small documentation update and issue template fix"
+prs = [17054]
+areas = ["Meta", "States"]
+file_name = "17054_small_documentation_update_and_issue_template_fix.md"
+
+[[guides]]
+title = "Add flags to `SpritePlugin` and `UiPlugin` to allow disabling their picking backend (without needing to disable features)."
+prs = [16473]
+areas = ["Picking"]
+file_name = "16473_Add_flags_to_SpritePlugin_and_UiPlugin_to_allow_disabling_.md"
+
+[[guides]]
+title = "Add optional transparency passthrough for sprite backend with bevy_picking"
+prs = [16388]
+areas = ["Picking"]
+file_name = "16388_Add_optional_transparency_passthrough_for_sprite_backend_w.md"
+
+[[guides]]
+title = "Allow users to easily use `bevy_sprite` and `bevy_ui` without picking"
+prs = [17175]
+areas = ["Picking"]
+file_name = "17175_Allow_users_to_easily_use_bevy_sprite_and_bevy_ui_without_.md"
+
+[[guides]]
+title = "Fix `bevy_picking` plugin suffixes"
+prs = [16082]
+areas = ["Picking"]
+file_name = "16082_Fix_bevy_picking_plugin_suffixes.md"
+
+[[guides]]
+title = "Flattened `PointerAction::Pressed` into `Press` and `Release`."
+prs = [17424]
+areas = ["Picking"]
+file_name = "17424_Flattened_PointerActionPressed_into_Press_and_Release.md"
+
+[[guides]]
+title = "If there is no movement, DragStart is not triggered."
+prs = [17233]
+areas = ["Picking"]
+file_name = "17233_If_there_is_no_movement_DragStart_is_not_triggered.md"
+
+[[guides]]
+title = "Make RayMap map public"
+prs = [18544]
+areas = ["Picking"]
+file_name = "18544_Make_RayMap_map_public.md"
+
+[[guides]]
+title = "Make sprite picking opt-in"
+prs = [17225]
+areas = ["Picking"]
+file_name = "17225_Make_sprite_picking_optin.md"
+
+[[guides]]
+title = "Make sprite picking opt-in"
+prs = [17842]
+areas = ["Picking"]
+file_name = "17842_Make_sprite_picking_optin.md"
+
+[[guides]]
+title = "Rename \"focus\" in `bevy_picking` to \"hover\""
+prs = [16872]
+areas = ["Picking"]
+file_name = "16872_Rename_focus_in_bevy_picking_to_hover.md"
+
+[[guides]]
+title = "Rename Pointer<Down/Up> -> Pointer<Pressed/Released> in bevy_picking."
+prs = [16331]
+areas = ["Picking"]
+file_name = "16331_Rename_PointerDownUp__PointerPressedReleased_in_bevy_picki.md"
+
+[[guides]]
+title = "Rename `PickingBehavior` to `Pickable`"
+prs = [17266]
+areas = ["Picking"]
+file_name = "17266_Rename_PickingBehavior_to_Pickable.md"
+
+[[guides]]
+title = "Rename `RayCastSettings` to `MeshRayCastSettings`"
+prs = [16703]
+areas = ["Picking"]
+file_name = "16703_Rename_RayCastSettings_to_MeshRayCastSettings.md"
+
+[[guides]]
+title = "Unify picking backends"
+prs = [17348]
+areas = ["Picking"]
+file_name = "17348_Unify_picking_backends.md"
+
+[[guides]]
+title = "Include ReflectFromReflect in all dynamic data types."
+prs = [17453]
+areas = ["Reflection"]
+file_name = "17453_Include_ReflectFromReflect_in_all_dynamic_data_types.md"
+
+[[guides]]
+title = "Make `bevy_remote` feature enable `serialize` feature"
+prs = [17260]
+areas = ["Reflection"]
+file_name = "17260_Make_bevy_remote_feature_enable_serialize_feature.md"
+
+[[guides]]
+title = "Rename `ArgList::push` methods to `with` and add new `push` methods which take `&mut self`"
+prs = [16567]
+areas = ["Reflection"]
+file_name = "16567_Rename_ArgListpush_methods_to_with_and_add_new_push_method.md"
+
+[[guides]]
+title = "bevy_reflect: Add `ReflectDeserializerProcessor`"
+prs = [15482]
+areas = ["Reflection"]
+file_name = "15482_bevy_reflect_Add_ReflectDeserializerProcessor.md"
+
+[[guides]]
+title = "bevy_reflect: Deprecate `PartialReflect::clone_value`"
+prs = [18284]
+areas = ["Reflection"]
+file_name = "18284_bevy_reflect_Deprecate_PartialReflectclone_value.md"
+
+[[guides]]
+title = "bevy_reflect: Remove `PartialReflect::serializable`"
+prs = [16576]
+areas = ["Reflection"]
+file_name = "16576_bevy_reflect_Remove_PartialReflectserializable.md"
+
+[[guides]]
+title = "Remove unnecessary `PartialReflect` bound on `DeserializeWithRegistry`"
+prs = [17560]
+areas = ["Reflection", "Scenes"]
+file_name = "17560_Remove_unnecessary_PartialReflect_bound_on_DeserializeWith.md"
+
+[[guides]]
+title = "Add `uv_transform` to `ColorMaterial`"
+prs = [17879]
+areas = ["Rendering"]
+file_name = "17879_Add_uv_transform_to_ColorMaterial.md"
+
+[[guides]]
+title = "Add a bindless mode to `AsBindGroup`."
+prs = [16368]
+areas = ["Rendering"]
+file_name = "16368_Add_a_bindless_mode_to_AsBindGroup.md"
+
+[[guides]]
+title = "Add bevy_anti_aliasing"
+prs = [18323]
+areas = ["Rendering"]
+file_name = "18323_Add_bevy_anti_aliasing.md"
+
+[[guides]]
+title = "Adding alpha_threshold to OrderIndependentTransparencySettings for user-level optimization"
+prs = [16090]
+areas = ["Rendering"]
+file_name = "16090_Adding_alpha_threshold_to_OrderIndependentTransparencySett.md"
+
+[[guides]]
+title = "Allowed creating uninitialized images (for use as storage textures)"
+prs = [17760]
+areas = ["Rendering"]
+file_name = "17760_Allowed_creating_uninitialized_images_for_use_as_storage_t.md"
+
+[[guides]]
+title = "Bind only the written parts of storage buffers."
+prs = [16405]
+areas = ["Rendering"]
+file_name = "16405_Bind_only_the_written_parts_of_storage_buffers.md"
+
+[[guides]]
+title = "Change `GpuImage::size` from `UVec2` to `Extent3d`"
+prs = [16815]
+areas = ["Rendering"]
+file_name = "16815_Change_GpuImagesize_from_UVec2_to_Extent3d.md"
+
+[[guides]]
+title = "Cold Specialization"
+prs = [17567]
+areas = ["Rendering"]
+file_name = "17567_Cold_Specialization.md"
+
+[[guides]]
+title = "Expose Pipeline Compilation Zero Initialize Workgroup Memory Option"
+prs = [16301]
+areas = ["Rendering"]
+file_name = "16301_Expose_Pipeline_Compilation_Zero_Initialize_Workgroup_Memo.md"
+
+[[guides]]
+title = "Fix sprite performance regression since retained render world"
+prs = [17078]
+areas = ["Rendering"]
+file_name = "17078_Fix_sprite_performance_regression_since_retained_render_wo.md"
+
+[[guides]]
+title = "Fix the `texture_binding_array`, `specialized_mesh_pipeline`, and `custom_shader_instancing` examples after the bindless change."
+prs = [16641]
+areas = ["Rendering"]
+file_name = "16641_Fix_the_texture_binding_array_specialized_mesh_pipeline_an.md"
+
+[[guides]]
+title = "Implement bindless lightmaps."
+prs = [16653]
+areas = ["Rendering"]
+file_name = "16653_Implement_bindless_lightmaps.md"
+
+[[guides]]
+title = "Implement experimental GPU two-phase occlusion culling for the standard 3D mesh pipeline."
+prs = [17413]
+areas = ["Rendering"]
+file_name = "17413_Implement_experimental_GPU_twophase_occlusion_culling_for_.md"
+
+[[guides]]
+title = "Introduce support for mixed lighting by allowing lights to opt out of contributing diffuse light to lightmapped objects."
+prs = [16761]
+areas = ["Rendering"]
+file_name = "16761_Introduce_support_for_mixed_lighting_by_allowing_lights_to.md"
+
+[[guides]]
+title = "Introduce two-level bins for multidrawable meshes."
+prs = [16898]
+areas = ["Rendering"]
+file_name = "16898_Introduce_twolevel_bins_for_multidrawable_meshes.md"
+
+[[guides]]
+title = "Key render phases off the main world view entity, not the render world view entity."
+prs = [16942]
+areas = ["Rendering"]
+file_name = "16942_Key_render_phases_off_the_main_world_view_entity_not_the_r.md"
+
+[[guides]]
+title = "Make indirect drawing opt-out instead of opt-in, enabling multidraw by default."
+prs = [16757]
+areas = ["Rendering"]
+file_name = "16757_Make_indirect_drawing_optout_instead_of_optin_enabling_mul.md"
+
+[[guides]]
+title = "Make the `get` function on `InstanceInputUniformBuffer` less error prone"
+prs = [17131]
+areas = ["Rendering"]
+file_name = "17131_Make_the_get_function_on_InstanceInputUniformBuffer_less_e.md"
+
+[[guides]]
+title = "Make the default directional light shadow cascade settings similar to those of other engines."
+prs = [17552]
+areas = ["Rendering"]
+file_name = "17552_Make_the_default_directional_light_shadow_cascade_settings.md"
+
+[[guides]]
+title = "Mesh::merge to return a Result"
+prs = [17475]
+areas = ["Rendering"]
+file_name = "17475_Meshmerge_to_return_a_Result.md"
+
+[[guides]]
+title = "Move `TextureAtlas` and friends into `bevy_image`"
+prs = [17219]
+areas = ["Rendering"]
+file_name = "17219_Move_TextureAtlas_and_friends_into_bevy_image.md"
+
+[[guides]]
+title = "Move non-generic parts of the PrepassPipeline to internal field"
+prs = [18322]
+areas = ["Rendering"]
+file_name = "18322_Move_nongeneric_parts_of_the_PrepassPipeline_to_internal_f.md"
+
+[[guides]]
+title = "Native unclipped depth on supported platforms"
+prs = [16095]
+areas = ["Rendering"]
+file_name = "16095_Native_unclipped_depth_on_supported_platforms.md"
+
+[[guides]]
+title = "Newtype `Anchor`"
+prs = [18439]
+areas = ["Rendering"]
+file_name = "18439_Newtype_Anchor.md"
+
+[[guides]]
+title = "Only use the AABB center for mesh visibility range testing if specified."
+prs = [16468]
+areas = ["Rendering"]
+file_name = "16468_Only_use_the_AABB_center_for_mesh_visibility_range_testing.md"
+
+[[guides]]
+title = "Reduce the clusterable object UBO size below 16384 for WebGL 2."
+prs = [16069]
+areas = ["Rendering"]
+file_name = "16069_Reduce_the_clusterable_object_UBO_size_below_16384_for_Web.md"
+
+[[guides]]
+title = "Refactor and simplify custom projections"
+prs = [17063]
+areas = ["Rendering"]
+file_name = "17063_Refactor_and_simplify_custom_projections.md"
+
+[[guides]]
+title = "Remove the type parameter from `check_visibility`, and only invoke it once."
+prs = [16812]
+areas = ["Rendering"]
+file_name = "16812_Remove_the_type_parameter_from_check_visibility_and_only_i.md"
+
+[[guides]]
+title = "Support scale factor for image render targets"
+prs = [16796]
+areas = ["Rendering"]
+file_name = "16796_Support_scale_factor_for_image_render_targets.md"
+
+[[guides]]
+title = "Upgrade to wgpu v24"
+prs = [17542]
+areas = ["Rendering"]
+file_name = "17542_Upgrade_to_wgpu_v24.md"
+
+[[guides]]
+title = "Use `multi_draw_indirect_count` where available, in preparation for two-phase occlusion culling."
+prs = [17211]
+areas = ["Rendering"]
+file_name = "17211_Use_multi_draw_indirect_count_where_available_in_preparati.md"
+
+[[guides]]
+title = "Use unchecked shaders for better performance"
+prs = [17767]
+areas = ["Rendering"]
+file_name = "17767_Use_unchecked_shaders_for_better_performance.md"
+
+[[guides]]
+title = "cleanup bevy_render/lib.rs"
+prs = [16481]
+areas = ["Rendering"]
+file_name = "16481_cleanup_bevy_renderlibrs.md"
+
+[[guides]]
+title = "doc: fix camera link"
+prs = [16827]
+areas = ["Rendering"]
+file_name = "16827_doc_fix_camera_link.md"
+
+[[guides]]
+title = "don't use bevy_pbr for base bevy_gizmos plugin"
+prs = [17581]
+areas = ["Rendering"]
+file_name = "17581_dont_use_bevy_pbr_for_base_bevy_gizmos_plugin.md"
+
+[[guides]]
+title = "`ExtractedSprites` slice buffer"
+prs = [17041]
+areas = ["Rendering", "Text"]
+file_name = "17041_ExtractedSprites_slice_buffer.md"
+
+[[guides]]
+title = "Improved `UiImage` and `Sprite` scaling and slicing APIs"
+prs = [16088]
+areas = ["Rendering", "UI"]
+file_name = "16088_Improved_UiImage_and_Sprite_scaling_and_slicing_APIs.md"
+
+[[guides]]
+title = "Rename `DefaultCameraView`"
+prs = [17235]
+areas = ["Rendering", "UI"]
+file_name = "17235_Rename_DefaultCameraView.md"
+
+[[guides]]
+title = "Rename `TargetCamera` to `UiTargetCamera`"
+prs = [17403]
+areas = ["Rendering", "UI"]
+file_name = "17403_Rename_TargetCamera_to_UiTargetCamera.md"
+
+[[guides]]
+title = "`BorderRect` maintenance"
+prs = [16727]
+areas = ["Rendering", "UI"]
+file_name = "16727_BorderRect_maintenance.md"
+
+[[guides]]
+title = "Only despawn scene entities still in the hierarchy"
+prs = [17938]
+areas = ["Scenes"]
+file_name = "17938_Only_despawn_scene_entities_still_in_the_hierarchy.md"
+
+[[guides]]
+title = "Move `futures.rs`, `ConditionalSend` and `BoxedFuture` types to `bevy_tasks`"
+prs = [16951]
+areas = ["Tasks"]
+file_name = "16951_Move_futuresrs_ConditionalSend_and_BoxedFuture_types_to_be.md"
+
+[[guides]]
+title = "Support `on_thread_spawn` and `on_thread_destroy` for `TaskPoolPlugin`"
+prs = [13045]
+areas = ["Tasks"]
+file_name = "13045_Support_on_thread_spawn_and_on_thread_destroy_for_TaskPool.md"
+
+[[guides]]
+title = "Add byte information to `PositionedGlyph`"
+prs = [17900]
+areas = ["Text"]
+file_name = "17900_Add_byte_information_to_PositionedGlyph.md"
+
+[[guides]]
+title = "Remove the `atlas_scaling` field from `ExtractedUiItem::Gylphs`."
+prs = [17047]
+areas = ["Text"]
+file_name = "17047_Remove_the_atlas_scaling_field_from_ExtractedUiItemGylphs.md"
+
+[[guides]]
+title = "add line height to `TextFont`"
+prs = [16614]
+areas = ["Text"]
+file_name = "16614_add_line_height_to_TextFont.md"
+
+[[guides]]
+title = "Improve ergonomics of `platform_support`'s `Instant`"
+prs = [17577]
+areas = ["Time"]
+file_name = "17577_Improve_ergonomics_of_platform_supports_Instant.md"
+
+[[guides]]
+title = "Fixing `ValArithmeticError` typo and unused variant"
+prs = [17597]
+areas = ["UI"]
+file_name = "17597_Fixing_ValArithmeticError_typo_and_unused_variant.md"
+
+[[guides]]
+title = "Move TextureAtlas into UiImage and remove impl Component for TextureAtlas"
+prs = [16072]
+areas = ["UI"]
+file_name = "16072_Move_TextureAtlas_into_UiImage_and_remove_impl_Component_f.md"
+
+[[guides]]
+title = "Multiple box shadow support"
+prs = [16502]
+areas = ["UI"]
+file_name = "16502_Multiple_box_shadow_support.md"
+
+[[guides]]
+title = "Only use physical coords internally in `bevy_ui`"
+prs = [16375]
+areas = ["UI"]
+file_name = "16375_Only_use_physical_coords_internally_in_bevy_ui.md"
+
+[[guides]]
+title = "Remove custom rounding"
+prs = [16097]
+areas = ["UI"]
+file_name = "16097_Remove_custom_rounding.md"
+
+[[guides]]
+title = "Remove the `min` and `max` fields from `LayoutContext`."
+prs = [16459]
+areas = ["UI"]
+file_name = "16459_Remove_the_min_and_max_fields_from_LayoutContext.md"
+
+[[guides]]
+title = "Rename `UiBoxShadowSamples` to `BoxShadowSamples`."
+prs = [16505]
+areas = ["UI"]
+file_name = "16505_Rename_UiBoxShadowSamples_to_BoxShadowSamples.md"
+
+[[guides]]
+title = "UiImage -> ImageNode, UiImageSize -> ImageNodeSize"
+prs = [16271]
+areas = ["UI"]
+file_name = "16271_UiImage__ImageNode_UiImageSize__ImageNodeSize.md"
+
+[[guides]]
+title = "Upgrade to Taffy 0.6"
+prs = [15844]
+areas = ["UI"]
+file_name = "15844_Upgrade_to_Taffy_06.md"
+
+[[guides]]
+title = "Create `bevy_platform_support` Crate"
+prs = [17250]
+areas = ["Utils"]
+file_name = "17250_Create_bevy_platform_support_Crate.md"
+
+[[guides]]
+title = "Move `all_tuples` to a new crate"
+prs = [16161]
+areas = ["Utils"]
+file_name = "16161_Move_all_tuples_to_a_new_crate.md"
+
+[[guides]]
+title = "Remove `tracing` re-export from `bevy_utils`"
+prs = [17161]
+areas = ["Utils"]
+file_name = "17161_Remove_tracing_reexport_from_bevy_utils.md"
+
+[[guides]]
+title = "Remove everything except `Instant` from `bevy_utils::time`"
+prs = [17158]
+areas = ["Utils"]
+file_name = "17158_Remove_everything_except_Instant_from_bevy_utilstime.md"
+
+[[guides]]
+title = "Update hashbrown to 0.15"
+prs = [15801]
+areas = ["Utils"]
+file_name = "15801_Update_hashbrown_to_015.md"
+
+[[guides]]
+title = "Make CustomCursor variants CustomCursorImage/CustomCursorUrl structs"
+prs = [17518]
+areas = ["Windowing"]
+file_name = "17518_Make_CustomCursor_variants_CustomCursorImageCustomCursorUr.md"
+
+[[guides]]
+title = "Make `RawHandleWrapper` fields private to save users from themselves"
+prs = [16968]
+areas = ["Windowing"]
+file_name = "16968_Make_RawHandleWrapper_fields_private_to_save_users_from_th.md"
+
+[[guides]]
+title = "Rework WindowMode::Fullscreen API"
+prs = [17525]
+areas = ["Windowing"]
+file_name = "17525_Rework_WindowModeFullscreen_API.md"
+
+[[guides]]
+title = "Support texture atlases in CustomCursor::Image"
+prs = [17121]
+areas = ["Windowing"]
+file_name = "17121_Support_texture_atlases_in_CustomCursorImage.md"
+
+[[guides]]
+title = ":pencil2: Fix typos across bevy"
+prs = [16702]
+areas = []
+file_name = "16702_pencil2_Fix_typos_across_bevy.md"
+
+[[guides]]
+title = "Link iOS example with `rustc`, and avoid C trampoline"
+prs = [14780]
+areas = []
+file_name = "14780_Link_iOS_example_with_rustc_and_avoid_C_trampoline.md"
+
+[[guides]]
+title = "Remove Image::from_buffer `name` argument (only present in debug \"dds\" builds)"
+prs = [18538]
+areas = []
+file_name = "18538_Remove_Imagefrom_buffer_name_argument_only_present_in_debu.md"
+
+[[guides]]
+title = "Remove `accesskit` re-export from `bevy_a11y`"
+prs = [16257]
+areas = []
+file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
+
+[[guides]]
+title = "Remove `bevy_core`"
+prs = [16897]
+areas = []
+file_name = "16897_Remove_bevy_core.md"
+
+[[guides]]
+title = "Rename `trigger.entity()` to `trigger.target()`"
+prs = [16716]
+areas = []
+file_name = "16716_Rename_triggerentity_to_triggertarget.md"
+
+[[guides]]
+title = "Update sprite_slice, spatial_audio_3d, spatial_audio_2d examples to use children macro"
+prs = [18318]
+areas = []
+file_name = "18318_Update_sprite_slice_spatial_audio_3d_spatial_audio_2d_exam.md"
+
+[[guides]]
+title = "Use 4-byte LightmapSlabIndex for batching instead of 16-byte AssetId<Image>"
+prs = [18326]
+areas = []
+file_name = "18326_Use_4byte_LightmapSlabIndex_for_batching_instead_of_16byte.md"
+
+[[guides]]
+title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
+prs = [17702]
+areas = []
+file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
+
