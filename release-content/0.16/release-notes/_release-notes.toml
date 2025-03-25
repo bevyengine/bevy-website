@@ -272,13 +272,6 @@ prs = [17953]
 file_name = "17953_Add_support_for_experimental_WESL_shader_source.md"
 
 [[release_notes]]
-title = "Transform Propagation Optimization: Static Subtree Marking"
-authors = ["@aevyrie"]
-contributors = []
-prs = [18093]
-file_name = "18093_Transform_Propagation_Optimization_Static_Subtree_Marking.md"
-
-[[release_notes]]
 title = "Link iOS example with `rustc`, and avoid C trampoline"
 authors = ["@madsmtm"]
 contributors = ["@mockersf"]
