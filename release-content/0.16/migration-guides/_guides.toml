@@ -164,7 +164,7 @@ file_name = "16694_Cache_systems_by_S_instead_of_SSystem.md"
 title = "Change `World::try_despawn` and `World::try_insert_batch` to return `Result`"
 prs = [17376]
 areas = ["ECS"]
-file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_retur.md"
+file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_return.md"
 
 [[guides]]
 title = "Convert to fallible system in IntoSystemConfigs"
@@ -182,7 +182,7 @@ file_name = "18301_Create_new_NonSendMarker.md"
 title = "Define system param validation on a per-system parameter basis"
 prs = [18504]
 areas = ["ECS"]
-file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_ba.md"
+file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_basis.md"
 
 [[guides]]
 title = "Deprecate `insert_or_spawn` function family"
@@ -1239,4 +1239,3 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
-
