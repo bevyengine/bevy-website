@@ -1,0 +1,1 @@
+`bevy_utils` has updated its version of `hashbrown` to 0.15 and now defaults to `foldhash` instead of `ahash`. This means that if you’ve hard-coded your hasher to `bevy_utils::AHasher` or separately used the `ahash` crate in your code, you may need to switch to `foldhash` to ensure that everything works like it does in Bevy.

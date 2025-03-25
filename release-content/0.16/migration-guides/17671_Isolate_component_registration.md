@@ -1,0 +1,2 @@
+- Remove storages from functions where it is no longer needed.
+- Note that SparseSets are no longer present for all registered sparse set components, only those that have been spawned.

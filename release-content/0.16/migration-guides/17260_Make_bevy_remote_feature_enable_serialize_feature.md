@@ -1,0 +1,1 @@
+The `bevy_remote` feature of `bevy` now enables the `serialize` feature automatically. If you wish to use `bevy_remote` without enabling the `serialize` feature for Bevy subcrates, you must import `bevy_remote` on its own.

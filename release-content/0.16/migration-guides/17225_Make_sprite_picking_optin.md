@@ -1,0 +1,1 @@
+The sprite picking backend is now strictly opt-in using the `SpritePickingCamera` and `Pickable` components. You should add the `Pickable` component any entities that you want sprite picking to be enabled for, and mark their respective cameras with `SpritePickingCamera`.

@@ -1,0 +1,1 @@
+- Bevy no longer turns on wgpu’s runtime safety checks https://docs.rs/wgpu/latest/wgpu/struct.ShaderRuntimeChecks.html. If you were using Bevy with untrusted shaders, please file an issue.

@@ -1,0 +1,1 @@
+- Indirect drawing (GPU culling) is now enabled by default, so the `GpuCulling` component is no longer available. To disable indirect mode, which may be useful with custom render nodes, add the new `NoIndirectDrawing` component to your camera.

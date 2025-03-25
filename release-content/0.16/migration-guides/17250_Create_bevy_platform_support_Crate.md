@@ -1,0 +1,2 @@
+- Replace imports of `bevy_utils::Instant` with `bevy_platform_support::time::Instant`
+- Replace imports of `bevy::utils::Instant` with `bevy::platform_support::time::Instant`

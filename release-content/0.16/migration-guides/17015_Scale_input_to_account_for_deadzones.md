@@ -1,0 +1,1 @@
+`GamepadButtonChangedEvent.value` is now linearly rescaled to be from `0.0..=1.0` (instead of `low..=high`) and `GamepadAxisChangedEvent.value` is now linearly rescaled to be from `-1.0..=0.0`/`0.0..=1.0` (accounting for the deadzone).

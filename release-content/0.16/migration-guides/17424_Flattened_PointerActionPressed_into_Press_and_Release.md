@@ -1,0 +1,3 @@
+- `PointerAction::Pressed` has been separated into two variants, `PointerAction::Press` and `PointerAction::Release`.
+- `PointerAction::Moved` has been renamed to `PointerAction::Move`. 
+- `PointerAction::Canceled` has been renamed to `PointerAction::Cancel`.

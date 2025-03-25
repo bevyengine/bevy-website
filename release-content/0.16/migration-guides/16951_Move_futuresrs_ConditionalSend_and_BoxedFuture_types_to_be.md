@@ -1,0 +1,5 @@
+- Several modules were moved from `bevy_utils` into `bevy_tasks`:
+  - Replace `bevy_utils::futures` imports with `bevy_tasks::futures`.
+  - Replace `bevy_utils::ConditionalSend` with `bevy_tasks::ConditionalSend`.
+  - Replace `bevy_utils::ConditionalSendFuture` with `bevy_tasks::ConditionalSendFuture`.
+  - Replace `bevy_utils::BoxedFuture` with `bevy_tasks::BoxedFuture`.

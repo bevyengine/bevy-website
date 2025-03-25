@@ -1,0 +1,1 @@
+- `check_visibility` no longer takes a `QueryFilter`, and there’s no need to add it manually to your app schedule anymore for custom rendering items. Instead, entities with custom renderable components should add the appropriate type IDs to `VisibilityClass`. See `custom_phase_item` for an example.
