@@ -55,10 +55,10 @@ prs = [16388]
 file_name = "16388_Add_optional_transparency_passthrough_for_sprite_backend_w.md"
 
 [[release_notes]]
-title = "Fallible systems"
-authors = ["@NthTensor"]
+title = "Unified ECS error handling"
+authors = ["@NthTensor", "@JeanMertz", "@JaySpruce", "@cart", "@alice-i-cecile"]
 contributors = ["@bushrat011899"]
-prs = [16589]
+prs = [16589, 17043, 17753, 18144, 18454]
 file_name = "16589_Fallible_systems.md"
 
 [[release_notes]]
@@ -116,13 +116,6 @@ authors = ["@aevyrie"]
 contributors = []
 prs = [17096]
 file_name = "17096_Anamorphic_Bloom.md"
-
-[[release_notes]]
-title = "Add `Result` handling to `Commands` and `EntityCommands`"
-authors = ["@JaySpruce"]
-contributors = []
-prs = [17043]
-file_name = "17043_Add_Result_handling_to_Commands_and_EntityCommands.md"
 
 [[release_notes]]
 title = "Forward decals (port of bevy_contact_projective_decals)"
@@ -200,13 +193,6 @@ authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@MrGVSV", "@ecoskey"]
 prs = [17521]
 file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
-
-[[release_notes]]
-title = "feat(ecs): configurable error handling for fallible systems"
-authors = ["@JeanMertz"]
-contributors = []
-prs = [17753]
-file_name = "17753_featecs_configurable_error_handling_for_fallible_systems.md"
 
 [[release_notes]]
 title = "Trait tags on docs.rs"
