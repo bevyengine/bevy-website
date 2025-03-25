@@ -83,18 +83,11 @@ prs = [16503]
 file_name = "16503_Derivative_access_patterns_for_curves.md"
 
 [[release_notes]]
-title = "Event source location tracking"
+title = "Better location tracking"
 authors = ["@SpecificProtagonist"]
-contributors = ["@alice-i-cecile"]
-prs = [16778]
+contributors = ["@alice-i-cecile", "Freya Pines", "@pin3-free", "@mweatherley"]
+prs = [15607, 16047, 16778]
 file_name = "16778_Event_source_location_tracking.md"
-
-[[release_notes]]
-title = "track_change_detection: Also track spawns/despawns"
-authors = ["@SpecificProtagonist"]
-contributors = ["Freya Pines", "@pin3-free", "@mweatherley"]
-prs = [16047]
-file_name = "16047_track_change_detection_Also_track_spawnsdespawns.md"
 
 [[release_notes]]
 title = "Add `AssetChanged` query filter"
@@ -130,13 +123,6 @@ authors = ["@NiseVoid"]
 contributors = []
 prs = [13120]
 file_name = "13120_Add_DefaultQueryFilters.md"
-
-[[release_notes]]
-title = "Track callsite for observers & hooks"
-authors = ["@SpecificProtagonist"]
-contributors = ["@alice-i-cecile"]
-prs = [15607]
-file_name = "15607_Track_callsite_for_observers__hooks.md"
 
 [[release_notes]]
 title = "Procedural atmospheric scattering"
