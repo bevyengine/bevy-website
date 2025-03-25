@@ -437,6 +437,12 @@ areas = ["ECS"]
 file_name = "18028_Use_register_dynamic_for_merging.md"
 
 [[guides]]
+title = "add Entity default to the entity set wrappers"
+prs = [18319]
+areas = ["ECS"]
+file_name = "18319_add_Entity_default_to_the_entity_set_wrappers.md"
+
+[[guides]]
 title = "impl EntityBorrow for more types"
 prs = [16917]
 areas = ["ECS"]
