@@ -195,13 +195,6 @@ prs = [17567]
 file_name = "17567_Cold_Specialization.md"
 
 [[release_notes]]
-title = "Introduce methods on QueryState to obtain a Query"
-authors = ["@chescock"]
-contributors = []
-prs = [15858]
-file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
-
-[[release_notes]]
 title = "Basic UI text shadows"
 authors = ["@ickshonpe"]
 contributors = []
