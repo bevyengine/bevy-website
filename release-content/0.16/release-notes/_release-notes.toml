@@ -1,11 +1,4 @@
 [[release_notes]]
-title = "Getting `QueryState` from immutable `World` reference"
-authors = ["@vil-mo"]
-contributors = []
-prs = [16434]
-file_name = "16434_Getting_QueryState_from_immutable_World_reference.md"
-
-[[release_notes]]
 title = "Multiple box shadow support"
 authors = ["@ickshonpe"]
 contributors = ["@alice-i-cecile"]
