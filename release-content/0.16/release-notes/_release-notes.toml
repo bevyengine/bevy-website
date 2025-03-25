@@ -167,13 +167,6 @@ prs = [16314]
 file_name = "16314_Procedural_atmospheric_scattering.md"
 
 [[release_notes]]
-title = "Proportional scaling for the sprite's texture."
-authors = ["@silvestrpredko"]
-contributors = []
-prs = [17258]
-file_name = "17258_Proportional_scaling_for_the_sprites_texture.md"
-
-[[release_notes]]
 title = "Implement basic clustered decal projectors."
 authors = ["@pcwalton"]
 contributors = []
