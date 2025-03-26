@@ -5,15 +5,15 @@ Being a framework, Bevy provides several traits that define how a type is used â
 ![Rustdoc showing a "Component" label below "Camera" type](trait-tags.png)
 
 This happens for the traits
-Plugin / PluginGroup,
-Component,
-Resource,
-Asset,
-Event,
-ScheduleLabel,
-SystemSet,
-SystemParam,
-Relationship and
-RelationshipTarget.
+`Plugin` / `PluginGroup`,
+`Component`,
+`Resource`,
+`Asset`,
+`Event`,
+`ScheduleLabel`,
+`SystemSet`,
+`SystemParam`,
+`Relationship` and
+`RelationshipTarget`.
 
 If you want to add these to your own crate, check out [these instructions](https://github.com/bevyengine/bevy/tree/release-0.16.0/docs-rs).
