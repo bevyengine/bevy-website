@@ -383,12 +383,6 @@ areas = ["ECS"]
 file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
 
 [[guides]]
-title = "Renamed members of `ParamWarnPolicy` to reflect new behaviour."
-prs = [17311]
-areas = ["ECS"]
-file_name = "17311_Renamed_members_of_ParamWarnPolicy_to_reflect_new_behaviou.md"
-
-[[guides]]
 title = "Replace VisitEntities with MapEntities"
 prs = [18432]
 areas = ["ECS"]
