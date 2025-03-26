@@ -1050,12 +1050,6 @@ areas = ["UI"]
 file_name = "16271_UiImage__ImageNode_UiImageSize__ImageNodeSize.md"
 
 [[guides]]
-title = "Upgrade to Taffy 0.6"
-prs = [15844]
-areas = ["UI"]
-file_name = "15844_Upgrade_to_Taffy_06.md"
-
-[[guides]]
 title = "Create `bevy_platform_support` Crate"
 prs = [17250]
 areas = ["Utils"]
