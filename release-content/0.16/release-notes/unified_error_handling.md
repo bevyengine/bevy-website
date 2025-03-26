@@ -58,4 +58,4 @@ making it dead simple to swap out the behavior with a single `#[cfg(prod)]`-gate
 [high quality custom backtraces]: https://github.com/bevyengine/bevy/pull/18144
 [`GLOBAL_ERROR_HANDLER`]: https://dev-docs.bevyengine.org/bevy/ecs/error/static.GLOBAL_ERROR_HANDLER.html
 [`Single`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Single.html
-[`warn`]: https://dev-docs.bevyengine.org/bevy/ecs/error/fn.warn.html
+[`warn`]: https://dev-docs.bevyengine.org/bevy/ecs/error/fn.warn.htm
