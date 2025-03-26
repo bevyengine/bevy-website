@@ -696,12 +696,6 @@ areas = ["Reflection"]
 file_name = "16567_Rename_ArgListpush_methods_to_with_and_add_new_push_method.md"
 
 [[guides]]
-title = "bevy_reflect: Add `ReflectDeserializerProcessor`"
-prs = [15482]
-areas = ["Reflection"]
-file_name = "15482_bevy_reflect_Add_ReflectDeserializerProcessor.md"
-
-[[guides]]
 title = "bevy_reflect: Deprecate `PartialReflect::clone_value`"
 prs = [18284]
 areas = ["Reflection"]
@@ -922,12 +916,6 @@ title = "doc: fix camera link"
 prs = [16827]
 areas = ["Rendering"]
 file_name = "16827_doc_fix_camera_link.md"
-
-[[guides]]
-title = "don't use bevy_pbr for base bevy_gizmos plugin"
-prs = [17581]
-areas = ["Rendering"]
-file_name = "17581_dont_use_bevy_pbr_for_base_bevy_gizmos_plugin.md"
 
 [[guides]]
 title = "`ExtractedSprites` slice buffer"

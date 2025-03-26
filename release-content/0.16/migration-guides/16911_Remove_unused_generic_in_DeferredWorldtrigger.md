@@ -1,1 +1,1 @@
-- Remove the generic parameter when calling this method
+`DeferredWorld::trigger` no longer takes a generic argument. They type is inferred via `impl Event` instead of `T: Event`. If rust can not infer the type for you, consider specifying the type on the variable passed into the function rather than on the function itself.
