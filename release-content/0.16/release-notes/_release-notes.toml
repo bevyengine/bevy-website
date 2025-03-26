@@ -40,7 +40,7 @@ title = "Unified ECS error handling"
 authors = ["@NthTensor", "@JeanMertz", "@JaySpruce", "@cart", "@alice-i-cecile"]
 contributors = ["@bushrat011899"]
 prs = [16589, 17043, 17753, 18144, 18454]
-file_name = "16589_Fallible_systems.md"
+file_name = "unified_error_handling.md"
 
 [[release_notes]]
 title = "Better location tracking"
