@@ -7,6 +7,7 @@ show_image = true
 image_subtitle = "TODO"
 image_subtitle_link = "https://todo.example.com"
 public_draft = 2008
+status = 'hidden'
 +++
 
 Thanks to **??** contributors, **???** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.16** release on [crates.io](https://crates.io/crates/bevy)!
