@@ -485,12 +485,6 @@ areas = ["ECS", "Networking"]
 file_name = "16269_Make_ComponentTicks_field_public.md"
 
 [[guides]]
-title = "Improved Entity Mapping and Cloning"
-prs = [17687]
-areas = ["ECS", "Networking", "Scenes"]
-file_name = "17687_Improved_Entity_Mapping_and_Cloning.md"
-
-[[guides]]
 title = "Add Immutable `Component` Support"
 prs = [16372]
 areas = ["ECS", "Reflection"]
