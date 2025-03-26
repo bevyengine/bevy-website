@@ -227,7 +227,7 @@ areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Implement SpawnableList for Vec<Bundle>"
+title = "Implement SpawnableList for `Vec<Bundle>`"
 prs = [18259]
 areas = ["ECS"]
 file_name = "18259_Implement_SpawnableList_for_VecBundle.md"
@@ -1128,7 +1128,7 @@ areas = []
 file_name = "16716_Rename_triggerentity_to_triggertarget.md"
 
 [[guides]]
-title = "Use 4-byte LightmapSlabIndex for batching instead of 16-byte AssetId<Image>"
+title = "Use 4-byte LightmapSlabIndex for batching instead of 16-byte `AssetId<Image>`"
 prs = [18326]
 areas = []
 file_name = "18326_Use_4byte_LightmapSlabIndex_for_batching_instead_of_16byte.md"
