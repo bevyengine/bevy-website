@@ -11,4 +11,5 @@ query.iter().sort_by::<&C>(comparer);
 // now fails with "error: implementation of `FnMut` is not general enough"
 fn comparer(left: &&'w C, right: &&'w C) -> Ordering { /* ... */ }
 // After: Accepts any lifetime using inferred lifetime parameter
-fn comparer(left: &&C, right: &&C) -> Ordering { /* ... */ }```
+fn comparer(left: &&C, right: &&C) -> Ordering { /* ... */ }
+```
