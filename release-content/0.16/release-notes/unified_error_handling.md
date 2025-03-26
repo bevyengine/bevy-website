@@ -27,9 +27,9 @@ Instead of:
 ```rust
 use bevy::prelude::*;
 
-fn move_player(query: Query<&Transform, With<Single>>) {
+fn move_player(query: Query<&Transform, With<Player>>) {
     let mut player_transform = query.single().unwrap();
-    player.transform.translation += Vec3::X;
+    player_transform.translation += Vec3::X;
 }
 ```
 
@@ -38,9 +38,9 @@ Try:
 ```rust
 use bevy::prelude::*;
 
-fn move_player(query: Query<&Transform, With<Single>>) -> Result {
+fn move_player(query: Query<&Transform, With<Player>>) -> Result {
     let mut player_transform = query.single()?;
-    player.transform.translation += Vec3::X;
+    player_transform.translation += Vec3::X;
 }
 ```
 
