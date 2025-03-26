@@ -1,10 +1,10 @@
 # ECS
 
 [[release_notes]]
-title = "Add Immutable `Component` Support"
+title = "Immutable Components"
 authors = ["@bushrat011899"]
 contributors = ["@nakedible", "@MrGVSV", "@BenjaminBrienen", "@alice-i-cecile"]
-prs = [16372]
+prs = [16372, 16668, 18532]
 file_name = "16372_Add_Immutable_Component_Support.md"
 
 [[release_notes]]
