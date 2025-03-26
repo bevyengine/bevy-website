@@ -702,12 +702,6 @@ areas = ["Reflection"]
 file_name = "16567_Rename_ArgListpush_methods_to_with_and_add_new_push_method.md"
 
 [[guides]]
-title = "bevy_reflect: Add `ReflectDeserializerProcessor`"
-prs = [15482]
-areas = ["Reflection"]
-file_name = "15482_bevy_reflect_Add_ReflectDeserializerProcessor.md"
-
-[[guides]]
 title = "bevy_reflect: Deprecate `PartialReflect::clone_value`"
 prs = [18284]
 areas = ["Reflection"]
