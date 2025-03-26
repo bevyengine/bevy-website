@@ -32,5 +32,5 @@ Peering deep into the mists of time (predictions are _extra_ hard when your team
 - TODO
 
 {{ support_bevy() }}
-{{ contributors(version="0.16") }}
-{{ changelog(version="0.16")}}
+TODO: add  contributors
+TODO: add changelog
