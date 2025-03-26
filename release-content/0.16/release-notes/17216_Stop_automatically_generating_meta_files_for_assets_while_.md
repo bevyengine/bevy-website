@@ -14,3 +14,18 @@ makes it easier to enable asset preprocessing and adopt it gradually.
 In addition, we've added `AssetServer::write_default_loader_meta_file_for_path` and
 `AssetProcessor::write_default_meta_file_for_path` to allow users to explicitly generate the default
 meta files for assets when necessary.
+
+Consider enabling asset processing with:
+
+```rust
+app.add_plugins(DefaultPlugins.set(
+    AssetPlugin {
+        mode: AssetMode::Processed,
+        ..default()
+    }
+));
+```
+
+Enabling the `bevy/asset_processor` feature will then process files automatically for you. See
+[the asset processing example](https://github.com/bevyengine/bevy/blob/main/examples/asset/processing/asset_processing.rs)
+for more details!
