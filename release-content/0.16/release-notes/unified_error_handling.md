@@ -22,7 +22,31 @@ The core ideas are pretty simple:
 - you should be able to quickly configure your error-handler of last-resort in a single place, using the [`GLOBAL_ERROR_HANDLER`]
 - this should work everywhere: in systems, observers, commands, and even fallible system parameters like [`Single`]
 
-By default, failures result in panics: it's great for prototyping and it works everywhere.
+Instead of:
+
+```rust
+use bevy::prelude::*;
+
+fn move_player(query: Query<&Transform, With<Single>>) {
+    let mut player_transform = query.single().unwrap();
+    player.transform.translation += Vec3::X;
+}
+```
+
+Try:
+
+```rust
+use bevy::prelude::*;
+
+fn move_player(query: Query<&Transform, With<Single>>) -> Result {
+    let mut player_transform = query.single()?;
+    player.transform.translation += Vec3::X;
+}
+```
+
+Easy as can be!
+
+By default, failures result in panics: it's great for prototyping and it works on every platform without any extra dependencies.
 When you're ready to ship to production, turn on Bevy's `configurable_error_handling` feature,
 and then set the [`GLOBAL_ERROR_HANDLER`] to the behavior you want.
 We even provide a built-in set of built-in logging helpers like [`warn`] for you:
