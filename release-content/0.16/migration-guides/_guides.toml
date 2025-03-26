@@ -930,12 +930,6 @@ areas = ["Rendering"]
 file_name = "16827_doc_fix_camera_link.md"
 
 [[guides]]
-title = "don't use bevy_pbr for base bevy_gizmos plugin"
-prs = [17581]
-areas = ["Rendering"]
-file_name = "17581_dont_use_bevy_pbr_for_base_bevy_gizmos_plugin.md"
-
-[[guides]]
 title = "`ExtractedSprites` slice buffer"
 prs = [17041]
 areas = ["Rendering", "Text"]
