@@ -13,12 +13,12 @@ you might want those panics *back*, rather than having to dig through logs. What
 Bevy 0.16 introduces a new unified paradigm for error handling to help you ship crash-free games (and other applications!)
 without sacrificing the loud-and-fast development that panics enable.
 
-The core ideas are pretty simple:
+We've prioritized a simple and consistent design, with a few bells and whistles for easier debugging:
 
 - Bevy (and libraries built for Bevy) should bubble up errors to the user whenever possible, rather than panicking
 - gracefully unwrapping errors should be *easy*, with the help of Rust's [`?` operator]
-- the standard "please just log this" error type should always be an [`anyhow`]-style [`bevy::ecs::error::Result`] trait object
-- figuring out what went wrong from the logs should be easy: so we've added [high quality custom backtraces]
+- the standard "please just log this" error type should always be an [`anyhow`]-style boxed error, contained in a [`BevyError`]
+- figuring out what went wrong from the logs should be easy: so we've added [high quality custom backtraces] to our [`BevyError`] type
 - you should be able to quickly configure your error-handler of last-resort in a single place, using the [`GLOBAL_ERROR_HANDLER`]
 - this should work everywhere: in systems, observers, commands, and even fallible system parameters like [`Single`]
 
@@ -44,7 +44,8 @@ fn move_player(query: Query<&Transform, With<Single>>) -> Result {
 }
 ```
 
-Easy as can be!
+Easy as can be! That `Result` type a [`bevy::ecs::error::Result`]: a type alias for `core::Result<(), BevyError>`,
+which uses a blanket `From` implementation to capture any `Error`-implementing type with a single `?` operation.
 
 By default, failures result in panics: it's great for prototyping and it works on every platform without any extra dependencies.
 When you're ready to ship to production, turn on Bevy's `configurable_error_handling` feature,
@@ -58,4 +59,5 @@ making it dead simple to swap out the behavior with a single `#[cfg(prod)]`-gate
 [high quality custom backtraces]: https://github.com/bevyengine/bevy/pull/18144
 [`GLOBAL_ERROR_HANDLER`]: https://dev-docs.bevyengine.org/bevy/ecs/error/static.GLOBAL_ERROR_HANDLER.html
 [`Single`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Single.html
-[`warn`]: https://dev-docs.bevyengine.org/bevy/ecs/error/fn.warn.htm
+[`warn`]: https://dev-docs.bevyengine.org/bevy/ecs/error/fn.warn.html
+[`BevyError`]: https://dev-docs.bevyengine.org/bevy/ecs/error/struct.BevyError.html
