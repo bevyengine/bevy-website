@@ -17,8 +17,8 @@ The core ideas are pretty simple:
 
 - Bevy (and libraries built for Bevy) should bubble up errors to the user whenever possible, rather than panicking
 - gracefully unwrapping errors should be *easy*, with the help of Rust's [`?` operator]
-- the standard "please just log this" error type should always be an [`anyhow`]-style `bevy::ecs::error::Result` trait object
-- figuring out what went wrong from the logs should be easy: so we've added [high quality backtraces]
+- the standard "please just log this" error type should always be an [`anyhow`]-style [`bevy::ecs::error::Result`] trait object
+- figuring out what went wrong from the logs should be easy: so we've added [high quality custom backtraces]
 - you should be able to quickly configure your error-handler of last-resort in a single place, using the [`GLOBAL_ERROR_HANDLER`]
 - this should work everywhere: in your systems, your observers, your commands, and even your fallible system parameters like [`Single`]
 
@@ -27,3 +27,10 @@ When you're ready to ship to production, turn on Bevy's `configurable_error_hand
 and then set the [`GLOBAL_ERROR_HANDLER`] to the behavior you want.
 We even provide a built-in set of built-in logging helpers for you:
 making it dead simple to add a `production`-flagged configuration to your application.
+
+[`?` operator]: https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html
+[`anyhow`]: https://docs.rs/anyhow/latest/anyhow/
+[`bevy::ecs::error::Result`]: https://dev-docs.bevyengine.org/bevy/ecs/error/type.Result.html
+[high quality custom backtraces]: https://github.com/bevyengine/bevy/pull/18144
+[`GLOBAL_ERROR_HANDLER`]: https://dev-docs.bevyengine.org/bevy/ecs/error/static.GLOBAL_ERROR_HANDLER.html
+[`Single`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Single.html
