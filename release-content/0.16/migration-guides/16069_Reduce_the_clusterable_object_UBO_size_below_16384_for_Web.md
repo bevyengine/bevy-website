@@ -1,1 +1,1 @@
-<!-- TODO -->
+`MAX_UNIFORM_BUFFER_CLUSTERABLE_OBJECTS` has been reduced from `256` to `204`.
