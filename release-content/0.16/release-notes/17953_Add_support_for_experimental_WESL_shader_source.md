@@ -1,7 +1,7 @@
 <!-- Add support for experimental WESL shader source -->
 <!-- https://github.com/bevyengine/bevy/pull/17953 -->
 
-Bevy continues to live life on the edge, the bleeding edge, of graphics technology. Today bevy officially supports [WESL](https://wesl-lang.dev/) shaders!
+Bevy continues to live life on the edge, the bleeding edge, of graphics technology. Today bevy supports [WESL](https://wesl-lang.dev/) shaders!
 
 Most Bevy shaders are written in [WGSL](https://www.w3.org/TR/WGSL/), a modern shader language built for simplicity. But while WGSL is pretty simple as far as shader languages go, it also leaves a lot to be desired in terms of features.
 
