@@ -5,7 +5,7 @@ Bevy now has support for `no_std` targets, allowing it to be used on a much wide
 
 This has been functionality [discussed] going back over 4 years, but was initially dropped to avoid the added complexity managing `no_std` support can bring.
 To be `no_std` compatible, your crate and _all_ of its dependencies must also be `no_std`.
-Coordinating that kind of support across over a hundred dependencies was just not feasible, let alone losing accessing to Rust's standard library.
+Coordinating that kind of support across over a hundred dependencies was just not feasible, let alone losing access to Rust's standard library.
 
 Since then, Rust's support for `no_std` has evolved dramatically with support for critical APIs such as [`Error`] coming in [Rust 1.81].
 Starting with tracking issue [#15460] and a [`no_std` Working Group], Bevy's various crates were individually made `no_std` compatible where possible.
