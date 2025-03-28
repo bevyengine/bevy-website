@@ -1008,12 +1008,6 @@ areas = ["UI"]
 file_name = "16271_UiImage__ImageNode_UiImageSize__ImageNodeSize.md"
 
 [[guides]]
-title = "Create `bevy_platform_support` Crate"
-prs = [17250]
-areas = ["Utils"]
-file_name = "17250_Create_bevy_platform_support_Crate.md"
-
-[[guides]]
 title = "Make CustomCursor variants CustomCursorImage/CustomCursorUrl structs"
 prs = [17518]
 areas = ["Windowing"]
@@ -1087,6 +1081,6 @@ file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
 
 [[guides]]
 title = "`bevy_utils` Refactor"
-prs = [15801, 16112, 16161, 16951, 17158, 17161, 17254, 17460, 17577]
+prs = [15801, 16112, 16161, 16951, 17158, 17161, 17250, 17254, 17460, 17577]
 areas = ["Utils"]
 file_name = "bevy_utils_decimation.md"
