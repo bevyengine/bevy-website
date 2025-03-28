@@ -183,7 +183,7 @@ file_name = "16503_Derivative_access_patterns_for_curves.md"
 # Assets
 
 [[release_notes]]
-title = "Add `AssetChanged` query filter"
+title = "`AssetChanged` query filter"
 authors = ["@tychedelia"]
 contributors = ["@chescock", "@pcwalton", "@alice-i-cecile", "@nicopap"]
 prs = [16810]
