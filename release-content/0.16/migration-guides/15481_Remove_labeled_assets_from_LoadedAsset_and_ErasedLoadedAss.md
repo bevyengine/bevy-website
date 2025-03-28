@@ -1,1 +1,0 @@
-- Most uses of `LoadedAsset` and `ErasedLoadedAsset` should be replaced with `CompleteLoadedAsset` and `CompleteErasedLoadedAsset` respectively.
