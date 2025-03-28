@@ -29,10 +29,10 @@ prs = [16132, 16826]
 file_name = "16132_Entity_cloning.md"
 
 [[release_notes]]
-title = "Add DefaultQueryFilters"
-authors = ["@NiseVoid"]
+title = "Entity disabling via default query filters"
+authors = ["@NiseVoid", "@alice-i-cecile"]
 contributors = []
-prs = [13120]
+prs = [13120, 17514, 17768]
 file_name = "13120_Add_DefaultQueryFilters.md"
 
 [[release_notes]]
