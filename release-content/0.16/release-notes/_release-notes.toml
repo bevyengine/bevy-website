@@ -44,9 +44,9 @@ file_name = "unified_error_handling.md"
 
 [[release_notes]]
 title = "Better location tracking"
-authors = ["@SpecificProtagonist"]
-contributors = ["@alice-i-cecile", "Freya Pines", "@pin3-free", "@mweatherley"]
-prs = [15607, 16047, 16778]
+authors = ["@SpecificProtagonist", "@chescock"]
+contributors = ["@alice-i-cecile", "Freya Pines", "@pin3-free", "@mweatherley", "@skimmedsquare"]
+prs = [15607, 16047, 16778, 17075, 17602]
 file_name = "16778_Event_source_location_tracking.md"
 
 [[release_notes]]
