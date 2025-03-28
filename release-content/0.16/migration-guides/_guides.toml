@@ -29,18 +29,6 @@ areas = ["App"]
 file_name = "16401_Headless_by_features.md"
 
 [[guides]]
-title = "Make adding a subasset label return a result for if there is a duplicate label."
-prs = [18013]
-areas = ["Assets"]
-file_name = "18013_Make_adding_a_subasset_label_return_a_result_for_if_there_.md"
-
-[[guides]]
-title = "Remove `labeled_assets` from `LoadedAsset` and `ErasedLoadedAsset`"
-prs = [15481]
-areas = ["Assets"]
-file_name = "15481_Remove_labeled_assets_from_LoadedAsset_and_ErasedLoadedAss.md"
-
-[[guides]]
 title = "Remove the `meta` field from `LoadedAsset` and `ErasedLoadedAsset`."
 prs = [15487]
 areas = ["Assets"]
