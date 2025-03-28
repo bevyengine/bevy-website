@@ -49,6 +49,13 @@ contributors = ["@alice-i-cecile", "Freya Pines", "@pin3-free", "@mweatherley"]
 prs = [15607, 16047, 16778]
 file_name = "16778_Event_source_location_tracking.md"
 
+[[release_notes]]
+title = "Improved Require Syntax"
+authors = ["@cart"]
+contributors = []
+prs = [18555]
+file_name = "18555_Improved_require_syntax.md"
+
 # Rendering
 
 [[release_notes]]

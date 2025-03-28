@@ -143,6 +143,12 @@ areas = ["Diagnostics", "ECS"]
 file_name = "16778_Event_source_location_tracking.md"
 
 [[guides]]
+title = "Improved Required Component Syntax"
+prs = [18555]
+areas = ["ECS"]
+file_name = "18555_Improved_require_syntax.md"
+
+[[guides]]
 title = "Add `EntityDoesNotExistError`, replace cases of `Entity` as an error, do some easy Resultification"
 prs = [17855]
 areas = ["ECS"]
