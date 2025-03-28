@@ -13,4 +13,4 @@ If you're interested in trying WESL, check out the new "Material - WESL" example
 
 Despite the additional features, WESL is easy to layer on top of existing WGSL shaders. This is because it is a super set of WGSL, so just like C is valid C++, WGSL is valid WESL. That makes it easy to migrate existing WGSL projects to WESL, though it's worth mentioning that the Bevy-specific WGSL syntax will need to be ported to its WESL counter parts. The WESL team (who helped write these notes!) is actively listening to feedback, and so is Bevy. If you do choose to use WESL in addition to or in replacement of WGSL, your thoughts, feature requests, and any pain points you encounter can be shared [here](https://github.com/wgsl-tooling-wg/wesl-rs).
 
-WESL is an exciting frontier of shader languages, and as it grows, Bevy intends to grow with it. You can track their progress and plans [here](https://github.com/wgsl-tooling-wg/wesl-rs).
+WESL is an exciting frontier of shader languages, and as it grows, Bevy intends to grow with it. You can track their progress and plans [here](https://wesl-lang.dev/).
