@@ -23,7 +23,12 @@ function otp_set_active(id_or_node){
   let id = `#${id_or_node instanceof HTMLElement ? id_or_node.getAttribute("id") : id_or_node}`;
 
   document.querySelectorAll("[data-highlight-intrapage-link] a").forEach(a => {
-    a.setAttribute("data-highlight-intrapage-link-active", a.getAttribute("href").includes(id));
+    const href = a.getAttribute("href");
+
+    if (href?.includes('#')) {
+      const fragment = href.substring(href.indexOf('#'));
+      a.setAttribute("data-highlight-intrapage-link-active", String(id === fragment));
+    }
   });
 }
 
