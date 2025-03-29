@@ -1,0 +1,2 @@
+- `RenderAssets::prepare_asset` now takes an `AssetId` parameter.
+- Bin keys now have Bevy-specific material bind group indices instead of `wgpu` material bind group IDs, as part of the bindless change. Use the new `MaterialBindGroupAllocator` to map from bind group index to bind group ID.

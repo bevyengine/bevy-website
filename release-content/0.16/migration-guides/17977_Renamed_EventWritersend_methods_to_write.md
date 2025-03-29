@@ -1,0 +1,3 @@
+- `EventWriter::send` has been renamed to `EventWriter::write`.
+- `EventWriter::send_batch` has been renamed to `EventWriter::write_batch`.
+- `EventWriter::send_default` has been renamed to `EventWriter::write_default`.

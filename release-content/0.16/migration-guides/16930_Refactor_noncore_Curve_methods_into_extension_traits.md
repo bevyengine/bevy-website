@@ -1,0 +1,1 @@
+`Curve` has been refactored so that much of its functionality is now in extension traits. Adaptors such as `map`, `reparametrize`, `reverse`, and so on now require importing `CurveExt`, while the resampling methods `resample_*` require importing `CurveResampleExt`. Both of these new traits are exported through `bevy::math::curve` and through `bevy::math::prelude`.

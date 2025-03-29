@@ -48,12 +48,12 @@ description = "Quick updates and shared Bevy content from the community"
 show_in_footer = true
 
 [[links]]
-title = "Twitter"
-subtitle = "bevyengine"
-url = "https://twitter.com/BevyEngine"
-image = "/assets/twitter.svg"
-image_alt = "Twitter logo"
-description = "Quick updates and shared Bevy content from the community"
+title = "Mastodon"
+subtitle = "bevy"
+url = "https://mastodon.social/@bevy"
+image = "/assets/mastodon-logo-purple.svg"
+image_alt = "Mastodon logo"
+description = "News, boosted community creations and chatter on the short-form Fediverse network."
 show_in_footer = true
 
 [[links]]
@@ -72,13 +72,4 @@ url = "https://itch.io/games/tag-bevy"
 image = "/assets/itchio-textless.svg"
 image_alt = "itch.io logo"
 description = 'Games tagged with "bevy" on itch.io.'
-show_in_footer = true
-
-[[links]]
-title = "Mastodon"
-subtitle = "bevy"
-url = "https://mastodon.social/@bevy"
-image = "/assets/mastodon-logo-purple.svg"
-image_alt = "Mastodon logo"
-description = "News, boosted community creations and chatter on the short-form Fediverse network."
 show_in_footer = true

@@ -1,0 +1,1 @@
+The lifetimes of functions using return-position impl-trait (RPIT) are likely _more_ conservative than they had been previously. If you encounter lifetime issues with such a function, please create an issue to investigate the addition of `+ use<...>`.

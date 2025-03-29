@@ -1,0 +1,3 @@
+- `TypeRegistryPlugin` no longer exists. If you can’t use a default `App` but still need `Name` registered, do so manually with `app.register_type::<Name>()`.
+- References to `TaskPoolPlugin` and associated types will need to import it from `bevy_app` instead of `bevy_core`
+- References to `FrameCountPlugin` and associated types will need to import it from `bevy_diagnostic` instead of `bevy_core`

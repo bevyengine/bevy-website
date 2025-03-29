@@ -3,7 +3,6 @@ title = "SME Announcements"
 date = 2023-12-12
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++

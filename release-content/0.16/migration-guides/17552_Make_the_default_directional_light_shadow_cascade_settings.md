@@ -1,0 +1,1 @@
+- The default shadow cascade far distance has been changed from 1000 to 150, and the default first cascade far bound has been changed from 5 to 10, in order to be similar to the defaults of other engines.

@@ -1,0 +1,1 @@
+- When enqueuing a custom mesh pipeline, work item buffers are now created with `bevy::render::batching::gpu_preprocessing::get_or_create_work_item_buffer`, not `PreprocessWorkItemBuffers::new`. See the `specialized_mesh_pipeline` example.

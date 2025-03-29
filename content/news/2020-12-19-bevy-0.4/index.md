@@ -3,7 +3,6 @@ title = "Bevy 0.4"
 date = 2020-12-19
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "colonize.png"

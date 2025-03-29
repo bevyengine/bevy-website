@@ -1,0 +1,1 @@
+- If you were previously calling the special `apply_deferred` system via `apply_deferred(world)`, don’t.

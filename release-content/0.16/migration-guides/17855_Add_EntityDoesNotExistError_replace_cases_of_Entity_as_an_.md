@@ -1,0 +1,3 @@
+- `World::inspect_entity` now returns `Result<impl Iterator<Item = &ComponentInfo>, EntityDoesNotExistError>` instead of `impl Iterator<Item = &ComponentInfo>`.
+- `World::get_entity` now returns `EntityDoesNotExistError` as an error instead of `Entity`. You can still access the entity’s ID through the error’s `entity` field.
+- `UnsafeWorldCell::get_entity` now returns `Result<UnsafeEntityCell, EntityDoesNotExistError>` instead of `Option<UnsafeEntityCell>`.

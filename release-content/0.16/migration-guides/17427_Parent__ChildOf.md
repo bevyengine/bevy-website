@@ -1,0 +1,1 @@
+- The `Parent` component has been renamed to `ChildOf`.

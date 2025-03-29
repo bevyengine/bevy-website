@@ -1,0 +1,1 @@
+`bevy_reflect` has been made a non-default feature of `bevy_math`. (It is still enabled when `bevy_math` is used through `bevy`.) You may need to enable this feature if you are using `bevy_math` on its own and desire for the types it exports to implement `Reflect` and other reflection traits.

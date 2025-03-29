@@ -5,7 +5,6 @@ authors = ["Carter Anderson"]
 [extra]
 image = "webgpu.svg"
 show_image = true
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++

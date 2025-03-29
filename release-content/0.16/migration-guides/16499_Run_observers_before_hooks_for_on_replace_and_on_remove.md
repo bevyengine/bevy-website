@@ -1,0 +1,1 @@
+The order of hooks and observers for `on_replace` and `on_remove` has been swapped. Observers are now run before hooks. This is a more natural ordering where the removal ordering is inverted compared to the insertion ordering.
