@@ -155,12 +155,6 @@ areas = ["ECS"]
 file_name = "17855_Add_EntityDoesNotExistError_replace_cases_of_Entity_as_an_.md"
 
 [[guides]]
-title = "Add more methods to `RelationshipSourceCollection`"
-prs = [18421]
-areas = ["ECS"]
-file_name = "18421_Add_more_methods_to_RelationshipSourceCollection.md"
-
-[[guides]]
 title = "Cache systems by `S` instead of `S::System`"
 prs = [16694]
 areas = ["ECS"]
