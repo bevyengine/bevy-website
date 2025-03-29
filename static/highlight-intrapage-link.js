@@ -1,4 +1,6 @@
-//! in nav.on-this-page, sets data-active=true on the link to the header you're currently looking at
+//! For elements with `[data-highlight-intrapage-link]`, sets
+//! `data-highlight-intrapage-link-active=true` to the descendant `<a>` elements
+//! (for intra-page navigation) that link to the top-most visible heading.
 
 if(window.location.hash == ""){
   otp_set_active(document.querySelector("main h2") || document.querySelector("main h3"));
@@ -7,21 +9,21 @@ if(window.location.hash == ""){
 }
 
 /**
- * remember which elements are on screen. IntersectionObserver only sends us updates.
+ * Remember which elements are on screen. `IntersectionObserver` only sends us updates.
  * @type {Map<Element, boolean>}
  */
 let otp_state = new Map();
 
 /**
- * give data-active=true to the page nav link which points to the given id; set all others to false.
- * accepts an id string or a DOM node which it will automatically retrieve the id of
- * @param {string | HTMLElement} id_or_node 
+ * Set `data-highlight-intrapage-link-active=true` to the page links which point
+ * to the given id; set all others to `false`. Accepts an id string or a DOM
+ * node which it will automatically retrieve the id of.
  */
 function otp_set_active(id_or_node){
   let id = `#${id_or_node instanceof HTMLElement ? id_or_node.getAttribute("id") : id_or_node}`;
 
-  document.querySelectorAll("[data-on-this-page] a").forEach(a => {
-    a.setAttribute("data-active", a.getAttribute("href").includes(id));
+  document.querySelectorAll("[data-highlight-intrapage-link] a").forEach(a => {
+    a.setAttribute("data-highlight-intrapage-link-active", a.getAttribute("href").includes(id));
   });
 }
 

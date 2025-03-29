@@ -58,7 +58,7 @@
             color: var(--tree-menu-label-color);
         }
 
-        &[data-active=true] {
+        &[data-highlight-intrapage-link-active=true] {
           color: var(--tree-menu-active-color);
         }
     }
