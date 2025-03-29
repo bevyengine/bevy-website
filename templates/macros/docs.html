@@ -107,7 +107,7 @@
   </ul>
 {% endmacro %}
 {% macro on_this_page(toc, class="") %}
-<nav aria-label="On This Page" class="on-this-page {{ class }}">
+<nav aria-label="On This Page" class="on-this-page {{ class }}" data-highlight-intrapage-link>
   {# screen readers will read this as 'Navigation: On This Page' #}
   <ul>
   {% for h1 in toc %}
