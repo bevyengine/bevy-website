@@ -1,1 +1,0 @@
-Any type implementing `RelationshipSourceCollection` now needs to also implement `new`, `reserve` and `shrink_to_fit`. `reserve` and `shrink_to_fit` can be made no-ops if they conceptually mean nothing to a collection.
