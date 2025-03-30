@@ -10,7 +10,7 @@ As it turns out, most entities in your game are going to have a transform!
 
 This made transform propagation a prime candidate for some serious optimization work, and Bevy 0.16 comes with *two* impressive performance optimizations.
 
-The first optimization improves our parallelization strategies. While we were already going splitting the work across threads,
+The first optimization improves our parallelization strategies. While we were already splitting the work across threads,
 better work sharing, parallelization across trees and a leaf vs non-leaf split to optimize cache coherency made a huge difference.
 
 The second optimization focuses on saving work for trees where none of the objects have moved.
