@@ -22,7 +22,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Unified error handling:** Sick of impossible to debug panics in your Bevy code? Us too! We've dramatically improved debuggability with the new `track_location` feature flag, and we've made it easy to return and handle errors across the entire ECS.
 - **Relations:** one of the hottest ECS features is finally here: allowing you to easily and robustly model and work with entity-entity connections. Some caveats apply, but we're excited to get a simple and robust solution to users today.
 - **`no_std` is a reality:** `bevy` itself and a ton of our subcrates no longer rely on Rust's standard library, letting you use the same engine on everything from a modern gaming rig to a Gameboy Advance.
-
+- **Procedural atmosphere scattering system:** allows for simulating realistic physically-based Earth-like sky at any time of day at a low performance cost. It is a multi pass advanced rendering technique and it's achieved using WebGPU compute shaders that run on both web and native platforms.
 <!-- more -->
 
 {{ release_notes(version="0.16") }}
