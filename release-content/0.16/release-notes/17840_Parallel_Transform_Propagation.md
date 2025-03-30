@@ -21,10 +21,11 @@ The results speak for themselves: taken together, our testing on the incredibly 
 While that's an impressive 11x performance improvement, the absolute magnitude of the time saved is the key metric.
 With about 16 ms per frame at 60 FPS, that's 6% of your *entire* game's CPU budget saved, making huge open worlds or incredibly complex CAD assemblies more viable than ever before.
 
-TODO: add image from [Discord](https://cdn.discordapp.com/attachments/743663924229963868/1355088699469336596/image.png?ex=67e9a272&is=67e850f2&hm=1f98169f9a068203315912821eca22cdcbefd789f0f9927bc09b97abf46580c2&)
+![A screenshot of a `tracy` histogram showing the effects of these changes on Caldera. 0.15 peaks at 1.1 ms, while 0.16 peaks at 0.1 ms. Note the logarithmic scale!][caldera-transform-propagation-bench]
 
-If you're interested in the gory technical details of these optimizations, take a look at [the code itself];
-it's incredibly well-commented and great to learn from.
+If you're interested in the gory technical details of these optimizations, take a look at [the code itself].
+It's incredibly well-commented and great to learn from.
 
 [Caldera Hotel]: https://github.com/Activision/caldera
 [the code itself]: https://github.com/bevyengine/bevy/blob/b0c446739888705d3e95b640e9d13e0f1f53f06d/crates/bevy_transform/src/systems.rs#L12
+[caldera-transform-propagation-bench]: caldera-transform-propagation-bench.png
