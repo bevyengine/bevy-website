@@ -1,6 +1,6 @@
 <!-- Better source location tracking -->
 
-Having a unified data model allows introspection tools work for the entire engine:
+Having a unified data model allows introspection and debugging tools to work for the entire engine:
 For example, last release's `track_change_detection` feature flag lets you
 automatically track by which line of source code any component (or resource) was inserted/mutated.
 
