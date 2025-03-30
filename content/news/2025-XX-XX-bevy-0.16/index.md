@@ -31,8 +31,12 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 The features above may be great, but what else does Bevy have in flight?
 Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
 
-- TODO
+- **A revamped observers API:** Observers are incredibly popular, but come with some weird quirks. Why is `OnAdd` not generic? What does that `B: Bundle` generic even _do_? Please, I want to add observers in my entity spawning to write little callbacks!
+- **Resources-as-entities:** Sure would be nice if hooks, observers, relations and more worked with resources. Rather than duplicating all of the code, we'd like to [make them components on singleton entities](https://github.com/bevyengine/bevy/pull/17485) under the hood.
+- **A .bsn file format and bsn! macro:** With the foundations laid (required components, improved spawning and relations!), it's time to build out the terse and robust Bevy-native scene format (and matching macro) described in [bevy#14437](https://github.com/bevyengine/bevy/discussions/14437).
+- **More game-focused examples:** New users continue to flock to Bevy, and need up-to-date learning materials. Our API-focused approach to examples isn't enough: we need to start demonstrating how to use Bevy to do common game dev tasks like making an inventory, saving user preferences or placing structures on a map.
 
 {{ support_bevy() }}
+
 TODO: add  contributors
 TODO: add changelog
