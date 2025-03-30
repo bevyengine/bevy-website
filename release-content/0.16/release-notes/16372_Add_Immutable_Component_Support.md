@@ -29,7 +29,7 @@ pub struct SumMe(pub u32);
 
 // We want to ensure that this global view of our components is *always* correct
 #[derive(Resource)]
-struct TotalSum(pub u32);
+struct TotalSum(u32);
 
 // We need a pair of observers to keep track of the sum
 // This will trigger when spawning or inserting a SumMe component
