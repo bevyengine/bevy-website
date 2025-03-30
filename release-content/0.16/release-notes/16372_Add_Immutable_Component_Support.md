@@ -17,7 +17,7 @@ lifecycle hooks and observers *always* fire.
 
 Because hooks and observers can modify the [`World`] in arbitrary ways,
 we can combine them with immutable components to uphold critical, complex invariants.
-While this obviously slower than a simple mutation operation,
+While obviously slower than a simple mutation operation,
 it's *much* harder to mess up.
 
 Let's see how it's done:
