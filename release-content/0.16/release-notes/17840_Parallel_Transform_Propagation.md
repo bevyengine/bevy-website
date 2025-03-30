@@ -6,7 +6,7 @@ Transforms in Bevy (and other 3D software) come in two flavors:
 In order to compute the global transform of each object (which is what rendering and physics care about!),
 we need to recursively combine the local transforms of all of our objects down the parent-child hierarchy.
 This process, known as transform propagation, has always been one of the most computationally intensive operations in most Bevy applications.
-Turns out, virtually everything in your world is going to have a transform!
+As it turns out, most entities in your game are going to have a transform!
 
 This made transform propagation a prime candidate for some serious optimization work, and Bevy 0.16 comes with *two* impressive performance optimizations.
 
