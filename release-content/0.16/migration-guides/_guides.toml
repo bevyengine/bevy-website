@@ -83,12 +83,6 @@ areas = ["Cross-Cutting"]
 file_name = "17955_Add_no_std_support_to_bevy.md"
 
 [[guides]]
-title = "Move `hashbrown` and `foldhash` out of `bevy_utils`"
-prs = [17460]
-areas = ["Cross-Cutting"]
-file_name = "17460_Move_hashbrown_and_foldhash_out_of_bevy_utils.md"
-
-[[guides]]
 title = "Support for non-browser `wasm`"
 prs = [17499]
 areas = ["Cross-Cutting"]
@@ -129,12 +123,6 @@ title = "Allow users to customize history length in `FrameTimeDiagnosticsPlugin`
 prs = [17259]
 areas = ["Diagnostics"]
 file_name = "17259_Allow_users_to_customize_history_length_in_FrameTimeDiagno.md"
-
-[[guides]]
-title = "Prefer `Display` over `Debug`"
-prs = [16112]
-areas = ["Diagnostics"]
-file_name = "16112_Prefer_Display_over_Debug.md"
 
 [[guides]]
 title = "Event source location tracking"
@@ -501,12 +489,6 @@ title = "`ReflectBundle::remove` improvement"
 prs = [16139]
 areas = ["ECS", "Reflection"]
 file_name = "16139_ReflectBundleremove_improvement.md"
-
-[[guides]]
-title = "Add compile-time dyn compatible checks for `DynEq`, `DynHash`"
-prs = [17254]
-areas = ["ECS", "Utils"]
-file_name = "17254_Add_compiletime_dyn_compatible_checks_for_DynEq_DynHash.md"
 
 [[guides]]
 title = "Gamepad improvements"
@@ -948,12 +930,6 @@ areas = ["Scenes"]
 file_name = "17938_Only_despawn_scene_entities_still_in_the_hierarchy.md"
 
 [[guides]]
-title = "Move `futures.rs`, `ConditionalSend` and `BoxedFuture` types to `bevy_tasks`"
-prs = [16951]
-areas = ["Tasks"]
-file_name = "16951_Move_futuresrs_ConditionalSend_and_BoxedFuture_types_to_be.md"
-
-[[guides]]
 title = "Support `on_thread_spawn` and `on_thread_destroy` for `TaskPoolPlugin`"
 prs = [13045]
 areas = ["Tasks"]
@@ -976,12 +952,6 @@ title = "add line height to `TextFont`"
 prs = [16614]
 areas = ["Text"]
 file_name = "16614_add_line_height_to_TextFont.md"
-
-[[guides]]
-title = "Improve ergonomics of `platform_support`'s `Instant`"
-prs = [17577]
-areas = ["Time"]
-file_name = "17577_Improve_ergonomics_of_platform_supports_Instant.md"
 
 [[guides]]
 title = "Fixing `ValArithmeticError` typo and unused variant"
@@ -1030,36 +1000,6 @@ title = "UiImage -> ImageNode, UiImageSize -> ImageNodeSize"
 prs = [16271]
 areas = ["UI"]
 file_name = "16271_UiImage__ImageNode_UiImageSize__ImageNodeSize.md"
-
-[[guides]]
-title = "Create `bevy_platform_support` Crate"
-prs = [17250]
-areas = ["Utils"]
-file_name = "17250_Create_bevy_platform_support_Crate.md"
-
-[[guides]]
-title = "Move `all_tuples` to a new crate"
-prs = [16161]
-areas = ["Utils"]
-file_name = "16161_Move_all_tuples_to_a_new_crate.md"
-
-[[guides]]
-title = "Remove `tracing` re-export from `bevy_utils`"
-prs = [17161]
-areas = ["Utils"]
-file_name = "17161_Remove_tracing_reexport_from_bevy_utils.md"
-
-[[guides]]
-title = "Remove everything except `Instant` from `bevy_utils::time`"
-prs = [17158]
-areas = ["Utils"]
-file_name = "17158_Remove_everything_except_Instant_from_bevy_utilstime.md"
-
-[[guides]]
-title = "Update hashbrown to 0.15"
-prs = [15801]
-areas = ["Utils"]
-file_name = "15801_Update_hashbrown_to_015.md"
 
 [[guides]]
 title = "Make CustomCursor variants CustomCursorImage/CustomCursorUrl structs"
@@ -1132,3 +1072,9 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
+
+[[guides]]
+title = "`bevy_utils` Refactor"
+prs = [15801, 16112, 16161, 16951, 17158, 17161, 17250, 17254, 17460, 17577]
+areas = ["Utils"]
+file_name = "bevy_utils_decimation.md"
