@@ -18,7 +18,9 @@ To update an existing Bevy App or Plugin to **Bevy 0.16**, check out our [0.15 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- TODO
+- **Relations:** one of the hottest ECS features is finally here: allowing you to easily and robustly model and work with entity-entity connections.
+- **GPU-driven rendering:** GPUs are fast: we should make sure that we keep them busy! We've done a ton of performance-oriented work that should make Bevy dramatically faster on big, complex scenes.
+- **`no_std` is a reality:** `bevy` itself and a ton of our subcrates no longer rely on Rust's standard library, letting you use the same engine on everything from a modern gaming rig to a Gameboy Advance.
 
 <!-- more -->
 
