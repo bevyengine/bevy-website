@@ -15,7 +15,7 @@ better work sharing, parallelization across trees and a leaf vs non-leaf split t
 
 The second optimization focuses on saving work for trees where none of the objects have moved.
 In many cases, this is the overwhelming majority of objects: level geometry and props are not typically moving around each frame!
-We're now propagating a "dirty bit" up the hierarchy towards ancestors; allowing transform propagation can ignore entire subtrees of the hierarchy if they encounter an entity without the dirty bit.
+We're now propagating a "dirty bit" up the hierarchy towards ancestors; allowing transform propagation to ignore entire subtrees of the hierarchy if they encounter an entity without the dirty bit.
 
 The results speak for themselves: taken together, our testing on the incredibly beefy [Caldera Hotel] from Call of Duty: Warzone shows that transform propagation took 1.1 ms in 0.15, and 0.1 ms after these changes in 0.16.
 While that's an impressive 11x performance improvement, the absolute magnitude of the time saved is the key metric.
