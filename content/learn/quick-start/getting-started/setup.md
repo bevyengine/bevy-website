@@ -38,7 +38,7 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
   #### Windows
   </summary>
 
-  * Run the [Microsoft C++ Build Tools installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+  * Run the [Visual Studio C++ Build Tools installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
   * For easy setup, select the ```Desktop development with C++``` workload in the installer.
   * For a minimal setup, follow these steps:
       1. In the installer, navigate to `Individual components`
