@@ -1032,12 +1032,6 @@ areas = []
 file_name = "18538_Remove_Imagefrom_buffer_name_argument_only_present_in_debu.md"
 
 [[guides]]
-title = "Remove `accesskit` re-export from `bevy_a11y`"
-prs = [16257]
-areas = []
-file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
-
-[[guides]]
 title = "Remove `bevy_core`"
 prs = [16897]
 areas = []
