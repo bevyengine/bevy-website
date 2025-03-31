@@ -251,12 +251,6 @@ areas = ["ECS"]
 file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
 
 [[guides]]
-title = "Move `Name` out of `bevy_core`"
-prs = [16894]
-areas = ["ECS"]
-file_name = "16894_Move_Name_out_of_bevy_core.md"
-
-[[guides]]
 title = "Move `Resource` trait to its own file"
 prs = [17469]
 areas = ["ECS"]
@@ -1033,9 +1027,9 @@ file_name = "18538_Remove_Imagefrom_buffer_name_argument_only_present_in_debu.md
 
 [[guides]]
 title = "Remove `bevy_core`"
-prs = [16897]
+prs = [16894, 16897]
 areas = []
-file_name = "16897_Remove_bevy_core.md"
+file_name = "bevy_core_removed.md"
 
 [[guides]]
 title = "Rename `trigger.entity()` to `trigger.target()`"
