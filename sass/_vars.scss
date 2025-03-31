@@ -321,7 +321,8 @@ $border-radius: 10px;
 
   --table-border-color: var(--color-neutral-60b);
   --table-border-radius: 4px;
-  --table-header-color: var(--color-neutral-13);
+  --table-header-bg-color: var(--color-neutral-13);
+  --table-header-color: var(--color-neutral-82);
 
   --tabs-bg-color: var(--color-white);
   --tabs-highlight-color: var(--color-blue-link);
@@ -448,6 +449,10 @@ $border-radius: 10px;
     --on-this-page-active-color: var(--color-black);
 
     --scrollbar-thumb-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
+
+    --table-border-color: var(--color-neutral-75);
+    --table-header-bg-color: var(--color-neutral-82);
+    --table-header-color: var(--color-neutral-22);
 
     --todo-bg-color: rgba(191, 170, 64, 0.3);
     --todo-border-color: rgba(223, 191, 32, 0.5);
