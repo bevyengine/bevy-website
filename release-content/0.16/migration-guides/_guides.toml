@@ -17,7 +17,7 @@ areas = ["Animation", "Math"]
 file_name = "16910_Fix_EaseFunctionExponential_to_exactly_hit_0_0_and_1_1.md"
 
 [[guides]]
-title = "Remove the `meta` field from `LoadedAsset` and `ErasedLoadedAsset`."
+title = "Remove `meta` field from `LoadedAsset` and `ErasedLoadedAsset`"
 prs = [15487]
 areas = ["Assets"]
 file_name = "15487_Remove_the_meta_field_from_LoadedAsset_and_ErasedLoadedAss.md"
