@@ -17,12 +17,6 @@ areas = ["Animation", "Math"]
 file_name = "16910_Fix_EaseFunctionExponential_to_exactly_hit_0_0_and_1_1.md"
 
 [[guides]]
-title = "Headless by features"
-prs = [16401]
-areas = ["App"]
-file_name = "16401_Headless_by_features.md"
-
-[[guides]]
 title = "Remove the `meta` field from `LoadedAsset` and `ErasedLoadedAsset`."
 prs = [15487]
 areas = ["Assets"]

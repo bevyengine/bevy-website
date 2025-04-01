@@ -1,1 +1,0 @@
-`HeadlessPlugins` has been removed, but the feature is still supported. `bevy_window`, a new default feature enables windows, etc. To replicate `HeadlessPlugins`, use `DefaultPlugins` and disable the `bevy_window` feature.
