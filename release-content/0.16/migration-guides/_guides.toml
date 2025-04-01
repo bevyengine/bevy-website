@@ -167,8 +167,8 @@ areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
 
 [[guides]]
-title = "Fallible systems"
-prs = [16589]
+title = "Fallible systems and custom schedule executors"
+prs = [16589, 18541, 18666]
 areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
@@ -221,8 +221,8 @@ areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"
 
 [[guides]]
-title = "Make Query::single (and friends) return a Result"
-prs = [18082]
+title = "Unified error handling"
+prs = [18082, 18144]
 areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
