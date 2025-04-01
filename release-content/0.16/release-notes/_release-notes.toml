@@ -45,7 +45,13 @@ file_name = "unified_error_handling.md"
 [[release_notes]]
 title = "Better location tracking"
 authors = ["@SpecificProtagonist", "@chescock"]
-contributors = ["@alice-i-cecile", "Freya Pines", "@pin3-free", "@mweatherley", "@skimmedsquare"]
+contributors = [
+	"@alice-i-cecile",
+	"Freya Pines",
+	"@pin3-free",
+	"@mweatherley",
+	"@skimmedsquare",
+]
 prs = [15607, 16047, 16778, 17075, 17602]
 file_name = "16778_Event_source_location_tracking.md"
 
@@ -213,15 +219,50 @@ prs = [17758]
 file_name = "17758_Trait_tags_on_docsrs.md"
 
 [[release_notes]]
-title = "Parallel Transform Propagation"
+title = "Faster Transform Propagation"
 authors = ["@aevyrie"]
 contributors = ["@alice-i-cecile", "@mockersf"]
-prs = [17840]
+prs = [17840, 18589]
 file_name = "17840_Parallel_Transform_Propagation.md"
 
 [[release_notes]]
 title = "Add `no_std` support to `bevy`"
 authors = ["@bushrat011899"]
-contributors = ["@alice-i-cecile", "@BD103", "@BenjaminBrienen", "@hymm", "@Jondolf", "@MrGVSV", "@mweatherley", "@Victoronz"]
-prs = [15281, 15463, 15464, 15465, 15528, 15810, 16256, 16633, 16758, 16874, 16995, 16998, 17027, 17028, 17030, 17031, 17086, 17470, 17490, 17491, 17505, 17507, 17955, 18061, 18333]
+contributors = [
+	"@alice-i-cecile",
+	"@BD103",
+	"@BenjaminBrienen",
+	"@hymm",
+	"@Jondolf",
+	"@MrGVSV",
+	"@mweatherley",
+	"@Victoronz",
+]
+prs = [
+	15281,
+	15463,
+	15464,
+	15465,
+	15528,
+	15810,
+	16256,
+	16633,
+	16758,
+	16874,
+	16995,
+	16998,
+	17027,
+	17028,
+	17030,
+	17031,
+	17086,
+	17470,
+	17490,
+	17491,
+	17505,
+	17507,
+	17955,
+	18061,
+	18333,
+]
 file_name = "17955_Add_no_std_support_to_bevy.md"
