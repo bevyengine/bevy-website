@@ -179,8 +179,8 @@ areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
 
 [[guides]]
-title = "Fallible systems"
-prs = [16589]
+title = "Fallible systems and custom schedule executors"
+prs = [16589, 18541, 18666]
 areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
