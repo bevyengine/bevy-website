@@ -1,17 +1,12 @@
-__`bevy_picking/src/pointer.rs`:__
+#### `bevy_picking/src/pointer.rs`
 
 __`enum PressDirection`:__
-
-- 
-`PressDirection::Down` changes to `PressDirection::Pressed`.
-
-- 
-`PressDirection::Up` changes to `PressDirection::Released`.
+- `PressDirection::Down` changes to `PressDirection::Pressed`.
+- `PressDirection::Up` changes to `PressDirection::Released`.
 
 These changes are also relevant when working with `enum PointerAction`
 
-
-__`bevy_picking/src/events.rs`:__
+#### `bevy_picking/src/events.rs`
 
 Clicking and pressing Events in events.rs categories change from [Down], [Up], [Click] to [Pressed], [Released], [Click].
 
