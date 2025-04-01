@@ -29,7 +29,7 @@ areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
 
 [[guides]]
-title = "Add `AssetChanged` query filter"
+title = "Use `AssetEvents` system set instead of `Assets::asset_events()`"
 prs = [16810]
 areas = ["Assets", "ECS"]
 file_name = "16810_Add_AssetChanged_query_filter.md"
