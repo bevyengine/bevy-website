@@ -1,5 +1,5 @@
 [[guides]]
-title = "Replace bevy_a11y::Focus with InputFocus"
+title = "Replace `bevy::a11y::Focus` with `bevy::input_focus::Focus`"
 prs = [16863]
 areas = ["Accessibility", "Input", "UI"]
 file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
