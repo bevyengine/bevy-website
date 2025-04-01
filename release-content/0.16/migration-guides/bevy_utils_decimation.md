@@ -52,6 +52,10 @@ Note that certain items have been completely removed, see below for further deta
 | `trace_once`           | `bevy_utils` | `bevy_log`         |
 | `warn_once`            | `bevy_utils` | `bevy_log`         |
 
+Note that if you were previously relying on `bevy_utils` to get access to
+the re-exported `tracing` macros like `info!`, `warn!` or `dbg!`, you should
+now rely on `bevy_log` instead (or `tracing` itself, being sure to keep the versions aligned).
+
 **Functions**
 
 | Item           | 0.15 Path             | 0.16 Path             |
