@@ -41,7 +41,7 @@ areas = ["Audio"]
 file_name = "16813_Add_ability_to_mute_audio_sinks.md"
 
 [[guides]]
-title = "Rename AudioSinkPlayback::toggle to toggle_playback"
+title = "Rename `AudioSinkPlayback::toggle()` to `toggle_playback()`"
 prs = [16837]
 areas = ["Audio"]
 file_name = "16837_Rename_AudioSinkPlaybacktoggle_to_toggle_playback.md"
