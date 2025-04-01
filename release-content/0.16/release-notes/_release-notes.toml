@@ -137,7 +137,7 @@ file_name = "virtual_geometry_improvements.md"
 # UI
 
 [[release_notes]]
-title = "Basic UI text shadows"
+title = "Text shadows"
 authors = ["@ickshonpe"]
 contributors = []
 prs = [17559]
