@@ -1,20 +1,18 @@
-Audio volume can now be configured using decibel values, as well as using linear scale values. To enable this, some types and functions in `bevy_audio` have changed.
-
-- `Volume` is now an enum with `Linear` and `Decibels` variants.
-
-Before:
+Audio volume can now be configured using decibel values, as well as using linear scale values. To enable this, some types and functions in `bevy::audio` have changed. First, `Volume` is now an enum with `Linear` and `Decibels` variants:
 
 ```rust
+// 0.15
 let v = Volume(1.0);
-```
 
-After:
-
-```rust
+// 0.16
 let volume = Volume::Linear(1.0);
-let volume = Volume::Decibels(0.0); // or now you can deal with decibels if you prefer
+
+// Alternatively, you can use decibels instead.
+let volume = Volume::Decibels(0.0);
 ```
 
-- `Volume::ZERO` has been renamed to the more semantically correct `Volume::SILENT` because `Volume` now supports decibels and “zero volume” in decibels actually means “normal volume”.
-- The `AudioSinkPlayback` trait’s volume-related methods now deal with `Volume` types rather than `f32`s. `AudioSinkPlayback::volume()` now returns a `Volume` rather than an `f32`. `AudioSinkPlayback::set_volume` now receives a `Volume` rather than an `f32`. This affects the `AudioSink` and `SpatialAudioSink` implementations of the trait. The previous `f32` values are equivalent to the volume converted to linear scale so the  `Volume:: Linear` variant should be used to migrate between `f32`s and `Volume`.
-- The `GlobalVolume::new` function now receives a `Volume` instead of an `f32`.
+`Volume::Linear` is equivalent to the old `f32` volume.
+
+With this change, `AudioSinkPlayback`'s volume-related methods (`volume()` and `set_volume()`) and `GlobalVolume` now deal in `Volume`s rather than `f32`s.
+
+Finally, `Volume::ZERO` has been renamed to the more semantically correct `Volume::SILENT`. This is because 0 decibals is equivalent to "normal volume", which could lead to confusion with the old naming.

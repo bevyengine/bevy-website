@@ -47,7 +47,7 @@ areas = ["Audio"]
 file_name = "16837_Rename_AudioSinkPlaybacktoggle_to_toggle_playback.md"
 
 [[guides]]
-title = "Support decibels in bevy_audio::Volume"
+title = "Support decibels in `Volume`"
 prs = [17605]
 areas = ["Audio"]
 file_name = "17605_Support_decibels_in_bevy_audioVolume.md"
