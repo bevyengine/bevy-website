@@ -29,7 +29,13 @@ areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
 
 [[guides]]
-title = "Use `AssetEvents` system set instead of `Assets::asset_events()`"
+title = "Get names of queued components"
+prs = [18451]
+areas = ["ECS"]
+file_name = "18451_Get_names_of_queued_components.md"
+
+[[guides]]
+title = "Add `AssetChanged` query filter"
 prs = [16810]
 areas = ["Assets", "ECS"]
 file_name = "16810_Add_AssetChanged_query_filter.md"
@@ -69,12 +75,6 @@ title = "Upgrade to Rust Edition 2024"
 prs = [17967]
 areas = ["Cross-Cutting"]
 file_name = "17967_Upgrade_to_Rust_Edition_2024.md"
-
-[[guides]]
-title = "Don't reëxport `bevy_image` from `bevy_render`"
-prs = [16163]
-areas = ["Cross-Cutting", "Rendering"]
-file_name = "16163_Dont_reëxport_bevy_image_from_bevy_render.md"
 
 [[guides]]
 title = "BRP strict field in query"
@@ -311,7 +311,7 @@ areas = ["ECS"]
 file_name = "16348_Remove_deprecated_component_reads_and_writes.md"
 
 [[guides]]
-title = "Remove flush_and_reserve_invalid_assuming_no_entities"
+title = "Remove `flush_and_reserve_invalid_assuming_no_entities`"
 prs = [16460]
 areas = ["ECS"]
 file_name = "16460_Remove_flush_and_reserve_invalid_assuming_no_entities.md"
@@ -341,7 +341,7 @@ areas = ["ECS"]
 file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
 
 [[guides]]
-title = "Replace VisitEntities with MapEntities"
+title = "Replace `VisitEntities` with `MapEntities`"
 prs = [18432]
 areas = ["ECS"]
 file_name = "18432_Replace_VisitEntities_with_MapEntities.md"
@@ -600,7 +600,7 @@ areas = ["Picking"]
 file_name = "16872_Rename_focus_in_bevy_picking_to_hover.md"
 
 [[guides]]
-title = "Rename Pointer<Down/Up> -> Pointer<Pressed/Released> in bevy_picking."
+title = "Rename `Pointer<Down/Up>` to `Pointer<Pressed/Released>` in `bevy_picking`"
 prs = [16331]
 areas = ["Picking"]
 file_name = "16331_Rename_PointerDownUp__PointerPressedReleased_in_bevy_picki.md"
@@ -858,12 +858,6 @@ areas = ["Rendering"]
 file_name = "16481_cleanup_bevy_renderlibrs.md"
 
 [[guides]]
-title = "doc: fix camera link"
-prs = [16827]
-areas = ["Rendering"]
-file_name = "16827_doc_fix_camera_link.md"
-
-[[guides]]
 title = "`ExtractedSprites` slice buffer"
 prs = [17041]
 areas = ["Rendering", "Text"]
@@ -996,10 +990,10 @@ areas = ["Windowing"]
 file_name = "17121_Support_texture_atlases_in_CustomCursorImage.md"
 
 [[guides]]
-title = ":pencil2: Fix typos across bevy"
-prs = [16702]
-areas = []
-file_name = "16702_pencil2_Fix_typos_across_bevy.md"
+title = "`bevy_utils` Refactor"
+prs = [15801, 16112, 16161, 16951, 17158, 17161, 17250, 17254, 17460, 17577]
+areas = ["Utils"]
+file_name = "bevy_utils_decimation.md"
 
 [[guides]]
 title = "Link iOS example with `rustc`, and avoid C trampoline"
@@ -1036,9 +1030,3 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
-
-[[guides]]
-title = "`bevy_utils` Refactor"
-prs = [15801, 16112, 16161, 16951, 17158, 17161, 17250, 17254, 17460, 17577]
-areas = ["Utils"]
-file_name = "bevy_utils_decimation.md"
