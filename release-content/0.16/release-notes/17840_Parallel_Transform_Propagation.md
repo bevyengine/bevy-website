@@ -17,9 +17,12 @@ The second optimization focuses on saving work for trees where none of the objec
 In many cases, this is the overwhelming majority of objects: level geometry and props are not typically moving around each frame!
 We're now propagating a "dirty bit" up the hierarchy towards ancestors; allowing transform propagation to ignore entire subtrees of the hierarchy if they encounter an entity without the dirty bit.
 
-The results speak for themselves: taken together, our testing on the incredibly beefy [Caldera Hotel] from Call of Duty: Warzone shows that transform propagation took 1.1 ms in 0.15, and 0.1 ms after these changes in 0.16.
+The results speak for themselves: taken together, our testing on the huge (127,515 objects) [Caldera Hotel] scene  from Call of Duty: Warzone shows that transform propagation took 1.1 ms in 0.15 on an M4 Max Macbook, and 0.1 ms after these changes in 0.16.
+Even fully dynamic scenes (like our [`many_foxes`] stress test) are substantially faster due to the improved parallelism. Nice!
+This work matters even more for more typical hardware: on large scenes on mid or low-end hardware transform propagation could eat an entire 25% of the frame budget. Ouch!
+
 While that's an impressive 11x performance improvement, the absolute magnitude of the time saved is the key metric.
-With about 16 ms per frame at 60 FPS, that's 6% of your *entire* game's CPU budget saved, making huge open worlds or incredibly complex CAD assemblies more viable than ever before.
+With about 16 ms per frame at 60 FPS, that's 6% of your *entire* game's CPU budget saved. making huge open worlds or incredibly complex CAD assemblies more viable than ever before.
 
 ![A screenshot of a `tracy` histogram showing the effects of these changes on Caldera. 0.15 peaks at 1.1 ms, while 0.16 peaks at 0.1 ms.][caldera-transform-propagation-bench]
 
@@ -29,3 +32,4 @@ It's incredibly well-commented and great to learn from.
 [Caldera Hotel]: https://github.com/Activision/caldera
 [the code itself]: https://github.com/bevyengine/bevy/blob/b0c446739888705d3e95b640e9d13e0f1f53f06d/crates/bevy_transform/src/systems.rs#L12
 [caldera-transform-propagation-bench]: caldera-transform-propagation-bench.png
+[`many_foxes`]: https://github.com/bevyengine/bevy/blob/main/examples/stress_tests/many_foxes.rs
