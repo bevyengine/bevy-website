@@ -39,7 +39,7 @@ Note that certain items have been completely removed, see below for further deta
 | Item                   | 0.15 Path    | 0.16 Path          |
 | ---------------------- | ------------ | ------------------ |
 | `assert_object_safe`   | `bevy_utils` | _Removed_          |
-| `dbg`                  | `bevy_utils` | `bevy_log`         |
+| `debug`                | `bevy_utils` | `bevy_log`         |
 | `error`                | `bevy_utils` | `bevy_log`         |
 | `info`                 | `bevy_utils` | `bevy_log`         |
 | `warn`                 | `bevy_utils` | `bevy_log`         |
@@ -53,7 +53,7 @@ Note that certain items have been completely removed, see below for further deta
 | `warn_once`            | `bevy_utils` | `bevy_log`         |
 
 Note that if you were previously relying on `bevy_utils` to get access to
-the re-exported `tracing` macros like `info!`, `warn!` or `dbg!`, you should
+the re-exported `tracing` macros like `info!`, `warn!` or `debug!`, you should
 now rely on `bevy_log` instead (or `tracing` itself, being sure to keep the versions aligned).
 
 **Functions**
