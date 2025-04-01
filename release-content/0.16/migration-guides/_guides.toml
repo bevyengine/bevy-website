@@ -23,7 +23,7 @@ areas = ["Assets"]
 file_name = "15487_Remove_the_meta_field_from_LoadedAsset_and_ErasedLoadedAss.md"
 
 [[guides]]
-title = "Weak handle migration"
+title = "Deprecate `Handle::weak_from_u128()`"
 prs = [17695]
 areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
