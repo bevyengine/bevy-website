@@ -21,7 +21,7 @@ The results speak for themselves: taken together, our testing on the incredibly 
 While that's an impressive 11x performance improvement, the absolute magnitude of the time saved is the key metric.
 With about 16 ms per frame at 60 FPS, that's 6% of your *entire* game's CPU budget saved, making huge open worlds or incredibly complex CAD assemblies more viable than ever before.
 
-![A screenshot of a `tracy` histogram showing the effects of these changes on Caldera. 0.15 peaks at 1.1 ms, while 0.16 peaks at 0.1 ms. Note the logarithmic scale!][caldera-transform-propagation-bench]
+![A screenshot of a `tracy` histogram showing the effects of these changes on Caldera. 0.15 peaks at 1.1 ms, while 0.16 peaks at 0.1 ms.][caldera-transform-propagation-bench]
 
 If you're interested in the gory technical details of these optimizations, take a look at [the code itself].
 It's incredibly well-commented and great to learn from.
