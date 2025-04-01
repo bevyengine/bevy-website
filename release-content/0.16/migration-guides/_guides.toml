@@ -65,7 +65,7 @@ areas = ["Cross-Cutting"]
 file_name = "17955_Add_no_std_support_to_bevy.md"
 
 [[guides]]
-title = "Support for non-browser `wasm`"
+title = "Support for non-browser WASM"
 prs = [17499]
 areas = ["Cross-Cutting"]
 file_name = "17499_Support_for_nonbrowser_wasm.md"
