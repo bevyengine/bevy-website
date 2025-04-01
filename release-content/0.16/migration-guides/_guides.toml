@@ -11,7 +11,7 @@ areas = ["Animation", "Math"]
 file_name = "17752_Add_ways_to_configure_EasingFunctionSteps_via_new_StepConf.md"
 
 [[guides]]
-title = "Fix `EaseFunction::Exponential*` to exactly hit (0, 0) and (1, 1)"
+title = "Fix `EaseFunction::Exponential*` to be continuous"
 prs = [16910]
 areas = ["Animation", "Math"]
 file_name = "16910_Fix_EaseFunctionExponential_to_exactly_hit_0_0_and_1_1.md"
