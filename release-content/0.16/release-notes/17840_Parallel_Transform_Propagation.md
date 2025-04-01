@@ -8,7 +8,7 @@ we need to recursively combine the local transforms of all of our objects down t
 This process, known as transform propagation, has always been one of the most computationally intensive operations in most Bevy applications.
 As it turns out, most entities in your game are going to have a transform!
 
-This made transform propagation a prime candidate for some serious optimization work, and Bevy 0.16 comes with *two* impressive performance optimizations.
+This made transform propagation a prime candidate for some serious optimization work, and Bevy 0.16 comes with *two* impressive performance optimizations, stolen shamelessly from the [`big_space`] crate by the same author.
 
 The first optimization improves our parallelization strategies. While we were already splitting the work across threads,
 better work sharing, parallelization across trees and a leaf vs non-leaf split to optimize cache coherency made a huge difference.
@@ -33,3 +33,4 @@ It's incredibly well-commented and great to learn from.
 [the code itself]: https://github.com/bevyengine/bevy/blob/b0c446739888705d3e95b640e9d13e0f1f53f06d/crates/bevy_transform/src/systems.rs#L12
 [caldera-transform-propagation-bench]: caldera-transform-propagation-bench.png
 [`many_foxes`]: https://github.com/bevyengine/bevy/blob/main/examples/stress_tests/many_foxes.rs
+[`big_space`]: https://github.com/aevyrie/big_space
