@@ -38,7 +38,8 @@ Peering deep into the mists of time (predictions are _extra_ hard when your team
 - **Light textures:** Also known as "light cookies", these are great for everything from dappled sunlight to shadow boxing.
 - **NVIDIA Deep Learning Super Sampling:** DLSS is a neural-net powered approach to temporal anti-aliasing and upscaling for NVIDIA RTX GPUs. We're working on integrating DLSS into Bevy to provide a cheaper and higher quality anti-aliasing solution than Bevy's current TAA (on supported platforms).
 - **More game-focused examples:** New users continue to flock to Bevy, and need up-to-date learning materials. Our API-focused approach to examples isn't enough: we need to start demonstrating how to use Bevy to do common game dev tasks like making an inventory, saving user preferences or placing structures on a map.
-- **Unified volumetrics system:** To get realistic volumetric scenes with localized light shafts using cascading shadow maps, we propose a new unified system that captures both local volumes and atmospheres as part of the same rendering context. This is rendered using temporally jittered ray-marching or ray tracing. We augment this with features like dynamic image based lighting, pluggable API for user defined cloud layers. Finally we attenuate the light sources so that the direct light hitting surfaces is also occluded by volumes, for example orange tinted light reaching objects at sunset. 
+- **Unified volumetrics system:** God rays, fogs, cascading shadow maps, and atmospheric scattering: there's a huge a number of rendering features that fundamentally care about the optical properties of volumes of open air (or water!). We're hoping to unify and extend these features for easier to use, more beautiful physically-based rendering.
+
 {{ support_bevy() }}
 
 TODO: add  contributors
