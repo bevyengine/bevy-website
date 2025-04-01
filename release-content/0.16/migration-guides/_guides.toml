@@ -5,7 +5,7 @@ areas = ["Accessibility", "Input", "UI"]
 file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
 
 [[guides]]
-title = "Add ways to configure `EasingFunction::Steps` via new `StepConfig`"
+title = "Configure `EasingFunction::Steps` jumping with `JumpAt`"
 prs = [17752]
 areas = ["Animation", "Math"]
 file_name = "17752_Add_ways_to_configure_EasingFunctionSteps_via_new_StepConf.md"
