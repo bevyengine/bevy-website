@@ -1,0 +1,5 @@
+Bevy now supports queueing components to be registered with read only world access, as opposed to registering them directly with mutable access. For now, that's an implementation detail, but it opens up some exciting possibilities for the future. Today, however, it causes a breaking change.
+
+In order to support getting the names of components that are queued but not registered (important for debugging), `Components::get_name` now returns `Option<Cow<'_, str>` instead of `Option<&str>`. If that behavior is not desired, or you know the component is not queued, you can use `components.get_info().map(ComponentInfo::name)` instead. Similarly, `ScheduleGraph::conflicts_to_string` now returns `impl Iterator<Item = (String, String, Vec<Cow<str>>)>` instead of `impl Iterator<Item = (String, String, Vec<&str>)>`.
+
+Because `Cow<str>` derefs to `&str`, most use cases can remain unchanged. If you're curious about queued registration, check out the original pr [here](https://github.com/bevyengine/bevy/pull/18173).

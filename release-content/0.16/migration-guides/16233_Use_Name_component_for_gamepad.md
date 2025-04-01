@@ -1,0 +1,4 @@
+- `GamepadInfo` no longer exists:
+  - Name now accessible via `Name` component.
+  - Other information available on `Gamepad` component directly.
+  - `GamepadConnection::Connected` now stores all info fields directly.

@@ -1,0 +1,1 @@
+`InstanceInputUniformBuffer::get` now returns `Option<BDI>` instead of `BDI` to reduce panics. If you require the old functionality of `InstanceInputUniformBuffer::get` consider using  `InstanceInputUniformBuffer::get_unchecked`.

@@ -1,0 +1,2 @@
+- `UiPlugin` now contains an extra `add_picking` field if `bevy_ui_picking_backend` is enabled.
+- `SpritePlugin` is no longer a unit struct, and has one field if `bevy_sprite_picking_backend` is enabled (otherwise no fields).

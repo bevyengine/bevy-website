@@ -1,0 +1,2 @@
+- If you were previously relying on `bevy` with default features disabled, you may need to enable the `std` and `async_executor` features.
+- `bevy_reflect` has had its `bevy` feature removed. If you were relying on this feature, simply enable `smallvec` and `smol_str` instead.

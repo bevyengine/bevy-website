@@ -1,0 +1,2 @@
+- `PerspectiveProjection` and `OrthographicProjection` are no longer components. Use `Projection` instead.
+- Custom projections should no longer be inserted as a component. Instead, simply set the custom projection as a value of `Projection` with `Projection::custom()`.

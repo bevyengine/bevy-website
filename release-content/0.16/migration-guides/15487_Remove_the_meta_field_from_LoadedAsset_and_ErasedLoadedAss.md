@@ -1,0 +1,3 @@
+- `ErasedAssetLoader` now takes a borrow to `AssetMetaDyn` instead of a `Box`.
+- `LoadedAsset::new_with_dependencies` no longer requires a `meta` argument.
+- `LoadContext::finish` no longer requires a `meta` argument.

@@ -355,7 +355,8 @@ $border-radius: 10px;
 
   --table-border-color: var(--color-neutral-60b);
   --table-border-radius: 4px;
-  --table-header-color: var(--color-neutral-13);
+  --table-header-bg-color: var(--color-neutral-13);
+  --table-header-color: var(--color-neutral-82);
 
   --tabs-bg-color: var(--color-white);
   --tabs-highlight-color: var(--color-blue-link);
@@ -507,6 +508,10 @@ $border-radius: 10px;
     --search-result-hash-sign-color: var(--color-neutral-50);
     --search-result-excerpt-term-bg-color: var(--color-black);
     --search-result-excerpt-term-color: var(--color-neutral-33);
+
+    --table-border-color: var(--color-neutral-75);
+    --table-header-bg-color: var(--color-neutral-82);
+    --table-header-color: var(--color-neutral-22);
 
     --todo-bg-color: rgba(191, 170, 64, 0.3);
     --todo-border-color: rgba(223, 191, 32, 0.5);

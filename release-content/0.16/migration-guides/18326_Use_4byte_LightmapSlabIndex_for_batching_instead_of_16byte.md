@@ -1,0 +1,1 @@
+- Changed: `RenderLightmap::new()` no longer takes an `AssetId<Image>` argument for the asset id of the lightmap image.

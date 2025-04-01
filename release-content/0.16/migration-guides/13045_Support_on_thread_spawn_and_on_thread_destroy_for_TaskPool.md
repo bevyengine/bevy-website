@@ -1,0 +1,1 @@
+- `TaskPooolThreadAssignmentPolicy` now has two additional fields: `on_thread_spawn` and `on_thread_destroy`. Please consider defaulting them to `None`.

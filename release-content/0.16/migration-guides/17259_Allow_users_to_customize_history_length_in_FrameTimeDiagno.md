@@ -1,0 +1,1 @@
+`FrameTimeDiagnosticsPlugin` now contains two fields. Use `FrameTimeDiagnosticsPlugin::default()` to match Bevy’s previous behavior or, for example, `FrameTimeDiagnosticsPlugin::new(60)` to configure it.

@@ -1,0 +1,1 @@
+If you are manually creating a `ReflectComponentFns` struct, the `reflect` function now takes `FilteredResources` instead `&World`, and there is a new `reflect_mut` function that takes `FilteredResourcesMut`.

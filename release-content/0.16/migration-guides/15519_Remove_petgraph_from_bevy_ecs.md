@@ -1,0 +1,1 @@
+The `Dag::graph` method no longer returns a `petgraph` `DiGraph` and instead returns the new `DiGraph` type within `bevy_ecs`. Edge and node iteration methods are provided so conversion to the `petgraph` type should be trivial if required.
