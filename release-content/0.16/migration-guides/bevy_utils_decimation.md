@@ -5,70 +5,74 @@ Note that certain items have been completely removed, see below for further deta
 
 **Re-Exports**
 
-| Item                    | 0.15 Path             | 0.16 Path                                      |
-| ----------------------- | --------------------- | ---------------------------------------------- |
-| `hashbrown`             | `bevy_utils`          | _Removed_                                      |
-| `tracing`               | `bevy_utils`          | `bevy_log`                                     |
+| Item        | 0.15 Path    | 0.16 Path  |
+| ----------- | ------------ | ---------- |
+| `hashbrown` | `bevy_utils` | _Removed_  |
+| `tracing`   | `bevy_utils` | `bevy_log` |
 
 **Structs**
 
-| Item                    | 0.15 Path             | 0.16 Path                                      |
-| ----------------------- | --------------------- | ---------------------------------------------- |
-| `AHasher`               | `bevy_utils`          | `ahash`                                        |
-| `Duration`              | `bevy_utils`          | `core::time`                                   |
-| `FixedState`            | `bevy_utils`          | `bevy_platform_support::hash`                  |
-| `Hashed`                | `bevy_utils`          | `bevy_platform_support::hash`                  |
-| `Instant`               | `bevy_utils`          | `bevy_platform_support::time`                  |
-| `NoOpHash`              | `bevy_utils`          | `bevy_platform_support::time`                  |
-| `PassHash`              | `bevy_utils`          | `bevy_platform_support::time`                  |
-| `PassHasher`            | `bevy_utils`          | `bevy_platform_support::time`                  |
-| `RandomState`           | `bevy_utils`          | `bevy_platform_support::time`                  |
-| `SystemTime`            | `bevy_utils`          | `std::time`                                    |
-| `SystemTimeError`       | `bevy_utils`          | `std::time`                                    |
-| `TryFromFloatSecsError` | `bevy_utils`          | `core::time`                                   |
+| Item                    | 0.15 Path    | 0.16 Path                     |
+| ----------------------- | ------------ | ----------------------------- |
+| `AHasher`               | `bevy_utils` | `ahash`                       |
+| `Duration`              | `bevy_utils` | `core::time`                  |
+| `FixedState`            | `bevy_utils` | `bevy_platform_support::hash` |
+| `Hashed`                | `bevy_utils` | `bevy_platform_support::hash` |
+| `Instant`               | `bevy_utils` | `bevy_platform_support::time` |
+| `NoOpHash`              | `bevy_utils` | `bevy_platform_support::time` |
+| `PassHash`              | `bevy_utils` | `bevy_platform_support::time` |
+| `PassHasher`            | `bevy_utils` | `bevy_platform_support::time` |
+| `RandomState`           | `bevy_utils` | `bevy_platform_support::time` |
+| `SystemTime`            | `bevy_utils` | `std::time`                   |
+| `SystemTimeError`       | `bevy_utils` | `std::time`                   |
+| `TryFromFloatSecsError` | `bevy_utils` | `core::time`                  |
 
 **Traits**
 
-| Item                    | 0.15 Path             | 0.16 Path                                      |
-| ----------------------- | --------------------- | ---------------------------------------------- |
-| `ConditionalSend`       | `bevy_utils`          | `bevy_tasks`                                   |
-| `ConditionalSendFuture` | `bevy_utils`          | `bevy_tasks`                                   |
+| Item                    | 0.15 Path    | 0.16 Path    |
+| ----------------------- | ------------ | ------------ |
+| `ConditionalSend`       | `bevy_utils` | `bevy_tasks` |
+| `ConditionalSendFuture` | `bevy_utils` | `bevy_tasks` |
 
 **Macros**
 
-| Item                    | 0.15 Path             | 0.16 Path                                      |
-| ----------------------- | --------------------- | ---------------------------------------------- |
-| `all_tuples`            | `bevy_utils`          | `variadics_please`                             |
-| `all_tuples_with_size`  | `bevy_utils`          | `variadics_please`                             |
-| `debug_once`            | `bevy_utils`          | `bevy_log`                                     |
-| `detailed_trace`        | `bevy_utils`          | _Removed_                                      |
-| `error_once`            | `bevy_utils`          | `bevy_log`                                     |
-| `info_once`             | `bevy_utils`          | `bevy_log`                                     |
-| `trace_once`            | `bevy_utils`          | `bevy_log`                                     |
-| `warn_once`             | `bevy_utils`          | `bevy_log`                                     |
+| Item                   | 0.15 Path    | 0.16 Path          |
+| ---------------------- | ------------ | ------------------ |
+| `assert_object_safe`   | `bevy_utils` | _Removed_          |
+| `debug`                | `bevy_utils` | `bevy_log`         |
+| `error`                | `bevy_utils` | `bevy_log`         |
+| `info`                 | `bevy_utils` | `bevy_log`         |
+| `warn`                 | `bevy_utils` | `bevy_log`         |
+| `all_tuples`           | `bevy_utils` | `variadics_please` |
+| `all_tuples_with_size` | `bevy_utils` | `variadics_please` |
+| `debug_once`           | `bevy_utils` | `bevy_log`         |
+| `detailed_trace`       | `bevy_utils` | _Removed_          |
+| `error_once`           | `bevy_utils` | `bevy_log`         |
+| `info_once`            | `bevy_utils` | `bevy_log`         |
+| `trace_once`           | `bevy_utils` | `bevy_log`         |
+| `warn_once`            | `bevy_utils` | `bevy_log`         |
+
+Note that if you were previously relying on `bevy_utils` to get access to
+the re-exported `tracing` macros like `info!`, `warn!` or `debug!`, you should
+now rely on `bevy_log` instead (or `tracing` itself, being sure to keep the versions aligned).
 
 **Functions**
 
-| Item                    | 0.15 Path             | 0.16 Path                                      |
-| ----------------------- | --------------------- | ---------------------------------------------- |
-| `assert_object_safe`    | `bevy_utils`          | _Removed_                                      |
-| `dbg`                   | `bevy_utils`          | _Removed_                                      |
-| `error`                 | `bevy_utils`          | _Removed_                                      |
-| `check_ready`           | `bevy_utils::futures` | `bevy_tasks::futures`                          |
-| `now_or_never`          | `bevy_utils::futures` | `bevy_tasks::futures`                          |
-| `info`                  | `bevy_utils`          | _Removed_                                      |
-| `warn`                  | `bevy_utils`          | _Removed_                                      |
+| Item           | 0.15 Path             | 0.16 Path             |
+| -------------- | --------------------- | --------------------- |
+| `check_ready`  | `bevy_utils::futures` | `bevy_tasks::futures` |
+| `now_or_never` | `bevy_utils::futures` | `bevy_tasks::futures` |
 
 **Type Aliases**
 
-| Item                    | 0.15 Path             | 0.16 Path                                      |
-| ----------------------- | --------------------- | ---------------------------------------------- |
-| `BoxedFuture`           | `bevy_utils`          | `bevy_tasks`                                   |
-| `Entry`                 | `bevy_utils`          | `bevy_platform_support::collections::hash_map` |
-| `HashMap`               | `bevy_utils`          | `bevy_platform_support::collections`           |
-| `HashSet`               | `bevy_utils`          | `bevy_platform_support::collections`           |
-| `StableHashMap`         | `bevy_utils`          | _Removed_                                      |
-| `StableHashSet`         | `bevy_utils`          | _Removed_                                      |
+| Item            | 0.15 Path    | 0.16 Path                                      |
+| --------------- | ------------ | ---------------------------------------------- |
+| `BoxedFuture`   | `bevy_utils` | `bevy_tasks`                                   |
+| `Entry`         | `bevy_utils` | `bevy_platform_support::collections::hash_map` |
+| `HashMap`       | `bevy_utils` | `bevy_platform_support::collections`           |
+| `HashSet`       | `bevy_utils` | `bevy_platform_support::collections`           |
+| `StableHashMap` | `bevy_utils` | _Removed_                                      |
+| `StableHashSet` | `bevy_utils` | _Removed_                                      |
 
 **Removed Items**
 
