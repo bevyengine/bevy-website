@@ -834,7 +834,7 @@ areas = ["Rendering"]
 file_name = "17063_Refactor_and_simplify_custom_projections.md"
 
 [[guides]]
-title = "Remove the type parameter from `check_visibility`, and only invoke it once."
+title = "Remove the type parameter from `check_visibility` and `VisibleEntities`"
 prs = [16812]
 areas = ["Rendering"]
 file_name = "16812_Remove_the_type_parameter_from_check_visibility_and_only_i.md"
