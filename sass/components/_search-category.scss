@@ -1,5 +1,6 @@
 .search-category {
   --search-category-bg-color: var(--search-category-default-bg-color);
+  @include hack-search-category-modifier-vars(default);
 
   background-color: transparent;
   border: 1px solid var(--search-category-border-color);
@@ -12,48 +13,57 @@
 
   &:hover {
     color: var(--search-category-text-hover-color);
-    background-color: #{unquote('rgb(from var(--search-category-default-bg-hover-color) r g b / 0.05)')};
+    background-color: var(--search-category-default-bg-hover-color);
+    // background-color: #{unquote('rgb(from var(--search-category-default-bg-hover-color) r g b / 0.05)')};
   }
 
   &--quickstart,
   &--book {
-    --search-category-bg-color: var(--search-category-cat-book-bg-color);
+    --search-category-bg-color: var(--search-category-book-bg-color);
+    @include hack-search-category-modifier-vars(book);
   }
 
   &--examples {
-    --search-category-bg-color: var(--search-category-cat-examples-bg-color);
+    --search-category-bg-color: var(--search-category-examples-bg-color);
+    @include hack-search-category-modifier-vars(examples);
   }
 
   &--migrations {
-    --search-category-bg-color: var(--search-category-cat-migrations-bg-color);
+    --search-category-bg-color: var(--search-category-migrations-bg-color);
+    @include hack-search-category-modifier-vars(migrations);
   }
 
   &--errors {
-    --search-category-bg-color: var(--search-category-cat-errors-bg-color);
+    --search-category-bg-color: var(--search-category-errors-bg-color);
+    @include hack-search-category-modifier-vars(errors);
   }
 
   &--news {
-    --search-category-bg-color: var(--search-category-cat-news-bg-color);
+    --search-category-bg-color: var(--search-category-news-bg-color);
+    @include hack-search-category-modifier-vars(news);
   }
 
   &--contribute {
-    --search-category-bg-color: var(--search-category-cat-contribute-bg-color);
+    --search-category-bg-color: var(--search-category-contribute-bg-color);
+    @include hack-search-category-modifier-vars(contribute);
   }
 
   &--active {
-    --text-color: #{unquote("hsl(from var(--search-category-bg-color) h s 90)")};
+    // --text-color: #{unquote("hsl(from var(--search-category-bg-color) h s 90)")};
 
     background-color: var(--search-category-bg-color);
     color: var(--text-color);
-    border-color: unquote(
-      "hsl(from var(--search-category-bg-color) h s calc(l + 10))"
-    );
+    border-color: var(--border-color);
+    // border-color: unquote(
+    //   "hsl(from var(--search-category-bg-color) h s calc(l + 10))"
+    // );
 
     &:hover {
       color: var(--text-color);
-      background-color: unquote(
-        "hsl(from var(--search-category-bg-color) h s calc(l + 4))"
-      );
+      background-color: var(--bg-hover-color);
+      // background-color: unquote(
+      //   "hsl(from var(--search-category-bg-color) h s calc(l + 4))"
+      // );
     }
   }
 

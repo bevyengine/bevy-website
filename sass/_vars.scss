@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Typography
 $size-body: 16px; // Usual browser default size
 $size-body-mobile: 14px; // Size for mobile
@@ -34,6 +36,38 @@ $mobile-menu-width: 300px;
 $content-top-margin: 30px;
 $border-radius: 10px;
 
+$color-neutral-40: #666;
+
+$color-black: #000;
+$color-white: #fff;
+
+$color-dark-search-category-default-bg: $color-neutral-40;
+$color-dark-search-category-book-bg: #537134;
+$color-dark-search-category-examples-bg: #885d26;
+$color-dark-search-category-migrations-bg: #2b5e77;
+$color-dark-search-category-errors-bg: #953562;
+$color-dark-search-category-news-bg: #2c5580;
+$color-dark-search-category-contribute-bg: #78527e;
+
+$color-light-search-category-book-bg: #5b8b2c;
+$color-light-search-category-examples-bg: #b96f0e;
+$color-light-search-category-migrations-bg: #455f6b;
+$color-light-search-category-news-bg: #2c65a2;
+
+// TODO: Remove when CSS Relative Colors are available
+@mixin hack-search-category-computed-colors($category, $color) {
+  --search-category-#{$category}-bg-hover-color: #{color.adjust($color, $lightness: 4%)};
+  --search-category-#{$category}-border-color: #{color.adjust($color, $lightness: 10%)};
+  --search-category-#{$category}-text-color: #{color.change($color, $lightness: 90%)};
+}
+
+// TODO: Remove when CSS Relative Colors are available, check: `_search-category.scss`
+@mixin hack-search-category-modifier-vars($category) {
+  --bg-hover-color: var(--search-category-#{$category}-bg-hover-color);
+  --border-color: var(--search-category-#{$category}-border-color);
+  --text-color: var(--search-category-#{$category}-text-color);
+}
+
 // CSS Vars
 :root {
   // Typography
@@ -52,7 +86,7 @@ $border-radius: 10px;
   --color-neutral-33: #555;
   --color-neutral-33b: #535353;
   --color-neutral-36: #59595e;
-  --color-neutral-40: #666;
+  --color-neutral-40: #{$color-neutral-40};
   --color-neutral-42: #6b6b6b;
   --color-neutral-45: #737373;
   --color-neutral-50: #808080;
@@ -75,8 +109,8 @@ $border-radius: 10px;
   --color-neutral-96: #f0effb;
   --color-neutral-97: #f7f7f7;
 
-  --color-black: #000;
-  --color-white: #fff;
+  --color-black: #{$color-black};
+  --color-white: #{$color-white};
 
   // Blues by lightness
   --color-blue-21: #2f2745;
@@ -126,7 +160,7 @@ $border-radius: 10px;
   --asset-version-select-border-color: var(--color-neutral-22);
   --asset-version-select-border-hover-color: var(--color-neutral-42);
 
-  --backdrop-color: #{unquote('rgb(from var(--color-black) r g b / 0.2)')};
+  --backdrop-color: #{rgba($color-black, 0.2)};
 
   --bevy-instance-canvas-color: var(--color-neutral-18);
   --bevy-instance-text-shadow-color: var(--color-black);
@@ -326,17 +360,26 @@ $border-radius: 10px;
   --search-no-results-color: var(--color-neutral-75);
   --search-tip-color: var(--color-neutral-67);
 
-  --search-category-default-bg-color: var(--color-neutral-40);
-  --search-category-default-bg-hover-color: var(--color-white);
+  --search-category-default-bg-color: #{$color-dark-search-category-default-bg};
+  --search-category-default-bg-hover-color: #{rgba($color-white, 0.05)};
   --search-category-border-color: var(--color-neutral-27);
   --search-category-text-color: var(--color-neutral-67);
   --search-category-text-hover-color: var(--color-white);
-  --search-category-cat-book-bg-color: #537134;
-  --search-category-cat-examples-bg-color: #885d26;
-  --search-category-cat-migrations-bg-color: #2b5e77;
-  --search-category-cat-errors-bg-color: #953562;
-  --search-category-cat-news-bg-color: #2c5580;
-  --search-category-cat-contribute-bg-color: #78527e;
+  --search-category-book-bg-color: #{$color-dark-search-category-book-bg};
+  --search-category-examples-bg-color: #{$color-dark-search-category-examples-bg};
+  --search-category-migrations-bg-color: #{$color-dark-search-category-migrations-bg};
+  --search-category-errors-bg-color: #{$color-dark-search-category-errors-bg};
+  --search-category-news-bg-color: #{$color-dark-search-category-news-bg};
+  --search-category-contribute-bg-color: #{$color-dark-search-category-contribute-bg};
+
+  --search-category-default-border-color: #{color.adjust($color-dark-search-category-default-bg, $lightness: 10%)};
+  --search-category-default-text-color: #{color.change($color-dark-search-category-default-bg, $lightness: 90%)};
+  @include hack-search-category-computed-colors(book, $color-dark-search-category-book-bg);
+  @include hack-search-category-computed-colors(examples, $color-dark-search-category-examples-bg);
+  @include hack-search-category-computed-colors(migrations, $color-dark-search-category-migrations-bg);
+  @include hack-search-category-computed-colors(errors, $color-dark-search-category-errors-bg);
+  @include hack-search-category-computed-colors(news, $color-dark-search-category-news-bg);
+  @include hack-search-category-computed-colors(contribute, $color-dark-search-category-contribute-bg);
 
   --search-result-bg-color: var(--color-black);
   --search-result-bg-hover-color: var(--color-white);
@@ -493,14 +536,19 @@ $border-radius: 10px;
     --search-no-results-color: var(--color-neutral-40);
     --search-tip-color: var(--color-neutral-40);
   
-    --search-category-default-bg-hover-color: var(--color-black);
+    --search-category-default-bg-hover-color: #{rgba($color-black, 0.05)};
     --search-category-border-color: var(--color-neutral-67);
     --search-category-text-color: var(--color-neutral-33);
     --search-category-text-hover-color: var(--color-black);
-    --search-category-cat-book-bg-color: #5b8b2c;
-    --search-category-cat-examples-bg-color: #b96f0e;
-    --search-category-cat-migrations-bg-color: #455f6b;
-    --search-category-cat-news-bg-color: #2c65a2;
+    --search-category-book-bg-color: #{$color-light-search-category-book-bg};
+    --search-category-examples-bg-color: #{$color-light-search-category-examples-bg};
+    --search-category-migrations-bg-color: #{$color-light-search-category-migrations-bg};
+    --search-category-news-bg-color: #{$color-light-search-category-news-bg};
+
+    @include hack-search-category-computed-colors(book, $color-light-search-category-book-bg);
+    @include hack-search-category-computed-colors(examples, $color-light-search-category-examples-bg);
+    @include hack-search-category-computed-colors(migrations, $color-light-search-category-migrations-bg);
+    @include hack-search-category-computed-colors(news, $color-light-search-category-news-bg);
   
     --search-result-bg-color: var(--color-white);
     --search-result-bg-hover-color: var(--color-black);
