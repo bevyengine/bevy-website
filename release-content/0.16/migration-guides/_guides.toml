@@ -5,12 +5,6 @@ areas = ["Accessibility", "Input", "UI"]
 file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
 
 [[guides]]
-title = "Incorporate all node weights in additive blending"
-prs = [16279]
-areas = ["Animation"]
-file_name = "16279_Incorporate_all_node_weights_in_additive_blending.md"
-
-[[guides]]
 title = "Add ways to configure `EasingFunction::Steps` via new `StepConfig`"
 prs = [17752]
 areas = ["Animation", "Math"]
