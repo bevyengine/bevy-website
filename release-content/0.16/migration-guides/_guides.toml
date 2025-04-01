@@ -233,8 +233,8 @@ areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"
 
 [[guides]]
-title = "Make Query::single (and friends) return a Result"
-prs = [18082]
+title = "Unified error handling"
+prs = [18082, 18144]
 areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
