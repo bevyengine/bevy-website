@@ -107,7 +107,7 @@ areas = ["ECS"]
 file_name = "18555_Improved_require_syntax.md"
 
 [[guides]]
-title = "Add `EntityDoesNotExistError`, replace cases of `Entity` as an error, do some easy Resultification"
+title = "Return `EntityDoesNotExistError` on error for several methods"
 prs = [17855]
 areas = ["ECS"]
 file_name = "17855_Add_EntityDoesNotExistError_replace_cases_of_Entity_as_an_.md"
