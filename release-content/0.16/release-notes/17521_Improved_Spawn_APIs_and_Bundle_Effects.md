@@ -15,7 +15,7 @@ commands
     });
 ```
 
-We have big plans to make spawning top-tier with our [Next Generation Scene / UI System](https://github.com/bevyengine/bevy/discussions/14437) (BSN). An important stepping stone on that path is making it possible to express hierarchies directly via data, rather than using builder methods. The addition of Relationships further increases the value of building such a system, as _all_ relationships can benefit from it.
+We have big plans to improve Bevy's spawning experience with our [Next Generation Scene / UI System](https://github.com/bevyengine/bevy/discussions/14437) (BSN). An important stepping stone on that path is making it possible to express hierarchies directly via data, rather than using builder methods. The addition of Relationships further increases the value of building such a system, as _all_ relationships can benefit from it.
 
 In **Bevy 0.16** we have vastly improved the ergonomics of spawning hierarchies:
 
