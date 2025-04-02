@@ -5,9 +5,11 @@ commands
     .spawn(Player)
     .with_children(|p| {
         p.spawn(RightHand).with_children(|p| {
+            p.spawn(Glove);
             p.spawn(Sword);
         });
         p.spawn(LeftHand).with_children(|p| {
+            p.spawn(Glove);
             p.spawn(Shield);
         });
     });
@@ -21,9 +23,9 @@ In **Bevy 0.16** we have vastly improved the ergonomics of spawning hierarchies:
 commands.spawn((
     Player,
     children![
-        (RightHand, children![Sword]),
-        (LeftHand, children![Shield]),
-    ]
+        (RightHand, children![Glove, Sword]),
+        (LeftHand, children![Glove, Shield]),
+    ],
 ));
 ```
 
@@ -35,8 +37,8 @@ fn player(name: &str) -> impl Bundle {
         Player,
         Name::new(name),
         children![
-            (RightHand, children![Sword]),
-            (LeftHand, children![Shield]),
+            (RightHand, children![Glove, Sword]),
+            (LeftHand, children![Glove, Shield]),
         ]
     )
 }
@@ -53,13 +55,13 @@ commands.spawn((
     Children::spawn((
         Spawn((
             RightHand,
-            Children::spawn(Spawn(Sword))
+            Children::spawn((Spawn(Glove), Spawn(Sword))),
         )),
         Spawn((
             LeftHand,
-            Children::spawn(Spawn(Shield))
+            Children::spawn((Spawn(Glove), Spawn(Shield))),
         )),
-    ))
+    )),
 ));
 ```
 
