@@ -55,7 +55,7 @@ We also took this chance to improve our spawn APIs more generally. Read the next
 Note that this is just the first step for relationships. We have plans to expand their capabilities:
 
 1. Many-To-Many Relationships: The current system is one-to-many (ex: The `ChildOf` Relationship points to "one" target entity and the `RelationshipTarget` can be targeted by "many" child entities). Some relationships could benefit from supporting many relationship targets.
-2. Fragmenting Relationships: The current system does not "fragment" ECS archetypes (Ex: `(Player, ChildOf(e1))`, and `(Player, ChildOf(e2))` exist in the same archetype). In some cases, for performance or logic reasons, a relationship might want to fragment the archetype based on its _value_ rather than just its type. Fragmenting Relationships would enable these cases to opt-in to fragmenting behavior.
+2. Fragmenting Relationships: The current system does not "fragment" ECS archetypes (Ex: `(Player, ChildOf(e1))`, and `(Player, ChildOf(e2))` exist in the same archetype). In some cases, for performance or logic reasons, a relationship might want to fragment the archetype based on its _value_ rather than just its type. Fragmenting Relationships would enable these cases to opt in to fragmenting behavior.
 
 [`Relationship`]: https://dev-docs.bevyengine.org/bevy/ecs/relationship/trait.Relationship.html
 [`RelationshipTarget`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.RelationshipTarget.html
