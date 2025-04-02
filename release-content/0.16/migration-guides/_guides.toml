@@ -1,41 +1,29 @@
 [[guides]]
-title = "Replace bevy_a11y::Focus with InputFocus"
+title = "Replace `bevy::a11y::Focus` with `bevy::input_focus::Focus`"
 prs = [16863]
 areas = ["Accessibility", "Input", "UI"]
 file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
 
 [[guides]]
-title = "Incorporate all node weights in additive blending"
-prs = [16279]
-areas = ["Animation"]
-file_name = "16279_Incorporate_all_node_weights_in_additive_blending.md"
-
-[[guides]]
-title = "Add ways to configure `EasingFunction::Steps` via new `StepConfig`"
+title = "Configure `EasingFunction::Steps` jumping with `JumpAt`"
 prs = [17752]
 areas = ["Animation", "Math"]
 file_name = "17752_Add_ways_to_configure_EasingFunctionSteps_via_new_StepConf.md"
 
 [[guides]]
-title = "Fix `EaseFunction::Exponential*` to exactly hit (0, 0) and (1, 1)"
+title = "Fix `EaseFunction::Exponential*` to be continuous"
 prs = [16910]
 areas = ["Animation", "Math"]
 file_name = "16910_Fix_EaseFunctionExponential_to_exactly_hit_0_0_and_1_1.md"
 
 [[guides]]
-title = "Headless by features"
-prs = [16401]
-areas = ["App"]
-file_name = "16401_Headless_by_features.md"
-
-[[guides]]
-title = "Remove the `meta` field from `LoadedAsset` and `ErasedLoadedAsset`."
+title = "Remove `meta` field from `LoadedAsset` and `ErasedLoadedAsset`"
 prs = [15487]
 areas = ["Assets"]
 file_name = "15487_Remove_the_meta_field_from_LoadedAsset_and_ErasedLoadedAss.md"
 
 [[guides]]
-title = "Weak handle migration"
+title = "Deprecate `Handle::weak_from_u128()`"
 prs = [17695]
 areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
@@ -59,13 +47,13 @@ areas = ["Audio"]
 file_name = "16813_Add_ability_to_mute_audio_sinks.md"
 
 [[guides]]
-title = "Rename AudioSinkPlayback::toggle to toggle_playback"
+title = "Rename `AudioSinkPlayback::toggle()` to `toggle_playback()`"
 prs = [16837]
 areas = ["Audio"]
 file_name = "16837_Rename_AudioSinkPlaybacktoggle_to_toggle_playback.md"
 
 [[guides]]
-title = "Support decibels in bevy_audio::Volume"
+title = "Support decibels in `Volume`"
 prs = [17605]
 areas = ["Audio"]
 file_name = "17605_Support_decibels_in_bevy_audioVolume.md"
@@ -179,8 +167,8 @@ areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
 
 [[guides]]
-title = "Fallible systems"
-prs = [16589]
+title = "Fallible systems and custom schedule executors"
+prs = [16589, 18541, 18666]
 areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
@@ -233,8 +221,8 @@ areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"
 
 [[guides]]
-title = "Make Query::single (and friends) return a Result"
-prs = [18082]
+title = "Unified error handling"
+prs = [18082, 18144]
 areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
@@ -834,7 +822,7 @@ areas = ["Rendering"]
 file_name = "17063_Refactor_and_simplify_custom_projections.md"
 
 [[guides]]
-title = "Remove the type parameter from `check_visibility`, and only invoke it once."
+title = "Remove the type parameter from `check_visibility` and `VisibleEntities`"
 prs = [16812]
 areas = ["Rendering"]
 file_name = "16812_Remove_the_type_parameter_from_check_visibility_and_only_i.md"
