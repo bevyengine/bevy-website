@@ -101,12 +101,6 @@ areas = ["Diagnostics"]
 file_name = "17259_Allow_users_to_customize_history_length_in_FrameTimeDiagno.md"
 
 [[guides]]
-title = "Event source location tracking"
-prs = [16778]
-areas = ["Diagnostics", "ECS"]
-file_name = "16778_Event_source_location_tracking.md"
-
-[[guides]]
 title = "Improved Required Component Syntax"
 prs = [18555]
 areas = ["ECS"]
