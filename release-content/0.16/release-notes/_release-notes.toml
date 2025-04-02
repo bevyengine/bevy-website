@@ -187,7 +187,7 @@ file_name = "15074_bevy_reflect_Function_Overloading_Generic__Variadic_Functi.md
 # Math
 
 [[release_notes]]
-title = "Derivative access patterns for curves"
+title = "Curve derivatives"
 authors = ["@mweatherley"]
 contributors = ["@alice-i-cecile"]
 prs = [16503]
