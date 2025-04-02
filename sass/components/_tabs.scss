@@ -19,11 +19,11 @@
     border-radius: 8px;
 
     &:hover {
-      background-color: unquote("rgb(from var(--tabs-bg-color) r g b / 0.05)");
+      background-color: var(--tabs-bg-hover-color);
     }
 
     &:active {
-      background-color: unquote("rgb(from var(--tabs-bg-color) r g b / 0.1)");
+      background-color: var(--tabs-bg-active-color);
     }
 
     &:after {
