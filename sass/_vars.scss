@@ -396,8 +396,8 @@ $color-light-search-category-news-bg: #2c65a2;
   @include hack-search-category-computed-colors(news, $color-dark-search-category-news-bg);
   @include hack-search-category-computed-colors(contribute, $color-dark-search-category-contribute-bg);
 
-  --search-result-bg-color: var(--color-black);
-  --search-result-bg-hover-color: var(--color-white);
+  --search-result-bg-color: #{rgba($color-black, 0.15)};
+  --search-result-bg-hover-color: #{rgba($color-white, 0.04)};
   --search-result-title-color: var(--color-white);
   --search-result-hash-sign-color: var(--color-neutral-75);
   --search-result-excerpt-color: var(--color-neutral-53);
@@ -566,9 +566,9 @@ $color-light-search-category-news-bg: #2c65a2;
     @include hack-search-category-computed-colors(examples, $color-light-search-category-examples-bg);
     @include hack-search-category-computed-colors(migrations, $color-light-search-category-migrations-bg);
     @include hack-search-category-computed-colors(news, $color-light-search-category-news-bg);
-  
-    --search-result-bg-color: var(--color-white);
-    --search-result-bg-hover-color: var(--color-black);
+
+    --search-result-bg-color: #{rgba($color-white, 0.15)};
+    --search-result-bg-hover-color: #{rgba($color-black, 0.04)};
     --search-result-title-color: var(--color-black);
     --search-result-hash-sign-color: var(--color-neutral-50);
     --search-result-excerpt-term-bg-color: var(--color-black);
