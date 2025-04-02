@@ -81,7 +81,7 @@ world.spawn((
 ))
 ```
 
-Notably, this API works for _all_ Relationship types. For example, you could spawn a `Likes` / `LikedBy` relationship hierarchy (as defined in the relationships section above) like this:
+Notably, this API works for _all_ relationship types. For example, you could spawn a `Likes` / `LikedBy` relationship hierarchy (as defined in the relationships section above) like this:
 
 ```rust
 world.spawn((
