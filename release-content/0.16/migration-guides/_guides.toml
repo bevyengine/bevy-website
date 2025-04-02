@@ -77,7 +77,7 @@ areas = ["Cross-Cutting"]
 file_name = "17967_Upgrade_to_Rust_Edition_2024.md"
 
 [[guides]]
-title = "BRP strict field in query"
+title = "Add `strict` field to BRP `bevy/query`"
 prs = [16725]
 areas = ["Dev-Tools"]
 file_name = "16725_BRP_strict_field_in_query.md"
