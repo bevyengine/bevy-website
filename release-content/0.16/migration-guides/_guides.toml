@@ -1,4 +1,10 @@
 [[guides]]
+title = "`HashMap` and `HashSet` require more explicit types"
+prs = [15801, 17460, 18350]
+areas = ["Utils"]
+file_name = "hash_explicit_types.md"
+
+[[guides]]
 title = "Replace `bevy::a11y::Focus` with `bevy::input_focus::Focus`"
 prs = [16863]
 areas = ["Accessibility", "Input", "UI"]
