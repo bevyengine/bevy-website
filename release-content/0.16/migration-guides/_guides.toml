@@ -101,7 +101,7 @@ areas = ["Diagnostics"]
 file_name = "17259_Allow_users_to_customize_history_length_in_FrameTimeDiagno.md"
 
 [[guides]]
-title = "Improved Required Component Syntax"
+title = "Improve required component syntax"
 prs = [18555]
 areas = ["ECS"]
 file_name = "18555_Improved_require_syntax.md"
