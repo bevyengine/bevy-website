@@ -46,9 +46,12 @@ $border-radius: 10px;
 // the `sass:color` package to derive new colors. If a color is not going to be
 // used to derive a new color, then CSS vars should be used instead.
 //
-// See PR: https://github.com/bevyengine/bevy-website/pull/1953
-// See how to revert `.search-category`: https://github.com/bevyengine/bevy-website/pull/1935/commits/30d94f6e9316b03d6741fbdfb4ea493f06485482
 // See Relative Colors support: https://caniuse.com/css-relative-colors
+//
+// To revert:
+// - Original PR: https://github.com/bevyengine/bevy-website/pull/1953
+// - `.search-category`: https://github.com/bevyengine/bevy-website/pull/1935/commits/30d94f6e9316b03d6741fbdfb4ea493f06485482
+// - `.search-result`: https://github.com/bevyengine/bevy-website/pull/1935/commits/0e0069784f93ab27273384ced13833657c73459e
 $color-neutral-17: #2c2c2d;
 $color-neutral-40: #666;
 $color-neutral-93: #ececec;
