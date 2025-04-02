@@ -34,7 +34,7 @@ assert_eq!(&**liked_by, &[e2, e3]);
 
 The [`Relationship`] component is the "source of truth", and the [`RelationshipTarget`] component is updated to reflect that source of truth. This means that adding/removing relationships should always be done via the [`Relationship`] component.
 
-We use this "source of truth" model instead of allowing both components to "drive" for performance reasons. Allowing writes to both sides would require expensive scanning during inserts ensure they are in sync and have no duplicates. The "relationships as the source of truth" approach allows us to make adding relationships constant-time (which is an improvement over previous Bevy versions!).
+We use this "source of truth" model instead of allowing both components to "drive" for performance reasons. Allowing writes to both sides would require expensive scanning during inserts to ensure they are in sync and have no duplicates. The "relationships as the source of truth" approach allows us to make adding relationships constant-time (which is an improvement over previous Bevy versions!).
 
 Relationships are built on top of Bevy's [Component Hooks](/news/bevy-0-14/#ecs-hooks-and-observers), which immediately and efficiently maintains the connection between the [`Relationship`] and the [`RelationshipTarget`] by plugging directly into the component add/remove/update lifecycle. In combination with the new Immutable Components feature (relationship components are immutable), this ensures data integrity is maintained no matter what developers do!
 
