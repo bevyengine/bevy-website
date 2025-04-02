@@ -1,7 +1,7 @@
 `hashbrown`'s default hasher [has changed in `hashbrown 0.15`](https://github.com/rust-lang/hashbrown/pull/563), resulting in serious regressions in type inference and method availability for Bevy users of `HashSet` and `HashMap`.
 We have updated versions to avoid compiling duplicate copies of the crate, as Bevy's own dependencies have already updated.
 
-Bevy uses a different (faster on average, but slower in the face of malicious inputs) than `hashbrown`'s new default hasher.
+Bevy uses a different hasher (faster on average, but slower in the face of malicious inputs) than `hashbrown`'s new default hasher.
 Unfortunately, many methods are only implemented for the slower `HashMap` and `HashSet` types with the slower `RandomState` type as a generic argument, rather than the Bevy's preferred `FixedHasher` type.
 
 For example, the `HashMap::new` method will produce a type that uses the incorrect hasher, leading to errors like:
