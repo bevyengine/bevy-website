@@ -36,7 +36,7 @@ The [`Relationship`] component is the "source of truth", and the [`RelationshipT
 
 We use this "source of truth" model instead of allowing both components to "drive" for performance reasons. Allowing writes to both sides would require expensive scanning during inserts to ensure they are in sync and have no duplicates. The "relationships as the source of truth" approach allows us to make adding relationships constant-time (which is an improvement over previous Bevy versions!).
 
-Relationships are built on top of Bevy's [Component Hooks](/news/bevy-0-14/#ecs-hooks-and-observers), which immediately and efficiently maintains the connection between the [`Relationship`] and the [`RelationshipTarget`] by plugging directly into the component add/remove/update lifecycle. In combination with the new Immutable Components feature (relationship components are immutable), this ensures data integrity is maintained no matter what developers do!
+Relationships are built on top of Bevy's [Component Hooks](/news/bevy-0-14/#ecs-hooks-and-observers), which immediately and efficiently maintains the connection between the [`Relationship`] and the [`RelationshipTarget`] by plugging directly into the component add/remove/update lifecycle. In combination with the new [Immutable Components](#immutable-components) feature (relationship components are immutable), this ensures data integrity is maintained no matter what developers do!
 
 Bevy's existing hierarchy system has been fully replaced by the new [`ChildOf`] [`Relationship`] and [`Children`] [`RelationshipTarget`]. Adding a child is now as simple as:
 
