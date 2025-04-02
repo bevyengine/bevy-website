@@ -8,14 +8,14 @@ prs = [16372, 16668, 18532]
 file_name = "16372_Add_Immutable_Component_Support.md"
 
 [[release_notes]]
-title = "Relationships (non-fragmenting, one-to-many)"
+title = "Relationships"
 authors = ["@cart"]
 contributors = ["@alice-i-cecile"]
 prs = [17398]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
 
 [[release_notes]]
-title = "Improved Spawn APIs and Bundle Effects"
+title = "Improved Spawn API"
 authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@MrGVSV", "@ecoskey"]
 prs = [17521]
@@ -46,11 +46,11 @@ file_name = "unified_error_handling.md"
 title = "Better location tracking"
 authors = ["@SpecificProtagonist", "@chescock"]
 contributors = [
-	"@alice-i-cecile",
-	"Freya Pines",
-	"@pin3-free",
-	"@mweatherley",
-	"@skimmedsquare",
+    "@alice-i-cecile",
+    "Freya Pines",
+    "@pin3-free",
+    "@mweatherley",
+    "@skimmedsquare",
 ]
 prs = [15607, 16047, 16778, 17075, 17602]
 file_name = "16778_Event_source_location_tracking.md"
@@ -229,40 +229,40 @@ file_name = "17840_Parallel_Transform_Propagation.md"
 title = "Add `no_std` support to `bevy`"
 authors = ["@bushrat011899"]
 contributors = [
-	"@alice-i-cecile",
-	"@BD103",
-	"@BenjaminBrienen",
-	"@hymm",
-	"@Jondolf",
-	"@MrGVSV",
-	"@mweatherley",
-	"@Victoronz",
+    "@alice-i-cecile",
+    "@BD103",
+    "@BenjaminBrienen",
+    "@hymm",
+    "@Jondolf",
+    "@MrGVSV",
+    "@mweatherley",
+    "@Victoronz",
 ]
 prs = [
-	15281,
-	15463,
-	15464,
-	15465,
-	15528,
-	15810,
-	16256,
-	16633,
-	16758,
-	16874,
-	16995,
-	16998,
-	17027,
-	17028,
-	17030,
-	17031,
-	17086,
-	17470,
-	17490,
-	17491,
-	17505,
-	17507,
-	17955,
-	18061,
-	18333,
+    15281,
+    15463,
+    15464,
+    15465,
+    15528,
+    15810,
+    16256,
+    16633,
+    16758,
+    16874,
+    16995,
+    16998,
+    17027,
+    17028,
+    17030,
+    17031,
+    17086,
+    17470,
+    17490,
+    17491,
+    17505,
+    17507,
+    17955,
+    18061,
+    18333,
 ]
 file_name = "17955_Add_no_std_support_to_bevy.md"
