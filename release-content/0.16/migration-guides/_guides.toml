@@ -149,7 +149,7 @@ areas = ["ECS"]
 file_name = "18147_Deprecate_insert_or_spawn_function_family.md"
 
 [[guides]]
-title = "Deprecated Query::many and many_mut"
+title = "Deprecate `Query::many()` and `Query::many_mut()`"
 prs = [18183]
 areas = ["ECS"]
 file_name = "18183_Deprecated_Querymany_and_many_mut.md"
