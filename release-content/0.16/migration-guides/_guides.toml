@@ -131,7 +131,7 @@ areas = ["ECS"]
 file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
 
 [[guides]]
-title = "Create new `NonSendMarker`"
+title = "Improve ergonomics of `NonSendMarker`"
 prs = [18301]
 areas = ["ECS"]
 file_name = "18301_Create_new_NonSendMarker.md"
