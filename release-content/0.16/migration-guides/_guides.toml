@@ -1,5 +1,5 @@
 [[guides]]
-title = "Replace `bevy::a11y::Focus` with `bevy::input_focus::Focus`"
+title = "Replace `bevy::a11y::Focus` with `bevy::input_focus::InputFocus`"
 prs = [16863]
 areas = ["Accessibility", "Input", "UI"]
 file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
@@ -27,12 +27,6 @@ title = "Deprecate `Handle::weak_from_u128()`"
 prs = [17695]
 areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
-
-[[guides]]
-title = "Get names of queued components"
-prs = [18451]
-areas = ["ECS"]
-file_name = "18451_Get_names_of_queued_components.md"
 
 [[guides]]
 title = "Add `AssetChanged` query filter"
@@ -65,7 +59,7 @@ areas = ["Cross-Cutting"]
 file_name = "17955_Add_no_std_support_to_bevy.md"
 
 [[guides]]
-title = "Support for non-browser `wasm`"
+title = "Support for non-browser WASM"
 prs = [17499]
 areas = ["Cross-Cutting"]
 file_name = "17499_Support_for_nonbrowser_wasm.md"
@@ -77,7 +71,7 @@ areas = ["Cross-Cutting"]
 file_name = "17967_Upgrade_to_Rust_Edition_2024.md"
 
 [[guides]]
-title = "BRP strict field in query"
+title = "Add `strict` field to BRP `bevy/query`"
 prs = [16725]
 areas = ["Dev-Tools"]
 file_name = "16725_BRP_strict_field_in_query.md"
@@ -101,19 +95,19 @@ areas = ["Diagnostics"]
 file_name = "17259_Allow_users_to_customize_history_length_in_FrameTimeDiagno.md"
 
 [[guides]]
-title = "Event source location tracking"
-prs = [16778]
-areas = ["Diagnostics", "ECS"]
-file_name = "16778_Event_source_location_tracking.md"
-
-[[guides]]
-title = "Improved Required Component Syntax"
+title = "Improve required component syntax"
 prs = [18555]
 areas = ["ECS"]
 file_name = "18555_Improved_require_syntax.md"
 
 [[guides]]
-title = "Add `EntityDoesNotExistError`, replace cases of `Entity` as an error, do some easy Resultification"
+title = "Get names of queued components"
+prs = [18451]
+areas = ["ECS"]
+file_name = "18451_Get_names_of_queued_components.md"
+
+[[guides]]
+title = "Return `EntityDoesNotExistError` on error for several methods"
 prs = [17855]
 areas = ["ECS"]
 file_name = "17855_Add_EntityDoesNotExistError_replace_cases_of_Entity_as_an_.md"
@@ -125,13 +119,13 @@ areas = ["ECS"]
 file_name = "16694_Cache_systems_by_S_instead_of_SSystem.md"
 
 [[guides]]
-title = "Change `World::try_despawn` and `World::try_insert_batch` to return `Result`"
+title = "Change `World::try_despawn()` and `World::try_insert_batch()` to return `Result`"
 prs = [17376]
 areas = ["ECS"]
 file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_return.md"
 
 [[guides]]
-title = "Convert to fallible system in IntoSystemConfigs"
+title = "Remove `IntoSystemConfigs` implementation for `BoxedSystem<(), ()>`"
 prs = [17051]
 areas = ["ECS"]
 file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
