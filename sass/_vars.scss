@@ -349,6 +349,7 @@ $color-white: #fff;
   --todo-bg-color: rgba(191, 170, 64, 0.3);
   --todo-border-color: rgba(223, 191, 32, 0.5);
 
+  --tree-menu-active-color: var(--color-neutral-93);
   --tree-menu-chevron-filter: brightness(70%);
   --tree-menu-label-active-bg-color: #{rgba($color-neutral-93, 0.1)};
   --tree-menu-label-active-color: var(--color-neutral-93);
@@ -476,6 +477,7 @@ $color-white: #fff;
     --todo-bg-color: rgba(191, 170, 64, 0.3);
     --todo-border-color: rgba(223, 191, 32, 0.5);
 
+    --tree-menu-active-color: var(--color-black);
     --tree-menu-chevron-filter: invert(65%);
     --tree-menu-label-active-bg-color: var(--color-neutral-88);
     --tree-menu-label-active-color: var(--color-black);
