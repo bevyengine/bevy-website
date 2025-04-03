@@ -125,7 +125,7 @@ areas = ["ECS"]
 file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_return.md"
 
 [[guides]]
-title = "Convert to fallible system in IntoSystemConfigs"
+title = "Remove `IntoSystemConfigs` implementation for `BoxedSystem<(), ()>`"
 prs = [17051]
 areas = ["ECS"]
 file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
