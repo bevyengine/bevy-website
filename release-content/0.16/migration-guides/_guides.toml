@@ -119,7 +119,7 @@ areas = ["ECS"]
 file_name = "16694_Cache_systems_by_S_instead_of_SSystem.md"
 
 [[guides]]
-title = "Change `World::try_despawn` and `World::try_insert_batch` to return `Result`"
+title = "Change `World::try_despawn()` and `World::try_insert_batch()` to return `Result`"
 prs = [17376]
 areas = ["ECS"]
 file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_return.md"
