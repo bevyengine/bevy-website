@@ -144,13 +144,6 @@ prs = [17559]
 file_name = "17559_Basic_UI_text_shadows.md"
 
 [[release_notes]]
-title = "Multiple box shadow support"
-authors = ["@ickshonpe"]
-contributors = ["@alice-i-cecile"]
-prs = [16502]
-file_name = "16502_Multiple_box_shadow_support.md"
-
-[[release_notes]]
 title = "Add \"bevy_input_focus\" crate."
 authors = ["@viridia", "@alice-i-cecile"]
 contributors = []
