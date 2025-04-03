@@ -143,7 +143,7 @@ areas = ["ECS"]
 file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_basis.md"
 
 [[guides]]
-title = "Deprecate `insert_or_spawn` function family"
+title = "Deprecate `insert_or_spawn()` function family"
 prs = [18147]
 areas = ["ECS"]
 file_name = "18147_Deprecate_insert_or_spawn_function_family.md"
