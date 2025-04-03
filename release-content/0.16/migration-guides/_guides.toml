@@ -29,12 +29,6 @@ areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
 
 [[guides]]
-title = "Get names of queued components"
-prs = [18451]
-areas = ["ECS"]
-file_name = "18451_Get_names_of_queued_components.md"
-
-[[guides]]
 title = "Add `AssetChanged` query filter"
 prs = [16810]
 areas = ["Assets", "ECS"]
@@ -105,6 +99,12 @@ title = "Improve required component syntax"
 prs = [18555]
 areas = ["ECS"]
 file_name = "18555_Improved_require_syntax.md"
+
+[[guides]]
+title = "Get names of queued components"
+prs = [18451]
+areas = ["ECS"]
+file_name = "18451_Get_names_of_queued_components.md"
 
 [[guides]]
 title = "Return `EntityDoesNotExistError` on error for several methods"
