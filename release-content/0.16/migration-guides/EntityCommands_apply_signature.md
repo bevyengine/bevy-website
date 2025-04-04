@@ -1,4 +1,4 @@
-The `EntityCommands::apply` method now takes an `EntityWorldMut` argument, instead of a `Entity` and a `&mut World` argument.
+The `EntityCommands::apply` method now takes an `EntityWorldMut` argument, instead of an `Entity` and a `&mut World` argument.
 This was done to improve our error handling and better encapsulate the effect of `EntityCommands`, which are focused on mutating a single entity during exclusive world access.
 
 To access the entity affected, use `EntityWorldMut::id`. Before:
