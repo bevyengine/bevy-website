@@ -3,7 +3,7 @@ In games, it's a powerful artistic tool for creating everything from cyberpunk n
 
 Bevy has had bloom since version 0.9, but we're giving artists another simple lever to tweak: the ability to stretch, squash and otherwise distort the effect by setting the 2-dimensional `scale` parameter on the [`Bloom`] component on your camera.
 
-TODO: add image.
+![A realistic high-polygon model of a fancy black Porsche 911 demonstrating anamorphic bloom in its stretched-out tail light glow. Rendered in Bevy 0.16!](anamorphic-car-bloom.png)
 
 When heavily skewed (usually horizontally), this effect is known as **anamorphic bloom**.
 This effect is associated with a cinematic, futuristic vibe, and emulates the unusual geometry of certain film cameras as they compress a wider image onto narrower film.
