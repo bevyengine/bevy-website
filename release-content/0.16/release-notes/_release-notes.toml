@@ -73,9 +73,9 @@ file_name = "16427_Use_multidraw_for_opaque_meshes_when_GPU_culling_is_in_use.md
 
 [[release_notes]]
 title = "Occlusion culling"
-authors = ["@pcwalton"]
+authors = ["@JMS55", "@pcwalton"]
 contributors = []
-prs = [17413, 17934]
+prs = [12898, 17413, 17934]
 file_name = "occlusion_culling.md"
 
 [[release_notes]]

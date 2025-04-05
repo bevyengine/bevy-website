@@ -11,7 +11,7 @@ We can check the resulting depth buffer, count how many pixels are associated wi
 As a result, we can avoid most fragment shading costs (dominated by textures and lighting) for occluded objects, but the vertex shading overhead is still present, in addition to the inherent cost of this fragment testing process.
 
 We can do better than that.
-As [PR #17413] lays out, we're using a modern two-phase occlusion culling (in contrast to a traditional potentially visible sets design), because it works well with the GPU-driven rendering architecture (cold specialization, retained bins) that we've established during this cycle!
+As [PR #17413] lays out, we're adopting the modern two-phase occlusion culling (in contrast to a traditional potentially visible sets design) already used by our virtual geometry rendering, because it works well with the GPU-driven rendering architecture (cold specialization, retained bins) that we've established during this cycle!
 
 For now, this feature is marked as experimental, due to known precision issues that can mark meshes as occluded even when they're not.
 In practice, we're not convinced that this is a serious concern, so please let us know how it goes!
