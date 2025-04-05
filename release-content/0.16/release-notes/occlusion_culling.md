@@ -22,11 +22,11 @@ Small scenes, or those using simpler non-PBR rendering are particularly likely t
 Like always: you need to measure your performance to improve it.
 
 If you're a rendering engineer who'd like to help us resolve these precision issues and stabilize this feature, we're looking to learn from Hans-Kristian Arntzen design in [Granite].
-Chime in at [issue #18711] (and read our [Contributing Guide]) and we can help you get started.
+Chime in at [issue #14062] (and read our [Contributing Guide]) and we can help you get started.
 
 [PR #17413]: https://github.com/bevyengine/bevy/pull/17413
 [`DepthPrepass`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/prepass/struct.DepthPrepass.html
 [`OcclusionCulling`]: https://dev-docs.bevyengine.org/bevy/render/experimental/occlusion_culling/struct.OcclusionCulling.html
-[issue #18711]: https://github.com/bevyengine/bevy/issues/18711
+[issue #14062]: https://github.com/bevyengine/bevy/issues/14062
 [Granite]: https://github.com/Themaister/Granite
 [Contributing Guide]: https://bevyengine.org/learn/contribute/introduction/
