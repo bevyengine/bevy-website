@@ -1,4 +1,4 @@
-When it comes to pushing hardware to support larger levels and more detailed meshes, "simply draw less stuff" is a tried-and-true strategy.
+When it comes to pushing hardware to support larger scenes and more detailed meshes, "simply draw less stuff" is a tried-and-true strategy.
 These techniques are collectively referred to as "culling": we can save work whenever we can determine "this doesn't need to be drawn" for cheaper than it would cost to draw the thing despite its pixels later being overwritten completely.
 
 **Occlusion culling** is the idea that we don't need to draw something that's completely blocked by other opaque objects,
@@ -6,12 +6,12 @@ from the perspective of the camera.
 That makes sense! We don't need to draw a car parked on the other side of a building, even if it's within the range used for fustrum culling.
 
 Before you worry too much: we're already checking for this category of wasted work in some form, via the use of a **depth prepass**.
-A depth prepass renders a simplified version of the scene, recording only the depth (distance from the camera) of each object into the 2-dimensional depth buffer.
+A depth prepass renders the scene with a simplified shader, recording only the depth (distance from the camera) of each object into the 2-dimensional depth buffer.
 Then, during the more expensive main pass, objects that ended up behind something else during this simpler calculation can be skipped.
 Because of this approach, we can avoid most fragment shading costs (dominated by textures and lighting) for occluded objects, but the vertex shading overhead is still present, in addition to the inherent cost of this fragment testing process.
 
 We can do better than that.
-As [PR #17413] lays out, we're adopting the modern two-phase occlusion culling (in contrast to a traditional potentially visible sets design) already used by our virtual geometry rendering, because it works well with the GPU-driven rendering architecture (cold specialization, retained bins) that we've established during this cycle!
+As [PR #17413] lays out, we're adopting the modern two-phase occlusion culling (in contrast to a traditional potentially visible sets design) already used by our virtual geometry rendering, because it works well with the GPU-driven rendering architecture that we've established during this cycle!
 
 For now, this feature is marked as experimental, due to known precision issues that can mark meshes as occluded even when they're not.
 In practice, we're not convinced that this is a serious concern, so please let us know how it goes!
