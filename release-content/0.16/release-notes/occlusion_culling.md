@@ -7,8 +7,8 @@ That makes sense! We don't need to draw a car parked on the other side of a buil
 
 Before you worry too much: we're already checking for this category of wasted work in some form, via the use of a **depth prepass**.
 A depth prepass renders a simplified version of the scene, recording only the depth (distance from the camera) of each object into the 2-dimensional depth buffer.
-We can check the resulting depth buffer, count how many pixels are associated with each object, and then discard objects whose pixels were completely overwritten.
-As a result, we can avoid most fragment shading costs (dominated by textures and lighting) for occluded objects, but the vertex shading overhead is still present, in addition to the inherent cost of this fragment testing process.
+Then, during the more expensive main pass, objects that ended up behind something else during this simpler calculation can be skipped.
+Because of this approach, we can avoid most fragment shading costs (dominated by textures and lighting) for occluded objects, but the vertex shading overhead is still present, in addition to the inherent cost of this fragment testing process.
 
 We can do better than that.
 As [PR #17413] lays out, we're adopting the modern two-phase occlusion culling (in contrast to a traditional potentially visible sets design) already used by our virtual geometry rendering, because it works well with the GPU-driven rendering architecture (cold specialization, retained bins) that we've established during this cycle!
