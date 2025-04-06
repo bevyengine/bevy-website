@@ -155,7 +155,7 @@ areas = ["ECS"]
 file_name = "18183_Deprecated_Querymany_and_many_mut.md"
 
 [[guides]]
-title = "Encapsulate `cfg(feature = \"track_location\")` in a type."
+title = "Encapsulate location tracking data into `MaybeLocation`"
 prs = [17602]
 areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
