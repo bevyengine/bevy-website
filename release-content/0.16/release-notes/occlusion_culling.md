@@ -1,4 +1,4 @@
-When it comes to pushing hardware to support larger levels and more detailed meshes, "simply draw less stuff" is a tried-and-true strategy.
+When it comes to pushing hardware to support larger scenes and more detailed meshes, "simply draw less stuff" is a tried-and-true strategy.
 These techniques are collectively referred to as "culling": we can save work whenever we can determine "this doesn't need to be drawn" for cheaper than it would cost to draw the thing despite its pixels later being overwritten completely.
 
 **Occlusion culling** is the idea that we don't need to draw something that's completely blocked by other opaque objects,
