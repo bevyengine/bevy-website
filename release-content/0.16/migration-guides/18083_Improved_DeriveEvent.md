@@ -1,11 +1,7 @@
-
 In Bevy 0.16 you can now use `#[derive(Event)]` for more specialized implementations. 
 
 ```rust
-
-// before
-use bevy_ecs::prelude::*;
-
+// 0.15
 struct MyEvent;
 
 impl Event for MyEvent {
@@ -13,9 +9,7 @@ impl Event for MyEvent {
     type Traversal = &'static ChildOf
 }
 
-// after
-use bevy_ecs::prelude::*;
-
+// 0.16
 #[derive(Event)]
 #[event(traversal = &'static ChildOf, auto_propagate)]
 struct MyEvent;
