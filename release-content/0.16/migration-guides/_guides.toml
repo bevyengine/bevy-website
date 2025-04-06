@@ -167,7 +167,7 @@ areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
 [[guides]]
-title = "`EntityCommands::apply` now takes an `EntityWorldMut` argument"
+title = "`EntityCommands::apply()` now takes an `EntityWorldMut` argument"
 prs = [17215]
 areas = ["ECS"]
 file_name = "EntityCommands_apply_signature.md"
