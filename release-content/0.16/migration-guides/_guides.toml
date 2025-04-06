@@ -1030,3 +1030,9 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
+
+[[guides]]
+title = "Improved Derive(Event)"
+prs = [18083]
+areas = ["Ecs"]
+file_name = "Improved_DeriveEvent.md"
