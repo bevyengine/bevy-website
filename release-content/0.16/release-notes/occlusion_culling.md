@@ -6,7 +6,7 @@ from the perspective of the camera.
 That makes sense! We don't need to draw a car parked on the other side of a building (even if it's within the range used for fustrum culling), and we *never* need to draw all of the teeth inside of a character's closed mouth.
 
 Before you worry too much: we're already checking for this category of wasted work in some form, via the use of a **depth prepass**.
-A depth prepass renders a simplified version of the scene, recording only the depth (distance from the camera) of each object into the 2-dimensional depth buffer.
+A depth prepass renders the scene with a simplified shader, recording only the depth (distance from the camera) of each object into the 2-dimensional depth buffer.
 We can check the resulting depth buffer, count how many pixels are associated with each object, and then discard objects whose pixels were completely overwritten.
 As a result, we can avoid most fragment shading costs (dominated by textures and lighting) for occluded objects, but the vertex shading overhead is still present, in addition to the inherent cost of this fragment testing process.
 
