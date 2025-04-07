@@ -5,6 +5,8 @@ If you have an eye for light (or training in visual arts), you'll notice that sh
 That's a specular highlight!
 In Bevy 0.16, we've implemented a standard physically-based rendering (PBR) feature of specular highlights: the ability to tint their color.
 
+![A shiny floating sphere with an iridescent multicolored sheen. It reminds you of a Christmas tree ornament. You can see a reflection of a city scene in it.](specular-tint-sphere.png)
+
 This can be done uniformly across the material, by simply setting the `specular_tint` field on the [`StandardMaterial`] for your object.
 
 Like many other material properties (color, normals, emissiveness, roughness etc), this can be varied over the material via the use of a texture map,
