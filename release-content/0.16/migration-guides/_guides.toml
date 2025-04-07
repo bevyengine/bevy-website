@@ -167,12 +167,6 @@ areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
 [[guides]]
-title = "`EntityCommands::apply()` now takes an `EntityWorldMut` argument"
-prs = [17215]
-areas = ["ECS"]
-file_name = "EntityCommands_apply_signature.md"
-
-[[guides]]
 title = "Fix unsoundness in `QueryIter::sort_by()`"
 prs = [17826]
 areas = ["ECS"]
@@ -191,7 +185,7 @@ areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Improved command errors"
+title = "Introduce `EntityWorldMut` and move `EntityCommand::with_entity()`"
 prs = [17215]
 areas = ["ECS"]
 file_name = "17215_Improved_Command_Errors.md"
