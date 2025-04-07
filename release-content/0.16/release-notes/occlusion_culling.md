@@ -3,7 +3,7 @@ These techniques are collectively referred to as "culling": we can save work whe
 
 **Occlusion culling** is the idea that we don't need to draw something that's completely blocked by other opaque objects,
 from the perspective of the camera.
-That makes sense! We don't need to draw a person hidden behind a wall, even if they're within the range used for frustrum culling.
+That makes sense! We don't need to draw a person hidden behind a wall, even if they're within the range used for frustum culling.
 
 Before you worry too much: we're already checking for this category of wasted work in some form, via the use of a **depth prepass**.
 A depth prepass renders the scene with a simplified shader, recording only the depth (distance from the camera) of each object into the 2-dimensional depth buffer.
