@@ -2,6 +2,7 @@ If you wish to optimize something, you must first measure and understand it.
 When looking at the performance of applications, [tracy] is our tool of choice.
 It gives us a clear understanding of how long work takes, when it happens relative to other work each frame,
 and how various threads are used.
+Read our [profiling docs] to get started!
 
 But until now, it's had a critical limitation: work done on the GPU wasn't shown,
 forcing devs to pull up dedicated GPU-focused tools (like [NSight] or [RenderDoc]) and struggle to piece together an intuition for how it all fits together.
@@ -13,6 +14,7 @@ While this only provides coarse diagnostics currently (diving into a specialized
 Special thanks to [@wumpf] for trailblazing this work in the excellent [wgpu-profiler] tool, and demonstrating how to wire [wgpu] and [tracy] together.
 
 [tracy]: https://github.com/wolfpld/tracy
+[profiling docs]: https://github.com/bevyengine/bevy/blob/main/docs/profiling.md
 [NSight]: https://developer.nvidia.com/nsight-systems
 [RenderDoc]: https://renderdoc.org/
 [@wumpf]: https://github.com/Wumpf
