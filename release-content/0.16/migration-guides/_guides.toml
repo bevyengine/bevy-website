@@ -203,7 +203,7 @@ areas = ["ECS"]
 file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
 
 [[guides]]
-title = "Introduce methods on QueryState to obtain a Query"
+title = "Rename `Query::to_readonly()` to `Query::as_readonly()`"
 prs = [15858]
 areas = ["ECS"]
 file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
