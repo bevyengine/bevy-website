@@ -245,7 +245,7 @@ areas = ["ECS"]
 file_name = "17469_Move_Resource_trait_to_its_own_file.md"
 
 [[guides]]
-title = "Optimize `Entities::entity_does_not_exist_error_details_message`, remove `UnsafeWorldCell` from error"
+title = "Rename `EntityFetchError` and introduce `EntityDoesNotExist`"
 prs = [17115]
 areas = ["ECS"]
 file_name = "17115_Optimize_Entitiesentity_does_not_exist_error_details_messa.md"
