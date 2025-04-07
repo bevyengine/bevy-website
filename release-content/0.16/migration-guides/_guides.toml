@@ -209,7 +209,7 @@ areas = ["ECS"]
 file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
 
 [[guides]]
-title = "Isolate component registration"
+title = "Isolate component registration from `Storages`"
 prs = [17671]
 areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"
