@@ -173,7 +173,7 @@ areas = ["ECS"]
 file_name = "EntityCommands_apply_signature.md"
 
 [[guides]]
-title = "Fix unsoundness in `QueryIter::sort_by`"
+title = "Fix unsoundness in `QueryIter::sort_by()`"
 prs = [17826]
 areas = ["ECS"]
 file_name = "17826_Fix_unsoundness_in_QueryItersort_by.md"
