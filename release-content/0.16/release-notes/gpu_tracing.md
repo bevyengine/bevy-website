@@ -8,8 +8,12 @@ But until now, it's had a critical limitation: work done on the GPU wasn't shown
 forcing devs to pull up dedicated GPU-focused tools (like [NSight] or [RenderDoc]) and struggle to piece together an intuition for how it all fits together.
 
 In 0.16, we've connected the [rendering diagnostics added in Bevy 0.14] to [tracy], creating a cohesive picture of
-all of the work that's being done in a Bevy application in a single place.
-While this only provides coarse diagnostics currently (diving into a specialized tool ), we're planning to gradually refine this, by adding more spans to critical parts of Bevy's rendering pipeline.
+all of the work that's being done in a Bevy application in a single convenient place.
+
+That said, we've only instrumented a few of our passes so far.
+While we will improve this in the future, you will need to add spans to your own custom rendering code,
+and specialized GPU diagnostic tools will always be more powerful: capturing all GPU-related work done,
+and providing more detailed information.
 
 Special thanks to [@wumpf] for trailblazing this work in the excellent [wgpu-profiler] tool, and demonstrating how to wire [wgpu] and [tracy] together.
 
