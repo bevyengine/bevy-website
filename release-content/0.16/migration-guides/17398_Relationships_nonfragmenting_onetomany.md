@@ -4,3 +4,8 @@
 - Replace calls to `.despawn_recursive()` with `.despawn()`.
 - Replace calls to `.despawn_descendants()` with `.despawn_related::<Children>()`.
 - If you have any calls to `.despawn()` which depend on the children being preserved, you’ll need to remove the `Children` component first.
+
+Because relationships are now part of `bevy_ecs` itself, all methods from the previous `HierarchyQueryExt` extension trait are
+now inherent methods on `Query`.
+While these have mostly been migrated unchanged, `parent` is now `related` and `children` now `relationship_sources`,
+as these methods work for any relationship, not just parent-child ones.
