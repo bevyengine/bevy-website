@@ -86,11 +86,11 @@ prs = [17096]
 file_name = "17096_Anamorphic_Bloom.md"
 
 [[release_notes]]
-title = "Forward decals (port of bevy_contact_projective_decals)"
-authors = ["@JMS55"]
+title = "Decals"
+authors = ["@naasblod", "@JMS55", "@pcwalton"]
 contributors = ["@IceSentry"]
-prs = [16600]
-file_name = "16600_Forward_decals_port_of_bevy_contact_projective_decals.md"
+prs = [16600, 17315]
+file_name = "decals.md"
 
 [[release_notes]]
 title = "Procedural atmospheric scattering"
