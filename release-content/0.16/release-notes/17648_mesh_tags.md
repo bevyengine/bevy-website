@@ -14,7 +14,7 @@ commands.spawn((
 ));
 ```
 
-Refere
+Lookup the tag in a vertex shader:
 ```wgsl
 #import bevy_pbr::mesh_functions
 
