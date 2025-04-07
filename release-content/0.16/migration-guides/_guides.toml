@@ -191,13 +191,13 @@ areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Improved Command Errors"
+title = "Improved command errors"
 prs = [17215]
 areas = ["ECS"]
 file_name = "17215_Improved_Command_Errors.md"
 
 [[guides]]
-title = "Improved Spawn APIs and Bundle Effects"
+title = "Add bundle effects"
 prs = [17521]
 areas = ["ECS"]
 file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
