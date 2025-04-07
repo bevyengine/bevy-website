@@ -191,12 +191,6 @@ areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Implement SpawnableList for `Vec<Bundle>`"
-prs = [18259]
-areas = ["ECS"]
-file_name = "18259_Implement_SpawnableList_for_VecBundle.md"
-
-[[guides]]
 title = "Improved Command Errors"
 prs = [17215]
 areas = ["ECS"]
