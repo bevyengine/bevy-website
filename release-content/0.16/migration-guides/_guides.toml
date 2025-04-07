@@ -185,7 +185,7 @@ areas = ["ECS"]
 file_name = "16219_Flush_commands_after_every_mutation_in_WorldEntityMut.md"
 
 [[guides]]
-title = "Generic system config"
+title = "Make system configuration generic"
 prs = [17962]
 areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
