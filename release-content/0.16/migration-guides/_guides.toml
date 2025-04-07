@@ -227,7 +227,7 @@ areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
 [[guides]]
-title = "Make system param validation rely on the unified ECS error handling via the GLOBAL_ERROR_HANDLER"
+title = "Make system parameter validation use the `GLOBAL_ERROR_HANDLER`"
 prs = [18454]
 areas = ["ECS"]
 file_name = "18454_Make_system_param_validation_rely_on_the_unified_ECS_error.md"
