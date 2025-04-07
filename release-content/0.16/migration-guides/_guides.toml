@@ -239,7 +239,7 @@ areas = ["ECS"]
 file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
 
 [[guides]]
-title = "Move `Resource` trait to its own file"
+title = "Move `Resource` trait to its own module"
 prs = [17469]
 areas = ["ECS"]
 file_name = "17469_Move_Resource_trait_to_its_own_file.md"
