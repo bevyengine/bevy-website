@@ -233,7 +233,7 @@ areas = ["ECS"]
 file_name = "18454_Make_system_param_validation_rely_on_the_unified_ECS_error.md"
 
 [[guides]]
-title = "Move `Item` and `fetch` to `QueryData` from `WorldQuery`"
+title = "Move `Item` and `fetch()` from `WorldQuery` to `QueryData`"
 prs = [17679]
 areas = ["ECS"]
 file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
