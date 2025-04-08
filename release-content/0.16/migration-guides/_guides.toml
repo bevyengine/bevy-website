@@ -287,7 +287,7 @@ areas = ["ECS"]
 file_name = "17380_Remove_Event_Component_trait_bound_using_a_wrapper_type_wh.md"
 
 [[guides]]
-title = "Remove `petgraph` from `bevy_ecs`"
+title = "Remove `petgraph` from `bevy::ecs`"
 prs = [15519]
 areas = ["ECS"]
 file_name = "15519_Remove_petgraph_from_bevy_ecs.md"
