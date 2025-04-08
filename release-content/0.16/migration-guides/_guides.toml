@@ -317,7 +317,7 @@ areas = ["ECS"]
 file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
 
 [[guides]]
-title = "Renamed `EventWriter::send` methods to `write`."
+title = "Rename `EventWriter::send()` methods to `write()`"
 prs = [17977]
 areas = ["ECS"]
 file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
