@@ -21,7 +21,6 @@ However, because our implementation assumes that the atmosphere is mostly symmet
 See [Sébastien Hillaire's 2020 paper] for more info. There's a lot of depth to this technique, like approximated multi-scattering, that would take much more than this section to cover :slightly_smiling_face:
 
 <video controls loop aria-label="A showcase of simulated sunrises and sunsets made in Bevy"><source src="atmosphere-showcase.mp4" type="video/mp4"/></video>
-
 Credit to `@aevyrie` for their amazing [atmosphere showcase]! It uses a fancy custom exposure curve to accentuate the near-dusk colors.
 
 [atmosphere showcase]: https://github.com/aevyrie/bevy/tree/atmosphere_showcase
