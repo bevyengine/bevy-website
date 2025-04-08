@@ -1,1 +1,1 @@
-The errors `EntityFetchError::NoSuchEntity` and `QueryEntityError::NoSuchEntity` now contain an `EntityDoesNotExistDetails` struct instead of an `UnsafeWorldCell`. If you were just printing these, they should work identically.
+`EntityFetchError` enum has been renamed to `EntityMutableFetchError`, and its `NoSuchEntity` variant has been renamed to `EntityDoesNotExist`. Furthermore, the `EntityDoesNotExist` variant now contains an `EntityDoesNotExistError` type, which provides further details on the entity that does not exist.

@@ -215,32 +215,32 @@ areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
 [[guides]]
-title = "Make system param validation rely on the unified ECS error handling via the GLOBAL_ERROR_HANDLER"
+title = "Make system parameter validation use the `GLOBAL_ERROR_HANDLER`"
 prs = [18454]
 areas = ["ECS"]
 file_name = "18454_Make_system_param_validation_rely_on_the_unified_ECS_error.md"
 
 [[guides]]
-title = "Move `Item` and `fetch` to `QueryData` from `WorldQuery`"
+title = "Move `Item` and `fetch()` from `WorldQuery` to `QueryData`"
 prs = [17679]
 areas = ["ECS"]
 file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
 
 [[guides]]
-title = "Move `Resource` trait to its own file"
+title = "Move `Resource` trait to its own module"
 prs = [17469]
 areas = ["ECS"]
 file_name = "17469_Move_Resource_trait_to_its_own_file.md"
 
 [[guides]]
-title = "Optimize `Entities::entity_does_not_exist_error_details_message`, remove `UnsafeWorldCell` from error"
+title = "Rename `EntityFetchError` and introduce `EntityDoesNotExist`"
 prs = [17115]
 areas = ["ECS"]
 file_name = "17115_Optimize_Entitiesentity_does_not_exist_error_details_messa.md"
 
 [[guides]]
-title = "Parent -> ChildOf"
-prs = [17427]
+title = "Rename `Parent` to `ChildOf` and change how the parent is accessed"
+prs = [17427, 18080]
 areas = ["ECS"]
 file_name = "17427_Parent__ChildOf.md"
 
@@ -251,37 +251,31 @@ areas = ["ECS"]
 file_name = "18173_Queued_component_registration.md"
 
 [[guides]]
-title = "Refactor various commands to remove structs"
+title = "Remove various structs that implemented `Command`"
 prs = [16999, 17029]
 areas = ["ECS"]
 file_name = "17029_Refactor_hierarchyrelated_commands_to_remove_structs.md"
 
 [[guides]]
-title = "Refactored `ComponentHook` Parameters into `HookContext`"
+title = "Refactor `ComponentHook` parameters into `HookContext`"
 prs = [17503]
 areas = ["ECS"]
 file_name = "17503_Refactored_ComponentHook_Parameters_into_HookContext.md"
 
 [[guides]]
-title = "Relationships (non-fragmenting, one-to-many)"
+title = "Use new relationship system for parent-child hierarchies"
 prs = [17398]
 areas = ["ECS"]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
 
 [[guides]]
-title = "Remove ChildOf::get and Deref impl"
-prs = [18080]
-areas = ["ECS"]
-file_name = "18080_Remove_ChildOfget_and_Deref_impl.md"
-
-[[guides]]
-title = "Remove Event: Component trait bound using a wrapper type which impls Component"
+title = "Remove `Event: Component` trait bound"
 prs = [17380]
 areas = ["ECS"]
 file_name = "17380_Remove_Event_Component_trait_bound_using_a_wrapper_type_wh.md"
 
 [[guides]]
-title = "Remove `petgraph` from `bevy_ecs`"
+title = "Remove `petgraph` from `bevy::ecs`"
 prs = [15519]
 areas = ["ECS"]
 file_name = "15519_Remove_petgraph_from_bevy_ecs.md"
@@ -293,13 +287,13 @@ areas = ["ECS"]
 file_name = "16853_Remove_deprecated_ECS_items.md"
 
 [[guides]]
-title = "Remove deprecated `component_reads_and_writes`"
+title = "Remove deprecated `component_reads_and_writes()` and family"
 prs = [16348]
 areas = ["ECS"]
 file_name = "16348_Remove_deprecated_component_reads_and_writes.md"
 
 [[guides]]
-title = "Remove `flush_and_reserve_invalid_assuming_no_entities`"
+title = "Remove `flush_and_reserve_invalid_assuming_no_entities()`"
 prs = [16460]
 areas = ["ECS"]
 file_name = "16460_Remove_flush_and_reserve_invalid_assuming_no_entities.md"
@@ -317,7 +311,7 @@ areas = ["ECS"]
 file_name = "17032_Remove_unsound_Clone_impl_for_EntityMutExcept.md"
 
 [[guides]]
-title = "Remove unused generic in `DeferredWorld::trigger`"
+title = "Remove unused generic in `DeferredWorld::trigger()`"
 prs = [16911]
 areas = ["ECS"]
 file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
