@@ -12,14 +12,18 @@ TODO: add decal image.
 Our implementation of forward decals (or to be more precise, contrast projective decals) was inspired by [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2], and was upstreamed from the [`bevy_contact_projective_decals`] ecosystem crate.
 Due to nature of this technique, looking at the decal from very steep angles will cause distortion.
 This can be mitigated by creating textures that are bigger than the effect, giving the decal more space to stretch.
-To create a forward decal TODO.
+To create a forward decal, spawn a [`ForwardDecal`] object, which uses a [`ForwardDecalMaterial`] using the [`ForwardDecalMaterialExt`] material extension.
 
 Clustered decals (or decal projectors) work by TODO.
 They are clusterable objects, just like point lights and light probes, which means that decals are only evaluated for objects within the conservative bounds of the projector, and they don't require a second pass.
-To create a clustered decal TODO.
+To create a clustered decal, spawn a [`ClusteredDecal`] entity.
 
-Ultimately, forward decals offer broader hardware and driver support, while decal projectors don't require the creation of bounding geometry, improving performance.
+Ultimately, forward decals offer broader hardware and driver support, while clustered decals are higher quality and don't require the creation of bounding geometry, improving performance.
 Currently, WebGL2, WebGPU, iOS and Mac only support forward decals.
 
 [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2]: https://www.youtube.com/watch?v=TrHHTQqmAaM
 [`bevy_contact_projective_decals`]: https://github.com/naasblod/bevy_contact_projective_decals
+[`ForwardDecal`]: https://dev-docs.bevyengine.org/bevy/pbr/decal/struct.ForwardDecal.html
+[`ForwardDecalMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/decal/type.ForwardDecalMaterial.html
+[`ForwardDecalMaterialExt`]: https://dev-docs.bevyengine.org/bevy/pbr/decal/struct.ForwardDecalMaterialExt.html
+[`ClusteredDecal`]: https://dev-docs.bevyengine.org/bevy/pbr/decal/clustered/struct.ClusteredDecal.html
