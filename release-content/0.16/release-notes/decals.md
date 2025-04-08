@@ -12,7 +12,7 @@ TODO: add decal image.
 Our implementation of forward decals (or to be more precise, contrast projective decals) was inspired by [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2], and was upstreamed from the [`bevy_contact_projective_decals`] ecosystem crate.
 Due to nature of this technique, looking at the decal from very steep angles will cause distortion.
 This can be mitigated by creating textures that are bigger than the effect, giving the decal more space to stretch.
-To create a forward decal, spawn a [`ForwardDecal`] object, which uses a [`ForwardDecalMaterial`] using the [`ForwardDecalMaterialExt`] material extension.
+To create a forward decal, spawn a [`ForwardDecal`] entity, which uses a [`ForwardDecalMaterial`] using the [`ForwardDecalMaterialExt`] material extension.
 
 Clustered decals (or decal projectors) work by projecting images from a 1x1x1 cube onto surfaces found in the +Z direction.
 They are clusterable objects, just like point lights and light probes, which means that decals are only evaluated for objects within the bounds of the projector, and they don't require a second rendering pass.
