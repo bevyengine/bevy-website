@@ -323,7 +323,7 @@ areas = ["ECS"]
 file_name = "17032_Remove_unsound_Clone_impl_for_EntityMutExcept.md"
 
 [[guides]]
-title = "Remove unused generic in `DeferredWorld::trigger`"
+title = "Remove unused generic in `DeferredWorld::trigger()`"
 prs = [16911]
 areas = ["ECS"]
 file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
