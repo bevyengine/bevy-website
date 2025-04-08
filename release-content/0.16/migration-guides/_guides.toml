@@ -263,7 +263,7 @@ areas = ["ECS"]
 file_name = "18173_Queued_component_registration.md"
 
 [[guides]]
-title = "Refactor various commands to remove structs"
+title = "Refactor various commands into methods"
 prs = [16999, 17029]
 areas = ["ECS"]
 file_name = "17029_Refactor_hierarchyrelated_commands_to_remove_structs.md"
