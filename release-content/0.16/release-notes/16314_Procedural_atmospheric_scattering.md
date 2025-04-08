@@ -1,6 +1,8 @@
 <!-- Procedural atmospheric scattering -->
 <!-- https://github.com/bevyengine/bevy/pull/16314 -->
-Bevy 0.16 introduces blazing-fast procedural atmospheric scattering, a customizable system for simulating sunsets, sunrises, and dynamic day/night cycles in real time. It also adds a form of distance fog that takes the atmosphere into account! For this release, we focused on optimizing for cameras relatively close to the ground and earth-like atmospheres, but we're hoping to expand to arbitrary atmospheres and space views soon. Unfortunately this feature isn't supported on WebGL, but should be fast even on mobile and WebGPU.
+Bevy 0.16 introduces procedural atmospheric scattering, a customizable system for simulating sunsets, sunrises, and dynamic day/night cycles in real time. It also adds a form of distance fog that takes the atmosphere into account! 
+
+For this release, we focused on optimizing for cameras relatively close to the ground and earth-like atmospheres, but we're hoping to expand to arbitrary atmospheres and space views soon. Unfortunately this feature isn't supported on WebGL, but it should be fast even on mobile and WebGPU.
 
 ```rs
 commands.spawn((
