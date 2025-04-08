@@ -14,8 +14,8 @@ Due to nature of this technique, looking at the decal from very steep angles wil
 This can be mitigated by creating textures that are bigger than the effect, giving the decal more space to stretch.
 To create a forward decal, spawn a [`ForwardDecal`] object, which uses a [`ForwardDecalMaterial`] using the [`ForwardDecalMaterialExt`] material extension.
 
-Clustered decals (or decal projectors) work by TODO.
-They are clusterable objects, just like point lights and light probes, which means that decals are only evaluated for objects within the conservative bounds of the projector, and they don't require a second pass.
+Clustered decals (or decal projectors) work by projecting images from a 1x1x1 cube onto surfaces found in the +Z direction.
+They are clusterable objects, just like point lights and light probes, which means that decals are only evaluated for objects within the bounds of the projector, and they don't require a second rendering pass.
 To create a clustered decal, spawn a [`ClusteredDecal`] entity.
 
 Ultimately, forward decals offer broader hardware and driver support, while clustered decals are higher quality and don't require the creation of bounding geometry, improving performance.
