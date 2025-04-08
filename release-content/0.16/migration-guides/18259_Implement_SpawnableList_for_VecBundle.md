@@ -1,1 +1,0 @@
-- Optional: you may use the new API to spawn `Vec`s of `Bundle` instead of using the `SpawnIter` approach.

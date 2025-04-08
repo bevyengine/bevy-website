@@ -131,49 +131,43 @@ areas = ["ECS"]
 file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
 
 [[guides]]
-title = "Create new `NonSendMarker`"
+title = "Improve ergonomics of `NonSendMarker`"
 prs = [18301]
 areas = ["ECS"]
 file_name = "18301_Create_new_NonSendMarker.md"
 
 [[guides]]
-title = "Define system param validation on a per-system parameter basis"
+title = "Define `SystemParam` validation on a per-system parameter basis"
 prs = [18504]
 areas = ["ECS"]
 file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_basis.md"
 
 [[guides]]
-title = "Deprecate `insert_or_spawn` function family"
+title = "Deprecate `insert_or_spawn()` function family"
 prs = [18147]
 areas = ["ECS"]
 file_name = "18147_Deprecate_insert_or_spawn_function_family.md"
 
 [[guides]]
-title = "Deprecated Query::many and many_mut"
+title = "Deprecate `Query::many()` and `Query::many_mut()`"
 prs = [18183]
 areas = ["ECS"]
 file_name = "18183_Deprecated_Querymany_and_many_mut.md"
 
 [[guides]]
-title = "Encapsulate `cfg(feature = \"track_location\")` in a type."
+title = "Encapsulate location tracking data into `MaybeLocation`"
 prs = [17602]
 areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
 
 [[guides]]
-title = "Fallible systems and custom schedule executors"
+title = "Support fallible systems"
 prs = [16589, 18541, 18666]
 areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
 [[guides]]
-title = "`EntityCommands::apply` now takes an `EntityWorldMut` argument"
-prs = [17215]
-areas = ["ECS"]
-file_name = "EntityCommands_apply_signature.md"
-
-[[guides]]
-title = "Fix unsoundness in `QueryIter::sort_by`"
+title = "Fix unsoundness in `QueryIter::sort_by()`"
 prs = [17826]
 areas = ["ECS"]
 file_name = "17826_Fix_unsoundness_in_QueryItersort_by.md"
@@ -185,37 +179,31 @@ areas = ["ECS"]
 file_name = "16219_Flush_commands_after_every_mutation_in_WorldEntityMut.md"
 
 [[guides]]
-title = "Generic system config"
+title = "Make system configuration generic"
 prs = [17962]
 areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Implement SpawnableList for `Vec<Bundle>`"
-prs = [18259]
-areas = ["ECS"]
-file_name = "18259_Implement_SpawnableList_for_VecBundle.md"
-
-[[guides]]
-title = "Improved Command Errors"
+title = "Introduce `EntityWorldMut` and move `EntityCommand::with_entity()`"
 prs = [17215]
 areas = ["ECS"]
 file_name = "17215_Improved_Command_Errors.md"
 
 [[guides]]
-title = "Improved Spawn APIs and Bundle Effects"
+title = "Add bundle effects"
 prs = [17521]
 areas = ["ECS"]
 file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
 
 [[guides]]
-title = "Introduce methods on QueryState to obtain a Query"
+title = "Rename `Query::to_readonly()` to `Query::as_readonly()`"
 prs = [15858]
 areas = ["ECS"]
 file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
 
 [[guides]]
-title = "Isolate component registration"
+title = "Isolate component registration from `Storages`"
 prs = [17671]
 areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"

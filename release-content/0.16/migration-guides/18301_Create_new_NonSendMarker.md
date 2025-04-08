@@ -1,15 +1,17 @@
-If `NonSendMarker` is being used from `bevy_app::prelude::*`, replace it with `bevy_ecs::system::NonSendMarker` or use it from `bevy_ecs::prelude::*`. In addition to that, `NonSendMarker` does not need to be wrapped like so:
+`NonSendMarker`, a type used to force systems to run on the main thread, is now a system parameter. This means that it no longer needs to be wrapped in `Option<NonSend<_>>`. Furthermore, `NonSendMarker` has been moved from `bevy::core` to `bevy::ecs::system`, so please update your imports accordingly.
 
 ```rust
-fn my_system(_non_send_marker: Option<NonSend<NonSendMarker>>) {
-    ...
+// 0.15
+use bevy::core::NonSendMarker;
+
+fn my_system(_: Option<NonSend<NonSendMarker>>) {
+    // ...
 }
-```
 
-Instead, it can be used without any wrappers:
+// 0.16
+use bevy::ecs::system::NonSendMarker;
 
-```rust
-fn my_system(_non_send_marker: NonSendMarker) {
-    ...
+fn my_system(_: NonSendMarker) {
+    // ...
 }
 ```
