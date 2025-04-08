@@ -88,7 +88,7 @@ file_name = "17096_Anamorphic_Bloom.md"
 [[release_notes]]
 title = "Decals"
 authors = ["@naasblod", "@JMS55", "@pcwalton"]
-contributors = ["@IceSentry"]
+contributors = ["@IceSentry", "@NiseVoid", "@DGriffin91"]
 prs = [16600, 17315]
 file_name = "decals.md"
 
