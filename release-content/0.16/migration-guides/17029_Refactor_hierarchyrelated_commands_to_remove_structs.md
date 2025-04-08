@@ -1,4 +1,4 @@
-Several commands have been refactored to be methods of `Commands` instead of individual structs.
+Several commands have been refactored to internally use closures instead of individual structs, and their structs have been removed.
 
 If you were queuing the structs of hierarchy-related commands directly, you will need to change them to methods implemented on `EntityCommands`:
 
