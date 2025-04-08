@@ -68,3 +68,8 @@ commands.entity(parent).despawn();
 commands.entity(parent).despawn_related::<Children>();
 commands.entity(parent).remove::<Children>().despawn();
 ```
+
+Because relationships are now part of `bevy_ecs` itself, all methods from the previous `HierarchyQueryExt` extension trait are
+now inherent methods on `Query`.
+While these have mostly been migrated unchanged, `parent` is now `related` and `children` now `relationship_sources`,
+as these methods work for any relationship, not just parent-child ones.

@@ -72,6 +72,13 @@ prs = [16427]
 file_name = "16427_Use_multidraw_for_opaque_meshes_when_GPU_culling_is_in_use.md"
 
 [[release_notes]]
+title = "Occlusion culling"
+authors = ["@pcwalton", "@JMS55"]
+contributors = []
+prs = [12755, 17413, 17934, 17951]
+file_name = "occlusion_culling.md"
+
+[[release_notes]]
 title = "Add a bindless mode to `AsBindGroup`."
 authors = ["@pcwalton"]
 contributors = []
@@ -126,6 +133,13 @@ authors = ["@tychedelia"]
 contributors = []
 prs = [17953]
 file_name = "17953_Add_support_for_experimental_WESL_shader_source.md"
+
+[[release_notes]]
+title = "GPU timestamps in traces"
+authors = ["@JMS55"]
+contributors = []
+prs = [18490]
+file_name = "gpu_tracing.md"
 
 [[release_notes]]
 title = "Virtual Geometry Improvements"
