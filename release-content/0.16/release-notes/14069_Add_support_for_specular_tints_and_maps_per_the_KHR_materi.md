@@ -12,7 +12,7 @@ This can be done uniformly across the material, by simply setting the `specular_
 Like many other material properties (color, normals, emissiveness, roughness etc), this can be varied over the material via the use of a texture map,
 which describes how this property varies via a 2-dimensional UV-space image.
 
-Maps are relatively expensive: you need an entire 2D image, rather than a single float or color, and GPUs limit the number of textures you can upload per material.
+Maps are relatively expensive: you need an entire 2D image, rather than a single float or color, and GPUs have limits on the number of textures you can use per material, unless they support bindless textures.
 As a result, specular maps are off by default, and gated behind the `pbr_specular_textures` Cargo feature.
 
 To support this work, we now support the KHR_materials_specular glTF extension, allowing artists to set these properties in 3D modelling tools like Blender, then import them into Bevy.
