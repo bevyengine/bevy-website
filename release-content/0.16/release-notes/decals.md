@@ -9,7 +9,7 @@ In Bevy 0.16, we've selected two complementary approaches: **forward decals** an
 
 TODO: add decal image.
 
-Our implementation of forward decals (or to be more precise, contrast projective decals) was inspired by [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2], and was upstreamed from the [`bevy_contact_projective_decals`] ecosystem crate.
+Our implementation of forward decals (or to be more precise, contract projective decals) was inspired by [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2], and was upstreamed from the [`bevy_contact_projective_decals`] ecosystem crate.
 Due to nature of this technique, looking at the decal from very steep angles will cause distortion.
 This can be mitigated by creating textures that are bigger than the effect, giving the decal more space to stretch.
 To create a forward decal, spawn a [`ForwardDecal`] entity, which uses a [`ForwardDecalMaterial`] using the [`ForwardDecalMaterialExt`] material extension.
