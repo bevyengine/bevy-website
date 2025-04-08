@@ -449,6 +449,12 @@ areas = ["ECS", "Reflection"]
 file_name = "16139_ReflectBundleremove_improvement.md"
 
 [[guides]]
+title = "Improved `#[derive(Event)]`"
+prs = [18083]
+areas = ["ECS"]
+file_name = "18083_Improved_DeriveEvent.md"
+
+[[guides]]
 title = "Gamepad improvements"
 prs = [16222]
 areas = ["Input"]
