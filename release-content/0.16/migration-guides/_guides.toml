@@ -269,7 +269,7 @@ areas = ["ECS"]
 file_name = "17029_Refactor_hierarchyrelated_commands_to_remove_structs.md"
 
 [[guides]]
-title = "Refactored `ComponentHook` Parameters into `HookContext`"
+title = "Refactor `ComponentHook` parameters into `HookContext`"
 prs = [17503]
 areas = ["ECS"]
 file_name = "17503_Refactored_ComponentHook_Parameters_into_HookContext.md"
