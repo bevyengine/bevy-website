@@ -281,7 +281,7 @@ areas = ["ECS"]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
 
 [[guides]]
-title = "Remove Event: Component trait bound using a wrapper type which impls Component"
+title = "Remove `Event: Component` trait bound"
 prs = [17380]
 areas = ["ECS"]
 file_name = "17380_Remove_Event_Component_trait_bound_using_a_wrapper_type_wh.md"
