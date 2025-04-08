@@ -135,6 +135,13 @@ prs = [17953]
 file_name = "17953_Add_support_for_experimental_WESL_shader_source.md"
 
 [[release_notes]]
+title = "GPU timestamps in traces"
+authors = ["@JMS55"]
+contributors = []
+prs = [18490]
+file_name = "gpu_tracing.md"
+
+[[release_notes]]
 title = "Virtual Geometry Improvements"
 authors = ["@JMS55"]
 contributors = ["@atlv24"]
