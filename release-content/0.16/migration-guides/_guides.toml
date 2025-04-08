@@ -275,7 +275,7 @@ areas = ["ECS"]
 file_name = "17503_Refactored_ComponentHook_Parameters_into_HookContext.md"
 
 [[guides]]
-title = "Relationships (non-fragmenting, one-to-many)"
+title = "Use new relationship system for parent-child hierarchies"
 prs = [17398]
 areas = ["ECS"]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
