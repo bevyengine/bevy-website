@@ -251,8 +251,8 @@ areas = ["ECS"]
 file_name = "17115_Optimize_Entitiesentity_does_not_exist_error_details_messa.md"
 
 [[guides]]
-title = "Rename `Parent` to `ChildOf`"
-prs = [17427]
+title = "Rename `Parent` to `ChildOf` and change how the parent is accessed"
+prs = [17427, 18080]
 areas = ["ECS"]
 file_name = "17427_Parent__ChildOf.md"
 
@@ -279,12 +279,6 @@ title = "Use new relationship system for parent-child hierarchies"
 prs = [17398]
 areas = ["ECS"]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
-
-[[guides]]
-title = "Remove ChildOf::get and Deref impl"
-prs = [18080]
-areas = ["ECS"]
-file_name = "18080_Remove_ChildOfget_and_Deref_impl.md"
 
 [[guides]]
 title = "Remove Event: Component trait bound using a wrapper type which impls Component"
