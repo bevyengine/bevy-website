@@ -19,7 +19,7 @@ They are clusterable objects, just like point lights and light probes, which mea
 To create a clustered decal, spawn a [`ClusteredDecal`] entity.
 
 Ultimately, forward decals offer broader hardware and driver support, while clustered decals are higher quality and don't require the creation of bounding geometry, improving performance.
-Currently, WebGL2, WebGPU, iOS and Mac only support forward decals.
+Currently, WebGL2, WebGPU, iOS and Mac only support forward decals, as clustered decals require bindless textures.
 
 [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2]: https://www.youtube.com/watch?v=TrHHTQqmAaM
 [`bevy_contact_projective_decals`]: https://github.com/naasblod/bevy_contact_projective_decals
