@@ -359,7 +359,7 @@ areas = ["ECS"]
 file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
 
 [[guides]]
-title = "Use register_dynamic for merging"
+title = "Replace `register_dynamic()` with `register_dynamic_with()`"
 prs = [18028]
 areas = ["ECS"]
 file_name = "18028_Use_register_dynamic_for_merging.md"
