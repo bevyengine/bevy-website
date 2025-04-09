@@ -1018,3 +1018,9 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
+
+[[guides]]
+title = "Closures which panic now need to explicitly specify a `()` return type"
+prs = [17967]
+areas = ["ECS"]
+file_name = "panicking_closures.md"
