@@ -335,7 +335,7 @@ areas = ["ECS"]
 file_name = "16499_Run_observers_before_hooks_for_on_replace_and_on_remove.md"
 
 [[guides]]
-title = "Shorten the 'world lifetime returned from `QueryLens::query()`."
+title = "Shorten the lifetime returned from `QueryLens::query()`"
 prs = [17694]
 areas = ["ECS"]
 file_name = "17694_Shorten_the_world_lifetime_returned_from_QueryLensquery.md"
