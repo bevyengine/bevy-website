@@ -353,12 +353,6 @@ areas = ["ECS"]
 file_name = "17447_Support_nonVec_data_structures_in_relations.md"
 
 [[guides]]
-title = "Support using FilteredResources with ReflectResource."
-prs = [15624]
-areas = ["ECS"]
-file_name = "15624_Support_using_FilteredResources_with_ReflectResource.md"
-
-[[guides]]
 title = "Turn `apply_deferred` into a ZST System"
 prs = [16642]
 areas = ["ECS"]
