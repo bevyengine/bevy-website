@@ -329,7 +329,7 @@ areas = ["ECS"]
 file_name = "18432_Replace_VisitEntities_with_MapEntities.md"
 
 [[guides]]
-title = "Run observers before hooks for `on_replace` and `on_remove`"
+title = "Run observers before hooks for `on_replace()` and `on_remove()`"
 prs = [16499]
 areas = ["ECS"]
 file_name = "16499_Run_observers_before_hooks_for_on_replace_and_on_remove.md"
