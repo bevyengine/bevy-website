@@ -353,7 +353,7 @@ areas = ["ECS"]
 file_name = "17447_Support_nonVec_data_structures_in_relations.md"
 
 [[guides]]
-title = "Turn `apply_deferred` into a ZST System"
+title = "Turn `apply_deferred()` into a ZST system"
 prs = [16642]
 areas = ["ECS"]
 file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
