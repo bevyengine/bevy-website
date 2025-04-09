@@ -114,7 +114,7 @@ prs = [17315]
 file_name = "17315_Implement_basic_clustered_decal_projectors.md"
 
 [[release_notes]]
-title = "Add support for specular tints and maps per the `KHR_materials_specular` glTF extension."
+title = "Specular tints and maps"
 authors = ["@pcwalton"]
 contributors = []
 prs = [14069]
