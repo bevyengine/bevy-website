@@ -341,7 +341,7 @@ areas = ["ECS"]
 file_name = "17694_Shorten_the_world_lifetime_returned_from_QueryLensquery.md"
 
 [[guides]]
-title = "Split `Component::register_component_hooks` into individual methods"
+title = "Split `Component::register_component_hooks()` into individual methods"
 prs = [17685]
 areas = ["ECS"]
 file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
