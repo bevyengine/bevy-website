@@ -24,11 +24,20 @@
         {% block callout %}{% endblock callout %}
       </aside>
     </div>
-    
     <div class="example__code-tabs tabs">
+      {% if page.content %}
+        <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab-explanation" checked="checked">
+        <label class="tabs__label" for="tab-explanation">Explanation</label>
+        <div class="tabs__panel" tabindex="1">
+          <div class="example__content media-content">
+            {{ page.content | safe }}
+          </div>
+        </div>
+      {% endif %}
+
       {% set filename = page.extra.code_path | split(pat="/") | last %}
-      <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" checked="checked">
-      <label class="tabs__label" for="tab0">{{ filename }}</label>
+      <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" {% if page.content == "" %}checked="checked"{% endif %}>
+      <label class="tabs__label" for="tab0"><code>{{ filename }}</code></label>
       <div class="tabs__panel" tabindex="1">
         <div class="example__code media-content">
           {% set code = load_data(path=page.extra.code_path) %}
@@ -39,7 +48,7 @@
       
       {% for shader in page.extra.shader_code_paths %}
         <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
-        <label class="tabs__label" for="tab{{ loop.index }}">{{ shader }}</label>
+        <label class="tabs__label" for="tab{{ loop.index }}"><code>{{ shader }}</code></label>
         <div class="tabs__panel" tabindex="1">
           <div class="example__code media-content">
             {% set code = load_data(path="static/assets/examples/" ~ shader) %}
