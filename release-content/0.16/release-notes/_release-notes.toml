@@ -8,14 +8,14 @@ prs = [16372, 16668, 18532]
 file_name = "16372_Add_Immutable_Component_Support.md"
 
 [[release_notes]]
-title = "Relationships (non-fragmenting, one-to-many)"
+title = "Relationships"
 authors = ["@cart"]
 contributors = ["@alice-i-cecile"]
 prs = [17398]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
 
 [[release_notes]]
-title = "Improved Spawn APIs and Bundle Effects"
+title = "Improved Spawn API"
 authors = ["@cart"]
 contributors = ["@alice-i-cecile", "@MrGVSV", "@ecoskey"]
 prs = [17521]
@@ -46,11 +46,11 @@ file_name = "unified_error_handling.md"
 title = "Better location tracking"
 authors = ["@SpecificProtagonist", "@chescock"]
 contributors = [
-	"@alice-i-cecile",
-	"Freya Pines",
-	"@pin3-free",
-	"@mweatherley",
-	"@skimmedsquare",
+    "@alice-i-cecile",
+    "Freya Pines",
+    "@pin3-free",
+    "@mweatherley",
+    "@skimmedsquare",
 ]
 prs = [15607, 16047, 16778, 17075, 17602]
 file_name = "16778_Event_source_location_tracking.md"
@@ -70,6 +70,13 @@ authors = ["@pcwalton"]
 contributors = []
 prs = [16427]
 file_name = "16427_Use_multidraw_for_opaque_meshes_when_GPU_culling_is_in_use.md"
+
+[[release_notes]]
+title = "Occlusion culling"
+authors = ["@pcwalton", "@JMS55"]
+contributors = []
+prs = [12755, 17413, 17934, 17951]
+file_name = "occlusion_culling.md"
 
 [[release_notes]]
 title = "Add a bindless mode to `AsBindGroup`."
@@ -107,7 +114,7 @@ prs = [17315]
 file_name = "17315_Implement_basic_clustered_decal_projectors.md"
 
 [[release_notes]]
-title = "Add support for specular tints and maps per the `KHR_materials_specular` glTF extension."
+title = "Specular tints and maps"
 authors = ["@pcwalton"]
 contributors = []
 prs = [14069]
@@ -128,6 +135,13 @@ prs = [17953]
 file_name = "17953_Add_support_for_experimental_WESL_shader_source.md"
 
 [[release_notes]]
+title = "GPU timestamps in traces"
+authors = ["@JMS55"]
+contributors = []
+prs = [18490]
+file_name = "gpu_tracing.md"
+
+[[release_notes]]
 title = "Virtual Geometry Improvements"
 authors = ["@JMS55"]
 contributors = ["@atlv24"]
@@ -137,18 +151,11 @@ file_name = "virtual_geometry_improvements.md"
 # UI
 
 [[release_notes]]
-title = "Basic UI text shadows"
+title = "Text shadows"
 authors = ["@ickshonpe"]
 contributors = []
 prs = [17559]
 file_name = "17559_Basic_UI_text_shadows.md"
-
-[[release_notes]]
-title = "Multiple box shadow support"
-authors = ["@ickshonpe"]
-contributors = ["@alice-i-cecile"]
-prs = [16502]
-file_name = "16502_Multiple_box_shadow_support.md"
 
 [[release_notes]]
 title = "Add \"bevy_input_focus\" crate."
@@ -187,7 +194,7 @@ file_name = "15074_bevy_reflect_Function_Overloading_Generic__Variadic_Functi.md
 # Math
 
 [[release_notes]]
-title = "Derivative access patterns for curves"
+title = "Curve derivatives"
 authors = ["@mweatherley"]
 contributors = ["@alice-i-cecile"]
 prs = [16503]
@@ -229,40 +236,40 @@ file_name = "17840_Parallel_Transform_Propagation.md"
 title = "Add `no_std` support to `bevy`"
 authors = ["@bushrat011899"]
 contributors = [
-	"@alice-i-cecile",
-	"@BD103",
-	"@BenjaminBrienen",
-	"@hymm",
-	"@Jondolf",
-	"@MrGVSV",
-	"@mweatherley",
-	"@Victoronz",
+    "@alice-i-cecile",
+    "@BD103",
+    "@BenjaminBrienen",
+    "@hymm",
+    "@Jondolf",
+    "@MrGVSV",
+    "@mweatherley",
+    "@Victoronz",
 ]
 prs = [
-	15281,
-	15463,
-	15464,
-	15465,
-	15528,
-	15810,
-	16256,
-	16633,
-	16758,
-	16874,
-	16995,
-	16998,
-	17027,
-	17028,
-	17030,
-	17031,
-	17086,
-	17470,
-	17490,
-	17491,
-	17505,
-	17507,
-	17955,
-	18061,
-	18333,
+    15281,
+    15463,
+    15464,
+    15465,
+    15528,
+    15810,
+    16256,
+    16633,
+    16758,
+    16874,
+    16995,
+    16998,
+    17027,
+    17028,
+    17030,
+    17031,
+    17086,
+    17470,
+    17490,
+    17491,
+    17505,
+    17507,
+    17955,
+    18061,
+    18333,
 ]
 file_name = "17955_Add_no_std_support_to_bevy.md"
