@@ -317,7 +317,7 @@ areas = ["ECS"]
 file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
 
 [[guides]]
-title = "Renamed `EventWriter::send` methods to `write`."
+title = "Rename `EventWriter::send()` methods to `write()`"
 prs = [17977]
 areas = ["ECS"]
 file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
@@ -329,43 +329,37 @@ areas = ["ECS"]
 file_name = "18432_Replace_VisitEntities_with_MapEntities.md"
 
 [[guides]]
-title = "Run observers before hooks for `on_replace` and `on_remove`"
+title = "Run observers before hooks for `on_replace()` and `on_remove()`"
 prs = [16499]
 areas = ["ECS"]
 file_name = "16499_Run_observers_before_hooks_for_on_replace_and_on_remove.md"
 
 [[guides]]
-title = "Shorten the 'world lifetime returned from `QueryLens::query()`."
+title = "Shorten the lifetime returned from `QueryLens::query()`"
 prs = [17694]
 areas = ["ECS"]
 file_name = "17694_Shorten_the_world_lifetime_returned_from_QueryLensquery.md"
 
 [[guides]]
-title = "Split `Component::register_component_hooks` into individual methods"
+title = "Split `Component::register_component_hooks()` into individual methods"
 prs = [17685]
 areas = ["ECS"]
 file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
 
 [[guides]]
-title = "Support non-Vec data structures in relations"
+title = "Don't re-export `EntityHashSet` and `EntityHashMap`"
 prs = [17447]
 areas = ["ECS"]
 file_name = "17447_Support_nonVec_data_structures_in_relations.md"
 
 [[guides]]
-title = "Support using FilteredResources with ReflectResource."
-prs = [15624]
-areas = ["ECS"]
-file_name = "15624_Support_using_FilteredResources_with_ReflectResource.md"
-
-[[guides]]
-title = "Turn `apply_deferred` into a ZST System"
+title = "Turn `apply_deferred()` into a ZST system"
 prs = [16642]
 areas = ["ECS"]
 file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
 
 [[guides]]
-title = "Use register_dynamic for merging"
+title = "Replace `register_dynamic()` with `register_dynamic_with()`"
 prs = [18028]
 areas = ["ECS"]
 file_name = "18028_Use_register_dynamic_for_merging.md"
