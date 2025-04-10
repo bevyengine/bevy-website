@@ -1,23 +1,15 @@
-Existing spawn patterns will continue to work as expected.
-
-Manual Bundle implementations now require a `BundleEffect` associated type. Existing bundles would have no bundle effect, so use `()`. Additionally `Bundle::from_components` has been moved to the new `BundleFromComponents` trait.
+As part of improvements to the bundle spawning API, the `DynamicBundle` trait now has a new `Effect` associated type. If you manually implemented `DynamicBundle`, you likely want to set `Effect = ()`, which retains the same behavior as 0.15 bundles:
 
 ```rust
-// Before
-unsafe impl Bundle for X {
-    unsafe fn from_components<T, F>(ctx: &mut T, func: &mut F) -> Self {
-    }
-    /* remaining bundle impl here */
+// 0.15
+impl DynamicBundle for MyBundle {
+    // ...
 }
 
-// After
-unsafe impl Bundle for X {
+// 0.16
+impl DynamicBundle for MyBundle {
     type Effect = ();
-    /* remaining bundle impl here */
-}
 
-unsafe impl BundleFromComponents for X {
-    unsafe fn from_components<T, F>(ctx: &mut T, func: &mut F) -> Self {
-    }
+    // ...
 }
 ```

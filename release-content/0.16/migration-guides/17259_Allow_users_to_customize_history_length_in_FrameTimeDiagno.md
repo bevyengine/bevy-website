@@ -1,1 +1,1 @@
-`FrameTimeDiagnosticsPlugin` now contains two fields. Use `FrameTimeDiagnosticsPlugin::default()` to match Bevy’s previous behavior or, for example, `FrameTimeDiagnosticsPlugin::new(60)` to configure it.
+`FrameTimeDiagnosticsPlugin` now contains two fields: `max_history_length` and `smoothing_factor`. If you manually construct this plugin and wish to retain 0.15 behavior, simply call `FrameTimeDiagnosticsPlugin::default()`. If you wish to configure the maximum history length, you may use `FrameTimeDiagnosticsPlugin::new()` instead.

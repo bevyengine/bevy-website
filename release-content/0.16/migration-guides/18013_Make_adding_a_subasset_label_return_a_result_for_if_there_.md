@@ -1,1 +1,0 @@
-- `AssetLoader`s must now handle the case of a duplicate subasset label when using `LoadContext::add_labeled_asset` and its variants. If you know your subasset labels are unique by construction (e.g., they include an index number), you can simply unwrap this result.

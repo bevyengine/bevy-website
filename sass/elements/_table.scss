@@ -2,10 +2,12 @@ table {
   border-spacing: 0;
   border: 2px solid var(--table-border-color);
   border-radius: var(--table-border-radius);
+  margin-block: 16px;
 }
 
 thead {
-  background-color: var(--table-header-color);
+  background-color: var(--table-header-bg-color);
+  color: var(--table-header-color)
 }
 
 tr td {

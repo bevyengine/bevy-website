@@ -1,1 +1,0 @@
-- If you manually construct a `SendEvent`, use `SendEvent::new()`

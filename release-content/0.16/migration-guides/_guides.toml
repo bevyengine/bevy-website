@@ -1,53 +1,29 @@
 [[guides]]
-title = "Replace bevy_a11y::Focus with InputFocus"
+title = "Replace `bevy::a11y::Focus` with `bevy::input_focus::InputFocus`"
 prs = [16863]
 areas = ["Accessibility", "Input", "UI"]
 file_name = "16863_Replace_bevy_a11yFocus_with_InputFocus.md"
 
 [[guides]]
-title = "Incorporate all node weights in additive blending"
-prs = [16279]
-areas = ["Animation"]
-file_name = "16279_Incorporate_all_node_weights_in_additive_blending.md"
-
-[[guides]]
-title = "Add ways to configure `EasingFunction::Steps` via new `StepConfig`"
+title = "Configure `EasingFunction::Steps` jumping with `JumpAt`"
 prs = [17752]
 areas = ["Animation", "Math"]
 file_name = "17752_Add_ways_to_configure_EasingFunctionSteps_via_new_StepConf.md"
 
 [[guides]]
-title = "Fix `EaseFunction::Exponential*` to exactly hit (0, 0) and (1, 1)"
+title = "Fix `EaseFunction::Exponential*` to be continuous"
 prs = [16910]
 areas = ["Animation", "Math"]
 file_name = "16910_Fix_EaseFunctionExponential_to_exactly_hit_0_0_and_1_1.md"
 
 [[guides]]
-title = "Headless by features"
-prs = [16401]
-areas = ["App"]
-file_name = "16401_Headless_by_features.md"
-
-[[guides]]
-title = "Make adding a subasset label return a result for if there is a duplicate label."
-prs = [18013]
-areas = ["Assets"]
-file_name = "18013_Make_adding_a_subasset_label_return_a_result_for_if_there_.md"
-
-[[guides]]
-title = "Remove `labeled_assets` from `LoadedAsset` and `ErasedLoadedAsset`"
-prs = [15481]
-areas = ["Assets"]
-file_name = "15481_Remove_labeled_assets_from_LoadedAsset_and_ErasedLoadedAss.md"
-
-[[guides]]
-title = "Remove the `meta` field from `LoadedAsset` and `ErasedLoadedAsset`."
+title = "Remove `meta` field from `LoadedAsset` and `ErasedLoadedAsset`"
 prs = [15487]
 areas = ["Assets"]
 file_name = "15487_Remove_the_meta_field_from_LoadedAsset_and_ErasedLoadedAss.md"
 
 [[guides]]
-title = "Weak handle migration"
+title = "Deprecate `Handle::weak_from_u128()`"
 prs = [17695]
 areas = ["Assets"]
 file_name = "17695_Weak_handle_migration.md"
@@ -65,13 +41,13 @@ areas = ["Audio"]
 file_name = "16813_Add_ability_to_mute_audio_sinks.md"
 
 [[guides]]
-title = "Rename AudioSinkPlayback::toggle to toggle_playback"
+title = "Rename `AudioSinkPlayback::toggle()` to `toggle_playback()`"
 prs = [16837]
 areas = ["Audio"]
 file_name = "16837_Rename_AudioSinkPlaybacktoggle_to_toggle_playback.md"
 
 [[guides]]
-title = "Support decibels in bevy_audio::Volume"
+title = "Support decibels in `Volume`"
 prs = [17605]
 areas = ["Audio"]
 file_name = "17605_Support_decibels_in_bevy_audioVolume.md"
@@ -83,13 +59,7 @@ areas = ["Cross-Cutting"]
 file_name = "17955_Add_no_std_support_to_bevy.md"
 
 [[guides]]
-title = "Move `hashbrown` and `foldhash` out of `bevy_utils`"
-prs = [17460]
-areas = ["Cross-Cutting"]
-file_name = "17460_Move_hashbrown_and_foldhash_out_of_bevy_utils.md"
-
-[[guides]]
-title = "Support for non-browser `wasm`"
+title = "Support for non-browser WASM"
 prs = [17499]
 areas = ["Cross-Cutting"]
 file_name = "17499_Support_for_nonbrowser_wasm.md"
@@ -101,13 +71,7 @@ areas = ["Cross-Cutting"]
 file_name = "17967_Upgrade_to_Rust_Edition_2024.md"
 
 [[guides]]
-title = "Don't reëxport `bevy_image` from `bevy_render`"
-prs = [16163]
-areas = ["Cross-Cutting", "Rendering"]
-file_name = "16163_Dont_reëxport_bevy_image_from_bevy_render.md"
-
-[[guides]]
-title = "BRP strict field in query"
+title = "Add `strict` field to BRP `bevy/query`"
 prs = [16725]
 areas = ["Dev-Tools"]
 file_name = "16725_BRP_strict_field_in_query.md"
@@ -131,34 +95,22 @@ areas = ["Diagnostics"]
 file_name = "17259_Allow_users_to_customize_history_length_in_FrameTimeDiagno.md"
 
 [[guides]]
-title = "Prefer `Display` over `Debug`"
-prs = [16112]
-areas = ["Diagnostics"]
-file_name = "16112_Prefer_Display_over_Debug.md"
-
-[[guides]]
-title = "Event source location tracking"
-prs = [16778]
-areas = ["Diagnostics", "ECS"]
-file_name = "16778_Event_source_location_tracking.md"
-
-[[guides]]
-title = "Improved Required Component Syntax"
+title = "Improve required component syntax"
 prs = [18555]
 areas = ["ECS"]
 file_name = "18555_Improved_require_syntax.md"
 
 [[guides]]
-title = "Add `EntityDoesNotExistError`, replace cases of `Entity` as an error, do some easy Resultification"
+title = "Get names of queued components"
+prs = [18451]
+areas = ["ECS"]
+file_name = "18451_Get_names_of_queued_components.md"
+
+[[guides]]
+title = "Return `EntityDoesNotExistError` on error for several methods"
 prs = [17855]
 areas = ["ECS"]
 file_name = "17855_Add_EntityDoesNotExistError_replace_cases_of_Entity_as_an_.md"
-
-[[guides]]
-title = "Add more methods to `RelationshipSourceCollection`"
-prs = [18421]
-areas = ["ECS"]
-file_name = "18421_Add_more_methods_to_RelationshipSourceCollection.md"
 
 [[guides]]
 title = "Cache systems by `S` instead of `S::System`"
@@ -167,55 +119,55 @@ areas = ["ECS"]
 file_name = "16694_Cache_systems_by_S_instead_of_SSystem.md"
 
 [[guides]]
-title = "Change `World::try_despawn` and `World::try_insert_batch` to return `Result`"
+title = "Change `World::try_despawn()` and `World::try_insert_batch()` to return `Result`"
 prs = [17376]
 areas = ["ECS"]
 file_name = "17376_Change_Worldtry_despawn_and_Worldtry_insert_batch_to_return.md"
 
 [[guides]]
-title = "Convert to fallible system in IntoSystemConfigs"
+title = "Remove `IntoSystemConfigs` implementation for `BoxedSystem<(), ()>`"
 prs = [17051]
 areas = ["ECS"]
 file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
 
 [[guides]]
-title = "Create new `NonSendMarker`"
+title = "Improve ergonomics of `NonSendMarker`"
 prs = [18301]
 areas = ["ECS"]
 file_name = "18301_Create_new_NonSendMarker.md"
 
 [[guides]]
-title = "Define system param validation on a per-system parameter basis"
+title = "Define `SystemParam` validation on a per-system parameter basis"
 prs = [18504]
 areas = ["ECS"]
 file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_basis.md"
 
 [[guides]]
-title = "Deprecate `insert_or_spawn` function family"
+title = "Deprecate `insert_or_spawn()` function family"
 prs = [18147]
 areas = ["ECS"]
 file_name = "18147_Deprecate_insert_or_spawn_function_family.md"
 
 [[guides]]
-title = "Deprecated Query::many and many_mut"
+title = "Deprecate `Query::many()` and `Query::many_mut()`"
 prs = [18183]
 areas = ["ECS"]
 file_name = "18183_Deprecated_Querymany_and_many_mut.md"
 
 [[guides]]
-title = "Encapsulate `cfg(feature = \"track_location\")` in a type."
+title = "Encapsulate location tracking data into `MaybeLocation`"
 prs = [17602]
 areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
 
 [[guides]]
-title = "Fallible systems"
-prs = [16589]
+title = "Support fallible systems"
+prs = [16589, 18541, 18666]
 areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
 [[guides]]
-title = "Fix unsoundness in `QueryIter::sort_by`"
+title = "Fix unsoundness in `QueryIter::sort_by()`"
 prs = [17826]
 areas = ["ECS"]
 file_name = "17826_Fix_unsoundness_in_QueryItersort_by.md"
@@ -227,80 +179,68 @@ areas = ["ECS"]
 file_name = "16219_Flush_commands_after_every_mutation_in_WorldEntityMut.md"
 
 [[guides]]
-title = "Generic system config"
+title = "Make system configuration generic"
 prs = [17962]
 areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Implement SpawnableList for `Vec<Bundle>`"
-prs = [18259]
-areas = ["ECS"]
-file_name = "18259_Implement_SpawnableList_for_VecBundle.md"
-
-[[guides]]
-title = "Improved Command Errors"
+title = "Introduce `EntityWorldMut` and move `EntityCommand::with_entity()`"
 prs = [17215]
 areas = ["ECS"]
 file_name = "17215_Improved_Command_Errors.md"
 
 [[guides]]
-title = "Improved Spawn APIs and Bundle Effects"
+title = "Add bundle effects"
 prs = [17521]
 areas = ["ECS"]
 file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
 
 [[guides]]
-title = "Introduce methods on QueryState to obtain a Query"
+title = "Rename `Query::to_readonly()` to `Query::as_readonly()`"
 prs = [15858]
 areas = ["ECS"]
 file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
 
 [[guides]]
-title = "Isolate component registration"
+title = "Isolate component registration from `Storages`"
 prs = [17671]
 areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"
 
 [[guides]]
-title = "Make Query::single (and friends) return a Result"
-prs = [18082]
+title = "Unified error handling"
+prs = [18082, 18144]
 areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
 [[guides]]
-title = "Make system param validation rely on the unified ECS error handling via the GLOBAL_ERROR_HANDLER"
+title = "Make system parameter validation use the `GLOBAL_ERROR_HANDLER`"
 prs = [18454]
 areas = ["ECS"]
 file_name = "18454_Make_system_param_validation_rely_on_the_unified_ECS_error.md"
 
 [[guides]]
-title = "Move `Item` and `fetch` to `QueryData` from `WorldQuery`"
+title = "Move `Item` and `fetch()` from `WorldQuery` to `QueryData`"
 prs = [17679]
 areas = ["ECS"]
 file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
 
 [[guides]]
-title = "Move `Name` out of `bevy_core`"
-prs = [16894]
-areas = ["ECS"]
-file_name = "16894_Move_Name_out_of_bevy_core.md"
-
-[[guides]]
-title = "Move `Resource` trait to its own file"
+title = "Move `Resource` trait to its own module"
 prs = [17469]
 areas = ["ECS"]
 file_name = "17469_Move_Resource_trait_to_its_own_file.md"
 
 [[guides]]
-title = "Optimize `Entities::entity_does_not_exist_error_details_message`, remove `UnsafeWorldCell` from error"
+title = "Rename `EntityFetchError` and introduce `EntityDoesNotExist`"
 prs = [17115]
 areas = ["ECS"]
 file_name = "17115_Optimize_Entitiesentity_does_not_exist_error_details_messa.md"
 
 [[guides]]
-title = "Parent -> ChildOf"
-prs = [17427]
+title = "Rename `Parent` to `ChildOf` and change how the parent is accessed"
+prs = [17427, 18080]
 areas = ["ECS"]
 file_name = "17427_Parent__ChildOf.md"
 
@@ -311,37 +251,31 @@ areas = ["ECS"]
 file_name = "18173_Queued_component_registration.md"
 
 [[guides]]
-title = "Refactor hierarchy-related commands to remove structs"
-prs = [17029]
+title = "Remove various structs that implemented `Command`"
+prs = [16999, 17029]
 areas = ["ECS"]
 file_name = "17029_Refactor_hierarchyrelated_commands_to_remove_structs.md"
 
 [[guides]]
-title = "Refactored `ComponentHook` Parameters into `HookContext`"
+title = "Refactor `ComponentHook` parameters into `HookContext`"
 prs = [17503]
 areas = ["ECS"]
 file_name = "17503_Refactored_ComponentHook_Parameters_into_HookContext.md"
 
 [[guides]]
-title = "Relationships (non-fragmenting, one-to-many)"
+title = "Use new relationship system for parent-child hierarchies"
 prs = [17398]
 areas = ["ECS"]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
 
 [[guides]]
-title = "Remove ChildOf::get and Deref impl"
-prs = [18080]
-areas = ["ECS"]
-file_name = "18080_Remove_ChildOfget_and_Deref_impl.md"
-
-[[guides]]
-title = "Remove Event: Component trait bound using a wrapper type which impls Component"
+title = "Remove `Event: Component` trait bound"
 prs = [17380]
 areas = ["ECS"]
 file_name = "17380_Remove_Event_Component_trait_bound_using_a_wrapper_type_wh.md"
 
 [[guides]]
-title = "Remove `petgraph` from `bevy_ecs`"
+title = "Remove `petgraph` from `bevy::ecs`"
 prs = [15519]
 areas = ["ECS"]
 file_name = "15519_Remove_petgraph_from_bevy_ecs.md"
@@ -353,13 +287,13 @@ areas = ["ECS"]
 file_name = "16853_Remove_deprecated_ECS_items.md"
 
 [[guides]]
-title = "Remove deprecated `component_reads_and_writes`"
+title = "Remove deprecated `component_reads_and_writes()` and family"
 prs = [16348]
 areas = ["ECS"]
 file_name = "16348_Remove_deprecated_component_reads_and_writes.md"
 
 [[guides]]
-title = "Remove flush_and_reserve_invalid_assuming_no_entities"
+title = "Remove `flush_and_reserve_invalid_assuming_no_entities()`"
 prs = [16460]
 areas = ["ECS"]
 file_name = "16460_Remove_flush_and_reserve_invalid_assuming_no_entities.md"
@@ -377,61 +311,55 @@ areas = ["ECS"]
 file_name = "17032_Remove_unsound_Clone_impl_for_EntityMutExcept.md"
 
 [[guides]]
-title = "Remove unused generic in `DeferredWorld::trigger`"
+title = "Remove unused generic in `DeferredWorld::trigger()`"
 prs = [16911]
 areas = ["ECS"]
 file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
 
 [[guides]]
-title = "Renamed `EventWriter::send` methods to `write`."
+title = "Rename `EventWriter::send()` methods to `write()`"
 prs = [17977]
 areas = ["ECS"]
 file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
 
 [[guides]]
-title = "Replace VisitEntities with MapEntities"
+title = "Replace `VisitEntities` with `MapEntities`"
 prs = [18432]
 areas = ["ECS"]
 file_name = "18432_Replace_VisitEntities_with_MapEntities.md"
 
 [[guides]]
-title = "Run observers before hooks for `on_replace` and `on_remove`"
+title = "Run observers before hooks for `on_replace()` and `on_remove()`"
 prs = [16499]
 areas = ["ECS"]
 file_name = "16499_Run_observers_before_hooks_for_on_replace_and_on_remove.md"
 
 [[guides]]
-title = "Shorten the 'world lifetime returned from `QueryLens::query()`."
+title = "Shorten the lifetime returned from `QueryLens::query()`"
 prs = [17694]
 areas = ["ECS"]
 file_name = "17694_Shorten_the_world_lifetime_returned_from_QueryLensquery.md"
 
 [[guides]]
-title = "Split `Component::register_component_hooks` into individual methods"
+title = "Split `Component::register_component_hooks()` into individual methods"
 prs = [17685]
 areas = ["ECS"]
 file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
 
 [[guides]]
-title = "Support non-Vec data structures in relations"
+title = "Don't re-export `EntityHashSet` and `EntityHashMap`"
 prs = [17447]
 areas = ["ECS"]
 file_name = "17447_Support_nonVec_data_structures_in_relations.md"
 
 [[guides]]
-title = "Support using FilteredResources with ReflectResource."
-prs = [15624]
-areas = ["ECS"]
-file_name = "15624_Support_using_FilteredResources_with_ReflectResource.md"
-
-[[guides]]
-title = "Turn `apply_deferred` into a ZST System"
+title = "Turn `apply_deferred()` into a ZST system"
 prs = [16642]
 areas = ["ECS"]
 file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
 
 [[guides]]
-title = "Use register_dynamic for merging"
+title = "Replace `register_dynamic()` with `register_dynamic_with()`"
 prs = [18028]
 areas = ["ECS"]
 file_name = "18028_Use_register_dynamic_for_merging.md"
@@ -509,10 +437,10 @@ areas = ["ECS", "Reflection"]
 file_name = "16139_ReflectBundleremove_improvement.md"
 
 [[guides]]
-title = "Add compile-time dyn compatible checks for `DynEq`, `DynHash`"
-prs = [17254]
-areas = ["ECS", "Utils"]
-file_name = "17254_Add_compiletime_dyn_compatible_checks_for_DynEq_DynHash.md"
+title = "Improved `#[derive(Event)]`"
+prs = [18083]
+areas = ["ECS"]
+file_name = "18083_Improved_DeriveEvent.md"
 
 [[guides]]
 title = "Gamepad improvements"
@@ -654,7 +582,7 @@ areas = ["Picking"]
 file_name = "16872_Rename_focus_in_bevy_picking_to_hover.md"
 
 [[guides]]
-title = "Rename Pointer<Down/Up> -> Pointer<Pressed/Released> in bevy_picking."
+title = "Rename `Pointer<Down/Up>` to `Pointer<Pressed/Released>` in `bevy_picking`"
 prs = [16331]
 areas = ["Picking"]
 file_name = "16331_Rename_PointerDownUp__PointerPressedReleased_in_bevy_picki.md"
@@ -876,7 +804,7 @@ areas = ["Rendering"]
 file_name = "17063_Refactor_and_simplify_custom_projections.md"
 
 [[guides]]
-title = "Remove the type parameter from `check_visibility`, and only invoke it once."
+title = "Remove the type parameter from `check_visibility` and `VisibleEntities`"
 prs = [16812]
 areas = ["Rendering"]
 file_name = "16812_Remove_the_type_parameter_from_check_visibility_and_only_i.md"
@@ -910,12 +838,6 @@ title = "cleanup bevy_render/lib.rs"
 prs = [16481]
 areas = ["Rendering"]
 file_name = "16481_cleanup_bevy_renderlibrs.md"
-
-[[guides]]
-title = "doc: fix camera link"
-prs = [16827]
-areas = ["Rendering"]
-file_name = "16827_doc_fix_camera_link.md"
 
 [[guides]]
 title = "`ExtractedSprites` slice buffer"
@@ -954,12 +876,6 @@ areas = ["Scenes"]
 file_name = "17938_Only_despawn_scene_entities_still_in_the_hierarchy.md"
 
 [[guides]]
-title = "Move `futures.rs`, `ConditionalSend` and `BoxedFuture` types to `bevy_tasks`"
-prs = [16951]
-areas = ["Tasks"]
-file_name = "16951_Move_futuresrs_ConditionalSend_and_BoxedFuture_types_to_be.md"
-
-[[guides]]
 title = "Support `on_thread_spawn` and `on_thread_destroy` for `TaskPoolPlugin`"
 prs = [13045]
 areas = ["Tasks"]
@@ -982,12 +898,6 @@ title = "add line height to `TextFont`"
 prs = [16614]
 areas = ["Text"]
 file_name = "16614_add_line_height_to_TextFont.md"
-
-[[guides]]
-title = "Improve ergonomics of `platform_support`'s `Instant`"
-prs = [17577]
-areas = ["Time"]
-file_name = "17577_Improve_ergonomics_of_platform_supports_Instant.md"
 
 [[guides]]
 title = "Fixing `ValArithmeticError` typo and unused variant"
@@ -1038,36 +948,6 @@ areas = ["UI"]
 file_name = "16271_UiImage__ImageNode_UiImageSize__ImageNodeSize.md"
 
 [[guides]]
-title = "Create `bevy_platform_support` Crate"
-prs = [17250]
-areas = ["Utils"]
-file_name = "17250_Create_bevy_platform_support_Crate.md"
-
-[[guides]]
-title = "Move `all_tuples` to a new crate"
-prs = [16161]
-areas = ["Utils"]
-file_name = "16161_Move_all_tuples_to_a_new_crate.md"
-
-[[guides]]
-title = "Remove `tracing` re-export from `bevy_utils`"
-prs = [17161]
-areas = ["Utils"]
-file_name = "17161_Remove_tracing_reexport_from_bevy_utils.md"
-
-[[guides]]
-title = "Remove everything except `Instant` from `bevy_utils::time`"
-prs = [17158]
-areas = ["Utils"]
-file_name = "17158_Remove_everything_except_Instant_from_bevy_utilstime.md"
-
-[[guides]]
-title = "Update hashbrown to 0.15"
-prs = [15801]
-areas = ["Utils"]
-file_name = "15801_Update_hashbrown_to_015.md"
-
-[[guides]]
 title = "Make CustomCursor variants CustomCursorImage/CustomCursorUrl structs"
 prs = [17518]
 areas = ["Windowing"]
@@ -1092,10 +972,10 @@ areas = ["Windowing"]
 file_name = "17121_Support_texture_atlases_in_CustomCursorImage.md"
 
 [[guides]]
-title = ":pencil2: Fix typos across bevy"
-prs = [16702]
-areas = []
-file_name = "16702_pencil2_Fix_typos_across_bevy.md"
+title = "`bevy_utils` Refactor"
+prs = [15801, 16112, 16161, 16951, 17158, 17161, 17250, 17254, 17460, 17577]
+areas = ["Utils"]
+file_name = "bevy_utils_decimation.md"
 
 [[guides]]
 title = "Link iOS example with `rustc`, and avoid C trampoline"
@@ -1110,16 +990,10 @@ areas = []
 file_name = "18538_Remove_Imagefrom_buffer_name_argument_only_present_in_debu.md"
 
 [[guides]]
-title = "Remove `accesskit` re-export from `bevy_a11y`"
-prs = [16257]
-areas = []
-file_name = "16257_Remove_accesskit_reexport_from_bevy_a11y.md"
-
-[[guides]]
 title = "Remove `bevy_core`"
-prs = [16897]
+prs = [16894, 16897]
 areas = []
-file_name = "16897_Remove_bevy_core.md"
+file_name = "bevy_core_removed.md"
 
 [[guides]]
 title = "Rename `trigger.entity()` to `trigger.target()`"
@@ -1138,3 +1012,9 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
+
+[[guides]]
+title = "Closures which panic now need to explicitly specify a `()` return type"
+prs = [17967]
+areas = ["ECS"]
+file_name = "panicking_closures.md"

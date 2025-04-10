@@ -1,1 +1,1 @@
-`bevy_a11y::Focus` has been replaced with `bevy_input_focus::Focus`.
+Bevy now has first-class input handling, available in the `bevy::input_focus` module. As such, `bevy::a11y::Focus` has been replaced with `bevy::input_focus::InputFocus`. Please replace all references and imports.

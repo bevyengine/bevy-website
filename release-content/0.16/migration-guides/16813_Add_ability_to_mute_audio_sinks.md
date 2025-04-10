@@ -1,29 +1,20 @@
-- The `AudioSinkPlayback` trait now has 4 new methods to allow you to mute audio sinks: `is_muted`, `mute`, `unmute` and `toggle_mute`. You can use these methods on `bevy_audio`’s `AudioSink` and `SpatialAudioSink` components to manage the sink’s mute state.
-- `AudioSinkPlayback`’s `set_volume` method now takes a mutable reference instead of an immutable one. Update your code which calls `set_volume` on `AudioSink` and `SpatialAudioSink` components to take a mutable reference. E.g.:
+It is now possible to mute audio sinks. Several breaking changes have been introduced to implement this feature.
 
-Before:
+First, `AudioSinkPlayback::set_volume()` now takes a mutable `&mut AudioSinkPlayback` argument instead of an immutable one. This may require you to update your system parameters:
 
 ```rust
-fn increase_volume(sink: Single<&AudioSink>) {
+// 0.15
+fn increase_volume(sink: Single<&AudioSink, With<Music>>) {
     sink.set_volume(sink.volume() + 0.1);
 }
-```
 
-After:
-
-```rust
-fn increase_volume(mut sink: Single<&mut AudioSink>) {
+// 0.16
+fn increase_volume(mut sink: Single<&mut AudioSink, With<Music>>) {
     let current_volume = sink.volume();
     sink.set_volume(current_volume + 0.1);
 }
 ```
 
-- The `PlaybackSettings` component now has a `muted` field which you can use to spawn your audio in a muted state. `PlaybackSettings` also now has a helper method `muted` which you can use when building the component. E.g.: 
+Secondly, `PlaybackSettings` has a new `muted` field to specify whether an entity should start muted. You may need to set this field when creating `PlaybackSettings` if you do not use function update syntax (`..default()`).
 
-```rust
-commands.spawn((
-    // ...
-    AudioPlayer::new(asset_server.load("sounds/Windless Slopes.ogg")),
-    PlaybackSettings::LOOP.with_spatial(true).muted(),
-));
-```
+Finally, if you manually implemented audio muting using an audio sink's volume, you can switch over to using the new `AudioSinkPlayback` methods: `is_muted()`, `mute()`, `unmute()` and `toggle_mute()`.

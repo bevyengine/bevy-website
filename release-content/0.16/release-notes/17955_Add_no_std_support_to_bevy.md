@@ -30,6 +30,10 @@ During the release candidate period, quite a few libraries have successfully exp
 Determining what `no_std` targets support Bevy is still a work in progress.
 But early reports from users have shown Bevy working on bare-metal desktops, embedded devices, and even retro consoles such as the GameBoy Advance.
 
+<video controls loop aria-label="A purple GameBoy Advance running a game made using Bevy"><source  src="bevy-gba.mp4" type="video/mp4"/></video>
+
+Credit to Chris Biscardi for creating this awesome demo using [`bevy_transform_interpolation`]!
+
 If you have an unusual platform you'd like to try getting Bevy working on, check out the [`#unusual-platforms`] channel on Bevy's Discord server for advice!
 
 [`Error`]: https://doc.rust-lang.org/stable/core/error/trait.Error.html
@@ -43,3 +47,4 @@ If you have an unusual platform you'd like to try getting Bevy working on, check
 [`no_std` library]: https://github.com/bevyengine/bevy/tree/main/examples/no_std/library
 [`bevy_replicon`]: https://github.com/projectharmonia/bevy_replicon/tree/bevy-0.16-dev
 [`bevy_rand`]: https://github.com/Bluefinger/bevy_rand
+[`bevy_transform_interpolation`]: https://github.com/Jondolf/bevy_transform_interpolation

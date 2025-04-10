@@ -38,7 +38,7 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
   #### Windows
   </summary>
 
-  * Run the [Visual Studio 2019 build tools installer](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
+  * Run the [Visual Studio C++ Build Tools installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
   * For easy setup, select the ```Desktop development with C++``` workload in the installer.
   * For a minimal setup, follow these steps:
       1. In the installer, navigate to `Individual components`

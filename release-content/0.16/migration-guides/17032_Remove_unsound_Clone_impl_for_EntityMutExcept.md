@@ -1,1 +1,1 @@
-- `EntityMutExcept` can no-longer be cloned, as this violates Rust’s memory safety rules.
+`EntityMutExcept` can no-longer be cloned, as doing so violates Rust's memory safety rules.
