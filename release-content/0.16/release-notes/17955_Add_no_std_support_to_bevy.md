@@ -9,7 +9,7 @@ Coordinating that kind of support across over a hundred dependencies was just no
 
 Since then, Rust's support for `no_std` has evolved dramatically with support for critical APIs such as [`Error`] coming in [Rust 1.81].
 Starting with tracking issue [#15460] and a [`no_std` Working Group], Bevy's various crates were individually made `no_std` compatible where possible.
-To aid this effort, [`bevy_platform_support`] was developed with the goal of providing opinionated alternatives to `std` items.
+To aid this effort, [`bevy_platform`] was developed with the goal of providing opinionated alternatives to `std` items.
 
 This effort reached a substantial milestone during the development of Bevy 0.16: support for `no_std` in our main `bevy` crate.
 To use Bevy on a `no_std` platform, simply disable default features and use Bevy just like any other `no_std` dependency.
@@ -39,7 +39,7 @@ If you have an unusual platform you'd like to try getting Bevy working on, check
 [`Error`]: https://doc.rust-lang.org/stable/core/error/trait.Error.html
 [#15460]: https://github.com/bevyengine/bevy/issues/15460
 [`no_std` Working Group]: https://discord.com/channels/691052431525675048/1303128171352293410
-[`bevy_platform_support`]: https://crates.io/crates/bevy_platform_support/
+[`bevy_platform`]: https://crates.io/crates/bevy_platform/
 [`#unusual-platforms`]: https://discord.com/channels/691052431525675048/1284885928837517432
 [discussed]: https://github.com/bevyengine/bevy/discussions/705
 [`Plugin`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html
