@@ -16,13 +16,13 @@ Note that certain items have been completely removed, see below for further deta
 | ----------------------- | ------------ | ----------------------------- |
 | `AHasher`               | `bevy_utils` | `ahash`                       |
 | `Duration`              | `bevy_utils` | `core::time`                  |
-| `FixedState`            | `bevy_utils` | `bevy_platform_support::hash` |
-| `Hashed`                | `bevy_utils` | `bevy_platform_support::hash` |
-| `Instant`               | `bevy_utils` | `bevy_platform_support::time` |
-| `NoOpHash`              | `bevy_utils` | `bevy_platform_support::time` |
-| `PassHash`              | `bevy_utils` | `bevy_platform_support::time` |
-| `PassHasher`            | `bevy_utils` | `bevy_platform_support::time` |
-| `RandomState`           | `bevy_utils` | `bevy_platform_support::time` |
+| `FixedState`            | `bevy_utils` | `bevy_platform::hash` |
+| `Hashed`                | `bevy_utils` | `bevy_platform::hash` |
+| `Instant`               | `bevy_utils` | `bevy_platform::time` |
+| `NoOpHash`              | `bevy_utils` | `bevy_platform::time` |
+| `PassHash`              | `bevy_utils` | `bevy_platform::time` |
+| `PassHasher`            | `bevy_utils` | `bevy_platform::time` |
+| `RandomState`           | `bevy_utils` | `bevy_platform::time` |
 | `SystemTime`            | `bevy_utils` | `std::time`                   |
 | `SystemTimeError`       | `bevy_utils` | `std::time`                   |
 | `TryFromFloatSecsError` | `bevy_utils` | `core::time`                  |
@@ -68,9 +68,9 @@ now rely on `bevy_log` instead (or `tracing` itself, being sure to keep the vers
 | Item            | 0.15 Path    | 0.16 Path                                      |
 | --------------- | ------------ | ---------------------------------------------- |
 | `BoxedFuture`   | `bevy_utils` | `bevy_tasks`                                   |
-| `Entry`         | `bevy_utils` | `bevy_platform_support::collections::hash_map` |
-| `HashMap`       | `bevy_utils` | `bevy_platform_support::collections`           |
-| `HashSet`       | `bevy_utils` | `bevy_platform_support::collections`           |
+| `Entry`         | `bevy_utils` | `bevy_platform::collections::hash_map` |
+| `HashMap`       | `bevy_utils` | `bevy_platform::collections`           |
+| `HashSet`       | `bevy_utils` | `bevy_platform::collections`           |
 | `StableHashMap` | `bevy_utils` | _Removed_                                      |
 | `StableHashSet` | `bevy_utils` | _Removed_                                      |
 
@@ -87,7 +87,7 @@ now rely on `bevy_log` instead (or `tracing` itself, being sure to keep the vers
   ```
   
 - `hashbrown` was removed from `bevy_utils` as a re-export due to its significant API change from `hashbrown` 0.14 to 0.15.
-  Instead of exposing a large public API out of our direct control, we've taken a more explicit subset and moved it into `bevy_platform_support::collections`, mimicking the layout of the standard library.
+  Instead of exposing a large public API out of our direct control, we've taken a more explicit subset and moved it into `bevy_platform::collections`, mimicking the layout of the standard library.
   If you need access to `hashbrown`, take a direct dependency instead.
 
 - `detailed_trace` was removed due to its minimal use within the engine.
