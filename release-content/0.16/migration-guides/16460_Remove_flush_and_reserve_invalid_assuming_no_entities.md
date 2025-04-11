@@ -1,1 +1,1 @@
-- exchange `Entities::flush_and_reserve_invalid_assuming_no_entities` for `reserve` and `flush_as_invalid` and notify us if that’s insufficient
+`Entities::flush_and_reserve_invalid_assuming_no_entities()` was a specialized method primarily used in 0.14 and earlier's rendering world design. With 0.15, `flush_and_reserve_invalid_assuming_no_entities()` went unused, so it now has been removed. If you previously required this method, you should switch to calling `Entities::reserve_entities()` and `Entities::flush_as_invalid()`.

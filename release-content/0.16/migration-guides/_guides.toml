@@ -131,49 +131,43 @@ areas = ["ECS"]
 file_name = "17051_Convert_to_fallible_system_in_IntoSystemConfigs.md"
 
 [[guides]]
-title = "Create new `NonSendMarker`"
+title = "Improve ergonomics of `NonSendMarker`"
 prs = [18301]
 areas = ["ECS"]
 file_name = "18301_Create_new_NonSendMarker.md"
 
 [[guides]]
-title = "Define system param validation on a per-system parameter basis"
+title = "Define `SystemParam` validation on a per-system parameter basis"
 prs = [18504]
 areas = ["ECS"]
 file_name = "18504_Define_system_param_validation_on_a_persystem_parameter_basis.md"
 
 [[guides]]
-title = "Deprecate `insert_or_spawn` function family"
+title = "Deprecate `insert_or_spawn()` function family"
 prs = [18147]
 areas = ["ECS"]
 file_name = "18147_Deprecate_insert_or_spawn_function_family.md"
 
 [[guides]]
-title = "Deprecated Query::many and many_mut"
+title = "Deprecate `Query::many()` and `Query::many_mut()`"
 prs = [18183]
 areas = ["ECS"]
 file_name = "18183_Deprecated_Querymany_and_many_mut.md"
 
 [[guides]]
-title = "Encapsulate `cfg(feature = \"track_location\")` in a type."
+title = "Encapsulate location tracking data into `MaybeLocation`"
 prs = [17602]
 areas = ["ECS"]
 file_name = "17602_Encapsulate_cfgfeature__track_location_in_a_type.md"
 
 [[guides]]
-title = "Fallible systems and custom schedule executors"
+title = "Support fallible systems"
 prs = [16589, 18541, 18666]
 areas = ["ECS"]
 file_name = "16589_Fallible_systems.md"
 
 [[guides]]
-title = "`EntityCommands::apply` now takes an `EntityWorldMut` argument"
-prs = [17215]
-areas = ["ECS"]
-file_name = "EntityCommands_apply_signature.md"
-
-[[guides]]
-title = "Fix unsoundness in `QueryIter::sort_by`"
+title = "Fix unsoundness in `QueryIter::sort_by()`"
 prs = [17826]
 areas = ["ECS"]
 file_name = "17826_Fix_unsoundness_in_QueryItersort_by.md"
@@ -185,37 +179,31 @@ areas = ["ECS"]
 file_name = "16219_Flush_commands_after_every_mutation_in_WorldEntityMut.md"
 
 [[guides]]
-title = "Generic system config"
+title = "Make system configuration generic"
 prs = [17962]
 areas = ["ECS"]
 file_name = "17962_Generic_system_config.md"
 
 [[guides]]
-title = "Implement SpawnableList for `Vec<Bundle>`"
-prs = [18259]
-areas = ["ECS"]
-file_name = "18259_Implement_SpawnableList_for_VecBundle.md"
-
-[[guides]]
-title = "Improved Command Errors"
+title = "Introduce `EntityWorldMut` and move `EntityCommand::with_entity()`"
 prs = [17215]
 areas = ["ECS"]
 file_name = "17215_Improved_Command_Errors.md"
 
 [[guides]]
-title = "Improved Spawn APIs and Bundle Effects"
+title = "Add bundle effects"
 prs = [17521]
 areas = ["ECS"]
 file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
 
 [[guides]]
-title = "Introduce methods on QueryState to obtain a Query"
+title = "Rename `Query::to_readonly()` to `Query::as_readonly()`"
 prs = [15858]
 areas = ["ECS"]
 file_name = "15858_Introduce_methods_on_QueryState_to_obtain_a_Query.md"
 
 [[guides]]
-title = "Isolate component registration"
+title = "Isolate component registration from `Storages`"
 prs = [17671]
 areas = ["ECS"]
 file_name = "17671_Isolate_component_registration.md"
@@ -227,32 +215,32 @@ areas = ["ECS"]
 file_name = "18082_Make_Querysingle_and_friends_return_a_Result.md"
 
 [[guides]]
-title = "Make system param validation rely on the unified ECS error handling via the GLOBAL_ERROR_HANDLER"
+title = "Make system parameter validation use the `GLOBAL_ERROR_HANDLER`"
 prs = [18454]
 areas = ["ECS"]
 file_name = "18454_Make_system_param_validation_rely_on_the_unified_ECS_error.md"
 
 [[guides]]
-title = "Move `Item` and `fetch` to `QueryData` from `WorldQuery`"
+title = "Move `Item` and `fetch()` from `WorldQuery` to `QueryData`"
 prs = [17679]
 areas = ["ECS"]
 file_name = "17679_Move_Item_and_fetch_to_QueryData_from_WorldQuery.md"
 
 [[guides]]
-title = "Move `Resource` trait to its own file"
+title = "Move `Resource` trait to its own module"
 prs = [17469]
 areas = ["ECS"]
 file_name = "17469_Move_Resource_trait_to_its_own_file.md"
 
 [[guides]]
-title = "Optimize `Entities::entity_does_not_exist_error_details_message`, remove `UnsafeWorldCell` from error"
+title = "Rename `EntityFetchError` and introduce `EntityDoesNotExist`"
 prs = [17115]
 areas = ["ECS"]
 file_name = "17115_Optimize_Entitiesentity_does_not_exist_error_details_messa.md"
 
 [[guides]]
-title = "Parent -> ChildOf"
-prs = [17427]
+title = "Rename `Parent` to `ChildOf` and change how the parent is accessed"
+prs = [17427, 18080]
 areas = ["ECS"]
 file_name = "17427_Parent__ChildOf.md"
 
@@ -263,37 +251,31 @@ areas = ["ECS"]
 file_name = "18173_Queued_component_registration.md"
 
 [[guides]]
-title = "Refactor various commands to remove structs"
+title = "Remove various structs that implemented `Command`"
 prs = [16999, 17029]
 areas = ["ECS"]
 file_name = "17029_Refactor_hierarchyrelated_commands_to_remove_structs.md"
 
 [[guides]]
-title = "Refactored `ComponentHook` Parameters into `HookContext`"
+title = "Refactor `ComponentHook` parameters into `HookContext`"
 prs = [17503]
 areas = ["ECS"]
 file_name = "17503_Refactored_ComponentHook_Parameters_into_HookContext.md"
 
 [[guides]]
-title = "Relationships (non-fragmenting, one-to-many)"
+title = "Use new relationship system for parent-child hierarchies"
 prs = [17398]
 areas = ["ECS"]
 file_name = "17398_Relationships_nonfragmenting_onetomany.md"
 
 [[guides]]
-title = "Remove ChildOf::get and Deref impl"
-prs = [18080]
-areas = ["ECS"]
-file_name = "18080_Remove_ChildOfget_and_Deref_impl.md"
-
-[[guides]]
-title = "Remove Event: Component trait bound using a wrapper type which impls Component"
+title = "Remove `Event: Component` trait bound"
 prs = [17380]
 areas = ["ECS"]
 file_name = "17380_Remove_Event_Component_trait_bound_using_a_wrapper_type_wh.md"
 
 [[guides]]
-title = "Remove `petgraph` from `bevy_ecs`"
+title = "Remove `petgraph` from `bevy::ecs`"
 prs = [15519]
 areas = ["ECS"]
 file_name = "15519_Remove_petgraph_from_bevy_ecs.md"
@@ -305,13 +287,13 @@ areas = ["ECS"]
 file_name = "16853_Remove_deprecated_ECS_items.md"
 
 [[guides]]
-title = "Remove deprecated `component_reads_and_writes`"
+title = "Remove deprecated `component_reads_and_writes()` and family"
 prs = [16348]
 areas = ["ECS"]
 file_name = "16348_Remove_deprecated_component_reads_and_writes.md"
 
 [[guides]]
-title = "Remove `flush_and_reserve_invalid_assuming_no_entities`"
+title = "Remove `flush_and_reserve_invalid_assuming_no_entities()`"
 prs = [16460]
 areas = ["ECS"]
 file_name = "16460_Remove_flush_and_reserve_invalid_assuming_no_entities.md"
@@ -329,13 +311,13 @@ areas = ["ECS"]
 file_name = "17032_Remove_unsound_Clone_impl_for_EntityMutExcept.md"
 
 [[guides]]
-title = "Remove unused generic in `DeferredWorld::trigger`"
+title = "Remove unused generic in `DeferredWorld::trigger()`"
 prs = [16911]
 areas = ["ECS"]
 file_name = "16911_Remove_unused_generic_in_DeferredWorldtrigger.md"
 
 [[guides]]
-title = "Renamed `EventWriter::send` methods to `write`."
+title = "Rename `EventWriter::send()` methods to `write()`"
 prs = [17977]
 areas = ["ECS"]
 file_name = "17977_Renamed_EventWritersend_methods_to_write.md"
@@ -347,43 +329,37 @@ areas = ["ECS"]
 file_name = "18432_Replace_VisitEntities_with_MapEntities.md"
 
 [[guides]]
-title = "Run observers before hooks for `on_replace` and `on_remove`"
+title = "Run observers before hooks for `on_replace()` and `on_remove()`"
 prs = [16499]
 areas = ["ECS"]
 file_name = "16499_Run_observers_before_hooks_for_on_replace_and_on_remove.md"
 
 [[guides]]
-title = "Shorten the 'world lifetime returned from `QueryLens::query()`."
+title = "Shorten the lifetime returned from `QueryLens::query()`"
 prs = [17694]
 areas = ["ECS"]
 file_name = "17694_Shorten_the_world_lifetime_returned_from_QueryLensquery.md"
 
 [[guides]]
-title = "Split `Component::register_component_hooks` into individual methods"
+title = "Split `Component::register_component_hooks()` into individual methods"
 prs = [17685]
 areas = ["ECS"]
 file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
 
 [[guides]]
-title = "Support non-Vec data structures in relations"
+title = "Don't re-export `EntityHashSet` and `EntityHashMap`"
 prs = [17447]
 areas = ["ECS"]
 file_name = "17447_Support_nonVec_data_structures_in_relations.md"
 
 [[guides]]
-title = "Support using FilteredResources with ReflectResource."
-prs = [15624]
-areas = ["ECS"]
-file_name = "15624_Support_using_FilteredResources_with_ReflectResource.md"
-
-[[guides]]
-title = "Turn `apply_deferred` into a ZST System"
+title = "Turn `apply_deferred()` into a ZST system"
 prs = [16642]
 areas = ["ECS"]
 file_name = "16642_Turn_apply_deferred_into_a_ZST_System.md"
 
 [[guides]]
-title = "Use register_dynamic for merging"
+title = "Replace `register_dynamic()` with `register_dynamic_with()`"
 prs = [18028]
 areas = ["ECS"]
 file_name = "18028_Use_register_dynamic_for_merging.md"
@@ -459,6 +435,12 @@ title = "`ReflectBundle::remove` improvement"
 prs = [16139]
 areas = ["ECS", "Reflection"]
 file_name = "16139_ReflectBundleremove_improvement.md"
+
+[[guides]]
+title = "Improved `#[derive(Event)]`"
+prs = [18083]
+areas = ["ECS"]
+file_name = "18083_Improved_DeriveEvent.md"
 
 [[guides]]
 title = "Gamepad improvements"
@@ -1030,3 +1012,9 @@ title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
+
+[[guides]]
+title = "Closures which panic now need to explicitly specify a `()` return type"
+prs = [17967]
+areas = ["ECS"]
+file_name = "panicking_closures.md"

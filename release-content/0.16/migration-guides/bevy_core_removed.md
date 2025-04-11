@@ -10,7 +10,7 @@ Below are some tables showing where items have been moved to
 | `Name`                           | `bevy_core` | `bevy_ecs::name`  |
 | `NameOrEntity`                   | `bevy_core` | `bevy_ecs::name`  |
 | `NameOrEntityItem`               | `bevy_core` | `bevy_ecs::name`  |
-| `NonSendMarker`                  | `bevy_core` | `bevy_app`        |
+| `NonSendMarker`                  | `bevy_core` | `bevy_ecs::system`|
 | `TaskPoolOptions`                | `bevy_core` | `bevy_app`        |
 | `TaskPoolPlugin`                 | `bevy_core` | `bevy_app`        |
 | `TaskPoolThreadAssignmentPolicy` | `bevy_core` | `bevy_app`        |
