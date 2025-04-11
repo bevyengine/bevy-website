@@ -148,6 +148,13 @@ contributors = ["@atlv24"]
 prs = [17765, 16947, 16941]
 file_name = "virtual_geometry_improvements.md"
 
+[[release_notes]]
+title = "Mesh tags"
+authors = ["@tychedelia"]
+contributors = []
+prs = [17648]
+file_name = "17648_mesh_tags.md"
+
 # UI
 
 [[release_notes]]
