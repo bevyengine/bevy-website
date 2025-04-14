@@ -2,8 +2,8 @@
 
 ```rust
 // 0.15
-use bevy::ecs::entity::{HashSet, HashMap};
+use bevy::ecs::entity::{EntityHashSet, EntityHashMap};
 
 // 0.16
-use bevy::ecs::entity::{hash_set::HashSet, hash_map::HashMap};
+use bevy::ecs::entity::{hash_set::EntityHashSet, hash_map::EntityHashMap};
 ```
