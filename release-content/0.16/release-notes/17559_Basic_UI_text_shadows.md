@@ -7,6 +7,6 @@ TODO: generate and add an image of text shadows in action
 While this is a simple first implementation (no blurring), and only supports `bevy_ui` text (sorry [`Text2d`]),
 we hope that this helps make Bevy a better fit for stylized game UIs.
 
-[`TextShadow`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.TextShadow.html
-[`Text`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Text.html
-[`Text2d`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Text2d.html
+[`TextShadow`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.TextShadow.html
+[`Text`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.Text.html
+[`Text2d`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.Text2d.html

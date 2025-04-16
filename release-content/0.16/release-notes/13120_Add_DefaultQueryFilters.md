@@ -19,7 +19,7 @@ To disable or enable an entity, simply remove or add the disabling component of 
 Note that for maximum control and explicitness, only the entities that you directly add disabling components to are disabled: their children or other related entities are not automatically disabled!
 This can lead to strange bugs, so in most cases, you should either be careful to call [`Commands::insert_recursive`] and [`Commands::remove_recursive`] or add a hook or observer to get automatic hierarchy-aware disabling.
 
-[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.World.html
-[`Disabled`]: https://dev-docs.bevyengine.org/bevy/ecs/entity_disabling/struct.Disabled.html
-[`Commands::insert_recursive`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.EntityCommands.html#method.insert_recursive
-[`Commands::remove_recursive`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.EntityCommands.html#method.remove_recursive
+[`World`]: https://docs.rs/bevy/0.16/bevy/ecs/prelude/struct.World.html
+[`Disabled`]: https://docs.rs/bevy/0.16/bevy/ecs/entity_disabling/struct.Disabled.html
+[`Commands::insert_recursive`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.EntityCommands.html#method.insert_recursive
+[`Commands::remove_recursive`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.EntityCommands.html#method.remove_recursive

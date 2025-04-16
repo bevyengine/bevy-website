@@ -17,4 +17,4 @@ As a result, specular maps are off by default, and gated behind the `pbr_specula
 
 To support this work, we now support the KHR_materials_specular glTF extension, allowing artists to set these properties in 3D modelling tools like Blender, then import them into Bevy.
 
-[`StandardMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.16/bevy/pbr/struct.StandardMaterial.html

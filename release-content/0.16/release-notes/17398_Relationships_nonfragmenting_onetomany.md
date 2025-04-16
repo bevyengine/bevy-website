@@ -57,7 +57,7 @@ Note that this is just the first step for relationships. We have plans to expand
 1. Many-To-Many Relationships: The current system is one-to-many (ex: The `ChildOf` relationship points to "one" target entity and the `RelationshipTarget` can be targeted by "many" child entities). Some relationships could benefit from supporting many relationship targets.
 2. Fragmenting Relationships: In the current system, relationship components "fragment" ECS archetypes based on their _type_, just like a normal component (Ex: `(Player, ChildOf(e1))`, and `(Player, ChildOf(e2))` exist in the same archetype). Fragmenting relationships would be an opt-in system that fragment archetypes based on their _value_ as well, which would result in entities with the same relationship targets being stored next to each other. This serves as an index, making querying by value faster, and making some access patterns more cache friendly.
 
-[`Relationship`]: https://dev-docs.bevyengine.org/bevy/ecs/relationship/trait.Relationship.html
-[`RelationshipTarget`]: https://dev-docs.bevyengine.org/bevy/prelude/trait.RelationshipTarget.html
-[`ChildOf`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.ChildOf.html
-[`Children`]: https://dev-docs.bevyengine.org/bevy/ecs/hierarchy/struct.Children.html
+[`Relationship`]: https://docs.rs/bevy/0.16/bevy/ecs/relationship/trait.Relationship.html
+[`RelationshipTarget`]: https://docs.rs/bevy/0.16/bevy/prelude/trait.RelationshipTarget.html
+[`ChildOf`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.ChildOf.html
+[`Children`]: https://docs.rs/bevy/0.16/bevy/ecs/hierarchy/struct.Children.html
