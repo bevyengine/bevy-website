@@ -31,7 +31,7 @@ Subjects of paragraphs should usually be name dropped at the beginning of those 
 
 ### Who looks at examples
 
-This is slightly different set of demographic assumptions than in [Writing Documentation](../writing-docs#learning-material-structure) as we're making the assumption people are already at the example pages and have some more nuance available to us with our assumptions.
+The demographic assumptions are a bit different than in [Writing Documentation](../writing-docs#learning-material-structure) as we are assuming that people are already navigating the example pages.
 
 There are 3 kinds of people we're aiming to write this kind of documentation for, each with their own reasons to visit the Bevy example pages:
 
