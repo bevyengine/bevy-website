@@ -9,4 +9,4 @@ When heavily skewed (usually horizontally), this effect is known as **anamorphic
 This effect is associated with a cinematic, futuristic vibe, and emulates the unusual geometry of certain film cameras as they compress a wider image onto narrower film.
 But, regardless of why it occurs, it simply looks neat!
 
-[`Bloom`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/bloom/struct.Bloom.html
+[`Bloom`]: https://docs.rs/bevy/0.16/bevy/core_pipeline/bloom/struct.Bloom.html

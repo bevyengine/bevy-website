@@ -25,8 +25,8 @@ If you're a rendering engineer who'd like to help us resolve these precision iss
 Chime in at [issue #14062] (and read our [Contributing Guide]) and we can help you get started.
 
 [PR #17413]: https://github.com/bevyengine/bevy/pull/17413
-[`DepthPrepass`]: https://dev-docs.bevyengine.org/bevy/core_pipeline/prepass/struct.DepthPrepass.html
-[`OcclusionCulling`]: https://dev-docs.bevyengine.org/bevy/render/experimental/occlusion_culling/struct.OcclusionCulling.html
+[`DepthPrepass`]: https://docs.rs/bevy/0.16/bevy/core_pipeline/prepass/struct.DepthPrepass.html
+[`OcclusionCulling`]: https://docs.rs/bevy/0.16/bevy/render/experimental/occlusion_culling/struct.OcclusionCulling.html
 [issue #14062]: https://github.com/bevyengine/bevy/issues/14062
 [Granite]: https://github.com/Themaister/Granite
 [Contributing Guide]: https://bevyengine.org/learn/contribute/introduction/

@@ -55,9 +55,9 @@ making it dead simple to swap out the behavior with a single `#[cfg(prod)]`-gate
 
 [`?` operator]: https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html
 [`anyhow`]: https://docs.rs/anyhow/latest/anyhow/
-[`bevy::ecs::error::Result`]: https://dev-docs.bevyengine.org/bevy/ecs/error/type.Result.html
+[`bevy::ecs::error::Result`]: https://docs.rs/bevy/0.16/bevy/ecs/error/type.Result.html
 [high quality custom backtraces]: https://github.com/bevyengine/bevy/pull/18144
-[`GLOBAL_ERROR_HANDLER`]: https://dev-docs.bevyengine.org/bevy/ecs/error/static.GLOBAL_ERROR_HANDLER.html
-[`Single`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.Single.html
-[`warn`]: https://dev-docs.bevyengine.org/bevy/ecs/error/fn.warn.html
-[`BevyError`]: https://dev-docs.bevyengine.org/bevy/ecs/error/struct.BevyError.html
+[`GLOBAL_ERROR_HANDLER`]: https://docs.rs/bevy/0.16/bevy/ecs/error/static.GLOBAL_ERROR_HANDLER.html
+[`Single`]: https://docs.rs/bevy/0.16/bevy/ecs/prelude/struct.Single.html
+[`warn`]: https://docs.rs/bevy/0.16/bevy/ecs/error/fn.warn.html
+[`BevyError`]: https://docs.rs/bevy/0.16/bevy/ecs/error/struct.BevyError.html
