@@ -347,12 +347,6 @@ areas = ["ECS"]
 file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
 
 [[guides]]
-title = "Don't re-export `EntityHashSet` and `EntityHashMap`"
-prs = [17447]
-areas = ["ECS"]
-file_name = "17447_Support_nonVec_data_structures_in_relations.md"
-
-[[guides]]
 title = "Turn `apply_deferred()` into a ZST system"
 prs = [16642]
 areas = ["ECS"]
@@ -389,22 +383,10 @@ areas = ["ECS"]
 file_name = "16912_make_EntityHashMap_and_EntityHashSet_proper_types.md"
 
 [[guides]]
-title = "make various entity wrapper type modules public"
-prs = [18248]
-areas = ["ECS"]
-file_name = "18248_make_various_entity_wrapper_type_modules_public.md"
-
-[[guides]]
 title = "one shot system cleanup"
 prs = [16516]
 areas = ["ECS"]
 file_name = "16516_one_shot_system_cleanup.md"
-
-[[guides]]
-title = "rename enqueue_command  to queue_command  for consistency"
-prs = [16753]
-areas = ["ECS"]
-file_name = "16753_rename_enqueue_command__to_queue_command__for_consistency.md"
 
 [[guides]]
 title = "Make `ComponentTicks` field public"
@@ -1002,19 +984,7 @@ areas = []
 file_name = "16716_Rename_triggerentity_to_triggertarget.md"
 
 [[guides]]
-title = "Use 4-byte LightmapSlabIndex for batching instead of 16-byte `AssetId<Image>`"
-prs = [18326]
-areas = []
-file_name = "18326_Use_4byte_LightmapSlabIndex_for_batching_instead_of_16byte.md"
-
-[[guides]]
 title = "Use `target_abi = \"sim\"` instead of `ios_simulator` feature"
 prs = [17702]
 areas = []
 file_name = "17702_Use_target_abi__sim_instead_of_ios_simulator_feature.md"
-
-[[guides]]
-title = "Closures which panic now need to explicitly specify a `()` return type"
-prs = [17967]
-areas = ["ECS"]
-file_name = "panicking_closures.md"
