@@ -347,12 +347,6 @@ areas = ["ECS"]
 file_name = "17685_Split_Componentregister_component_hooks_into_individual_me.md"
 
 [[guides]]
-title = "Don't re-export `EntityHashSet` and `EntityHashMap`"
-prs = [17447]
-areas = ["ECS"]
-file_name = "17447_Dont_reexport_EntityHashSet_and_EntityHashMap.md"
-
-[[guides]]
 title = "Turn `apply_deferred()` into a ZST system"
 prs = [16642]
 areas = ["ECS"]
