@@ -19,9 +19,11 @@ Everything in [Writing Documentation](../writing-docs) also applies here, with s
 There is no predictable order to how people visit the examples pages, people will look for what they need in the moment and then go to it. No page can assume that another page has been read first, or at least if it does it may need to link directly to that other page.
 {% end %}
 
-### Building a narrative
+### Building a narrative and avoiding rote repetition
 
-A subject should be identified for an example so that the narrative can be built around it. If someone is writing an explanation on an example that is only "Setting up the camera" then there's plenty of space to give to the details of setting up the camera and all the possible things one could draw on, but this can't be copied-and-pasted into another example. Paragraphs should **not** be written in a context-free way to be copy-pasted between examples, this is a [non-goal](#non-goals-of-explaining-examples).
+A subject should be identified for an example so that the narrative can be built around it. If someone is writing an explanation on an example that is only "Setting up the camera" then there's plenty of space to give to the details of setting up the camera and all the possible things one could draw on and why, but we would not want to overemphasise extra things we put in the scene to show that the camera is in fact working. Similarly, for a UI example we will want to explain through a narrative of why we want to achieve making a UI this way within a common, abstracted context for building a UI in games.
+
+A **non-goal** of examples is to give a blurb for every part of the engine and combine relevant blurbs together on each example page. This form of documentation is best left for what the API docs do, and an explanation built this way eliminates the chance to explain context. Examples are an opportunity to show Bevy-in-context, already proving itself by running in the browser with the code right next to it.
 
 ### What's in a paragraph
 
@@ -65,10 +67,6 @@ Experience with Rust should be assumed to be intermediate. If something complex 
     1. Does the technology need to be explained, or just how to use it?
     2. Something that requires an already existing deep knowledge of another domain may only need to nod towards that domain, not fully explain it.
 4. Does the explanation you're writing also line up with the [general documentation style guide](../writing-docs)?
-
-## Non-goals of explaining examples
-
-A non-goal of examples is to just give a blurb for every part of the engine and combine relevant blurbs together on each example page, that's best left for what the API docs do and an explanation built this way eliminates the chance to explain context. Examples are an opportunity to show Bevy-in-context, already proving itself by running in the browser with the code right next to it.
 
 ## Explanation rot
 
