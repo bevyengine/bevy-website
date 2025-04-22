@@ -7,19 +7,21 @@ This has two benefits over simply changing a mesh's texture:
 Like many things in rendering, there are a huge number of ways to implement this feature, each with their own tradeoffs.
 In Bevy 0.16, we've selected two complementary approaches: **forward decals** and **clustered decals**.
 
-TODO: add decal image.
+![decals](decals.png)
 
-Our implementation of forward decals (or to be more precise, contract projective decals) was inspired by [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2], and was upstreamed from the [`bevy_contact_projective_decals`] ecosystem crate.
+Our implementation of forward decals (or to be more precise, contact projective decals) was inspired by [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2], and was upstreamed from the [`bevy_contact_projective_decals`] ecosystem crate.
 Due to nature of this technique, looking at the decal from very steep angles will cause distortion.
 This can be mitigated by creating textures that are bigger than the effect, giving the decal more space to stretch.
 To create a forward decal, spawn a [`ForwardDecal`] entity, which uses a [`ForwardDecalMaterial`] using the [`ForwardDecalMaterialExt`] material extension.
 
+![clustered decals](clustered-decals.png)
+
 Clustered decals (or decal projectors) work by projecting images from a 1x1x1 cube onto surfaces found in the +Z direction.
-They are clusterable objects, just like point lights and light probes, which means that decals are only evaluated for objects within the bounds of the projector, and they don't require a second rendering pass.
+They are clusterable objects, just like point lights and light probes, which means that decals are only evaluated for objects within the bounds of the projector.
 To create a clustered decal, spawn a [`ClusteredDecal`] entity.
 
 Ultimately, forward decals offer broader hardware and driver support, while clustered decals are higher quality and don't require the creation of bounding geometry, improving performance.
-Currently, WebGL2, WebGPU, iOS and Mac only support forward decals, as clustered decals require bindless textures.
+Currently clustered decals require bindless textures and thus don't support WebGL2, WebGPU, iOS and Mac targets. Forward decals _are_ available on these targets.
 
 [Alexander Sannikovs talk on the rendering techniques of Path of Exile 2]: https://www.youtube.com/watch?v=TrHHTQqmAaM
 [`bevy_contact_projective_decals`]: https://github.com/naasblod/bevy_contact_projective_decals
