@@ -1,6 +1,6 @@
 ## GPU-Driven Rendering
 
-Over the years, the trend in real-time rendering has increasingly been to move work from the CPU to the GPU. One of the latest developments in this area has been *GPU-driven rendering*, in which the GPU takes a representation of the scene and essentially works out what to draw on its own. While Bevy 0.15 had some support for GPU-driven rendering for meshlets only, Bevy 0.16 features comprehensive support for this technique, including for skinned meshes. This dramatically reduces the amount of CPU time that the renderer needs for larger scenes. It's automatically enabled on platforms that support it; unless your application hooks into the rendering pipeline, upgrading to Bevy 0.16 will automatically enable GPU-driven rendering for your meshes.
+Over the years, the trend in real-time rendering has increasingly been to move work from the CPU to the GPU. One of the latest developments in this area has been *GPU-driven rendering*, in which the GPU takes a representation of the scene and essentially works out what to draw on its own. While Bevy 0.15 had support for GPU-driven rendering for virtual geometry only, Bevy 0.16 supports GPU-driven rendering for most other types of 3D meshes, including skinned ones. This dramatically reduces the amount of CPU time that the renderer needs for larger scenes. It's automatically enabled on platforms that support it; unless your application hooks into the rendering pipeline, upgrading to Bevy 0.16 will automatically enable GPU-driven rendering for your meshes.
 
 To explain how GPU-driven rendering operates, it's easiest to first describe how CPU-driven rendering works:
 
@@ -22,7 +22,7 @@ To explain how GPU-driven rendering operates, it's easiest to first describe how
 
 In contrast, GPU-driven rendering in Bevy works like this:
 
-1. The CPU uploads transform information for all objects at once to the GPU.
+1. The CPU supplies a single buffer containing transform information for all objects to the GPU, so that shaders can process many objects at once.
 
 2. If new objects have been spawned since the last frame, the CPU fills out tables specifying where the mesh data for the new objects are.
 
@@ -38,9 +38,9 @@ In contrast, GPU-driven rendering in Bevy works like this:
 
     c. The GPU renders each such visible object.
 
-For large scenes that may have tens of thousands of objects, GPU-driven rendering frequently results in reduction in CPU rendering overhead of 3× or more. It's also necessary for occlusion culling, because of the GPU transform step (5(b) above).
+For large scenes that may have tens of thousands of objects, GPU-driven rendering frequently results in a reduction in CPU rendering overhead of 3× or more. It's also necessary for occlusion culling, because of the GPU transform step (5(b) above).
 
-Internally, GPU-driven rendering is less a single technique than a collection of techniques. These include:
+Internally, GPU-driven rendering is less a single technique than a combination of several techniques. These include:
 
 * *Multi-draw indirect* (MDI), a GPU API that allows multiple meshes to be drawn in a single drawcall, the details of which the GPU provides by filling out tables in GPU memory. In order to use MDI effectively, Bevy uses a new subsystem, the *mesh allocator*, which manages the details of packing meshes together in GPU memory.
 
@@ -48,11 +48,30 @@ Internally, GPU-driven rendering is less a single technique than a collection of
 
 * *Bindless resources*, which allow Bevy to supply the textures (and other resources) for many objects as a group, instead of having to bind textures one-by-one on the CPU. These resources are managed by a new subsystem known as the *material allocator*.
 
-* *GPU transform and cull*, which allows Bevy to compute the position and visibility of every object from the camera's perspective on the GPU instead of on the GPU.
+* *GPU transform and cull*, which allows Bevy to compute the position and visibility of every object from the camera's perspective on the GPU instead of on the CPU.
 
-* The *retained render world*, which allows the CPU to avoid processing and uploading data that hasn't changed since the last frame. Bevy 0.16 not only retains entities in the render world from frame to frame but also retains many internal rendering data structures, allowing it to avoid most CPU overhead associated with meshes that didn't change from the previous frame.
+* The *retained render world*, which allows the CPU to avoid processing and uploading data that hasn't changed since the last frame.
 
-Not all platforms offer full support for GPU-driven rendering; for example, Metal (macOS and iOS) currently only has partial support, and WebGL 2 (the browser) has no support for GPU-driven rendering at all. Some platforms, such as Android phones with certain Mali chips, theoretically support GPU-driven rendering, but in practice driver issues prevent it from working reliably. In these cases, Bevy 0.16 automatically works around the missing functionality, or falls back to CPU-driven rendering if that isn't feasible. This is possible because the Bevy renderer is a unified codebase that supports both CPU- and GPU-driven rendering techniques. That is, there is just one renderer, not a CPU-driven renderer and a GPU-driven renderer.
+* *Cached pipeline specialization*, which leverages Bevy's component-level change detection to more quickly determine when the rendering state for meshes is unchanged from the previous frame.
+
+At the moment, not all platforms offer full support for this feature. The following table summarizes the platform support for the various parts of GPU-driven rendering:
+
+| OS      | Graphics API | GPU transform | Multi-draw & GPU cull | Bindless resources |
+|---------|--------------|---------------|-----------------------|--------------------|
+| Windows | Vulkan       | ✅            | ✅                   | ✅                |
+| Windows | Direct3D 12  | ✅            | ❌                   |❌                 |
+| Windows | OpenGL       | ✅            |❌                    |❌                 |
+| Linux   | Vulkan       | ✅            | ✅                   | ✅                |
+| Linux   | OpenGL       | ✅            |❌                    |❌                 |
+| macOS   | Metal        | ✅            |❌                    |➖¹                |
+| iOS     | Metal        | ✅            |❌                    |➖¹                |
+| Android | Vulkan       | ➖²            |➖²                    |➖²               |
+| Web     | WebGPU       | ✅            |❌                    |❌                 |
+| Web     | WebGL 2       | ❌            |❌                    |❌                 |
+
+¹ Bevy does support bindless resources on Metal, but the limits are currently significantly lower, potentially resulting in more drawcalls.
+
+² Some Android drivers that are known to exhibit bugs in Bevy's workloads are denylisted and will cause Bevy to fall back to CPU-driven rendering.
 
 In most cases, you don't need to do anything special in order for your application to support GPU-driven rendering. There are two main exceptions:
 
@@ -62,9 +81,11 @@ In most cases, you don't need to do anything special in order for your applicati
 
 Bevy's current GPU-driven rendering isn't the end of the story. There's a sizable amount of potential future work to be done:
 
-* Bevy 0.16 only supports GPU-driven rendering for the 3D pipeline, but the techniques are equally applicable to the 2D pipeline. Future versions of Bevy could support 2D GPU-driven rendering as well.
+* Bevy 0.16 only supports GPU-driven rendering for the 3D pipeline, but the techniques are equally applicable to the 2D pipeline. Future versions of Bevy should support GPU-driven rendering for 2D mesh rendering, sprites, UI, and so on.
 
-* Morph targets currently force objects to CPU-driven rendering. This is something we plan to address in the future.
+* Bevy currently draws objects with morph targets using CPU-driven rendering. This is something we plan to address in the future. Note that the presence of objects with morph targets doesn't prevent objects that don't have morph targets from being drawn with GPU-driven rendering.
+
+* In the future, a portion of the GPU-driven rendering infrastructure could be ported to platforms that don't support the full set of features, offering some performance improvements on those platforms. For example, even on WebGL 2 the renderer could make use of the material allocator to pack data more efficiently.
 
 * We're watching new API features, such as [Vulkan device generated commands] and [Direct3D 12 work graphs], with interest. These would allow future versions of Bevy to offload even more work to the GPU, such as sorting of transparent objects. While figuring out how to unify these disparate APIs in a single renderer will be a challenge, the future possibilities in this space are exciting.
 
