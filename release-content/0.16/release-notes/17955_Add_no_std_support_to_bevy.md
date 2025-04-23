@@ -3,7 +3,13 @@
 
 Bevy now has support for `no_std` targets, allowing it to be used on a much wider range of platforms.
 
-This has been functionality [discussed] going back over 4 years, but was initially dropped to avoid the added complexity managing `no_std` support can bring.
+Early reports from users have shown Bevy working on bare-metal desktops, embedded devices, and even retro consoles such as the GameBoy Advance:
+
+<video controls loop aria-label="A purple GameBoy Advance running a game made using Bevy"><source  src="bevy-gba.mp4" type="video/mp4"/></video>
+
+Credit to Chris Biscardi for creating this awesome demo!
+
+Bevy `no_std` support has been [discussed] going back over 4 years, but was initially dropped to avoid the added complexity managing `no_std` support can bring.
 To be `no_std` compatible, your crate and _all_ of its dependencies must also be `no_std`.
 Coordinating that kind of support across over a hundred dependencies was just not feasible, let alone losing access to Rust's standard library.
 
@@ -11,7 +17,7 @@ Since then, Rust's support for `no_std` has evolved dramatically with support fo
 Starting with tracking issue [#15460] and a [`no_std` Working Group], Bevy's various crates were individually made `no_std` compatible where possible.
 To aid this effort, [`bevy_platform`] was developed with the goal of providing opinionated alternatives to `std` items.
 
-This effort reached a substantial milestone during the development of Bevy 0.16: support for `no_std` in our main `bevy` crate.
+This effort reached a substantial milestone during the development of **Bevy 0.16**: support for `no_std` in our main `bevy` crate.
 To use Bevy on a `no_std` platform, simply disable default features and use Bevy just like any other `no_std` dependency.
 
 ```toml
@@ -27,14 +33,7 @@ For those community members working on libraries for Bevy, we encourage you to t
 There's a new [`no_std` library] example which demonstrates how to make a crate that is compatible with `std` and `no_std` users, with detailed comments and advice.
 During the release candidate period, quite a few libraries have successfully experimented with `no_std` support, such as [`bevy_rand`] and [`bevy_replicon`].
 
-Determining what `no_std` targets support Bevy is still a work in progress.
-But early reports from users have shown Bevy working on bare-metal desktops, embedded devices, and even retro consoles such as the GameBoy Advance.
-
-<video controls loop aria-label="A purple GameBoy Advance running a game made using Bevy"><source  src="bevy-gba.mp4" type="video/mp4"/></video>
-
-Credit to Chris Biscardi for creating this awesome demo using [`bevy_transform_interpolation`]!
-
-If you have an unusual platform you'd like to try getting Bevy working on, check out the [`#unusual-platforms`] channel on Bevy's Discord server for advice!
+Determining what `no_std` targets support Bevy is still a work in progress. If you have an unusual platform you'd like to try getting Bevy working on, check out the [`#unusual-platforms`] channel on Bevy's Discord server for advice!
 
 [`Error`]: https://doc.rust-lang.org/stable/core/error/trait.Error.html
 [#15460]: https://github.com/bevyengine/bevy/issues/15460

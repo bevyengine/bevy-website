@@ -34,9 +34,9 @@ assert_eq!(&**liked_by, &[e2, e3]);
 
 The [`Relationship`] component is the "source of truth", and the [`RelationshipTarget`] component is updated to reflect that source of truth. This means that adding/removing relationships should always be done via the [`Relationship`] component.
 
-We use this "source of truth" model instead of allowing both components to "drive" for performance reasons. Allowing writes to both sides would require expensive scanning during inserts to ensure they are in sync and have no duplicates. The "relationships as the source of truth" approach allows us to make adding relationships constant-time (which is an improvement over previous Bevy versions!).
+We use this "source of truth" model instead of allowing both components to "drive" for performance reasons. Allowing writes to both sides would require expensive scanning during inserts to ensure they are in sync and have no duplicates. The "relationships as the source of truth" approach allows us to make adding relationships constant-time (which is an improvement over the old Bevy parent/child approach!).
 
-Relationships are built on top of Bevy's [Component Hooks](/news/bevy-0-14/#ecs-hooks-and-observers), which immediately and efficiently maintains the connection between the [`Relationship`] and the [`RelationshipTarget`] by plugging directly into the component add/remove/update lifecycle. In combination with the new [Immutable Components](#immutable-components) feature (relationship components are immutable), this ensures data integrity is maintained no matter what developers do!
+Relationships are built on top of Bevy's [Component Hooks](/news/bevy-0-14/#ecs-hooks-and-observers), which immediately and efficiently maintain the connection between the [`Relationship`] and the [`RelationshipTarget`] by plugging directly into the component add/remove/update lifecycle. In combination with the new [Immutable Components](#immutable-components) feature (relationship components are immutable), this ensures data integrity is maintained no matter what developers do!
 
 Bevy's existing hierarchy system has been fully replaced by the new [`ChildOf`] [`Relationship`] and [`Children`] [`RelationshipTarget`]. Adding a child is now as simple as:
 
@@ -54,8 +54,8 @@ We also took this chance to improve our spawn APIs more generally. Read the next
 
 Note that this is just the first step for relationships. We have plans to expand their capabilities:
 
-1. Many-To-Many Relationships: The current system is one-to-many (ex: The `ChildOf` relationship points to "one" target entity and the `RelationshipTarget` can be targeted by "many" child entities). Some relationships could benefit from supporting many relationship targets.
-2. Fragmenting Relationships: In the current system, relationship components "fragment" ECS archetypes based on their _type_, just like a normal component (Ex: `(Player, ChildOf(e1))`, and `(Player, ChildOf(e2))` exist in the same archetype). Fragmenting relationships would be an opt-in system that fragment archetypes based on their _value_ as well, which would result in entities with the same relationship targets being stored next to each other. This serves as an index, making querying by value faster, and making some access patterns more cache friendly.
+1. **Many-To-Many Relationships**: The current system is one-to-many (ex: The [`ChildOf`] [`Relationship`] points to "one" target entity and the [`Children`] [`RelationshipTarget`] can be targeted by "many" child entities). Some relationships could benefit from supporting many relationship targets.
+2. **Fragmenting Relationships**: In the current system, relationship components "fragment" ECS archetypes based on their _type_, just like a normal component (Ex: `(Player, ChildOf(e1))`, and `(Player, ChildOf(e2))` exist in the same archetype). Fragmenting relationships would be an opt-in system that fragment archetypes based on their _value_ as well, which would result in entities with the same relationship targets being stored next to each other. This serves as an index, making querying by value faster, and making some access patterns more cache friendly.
 
 [`Relationship`]: https://docs.rs/bevy/0.16/bevy/ecs/relationship/trait.Relationship.html
 [`RelationshipTarget`]: https://docs.rs/bevy/0.16/bevy/prelude/trait.RelationshipTarget.html

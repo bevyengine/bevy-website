@@ -1,4 +1,4 @@
-Due to improvements in Bevy 0.16's error handling capabilities, `Query::many()` and `Query::many_mut()` have been deprecated in favor of their non-panicking variants: `Query::get_many()` and `Query::get_many_mut()`.
+Due to improvements in **Bevy 0.16**'s error handling capabilities, `Query::many()` and `Query::many_mut()` have been deprecated in favor of their non-panicking variants: `Query::get_many()` and `Query::get_many_mut()`.
 
 ```rust
 #[derive(Resource)]

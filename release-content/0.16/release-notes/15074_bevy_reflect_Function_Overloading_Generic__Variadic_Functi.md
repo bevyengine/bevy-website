@@ -1,7 +1,7 @@
 <!-- bevy_reflect: Function Overloading (Generic & Variadic Functions) -->
 <!-- https://github.com/bevyengine/bevy/pull/15074 -->
 
-In 0.15, Bevy's reflection crate, `bevy_reflect`, added support for reflecting functions.
+**Bevy 0.15** added support for reflecting functions to `bevy_reflect`, Bevy's type reflection crate.
 This allows Rust functions to be called dynamically with a list of arguments generated at runtime—and safely!
 
 ```rust

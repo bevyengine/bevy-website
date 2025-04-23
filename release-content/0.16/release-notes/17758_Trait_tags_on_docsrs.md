@@ -1,8 +1,9 @@
 <!-- Trait tags on docs.rs -->
 <!-- https://github.com/bevyengine/bevy/pull/17758 -->
 
-Being a framework, Bevy provides several traits that define how a type is used – for example, to attach data to an entity, it must implement `Component`. When reading the docs, that meant scrolling down to the type's trait implementation section and searching for relevant traits. With 0.16 however, on docs.rs, Bevy displays labels indicating which relevant a type implements:
-![Rustdoc showing a "Component" label below "Camera" type](trait-tags.png)
+Bevy provides several core traits that define how a type is used. For example, to attach data to an entity it must implement `Component`. When reading the Rust API docs, determining whether a type is a `Component` (or some other core Bevy trait) requires scrolling through all of the docs until you find the relevant trait. But in **Bevy 0.16**, on docs.rs Bevy now displays labels indicating which core Bevy traits a type implements:
+
+![Rustdoc showing a "Component" label below "Camera" type](trait-tags.jpg)
 
 This happens for the traits
 `Plugin` / `PluginGroup`,

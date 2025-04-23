@@ -2,10 +2,10 @@
 title = "Bevy 0.16"
 date = 2024-12-31 # TODO: fix date
 [extra]
-image = "cover.png"
+image = "planet.jpg"
 show_image = true
-image_subtitle = "TODO"
-image_subtitle_link = "https://todo.example.com"
+image_subtitle = "A planet from EmbersArc's in-development spaceflight simulation game, rendered with custom shaders in Bevy"
+image_subtitle_link = "https://bsky.app/profile/embersarc.bsky.social"
 public_draft = 2008
 status = 'hidden'
 +++
@@ -18,11 +18,15 @@ To update an existing Bevy App or Plugin to **Bevy 0.16**, check out our [0.15 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **Unified error handling:** Sick of impossible to debug panics in your Bevy code? Us too! We've dramatically improved debuggability with the new `track_location` feature flag, and we've made it easy to return and handle errors across the entire ECS.
-- **GPU-driven rendering:** GPUs are fast: we should make sure that we keep them busy! We've done a ton of performance-oriented work that should make Bevy dramatically faster on big, complex scenes.
-- **Relations:** one of the hottest ECS features is finally here: allowing you to easily and robustly model and work with entity-entity connections. Some caveats apply, but we're excited to get a simple and robust solution to users today.
-- **`no_std` is a reality:** `bevy` itself and a ton of our subcrates no longer rely on Rust's standard library, letting you use the same engine on everything from a modern gaming rig to a Gameboy Advance.
-- **Procedural atmosphere scattering system:** allows for simulating realistic physically-based Earth-like sky at any time of day at a low performance cost. It is a multi pass advanced rendering technique and it's achieved using WebGPU compute shaders that run on both web and native platforms.
+- **GPU-Driven Rendering:** Bevy now does even more rendering work on the GPU (where possible), making Bevy dramatically faster on big, complex scenes.
+- **Procedural Atmospheric Scattering:** Simulate realistic physically-based Earth-like sky at any time of day at a low performance cost.
+- **Decals**: Dynamically layer textures onto rendered meshes.
+- **Occlusion Culling**: Improve performance by not rendering objects that are obscured by other objects.
+- **ECS Relationships:** One of the hottest ECS features is finally here: allowing you to easily and robustly model and work with entity-entity connections. Some caveats apply, but we're excited to get a simple and robust solution to users today.
+- **Improved Spawn API:** Spawning entity hierarchies is now significantly easier!
+- **Unified Error Handling:** Bevy now has first class error handling support, making it easy, flexible, and ergonomic, while also making debugging easier!
+- **`no_std` Support:** `bevy` itself and a ton of our subcrates no longer rely on Rust's standard library, letting you use the same engine on everything from a modern gaming rig to a Gameboy Advance.
+- **Faster Transform Propagation:** We've dramatically improved the performance of transform propagation for many scene types.
 <!-- more -->
 
 {{ release_notes(version="0.16") }}
