@@ -93,11 +93,11 @@ prs = [17096]
 file_name = "17096_Anamorphic_Bloom.md"
 
 [[release_notes]]
-title = "Forward decals (port of bevy_contact_projective_decals)"
-authors = ["@JMS55"]
-contributors = ["@IceSentry"]
-prs = [16600]
-file_name = "16600_Forward_decals_port_of_bevy_contact_projective_decals.md"
+title = "Decals"
+authors = ["@naasblod", "@JMS55", "@pcwalton"]
+contributors = ["@IceSentry", "@NiseVoid", "@DGriffin91"]
+prs = [16600, 17315]
+file_name = "decals.md"
 
 [[release_notes]]
 title = "Procedural atmospheric scattering"
@@ -105,13 +105,6 @@ authors = ["@ecoskey"]
 contributors = ["@mate-h", "@atlv24", "@JMS55"]
 prs = [16314]
 file_name = "16314_Procedural_atmospheric_scattering.md"
-
-[[release_notes]]
-title = "Implement basic clustered decal projectors."
-authors = ["@pcwalton"]
-contributors = []
-prs = [17315]
-file_name = "17315_Implement_basic_clustered_decal_projectors.md"
 
 [[release_notes]]
 title = "Specular tints and maps"
