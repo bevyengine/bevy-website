@@ -100,13 +100,6 @@ prs = [16314]
 file_name = "16314_Procedural_atmospheric_scattering.md"
 
 [[release_notes]]
-title = "Implement basic clustered decal projectors."
-authors = ["@pcwalton"]
-contributors = []
-prs = [17315]
-file_name = "17315_Implement_basic_clustered_decal_projectors.md"
-
-[[release_notes]]
 title = "Add support for specular tints and maps per the `KHR_materials_specular` glTF extension."
 authors = ["@pcwalton"]
 contributors = []
