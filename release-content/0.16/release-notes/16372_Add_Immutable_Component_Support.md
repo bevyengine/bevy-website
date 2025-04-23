@@ -66,10 +66,10 @@ For example, Bevy 0.16 uses immutable components (and hooks!) as the foundation 
 
 We're keen to develop a first-class indexing solution using these new tools, and excited to hear about your ideas. Stay tuned; we've only scratched the surface here!
 
-[`Component`]: https://dev-docs.bevyengine.org/bevy/ecs/component/trait.Component.html
+[`Component`]: https://docs.rs/bevy/0.16/bevy/ecs/component/trait.Component.html
 [`mem::swap`]: https://doc.rust-lang.org/std/mem/fn.swap.html
 [flecs]: https://github.com/SanderMertens/flecs
-[`World`]: https://dev-docs.bevyengine.org/bevy/ecs/prelude/struct.World.html
-[`World::modify_component`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.World.html#method.modify_component
-[`ChildOf`]: https://dev-docs.bevyengine.org/bevy/ecs/hierarchy/struct.ChildOf.html
-[`Children`]: https://dev-docs.bevyengine.org/bevy/ecs/hierarchy/struct.Children.html
+[`World`]: https://docs.rs/bevy/0.16/bevy/ecs/prelude/struct.World.html
+[`World::modify_component`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.World.html#method.modify_component
+[`ChildOf`]: https://docs.rs/bevy/0.16/bevy/ecs/hierarchy/struct.ChildOf.html
+[`Children`]: https://docs.rs/bevy/0.16/bevy/ecs/hierarchy/struct.Children.html

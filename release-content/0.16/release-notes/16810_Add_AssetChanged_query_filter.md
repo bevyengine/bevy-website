@@ -13,8 +13,8 @@ To solve this, we've added an [`AssetChanged`] query filter, which works for any
 which implements the new [`AsAssetId`] trait.
 Something like `Query<&mut Aabb, With<AssetChanged<Mesh3d>>>` now Just Works™️, allowing you to recompute data whenever the underlying asset is changed for any reason.
 
-[`Assets<T>`]: https://dev-docs.bevyengine.org/bevy/asset/struct.Assets.html
-[`Sprite`]: https://dev-docs.bevyengine.org/bevy/prelude/struct.Sprite.html
-[`Handle<T>`]: https://dev-docs.bevyengine.org/bevy/asset/enum.Handle.html
-[`AssetChanged`]: https://dev-docs.bevyengine.org/bevy/asset/prelude/struct.AssetChanged.html
-[`AsAssetId`]: https://dev-docs.bevyengine.org/bevy/asset/trait.AsAssetId.html
+[`Assets<T>`]: https://docs.rs/bevy/0.16/bevy/asset/struct.Assets.html
+[`Sprite`]: https://docs.rs/bevy/0.16/bevy/prelude/struct.Sprite.html
+[`Handle<T>`]: https://docs.rs/bevy/0.16/bevy/asset/enum.Handle.html
+[`AssetChanged`]: https://docs.rs/bevy/0.16/bevy/asset/prelude/struct.AssetChanged.html
+[`AsAssetId`]: https://docs.rs/bevy/0.16/bevy/asset/trait.AsAssetId.html
