@@ -1,1 +1,1 @@
-`bevy_ecs::system::Resource` has been moved to `bevy_ecs::resource::Resource`.
+The `Resource` trait has been moved from `bevy::ecs::system::Resource` to `bevy::ecs::resource::Resource`. Please update your imports accordingly.

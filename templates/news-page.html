@@ -4,6 +4,11 @@
 {% block page_name %}Post{% endblock page_name %}
 {% block mobile_page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=1) }}{% endblock mobile_page_menu %}
 {% block page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=2) }}{% endblock page_menu %}
+
+{% block head_extensions %}
+  <script defer src="/highlight-intrapage-link.js"></script>
+{% endblock head_extensions %}
+
 {% block page_content %}
   <h1 class="news-title">{{ page.title }}</h1>
   <h2 class="news-subtitle">

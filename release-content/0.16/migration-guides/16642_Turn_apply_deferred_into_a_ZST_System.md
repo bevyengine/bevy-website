@@ -1,1 +1,1 @@
-- If you were previously calling the special `apply_deferred` system via `apply_deferred(world)`, don’t.
+The special `apply_deferred()` system has been converted into the zero-sized `ApplyDeferred` type that implements `System` for performance reasons. If you manually schedule `apply_deferred()`, which usually isn't the case, you will need to use the new `ApplyDeferred` type instead. If you manually called `apply_deferred()` without your code, you may delete it, as that function did nothing.

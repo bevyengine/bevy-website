@@ -16,4 +16,4 @@ This happens for the traits
 `Relationship` and
 `RelationshipTarget`.
 
-If you want to add these to your own crate, check out [these instructions](https://github.com/bevyengine/bevy/tree/release-0.16.0/docs-rs).
+This is done for now through [javascript](https://github.com/bevyengine/bevy/tree/release-0.16.0/docs-rs). This should be useful for other Rust frameworks than Bevy, and we'll work with the rustdoc team on how to make this built in and more generic. Get in touch if you're interested so we can start a specification!

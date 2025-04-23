@@ -1,8 +1,7 @@
-Users who have implemented their own custom executor should use `ScheduleSystem` in place of `BoxedSystem<(), ()>` and import the `System` trait where needed. 
+If you've written a custom executor, there are a few changes you will need to make in order to support fallible systems.
 
-Custom executors should:
+1. Many uses of `BoxedSystem<(), ()>` have been replaced with `ScheduleSystem`, which is a type alias to `BoxedSystem<(), Result>`.
+2. Executors should obey the `SystemParamValidationError` returned by `SystemParam::validate_param()` in order to determine whether to raise an error or skip the system.
+3. When an executor encounters an error, it should pass that error to `default_error_handler()`, whose behavior can be configured with the `GLOBAL_ERROR_HANDLER` static.
 
-- obey the `SystemParamValidationError` returned by `SystemParam::validate_param`, skipping systems as requested
-- use the `default_error_handler` for both validation errors and results returned from systems
-
-See the source code of the first-party Bevy schedule executors for more details.
+For more information on fallible systems, please read the module docs for `bevy::ecs::error`.

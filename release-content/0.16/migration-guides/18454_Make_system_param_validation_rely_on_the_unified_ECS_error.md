@@ -1,1 +1,1 @@
-`ParamWarnPolicy` and the `WithParamWarnPolicy` have been removed completely. Failures during system param validation are now handled via the `GLOBAL_ERROR_HANDLER`: please see the `bevy_ecs::error` module docs for more information.
+`ParamWarnPolicy` and the `WithParamWarnPolicy` have been removed completely. Failures during system param validation are now handled via the `GLOBAL_ERROR_HANDLER`. Please see the `bevy_ecs::error` module docs for more information.
