@@ -1,6 +1,12 @@
 Over the years, the trend in real-time rendering has increasingly been to move work from the CPU to the GPU. One of the latest developments in this area has been *GPU-driven rendering*, in which the GPU takes a representation of the scene and essentially works out what to draw on its own.
 
-While **Bevy 0.15** added support for GPU-driven rendering [for Virtual Geometry only](/news/bevy-0-14/#virtual-geometry-experimental), **Bevy 0.16** adds GPU-driven rendering support for most "standard" 3D mesh rendering, including skinned meshes. This dramatically reduces the amount of CPU time that the renderer needs for larger scenes. It's automatically enabled on platforms that support it; unless your application hooks into the rendering pipeline, upgrading to **Bevy 0.16** will automatically enable GPU-driven rendering for your meshes.
+**Bevy 0.16** adds GPU-driven rendering support for most "standard" 3D mesh rendering, including skinned meshes. This dramatically reduces the amount of CPU time that the renderer needs for larger scenes. It's automatically enabled on platforms that support it; unless your application hooks into the rendering pipeline, upgrading to **Bevy 0.16** will automatically enable GPU-driven rendering for your meshes. This joins the support that **Bevy 0.14** and **0.15** added for GPU-driven rendering of [Virtual Geometry](/news/bevy-0-14/#virtual-geometry-experimental).
+
+On Activision's "heavy" [Caldera scene](https://github.com/Activision/caldera) from Call of Duty Warzone, **Bevy 0.16** with GPU-driven rendering performs roughly 3x better than **Bevy 0.15**! (this includes *all* optimizations between these releases)
+
+![Caldera scene rendered in Bevy](caldera.jpg)
+
+On a mobile Nvidia 4090 with Vulkan / Linux, **Bevy 0.16** runs the scene at 10.16ms (~101 FPS), compared to 33.55ms (~30 FPS) on **Bevy 0.15**. Massive wins!
 
 ### Overview: CPU-Driven Rendering
 
