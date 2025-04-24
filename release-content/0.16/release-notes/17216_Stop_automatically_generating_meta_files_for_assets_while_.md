@@ -1,10 +1,8 @@
 <!-- Stop automatically generating meta files for assets while using asset processing. -->
 <!-- https://github.com/bevyengine/bevy/pull/17216 -->
 
-In Bevy 0.12, we introduced "Assets V2". This was a complete rewrite of our asset system and
-included all sorts of cool features. One of those was "asset preprocessing". This allows defining
-a `Process` to apply to assets before they are loaded for use in the engine. This however
-necessitated "meta files" for every asset in your project - meaning when you started using asset
+In **Bevy 0.12**, we [introduced Assets V2](/news/bevy-0-12/#bevy-asset-v2). This was a complete rewrite of our asset system, which added features like "asset preprocessing" (the ability to process assets into more efficient forms at development time, prior to deploying your game). This however
+created "meta files" for every asset in your project - meaning when you started using asset
 preprocessing *at all*, your entire `assets` folder would be filled with these meta files
 automatically (even for assets that don't need any preprocessing).
 

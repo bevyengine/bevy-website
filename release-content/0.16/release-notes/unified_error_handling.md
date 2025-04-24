@@ -1,26 +1,18 @@
-Handling errors can be a touchy topic!
-While you're prototyping, you might *want* loud panics that crash your application: quickly alerting you to serious problems rather than making you waste hours debugging why something wasn't working.
-But as you move into production, those panics can be embarrassing, frustrating or even dangerous!
+Bevy has historically left error handling as an exercise for the user. Many Bevy APIs return Results / errors, but Bevy ECS systems and commands did not themselves support returning Results / errors. Additionally, Bevy provides some "shorthand" panicking APIs that require less typing than unwrapping results. These things encouraged developers to write overly panick-ey behavior, even when that wasn't desired.
 
-The typical approach is to gradually refine your error handling one call site at a time,
-gracefully recovering from expected failures, and swapping unhandled problems to logs rather than panicking.
-While this works well enough, it can be challenging to ensure that you've caught all of the potential panics,
-and in particular, it's very hard to ensure that your *dependencies* aren't going to panic in an edge case.
+Ideally developers can _choose_ whether or not their systems should panic. For example, panic while you are developing to discover errors quickly (and force you to solve them), but when deploying to production just print errors to a console to avoid disrupting the user's experience.
 
-Moreover, if you're quickly swapping back and forth between development and production (that's Agile baby!),
-you might want those panics *back*, rather than having to dig through logs. What a mess!
-
-Bevy 0.16 introduces a new unified paradigm for error handling to help you ship crash-free games (and other applications!)
+**Bevy 0.16** introduces a new unified paradigm for error handling to help you ship crash-free games (and other applications!)
 without sacrificing the loud-and-fast development that panics enable.
 
 We've prioritized a simple and consistent design, with a few bells and whistles for easier debugging:
 
-- Bevy (and libraries built for Bevy) should bubble up errors to the user whenever possible, rather than panicking
-- gracefully unwrapping errors should be *easy*, with the help of Rust's [`?` operator]
-- the standard "please just log this" error type should always be an [`anyhow`]-style boxed error, contained in a [`BevyError`]
-- figuring out what went wrong from the logs should be easy: so we've added [high quality custom backtraces] to our [`BevyError`] type
-- you should be able to quickly configure your error-handler of last-resort in a single place, using the [`GLOBAL_ERROR_HANDLER`]
-- this should work everywhere: in systems, observers, commands, and even fallible system parameters like [`Single`]
+- Bevy systems, observers, and commands now support returning [`Result`], which is a type alias for `Result<(), BevyError>`
+- [`Result`] expects the new [`BevyError`], which accepts any error type (much like [`anyhow`]). This makes it easy and ergonomic to use the [`?` operator] in systems / observers / commands to capture and return errors.
+- [`BevyError`] automatically captures [high quality custom backtraces]. By default these are filtered down to just the essentials, cutting down on a lot of the noise from Rust and Bevy internals.
+- Errors returned by systems, observers, and commands are now handled by the [`GLOBAL_ERROR_HANDLER`]. This defaults to panicking, but can be set to anything (log, panic, custom logic, etc). We generally encourage developing with the panicking default, then switching to logging errors when deploying to production.
+
+We now encourage developers to bubble up errors whenever possible, rather than panicking immediately where the error occurs.
 
 Instead of:
 
@@ -29,7 +21,7 @@ use bevy::prelude::*;
 
 fn move_player(query: Query<&Transform, With<Player>>) {
     let mut player_transform = query.single().unwrap();
-    player_transform.translation += Vec3::X;
+    player_transform.translation.x += 1.0;
 }
 ```
 
@@ -40,24 +32,13 @@ use bevy::prelude::*;
 
 fn move_player(query: Query<&Transform, With<Player>>) -> Result {
     let mut player_transform = query.single()?;
-    player_transform.translation += Vec3::X;
+    player_transform.translation.x += 1.0;
 }
 ```
 
-Easy as can be! That `Result` type a [`bevy::ecs::error::Result`]: a type alias for `core::Result<(), BevyError>`,
-which uses a blanket `From` implementation to capture any `Error`-implementing type with a single `?` operation.
-
-By default, failures result in panics: it's great for prototyping and it works on every platform without any extra dependencies.
-When you're ready to ship to production, turn on Bevy's `configurable_error_handling` feature,
-and then set the [`GLOBAL_ERROR_HANDLER`] to the behavior you want.
-We even provide a built-in set of built-in logging helpers like [`warn`] for you:
-making it dead simple to swap out the behavior with a single `#[cfg(prod)]`-gated line of code.
-
+[`Result`]: https://docs.rs/bevy/0.16/bevy/ecs/error/type.Result.html
 [`?` operator]: https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html
 [`anyhow`]: https://docs.rs/anyhow/latest/anyhow/
-[`bevy::ecs::error::Result`]: https://docs.rs/bevy/0.16/bevy/ecs/error/type.Result.html
 [high quality custom backtraces]: https://github.com/bevyengine/bevy/pull/18144
 [`GLOBAL_ERROR_HANDLER`]: https://docs.rs/bevy/0.16/bevy/ecs/error/static.GLOBAL_ERROR_HANDLER.html
-[`Single`]: https://docs.rs/bevy/0.16/bevy/ecs/prelude/struct.Single.html
-[`warn`]: https://docs.rs/bevy/0.16/bevy/ecs/error/fn.warn.html
 [`BevyError`]: https://docs.rs/bevy/0.16/bevy/ecs/error/struct.BevyError.html

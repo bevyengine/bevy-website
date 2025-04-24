@@ -1,4 +1,4 @@
-In Bevy 0.16 you can now use `#[derive(Event)]` for more specialized implementations. 
+In **Bevy 0.16** you can now use `#[derive(Event)]` for more specialized implementations. 
 
 ```rust
 // 0.15
