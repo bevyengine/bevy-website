@@ -42,4 +42,5 @@ extend-ignore-identifiers-re = [
   "Sasy00",
   "BorMor",
   "IsseW",
+  "JusSchw",
 ]
