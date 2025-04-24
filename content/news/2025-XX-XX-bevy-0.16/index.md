@@ -26,7 +26,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Improved Spawn API:** Spawning entity hierarchies is now significantly easier!
 - **Unified Error Handling:** Bevy now has first class error handling support, making it easy, flexible, and ergonomic, while also making debugging easier!
 - **`no_std` Support:** `bevy` itself and a ton of our subcrates no longer rely on Rust's standard library, letting you use the same engine on everything from a modern gaming rig to a Gameboy Advance.
-- **Faster Transform Propagation:** We've dramatically improved the performance of transform propagation for many scene types.
+- **Faster Transform Propagation:** We've dramatically improved the performance of transform propagation for more objects at once, especially if they are static.
 <!-- more -->
 
 {{ release_notes(version="0.16") }}

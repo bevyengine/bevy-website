@@ -7,7 +7,7 @@ Early reports from users have shown Bevy working on bare-metal desktops, embedde
 
 <video controls loop aria-label="A purple GameBoy Advance running a game made using Bevy"><source  src="bevy-gba.mp4" type="video/mp4"/></video>
 
-Credit to Chris Biscardi for creating this awesome demo!
+Credit to [Chris Biscardi](https://www.youtube.com/@chrisbiscardi) for creating this awesome demo!
 
 Bevy `no_std` support has been [discussed] going back over 4 years, but was initially dropped to avoid the added complexity managing `no_std` support can bring.
 To be `no_std` compatible, your crate and _all_ of its dependencies must also be `no_std`.
