@@ -2,7 +2,7 @@
 
 [[release_notes]]
 title = "GPU-Driven Rendering"
-authors = ["@pcwalton"]
+authors = ["@pcwalton", "@tychedelia", "@robswain"]
 contributors = []
 prs = [16427]
 file_name = "gpu_driven_rendering.md"

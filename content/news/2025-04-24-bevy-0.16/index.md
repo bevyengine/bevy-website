@@ -1,13 +1,11 @@
 +++
 title = "Bevy 0.16"
-date = 2024-12-31 # TODO: fix date
+date = 2025-04-24 
 [extra]
 image = "planet.jpg"
 show_image = true
 image_subtitle = "A planet from EmbersArc's in-development spaceflight simulation game, rendered with custom shaders in Bevy"
 image_subtitle_link = "https://bsky.app/profile/embersarc.bsky.social"
-public_draft = 2008
-status = 'hidden'
 +++
 
 Thanks to **261** contributors, **1244** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.16** release on [crates.io](https://crates.io/crates/bevy)!
