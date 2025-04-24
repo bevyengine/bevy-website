@@ -5,7 +5,7 @@
 <video controls loop aria-label="A showcase of simulated sunrises and sunsets made in Bevy"><source src="atmosphere-showcase.mp4" type="video/mp4"/></video>
 Credit to `@aevyrie` for their amazing [atmosphere showcase]! It uses a fancy custom exposure curve to accentuate the near-dusk colors.
 
-Enabling atomosphere rendering is simple, just add the new [`Atmosphere`] component to your camera!
+Enabling atmosphere rendering is simple, just add the new [`Atmosphere`] component to your camera!
 
 ```rs
 commands.spawn((
