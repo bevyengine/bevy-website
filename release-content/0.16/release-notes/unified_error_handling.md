@@ -19,8 +19,8 @@ Instead of:
 ```rust
 use bevy::prelude::*;
 
-fn move_player(query: Query<&Transform, With<Player>>) {
-    let mut player_transform = query.single().unwrap();
+fn move_player(mut query: Query<&mut Transform, With<Player>>) {
+    let mut player_transform = query.single_mut().unwrap();
     player_transform.translation.x += 1.0;
 }
 ```
@@ -30,9 +30,10 @@ Try:
 ```rust
 use bevy::prelude::*;
 
-fn move_player(query: Query<&Transform, With<Player>>) -> Result {
-    let mut player_transform = query.single()?;
+fn move_player(mut query: Query<&mut Transform, With<Player>>) -> Result {
+    let mut player_transform = query.single_mut()?;
     player_transform.translation.x += 1.0;
+    Ok(())
 }
 ```
 
