@@ -27,7 +27,7 @@ jobs:
           example_count=`cat Cargo.toml | grep '\[\[example\]\]' | wc -l`
           page_count=$((example_count / ${{ env.PER_PAGE }} + 1))
           echo "pages=`jq -n -c \"[range($page_count)]\"`" >> $GITHUB_OUTPUT
- 
+
   take-screenshots:
     name: Take Screenshots
     needs: prepare-pages
@@ -57,7 +57,7 @@ jobs:
           sudo apt-get update -y -qq
           sudo add-apt-repository ppa:kisak/turtle -y
           sudo apt-get update
-          sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
+          sudo apt install -y xvfb libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
       - name: Install oxipng
         run: |
@@ -85,7 +85,7 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      
+
       - name: Clone bevy-website repo
         uses: actions/checkout@v4
 
