@@ -8,11 +8,11 @@ As `try_iter_component_access()` returns a `Result`, you’ll now need to handle
 
 Additionally, you’ll need to `filter_map()` the accesses based on which method you’re attempting to replace:
 
-|0.15|0.16|
-|-|-|
-|`Access::component_reads_and_writes()`|`Exclusive(_) | Shared(_)`|
-|`Access::component_reads()`|`Shared(_)`|
-|`Access::component_writes()`|`Exclusive(_)`|
+| 0.15                                   | 0.16                        |
+|----------------------------------------|-----------------------------|
+| `Access::component_reads_and_writes()` | `Exclusive(_) \| Shared(_)` |
+| `Access::component_reads()`            | `Shared(_)`                 |
+| `Access::component_writes()`           | `Exclusive(_)`              |
 
 To ease migration, please consider the below extension trait which you can include in your project:
 
