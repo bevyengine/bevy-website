@@ -15,4 +15,4 @@ let volume = Volume::Decibels(0.0);
 
 With this change, `AudioSinkPlayback`'s volume-related methods (`volume()` and `set_volume()`) and `GlobalVolume` now deal in `Volume`s rather than `f32`s.
 
-Finally, `Volume::ZERO` has been renamed to the more semantically correct `Volume::SILENT`. This is because 0 decibals is equivalent to "normal volume", which could lead to confusion with the old naming.
+Finally, `Volume::ZERO` has been renamed to the more semantically correct `Volume::SILENT`. This is because 0 decibels is equivalent to "normal volume", which could lead to confusion with the old naming.
