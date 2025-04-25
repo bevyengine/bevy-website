@@ -6,7 +6,7 @@
       {% if page and not page.extra.public_draft %}
         <a class="link-card" href="{{ page.path }}">
           {% set add_img_padding = page.extra.padded_list_image or page.extra.image is undefined %}
-          <div class="link-card__img-wrapper {% if add_img_padding %}link-card__img-wrapper--padded{% endif%}">
+          <div class="link-card__img-wrapper {% if add_img_padding %}link-card__img-wrapper--padded{% endif %}">
             {% if page.extra.image %}
               {% set image_parent = page.path | replace(from="_index.md", to="") %}
               <img class="link-card__img"
