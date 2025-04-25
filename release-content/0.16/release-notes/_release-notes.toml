@@ -248,7 +248,7 @@ file_name = "gpu_tracing.md"
 
 [[release_notes]]
 title = "Trait Tags on docs.rs"
-authors = ["@SpecificProtagonist"]
-contributors = ["@Jondolf", "@Carter0"]
+authors = ["@SpecificProtagonist", "@Jondolf"]
+contributors = ["@Carter0"]
 prs = [17758]
 file_name = "17758_Trait_tags_on_docsrs.md"
