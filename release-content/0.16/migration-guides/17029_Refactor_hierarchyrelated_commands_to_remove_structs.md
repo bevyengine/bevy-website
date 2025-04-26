@@ -18,6 +18,6 @@ If you were queuing the structs of hierarchy-related commands directly, you will
 If you were queuing the structs of event-related commands directly, you will need to change them to methods implemented on `Commands`:
 
 |Struct|Method|
-|-|
+|-|-|
 |`commands.queue(SendEvent { event })`|`commands.send_event(event)`|
 |`commands.queue(TriggerEvent { event, targets })`|`commands.trigger_targets(event, targets)`|
