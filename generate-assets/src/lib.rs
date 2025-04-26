@@ -801,6 +801,7 @@ mod tests {
                     metadata: Default::default(),
                     resolver: Default::default(),
                     dependencies: workspace_dependencies,
+                    lints: Default::default(),
                 }),
                 dependencies,
                 dev_dependencies,
@@ -816,6 +817,7 @@ mod tests {
                 bench: Default::default(),
                 test: Default::default(),
                 example: Default::default(),
+                lints: Default::default(),
             }
         }
 
@@ -995,10 +997,10 @@ mod tests {
 
             dependencies.insert(
                 "bevy".to_string(),
-                Dependency::Detailed(cargo_toml::DependencyDetail {
+                Dependency::Detailed(Box::new(cargo_toml::DependencyDetail {
                     path: Some("fake/path/to/crate".to_string()),
                     ..Default::default()
-                }),
+                })),
             );
             dev_dependencies.insert(
                 "bevy_transform".to_string(),
@@ -1019,10 +1021,10 @@ mod tests {
             // Alphabetical order could matter in this example, "first" < "second"
             dependencies.insert(
                 "bevy_first_third_party_crate".to_string(),
-                Dependency::Detailed(cargo_toml::DependencyDetail {
+                Dependency::Detailed(Box::new(cargo_toml::DependencyDetail {
                     path: Some("fake/path/to/crate".to_string()),
                     ..Default::default()
-                }),
+                })),
             );
             dependencies.insert(
                 "bevy_second_third_party_crate".to_string(),
