@@ -13,7 +13,7 @@ toml = "0.7"
 serde = { version = "1", features = ["derive"] }
 rand = "0.8"
 regex = "1"
-cargo_toml = "0.15"
+cargo_toml = "0.22"
 url = "2.2.2"
 anyhow = "1.0.58"
 base64 = "0.13.0"
