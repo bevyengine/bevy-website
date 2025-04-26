@@ -4,6 +4,7 @@ date = 2024-03-11
 authors = ["Carter Anderson"]
 [extra]
 image = "bevy_foundation.svg"
+padded_list_image = true
 # show_image = true
 github = "cart"
 youtube = "cartdev"

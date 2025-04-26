@@ -6,6 +6,7 @@ authors = ["Carter Anderson"]
 github = "cart"
 youtube = "cartdev"
 image = "bevy_birthday.svg"
+padded_list_image = true
 show_image = true
 +++
 
