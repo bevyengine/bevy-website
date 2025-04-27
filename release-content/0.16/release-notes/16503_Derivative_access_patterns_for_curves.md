@@ -4,12 +4,7 @@ One of the most natural and important things you might want to do with a curve i
 the rate at which it's changing.
 You might even be after its **second derivative**: the rate at which the rate of change is changing.
 
-Accessing this information should be easy and error-resistant,
-but we also won't accept any complication or performance penalty in the more common derivative-less use cases.
-
-To satisfy these requirements, our resident mathematicians have built a careful solution involving multiple traits and wrapper types.
-For a full description of the mechanisms and considerations, dive down the rabbit hole into the linked PR description!
-Despite (or because of?) all of the mathematical type wizardry, the actual usage is straightforward:
+In **Bevy 0.16** you can now easily calculate these things!
 
 ```rust
 let points = [

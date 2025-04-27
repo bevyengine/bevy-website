@@ -1,6 +1,6 @@
 <!-- Entity cloning -->
 <!-- https://github.com/bevyengine/bevy/pull/16132 -->
-Bevy now has first-class support for cloning entities. While it was possible to do this before using reflection and `ReflectComponent` functionality, the common implementation was slow and required registering all cloneable components. With Bevy 0.16, entity cloning is supported natively and is as simple as adding `#[derive(Clone)]` to a component to make it cloneable.
+Bevy now has first-class support for cloning entities. While it was possible to do this before using reflection and `ReflectComponent` functionality, the common implementation was slow and required registering all cloneable components. With **Bevy 0.16**, entity cloning is supported natively and is as simple as adding `#[derive(Clone)]` to a component to make it cloneable.
 
 ```rust
 #[derive(Component, Clone)]

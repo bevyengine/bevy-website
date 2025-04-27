@@ -1,6 +1,6 @@
 `Query::single()`, `Query::single_mut()` and their `QueryState` equivalents now return a `Result`. Generally, you'll want to:
 
-- Use Bevy 0.16's system error handling to return a `Result` using the `?` operator.
+- Use **Bevy 0.16**'s system error handling to return a `Result` using the `?` operator.
 - Use a `let Ok(data) = result else {}` block to early return if there's an expected failure.
 - Use `unwrap()` or `Ok` destructuring inside of tests.
 

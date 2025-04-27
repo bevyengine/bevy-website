@@ -1,12 +1,9 @@
 <!-- Retained `Gizmo`s -->
 <!-- https://github.com/bevyengine/bevy/pull/15473 -->
-
-In previous versions of Bevy, gizmos were always "immediate mode". They were rendered for a frame before disappearing. This is great for prototyping but can have a serious effect on performance.
+In previous versions of Bevy, gizmos were always rendered in an "immediate mode" style: they were rendered for a single frame before disappearing. This is great for prototyping but also has a performance cost.
 
 With retained gizmos, you can now spawn gizmos that persist, enabling higher performance! For a
-static set of lines, we've measured ~65-80x improvement in performance! This does not remove the old
-API though - if you were using `Gizmos` before, you can continue to use it to draw gizmos each
-frame.
+static set of lines, we've measured a ~65-80x improvement in performance!
 
 As an example, here's how to spawn a sphere that persists:
 
@@ -28,3 +25,5 @@ fn setup(
     });
 }
 ```
+
+The immediate mode `Gizmos` API is still there if you want it though. It is still a great choice for easy debugging.

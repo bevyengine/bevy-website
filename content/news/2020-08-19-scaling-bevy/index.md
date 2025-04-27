@@ -6,6 +6,7 @@ authors = ["Carter Anderson"]
 github = "cart"
 youtube = "cartdev"
 image = "balance-scale.svg"
+padded_list_image = true
 show_image = false
 +++
 

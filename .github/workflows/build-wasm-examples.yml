@@ -68,6 +68,8 @@ jobs:
         run: |
           export PATH=$PATH:`pwd`/binaryen/bin
           cargo run -p example-showcase -- --per-page ${{ env.PER_PAGE }} --page ${{ matrix.page }} build-wasm-examples --content-folder wasm-examples --api ${{ matrix.api }} --website-hacks --optimize-size
+        env:
+          CARGO_PROFILE_RELEASE_OPT_LEVEL: "z"
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
