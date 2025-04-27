@@ -3,9 +3,9 @@
 
 If you have an eye for light (or training in visual arts), you'll notice that shiny curved surfaces get extra-bright spots of light.
 That's a specular highlight!
-In Bevy 0.16, we've implemented a standard physically-based rendering (PBR) feature of specular highlights: the ability to tint their color.
+In **Bevy 0.16**, we've implemented a standard physically-based rendering (PBR) feature of specular highlights: the ability to tint their color.
 
-![A shiny floating sphere with an iridescent multicolored sheen. It reminds you of a Christmas tree ornament. You can see a reflection of a city scene in it.](specular-tint-sphere.png)
+![A shiny floating sphere with an iridescent multicolored sheen. It reminds you of a Christmas tree ornament. You can see a reflection of a city scene in it.](specular-tint-sphere.jpg)
 
 This can be done uniformly across the material, by simply setting the `specular_tint` field on the [`StandardMaterial`] for your object.
 
@@ -17,4 +17,4 @@ As a result, specular maps are off by default, and gated behind the `pbr_specula
 
 To support this work, we now support the KHR_materials_specular glTF extension, allowing artists to set these properties in 3D modelling tools like Blender, then import them into Bevy.
 
-[`StandardMaterial`]: https://dev-docs.bevyengine.org/bevy/pbr/struct.StandardMaterial.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.16/bevy/pbr/struct.StandardMaterial.html
