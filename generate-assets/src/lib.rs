@@ -591,11 +591,23 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
         println!("Downloading crates.io data dump");
     }
 
-    Ok(CratesIODumpLoader::default()
+    let db = CratesIODumpLoader::default()
         .tables(&["crates", "dependencies", "versions"])
         .preload(true)
         .update()?
-        .open_db()?)
+        .open_db()?;
+
+    db.execute_batch(
+        "\
+        CREATE INDEX IF NOT EXISTS versions_crate_id_index ON versions(crate_id);
+        CREATE INDEX IF NOT EXISTS dependencies_crate_id_index ON dependencies(crate_id);
+        CREATE INDEX IF NOT EXISTS crates_id_index ON crates(id);
+        CREATE INDEX IF NOT EXISTS crates_name_index ON crates(name);
+     ",
+    )
+    .expect("could not create crates.io database indices");
+
+    Ok(db)
 }
 
 /// Gets metadata of a crate from the crates.io database dump.
