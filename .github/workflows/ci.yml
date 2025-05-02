@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   mega-linter:
+    needs: [generate-errors, generate-community, generate-wasm-examples, generate-community]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76,274 +77,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create Dummy Generated Pages
-        run: |
-          echo "Assets"
-          mkdir content/assets content/assets/placeholder
-          echo -e "+++\ntitle = \"Bevy Assets\"\ntemplate = \"assets.html\"\n+++\n" > content/assets/_index.md 
-          echo -e "+++\ntitle = \"placeholder\"\n+++\n" > content/assets/placeholder/_index.md
-          echo -e "+++\ntitle = \"Example\"\ndescription = \"Example post of assets section of site.\"\n[extra]\nlink = \"https://example.com\"\nlicenses = [\"Example License\"]\nbevy_versions = [\"x.y.x\"]\n+++\n" > content/assets/placeholder/example.md
-          echo "Examples"
-          mkdir content/examples content/examples/2d_rendering content/examples/2d_rendering/2d-shapes
-          echo -e "+++\ntitle = \"Bevy Examples in WebGL2\"\ntemplate = \"examples.html\"\nsort_by = \"weight\"\n[extra]\nheader_message = \"Examples (WebGL2)\"\n+++\nshader_code_paths = []\ncode_paths = []\n" > content/examples/_index.md
-          echo -e "+++\ntitle = \"2D Rendering\"\nsort_by = \"weight\"\nweight = 15\n+++\n" > content/examples/2d_rendering/_index.md
-          echo -e "+++\ntitle = \"2D Shapes\"\ntemplate = \"example.html\"\nweight = 0\ndescription = \"Renders simple 2D primitive shapes like circles and polygons\"\n[extra]\ntechnical_name = \"2d-shapes\"\nlink = \"/examples/2d_rendering/2d-shapes\"\nimage = \"../static/screenshots/2d_rendering/2d_shapes.png\"\ncode_path = \"content/examples/2d_rendering/2d-shapes/2d_shapes.rs\"\ngithub_code_path = \"examples/2d/2d_shapes.rs\"\nheader_message = \"examples (WebGL2)\"\n+++\n" > content/examples/2d_rendering/2d-shapes/index.md
-          echo "//! Shows how to render simple primitive shapes with a single color.
-            use bevy::{
-                prelude::*,
-                sprite::{MaterialMesh2dBundle, Mesh2dHandle},
-            };
-            fn main() {
-                App::new()
-                    .add_plugins(DefaultPlugins)
-                    .add_systems(Startup, setup)
-                    .run();
-            }
-            const X_EXTENT: f32 = 600.;
-            fn setup(
-                mut commands: Commands,
-                mut meshes: ResMut<Assets<Mesh>>,
-                mut materials: ResMut<Assets<ColorMaterial>>,
-            ) {
-                commands.spawn(Camera2dBundle::default());
-                let shapes = [
-                    Mesh2dHandle(meshes.add(Circle { radius: 50.0 })),
-                    Mesh2dHandle(meshes.add(Ellipse::new(25.0, 50.0))),
-                    Mesh2dHandle(meshes.add(Capsule2d::new(25.0, 50.0))),
-                    Mesh2dHandle(meshes.add(Rectangle::new(50.0, 100.0))),
-                    Mesh2dHandle(meshes.add(RegularPolygon::new(50.0, 6))),
-                    Mesh2dHandle(meshes.add(Triangle2d::new(
-                        Vec2::Y * 50.0,
-                        Vec2::new(-50.0, -50.0),
-                        Vec2::new(50.0, -50.0),
-                    ))),
-                ];
-                let num_shapes = shapes.len();
-                for (i, shape) in shapes.into_iter().enumerate() {
-                    // Distribute colors evenly across the rainbow.
-                    let color = Color::hsl(360. * i as f32 / num_shapes as f32, 0.95, 0.7);
-                    commands.spawn(MaterialMesh2dBundle {
-                        mesh: shape,
-                        material: materials.add(color),
-                        transform: Transform::from_xyz(
-                            // Distribute shapes from -X_EXTENT to +X_EXTENT.
-                            -X_EXTENT / 2. + i as f32 / (num_shapes - 1) as f32 * X_EXTENT,
-                            0.0,
-                            0.0,
-                        ),
-                        ..default()
-                    });
-                }
-            }" > content/examples/2d_rendering/2d-shapes/2d_shapes.rs
-          echo "Community"
-          mkdir content/community/donate content/community/people content/community/people/'community members' content/community/people/'the bevy organization'
-          echo "Donation Page"
-          echo -e "+++
-            title = \"Supporting Bevy Development\"
-            sort_by = \"weight\"
-            template = \"donate.html\"
-            weight = 1
-
-            [extra]
-            header_message = \"Supporting Bevy\"
-            sort_order_reversed = false
-
-            +++
-            " > content/community/donate/_index.md
-          echo -e "+++
-            title = \"Test Person\"
-            weight = 0
-
-            [extra]
-            profile_picture = \"\"
-            sponsor = \"nothing\"
-            bio = \"Test person.\"
-            discord = \"test#9999\"
-            discord_userid = \"000000000000000000\"
-            github = \"invalid\"
-            mastodon_user = \"invalid\"
-            mastodon_instance = \"doesnt.exist\"
-            twitter = \"nothing\"
-            itch_io = \"nada\"
-            roles = [\"Non-existent\"]
-
-            +++
-            " > content/community/donate/test.md
-          echo "People Page"
-          echo -e "+++
-            title = \"People\"
-            sort_by = \"weight\"
-            template = \"people.html\"
-            weight = 0
-
-            [extra]
-            header_message = \"People\"
-            sort_order_reversed = false
-
-            +++
-            " > content/community/people/_index.md
-          echo -e "+++
-            title = \"Community Members\"
-            sort_by = \"weight\"
-            weight = 2
-
-            [extra]
-            sort_order_reversed = false
-
-            +++
-            " > content/community/people/'community members'/_index.md
-          echo -e "+++
-            title = \"Test Person\"
-            weight = 0
-
-            [extra]
-            profile_picture = \"\"
-            sponsor = \"nothing\"
-            bio = \"Tester\"
-            discord = \"test\"
-            discord_userid = \"000000000000000000\"
-            github = \"test\"
-            itch_io = \"test\"
-            website = \"https://example.com\"
-
-            +++
-            " > content/community/people/'community members'/test.md
-          echo -e "+++
-            title = \"The Bevy Organization\"
-            sort_by = \"weight\"
-            weight = 1
-
-            [extra]
-            sort_order_reversed = false
-
-            +++
-            " > content/community/people/'the bevy organization'/_index.md
-          echo -e "+++
-            title = \"Test Member\"
-            weight = 0
-
-            [extra]
-            profile_picture = \"\"
-            bio = \"Test person.\"
-            discord = \"test#9999\"
-            discord_userid = \"000000000000000000\"
-            github = \"invalid\"
-            mastodon_user = \"invalid\"
-            mastodon_instance = \"doesnt.exist\"
-            twitter = \"nothing\"
-            itch_io = \"nada\"
-            roles = [\"Non-existent\"]
-
-            +++
-            " > content/community/people/'the bevy organization'/test.md          
-          echo "Errors"
-          mkdir content/learn/errors
-          echo -e "+++
-            title = \"Errors\"
-            sort_by = \"weight\"
-            template = \"docs.html\"
-            page_template = \"docs.html\"
-            +++
-            " > content/learn/errors/_index.md
-          echo -e "+++
-            title = \"B0001\"
-            weight = 0
-
-            +++
-
-
-            To keep [Rust rules on references](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#the-rules-of-references) (either one mutable reference or any number of immutable references) on a component, it is not possible to have two queries on the same component when one requests mutable access to it in the same system.
-
-            Erroneous code example:
-
-            ```rust
-            use bevy::prelude::*;
-
-            #[derive(Component)]
-            struct Player;
-
-            #[derive(Component)]
-            struct Enemy;
-
-            fn move_enemies_to_player(
-                mut enemies: Query<&mut Transform, With<Enemy>>,
-                player: Query<&Transform, With<Player>>,
-            ) {
-                // ...
-            }
-
-            fn main() {
-                App::new()
-                    .add_plugins(DefaultPlugins)
-                    .add_systems(Update, move_enemies_to_player)
-                    .run();
-            }
-            ```
-
-            This will panic, as it's not possible to have both a mutable and an immutable query on `Transform` at the same time.
-
-            You have two solutions:
-
-            Solution #1: use disjoint queries using [`Without`]
-
-            As a `Player` entity won't be an `Enemy` at the same time, those two queries will actually never target the same entity. This can be encoded in the query filter with [`Without`] :
-
-          [`Without`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Without.html
-            ```rust
-            use bevy::prelude::*;
-
-            #[derive(Component)]
-            struct Player;
-
-            #[derive(Component)]
-            struct Enemy;
-
-            fn move_enemies_to_player(
-                mut enemies: Query<&mut Transform, With<Enemy>>,
-                player: Query<&Transform, (With<Player>, Without<Enemy>)>,
-            ) {
-                // ...
-            }
-
-            fn main() {
-                App::new()
-                    .add_plugins(DefaultPlugins)
-                    .add_systems(Update, move_enemies_to_player)
-                    .run();
-            }
-            ```
-
-            Solution #2: use a `ParamSet`
-
-            A `ParamSet` will let you have conflicting queries as a parameter, but you will still be responsible for not using them at the same time in your system.
-
-            ```rust
-            use bevy::prelude::*;
-
-            #[derive(Component)]
-            struct Player;
-
-            #[derive(Component)]
-            struct Enemy;
-
-            fn move_enemies_to_player(
-                mut transforms: ParamSet<(
-                    Query<&mut Transform, With<Enemy>>,
-                    Query<&Transform, With<Player>>,
-                )>,
-            ) {
-                // ...
-            }
-
-            fn main() {
-                App::new()
-                    .add_plugins(DefaultPlugins)
-                    .add_systems(Update, move_enemies_to_player)
-                    .run();
-            }
-            ```
-            " > content/learn/errors/test_error.md
-
       - name: Install NPM
         uses: actions/setup-node@v4
         with:
@@ -389,7 +122,7 @@ jobs:
           echo 'You can find the extension here: https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode'
 
   generate-assets:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
+    needs: [test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -425,7 +158,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
+    needs: [ test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -452,7 +185,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
+    needs: [test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -479,7 +212,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
+    needs: [test-code-examples, lint-tools, check-hide-lines, typos, accessibility-linting]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
