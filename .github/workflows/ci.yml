@@ -241,13 +241,8 @@ jobs:
           echo -e "+++
             title = \"Errors\"
             sort_by = \"weight\"
-            template = \"errors.html\"
-            weight = 0
-
-            [extra]
-            header_message = \"Errors\"
-            sort_order_reversed = false
-
+            template = \"docs.html\"
+            page_template = \"docs.html\"
             +++
             " > content/learn/errors/_index.md
           echo -e "+++
