@@ -85,7 +85,7 @@ jobs:
           echo -e "+++\ntitle = \"Example\"\ndescription = \"Example post of assets section of site.\"\n[extra]\nlink = \"https://example.com\"\nlicenses = [\"Example License\"]\nbevy_versions = [\"x.y.x\"]\n+++\n" > content/assets/placeholder/example.md
           echo "Examples"
           mkdir content/examples content/examples/2d_rendering content/examples/2d_rendering/2d-shapes
-          echo -e "+++\ntitle = \"Bevy Examples in WebGL2\"\ntemplate = \"examples.html\"\nsort_by = \"weight\"\n[extra]\nheader_message = \"Examples (WebGL2)\"\n+++\n" > content/examples/_index.md
+          echo -e "+++\ntitle = \"Bevy Examples in WebGL2\"\ntemplate = \"examples.html\"\nsort_by = \"weight\"\n[extra]\nheader_message = \"Examples (WebGL2)\"\n+++\nshader_code_paths = []\ncode_paths = []\n" > content/examples/_index.md
           echo -e "+++\ntitle = \"2D Rendering\"\nsort_by = \"weight\"\nweight = 15\n+++\n" > content/examples/2d_rendering/_index.md
           echo -e "+++\ntitle = \"2D Shapes\"\ntemplate = \"example.html\"\nweight = 0\ndescription = \"Renders simple 2D primitive shapes like circles and polygons\"\n[extra]\ntechnical_name = \"2d-shapes\"\nlink = \"/examples/2d_rendering/2d-shapes\"\nimage = \"../static/screenshots/2d_rendering/2d_shapes.png\"\ncode_path = \"content/examples/2d_rendering/2d-shapes/2d_shapes.rs\"\ngithub_code_path = \"examples/2d/2d_shapes.rs\"\nheader_message = \"examples (WebGL2)\"\n+++\n" > content/examples/2d_rendering/2d-shapes/index.md
           echo "//! Shows how to render simple primitive shapes with a single color.
