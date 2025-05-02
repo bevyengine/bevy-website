@@ -71,7 +71,7 @@ jobs:
         run: cargo clippy --workspace -- -Dwarnings
         
   accessibility-linting:
-    needs: [generate-errors, generate-community, generate-wasm-examples, generate-community]
+    needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
     runs-on: ubuntu-latest
 
     steps:
