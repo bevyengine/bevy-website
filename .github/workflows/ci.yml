@@ -16,7 +16,6 @@ concurrency:
 
 jobs:
   mega-linter:
-    needs: [generate-errors, generate-community, generate-wasm-examples, generate-community]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,6 +71,7 @@ jobs:
         run: cargo clippy --workspace -- -Dwarnings
         
   accessibility-linting:
+    needs: [generate-errors, generate-community, generate-wasm-examples, generate-community]
     runs-on: ubuntu-latest
 
     steps:
