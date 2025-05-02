@@ -1,0 +1,1 @@
+- `WorldQuery` now has an additional `shrink_fetch` method you have to implement if you were implementing `WorldQuery` manually.

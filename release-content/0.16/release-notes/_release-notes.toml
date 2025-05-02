@@ -1,0 +1,254 @@
+# Rendering
+
+[[release_notes]]
+title = "GPU-Driven Rendering"
+authors = ["@pcwalton", "@tychedelia", "@robswain"]
+contributors = []
+prs = [16427]
+file_name = "gpu_driven_rendering.md"
+
+[[release_notes]]
+title = "Procedural Atmospheric Scattering"
+authors = ["@ecoskey", "@mate-h"]
+contributors = ["@atlv24", "@JMS55"]
+prs = [16314, 17555, 17672, 18582]
+file_name = "16314_Procedural_atmospheric_scattering.md"
+
+[[release_notes]]
+title = "Decals"
+authors = ["@naasblod", "@JMS55", "@pcwalton"]
+contributors = ["@IceSentry", "@NiseVoid", "@DGriffin91"]
+prs = [16600, 17315]
+file_name = "decals.md"
+
+[[release_notes]]
+title = "Experimental Occlusion Culling"
+authors = ["@pcwalton", "@JMS55"]
+contributors = []
+prs = [12755, 17413, 17934, 17951]
+file_name = "occlusion_culling.md"
+
+[[release_notes]]
+title = "Anamorphic Bloom"
+authors = ["@aevyrie"]
+contributors = []
+prs = [17096]
+file_name = "17096_Anamorphic_Bloom.md"
+
+[[release_notes]]
+title = "ECS Relationships"
+authors = ["@cart"]
+contributors = ["@alice-i-cecile"]
+prs = [17398]
+file_name = "17398_Relationships_nonfragmenting_onetomany.md"
+
+[[release_notes]]
+title = "Improved Spawn API"
+authors = ["@cart"]
+contributors = ["@alice-i-cecile", "@MrGVSV", "@ecoskey"]
+prs = [17521]
+file_name = "17521_Improved_Spawn_APIs_and_Bundle_Effects.md"
+
+[[release_notes]]
+title = "Unified ECS Error Handling"
+authors = ["@NthTensor", "@JeanMertz", "@JaySpruce", "@cart", "@alice-i-cecile"]
+contributors = ["@bushrat011899"]
+prs = [16589, 17043, 17753, 18144, 18454]
+file_name = "unified_error_handling.md"
+
+[[release_notes]]
+title = "Bevy `no_std` Support"
+authors = ["@bushrat011899"]
+contributors = [
+    "@alice-i-cecile",
+    "@BD103",
+    "@BenjaminBrienen",
+    "@hymm",
+    "@Jondolf",
+    "@MrGVSV",
+    "@mweatherley",
+    "@Victoronz",
+]
+prs = [
+    15281,
+    15463,
+    15464,
+    15465,
+    15528,
+    15810,
+    16256,
+    16633,
+    16758,
+    16874,
+    16995,
+    16998,
+    17027,
+    17028,
+    17030,
+    17031,
+    17086,
+    17470,
+    17490,
+    17491,
+    17505,
+    17507,
+    17955,
+    18061,
+    18333,
+]
+file_name = "17955_Add_no_std_support_to_bevy.md"
+
+[[release_notes]]
+title = "Faster Transform Propagation"
+authors = ["@aevyrie"]
+contributors = ["@alice-i-cecile", "@mockersf"]
+prs = [17840, 18589]
+file_name = "17840_Parallel_Transform_Propagation.md"
+
+[[release_notes]]
+title = "Specular Tints and Maps"
+authors = ["@pcwalton"]
+contributors = []
+prs = [14069]
+file_name = "14069_Add_support_for_specular_tints_and_maps_per_the_KHR_materi.md"
+
+[[release_notes]]
+title = "Experimental WESL Shaders"
+authors = ["@tychedelia"]
+contributors = []
+prs = [17953]
+file_name = "17953_Add_support_for_experimental_WESL_shader_source.md"
+
+[[release_notes]]
+title = "Virtual Geometry Improvements"
+authors = ["@JMS55"]
+contributors = ["@atlv24"]
+prs = [17765, 16947, 16941]
+file_name = "virtual_geometry_improvements.md"
+
+# ECS
+
+[[release_notes]]
+title = "Immutable Components"
+authors = ["@bushrat011899"]
+contributors = ["@nakedible", "@MrGVSV", "@BenjaminBrienen", "@alice-i-cecile"]
+prs = [16372, 16668, 18532]
+file_name = "16372_Add_Immutable_Component_Support.md"
+
+[[release_notes]]
+title = "Entity Cloning"
+authors = ["@eugineerd", "@JaySpruce"]
+contributors = []
+prs = [16132, 16826]
+file_name = "16132_Entity_cloning.md"
+
+[[release_notes]]
+title = "Entity Disabling / Default Query Filters"
+authors = ["@NiseVoid", "@alice-i-cecile"]
+contributors = []
+prs = [13120, 17514, 17768]
+file_name = "13120_Add_DefaultQueryFilters.md"
+
+[[release_notes]]
+title = "Better Location Tracking"
+authors = ["@SpecificProtagonist", "@chescock"]
+contributors = [
+    "@alice-i-cecile",
+    "Freya Pines",
+    "@pin3-free",
+    "@mweatherley",
+    "@skimmedsquare",
+]
+prs = [15607, 16047, 16778, 17075, 17602]
+file_name = "16778_Event_source_location_tracking.md"
+
+# UI
+
+[[release_notes]]
+title = "Text Shadows"
+authors = ["@ickshonpe"]
+contributors = []
+prs = [17559]
+file_name = "17559_Basic_UI_text_shadows.md"
+
+[[release_notes]]
+title = "Input Focus Improvements"
+authors = ["@viridia", "@alice-i-cecile"]
+contributors = []
+prs = [15611, 16795]
+file_name = "15611_Add_bevy_input_focus_crate.md"
+
+# Gizmos
+
+[[release_notes]]
+title = "Retained `Gizmo`s"
+authors = ["@tim-blackbird"]
+contributors = []
+prs = [15473]
+file_name = "15473_Retained_Gizmos.md"
+
+# Picking
+
+[[release_notes]]
+title = "Transparent Sprite Picking"
+authors = ["@vandie"]
+contributors = ["@andriyDev"]
+prs = [16388]
+file_name = "16388_Add_optional_transparency_passthrough_for_sprite_backend_w.md"
+
+# Reflection
+
+[[release_notes]]
+title = "Reflection: Function Overloading (Generic & Variadic Functions)"
+authors = ["@MrGVSV"]
+contributors = []
+prs = [15074]
+file_name = "15074_bevy_reflect_Function_Overloading_Generic__Variadic_Functi.md"
+
+# Math
+
+[[release_notes]]
+title = "Curve Derivatives"
+authors = ["@mweatherley"]
+contributors = ["@alice-i-cecile"]
+prs = [16503]
+file_name = "16503_Derivative_access_patterns_for_curves.md"
+
+# Assets
+
+[[release_notes]]
+title = "`AssetChanged` Query Filter"
+authors = ["@tychedelia"]
+contributors = ["@chescock", "@pcwalton", "@alice-i-cecile", "@nicopap"]
+prs = [16810]
+file_name = "16810_Add_AssetChanged_query_filter.md"
+
+[[release_notes]]
+title = "Asset Processing no longer auto-generates .meta files"
+authors = ["@andriyDev"]
+contributors = []
+prs = [17216]
+file_name = "17216_Stop_automatically_generating_meta_files_for_assets_while_.md"
+
+# Grab bag
+
+[[release_notes]]
+title = "Mesh Tags"
+authors = ["@tychedelia"]
+contributors = []
+prs = [17648]
+file_name = "17648_mesh_tags.md"
+
+[[release_notes]]
+title = "GPU Timestamps in Traces"
+authors = ["@JMS55"]
+contributors = []
+prs = [18490]
+file_name = "gpu_tracing.md"
+
+[[release_notes]]
+title = "Trait Tags on docs.rs"
+authors = ["@SpecificProtagonist", "@Jondolf"]
+contributors = ["@Carter0"]
+prs = [17758]
+file_name = "17758_Trait_tags_on_docsrs.md"

@@ -1,0 +1,1 @@
+Any custom type used as a `Borrow<Entity>` entity list item for an `iter_many` method now has to implement `EntityBorrow` instead. Any type that implements `Borrow<Entity>` can trivially implement `EntityBorrow`.

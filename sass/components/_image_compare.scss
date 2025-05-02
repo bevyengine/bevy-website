@@ -1,19 +1,26 @@
+p.image-compare-instruction {
+  font-weight: bold;
+  margin-bottom: 0;
+}
+div.image-compare-container {
+  max-height: 720px;
+}
 div.image-compare {
   // default values
   --slider-min: 7%;
   --slider-max: 93%;
   --slider-value: 50%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9; // fallback; normally overridden by compare_slider shortcode
   // config
   --text-padding: 10px;
   --gap: 3px;
   --range-thumb-diametre: 16px;
-  background-color: $color-white; // gap color;
+  background-color: var(--image-compare-gap-color); // gap color;
 
   position: relative;
   border-radius: 10px;
   width: 100%;
-  outline: solid 1px $color-grey-900; // fixes border leaking background color
+  outline: solid 1px var(--image-compare-outline-color); // fixes border leaking background color
   outline-offset: -1px;
 
   // calculated
@@ -25,7 +32,7 @@ div.image-compare {
     font-weight: bolder;
     font-size: 1.8rem;
     width: calc(100% - var(--text-padding));
-    text-shadow: 0 0 2px $color-black;
+    text-shadow: 0 0 2px var(--image-compare-text-shadow-color);
   }
 
   &::before {
@@ -83,13 +90,13 @@ div.image-compare {
       width: var(--range-thumb-diametre);
       height: var(--range-thumb-diametre);
       border-radius: 50%;
-      outline: solid 3px $color-white;
+      outline: solid 3px var(--image-compare-thumb-outline-color);
       outline-offset: -2.9px;
-      background-color: darken($color-white, 40%);
+      background-color: var(--image-compare-thumb-bg-color);
 
       &:hover,
       &:active {
-        background-color: darken($color-white, 20%);
+        background-color: var(--image-compare-thumb-bg-hover-color);
       }
     }
 

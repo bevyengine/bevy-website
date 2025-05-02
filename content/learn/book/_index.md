@@ -1,7 +1,7 @@
 +++
 title = "Book"
-template = "docs-section.html"
-page_template = "docs-page.html"
+template = "docs.html"
+page_template = "docs.html"
 insert_anchor_links = "right"
 redirect_to = "learn/book/getting-started"
 [extra]

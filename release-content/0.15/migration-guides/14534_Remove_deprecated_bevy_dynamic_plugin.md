@@ -1,0 +1,1 @@
+Dynamic plugins were deprecated in 0.14 for being unsound, and they have now been fully removed. Please consider using the alternatives listed in the `bevy_dynamic_plugin` crate documentation, or worst-case scenario you may copy the code from 0.14.

@@ -1,0 +1,1 @@
+The `bevy_pbr::utils::random1D()` **shader** function has been replaced by the similar `bevy_pbr::utils::rand_f()`. Note that if you convert the returned `f32` to a different data type, you may be interested in `rand_u()` which returns a `u32` and `rand_vec2f()` which returns a `vec2<f32>`.

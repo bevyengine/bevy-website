@@ -1,0 +1,1 @@
+`FrameTimeDiagnosticsPlugin` now contains two fields: `max_history_length` and `smoothing_factor`. If you manually construct this plugin and wish to retain 0.15 behavior, simply call `FrameTimeDiagnosticsPlugin::default()`. If you wish to configure the maximum history length, you may use `FrameTimeDiagnosticsPlugin::new()` instead.

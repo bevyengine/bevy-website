@@ -1,0 +1,1 @@
+There was a regression in 0.13.1 `NodeBundle`s to destroy previous ones when spawned, and the original workaround was to add `position_type: Absolute` to all of the root nodes. This bug is now fixed, so you can remove the workaround.

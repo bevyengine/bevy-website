@@ -1,0 +1,1 @@
+`TorusMeshBuilder` is no longer `Copy` because it contains a `RangeInclusive` (`x..=y`) for the angle range. You will need to call `clone()` manually in any scenario where it was implicitly copied before.

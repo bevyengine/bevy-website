@@ -3,7 +3,6 @@ title = "Introducing Bevy 0.1"
 date = 2020-08-10
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++
@@ -105,7 +104,7 @@ And of course you can also create your own plugins. In fact, all engine and game
 
 ## Bevy ECS
 
-All Bevy engine and game logic is built on top of a custom [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system) (or ECS for short). Entity Component Systems are a software paradigm that involves breaking data up into Components. Entities are unique ids assigned to groups of Components. For example, one entity might might have a `Position` and `Velocity` component, whereas another entity might have a `Position` and `UI` component. Systems are logic that runs on a specific set of component types. You might have a `movement` system that runs on all entities with a `Position` and `Velocity` component.
+All Bevy engine and game logic is built on top of a custom [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system) (or ECS for short). Entity Component Systems are a software paradigm that involves breaking data up into Components. Entities are unique ids assigned to groups of Components. For example, one entity might have a `Position` and `Velocity` component, whereas another entity might have a `Position` and `UI` component. Systems are logic that runs on a specific set of component types. You might have a `movement` system that runs on all entities with a `Position` and `Velocity` component.
 
 The ECS pattern encourages clean, decoupled designs by forcing you to break up your app data and logic into its core components.
 
@@ -162,11 +161,11 @@ Bevy ECS does both of these things about as well as it can. According to the pop
 
 #### System Iteration (in nanoseconds, less is better)
 
-![ecs iter performance graph](ecs_iter.svg)
+<img alt="ecs iter performance graph" src="ecs_iter.svg" class="invertable">
 
 #### World Setup (in nanoseconds, less is better)
 
-![ecs iter performance graph](ecs_build.svg)
+<img alt="ecs iter performance graph" src="ecs_build.svg" class="invertable">
 
 Note that `ecs_bench` is a single threaded benchmark, so it doesn't illustrate the multi-threading capabilities of these framework. And as always, please be aware that `ecs_bench` is a micro benchmark and it doesn't illustrate the performance of a complex game. There is a lot of nuance in the ECS performance space and each of the ECS implementations above will perform differently under different workloads.
 
@@ -1198,4 +1197,4 @@ If any of this sounds interesting to you, I encourage you to check out [Bevy on 
 
 I want Bevy to become a vibrant developer community ... thats actually why I chose the name! A Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 
-<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 2.0rem" />
+<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 2.0rem" class="invertable"/>

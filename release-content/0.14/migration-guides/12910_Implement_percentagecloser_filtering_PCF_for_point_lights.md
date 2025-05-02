@@ -1,0 +1,1 @@
+`ShadowFilteringMethod::Castano13` and `ShadowFilteringMethod::Jimenez14` have been renamed to `Gaussian` and `Temporal` respectively to leave room for expansion in the future, though the corresponding authors are still credited in the documentation.

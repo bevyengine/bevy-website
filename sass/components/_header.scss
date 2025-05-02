@@ -1,14 +1,14 @@
 .header {
   padding-right: 8px;
 
-  @media #{$bp-tablet-landscape-up} {
+  @media #{$bp-desktop-up} {
     padding: 0 16px;
   }
 
   &__content {
     width: 100%;
     max-width: $max-width;
-    height: var(--header-height);
+    height: var(--layout-header-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -18,7 +18,7 @@
   &__hamburger {
     flex-shrink: 0;
 
-    @media #{$bp-tablet-landscape-up} {
+    @media #{$bp-desktop-up} {
       display: none;
     }
   }
@@ -38,7 +38,7 @@
     display: none;
     font-size: 1.28rem;
     font-weight: 500;
-    color: #868686;
+    color: var(--header-message-color);
     margin-left: 12px;
     white-space: nowrap;
 
@@ -81,7 +81,7 @@
       }
 
       &:hover {
-        filter: brightness(80%)
+        filter: brightness(80%);
       }
     }
   }

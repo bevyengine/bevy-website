@@ -2,3 +2,6 @@ ENABLE_LINTERS:
   - HTML_DJLINT
   - MARKDOWN_MARKDOWNLINT
   - EDITORCONFIG_EDITORCONFIG_CHECKER
+
+# We use the Javascript flavor, which does not include all of the linters.
+FAIL_IF_MISSING_LINTER_IN_FLAVOR: true

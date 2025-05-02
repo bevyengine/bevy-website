@@ -104,23 +104,23 @@ Looking better! However this still isn't a perfect solution. Large shadowmaps ar
 
 **Bevy 0.12**'s default PCF approach is the [`ShadowMapFilter::Castano13`] method by Ignacio Castaño (used in The Witness). Here it is with a 512x512 shadow map:
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare (Castano)</b>
-
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF On" data-title-b="PCF Off">
-  <img class="image-a" alt="PCF On" src="pcf_castano.png">
-  <img class="image-b" alt="PCF Off" src="no_pcf.png">
-</div>
+{{ compare_slider(
+    left_title="Castano 13 PCF",
+    left_image="pcf_castano.png",
+    right_title="PCF Off",
+    right_image="no_pcf.png"
+) }}
 
 Much better!
 
 We also implemented the [`ShadowMapFilter::Jimenez14`] method by Jorge Jimenez (used in Call of Duty Advanced Warfare). This can be slightly cheaper than Castano, but it can flicker. It benefits from [Temporal Anti-Aliasing (TAA)](/news/bevy-0-11/#temporal-anti-aliasing) which can reduce the flickering. It can also blend shadow cascades a bit more smoothly than Castano.
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare (Jimenez)</b>
-
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="PCF On" data-title-b="PCF Off">
-  <img class="image-a" alt="PCF On" src="pcf_jimenez.png">
-  <img class="image-b" alt="PCF Off" src="no_pcf.png">
-</div>
+{{ compare_slider(
+    left_title="Jimenez 14 PCF",
+    left_image="pcf_jimenez.png",
+    right_title="PCF Off",
+    right_image="no_pcf.png"
+) }}
 
 [`ShadowMapFilter::Castano13`]: https://docs.rs/bevy/0.12.0/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Castano13
 [`ShadowMapFilter::Jimenez14`]: https://docs.rs/bevy/0.12.0/bevy/pbr/enum.ShadowFilteringMethod.html#variant.Jimenez14
@@ -202,7 +202,7 @@ Most existing user-facing asset code will either require no changes at all, or m
 
 ### Asset Preprocessing
 
-![image process diagram](image_process.png)
+<img alt="image process diagram" src="image_process.png" class="invertable">
 
 Asset preprocessing is the ability to take an input asset of a given type, process it in some way (generally during development time), and then use the result as the final asset in your application. Think of it as an "asset compiler".
 

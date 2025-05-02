@@ -6,6 +6,7 @@ use gitlab_client::GitlabClient;
 use serde::Deserialize;
 use std::cmp::Ordering;
 use std::{fs, path::PathBuf, str::FromStr};
+use url::Url;
 
 pub mod github_client;
 pub mod gitlab_client;
@@ -23,6 +24,8 @@ pub struct Asset {
     pub description: String,
     pub order: Option<usize>,
     pub image: Option<String>,
+    #[serde(rename = "crate")]
+    pub crate_name: Option<String>,
     pub licenses: Option<Vec<String>>,
     pub bevy_versions: Option<Vec<String>>,
 
@@ -66,11 +69,13 @@ pub struct Section {
     pub sort_order_reversed: bool,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 pub enum AssetNode {
     Section(Section),
     Asset(Asset),
 }
+
 impl AssetNode {
     pub fn name(&self) -> String {
         match self {
@@ -220,7 +225,10 @@ fn get_extra_metadata(
 ) -> anyhow::Result<()> {
     println!("Getting extra metadata for {}", asset.name);
 
-    let url = url::Url::parse(&asset.link)?;
+    let url = match &asset.crate_name {
+        Some(crate_name) => Url::parse(&format!("https://crates.io/crates/{crate_name}")),
+        None => Url::parse(&asset.link),
+    }?;
     let segments = url.path_segments().map(|c| c.collect::<Vec<_>>()).unwrap();
 
     let metadata = match url.host_str() {
@@ -303,20 +311,20 @@ fn merge_version(version1: Option<String>, version2: Option<String>) -> Option<S
 
 /// Gets metadata from a Github project.
 ///
-/// This algorithm, in order :
+/// This algorithm, in order:
 /// - tries to get metadata from the root `Cargo.toml` file,
 /// - if the license is missing, search the license of the project on Github,
 /// - if metadata is missing, search all `Cargo.toml` files, then tries to get metadata
-/// from all of them, until we have the information we need.
+///   from all of them, until we have the information we need.
 ///
 /// Note:
 /// - The search call of the API has a tendency to return 403 errors after a few number
-/// of calls. Assets that are at the "end" might not have correct metadata because of that.
+///   of calls. Assets that are at the "end" might not have correct metadata because of that.
 /// - This algorithm tries to retain the "best" version and merge all licenses found.
 /// - If a licence and version is found, it will stop searching, but the information
-/// about the version and license could have gotten "better" by searching deper.
+///   about the version and license could have gotten "better" by searching deper.
 /// - Likewise, the project license is never checked if a license is provided in the root
-/// `Cargo.toml` file.
+///   `Cargo.toml` file.
 fn get_metadata_from_github(
     client: &GithubClient,
     username: &str,
@@ -461,10 +469,11 @@ fn get_license(cargo_manifest: &cargo_toml::Manifest) -> Option<String> {
 
 /// Find any bevy dependency and get the corresponding bevy version from a `Cargo.toml` file.
 ///
-/// This algorithm checks if a dependency to an official bevy crate is found, in order :
+/// This algorithm checks if a dependency to an official bevy crate is found, in order:
 /// - in the (regular) dependencies,
 /// - in the dev dependencies (used for examples, tests and benchmarks),
 /// - in the workspace dependencies.
+///
 /// It doesn't go deeper if a version is already found.
 fn get_bevy_version_from_manifest(
     cargo_manifest: &cargo_toml::Manifest,
@@ -547,7 +556,7 @@ fn search_bevy_in_manifest_dependencies(
 /// Gets the bevy version from the `Cargo.toml` bevy dependency provided.
 ///
 /// Returns the version number if available.
-/// If is is a git dependency, return either "main" or "git" for anything that isn't "main".
+/// If is a git dependency, return either "main" or "git" for anything that isn't "main".
 fn get_bevy_manifest_dependency_version(dep: &cargo_toml::Dependency) -> Option<String> {
     match dep {
         cargo_toml::Dependency::Simple(version) => Some(version.to_string()),
@@ -582,11 +591,23 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
         println!("Downloading crates.io data dump");
     }
 
-    Ok(CratesIODumpLoader::default()
+    let db = CratesIODumpLoader::default()
         .tables(&["crates", "dependencies", "versions"])
         .preload(true)
         .update()?
-        .open_db()?)
+        .open_db()?;
+
+    db.execute_batch(
+        "\
+        CREATE INDEX IF NOT EXISTS versions_crate_id_index ON versions(crate_id);
+        CREATE INDEX IF NOT EXISTS dependencies_crate_id_index ON dependencies(crate_id);
+        CREATE INDEX IF NOT EXISTS crates_id_index ON crates(id);
+        CREATE INDEX IF NOT EXISTS crates_name_index ON crates(name);
+     ",
+    )
+    .expect("could not create crates.io database indices");
+
+    Ok(db)
 }
 
 /// Gets metadata of a crate from the crates.io database dump.
@@ -672,6 +693,37 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
     bevy_crates
 }
 
+/// Get the highest (according to semver) version of Bevy listed in the crates.io database
+pub fn get_latest_bevy_version(db: &CratesIoDb) -> anyhow::Result<semver::Version> {
+    let mut bevy_id_statement = db.prepare(
+        "\
+            SELECT id \
+            FROM crates \
+            WHERE name = 'bevy'\
+        ",
+    )?;
+
+    let bevy_id: String = bevy_id_statement.query_row([], |row| row.get(0))?;
+
+    let mut bevy_versions_statement = db.prepare(
+        "\
+            SELECT num \
+            FROM versions \
+            WHERE crate_id = ?\
+        ",
+    )?;
+
+    let bevy_versions: Vec<semver::Version> = bevy_versions_statement
+        .query_map([bevy_id], |r| r.get::<_, String>(0))?
+        .filter_map(|r| semver::Version::parse(&r.ok()?).ok())
+        .collect();
+
+    bevy_versions
+        .into_iter()
+        .max()
+        .context("Failed to retrieve Bevy versions from crates.io db")
+}
+
 /// Get a prepared statement to get license and version for a crate from the
 /// crates.io database dump.
 ///
@@ -688,7 +740,7 @@ pub fn get_metadata_from_cratesio_statement(
         FROM ( \
             SELECT version_id, license, major, \
                 CAST(SUBSTR(minor_and_patch,0,second_point) AS INTEGER) minor, \
-                SUBSTR(minor_and_patch,second_point+1) patch \
+                CAST(SUBSTR(minor_and_patch,second_point+1) AS INTEGER) patch \
             FROM ( \
                 SELECT version_id, license, major, minor_and_patch, \
                     INSTR(minor_and_patch, '.') second_point \
@@ -761,6 +813,7 @@ mod tests {
                     metadata: Default::default(),
                     resolver: Default::default(),
                     dependencies: workspace_dependencies,
+                    lints: Default::default(),
                 }),
                 dependencies,
                 dev_dependencies,
@@ -776,6 +829,7 @@ mod tests {
                 bench: Default::default(),
                 test: Default::default(),
                 example: Default::default(),
+                lints: Default::default(),
             }
         }
 
@@ -955,10 +1009,10 @@ mod tests {
 
             dependencies.insert(
                 "bevy".to_string(),
-                Dependency::Detailed(cargo_toml::DependencyDetail {
+                Dependency::Detailed(Box::new(cargo_toml::DependencyDetail {
                     path: Some("fake/path/to/crate".to_string()),
                     ..Default::default()
-                }),
+                })),
             );
             dev_dependencies.insert(
                 "bevy_transform".to_string(),
@@ -979,10 +1033,10 @@ mod tests {
             // Alphabetical order could matter in this example, "first" < "second"
             dependencies.insert(
                 "bevy_first_third_party_crate".to_string(),
-                Dependency::Detailed(cargo_toml::DependencyDetail {
+                Dependency::Detailed(Box::new(cargo_toml::DependencyDetail {
                     path: Some("fake/path/to/crate".to_string()),
                     ..Default::default()
-                }),
+                })),
             );
             dependencies.insert(
                 "bevy_second_third_party_crate".to_string(),

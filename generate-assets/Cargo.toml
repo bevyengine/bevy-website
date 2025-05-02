@@ -1,27 +1,26 @@
 [package]
 name = "generate-assets"
-version = "0.1.0"
 authors = [
-  "Bevy Contributors <bevyengine@gmail.com>",
+  "Bevy Contributors <support@bevyengine.org>",
   "Carter Anderson <mcanders1@gmail.com>",
 ]
 license = "MIT"
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+publish = false
 
 [dependencies]
 toml = "0.7"
 serde = { version = "1", features = ["derive"] }
 rand = "0.8"
 regex = "1"
-cargo_toml = "0.15"
+cargo_toml = "0.22"
 url = "2.2.2"
 anyhow = "1.0.58"
 base64 = "0.13.0"
 cratesio-dbdump-csvtab = "0.2.2"
 ureq = { version = "2.5.0", features = ["json"] }
 dotenv = "0.15.0"
+semver = "1.0.23"
 
 [lints]
 workspace = true

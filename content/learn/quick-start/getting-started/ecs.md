@@ -18,29 +18,15 @@ Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS impl
 
 * **Components**: Rust structs that implement the [`Component`] trait
 
-    ```rs,hide_lines=1
-    # use bevy::prelude::*;
-    #[derive(Component)]
-    struct Position { x: f32, y: f32 }
-    ```
+{{file_code_block(file="quick-start/position_ecs.rs", anchor="position_component")}}
 
 * **Systems**: normal Rust functions
 
-    ```rs,hide_lines=1
-    # use bevy::prelude::*;
-    fn print_position_system(query: Query<&Position>) {
-        for position in &query {
-            println!("position: {} {}", position.x, position.y);
-        }
-    }
-    ```
+{{file_code_block(file="quick-start/position_ecs.rs", anchor="position_system")}}
 
 * **Entities**: a simple type containing a unique integer
 
-    ```rs,hide_lines=1
-    # use bevy::prelude::*;
-    struct Entity(u64);
-    ```
+{{file_code_block(file="quick-start/mock_entity.rs", anchor="entity_struct")}}
 
 Now let's see how this works in practice!
 
@@ -50,24 +36,11 @@ Now let's see how this works in practice!
 
 Paste the following function into your `main.rs` file:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn hello_world() {
-    println!("hello world!");
-}
-```
+{{file_code_block(file="quick-start/getting_started_v2.rs", anchor="hello_world")}}
 
 This will be our first system. The only remaining step is to add it to our [`App`]!
 
-```rs
-use bevy::prelude::*;
-
-fn main() {
-    App::new()
-        .add_systems(Update, hello_world)
-        .run();
-}
-```
+{{file_code_block(file="quick-start/getting_started_v2.rs", anchor="app_main")}}
 
 The [`add_systems`] function adds the system to your App's [`Update`] [`Schedule`], but we'll cover that more later.
 
@@ -84,42 +57,19 @@ Greeting the whole world is great, but what if we want to greet specific people?
 
 Add this struct to your `main.rs` file:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-#[derive(Component)]
-struct Person;
-```
+{{file_code_block(file="quick-start/getting_started_v3.rs", anchor="person_component")}}
 
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-#[derive(Component)]
-struct Name(String);
-```
+{{file_code_block(file="quick-start/getting_started_v3.rs", anchor="name_component")}}
 
 We can then add people to our [`World`] using a "startup system". Startup systems are just like normal systems, but they run exactly once, before all other systems, right when our app starts. Let's use [`Commands`] to spawn some entities into our [`World`]\:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn add_people(mut commands: Commands) {
-    commands.spawn((Person, Name("Elaina Proctor".to_string())));
-    commands.spawn((Person, Name("Renzo Hume".to_string())));
-    commands.spawn((Person, Name("Zayna Nieves".to_string())));
-}
-```
+{{file_code_block(file="quick-start/getting_started_v3.rs", anchor="add_people_system")}}
 
 Now register the startup system like this:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn main() {
-    App::new()
-        .add_systems(Startup, add_people)
-        .add_systems(Update, hello_world)
-        .run();
-}
-```
+{{file_code_block(file="quick-start/getting_started_v3.rs", anchor="app_main")}}
 
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
@@ -128,31 +78,17 @@ fn main() {
 
 We could run this now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our [`World`]:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn greet_people(query: Query<&Name, With<Person>>) {
-    for name in &query {
-        println!("hello {}!", name.0);
-    }
-}
-```
+{{file_code_block(file="quick-start/getting_started_v4.rs", anchor="greet_people_system")}}
 
 The parameters we pass into a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
 
 You can interpret the [`Query`] above as: "iterate over every `Name` component for entities that also have a `Person` component".
 
 Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
+
 [`Query`]: <https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html>
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn main() {
-    App::new()
-        .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, greet_people))
-        .run();
-}
-```
+{{file_code_block(file="quick-start/getting_started_v4.rs", anchor="app_main")}}
 
 Running our app will result in the following output:
 
@@ -171,33 +107,15 @@ Marvelous!
 
 If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn update_people(mut query: Query<&mut Name, With<Person>>) {
-    for mut name in &mut query {
-        if name.0 == "Elaina Proctor" {
-            name.0 = "Elaina Hume".to_string();
-            break; // We don’t need to change any other names
-        }
-    }
-}
-```
+{{file_code_block(file="quick-start/getting_started_v5.rs", anchor="update_people_system")}}
 
 We need to make `query` mutable, and use a mutable reference (`&mut`) to the components we want to change.
 
 Don’t forget to add the system to the [`Update`] schedule:
 
-```rs,hide_lines=1
-# use bevy::prelude::*;
-fn main() {
-    App::new()
-        .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
-        .run();
-}
-```
+{{file_code_block(file="quick-start/getting_started_v5.rs", anchor="app_main")}}
 
-Note that we have used `.chain()` on the two systems. This is because we want them two to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
+Note that we have used `.chain()` on the two systems. This is because we want both of them to run in exactly the order they're listed in the code: with `update_people` occurring before `greet_people`.
 If they weren’t, the name might change after we greet the people.
 
 But we don’t add the `hello_world` system to the chain, because it doesn’t matter when it runs. This way, Bevy can run `hello_world` in parallel while the other systems are running.

@@ -4,8 +4,8 @@ date = 2023-05-17
 authors = ["Carter Anderson"]
 [extra]
 image = "webgpu.svg"
+padded_list_image = true
 show_image = true
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++

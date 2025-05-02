@@ -1,5 +1,9 @@
 use serde::Deserialize;
-use std::{collections::HashMap, fs, io, path::PathBuf, str::FromStr};
+use std::{
+    collections::HashMap,
+    fs, io,
+    path::{Path, PathBuf},
+};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -18,6 +22,7 @@ pub struct Member {
     #[serde(default, deserialize_with = "extract_mastodon")]
     pub mastodon: Option<Mastodon>,
     pub twitter: Option<String>,
+    pub instagram: Option<String>,
     pub itch_io: Option<String>,
     pub steam_developer: Option<String>,
     pub website: Option<String>,
@@ -218,7 +223,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
     Ok(())
 }
 
-pub fn parse_members(community_dir: &str) -> io::Result<Section> {
+pub fn parse_members(community_dir: &Path) -> io::Result<Section> {
     let mut people_root_section = Section {
         name: "People".to_string(),
         filename: None,
@@ -229,9 +234,7 @@ pub fn parse_members(community_dir: &str) -> io::Result<Section> {
         sort_order_reversed: false,
     };
 
-    visit_dirs(
-        PathBuf::from_str(community_dir).unwrap(),
-        &mut people_root_section,
-    )?;
+    visit_dirs(community_dir.to_path_buf(), &mut people_root_section)?;
+
     Ok(people_root_section)
 }

@@ -1,0 +1,3 @@
+- `BackgroundColor` no longer tints the color of images in `ImageBundle` or `ButtonBundle`. Set `UiImage::color` to tint images instead.
+- The default texture for `UiImage` is now a transparent white square.  Use `UiImage::solid_color` to quickly draw debug images.
+- The default value for `BackgroundColor` and `BorderColor` is now transparent. Set the color to white manually to return to previous behavior.

@@ -1,0 +1,1 @@
+`Gizmos::primitive_2d(CIRLCE)`, `Gizmos::primitive_2d(ELLIPSE)`, `Gizmos::primitive_2d(ANNULUS)`, and `Gizmos::primitive_3d(SPHERE)` now return their corresponding builders instead of the unit type `()`. Furthermore, `SphereBuilder::circle_segments()` has been renamed to `resolution()`.

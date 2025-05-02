@@ -4,10 +4,15 @@
 {% block page_name %}Post{% endblock page_name %}
 {% block mobile_page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=1) }}{% endblock mobile_page_menu %}
 {% block page_menu %}{{ news_macros::news_menu(toc=page.toc, max_levels=2) }}{% endblock page_menu %}
+
+{% block head_extensions %}
+  <script defer src="/highlight-intrapage-link.js"></script>
+{% endblock head_extensions %}
+
 {% block page_content %}
   <h1 class="news-title">{{ page.title }}</h1>
   <h2 class="news-subtitle">
-    Posted on {{ page.date | date(format="%B %d, %Y") }} by {% if page.authors %}{% for author in page.authors %}{{ author }}{% endfor %}{% else %}Bevy Contributors{% endif %}
+    Posted on {{ page.date | date(format="%B %-d, %Y") }} by {% if page.authors %}{% for author in page.authors %}{{ author }}{% endfor %}{% else %}Bevy Contributors{% endif %}
     {% if page.extra.twitter or page.extra.github %}
       <span class="news-social-links">
         (
@@ -48,17 +53,11 @@
     {% endif %}
   </h2>
   {% if page.extra.image and page.extra.show_image %}
-    <div class="media-content news-content">
+    <div class="media-content news-content news-content__hero-image">
       {% if page.extra.image_subtitle %}
-        <img src="{{ page.extra.image }}"
-              alt="{{ page.extra.image_subtitle }}"
-              width="926"
-              height="521" />
+        <img src="{{ page.extra.image }}" alt="{{ page.extra.image_subtitle }}" style="aspect-ratio: auto 16 / 9" />
       {% else %}
-        <img src="{{ page.extra.image }}"
-              alt="An image representing the article"
-              width="926"
-              height="521" />
+        <img src="{{ page.extra.image }}" alt="An image representing the article" style="aspect-ratio: auto 16 / 9" />
       {% endif %}
       {% if page.extra.image_subtitle %}
         {% if page.extra.image_subtitle_link %}
@@ -71,7 +70,9 @@
       {% endif %}
     </div>
   {% endif %}
-  <div class="media-content news-content">{{ page.content | safe }}</div>
+  <div class="media-content news-content">
+    {{ page.content | safe }}
+  </div>
   <script type="module">
   import { enable_image_compare } from '/components.js';
 

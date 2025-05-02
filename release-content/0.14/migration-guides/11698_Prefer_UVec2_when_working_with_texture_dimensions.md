@@ -1,0 +1,3 @@
+`GpuImage`, `TextureAtlasLayout`, `TextureAtlasBuilder`, `DynamicAtlasTextureBuilder`, and `FontAtlas` have been changed to store their dimensions in integers rather than floating point numbers, in order to increase consistency with the underlying texture data. Instances of `Vec2` and `Rect` have been replaced with `UVec2` and `URect`.
+
+Migrating this is tricky because the conversion from `f32` to `u32` is lossy. If you work with constants, you can simply rewrite the code. If you work with user input, you could choose to simply discard the decimal (`1.4 as u32`) or round it first (`1.83.round() as u32`).

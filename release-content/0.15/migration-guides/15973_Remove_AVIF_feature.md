@@ -1,0 +1,1 @@
+AVIF images are no longer supported. They never really worked, and require system dependencies (libdav1d) to work correctly, so, it’s better to simply offer this support via an unofficial plugin instead as needed. The corresponding types have been removed from Bevy to account for this.

@@ -1,0 +1,1 @@
+If you are given an `Entity` and you want to do something with it, use `Commands.entity(...)` or `World.entity(...)`. If instead you want to spawn something use `Commands.spawn(...)` or `World.spawn(...)`. If you are not sure if an entity exists, you can always use `get_entity` and match on the `Option<...>` that is returned.

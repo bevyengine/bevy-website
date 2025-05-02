@@ -1,6 +1,6 @@
 let filters_state = {
     search_terms: [''],
-    version: '*'
+    version: 'all_versions'
 }
 
 const check_filters = (filters) => (node) => {
@@ -141,6 +141,8 @@ if (versionsSelect) {
     })
 
 }
+
+document.querySelector('[data-assets-filters]').classList.remove('hidden');
 
 document
     .querySelector('#assets-filter')

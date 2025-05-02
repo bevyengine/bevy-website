@@ -1,0 +1,1 @@
+All shape mesh builders (`ConeMeshBuilder`, `PlaneMeshBuilder`, etc.) have a method `build()` for converting into a `Mesh`. This method has been made into a common trait `MeshBuilder`. You will need to import this trait if you use `build()` but do not use the prelude.

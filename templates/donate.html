@@ -1,13 +1,9 @@
 {% import "macros/numbers.html" as numbers %}
 {% extends "layouts/base.html" %}
 
-{% block head_extensions %}
-    <script src="/donate.js"></script>
-{% endblock head_extensions %}
-
 {% block content %}
 
-{% set sponsors = load_data(path="content/donate/foundation-sponsors.toml") %}
+{% set donors = load_data(path="content/donate/donors.toml") %}
 {% set tiers = load_data(path="content/donate/tiers.toml") %}
 {% set metrics = load_data(path="content/donate/metrics.toml") %}
 
@@ -25,13 +21,13 @@
 
         <!-- Note: this "sponsor filtering logic" _must_ be kept in sync with the logic in sponsors.html -->
         <!-- If we can find a way to reuse this logic in Zola, we absolutely should! -->
-        {% if sponsors.sponsor %}
-            {% for sponsor in sponsors.sponsor %}
-                {% if sponsor.past %}
+        {% if donors.donor %}
+            {% for donor in donors.donor %}
+                {% if donor.past %}
                     {% continue %}
                 {% endif %}
-                {% if sponsor.amount >= tier.amount %}
-                    {% if next_tier and sponsor.amount >= next_tier.amount %}
+                {% if donor.amount >= tier.amount %}
+                    {% if next_tier and donor.amount >= next_tier.amount %}
                         {% continue %}
                     {% endif %}
                     {% if tier.sponsor_tier %}
@@ -45,12 +41,12 @@
     {% endfor %}
 
     {% set_global monthly_donations = 0 %}
-    {% if sponsors.sponsor %}
-        {% for sponsor in sponsors.sponsor %}
-            {% if sponsor.past %}
+    {% if donors.donor %}
+        {% for donor in donors.donor %}
+            {% if donor.past %}
                 {% continue %}
             {% endif %}
-            {% set_global monthly_donations = monthly_donations + sponsor.amount %}
+            {% set_global monthly_donations = monthly_donations + donor.amount %}
         {% endfor %}
     {% endif %}
 #}
@@ -83,6 +79,8 @@
     </div>
 </div>
 
+<input id="donate-view-state" class="hidden" type="checkbox">
+<div data-donate-view-state-container>
 <div id="membership">
 <h2 class="donate-header-padding">Membership</h2>
 <div class="donate-levels-container">
@@ -92,7 +90,12 @@
                 {% continue %}
             {% endif %}
             {% set amount_string = numbers::comma_string(value=tier.amount) %}
-            <a href="{{ tier.donate_link }}" class="card donate-level">
+            {% if tier.every_org_link %}
+                {% set donate_link = tier.every_org_link %}
+            {% elif tier.stripe_link %}
+                {% set donate_link = tier.stripe_link %}
+            {% endif %}
+            <a href="{{ donate_link }}" class="card donate-level">
                 <div class="donate-level-info">
                     <img class="donate-level-icon" alt="donate level icon" src="{{ tier.icon }}"/>
                     <div class="donate-level-text donate-level-{{ tier.name | replace(from=" ", to="_") | lower }}">
@@ -115,15 +118,15 @@
         {% endfor %}
     </div>
 </div>
-<div class="card donate-corporate-button" onclick="show_corporate()">
+<label for="donate-view-state" class="card donate-corporate-button">
     Corporate Tiers 
-</div>
+</label>
 </div>
 
-<div id="corporate-sponsorship" style="display: none">
+<div id="corporate-sponsorship">
 <h2 class="donate-header-padding">Corporate Sponsorship</h2>
 <div class="donate-membership-description">
-These tiers exist for individuals or organizations that want to support Bevy in a big way. We <i>highly</i> recommend using bank transfers for payments at these levels to avoid exorbitant credit card processor fees. We provide Stripe links as a convenience, but note that Stripe charges us a 0.5% fee for subscriptions (ex: if you pay $500 / month, they take $2.50 a month). Please <a href="mailto:bevyengine@gmail.com">contact us</a> if you have any questions, or if you would like to discuss other payment options!
+These tiers exist for individuals or organizations that want to support Bevy in a big way. We <i>highly</i> recommend using bank transfers for payments at these levels to avoid exorbitant credit card processor fees. Please <a href="mailto:support@bevyengine.org">contact us</a> if you have any questions, or if you would like to discuss other payment options!
 </div>
 <div class="donate-levels-container">
 <div class="donate-membership-levels">
@@ -132,7 +135,12 @@ These tiers exist for individuals or organizations that want to support Bevy in 
             {% continue %}
         {% endif %}
         {% set amount_string = numbers::comma_string(value=tier.amount) %}
-        <a href="{{ tier.donate_link }}" class="card donate-level">
+        {% if tier.every_org_link %}
+            {% set donate_link = tier.every_org_link %}
+        {% elif tier.stripe_link %}
+            {% set donate_link = tier.stripe_link %}
+        {% endif %}
+        <a href="{{ donate_link }}" class="card donate-level">
             <div class="donate-level-info">
                 <img alt="donate level icon" class="donate-level-icon" src="{{ tier.icon }}"/>
                 <div class="donate-level-text donate-level-{{ tier.name | replace(from="Corporate ", to="") | replace(from=" ", to="_") | lower }}">
@@ -156,16 +164,14 @@ These tiers exist for individuals or organizations that want to support Bevy in 
     {% endfor %}
 </div>
 </div>
-<div class="card donate-corporate-button" onclick="show_membership()">
+<label for="donate-view-state" class="card donate-corporate-button">
     Individual Tiers
+</label>
 </div>
 </div>
 
-<div class="donate-faq-link">See our <a href="/donate/faq">Donation FAQ</a> for more information.</div>
-
+<div class="donate-faq-link"><a href="/donate/options">Click here</a> for more donation options and FAQs</div>
 {% include "sponsors.html" %}
-
-{% include "individual-sponsors.html" %}
 </div>
 
 {% endblock content %}

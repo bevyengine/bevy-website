@@ -6,15 +6,9 @@ aliases = ["learn/book/getting-started/apps"]
 weight = 2
 +++
 
-Bevy programs are referred to as [`App`]s. The simplest Bevy app looks like this:
+Every Bevy program can be referred to as an [`App`]. The simplest Bevy app looks like this:
 
-```rs
-use bevy::prelude::*;
-
-fn main() {
-    App::new().run();
-}
-```
+{{ file_code_block(file="quick-start/getting_started_v1.rs", anchor="basic_app") }}
 
 The `use bevy::prelude::*` statement brings in the essential things from Bevy. For brevity, this guide may omit it in later steps.
 

@@ -8,6 +8,12 @@ on:
       - 'staging'
       - 'trying'
 
+concurrency:
+  # Only the same workflows on the same branch can cancel each other.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Only cancel runs in a PR; we don't want to cancel commit checks on main.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   mega-linter:
     runs-on: ubuntu-latest
@@ -17,7 +23,7 @@ jobs:
           # Full git history is needed to get a proper list of changed files within `mega-linter`
           fetch-depth: 0
       - name: Run Mega Linter
-        uses: oxsecurity/megalinter@v7
+        uses: oxsecurity/megalinter/flavors/javascript@v7
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
@@ -34,7 +40,7 @@ jobs:
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
       - name: Build & run doc tests
-        run: cd code-validation && cargo test
+        run: cd learning-code-examples && ./validate_examples.sh
 
   check-hide-lines:
     runs-on: ubuntu-latest
@@ -409,8 +415,9 @@ jobs:
           key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
 
       - name: "Build Bevy Assets"
-        # Only run if in merge queue or if no cache was found
-        if: ${{ github.event_name == 'merge_group' || !steps.restore-cached-assets.outputs.cache-hit }}
+        # Only run if in merge queue or if no cache was found. `cache-hit` is a string, so we
+        # cannot use normal boolean operators on it, as `!'false' == true`.
+        if: ${{ github.event_name == 'merge_group' || steps.restore-cached-assets.outputs.cache-hit != 'true' }}
         working-directory: generate-assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -509,6 +516,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Checkout Bevy repo for asset access
+        uses: actions/checkout@v4
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'latest'
+          path: 'bevy'
+
+      - name: Move Bevy assets to static files
+        # during the real build, this is handled by the generate_wasm_examples.sh script.
+        run: mv bevy/assets static/assets/examples/
       - uses: actions/download-artifact@v4
         with:
           name: generated-assets
@@ -535,7 +553,7 @@ jobs:
           path: content/community/people
 
       - name: "Build website"
-        uses: shalzz/zola-deploy-action@v0.18.0
+        uses: shalzz/zola-deploy-action@v0.19.2
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .

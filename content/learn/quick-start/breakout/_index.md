@@ -1,6 +1,6 @@
 +++
 title = "Breakout"
-template = "docs-section.html"
+template = "docs.html"
 [extra]
 weight = 1
 public_draft = 877

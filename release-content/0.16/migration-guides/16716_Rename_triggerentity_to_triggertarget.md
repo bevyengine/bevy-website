@@ -1,0 +1,2 @@
+- Rename `Trigger::entity()` to `Trigger::target()`.
+- Rename `ObserverTrigger::entity` to `ObserverTrigger::target`

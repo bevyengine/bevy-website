@@ -6,18 +6,20 @@
 {% block page_content %}
   <div class="assets">
     {{ assets_macros::init_svg() }}
-    <div class="assets-search">
-      <input class="assets-search__input"
-              type="text"
-              id="assets-search"
-              placeholder="Search (ie: 0.11 MIT)"
-              aria-label="Search (ie: 0.11 MIT)" />
-    </div>
-    <div class="assets-filters">
-      <label for="assets-filter">Bevy last supported version</label>
-      <select class="asset-version-select" id="assets-filter">
-        <option value="all_versions">All</option>
-      </select>
+    <div class="hidden" data-assets-filters>
+      <div class="assets-search">
+        <input class="assets-search__input"
+                type="text"
+                id="assets-search"
+                placeholder="Search (ie: 0.16 MIT)"
+                aria-label="Search (ie: 0.16 MIT)" />
+      </div>
+      <div class="assets-filters">
+        <label for="assets-filter">Bevy last supported version</label>
+        <select class="asset-version-select" id="assets-filter">
+          <option value="all_versions">All</option>
+        </select>
+      </div>
     </div>
     <div class="assets-intro media-content">
       A collection of third-party Bevy assets, plugins, learning resources, and apps made by the community. If you

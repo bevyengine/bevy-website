@@ -3,7 +3,13 @@
 }
 
 .foundation-logo {
-    height: 110px;
+    max-height: 110px;
+    max-width: 100%;
     margin-top: 2.2rem;
     margin-bottom: 0.8rem;
+    filter: var(--foundation-logo-filter);
+}
+
+.foundation-board-info {
+    margin-right: 5px;
 }

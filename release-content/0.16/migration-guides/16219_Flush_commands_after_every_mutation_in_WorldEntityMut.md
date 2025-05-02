@@ -1,0 +1,3 @@
+Previously, `EntityWorldMut` triggered command queue flushes in unpredictable places, which could interfere with hooks and observers. Now the command queue is always flushed immediately after `EntityWorldMut` spawns or despawns an entity, or adds, removes, or replaces a component.
+
+As a side effect of this change, there is a new possibility that a hook or observer may despawn an entity that is being referred to by `EntityWorldMut`. If any of `EntityWorldMut`'s methods detect that the entity is despawned, they will panic. If you know this is a possibility and wish to avoid panicking, you may check that the entity is despawned with `EntityWorldMut::is_despawned()`.

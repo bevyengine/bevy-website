@@ -1,0 +1,1 @@
+`RecursiveDependencyLoadState::Failed` now stores error information about the first encountered error, rather than being a unit struct.

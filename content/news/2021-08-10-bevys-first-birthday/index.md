@@ -3,14 +3,14 @@ title = "Bevy's First Birthday"
 date = 2021-08-10
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "bevy_birthday.svg"
+padded_list_image = true
 show_image = true
 +++
 
-[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator, lead developer, and project manager) with some exciting news:
+[@cart](https://bsky.app/profile/cart.work) here (Bevy's creator, lead developer, and project manager) with some exciting news:
 
 Today is Bevy's first birthday! And what a year it has been! Now seems like as good a time as any to look back on how far we've come, reflect a bit, and start thinking about what the next year of Bevy development will look like.
 
@@ -20,12 +20,12 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## A Year of Milestones
 
-![milestones](milestones.svg)
+<img src="milestones.svg" alt="milestones" class="img-in-card" />
 
 * **August 10**: [Bevy 0.1](/news/introducing-bevy/)
   * Bevy's first public release! After months of working incognito, I released Bevy to the world. It was by no means complete, but it had most of the pillars in place to show the world what Bevy is (and could be): a modern and flexible renderer built on top of a modular Render Graph, a custom ECS with unrivaled ergonomics and competitive performance, 2D and 3D rendering features, asset handling, a modular app model that blurs the lines between engine developers and app developers, a custom UI system that integrates deeply with the engine, scenes, hot reloading, and blissfully productive iterative compile times.
 * **August 19**: [Absolutely Wild Public Reception](/news/scaling-bevy/)
-  * Just a week after release we became the 3rd most popular /r/rust post of all time, hit #2 on Hacker News, received 2,200 Github stars, merged pull requests from 26 new contributors, gained 644 Discord members, and received [sponsorships](https://github.com/sponsors/cart) that brought us 37% of the way to our first funding goal.
+  * Just a week after release we became the 3rd most popular /r/rust post of all time, hit #2 on Hacker News, received 2,200 GitHub stars, merged pull requests from 26 new contributors, gained 644 Discord members, and received [sponsorships](https://github.com/sponsors/cart) that brought us 37% of the way to our first funding goal.
 * **August 20**: [Reached our first funding goal ($1500 / month)](https://github.com/sponsors/cart)
   * [Embark became our first platinum sponsor](https://twitter.com/BevyEngine/status/1296525644004593664), which brought us past our first funding goal, allowing me to work on Bevy full time without eating into my savings. This honestly set the course for the rest of the year of Bevy development.
 * **August 20**: [The Amethyst forum post: "Bevy Engine - Addressing the elephant in the room"](https://community.amethyst.rs/t/bevy-engine-addressing-the-elephant-in-the-room/)
@@ -46,21 +46,21 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
   * [Bevy Assets](https://bevyengine.org/assets/) is a public library of community developed Bevy plugins, crates, assets, games, and learning materials. The website is fed by structured toml files in the [bevy-assets repo](https://github.com/bevyengine/bevy-assets). It has its roots in the awesome-bevy repo, our old unstructured markdown document with a list of community projects. It is still hot off the presses, but we have big plans for it!  
 * **June 24**: [Reached our third funding goal ($4000 / month)](https://github.com/sponsors/cart)
   * Reaching this goal marked the point where I started thinking about Bevy as a career. I'm not making "market rate" for my skills and I'm still making less than 1/4th what I made as a Senior Software Engineer at Microsoft, but I'm no longer "just breaking even" and I'm starting to save some money.
-* **August 2**: [Bevy hits 10,000 stars on Github](https://twitter.com/cart_cart/status/1422393321394085888)
+* **August 2**: [Bevy hits 10,000 stars on GitHub](https://twitter.com/cart_cart/status/1422393321394085888)
   * I honestly can't believe we hit this so quickly.
 * **August 10**: Bevy is now one year old!
 
 ## A Year By The Numbers
 
-![numbers](numbers.svg)
+<img src="numbers.svg" alt="numbers" class="img-in-card" />
 
-* **255** unique Bevy contributors on [Github](https://github.com/bevyengine)
-* **10,030** [Github](https://github.com/bevyengine) stars
-* **837** forks on [Github](https://github.com/bevyengine)
-* **1,501** pull requests (1060 merged) on [Github](https://github.com/bevyengine)
-* **1,112** issues (609 closed) on [Github](https://github.com/bevyengine)
-* **1,895** commits on [Github](https://github.com/bevyengine)
-* **153**  [Github Discussions](https://github.com/bevyengine/bevy/discussions)
+* **255** unique Bevy contributors on [GitHub](https://github.com/bevyengine)
+* **10,030** [GitHub](https://github.com/bevyengine) stars
+* **837** forks on [GitHub](https://github.com/bevyengine)
+* **1,501** pull requests (1060 merged) on [GitHub](https://github.com/bevyengine)
+* **1,112** issues (609 closed) on [GitHub](https://github.com/bevyengine)
+* **1,895** commits on [GitHub](https://github.com/bevyengine)
+* **153**  [GitHub Discussions](https://github.com/bevyengine/bevy/discussions)
 * **110** [Bevy Assets](https://bevyengine.org/assets/) (plugins, crates, games, apps, and learning materials)
 * **57,349** downloads on [crates.io](https://crates.io/crates/bevy)
 * **93** [@BevyEngine](https://twitter.com/BevyEngine) retweets of Bevy community content on Twitter
@@ -70,13 +70,13 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 
 ## Things I'm Proud Of
 
-![proud](proud.svg)
+<img src="proud.svg" alt="proud" class="img-in-card" />
 
 ### _Our_ Engine
 
 I'm _so_ happy that Bevy quickly went from being "my engine" to being "our engine". It was beautiful to see so many people find passion projects in Bevy. Take a look at the feature author lists in the release blog posts (after Bevy 0.1). This community is _huge_, _wildly_ productive, and _intensely_ collaborative!
 
-Our community is also extremely welcoming: we have an active [Github Q&A platform](https://github.com/bevyengine/bevy/discussions/categories/q-a) and [#help channel](https://discord.com/invite/bevy) on Discord (with over 82,000 messages). If you haven't already, [hop in to our Discord](https://discord.com/invite/bevy) and say hi!
+Our community is also extremely welcoming: we have an active [GitHub Q&A platform](https://github.com/bevyengine/bevy/discussions/categories/q-a) and [#help channel](https://discord.com/invite/bevy) on Discord (with over 82,000 messages). If you haven't already, [hop in to our Discord](https://discord.com/invite/bevy) and say hi!
 
 ### Development Pace
 
@@ -146,9 +146,9 @@ Bevy ECS is the interface we use to build both engine features and apps, so it w
 
 For those who think ECS is over-hyped ... I totally get it. ECS is _not_ the only way to build a good engine. Anyone who tells you otherwise either has an agenda or hasn't thought enough about the problem yet. ECS is, however, one of the best ways to standardize data representation and flow in a modular context. This is a problem that _every_ engine needs to solve and the results almost always end up looking _something_ like ECS, even if they don't use that label. ECS is also an extremely broad category, to the point of being almost meaningless. If thinking about Bevy ECS as "Bevy Data Layer" makes you happier, that is a completely valid mindset! Our APIs extend beyond traditional ECS definitions (and [we have plans to go further](https://github.com/bevyengine/bevy/pull/1627)). If you want to use an ECS-based engine because you've bought into the hype, I promise Bevy ECS can deliver :)
 
-### Github Popularity
+### GitHub Popularity
 
-With over 10,000 stars, we are now the most popular Rust game engine on Github by a pretty wide margin. We are the [8th most popular game engine on Github](https://github.com/topics/game-engine). And Godot (currently holding the #1 spot with 40,900 stars) is starting to feel within our grasp, especially given their six year head start on us. If we make the same amount of progress next year, we'll be in the #2 spot! I'll be the first to say that popularity isn't everything. It isn't a measure of project maturity or feature set, but it _is_ a measure of how many people we reach and resonate with. Winning hearts and minds is an important part of scaling an open source project. I'm proud of this progress and I hope the rest of the community is too.
+With over 10,000 stars, we are now the most popular Rust game engine on GitHub by a pretty wide margin. We are the [8th most popular game engine on GitHub](https://github.com/topics/game-engine). And Godot (currently holding the #1 spot with 40,900 stars) is starting to feel within our grasp, especially given their six year head start on us. If we make the same amount of progress next year, we'll be in the #2 spot! I'll be the first to say that popularity isn't everything. It isn't a measure of project maturity or feature set, but it _is_ a measure of how many people we reach and resonate with. Winning hearts and minds is an important part of scaling an open source project. I'm proud of this progress and I hope the rest of the community is too.
 
 ### Bevy Jobs
 
@@ -156,7 +156,7 @@ We're starting to see paid Bevy jobs pop up and some of them are resulting in op
 
 ## There is Always Room for Improvement
 
-![improve](improve.svg)
+<img src="improve.svg" alt="improve" class="img-in-card" />
 
 ### Delegating Work and Responsibility
 
@@ -227,7 +227,7 @@ Never thought I'd say those words but here we are. I have a pretty big backlog o
 
 ## The Next Year of Bevy
 
-![next year](next_year.svg)
+<img src="next_year.svg" alt="next year" class="img-in-card" />
 
 Here are some of my plans for the next year:
 
@@ -254,10 +254,10 @@ Here are some predictions about Bevy's trajectory over the next year:
 * If the "Next Generation Bevy UI" effort is successful, people wanting to build "Rust GUI apps" will start reaching for Bevy.
 * We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable APIs.
 
-If any of this excites you, we would love your help! Check out our code on [Github](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
+If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
 
 I'm looking forward to spending the next year with you all!
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 1.5rem" class="invertable"/>

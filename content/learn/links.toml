@@ -20,6 +20,13 @@ image_alt = "Rust logo"
 description = "Learn how to use Bevy's types, traits and methods using the in-depth reference documentation, complete with inline examples."
 
 [[links]]
+title = "Contributing Guide"
+url = "/learn/contribute/introduction"
+image = "/assets/book.svg"
+image_alt = "A slanted book"
+description = "Learn how to best contribute to the Bevy Project."
+
+[[links]]
 title = "Official Examples"
 url = "https://github.com/bevyengine/bevy/tree/latest/examples#examples"
 image = "/assets/github.svg"
@@ -42,7 +49,7 @@ description = "Browse bevy examples compiled to wasm and running directly in you
 
 [[links]]
 title = "Bevy Errors"
-url = "/learn/errors"
+url = "/learn/errors/introduction"
 image = "/assets/bevy_icon_dark.svg"
 image_alt = "Bevy logo"
 description = "List of Bevy's error codes for the current release."

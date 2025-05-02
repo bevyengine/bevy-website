@@ -13,7 +13,7 @@
     {% set class = class~" main-menu__link--active" %}
   {% endif %}
   <li class="main-menu__entry {{ extra_class }}">
-    <a href="{{ route | lower }}" class="{{ class }}">
+    <a href="{{ route | lower }}/" class="{{ class }}">
       <span>{{ name }}</span>
     </a>
   </li>

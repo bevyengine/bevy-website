@@ -3,7 +3,6 @@ title = "Bevy 0.8"
 date = 2022-07-30
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "bevy_terrain.jpg"
@@ -542,7 +541,7 @@ When possible, **Bevy 0.8** now uses "unstable sorts" (currently "radix sort"), 
 
 ### many_cubes stress test "opaque phase" sort times (in milliseconds, less is better)
 
-![unstable sort](unstable_sort.svg)
+<img alt="unstable sort" src="unstable_sort.svg" class="invertable">
 
 ## Vertex Colors
 
@@ -744,7 +743,7 @@ This new representation sped up schedule construction by ~30%!
 
 ### time to prepare and compute schedule with 100 systems (in milliseconds, less is better)
 
-![label bench](label_bench.svg)
+<img alt="label bench" src="label_bench.svg" class="invertable">
 
 This change also removed a number of trait requirements from our label derives:
 

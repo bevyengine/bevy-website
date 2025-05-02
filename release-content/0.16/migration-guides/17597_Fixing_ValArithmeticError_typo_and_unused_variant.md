@@ -1,0 +1,2 @@
+- `ValArithmeticError::NonEvaluateable` has been renamed to `NonEvaluateable::NonEvaluable`
+- `ValArithmeticError::NonIdenticalVariants ` has been removed

@@ -5,21 +5,24 @@ name = "Bronze"
 amount = 5
 sponsor_tier = false
 icon = "/assets/sponsor_badges/bronze.svg"
-donate_link = "https://buy.stripe.com/5kA7vS7tPeXJ38A7ss"
+stripe_link = "https://buy.stripe.com/5kA7vS7tPeXJ38A7ss"
+every_org_missing = "Every.org has a $10 minimum"
 
 [[tier]]
 name = "Silver"
 amount = 10
 sponsor_tier = false
 icon = "/assets/sponsor_badges/silver.svg"
-donate_link = "https://buy.stripe.com/9AQ5nK01neXJ4cE001"
+stripe_link = "https://buy.stripe.com/9AQ5nK01neXJ4cE001"
+every_org_link = "https://www.every.org/bevy-foundation?amount=10&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=Silver&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 
 [[tier]]
 name = "Gold"
 amount = 25
 sponsor_tier = false
 icon = "/assets/sponsor_badges/gold.svg"
-donate_link = "https://buy.stripe.com/9AQ5nKaG1cPB5gI28a"
+stripe_link = "https://buy.stripe.com/9AQ5nKaG1cPB5gI28a"
+every_org_link = "https://www.every.org/bevy-foundation?amount=25&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=Gold&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_name = true
 
 [[tier]]
@@ -27,7 +30,8 @@ name = "Platinum"
 amount = 50
 sponsor_tier = false
 icon = "/assets/sponsor_badges/platinum.svg"
-donate_link = "https://buy.stripe.com/eVa3fC4hD2aX7oQeUX"
+stripe_link = "https://buy.stripe.com/eVa3fC4hD2aX7oQeUX"
+every_org_link = "https://www.every.org/bevy-foundation?amount=50&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=Platinum&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_name = true
 
 [[tier]]
@@ -35,7 +39,8 @@ name = "Titanium"
 amount = 100
 sponsor_tier = false
 icon = "/assets/sponsor_badges/titanium.svg"
-donate_link = "https://buy.stripe.com/5kAbM8cO9g1NfVm004"
+stripe_link = "https://buy.stripe.com/5kAbM8cO9g1NfVm004"
+every_org_link = "https://www.every.org/bevy-foundation?amount=100&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=Titanium&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_name = true
 reward_link = true
 
@@ -44,69 +49,85 @@ name = "Diamond"
 amount = 250
 sponsor_tier = false
 icon = "/assets/sponsor_badges/diamond.svg"
-donate_link = "https://buy.stripe.com/6oEaI49BX16T9wY4gl"
+stripe_link = "https://buy.stripe.com/6oEaI49BX16T9wY4gl"
+every_org_link = "https://www.every.org/bevy-foundation?amount=250&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=Diamond&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 45
 
 [[tier]]
 name = "Corporate Bronze"
 amount = 500
 sponsor_tier = true
 icon = "/assets/sponsor_badges/bronze.svg"
-donate_link = "https://buy.stripe.com/bIY7vSeWhaHt7oQ7sy"
+stripe_link = "https://buy.stripe.com/bIY7vSeWhaHt7oQ7sy"
+every_org_link = "https://www.every.org/bevy-foundation?amount=500&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporateBronze&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 70
 
 [[tier]]
 name = "Corporate Silver"
 amount = 1000
 sponsor_tier = true
 icon = "/assets/sponsor_badges/silver.svg"
-donate_link = "https://buy.stripe.com/14kcQceWh8zleRi4gn"
+stripe_link = "https://buy.stripe.com/14kcQceWh8zleRi4gn"
+every_org_link = "https://www.every.org/bevy-foundation?amount=1000&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporateSilver&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 85
 
 [[tier]]
 name = "Corporate Gold"
 amount = 2000
 sponsor_tier = true
 icon = "/assets/sponsor_badges/gold.svg"
-donate_link = "https://buy.stripe.com/fZecQcdSd6rd4cEfZ6"
+stripe_link = "https://buy.stripe.com/fZecQcdSd6rd4cEfZ6"
+every_org_link = "https://www.every.org/bevy-foundation?amount=2000&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporateGold&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 90
 
 [[tier]]
 name = "Corporate Platinum"
 amount = 4000
 sponsor_tier = true
 icon = "/assets/sponsor_badges/platinum.svg"
-donate_link = "https://buy.stripe.com/fZe03q29vdTFgZq6ox"
+stripe_link = "https://buy.stripe.com/fZe03q29vdTFgZq6ox"
+every_org_link = "https://www.every.org/bevy-foundation?amount=4000&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporatePlatinum&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 95
 
 [[tier]]
 name = "Corporate Titanium"
 amount = 6000
 sponsor_tier = true
 icon = "/assets/sponsor_badges/titanium.svg"
-donate_link = "https://buy.stripe.com/bIY03qaG1eXJ8sU8wG"
+stripe_link = "https://buy.stripe.com/bIY03qaG1eXJ8sU8wG"
+every_org_link = "https://www.every.org/bevy-foundation?amount=6000&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporateTitanium&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 100
 
 [[tier]]
 name = "Corporate Diamond"
 amount = 8000
 sponsor_tier = true
 icon = "/assets/sponsor_badges/diamond.svg"
-donate_link = "https://buy.stripe.com/00gdUg4hD6rddNe7sD"
+stripe_link = "https://buy.stripe.com/00gdUg4hD6rddNe7sD"
+every_org_link = "https://www.every.org/bevy-foundation?amount=8000&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporateDiamond&frequency=MONTHLY&utm_campaign=donate-link#/donate"
 reward_logo = true
 reward_link = true
+logo_height = 120
 
 [[tier]]
 name = "Patron"
 amount = 13000
 sponsor_tier = true
 icon = "/assets/sponsor_badges/patron.svg"
-donate_link = "mailto:bevyengine@gmail.com"
+every_org_link = "https://www.every.org/bevy-foundation?amount=13000&theme_color=6a8fb3&method=card%2Cbank%2Cpaypal%2Cpay&designation=CorporatePatron&frequency=MONTHLY&utm_campaign=donate-link#/donate"
+stripe_missing = "Not supported right now"
 reward_logo = true
 reward_link = true
+logo_height = 190

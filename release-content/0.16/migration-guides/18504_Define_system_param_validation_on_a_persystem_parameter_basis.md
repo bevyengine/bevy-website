@@ -1,0 +1,5 @@
+Various system and system parameter validation methods (`SystemParam::validate_param`, `System::validate_param` and `System::validate_param_unsafe`) now return and accept a `ValidationOutcome` enum, rather than a `bool`.  The previous `true` values map to `ValidationOutcome::Valid`, while `false` maps to `ValidationOutcome::Invalid`.
+
+However, if you wrote a custom schedule executor, you should now respect the new `ValidationOutcome::Skipped` parameter, skipping any systems whose validation was skipped. By contrast, `ValidationOutcome::Invalid` systems should also be skipped, but you should call the `default_error_handler` on them first, which by default will result in a panic.
+
+If you are implementing a custom `SystemParam`, you should consider whether failing system param validation is an error or an expected state, and choose between `Invalid` and `Skipped` accordingly. In Bevy itself, `Single` and `Populated` now once again skip the system when their conditions are not met. This is the 0.15.0 behavior, but stands in contrast to the 0.15.1 behavior, where they would panic.

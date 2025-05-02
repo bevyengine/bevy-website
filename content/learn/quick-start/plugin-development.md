@@ -30,30 +30,7 @@ It can be useful to allow your users to supply generic types to your plugins. It
 
 You can define a generic plugin like so:
 
-```rust,hide_lines=1-2
-# use bevy::prelude::*;
-# use std::marker::PhantomData;
-// Example with a generic type that implements `Component`
-
-pub struct YourPlugin<T: Component> {
-  pub phantom_t: PhantomData<T>,
-}
-
-impl<T: Component> Plugin for YourPlugin<T> {
-  fn build(&self, app: &mut App) {
-    app.add_systems(Startup, example_system::<T>);
-  }
-
-  // ... your other logic ...
-}
-
-// Example system using your generics
-pub fn example_system<T: Component>(query: Query<Entity, With<T>>) {
-  let entity = query.single();
-
-  // ... any other logic here ...
-}
-```
+{{file_code_block(file="quick-start/generic_plugin.rs", anchor="generic_plugin")}}
 
 A prime example of generic plugins in use is the [Bevy Cellular Automaton Plugin](https://github.com/ManevilleF/bevy_life).
 
@@ -72,6 +49,18 @@ To avoid long build times in your plugin and in projects using it, you should ai
 - Avoid large new dependencies.
 - Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
 - Put optional functionality and dependencies behind a [cargo feature](https://doc.rust-lang.org/cargo/reference/features.html).
+
+## `no_std` Compatibility
+
+Since the release of Bevy 0.16, it is now possible to use Bevy in a [`no_std`](https://doc.rust-lang.org/stable/reference/names/preludes.html#the-no_std-attribute) context.
+If you don't want to or can't support `no_std` in your plugin, you'll likely want to enable the `std` feature in Bevy to regain some functionality that was previously included by default.
+
+```toml
+bevy = { version = "0.16", default-features = false, features = ["std"] }
+```
+
+If you _do_ want to pursue `no_std` support, please refer to the `no_std` example in `examples/no_std/library`.
+This example includes recommended feature flags and some helpful tips for working with `no_std` Bevy.
 
 ## Tests and CI
 
@@ -147,7 +136,7 @@ Once a crate is published to [crates.io](https://crates.io), there are two badge
 [![docs.rs](https://docs.rs/bevy/badge.svg)](https://docs.rs/bevy)
 
 ```markdown
-[![docs.rs](https://docs.rs/bevy_awesome_plugin/badge.svg)](https://docs.rs/bevy_awesome_plugin)`
+[![docs.rs](https://docs.rs/bevy_awesome_plugin/badge.svg)](https://docs.rs/bevy_awesome_plugin)
 ```
 
 ## Promotion

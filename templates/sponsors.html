@@ -1,17 +1,17 @@
-{% set sponsors = load_data(path="content/donate/foundation-sponsors.toml") %}
+{% set donors = load_data(path="content/donate/donors.toml") %}
 
 <h2 class="donate-header-padding">Bevy Supporters</h2>
 
-{% set_global has_active_sponsor = false %}
-{% if sponsors.sponsor %}
-    {% for sponsor in sponsors.sponsor %}
-        {% if not sponsor.past %}
-            {% set_global has_active_sponsor = true %}
+{% set_global has_active_donor = false %}
+{% if donors.donor %}
+    {% for donor in donors.donor %}
+        {% if not donor.past %}
+            {% set_global has_active_donor = true %}
         {% endif %}
     {% endfor %}
 {% endif %}
 
-{% if not has_active_sponsor %}
+{% if not has_active_donor %}
 <div class="credits-text">
     There are no Bevy Foundation supporters yet that qualify to be in the credits. <a href="/donate">You could be the first</a>!
 </div> 
@@ -29,24 +29,24 @@
     {% set next_tier_index = tiers.tier | length - loop.index0 %}
     {% set next_tier = tiers.tier | nth(n=next_tier_index) %}
 
-    {% set_global sponsors_in_tier = [] %}
-    {% if sponsors.sponsor %}
-        {% for sponsor in sponsors.sponsor %}
-            {% if sponsor.past %}
+    {% set_global donors_in_tier = [] %}
+    {% if donors.donor %}
+        {% for donor in donors.donor %}
+            {% if donor.past %}
                 {% continue %}
             {% endif %}
-            <!-- Note: this "sponsor filtering logic" _must_ be kept in sync with the logic in donate.html -->
-            <!-- If we can find a way to reuse this logic in Zola, we absolutely should! -->
-            {% if sponsor.amount >= tier.amount %}
-                {% if next_tier and sponsor.amount >= next_tier.amount %}
+            {# Note: this "donor filtering logic" _must_ be kept in sync with the logic in donate.html #}
+            {# If we can find a way to reuse this logic in Zola, we absolutely should! #}
+            {% if donor.amount >= tier.amount %}
+                {% if next_tier and donor.amount >= next_tier.amount %}
                     {% continue %}
                 {% endif %}
-                {% set_global sponsors_in_tier = sponsors_in_tier | concat(with=sponsor) %}
+                {% set_global donors_in_tier = donors_in_tier | concat(with=donor) %}
             {% endif %}
         {% endfor %}
     {% endif %}
 
-    {% if sponsors_in_tier | length == 0 %}
+    {% if donors_in_tier | length == 0 %}
         {% continue %}
     {% endif %}
 
@@ -54,44 +54,49 @@
     <h2 class="sponsors__title">{{ tier.name }}</h2>
     <h3 class="sponsors__amount">${{ tier.amount }} / month</h3>
     <div class="sponsors__content">
-        {% for sponsor in sponsors_in_tier %}
-        {% if tier.reward_logo %}
-        <a class="sponsors__link" href="{{ sponsor.link }}">
-            <img class="sponsors__logo" {% if sponsor.style %}style="{{ sponsor.style }}"{% endif %} src="/assets/sponsors/{{ sponsor.image }}"
-                alt="{{ sponsor.name }} logo" />
+        {% for donor in donors_in_tier %}
+        {% if tier.reward_logo and donor.logo %}
+            {% set_global logo_height = tier.logo_height %}
+            {% if donor.square_logo %}
+                {% set_global logo_height = logo_height * 2.0 %}
+            {% endif %}
+            {% if donor.logo_scale %}
+                {% set_global logo_height = logo_height * donor.logo_scale %}
+            {% endif %}
+        <a class="sponsors__link" {% if donor.link %}href="{{ donor.link }}"{% endif %}>
+            <img
+                class="sponsors__logo"
+                height="{{ logo_height }}"
+                {% if donor.style %}
+                style="{{ donor.style }}"
+                {% endif %}
+                src="/assets/donor_logos/{{ donor.logo }}"
+                {% if donor.name %}
+                alt="{{ donor.name }} logo"
+                {% else %}
+                alt="{{ donor.logo | split(pat=".") | first }} logo"
+                {% endif %}
+            />
         </a>
-        {% elif tier.reward_link %}
-        <a class="sponsors__link" href="{{ sponsor.link }}">
-            <div class="sponsors__name">{{ sponsor.name }}</div>
+        {% elif tier.reward_link and donor.name %}
+        <a class="sponsors__name sponsors__link" {% if donor.link %}href="{{ donor.link }}"{% endif %}>
+            {{ donor.name }}
         </a>
-        {% elif tier.reward_name %}
-        <div class="sponsors__name">{{ sponsor.name }}</div>
+        {% elif tier.reward_name and donor.name %}
+        <div class="sponsors__name">{{ donor.name }}</div>
         {% endif %}
         {% endfor %}
     </div>
 </div>
 {% endfor %}
 
-{% if sponsors.sponsor %}
-    {% set_global first = true %}
-    {% set sorted_sponsors = sponsors.sponsor | sort(attribute="amount") | reverse %}
-    {% set_global past_sponsor_exists = false %}
-    {% for sponsor in sorted_sponsors %}
-        {% if sponsor.past %}
-            {% set_global past_sponsor_exists = true %}
-        {% endif %}
-    {% endfor %}
-    {% if past_sponsor_exists %}
-        <h2 class="past-sponsors-title">Past Sponsors</h2>
-        <div>
-        {% for sponsor in sorted_sponsors %}
-            {% if not sponsor.past %}
-                {% continue %}
-            {% endif %}
-            {% if first %}{{ sponsor.name }}{% else %} , {{ sponsor.name }}{% endif %}
-            {% if first %}
-                {% set_global first = false %}
-            {% endif %}
+{% if donors.donor %}
+    {% set past_donors = donors.donor | filter(attribute="past", value=true) | filter(attribute="name") | sort(attribute="amount") | reverse %}
+    {% if past_donors %}
+        <h2 class="past-donors-title">Past Donors</h2>
+        <div class="past-donor">
+        {% for donor in past_donors %}
+            {{ donor.name | escape | replace(from=" ", to="&nbsp;") | safe }}{% if not loop.last %},{% endif %}
         {% endfor %}
         </div>
     {% endif %}

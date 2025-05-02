@@ -1,9 +1,32 @@
 {% import "macros/header.html" as header_macros %}
 {% import "macros/public_draft.html" as public_draft %}
+{% import "macros/base.html" as base_macros %}
+
+{# Shortcut to get the section/page. This variable will have a value except in some special pages like `404.html`. #}
+{% set_global section_or_page = false %}
+{% if section or page %}
+  {% set_global section_or_page = section | default(value=page) %}
+{% endif %}
+
+{% if section_or_page %}
+  {# Possible docs root section paths. A temporary workaround. TODO: issue #1181(https://github.com/bevyengine/bevy-website/issues/1181) find a better solution #}
+  {% set_global root_section_paths = ["learn/quick-start", "learn/book", "learn/migration-guides", "learn/advanced-examples", "learn/errors", "learn/contribute"] %}
+  {% for root_section_path in root_section_paths %}
+    {% set components = root_section_path | split(pat="/") %}
+    {% if section_or_page.components | slice(end=components | length) == components %}
+      {% set_global root_section = get_section(path=root_section_path ~ "/_index.md") %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
 {% set current_path = current_path | default(value="/") %}
+
 {% if section and section.title %}
   {% if section.path is starting_with("/learn/book/") %}
     {% set page_title = "Bevy Book: " ~ section.title %}
+  {% elif section.path is starting_with("/learn/errors/") %}
+    {% set page_title = "Bevy Errors: " ~ section.title %}
   {% elif section.path is starting_with("/assets") %}
     {% set page_title = "Bevy Assets" %}
   {% else %}
@@ -12,6 +35,8 @@
 {% elif page and page.title %}
   {% if page.path is starting_with("/learn/book/") %}
     {% set page_title = "Bevy Book: " ~ page.title %}
+  {% elif page.path is starting_with("/learn/errors/") %}
+    {% set page_title = "Bevy Errors: " ~ page.title %}
   {% elif page.path is starting_with("/assets") %}
     {% set page_title = "Bevy Assets" %}
   {% else %}
@@ -20,6 +45,7 @@
 {% else %}
   {% set page_title = "Bevy Engine" %}
 {% endif %}
+
 {% if section and section.path %}
   {% set path = "/" ~ section.path %}
 {% elif page and page.path %}
@@ -27,24 +53,30 @@
 {% else %}
   {% set path = "" %}
 {% endif %}
+
 {% if section %}
   {% if section.path is starting_with("/learn/book/") %}
     {% set show_nav_toggle = true %}
   {% elif section.path is starting_with("/learn/migration-guides/") %}
     {% set show_nav_toggle = true %}
+  {% elif section.path is starting_with("/learn/errors/") %}
+    {% set show_nav_toggle = true %}
   {% elif section.path is starting_with("/assets/") %}
+    {% set show_nav_toggle = true %}
+  {% elif section.path is starting_with("/contribute/") %}
     {% set show_nav_toggle = true %}
   {% endif %}
 {% elif page %}
-  {% if page.path is starting_with("/learn/book/") or page.path is starting_with("/learn/migration-guides/") or page.path
-    is starting_with("/assets/") %}
+  {% if page.path is starting_with("/learn/book/") or page.path is starting_with("/learn/migration-guides/") or page.path is starting_with("/learn/errors/") or page.path
+    is starting_with("/assets/") or page.path is starting_with("/contribute/") %}
     {% set show_nav_toggle = true %}
   {% endif %}
 {% endif %}
+
 {% set newline = "
 " %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="{% block theme %}{% endblock theme %}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,13 +90,17 @@
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
-    <title>{{ page_title }}</title>
+    {% if ancestor_is_public_draft or section_or_page and section_or_page.extra and section_or_page.extra.public_draft %}
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    {% endif %}
+
+    <title>{% if page.extra.public_draft or section.extra.public_draft %}[DRAFT] {% endif -%}{{ page_title }}</title>
     {% block head_extensions %}{% endblock head_extensions %}
   </head>
   <body>
     <div class="layout">
       <input id="mobile-menu-state" class="hidden" type="checkbox">
-      <header class="layout__header header" data-mobile-menu-state-container>
+      <header class="layout__header header print:hidden" data-mobile-menu-state-container>
         <div class="header__content">
           <label class="main-menu-backdrop" for="mobile-menu-state"></label>
           <label class="header__hamburger button-square button-square--header"
@@ -76,33 +112,17 @@
           </label>
           <div class="header__left-block">
             <a class="header__logo" href="/">
-              <img class="logo"
-                    src="/assets/bevy_logo_dark.svg"
-                    alt="Bevy Engine"
-                    width="520"
-                    height="130">
+              <picture class="logo">
+                <img src="/assets/bevy_logo_dark.svg"
+                  class="logo"
+                  alt="Bevy logo"
+                  width="520"
+                  height="130"
+                />
+              </picture>
             </a>
             <div class="header__message">
-              {% if section and section.extra.header_message %}
-                {{ section.extra.header_message }}
-              {% elif page and page.extra.header_message %}
-                {{ page.extra.header_message }}
-              {% elif section and section.path is starting_with("/learn/book/") or page and page.path is
-                starting_with("/learn/book/") %}
-                The Book
-              {% elif section and section.path is starting_with("/learn/quick-start/") or page and page.path is
-                starting_with("/learn/quick-start/") %}
-                Quick Start
-              {% elif section and section.path is starting_with("/learn/migration-guides/") or page and page.path is
-                starting_with("/learn/migration-guides/") %}
-                Migration Guides
-              {% elif section and section.path is starting_with("/news/") %}
-                News
-              {% elif page and page.path is starting_with("/news/") %}
-                News
-              {% else %}
-                Features
-              {% endif %}
+              {{ base_macros::page_header_message(section_or_page=section_or_page) }}
             </div>
           </div>
           {% block mobile_page_menu_state %}{% endblock mobile_page_menu_state %}
@@ -111,11 +131,14 @@
                 data-page-menu-switch-state-container>
             <div class="main-menu__header">
               <a href="/">
-                <img class="logo"
-                      src="/assets/bevy_logo_dark.svg"
-                      alt="Bevy Engine"
-                      width="520"
-                      height="130">
+                <picture class="logo">
+                  <img class="logo"
+                        src="/assets/bevy_logo_dark.svg"
+                        alt="Bevy Engine"
+                        width="520"
+                        height="130"
+                  />
+                </picture>
               </a>
               <label class="button-square button-square--header" for="mobile-menu-state">
                 <img src="/assets/icon-times.svg"
@@ -172,44 +195,25 @@
           {% block content %}{% endblock content %}
         </div>
       </main>
-      <footer>
+      <footer class="print:hidden">
         {% block footer_extensions %}{% endblock footer_extensions %}
         <div class="footer__social-container">
-          <a class="footer__social" href="https://github.com/bevyengine/bevy">
-            <img src="/assets/github-mark-white.svg"
-                  alt="Bevy engine's GitHub repo"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://discord.gg/bevy">
-            <img src="/assets/discord.svg"
-                  alt="Bevy Discord server"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://mastodon.social/@bevy">
-            <img src="/assets/mastodon-logo-purple.svg"
-                  alt="Bevy Mastodon account"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://twitter.com/BevyEngine">
-            <img src="/assets/twitter.svg"
-                  alt="Bevy Twitter account"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="https://www.reddit.com/r/bevy/">
-            <img src="/assets/reddit.svg"
-                  alt="Bevy subreddit"
-                  width="32"
-                  height="32" />
-          </a>
-          <a class="footer__social" href="/atom.xml">
+          {% set community_links = load_data(path="content/community/links.toml") %}
+          {% for link in community_links.links %}
+            {% if link.show_in_footer %}
+              <a class="footer__social" href="{{ link.url }}" title="{{ link.title }}">
+                <img src="{{ link.image }}"
+                      alt="{{ link.image_alt }}"
+                      width="24"
+                      height="24" />
+              </a>
+            {% endif %}
+          {% endfor %}
+          <a class="footer__social" href="/atom.xml" title="Bevy news feed">
             <img src="/assets/feed.svg"
                   alt="Bevy news feed"
-                  width="32"
-                  height="32" />
+                  width="24"
+                  height="24" />
           </a>
         </div>
       </footer>

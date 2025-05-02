@@ -1,0 +1,1 @@
+- The `Opaque3dBinKey::lightmap_image` field is now `Opaque3dBinKey::lightmap_slab`, which is a lightweight identifier for an entire binding array of lightmaps.

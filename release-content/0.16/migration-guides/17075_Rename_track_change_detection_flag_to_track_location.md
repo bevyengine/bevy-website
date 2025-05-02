@@ -1,0 +1,1 @@
+The `track_change_detection` feature flag no longer just tracks the source code location for change detection, but also where entities are spawned and despawned. As such, the feature flag has been renamed to `track_location` to better reflect its extended capabilities.

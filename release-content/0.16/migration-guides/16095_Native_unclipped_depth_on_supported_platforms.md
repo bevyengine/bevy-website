@@ -1,0 +1,3 @@
+- `MeshPipelineKey::DEPTH_CLAMP_ORTHO` is now `MeshPipelineKey::UNCLIPPED_DEPTH_ORTHO`
+- The `DEPTH_CLAMP_ORTHO` shaderdef has been renamed to `UNCLIPPED_DEPTH_ORTHO_EMULATION`
+- `clip_position_unclamped: vec4<f32>` is now `unclipped_depth: f32`

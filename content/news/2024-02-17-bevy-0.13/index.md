@@ -115,12 +115,12 @@ expensive.
 
 **Bevy 0.13** adds support for **Approximate Indirect Specular Occlusion**, which uses our existing [Screen Space Ambient Occlusion](/news/bevy-0-11/#screen-space-ambient-occlusion) to _approximate_ specular occlusion, which can run efficiently in real time while still producing reasonably high quality results:
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="Specular Occlusion On" data-title-b="Specular Occlusion Off">
-  <img class="image-a" alt="Specular Occlusion On" src="specular_occlusion_on.jpg">
-  <img class="image-b" alt="Specular Occlusion Off" src="specular_occlusion_off.jpg">
-</div>
+{{ compare_slider(
+    left_title="Specular Occlusion On",
+    left_image="specular_occlusion_on.jpg",
+    right_title="Specular Occlusion Off",
+    right_image="specular_occlusion_off.jpg"
+) }}
 
 <div style="font-size: 1.0rem" class="release-feature-authors">Model Credits: <a href="https://sketchfab.com/3d-models/bmw-r1200gs-motorcycle-6550451b0ae547039585a44286b2f530">BMW R1200GS Motorcycle</a> by Moto3D is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>.
 </div>
@@ -492,12 +492,12 @@ In **Bevy 0.13**, you can now configure the EV100 on a per-camera basis using th
 
 This is important because Bevy's "physically based" renderer (PBR) is intentionally grounded in reality. Our goal is for people to be able to use real-world units in their lights and materials and have them behave as close to reality as possible.
 
-<b style="display:block; margin-bottom: -18px">Drag this image to compare</b>
-
-<div class="image-compare" style="aspect-ratio: 16 / 9" data-title-a="EV100 9.7" data-title-b="EV100 15">
-  <img class="image-a" alt="EV100 9.7" src="exposure_97.jpg">
-  <img class="image-b" alt="EV100 15" src="exposure_15.jpg">
-</div>
+{{ compare_slider(
+    left_title="EV100 9.7",
+    left_image="exposure_97.jpg",
+    right_title="EV100 15",
+    right_image="exposure_15.jpg"
+) }}
 
 Note that prior versions of Bevy hard-coded a static EV100 for some of its light types. In **Bevy 0.13** it is configurable _and_ consistent across all light types. We have also bumped the default EV100 to 9.7, which is a [number we chose to best match Blender's default exposure](https://github.com/bevyengine/bevy/issues/11577#issuecomment-1942873507). It also happens to be a nice "middle ground" value that sits somewhere between indoor lighting and overcast outdoor lighting.
 
@@ -1553,7 +1553,7 @@ There are some incredible mockups, functional prototypes and third-party editor-
 It's really exciting to see this progress, and we're keen to channel that energy and experience into official first-party efforts.
 
 [playground]: https://github.com/bevyengine/bevy_editor_prototypes
-[could look like]: https://asour8.github.io/bevy_editor_mockup/editor/
+[could look like]: https://amytimed.github.io/bevy_editor_mockup/editor/
 [key questions]: https://github.com/bevyengine/bevy_editor_prototypes/discussions/1
 [`bevy_animation_graph`]: https://crates.io/crates/bevy_animation_graph
 [`space_editor`]: https://github.com/rewin123/space_editor
@@ -1851,7 +1851,7 @@ For a complete list of changes, check out the PRs listed below.
 * [derive asset for enums][10410]
 * [Ensure consistency between Un/Typed `AssetId` and `Handle`][10628]
 * [Fix Asset Loading Bug][10698]
-* [remove double-hasing of typeid for handle][10699]
+* [remove double-hashing of typeid for handle][10699]
 * [AssetMetaMode][10623]
 * [Fix GLTF scene dependencies and make full scene renders predictable][10745]
 * [Print precise and correct watch warnings (and only when necessary)][10787]
@@ -2280,7 +2280,7 @@ For a complete list of changes, check out the PRs listed below.
 * [Minimize small allocations by dropping the tick Vecs from Resources][11226]
 * [Change Entity::generation from u32 to NonZeroU32 for niche optimization][9907]
 * [fix B0003 example and update logs][11162]
-* [Unified identifer for entities & relations][9797]
+* [Unified identifier for entities & relations][9797]
 * [Simplify conditions][11316]
 * [Add example using `State` in docs][11319]
 * [Skip rehashing TypeIds][11268]
@@ -2387,7 +2387,7 @@ For a complete list of changes, check out the PRs listed below.
 * [fix patches for example showcase after winit update][11058]
 * [finish cleaning up dependency bans job][11059]
 * [Bump actions/upload-artifact from 2 to 4][11014]
-* [Publish dev-docs with Github Pages artifacts (2nd attempt)][10892]
+* [Publish dev-docs with GitHub Pages artifacts (2nd attempt)][10892]
 * [example showcase patches: use default instead of game mode for desktop][11250]
 * [Bump toml_edit in build-template-pages tool][11342]
 * [Miri is failing on latest nightly: pin nightly to last known working version][11421]
@@ -2428,7 +2428,7 @@ For a complete list of changes, check out the PRs listed below.
 ### A-Core
 
 * [Derive `Debug` for `Framecount`][11573]
-* [Don't unconditionally enable bevy_render or bevy_assets if mutli-threaded feature is enabled][11726]
+* [Don't unconditionally enable bevy_render or bevy_assets if multi-threaded feature is enabled][11726]
 
 ### A-Windowing
 
@@ -2539,7 +2539,7 @@ For a complete list of changes, check out the PRs listed below.
 * [Remove unnecessary parentheses][10990]
 * [Replace deprecated elements][10999]
 * [Simplify equality assertions][10988]
-* [Add Solus package requrements to linux_dependencies.md][10996]
+* [Add Solus package requirements to linux_dependencies.md][10996]
 * [Update base64 requirement from 0.13.0 to 0.21.5][10336]
 * [Update sysinfo version to 0.30.0][11071]
 * [Remove unnecessary parens][11075]

@@ -1,14 +1,14 @@
 [package]
 name = "generate-community"
-version = "0.1.0"
 authors = [
-  "Bevy Contributors <bevyengine@gmail.com>",
+  "Bevy Contributors <support@bevyengine.org>",
 ]
 license = "MIT"
 edition = "2021"
+publish = false
 
 [dependencies]
-serde = { version = "1", features = [ "derive" ] }
+serde = { version = "1", features = ["derive"] }
 toml = "0.5"
 rand = "0.8"
 unicode-segmentation = "1.10"

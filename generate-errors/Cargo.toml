@@ -1,17 +1,17 @@
 [package]
 name = "generate-errors"
-version = "0.1.0"
 authors = [
-  "Bevy Contributors <bevyengine@gmail.com>",
+  "Bevy Contributors <support@bevyengine.org>",
   "Carter Anderson <mcanders1@gmail.com>",
 ]
 license = "MIT"
-edition = "2018"
-
-[dependencies]
-serde = { version = "1", features = [ "derive" ] }
-toml = "0.5"
-regex = "1.5"
+edition = "2021"
+publish = false
 
 [lints]
 workspace = true
+
+[dependencies]
+anyhow = "1.0.80"
+clap = { version = "4.5.2", features = ["derive"] }
+regex = "1.10.3"

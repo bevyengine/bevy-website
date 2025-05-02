@@ -2,18 +2,48 @@ name: Build WASM Examples
 
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        required: true
+        type: string
+        default: "latest"
+        description: "Bevy ref to use"
+      publish:
+        required: true
+        type: boolean
+        default: false
+        description: "Publish to cloudflare"
+
 
 env:
   PER_PAGE: 50
 
 jobs:
+  prepare-pages:
+    name: Get Pages
+    runs-on: ubuntu-latest
+    outputs:
+      pages: ${{ steps.pages.outputs.pages }}
+    steps:
+      - name: Checkout Bevy main branch
+        uses: actions/checkout@v4
+        with:
+          repository: 'bevyengine/bevy'
+          ref: ${{ inputs.ref }}
+      - name: Get Pages
+        id: pages
+        run: |
+          example_count=`cat Cargo.toml | grep 'wasm = true' | wc -l`
+          page_count=$((example_count / ${{ env.PER_PAGE }} + 1))
+          echo "pages=`jq -n -c \"[range($page_count)]\"`" >> $GITHUB_OUTPUT
+
   wasm-examples:
     name: Build WASM Examples
+    needs: prepare-pages
     runs-on: macos-latest
     strategy:
       matrix:
-        # if all examples are not built, add a new page here
-        page: [0, 1, 2]
+        page: ${{ fromJSON(needs.prepare-pages.outputs.pages) }}
         api: [webgl2, webgpu]
     steps:
 
@@ -21,19 +51,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'bevyengine/bevy'
-          ref: 'latest'
-
-      # temporary: fetch tools from main branch
-      - name: Checkout Bevy Tools
-        uses: actions/checkout@v4
-        with:
-          repository: 'bevyengine/bevy'
-          ref: 'main'
-          path: 'bevy-tools'
-      - name: Copy Bevy tools to latest
-        run: |
-          cp -r bevy-tools/tools/ tools
-          rm -rf bevy-tools
+          ref: ${{ inputs.ref }}
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -50,6 +68,8 @@ jobs:
         run: |
           export PATH=$PATH:`pwd`/binaryen/bin
           cargo run -p example-showcase -- --per-page ${{ env.PER_PAGE }} --page ${{ matrix.page }} build-wasm-examples --content-folder wasm-examples --api ${{ matrix.api }} --website-hacks --optimize-size
+        env:
+          CARGO_PROFILE_RELEASE_OPT_LEVEL: "z"
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
@@ -61,11 +81,12 @@ jobs:
       name: Upload to Cloudflare
       runs-on: ubuntu-latest
       needs: wasm-examples
+      if: ${{ inputs.publish }}
       strategy:
         matrix:
-          api: [webgl2, webgpu]  
+          api: [webgl2, webgpu]
       steps:
-        
+
         - name: Download all artifacts
           uses: actions/download-artifact@v4
 

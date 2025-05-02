@@ -1,0 +1,1 @@
+- In code which uses DebugName you should now use the Display implementation rather than the Debug implementation (ie {} instead of {:?} if you were printing it out).

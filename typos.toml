@@ -7,6 +7,14 @@ extend-exclude = [
   "content/learn/migration-guides/0.[1-8]-to-0.[2-9].md",
   "content/learn/migration-guides/0.9-to-0.10.md",
   "content/learn/migration-guides/0.1[0-2]-to-0.1[1-3].md",
+  # Ignore specific migration guides that fix typos or truncate titles.
+  "release-content/0.14/migration-guides/_guides.toml",
+  "release-content/0.14/migration-guides/12038_fix_some_typos.md",
+  "release-content/0.14/migration-guides/13261_More_gizmos_builders.md",
+  "release-content/0.14/migration-guides/13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md",
+  # Ignore changelogs and release notes (titles should be verbatim)
+  "release-content/*/changelog.toml",
+  "release-content/*/_release-notes.toml",
 ]
 
 # Corrections take the form of a key/value pair. The key is the incorrect word
@@ -17,6 +25,7 @@ extend-exclude = [
 # Match Whole Word - Case Sensitive
 [default.extend-identifiers]
 ser = "ser" # ron::ser - Serializer
+SME = "SME" # Subject Matter Expert
 
 # Match Inside a Word - Case Insensitive
 [default.extend-words]
@@ -25,11 +34,13 @@ LOD = "LOD" # Level of detail
 # names
 [default]
 extend-ignore-identifiers-re = [
-  "2nd", # Second
+  "2nd",   # Second
+  "optin", # Opt-in
   # Contributor Names
   "TehPers",
   "AlisCode",
   "Sasy00",
   "BorMor",
   "IsseW",
+  "JusSchw",
 ]

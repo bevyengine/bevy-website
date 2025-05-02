@@ -1,6 +1,6 @@
 +++
 title = "Entities, Components and Systems"
-template = "docs-section.html"
+template = "docs.html"
 insert_anchor_links = "right"
 [extra]
 weight = 2
@@ -9,7 +9,7 @@ status = 'hidden'
 
 In Bevy, game objects are stored as **entities**, whose data is stored as **components**.
 **Systems** operate on this data, modifying the **world** to carry out the behavior that brings your game to life.
-Together, these these form the basis of Bevy's **ECS**, which unsurprisingly stands for ["Entity-Component-System"](https://en.wikipedia.org/wiki/Entity_component_system).
+Together, these form the basis of Bevy's **ECS**, which unsurprisingly stands for ["Entity-Component-System"](https://en.wikipedia.org/wiki/Entity_component_system).
 Let's go over the most important definitions:
 
 - **World:** A unifying collection of all of the data stored in the ECS.

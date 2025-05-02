@@ -1,0 +1,1 @@
+The `bevy::utils::label` and `bevy::utils::intern` modules have been moved to `bevy::ecs`, as well as the `bevy::utils::define_label` macro as part of an active effort to shrink `bevy::utils`. You will have to update your import statements to use the new paths.

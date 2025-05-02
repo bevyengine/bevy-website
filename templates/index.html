@@ -6,17 +6,28 @@
 {% endblock head_extensions %}
 {% block content %}
   <div>
-    <img src="/assets/bevy_logo_dark.svg"
-          class="bevy-logo-header"
-          alt="Bevy logo"
-          width="520"
-          height="130" />
+    <picture class="themed-picture">
+      <img
+        class="bevy-logo-header themed-picture__light"
+        src="/assets/bevy_logo_dark-inverted.svg"
+        alt="Bevy logo"
+        width="520"
+        height="130"
+      />
+      <img
+        class="bevy-logo-header themed-picture__dark"
+        src="/assets/bevy_logo_dark.svg"
+        alt="Bevy logo"
+        width="520"
+        height="130"
+      />
+    </picture>
     <div class="bevy-description">
       A refreshingly simple data-driven game engine built in Rust
       <br />
       Free and Open Source Forever!
       <br />
-      <a class="button button--big" href="/learn/quick-start/getting-started/">Get Started</a>
+      <a class="button button--big" href="/learn/quick-start/introduction/">Get Started</a>
     </div>
     <div class="feature-list">
       <div class="feature-container">
@@ -299,11 +310,25 @@
         Ready to start building Bevy apps? Get started fast with <a href="learn/quick-start/introduction/">The Quick Start
           Guide!</a>
     </div>
-    <img src="/assets/bevy_logo_dark.svg" class="bevy-logo-header" alt="Bevy logo" />
+    <picture class="themed-picture">
+      <img
+        class="bevy-logo-header themed-picture__light"
+        src="/assets/bevy_logo_dark-inverted.svg"
+        alt="Bevy logo"
+        width="520"
+        height="130"
+      />
+      <img
+        class="bevy-logo-header themed-picture__dark"
+        src="/assets/bevy_logo_dark.svg"
+        alt="Bevy logo"
+        width="520"
+        height="130"
+      />
+    </picture>
+
     <div class="donate-page">
         {% include "sponsors.html" %}
-
-        {% include "individual-sponsors.html" %}
     </div>
 </div>
 {% endblock content %}

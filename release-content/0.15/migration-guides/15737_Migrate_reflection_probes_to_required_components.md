@@ -1,0 +1,1 @@
+`ReflectionProbeBundle` has been deprecated in favor of inserting the `LightProbe` and `EnvironmentMapLight` components directly. Inserting them will now automatically insert `Transform` and `Visibility` components.

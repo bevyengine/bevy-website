@@ -1,0 +1,1 @@
+- Systems that add custom phase items now need to populate the indirect drawing-related buffers. See the `specialized_mesh_pipeline` example for an example of how this is done.

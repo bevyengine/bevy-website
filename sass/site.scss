@@ -4,6 +4,7 @@
 @import "functions";
 @import "vars";
 @import "mixins";
+@import "print";
 
 // Fonts
 @import "fonts/firamono";
@@ -14,6 +15,9 @@
 @import "elements/html";
 @import "elements/body";
 @import "elements/table";
+@import "elements/button";
+@import "elements/details";
+@import "elements/kbd";
 
 // CSS utility classes
 @import "utils";
@@ -26,10 +30,13 @@
 @import "components/docs-footer";
 @import "components/button-square";
 @import "components/button";
+@import "components/callout";
 @import "components/card";
 @import "components/container";
+@import "components/contributors";
 @import "components/example";
 @import "components/header";
+@import "components/heading-meta";
 @import "components/icon";
 @import "components/item-grid";
 @import "components/layout";
@@ -38,9 +45,13 @@
 @import "components/main-menu-backdrop";
 @import "components/main-menu";
 @import "components/menu-switch";
+@import "components/on-this-page";
 @import "components/page-with-menu";
+@import "components/pr-list";
 @import "components/sponsors";
 @import "components/syntax-theme";
+@import "components/themed-picture";
+@import "components/tabs";
 @import "components/tree-menu";
 @import "components/asset-card";
 @import "components/image_compare";

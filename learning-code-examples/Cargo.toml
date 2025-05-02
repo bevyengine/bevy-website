@@ -1,0 +1,63 @@
+[package]
+name = "learning-code-examples"
+edition = "2021"
+publish = false
+autoexamples = false
+
+[dependencies]
+bevy = "0.16"
+
+[lints]
+workspace = true
+
+[[example]]
+name = "getting-started-v1"
+path = "examples/quick-start/getting_started_v1.rs"
+
+[[example]]
+name = "getting-started-v2"
+path = "examples/quick-start/getting_started_v2.rs"
+
+[[example]]
+name = "getting-started-v3"
+path = "examples/quick-start/getting_started_v3.rs"
+
+[[example]]
+name = "getting-started-v4"
+path = "examples/quick-start/getting_started_v4.rs"
+
+[[example]]
+name = "getting-started-v5"
+path = "examples/quick-start/getting_started_v5.rs"
+
+[[example]]
+name = "getting-started-v6"
+path = "examples/quick-start/getting_started_v6.rs"
+
+[[example]]
+name = "getting-started-v7"
+path = "examples/quick-start/getting_started_v7.rs"
+
+[[example]]
+name = "getting-started-v8"
+path = "examples/quick-start/getting_started_v8.rs"
+
+[[example]]
+name = "getting-started-v9"
+path = "examples/quick-start/getting_started_v9.rs"
+
+[[example]]
+name = "getting-started-v10"
+path = "examples/quick-start/getting_started_v10.rs"
+
+[[example]]
+name = "position-ecs"
+path = "examples/quick-start/position_ecs.rs"
+
+[[example]]
+name = "mock-entity"
+path = "examples/quick-start/mock_entity.rs"
+
+[[example]]
+name = "generic-plugin"
+path = "examples/quick-start/generic_plugin.rs"

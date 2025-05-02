@@ -1,0 +1,33 @@
+{#
+Creates a slider to compare two different images.
+Usage:
+    {{ compare_slider(
+        // mandatory arguments
+        left_title="Left Title",
+        left_image="left_image.png",
+        right_title="Right Title",
+        right_image="right_image.png",
+        // optional arguments
+        start_slider_at="40%", // 0% is completely showing right_image; 100% is completely showing left_image
+        left_alt="alt text",   // left image `alt` attribute; defaults to left_title
+        right_alt="alt text"   // right image `alt` attribute; defaults to right_title
+    ) }}
+#}
+{% if path %}
+    {% set img = get_image_metadata(path=path ~ left_image) %}
+{% else %}
+    {% set img = get_image_metadata(path=page.colocated_path ~ left_image) %}
+{% endif %}
+<p class="image-compare-instruction">Drag this image to compare</p>
+<div class="image-compare-container" style="aspect-ratio: {{ img.width }} / {{ img.height }}{% if height %};height:{{ height }}{% endif %}">
+  <div
+    style="aspect-ratio: {{ img.width }} / {{ img.height }};
+        {%- if start_slider_at %}--slider-value: {{ start_slider_at }};{% endif %}"
+    class="image-compare"
+    data-title-a="{{ left_title }}"
+    data-title-b="{{ right_title }}"
+  >
+    <img class="image-a" alt="{% if left_alt %}{{ left_alt }}{% else %}{{ left_title }}{% endif %}" src="{{ left_image }}">
+    <img class="image-b" alt="{% if right_alt %}{{ right_alt }}{% else %}{{ right_title }}{% endif %}" src="{{ right_image }}">
+  </div>
+</div>

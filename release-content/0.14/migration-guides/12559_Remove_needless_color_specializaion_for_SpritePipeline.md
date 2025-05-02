@@ -1,0 +1,1 @@
+The `COLORED` flag of `SpritePipelineKey` has been removed, since it is no longer used. In doing so, the raw values of `HDR`, `TONEMAP_IN_SHADER`, and `DEBAND_DITHER` have changed. If you are manually converting a `u32` into `SpritePipelineKey`, you may need to update it.

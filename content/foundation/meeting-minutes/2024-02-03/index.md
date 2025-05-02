@@ -1,8 +1,9 @@
 +++
 title = "Board meeting: 2024-02-03"
 date = 2024-02-03
+authors = ["Alice I. Cecile"]
 [extra]
-author = "Alice I. Cecile"
+github = "alice-i-cecile"
 +++
 
 <!-- more -->
@@ -80,7 +81,7 @@ Unanimously approved.
 
 Discussed how to validate meeting minutes.
 
-Agreed on storing meeting minutes on Github on `bevy-website repo`, and approved by board members via PR approval.
+Agreed on storing meeting minutes on GitHub on `bevy-website repo`, and approved by board members via PR approval.
 
 ## Transferring the ownership of the bevyengine.org domain to the Foundation
 

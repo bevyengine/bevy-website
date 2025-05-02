@@ -1,0 +1,1 @@
+There was a bug with `CameraProjectionPlugin<T>` where it would sometimes not implement `Plugin` if `T` did not implement `Component` and `GetTypeRegistration`. This has now been fixed by requiring `T: CameraProjection + Component + GetTypeRegistration`.

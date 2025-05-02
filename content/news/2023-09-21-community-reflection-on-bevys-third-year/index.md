@@ -3,7 +3,6 @@ title = "Community Reflection on Bevy's Third Year"
 date = 2023-09-21
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++
@@ -57,4 +56,4 @@ Here is to another year of Bevy!
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 1.5rem" />
+<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 1.5rem" class="invertable"/>

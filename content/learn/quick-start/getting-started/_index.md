@@ -1,8 +1,7 @@
 +++
 title = "Getting Started"
-template = "docs-section.html"
+template = "docs.html"
 insert_anchor_links = "right"
-aliases = ["learn/book/getting-started"]
 [extra]
 weight = 2
 +++
@@ -13,10 +12,13 @@ This section will help you get started on your Bevy journey as quickly as possib
 
 If you want to dive in immediately and you already have a working Rust setup, feel free to follow this "quick start" guide. Otherwise, move on to the next page.
 
-Note: depending on your platform, you may have to [install additional dependencies]. You can also speed up compile times by following the ["fast compiles"] section.
+{% callout() %}
+Depending on your platform, you may have to [install additional dependencies].
+You can also speed up compile times by following the ["fast compiles"] section.
 
 [install additional dependencies]: /learn/quick-start/getting-started/setup/#installing-os-dependencies
 ["fast compiles"]: /learn/quick-start/getting-started/setup/#enable-fast-compiles-optional
+{% end %}
 
 ### Try the Examples
 
@@ -38,7 +40,7 @@ Note: depending on your platform, you may have to [install additional dependenci
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.13.0
+    git checkout v0.16.0
     ```
 
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
@@ -61,7 +63,7 @@ Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.13" # make sure this is the latest version
+bevy = "0.16" # make sure this is the latest version
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).

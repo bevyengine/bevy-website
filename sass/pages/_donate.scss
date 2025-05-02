@@ -2,13 +2,17 @@ div.donate-sponsor {
   position: absolute;
   bottom: 0.4rem;
   right: 0.8rem;
+
+  svg {
+    margin-right: 4px;
+  }
 }
 
 .donate-page {
     font-size: 1.22rem;
     font-weight: 400;
     line-height: 1.43;
-    color: #d2d2d2;
+    color: var(--donate-text-color);
     font-style: normal;
     text-decoration: none;
     word-break: break-word;
@@ -31,7 +35,7 @@ div.donate-sponsor {
 
     a:visited {
         text-decoration: none;
-        color: $link-color;
+        color: var(--donate-link-color);
     }
 }
 
@@ -58,7 +62,7 @@ div.donate-sponsor {
     margin-top: 10px;
     font-size: 1.3rem;
     font-weight: 500;
-    color: rgb(200, 200, 200);
+    color: var(--donate-description-color);
 }
 
 .donate-header-padding {
@@ -77,7 +81,7 @@ div.donate-sponsor {
     margin-bottom: 1rem;
     line-height: 40px;
     border-bottom-width: 4px;
-    border-bottom-color: $color-white;
+    border-bottom-color: var(--donate-metric-color);
     border-bottom-style: solid;
 }
 
@@ -136,7 +140,7 @@ div.donate-sponsor {
 }
 
 .donate-level-corporate {
-    color: rgb(150, 150, 150);
+    color: var(--donate-level-corporate-color);
     font-weight: 500;
     font-size: 1.2rem;
     margin-top: -6px;
@@ -156,36 +160,36 @@ div.donate-sponsor {
 
 .donate-level-amount {
     margin-top: -0.8rem;
-    color: #bababa;
+    color: var(--donate-level-amount-color);
     font-weight: 500;
 }
 
 .donate-level-bronze {
-    color: #9f7d6c;
+    color: var(--donate-level-bronze-color);
 }
 
 .donate-level-silver {
-    color: #bbb;
+    color: var(--donate-level-silver-color);
 }
 
 .donate-level-gold {
-    color: #c0b04bff;
+    color: var(--donate-level-gold-color);
 }
 
 .donate-level-platinum {
-    color: #c5c5c5;
+    color: var(--donate-level-platinum-color);
 }
 
 .donate-level-titanium {
-    color: #848484;
+    color: var(--donate-level-titanium-color);
 }
 
 .donate-level-diamond {
-    color: #a3daeb;
+    color: var(--donate-level-diamond-color);
 }
 
 .donate-level-patron {
-    color: #dcdcdc;
+    color: var(--donate-level-patron-color);
 }
 
 .donate-corporate-button {
@@ -218,7 +222,7 @@ div.donate-sponsor {
     border-width: 1px;
     border-style: solid;
     border-radius: $border-radius;
-    color: rgb(150, 150, 150);
+    color: var(--donate-tier-reward-color);
     line-height: 1.4rem;
     padding-left: 8px;
     padding-right: 8px;
@@ -236,4 +240,22 @@ div.donate-sponsor {
     font-size: 1.4rem;
     text-align: center;
     margin-top: 4rem;
+}
+
+#membership {
+  display: block;
+}
+
+#corporate-sponsorship {
+  display: none;
+}
+
+@include state-checked("donate-view") {
+    #membership {
+        display: none;
+    }
+
+    #corporate-sponsorship {
+        display: block;
+    }
 }

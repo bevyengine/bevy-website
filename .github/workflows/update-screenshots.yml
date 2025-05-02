@@ -3,17 +3,38 @@ name: Update Screenshots
 on:
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+
 env:
   PER_PAGE: 20
 
 jobs:
+  prepare-pages:
+    name: Get Pages
+    runs-on: ubuntu-latest
+    outputs:
+      pages: ${{ steps.pages.outputs.pages }}
+    steps:
+      - name: Checkout Bevy main branch
+        uses: actions/checkout@v4
+        with:
+          repository: 'bevyengine/bevy'
+          ref: 'latest'
+      - name: Get Pages
+        id: pages
+        run: |
+          example_count=`cat Cargo.toml | grep '\[\[example\]\]' | wc -l`
+          page_count=$((example_count / ${{ env.PER_PAGE }} + 1))
+          echo "pages=`jq -n -c \"[range($page_count)]\"`" >> $GITHUB_OUTPUT
+
   take-screenshots:
     name: Take Screenshots
+    needs: prepare-pages
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # if all examples are not built, add a new page here
-        page: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        page: ${{ fromJSON(needs.prepare-pages.outputs.pages) }}
     steps:
 
       - name: Checkout Bevy latest tag
@@ -31,16 +52,24 @@ jobs:
           DEBIAN_FRONTEND=noninteractive sudo apt-get install --no-install-recommends -yq \
             libasound2-dev libudev-dev libxkbcommon-x11-0;
 
-      - name: install xvfb, llvmpipe and lavapipe
+      - name: Install xvfb, llvmpipe and lavapipe
         run: |
           sudo apt-get update -y -qq
           sudo add-apt-repository ppa:kisak/turtle -y
           sudo apt-get update
-          sudo apt install -y xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
+          sudo apt install -y xvfb libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
+
+      - name: Install oxipng
+        run: |
+          cargo install oxipng --version ^9.1.1
 
       - name: Take Screenshots
         run: |
           xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot --in-ci
+
+      - name: Optimize PNGs
+        run: |
+          oxipng --opt max --strip safe --recursive screenshots
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
@@ -56,7 +85,7 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      
+
       - name: Clone bevy-website repo
         uses: actions/checkout@v4
 

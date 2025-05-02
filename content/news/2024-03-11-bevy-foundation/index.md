@@ -1,18 +1,18 @@
 +++
 title = "Bevy Foundation"
 date = 2024-03-11
+authors = ["Carter Anderson"]
 [extra]
 image = "bevy_foundation.svg"
+padded_list_image = true
 # show_image = true
-author = "Carter Anderson"
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 +++
 
 It is with excitement that I unveil to the world ...
 
-<img src="bevy_foundation.svg" alt="Bevy Foundation Logo" style="margin-top: 2rem; margin-bottom: 2rem;" />
+<img src="bevy_foundation.svg" alt="Bevy Foundation Logo" style="margin-top: 2rem; margin-bottom: 2rem;" class="img-in-card" />
 
 The [**Bevy Foundation**](/foundation) is the next step in our journey to build a world class free and open source game engine. **Bevy Foundation** is a non-profit organization formed in Washington State, with a pending federal 501(c)(3) tax-exemption application (more on this later).
 
@@ -32,9 +32,9 @@ I (Carter / @cart) am still Bevy's Project Lead, but I no longer make all of the
 
 As we have grown, we have accumulated what I will call "organizational debt":
 
-* **Funding Bevy Has Been A Popularity Contest**: For years, our donate button linked directly to my GitHub sponsors page. This was acceptable early on when I was the only one spending significant time on the project, but that is no longer the case. Last year, we replaced that with a page that any Bevy Organization member could list themselves on. While fairer than the "everything goes to @cart" model, it resulted in funding being a "popularity contest". And unfortunately, given how attached my name is to the project, in practice I still received the majority of the sponsorships. Presenting donors with the task of picking someone to back also deeply complicated the donation process, which likely turned some donors off. We need a simple, centralized donation model where we can direct funds fairly to the areas of the project that need them the most.
-* **We Lacked "Organizational Legitimacy"**: We would like to attract the attention (and funding) of people and companies serious about gamedev. An informal collective of Bevy developers (each asking for support individually) lacks the legitimacy required to attract some entities. We need to be able to present a centralized and transparent view of our operations, with accountable and professional people at the helm.
-* **Carter Held (And Owned) The Keys**: Up until this point, I have owned Bevy-related intellectual property such as the copyright for the Bevy logo. I also owned the `bevyengine.org` domain name and had exclusive administrative control over most of our infrastructure and communities. I have had absolute authority over all aspects of the project since its inception. Yes, I have delegated, but it all stemmed from me at the root. This had its efficiencies, but it is no longer sustainable for me or ethically sound when there are _so many_ others that deserve actual _legal_ say over how the project is run. There is also the ["bus factor"](https://en.wikipedia.org/wiki/Bus_factor) to consider. If something were to happen to me, some aspects of the Bevy project would be lost forever.
+- **Funding Bevy Has Been A Popularity Contest**: For years, our donate button linked directly to my GitHub sponsors page. This was acceptable early on when I was the only one spending significant time on the project, but that is no longer the case. Last year, we replaced that with a page that any Bevy Organization member could list themselves on. While fairer than the "everything goes to @cart" model, it resulted in funding being a "popularity contest". And unfortunately, given how attached my name is to the project, in practice I still received the majority of the sponsorships. Presenting donors with the task of picking someone to back also deeply complicated the donation process, which likely turned some donors off. We need a simple, centralized donation model where we can direct funds fairly to the areas of the project that need them the most.
+- **We Lacked "Organizational Legitimacy"**: We would like to attract the attention (and funding) of people and companies serious about gamedev. An informal collective of Bevy developers (each asking for support individually) lacks the legitimacy required to attract some entities. We need to be able to present a centralized and transparent view of our operations, with accountable and professional people at the helm.
+- **Carter Held (And Owned) The Keys**: Up until this point, I have owned Bevy-related intellectual property such as the copyright for the Bevy logo. I also owned the `bevyengine.org` domain name and had exclusive administrative control over most of our infrastructure and communities. I have had absolute authority over all aspects of the project since its inception. Yes, I have delegated, but it all stemmed from me at the root. This had its efficiencies, but it is no longer sustainable for me or ethically sound when there are _so many_ others that deserve actual _legal_ say over how the project is run. There is also the ["bus factor"](https://en.wikipedia.org/wiki/Bus_factor) to consider. If something were to happen to me, some aspects of the Bevy project would be lost forever.
 
 Bevy needs a structure that lets us work together: a legal entity that embodies our goals and principles, where responsibility and decision making are all shared.
 
@@ -86,10 +86,10 @@ We have adopted public [Bylaws](/foundation/bylaws) that govern how we operate. 
 
 Our goal is to make the operations of **Bevy Foundation** as transparent as possible. We make the following public:
 
-* [**Bylaws**](/foundation/bylaws): The operational rules we have adopted
-* [**Meeting Minutes**](/foundation/meeting-minutes): Learn about the decisions the board makes and why we make them
-* [**Documents**](https://drive.google.com/drive/u/0/folders/1Q_vdAaI0tsWZdcddL9lDicDZhjPl79s9?ths=true):  Public Bevy Foundation documents, such as our Articles of Incorporation
-* [**Budget**](/foundation/budget): How we plan to spend money this year
+- [**Bylaws**](/foundation/bylaws): The operational rules we have adopted
+- [**Meeting Minutes**](/foundation/meeting-minutes): Learn about the decisions the board makes and why we make them
+- [**Documents**](https://drive.google.com/drive/u/0/folders/1Q_vdAaI0tsWZdcddL9lDicDZhjPl79s9?ths=true): Public Bevy Foundation documents, such as our Articles of Incorporation
+- [**Budget**](/foundation/budget): How we plan to spend money this year
 
 We will strive to be approachable and accountable for our actions, and we will continue to make our technical decisions in public with the input of the community. You know who we are and where to find us!
 
@@ -140,7 +140,7 @@ When we consider future programs, we will ask the questions:
 4. Will this change our incentives in a way that risks changing our answers to (1), (2), or (3)?
 5. If we are monetizing something, are we doing it in an ethical way?
 
-Know that we exist _for the benefit of the Bevy community and the general public_ and we will try our utmost to never compromise that.  
+Know that we exist _for the benefit of the Bevy community and the general public_ and we will try our utmost to never compromise that.
 
 ## A New Era
 

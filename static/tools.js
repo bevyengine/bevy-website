@@ -27,6 +27,7 @@ async function progressiveFetch(resource, callbacks={}) {
     // don't hang on error
     if (response.status !== 200) {
         cb.finish({ filename, lengthBytes: 0 });
+        return response;
     }
 
     function update() {

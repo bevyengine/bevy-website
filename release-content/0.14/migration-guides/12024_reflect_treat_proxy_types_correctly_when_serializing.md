@@ -1,0 +1,1 @@
+`ReflectSerialize` now requires the `TypePath` and `FromReflect` trait bounds instead of `Reflect`. You will have to implement these traits if you previously opted-out of them. For instance, if you used `#[reflect(type_path = false)]` or `#[reflect(from_reflect = false)]`, you will have to remove them.

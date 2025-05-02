@@ -3,10 +3,10 @@ title = "Scaling Bevy"
 date = 2020-08-19
 authors = ["Carter Anderson"]
 [extra]
-twitter = "cart_cart"
 github = "cart"
 youtube = "cartdev"
 image = "balance-scale.svg"
+padded_list_image = true
 show_image = false
 +++
 
@@ -24,7 +24,7 @@ First, I want to take a moment to highlight just how wild the last week has been
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4>2,200 Github Stars</h4>
-        <img src="2_2k_stars.png" alt="A star with the word "unstar" next to it and a counter saying 2.2k to the right" style="display: block; height: 3rem"/>
+        <img src="2_2k_stars.png" alt="A star with the word 'unstar' next to it and a counter saying 2.2k to the right" style="display: block; height: 3rem"/>
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4>26 contributors</h4>

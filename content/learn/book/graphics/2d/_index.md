@@ -1,6 +1,6 @@
 +++
 title = "2D"
-template = "docs-section.html"
+template = "docs.html"
 insert_anchor_links = "right"
 [extra]
 weight = 5

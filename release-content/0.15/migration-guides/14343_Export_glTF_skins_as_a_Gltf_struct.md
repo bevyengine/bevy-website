@@ -1,0 +1,1 @@
+- Change `GltfAssetLabel::Skin(..)` to `GltfAssetLabel::InverseBindMatrices(..)`.

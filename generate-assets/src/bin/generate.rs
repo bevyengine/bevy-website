@@ -38,7 +38,7 @@ fn main() -> anyhow::Result<()> {
     };
 
     let _ = fs::create_dir(content_dir.clone());
-    let asset_root_section = parse_assets(
+    let mut asset_root_section = parse_assets(
         &asset_dir,
         MetadataSource {
             crates_io_db: Some(&db),
@@ -48,10 +48,65 @@ fn main() -> anyhow::Result<()> {
         },
     )?;
 
+    let latest_bevy_version = get_latest_bevy_version(&db)?;
+
+    sort_section(&mut asset_root_section.content, &latest_bevy_version);
+
     asset_root_section
         .write(Path::new(&content_dir), Path::new(""), 0)
         .expect("Failed to write assets section");
     Ok(())
+}
+
+/// Sort the assets in the section so that:
+/// - Assets that have been manually assigned an order in `bevy-assets` are first
+/// - Assets that are semver compatible with Bevy are next
+/// - If all else is equal, sort randomly
+fn sort_section(nodes: &mut [AssetNode], latest_bevy_version: &semver::Version) {
+    for node in nodes.iter_mut() {
+        if let AssetNode::Section(section) = node {
+            sort_section(&mut section.content, latest_bevy_version);
+        }
+    }
+
+    let mut to_sort = vec![];
+    for node in nodes {
+        let is_semver_compat = node_semver_compat_with(node, latest_bevy_version);
+
+        let existing_order = match node {
+            AssetNode::Asset(asset) => asset.order.unwrap_or(usize::MAX),
+            _ => continue,
+        };
+
+        let random: u32 = rand::random();
+        to_sort.push((node, existing_order, !is_semver_compat, random));
+    }
+
+    to_sort.sort_by_key(|sorts| (sorts.1, sorts.2, sorts.3));
+
+    for (i, (node, _, _, _)) in to_sort.into_iter().enumerate() {
+        let AssetNode::Asset(asset) = node else {
+            continue;
+        };
+
+        asset.order = Some(i);
+    }
+}
+
+fn node_semver_compat_with(node: &AssetNode, version: &semver::Version) -> bool {
+    let AssetNode::Asset(asset) = node else {
+        return false;
+    };
+
+    let Some(ver) = asset.bevy_versions.as_ref().and_then(|v| v.first()) else {
+        return false;
+    };
+
+    let Ok(semver) = semver::VersionReq::parse(ver) else {
+        return false;
+    };
+
+    semver.matches(version)
 }
 
 trait FrontMatterWriter {

@@ -1,0 +1,5 @@
+- `MeshPickingBackend` is now named `MeshPickingPlugin`.
+- `MeshPickingBackendSettings` is now named `MeshPickingSettings`.
+- `SpritePickingBackend` is now named `SpritePickingPlugin`.
+- `UiPickingBackendPlugin` is now named `UiPickingPlugin`.
+- `DefaultPickingPlugins` is now a a `PluginGroup` instead of a `Plugin`.

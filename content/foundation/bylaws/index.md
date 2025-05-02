@@ -101,7 +101,9 @@ A Director of the Corporation present at a Board meeting at which action on any 
 
 ### 5.16 Action by Board Without a Meeting
 
-Any action which could be taken at a meeting of the Board may be taken without a meeting if a written consent setting forth the action so taken is executed by each of the Directors entitled to vote. Such written consents may be executed in two or more counterparts, each of which shall be deemed an original and all of which, taken together, shall constitute one and the same document. Any such written consent shall be inserted in the minute book as if it were the minutes of a Board meeting. For purposes of these Bylaws, “executed” means: (a) writing that is signed; or (b) an email transmission that is sent with sufficient information to determine the sender’s identity.
+Any action which could be taken at a meeting of the Board may be taken without a meeting if a written consent setting forth the action so taken is executed by each of the Directors entitled to vote. Such written consents may be executed in two or more counterparts, each of which shall be deemed an original and all of which, taken together, shall constitute one and the same document. Any such written consent shall be inserted in the minute book as if it were the minutes of a Board meeting. For purposes of these Bylaws, “executed” means: (a) writing that is signed; or (b) an email transmission with sufficient information to determine the sender's identity or a Discord message or vote in an official Bevy channel or private chat where all maintainers are present."
+
+At the time of determining the results of a vote, "edits" to digital messages are considered invalid and the Secretary should take screenshots of the results to include in the meeting minutes.
 
 For purposes of this Section 3.16 only, "each of the Directors entitled to vote" does not include an "interested director" who abstains in writing from providing consent, where:
 
@@ -241,7 +243,7 @@ After disclosure of the financial interest or organizational affiliation and all
 The minutes of the governing board and all committees with board delegated powers shall contain:
 
 1. The names of the persons who disclosed or otherwise were found to have a financial interest or organizational affiliation in connection with an actual or possible conflict of interest, the nature of the financial interest or organizational affiliation, any action taken to determine whether a conflict of interest was present, and the governing board’s or committee’s decision as to whether a conflict of interest in fact existed.
-2. The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings.
+2. The names of the persons who were present for discussions and votes relating to the transaction or arrangement, the content of the discussion, including any alternatives to the proposed transaction or arrangement, and a record of any votes taken in connection with the proceedings. When a decision is not unanimous, the name of each voting board member and the content of their vote must be recorded in the minutes.
 
 ### 8.6 Compensation
 

@@ -1,0 +1,1 @@
+`Node2d::MainPass` has been split into 3 separate phases: `StartMainPass`, `MainTransparentPass`, and `EndMainPass`. If you previously used `MainPass` to order your own custom nodes, you now need to order them relative to `StartMainPass` and `EndMainPass`.

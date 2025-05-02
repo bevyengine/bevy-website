@@ -37,6 +37,9 @@
                 height="24">
         </label>
       {% endif %}
+      {% if is_active and menu_section.toc %}
+        {{ self::on_this_page(toc=menu_section.toc, class="tree-menu__toc") }}
+      {% endif %}
     </div>
     {% if pages_and_sections %}
       <ul class="tree-menu">
@@ -69,6 +72,9 @@
   <li class="{{ class }}">
     <div class="{{ label_class }}">
       <a class="tree-menu__link" href="{{ menu_page.path }}">{{ menu_page.title }}</a>
+      {% if is_active and menu_page.toc %}
+        {{ self::on_this_page(toc=menu_page.toc, class="tree-menu__toc") }}
+      {% endif %}
     </div>
   </li>
 {% endmacro docs_menu_page_row %}
@@ -99,4 +105,25 @@
       {% endfor %}
     {% endif %}
   </ul>
+{% endmacro %}
+{% macro on_this_page(toc, class="") %}
+<nav aria-label="On This Page" class="on-this-page {{ class }}" data-highlight-intrapage-link>
+  {# screen readers will read this as 'Navigation: On This Page' #}
+  <ul>
+  {% for h1 in toc %}
+    <li>
+      <a href="#{{ h1.id }}">{{ h1.title }}</a>
+      {% if h1.children %}
+        <ul>
+          {% for h2 in h1.children %}
+          <li>
+            <a href="#{{ h2.id }}">{{ h2.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+</nav>
 {% endmacro %}
