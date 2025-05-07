@@ -60,4 +60,4 @@ To validate code you can run the bash script contained in this directory:
 >[!TIP]
 > The bash script can be called from any directory!
 
-However, if you can't run the bash script for one reason or another then you can run `cargo check --examples && cargo clippy --examples && cargo fmt --check` _in this directory_.
+However, if you can't run the bash script for one reason or another then you can run `cargo check --examples && cargo clippy --examples -- -Dwarnings && cargo fmt --check` _in this directory_.

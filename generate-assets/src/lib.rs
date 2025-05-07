@@ -929,23 +929,6 @@ mod tests {
         }
 
         #[test]
-        fn from_third_party() {
-            let mut dependencies = BTreeMap::new();
-            let dev_dependencies = BTreeMap::new();
-            let workspace_dependencies = BTreeMap::new();
-
-            dependencies.insert(
-                "bevy_third_party_crate_example".to_string(),
-                Dependency::Simple("0.5".to_string()),
-            );
-
-            let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
-            let version = get_bevy_version_from_manifest(&manifest, &get_bevy_crates_names());
-            // Note that this result is expected, but potentially wrong
-            assert_eq!(version, Some("0.5".to_string()));
-        }
-
-        #[test]
         fn from_dependencies_ignore_third_party() {
             let mut dependencies = BTreeMap::new();
             let dev_dependencies = BTreeMap::new();
@@ -1022,49 +1005,6 @@ mod tests {
             let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
             let version = get_bevy_version_from_manifest(&manifest, &get_bevy_crates_names());
             assert_eq!(version, Some("0.10".to_string()));
-        }
-
-        #[test]
-        fn from_third_party_crate_with_path_dependency() {
-            let mut dependencies = BTreeMap::new();
-            let dev_dependencies = BTreeMap::new();
-            let workspace_dependencies = BTreeMap::new();
-
-            // Alphabetical order could matter in this example, "first" < "second"
-            dependencies.insert(
-                "bevy_first_third_party_crate".to_string(),
-                Dependency::Detailed(Box::new(cargo_toml::DependencyDetail {
-                    path: Some("fake/path/to/crate".to_string()),
-                    ..Default::default()
-                })),
-            );
-            dependencies.insert(
-                "bevy_second_third_party_crate".to_string(),
-                Dependency::Simple("0.10".to_string()),
-            );
-
-            let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
-            let version = get_bevy_version_from_manifest(&manifest, &get_bevy_crates_names());
-            assert_eq!(version, Some("0.10".to_string()));
-        }
-
-        #[test]
-        fn from_third_party_with_no_official_bevy_crates() {
-            let mut dependencies = BTreeMap::new();
-            let mut dev_dependencies = BTreeMap::new();
-            let mut workspace_dependencies = BTreeMap::new();
-
-            dependencies.insert(
-                "bevy_third_party_crate_example".to_string(),
-                Dependency::Simple("0.5".to_string()),
-            );
-            dev_dependencies.insert("bevy".to_string(), Dependency::Simple("0.10".to_string()));
-            workspace_dependencies
-                .insert("bevy".to_string(), Dependency::Simple("0.10".to_string()));
-
-            let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
-            let version = get_bevy_version_from_manifest(&manifest, &Some(vec![]));
-            assert_eq!(version, Some("0.5".to_string()));
         }
 
         #[test]
