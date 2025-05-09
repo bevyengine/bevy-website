@@ -5,12 +5,13 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
-Examples in Bevy should be:
+Each example in Bevy must be:
 
-1. **Working:** They must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
-2. **Clear:** They must use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
-3. **Relevant:** They should explain, through comments or variable names, what they do and how this can be useful to a game developer.
-4. **Minimal:** They should be no larger or complex than is needed to meet the goals of the example.
+1. **Goal-driven:** Each example must have a single clearly stated learning-focused goal.
+2. **Working:** Every example must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
+3. **Clear:** Examples should use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
+4. **Relevant:** Examples should explain, through comments or variable names, what they do and how this can be useful to a game developer.
+5. **Minimal:** Examples should be no larger or complex than is needed to meet the goals of the example.
 
 When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
 Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
