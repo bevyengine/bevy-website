@@ -63,7 +63,8 @@ Please adhere to the following guidelines when creating or updating an example.
    3. Game examples live in `examples/games`, with each game example getting its own dedicated subfolder.
    4. Stress tests live in the root level `stress-tests` folder.
    5. Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
-2. Examples should be a single file if possible.
+2. Each example should consist of exactly one `.rs` file, except where assets or shaders are required.
+   1. Game examples are an exception to this, and should be structured as self-contained small projects with a realistic file and module structure.
 3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repository small. Don't add "large" asset files.
 4. Each example should try to follow this order:
    1. Imports
