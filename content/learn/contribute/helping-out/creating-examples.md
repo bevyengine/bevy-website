@@ -5,8 +5,21 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
-Most [examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) aim to clearly demonstrate a single feature, group of closely related small features, or show how to accomplish a particular task (such as asset loading, creating a custom shader, or testing your app).
-In rare cases, creating new "game" examples is justified in order to demonstrate new features that open a complex class of functionality in a way that's hard to demonstrate in isolation or requires additional integration testing.
+[Examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) in Bevy can be categorized into three distinct categories,
+each of which have their own goals and subfolder:
+
+1. API examples: clearly demonstrating a single feature or group of closely related small features.
+2. Usage examples: teach users opinionated patterns for accomplishing common game development tasks.
+3. Small games: focused on integrating these patterns into a cohesive whole while demonstrating how to structure larger projects.
+
+In addition, we have two additional categories which are treated as examples by `cargo`, but are not intended to teach users:
+
+1. Stress tests: uses extreme entity counts or otherwise unrealistic settings to allow us to readily detect performance changes in particular performance-sensitive hot paths.
+2. Testbeds: designed to test features and scenes that rely on graphical rendering or interactivity, in both an automated and manual fashion.
+
+Unlike examples, stress tests and test beds should be configurable, allowing Bevy contriubtors (and curious users) to see the impact of changes.
+
+## Writing good examples
 
 Examples in Bevy should be:
 
