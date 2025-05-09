@@ -67,6 +67,12 @@ Please adhere to the following guidelines when creating or updating an example.
 5. Try to structure app / plugin construction in the same fashion as the actual code.
 6. Examples should typically not have tests, as those are not directly reusable by the Bevy user.
 
+### Dependencies
+
+1. Examples should not take on new dependencies unless they are required for core functionality of that example.
+2. Examples can never take on dependencies to Bevy ecosystem crates, to avoid circular dependencies and maintenance risk.
+3. Any dependencies needed for examples should be listed as `dev-dependencies`.
+
 ### Stylistic preferences
 
 1. Use simple, descriptive variable names.
