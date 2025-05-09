@@ -33,18 +33,22 @@ In addition, we have two additional categories which are treated as examples by 
 
 Unlike examples, stress tests and test beds should be configurable, allowing Bevy contriubtors (and curious users) to see the impact of changes.
 
-## What makes a good example?
+## When should I add an example?
 
-Each of our example categories has its own goals, and are best considered separately.
+Adding, maintaining and searching through examples has non-trivial costs: we need to think carefully about our selection.
+Each of our example categories has its own goals which should be discussed separately.
 
 A good API example is complementary to good API documentation, and should only be added to promote the discovery of important features, show API usage in context, or show off graphical, audible or interactive functionality that cannot be appropriately conveyed by written documentation alone.
+When possible, prefer documentation tests and module documentation over API examples: these are easier to keep up to date, more clearly scoped and better connected to the APIs in question.
 
 Usage examples tackle common tasks that might be encountered by veterans to game development (or CAD or...) that are trying to translate existing concepts or workflows into Bevy's APIs.
 These should be focused on realism, building out the minimum required to demonstrate that they actually solve the problem at hand.
+Usage examples can be more opinionated, and may demonstrate multiple possible approaches to the same problem, explaining the tradeoffs involved.
 
 Game examples are much more expensive to maintain, and should be used sparingly. Each game example should demonstrate Bevy's capabilities in a new genre or style of game, while being simple enough for new Bevy users to follow and get excited about.
+Polish is important here: these are often a new user's first impression of the engine, although it must be balanced against added complexity.
 
-Full game templates or more complex demonstrations of functionality are also welcome, but to manage maintenance burden these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
+Full game templates or more complex demonstrations of functionality are also welcome, but to manage maintenance burden these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets), as part of our semi-curated collection of community-maintained learning resources.
 
 ## Style guide
 
