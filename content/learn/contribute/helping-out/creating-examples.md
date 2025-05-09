@@ -76,7 +76,7 @@ Please adhere to the following guidelines when creating or updating an example.
 ### Stylistic preferences
 
 1. Use simple, descriptive variable names.
-   1. Avoid names like `MyComponent` in favor of more descriptive terms like `Events`.
+   1. Avoid names like `MyComponent` in favor of more descriptive or evocative terms like `SparseComponent` or `Life`.
    2. Prefer single letter differentiators like `EventsA` and `EventsB` to nonsense words like `EventsFoo` and `EventsBar`.
    3. Avoid repeating the type of variables in their name where possible. For example, `Color` should be preferred to `ColorComponent`.
 2. Prefer glob imports of `bevy::prelude::*` and `bevy::sub_crate::*` over granular imports (for terseness).
