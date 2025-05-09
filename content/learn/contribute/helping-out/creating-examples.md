@@ -19,6 +19,19 @@ In addition, we have two additional categories which are treated as examples by 
 
 Unlike examples, stress tests and test beds should be configurable, allowing Bevy contriubtors (and curious users) to see the impact of changes.
 
+## What makes a good example?
+
+Each of our example categories has its own goals, and are best considered separately.
+
+A good API example is complementary to good API documentation, and should only be added to promote the discovery of important features, show API usage in context, or show off graphical, audible or interactive functionality that cannot be appropriately conveyed by written documentation alone.
+
+Usage examples tackle common tasks that might be encountered by veterans to game development (or CAD or...) that are trying to translate existing concepts or workflows into Bevy's APIs.
+These should be focused on realism, building out the minimum required to demonstrate that they actually solve the problem at hand.
+
+Game examples are much more expensive to maintain, and should be used sparingly. Each game example should demonstrate Bevy's capabilities in a new genre or style of game, while being simple enough for new Bevy users to follow and get excited about.
+
+Full game templates or more complex demonstrations of functionality are also welcome, but to manage maintenance burden these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
+
 ## Writing good examples
 
 Examples in Bevy should be:
@@ -32,8 +45,6 @@ When you add a new example, be sure to update `examples/README.md` with the new 
 Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
 See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
-
-More complex demonstrations of functionality are also welcome, but these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
 
 ## Style guide
 
