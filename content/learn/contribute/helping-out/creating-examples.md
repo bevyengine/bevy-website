@@ -53,6 +53,11 @@ Please adhere to the following guidelines when creating or updating an example.
 ### Organization
 
 1. Examples should live in an appropriate subfolder of `/examples`.
+   1. API examples live in `examples/api`, then subdivided by engine category.
+   2. Usage examples live in `examples/usage`, then subdivided by domain.
+   3. Game examples live in `examples/games`, with each game example getting its own dedicated subfolder.
+   4. Stress tests live in the root level `stress-tests` folder.
+   5. Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
 2. Examples should be a single file if possible.
 3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repository small. Don't add "large" asset files.
 4. Each example should try to follow this order:
