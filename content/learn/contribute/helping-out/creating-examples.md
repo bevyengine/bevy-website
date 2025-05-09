@@ -5,6 +5,20 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
+Examples in Bevy should be:
+
+1. **Working:** They must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
+2. **Clear:** They must use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
+3. **Relevant:** They should explain, through comments or variable names, what they do and how this can be useful to a game developer.
+4. **Minimal:** They should be no larger or complex than is needed to meet the goals of the example.
+
+When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
+Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
+Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
+See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
+
+## Types of examples
+
 [Examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) in Bevy can be categorized into three distinct categories,
 each of which have their own goals and subfolder:
 
@@ -31,20 +45,6 @@ These should be focused on realism, building out the minimum required to demonst
 Game examples are much more expensive to maintain, and should be used sparingly. Each game example should demonstrate Bevy's capabilities in a new genre or style of game, while being simple enough for new Bevy users to follow and get excited about.
 
 Full game templates or more complex demonstrations of functionality are also welcome, but to manage maintenance burden these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
-
-## Writing good examples
-
-Examples in Bevy should be:
-
-1. **Working:** They must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
-2. **Clear:** They must use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
-3. **Relevant:** They should explain, through comments or variable names, what they do and how this can be useful to a game developer.
-4. **Minimal:** They should be no larger or complex than is needed to meet the goals of the example.
-
-When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
-Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
-Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
-See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
 
 ## Style guide
 
