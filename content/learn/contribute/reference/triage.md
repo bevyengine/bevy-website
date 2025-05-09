@@ -32,6 +32,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
 - **S**: Status. The most common include:
   - `S-Ready-For-Implementation`: this issue is ready for someone to pick it up and open a PR!
   - `S-Needs-Triage`: this issue needs to be labeled.
+  - `S-Needs-Reproduction`: this issue needs a reproduction to allow fixes to be tested.
   - `S-Adopt-Me`: the original PR author has no intent to complete the PR, and it should be adopted by another contributor. This PR should be closed, and have an issue linked to track its adoption.
   - `S-Blocked`: cannot move forward until something else changes.
   - `S-Needs-Review`: this PR needs reviewer attention to move forward.
