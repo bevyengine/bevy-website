@@ -189,9 +189,9 @@ You might think to simply develop in release mode instead, but we recommend agai
   # Strip all debugging information from the binary to slightly reduce file size.
   strip = "debuginfo"
   ```
-</details>
 
-When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+  When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+</details>
 
 <details>
   <summary>
