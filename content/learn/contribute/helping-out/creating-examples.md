@@ -73,6 +73,7 @@ Please adhere to the following guidelines when creating or updating an example.
 5. Try to structure app / plugin construction in the same fashion as the actual code.
 6. Examples should typically not have tests, as those are not directly reusable by the Bevy user.
 7. Examples should not share common "utility" logic: if you feel this is warranted, improve the engine instead!
+   1. Similarly, try to avoid incidental complexity and abstractions. Find a simpler way for now, and work to create these tools and resolve this tension in the engine itself.
 
 ### Dependencies
 
