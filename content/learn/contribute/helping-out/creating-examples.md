@@ -98,6 +98,15 @@ As a result, you should currently reuse assets for your examples whenever possib
 If you *need* an asset to demonstrate a newly added feature, make it as small as possible.
 If you want to add a new example that requires a new asset to properly teach a new concept, it will almost certainly be rejected until the issue linked above is resolved.
 
+## Platform support
+
+By default, every example must work on our desktop platforms: Linux, Windows and MacOS.
+
+It is acceptable (but not ideal) if certain examples do not work on web, or low end hardware.
+However, this should be prominently called out and explained inside of the examples.
+
+Examples for mobile or embedded platforms require special setup, and are generally split out, focusing on the specific quirks of those platforms.
+
 ### Dependencies
 
 1. Examples should not take on new dependencies unless they are required for core functionality of that example.
