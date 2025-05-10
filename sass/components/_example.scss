@@ -47,6 +47,11 @@
     text-align: right;
   }
 
+  &__explanation {
+    padding-inline: 16px;
+    margin-block: 32px;
+  }
+
   &__code-tabs {
     margin-top: 16px;
   }
