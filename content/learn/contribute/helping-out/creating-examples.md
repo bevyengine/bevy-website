@@ -49,6 +49,19 @@ Usage examples can be more opinionated, and may demonstrate multiple possible ap
 Game examples are much more expensive to maintain, and should be used sparingly. Each game example should demonstrate Bevy's capabilities in a new genre or style of game, while being simple enough for new Bevy users to follow and get excited about.
 Polish is important here: these are often a new user's first impression of the engine, although it must be balanced against added complexity.
 
+Each game example should be a few hundred to a few thousand lines at most.
+Try to pick the simplest example that embodies the body or domain that you can, and strip it down to its essence.
+The point is to prove to the reader that Bevy *can* make projects like this, not to actually make a project.
+
+For example, suppose you wanted to demonstrate a turn-based RPG, analogous to Pokemon.
+Implementing a single overworld level where you can walk around and a single battle with one character and no gameplay mechanics would be enough to get the idea across, and teach the reader how to architect their project.
+
+As another example, consider making a first-person shooter game example.
+A cross-hair, character controller, level, target dummy and the ability to fire a weapon would be enough.
+Bullet decals, a weapon changing system, a scoreboard, respawning or so on are all valuable additions,
+but generally won't have an architectural impact.
+Instead, those features make more sense to demonstrate inside of dedicated usage examples in a lightweight way.
+
 Full game templates or more complex demonstrations of functionality are also welcome, but to manage maintenance burden these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets), as part of our semi-curated collection of community-maintained learning resources.
 
 ## Style guide
