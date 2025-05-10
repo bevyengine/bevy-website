@@ -78,7 +78,7 @@ Please adhere to the following guidelines when creating or updating an example.
    5. Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
 2. Each example should consist of exactly one `.rs` file, except where assets or shaders are required.
    1. Game examples are an exception to this, and should be structured as self-contained small projects with a realistic file and module structure.
-3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repository small. Don't add "large" asset files.
+3. Assets live in `/assets`, organized by kind, rather than by example.
 4. Each example should try to follow this order:
    1. Imports
    2. A `fn main()` block
@@ -87,6 +87,16 @@ Please adhere to the following guidelines when creating or updating an example.
 6. Examples should typically not have tests, as those are not directly reusable by the Bevy user.
 7. Examples should not share common "utility" logic: if you feel this is warranted, improve the engine instead!
    1. Similarly, try to avoid incidental complexity and abstractions. Find a simpler way for now, and work to create these tools and resolve this tension in the engine itself.
+
+### Assets
+
+While we're [currently trying to figure out](https://github.com/bevyengine/bevy/issues/13875) how to best use larger and more realistic assets inside of Bevy's learning material, the current status quo is that we are extremely constrained on asset usage for examples.
+
+Adding new assets permanently increases the size of the Bevy repository, causing us problems with hosting, and resulting in pain for Bevy contributors when they clone or work with the repository.
+
+As a result, you should currently reuse assets for your examples whenever possible.
+If you *need* an asset to demonstrate a newly added feature, make it as small as possible.
+If you want to add a new example that requires a new asset to properly teach a new concept, it will almost certainly be rejected until the issue linked above is resolved.
 
 ### Dependencies
 
