@@ -14,12 +14,12 @@ Bevy is a modern, ECS-first game engine written in Rust. We aim to be:
 - **Fast:** App logic should run quickly, and when possible, in parallel
 - **Productive:** Changes should compile quickly... waiting isn't fun
 
-Bevy is [MIT](https://github.com/bevyengine/bevy/blob/main/LICENSE-MIT) + [Apache v2](https://github.com/bevyengine/bevy/blob/main/LICENSE-APACHE) licensed and controlled by the [Bevy Foundation](https://bevyengine.org/foundation/), a 501c3 charity run by the maintainers who do the day-to-day work to make Bevy what it is.
-It's powered by hundreds of community contributors, and funded by the [generous donations](https://bevyengine.org/donate/) of the hobbyists and businesses that love and rely on it.
+Bevy is [MIT](https://github.com/bevyengine/bevy/blob/main/LICENSE-MIT) + [Apache v2](https://github.com/bevyengine/bevy/blob/main/LICENSE-APACHE) licensed and controlled by the [Bevy Foundation](httaps://bevyengine.org/foundation/), a 501c3 charity run by the maintainers who do the day-to-day work to make Bevy what it is.
+It's built in the open, powered by hundreds of [community contributors](https://bevyengine.org/learn/contribute/introduction) and funded by the [generous donations](https://bevyengine.org/donate/) of the hobbyists and businesses that love and rely on it.
 
 ## Why use Bevy?
 
-Bevy is great! You should use Bevy if:
+Bevy is delightful! You should use Bevy if:
 
 - You like Rust: it's a modern, safe, high-performance language with incredible tooling and a welcoming community
 - You like ECS: it's fast, elegant, extremely parallelizable and handles extreme levels of complexity well
