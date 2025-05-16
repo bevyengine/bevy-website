@@ -66,7 +66,7 @@ fn spawn_entities(commands: &mut Commands) {
     commands.spawn(Color::Heliotrope);
 }
 ```
-(Entity spawning is done using [Commands](todo-link-to-commands), which will be covered in the next section.)
+(Entity spawning is done using [Commands](../intro/the-next-three-letters#commands), which will be covered in the next section.)
 
 ## The S: Systems
 
@@ -83,5 +83,4 @@ fn my_system(entities: Query<&mut Location>) {
     }
 }
 ```
-(Most ineractions with entities and their components is done using [Queries](todo-link-to-queries), which will be covered in the next section.)
-
+(Most ineractions with entities and their components is done using [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.)
