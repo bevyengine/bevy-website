@@ -1,7 +1,7 @@
 +++
-title = "Fallible Systems"
+title = "Rendering frames"
 insert_anchor_links = "right"
 [extra]
-weight = 7
+weight = 4
 status = 'hidden'
 +++
