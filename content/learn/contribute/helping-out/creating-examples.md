@@ -13,7 +13,7 @@ Each example in Bevy must be:
 4. **Relevant:** Examples should explain, through comments or variable names, what they do and how this can be useful to a game developer.
 5. **Minimal:** Examples should be no larger or complex than is needed to meet the goals of the example.
 
-When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
+When you add a new example, be sure to update add it to the root `Cargo.toml` file and update the relevant `README.md` based on the type of example (see below).
 Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
 See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
@@ -70,23 +70,24 @@ Please adhere to the following guidelines when creating or updating an example.
 
 ### Organization
 
-1. Examples should live in an appropriate subfolder of `/examples`.
-   1. API examples live in `examples/api`, then subdivided by engine category.
-   2. Usage examples live in `examples/usage`, then subdivided by domain.
-   3. Game examples live in `examples/games`, with each game example getting its own dedicated subfolder.
-   4. Stress tests live in the root level `stress-tests` folder.
-   5. Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
-2. Each example should consist of exactly one `.rs` file, except where assets or shaders are required.
-   1. Game examples are an exception to this, and should be structured as self-contained small projects with a realistic file and module structure.
-3. Assets live in `/assets`, organized by kind, rather than by example.
-4. Each example should try to follow this order:
-   1. Imports
-   2. A `fn main()` block
-   3. Example logic
-5. Try to structure app / plugin construction in the same fashion as the actual code.
-6. Examples should typically not have tests, as those are not directly reusable by the Bevy user.
-7. Examples should not share common "utility" logic: if you feel this is warranted, improve the engine instead!
-   1. Similarly, try to avoid incidental complexity and abstractions. Find a simpler way for now, and work to create these tools and resolve this tension in the engine itself.
+- Examples should live in an appropriate subfolder of `/examples`.
+  - API examples live in `examples/api`, then subdivided by engine category.
+  - Usage examples live in `examples/usage`, then subdivided by domain.
+  - Game examples live in `examples/games`, with each game example getting its own dedicated subfolder.
+  - Stress tests live in the root level `stress-tests` folder.
+  - Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
+- Each of these subfolders has a `README.md` file with a table listing of the examples.
+- Each example should consist of exactly one `.rs` file, except where assets or shaders are required.
+  - Game examples are an exception to this, and should be structured as self-contained small projects with a realistic file and module structure.
+- Assets live in `/assets`, organized by kind, rather than by example.
+- Each example should try to follow this order:
+  - Imports
+  - A `fn main()` block
+  - Example logic
+- Try to structure app / plugin construction in the same fashion as the actual code.
+- Examples should typically not have tests, as those are not directly reusable by the Bevy user.
+- Examples should not share common "utility" logic: if you feel this is warranted, improve the engine instead!
+  - Similarly, try to avoid incidental complexity and abstractions. Find a simpler way for now, and work to create these tools and resolve this tension in the engine itself.
 
 ### Assets
 
