@@ -3,7 +3,7 @@ title = "Storing Data"
 template = "docs.html"
 insert_anchor_links = "right"
 [extra]
-weight = 2
+weight = 3
 status = 'hidden'
 +++
 
