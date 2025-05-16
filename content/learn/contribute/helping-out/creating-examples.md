@@ -13,7 +13,7 @@ Each example in Bevy must be:
 4. **Relevant:** Examples should explain, through comments or variable names, what they do and how this can be useful to a game developer.
 5. **Minimal:** Examples should be no larger or complex than is needed to meet the goals of the example.
 
-When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
+When you add a new example, be sure to update add it to the root `Cargo.toml` file and update the relevant `README.md` based on the type of example (see below).
 Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
 See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
@@ -76,6 +76,7 @@ Please adhere to the following guidelines when creating or updating an example.
   - Game examples live in `examples/games`, with each game example getting its own dedicated subfolder.
   - Stress tests live in the root level `stress-tests` folder.
   - Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
+- Each of these subfolders has a `README.md` file with a table listing of the examples.
 - Each example should consist of exactly one `.rs` file, except where assets or shaders are required.
   - Game examples are an exception to this, and should be structured as self-contained small projects with a realistic file and module structure.
 - Assets live in `/assets`, organized by kind, rather than by example.
