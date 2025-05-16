@@ -26,3 +26,5 @@ You should not use Bevy if:
 - You need high stability
 	- Bevy iterates quickly and often has breaking changes, although it also has good migration guides
 	- Many serious users upgrade bevy on existing projects, but the work is non-trivial for large projects
+- You want to ship to consoles
+	- Bevy does not have console support (yet!)
