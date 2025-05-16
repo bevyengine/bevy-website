@@ -17,39 +17,37 @@ Like components, resources in Bevy are also "just Rust structs" (or enums).
 
 ```rs
 #[derive(Resource)]
-struct InGameClock {
-  current_time: Instant
+struct Score {
+    points: i32
 }
 ```
 
 They're accessed and updated in systems, similar to entities and components:
 
 ```rs
-fn update_game_time(time: ResMut<InGameClock>) {
-  // ResMut gets the resource mutably, so we can update it
-  *time = Instant::now();
+fn update_score(score: ResMut<Score>) {
+    // ResMut gets the resource mutably, so we can update it
+    score.points += 1;
 }
 ```
 
 ## Queries
 
-Queries are used to fetch data from the ECS, either in read only mode (like a `&`), or in mutable access mode (like a `&mut`).
-When writing a query, you provide a set of components, and Bevy will fetch all entities that have those components.
+Queries are used to fetch data from the ECS, either in read only mode (like a [`&`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#references-and-borrowing)), or in mutable access mode (like a [`&mut`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)).
+When writing a query, you provide a set of components, and Bevy will fetch all entities that have every requested component.
 (The entities fetched may also have other components, but those are ignored if the query does not ask for them.)
-
-In the database model, a query is a lot like a SQL `SELECT` statement: `SELECT component1, component2 from world`
 
 Any ECS system can make queries by adding the appropriate argument to the function signature:
 ```rs
-fn my_system(mut entities: Query<(&Color, &mut Location)>) {
-    for (color, mut location) in entities.iter_mut() {
+fn my_system(mut query: Query<(&Color, &mut Location)>) {
+    for (color, mut location) in query.iter_mut() {
         if color == Color::Red {
             location += 1;
         }
     }
 }
 ```
-Then, the query information is passed into the system by Bevy automatically when the system is added to an [app](todo-link-to-apps):
+Then, when systems are run as part of a Bevy [app](todo-link-to-apps), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
 ```rs
 fn main() {
     App::new()
@@ -58,9 +56,15 @@ fn main() {
 }
 ```
 
+In the database model, a query is a lot like a [SQL `SELECT` statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location from World`
+
+Queries have more functionality than just this.
+You can also request optional components for `OR` semantics, add query filters, and much more!
+Queries are covered in more detail in the [TODO QUERIES CHAPTER](todo-link) chapter.
+
 ## Commands
 
-Commands are a very flexible structure that allows for aribtrary changes to the ECS.
+Commands are a very flexible structure that allows for arbitrary changes to the ECS.
 They are mostly used for write operations, such as spawning entities (as we saw in the previous section).
 Any system can access the command queue by adding a `mut commands: Commands` to the function signature:
 
