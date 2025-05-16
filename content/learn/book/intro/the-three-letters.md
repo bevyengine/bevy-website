@@ -67,7 +67,7 @@ In the database model, components are like the columns of our database (although
 
 Spawning entities with components is done like so:
 ```rs
-fn spawn_entities(commands: &mut Commands) {
+fn spawn_entities(mut commands: Commands) {
     // Spawn an entity with all our components
     commands.spawn((Location::zero(), Color::Red, Player));
     // Spawn an entity with only one component
