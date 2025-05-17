@@ -3,7 +3,7 @@ title = "Control Flow"
 template = "docs.html"
 insert_anchor_links = "right"
 [extra]
-weight = 4
+weight = 3
 status = 'hidden'
 +++
 

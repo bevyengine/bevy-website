@@ -3,7 +3,7 @@ title = "The Game Loop"
 template = "docs.html"
 insert_anchor_links = "right"
 [extra]
-weight = 2
+weight = 4
 status = 'hidden'
 +++
 
