@@ -10,8 +10,8 @@ The core concept in Bevy is the ECS architecture, which stands for **Entity, Com
 ECS is a method of structuring the data of a program, and how that data is accessed and updated.
 There are two main mental models for how to think about ECS:
 - The **object-like model:** similar to game objects you may be familiar with from other engines
-- The **database model:** similar to an in-memory SQL database or spreadsheet
-We'll reference both conceptual models throughout this chapter.
+- The **database model:** similar to an in-memory SQL database or spreadsheet.
+  We'll reference both conceptual models throughout this chapter
 
 So, what does each letter mean?
 
@@ -43,7 +43,7 @@ In Bevy, components are "just Rust structs" (or enums).
 struct Location {
     x: f32,
     y: f32,
-    z: f32
+    z: f32,
 }
 
 /// The color of an object in our game
@@ -52,11 +52,11 @@ enum Color {
     Red,
     Green,
     Blue,
-    Heliotrope
+    Heliotrope,
 }
 
 /// A "marker" component for entities which represent a player
-/// 
+///
 /// Since this contains no data, this is more like a tag
 #[derive(Component)]
 struct Player;

@@ -26,16 +26,16 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()                          // Create a new app
-        .add_systems(Update, my_system) // Configure it's behavior
+        .add_systems(Update, my_system) // Configure its behavior
         .run();                         // Enter a run loop
 }
 ```
 
 In most cases, your world will be contained within your app.
-The app is resopnsible for scheduling and executing your systems, and passing the data in and out of them appropriately.
+The app is responsible for scheduling and executing your systems, and passing the data in and out of them appropriately.
 It also handles other app-level config, like windowing settings.
 
 ## Off you go, now
 
 With that, you should have everything you need to understand a relatively straightforward example, such as the [`ecs_guide` example](https://github.com/bevyengine/bevy/blob/main/examples/ecs/ecs_guide.rs).
-The rest of this book contains different chapters that read or referenced in any order.
+The rest of this book contains different chapters that can be read or referenced in any order.
