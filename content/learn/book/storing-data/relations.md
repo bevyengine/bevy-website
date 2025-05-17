@@ -2,6 +2,6 @@
 title = "Relations"
 insert_anchor_links = "right"
 [extra]
-weight = 5
+weight = 6
 status = 'hidden'
 +++

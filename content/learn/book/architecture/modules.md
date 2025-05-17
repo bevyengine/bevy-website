@@ -1,6 +1,6 @@
 +++
-title = "Schedules"
+title = "Module Organization"
 insert_anchor_links = "right"
 [extra]
-weight = 4
+weight = 2
 +++

@@ -1,6 +1,6 @@
 +++
-title = "Schedules"
+title = "The World"
 insert_anchor_links = "right"
 [extra]
-weight = 4
+weight = 3
 +++
