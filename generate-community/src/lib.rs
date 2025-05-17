@@ -22,6 +22,7 @@ pub struct Member {
     #[serde(default, deserialize_with = "extract_mastodon")]
     pub mastodon: Option<Mastodon>,
     pub twitter: Option<String>,
+    pub bluesky: Option<String>,
     pub instagram: Option<String>,
     pub itch_io: Option<String>,
     pub steam_developer: Option<String>,
