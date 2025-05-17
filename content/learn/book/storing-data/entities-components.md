@@ -21,6 +21,12 @@ Bevy makes no guarantees that exact entity assignment or storage behavior will b
 [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 
+## A Different Perspective on Entities
+
+There's another way to think about entities and components: the Bevy game world operates much like a traditional database application. Metaphorically, the "entities" represent rows in a table, and the "components" are much like columns. A "query" lets you read and manipulate the contents of the database by giving you access to a subset of the rows and columns in the table.
+
+The ECS approach can take some getting used to, especially for someone coming from a traditional OOP (Object-Oriented Programming) background. However, the advantage of this approach is the ability to perform massive bulk operations efficiently within extremely large and complex game worlds.
+
 ## Spawning and Despawning Entities
 
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
