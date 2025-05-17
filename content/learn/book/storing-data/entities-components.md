@@ -48,7 +48,7 @@ fn spawning_system(mut commands: Commands){
 
 ## Working With Components
 
-As mentioned in the [introduction section on components], a **Component** is a small, modular, reusable piece of data that can be put on an entity.
+As mentioned in the [introduction section on components], a **Component** is a small, modular, reusable piece of data that can be attached to an entity.
 Components are necessary to make individual entities useful.
 Otherwise, entities are just identifiers that don't point to anything!
 
@@ -201,8 +201,8 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
   - Common functionality can be handled by putting it on a shared [Required Component]
   - Small modular systems based on common behavior work well
   - Reducing the amount of data stored improves cache performance and system-parallelism
-  - Keep it as a single component if you need to maintain invariants (such as current life is always less than or equal to max life)
-  - Keep it as a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)
+  - Group properties together within a single component if you need to maintain invariants (such as current life is always less than or equal to max life)
+  - Additionally, group properties together within a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)
 - Simple methods on components are a good tool for clean, testable code
   - Logic that is inherent to how the component works (like rolling dice or healing life points) is a great fit
   - Logic that will only be repeated once generally belongs in systems
