@@ -26,7 +26,7 @@ Bevy makes no guarantees that exact entity assignment or storage behavior will b
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
 
-Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system](../exclusive-world-access)).
+Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system](../../control-flow/exclusive-systems)).
 As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust,hide_lines=1
