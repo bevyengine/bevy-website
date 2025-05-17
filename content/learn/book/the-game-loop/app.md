@@ -11,8 +11,8 @@ After it's configured, the can be started with [`App::run`].
 This typically takes control of the main thread and enters the game loop.
 
 You can think of an `App` as containing three things:
-+ A [world].
-+ A run loop function.
++ A [world], which stores all the data for the app.
++ A run-loop function, to execute [schedules].
 + A set of [plugins], which are important enough to deserve their own section.
 
 Most app configuration -- registering systems, ect -- boils down to modifying the world. 
@@ -29,6 +29,8 @@ We will take a closer look at the runner function in the [scheduling] chapter.
 [`App::run`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.run
 [`App::world_mut`]:  https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.world_mut
 [`App::set_runner`]:  https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.set_runner
-[scheduling]: ../schedules
-[world]: ../../storing-data/world
-[plugins]: ../../architecture/plugins
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/index.html
+[schedules]: /learn/book/the-game-loop/schedules
+[scheduling]: /learn/book/the-game-loop/schedules
+[world]: /learn/book/storing-data/world
+[plugins]: /learn/book/architecture/plugins
