@@ -47,7 +47,7 @@ fn my_system(mut query: Query<(&Color, &mut Location)>) {
     }
 }
 ```
-Then, when systems are run as part of a Bevy [app](todo-link-to-apps), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
+Then, when systems are run as part of a Bevy [app](../../the-game-loop/app), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
 ```rs
 fn main() {
     App::new()
@@ -60,7 +60,7 @@ In the database model, a query is a lot like a [SQL `SELECT` statement](https://
 
 Queries have more functionality than just this.
 You can also request optional components for `OR` semantics, add query filters, and much more!
-Queries are covered in more detail in the [TODO QUERIES CHAPTER](todo-link) chapter.
+Queries are covered in more detail in the [Queries](../../storing-data/queries) chapter.
 
 ## Commands
 
@@ -79,4 +79,4 @@ fn spawn_entities(mut commands: Commands) {
 
 Commands can do nearly anything to the ECS that you can imagine, including running queries!
 You can also write custom commands to extend the ECS however you might need to.
-They are talked about in more detail in the [TODO COMMANDS CHAPTER](todo-link) chapter.
+They are talked about in more detail in the [Commands](../../control-flow/commands) chapter.
