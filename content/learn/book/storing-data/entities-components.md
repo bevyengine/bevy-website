@@ -26,7 +26,7 @@ Bevy makes no guarantees that exact entity assignment or storage behavior will b
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
 
-Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system](../../control-flow/exclusive-systems)).
+Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system]).
 As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust,hide_lines=1
@@ -43,25 +43,39 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
+[exclusive system]: ../../control-flow/exclusive-systems
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ## Working With Components
 
-Spawning an entity doesn't add any behavior or create a "physical object" in our game like it might in other engines.
-Instead, all it does is provide us an [`Entity`] identifier for a collection of component data.
+As mentioned in the [introduction section on components], a **Component** is a small, modular, reusable piece of data that can be put on an entity.
+Components are necessary to make individual entities useful.
+Otherwise, entities are just identifiers that don't point to anything!
 
-In order to make this useful, we need to be able to add, remove and modify component data for each entity.
+Spawning an entity doesn't add any behavior or create a "physical object" in our game like it might in other engines.
+To make a basic cube, you'd probably need to add:
+- A [`Transform`] component to store where the object is
+- A [`Mesh`] component to store its geometry (in practice, actually a [`Handle`] to a [`Mesh`])
+- A [`StandardMaterial`] to define how that mesh should be rendered (in practice, actually a [`Handle`] to a [`StandardMaterial`])
+- Etc.
+
+[introduction section on components]: ../../intro/the-three-letters#the-c-components
+[`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
+[`Mesh`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Mesh.html
+[`Handle`]: https://docs.rs/bevy/latest/bevy/asset/enum.Handle.html
+[`StandardMaterial`]: https://docs.rs/bevy/latest/bevy/pbr/struct.StandardMaterial.html
 
 ### Defining Components
 
 To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
 You will almost always want to use the `#[derive(Component)]` [macro](https://doc.rust-lang.org/reference/attributes/derive.html) to do this for you; which quickly and reliably generates the correct trait implementation.
 
-With the theory out of the way, let's define some components!
+Components come in a variety of tasty flavors:
 
 ```rust,hide_lines=1
 # use bevy::ecs::component::Component;
 // This is a "unit struct", which holds no data of its own.
+// However, it can still be used in queries as a filter!
 #[derive(Component)]
 struct Combatant;
 
@@ -183,41 +197,35 @@ Entities can only ever store one component of each type: inserting another compo
 
 Over time, the Bevy community has converged on a few standard pieces of advice for how to structure and define component data:
 
-- try to keep your components relatively small
-  - combine common functionality into bundles, not large components
-  - small modular systems based on common behavior work well
-  - reducing the amount of data stored improves cache performance and system-parallelism
-  - keep it as a single component if you need to maintain invariants (such as current life is always less than or equal to max life)
-  - keep it as a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)
-- simple methods on components are a good tool for clean, testable code
-  - logic that is inherent to how the component works (like rolling dice or healing life points) is a great fit
-  - logic that will only be repeated once generally belongs in systems
-  - methods make it easier to understand the actual gameplay logic in your systems, and fix bugs in a single place
-- marker components are incredibly valuable for extending your design
-  - it is very common to want to quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`
-  - filtering by component presence/absence is (generally) faster and clearer than looping through a list of boolean values
-  - try to model meaningful groups at several levels of abstraction / along multiple axes: e.g. `Unit`, `Ant`, `Combatant`
-- enum components are very expressive, and help reduce bugs
-  - enums can hold different data in each variant, allowing you to capture information effectively
-  - if you have a fixed number of options for a value, store it as an enum
-- implementing traits like [`Add`] or [`Display`] can provide useful behavior in an idiomatic way
-- use [`Deref`] and [`DerefMut`] for tuple structs with a single item ([newtypes])
-  - this allows you to access the internal data with `*my_component` instead of `my_component.0`
-  - more importantly, this allows you to call methods that belong to the wrapped type directly on your component
-- define builder methods for your [`Bundle`] types that return [`Self`]
-  - this is useful to define a friendly interface for how entities of this sort tend to vary
-  - not as useful as you might hope for upholding invariants; components will be able to be accidentally modified independently later
-- use [struct update syntax] to modify component bundles
-  - [`..default()`] is a particularly common idiom, to modify a struct from its default values
-- consider defining traits for related components
-  - this allows you to ensure a consistent interface
-  - this can be very powerful in combination with generic systems that use trait bounds
+- Try to keep your components relatively small
+  - Common functionality can be handled by putting it on a shared [Required Component]
+  - Small modular systems based on common behavior work well
+  - Reducing the amount of data stored improves cache performance and system-parallelism
+  - Keep it as a single component if you need to maintain invariants (such as current life is always less than or equal to max life)
+  - Keep it as a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)
+- Simple methods on components are a good tool for clean, testable code
+  - Logic that is inherent to how the component works (like rolling dice or healing life points) is a great fit
+  - Logic that will only be repeated once generally belongs in systems
+  - Methods make it easier to understand the actual gameplay logic in your systems, and fix bugs in a single place
+- **Marker components** (using unit structs) are incredibly valuable for extending your design
+  - It is very common to want to quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`
+  - Filtering by component presence/absence is (generally) faster and clearer than looping through a list of boolean values
+  - Try to model meaningful groups at several levels of abstraction / along multiple axes: e.g. `Unit`, `Ant`, `Combatant`
+- Enum components are very expressive, and help reduce bugs
+  - Enums can hold different data in each variant, allowing you to capture information effectively
+  - If you have a fixed number of options for a value, store it as an enum
+- Implementing traits like [`Add`] or [`Display`] can provide useful behavior in an idiomatic way
+- Use [`Deref`] and [`DerefMut`] for tuple structs with a single item ([newtypes])
+  - This allows you to access the internal data with `*my_component` instead of `my_component.0`
+  - More importantly, this allows you to call methods that belong to the wrapped type directly on your component
+- Consider defining traits for related components
+  - This allows you to ensure a consistent interface
+  - This can be very powerful in combination with generic systems that use trait bounds
 
+[Required Component]: ../required-components
 [`Add`]: https://doc.rust-lang.org/std/ops/trait.Add.html
 [`Display`]: https://doc.rust-lang.org/std/path/struct.Display.html
 [`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
 [`DerefMut`]: https://doc.rust-lang.org/std/ops/trait.DerefMut.html
-[`Self`]: https://doc.rust-lang.org/reference/paths.html#self-1
-[`..default()`]: https://docs.rs/bevy/latest/bevy/prelude/fn.default.html
 [newtypes]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html
 [struct update syntax]: https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
