@@ -1,7 +1,7 @@
 +++
-title = "One Shot Systems"
+title = "Run Conditions"
 insert_anchor_links = "right"
 [extra]
-weight = 3
+weight = 1
 status = 'hidden'
 +++
