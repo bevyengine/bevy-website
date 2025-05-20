@@ -10,16 +10,16 @@ status = 'hidden'
 On its own, the [`Entity`] type is a simple identifier: it has neither behavior nor data.
 Components store this data, and define the overlapping categories that the entity belongs to.
 
-Informally, we use the term "entity" to refer to the conceptual entry in our [`World`]: all of the component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
-If you're an experienced programmer, you can reason about the [`World`] as something like a (very fast) [`HashMap`] from [`Entity`] to a collection of components.
+Informally, we use the term "entity" to refer to the conceptual entry in our [world]: all of the component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
+If you're an experienced programmer, you can reason about the [world] as something like a (very fast) [`HashMap`] from [`Entity`] to a collection of components.
 
 Internally, [`Entity`] is roughly shaped like a `u64`, with arbitrary (unique) bits.
 While it is possible to work with the [`Entity`] type directly, it should be treated as an opaque, black box key.
 Bevy makes no guarantees that exact entity assignment or storage behavior will be stable across any version boundary.
 
+[world]: /learn/book/storing-data/world
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
-[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 
 ## A Different Perspective on Entities
 
