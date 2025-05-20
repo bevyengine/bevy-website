@@ -13,7 +13,7 @@ A clear and concise description of what the problem is.
 
 ## Proposed Solution
 
-Provide informations about what would be required to consider this issue resolved.
+Provide information about what would be required to consider this issue resolved.
 
 ## Additional Information (optional)
 
