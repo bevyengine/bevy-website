@@ -17,4 +17,4 @@ Provide information about what would be required to consider this issue resolved
 
 ## Additional Information (optional)
 
-Here add any useful information that did not fit any of the previous categories.
+Add any useful information here that did not fit any of the previous categories.
