@@ -16,7 +16,7 @@ Here are some examples of data that could be encoded as a **[`Resource`]**:
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
-[`Resource`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.Resource.html
+[`Resource`]: https://docs.rs/bevy/latest/bevy/ecs/resource/trait.Resource.html
 
 ## Tracking Time with Resources
 
