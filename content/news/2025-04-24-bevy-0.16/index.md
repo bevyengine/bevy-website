@@ -10,7 +10,7 @@ image_subtitle_link = "https://bsky.app/profile/embersarc.bsky.social"
 
 Thanks to **261** contributors, **1244** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.16** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.16**, check out our [0.15 to 0.16 Migration Guide](/learn/migration-guides/0-15-to-0-16/).
 

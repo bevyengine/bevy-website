@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://bevyengine.org"
+base_url = "https://bevy.org"
 
 # Used for the Atom feed
 title = "Bevy Engine"
@@ -16,9 +16,7 @@ build_search_index = true
 generate_feeds = true
 feed_limit = 1000
 
-taxonomies = [
-    {name = "news", feed = true},
-]
+taxonomies = [{ name = "news", feed = true }]
 
 [markdown]
 # Whether to do syntax highlighting

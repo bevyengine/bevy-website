@@ -2,7 +2,7 @@
 
 This tool generates the [assets page] using the content in [`bevy-assets`].
 
-[assets page]: https://bevyengine.org/assets/
+[assets page]: https://bevy.org/assets/
 [`bevy-assets`]: https://github.com/bevyengine/bevy-assets
 
 To generate the assets page, run `generate_assets.sh`:

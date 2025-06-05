@@ -142,7 +142,7 @@ Examples for mobile or embedded platforms require special setup, and are general
 
 ### Visual guidelines
 
-Examples may be displayed in the [example showcase](https://bevyengine.org/examples/) and a consistent style helps keep things tidy there.
+Examples may be displayed in the [example showcase](https://bevy.org/examples/) and a consistent style helps keep things tidy there.
 
 1. Use the default `ClearColor` and `WindowResolution` unless absolutely necessary.
 2. "Instruction Text" should use the default font, color, and size. It should be inset 12 pixels from the edge of the window.

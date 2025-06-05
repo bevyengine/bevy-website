@@ -6,7 +6,7 @@ authors = ["Alice I. Cecile"]
 github = "alice-i-cecile"
 +++
 
-[Contributing to Bevy](https://bevyengine.org/learn/contribute/introduction/) is a blast, but what if you could meet each other in flesh?
+[Contributing to Bevy](https://bevy.org/learn/contribute/introduction/) is a blast, but what if you could meet each other in flesh?
 
 [RustWeek 2025](https://rustweek.org/) has generously offered to let Bevy (among other Rust-affiliated groups!) nest into a room (plus a breakout room!) as part of their [Unconf](https://rustweek.org/unconf/). Three days of socializing, collaborating and working on Bevy, in whatever form we'd like!
 
