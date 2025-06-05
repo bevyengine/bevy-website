@@ -24,7 +24,7 @@ WebGPU has started making waves because [Chrome just shipped WebGPU support in C
 
 For those who don't know, Bevy is a refreshingly simple cross-platform data-driven game engine built in Rust. It has a modern and extensible 2D and 3D renderer, a best-in-class ECS (entity component system) that is delightful to use, [plenty of features](/), and a vibrant and open [developer community](/community). It currently supports Windows, MacOS, Linux, iOS, and Web. We also have work in progress Android support ... and ambitions for even more platforms in the future!
 
-You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It is free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It is free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 <!-- more -->
 

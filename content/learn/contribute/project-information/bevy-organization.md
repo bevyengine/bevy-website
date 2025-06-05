@@ -40,7 +40,7 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to the Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from the Project Lead and all Maintainers.
 
 {% callout(type="info") %}
-Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of Maintainers.
+Check out the [Bevy People](https://bevy.org/community/people/#the-bevy-organization) page for the current list of Maintainers.
 {% end %}
 
 ## Subject Matter Expert (SME)
@@ -62,7 +62,7 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 If you are interested in a SME role and believe you meet these criteria, reach out to our Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new SME requires the support of the Project Lead and half of the Maintainers (however unanimous support is preferred).
 
 {% callout(type="info") %}
-Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of SMEs.
+Check out the [Bevy People](https://bevy.org/community/people/#the-bevy-organization) page for the current list of SMEs.
 {% end %}
 
 ## Bevy Org Member / Triage Team

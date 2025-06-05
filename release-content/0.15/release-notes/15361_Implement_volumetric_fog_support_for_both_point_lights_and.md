@@ -1,4 +1,4 @@
-Volumetric fog was [introduced in Bevy 0.14](https://bevyengine.org/news/bevy-0-14/#volumetric-fog-and-volumetric-lighting-light-shafts-god-rays). Initially, only directional lights could interact with it. In Bevy 0.15, point lights and spot lights work with it too:
+Volumetric fog was [introduced in Bevy 0.14](https://bevy.org/news/bevy-0-14/#volumetric-fog-and-volumetric-lighting-light-shafts-god-rays). Initially, only directional lights could interact with it. In Bevy 0.15, point lights and spot lights work with it too:
 
 ![volumetric fog](volumetric_fog.jpg)
 

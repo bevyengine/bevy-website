@@ -11,7 +11,7 @@ image_subtitle_link = "https://twitter.com/i_am_feenster"
 
 Thanks to **185** contributors, **567** pull requests, community reviewers, and our [**generous sponsors**](/donate), we're happy to announce the **Bevy 0.12** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.12**, check out our [0.11 to 0.12 Migration Guide](/learn/migration-guides/0.11-0.12/).
 
@@ -1567,7 +1567,7 @@ Bevy is now using this to ignore conflicts between the `Assets<T>` resources. Mo
 
 <div class="release-feature-authors">authors: @rparrett, @hymm, @mockersf</div>
 
-A simple "stereo" (non-HRTF) spatial audio implementation was heroically [put together](https://bevyengine.org/news/bevy-0-10/#spatial-audio) at the last minute for Bevy 0.10, but the implementation was somewhat bare-bones and not very user-friendly. Users needed to write their own systems to update audio sinks with emitter and listener positions.
+A simple "stereo" (non-HRTF) spatial audio implementation was heroically [put together](https://bevy.org/news/bevy-0-10/#spatial-audio) at the last minute for Bevy 0.10, but the implementation was somewhat bare-bones and not very user-friendly. Users needed to write their own systems to update audio sinks with emitter and listener positions.
 
 Now users can just add a `TransformBundle` to their `AudioBundle`s and Bevy will take care of the rest!
 
@@ -1693,8 +1693,8 @@ Additionally, the daily mobile check job now builds on more iOS and Android devi
 
 The example showcase tool can now build all examples for WebGL2 or WebGPU. This is used to update
 the website with all Wasm-compatible examples, which you can find
-[here](https://bevyengine.org/examples/) for WebGL2, or
-[here](https://bevyengine.org/examples-webgpu/) for WebGPU.
+[here](https://bevy.org/examples/) for WebGL2, or
+[here](https://bevy.org/examples-webgpu/) for WebGPU.
 
 It is now also capable of capturing a screenshot while running all examples:
 

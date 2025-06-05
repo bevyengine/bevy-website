@@ -4,7 +4,7 @@ At runtime, using dynamically-defined component and resource types!
 While you can use [`SystemBuilder`](https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.SystemBuilder.html) as an ergonomic alternative to the [`SystemState`](https://docs.rs/bevy/0.14/bevy/ecs/system/struct.SystemState.html) API for splitting the [`World`](https://docs.rs/bevy/0.14/bevy/ecs/prelude/struct.World.html) into disjoint borrows, its true values lies in its dynamic usage.
 
 You can choose to create a different system based on runtime branches or, more intriguingly, the queries and so on can use runtime-defined component IDs.
-This is another vital step towards creating an ergonomic and safe API to work with [dynamic queries](https://bevyengine.org/news/bevy-0-13/#dynamic-queries),
+This is another vital step towards creating an ergonomic and safe API to work with [dynamic queries](https://bevy.org/news/bevy-0-13/#dynamic-queries),
 laying the groundwork for the devs who want to integrate scripting languages or bake in sophisticated modding support for their game.
 
 ```rust
