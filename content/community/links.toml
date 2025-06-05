@@ -41,7 +41,7 @@ show_in_footer = true
 [[links]]
 title = "Bluesky"
 subtitle = "bevy.bsky.social"
-url = "https://bsky.app/profile/bevyengine.org"
+url = "https://bsky.app/profile/bevy.org"
 image = "/assets/bluesky.svg"
 image_alt = "Bluesky logo"
 description = "Quick updates and shared Bevy content from the community"

@@ -43,7 +43,7 @@ Every.org also supports easy one-time payments with custom amounts (an often req
 
 ## New Bevy Foundation Emails
 
-As part of this announcement, we're also rolling out new `bevyengine.org` emails:
+As part of this announcement, we're also rolling out new `bevyengine.org` emails (note from the future: these are all now `bevy.org` emails):
 
 * <support@bevyengine.org>: The new way to ask Bevy leadership for support. This replaces `bevyengine@gmail.com`.
 * <foundation@bevyengine.org>: The best way to reach Bevy Foundation board members.
