@@ -1,0 +1,24 @@
+User-agent: *
+Sitemap: https://bevy.org/sitemap.xml
+Disallow: /learn/advanced-examples/
+Disallow: /learn/advanced-examples/text-adventure/
+Disallow: /learn/advanced-examples/sudoku/
+Disallow: /learn/book/
+Disallow: /learn/book/audio/
+Disallow: /learn/book/ecs/
+Disallow: /learn/book/platforms/
+Disallow: /learn/book/ui/
+Disallow: /learn/book/input/
+Disallow: /learn/book/performance-optimizations/
+Disallow: /learn/book/getting-started/
+Disallow: /learn/book/assets/
+Disallow: /learn/book/game-logic/
+Disallow: /learn/book/graphics/
+Disallow: /learn/book/graphics/rendering-internals/
+Disallow: /learn/book/graphics/2d/
+Disallow: /learn/book/graphics/3d/
+Disallow: /learn/book/development-practices/
+Disallow: /learn/quick-start/breakout/
+Disallow: /learn/quick-start/3d-puzzle-game/
+Disallow: /learn/quick-start/falling-sand/
+
