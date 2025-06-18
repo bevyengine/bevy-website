@@ -2,8 +2,6 @@
 title = "Board meeting: 2024-02-03"
 date = 2024-02-03
 authors = ["Alice I. Cecile"]
-[extra]
-github = "alice-i-cecile"
 +++
 
 <!-- more -->
