@@ -8,8 +8,8 @@ authors = ["Alice I. Cecile"]
 
 ![Vote for hiring Cart](hire-cart.png)
 
-**Proposal:** The foundation wants to hire Cart, at the same rate as Alice. Adjusted with the personal donations he received, Cart cost to the foundation will be $5,374 USD.
+**Proposal:** Francois Mockers proposes:
 
-**Proposed by:** Francois Mockers
+> The foundation wants to hire Cart, at the same rate as Alice. Adjusted with the personal donations he received, Cart cost to the foundation will be $5,374 USD.
 
 **Votes:** Yes by Alice Cecile, Rob Swain, Francois Mockers, James Liu. Carter Anderson abstains.

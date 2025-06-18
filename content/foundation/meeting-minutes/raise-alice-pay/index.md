@@ -8,7 +8,9 @@ authors = ["Alice I. Cecile"]
 
 ![Vote for Raise Alice's Pay](raise-alice-pay.png)
 
-**Proposal:**  increase Alice cost to the foundation to $6,324 USD (from $5,127 USD).
+**Proposal:** Francois Mockers proposes:
+
+> increase Alice cost to the foundation to $6,324 USD (from $5,127 USD).
 
 **Supporting information:** Foundation donations and personal sponsors have changed since the last time (2024/08/07) we updated our budget.
 
@@ -40,7 +42,5 @@ With today (2025/03/07) numbers:
 | François payment (`hourly rate * 6 * 4 + hosting costs - donations`) | 1036                 |
 
 Spreadsheet with the current state and this proposal, with the calculations: https://docs.google.com/spreadsheets/d/1EXcwqWLO8yHHD1A_2msQXpGbNF2plvCy4kqdCeqxtzo/edit?gid=2076305514#gid=2076305514
-
-**Proposed by:** Francois Mockers
 
 **Votes:** Yes by Rob Swain, Carter Anderson, Francois Mockers, James Liu. Alice Cecile abstains.

@@ -8,6 +8,10 @@ authors = ["Alice I. Cecile"]
 
 ![Increasing Alice's salary](increasing_alice_salary.png)
 
+**Proposal:** Cart proposes:
+
+> So the proposal is: increase Alice's monthly payments to $6,417.67 CAD ($4,705.28 USD) as soon as Thera can make it possible. Vote on this comment with 👍  or 👎 to officially approve this proposal. Feel free to discuss first if you want to amend the proposal / notice any discrepancies.
+
 **Context:**
 
 > Cart: Alrighty it is definitely time to bump Alice's pay. Consider this a start of one of our "async chat-driven board meetings". Here is my proposal, given the current numbers.
@@ -54,7 +58,5 @@ On the topic of Thera fees: I think this cost should be split evenly across thos
 > 6,994.51 CAD / 1.089883333 (canadian overhead multiplier) = 6,417.67 CAD (Alice monthly gross)
 >
 > Note that I am still not quite prepared on the "legal" side to take my cut, but I think we should set Alice's payment according to this rate, as I'm not certain how possible lowering monthly income arbitrarily is. We can sort out what to do with the extra funds later (ex: pay out as "fixup" bonuses, or we can discuss alternatives).
-
-**Proposal:** So the proposal is: increase Alice's monthly payments to $6,417.67 CAD ($4,705.28 USD) as soon as Thera can make it possible. Vote on this comment with 👍  or 👎 to officially approve this proposal. Feel free to discuss first if you want to amend the proposal / notice any discrepancies.
 
 **Votes:** Alice I. Cecile abstains. All others voted yes.

@@ -8,8 +8,8 @@ authors = ["Alice I. Cecile"]
 
 ![Sick leave documentation policy](sick_leave_documentation_policy.png)
 
-**Proposal:** Should Bevy Foundation employees require documentation for sick leave?
+**Proposal:** Carter Anderson proposes:
 
-**Proposed by:** Carter Anderson![alt text](image.png)
+> Should Bevy Foundation employees require documentation for sick leave?
 
 **Votes:** No from Rob Swain, Carter Anderson, Alice I. Cecile, James Liu. No vote from François Mockers.
