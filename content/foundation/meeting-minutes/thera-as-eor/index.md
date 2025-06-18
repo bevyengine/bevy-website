@@ -4,6 +4,8 @@ date = 2024-04-15
 authors = ["Alice I. Cecile"]
 +++
 
+<!-- more -->
+
 ![Using Thera as our Employer of Record](thera_employer_of_record.png)
 
 **Context:** In order to readily employee folks from across the world, the Bevy Foundation uses an [employer of record](https://www.oysterhr.com/glossary/eor) to handle local compliance, taxation and benefits.

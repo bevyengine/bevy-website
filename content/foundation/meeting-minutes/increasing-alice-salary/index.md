@@ -4,6 +4,8 @@ date = 2024-07-08
 authors = ["Alice I. Cecile"]
 +++
 
+<!-- more -->
+
 ![Increasing Alice's salary](increasing_alice_salary.png)
 
 **Context:**

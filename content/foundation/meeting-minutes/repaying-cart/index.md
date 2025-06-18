@@ -4,6 +4,8 @@ date = 2024-06-16
 authors = ["Alice I. Cecile"]
 +++
 
+<!-- more -->
+
 ![Repaying Cart for initial deposit into bank account](repaying_cart_initial_deposit.png)
 
 **Context:** The Bevy bank account needed funds in it to be opened. Cart lent the Foundation $2000 USD from his personal account to cover this.

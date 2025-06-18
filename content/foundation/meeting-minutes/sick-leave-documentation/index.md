@@ -4,6 +4,8 @@ date = 2024-05-02
 authors = ["Alice I. Cecile"]
 +++
 
+<!-- more -->
+
 ![Sick leave documentation policy](sick_leave_documentation_policy.png)
 
 **Proposal:** Should Bevy Foundation employees require documentation for sick leave?
