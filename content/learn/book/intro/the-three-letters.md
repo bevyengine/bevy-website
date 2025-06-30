@@ -9,7 +9,7 @@ status = 'hidden'
 The core concept in Bevy is the [ECS architecture](https://en.wikipedia.org/wiki/Entity_component_system), which stands for **Entity, Component, System**. It is a way of organizing the data of a program, and controlling how that data is accessed and updated. ECS has been utilized in a number of commercial game engines, and has been increasing in popularity in the last several decades.
 
 There are two main mental models for how to think about ECS:
-- The **object-like model:** similar to game objects you may be familiar with from some other engines.
+- The **object-like model:** similar to game objects you may be familiar with from other engines.
 - The **database model:** similar to an in-memory SQL database or spreadsheet.
 
 We'll reference both conceptual models throughout this chapter.
@@ -28,12 +28,12 @@ This might include:
 
 An Entity, by itself, is just an identifier; it does not store any data within it. In order to be useful, it needs to be associated with one or more [components](#the-c-components).
 
-In the "in-memory database" model, entities are the primary keys in our database, with each entity getting its own row and unique identifier.
+In the "in-memory database" model, entities are the keys in our database, with each entity getting its own row and unique identifier.
 
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different bececause they **do not store any behavior**.
 This is handled by [systems](#the-s-systems).
 
-**Note on terminology**: The word "entity" is often used to refer to the entity id itself, or to the "whole" entity: the id along with all of its components. In this book, when we mean the former, we'll capitalize the word `Entity` and typographically highlight it as a code symbol. When we mean the latter, we'll type it in lower case.
+**Note on terminology**: The word "entity" is often used to refer both to the entity id itself, and to the "whole" entity: the id along with all of its components. In this book, when we mean the former, we'll capitalize the word `Entity` and typographically highlight it as a code symbol. When we mean the latter, we'll type it in lower case.
 
 ## The C: Components
 
