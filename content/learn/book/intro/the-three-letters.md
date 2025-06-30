@@ -28,7 +28,7 @@ This might include:
 
 An Entity, by itself, is just an identifier; it does not store any data within it. In order to be useful, it needs to be associated with one or more [components](#the-c-components).
 
-In the "in-memory database" model, entities are the keys in our database, with each entity getting its own row and unique identifier.
+In the "in-memory database" model, entities are the row keys in our database, with each entity getting its own row and unique identifier.
 
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different bececause they **do not store any behavior**.
 This is handled by [systems](#the-s-systems).
