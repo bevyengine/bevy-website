@@ -33,7 +33,7 @@ In the "in-memory database" model, entities are the row keys in our database, wi
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different bececause they **do not store any behavior**.
 This is handled by [systems](#the-s-systems).
 
-**Note on terminology**: The word "entity" is often used to refer both to the entity id itself, and to the "whole" entity: the id along with all of its components. In this book, when we mean the former, we'll capitalize the word `Entity` and typographically highlight it as a code symbol. When we mean the latter, we'll type it in lower case.
+**Note on terminology**: Sometimes, using the word "entity" on its own can be ambiguous. Does it mean the row/id/primary key or does it mean the game object/thing it represents with all its data? In Bevy, entity ids are modeled in the `Entity` type. As a result, `Entity` typically refers to the id, and a lowercase "entity" typically refers to the game object.
 
 ## The C: Components
 
