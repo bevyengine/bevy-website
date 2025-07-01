@@ -97,5 +97,8 @@ fn my_system(entities: Query<&mut Location>) {
     }
 }
 ```
+Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](../intro/the-next-three-letters#queries) or [Res](../intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automagically - without you having to actually call the system.
 
-Entities and their components are usually accessed via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
+Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
+
+Systems usually access Entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
