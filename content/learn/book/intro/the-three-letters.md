@@ -21,10 +21,12 @@ So, what does each letter mean?
 **Entities are objects** in our game world.
 This might include:
 - The player
+- The player's inventory, buffs, or active enchantments
 - Each enemy
 - Props in the game scene
 - The camera
 - The skybox
+- Particle effect clouds
 
 An Entity, by itself, is just an identifier; it does not store any data within it. In order to be useful, it needs to be associated with one or more [components](#the-c-components).
 
