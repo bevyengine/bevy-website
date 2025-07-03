@@ -59,7 +59,7 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
             if let Some(bio) = &member.bio {
                 let grapheme_count = bio.graphemes(true).count();
                 if grapheme_count > MAX_BIO_LENGTH {
-                    Err(format!("Bio is longer than the maximum allowed length of {}. It is currently {} characters long.", MAX_BIO_LENGTH, grapheme_count))?;
+                    Err(format!("Bio is longer than the maximum allowed length of {MAX_BIO_LENGTH}. It is currently {grapheme_count} characters long."))?;
                 }
             }
 

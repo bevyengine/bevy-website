@@ -64,7 +64,7 @@ pub fn write_markdown_section(
                 _ => {}
             }
             let event = write_markdown_event(&event, list_item_level - 1)?;
-            write!(output, "{}", event)?;
+            write!(output, "{event}")?;
         }
     }
 

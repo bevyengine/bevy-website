@@ -62,7 +62,7 @@ impl Annotation {
                     .collect::<Vec<_>>()
                     .join(" ");
 
-                format!("hide_lines={}", ranges)
+                format!("hide_lines={ranges}")
             }
             Annotation::Other(content) => content,
         }
@@ -107,7 +107,7 @@ impl CodeBlockDefinition {
             .collect();
 
         Some(CodeBlockDefinition {
-            tag: format!("{}```{}", whitespace, tag),
+            tag: format!("{whitespace}```{tag}"),
             annotations,
             hide_lines_idx,
         })
