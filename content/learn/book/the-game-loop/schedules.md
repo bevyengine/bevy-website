@@ -5,8 +5,8 @@ insert_anchor_links = "right"
 weight = 2
 +++
 
-At the heart of a bevy game is the "game loop": a continuously running for-loop which reads input, calls logic and updates the renderer.
-Since bevy organizes game logic into [systems], the game loop boils down to repeatedly running a specific set of systems in sequence. 
+At the heart of a Bevy game is the "game loop": a continuously running for-loop which reads input, calls logic and updates the renderer.
+Since Bevy organizes game logic into [systems], the game loop boils down to repeatedly running a specific set of systems in sequence.
 To help manage the execution order of these systems, we group them into **Schedules**.
 
 A [`Schedule`] is just a collection of systems which will all be executed together.
@@ -15,16 +15,16 @@ You add systems to a schedule as part of your app setup.
 // Add the `move_players` system to the `Update` schedule.
 app.add_plugin(Update, move_players)
 ```
-Now, whenever bevy runs the `Update` schedule, `move_players` will execute.
+Now, whenever Bevy runs the `Update` schedule, `move_players` will execute.
 
-The `Update` schedule is one of many built-in schedules provided by bevy, each of which runs at a different point.
-Each schedule runs at a different point during the life-cycle of a bevy app, so by controlling where your system is registered you can also control how it's run.
+The `Update` schedule is one of many built-in schedules provided by Bevy, each of which runs at a different point.
+Each schedule runs at a different point during the life-cycle of a Bevy app, so by controlling where your system is registered you can also control how it's run.
 
-## Bevy's Schedule Life-Cycle 
+## Bevy's Schedule Life-Cycle
 
-Let's look at the other schedules provided by bevy by default. 
-When a bevy [app] starts, it typically executes several schedules in order:
-+ [`StateTransition`]: Part of bevy's [state machine abstraction].
+Let's look at the other schedules provided by Bevy by default.
+When a Bevy [app] starts, it typically executes several schedules in order:
++ [`StateTransition`]: Part of Bevy's [state machine abstraction].
 + [`PreStartup`]: Library setup which must proceed application setup.
 + [`Startup`]: Setup for the application itself.
 + [`PostStartup`]: Stuff that must follow application setup.
@@ -39,7 +39,7 @@ After the [`PostStartup`] schedule completes, the app shifts into the main game 
 The following schedules are then executed in order each "tick":
 + [`First`]: Logic that needs to run before everything else each tick.
 + [`PreUpdate`]: Library updates that must proceed application updates.
-+ [`StateTransition`]: Part of bevy's [state machine abstraction].
++ [`StateTransition`]: Part of Bevy's [state machine abstraction].
 + The [fixed update loop] may run multiple schedules before progressing.
 + [`Update`]: Updates for the application itself.
 + [`PostUpdate`]: Library updates that must follow application updates.
@@ -55,7 +55,7 @@ It may also be helpful for you to know about the `Main` schedule, though this be
 The "main loop" is itself a schedule called `Main`, which execute other schedules each tick (`First`, then `PreUpdate` and so on).
 Most people will never need to interact with it directly, but it's good to know that it exists.
 
-It's also possible for users to add their own schedules, either extending the `Main` schedule or [replacing it entirely]. 
+It's also possible for users to add their own schedules, either extending the `Main` schedule or [replacing it entirely].
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
 [`ScheduleLabel`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/trait.ScheduleLabel.html
