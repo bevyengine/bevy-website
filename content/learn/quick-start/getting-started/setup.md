@@ -124,7 +124,7 @@ cargo add bevy
   edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
   [dependencies]
-  bevy = "0.15" # make sure this is the latest version
+  bevy = "0.16" # make sure this is the latest version
   ```
 </details>
 

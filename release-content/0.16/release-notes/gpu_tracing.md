@@ -23,4 +23,4 @@ Special thanks to [@wumpf] for trailblazing this work in the excellent [wgpu-pro
 [RenderDoc]: https://renderdoc.org/
 [@wumpf]: https://github.com/Wumpf
 [wgpu-profiler]: https://github.com/Wumpf/wgpu-profiler
-[rendering diagnostics added in Bevy 0.14]: https://bevyengine.org/news/bevy-0-14/#tools-for-profiling-gpu-performance
+[rendering diagnostics added in Bevy 0.14]: https://bevy.org/news/bevy-0-14/#tools-for-profiling-gpu-performance

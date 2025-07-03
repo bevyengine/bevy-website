@@ -456,7 +456,7 @@ By spawning beneath a parent, this enables you to do things like translate/rotat
 
 @bjorn3 discovered that you can force Bevy to dynamically link.
 
-This _significantly_ reduces iterative compile times. Check out how long it takes to compile a change made to the `3d_scene.rs` example with the [Fast Compiles Config](https://bevyengine.org/learn/quick-start/getting-started/setup/) _and_ dynamic linking:
+This _significantly_ reduces iterative compile times. Check out how long it takes to compile a change made to the `3d_scene.rs` example with the [Fast Compiles Config](https://bevy.org/learn/quick-start/getting-started/setup/) _and_ dynamic linking:
 
 ![fast dynamic](dynamic_fast.png)
 

@@ -70,7 +70,7 @@ When making a release, the Maintainers follow these checklists:
 
 #### Minor Post-release
 
-1. Bump version number for all crates to next versions, as `0.X-dev`, using the "Post-release version bump" workflow, to ensure properly displayed version for [Dev Docs](https://dev-docs.bevyengine.org/bevy/index.html).
+1. Bump version number for all crates to next versions, as `0.X-dev`, using the "Post-release version bump" workflow, to ensure properly displayed version for [Dev Docs](https://dev-docs.bevy.org/bevy/index.html).
 2. Update Bevy version used for Bevy's website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
 
 ### Patch

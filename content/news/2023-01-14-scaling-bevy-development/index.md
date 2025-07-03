@@ -67,7 +67,7 @@ Roles like Project Lead, Maintainer, and SME are intentionally kept in limited s
 
 Bevy is a community-driven project. It makes sense for the people behind Bevy and the roles they fill to be easily discoverable.
 
-To make that happen, François (@mockersf) and I built a new [Bevy People](https://bevyengine.org/community/people/) page. "Bevy people" can opt-in to listing their name and/or pseudonym, their social information (GitHub, Discord, Mastodon, Twitter, personal website, itch.io, etc), a sponsorship link, and a personal bio describing who they are and what they work on.
+To make that happen, François (@mockersf) and I built a new [Bevy People](https://bevy.org/community/people/) page. "Bevy people" can opt-in to listing their name and/or pseudonym, their social information (GitHub, Discord, Mastodon, Twitter, personal website, itch.io, etc), a sponsorship link, and a personal bio describing who they are and what they work on.
 
 It also displays the current Bevy Organization roles these people occupy. You _could_ call it an "org chart" if you wanted to, but my anti-bureaucracy reflexes prevent me from doing so. The Bevy community will always be as flat and "people first" as possible.
 

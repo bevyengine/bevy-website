@@ -5,22 +5,64 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
-Most [examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) aim to clearly demonstrate a single feature, group of closely related small features, or show how to accomplish a particular task (such as asset loading, creating a custom shader, or testing your app).
-In rare cases, creating new "game" examples is justified in order to demonstrate new features that open a complex class of functionality in a way that's hard to demonstrate in isolation or requires additional integration testing.
+Each example in Bevy must be:
 
-Examples in Bevy should be:
+1. **Goal-driven:** Each example must have a single clearly stated learning-focused goal.
+2. **Working:** Every example must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
+3. **Clear:** Examples should use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
+4. **Relevant:** Examples should explain, through comments or variable names, what they do and how this can be useful to a game developer.
+5. **Minimal:** Examples should be no larger or complex than is needed to meet the goals of the example.
 
-1. **Working:** They must compile and run, and any intentionally introduced errors in them should be obvious (through tests, simple results, or clearly displayed behavior).
-2. **Clear:** They must use descriptive variable names, be formatted, and be appropriately commented. Try your best to showcase best practices when it doesn't obscure the point of the example.
-3. **Relevant:** They should explain, through comments or variable names, what they do and how this can be useful to a game developer.
-4. **Minimal:** They should be no larger or complex than is needed to meet the goals of the example.
-
-When you add a new example, be sure to update `examples/README.md` with the new example and add it to the root `Cargo.toml` file.
+When you add a new example, be sure to update add it to the root `Cargo.toml` file and update the relevant `README.md` based on the type of example (see below).
 Run `cargo run -p build-templated-pages -- build-example-page` to do this automatically.
 Use a generous sprinkling of keywords in your description: these are commonly used to search for a specific example.
 See the [example style guide](#style-guide) to help make sure the style of your example matches what we're already using.
 
-More complex demonstrations of functionality are also welcome, but these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets).
+## Types of examples
+
+[Examples in Bevy](https://github.com/bevyengine/bevy/tree/main/examples) in Bevy can be categorized into three distinct categories,
+each of which have their own goals and subfolder:
+
+1. API examples: clearly demonstrating a single feature or group of closely related small features.
+2. Usage examples: teach users opinionated patterns for accomplishing common game development tasks.
+3. Small games: focused on integrating these patterns into a cohesive whole while demonstrating how to structure larger projects.
+
+In addition, we have two additional categories which are treated as examples by `cargo`, but are not intended to teach users:
+
+1. Stress tests: uses extreme entity counts or otherwise unrealistic settings to allow us to readily detect performance changes in particular performance-sensitive hot paths.
+2. Testbeds: designed to test features and scenes that rely on graphical rendering or interactivity, in both an automated and manual fashion.
+
+Unlike examples, stress tests and test beds should be configurable, allowing Bevy contriubtors (and curious users) to see the impact of changes.
+
+## When should I add an example?
+
+Adding, maintaining and searching through examples has non-trivial costs: we need to think carefully about our selection.
+Each of our example categories has its own goals which should be discussed separately.
+
+A good API example is complementary to good API documentation, and should only be added to promote the discovery of important features, show API usage in context, or show off graphical, audible or interactive functionality that cannot be appropriately conveyed by written documentation alone.
+When possible, prefer documentation tests and module documentation over API examples: these are easier to keep up to date, more clearly scoped and better connected to the APIs in question.
+
+Usage examples tackle common tasks that might be encountered by veterans to game development (or CAD or...) that are trying to translate existing concepts or workflows into Bevy's APIs.
+These should be focused on realism, building out the minimum required to demonstrate that they actually solve the problem at hand.
+Usage examples can be more opinionated, and may demonstrate multiple possible approaches to the same problem, explaining the tradeoffs involved.
+
+Game examples are much more expensive to maintain, and should be used sparingly. Each game example should demonstrate Bevy's capabilities in a new genre or style of game, while being simple enough for new Bevy users to follow and get excited about.
+Polish is important here: these are often a new user's first impression of the engine, although it must be balanced against added complexity.
+
+Each game example should be a few hundred to a few thousand lines at most.
+Try to pick the simplest example that embodies the body or domain that you can, and strip it down to its essence.
+The point is to prove to the reader that Bevy *can* make projects like this, not to actually make a project.
+
+For example, suppose you wanted to demonstrate a turn-based RPG, analogous to Pokemon.
+Implementing a single overworld level where you can walk around and a single battle with one character and no gameplay mechanics would be enough to get the idea across, and teach the reader how to architect their project.
+
+As another example, consider making a first-person shooter game example.
+A cross-hair, character controller, level, target dummy and the ability to fire a weapon would be enough.
+Bullet decals, a weapon changing system, a scoreboard, respawning or so on are all valuable additions,
+but generally won't have an architectural impact.
+Instead, those features make more sense to demonstrate inside of dedicated usage examples in a lightweight way.
+
+Full game templates or more complex demonstrations of functionality are also welcome, but to manage maintenance burden these should be submitted to [`bevy-assets`](https://github.com/bevyengine/bevy-assets), as part of our semi-curated collection of community-maintained learning resources.
 
 ## Style guide
 
@@ -28,20 +70,54 @@ Please adhere to the following guidelines when creating or updating an example.
 
 ### Organization
 
-1. Examples should live in an appropriate subfolder of `/examples`.
-2. Examples should be a single file if possible.
-3. Assets live in `/assets`. Try to avoid adding new assets unless strictly necessary to keep the repository small. Don't add "large" asset files.
-4. Each example should try to follow this order:
-   1. Imports
-   2. A `fn main()` block
-   3. Example logic
-5. Try to structure app / plugin construction in the same fashion as the actual code.
-6. Examples should typically not have tests, as those are not directly reusable by the Bevy user.
+- Examples should live in an appropriate subfolder of `/examples`.
+  - API examples live in `examples/api`, then subdivided by engine category.
+  - Usage examples live in `examples/usage`, then subdivided by domain.
+  - Game examples live in `examples/games`, with each game example getting its own dedicated subfolder.
+  - Stress tests live in the root level `stress-tests` folder.
+  - Testbeds live in the root level `tests` folder, subdivided by domain (e.g. `3d`).
+- Each of these subfolders has a `README.md` file with a table listing of the examples.
+- Each example should consist of exactly one `.rs` file, except where assets or shaders are required.
+  - Game examples are an exception to this, and should be structured as self-contained small projects with a realistic file and module structure.
+- Assets live in `/assets`, organized by kind, rather than by example.
+- Each example should try to follow this order:
+  - Imports
+  - A `fn main()` block
+  - Example logic
+- Try to structure app / plugin construction in the same fashion as the actual code.
+- Examples should typically not have tests, as those are not directly reusable by the Bevy user.
+- Examples should not share common "utility" logic: if you feel this is warranted, improve the engine instead!
+  - Similarly, try to avoid incidental complexity and abstractions. Find a simpler way for now, and work to create these tools and resolve this tension in the engine itself.
+
+### Assets
+
+While we're [currently trying to figure out](https://github.com/bevyengine/bevy/issues/13875) how to best use larger and more realistic assets inside of Bevy's learning material, the current status quo is that we are extremely constrained on asset usage for examples.
+
+Adding new assets permanently increases the size of the Bevy repository, causing us problems with hosting, and resulting in pain for Bevy contributors when they clone or work with the repository.
+
+As a result, you should currently reuse assets for your examples whenever possible.
+If you *need* an asset to demonstrate a newly added feature, make it as small as possible.
+If you want to add a new example that requires a new asset to properly teach a new concept, it will almost certainly be rejected until the issue linked above is resolved.
+
+## Platform support
+
+By default, every example must work on our desktop platforms: Linux, Windows and MacOS.
+
+It is acceptable (but not ideal) if certain examples do not work on web, or low end hardware.
+However, this should be prominently called out and explained inside of the examples.
+
+Examples for mobile or embedded platforms require special setup, and are generally split out, focusing on the specific quirks of those platforms.
+
+### Dependencies
+
+1. Examples should not take on new dependencies unless they are required for core functionality of that example.
+2. Examples can never take on dependencies to Bevy ecosystem crates, to avoid circular dependencies and maintenance risk.
+3. Any dependencies needed for examples should be listed as `dev-dependencies`.
 
 ### Stylistic preferences
 
 1. Use simple, descriptive variable names.
-   1. Avoid names like `MyComponent` in favor of more descriptive terms like `Events`.
+   1. Avoid names like `MyComponent` in favor of more descriptive or evocative terms like `SparseComponent` or `Life`.
    2. Prefer single letter differentiators like `EventsA` and `EventsB` to nonsense words like `EventsFoo` and `EventsBar`.
    3. Avoid repeating the type of variables in their name where possible. For example, `Color` should be preferred to `ColorComponent`.
 2. Prefer glob imports of `bevy::prelude::*` and `bevy::sub_crate::*` over granular imports (for terseness).
@@ -66,7 +142,7 @@ Please adhere to the following guidelines when creating or updating an example.
 
 ### Visual guidelines
 
-Examples may be displayed in the [example showcase](https://bevyengine.org/examples/) and a consistent style helps keep things tidy there.
+Examples may be displayed in the [example showcase](https://bevy.org/examples/) and a consistent style helps keep things tidy there.
 
 1. Use the default `ClearColor` and `WindowResolution` unless absolutely necessary.
 2. "Instruction Text" should use the default font, color, and size. It should be inset 12 pixels from the edge of the window.
