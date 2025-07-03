@@ -203,8 +203,7 @@ impl GithubClient {
         // Make sure the older PRs from the last page aren't returned
         if let Some(datetime_utc) = datetime_utc {
             println!(
-                "Filtering PRs closed before the target datetime {}",
-                datetime_utc
+                "Filtering PRs closed before the target datetime {datetime_utc}"
             );
 
             prs.retain(|pr| {

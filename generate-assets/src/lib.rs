@@ -343,8 +343,7 @@ fn get_metadata_from_github(
         Ok(lic_ver) => lic_ver,
         Err(err) => {
             println!(
-                "Error getting metadata from root cargo file from github: {}",
-                err
+                "Error getting metadata from root cargo file from github: {err}"
             );
             (None, None)
         }
@@ -358,7 +357,7 @@ fn get_metadata_from_github(
         let cargo_files = match client.search_file(username, repository_name, "Cargo.toml") {
             Ok(cargo_files) => cargo_files,
             Err(err) => {
-                println!("Error fetching cargo files from github: {:#}", err);
+                println!("Error fetching cargo files from github: {err:#}");
                 return Ok((license, version));
             }
         };
@@ -388,8 +387,7 @@ fn get_metadata_from_github(
                 }
                 Err(err) => {
                     println!(
-                        "Error getting metadata from other cargo file from github: {}",
-                        err
+                        "Error getting metadata from other cargo file from github: {err}"
                     );
                     return Ok((license, version));
                 }
@@ -586,7 +584,7 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
     };
 
     if cache_dir.exists() {
-        println!("Using crates.io data dump cache from: {:?}", cache_dir);
+        println!("Using crates.io data dump cache from: {cache_dir:?}");
     } else {
         println!("Downloading crates.io data dump");
     }

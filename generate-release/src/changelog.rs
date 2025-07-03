@@ -40,7 +40,7 @@ pub fn generate_changelog(
             output,
             "name = [{}]",
             area.iter()
-                .map(|a| format!("\"{}\"", a))
+                .map(|a| format!("\"{a}\""))
                 .collect::<Vec<_>>()
                 .join(", ")
         )?;

@@ -39,9 +39,9 @@ fn check(folders: impl ExactSizeIterator<Item = PathBuf>) -> ExitCode {
         if is_ci {
             // Create an collapsible group for all files checked.
             // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines
-            println!("::group::Checking folder {:?}", folder);
+            println!("::group::Checking folder {folder:?}");
         } else {
-            println!("\nChecking folder {:?}", folder);
+            println!("\nChecking folder {folder:?}");
         }
 
         // Checks folders, exiting early if an error occurred.
@@ -54,7 +54,7 @@ fn check(folders: impl ExactSizeIterator<Item = PathBuf>) -> ExitCode {
                     println!("::endgroup::");
                 }
 
-                eprintln!("Error: {}", error);
+                eprintln!("Error: {error}");
 
                 return ExitCode::FAILURE;
             }
@@ -72,9 +72,9 @@ fn check(folders: impl ExactSizeIterator<Item = PathBuf>) -> ExitCode {
             if is_ci {
                 // Print custom error message, formatted in Github Actions.
                 // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
-                println!("::error file={0:?},title=File is not formatted with correct hide-lines annotations::- {0:?}", path);
+                println!("::error file={path:?},title=File is not formatted with correct hide-lines annotations::- {path:?}");
             } else {
-                println!("- {:?}", path);
+                println!("- {path:?}");
             }
         }
 
@@ -96,11 +96,11 @@ fn format(folders: impl ExactSizeIterator<Item = PathBuf>) -> ExitCode {
     }
 
     for folder in folders {
-        println!("\nFormatting folder {:?}", folder);
+        println!("\nFormatting folder {folder:?}");
 
         // Format folders, exiting early if an error occurred.
         if let Err(error) = formatter::format(&folder) {
-            eprintln!("Error: {}", error);
+            eprintln!("Error: {error}");
 
             return ExitCode::FAILURE;
         }
