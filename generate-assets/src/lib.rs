@@ -342,9 +342,7 @@ fn get_metadata_from_github(
     let (mut license, mut version) = match result {
         Ok(lic_ver) => lic_ver,
         Err(err) => {
-            println!(
-                "Error getting metadata from root cargo file from github: {err}"
-            );
+            println!("Error getting metadata from root cargo file from github: {err}");
             (None, None)
         }
     };
@@ -386,9 +384,7 @@ fn get_metadata_from_github(
                     );
                 }
                 Err(err) => {
-                    println!(
-                        "Error getting metadata from other cargo file from github: {err}"
-                    );
+                    println!("Error getting metadata from other cargo file from github: {err}");
                     return Ok((license, version));
                 }
             }
