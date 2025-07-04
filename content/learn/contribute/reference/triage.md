@@ -9,7 +9,7 @@ Bevy's scope and user base means that it gets a large volume of issues and pull 
 
 ## Classifying Issues and PRs
 
-Labels are our primary tool for organizing work. You can find a complete list with descriptions [here](https://github.com/bevyengine/bevy/labels) for the engine, or [here](https://github.com/bevyengine/bevy-website/labels) for the website. These are a few of the most common, organized by category:
+Labels are our primary tool for organizing work. Here are a few of the most common, organized by category:
 
 - **A**: Area (e.g. `A-Animation`, `A-ECS`, `A-Rendering`, ...).
 - **C**: Category. The most common include:
@@ -49,6 +49,7 @@ Labels are our primary tool for organizing work. You can find a complete list wi
   - `M-Needs-Release-Note`:  work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
   - `M-Needs-Migration-Guide`: this is a breaking change to Bevy's public API, and requires advice on how to migrate existing code. These changes cannot be shipped in minor versions!
 
+ Check Github for an up-to-date, complete list with descriptions [for the engine repo](https://github.com/bevyengine/bevy/labels) or [the website repo](https://github.com/bevyengine/bevy-website/labels).
 You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
 [The rules for how PRs get merged](@/learn/contribute/helping-out/reviewing-pull-requests.md#how-pull-requests-are-merged) depend on their classification by controversy and difficulty. More difficult PRs will require more careful review from experts, while more controversial PRs will require rewrites to reduce the costs involved and / or sign-off from Subject Matter Experts and Maintainers.
