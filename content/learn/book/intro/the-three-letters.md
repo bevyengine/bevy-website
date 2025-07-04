@@ -9,6 +9,7 @@ status = 'hidden'
 The core concept in Bevy is the [ECS architecture](https://en.wikipedia.org/wiki/Entity_component_system), which stands for **Entity, Component, System**. It is a way of organizing the data of a program, and controlling how that data is accessed and updated. ECS has been utilized in a number of commercial game engines, and has been increasing in popularity in the last several decades.
 
 There are two main mental models for how to think about ECS:
+
 - The **object-like model:** similar to game objects you may be familiar with from other engines.
 - The **database model:** similar to an in-memory SQL database or spreadsheet.
 
@@ -20,6 +21,7 @@ So, what does each letter mean?
 
 **Entities are objects** in our game world.
 This might include:
+
 - The player
 - The player's inventory, buffs, or active enchantments
 - Each enemy
@@ -35,7 +37,9 @@ In the "in-memory database" model, entities are the row keys in our database, wi
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different bececause they **do not store any behavior**.
 This is handled by [systems](#the-s-systems).
 
+{% callout(type="note") %}
 **Note on terminology**: Sometimes, using the word "entity" on its own can be ambiguous. Does it mean the row/id/primary key or does it mean the game object/thing it represents with all its data? In Bevy, entity ids are modeled in the `Entity` type. As a result, `Entity` typically refers to the id, and a lowercase "entity" typically refers to the game object.
+{% end %}
 
 ## The C: Components
 
@@ -71,6 +75,7 @@ Any number and combination of components can be added to an entity, and each ent
 In the database model, components are like the columns of our database (although not every entity will have every component).
 
 Spawning entities with components is done like so:
+
 ```rs
 fn spawn_entities(mut commands: Commands) {
     // Spawn an entity with all our components
@@ -97,8 +102,11 @@ fn my_system(entities: Query<&mut Location>) {
     }
 }
 ```
+
+{% callout(type="info") %}
 Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](../intro/the-next-three-letters#queries) or [Res](../intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automagically - without you having to actually call the system.
 
 Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
+{% end %}
 
 Systems usually access Entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
