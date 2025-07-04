@@ -8,10 +8,10 @@ status = 'hidden'
 
 In the previous section, we saw how simple components can be composed together to form complex
 entities. Often times, a given component will need certain other components in order to do anything
-useful. Using the components from the example in the previous section, it probably doesn't make
-much sense to mark an entity as a `Combatant` if it doesn't also have `Life`.
+useful. Drawing from the example in the previous section, it probably doesn't make much sense to
+mark an entity as a `Combatant` if it doesn't also have `Life`.
 
-To help prevent errors of omission, and to simplify the task of spawning, Bevy let's you declare
+To help prevent errors of omission, and to simplify the task of spawning, Bevy lets you declare
 that a given component depends on the presence of another component:
 
 ```rust,hide_lines=1-2
