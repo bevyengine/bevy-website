@@ -14,8 +14,11 @@ mark an entity as a `Combatant` if it doesn't also have `Life`.
 To help prevent errors of omission, and to simplify the task of spawning, Bevy lets you declare
 that a given component depends on the presence of another component:
 
-```rust,hide_lines=1-2
+```rust,hide_lines=1-5
 # use bevy::ecs::prelude::*;
+#
+# #[derive(Component)]
+# struct Life(u8);
 #
 # #[derive(Component)]
 # #[require(Life)]
@@ -28,8 +31,11 @@ component, insert a `Life` component as well."
 However, we didn't specify in the `require` clause how _much_ `Life` we should give the new entity.
 We can do better by supplying an initializer expression:
 
-```rust,hide_lines=1-2
+```rust,hide_lines=1-5
 # use bevy::ecs::prelude::*;
+#
+# #[derive(Component)]
+# struct Life(u8);
 #
 # #[derive(Component)]
 # #[require(Life(10))]
@@ -43,8 +49,11 @@ as part of the initial bundle while spawning, or inserted at a later point.
 
 Alternatively, you can use `=` to assign an initial value to the component:
 
-```rust,hide_lines=1-2
+```rust,hide_lines=1-5
 # use bevy::ecs::prelude::*;
+#
+# #[derive(Component)]
+# struct Life(u8);
 #
 # #[derive(Component)]
 # #[require(Life = initial_health())]
