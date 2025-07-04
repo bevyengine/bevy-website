@@ -12,7 +12,8 @@ These concepts are core to Bevy's ECS (so much so that they're used in the previ
 ## Resources
 
 **Resources** are global state singletons.
-Unlike [components](../the-three-letters#the-c-components), which are reused across multiple entities, there is only one instance of a resource of type `R` at a time.
+Unlike [components](../the-three-letters#the-c-components), which are reused across multiple entities, resources are unique. For any given resource type (like `Score` in the example below), there can only be one instance in your game world at a time.
+
 Like components, resources in Bevy are also "just Rust structs" (or enums).
 
 ```rs
@@ -38,6 +39,7 @@ When writing a query, you provide a set of components, and Bevy will fetch all e
 (The entities fetched may also have other components, but those are ignored if the query does not ask for them.)
 
 Any ECS system can make queries by adding the appropriate argument to the function signature:
+
 ```rs
 fn my_system(mut query: Query<(&Color, &mut Location)>) {
     for (color, mut location) in query.iter_mut() {
@@ -47,7 +49,9 @@ fn my_system(mut query: Query<(&Color, &mut Location)>) {
     }
 }
 ```
+
 Then, when systems are run as part of a Bevy [app](../../the-game-loop/app), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
+
 ```rs
 fn main() {
     App::new()
@@ -56,9 +60,13 @@ fn main() {
 }
 ```
 
-In the database model, a query is a lot like a [SQL `SELECT` statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location from World`
+{% callout(type="info") %}
+Bevy queries let you update massive amounts of game data in a tight, cache-friendly loop.
 
-Queries have more functionality than just this.
+Going back to our database analogy, a query is a lot like a [SQL `SELECT` statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location from World`
+{% end %}
+
+Queries have a lot more functionality than what's shown here.
 You can also request optional components for `OR` semantics, add query filters, and much more!
 Queries are covered in more detail in the [Queries](../../storing-data/queries) chapter.
 
