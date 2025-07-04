@@ -161,7 +161,7 @@ impl FrontMatterWriter for Member {
             .and_then(|f| f.file_name())
             .map(|f| f.to_string_lossy().replace(".toml", ""))
             .expect("Failed to get file_name");
-        let mut file = File::create(path.join(format!("{}.md", file_name)))?;
+        let mut file = File::create(path.join(format!("{file_name}.md")))?;
         file.write_all(
             format!(
                 r#"+++
