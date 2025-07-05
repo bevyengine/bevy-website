@@ -14,7 +14,7 @@ mark an entity as a `Combatant` if it doesn't also have `Life`.
 To help prevent errors of omission, and to simplify the task of spawning, Bevy lets you declare
 that a given component depends on the presence of another component:
 
-```rust,hide_lines=1-5
+```rust,hide_lines=1
 # use bevy::ecs::prelude::*;
 
 #[derive(Component)]
