@@ -16,7 +16,6 @@ that a given component depends on the presence of another component:
 
 ```rust,hide_lines=1
 # use bevy::ecs::prelude::*;
-
 #[derive(Component)]
 struct Life(u8);
 
