@@ -6,7 +6,7 @@ weight = 2
 status = 'hidden'
 +++
 
-In the previous section, we saw how simple components can be composed together to form complex
+In the previous section, we saw how simple components can be composed to form complex
 entities. Often times, a given component will need certain other components in order to do anything
 useful. Drawing from the example in the previous section, it probably doesn't make much sense to
 mark an entity as a `Combatant` if it doesn't also have `Life`.
@@ -16,13 +16,13 @@ that a given component depends on the presence of another component:
 
 ```rust,hide_lines=1-5
 # use bevy::ecs::prelude::*;
-#
-# #[derive(Component)]
-# struct Life(u8);
-#
-# #[derive(Component)]
-# #[require(Life)]
-# struct Combatant;
+
+#[derive(Component)]
+struct Life(u8);
+
+#[derive(Component)]
+#[require(Life)]
+struct Combatant;
 ```
 
 Here, we've told the engine that `Combatant` requires `Life`: "Whenever you insert a `Combatant`
