@@ -31,16 +31,15 @@ component, insert a `Life` component as well."
 However, we didn't specify in the `require` clause how _much_ `Life` we should give the new entity.
 We can do better by supplying an initializer expression:
 
-```rust,hide_lines=1-5
+```rust,hide_lines=1
 # use bevy::ecs::prelude::*;
-#
-# #[derive(Component)]
-# struct Life(u8);
-#
-# #[derive(Component)]
-# #[require(Life(10))]
-# struct Combatant;
-```
+
+#[derive(Component)]
+struct Life(u8);
+
+#[derive(Component)]
+#[require(Life(10))]
+struct Combatant;
 
 This means that every `Combatant` will get 10 `Life` by default. But what if we want to give the
 combatant a different amount of life? That's OK! You see, the "required" clause only sets a
