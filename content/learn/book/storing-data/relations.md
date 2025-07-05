@@ -152,7 +152,7 @@ fn scan_parents(mut query: Query<(&Color, &ChildOf)>) {
 
 ## Traversing Hierarchies
 
-The `bevy_hierarchy` crate has a bunch of handy methods for traversing hiearchies: upwards through
+The `bevy_hierarchy` crate has a bunch of handy methods for traversing hierarchies: upwards through
 ancestors, or downwards through descendants. All you need to kick off the process is a query able
 to access the relationship components:
 
