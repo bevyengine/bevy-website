@@ -48,16 +48,15 @@ as part of the initial bundle while spawning, or inserted at a later point.
 
 Alternatively, you can use `=` to assign an initial value to the component:
 
-```rust,hide_lines=1-5
+```rust,hide_lines=1
 # use bevy::ecs::prelude::*;
-#
-# #[derive(Component)]
-# struct Life(u8);
-#
-# #[derive(Component)]
-# #[require(Life = initial_health())]
-# struct Combatant;
-```
+
+#[derive(Component)]
+struct Life(u8);
+
+#[derive(Component)]
+#[require(Life = initial_health())]
+struct Combatant;
 
 The `require` macro is the easiest way to declare required components, but you can also define
 the required components programmatically by manually implementing the `Component` trait.
