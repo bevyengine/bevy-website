@@ -37,7 +37,7 @@ As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust,hide_lines=1
 # use bevy::ecs::system::Commands;
-// The `Commands` system parameter allows us to generate commands
+// The `Commands` system parameter allows us to issue commands
 // which operate on the `World` once all of the current systems have finished running
 fn spawning_system(mut commands: Commands){
     // Spawning a single entity with no components
@@ -60,6 +60,7 @@ Otherwise, entities are just identifiers that don't point to anything!
 
 Spawning an entity doesn't add any behavior or create a "physical object" in our game like it might in other engines.
 To make a basic cube, you'd probably need to add:
+
 - A [`Transform`] component to store where the object is
 - A [`Mesh`] component to store its geometry (in practice, actually a [`Handle`] to a [`Mesh`])
 - A [`StandardMaterial`] to define how that mesh should be rendered (in practice, actually a [`Handle`] to a [`StandardMaterial`])
@@ -113,20 +114,20 @@ Now that we have some components defined, let's try adding them to our entities 
 
 ```rust,hide_lines=1-20
 # use bevy::ecs::prelude::*;
-# 
+#
 # #[derive(Component)]
 # struct Combatant;
-# 
+#
 # #[derive(Component)]
 # struct Life(u8);
-# 
+#
 # #[derive(Component)]
 # struct Stats {
 #     strength: u8,
 #     dexterity: u8,
 #     intelligence: u8,
 # }
-# 
+#
 # #[derive(Component)]
 # enum Allegiance {
 #     Friendly,
@@ -171,7 +172,7 @@ Once an entity is spawned, you can use [`Commands`] to add and remove components
 
 ```rust,hide_lines=1-4
 # use bevy::ecs::prelude::*;
-# 
+#
 # #[derive(Component)]
 # struct Combatant;
 #[derive(Component)]
@@ -214,7 +215,7 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
   - Logic that will only be repeated once generally belongs in systems
   - Methods make it easier to understand the actual gameplay logic in your systems, and fix bugs in a single place
 - **Marker components** (using unit structs) are incredibly valuable for extending your design
-  - It is very common to want to quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`
+  - It is very common to want to quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`"
   - Filtering by component presence/absence is (generally) faster and clearer than looping through a list of boolean values
   - Try to model meaningful groups at several levels of abstraction / along multiple axes: e.g. `Unit`, `Ant`, `Combatant`
 - Enum components are very expressive, and help reduce bugs
