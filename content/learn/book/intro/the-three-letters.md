@@ -124,12 +124,10 @@ you can:
 - write fast, scalable code by default
   - most operations in games are of the form "look at each of these objects and do the same thing to them"
   - because of better [data locality](TODO), ECS architectures are much faster at iterating during these operations
+  - no more speculative rewrites of whole subsystems: gradually optimize the hot loops
 - have engine code that looks like library code that looks like game code
   - this makes [contributing](.../contribute/) fixes and features to Bevy much easier
   - and it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/)
-- stop wasting time writing glue code or refactoring whole subsystems when performance bottlenecks arise
-- avoid Rust ownership and lifetime headaches by having a single clear owner of your data: the world
-  - we've built sophisticated ways to split up your access to this data behind convenient, safe, panic-proof APIs
 - build consistent, universal abstractions on a common base of data structures
   - shared data structures mean that improvements and bug fixes trickle down automatically
   - use the same powerful patterns for [control flow](../control-flow/) everywhere
