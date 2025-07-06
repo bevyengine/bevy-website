@@ -46,3 +46,14 @@ We love Bevy, but it's not the right tool for every project. You should not use 
   - That said, it is possible. Bevy and Rust make sure that users have the tools needed to integrate Lua, Python and more
   - Take a look at [Bevy Assets](https://bevyengine.org/assets) to see the options that the community have provided
 - You want to ship to consoles: Rust, and therefore Bevy, is currently not supported on Sony, Nintendo, or Microsoft consoles
+
+## Bevy beyond games
+
+Game engines are, at their core, high-performance, real-time simulators coupled with a framework for producing high-fidelity graphics and immersive sound. Game engines are designed to squeeze every last drop of performance out of the available hardware (both CPU and GPU). The fruits of this labor are just as applicable to data visualization and computer-aided design as they are to building entertainment products.
+
+Bevy's modular, flexible nature makes it particularly suited to these weirder applications, and there are multiple successful
+companies and large projects using Bevy to build everything from CAD to art installations.
+Take what you want; ignore or rewrite the rest.
+
+While our documentation and development priorities place games in the foreground, we care about all of our non-game users too:
+no matter what you're building.
