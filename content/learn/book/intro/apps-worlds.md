@@ -37,5 +37,7 @@ It also handles other app-level config, like windowing settings.
 
 ## Off you go now
 
-With that, you should have everything you need to understand a relatively straightforward example, such as the [`ecs_guide` example](https://github.com/bevyengine/bevy/blob/main/examples/ecs/ecs_guide.rs).
-The rest of this book contains different chapters that can be read or referenced in any order.
+With that, you should have everything you need to start [exploring our examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples),
+or diving into the rest of the book.
+
+The remaining chapters of this book are non-linear: you can read or referenced them in any order.
