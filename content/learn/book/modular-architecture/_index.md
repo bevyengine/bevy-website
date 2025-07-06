@@ -1,5 +1,5 @@
 +++
-title = "Architecture"
+title = "Modular Architecture"
 template = "docs.html"
 insert_anchor_links = "right"
 [extra]
