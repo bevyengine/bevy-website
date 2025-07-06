@@ -1,6 +1,6 @@
 +++
-title = "Hot Reloading"
+title = "Profiling"
 insert_anchor_links = "right"
 [extra]
-weight = 2
+weight = 0
 +++
