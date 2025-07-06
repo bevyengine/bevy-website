@@ -110,3 +110,28 @@ Another cool feature of Bevy systems is automatic parallelism: by inspecting the
 {% end %}
 
 Systems usually access Entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
+
+## Why ECS?
+
+At this point, you may be wondering: why bother with all of this machinery and these new concepts?
+What's wrong with a good-old-fashioned game loop?
+Aren't game object models simpler?
+
+We won't deny it: these approaches work, and people have and can build great games with them.
+But we think that by focusing on ECS as the heart of an engine (rather than a tacked on feature),
+you can:
+
+- write fast, scalable code by default
+  - most operations in games are of the form "look at each of these objects and do the same thing to them"
+  - because of better [data locality](TODO), ECS architectures are much faster at iterating during these operations
+- have engine code that looks like library code that looks like game code
+  - this makes [contributing](.../contribute/) fixes and features to Bevy much easier
+  - and it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/)
+- stop wasting time writing glue code or refactoring whole subsystems when performance bottlenecks arise
+- avoid Rust ownership and lifetime headaches by having a single clear owner of your data: the world
+  - we've built sophisticated ways to split up your access to this data behind convenient, safe, panic-proof APIs
+- build consistent, universal abstractions on a common base of data structures
+  - shared data structures mean that improvements and bug fixes trickle down automatically
+  - use the same powerful patterns for [control flow](../control-flow/) everywhere
+  - structure your application using a uniform, flexible [modular architecture](../modular-architecture)
+  - debug and inspect every part of your game using the same [dev tools](../development-practices)
