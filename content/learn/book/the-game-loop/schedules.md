@@ -53,13 +53,36 @@ The following schedules are then executed in order each "tick":
 [`First`] and [`Last`] extend this further, allowing running before and after the majority of other logic.
 Libraries should generally prefer the update schedules unless they have a very good reason to use `First` or `Last`.
 
-## The Main Schedule
+## Adding your own schedueles
 
-It may also be helpful for you to know about the `Main` schedule, though this begins to get into the internal implementation a little.
-The "main loop" is itself a schedule called `Main`, which execute other schedules each tick (`First`, then `PreUpdate` and so on).
-Most people will never need to interact with it directly, but it's good to know that it exists.
+This repeating game loop is set up by the [`ScheduleRunnerPlugin`],
+which is included as part of both [`MinimalPlugins`] and [`DefaultPlugins`].
 
-It's also possible for users to add their own schedules, either extending the `Main` schedule or [replacing it entirely].
+That plugin causes your app to repeatedly run the [`Main`] schedule, which is a schedule that loops over a vector of schedules.
+While it is rarely helpful, you can add your own schedules to this game loop, by modifying the [`MainScheduleOrder`].
+To create your own schedule, simply define a [`ScheduleLabel`], and add your systems to your app under that schedule label.
+
+```rust
+# use bevy::prelude::*;
+# fn my_system() {}
+
+#[derive(ScheduleLabel)]
+struct MySchedule;
+
+App::new()
+  .add_systems(MySchedule, my_system);
+```
+
+However, in most cases, the existing schedules are more than enough,
+and system ordering should be used to control the exact timing of your systems relative to each other.
+
+A more helpful pattern is calling [`World::run_schedule`] manually.
+You can organize systems into complex groups, with well-defined ordering between them,
+and then evaluate some complex condition inside of a system to determine if and when this schedule gets evaluated.
+This can be very helpful for turn-based games, simulations, networked servers and more.
+Bevy itself uses this pattern for both the [`Main`] schedule and our built-in [fixed time] solution.
+
+For even more control over your game loop, read the [custom loops] chapter!
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
 [`StateTransition`]: https://docs.rs/bevy/latest/bevy/state/state/struct.StateTransition.html
@@ -71,9 +94,16 @@ It's also possible for users to add their own schedules, either extending the `M
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`PostUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PostUpdate.html
 [`Last`]: https://docs.rs/bevy/latest/bevy/app/struct.Last.html
+[`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
 [systems]: /learn/book/control-flow/systems
 [app]: /learn/book/the-game-loop/app
 [plugins]: /learn/book/architecture/plugins
 [state machine abstraction]: /learn/book/architecture/states
 [fixed update loop]: /learn/book/the-game-loop/fixed-time
-[replacing it entirely]: /learn/book/the-game-loop/custom-loops
+[custom loops]: /learn/book/the-game-loop/custom-loops
+[`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html
+[`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
+[`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
+[`MainScheduleOrder`]: https://docs.rs/bevy/latest/bevy/app/struct.MainScheduleOrder.html
+[`World::run_schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_schedule
+[fixed time]: ./fixed-time.md
