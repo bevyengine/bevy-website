@@ -10,7 +10,7 @@ There's one more place where the ECS can store data: on the systems themselves.
 With the help of the [`Local<T>`] system parameter, you can cache private data from one run of a system to the next.
 
 In most cases, a [resource] is going to be more flexible, as you can read and mutate it from other systems.
-But from time-to-time, you might want to:
+However, from time-to-time, you might want to:
 
 - store some system-specific state about the last value
 - maintain a cache of intermediate results to improve efficiency of computation
