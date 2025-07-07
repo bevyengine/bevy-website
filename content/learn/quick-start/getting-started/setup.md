@@ -98,7 +98,7 @@ fn main() {
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 ```
@@ -121,7 +121,7 @@ cargo add bevy
   [package]
   name = "my_bevy_game"
   version = "0.1.0"
-  edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
+  edition = "2024"
 
   [dependencies]
   bevy = "0.16" # make sure this is the latest version
@@ -129,20 +129,6 @@ cargo add bevy
 </details>
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
-
-<details>
-  <summary>
-
-  ### Cargo Workspaces
-  </summary>
-
-  If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
-
-  ```toml
-  [workspace]
-  resolver = "2" # Important! wgpu/Bevy needs this!
-  ```
-</details>
 
 ### Compile with Performance Optimizations
 
