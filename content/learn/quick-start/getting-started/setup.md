@@ -130,20 +130,6 @@ cargo add bevy
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
 
-<details>
-  <summary>
-
-  ### Cargo Workspaces
-  </summary>
-
-  If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
-
-  ```toml
-  [workspace]
-  resolver = "3"
-  ```
-</details>
-
 ### Compile with Performance Optimizations
 
 While it may not be an issue for simple projects, debug builds in Rust can be _very slow_ - especially when you start using Bevy to make real games.
