@@ -137,7 +137,7 @@ you can:
 
 Learning to take advantage of everything a modern ECS has to offer will take time:
 if you want to be able to tackle any data modelling problem that games have to throw at you,
-you need a lot more than just entities, components and systems.
+you need a lot more than just entities, components, and systems.
 Even if you're a veteran game programmer, there will be a learning curve
 as you explore new approaches and master new tools.
 
