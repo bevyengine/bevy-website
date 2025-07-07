@@ -126,7 +126,7 @@ you can:
   - because of better [data locality](TODO), ECS architectures are much faster at iterating during these operations
   - no more speculative rewrites of whole subsystems: gradually optimize the hot loops
 - have engine code that looks like library code that looks like game code
-  - this makes [contributing](.../contribute/) fixes and features to Bevy much easier
+  - this makes [contributing](/learn/contribute) fixes and features to Bevy much easier
   - and it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/)
 - build consistent, universal abstractions on a common base of data structures
   - shared data structures mean that improvements and bug fixes trickle down automatically
