@@ -144,4 +144,4 @@ as you explore new approaches and master new tools.
 But start simple, and add in new patterns as you encounter the problems they're solving.
 With a bit of persistence, you'll be flying in no time!
 
-[data locality]: https://en.wikipedia.org/wiki/Locality_of_referenc
+[data locality]: https://en.wikipedia.org/wiki/Locality_of_reference
