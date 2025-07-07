@@ -41,7 +41,7 @@ fn increment_local_system_data(mut local: Local<Option<NoGoodDefaultValue>>){
         *local = Some(NoGoodDefaultValue(0));
     }
     
-    local.unwrap().0 += 1;
+    local.as_mut().unwrap().0 += 1;
 }
 ```
 
