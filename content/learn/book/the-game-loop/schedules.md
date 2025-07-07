@@ -62,7 +62,7 @@ That plugin causes your app to repeatedly run the [`Main`] schedule, which is a 
 While it is rarely helpful, you can add your own schedules to this game loop, by modifying the [`MainScheduleOrder`].
 To create your own schedule, simply define a [`ScheduleLabel`], and add your systems to your app under that schedule label.
 
-```rust
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
 # fn my_system() {}
 
