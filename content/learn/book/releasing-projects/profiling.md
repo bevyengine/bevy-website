@@ -5,26 +5,6 @@ insert_anchor_links = "right"
 weight = 0
 +++
 
-## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [CPU runtime](#cpu-runtime)
-  - [Overview](#overview)
-  - [Adding your own spans](#adding-your-own-spans)
-  - [Tracy profiler](#tracy-profiler)
-  - [Chrome tracing format](#chrome-tracing-format)
-  - [`perf` Flame Graph](#perf-flame-graph)
-- [GPU runtime](#gpu-runtime)
-  - [Vendor tools](#vendor-tools)
-    - [Xcode's Metal debugger](#xcodes-metal-debugger)
-  - [Tracy RenderQueue](#tracy-renderqueue)
-- [Compile time](#compile-time)
-  - [General advice](#general-advice)
-  - [Cargo timings](#cargo-timings)
-  - [rustc self-profile](#rustc-self-profile)
-  - [cargo-llvm-lines](#cargo-llvm-lines)
-  - [cargo-bloat](#cargo-bloat)
-
 ## CPU runtime
 
 ### Overview
