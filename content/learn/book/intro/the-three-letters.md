@@ -110,3 +110,38 @@ Another cool feature of Bevy systems is automatic parallelism: by inspecting the
 {% end %}
 
 Systems usually access Entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
+
+## Why ECS?
+
+At this point, you may be wondering: why bother with all of this machinery and these new concepts?
+What's wrong with a good-old-fashioned game loop?
+Aren't game object models simpler?
+
+We won't deny it: these approaches work, and people have and can build great games with them.
+But we think that by focusing on ECS as the heart of an engine (rather than a tacked on feature),
+you can:
+
+- write fast, scalable code by default
+  - most operations in games are of the form "look at each of these objects and do the same thing to them"
+  - because of better [data locality], ECS architectures are much faster at iterating during these operations
+  - no more speculative rewrites of whole subsystems: gradually optimize the hot loops
+- have engine code that looks like library code that looks like game code
+  - weird behavior? Check the source!
+  - this makes [contributing](/learn/contribute) fixes and features to Bevy much easier
+  - and it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/)
+- build consistent, universal abstractions on a common base of data structures
+  - shared data structures mean that improvements and bug fixes trickle down automatically
+  - use the same powerful patterns for [control flow](../control-flow/) everywhere
+  - structure your application using a uniform, flexible [modular architecture](../modular-architecture)
+  - debug and inspect every part of your game using the same [dev tools](../development-practices)
+
+Learning to take advantage of everything a modern ECS has to offer will take time:
+if you want to be able to tackle any data modelling problem that games have to throw at you,
+you need a lot more than just entities, components, and systems.
+Even if you're a veteran game programmer, there will be a learning curve
+as you explore new approaches and master new tools.
+
+But start simple, and add in new patterns as you encounter the problems they're solving.
+With a bit of persistence, you'll be flying in no time!
+
+[data locality]: https://en.wikipedia.org/wiki/Locality_of_referenc
