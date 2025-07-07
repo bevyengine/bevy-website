@@ -67,6 +67,38 @@ extra features in the future.
 
 ## Plugin groups
 
+You may have noticed that [`App::add_plugins`] is a method that takes `&mut App`.
+Does that mean you can add plugins via other plugins?
+Yes, yes it does.
+
+You probably shouldn't do this though: it can make it harder to follow what's going on,
+and it becomes challenging to selectively disable plugins for testing or things like "making a server build".
+
+Instead, you probably want to use a [`PluginGroup`].
+You've likely already encountered these: [`DefaultPlugins`] is a [`PluginGroup`]!
+
+[`PluginGroup`] comes with a few extra niceties over simply recursively adding plugins:
+
+1. You can write dedicated docs for the collection of plugins.
+2. You can overwrite the values of contained plugins via [`PluginGroup::set`], changing the default config.
+3. With the help of [`PluginGroupBuilder`] you can enable and disable contained plugins cleanly.
+
+## Plugin ordering and dependencies
+
+When working with multiple plugins, be mindful that they're effectively just functions that immediately mutate the [`App`].
+As a result, plugins are [evaluated in the order that they are added to the `App`].
+This can lead to very annoying bugs for your users as they try and do seemingly innocuous things
+like alphabetizing their plugin list, so please try to be robust to this behavior.
+
+Currently, there is [no official solution for declaring that one plugin relies on the existence of another].
+Using a [duck typing] approach, where you check for the existence of required resources,
+is the least bad solution for now.
+
+Similarly, to avoid tricky bugs, adding the same plugin to your app multiple times will panic by default.
+This behavior can be overridden by overwriting the default [`Plugin::is_unique`] method.
+The same duck-typing solution can be used to check if the plugin already exists,
+and avoid re-adding it if another dependency has already pulled it in.
+
 ## The `Plugin` lifecycle
 
 When a plugin is added though `App::add_plugins`, the app calls `Plugin::build`, and the plugin typically accesses and configures the world.  Then, when the app is run, a few other plugin life-cycle functions are called, and finally we enter the run loop:
@@ -79,5 +111,14 @@ When a plugin is added though `App::add_plugins`, the app calls `Plugin::build`,
 [apps]: [../the-game-loop/app]
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_systems
+[`App::add_plugins`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_plugins
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html
 [the blanket for all functions that take a &mut App]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html#impl-Plugin-for-T
+[`PluginGroup`]: https://docs.rs/bevy/latest/bevy/app/trait.PluginGroup.html
+[`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
+[`PluginGroup::set`]: https://docs.rs/bevy/latest/bevy/prelude/trait.PluginGroup.html#method.set
+[`PluginGroupBuilder`]: https://docs.rs/bevy/latest/bevy/app/struct.PluginGroupBuilder.html
+[evaluated in the order that they are added to the `App`]: https://github.com/bevyengine/bevy/issues/1255
+[no official solution for declaring that one plugin relies on the existence of another]: https://github.com/bevyengine/bevy/issues/69
+[duck typing]: https://en.wikipedia.org/wiki/Duck_typing
+[`Plugin::is_unique`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html#method.is_unique
