@@ -139,7 +139,6 @@ fn spawn_combatants_system(mut commands: Commands) {
         Combatant,
         // We configure starting component values by passing in concrete instances of our types
         Life(10),
-        // By chaining .insert method calls like this, we continue to add more components to our entity
         // Instances of named structs are constructed with {field_name: value}
         Stats {
             strength: 15,
