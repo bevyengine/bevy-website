@@ -28,9 +28,14 @@ only on when transitioning between certain states. You can create entities that 
 within particular states as well. For example, you might have a HUD (heads-up display) entity which
 only exists during "play" mode.
 
-Let's say that we're building a retro arcade game like _Galaxian_. We'll want at least three states:
+## Defining States
 
-```rust
+Let's say that we're building a retro arcade game like [Galaga](https://en.wikipedia.org/wiki/Galaga).
+We'll want at least three states:
+
+```rust,hide_lines=1-2
+# use bevy::ecs::prelude::*;
+#
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default, States)]
 pub enum GameState {
     /// The introductory screen
@@ -62,15 +67,6 @@ app.init_state::<GameState>();
 
 You can define more than one set of states; these are independent (but see sub-states, below).
 
-You can access the current state of type `T` with the `State<T>` resource. To trigger a transition
-between states, update the `NextState<T>` resource with the state you want to transition to.
-
-(More TBW)
-
-- show run conditions
-- show OnEnter / OnExit
-- show StateScoped
-
 ## SubStates: States within States
 
 For our arcade game, the `GameState::Playing` state is actually more complex than it appears.
@@ -85,7 +81,9 @@ aspects of the game like background music.
 We can model this as a _sub-state_ of `GameState::Playing`, meaning that these states only exist
 while we are in the "playing" state.
 
-```rust
+```rust,hide_lines=1-2
+# use bevy::ecs::prelude::*;
+#
 #[derive(SubStates, Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 #[source(GameState = GameState::Playing)]
 pub enum ActionState {
@@ -116,6 +114,59 @@ be spawned, and so on. By making them sub-states, we can tie the existence of, s
 top-level state, while using the sub-states to control things like enemy and player movement. {% end
 %}
 
-(More TBW)
+## Switching between States
 
-- show ComputedState
+You can access the current state of type `T` with the `State<T>` resource. To trigger a transition
+between states, update the `NextState<T>` resource with the state you want to transition to.
+
+In our example arcade game, we start in the `Intro` state. When the player indicates they are ready to
+begin, we transition to the `Playing` state. If the player clears the level, we go to the
+`LevelComplete` state. This state only lasts a few seconds, at which point the next level begins -
+which means we go back to the `Playing` state. We continue to alternate between `Playing` and
+`LevelComplete` states until the player runs out of lives.
+
+(TBW: Example that transitions to "Playing" when a button is pressed).
+
+## States and Systems
+
+States can be used to determine which ECS systems get run. For example, say we only want enemy units
+to move and attack while in the `Playing` state:
+
+```rs
+// Only run the enemy behavior while playing
+app.add_systems(Update, update_enemies.run_if(in_state(GameState::Playing)));
+```
+
+The `in_state` function is a run condition which evaluates to `true` if we are in that state.
+
+We can also configure systems to run when entering or exiting a state, using `OnEnter` and
+`OnExit`. For example, we might want to play a sound when we begin a new level:
+
+```rs
+// Runs the `start_level_sound` system when we enter the `Playing` state.
+app.add_systems(OnEnter(GameState::Playing), start_level_sound);
+```
+
+## States and Entities
+
+The `StateScoped` component can be added to an entity to indicate that the entity should only
+exist in a particular state. When we exit that state, the entity will automatically be despawned.
+
+For example, if we wanted to despawn all remaining enemies at the end of a level:
+
+```rs
+fn spawn_enemy(mut commands: Commands) {
+    commands.spawn((
+        Enemy,
+        StateScoped(GameState::Playing),
+    ));
+}
+```
+
+## ComputedState
+
+TBW
+
+## States and Schedules
+
+TBW
