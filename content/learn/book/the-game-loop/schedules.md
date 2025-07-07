@@ -1,5 +1,5 @@
 +++
-title = "Scheduling"
+title = "Schedules"
 insert_anchor_links = "right"
 [extra]
 weight = 2
@@ -7,7 +7,7 @@ weight = 2
 
 At the heart of a Bevy game is the "game loop": a continuously running for-loop which reads input, calls logic and updates the renderer.
 Since Bevy organizes game logic into [systems], the game loop boils down to repeatedly running a specific set of systems in sequence.
-To help manage the execution order of these systems, we group them into **Schedules**.
+To help manage the execution order of these systems, we group them into **schedules**.
 
 A [`Schedule`] is just a collection of systems which will all be executed together.
 You add systems to a schedule as part of your app setup.
@@ -22,7 +22,7 @@ Now, whenever Bevy runs the `Update` schedule, `move_players` will execute.
 The `Update` schedule is one of many built-in schedules provided by Bevy, each of which runs at a different point.
 Each schedule runs at a different point during the life-cycle of a Bevy app, so by controlling where your system is registered you can also control how it's run.
 
-## Bevy's Schedule Life-Cycle
+## The standard Bevy schedules
 
 Let's look at the other schedules provided by Bevy by default.
 When a Bevy [app] starts, it typically executes several schedules in order:
