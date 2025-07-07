@@ -126,6 +126,7 @@ you can:
   - because of better [data locality], ECS architectures are much faster at iterating during these operations
   - no more speculative rewrites of whole subsystems: gradually optimize the hot loops
 - have engine code that looks like library code that looks like game code
+  - weird behavior? Check the source!
   - this makes [contributing](/learn/contribute) fixes and features to Bevy much easier
   - and it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/)
 - build consistent, universal abstractions on a common base of data structures
@@ -143,4 +144,4 @@ as you explore new approaches and master new tools.
 But start simple, and add in new patterns as you encounter the problems they're solving.
 With a bit of persistence, you'll be flying in no time!
 
-[data locality]: https://en.wikipedia.org/wiki/Locality_of_reference
+[data locality]: https://en.wikipedia.org/wiki/Locality_of_referenc
