@@ -11,10 +11,12 @@ To help manage the execution order of these systems, we group them into **Schedu
 
 A [`Schedule`] is just a collection of systems which will all be executed together.
 You add systems to a schedule as part of your app setup.
+
 ```rust
 // Add the `move_players` system to the `Update` schedule.
 app.add_plugin(Update, move_players)
 ```
+
 Now, whenever Bevy runs the `Update` schedule, `move_players` will execute.
 
 The `Update` schedule is one of many built-in schedules provided by Bevy, each of which runs at a different point.
@@ -24,6 +26,7 @@ Each schedule runs at a different point during the life-cycle of a Bevy app, so 
 
 Let's look at the other schedules provided by Bevy by default.
 When a Bevy [app] starts, it typically executes several schedules in order:
+
 + [`StateTransition`]: Part of Bevy's [state machine abstraction].
 + [`PreStartup`]: Library setup which must proceed application setup.
 + [`Startup`]: Setup for the application itself.
@@ -37,6 +40,7 @@ Likewise, [`PostStartup`] should be used to react or respond to things the user 
 
 After the [`PostStartup`] schedule completes, the app shifts into the main game loop.
 The following schedules are then executed in order each "tick":
+
 + [`First`]: Logic that needs to run before everything else each tick.
 + [`PreUpdate`]: Library updates that must proceed application updates.
 + [`StateTransition`]: Part of Bevy's [state machine abstraction].
@@ -58,15 +62,12 @@ Most people will never need to interact with it directly, but it's good to know 
 It's also possible for users to add their own schedules, either extending the `Main` schedule or [replacing it entirely].
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
-[`ScheduleLabel`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/trait.ScheduleLabel.html
-[`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.add_systems
 [`StateTransition`]: https://docs.rs/bevy/latest/bevy/state/state/struct.StateTransition.html
 [`PreStartup`]: https://docs.rs/bevy/latest/bevy/app/struct.PreStartup.html
 [`Startup`]: https://docs.rs/bevy/latest/bevy/app/struct.Startup.html
 [`PostStartup`]: https://docs.rs/bevy/latest/bevy/app/struct.PostStartup.html
 [`First`]: https://docs.rs/bevy/latest/bevy/app/struct.First.html
 [`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
-[`StateTransition`]: https://docs.rs/bevy/latest/bevy/app/struct.StateTransition.html
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`PostUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PostUpdate.html
 [`Last`]: https://docs.rs/bevy/latest/bevy/app/struct.Last.html
