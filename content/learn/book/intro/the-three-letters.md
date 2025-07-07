@@ -123,7 +123,7 @@ you can:
 
 - write fast, scalable code by default
   - most operations in games are of the form "look at each of these objects and do the same thing to them"
-  - because of better [data locality](TODO), ECS architectures are much faster at iterating during these operations
+  - because of better [data locality], ECS architectures are much faster at iterating during these operations
   - no more speculative rewrites of whole subsystems: gradually optimize the hot loops
 - have engine code that looks like library code that looks like game code
   - this makes [contributing](/learn/contribute) fixes and features to Bevy much easier
@@ -142,3 +142,5 @@ as you explore new approaches and master new tools.
 
 But start simple, and add in new patterns as you encounter the problems they're solving.
 With a bit of persistence, you'll be flying in no time!
+
+[data locality]: https://en.wikipedia.org/wiki/Locality_of_reference
