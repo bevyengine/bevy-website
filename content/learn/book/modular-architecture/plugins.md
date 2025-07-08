@@ -73,6 +73,28 @@ The choice is mostly stylistic: the "fn plugin" style is a bit terser,
 but the "struct plugin" style is easier to change if you find that your plugin needs
 extra features in the future.
 
+## Configuring plugins
+
+As alluded to above, you can use the `&self` argument in [`Plugin::build`] to change
+the behavior of the plugin based on the passed in configuration.
+But *should* you use this pattern?
+
+Whenever possible, you should prefer using resources for configuration,
+alerting users to their presence via documentation,
+and responding dynamically to changes in their value.
+
+This is inherently more flexible, allowing your user to tweak the settings at runtime
+to account for changing needs.
+It *also* plays nicer with various tooling, allowing users
+to easily inspect and dynamically modify the values.
+
+But sometimes, the value passed in *only* make sense
+to be provided once, at the time of plugin definition.
+A relatively common example of this is allowing the user
+to configure which schedule your plugins' systems should be added to.
+In that case, using a struct with fields as your `Plugin` type
+is the best and only option.
+
 ## Plugin groups
 
 You may have noticed that [`App::add_plugins`] is a method that takes `&mut App`.
