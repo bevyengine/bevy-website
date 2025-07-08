@@ -29,7 +29,7 @@ trait Plugin {
 Let's break that down:
 
 - this is a trait, so we need to implement it for a user-defined type
-- `build` takes `&self`, allowing you to change behavior based on the value of our type
+- `build` takes `&self`, allowing you to change the behavior based on the value.
 - it takes a`&mut App` reference, allowing you to mutate the [`App`] state freely
   - adding systems via [`App::add_systems`] is the most common and important method
   - as discussed in our section on [apps], [`App`] holds a [`World`], allowing you to add resources, make queries, spawn entities and more
@@ -109,7 +109,8 @@ and avoid re-adding it if another dependency has already pulled it in.
 
 ## The `Plugin` lifecycle
 
-When a plugin is added though [`App::add_plugins`], the app calls `Plugin::build`, and the plugin typically accesses and configures the world.  Then, when the app is run, a few other plugin life-cycle functions are called, and finally we enter the run loop:
+When a plugin is added though [`App::add_plugins`], the app calls `Plugin::build`, and the plugin typically accesses and configures the world.  
+Then, when the app is run, a few other plugin life-cycle functions are called, and finally we enter the run loop:
 
 - The app polls `Plugin::finished` until all the added plugins return `true`.
 - The app calls `Plugin::finish` on all plugins.
