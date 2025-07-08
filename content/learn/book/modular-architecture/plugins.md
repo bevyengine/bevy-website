@@ -37,7 +37,7 @@ Let's break that down:
 
 Let's see how this works in practice:
 
-```rust
+```rust,hide_lines=1-4
 # use bevy::prelude::*;
 #
 # fn check_if_player_is_dead() {}
@@ -57,7 +57,7 @@ App::new().add_plugins(PlayerPlugin);
 Because our plugin is so simple (it doesn't take any config, and only uses the `build` method),
 we could instead choose to use [the blanket for all functions that take a &mut App] instead:
 
-```rust
+```rust,hide_lines=1-4
 # use bevy::prelude::*;
 #
 # fn check_if_player_is_dead() {}
