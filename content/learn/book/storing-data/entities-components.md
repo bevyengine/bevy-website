@@ -49,7 +49,7 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
-[exclusive system]: ../../control-flow/exclusive-systems
+[exclusive system]: ../../control-flow/systems/#exclusive-systems
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ## Working With Components
