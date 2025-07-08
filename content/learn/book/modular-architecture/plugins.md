@@ -79,10 +79,14 @@ You may have noticed that [`App::add_plugins`] is a method that takes `&mut App`
 Does that mean you can add plugins via other plugins?
 Yes, yes it does.
 
-You probably shouldn't do this though: it can make it harder to follow what's going on,
+For game code, this can be really convenient,
+allowing you to readily group functionality into a nice hierarchy.
+
+If you're writing a library though, you probably shouldn't do nest plugins like this.
+It can make it harder to follow what's going on,
 and it becomes challenging to selectively disable plugins for testing or things like "making a server build".
 
-Instead, you probably want to use a [`PluginGroup`].
+Instead, you should use a [`PluginGroup`].
 You've likely already encountered these: [`DefaultPlugins`] is a [`PluginGroup`]!
 
 [`PluginGroup`] comes with a few extra niceties over simply recursively adding plugins:
