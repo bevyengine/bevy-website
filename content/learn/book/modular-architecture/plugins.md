@@ -9,6 +9,14 @@ weight = 0
 allowing you to split logic across files, easily toggle behavior for testing,
 and reuse functionality between projects.
 
+Plugins are best used to organize your code into functional units:
+`WorldGenPlugin`, `InventoryPlugin` or `AudioPlugin` are all plausible.
+Inside of each plugin, you can initialize resources,
+add systems, setup observers, register types and generally handle the setup needed
+to make your subsystem function.
+Once all of this setup is complete, a plugin's job is done:
+vanishing into thin air as the systems and resources it added live on to carry out its job.
+
 At its heart, the `Plugin` trait is extremely simple.
 It looks a little something like this:
 
