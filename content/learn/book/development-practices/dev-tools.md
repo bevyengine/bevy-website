@@ -1,6 +1,6 @@
 +++
-title = "Module Organization"
+title = "Dev tools"
 insert_anchor_links = "right"
 [extra]
-weight = 2
+weight = 6
 +++
