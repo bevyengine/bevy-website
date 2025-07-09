@@ -53,7 +53,7 @@ The following schedules are then executed in order each "tick":
 [`First`] and [`Last`] extend this further, allowing running before and after the majority of other logic.
 Libraries should generally prefer the update schedules unless they have a very good reason to use `First` or `Last`.
 
-## Adding your own schedueles
+## Adding your own schedules
 
 This repeating game loop is set up by the [`ScheduleRunnerPlugin`],
 which is included as part of both [`MinimalPlugins`] and [`DefaultPlugins`].
