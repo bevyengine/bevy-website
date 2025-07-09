@@ -8,7 +8,7 @@ weight = 1
 As your Bevy project grows, storing it all in a single `main.rs` file will become frustrating!
 But how should you split it apart, and what are your tools for doing so?
 
-Thankfully, the answers to these questions are pretty simple:
+Thankfully, the Bevy community has answers to these questions:
 
 - split your code based on the "domain" it covers
   - think about where you might want to reuse, or selectively disable bits of functionality
