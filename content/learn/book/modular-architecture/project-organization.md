@@ -38,7 +38,7 @@ Too small and you'll end up constantly swapping between files,
 and too large and finding code within a file becomes frustrating.
 
 Modules within files aren't particularly useful,
-but they can be used to control visibility, or enable code folding.
+but they can be used to control visibility, enable code folding, and are commonly used for tests.
 
 [module system]: https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html
 
