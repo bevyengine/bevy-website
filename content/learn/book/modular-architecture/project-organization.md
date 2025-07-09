@@ -47,7 +47,7 @@ but they can be used to control visibility, enable code folding, and are commonl
 As your project grows even further,
 you should consider splitting it into multiple [crates] using [workspaces].
 
-Using crates is helpful when reusing code between projects,
+Using crates is helpful when reusing code between projects, formalizing APIs for specific domains,
 or [creating libraries] to share with other Bevy users.
 Game code generally looks a lot like library code in Bevy,
 so gradually pulling out stable chunks of your game's infrastructure is a sensible and natural thing to do.
@@ -92,11 +92,11 @@ But there's still a few good reasons to take advantage of Rust's visibility syst
   - if your types/methods/functions are `pub`, Rust won't known if they're dead code
   - dead code slows down compile times, confuses the reader and slowly rots
 - keeping your code *reasonably* untangled
-  - iterating quickly is important, so you should be careful not to get too tangled up
+  - iterating quickly is important, and Rust will help you refactor, so you should be careful not to get too tangled up
   - forcing consumers to do things the right way makes it easier to change the internals later
 
 At the end of the day, `pub(crate)` is a good default visibility level for items in larger projects.
-Internal methods, invariants, and implementation details should be private.
+Internal methods, invariants, and implementation details should be private, which is the Rust language default behavior.
 Finally, fully `pub` items should be reserved for deliberate shared interfaces,
 central components / resources like `Player` or `TileMapIndex`, and the plugins that
 you add to your `main.rs` to actually add the final functionality.
