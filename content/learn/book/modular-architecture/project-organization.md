@@ -13,8 +13,7 @@ Thankfully, the Bevy community has answers to these questions:
 - split your code based on the "domain" it covers
   - think about where you might want to reuse, or selectively disable bits of functionality
   - code that changes together should live together
-  - splits like "world generation" and "combat" and "main menu" are great
-  - don't organize your modules by e.g. "components" and "systems"!
+  - don't try to group together objects by "kind", like "components" and "systems"
 - don't try to get it right from the very start
   - split things up gradually, as areas become complex and unwieldy
   - you'll have a much better idea of the shape of your program then
