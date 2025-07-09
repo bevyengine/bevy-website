@@ -13,4 +13,4 @@ weight = 99
 
 ## Depending on Bevy
 
-## Build systems
+## Continuous integration and automated testing
