@@ -105,3 +105,281 @@ The fields of your structs should match the visibility of the struct that holds 
 skip the getter/setter methods unless you're performing validation.
 
 [visibility]: https://doc.rust-lang.org/reference/visibility-and-privacy.html
+
+## Project organization by example
+
+Now that we have a handle on the tools available, let's talk over how a hypothetical project might change and grow.
+Our small studio is building a Wild West single player first-person shooter!
+
+The very first step is to create a new project.
+Our folder structure will look something like:
+
+- src/
+  - main.rs
+- Cargo.toml
+
+Simple enough! We get to Hello World with some [`DefaultPlugins`], and add some third-party plugins that we know we'll want,
+and stick it all in `main.rs`.
+
+Next up, we're going to need a first-person shooter character controller.
+We hunt around online, find a permissively licensed template or example, and copy-paste it into our project under a new `player.rs` file,
+declaring this file as a module under `main.rs`.
+We create a `PlayerPlugin`, add it to our `fn main`, and make sure we can hop around and aim.
+We *don't* pull in a library for this, because we know that we're going to need to heavily customize the exact behavior.
+
+We also need some placeholder assets, so we look on [itch.io] and grab something with about the right proportions.
+Our project now looks like this:
+
+- assets/
+  - main_character.gltf
+- src/
+  - main.rs
+  - player.rs
+- Cargo.toml
+
+With a bit of basic gameplay working, it's time to tackle some infrastructure that we know we'll need: menus and loading screens.
+We look at what we've done in previous projects and copy-paste liberally into a new `ui` folder, with multiple sub-files.
+We setup a basic `GameState` here, to allow us to pause and restart the game and handle opening and closing menus,
+sticking it in our `main.rs` because it's used throughout the project.
+Now, our project looks like this:
+
+- assets/
+  - main_character.gltf
+- src/
+  - ui/
+    - mod.rs
+    - main_menu.rs
+    - pause_menu.rs
+    - settings_menu.rs
+  - main.rs
+  - player.rs
+- Cargo.toml
+
+We're off to a good start, and it's time to add some more features!
+Let's get some basic enemies going. Wait, hang on, we want to share our character controller between our players and our enemies.
+After a quick refactor:
+
+- assets/
+  - main_character.gltf
+- src/
+  - characters/
+    - mod.rs
+    - controller.rs
+    - player.rs
+  - ui/
+    - mod.rs
+    - main_menu.rs
+    - pause_menu.rs
+    - settings_menu.rs
+  - main.rs
+- Cargo.toml
+
+With the help of Rust's compiler, that wasn't too bad. And now, we can finally add enemies!
+
+- assets/
+  - main_character.gltf
+  - enemy.gltf
+- src/
+  - characters/
+    - mod.rs
+    - controller.rs
+    - enemies.rs
+    - player.rs
+  - ui/
+    - mod.rs
+    - main_menu.rs
+    - pause_menu.rs
+    - settings_menu.rs
+  - main.rs
+- Cargo.toml
+
+Let's add some combat mechanics.
+After a few commits, our project has a brand new folder with plenty of game logic,
+and our enemies have some actual behavior:
+
+- assets/
+  - main_character.gltf
+  - enemy.gltf
+- src/
+  - characters/
+    - mod.rs
+    - ai.rs
+    - controller.rs
+    - enemies.rs
+    - player.rs
+  - combat/
+    - mod.rs
+    - life_and_damage.rs
+    - weapons.rs
+  - ui/
+    - mod.rs
+    - main_menu.rs
+    - pause_menu.rs
+    - settings_menu.rs
+  - main.rs
+- Cargo.toml
+
+Our enemy logic and behavior keeps growing in a messy way.
+Let's do some research, and swap over to a more sophisticated [Goal Oriented Action Planning] solution.
+Now:
+
+- assets/
+  - main_character.gltf
+  - enemy.gltf
+- src/
+  - characters/
+    - ai/
+      - mod.rs
+      - goals.rs
+      - actions.rs
+      - planning.rs
+    - mod.rs
+    - controller.rs
+    - enemies.rs
+    - player.rs
+  - combat/
+    - mod.rs
+    - life_and_damage.rs
+    - weapons.rs
+  - ui/
+    - mod.rs
+    - main_menu.rs
+    - pause_menu.rs
+    - settings_menu.rs
+  - main.rs
+- Cargo.toml
+
+Ugh, the compile times are really starting to slow down, and things are getting complicated.
+Let's refactor this to be a workspace.
+One step at a time though: get the simple setup right first, then we'll spin out subcrates.
+We're just going to create a binary application and a single library,
+and dump everything but our main.rs contents into the library, which we'll depend on in our binary.
+
+- assets/
+  - main_character.gltf
+  - enemy.gltf
+- wild_west_game/
+  - src/
+    - main.rs
+  - Cargo.toml
+- wild_west_lib/
+  - src/
+    - characters/
+      - ai/
+        - mod.rs
+        - goals.rs
+        - actions.rs
+        - planning.rs
+      - mod.rs
+      - controller.rs
+      - enemies.rs
+      - player.rs
+    - combat/
+      - mod.rs
+      - life_and_damage.rs
+      - weapons.rs
+    - ui/
+      - mod.rs
+      - main_menu.rs
+      - pause_menu.rs
+      - settings_menu.rs
+    - lib.rs
+    - Cargo.toml
+- Cargo.toml
+
+We've had to move our `GameState` into our `lib.rs` so we can rely on it in our plugins, but that wasn't too bad.
+Now that everything is working again, let's start splitting things up!
+We can split out our new AI library for sure though: that's something we might want to publish one day!
+
+- assets/
+  - main_character.gltf
+  - enemy.gltf
+- wild_west_game/
+  - src/
+    - main.rs
+  - Cargo.toml
+- wild_west_lib/
+  - src/
+    - characters/
+      - mod.rs
+      - controller.rs
+      - enemies.rs
+      - player.rs
+    - combat/
+      - mod.rs
+      - life_and_damage.rs
+      - weapons.rs
+    - ui/
+      - mod.rs
+      - main_menu.rs
+      - pause_menu.rs
+      - settings_menu.rs
+    - lib.rs
+- better_goap/
+  - src/
+    - lib.rs
+    - goals.rs
+    - actions.rs
+    - planning.rs
+  - Cargo.toml
+- Cargo.toml
+
+We're still not sure exactly how our combat is going to work,
+and it's going to need to interface closely with our character code.
+Let's leave that alone for now.
+However, we've been bitten before by spaghettti code with our UI:
+let's spin that out and reduce the temptation.
+We'll define the various settings for the UI in our `wild_west_lib` using resources,
+and have our new `wild_west_ui` simply read and write those resource values.
+
+- assets/
+  - main_character.gltf
+  - enemy.gltf
+- wild_west_game/
+  - src/
+    - main.rs
+  - Cargo.toml
+- wild_west_lib/
+  - src/
+    - characters/
+      - mod.rs
+      - controller.rs
+      - enemies.rs
+      - player.rs
+    - combat/
+      - mod.rs
+      - life_and_damage.rs
+      - weapons.rs
+    - lib.rs
+- wild_west_ui/
+  - src/
+    - lib.rs
+    - main_menu.rs
+    - pause_menu.rs
+    - settings_menu.rs
+  - Cargo.toml
+- better_goap/
+  - src/
+    - lib.rs
+    - goals.rs
+    - actions.rs
+    - planning.rs
+  - Cargo.toml
+- Cargo.toml
+
+Watching this hypothetical studio develop their hypothetical game,
+we can come to appreciate where the advice about "don't try and get it right from the start",
+and "organize your code by functionality" comes from.
+
+As you build your project, your needs will shift, and over-architecting a beautiful file structure
+will waste time and slow you down.
+But that doesn't mean you should be completely blind to potential future needs!
+By grouping related code together, we can quickly and reliably split apart files,
+and spin off folders into their own crates as the need arises.
+
+If you keep each of your refactors small, use version control and make sure your project always keeps running,
+experimenting with project structure and architecture is easy and safe!
+
+[`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
+[itch.io]: https://itch.io/
+[Goal Oriented Action Planning]: https://goap.crashkonijn.com/readme/theory
