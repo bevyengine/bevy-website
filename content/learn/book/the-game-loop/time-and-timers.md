@@ -171,7 +171,7 @@ The core strategy is simple enough, but the devil is in the details:
 
 1. Create your own custom `GamePosition` type, holding the translation/rotation/scale information that your project needs.
 2. Modify and read this `GamePosition` type for all of your game logic and physics.
-3. Interpolate/extrapolate between the previous [`GlobalTransform`] and the `GamePosition`, based on the elapsed [`Fixed`] time.
+3. Interpolate between the previous [`GlobalTransform`] and the `GamePosition`, based on the elapsed [`Fixed`] time.
    1. This should occur after the final fixed update for the frame has run, but before rendering occurs.
    2. You ultimately want to set the [`GlobalTransform`], but doing this correctly in the presence of hierarchies is hard.
    3. As a result, modifying the local [`Transform`] and relying on transform propagation can be the least bad solution.
