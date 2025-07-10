@@ -62,18 +62,43 @@ fn move_player(mut player_transform: Single<&mut Transform, With<Player>>, time:
 }
 ```
 
-This technique is commonly known as "delta time" among game devs, because physicists use "delta" to mean "a change in a quantity".
+This technique is commonly known as ["delta time"] among game devs, because physicists use "delta" to mean "a change in a quantity".
+
+["delta time"]: https://en.wikipedia.org/wiki/Delta_timing
 
 ## Pausing and time control
 
 With all of our time-dependent logic driven by the delta time,
 we can start playing tricks with the value of [`Time`] to implement features like pausing and slowing down the game.
+To do this, we need to change how we account for [`Virtual`] (in-game) time:
 
 ```rust
 use bevy::prelude::*;
 
+fn toggle_pause(mut time: ResMut<Time<Virtual>>) {
+    if time.is_paused() {
+        time.unpause();
+    } else {
+        time.pause();
+    }
+}
 
+#[derive(Event)]
+struct SetGameSpeed(f32);
+
+fn set_game_speed(mut time: ResMut<Time<Virtual>>, events: EventReader::<SetGameSpeed>){
+  if let Some(new_speed) = events.iter().last(){
+      time.set_relative_speed(new_speed.0);
+  }
+}
 ```
+
+If your systems uniformly rely on [`Time`], this will effect your entire game:
+halting, slowing or speeding up animations, movement, projectiles, physics and so on.
+Alternatively, [states] and [run conditions] can be used to skip systems while the game is paused.
+
+[states]: ../control-flow/states.md
+[run conditions]: ../control-flow/run-conditions.md
 
 ## Fixing your timestep
 
