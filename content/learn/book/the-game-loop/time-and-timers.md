@@ -156,8 +156,33 @@ Please see our [timers and cooldowns] section below for the tools available to m
 [fix your timestep article]: https://gafferongames.com/post/fix_your_timestep/
 [`RunFixedMainLoop`]: https://dev-docs.bevy.org/bevy/app/struct.RunFixedMainLoop.html
 
-## Interpolation and smooth movement
+### Interpolation between ticks
 
-## Timers and cooldowns
+One key problem with using a fixed timestep is that your game logic (including physics!) will have an uneven
+number of updates between each frame.
+This will lead to visible jittering, lagginess and tiny speedups.
 
-## Delayed actions
+To account for this, we need to distinguish between the logical and rendered position (and rotation, and sometimes scale) of
+game objects.
+This is a common problem and pattern for multiplayer games, but using a fixed timestep means that even single player
+games need to handle it.
+
+The core strategy is simple enough, but the devil is in the details:
+
+1. Create your own custom `GamePosition` type, holding the translation/rotation/scale information that your project needs.
+2. Modify and read this `GamePosition` type for all of your game logic and physics.
+3. Interpolate/extrapolate between the previous [`GlobalTransform`] and the `GamePosition`, based on the elapsed [`Fixed`] time.
+   1. This should occur after the final fixed update for the frame has run, but before rendering occurs.
+   2. You ultimately want to set the [`GlobalTransform`], but doing this correctly in the presence of hierarchies is hard.
+   3. As a result, modifying the local [`Transform`] and relying on transform propagation can be the least bad solution.
+
+Bevy does not currently offer any built-in functionality for this form of interpolation,
+but open source [ecosystem crates] are available to use and learn from.
+
+[ecosystem crates]: https://bevy.org/assets/
+[`GlobalTransform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.GlobalTransform.html
+[`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
+
+### Smooth camera movement
+
+## Timers, cooldowns and delayed actions
