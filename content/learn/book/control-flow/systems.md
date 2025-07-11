@@ -43,7 +43,7 @@ See the section on [`Local`] for more details.
 ## Running systems in schedules
 
 Normally, systems are inserted into a [`Schedule`] via [`App::add_system`].
-Each schedule is evaluated once per frame, and systems within a single schedule run in parallel unless they are explicitly ordered relative to each other.
+Each of the standard schedules are evaluated once per frame, and systems within a single schedule run in parallel unless they are explicitly ordered relative to each other.
 
 There's a great deal of complexity and nuance here: please see the [Game Loop chapter] for a more complete treatment of the topic.
 
