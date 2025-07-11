@@ -25,8 +25,6 @@ an existing entity, or a new entity with that component was spawned.
 The [`Changed<T>`] query filter detects when a component has been changed. Adding a new component
 counts as "changed" - in otherwords, this is a superset of [`Added<T>`].
 
-Removing components works differently, see the section below.
-
 ```rust
 // Detecting added components
 fn detect_added_position(query: Query<Entity, Added<Position>>) {
@@ -42,6 +40,8 @@ fn detect_changed_position(query: Query<(Entity, &Position), Changed<Position>>)
     }
 }
 ```
+
+Removing components works differently, see the section below.
 
 ## Checking for changes
 
