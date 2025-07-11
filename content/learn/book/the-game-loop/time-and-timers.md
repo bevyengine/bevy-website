@@ -183,13 +183,12 @@ but open source [ecosystem crates] are available to use and learn from.
 [`GlobalTransform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.GlobalTransform.html
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
 
-## Timers, cooldowns and delayed actions
+## Timers and cooldowns
 
 Delta time is great for physics and animations,
 but what if we want to implement other time-driven gameplay logic?
-We might want to automatically generate cookie clicks every 5 seconds,
-add a 3 second cooldown for our fireball ability,
-or cause an enemy to chase after the player a short time after seeing them.
+We might want to automatically generate cookie clicks every 5 seconds
+or add a 3 second cooldown for our fireball ability.
 
 The simplest of these tools is the [`Timer`].
 Timers in Bevy hold two [`Duration`]s:
@@ -273,43 +272,6 @@ fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
 }
 ```
 
-For something a bit more advanced,
-suppose we wanted to create a way to send commands that were only applied after a certain period of time.
-Let's create a [custom command] that wraps other commands by taking advantage of temporary entities and trait objects.
-
-FIXME: ensure this compiles and works
-
-```rust
-# use bevy::prelude;:*;
-#
-
-// We're reusing this type as both a Component and a Command
-#[derive(Component)]
-struct DelayedCommand {
-  delay_remaining: Duration,
-  // We're using dynamic dispatch rather than a generic here
-  // to allow us to update and handle any underlying command
-  // using only a single system
-  command: Box<dyn Command>,
-}
-
-impl DelayedCommand {
-  fn new(delay: Duration, command: impl Command) -> DelayedCommand {
-    DelayedCommand {
-      delay,
-      command: Box::new(command),
-    }
-  }
-}
-
-impl Command for DelayedCommand {
-  fn write(&self, world: &mut World) {
-    world.spawn()
-  }
-}
-```
-
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [`Duration`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [relationship]: ../storing-data/relations.md
-[custom command]: ../control-flow/commdands.md
