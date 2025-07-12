@@ -79,6 +79,13 @@ fn check_and_update_position(mut query: Query<(Entity, Mut<Position>)>) {
 }
 ```
 
+{% callout(type="info") %}
+Performance-wise, there's no real difference between using query filters and using the change
+detection methods: The [`Added<T>`] and [`Changed<T>`] query filters cause the iterator to skip
+over entities that have not changed, but they don't reduce the number of entities that get fetched
+by the query.
+{% end %}
+
 ## Resources
 
 The [`Res<T>`] and [`ResMut<T>`] provide the same [`.is_added()`] and [`.is_changed()`] methods as
@@ -97,7 +104,7 @@ fn detect_changed_score(score: Res<Score>) {
 Change detection works differently for removed components, since the component (and possibly the
 entity) no longer exists!
 
-To detect when components are removed, you can use the [`RemovedComponents`] event:
+To detect when components are removed, you can use the [`RemovedComponents`] param:
 
 ```rust
 fn detect_removed_position(mut removed: RemovedComponents<Position>) {
@@ -106,6 +113,15 @@ fn detect_removed_position(mut removed: RemovedComponents<Position>) {
     }
 }
 ```
+
+{% callout(type="warning") %}
+It's generally better to use an [`OnRemove`] observer or a component hook to detect removals.
+This has a number of advantages over using [`RemovedComponents`]:
+
+- You get access to the component values being removed.
+- [`RemovedComponents`] can miss component removals when used in `FixedUpdate`.
+
+{% end %}
 
 Bevy does not provide any API for detecting when resources are removed.
 
