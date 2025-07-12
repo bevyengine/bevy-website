@@ -8,7 +8,7 @@ status = 'hidden'
 
 Change detection is an inherent feature of Bevy's Entity Component System (ECS). Each time a
 [`Component`] or [`Resource`] is modified, Bevy marks the item as changed. This mechanism helps
-optimize performance by avoiding unnecessary system executions when no relevant changes have
+optimize performance by avoiding unnecessary calculations when no relevant changes have
 occurred. Change detection can also be used to trigger actions in response to changes, such as
 synchronizing data between two contexts.
 
@@ -28,14 +28,14 @@ counts as "changed" - in otherwords, this is a superset of [`Added<T>`].
 ```rust
 // Detecting added components
 fn detect_added_position(query: Query<Entity, Added<Position>>) {
-    for entity in &query {
+    for entity in query.iter() {
         println!("Entity {:?} was just given a Position component", entity);
     }
 }
 
 // Detecting changed components.
 fn detect_changed_position(query: Query<(Entity, &Position), Changed<Position>>) {
-    for (entity, position) in &query {
+    for (entity, position) in query.iter() {
         println!("Entity {:?} position changed to {:?}", entity, position);
     }
 }
@@ -59,7 +59,7 @@ detection.
 ```rust
 // Using Ref<T> for change detection with immutable access
 fn check_position_changes(query: Query<(Entity, Ref<Position>)>) {
-    for (entity, position) in &query {
+    for (entity, position) in query.iter() {
         if position.is_changed() {
             println!("Entity {:?} position changed to {:?}", entity, position);
         } else {
@@ -70,7 +70,7 @@ fn check_position_changes(query: Query<(Entity, Ref<Position>)>) {
 
 // Using Mut<T> for change detection with mutable access
 fn check_and_update_position(mut query: Query<(Entity, Mut<Position>)>) {
-    for (entity, mut position) in &mut query {
+    for (entity, mut position) in query.iter_mut() {
         if position.is_changed() {
             println!("Entity {:?} position changed to {:?} before update", entity, *position);
             position.x += 1.0; // This will mark the component as changed
