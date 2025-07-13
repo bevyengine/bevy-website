@@ -6,7 +6,7 @@ weight = 8
 status = 'hidden'
 +++
 
-Change detection is an inherent feature of Bevy's Entity Component System (ECS). Each time a
+Change detection is built into Bevy's Entity Component System (ECS). Each time a
 [`Component`] or [`Resource`] is modified, Bevy marks the item as changed. This mechanism helps
 optimize performance by avoiding unnecessary calculations when no relevant changes have
 occurred. Change detection can also be used to trigger actions in response to changes, such as
