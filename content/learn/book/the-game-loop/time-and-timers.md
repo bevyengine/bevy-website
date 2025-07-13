@@ -58,7 +58,7 @@ fn move_player(mut player_transform: Single<&mut Transform, With<Player>>, time:
     // At 60 FPS, this will be the same as before
     const PLAYER_SPEED: f32 = 60.;
     
-    player_transform.translation.x += PLAYER_SPEED * time.delta_secs_f32();
+    player_transform.translation.x += PLAYER_SPEED * time.delta_secs();
 }
 ```
 
@@ -86,14 +86,14 @@ fn toggle_pause(mut time: ResMut<Time<Virtual>>) {
 #[derive(Event)]
 struct SetGameSpeed(f32);
 
-fn set_game_speed(mut time: ResMut<Time<Virtual>>, events: EventReader::<SetGameSpeed>){
-  if let Some(new_speed) = events.iter().last(){
-      time.set_relative_speed(new_speed.0);
-  }
+fn set_game_speed(mut time: ResMut<Time<Virtual>>, events: EventReader<SetGameSpeed>) {
+    if let Some(new_speed) = events.iter().last() {
+        time.set_relative_speed(new_speed.0);
+    }
 }
 ```
 
-If your systems uniformly rely on [`Time`], this will effect your entire game:
+If your systems uniformly rely on [`Time`], this will affect your entire game:
 halting, slowing or speeding up animations, movement, projectiles, physics and so on.
 Alternatively, [states] and [run conditions] can be used to skip systems while the game is paused.
 
@@ -102,15 +102,15 @@ Alternatively, [states] and [run conditions] can be used to skip systems while t
 
 ## Fixing your timestep
 
-Compensating for fluctating frame times using delta time is a great start.
-But as the timeless [fix your timestep article] explains for projects that require a higher level of stability and reproducibility,
+Compensating for fluctuating frame times using delta time is a great start.
+But as the timeless [*Fix Your Timestep!*] article by Glenn Fiedler explains, for projects that require a higher level of stability and reproducibility,
 it's better to simply always advance time by a fixed amount.
-This is particularly important for physics and
+This is particularly important for physics and networking.
 
 To understand how to work with fixed time in Bevy, we need to first learn a little bit about how [`Time`] actually works under the hood.
-As the excellent docs on [`Time`] explain, there's actually *three* distinct types of time being measured:
+As the docs on [`Time`] explain, there's actually *three* distinct types of time being measured:
 
-- real time: the actual wall time
+- real time: the actual wall clock time
   - use this for things like UI animations that you don't want to be affected by pausing
 - virtual time: the "in-game time"
   - if you're using fixed time, this is useful for graphical effects
@@ -141,7 +141,7 @@ Now that we have the required vocabulary, let's go over exactly how the fixed ti
 
 This means that we may have 0, 1, 2 or more ticks per frame,
 with our fixed timestep logic running repeatedly until it's caught back up.
-For even more detail, check out the excellent documentation on [`Fixed`].
+For even more detail, check out the documentation on [`Fixed`].
 
 Note that Bevy's "fixed timesteps" are not the right mechanism to use for gameplay logic like "every 5 seconds update this building".
 Bevy only supports a single fixed timestep across your entire project, and its use is completely optional.
@@ -209,24 +209,25 @@ struct Cookies(u64);
 
 #[derive(Component)]
 struct AutomaticCookieClick {
-  // This should be initialized as a repeating timer
-  // ensuring it automatically resets
-  timer: Timer,
-  resources_gained: u64,
+    // This should be initialized as a repeating timer
+    // ensuring it automatically resets
+    timer: Timer,
+    resources_gained: u64,
 }
 
 fn automatically_click_cookies(
-  mut cookies: ResMut<Cookies>, 
-  time: Res<Time>, mut query: Query<&mut AutomaticCookieClick>
-){
-  let delta_time = time.delta();
+    mut cookies: ResMut<Cookies>, 
+    mut query: Query<&mut AutomaticCookieClick>,
+    time: Res<Time>,
+) {
+    let delta_time = time.delta();
 
-  for mut cookie_clicker in query.iter_mut(){
-    cookie_clicker.timer.tick(delta_time);
-    if cookie_clicker.timer.just_finished(){
-      cookies.0 += cookie_clicker.resources_gained;
+    for mut cookie_clicker in query.iter_mut() {
+        cookie_clicker.timer.tick(delta_time);
+        if cookie_clicker.timer.just_finished() {
+            cookies.0 += cookie_clicker.resources_gained;
+        }
     }
-  }
 }
 ```
 
@@ -236,7 +237,6 @@ Tracking each ability as its own entity, using a custom [relationship] to link
 it to the entity with that ability would be an elegant solution,
 as it would allow you to update all cooldowns in a single system.
 
-```rust
 # use bevy::prelude::*;
 #
 #[derive(Relationship)]
@@ -245,32 +245,31 @@ struct AbilityOf(Entity);
 
 #[derive(RelationshipTarget)]
 #[relationship_target(relationship = AbilityOf)]
-struct Abilities(Vec<Entity>)
+struct Abilities(Vec<Entity>);
 
 #[derive(Component)]
 struct Cooldown {
-  duration: Duration,
-  remaining: Duration,
+    duration: Duration,
+    remaining: Duration,
 }
 
 impl Cooldown {
-  fn expend(&mut self) {
-    self.remaining = self.duration;
-  }
+    fn expend(&mut self) {
+        self.remaining = self.duration;
+    }
   
-  fn is_ready(&self) -> bool {
-    self.remaining == Duration::ZERO;
-  }
+    fn is_ready(&self) -> bool {
+        self.remaining == Duration::ZERO;
+    }
 }
 
 fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
-  let delta_time = time.delta();
-  for mut cooldown in cooldowns.iter_mut(){
-    // We never want our remaining time to become negative
-    cooldown.remaining.saturating_sub(delta_time);
-  }
+    let delta_time = time.delta();
+    for mut cooldown in cooldowns.iter_mut(){
+        // We never want our remaining time to become negative
+        cooldown.remaining.saturating_sub(delta_time);
+    }
 }
-```
 
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [`Duration`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
