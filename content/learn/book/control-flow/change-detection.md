@@ -187,5 +187,5 @@ of the component with the tick count of the last time the system was run.
 {% end %}
 
 One thing to beware of is potential 1-frame delay, if the system that is causing the change
-runs after the system that is checking for changes. You may need to pay attention to [run schedules]
+runs after the system that is checking for changes. You may need to pay attention to how you [run schedules]
 or use [explicit system ordering] to prevent this.
