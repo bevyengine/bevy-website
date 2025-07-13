@@ -17,7 +17,7 @@ feature in your game development workflow.
 
 ## Filtering
 
-You can configure queries to only iterate over entities where certain components have been modified.
+You can configure queries to filter out entities unless certain components have been modified.
 
 The [`Added<T>`] query filter detects new component instances, either if the component was added to
 an existing entity, or a new entity with that component was spawned.
