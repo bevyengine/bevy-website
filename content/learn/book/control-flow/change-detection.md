@@ -128,8 +128,8 @@ Bevy does not provide any API for detecting when resources are removed.
 
 ## What gets detected?
 
-Change detection occurs when a component or resource is mutably dereferenced. [`Mut<T>`] and
-[`ResMut<T>`] implement `DerefMut`, which marks the item as changed.
+Change detection is triggered when a component or resource is mutably dereferenced. [`Mut<T>`] and
+[`ResMut<T>`] implement `DerefMut`, with an implementation that marks the item as changed.
 
 Simply reading components via a mutable query, or resources via [`ResMut`], will _not_ trigger change
 detection. But dereferencing the component, or taking a mutable borrow, will.
