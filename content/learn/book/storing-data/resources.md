@@ -137,7 +137,7 @@ write data stored in a resource. Accessing data within a component is more invol
 multi-step process where you first have to get access to the entity, and then its components. Often
 this will involve writing a query.
 
-Resources make sense when the data is truly singlular and always will be. For example, there can
+Resources make sense when the data is truly singular and always will be. For example, there can
 only be one master audio volume on a device, so it doesn't make sense to allow for multiple
 instances.
 
