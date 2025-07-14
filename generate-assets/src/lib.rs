@@ -666,7 +666,7 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
         "\
             SELECT name, id \
             FROM crates \
-            WHERE homepage = ? \
+            WHERE (homepage = ? OR homepage = ?)\
                 AND repository = ?\
         ",
     )?;
@@ -674,7 +674,11 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
     // Required let and return due to bevy_crates_statement not living long enough.
     let bevy_crates = bevy_crates_statement
         .query_and_then(
-            ["https://bevy.org", "https://github.com/bevyengine/bevy"],
+            [
+                "https://bevy.org",
+                "https://bevyengine.org",
+                "https://github.com/bevyengine/bevy",
+            ],
             |r| -> Result<(String, String), rusqlite::Error> {
                 Ok((r.get_unwrap::<_, String>(0), r.get_unwrap::<_, String>(1)))
             },
