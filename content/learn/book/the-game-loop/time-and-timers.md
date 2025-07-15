@@ -34,6 +34,9 @@ use bevy::prelude::*;
 struct Player;
 
 fn move_player(mut player_transform: Single<&mut Transform, With<Player>>){
+    // With Bevy's default camera setup and a 60 fps framerate, 
+    // this will move the player 60 pixels per second in 2D (reasonable),
+    // or 60 meters per second in 3D (wheee!)
     const PLAYER_MOVEMENT: f32 = 1.;
     
     player_transform.translation.x += PLAYER_MOVEMENT;
