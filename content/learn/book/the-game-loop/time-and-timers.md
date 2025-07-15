@@ -182,10 +182,14 @@ Unfortunately, the devil is in the details:
 Bevy does not currently offer any built-in functionality for this form of interpolation,
 but open source [ecosystem crates] are available to use and learn from.
 
+Note that smooth yet responsive camera interpolation is particularly tricky!
+See the [`physics_in_fixed_timestep`] example for a detailed breakdown of how to do this correctly.
+
 [ecosystem crates]: https://bevy.org/assets/
 [`GlobalTransform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.GlobalTransform.html
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
 [`RunFixedMainLoopSystems::AfterFixedMainLoop`]: https://docs.rs/bevy/latest/bevy/prelude/enum.RunFixedMainLoopSystems.html#variant.AfterFixedMainLoop
+[`physics_in_fixed_timestep`]: https://github.com/bevyengine/bevy/blob/latest/examples/movement/physics_in_fixed_timestep.rs
 
 ## Timers and cooldowns
 
