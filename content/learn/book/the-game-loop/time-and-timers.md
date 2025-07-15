@@ -175,8 +175,9 @@ Unfortunately, the devil is in the details:
 2. Modify and read this `GameTransform` type for all of your game logic and physics.
 3. Interpolate between the previous [`GlobalTransform`] and the `GameTransform`, based on the elapsed [`Fixed`] time.
    1. This should occur after the final fixed update for the frame has run, but before rendering occurs.
-   2. You ultimately want to set the [`GlobalTransform`], but doing this correctly in the presence of hierarchies is hard.
-   3. As a result, modifying the local [`Transform`] and relying on transform propagation can be the least bad solution.
+   2. The recommended location for this is [`RunFixedMainLoopSystems::AfterFixedMainLoop`] in the [`FixedMain`] schedule.
+   3. You ultimately want to set the [`GlobalTransform`], but doing this correctly in the presence of hierarchies is hard.
+   4. As a result, modifying the local [`Transform`] and relying on transform propagation can be the least bad solution.
 
 Bevy does not currently offer any built-in functionality for this form of interpolation,
 but open source [ecosystem crates] are available to use and learn from.
@@ -184,6 +185,7 @@ but open source [ecosystem crates] are available to use and learn from.
 [ecosystem crates]: https://bevy.org/assets/
 [`GlobalTransform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.GlobalTransform.html
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
+[`RunFixedMainLoopSystems::AfterFixedMainLoop`]: https://docs.rs/bevy/latest/bevy/prelude/enum.RunFixedMainLoopSystems.html#variant.AfterFixedMainLoop
 
 ## Timers and cooldowns
 
