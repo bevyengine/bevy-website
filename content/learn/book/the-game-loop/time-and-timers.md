@@ -52,7 +52,7 @@ our player is moving at an unsteady 20-30 units per second. Oh no!
 Instead, we can compensate for this effect by fixing our *speed* (or other rates of change per second),
 and then multiplying by the elapsed time.
 
-```rust, hide_lines=1-4
+```rust, hide_lines=1-4,hide_lines=1-5
 # use bevy::prelude::*;
 # 
 # #[derive(Component)]
@@ -215,7 +215,7 @@ They are also not components: you cannot simply add a [`Timer`] to an entity.
 Instead, timers are intended to be wrapped inside of simple components,
 which are updated and polled for completion by systems.
 
-```rust
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
 #
 #[derive(Resource)]
@@ -251,7 +251,7 @@ Tracking each ability as its own entity, using a custom [relationship] to link
 it to the entity with that ability would be an elegant solution,
 as it would allow you to update all cooldowns in a single system.
 
-```rust
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
 #
 #[derive(Relationship)]
@@ -289,7 +289,7 @@ fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
 
 To trigger a system periodically, the `on_timer` run condition can be very convenient.
 
-```rust
+```rust,hide_lines=1-7
 # use bevy::prelude::*;
 # #[derive(Component)]
 # struct Building;
