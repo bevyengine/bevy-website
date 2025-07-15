@@ -153,8 +153,8 @@ Please see our [timers and cooldowns] section below for the tools available to m
 [`Real`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Real.html
 [`Virtual`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Virtual.html
 [`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
-[fix your timestep article]: https://gafferongames.com/post/fix_your_timestep/
-[`RunFixedMainLoop`]: https://dev-docs.bevy.org/bevy/app/struct.RunFixedMainLoop.html
+[*Fix Your Timestep!*]: https://gafferongames.com/post/fix_your_timestep/
+[`RunFixedMainLoop`]: https://docs.rs/bevy/latest/bevy/app/struct.RunFixedMainLoop.html
 
 ### Interpolation between ticks
 
@@ -237,6 +237,7 @@ Tracking each ability as its own entity, using a custom [relationship] to link
 it to the entity with that ability would be an elegant solution,
 as it would allow you to update all cooldowns in a single system.
 
+```rust
 # use bevy::prelude::*;
 #
 #[derive(Relationship)]
@@ -270,6 +271,7 @@ fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
         cooldown.remaining.saturating_sub(delta_time);
     }
 }
+```
 
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [`Duration`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
