@@ -12,7 +12,8 @@ The [`Time`] resource in Bevy is the source of truth
 for the "current in-game time".
 Unlike [`Instant::now()`], the [`Time`] is fixed for the entire frame,
 rather than reflecting the precise wall clock time at the time of system evaluation.
-This value is set at the start of the frame based on the time supplied by the renderer,
+Time is derived from a clock whose value is fixed for the entire frame,
+set at the start of the frame based on the time supplied by the renderer
 during the [`TimeSystem`] system set in the [`First`] schedule.
 
 This is helpful for performance reasons, but more critically,
