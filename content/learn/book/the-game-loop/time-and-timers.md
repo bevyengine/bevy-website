@@ -167,7 +167,9 @@ game objects.
 This is a common problem and pattern for multiplayer games, but using a fixed timestep means that even single player
 games need to handle it.
 
-The core strategy is simple enough, but the devil is in the details:
+The core strategy is simple enough: you need to keep track of "logical" and "visual" positions
+separately, and smooth out the visual position while tracking the logical position when updated.
+Unfortunately, the devil is in the details:
 
 1. Create your own custom `GameTransform` type, holding the translation/rotation/scale information that your project needs.
 2. Modify and read this `GameTransform` type for all of your game logic and physics.
