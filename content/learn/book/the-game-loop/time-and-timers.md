@@ -144,6 +144,8 @@ with our fixed timestep logic running repeatedly until it's caught back up.
 For even more detail, check out the documentation on [`Fixed`].
 
 Note that Bevy's "fixed timesteps" are not the right mechanism to use for gameplay logic like "every 5 seconds update this building".
+In most cases, [`Timer`] components and the [`on_timer`] run condition are more appropriate.
+
 Bevy only supports a single fixed timestep across your entire project, and its use is completely optional.
 Please see our [timers and cooldowns] section below for the tools available to model this type of behavior.
 
@@ -281,6 +283,38 @@ fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
 }
 ```
 
+To trigger a system periodically, the `on_timer` run condition can be very convenient.
+
+```rust
+# use bevy::prelude::*;
+# #[derive(Component)]
+# struct Building;
+# 
+# impl Building {
+#   fn tick(&mut self) {}
+# }
+
+fn tick_buildings(query: Query<&mut Building>){
+   for query in query.iter_mut(){
+      building.tick();
+   }
+}
+
+App::new()
+  .add_systems(Update, tick_buildings.run_if(on_timer(Duration::from_secs(5))));
+```
+
+Timers (and the `on_timer` run condition) can safely be ticked in any schedule.
+When they are in a fixed time schedule, the [`Time<Fixed>`] delta time will automatically be used instead.
+
+Note that systems run periodically via an `on_timer` run condition are still blocking!
+While it is tempting to use them for very heavy, infrequent tasks (like chunk updating or path finding),
+a naive approach to this will simply result in your game stuttering every few seconds.
+
+Instead, you should either split the work into bite-sized pieces that can safely be completed
+within a single frame, or spawn an async task which you periodically poll for completion.
+
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [`Duration`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [relationship]: ../storing-data/relations.md
+[`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
