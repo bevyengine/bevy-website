@@ -11,7 +11,7 @@ and which can be accessed by any system in your application. Unlike components, 
 to individual entities, resources provide a way to store singleton data such as game settings, asset
 handles, time information, or any other state that needs to be accessible across multiple systems.
 
-To create a new resource type, simply derive a Rust `struct` or `enum`, and derive the [`Resource`]
+To create a new resource type, simply create a Rust `struct` or `enum`, and derive the [`Resource`]
 trait:
 
 ```rs
@@ -24,14 +24,14 @@ struct AudioSettings {
 ```
 
 For each unique resource type `T`, there can only be one instance of that type in the Bevy [`World`].
-It you might need multiple instances, then consider using [entities and components] instead.
+If you might need multiple instances, then consider using [entities and components] instead.
 
 Bevy uses resources for many of the built-in features of the engine. For example, Bevy's
 [`AssetServer`] is a resource.
 
 ## Accessing Resources
 
-To access the value of a resource use [`Res`] for immutable access, and [`ResMut`] for mutable access:
+To access the value of a resource in a system, use [`Res`] for immutable access, and [`ResMut`] for mutable access:
 
 ```rs
 fn audio_settings_system(settings: Res<AudioSettings>) {
