@@ -96,11 +96,54 @@ it's helpful to know that [`Changed`] and [`Added`] are both query filters.
 [`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
 [B0002]: https://bevy.org/learn/errors/b0002/
 
-## Query::get
+## Accessing data on specific entities
 
-ENTITY QUERY DATA
+While many systems will operate by simply iterating over all of the entities in a query,
+it is often helpful to look up (and possibly mutate) the data of a specific entity.
 
-QUERY GET
+This is fast and easy to do, using [`Query::get`] and its mutable sibling [`Query::get_mut`].
+These respect the query data and query filters of the query they are called on,
+making them an extremely powerful tool.
+
+Of course, this begs the question: where do we get the [`Entity`] identifier.
+The simplest way to get this information is to record it when spawning an entity.
+
+```rust
+# use bevy::prelude::*;
+
+#[derive(Resource)]
+struct SelectedEntity(Entity);
+
+fn spawn_selected_entity(mut commands: Commands, mut selected_entity: ResMut<SelectedEntity>){
+    // .id() records the allocated identifier of the entity that is about to be spawned
+    let special_entity_id = commands.spawn(Name::new("Throckmorton")).id();
+    special_entity.0 = special_entity_id;
+}
+
+fn print_selected_entity_name(query: Query<&Name>, special_entity: Res<SelectedEntity>){
+    if let Ok(name) = query.get(special_entity.0){
+        info!("{name} is selected.");
+    } else {
+        warn!("Selected entity {} has been despawned, or does not have a Name component", special_entity.0);
+    }
+}
+```
+
+As the example shows, you can store the retrieved `Entity` identifiers inside of components or resources,
+creating flexible connections between entities and lookup tables.
+Inside of Bevy itself, this pattern is combined with [hooks] to make it more robust
+and exposed to users as [relations].
+
+The other common way to get an [`Entity`] is to take advantage of its [`QueryData`] implementation,
+allowing you to determine the identifier for entities in queries that you are iterating over.
+
+```rust
+// TODO: fill this in with a nice self-contained example,
+// which ideally uses Query::get
+```
+
+[hooks]: ../control-flow/hooks.md
+[relations]: ./relations.md
 
 ## Working with singleton entities
 
@@ -111,12 +154,6 @@ CONTRAST TO SINGLE SYSTEM PARAM
 ## Accessing multiple items from the same query
 
 QUERY::GET_MANY
-
-## Multiple queries in a single system
-
-MUTABILITY RULES.
-AVOID WITH WITHOUT
-PARAMSET
 
 ## Disabling entities
 
