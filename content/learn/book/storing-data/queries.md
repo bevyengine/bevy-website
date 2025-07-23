@@ -96,10 +96,8 @@ USE SYSTEMPARAM DERIVE INSTEAD
 
 CONTRAST TO TYPE ALIASES
 
-## Advanced query tools
+## Accessing all data from a single entity via queries
 
 - change detection
-- Option, Has and AnyOf
-- Or
 - Mut and Ref
 - EntityMut, EntityRef, FilteredEntityMut, FilteredEntityRef, EntityMutExcept, EntityRefExcept
