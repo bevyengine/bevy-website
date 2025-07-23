@@ -60,6 +60,42 @@ Don't worry though: most of your queries will be quite simple, requesting a few 
 
 ## Mutable and immutable query data
 
+The most useful way to modify a query is to change whether we're requesting the data "immutably" (read-only) or "mutably" (read-write).
+We can do that by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life" respectively).
+The ampersand is Rust's read-only [reference] indicator,
+while `&mut` is for mutable references, making it easy to remember the syntax once you're familiar with Rust.
+
+{% callout(type="info") %}
+
+You can include multiple queries within a single system, allowing you to access component data in more flexible ways.
+But if Bevy is handing out mutable references to component data in safe Rust, how does it ensure that users don't
+invoke undefined behavior due to the forbidden [mutable aliasing]?
+
+Bevy protects against this by examining the [`Access`] of each of the system params in each systems,
+and then panicking if they could conflict.
+If you run into this, you'll be pointed to the [B0002] error page,
+which has advice on how to fix and avoid this problem.
+
+{% end %}
+
+By changing our [`QueryData`] terms in this way, we change the type of [query item] returned,
+changing the type of object we get when we iterate over our queries.
+`Query<&Life>` corresponds to a `&Life`, giving us direct read-only access to data inside of our world.
+However, you may have noticed that `Query<&mut Life>` returns a [`Mut<Life>`]. Why?
+
+This [smart pointer] wraps a `&mut T` and allows Bevy to automatically detect changes.
+While this is talked about in more depth in the chapter on [change detection],
+it's helpful to know that [`Changed`] and [`Added`] are both query filters.
+
+[reference]: https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html
+[query item]: https://dev-docs.bevy.org/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
+[`Mut<Life>`]: https://dev-docs.bevy.org/bevy/ecs/change_detection/struct.Mut.html
+[smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
+[change detection]: ../control-flow/change-detection.md
+[mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
+[`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
+[B0002]: https://bevy.org/learn/errors/b0002/
+
 ## Query::get
 
 ENTITY QUERY DATA
