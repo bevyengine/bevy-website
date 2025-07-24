@@ -213,13 +213,30 @@ Similarly, see the [resources] chapter of this book for a discussion on the choi
 
 ## Accessing multiple items from the same query
 
-QUERY::GET_MANY
+By contrast, you may have a query and need to access multiple items from it at once.
+The obvious method is to simply call [`Query::get`] multiple times on it.
+While this works for read-only access,
+it falls apart when using [`Query::get_mut`] as the borrow checker complains at you.
+
+To help with this, Bevy offers two particularly helpful methods on [`Query`]:
+
+- [`Query::get_multiple_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique. Helpful for things like collisions.
+- [`Query::iter_combinations_mut`]: iterate over all pairs, triples or so on of query items. Great for gravity simulations!
 
 ## Disabling entities
 
-DEFAULT QUERY FILTERS
+From time-to-time, you might want to hide or disable an entity without despawning it.
+While simply setting its [`Visibility`] can work well,
+it won't stop any gameplay effects.
 
-DISABLED COMPONENT
+Bevy offers a [`Disabled`] component, which works by hiding entities with this component from
+queries unless the [`Disabled`] component is explicitly permitted,
+such as via [`With`], [`Has`] or [`Allows`].
+
+Under the hood, this acts as a [default query filter],
+adding an overridable filter to each query.
+You can even add your own disabling components,
+which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
 
 ## Working with complex queries
 
