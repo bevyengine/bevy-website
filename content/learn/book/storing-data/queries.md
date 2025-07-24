@@ -138,8 +138,17 @@ The other common way to get an [`Entity`] is to take advantage of its [`QueryDat
 allowing you to determine the identifier for entities in queries that you are iterating over.
 
 ```rust
-// TODO: fill this in with a nice self-contained example,
-// which ideally uses Query::get
+# use bevy::prelude::*;
+#
+#[derive(Component)]
+struct Enemy;
+
+// Note: no `&` for Entity as a QueryData!
+fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Commands){
+    for enemy_entity in enemies.iter(){
+        commands.entity(enemy_entity).despawn();
+    }
+}
 ```
 
 [hooks]: ../control-flow/hooks.md
