@@ -238,16 +238,32 @@ adding an overridable filter to each query.
 You can even add your own disabling components,
 which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
 
-## Working with complex queries
-
-DERIVE QUERYDATA / QUERYFILTER
-
-USE SYSTEMPARAM DERIVE INSTEAD
-
-CONTRAST TO TYPE ALIASES
-
 ## Accessing all data from a single entity via queries
 
-- change detection
-- Mut and Ref
 - EntityMut, EntityRef, FilteredEntityMut, FilteredEntityRef, EntityMutExcept, EntityRefExcept
+
+## Working with complex queries
+
+In real projects, queries can get quite complex!
+As a result, Bevy users tend to disable [`clippy`'s `type_complexity` lint] altogether.
+But even without red squiggles, working with complex types can be frustrating and hard to reuse.
+
+Bevy offers three good tools for this, each with their own niche:
+
+- [type aliases]
+  - reduces typing and cognitive complexity
+  - quick and easy to define
+  - simple and flexible
+  - no added functionality
+- custom [`QueryData`] / [`QueryFilter`] types
+  - derive macro makes this easy!
+  - define custom methods on the struct or the generated item type
+  - bypass the standard 16-element limit of terms without nesting tuples
+  - more composable than a [`SystemParam`]
+- custom [`SystemParam`] types
+  - derive macro is great for simple cases
+  - combine data from multiple queries, or queries with other resources
+  - custom methods can be used to encapsulate complex logic
+
+[`clippy`'s `type_complexity` lint]: https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+[type aliases]: https://doc.rust-lang.org/reference/items/type-aliases.html
