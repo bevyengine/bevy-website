@@ -156,9 +156,60 @@ fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Comman
 
 ## Working with singleton entities
 
-QUERY::SINGLE
+From time-to-time, you may find yourself writing systems that expect there to be only a single matching entity.
+This might be a player, the sun, or something more abstract like your camera.
 
-CONTRAST TO SINGLE SYSTEM PARAM
+While you could iterate over a query of length one, this can be confusing to read and feel a bit silly.
+To make working with these patterns more comfortable, Bevy provides two tools:
+`Query::single` and the `Single` system param.
+Let's try writing the same simple system in each of the three ways.
+
+```rust
+# use bevy::prelude::*;
+#
+#[derive(Component)]
+struct Life(u32);
+
+fn kill_player_when_dead_query_iter(player_query: Query<(Entity, &Life), With<Player>>, mut commands: Commands) {
+    for (player_entity, player_life) in player_query.iter(){
+        if player_life.0 == 0 {
+            commands.entity(player_entity).despawn();
+        }
+    }
+}
+
+fn kill_player_when_dead_query_single(player_query: Query<(Entity, &Life), With<Player>>, mut commands: Commands) {
+    let Ok((player_entity, player_life)) = player.single() else {
+        // We could instead use the ? operator and return an error;
+        // see the error handling chapter        
+        return;
+    }
+
+    if player_life.0 == 0 {
+        commands.entity(player_entity).despawn();
+    }
+}
+
+// This system will be skipped unless there is exactly one matching player entity
+// so there's no need to handle the error case in the system
+fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Player>>, mut commands: Commands) {
+    // We have to dereference out of the Single smart pointer
+    // before we can use destructuring assignment
+    let (player_entity, player_life) = *player;
+
+    if player_life.0 == 0 {
+        commands.entity(player_entity).despawn();
+    }
+}
+```
+
+[`Query::single`] returns a [`QuerySingleError`], allowing you to check if zero, one, or more than one matching entities were found.
+
+For more discussion on [`Single`] and how it works, please see the [error handling] chapter.
+Similarly, see the [resources] chapter of this book for a discussion on the choice between using a singleton entity or a resource.
+
+[error handling]: ../control-flow/error-handling.md
+[resources]: ./resources.md
 
 ## Accessing multiple items from the same query
 
