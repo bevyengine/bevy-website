@@ -238,10 +238,6 @@ adding an overridable filter to each query.
 You can even add your own disabling components,
 which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
 
-## Accessing all data from a single entity via queries
-
-- EntityMut, EntityRef, FilteredEntityMut, FilteredEntityRef, EntityMutExcept, EntityRefExcept
-
 ## Working with complex queries
 
 In real projects, queries can get quite complex!
