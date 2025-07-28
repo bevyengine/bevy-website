@@ -129,7 +129,7 @@ The usual estimation and long-term planning difficulties of software are amplifi
 Despite this, some degree of work planning is important, as both a coordination and quality control mechanism.
 This is generally fairly decentralized and organic, relying on temporary, focused working groups and milestones.
 
-Each release (both major and minor) has an associated milestone.
+Each release (both major and minor) has an [associated milestone](https://github.com/bevyengine/bevy/milestones).
 For example, the 0.5 milestone would be for the major Bevy version 0.5 release,
 while the 0.5.1 milestone would be for a minor patch release for Bevy 0.5.
 
