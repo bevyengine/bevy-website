@@ -148,6 +148,8 @@ By contrast, major version milestones serve three purposes:
 
 At the start of each release cycle, the milestone will tend towards the first two use cases.
 As we near the end, the milestone is gradually trimmed down to only the most critical problems that would justify delaying a release.
+It's common to move issues and PRs that are near completion or still helpful to implement
+into the milestone for the major release after the current milestone.
 
 Members of the triage team should follow these guidelines for how we use milestones,
 but are encouraged to add, remove and modify milestones for various work, based on their own subjective judgement
