@@ -168,13 +168,13 @@ $color-white: #fff;
   --button-square-bg-color: #{rgba($color-neutral-93, 0.05)};
 
   --callout-caution-accent-color: #d95e7a;
-  --callout-caution-bg-color: #4b373b;
+  --callout-caution-bg-color: #52363c;
   --callout-caution-color: #f1dfe3;
   --callout-info-accent-color: #817aaf;
-  --callout-info-bg-color: #36333d;
+  --callout-info-bg-color: #3b344c;
   --callout-info-color: var(--color-neutral-96);
   --callout-warning-accent-color: #ccb875;
-  --callout-warning-bg-color: #443f35;
+  --callout-warning-bg-color: #5a4d34;
   --callout-warning-color: #f9f9ee;
 
   --card-bg-color: var(--color-neutral-18);
@@ -221,7 +221,8 @@ $color-white: #fff;
   --code-yyy: #d19a66;
   --code-zzz: #d1af8f;
 
-  --details-bg-color: #{rgba($color-neutral-93, 0.1)};
+  --details-bg-color: #{rgba($color-neutral-93, 0.01)};
+  --details-border-color: #444;
   --details-text-shadow-color: var(--color-neutral-93);
 
   --docs-whats-a-bevy-filter: none;
