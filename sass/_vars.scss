@@ -94,12 +94,12 @@ $color-white: #fff;
   --color-white: #{$color-white};
 
   // Blues by lightness
-  --color-blue-21: #2f2745;
+  --color-blue-21: #332e41;
   --color-blue-40: #456687;
   --color-blue-43: #4a6e91;
   --color-blue-47: #597899;
   --color-blue-56: #6a8fb3;
-  --color-blue-57: #5944e0;
+  --color-blue-57: #817aaf;
   --color-blue-60: #799bbb;
   --color-blue-71: #6c82ff;
   --color-blue-74: #7c90ff;
@@ -167,15 +167,15 @@ $color-white: #fff;
   --button-pink-text-color: var(--color-neutral-93);
   --button-square-bg-color: #{rgba($color-neutral-93, 0.05)};
 
-  --callout-caution-accent-color: #e82f5a;
-  --callout-caution-bg-color: #591626;
-  --callout-caution-color: #eed5db;
-  --callout-info-accent-color: var(--color-blue-57);
-  --callout-info-bg-color: var(--color-blue-21);
+  --callout-caution-accent-color: #d95e7a;
+  --callout-caution-bg-color: #52363c;
+  --callout-caution-color: #f1dfe3;
+  --callout-info-accent-color: #817aaf;
+  --callout-info-bg-color: #3b344c;
   --callout-info-color: var(--color-neutral-96);
-  --callout-warning-accent-color: #e4c151;
-  --callout-warning-bg-color: #513903;
-  --callout-warning-color: #fdfdec;
+  --callout-warning-accent-color: #ccb875;
+  --callout-warning-bg-color: #5a4d34;
+  --callout-warning-color: #f9f9ee;
 
   --card-bg-color: var(--color-neutral-18);
   --card-bg-hover-color: var(--color-neutral-19);
@@ -221,7 +221,8 @@ $color-white: #fff;
   --code-yyy: #d19a66;
   --code-zzz: #d1af8f;
 
-  --details-bg-color: #{rgba($color-neutral-93, 0.1)};
+  --details-bg-color: #{rgba($color-neutral-93, 0.01)};
+  --details-border-color: #444;
   --details-text-shadow-color: var(--color-neutral-93);
 
   --docs-whats-a-bevy-filter: none;
