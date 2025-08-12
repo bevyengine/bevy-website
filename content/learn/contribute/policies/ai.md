@@ -23,6 +23,7 @@ increasing frequency of burdensome PRs/issues and to address the potential legal
 currently surrounding the intersection of AI generated code and the FOSS contribution model.
 
 ## AI Generated Communications
+
 The unsolicited use of automated systems to communicate issues, bugs, or security vulnerabilities
 about Bevy Organization projects under the guise of a human is considered unacceptable
 and a Code of Conduct violation. Any individual contributor, operator of automated systems,
@@ -39,6 +40,7 @@ the above policy, though it is recommended by the community to use non-LLM machi
 options, as they tend to be less verbose while still getting the point across.
 
 ## Copyrightable AI Generated Contributions
+
 At the current time of writing (August 11th, 2025), the US Copyright Office has
 [stated publicly][us-copyright-office-response] that "human authorship is a
 pre-requisite to copyright protection". A [more recent report][us-copyright-office-report] 
