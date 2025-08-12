@@ -16,7 +16,7 @@ issues.
 
 Whether AI generated code are copyrightable works is also a hot-button legal topic that is 
 still being openly debated and litigated. How this impacts the legal aspects of maintaining
-a FOSS project is currently a unresolved question.
+a FOSS project is currently an unresolved question.
 
 This policy is established as a response targeted at the problem of an 
 increasing frequency of burdensome PRs/issues and to address the potential legal issues
