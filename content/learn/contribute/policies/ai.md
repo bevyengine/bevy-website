@@ -2,7 +2,7 @@
 title = "AI Policy"
 insert_anchor_links = "right"
 [extra]
-weight = 2
+weight = 1
 +++
 
 In recent times, there have been a growing number of contributions that are fully or 
