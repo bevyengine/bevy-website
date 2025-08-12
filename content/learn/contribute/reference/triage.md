@@ -94,6 +94,8 @@ Some reasons to apply `D-Trivial` include:
 Some reasons to apply `S-Nominated-to-Close`  include:
 
  1. The PR shows inconsistencies and verbosity to suggest that the code was [AI generated][ai-policy].
+ 2. The PR has serious flaws and has not attracted any support from reviewers.
+ 3. The PR is no longer needed.
 
 Remember that difficulty labels are for expertise required to either solve an issue or review a pull request. By labeling an issue as `D-Trivial`, you are marking it as a good first issue for new contributors to the Bevy project.
 
