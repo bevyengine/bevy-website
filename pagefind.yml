@@ -1,0 +1,6 @@
+site: public
+output_path: static/pagefind
+exclude_selectors:
+  - ".tree-menu"
+  - ".example__back"
+  - ".example__github"
