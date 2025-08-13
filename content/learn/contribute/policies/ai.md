@@ -78,4 +78,4 @@ This policy may be revisited when the legal debate has settled.
 [us-copyright-office-report]: https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf
 
 [^1]: Trivial LLM generated content such as variable renames or autocompleted function calls, often branded "predictions" or "suggestions", that is indistinguishable from traditional methods such as a regex search/replace or an LSP autocompletion is by definition not detectable and can be treated like other regular IDE tools such as Intellisense. 
-This is does not include cases where the prediction generates things like entire function blocks. 
+This does not include cases where the prediction generates things like entire function blocks. 
