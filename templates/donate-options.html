@@ -14,6 +14,8 @@
                 <th>Name in Credits</th>
                 <th>Link in Credits</th>
                 <th>Logo in Credits</th>
+                <th>Name and Link in Project's Readme</th>
+                <th>Logo in Project's Readme</th>
             </tr>
         </thead>
         <tbody>
@@ -47,6 +49,16 @@
                 </td>
                 <td>
                     {% if tier.reward_logo %}
+                        Yes
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.reward_readme_link %}
+                        Yes
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.reward_readme_logo %}
                         Yes
                     {% endif %}
                 </td>
