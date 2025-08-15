@@ -36,7 +36,7 @@ other social media platforms, etc.
 
 We recognize that English may not be the primarily language for all contributors and that 
 machine translation is an indispensable tool for proper collaboration, and thus not subject to
-the above policy, though it is recommended by the community to use non-LLM machine translation
+the above policy. The community recommends that you instruct the LLM to produce a concise output or use non-LLM machine translation
 options, as they tend to be less verbose while still getting the point across.
 
 ## Copyrightable AI Generated Contributions
