@@ -45,9 +45,10 @@ At the current time of writing (August 11th, 2025), the US Copyright Office has
 [stated publicly][us-copyright-office-response] that "human authorship is a
 pre-requisite to copyright protection". A [more recent report][us-copyright-office-report] 
 from the same institution shows a much more contested legal space, both within the US and 
-internationally. In the case that AI generated works are not copyrightable, those same works 
-cannot be licensed to others, and thus AI-generated code and assets would not legally be 
-licensed under MIT or Apache.
+internationally. In the case that AI generated works are copyrightable, those works 
+would be considered derivatives of the input dataset, and thus use AI-generated code and assets 
+may constitute copyright infringement or may be subject to licensing terms incompatible
+with the FOSS licenses used by the Bevy Organization.
 
 Erring on the side of caution in light of a openly debated legal topic, 
 all[^1] forms of AI-generated contributions cannot be merged into repos maintained 
