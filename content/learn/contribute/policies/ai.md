@@ -6,7 +6,7 @@ weight = 1
 +++
 
 In recent times, there have been a growing number of contributions that are fully or 
-partially produced by generative AI (e.g. LLMs and friends) which exhibit 
+partially produced by generative AI (e.g. large language models and friends) which exhibit 
 characteristics that result in undue extra work for other contributors and maintainers. 
 While we've seen PRs and issues with these characteristics produced entirely by 
 humans, generative AI tools have significantly lowered the level of effort required to produce 
@@ -14,7 +14,7 @@ humans, generative AI tools have significantly lowered the level of effort requi
 incorrectly report bugs, and so have become a major source of burdensome PRs and
 issues.
 
-Whether AI generated code are copyrightable works is also a hot-button legal topic that is 
+Whether AI generated code are subject to copyright protection is also a hot-button legal topic that is 
 still being openly debated and litigated. How this impacts the legal aspects of maintaining
 a FOSS project is currently an unresolved question.
 
@@ -36,28 +36,29 @@ other social media platforms, etc.
 
 We recognize that English may not be the primarily language for all contributors and that 
 machine translation is an indispensable tool for proper collaboration, and thus not subject to
-the above policy. The community recommends that you instruct the LLM to produce a concise output or use non-LLM machine translation
-options, as they tend to be less verbose while still getting the point across.
+the above policy. The community recommends that you instruct the LLM to produce a concise output 
+or use non-LLM machine translation options, as they tend to be less verbose while still getting 
+the point across.
 
-## Copyrightable AI Generated Contributions
+## AI Generated Contributions and Copyright
 
 At the current time of writing (August 11th, 2025), the US Copyright Office has
 [stated publicly][us-copyright-office-response] that "human authorship is a
 pre-requisite to copyright protection". A [more recent report][us-copyright-office-report] 
 from the same institution shows a much more contested legal space, both within the US and 
-internationally. In the case that AI generated works are copyrightable, those works 
+internationally. In the case that AI generated works are protected under copyright, those works 
 would be considered derivatives of the input dataset, and thus use AI-generated code and assets 
 may constitute copyright infringement or may be subject to licensing terms incompatible
 with the FOSS licenses used by the Bevy Organization.
 
 Erring on the side of caution in light of a openly debated legal topic, 
-all[^1] forms of AI-generated contributions cannot be merged into repos maintained 
+all[^1] forms of AI-generated contributions cannot be merged into repositories maintained 
 by the Bevy Organization. This includes both code and non-code game assets (e.g. textures,
 audio, etc).
 
 Any triage team member suspecting a pull request to be made primarily through the use of 
-LLMs or other generative tools should mark the PR as `S-Nominated-to-Close`, upon which a 
-maintainer can then review the PR for closure. To help identify these cases, 
+large language models or other generative tools should mark the PR as `S-Nominated-to-Close`, 
+upon which a maintainer can then review the PR for closure. To help identify these cases, 
 pull requests subject to this policy have characteristics such as (but not limited to): 
 
  * Needlessly or overly verbose descriptions or responses.
