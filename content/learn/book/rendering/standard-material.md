@@ -16,7 +16,7 @@ Before PBR, artists designed lighting, material, and camera properties more ad-h
 
 While this process worked fine for smaller scenes, as larger movies and games got created, assets became harder to reuse. A coin that looked the correct shade of yellow, with a certain shininess in one scene, might look completely wrong when reused in another scene under different lighting conditions.
 
-With PBR, to answer "what color should this object be?", you instead reference values from a database of real-world measurements like [Physically Based](https://physicallybased.info). Assets are more scene-independent, and behave consistently in a variety of different lighting conditions.
+With PBR, to answer "what color should this object be?", you instead reference values from a database of real-world measurements like [Physically Based](https://physicallybased.info). Assets are more scene-independent, and behave consistently in a variety of different lighting conditions. Even if you're making a stylized game, PBR is still important.
 
 ## Theory
 
