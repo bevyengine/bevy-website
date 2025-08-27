@@ -26,7 +26,7 @@ struct Score {
 They're accessed and updated in systems, similar to entities and components:
 
 ```rs
-fn update_score(score: ResMut<Score>) {
+fn update_score(mut score: ResMut<Score>) {
     // ResMut gets the resource mutably, so we can update it
     score.points += 1;
 }

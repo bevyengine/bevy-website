@@ -121,6 +121,42 @@ There are several paths for PRs to be closed:
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
 
+## Milestones, Roadmaps and Work Planning
+
+Bevy is, to a large degree, a project powered by volunteers, each with their own motivations and goals.
+The usual estimation and long-term planning difficulties of software are amplified dramatically: this is why Bevy does not maintain a central roadmap.
+
+Despite this, some degree of work planning is important, as both a coordination and quality control mechanism.
+This is generally fairly decentralized and organic, relying on temporary, focused working groups and milestones.
+
+Each release (both major and minor) has an [associated milestone](https://github.com/bevyengine/bevy/milestones).
+For example, the 0.5 milestone would be for the major Bevy version 0.5 release,
+while the 0.5.1 milestone would be for a minor patch release for Bevy 0.5.
+
+Minor version milestones are intended for work and issues that are either particularly critical to backport fixes for,
+or extremely low risk non-breaking improvements (such as documentation improvements or simple methods).
+When enough changes have accumulated, maintainers will create a new branch for the minor version,
+cherrypicking merged PRs in that milestone onto that branch and then publishing it.
+Breaking changes cannot be shipped in a minor version (due to semantic versioning),
+and complex changes are both hard to cherrypick and challenging to use.
+
+By contrast, major version milestones serve three purposes:
+
+1. Tracking high-value, ready-to-implement or reviewable work that would be useful for contributors to tackle this cycle.
+2. Coordinating complex efforts that would be good to ship in a single cycle to avoid shipping half-complete features or refactors.
+3. Ensuring that we do not ship major bugs, shoddy documentation or inconsistent APIs.
+
+At the start of each release cycle, the milestone will tend towards the first two use cases.
+As we near the end, the milestone is gradually trimmed down to only the most critical problems that would justify delaying a release.
+It's common to move issues and PRs that are near completion or still helpful to implement
+into the milestone for the major release after the current milestone.
+
+Members of the triage team should follow these guidelines for how we use milestones,
+but are encouraged to add, remove and modify milestones for various work, based on their own subjective judgement
+of the importance of the work, how well it aligns with our current collective goals, and its current state.
+When you assign work to a milestone (or take it out of it), try to leave a short comment justifying why you have done so,
+so others can understand (and perhaps argue with) your rationale.
+
 ## Triage Team
 
 Members of the Triage Team within the Bevy organization have permissions to label and close issues, though they do not have merge rights or special authority. Anyone is free to join as long as:
