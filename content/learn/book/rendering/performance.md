@@ -1,3 +1,11 @@
++++
+title = "TODO"
+insert_anchor_links = "right"
+[extra]
+weight = 1
+status = 'hidden'
++++
+
 * Profile first! Really!! (Link to that part of the book)
   * CPU vs GPU bottlenecks, render world and render commands vs GPU timeline
 * Mesh/material auto-batching and pipeline/draw calls, MeshTag
