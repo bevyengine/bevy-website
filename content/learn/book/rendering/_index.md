@@ -10,10 +10,12 @@ To display stuff on screen, 3D rendering... (what about 2D?)
 
 list of crates (pbr, core pipeline, mesh, light, anti_aliasing, etc)
 
-Quick start example spawn mesh/camera/etc:
+Quick start example spawn camera/mesh+material/light/etc:
 ```rust
 
 ```
+
+The next few pages will cover each of these concepts in greater detail.
 
 wgpu/supported platforms (webgpu, native, mobile, webgl2)
 
