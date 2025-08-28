@@ -206,10 +206,6 @@ fn visit_dirs(
             let mut asset: Asset = toml::from_str(&fs::read_to_string(&path).unwrap())?;
             asset.original_path = Some(path);
 
-            if asset.name == "Lost Oppai" {
-                println!("{:?}", asset);
-            }
-
             if let Err(err) = get_extra_metadata(&mut asset, metadata_source) {
                 // We don't want to stop execution here
                 eprintln!("Failed to get metadata for {}", asset.name);
