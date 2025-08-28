@@ -14,7 +14,7 @@
   <div id="{{ post.title | slugify }}">
     <a class="asset-card" href="{{ post.extra.link }}">
       <div class="asset-card__banner">
-        {% if post.extra.nsfw %}<div class="asset-card__blur-overlay"></div>{%endif %}
+        {% if post.extra.nsfw %}<div class="asset-card__blur-overlay"></div>{% endif %}
         <div class="asset-card__title">{{ post.title }}</div>
         {% if post.extra.image %}
           <img src="{{ image_macros::resize_image(path=post.extra.image, width=370, height=370) }}"
