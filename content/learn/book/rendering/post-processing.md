@@ -13,5 +13,5 @@ Auto exposure
 Skybox/Procedural atmosphere(?)
 Motion blur
 Depth of field
-Chromatic abberation
+Chromatic aberration
 Color grading

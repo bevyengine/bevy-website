@@ -12,7 +12,7 @@ StandardMaterial, like most of the functionality in `bevy_pbr`, implements an id
 
 PBR is when you use formulas and units derived from real-world physics and math. PBR is oftentimes a concept more than a strict set of rules, and approximations are used in the name of performance, but where possible you try to stick to real-world physics.
 
-Before PBR, artists designed lighting, material, and camera properties more ad-hoc. When answering the question "what color should this object be?", artists would just choose a value that they thought looked good. Properties like how shiny or smooth an object are were similiary made up by the artist.
+Before PBR, artists designed lighting, material, and camera properties more ad-hoc. When answering the question "what color should this object be?", artists would just choose a value that they thought looked good. Properties like how shiny or smooth an object are were similarly made up by the artist.
 
 While this process worked fine for smaller scenes, as larger movies and games got created, assets became harder to reuse. A coin that looked the correct shade of yellow, with a certain shininess in one scene, might look completely wrong when reused in another scene under different lighting conditions.
 
