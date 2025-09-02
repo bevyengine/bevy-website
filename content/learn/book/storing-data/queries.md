@@ -41,28 +41,60 @@ wrapping them with parentheses.
 [generic type parameters]: (https://doc.rust-lang.org/book/ch10-01-syntax.html)
 ["unit type"]: https://doc.rust-lang.org/core/primitive.unit.html
 
-### Multiple Components
+### Accessing multiple components at once
 
 Let's say we have three components: `Energy`, `Life`, and `Mana`.
 
 As shown above, we can grab a list of all entities with the `Life` component with `Query<&Life>`.
+But what if we wanted to see the `Life` and `Mana` of our entities at the same time?
 
-<!--
-it might be hard for new users to understand why you'd
-iterate over an empty list of components
+We need to somehow communicate that the `D` generic of our `Query` should cover both `&Life` and `&Mana`.
+Bevy uses [tuples] as the syntax for this, wrapping all of the types that we want to combine in parentheses.
+`&Life` becomes `(&Life, &Mana)`, which we slot into the `D` generic to become `Query<(&Life, &Mana)>`.
 
-we can try to state it explicitly, or just keep it in that
-useful little list you made!
--->
+We can iterate over this query like so:
 
-However, there are many other kinds of queries you can create:
+```rust,hide_lines=1-2
+# use bevy::prelude::*;
+#
+#[derive(Component)]
+struct Life {
+    value: u32
+}
 
-- `Query<(&Life, &Mana)>`: get `Life` and `Mana` from entities with both components.
-- `Query<AnyOf<(&Life, &Mana)>>`: get `Life` and/or `Mana`, though all entities in this query will have at least one of these two!
-  - `AnyOf` in the data spot acts as shorthand for `Query<(Option<&Life>, Option<&Mana>), Or<(With<Life>, With<Mana>)>>`. Much cleaner!
-- `Query<(), (With<Life>, With<Mana>)>`: grab the unit type for each entity with both `Life` and `Mana`
 
-These tuples can have many components: `Query<(&Life, &Mana, &Energy)>` works just fine!
+#[derive(Component)]
+struct Mana {
+    value: u32
+}
+
+fn life_and_mana_system(query: Query<(&Life, &Mana)>){
+    // This pattern is called "destructuring",
+    // and is very convenient when working with queries.
+    // The type annotations (": &Life") are optional;
+    // they're shown here for clarity!
+    for (life: &Life, mana: &Mana) in query.iter(){
+        todo!();
+    } 
+}
+```
+
+When we use queries with multiple terms like this, the critical thing is that we're accessing the `Life` and `Mana` components
+on the same entity whenever we iterate over our query.
+This allows you to perform operations on entities as a whole: relating their properties in flexible but efficient ways.
+
+We can add more terms to this tuple to request more components at once, like `Query<(&Life, &Mana, &Energy)>`.
+Up to 16 elements can be combined in this way.
+While this should be plenty, Bevy is currently limited by the lack of [variadic generics] in Rust itself.
+
+This works for `QueryFilter` terms too: if we set `F` to `(With<Life>, Without<Mana>)`,
+we can use it like `Query<&Energy, (With<Life>, Without<Mana>)>`.
+This means "get me the energy component of all entities that have a life component but do not have a mana component".
+
+Combining multiple terms in your queries like this should be the first tool you reach for when trying to implement more complex logic in Bevy.
+
+[tuples]: https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
+[variadic generics]: https://poignardazur.github.io/2025/06/07/report-on-variadics-rustweek/
 
 ### Optional Components
 
@@ -72,6 +104,7 @@ Sometimes, you want to swap from the default "and" logic, where all of the compo
 - `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types
 - `Query<Has<Life>>`, which contains `true` if the component is present, and `false` if the component is absent
 - `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an `Or` relationship
+  - Using `()` in the `QueryData` field means that no data will be fetched: the only information retrieved is whether or not the query contains a given entity.
 
 As you can see, Bevy's type-driven querying can be quite expressive and elaborate!
 Don't worry, though: most of your queries will be quite simple, requesting a few pieces of data with a simple filter.
@@ -128,9 +161,9 @@ making them an extremely powerful tool.
 Of course, this begs the question: where do we get the [`Entity`] identifier.
 The simplest way to get this information is to record it when spawning an entity.
 
-```rust,hide_lines=1
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
-
+#
 #[derive(Resource)]
 struct SelectedEntity(Entity);
 
@@ -160,7 +193,7 @@ and exposed to users as [relations].
 The other common way to get an [`Entity`] is to take advantage of its [`QueryData`] implementation,
 allowing you to determine the identifier for entities in queries that you are iterating over.
 
-```rust
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
 #
 #[derive(Component)]
