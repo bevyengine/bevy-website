@@ -277,9 +277,9 @@ it falls apart when using [`Query::get_mut`], as the borrow checker complains at
 To help with this, Bevy offers two particularly helpful methods on [`Query`]:
 
 - [`Query::get_multiple_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique.
-    - Helpful for things like collisions.
+  - Helpful for things like collisions.
 - [`Query::iter_combinations_mut`]: iterate over all pairs, triples or so on of query items.
-    - Great for gravity simulations!
+  - Great for gravity simulations!
 
 ## Disabling entities
 
@@ -319,5 +319,6 @@ Bevy offers three good tools for this, each with their own niche:
   - combine data from multiple queries, or queries with other resources
   - custom methods can be used to encapsulate complex logic
   - sometimes provided by third-party libraries for ease of use
+
 [`clippy`'s `type_complexity` lint]: https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
 [type aliases]: https://doc.rust-lang.org/reference/items/type-aliases.html
