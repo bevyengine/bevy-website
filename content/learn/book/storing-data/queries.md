@@ -186,7 +186,7 @@ This is fast and easy to do, using [`Query::get`] and its mutable sibling [`Quer
 These respect the query data and query filters of the query they are called on,
 making them an extremely powerful tool.
 
-Of course, this begs the question: where do we get the [`Entity`] identifier.
+Of course, this raises the question: where do we get the [`Entity`] identifier.
 The simplest way to get this information is to record it when spawning an entity.
 
 ```rust,hide_lines=1-2
