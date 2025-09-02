@@ -327,6 +327,8 @@ adding an overridable filter to each query.
 You can even add your own disabling components,
 which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
 
+[default query filter]: https://docs.rs/bevy/latest/bevy/ecs/entity_disabling/struct.DefaultQueryFilters.html
+
 ## Working with complex queries
 
 In real projects, queries can get quite complex!
