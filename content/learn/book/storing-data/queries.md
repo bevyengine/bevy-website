@@ -302,7 +302,8 @@ Similarly, see the [resources] chapter of this book for a discussion on the choi
 By contrast, you may have a query and need to access multiple items from it at once.
 The obvious method is to simply call [`Query::get`] multiple times on it.
 While this works for read-only access,
-it falls apart when using [`Query::get_mut`], as the borrow checker complains at you.
+it falls apart when using [`Query::get_mut`], as the borrow checker complains.
+After all, it can't tell from the type signature that you're not accessing the same entity's data twice!
 
 To help with this, Bevy offers two particularly helpful methods on [`Query`]:
 
