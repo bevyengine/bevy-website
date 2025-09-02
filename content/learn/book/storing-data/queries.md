@@ -113,10 +113,34 @@ Don't worry, though: most of your queries will be quite simple, requesting a few
 
 ## Mutable and immutable query data
 
-The most useful way to modify a query is to change whether we're requesting the data "immutably" (read-only) or "mutably" (read-write).
-We can do that by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life", respectively).
+Simply reading the values of our components isn't very useful: in order to actually implement gameplay,
+we need to change those values!
+
+We can change whether we're requesting the data "immutably" (read-only) or "mutably" (read-write) by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life", respectively).
 The ampersand is Rust's read-only [reference] indicator,
 while `&mut` is for mutable references, making it easy to remember the syntax once you're familiar with Rust.
+
+Let's take a look at how that might look in practice:
+
+```rust,hide_lines=1-2
+#[derive(Component)]
+struct Poisoned;
+
+#[derive(Component)]
+struct Life {
+    value: u32
+}
+
+fn apply_poison(poisoned: Query<&mut Life, With<Poisoned>>){ 
+    // The `mut life` tells Rust that we want to mutate the Rust variable
+    // and `.iter_mut` tells Bevy that we want to access the query data mutably,
+    // rather than downgrading it to a read-only `&Life`
+    for mut life in poisoned.iter_mut(){
+        // Simply calling life.value -= 1 will underflow!
+        life.value.saturating_sub(1);
+    }
+}
+```
 
 {% callout(type="info") %}
 
@@ -135,7 +159,7 @@ which has advice on how to fix and avoid this problem.
 
 {% end %}
 
-By changing our [`QueryData`] terms in this way, we change the type of [query item] returned,
+By changing our [`QueryData`] terms from `&Life` to `&mut Life`, we change the type of [query item] returned,
 changing the type of object we get when we iterate over our queries.
 `Query<&Life>` corresponds to a `&Life`, giving us direct read-only access to data inside of our world.
 However, you may have noticed that `Query<&mut Life>` returns a [`Mut<Life>`]. Why?
