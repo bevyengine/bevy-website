@@ -224,11 +224,13 @@ Let's try writing the same simple system in each of the three ways.
 # use bevy::prelude::*;
 #
 #[derive(Component)]
-struct Life(u32);
+struct Life {
+    value: u32
+};
 
 fn kill_player_when_dead_query_iter(player_query: Query<(Entity, &Life), With<Player>>, mut commands: Commands) {
     for (player_entity, player_life) in player_query.iter() {
-        if player_life.0 == 0 {
+        if player_life.value == 0 {
             commands.entity(player_entity).despawn();
         }
     }
@@ -241,7 +243,7 @@ fn kill_player_when_dead_query_single(player_query: Query<(Entity, &Life), With<
         return;
     }
 
-    if player_life.0 == 0 {
+    if player_life.value == 0 {
         commands.entity(player_entity).despawn();
     }
 }
@@ -253,7 +255,7 @@ fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Playe
     // before we can use destructuring assignment to access the individual components
     let (player_entity, player_life): (Entity, &Life) = *player;
 
-    if player_life.0 == 0 {
+    if player_life.value == 0 {
         commands.entity(player_entity).despawn();
     }
 }
