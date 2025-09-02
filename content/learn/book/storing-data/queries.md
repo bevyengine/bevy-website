@@ -50,7 +50,7 @@ However, there are many other kinds of queries you can create:
 
 - `Query<(&Life, &Mana)>`: get `Life` and `Mana` from entities with both components.
 - `Query<AnyOf<(&Life, &Mana)>>`: get `Life` and/or `Mana`, though all entities in this query will have at least one of these two!
-	- `AnyOf` in the data spot acts as shorthand for `Query<(Option<&Life>, Option<&Mana>), Or<(With<Life>, With<Mana>)>>`. Not bad, huh?
+  - `AnyOf` in the data spot acts as shorthand for `Query<(Option<&Life>, Option<&Mana>), Or<(With<Life>, With<Mana>)>>`. Much cleaner!
 - `Query<(), (With<Life>, With<Mana>)>`: grab the unit type for each entity with both `Life` and `Mana`
 
 These tuples can have many components: `Query<(&Life, &Mana, &Energy)>` works just fine!
