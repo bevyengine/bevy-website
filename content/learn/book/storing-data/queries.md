@@ -20,33 +20,44 @@ Only entities which match *all* of the terms in `D` *and* `F` will be included i
 When we write `Query<&Life, With<Player>>`, we're supplying these generics, setting `D` to `&Life` and `F` to `With<Player>`,
 separated by a comma.
 Bevy uses the information in the [`QueryData`] and [`QueryFilter`] traits,
-along with the [`WorldQuery`] supertrait, in order to know how to lookup components of
+along with the [`WorldQuery`] supertrait, to look up components of
 the correct type in the world and supply them to your system via [dependency injection].
 
 If we don't want to fetch any data, or perform any filtering,
-we can use `()`, Rust's "unit type" in the place of `D` or `F`.
-The `F: QueryFilter` argument defaults to `()`, allowing us to conveniently write
-`Query<&Life>`, rather than spelling out that we don't want to filter via `Query<&Life, ()>`.
+we can use `()`, Rust's ["unit type"](https://doc.rust-lang.org/core/primitive.unit.html) in place of `D` or `F`.
 
-To access more than one component at once, or filter by multiple predicates at the same time,
+Inside the `Query` type, the `F: QueryFilter` generic defaults to `()`, allowing us to avoid explicitly writing `Query<&Life, ()>` when we don't want to filter. This simplified, filter-less form of query looks like `Query<&Life>`, which will fetch all instances of the `Life` component in the world.
+
+To access more than one component at once, or add multiple filters at the same time,
 we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple],
 wrapping them with parentheses.
 
-If we have two components, `Life` and `Mana`, we can fetch all entities with the `Life` component
-by requesting `Query<&Life>` (if we want the data), or `Query<(), With<Life>>` (if we don't need the data).
-We can do the same thing for `Mana`, and we could add two queries in the same system, one for `Life`, and one for `Mana`,
-if we wanted to examine these two lists side by side.
+### Multiple Components
 
-But to fetch entities with *both* the life and mana components,
-we would need:
+Let's say we have three components: `Energy`, `Life`, and `Mana`.
 
-- `Query<(&Life, &Mana)>`, giving us access to the data of both components
-- `Query<&Life, With<Mana>>` or `Query<&Mana, With<Life>>`, accessing the data of one and filtering on the presence of the other
-- `Query<(), (With<Life>, With<Mana>)>` to filter on both components
+As shown above, we can grab a list of all entities with the `Life` component with `Query<&Life>`.
 
-These tuples can be extended to multiple elements: `Query<(&Life, &Mana, &Energy)>` and so on works just fine!
-To swap from the default "and" logic, where all of the components must be present, to "or" logic,
-where any of the components can be present, you can use:
+<!--
+it might be hard for new users to understand why you'd
+iterate over an empty list of components
+
+we can try to state it explicitly, or just keep it in that
+useful little list you made!
+-->
+
+However, there are many other kinds of queries you can create:
+
+- `Query<(&Life, &Mana)>`: get `Life` and `Mana` from entities with both components.
+- `Query<AnyOf<(&Life, &Mana)>>`: get `Life` and/or `Mana`, though all entities in this query will have at least one of these two!
+	- `AnyOf` in the data spot acts as shorthand for `Query<(Option<&Life>, Option<&Mana>), Or<(With<Life>, With<Mana>)>>`. Not bad, huh?
+- `Query<(), (With<Life>, With<Mana>)>`: grab the unit type for each entity with both `Life` and `Mana`
+
+These tuples can have many components: `Query<(&Life, &Mana, &Energy)>` works just fine!
+
+### Optional Components
+
+Sometimes, you want to swap from the default "and" logic, where all of the components must be present, to "or" logic, where any of the components can be present. To do so, you can use `Option` and a few special types:
 
 - `Query<Option<&Life>>`, for an [`Option`] that contains the component value if present and nothing if it is absent
 - `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types
@@ -54,25 +65,25 @@ where any of the components can be present, you can use:
 - `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an `Or` relationship
 
 As you can see, Bevy's type-driven querying can be quite expressive and elaborate!
-Don't worry though: most of your queries will be quite simple, requesting a few pieces of data with some filter.
+Don't worry, though: most of your queries will be quite simple, requesting a few pieces of data with a simple filter.
 
 [dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
 
 ## Mutable and immutable query data
 
 The most useful way to modify a query is to change whether we're requesting the data "immutably" (read-only) or "mutably" (read-write).
-We can do that by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life" respectively).
+We can do that by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life", respectively).
 The ampersand is Rust's read-only [reference] indicator,
 while `&mut` is for mutable references, making it easy to remember the syntax once you're familiar with Rust.
 
 {% callout(type="info") %}
 
 You can include multiple queries within a single system, allowing you to access component data in more flexible ways.
-But if Bevy is handing out mutable references to component data in safe Rust, how does it ensure that users don't
+But, if Bevy is handing out mutable references to component data in safe Rust, how does it ensure that users don't
 invoke undefined behavior due to the forbidden [mutable aliasing]?
 
 Bevy protects against this by examining the [`Access`] of each of the system params in each systems,
-and then panicking if they could conflict.
+then panicking if they could conflict.
 If you run into this, you'll be pointed to the [B0002] error page,
 which has advice on how to fix and avoid this problem.
 
@@ -108,28 +119,31 @@ making them an extremely powerful tool.
 Of course, this begs the question: where do we get the [`Entity`] identifier.
 The simplest way to get this information is to record it when spawning an entity.
 
-```rust
+```rust,hide_lines=1
 # use bevy::prelude::*;
 
 #[derive(Resource)]
 struct SelectedEntity(Entity);
 
-fn spawn_selected_entity(mut commands: Commands, mut selected_entity: ResMut<SelectedEntity>){
+fn spawn_selected_entity(mut commands: Commands, mut selected_entity: ResMut<SelectedEntity>) {
     // .id() records the allocated identifier of the entity that is about to be spawned
     let special_entity_id = commands.spawn(Name::new("Throckmorton")).id();
     special_entity.0 = special_entity_id;
 }
 
-fn print_selected_entity_name(query: Query<&Name>, special_entity: Res<SelectedEntity>){
+fn print_selected_entity_name(query: Query<&Name>, special_entity: Res<SelectedEntity>) {
     if let Ok(name) = query.get(special_entity.0){
         info!("{name} is selected.");
     } else {
-        warn!("Selected entity {} has been despawned, or does not have a Name component", special_entity.0);
+        warn!(
+            "Selected entity {} has been despawned, or does not have a Name component", 
+            special_entity.0
+        );
     }
 }
 ```
 
-As the example shows, you can store the retrieved `Entity` identifiers inside of components or resources,
+As this example shows, you can store the retrieved `Entity` identifiers inside of components or resources,
 creating flexible connections between entities and lookup tables.
 Inside of Bevy itself, this pattern is combined with [hooks] to make it more robust
 and exposed to users as [relations].
@@ -143,9 +157,9 @@ allowing you to determine the identifier for entities in queries that you are it
 #[derive(Component)]
 struct Enemy;
 
-// Note: no `&` for Entity as a QueryData!
-fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Commands){
-    for enemy_entity in enemies.iter(){
+// Note: `Entity` is the correct form of QueryData: no `&`!
+fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Commands) {
+    for enemy_entity in enemies.iter() {
         commands.entity(enemy_entity).despawn();
     }
 }
@@ -164,14 +178,14 @@ To make working with these patterns more comfortable, Bevy provides two tools:
 `Query::single` and the `Single` system param.
 Let's try writing the same simple system in each of the three ways.
 
-```rust
+```rust,hide_lines=1-2
 # use bevy::prelude::*;
 #
 #[derive(Component)]
 struct Life(u32);
 
 fn kill_player_when_dead_query_iter(player_query: Query<(Entity, &Life), With<Player>>, mut commands: Commands) {
-    for (player_entity, player_life) in player_query.iter(){
+    for (player_entity, player_life) in player_query.iter() {
         if player_life.0 == 0 {
             commands.entity(player_entity).despawn();
         }
@@ -194,8 +208,8 @@ fn kill_player_when_dead_query_single(player_query: Query<(Entity, &Life), With<
 // so there's no need to handle the error case in the system
 fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Player>>, mut commands: Commands) {
     // We have to dereference out of the Single smart pointer
-    // before we can use destructuring assignment
-    let (player_entity, player_life) = *player;
+    // before we can use destructuring assignment to access the individual components
+    let (player_entity, player_life): (Entity, &Life) = *player;
 
     if player_life.0 == 0 {
         commands.entity(player_entity).despawn();
@@ -216,12 +230,14 @@ Similarly, see the [resources] chapter of this book for a discussion on the choi
 By contrast, you may have a query and need to access multiple items from it at once.
 The obvious method is to simply call [`Query::get`] multiple times on it.
 While this works for read-only access,
-it falls apart when using [`Query::get_mut`] as the borrow checker complains at you.
+it falls apart when using [`Query::get_mut`], as the borrow checker complains at you.
 
 To help with this, Bevy offers two particularly helpful methods on [`Query`]:
 
-- [`Query::get_multiple_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique. Helpful for things like collisions.
-- [`Query::iter_combinations_mut`]: iterate over all pairs, triples or so on of query items. Great for gravity simulations!
+- [`Query::get_multiple_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique.
+    - Helpful for things like collisions.
+- [`Query::iter_combinations_mut`]: iterate over all pairs, triples or so on of query items.
+    - Great for gravity simulations!
 
 ## Disabling entities
 
@@ -260,6 +276,6 @@ Bevy offers three good tools for this, each with their own niche:
   - derive macro is great for simple cases
   - combine data from multiple queries, or queries with other resources
   - custom methods can be used to encapsulate complex logic
-
+  - sometimes provided by third-party libraries for ease of use
 [`clippy`'s `type_complexity` lint]: https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
 [type aliases]: https://doc.rust-lang.org/reference/items/type-aliases.html
