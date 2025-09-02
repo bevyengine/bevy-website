@@ -21,3 +21,7 @@ ptr_cast_constness = "warn"
 
 [workspace.lints.rust]
 unsafe_op_in_unsafe_fn = "warn"
+
+# temporary fix for https://github.com/bevyengine/bevy-assets/issues/542
+[patch.crates-io]
+cratesio-dbdump-csvtab = { git = "https://github.com/bevyengine/cratesio-dbdump-csvtab" }
