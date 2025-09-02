@@ -7,13 +7,19 @@ status = 'hidden'
 +++
 
 Queries are your primary tool for interacting with the Bevy world,
-allowing you to carefully and efficiently read and write component data from matching entities.
+allowing you to efficiently read and write component data from entities.
+Queries create a filtered "view" into the metaphorical database that makes up our ECS.
+With that view, you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element,
+or fetch the matching components for a particular `Entity` value.
+
+We introduced queries briefly in our [introduction](../intro/) to Bevy: if you're brand to new Bevy or ECS, start there.
 
 ## Anatomy of a query
 
 To understand how queries work in a bit more detail, let's take a look at the anatomy of a [`Query`].
-The [`Query`] type has two generics: `D`, which must implement the [`QueryData`] trait,
+The [`Query<D, F>`] type has two [generic type parameters]: `D`, which must implement the [`QueryData`] trait,
 and `F`, which must implement the [`QueryFilter`] trait.
+
 `D` describes "which data should I access", while `F` describes "how should I restrict the returned entities".
 Only entities which match *all* of the terms in `D` *and* `F` will be included in your query.
 
@@ -24,13 +30,16 @@ along with the [`WorldQuery`] supertrait, to look up components of
 the correct type in the world and supply them to your system via [dependency injection].
 
 If we don't want to fetch any data, or perform any filtering,
-we can use `()`, Rust's ["unit type"](https://doc.rust-lang.org/core/primitive.unit.html) in place of `D` or `F`.
+we can use `()`, Rust's ["unit type"] in place of `D` or `F`.
 
 Inside the `Query` type, the `F: QueryFilter` generic defaults to `()`, allowing us to avoid explicitly writing `Query<&Life, ()>` when we don't want to filter. This simplified, filter-less form of query looks like `Query<&Life>`, which will fetch all instances of the `Life` component in the world.
 
 To access more than one component at once, or add multiple filters at the same time,
 we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple],
 wrapping them with parentheses.
+
+[generic type parameters]: (https://doc.rust-lang.org/book/ch10-01-syntax.html)
+["unit type"]: https://doc.rust-lang.org/core/primitive.unit.html
 
 ### Multiple Components
 
