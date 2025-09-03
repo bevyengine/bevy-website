@@ -122,7 +122,7 @@ while `&mut` is for mutable references, making it easy to remember the syntax on
 
 Let's take a look at how that might look in practice:
 
-```rust,hide_lines=1-2
+```rust
 #[derive(Component)]
 struct Poisoned;
 
