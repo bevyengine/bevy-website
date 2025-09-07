@@ -46,7 +46,7 @@ jobs:
 
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
-        uses: shalzz/zola-deploy-action@v0.19.2
+        uses: shalzz/zola-deploy-action@v0.21.0
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .
