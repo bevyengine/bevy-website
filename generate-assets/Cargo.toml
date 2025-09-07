@@ -15,7 +15,7 @@ rand = "0.8"
 regex = "1"
 cargo_toml = "0.22"
 url = "2.2.2"
-anyhow = "1.0.58"
+anyhow = "1.0.99"
 base64 = "0.13.0"
 cratesio-dbdump-csvtab = "0.2.2"
 ureq = { version = "2.5.0", features = ["json"] }
