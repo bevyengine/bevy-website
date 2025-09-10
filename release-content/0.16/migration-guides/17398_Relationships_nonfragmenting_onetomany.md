@@ -27,7 +27,7 @@ commands.spawn_empty().with_children(|spawner: &mut ChildSpawnerCommands<'_>| {
 });
 ```
 
-Furthermore, the new relationship system encourages working with the relationship components (`ChildOf`, `Children`) directly. For example, setting the parent of an entity is a simple as inserting a `ChildOf` component:
+Furthermore, the new relationship system encourages working with the relationship components (`ChildOf`, `Children`) directly. For example, setting the parent of an entity is as simple as inserting a `ChildOf` component:
 
 ```rust
 // 0.15
