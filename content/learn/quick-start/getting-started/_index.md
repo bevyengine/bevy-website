@@ -34,16 +34,7 @@ You can also speed up compile times by following the ["fast compiles"] section.
     cd bevy
     ```
 
-3. Switch to the correct Bevy version (as the default is the git main development branch)
-
-    ```sh
-    # use the latest Bevy release
-    git checkout latest
-    # or a specific version
-    git checkout v0.16.0
-    ```
-
-4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
+3. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
 
     ```sh
     cargo run --example breakout
