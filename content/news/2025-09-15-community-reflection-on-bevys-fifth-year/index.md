@@ -47,7 +47,7 @@ We had plenty of responses this year! Here is a central collection of **Bevy's F
 * **Chris Biscardi ([@ChristopherBiscardi](https://github.com/ChristopherBiscardi))**
   * [Bevy's 5th Birthday](https://www.christopherbiscardi.com/bevy-5th-birthday)
 
-Here is to another year of Bevy! This will be our best one yet!
+Here's to another year of Bevy! This will be our best one yet!
 
 \- [@cart](https://github.com/cart/)
 
