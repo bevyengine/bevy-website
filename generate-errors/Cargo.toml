@@ -12,6 +12,6 @@ publish = false
 workspace = true
 
 [dependencies]
-anyhow = "1.0.80"
+anyhow = "1.0.100"
 clap = { version = "4.5.2", features = ["derive"] }
 regex = "1.10.3"
