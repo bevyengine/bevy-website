@@ -485,7 +485,7 @@ These modulate the intensity of light cast upon surfaces for various artistic ef
 
 ## Hot Patching Systems in a Running App
 
-{{ heading_metadata(authors=["@mockersf"] prs=[19309]) }}
+{{ heading_metadata(authors=["@mockersf", "@janhohenheim"] prs=[19309]) }}
 
 Bevy now supports hot patching systems via [subsecond](https://crates.io/crates/subsecond) and the [`dx`](https://crates.io/crates/dioxus-cli) command line tool from the Dioxus project.
 
