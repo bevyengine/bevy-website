@@ -672,7 +672,7 @@ more siloed and less modular than we would like. Additionally, the type-level sp
 has meant that every feature implemented for 3D needs a mostly copy-pasted version for 2D, which has caused the 2D
 renderer to lag behind in terms of features.
 
-In Bevy `0.17`, we've started the process of refactoring the renderer's mid and low-level APIs to be *data driven*. More
+In Bevy `0.17`, we've started the process of refactoring the renderer's mid and low-level APIs to be _data driven_. More
 specifically, we've removed the `M: Material` bound from every rendering system in the render world. Rather than being
 described statically by a type, the renderer now understands materials in terms of plain data that can be modified at
 runtime. Consequently, it is now possible to implement a custom material that doesn't rely on the `Material` trait at
