@@ -4,10 +4,10 @@ date = 2025-09-24
 [extra]
 public_draft = 2215
 status = 'hidden'
-# image = "x.jpg"
-# show_image = true
-# image_subtitle = "x"
-# image_subtitle_link = "x"
+image = "cover.jpg"
+show_image = true
+image_subtitle = "A factory from Exofactory, an in-development factory builder made with Bevy"
+image_subtitle_link = "https://store.steampowered.com/app/3615720/Exofactory/"
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.17** release on [crates.io](https://crates.io/crates/bevy)!
