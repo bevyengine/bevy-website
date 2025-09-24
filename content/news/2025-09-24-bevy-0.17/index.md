@@ -539,7 +539,7 @@ Note that DLSS integration is expected to have some bugs in this release related
 
 Other temporal upscalers like AMD's FidelityFX™ Super Resolution (FSR), Intel's Xe Super Sampling XeSS (XeSS), and Apple's MTLFXTemporalScaler are not integrated in this release. However they all use similar APIs, and would not be a challenge to integrate in future releases.
 
-Support for other swapchain-related features like frame interpolation/extrapolation, latency reduction, or dynamic resolution scaling are not currently planned, but support for DLSS Ray Reconstruction for use in Bevy Solari _is_ planned for a future release.
+Support for other swapchain-related features like frame interpolation/extrapolation, latency reduction, or dynamic resolution scaling is not currently planned.
 
 Special thanks to @cwfitzgerald for helping with the [`wgpu`](https://github.com/gfx-rs/wgpu) backend interop APIs.
 
