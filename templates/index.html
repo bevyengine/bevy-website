@@ -1,334 +1,269 @@
 {% extends "layouts/base.html" %}
 {% block head_extensions %}
-  <meta name="description"
-        content="A refreshingly simple data-driven game engine built in Rust. Free and Open Source Forever!" />
-  <link href="https://mastodon.social/@bevy" rel="me" />
+<meta name="description"
+  content="A refreshingly simple data-driven game engine built in Rust. Free and Open Source Forever!" />
+<link href="https://mastodon.social/@bevy" rel="me" />
 {% endblock head_extensions %}
 {% block content %}
-  <div>
-    <picture class="themed-picture">
-      <img
-        class="bevy-logo-header themed-picture__light"
-        src="/assets/bevy_logo_dark-inverted.svg"
-        alt="Bevy logo"
-        width="520"
-        height="130"
-      />
-      <img
-        class="bevy-logo-header themed-picture__dark"
-        src="/assets/bevy_logo_dark.svg"
-        alt="Bevy logo"
-        width="520"
-        height="130"
-      />
-    </picture>
-    <div class="bevy-description">
-      A refreshingly simple data-driven game engine built in Rust
-      <br />
-      Free and Open Source Forever!
-      <br />
-      <a class="button button--big" href="/learn/quick-start/introduction/">Get Started</a>
+<div>
+  <picture class="themed-picture">
+    <img class="bevy-logo-header themed-picture__light" src="/assets/bevy_logo_dark-inverted.svg" alt="Bevy logo"
+      width="520" height="130" />
+    <img class="bevy-logo-header themed-picture__dark" src="/assets/bevy_logo_dark.svg" alt="Bevy logo" width="520"
+      height="130" />
+  </picture>
+  <div class="bevy-description">
+    A refreshingly simple data-driven game engine built in Rust
+    <br />
+    Free and Open Source Forever!
+    <br />
+    <a class="button button--big" href="/learn/quick-start/introduction/">Get Started</a>
+  </div>
+  <div class="feature-list">
+    <div class="feature-container">
+      <div class="feature-text">
+        <h2 class="feature-title">Data Driven</h2>
+        <div class="feature-description">
+          All engine and game logic uses Bevy ECS, a custom Entity Component System
+          <ul class="feature-sublist">
+            <li>
+              <b>Fast:</b> Massively Parallel and Cache-Friendly.
+            </li>
+            <li>
+              <b>Simple:</b> Components are Rust structs, Systems are Rust functions
+            </li>
+            <li>
+              <b>Capable:</b> Queries, Global Resources, Local Resources, Change Detection, Lock-Free
+              Parallel Scheduler
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="feature-image">
+        <img src="assets/ecs.svg" class="feature-img svg-ecs" alt="ECS code" width="444" height="226" />
+      </div>
     </div>
-    <div class="feature-list">
-      <div class="feature-container">
-        <div class="feature-text">
-          <h2 class="feature-title">Data Driven</h2>
-          <div class="feature-description">
-            All engine and game logic uses Bevy ECS, a custom Entity Component System
-            <ul class="feature-sublist">
-              <li>
-                <b>Fast:</b> Massively Parallel and Cache-Friendly. The fastest ECS according to some
-                benchmarks
-              </li>
-              <li>
-                <b>Simple:</b> Components are Rust structs, Systems are Rust functions
-              </li>
-              <li>
-                <b>Capable:</b> Queries, Global Resources, Local Resources, Change Detection, Lock-Free
-                Parallel Scheduler
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="feature-image">
-          <img src="assets/ecs.svg"
-                class="feature-img svg-ecs"
-                alt="ECS code"
-                width="444"
-                height="226" />
-        </div>
+    <div class="feature-container feature-container-reverse">
+      <div class="feature-image">
+        <img src="assets/sprite.png" class="feature-img" width="250" height="250" alt="Pixel art sprite of a person" />
       </div>
-      <div class="feature-container feature-container-reverse">
-        <div class="feature-image">
-          <img src="assets/sprite.png"
-                class="feature-img"
-                width="250"
-                height="250"
-                alt="Pixel art sprite of a person" />
-        </div>
-        <div class="feature-text">
-          <h2 class="feature-title">2D Renderer</h2>
-          <div class="feature-description">
-            Render real-time 2D graphics for games and apps
-            <ul class="feature-sublist">
-              <li>
-                <b>Features:</b> sprite sheets, dynamic texture atlases, cameras, textures, and materials
-              </li>
-              <li>
-                <b>Extensible:</b> custom shaders, materials, and render pipelines
-              </li>
-              <li>
-                <b>Common Core:</b> builds on top of Bevy's Render Graph
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="feature-container">
-        <div class="feature-text">
-          <h2 class="feature-title">3D Renderer</h2>
-          <div class="feature-description">
-            A modern and flexible 3D renderer
-            <ul class="feature-sublist">
-              <li>
-                <b>Features:</b> lights, shadows, cameras, meshes, textures, materials, gltf loading
-              </li>
-              <li>
-                <b>Extensible:</b> custom shaders, materials, and render pipelines
-              </li>
-              <li>
-                <b>Common Core:</b> built on top of Bevy's Render Graph
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="feature-image">
-          <img src="assets/boat.png"
-                class="feature-img svg-boat"
-                alt="3D boat model"
-                width="630"
-                height="289" />
-        </div>
-      </div>
-      <div class="feature-container feature-container-reverse">
-        <div class="feature-image">
-          <img src="assets/render_graph.svg"
-                class="feature-img"
-                alt="Render graph"
-                width="358"
-                height="281" />
-        </div>
-        <div class="feature-text">
-          <h2 class="feature-title">Render Graph</h2>
-          <div class="feature-description">
-            Compose custom render pipelines using a graph structure
-            <ul class="feature-sublist">
-              <li>
-                <b>Parallel:</b> Render Graphs are automatically rendered in parallel
-              </li>
-              <li>
-                <b>Modular:</b> Build composable and reusable render logic using Render Graph nodes
-              </li>
-              <li>
-                <b>Backend Agnostic:</b> Not tied to a specific graphics API
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="feature-container">
-        <div class="feature-text">
-          <h2 class="feature-title">Animation</h2>
-          <div class="feature-description">
-            <p>A capable animation system</p>
-            <ul class="feature-sublist">
-              <li>Skeletal rig animation driven by an ECS-based joint API</li>
-              <li>Play multiple animations at the same time by smoothly blending between them</li>
-              <li>Use blend shapes / morph targets to animate vertices directly</li>
-              <li>Import animations from GLTF files</li>
-            </ul>
-          </div>
-        </div>
-        <div class="feature-image">
-          <img src="assets/fox.webp"
-                class="feature-img"
-                alt="An animated poly style model of a fox running"
-                width="384"
-                height="216" />
-        </div>
-      </div>
-      <div class="feature-container feature-container-reverse">
-        <div class="feature-image">
-          <img src="assets/platform-icons.svg"
-                class="feature-img"
-                alt="Microsoft, Apple, and Linux logos"
-                width="1354"
-                height="512" />
-        </div>
-        <div class="feature-text">
-          <h2 class="feature-title">Cross Platform</h2>
-          <div class="feature-description">
-            Support for all major platforms:
-            <ul class="feature-sublist">
-              <li>Windows, MacOS, Linux, Web, iOS, Android</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="feature-container">
-        <div class="feature-text">
-          <h2 class="feature-title">Bevy UI</h2>
-          <div class="feature-description">
-            A custom ECS-driven UI framework built specifically for Bevy
-            <ul class="feature-sublist">
-              <li>Built directly on top of Bevy's ECS, Renderer, and Scene plugins</li>
-              <li>Compose UIs dynamically in code or declaratively using the Bevy Scene format</li>
-              <li>Use a familiar "flex box" model to layout your UIs</li>
-            </ul>
-          </div>
-        </div>
-        <div class="feature-image">
-          <img src="assets/bevy_ui.svg"
-                class="feature-img"
-                alt="UI dialog window diagram"
-                width="358"
-                height="281" />
-        </div>
-      </div>
-      <div class="feature-container feature-container-reverse">
-        <div class="feature-image">
-          <img src="assets/scene.svg"
-                class="feature-img"
-                alt="2D scene of a square upon grass under the sun"
-                width="353"
-                height="235" />
-        </div>
-        <div class="feature-text">
-          <h2 class="feature-title">Scenes</h2>
-          <div class="feature-description">
-            Create, save, and load ECS worlds using Bevy's Scene system
-            <ul class="feature-sublist">
-              <li>
-                <b>Loading:</b> Loading scenes preserves entity IDs (useful for save games)
-              </li>
-              <li>
-                <b>Instancing:</b> Instancing creates linked duplicates of scenes with new entity IDs
-              </li>
-              <li>
-                <b>Hot Reloading:</b> Changes to scene files are automatically applied to running apps
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="feature-container">
-        <div class="feature-text">
-          <h2 class="feature-title">Sound</h2>
-          <div class="feature-description">
-            Load audio files and play them on demand
-            <ul class="feature-sublist">
-              <li>Load audio files as Assets</li>
-              <li>Play audio Assets using Audio entities</li>
-            </ul>
-          </div>
-        </div>
-        <div class="feature-image">
-          <img src="assets/sound.svg"
-                class="feature-img"
-                alt="Music notes"
-                width="235"
-                height="176" />
-        </div>
-      </div>
-      <div class="feature-container feature-container-reverse">
-        <div class="feature-image">
-          <img src="assets/hot_reloading.svg"
-                class="feature-img"
-                alt="Hot reloading diagram"
-                width="266"
-                height="154" />
-        </div>
-        <div class="feature-text">
-          <h2 class="feature-title">Hot Reloading</h2>
-          <div class="feature-description">
-            Get instant feedback on your changes without app restarts or recompiles
-            <ul class="feature-sublist">
-              <li>Asset changes are immediately reflected in running Bevy apps</li>
-              <li>You can currently hot-reload scenes, textures, and meshes</li>
-              <li>Any asset type can be integrated</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="feature-container">
-        <div class="feature-text">
-          <h2 class="feature-title">Productive Compile Times</h2>
-          <div class="feature-description">
-            Game development is an iterative process. You can't afford to wait for compiles
-            <ul class="feature-sublist">
-              <li>With Bevy you can expect 0.8-3.0 seconds with the "fast compiles" configuration</li>
-              <li>
-                Compare that to other popular Rust game engines, which can take over 30 seconds to compile a
-                single
-                newline insertion!
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="feature-image">
-          <img src="assets/progressbar.svg"
-                class="feature-img"
-                alt="Compile time progress bar"
-                width="358"
-                height="281" />
-        </div>
-      </div>
-      <div class="feature-container feature-container-reverse">
-        <div class="feature-image">
-          <img src="assets/opensource.svg"
-                class="feature-img"
-                alt="The open source icon"
-                width="583"
-                height="564" />
-        </div>
-        <div class="feature-text">
-          <h2 class="feature-title">Free and Open Source</h2>
-          <div class="feature-description">
-            An engine made by and for the developer community
-            <ul class="feature-sublist">
-              <li>100% free. Forever and always</li>
-              <li>Open Source under the permissive MIT or Apache 2.0 licenses</li>
-              <li>No contracts</li>
-              <li>No license fees</li>
-              <li>No sales cuts</li>
-            </ul>
-          </div>
+      <div class="feature-text">
+        <h2 class="feature-title">2D Renderer</h2>
+        <div class="feature-description">
+          Render real-time 2D graphics for games and apps
+          <ul class="feature-sublist">
+            <li>
+              <b>Features:</b> sprite sheets, dynamic texture atlases, cameras, textures, and materials
+            </li>
+            <li>
+              <b>Extensible:</b> custom shaders, materials, and render pipelines
+            </li>
+            <li>
+              <b>Common Core:</b> builds on top of Bevy's Render Graph
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="media-content features-whats-next">
-        Ready to start building Bevy apps? Get started fast with <a href="learn/quick-start/introduction/">The Quick Start
-          Guide!</a>
+    <div class="feature-container">
+      <div class="feature-text">
+        <h2 class="feature-title">3D Renderer</h2>
+        <div class="feature-description">
+          A modern and flexible 3D renderer
+          <ul class="feature-sublist">
+            <li>
+              <b>Features:</b> lights, shadows, cameras, meshes, textures, materials, gltf loading
+            </li>
+            <li>
+              <b>Extensible:</b> custom shaders, materials, and render pipelines
+            </li>
+            <li>
+              <b>Common Core:</b> built on top of Bevy's Render Graph
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="feature-image">
+        <img src="assets/boat.png" class="feature-img svg-boat" alt="3D boat model" width="630" height="289" />
+      </div>
     </div>
-    <picture class="themed-picture">
-      <img
-        class="bevy-logo-header themed-picture__light"
-        src="/assets/bevy_logo_dark-inverted.svg"
-        alt="Bevy logo"
-        width="520"
-        height="130"
-      />
-      <img
-        class="bevy-logo-header themed-picture__dark"
-        src="/assets/bevy_logo_dark.svg"
-        alt="Bevy logo"
-        width="520"
-        height="130"
-      />
-    </picture>
+    <div class="feature-container feature-container-reverse">
+      <div class="feature-image">
+        <img src="assets/render_graph.svg" class="feature-img" alt="Render graph" width="358" height="281" />
+      </div>
+      <div class="feature-text">
+        <h2 class="feature-title">Render Graph</h2>
+        <div class="feature-description">
+          Compose custom render pipelines using a graph structure
+          <ul class="feature-sublist">
+            <li>
+              <b>Parallel:</b> Render Graphs are automatically rendered in parallel
+            </li>
+            <li>
+              <b>Modular:</b> Build composable and reusable render logic using Render Graph nodes
+            </li>
+            <li>
+              <b>Backend Agnostic:</b> Not tied to a specific graphics API
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="feature-container">
+      <div class="feature-text">
+        <h2 class="feature-title">Animation</h2>
+        <div class="feature-description">
+          <p>A capable animation system</p>
+          <ul class="feature-sublist">
+            <li>Skeletal rig animation driven by an ECS-based joint API</li>
+            <li>Play multiple animations at the same time by smoothly blending between them</li>
+            <li>Use blend shapes / morph targets to animate vertices directly</li>
+            <li>Import animations from GLTF files</li>
+          </ul>
+        </div>
+      </div>
+      <div class="feature-image">
+        <img src="assets/fox.webp" class="feature-img" alt="An animated poly style model of a fox running" width="384"
+          height="216" />
+      </div>
+    </div>
+    <div class="feature-container feature-container-reverse">
+      <div class="feature-image">
+        <img src="assets/platform-icons.svg" class="feature-img" alt="Microsoft, Apple, and Linux logos" width="1354"
+          height="512" />
+      </div>
+      <div class="feature-text">
+        <h2 class="feature-title">Cross Platform</h2>
+        <div class="feature-description">
+          Support for all major platforms:
+          <ul class="feature-sublist">
+            <li>Windows, MacOS, Linux, Web, iOS, Android</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="feature-container">
+      <div class="feature-text">
+        <h2 class="feature-title">Bevy UI</h2>
+        <div class="feature-description">
+          A custom ECS-driven UI framework built specifically for Bevy
+          <ul class="feature-sublist">
+            <li>Built directly on top of Bevy's ECS, Renderer, and Scene plugins</li>
+            <li>Compose UIs dynamically in code or declaratively using the Bevy Scene format</li>
+            <li>Use a familiar "flex box" model to layout your UIs</li>
+          </ul>
+        </div>
+      </div>
+      <div class="feature-image">
+        <img src="assets/bevy_ui.svg" class="feature-img" alt="UI dialog window diagram" width="358" height="281" />
+      </div>
+    </div>
+    <div class="feature-container feature-container-reverse">
+      <div class="feature-image">
+        <img src="assets/scene.svg" class="feature-img" alt="2D scene of a square upon grass under the sun" width="353"
+          height="235" />
+      </div>
+      <div class="feature-text">
+        <h2 class="feature-title">Scenes</h2>
+        <div class="feature-description">
+          Create, save, and load ECS worlds using Bevy's Scene system
+          <ul class="feature-sublist">
+            <li>
+              <b>Loading:</b> Loading scenes preserves entity IDs (useful for save games)
+            </li>
+            <li>
+              <b>Instancing:</b> Instancing creates linked duplicates of scenes with new entity IDs
+            </li>
+            <li>
+              <b>Hot Reloading:</b> Changes to scene files are automatically applied to running apps
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="feature-container">
+      <div class="feature-text">
+        <h2 class="feature-title">Sound</h2>
+        <div class="feature-description">
+          Load audio files and play them on demand
+          <ul class="feature-sublist">
+            <li>Load audio files as Assets</li>
+            <li>Play audio Assets using Audio entities</li>
+          </ul>
+        </div>
+      </div>
+      <div class="feature-image">
+        <img src="assets/sound.svg" class="feature-img" alt="Music notes" width="235" height="176" />
+      </div>
+    </div>
+    <div class="feature-container feature-container-reverse">
+      <div class="feature-image">
+        <img src="assets/hot_reloading.svg" class="feature-img" alt="Hot reloading diagram" width="266" height="154" />
+      </div>
+      <div class="feature-text">
+        <h2 class="feature-title">Hot Reloading</h2>
+        <div class="feature-description">
+          Get instant feedback on your changes without app restarts or recompiles
+          <ul class="feature-sublist">
+            <li>Asset changes are immediately reflected in running Bevy apps</li>
+            <li>You can currently hot-reload scenes, textures, and meshes</li>
+            <li>Any asset type can be integrated</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="feature-container">
+      <div class="feature-text">
+        <h2 class="feature-title">Productive Compile Times</h2>
+        <div class="feature-description">
+          Game development is an iterative process. You can't afford to wait for compiles
+          <ul class="feature-sublist">
+            <li>With Bevy you can expect 0.8-3.0 seconds with the "fast compiles" configuration</li>
+            <li>
+              Compare that to other popular Rust game engines, which can take over 30 seconds to compile a
+              single
+              newline insertion!
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="feature-image">
+        <img src="assets/progressbar.svg" class="feature-img" alt="Compile time progress bar" width="358"
+          height="281" />
+      </div>
+    </div>
+    <div class="feature-container feature-container-reverse">
+      <div class="feature-image">
+        <img src="assets/opensource.svg" class="feature-img" alt="The open source icon" width="583" height="564" />
+      </div>
+      <div class="feature-text">
+        <h2 class="feature-title">Free and Open Source</h2>
+        <div class="feature-description">
+          An engine made by and for the developer community
+          <ul class="feature-sublist">
+            <li>100% free. Forever and always</li>
+            <li>Open Source under the permissive MIT or Apache 2.0 licenses</li>
+            <li>No contracts</li>
+            <li>No license fees</li>
+            <li>No sales cuts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="media-content features-whats-next">
+    Ready to start building Bevy apps? Get started fast with <a href="learn/quick-start/introduction/">The Quick Start
+      Guide!</a>
+  </div>
+  <picture class="themed-picture">
+    <img class="bevy-logo-header themed-picture__light" src="/assets/bevy_logo_dark-inverted.svg" alt="Bevy logo"
+      width="520" height="130" />
+    <img class="bevy-logo-header themed-picture__dark" src="/assets/bevy_logo_dark.svg" alt="Bevy logo" width="520"
+      height="130" />
+  </picture>
 
-    <div class="donate-page">
-        {% include "sponsors.html" %}
-    </div>
+  <div class="donate-page">
+    {% include "sponsors.html" %}
+  </div>
 </div>
 {% endblock content %}
