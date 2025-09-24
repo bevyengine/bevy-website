@@ -798,7 +798,7 @@ Comparing the sample scene shown above with 130k dragon instances to one with ov
 
 This also gets rid of the previous cluster limit that limited the world to 2^24 clusters (about 4 billion triangles).
 There are now _no_ hardcoded limits to scene size. In practice you will only be limited by asset VRAM usage (since streaming is not yet implemented),
-and total instance count due the current code requiring all instances to be re-uploaded to the GPU every frame.
+and total instance count (again, due to temporary limitations we're working on improving).
 
 The screenshot above has 130,000 dragons in the scene, each with about 870,000 triangles, leading to over _115 billion_ total triangles in the scene.
 
