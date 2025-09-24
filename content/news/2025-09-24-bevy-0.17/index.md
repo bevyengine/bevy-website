@@ -1014,35 +1014,6 @@ let handle = asset_server.load_with_settings(
 
 Setting the above to `None` will fall back to the global setting taken from `GltfPlugin::use_model_forward_direction`.
 
-## Consistent `*Systems` naming convention for system sets
-
-{{ heading_metadata(authors=["@Jondolf"] prs=[18900]) }}
-
-Names of `SystemSet` types within Bevy and its ecosystem have historically
-been very inconsistent. Examples of system set names include `AccessibilitySystem`,
-`PickSet`, `StateTransitionSteps`, and `Animation`.
-
-Naming conventions being so wildly inconsistent can make it harder for users to pick names
-for their own types, to search for system sets on docs.rs, or to even discern which types
-_are_ system sets.
-
-To reign in the inconsistency and help unify the ecosystem, **Bevy 0.17** has renamed most of
-its own system sets to follow a consistent `*Systems` naming convention.
-As you can see by this very incomplete list of renames, our naming was all over the place:
-
-- `GizmoRenderSystem` → `GizmoRenderSystems`
-- `PickSet` → `PickingSystems`
-- `Animation` → `AnimationSystems`
-- `Update2dText` → `Text2dUpdateSystems`
-
-The `Systems` suffix was chosen over the other popular suffix `Set`,
-because `Systems` more clearly communicates that it is specifically
-a collection of systems, and it has a lower risk of naming conflicts
-with other set types.
-
-For consistency, we recommend that ecosystem crates and users to follow suit and also adopt
-the `*Systems` naming convention for their system sets where applicable.
-
 ## `RenderStartup` Schedule
 
 {{ heading_metadata(authors=["@IceSentry", "@andriyDev"] prs=[19841, 19885, 19886, 19897, 19898, 19901, 19912, 19926, 19999, 20002, 20024, 20124, 20147, 20184, 20194, 20195, 20208, 20209, 20210]) }}
@@ -1162,6 +1133,35 @@ With these changes, it is now possible for 3rd party custom renderers to act as 
 This is also incredibly important for reducing compile time, especially for 3rd party crates: crate authors can now depend more granularly on the specific crates they need. If they don't need access to renderer internals, they don't need to wait for them to start compiling! This increases the potential for parallel compilation.
 
 Additionally, "shader library only" crates with minimal dependencies are now possible thanks to the new separate `bevy_shader` crate.
+
+## Consistent `*Systems` naming convention for system sets
+
+{{ heading_metadata(authors=["@Jondolf"] prs=[18900]) }}
+
+Names of `SystemSet` types within Bevy and its ecosystem have historically
+been very inconsistent. Examples of system set names include `AccessibilitySystem`,
+`PickSet`, `StateTransitionSteps`, and `Animation`.
+
+Naming conventions being so wildly inconsistent can make it harder for users to pick names
+for their own types, to search for system sets on docs.rs, or to even discern which types
+_are_ system sets.
+
+To reign in the inconsistency and help unify the ecosystem, **Bevy 0.17** has renamed most of
+its own system sets to follow a consistent `*Systems` naming convention.
+As you can see by this very incomplete list of renames, our naming was all over the place:
+
+- `GizmoRenderSystem` → `GizmoRenderSystems`
+- `PickSet` → `PickingSystems`
+- `Animation` → `AnimationSystems`
+- `Update2dText` → `Text2dUpdateSystems`
+
+The `Systems` suffix was chosen over the other popular suffix `Set`,
+because `Systems` more clearly communicates that it is specifically
+a collection of systems, and it has a lower risk of naming conflicts
+with other set types.
+
+For consistency, we recommend that ecosystem crates and users to follow suit and also adopt
+the `*Systems` naming convention for their system sets where applicable.
 
 ## What's Next?
 
