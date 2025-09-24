@@ -755,10 +755,9 @@ can be found in this [`example`]. Types can also still be manually registered us
 (TODO: Embed example screenshot here)
 
 Bevy's virtual geometry has been greatly optimized with BVH-based culling, making the cost of rendering nearly independent of scene geometry.
-Comparing the sample scene shown above with 130k dragon instances to one with over 1 million instances, total GPU rendering time only increases by 30%.
 
-This also gets rid of the previous cluster limit that limited the world to 2^24 clusters (about 4 billion triangles).
-There are now _no_ hardcoded limits to scene size. In practice you will only be limited by asset VRAM usage (since streaming is not yet implemented),
+These changes have also lifted the previous cluster limit that limited the world to 2^24 clusters (about 4 billion triangles).
+There are now _no_ hardcoded limits to scene size. In practice you will only be limited by asset VRAM usage (as asset streaming is not yet implemented),
 and total instance count (again, due to temporary limitations we're working on improving).
 
 The screenshot above has 130,000 dragons in the scene, each with about 870,000 triangles, leading to over _115 billion_ total triangles in the scene.
