@@ -549,7 +549,7 @@ Special thanks to @cwfitzgerald for helping with the [`wgpu`](https://github.com
 
 (Insert screenshot of space shot including volumetric shadows)
 
-Bevy's atmosphere now supports a raymarched rendering path that unlocks accurate views from above the atmosphere. This means **Bevy 0.17** now has two atmosphere rendering modes to choose from:
+Bevy's procedural atmosphere now supports a raymarched rendering path that unlocks accurate views from above the atmosphere. This means **Bevy 0.17** now has two atmosphere rendering modes to choose from:
 
 - [`AtmosphereMode::Raymarched`]
   - Ideal for cinematic shots, planets seen from space, and "flight simulator" type scenes
