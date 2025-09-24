@@ -40,7 +40,7 @@ You can also speed up compile times by following the ["fast compiles"] section.
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.16.0
+    git checkout v0.16.1
     ```
 
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
