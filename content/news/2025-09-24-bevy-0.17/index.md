@@ -60,13 +60,16 @@ Additionally, if you have a NVIDIA GPU, you can enable DLSS Ray Reconstruction w
 
 ### How it works
 
-TODO: Showcase the different aspects/steps of Solari (direct initial+temporal+spatial, indirect initial+temporal+spatial, world cache, DLSS RR)
+Our current implementation uses rayraced dissue direct and indirect lighting (also known as global illuminance), which are sampled via ReSTIR variants and uses a world-space irradiance cache to improve quality.
+Like all raytracing techniques, this produces results that are too noisy for realtime applications.
+To resolve this, you need to add a denoising step, which is currently handled via DLSS Ray Reconstruction, although we'd be happy to add support for alternate methods as well in the future.
+If you're interested in the crunchy technical details of how this all works: please read [@JMS55's blog post](https://jms55.github.io/posts/2025-09-20-solari-bevy-0-17) for a frame breakdown!
 
 Look forward to more work on Bevy Solari in future releases!
 
 (TODO: Embed bevy_solari logo here, or somewhere else that looks good)
 
-Special thanks to @Vecvec for adding raytracing support to wgpu.
+Special thanks to `@Vecvec` for adding raytracing support to wgpu.
 
 ## Event / Observer Overhaul
 
