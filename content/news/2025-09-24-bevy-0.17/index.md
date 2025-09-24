@@ -573,45 +573,6 @@ commands.spawn((
 ));
 ```
 
-## UI Gradients
-
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[18139, 19330, 19992]) }}
-
-Bevy now supports UI nodes that display a gradient that transitions smoothly between two or more colors.
-
-You can now add the `BackgroundGradient` component to a `Node` to set its background to a gradient. If you also set a `BackgroundColor`, the background color is drawn first and the gradient(s) are drawn on top. You can also use the `BorderGradient` component to make the border use a gradient.
-
-Both of these components wrap the `Gradient` enum type, which has three variants:`Linear`, `Conic` and `Radial`.
-
-Each gradient type consists of the geometric properties for that gradient, a list of color stops, and the color space used for interpolation (Bevy defaults to using `InterpolationColorSpace::Oklab`).
-
-```rust
-commands.spawn((
-    Node { width: px(20), height: px(20) },
-    BackgroundGradient::from(LinearGradient {
-        angle: 4.,
-        stops: vec![
-            ColorStop::new(Color::WHITE, percent(15)),
-            ColorStop::new(Color::BLACK, percent(85)),
-        ],
-        ..default()
-    })
-))
-```
-
-## Per-side UI border colors
-
-{{ heading_metadata(authors=["@robtfm"] prs=[18682]) }}
-
-TODO: add image from 18682
-
-`bevy_ui` now supports distinct border colors on each side of your UI nodes,
-controlled with the [`BorderColor`] component.
-This feature was borrowed from CSS, where it is commonly used to fake buttons with depth,
-but we're looking forward to seeing your creative designs.
-
-[`BorderColor`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/prelude/struct.BorderColor.html
-
 ## `ViewportNode`
 
 {{ heading_metadata(authors=["@chompaa", "@ickshonpe"] prs=[17253]) }}
@@ -840,6 +801,45 @@ TODO: add showcase image(s)
 Text in Bevy now supports background colors. Insert the `TextBackgroundColor` component on a UI `Text` or `TextSpan` entity to set a background color for its text section. `TextBackgroundColor` provides the ability to set the color of _each_ "text span", whereas the standard `BackgroundColor` applies to _all_ spans in a `Text` node, and also includes space taken up by padding.
 
 `TextBackgroundColor` also works with `Text2d`: perfect for worldspace tooltips!
+
+## UI Gradients
+
+{{ heading_metadata(authors=["@Ickshonpe"] prs=[18139, 19330, 19992]) }}
+
+Bevy now supports UI nodes that display a gradient that transitions smoothly between two or more colors.
+
+You can now add the `BackgroundGradient` component to a `Node` to set its background to a gradient. If you also set a `BackgroundColor`, the background color is drawn first and the gradient(s) are drawn on top. You can also use the `BorderGradient` component to make the border use a gradient.
+
+Both of these components wrap the `Gradient` enum type, which has three variants:`Linear`, `Conic` and `Radial`.
+
+Each gradient type consists of the geometric properties for that gradient, a list of color stops, and the color space used for interpolation (Bevy defaults to using `InterpolationColorSpace::Oklab`).
+
+```rust
+commands.spawn((
+    Node { width: px(20), height: px(20) },
+    BackgroundGradient::from(LinearGradient {
+        angle: 4.,
+        stops: vec![
+            ColorStop::new(Color::WHITE, percent(15)),
+            ColorStop::new(Color::BLACK, percent(85)),
+        ],
+        ..default()
+    })
+))
+```
+
+## Per-side UI border colors
+
+{{ heading_metadata(authors=["@robtfm"] prs=[18682]) }}
+
+TODO: add image from 18682
+
+`bevy_ui` now supports distinct border colors on each side of your UI nodes,
+controlled with the [`BorderColor`] component.
+This feature was borrowed from CSS, where it is commonly used to fake buttons with depth,
+but we're looking forward to seeing your creative designs.
+
+[`BorderColor`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/prelude/struct.BorderColor.html
 
 ## Specialized UI Transform
 
