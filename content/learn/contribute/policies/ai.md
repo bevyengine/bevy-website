@@ -53,9 +53,10 @@ Unanswered open questions in the space include, but are not limited to:
   but not limited to: the model's training dataset, the dataset used for fine
   tuning the model, any data fetched during retrieval augmented generation
   (RAG), or extra context provided to the model in the prompt?
-- If AI generated works are considered derivative works, does the existing
-  language of FOSS licenses currently in use by the Bevy Organziation have the
-  language and legal framework to provide the same guarantees and protections?
+- If AI generated works are considered derivative works, do the FOSS licenses
+  currently in use by the Bevy Organziation have the language and legal
+  framework to provide the same guarantees and protections to both the licensor
+  and licensee?
 - In the case that AI generated works are protected under copyright, who owns
   the copyright to the generated work? Is it the user that requested the
   generation? The owner of the LLM model or service? Who holds the rights to
@@ -69,10 +70,10 @@ Unanswered open questions in the space include, but are not limited to:
 - Does the local law in various countries and jurisdictions around the world
   provide consistent answers to all of the questions above?
 
-Until there is well established answers to these questions, the use and/or
+Until there are well established answers to these questions, the use and/or
 distribution of AI-generated code and assets may constitute copyright
 infringement or may be subject to licensing terms incompatible with the FOSS
-licenses used by the Bevy Organization. 
+licenses used by the Bevy Organization.
 
 Erring on the side of caution in light of a openly debated legal topic, all[^1]
 forms of AI-generated contributions cannot be merged into repositories
