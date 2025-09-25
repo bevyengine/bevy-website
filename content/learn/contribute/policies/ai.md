@@ -1,4 +1,9 @@
-+++ title = "AI Policy" insert_anchor_links = "right" [extra] weight = 1 +++
++++
+title = "AI Policy"
+insert_anchor_links = "right"
+[extra]
+weight = 1
++++
 
 In recent times, there have been a growing number of contributions that are
 fully or partially produced by generative AI (e.g. large language models and
