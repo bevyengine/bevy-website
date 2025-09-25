@@ -54,7 +54,7 @@ jobs:
         run: cargo fmt --check --all
 
       - name: Check clippy
-        run: cargo clippy --workspace -- -Dwarnings
+        run: cargo clippy --all-targets -- -Dwarnings
         
   accessibility-linting:
     needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
