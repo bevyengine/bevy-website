@@ -60,13 +60,16 @@ Additionally, if you have a NVIDIA GPU, you can enable DLSS Ray Reconstruction w
 
 ### How it works
 
-TODO: Showcase the different aspects/steps of Solari (direct initial+temporal+spatial, indirect initial+temporal+spatial, world cache, DLSS RR)
+Our current implementation uses raytraced direct and indirect lighting (also known as global illuminance), which are sampled via ReSTIR DI/GI and uses a world-space irradiance cache to improve GI quality.
+Like all raytracing techniques, this produces results that are too noisy for realtime applications.
+To resolve this, you need to add a denoising step, which is currently handled via DLSS Ray Reconstruction, although we'd be happy to add support for alternate methods as well in the future.
+If you're interested in the crunchy technical details of how this all works: please read [@JMS55's blog post](https://jms55.github.io/posts/2025-09-20-solari-bevy-0-17) for a frame breakdown!
 
 Look forward to more work on Bevy Solari in future releases!
 
 (TODO: Embed bevy_solari logo here, or somewhere else that looks good)
 
-Special thanks to @Vecvec for adding raytracing support to wgpu.
+Special thanks to `@Vecvec` for adding raytracing support to wgpu.
 
 ## Event / Observer Overhaul
 
@@ -520,7 +523,7 @@ Compared to Bevy's built-in TAA, DLSS:
 - Produces higher quality and more stable images
 - Supports upscaling in addition to anti-aliasing, leading to much cheaper render times, particularly when used with GPU-heavy features like Bevy Solari
 - Requires a NVIDIA RTX GPU
-- Currently requires running via the Vulkan backend on Windows/Linux (no macOS, web, or mobile support)
+- Currently requires running via the Vulkan backend on Windows/Linux (no DirectX, macOS, web, or mobile support)
 
 To use DLSS in your app:
 
@@ -536,44 +539,9 @@ Note that DLSS integration is expected to have some bugs in this release related
 
 Other temporal upscalers like AMD's FidelityFX™ Super Resolution (FSR), Intel's Xe Super Sampling XeSS (XeSS), and Apple's MTLFXTemporalScaler are not integrated in this release. However they all use similar APIs, and would not be a challenge to integrate in future releases.
 
-Support for other swapchain-related features like frame interpolation/extrapolation, latency reduction, or dynamic resolution scaling are not currently planned, but support for DLSS Ray Reconstruction for use in Bevy Solari _is_ planned for a future release.
+Support for other swapchain-related features like frame interpolation/extrapolation, latency reduction, or dynamic resolution scaling is not currently planned.
 
 Special thanks to @cwfitzgerald for helping with the [`wgpu`](https://github.com/gfx-rs/wgpu) backend interop APIs.
-
-## Raymarched atmosphere and space views
-
-{{ heading_metadata(authors=["@mate-h"] prs=[20766]) }}
-
-(Insert screenshot of space shot including volumetric shadows)
-
-Bevy's atmosphere now supports a raymarched rendering path that unlocks accurate views from above the atmosphere. This means **Bevy 0.17** now has two atmosphere rendering modes to choose from:
-
-- [`AtmosphereMode::Raymarched`]
-  - Ideal for cinematic shots, planets seen from space, and "flight simulator" type scenes
-  - More accurate lighting, but slower
-  - Sharper shadows through the atmosphere
-- [`AtmosphereMode::LookupTexture`]
-  - This is the default
-  - Great for ground level and broad outdoor scenes
-  - Less accurate lighting at long distances, but faster
-  - Softer shadows through the atmosphere
-
-To use it, add an [`Atmosphere`] component to your [`Camera`] and set the rendering method on the camera’s [`AtmosphereSettings`]:
-
-```rust
-commands.spawn((
-    Camera3d::default(),
-    Atmosphere::default(),
-    AtmosphereSettings { 
-      rendering_method: AtmosphereMode::Raymarched, 
-      ..default() 
-    }
-));
-```
-
-You can also adjust the `AtmosphereSettings::sky_max_samples` to configure the maximum number of steps to take when raymarching the atmosphere. Lower numbers are faster and less accurate. Higher numbers are slower and more accurate.
-
-See the updated [`atmosphere` example](https://github.com/bevyengine/bevy/blob/release-0.17.0/examples/3d/atmosphere.rs) for a working reference.
 
 ## Tilemap Chunk Rendering
 
@@ -604,45 +572,6 @@ commands.spawn((
     TilemapChunkTileData(tile_data),
 ));
 ```
-
-## UI Gradients
-
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[18139, 19330, 19992]) }}
-
-Bevy now supports UI nodes that display a gradient that transitions smoothly between two or more colors.
-
-You can now add the `BackgroundGradient` component to a `Node` to set its background to a gradient. If you also set a `BackgroundColor`, the background color is drawn first and the gradient(s) are drawn on top. You can also use the `BorderGradient` component to make the border use a gradient.
-
-Both of these components wrap the `Gradient` enum type, which has three variants:`Linear`, `Conic` and `Radial`.
-
-Each gradient type consists of the geometric properties for that gradient, a list of color stops, and the color space used for interpolation (Bevy defaults to using `InterpolationColorSpace::Oklab`).
-
-```rust
-commands.spawn((
-    Node { width: px(20), height: px(20) },
-    BackgroundGradient::from(LinearGradient {
-        angle: 4.,
-        stops: vec![
-            ColorStop::new(Color::WHITE, percent(15)),
-            ColorStop::new(Color::BLACK, percent(85)),
-        ],
-        ..default()
-    })
-))
-```
-
-## Per-side UI border colors
-
-{{ heading_metadata(authors=["@robtfm"] prs=[18682]) }}
-
-TODO: add image from 18682
-
-`bevy_ui` now supports distinct border colors on each side of your UI nodes,
-controlled with the [`BorderColor`] component.
-This feature was borrowed from CSS, where it is commonly used to fake buttons with depth,
-but we're looking forward to seeing your creative designs.
-
-[`BorderColor`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/prelude/struct.BorderColor.html
 
 ## `ViewportNode`
 
@@ -699,6 +628,41 @@ we are hoping to explore in `0.18` and beyond, including:
 With this foundation in place, we're actively evolving the renderer to embrace the flexibility and composability
 that defines Bevy's ECS. If you'd like to help us explore the possibilities of ECS-driven rendering, please join us on
 [Discord](https://discord.gg/bevy) or [GitHub Discussions](https://github.com/bevyengine/bevy/discussions)!
+
+## Raymarched atmosphere and space views
+
+{{ heading_metadata(authors=["@mate-h"] prs=[20766]) }}
+
+(Insert screenshot of space shot including volumetric shadows)
+
+Bevy's procedural atmosphere now supports a raymarched rendering path that unlocks accurate views from above the atmosphere. This means **Bevy 0.17** now has two atmosphere rendering modes to choose from:
+
+- [`AtmosphereMode::Raymarched`]
+  - Ideal for cinematic shots, planets seen from space, and "flight simulator" type scenes
+  - More accurate lighting, but slower
+  - Sharper shadows through the atmosphere
+- [`AtmosphereMode::LookupTexture`]
+  - This is the default
+  - Great for ground level and broad outdoor scenes
+  - Less accurate lighting at long distances, but faster
+  - Softer shadows through the atmosphere
+
+To use it, add an [`Atmosphere`] component to your [`Camera`] and set the rendering method on the camera’s [`AtmosphereSettings`]:
+
+```rust
+commands.spawn((
+    Camera3d::default(),
+    Atmosphere::default(),
+    AtmosphereSettings { 
+      rendering_method: AtmosphereMode::Raymarched, 
+      ..default() 
+    }
+));
+```
+
+You can also adjust the `AtmosphereSettings::sky_max_samples` to configure the maximum number of steps to take when raymarching the atmosphere. Lower numbers are faster and less accurate. Higher numbers are slower and more accurate.
+
+See the updated [`atmosphere` example](https://github.com/bevyengine/bevy/blob/release-0.17.0/examples/3d/atmosphere.rs) for a working reference.
 
 ## Procedural Sun Disk
 
@@ -791,11 +755,10 @@ can be found in this [`example`]. Types can also still be manually registered us
 (TODO: Embed example screenshot here)
 
 Bevy's virtual geometry has been greatly optimized with BVH-based culling, making the cost of rendering nearly independent of scene geometry.
-Comparing the sample scene shown above with 130k dragon instances to one with over 1 million instances, total GPU rendering time only increases by 30%.
 
-This also gets rid of the previous cluster limit that limited the world to 2^24 clusters (about 4 billion triangles).
-There are now _no_ hardcoded limits to scene size. In practice you will only be limited by asset VRAM usage (since streaming is not yet implemented),
-and total instance count due the current code requiring all instances to be re-uploaded to the GPU every frame.
+These changes have also lifted the previous cluster limit that limited the world to 2^24 clusters (about 4 billion triangles).
+There are now _no_ hardcoded limits to scene size. In practice you will only be limited by asset VRAM usage (as asset streaming is not yet implemented),
+and total instance count (again, due to temporary limitations we're working on improving).
 
 The screenshot above has 130,000 dragons in the scene, each with about 870,000 triangles, leading to over _115 billion_ total triangles in the scene.
 
@@ -837,6 +800,45 @@ TODO: add showcase image(s)
 Text in Bevy now supports background colors. Insert the `TextBackgroundColor` component on a UI `Text` or `TextSpan` entity to set a background color for its text section. `TextBackgroundColor` provides the ability to set the color of _each_ "text span", whereas the standard `BackgroundColor` applies to _all_ spans in a `Text` node, and also includes space taken up by padding.
 
 `TextBackgroundColor` also works with `Text2d`: perfect for worldspace tooltips!
+
+## UI Gradients
+
+{{ heading_metadata(authors=["@Ickshonpe"] prs=[18139, 19330, 19992]) }}
+
+Bevy now supports UI nodes that display a gradient that transitions smoothly between two or more colors.
+
+You can now add the `BackgroundGradient` component to a `Node` to set its background to a gradient. If you also set a `BackgroundColor`, the background color is drawn first and the gradient(s) are drawn on top. You can also use the `BorderGradient` component to make the border use a gradient.
+
+Both of these components wrap the `Gradient` enum type, which has three variants:`Linear`, `Conic` and `Radial`.
+
+Each gradient type consists of the geometric properties for that gradient, a list of color stops, and the color space used for interpolation (Bevy defaults to using `InterpolationColorSpace::Oklab`).
+
+```rust
+commands.spawn((
+    Node { width: px(20), height: px(20) },
+    BackgroundGradient::from(LinearGradient {
+        angle: 4.,
+        stops: vec![
+            ColorStop::new(Color::WHITE, percent(15)),
+            ColorStop::new(Color::BLACK, percent(85)),
+        ],
+        ..default()
+    })
+))
+```
+
+## Per-side UI border colors
+
+{{ heading_metadata(authors=["@robtfm"] prs=[18682]) }}
+
+TODO: add image from 18682
+
+`bevy_ui` now supports distinct border colors on each side of your UI nodes,
+controlled with the [`BorderColor`] component.
+This feature was borrowed from CSS, where it is commonly used to fake buttons with depth,
+but we're looking forward to seeing your creative designs.
+
+[`BorderColor`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/prelude/struct.BorderColor.html
 
 ## Specialized UI Transform
 
@@ -1011,43 +1013,6 @@ let handle = asset_server.load_with_settings(
 
 Setting the above to `None` will fall back to the global setting taken from `GltfPlugin::use_model_forward_direction`.
 
-## `Text2d` window independent scale factor support
-
-{{ heading_metadata(authors=["@Icksonpe"] prs=[20656]) }}
-
-In previous versions of bevy, text rendered using `Text2d` would always use the scale factor of the primary window regardless of its render target. In 0.17, `Text2d` glyphs are rasterized to match the scale factor of the render target where the text is to be drawn.
-
-`Text2d` is still limited to generating only one text layout per `Text2d` entity. If a `Text2d` entity is simultaneously rendered to multiple targets with different scale factors then the maximum of the target scale factors is used.
-
-## Consistent `*Systems` naming convention for system sets
-
-{{ heading_metadata(authors=["@Jondolf"] prs=[18900]) }}
-
-Names of `SystemSet` types within Bevy and its ecosystem have historically
-been very inconsistent. Examples of system set names include `AccessibilitySystem`,
-`PickSet`, `StateTransitionSteps`, and `Animation`.
-
-Naming conventions being so wildly inconsistent can make it harder for users to pick names
-for their own types, to search for system sets on docs.rs, or to even discern which types
-_are_ system sets.
-
-To reign in the inconsistency and help unify the ecosystem, **Bevy 0.17** has renamed most of
-its own system sets to follow a consistent `*Systems` naming convention.
-As you can see by this very incomplete list of renames, our naming was all over the place:
-
-- `GizmoRenderSystem` → `GizmoRenderSystems`
-- `PickSet` → `PickingSystems`
-- `Animation` → `AnimationSystems`
-- `Update2dText` → `Text2dUpdateSystems`
-
-The `Systems` suffix was chosen over the other popular suffix `Set`,
-because `Systems` more clearly communicates that it is specifically
-a collection of systems, and it has a lower risk of naming conflicts
-with other set types.
-
-For consistency, we recommend that ecosystem crates and users to follow suit and also adopt
-the `*Systems` naming convention for their system sets where applicable.
-
 ## `RenderStartup` Schedule
 
 {{ heading_metadata(authors=["@IceSentry", "@andriyDev"] prs=[19841, 19885, 19886, 19897, 19898, 19901, 19912, 19926, 19999, 20002, 20024, 20124, 20147, 20184, 20194, 20195, 20208, 20209, 20210]) }}
@@ -1167,6 +1132,35 @@ With these changes, it is now possible for 3rd party custom renderers to act as 
 This is also incredibly important for reducing compile time, especially for 3rd party crates: crate authors can now depend more granularly on the specific crates they need. If they don't need access to renderer internals, they don't need to wait for them to start compiling! This increases the potential for parallel compilation.
 
 Additionally, "shader library only" crates with minimal dependencies are now possible thanks to the new separate `bevy_shader` crate.
+
+## Consistent `*Systems` naming convention for system sets
+
+{{ heading_metadata(authors=["@Jondolf"] prs=[18900]) }}
+
+Names of `SystemSet` types within Bevy and its ecosystem have historically
+been very inconsistent. Examples of system set names include `AccessibilitySystem`,
+`PickSet`, `StateTransitionSteps`, and `Animation`.
+
+Naming conventions being so wildly inconsistent can make it harder for users to pick names
+for their own types, to search for system sets on docs.rs, or to even discern which types
+_are_ system sets.
+
+To reign in the inconsistency and help unify the ecosystem, **Bevy 0.17** has renamed most of
+its own system sets to follow a consistent `*Systems` naming convention.
+As you can see by this very incomplete list of renames, our naming was all over the place:
+
+- `GizmoRenderSystem` → `GizmoRenderSystems`
+- `PickSet` → `PickingSystems`
+- `Animation` → `AnimationSystems`
+- `Update2dText` → `Text2dUpdateSystems`
+
+The `Systems` suffix was chosen over the other popular suffix `Set`,
+because `Systems` more clearly communicates that it is specifically
+a collection of systems, and it has a lower risk of naming conflicts
+with other set types.
+
+For consistency, we recommend that ecosystem crates and users follow suit and also adopt
+the `*Systems` naming convention for their system sets where applicable.
 
 ## What's Next?
 
