@@ -63,7 +63,7 @@ Unanswered open questions in the space include, but are not limited to:
   license out the generated work for use in open source projects? Is the
   copyright transferable through the same legal framework that exists for works
   that were not AI generated?
-- If there is a minimum thresholdof human contribution to a combined work
+- If there is a minimum threshold of human contribution to a combined work
   derived from AI-generated works for it to be considered copyrightable, where
   does that threshold lie, and is it consistently applicable to all types of
   contributions that Bevy Organization accepts?
