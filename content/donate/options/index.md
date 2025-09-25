@@ -28,7 +28,7 @@ Every.org has a minimum payment of $10, so we can't offer Bronze through them. T
 You have three options:
 
 1. If you donated via Every.org and opted for a public donation, your name will be included automatically. If you set the relevant form values on Stripe, the name and link will be used. If you donated at a level that includes a logo, or you would like to change any of the names / link values that have already been set, see the next two options.
-2. Reach out to <support@bevyengine.org> with the values you want and we will add them. Please provide your name and donation tier to help us find your donation info.
+2. Reach out to <support@bevy.org> with the values you want and we will add them. Please provide your name and donation tier to help us find your donation info.
 3. You can [set them yourself here](https://github.com/bevyengine/bevy-donors) by submitting a pull request. See the "Adding/Updating Donor Info" section of the readme.
 
 ## Can I make a one-time donation instead of monthly?

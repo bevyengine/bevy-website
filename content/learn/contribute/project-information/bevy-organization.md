@@ -40,7 +40,7 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to the Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from the Project Lead and all Maintainers.
 
 {% callout(type="info") %}
-Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of Maintainers.
+Check out the [Bevy People](https://bevy.org/community/people/#the-bevy-organization) page for the current list of Maintainers.
 {% end %}
 
 ## Subject Matter Expert (SME)
@@ -62,7 +62,7 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 If you are interested in a SME role and believe you meet these criteria, reach out to our Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new SME requires the support of the Project Lead and half of the Maintainers (however unanimous support is preferred).
 
 {% callout(type="info") %}
-Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-organization) page for the current list of SMEs.
+Check out the [Bevy People](https://bevy.org/community/people/#the-bevy-organization) page for the current list of SMEs.
 {% end %}
 
 ## Bevy Org Member / Triage Team
@@ -71,7 +71,7 @@ Check out the [Bevy People](https://bevyengine.org/community/people/#the-bevy-or
 
 1. Have actively engaged with Bevy development.
 2. Have demonstrated themselves to be polite and welcoming representatives of the project with an understanding of our goals and direction.
-3. Have asked to join the Bevy Org. Reach out to the Maintainers on [Discord](https://discord.gg/bevy) or email us at <support@bevyengine.org> if you are interested.
+3. Have asked to join the Bevy Org. Reach out to the Maintainers on [Discord](https://discord.gg/bevy) or email us at <support@bevy.org> if you are interested.
 
 If you've been around the community for a while, just ask! There are no formal responsibilities and this is intended to cover the community of people making Bevy quite broadly.
 

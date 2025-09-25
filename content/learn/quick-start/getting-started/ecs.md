@@ -59,7 +59,7 @@ Add this struct to your `main.rs` file:
 
 {{file_code_block(file="quick-start/getting_started_v3.rs", anchor="person_component")}}
 
-But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
+But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break up datatypes into small pieces to encourage code reuse. So let's make `Name` its own component:
 
 {{file_code_block(file="quick-start/getting_started_v3.rs", anchor="name_component")}}
 

@@ -12,7 +12,7 @@ image_subtitle_link = "https://www.jarl-game.com/"
 
 Thanks to **198** contributors, **672** pull requests, community reviewers, and our [**generous sponsors**](/community/donate), we're happy to announce the **Bevy 0.13** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 And to see what the engine has to offer hands-on, check out the entries in the [latest Bevy Jam](https://itch.io/jam/bevy-jam-4/entries), including the winner [That's a LOT of beeeeees](https://andrewb330.itch.io/thats-a-lot-of-beeeeees).
 
 To update an existing Bevy App or Plugin to **Bevy 0.13**, check out our [0.12 to 0.13 Migration Guide](/learn/migration-guides/0-12-to-0-13/).
@@ -199,7 +199,7 @@ Below, you can see a cuboid and a torus rendered using meshes and gizmos. You ca
 
 ![On the left: A torus rendered with gizmos. It consists of many small rings, all connected by 4 big rings. On the right: A torus rendered with meshes. A shape that looks like a donut.](tori.png)
 
-[Rendering Primitives]: https://bevyengine.org/examples/Math/render-primitives
+[Rendering Primitives]: https://bevy.org/examples/Math/render-primitives
 
 #### Meshing
 
@@ -264,8 +264,8 @@ Some default values for mesh shape dimensions have also been changed to be more 
 [`Meshable`]: https://docs.rs/bevy/0.13.0/bevy/prelude/trait.Meshable.html
 [`mesh` method]: https://docs.rs/bevy/0.13.0/bevy/prelude/trait.Meshable.html#tymethod.mesh
 [`Mesh`]: https://docs.rs/bevy/0.13.0/bevy/prelude/struct.Mesh.html
-[`2d_shapes`]: https://bevyengine.org/examples/2D%20Rendering/2d-shapes/
-[`3d_shapes`]: https://bevyengine.org/examples/3D%20Rendering/3d-shapes/
+[`2d_shapes`]: https://bevy.org/examples/2D%20Rendering/2d-shapes/
+[`3d_shapes`]: https://bevy.org/examples/3D%20Rendering/3d-shapes/
 
 #### Gizmos
 
@@ -863,7 +863,7 @@ There are several new APIs that allow you to opt-out.
 
 <div class="release-feature-authors">authors: @Nathan-Fenner</div>
 
-In **Bevy 0.12**, we introduced [one-shot systems](https://bevyengine.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
+In **Bevy 0.12**, we introduced [one-shot systems](https://bevy.org/news/bevy-0-12/#one-shot-systems), a handy way to call systems on demand without having to add them to a schedule.
 The initial implementation had some limitations in regard to what systems could and could not be used as one-shot systems.
 In **Bevy 0.13**, these limitations have been resolved.
 
@@ -1108,12 +1108,12 @@ fn setup(mut effects: ResMut<SoundEffects>, asset_server: Res<AssetServer>) {
 
 The [`custom_asset` example] has been updated to demonstrate these new features.
 
-[recent addition of .meta files]: https://bevyengine.org/news/bevy-0-12/#asset-meta-files
+[recent addition of .meta files]: https://bevy.org/news/bevy-0-12/#asset-meta-files
 [`AssetServer`]: https://docs.rs/bevy/0.13.0/bevy/asset/struct.AssetServer.html
 [`AssetLoader`]: https://docs.rs/bevy/0.13.0/bevy/asset/trait.AssetLoader.html
 [`load`]: https://docs.rs/bevy/0.13.0/bevy/asset/struct.AssetServer.html#method.load
 [turbofish]: https://turbo.fish/
-[`custom_asset` example]: https://bevyengine.org/examples/Assets/custom-asset/
+[`custom_asset` example]: https://bevy.org/examples/Assets/custom-asset/
 
 ## Texture Atlas Rework
 
@@ -1586,7 +1586,7 @@ A spectacular array of [third-party UI solutions] exists today, and learning fro
 [both mundane and architectural]: https://www.leafwing-studios.com/blog/ecs-gui-framework/
 [rounded]: https://github.com/bevyengine/bevy/pull/8973
 [corners]: https://github.com/bevyengine/bevy/pull/11813
-[third-party UI solutions]: https://bevyengine.org/assets/#ui
+[third-party UI solutions]: https://bevy.org/assets/#ui
 
 ### Meshlet Rendering
 

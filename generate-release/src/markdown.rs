@@ -64,7 +64,7 @@ pub fn write_markdown_section(
                 _ => {}
             }
             let event = write_markdown_event(&event, list_item_level - 1)?;
-            write!(output, "{}", event)?;
+            write!(output, "{event}")?;
         }
     }
 
@@ -84,6 +84,7 @@ pub fn write_markdown_section(
 /// This also makes sure the result has a more consistent formatting
 fn write_markdown_event(event: &Event, list_item_level: i32) -> anyhow::Result<String> {
     let mut output = String::new();
+    #[allow(clippy::match_same_arms)]
     match event {
         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => writeln!(
             output,

@@ -28,20 +28,6 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
 
-  test-code-examples:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install alsa and udev
-        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-
-      - name: Build & run doc tests
-        run: cd learning-code-examples && ./validate_examples.sh
-
   check-hide-lines:
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +35,7 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-      
+
       - name: Check hide-lines
         run: cd write-rustdoc-hide-lines && cargo run --release -- check ../content
 
@@ -105,6 +91,34 @@ jobs:
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
+  test-crates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-test-crates-${{ hashFiles('**/Cargo.toml') }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install alsa and udev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+
+      # Some tests assume the generate-errors/bevy/errors folder exists
+      - name: Checkout errors
+        run: generate-errors/download_errors.sh
+
+      - name: Run tests
+        run: cargo test
+
   typos:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -122,7 +136,7 @@ jobs:
           echo 'You can find the extension here: https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode'
 
   generate-assets:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
+    needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -158,7 +172,7 @@ jobs:
           retention-days: 1
 
   generate-errors:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
+    needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -185,7 +199,7 @@ jobs:
           retention-days: 1
 
   generate-wasm-examples:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
+    needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -212,7 +226,7 @@ jobs:
           retention-days: 1
 
   generate-community:
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos]
+    needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -240,7 +254,7 @@ jobs:
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [mega-linter, test-code-examples, lint-tools, check-hide-lines, typos, generate-assets, generate-errors, generate-wasm-examples, generate-community]
+    needs: [mega-linter, lint-tools, check-hide-lines, typos, generate-assets, generate-errors, generate-wasm-examples, generate-community, test-crates]
 
     steps:
       - uses: actions/checkout@v4

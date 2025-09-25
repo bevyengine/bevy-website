@@ -13,6 +13,11 @@
       </a>
     </div>
     <div class="example__canvas bevy-instance">
+      <noscript>
+        <aside class="example__callout media-content callout callout--plain callout--warning">
+          Examples require JavaScript to be enabled. Please enable JavaScript to run examples.
+        </aside>
+      </noscript>
       <div class="bevy-instance__progress-status" data-progress-status>
         <div class="bevy-instance__progress-file" data-progress-file></div>
         <div class="bevy-instance__progress-track">
@@ -24,11 +29,15 @@
         {% block callout %}{% endblock callout %}
       </aside>
     </div>
-    
+    {% if page.content %}
+      <div class="example__explanation media-content">
+        {{ page.content | safe }}
+      </div>
+    {% endif %}
     <div class="example__code-tabs tabs">
       {% set filename = page.extra.code_path | split(pat="/") | last %}
       <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" checked="checked">
-      <label class="tabs__label" for="tab0">{{ filename }}</label>
+      <label class="tabs__label" for="tab0"><code>{{ filename }}</code></label>
       <div class="tabs__panel" tabindex="1">
         <div class="example__code media-content">
           {% set code = load_data(path=page.extra.code_path) %}
@@ -39,7 +48,7 @@
       
       {% for shader in page.extra.shader_code_paths %}
         <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
-        <label class="tabs__label" for="tab{{ loop.index }}">{{ shader }}</label>
+        <label class="tabs__label" for="tab{{ loop.index }}"><code>{{ shader }}</code></label>
         <div class="tabs__panel" tabindex="1">
           <div class="example__code media-content">
             {% set code = load_data(path="static/assets/examples/" ~ shader) %}

@@ -28,6 +28,7 @@ pub struct Asset {
     pub crate_name: Option<String>,
     pub licenses: Option<Vec<String>>,
     pub bevy_versions: Option<Vec<String>>,
+    pub nsfw: Option<bool>,
 
     // this field is not read from the toml file
     #[serde(skip)]
@@ -342,10 +343,7 @@ fn get_metadata_from_github(
     let (mut license, mut version) = match result {
         Ok(lic_ver) => lic_ver,
         Err(err) => {
-            println!(
-                "Error getting metadata from root cargo file from github: {}",
-                err
-            );
+            println!("Error getting metadata from root cargo file from github: {err}");
             (None, None)
         }
     };
@@ -358,7 +356,7 @@ fn get_metadata_from_github(
         let cargo_files = match client.search_file(username, repository_name, "Cargo.toml") {
             Ok(cargo_files) => cargo_files,
             Err(err) => {
-                println!("Error fetching cargo files from github: {:#}", err);
+                println!("Error fetching cargo files from github: {err:#}");
                 return Ok((license, version));
             }
         };
@@ -387,10 +385,7 @@ fn get_metadata_from_github(
                     );
                 }
                 Err(err) => {
-                    println!(
-                        "Error getting metadata from other cargo file from github: {}",
-                        err
-                    );
+                    println!("Error getting metadata from other cargo file from github: {err}");
                     return Ok((license, version));
                 }
             }
@@ -586,7 +581,7 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
     };
 
     if cache_dir.exists() {
-        println!("Using crates.io data dump cache from: {:?}", cache_dir);
+        println!("Using crates.io data dump cache from: {cache_dir:?}");
     } else {
         println!("Downloading crates.io data dump");
     }
@@ -672,7 +667,7 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
         "\
             SELECT name, id \
             FROM crates \
-            WHERE homepage = ? \
+            WHERE (homepage = ? OR homepage = ?)\
                 AND repository = ?\
         ",
     )?;
@@ -681,6 +676,7 @@ fn get_bevy_crates(db: &CratesIoDb) -> Result<Vec<(String, String)>, rusqlite::E
     let bevy_crates = bevy_crates_statement
         .query_and_then(
             [
+                "https://bevy.org",
                 "https://bevyengine.org",
                 "https://github.com/bevyengine/bevy",
             ],
@@ -929,23 +925,6 @@ mod tests {
         }
 
         #[test]
-        fn from_third_party() {
-            let mut dependencies = BTreeMap::new();
-            let dev_dependencies = BTreeMap::new();
-            let workspace_dependencies = BTreeMap::new();
-
-            dependencies.insert(
-                "bevy_third_party_crate_example".to_string(),
-                Dependency::Simple("0.5".to_string()),
-            );
-
-            let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
-            let version = get_bevy_version_from_manifest(&manifest, &get_bevy_crates_names());
-            // Note that this result is expected, but potentially wrong
-            assert_eq!(version, Some("0.5".to_string()));
-        }
-
-        #[test]
         fn from_dependencies_ignore_third_party() {
             let mut dependencies = BTreeMap::new();
             let dev_dependencies = BTreeMap::new();
@@ -1022,49 +1001,6 @@ mod tests {
             let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
             let version = get_bevy_version_from_manifest(&manifest, &get_bevy_crates_names());
             assert_eq!(version, Some("0.10".to_string()));
-        }
-
-        #[test]
-        fn from_third_party_crate_with_path_dependency() {
-            let mut dependencies = BTreeMap::new();
-            let dev_dependencies = BTreeMap::new();
-            let workspace_dependencies = BTreeMap::new();
-
-            // Alphabetical order could matter in this example, "first" < "second"
-            dependencies.insert(
-                "bevy_first_third_party_crate".to_string(),
-                Dependency::Detailed(Box::new(cargo_toml::DependencyDetail {
-                    path: Some("fake/path/to/crate".to_string()),
-                    ..Default::default()
-                })),
-            );
-            dependencies.insert(
-                "bevy_second_third_party_crate".to_string(),
-                Dependency::Simple("0.10".to_string()),
-            );
-
-            let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
-            let version = get_bevy_version_from_manifest(&manifest, &get_bevy_crates_names());
-            assert_eq!(version, Some("0.10".to_string()));
-        }
-
-        #[test]
-        fn from_third_party_with_no_official_bevy_crates() {
-            let mut dependencies = BTreeMap::new();
-            let mut dev_dependencies = BTreeMap::new();
-            let mut workspace_dependencies = BTreeMap::new();
-
-            dependencies.insert(
-                "bevy_third_party_crate_example".to_string(),
-                Dependency::Simple("0.5".to_string()),
-            );
-            dev_dependencies.insert("bevy".to_string(), Dependency::Simple("0.10".to_string()));
-            workspace_dependencies
-                .insert("bevy".to_string(), Dependency::Simple("0.10".to_string()));
-
-            let manifest = get_manifest(dependencies, dev_dependencies, workspace_dependencies);
-            let version = get_bevy_version_from_manifest(&manifest, &Some(vec![]));
-            assert_eq!(version, Some("0.5".to_string()));
         }
 
         #[test]

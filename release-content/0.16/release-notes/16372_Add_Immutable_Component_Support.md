@@ -26,13 +26,13 @@ struct TotalSum(u32);
 
 // This observer will trigger when spawning or inserting a SumMe component
 fn add_when_inserting(mut trigger: Trigger<OnInsert, SumMe>, query: Query<&SumMe>, mut total_sum: ResMut<TotalSum>){
-    let sum_me = query.get(trigger.entity());
+    let sum_me = query.get(trigger.target());
     total_sum.0 += sum_me.0;
 }
 
 // This observer will trigger when despawning or removing a SumMe component
 fn subtract_when_removing(mut trigger: Trigger<OnRemove, SumMe>, query: Query<&SumMe>, mut total_sum: ResMut<TotalSum>){
-    let sum_me = query.get(trigger.entity());
+    let sum_me = query.get(trigger.target());
     total_sum.0 -= sum_me.0;
 }
 

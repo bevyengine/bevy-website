@@ -7,7 +7,7 @@ github = "alice-i-cecile"
 +++
 
 So I landed my dream job. Full-time open source building a game engine in Rust. Absolutely no meetings. What more could you ask for?
-With a very unconventional background (plant ecology, self-taught programming and years of disability), it's flatly astonishing to be [supported](https://bevyengine.org/donate/) by such an awesome community: surrounded and empowered by experts and beginners alike making incredible things together.
+With a very unconventional background (plant ecology, self-taught programming and years of disability), it's flatly astonishing to be [supported](https://bevy.org/donate/) by such an awesome community: surrounded and empowered by experts and beginners alike making incredible things together.
 
 But now what?
 [Bevy's fourth birthday](@/news/2024-08-10-bevys-fourth-birthday/index.md) has rolled around, and `@cart` has put out a call for others to reflect on the year behind us, and plan for the year ahead.
@@ -79,7 +79,7 @@ But it's not perfect, that's all balanced out by:
 - an incredibly small team of non-volunteers that serve as a backstop for all of the needful but tedious things that need to be done
 - fuzzy work-life boundaries
 - a salary that is *much* lower than what I could be making
-- existential dread caused by relying entirely on [generous donors](https://bevyengine.org/donate) to keep both myself and the project I love afloat
+- existential dread caused by relying entirely on [generous donors](https://bevy.org/donate) to keep both myself and the project I love afloat
 
 Honestly, it's a lot like founding a startup.
 It's just instead of having a small-but-nonzero chance of becoming wealthier than anyone ever needs to be,

@@ -14,7 +14,7 @@ show_image = true
 
 Today is Bevy's first birthday! And what a year it has been! Now seems like as good a time as any to look back on how far we've come, reflect a bit, and start thinking about what the next year of Bevy development will look like.
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/quick-start/introduction). You can also check out [Bevy Assets](https://bevyengine.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. We have a [Quick Start Guide](/learn/quick-start/introduction). You can also check out [Bevy Assets](https://bevy.org/assets/) for a library of community-developed plugins, crates, games, and learning resources.
 
 <!-- more -->
 
@@ -43,7 +43,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 * **April 14**: [The Bevy RFC process is unveiled](https://github.com/bevyengine/rfcs)
   * Inspired by the Rust RFC process, we added a way to collaboratively design and review Bevy APIs prior to implementing them. This generally isn't required, but for bigger changes it ensures we think deeply about what we are building, mitigates risk, and encodes designs and intents for future Bevy developers.
 * **June 1**: [First public release of Bevy Assets](https://twitter.com/BevyEngine/status/1399891316939448320)
-  * [Bevy Assets](https://bevyengine.org/assets/) is a public library of community developed Bevy plugins, crates, assets, games, and learning materials. The website is fed by structured toml files in the [bevy-assets repo](https://github.com/bevyengine/bevy-assets). It has its roots in the awesome-bevy repo, our old unstructured markdown document with a list of community projects. It is still hot off the presses, but we have big plans for it!  
+  * [Bevy Assets](https://bevy.org/assets/) is a public library of community developed Bevy plugins, crates, assets, games, and learning materials. The website is fed by structured toml files in the [bevy-assets repo](https://github.com/bevyengine/bevy-assets). It has its roots in the awesome-bevy repo, our old unstructured markdown document with a list of community projects. It is still hot off the presses, but we have big plans for it!  
 * **June 24**: [Reached our third funding goal ($4000 / month)](https://github.com/sponsors/cart)
   * Reaching this goal marked the point where I started thinking about Bevy as a career. I'm not making "market rate" for my skills and I'm still making less than 1/4th what I made as a Senior Software Engineer at Microsoft, but I'm no longer "just breaking even" and I'm starting to save some money.
 * **August 2**: [Bevy hits 10,000 stars on GitHub](https://twitter.com/cart_cart/status/1422393321394085888)
@@ -61,7 +61,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 * **1,112** issues (609 closed) on [GitHub](https://github.com/bevyengine)
 * **1,895** commits on [GitHub](https://github.com/bevyengine)
 * **153**  [GitHub Discussions](https://github.com/bevyengine/bevy/discussions)
-* **110** [Bevy Assets](https://bevyengine.org/assets/) (plugins, crates, games, apps, and learning materials)
+* **110** [Bevy Assets](https://bevy.org/assets/) (plugins, crates, games, apps, and learning materials)
 * **57,349** downloads on [crates.io](https://crates.io/crates/bevy)
 * **93** [@BevyEngine](https://twitter.com/BevyEngine) retweets of Bevy community content on Twitter
 * **4,871** [Bevy Discord](https://discord.com/invite/bevy) members
@@ -84,7 +84,7 @@ Just look at all of the releases above and the sheer size of their feature sets!
 
 ### Experimentation and Iteration
 
-We didn't just build things once and assume that was the best we could do. When we started [I called out](/news/scaling-bevy/#what-made-bevy-good) that we needed the freedom to experiment and iterate. I put a big "stability warning" wherever I could to help manage expectations. And we sure did iterate! We [rewrote the transform system](https://bevyengine.org/news/bevy-0-2/#transform-system-rewrite) ... [twice](https://bevyengine.org/news/bevy-0-3/#transform-re-rewrite). We [completely rewrote Bevy ECS from scratch](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2), leaving our hecs ECS roots behind (but not forgotten). We have a [brand new renderer](https://github.com/bevyengine/bevy/issues/2535) in the works. I've lost count of the number of "next generation Bevy UI" prototypes and designs people have put together.
+We didn't just build things once and assume that was the best we could do. When we started [I called out](/news/scaling-bevy/#what-made-bevy-good) that we needed the freedom to experiment and iterate. I put a big "stability warning" wherever I could to help manage expectations. And we sure did iterate! We [rewrote the transform system](https://bevy.org/news/bevy-0-2/#transform-system-rewrite) ... [twice](https://bevy.org/news/bevy-0-3/#transform-re-rewrite). We [completely rewrote Bevy ECS from scratch](https://bevy.org/news/bevy-0-5/#bevy-ecs-v2), leaving our hecs ECS roots behind (but not forgotten). We have a [brand new renderer](https://github.com/bevyengine/bevy/issues/2535) in the works. I've lost count of the number of "next generation Bevy UI" prototypes and designs people have put together.
 
 I know the lack of stability has been tough for some people, but I think this is the only way to build The Best Game Engine™ in a collaborative way. Things will start to stabilize soon ... and the wait will be worth it I promise.
 
@@ -125,7 +125,7 @@ This year we invested heavily in what I call The Bevy App Model. Bevy [`Apps`] a
 
 2. Bevy Engine "internals" are entirely implemented using the same App Model that "app developers" use. "App developers" _are_ "engine developers". "Engine developers" _are_ "app developers".
 
-As a result of (1), (2), and Bevy being free and open source, we foster a feeling of "stack ownership" that the other major players can't. Curious app developers can dig into Bevy's internals and feel immediately at home. The [_thousands of pull requests_](https://github.com/bevyengine/bevy/pulls) are a testament to that. We've seen an [explosion of third party plugins](https://bevyengine.org/assets/#assets) being developed ranging from [realistic physics](https://rapier.rs/) to [specialized tilemap renderers](https://github.com/StarArawn/bevy_ecs_tilemap). Bevy's modular nature enables app developers to mix and match the pieces they like and "build their own engine". Bevy's core plugins like [`AssetPlugin`] and [`RenderPlugin`] provide a common ground to ensure plugin-interoperability. This composes nicely with the "modular Render Graph", which makes for an extremely pluggable engine.
+As a result of (1), (2), and Bevy being free and open source, we foster a feeling of "stack ownership" that the other major players can't. Curious app developers can dig into Bevy's internals and feel immediately at home. The [_thousands of pull requests_](https://github.com/bevyengine/bevy/pulls) are a testament to that. We've seen an [explosion of third party plugins](https://bevy.org/assets/#assets) being developed ranging from [realistic physics](https://rapier.rs/) to [specialized tilemap renderers](https://github.com/StarArawn/bevy_ecs_tilemap). Bevy's modular nature enables app developers to mix and match the pieces they like and "build their own engine". Bevy's core plugins like [`AssetPlugin`] and [`RenderPlugin`] provide a common ground to ensure plugin-interoperability. This composes nicely with the "modular Render Graph", which makes for an extremely pluggable engine.
 
 [`Apps`]: https://docs.rs/bevy/0.5.0/bevy/app/struct.App.html
 [`Plugins`]: https://docs.rs/bevy/0.5.0/bevy/app/trait.Plugin.html
@@ -138,7 +138,7 @@ As a result of (1), (2), and Bevy being free and open source, we foster a feelin
 
 Bevy ECS is the interface we use to build both engine features and apps, so it was natural to give it focus last year. I honestly don't think it is controversial to say that Bevy ECS has pushed the envelope of what an ECS can be. Bevy ECS is the "secret sauce" (well ... \*\*cough\*\* ... "open sauce") that I believe uniquely positions us in the engine market. This is a result of meticulous experimentation, benchmarking, collaboration with other experts in the field, and unification of a lot of good ideas in the wider ECS ecosystem.
 
-* **The _most ergonomic ECS_ in existence**. This might sound like hyperbole, but I haven't found any other offering in any language that can do what we do, as tersely as we do it. We [have](https://bevyengine.org/news/introducing-bevy/#ergonomics) been [constantly](https://github.com/bevyengine/bevy/pull/741) pushing [the](https://github.com/bevyengine/bevy/pull/2398) envelope [here](https://github.com/bevyengine/bevy/pull/1525).
+* **The _most ergonomic ECS_ in existence**. This might sound like hyperbole, but I haven't found any other offering in any language that can do what we do, as tersely as we do it. We [have](https://bevy.org/news/introducing-bevy/#ergonomics) been [constantly](https://github.com/bevyengine/bevy/pull/741) pushing [the](https://github.com/bevyengine/bevy/pull/2398) envelope [here](https://github.com/bevyengine/bevy/pull/1525).
 * **Macro-free ergonomics**. In Bevy we have an aversion to macros because they are DSLs (domain specific languages). We want to write _Rust_, not "custom language we invented that happens to live inside Rust". Most ECS-es that approach our level of ergonomics do it via macros. By building Bevy ECS directly on the Rust type system, we ensure Bevy code is "pure rust", the implementation is easier to debug, and users can extend it simply by implementing the relevant traits. This is one of our biggest innovations and I expect to see more projects learn from and adopt this model over time.
 * **The first hybrid Archetypal / Sparse Set ECS**: We are the first ECS to support both Archetypal and Sparse Set storage, side-by-side. Prior to this, people selecting an ECS either needed to pick a Sparse Set ECS for faster component add/removes but slower query iteration, or an archetypal ECS for slower add/removes but faster query iteration. With Bevy ECS, developers can select what storage to use _per component_. Via some clever algorithms, we select the best iteration strategy for a given set of components. Credit goes to [@SanderMertens](https://github.com/SanderMertens) (the author of [flecs](https://github.com/SanderMertens/flecs)) for coming up with the initial idea and designs for this. After that, Sander and I spent a lot of time collaborating on implementation details. Bevy was "first to market" here, but flecs has plans to adopt a similar model (and plans to innovate on top of what we've done). This type of mutually beneficial cross project collaboration warms my heart. Why "hold cards close to your chest" and "compete" when you can collaboratively build things together? A rising tide lifts all boats.
 * **Lock-free Parallel ECS**: We don't lock storages in Bevy ECS. When a System runs, it has full, unchecked, yet safe access to the data it pulls in. Everything is parallel by default. Everything Just Works™. You can easily define explicit before/after orderings between systems using System Labels, when that matters.
@@ -172,7 +172,7 @@ I don't plan on giving up my "benevolent dictator" status any time soon. Rest as
 
 ### Project Planning and Communicating Project Direction
 
-Immediately after the initial Bevy release, I [said we needed to focus](https://bevyengine.org/news/scaling-bevy/#focus-focus-focus). I outlined three [focus-areas](https://github.com/bevyengine/bevy/labels/focus-area) for us:
+Immediately after the initial Bevy release, I [said we needed to focus](https://bevy.org/news/scaling-bevy/#focus-focus-focus). I outlined three [focus-areas](https://github.com/bevyengine/bevy/labels/focus-area) for us:
 
 * [**Scenes**](https://github.com/bevyengine/bevy/issues/255): better scene format, inline assets, enabling / disabling systems
 * [**PBR / Clustered Forward Rendering**](https://github.com/bevyengine/bevy/issues/179): PBR shaders, HDR, bloom, shadowing, all using clustered-forward rendering
@@ -254,7 +254,7 @@ Here are some predictions about Bevy's trajectory over the next year:
 * If the "Next Generation Bevy UI" effort is successful, people wanting to build "Rust GUI apps" will start reaching for Bevy.
 * We will break out of the "Rust gamedev enthusiast" circles. By the end of the year, Bevy will be brought up more regularly in the wider gamedev community alongside conversations about Unity, Unreal, and Godot. Not necessarily as a _direct_ competitor yet, but as a viable alternative for people that (1) want something new / innovative / different and (2) are willing to work around a smaller feature set and slightly less stable APIs.
 
-If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevyengine.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
+If any of this excites you, we would love your help! Check out our code on [GitHub](https://github.com/bevyengine/bevy), start participating in the [Bevy Community](https://bevy.org/community/), and consider [sponsoring my work](https://github.com/sponsors/cart) to ensure I can continue building and leading this wildly ambitious project.
 
 I'm looking forward to spending the next year with you all!
 

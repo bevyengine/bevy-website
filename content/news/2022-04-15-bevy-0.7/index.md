@@ -13,7 +13,7 @@ image_subtitle_link = "https://sketchfab.com/3d-models/stylized-mushrooms-9d22e0
 
 Thanks to **123** contributors, **349** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.7** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.7**, check out our [0.6 to 0.7 Migration Guide](/learn/migration-guides/0.6-0.7/).
 
@@ -181,7 +181,7 @@ Note that the current implementation is relatively low level. It will generally 
 
 <div class="release-feature-authors">authors: @Ku95</div>
 
-Bevy's flexible asset-driven shader system was ported to compute shaders/pipelines, enabling hot reloading, [shader defs](https://bevyengine.org/news/bevy-0-6/#shader-preprocessor), [shader imports](https://bevyengine.org/news/bevy-0-6/#shader-imports), and [pipeline specialization](https://bevyengine.org/news/bevy-0-6/#pipeline-specialization) based on user-configurable keys:
+Bevy's flexible asset-driven shader system was ported to compute shaders/pipelines, enabling hot reloading, [shader defs](https://bevy.org/news/bevy-0-6/#shader-preprocessor), [shader imports](https://bevy.org/news/bevy-0-6/#shader-imports), and [pipeline specialization](https://bevy.org/news/bevy-0-6/#pipeline-specialization) based on user-configurable keys:
 
 ```rust
 #import "shaders/game_of_life_texture_bind_group.wgsl"
@@ -712,7 +712,7 @@ If you're new to Bevy, check out the much-improved [Breakout example](https://gi
 
 <div class="release-feature-authors">authors: @james7132, @mockersf, @aevyrie</div>
 
-We now automatically deploy Bevy's `main` development branch to [https://dev-docs.bevyengine.org](https://dev-docs.bevyengine.org) whenever a change is merged. This will help Bevy documentation authors easily validate their changes. And "bleeding edge" Bevy users can learn about API changes we're working on.
+We now automatically deploy Bevy's `main` development branch to [https://dev-docs.bevy.org](https://dev-docs.bevy.org) whenever a change is merged. This will help Bevy documentation authors easily validate their changes. And "bleeding edge" Bevy users can learn about API changes we're working on.
 
 ![dev docs](dev_docs.png)
 

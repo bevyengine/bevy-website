@@ -17,6 +17,7 @@
     padding: 12px $h-padding;
     position: relative;
     border-radius: 8px;
+    user-select: none;
 
     &:hover {
       background-color: var(--tabs-bg-hover-color);
@@ -37,6 +38,10 @@
       left: $h-padding;
       right: $h-padding;
       transition: background-color $duration;
+    }
+
+    code {
+      font-size: 0.9em;
     }
   }
 

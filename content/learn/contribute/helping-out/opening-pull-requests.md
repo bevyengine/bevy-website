@@ -50,7 +50,7 @@ Bevy is actively open to code contributions from community members.
 If you're new to Bevy, here's the workflow we use:
 
 1. Fork the [`bevyengine/bevy`](https://github.com/bevyengine/bevy) repository on GitHub. You'll need to create a GitHub account if you don't have one already.
-2. (Optional) Copy `.cargo/config_fast_builds.toml` to `.cargo/config.toml`. Then update the file and follow the general recommendations to [compile with performance optimizations](https://bevyengine.org/learn/quick-start/getting-started/setup/#compile-with-performance-optimizations).
+2. (Optional) Copy `.cargo/config_fast_builds.toml` to `.cargo/config.toml`. Then update the file and follow the general recommendations to [compile with performance optimizations](https://bevy.org/learn/quick-start/getting-started/setup/#compile-with-performance-optimizations).
 3. Make your changes in a local clone of your fork, typically in its own new branch.
 
    Try to split your work into separate commits, each with a distinct purpose. Be particularly mindful of this when responding to reviews so that it's easy to see what's changed.
@@ -121,7 +121,7 @@ No matter how you're helping, thanks for contributing to Bevy!
    4. Use \`variable_name\` code blocks in comments to signify that you're referring to specific types and variables.
    5. Start comments with capital letters. End them with a period if they are sentence-like.
 3. Use comments to organize long and complex stretches of code that can't sensibly be refactored into separate functions.
-4. When using [Bevy error codes](https://bevyengine.org/learn/errors/) include a link to the relevant error on the Bevy website in the returned error message `... See: https://bevyengine.org/learn/errors/b0003`.
+4. When using [Bevy error codes](https://bevy.org/learn/errors/) include a link to the relevant error on the Bevy website in the returned error message `... See: https://bevy.org/learn/errors/b0003`.
 
 ### Rust API guidelines
 

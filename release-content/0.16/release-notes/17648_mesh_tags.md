@@ -28,5 +28,5 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 
 ```
 
-[automatic instancing]: https://bevyengine.org/examples/shaders/automatic-instancing/
-[`ShaderStorageBuffer` asset]: https://bevyengine.org/news/bevy-0-15/#shader-storage-buffer-asset
+[automatic instancing]: https://bevy.org/examples/shaders/automatic-instancing/
+[`ShaderStorageBuffer` asset]: https://bevy.org/news/bevy-0-15/#shader-storage-buffer-asset

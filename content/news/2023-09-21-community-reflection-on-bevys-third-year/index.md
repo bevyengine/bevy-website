@@ -7,7 +7,7 @@ github = "cart"
 youtube = "cartdev"
 +++
 
-[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A little over a month ago was Bevy's Third Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Third Birthday](https://bevyengine.org/news/bevys-third-birthday/) post.
+[@cart](https://www.twitter.com/cart_cart) here (Bevy's creator and Project Lead) with another update! A little over a month ago was Bevy's Third Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Third Birthday](https://bevy.org/news/bevys-third-birthday/) post.
 
 This year for the first time I also encouraged the Bevy community to write their own reflections on Bevy's third year in a similar style, and to [post them here](https://github.com/bevyengine/bevy-website/issues/728).
 
@@ -22,7 +22,7 @@ For those who don't know, Bevy is a refreshingly simple data-driven game engine 
 We had a number of responses! Here is a central collection of **Bevy's Third Birthday** posts:
 
 * **Carter Anderson ([@cart](https://github.com/cart))** <span class="people-role people-role-inline people-role-project-lead">Project Lead</span><span class="people-role people-role-inline people-role-maintainer">Maintainer</span>
-  * [Bevy's Third Birthday](https://bevyengine.org/news/bevys-third-birthday/)
+  * [Bevy's Third Birthday](https://bevy.org/news/bevys-third-birthday/)
 * **Alice Cecile ([@alice-i-cecile](https://github.com/alice-i-cecile))** <span class="people-role people-role-inline people-role-maintainer">Maintainer</span>
   * [Triage-by-controversy and community review](https://www.leafwing-studios.com/blog/triage-by-controversy/)
 * **Nicola Papale ([@nicopap](https://github.com/nicopap))**
