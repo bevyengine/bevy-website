@@ -54,7 +54,7 @@ Unanswered open questions in the space include, but are not limited to:
   tuning the model, any data fetched during retrieval augmented generation
   (RAG), or extra context provided to the model in the prompt?
 - If AI generated works are considered derivative works, do the FOSS licenses
-  currently in use by the Bevy Organziation have the language and legal
+  currently in use by the Bevy Organization have the language and legal
   framework to provide the same guarantees and protections to both the licensor
   and licensee?
 - In the case that AI generated works are protected under copyright, who owns
