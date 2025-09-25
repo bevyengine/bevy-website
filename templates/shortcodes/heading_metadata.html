@@ -1,12 +1,16 @@
 <div class="heading-meta">
+  {% if authors %}
   <div>
     <span class="heading-meta__title">Authors:</span>
     {% for author in authors %}{% if author is starting_with("@") %}<a href="https://github.com/{{ author | trim_start_matches(pat="@") }}" class="heading-meta__item">{{ author }}</a>{% else %}<span class="heading-meta__item">{{ author }}</span>{% endif %}{% if not loop.last %},{% endif %}
     {% endfor %}
   </div>
+  {% endif %}
+  {% if prs %}
   <div>
     <span class="heading-meta__title">PRs:</span>
     {% for pr in prs %}<a class="heading-meta__item" href="https://github.com/bevyengine/bevy/pull/{{ pr }}">#{{ pr }}</a>{% if not loop.last %},{% endif %}
     {% endfor %}
   </div>
+  {% endif %}
 </div>
