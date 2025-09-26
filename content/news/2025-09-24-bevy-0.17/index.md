@@ -18,14 +18,24 @@ To update an existing Bevy App or Plugin to **Bevy 0.17**, check out our [0.16 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **Rust hotpatching:** Tired of waiting for Rust to recompile while prototyping? Bevy has integrated `subsecond` by Dioxus, allowing you to opt into hotreloaded Rust code without restarting your program.
-- **Raytraced lighting:** Stunning, physically realistic real-time lighting. Some limitations apply, but boy is it pretty.
-- **Better observers:** Observers have been wildly popular, offering users a flexible way to respond to changes with very little boilerplate. We've cleaned up their API, clarified how they related to buffered events (now `Messages`) improved the documentation, and made them even more powerful.
-- **Experimental UI widgets:** We're shipping a headless UI widget library and an opinionated set of tooling-focused widgets built on top of it now for you to try out!
+- **Bevy Solari - Raytraced Lighting (Experimental):** Bevy now has work-in-progress support for stunning, physically realistic real-time lighting. Many limitations apply, but boy is it pretty.
+- **Improved Observers / Events:** Observers have been wildly popular, offering users a flexible way to respond to events with very little boilerplate. We've cleaned up the Observer and Event APIs, made them even more flexible, and improved their documentation!
+- **Headless Bevy UI Widgets (Experimental)**: A new work-in-progress headless UI widget library, providing baseline widget functionality to build on top of.
+- **Bevy Feathers - Widgets for Tooling (Experimental):** An opinionated set of tooling-focused widgets built on top of our headless widgets. We're still building this out, but you can play with it right now!
+- **Rust Hotpatching:** Tired of waiting for Rust to recompile while prototyping? Bevy now has an initial integration of `subsecond` by Dioxus, allowing you to opt into hotreloaded Rust code without restarting your program. This is currently limited to Bevy ECS systems, and has some limitations.
+- **Light Textures**: You can now use textures to artistically modulate the intensity of light.
+- **DLSS**: On Nvidia RTX GPUs, Bevy now supports Deep Learning Super Sampling (DLSS) for anti-aliasing and upscaling.
+- **Tilemap Chunk Rendering**: A new performant way to render tilemaps in chunks ... this is our first step in building out Bevy's built-in tilemap system.
+- **Web Assets**: Bevy's asset system supports loading assets from `http` and `https` URLs.
+- **Reflect Auto-Registration**: When reflecting types, you no longer need to manually register them in your apps.
+- **Frame Time Graphs**: A new built-in widget to debug frame times in running Bevy apps.
+- **UI Gradients**: Bevy UI now supports background and border gradients.
+- **Raymarched Atmosphere**: Bevy's procedural atmosphere now has a raymarching mode for more accurate lighting.
+- **Virtual Geometry BVH Culling**: Bevy's virtual geometry system is now much faster thanks to BVH culling.
 
 <!-- more -->
 
-## Experimental Raytraced Lighting: Bevy Solari
+## Bevy Solari: Raytraced Lighting (Experimental)
 
 {{ heading_metadata(authors=["@JMS55", "@SparkyPotato"] prs=[19058, 19620, 19790, 20020, 20113, 20156, 20213, 20242, 20259, 20406, 20457, 20580, 20596, 20622, 20658, 20659, 20980]) }}
 
@@ -54,9 +64,8 @@ While Bevy 0.17 adds the bevy_solari crate, it is not yet production ready.
 
 However, feel free to run the solari example to check out the progress we've made. There are two different modes you can try out:
 
-A non-realtime "reference" mode that uses pathtracing: `cargo run --release --example solari --features bevy_solari -- --pathtracer`.
-
-A realtime mode that uses a combination of techniques, and currently supports only diffuse materials: `cargo run --release --example solari --features bevy_solari`.
+1. A non-realtime "reference" mode that uses pathtracing: `cargo run --release --example solari --features bevy_solari -- --pathtracer`.
+2. A realtime mode that uses a combination of techniques, and currently supports only diffuse materials: `cargo run --release --example solari --features bevy_solari`.
 
 Additionally, if you have a NVIDIA GPU, you can enable DLSS Ray Reconstruction with the realtime mode for a combination of denoising (Bevy Solari does not currently come with any alternate denoisers), lower rendering times, and anti-aliasing: `cargo run --release --example solari --features bevy_solari,dlss`.
 
@@ -71,6 +80,7 @@ Additionally, if you have a NVIDIA GPU, you can enable DLSS Ray Reconstruction w
 Our current implementation uses raytraced direct and indirect lighting (also known as global illuminance), which are sampled via ReSTIR DI/GI and uses a world-space irradiance cache to improve GI quality.
 Like all raytracing techniques, this produces results that are too noisy for realtime applications.
 To resolve this, you need to add a denoising step, which is currently handled via DLSS Ray Reconstruction, although we'd be happy to add support for alternate methods as well in the future.
+
 If you're interested in the crunchy technical details of how this all works: please read [@JMS55's blog post](https://jms55.github.io/posts/2025-09-20-solari-bevy-0-17) for a frame breakdown!
 
 Look forward to more work on Bevy Solari in future releases!
@@ -318,7 +328,7 @@ It is still possible to support both contexts by implementing _both traits_, but
 [`AnimationEvent`]: https://dev-docs.bevy.org/bevy/animation/trait.AnimationEvent.html
 [`AnimationEventTrigger`]: https://dev-docs.bevy.org/bevy/animation/struct.AnimationEventTrigger.html
 
-## Experimental UI Widgets: Bevy Feathers
+## Bevy Feathers: Widgets for Tooling (Experimental)
 
 {{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969]) }}
 
@@ -342,12 +352,12 @@ Feathers currently offers:
 Feathers is still early in development. It is currently hidden behind the `experimental_bevy_feathers` feature flag. Feathers is still incomplete and likely to change in a variety of ways:
 
 - We will port Feathers to BSN (Bevy's [Next-Generation Scene/UI System](https://github.com/bevyengine/bevy/pull/20158/)) when that lands (targeted for **Bevy 0.18**).
-- We are still discussing the best way to handle UI callbacks / events in Feathers. It includes a proposal API, but the debate is ongoing!
-- We are still working on polishing up some UX issues.
-- There are missing widgets and features. Notably the "text input" widget is still being developed.
+- We are [still discussing](https://github.com/bevyengine/bevy/discussions/21044) the best way to handle UI callbacks / events in Feathers. It includes a proposal API, but the debate is ongoing!
+- We are still working on polishing up some API UX issues.
+- There are missing widgets and features. Notably the "text input" widget is [still being developed](https://github.com/bevyengine/bevy/issues/20885).
 
 If you're looking to experiment with building tooling for Bevy, enable it and take `feathers` for a test flight!
-Let us know what problems you run into, and feel free to contribute missing widgets and bugs upstream. Some folks have already started building tooling on it, such as the Rerecast Editor (a navmesh editor):
+Let us know what problems you run into, and feel free to contribute missing widgets and bugs upstream. Some folks have already started building tooling on it, such as the [Rerecast Editor](https://github.com/janhohenheim/rerecast) (a navmesh editor):
 
 ![rerecast editor](rerecast.jpg)
 
@@ -381,7 +391,7 @@ To enable this, add the new component `AtmosphereEnvironmentMapLight` to the cam
 This is a fully dynamic per-view effect: no pre-baked environment maps are needed.
 However, please be aware that light probes are not yet supported.
 
-## Headless Widgets
+## Headless Bevy UI Widgets (Experimental)
 
 {{ heading_metadata(authors=["@viridia", "@ickshonpe", "@alice-i-cecile"] prs=[19366, 19584, 19665, 19778, 19803, 20032, 20036, 20086, 20944]) }}
 
