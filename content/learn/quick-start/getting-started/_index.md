@@ -50,7 +50,7 @@ You can also speed up compile times by following the ["fast compiles"] section.
     ```
 
 {% callout(type="warning") %}
-Since Rust `1.89+` and when you use Bevy `0.16.x` and earlier versions the examples will not run and instead error. For more info on *why* see the issue: [bevyengine/bevy#20475 "0.16 fails to build breakout example due to bevy_mikktspace not compiling on Rust 1.89"](<https://github.com/bevyengine/bevy/issues/20475>)
+When using Rust `1.89+` and Bevy `0.16.x or earlier` the examples will not run and instead error. For more info on *why* see the issue: [bevyengine/bevy#20475 "0.16 fails to build breakout example due to bevy_mikktspace not compiling on Rust 1.89"](<https://github.com/bevyengine/bevy/issues/20475>)
 
 Some workarounds:
 - Use Rust 1.88 or earlier using this command: `rustup default 1.88.0`
