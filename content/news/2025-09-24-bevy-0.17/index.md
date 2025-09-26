@@ -347,7 +347,9 @@ Feathers is still early in development. It is currently hidden behind the `exper
 - There are missing widgets and features. Notably the "text input" widget is still being developed.
 
 If you're looking to experiment with building tooling for Bevy, enable it and take `feathers` for a test flight!
-Let us know what problems you run into, and feel free to contribute missing widgets and bugs upstream.
+Let us know what problems you run into, and feel free to contribute missing widgets and bugs upstream. Some folks have already started building tooling on it, such as the Rerecast Editor (a navmesh editor):
+
+![rerecast editor](rerecast.jpg)
 
 If you can't wait to get your hands on `bevy_ui` widgets for your game,
 we recommend copying the Feathers code into your project and start hacking away at it!
