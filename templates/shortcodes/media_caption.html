@@ -1,8 +1,8 @@
 <div style="font-size: 1.0rem; margin-top: -1.5rem !important;" class="release-feature-authors">
     {% if url %}
         {# Prefix https:// to avoid throwing markdown lint errors. Sometimes we do dumb things for good reasons  #}
-        <a href="https://{{url}}">{{text}}</a>
+        <a href="https://{{ url }}">{{ text }}</a>
     {% else %}
-        {{text}}
+        {{ text }}
     {% endif %}
 </div>
