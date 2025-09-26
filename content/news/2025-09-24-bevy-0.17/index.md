@@ -18,8 +18,8 @@ To update an existing Bevy App or Plugin to **Bevy 0.17**, check out our [0.16 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **Raytraced lighting:** Stunning, physically realistic real-time lighting. Some limitations apply, but boy is it pretty.
 - **Rust hotpatching:** Tired of waiting for Rust to recompile while prototyping? Bevy has integrated `subsecond` by Dioxus, allowing you to opt into hotreloaded Rust code without restarting your program.
+- **Raytraced lighting:** Stunning, physically realistic real-time lighting. Some limitations apply, but boy is it pretty.
 - **Better observers:** Observers have been wildly popular, offering users a flexible way to respond to changes with very little boilerplate. We've cleaned up their API, clarified how they related to buffered events (now `Messages`) improved the documentation, and made them even more powerful.
 - **Experimental UI widgets:** We're shipping a headless UI widget library and an opinionated set of tooling-focused widgets built on top of it now for you to try out!
 
