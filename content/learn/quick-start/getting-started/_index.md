@@ -49,6 +49,14 @@ You can also speed up compile times by following the ["fast compiles"] section.
     cargo run --example breakout
     ```
 
+{% callout(type="warning") %}
+When using Rust `1.89+` and Bevy `0.16.x or earlier` the examples will not run and instead error. For more info on *why* see the issue: [bevyengine/bevy#20475 "0.16 fails to build breakout example due to bevy_mikktspace not compiling on Rust 1.89"](<https://github.com/bevyengine/bevy/issues/20475>)
+
+Some workarounds:
+- Use Rust 1.88 or earlier using this command: `rustup default 1.88.0`
+- Use Rust 1.88 *only* in your Bevy Engine directory using this command: `rustup override set 1.88` (See https://rust-lang.github.io/rustup/overrides.html#directory-overrides for more on this)
+{% end %}
+
 ### Add Bevy as a Dependency
 
 Bevy is [available as a library on crates.io](https://crates.io/crates/bevy).
