@@ -1167,11 +1167,13 @@ the `*Systems` naming convention for their system sets where applicable.
 The features above may be great, but what else does Bevy have in flight?
 Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
 
-- **Better scenes:** Defining scenes, both in code and via assets is too hard. We have a [working prototype](https://github.com/bevyengine/bevy/pull/20158) for a much improved system, and are excited to test and refine it over the 0.18 cycle.
+- **Better scenes:** Defining scenes, both in code and via assets is too hard. We have a [working prototype](https://github.com/bevyengine/bevy/pull/20158) for a much improved system, and are excited to test and refine both the `bsn!` macro and the `.bsn` asset format over the 0.18 cycle.
+- **Fully-fledged UI framework:** `feathers` is a great start, but it's just-barely hatched. We're looking forward to improving ergonomics with the BSN work above, [adding more widgets], solidifying features like theming and screen reader support, and making it easier for you to build per-project design systems that allow you to create consistently styled, low-boilerplate UI.
+- **First-party entity inspector:** [Entity inspectors](https://github.com/bevyengine/bevy/pull/20189) are an incredibly valuable debugging tool, both as an ad-hoc dev tool and as a key element of an editor. This will be built with `feathers`, allowing us to refine both its aesthetic and functionality in preparation for more extensive developer tooling.
 - **`firewheel` audio:** The [`firewheel`](https://github.com/BillyDM/firewheel) team has been hard at work, creating a production-grade audio solution for Rust. We're encouraged by the draft integration via [`bevy_seedling`](https://github.com/corvusprudens/bevy_seedling), and keen to improve Bevy's first-party audio quality.
-- **First-party entity inspector:** [Entity inspectors](https://github.com/bevyengine/bevy/pull/20189) are an incredibly valuable debugging tool, both as an ad-hoc dev tool and as a key element of an editor. We're looking forward to stress-testing `feathers` by building this in-tree.
-- **Text input:** Text input is shockingly complicated and very useful for many games and applications. We're hoping to upstream and polish [`bevy_ui_text_input`](https://github.com/ickshonpe/bevy_ui_text_input) in the coming cycle.
 - **Improved examples:** Our examples do a great job explaining how to use Bevy, but leave users left fumbling when they want to know how to accomplish a specific task. We're looking to expand our usage examples, and finally add production-grade assets to our examples to show off how Bevy _actually_ looks when showcasing the work of talented artists.
+
+[adding more widgets]: https://github.com/bevyengine/bevy/issues/19236
 
 {{ support_bevy() }}
 
