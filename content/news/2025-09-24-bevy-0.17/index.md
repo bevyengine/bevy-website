@@ -1167,7 +1167,13 @@ the `*Systems` naming convention for their system sets where applicable.
 The features above may be great, but what else does Bevy have in flight?
 Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
 
-- **X:** x
+- **Better scenes:** Defining scenes, both in code and via assets is too hard. We have a [working prototype](https://github.com/bevyengine/bevy/pull/20158) for a much improved system, and are excited to test and refine it over the 0.18 cycle.
+- **`firewheel` audio:** The [`firewheel`](https://github.com/BillyDM/firewheel) team has been hard at work, creating a production-grade audio solution for Rust. We're encouraged by the draft integration via [`bevy_seedling`](https://github.com/corvusprudens/bevy_seedling), and keen to improve Bevy's first-party audio quality.
+- **First-party entity inspector:** [Entity inspectors](https://github.com/bevyengine/bevy/pull/20189) are an incredibly valuable debugging tool, both as an ad-hoc dev tool and as a key element of an editor. We're looking forward to stress-testing `feathers` by building this in-tree.
+- **Text input:** Text input is shockingly complicated and very useful for many games and applications. We're hoping to upstream and polish [`bevy_ui_text_input`](https://github.com/ickshonpe/bevy_ui_text_input) in the coming cycle.
+- **Easier material creation:** Our `StandardMaterial` is too fancy for many users, and reusing bits and pieces of our PBR code is too hard. We're looking to redesign how materials work, and make it easier to make your own material to match the art style you want.
+- **Better asset preprocessing:** At the heart of every successful game studio is a rock-solid asset pipeline. Asset preprocessing in Bevy today is underdocumented and half-baked: it's time to fix that.
+- **Improved examples:** Our examples do a great job explaining how to use Bevy, but leave users left fumbling when they want to know how to accomplish a specific task. We're looking to expand our usage examples, and finally add production-grade assets to our examples to show off how Bevy _actually_ looks when showcasing the work of talented artists.
 
 {{ support_bevy() }}
 
