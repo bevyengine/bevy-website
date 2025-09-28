@@ -342,7 +342,7 @@ Feathers currently offers:
 Feathers is still early in development. It is currently hidden behind the `experimental_bevy_feathers` feature flag. Feathers is still incomplete and likely to change in a variety of ways:
 
 - We will port Feathers to BSN (Bevy's [Next-Generation Scene/UI System](https://github.com/bevyengine/bevy/pull/20158/)) when that lands (targeted for **Bevy 0.18**).
-- The `observe` API is temporary: we hope to replace these with a general-purpose, relations-backed solution.
+- The `observe` API is temporary: we hope to replace these with a general-purpose, [relations-backed solution](https://github.com/bevyengine/bevy/issues/17607).
 - We are still working on polishing up some UX issues.
 - There are missing widgets and features. Notably the "text input" widget is still being developed.
 
