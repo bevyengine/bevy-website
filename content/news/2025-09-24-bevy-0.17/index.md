@@ -320,7 +320,7 @@ It is still possible to support both contexts by implementing _both traits_, but
 
 ## Experimental UI Widgets: Bevy Feathers
 
-{{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969]) }}
+{{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969, 21247]) }}
 
 ![feathers widgets](feathers.jpg)
 
