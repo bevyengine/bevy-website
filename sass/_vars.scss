@@ -370,7 +370,7 @@ $color-white: #fff;
 // styled in light mode.
 .light-mode {
   @media (prefers-color-scheme: light) {
-    --color-blue-link: var(--color-blue-57);
+    --color-blue-link: #1D3B87;
 
     --callout-caution-accent-color: #ed0c41;
     --callout-caution-bg-color: #fccad5;
