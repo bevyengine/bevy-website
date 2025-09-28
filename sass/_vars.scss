@@ -146,14 +146,16 @@ $color-white: #fff;
   --bevy-instance-progress-track-color: var(--color-neutral-33);
   --bevy-instance-progress-bar-color: var(--color-blue-60);
   // Generated using: https://stripesgenerator.com
-  --bevy-instance-progress-bar-stripes: linear-gradient(131deg,
+  --bevy-instance-progress-bar-stripes: linear-gradient(
+    131deg,
     var(--color-blue-60) 25%,
     var(--color-blue-47) 25%,
     var(--color-blue-47) 50%,
     var(--color-blue-60) 50%,
     var(--color-blue-60) 75%,
     var(--color-blue-47) 75%,
-    var(--color-blue-47) 100%);
+    var(--color-blue-47) 100%
+  );
 
   --button-blue-bg-color: var(--color-blue-43);
   --button-blue-bg-hover-color: var(--color-blue-40);
@@ -187,8 +189,10 @@ $color-white: #fff;
   --code-incorrect-bg-color: #481e21;
   --code-incorrect-border-color: darkred;
   --code-incorrect-border-hover-color: red;
-  --code-incorrect-img-hover-filter: invert(10%) sepia(85%) saturate(7491%) hue-rotate(5deg) brightness(116%) contrast(114%); // red
-  --code-incorrect-img-filter: invert(11%) sepia(57%) saturate(5143%) hue-rotate(350deg) brightness(118%) contrast(87%); // firebrick red
+  --code-incorrect-img-hover-filter: invert(10%) sepia(85%) saturate(7491%)
+    hue-rotate(5deg) brightness(116%) contrast(114%); // red
+  --code-incorrect-img-filter: invert(11%) sepia(57%) saturate(5143%)
+    hue-rotate(350deg) brightness(118%) contrast(87%); // firebrick red
   --code-text-dim-color: var(--color-neutral-60c);
 
   --code-aaa: #c0c5ce;
@@ -322,8 +326,6 @@ $color-white: #fff;
   --on-this-page-hover-color: var(--color-neutral-73);
   --on-this-page-active-color: var(--color-neutral-93);
 
-  --page-with-menu-menu-color: #292a2d;
-
   --people-role-lead-color: rgb(200, 200, 50);
   --people-role-maintainer-color: rgb(242, 103, 255);
   --people-role-sme-color: rgb(80, 200, 50);
@@ -358,7 +360,8 @@ $color-white: #fff;
 
   --warning-color: #c8c864;
 
-  .invertable {}
+  .invertable {
+  }
 }
 
 // Light Theme
@@ -466,8 +469,6 @@ $color-white: #fff;
     --on-this-page-hover-color: var(--color-black);
     --on-this-page-active-color: var(--color-black);
 
-    --page-with-menu-menu-color: #d1d3d6;
-
     --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
 
     --table-border-color: var(--color-neutral-75);
@@ -505,7 +506,6 @@ $color-white: #fff;
       color: var(--color-white);
 
       a {
-
         &,
         &:focus,
         &:hover,
