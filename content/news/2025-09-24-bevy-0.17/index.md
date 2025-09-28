@@ -451,9 +451,8 @@ expansion toggle).
 
 ### Widget Notifications
 
-Applications need a way to be notified when the user interacts with a widget. Currently in `bevy_ui_widgets`
-we're experimenting with a `Callback` system, which uses "one shot systems" under the hood. We're also heavily
-considering using Events / Observers for this. This is one of the primary reasons for the "experimental" label!
+Applications need a way to be notified when the user interacts with a widget.
+We're using observers for that, with a simple `observe` `BundleEffect` helper to improve spawning ergonomics for now.
 
 ### State Management
 
