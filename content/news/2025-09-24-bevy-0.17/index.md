@@ -454,35 +454,6 @@ expansion toggle).
 Applications need a way to be notified when the user interacts with a widget.
 We're using observers for that, with a simple `observe` `BundleEffect` helper to improve spawning ergonomics for now.
 
-### State Management
-
-See the [Wikipedia Article on State Management](https://en.wikipedia.org/wiki/State_management).
-
-Most of the standard widgets support "external state management" - something that is referred to in the
-React.js world as "controlled" widgets. This means that for widgets that edit a parameter value
-(such as checkboxes and sliders), the widget doesn't automatically update its own internal value,
-but only sends a notification to the app telling it that the value needs to change. It's the
-responsibility of the app to handle this notification and update the widget accordingly, and at the
-same time update any other game state that is dependent on that parameter.
-
-There are multiple reasons for this, but the main one is this: typical game user interfaces aren't
-just passive forms of fields to fill in, but more often represent a dynamic view of live data. As a
-consequence, the displayed value of a widget may change even when the user is not directly
-interacting with that widget. Externalizing the state avoids the need for two-way data binding, and
-instead allows simpler one-way data binding that aligns well with the traditional "Model / View /
-Controller" (MVC) design pattern.
-
-That being said, the choice of internal or external state management is up to you: if the widget has
-an `on_change` callback that is not `Callback::Ignore`, then the callback is used. If the callback
-is `Callback::Ignore`, however, the widget will update its own state automatically. (This is similar
-to how React.js does it.)
-
-There are two exceptions to this rule about external state management. First, widgets which don't
-edit a value, but which merely trigger an event (such as buttons), don't fall under this rule.
-Second, widgets which have complex states that are too large and heavyweight to fit within a
-notification event (such as a text editor) can choose to manage their state internally. These latter
-widgets will need to implement a two-way data binding strategy.
-
 ## Light Textures
 
 {{ heading_metadata(authors=["@robtfm"] prs=[18031]) }}
