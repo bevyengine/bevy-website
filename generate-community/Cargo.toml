@@ -7,7 +7,7 @@ publish = false
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-toml = "0.5"
+toml = "0.9.7"
 rand = "0.8"
 unicode-segmentation = "1.10"
 

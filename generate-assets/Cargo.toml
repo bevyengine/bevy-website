@@ -9,7 +9,7 @@ edition = "2018"
 publish = false
 
 [dependencies]
-toml = "0.7"
+toml = "0.9.7"
 serde = { version = "1", features = ["derive"] }
 rand = "0.8"
 regex = "1"
