@@ -8,4 +8,4 @@ The WebGPU Shading Language syntax package is derived from `wgsl.tmLanguage.yml`
 
 ## RON
 
-The Rusty Object Notation syntax package is from <https://github.com/ron-rs/sublime-ron>, licensed under the Apache-2.0 license, which you can find at [`LICENSE-RON`](./LICENSE-RON).
+The Rusty Object Notation syntax package is from [ron-rs/sublime-ron](https://github.com/ron-rs/sublime-ron), licensed under the Apache-2.0 license, which you can find at [`LICENSE-RON`](./LICENSE-RON).
