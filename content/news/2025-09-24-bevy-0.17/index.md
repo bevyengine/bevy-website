@@ -727,7 +727,7 @@ but we're looking forward to seeing your creative designs.
 
 In Bevy UI, [`Transform`] and `GlobalTransform` have been replaced by [`UiTransform`] and `UiGlobalTransform`.  [`UiTransform`] is a specialized 2D UI transform, which more effectively maps to the UI space, improves our internals substantially, and cuts out redundant, unnecessary, often expensive work (such as doing full hierarchical [`Transform`] propagation _in addition_ to the Bevy UI layout algorithm).
 
-[`Transform`]: https://docs.rs/bevy/0.17.0/bevy_transform/components/transform/struct.Transform.html
+[`Transform`]: https://docs.rs/bevy/0.17.0/bevy/prelude/struct.Transform.html
 [`UiTransform`]: https://docs.rs/bevy/0.17.0/bevy/ui/ui_transform/struct.UiTransform.html
 
 ## Data-Driven Materials
