@@ -283,7 +283,7 @@ It is still possible to support both contexts by implementing _both traits_, but
 
 ## Bevy Feathers: Widgets for Tooling (Experimental)
 
-{{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969]) }}
+{{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969, 21247]) }}
 
 ![feathers widgets](feathers.jpg)
 
@@ -305,8 +305,8 @@ Feathers currently offers:
 Feathers is still early in development. It is currently hidden behind the `experimental_bevy_feathers` feature flag. Feathers is still incomplete and likely to change in a variety of ways:
 
 - We will port Feathers to BSN (Bevy's [Next-Generation Scene/UI System](https://github.com/bevyengine/bevy/pull/20158/)) when that lands (targeted for **Bevy 0.18**).
-- We are [still discussing](https://github.com/bevyengine/bevy/discussions/21044) the best way to handle UI callbacks / events in Feathers. It includes a proposal API, but the debate is ongoing!
-- We are still working on polishing up some API UX issues.
+- The `observe` API is temporary: we hope to replace these with a general-purpose, [relations-backed solution](https://github.com/bevyengine/bevy/issues/17607).
+- We are still working on polishing up some UX issues.
 - There are missing widgets and features. Notably the "text input" widget is [still being developed](https://github.com/bevyengine/bevy/issues/20885).
 
 If you're looking to experiment with building tooling for Bevy, enable it and take `feathers` for a test flight!
@@ -416,38 +416,8 @@ expansion toggle).
 
 ### Widget Notifications
 
-Applications need a way to be notified when the user interacts with a widget. Currently in `bevy_ui_widgets`
-we're experimenting with a `Callback` system, which uses "one shot systems" under the hood. We're also heavily
-considering using Events / Observers for this. This is one of the primary reasons for the "experimental" label!
-
-### State Management
-
-See the [Wikipedia Article on State Management](https://en.wikipedia.org/wiki/State_management).
-
-Most of the standard widgets support "external state management" - something that is referred to in the
-React.js world as "controlled" widgets. This means that for widgets that edit a parameter value
-(such as checkboxes and sliders), the widget doesn't automatically update its own internal value,
-but only sends a notification to the app telling it that the value needs to change. It's the
-responsibility of the app to handle this notification and update the widget accordingly, and at the
-same time update any other game state that is dependent on that parameter.
-
-There are multiple reasons for this, but the main one is this: typical game user interfaces aren't
-just passive forms of fields to fill in, but more often represent a dynamic view of live data. As a
-consequence, the displayed value of a widget may change even when the user is not directly
-interacting with that widget. Externalizing the state avoids the need for two-way data binding, and
-instead allows simpler one-way data binding that aligns well with the traditional "Model / View /
-Controller" (MVC) design pattern.
-
-That being said, the choice of internal or external state management is up to you: if the widget has
-an `on_change` callback that is not `Callback::Ignore`, then the callback is used. If the callback
-is `Callback::Ignore`, however, the widget will update its own state automatically. (This is similar
-to how React.js does it.)
-
-There are two exceptions to this rule about external state management. First, widgets which don't
-edit a value, but which merely trigger an event (such as buttons), don't fall under this rule.
-Second, widgets which have complex states that are too large and heavyweight to fit within a
-notification event (such as a text editor) can choose to manage their state internally. These latter
-widgets will need to implement a two-way data binding strategy.
+Applications need a way to be notified when the user interacts with a widget.
+We're using observers for that, with a simple `observe` `BundleEffect` helper to improve spawning ergonomics for now.
 
 ## Light Textures
 
