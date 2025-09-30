@@ -63,7 +63,10 @@ impl GithubClient {
             .into_json()?;
 
         if response.encoding == "base64" {
-            let data = base64::decode(response.content.replace('\n', "").trim())?;
+            use base64::Engine;
+
+            let data = base64::prelude::BASE64_STANDARD
+                .decode(response.content.replace('\n', "").trim())?;
             Ok(String::from_utf8(data)?)
         } else {
             bail!("Content is not in base64");
