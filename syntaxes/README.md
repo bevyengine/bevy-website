@@ -4,7 +4,7 @@ This folder contains [Sublime Text syntax definitions](https://www.sublimetext.c
 
 ## WGSL
 
-The WGSL syntax package is from <https://github.com/relrelb/sublime-wgsl>.
+TODO :)
 
 ## RON
 
