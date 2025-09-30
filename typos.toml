@@ -13,7 +13,7 @@ extend-exclude = [
   "release-content/0.14/migration-guides/13261_More_gizmos_builders.md",
   "release-content/0.14/migration-guides/13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md",
   # Ignore contributor files as those are usernames
-  "release-content/*/contributors.toml"
+  "release-content/*/contributors.toml",
   # Ignore changelogs and release notes (titles should be verbatim)
   "release-content/*/changelog.toml",
   "release-content/*/_release-notes.toml",
