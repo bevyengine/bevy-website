@@ -1,16 +1,14 @@
 +++
 title = "Bevy 0.17"
-date = 2025-09-24 
+date = 2025-09-30 
 [extra]
-public_draft = 2215
-status = 'hidden'
 image = "cover.jpg"
 show_image = true
 image_subtitle = "A factory from Exofactory, an in-development factory builder made with Bevy"
 image_subtitle_link = "https://store.steampowered.com/app/3615720/Exofactory/"
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.17** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **278** contributors, **1311** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.17** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -417,8 +415,7 @@ Bevy now supports hot patching systems via [subsecond](https://crates.io/crates/
 
 When the cargo feature `hotpatching` is enabled, every system can now be modified during execution, and the changes are immediately visible in your game.
 
-`dx` is the Dioxus CLI. To install it run `cargo install dioxus-cli@0.7.0-alpha.1`
-TODO: use the fixed version that will match the version of subsecond dependency used in Bevy at release time
+`dx` is the Dioxus CLI. To install it run `cargo install dioxus-cli@0.7.0-rc.0 --locked`
 
 Then run `BEVY_ASSET_ROOT="." dx serve --hot-patch --features "bevy/hotpatching"` to test it in your project. You can also try it out using Bevy's [`hotpatching_systems.rs`](https://github.com/bevyengine/bevy/blob/release-0.17.0/examples/ecs/hotpatching_systems.rs) example.
 
@@ -1100,6 +1097,6 @@ Peering deep into the mists of time (predictions are _extra_ hard when your team
 
 {{ support_bevy() }}
 
-TODO: contributors
+{{ contributors(version="0.17") }}
 
 For those interested in a complete changelog, you can see the entire log (and linked pull requests) via the [relevant commit history](https://github.com/bevyengine/bevy/compare/v0.16.0...v0.17.0).
