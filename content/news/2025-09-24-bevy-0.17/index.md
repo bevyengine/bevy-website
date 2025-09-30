@@ -362,6 +362,10 @@ which can be added to any UI Node to get widget-like behavior. The standard widg
 - `Checkbox`: Provides toggle-able state.
 - `RadioButton` and `RadioGroup`: Select an item from a set of items.
 
+Here's a heavily styled example showing what is possible with them:
+
+<video controls loop><source  src="deco-buttons.mp4" type="video/mp4"/></video>
+
 While these widgets are usable today for games and apps, they are still **experimental**. We are still polishing up some aspects of the
 developer experience and filling in gaps.
 Expect breaking changes as we continue to iterate and improve on them!
