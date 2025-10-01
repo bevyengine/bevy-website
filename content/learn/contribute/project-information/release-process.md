@@ -125,7 +125,8 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 ```sh
 version="0.X"
 
-git checkout release-$version.0
+git checkout main && git pull
+git checkout release-$version.0 && git pull
 
 # List the last 1000 PRs merged in the milestone
 prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 1000`
