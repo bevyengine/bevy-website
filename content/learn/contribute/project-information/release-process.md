@@ -127,8 +127,8 @@ version="0.X"
 
 git checkout release-$version.0
 
-# List the last 100 PRs merged in the milestone
-prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 100`
+# List the last 1000 PRs merged in the milestone
+prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 1000`
 while read -r commit number title <&3; do
     # Ignore commits that are already present by sha
     if git merge-base --is-ancestor $commit HEAD; then
