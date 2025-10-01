@@ -4,7 +4,7 @@ This folder contains [Sublime Text syntax definitions](https://www.sublimetext.c
 
 ## WGSL
 
-The WebGPU Shading Language syntax package is derived from `wgsl.tmLanguage.yml` from [PolyMeilex/vscode-wgsl](https://github.com/PolyMeilex/vscode-wgsl), and was converted to `WGSL.sublime-syntax` using the [TextMate Languages VSCode Extension](https://marketplace.visualstudio.com/items?itemName=pedro-w.tmlanguage) and [aziz/SublimeSyntaxConvertor](https://github.com/aziz/SublimeSyntaxConvertor).
+The WebGPU Shading Language syntax package is derived from `wgsl.tmLanguage.json` from [wgsl-analyzer](https://github.com/wgsl-analyzer/wgsl-analyzer/blob/793fd6669fd3bf9ad441ddd70df371541b6a3e89/editors/code/syntaxes/wgsl.tmLanguage.json), and was converted to `WGSL.sublime-syntax` using the [TextMate Languages VSCode Extension](https://marketplace.visualstudio.com/items?itemName=pedro-w.tmlanguage) and [aziz/SublimeSyntaxConvertor](https://github.com/aziz/SublimeSyntaxConvertor). It is dual-licensed under the [MIT](https://github.com/wgsl-analyzer/wgsl-analyzer/blob/793fd6669fd3bf9ad441ddd70df371541b6a3e89/LICENSE-MIT) and [Apache-2.0](https://github.com/wgsl-analyzer/wgsl-analyzer/blob/793fd6669fd3bf9ad441ddd70df371541b6a3e89/LICENSE-APACHE) licenses.
 
 ## RON
 

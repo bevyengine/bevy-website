@@ -5,81 +5,82 @@ name: WGSL
 scope: source.wgsl
 contexts:
   main:
-    - include: line_comments
+    - include: line_ending_comments
     - include: block_comments
-    - include: keywords
     - include: attributes
     - include: functions
+    - include: keywords
     - include: function_calls
-    - include: constants
+    - include: literals
     - include: types
     - include: variables
     - include: punctuation
+    - include: reserved_words
+    - include: address_spaces
+    - include: memory_access_modes
+    - include: operators
+    - include: built-in_value_names
+    - include: bevy_preprocessor_directives
+  address_spaces:
+    - match: \b(function|private|workgroup|uniform|storage|handle)\b
+      comment: https://www.w3.org/TR/WGSL/#address-spaces
+      scope: storage.modifier.address_spaces.wgsl
   attributes:
-    - match: "(@)([A-Za-z_]+)"
-      comment: attribute declaration
-      scope: meta.attribute.wgsl
+    - match: '(@)\s*([_$[:alpha:]][_$[:alnum:]]*)\b'
+      comment: attribute
       captures:
-        1: keyword.operator.attribute.at
-        2: entity.name.attribute.wgsl
+        1: punctuation.attribute.wgsl
+        2: entity.other.attribute.wgsl
+  bevy_preprocessor_directives:
+    - match: ^#(ifdef|else|endif|import|define_import_path)\b
+      comment: bevy preprocessor directives
+      scope: invalid.deprecated.wgsl
   block_comments:
-    - match: /\*\*/
-      comment: empty block comments
-      scope: comment.block.wgsl
-    - match: /\*\*
-      comment: block documentation comments
-      push:
-        - meta_scope: comment.block.documentation.wgsl
-        - match: \*/
-          pop: true
-        - include: block_comments
-    - match: /\*(?!\*)
-      comment: block comments
+    - match: /\*
+      comment: Block comment
       push:
         - meta_scope: comment.block.wgsl
         - match: \*/
           pop: true
         - include: block_comments
-  constants:
-    - match: '(-?\b[0-9][0-9]*\.[0-9][0-9]*)([eE][+-]?[0-9]+)?\b'
-      comment: decimal float literal
-      scope: constant.numeric.float.wgsl
-    - match: '-?\b0x[0-9a-fA-F]+\b|\b0\b|-?\b[1-9][0-9]*\b'
-      comment: int literal
-      scope: constant.numeric.decimal.wgsl
-    - match: '\b0x[0-9a-fA-F]+u\b|\b0u\b|\b[1-9][0-9]*u\b'
-      comment: uint literal
-      scope: constant.numeric.decimal.wgsl
-    - match: \b(true|false)\b
-      comment: boolean constant
-      scope: constant.language.boolean.wgsl
+  built-in_value_names:
+    - match: \b(vertex_index|instance_index|position|front_facing|frag_depth|sample_index|sample_mask|local_invocation_id|local_invocation_index|global_invocation_id|workgroup_id|num_workgroups|subgroup_invocation_id|subgroup_size)\b
+      comment: "built-ins: https://www.w3.org/TR/WGSL/#builtin-value-names"
+      scope: variable.language.built-ins.wgsl
+  function_arguments:
+    - include: line_ending_comments
+    - include: block_comments
+    - include: attributes
+    - include: keywords
+    - include: function_calls
+    - include: literals
+    - include: types
+    - include: variables
+    - include: punctuation
+    - include: reserved_words
+    - include: address_spaces
+    - include: memory_access_modes
+    - include: operators
+    - include: built-in_value_names
   function_calls:
-    - match: '([A-Za-z0-9_]+)(\()'
-      comment: function/method calls
+    - match: '([_$[:alpha:]][_$[:alnum:]]*)\s*(<[^|&()]+>)?(\()'
+      comment: function/method calls with best effort generics
       captures:
         1: entity.name.function.wgsl
-        2: punctuation.brackets.round.wgsl
+        3: punctuation.brackets.round.wgsl
       push:
-        - meta_scope: meta.function.call.wgsl
+        - meta_scope: meta.function.wgsl
         - match: \)
           captures:
             0: punctuation.brackets.round.wgsl
           pop: true
-        - include: line_comments
-        - include: block_comments
-        - include: keywords
-        - include: attributes
-        - include: function_calls
-        - include: constants
-        - include: types
-        - include: variables
-        - include: punctuation
+        - include: function_arguments
   functions:
-    - match: '\b(fn)\s+([A-Za-z0-9_]+)((\()|(<))'
+    - match: '\b(fn)\s+([_$[:alpha:]][_$[:alnum:]]*)\s*((\()|(<))'
       comment: function definition
       captures:
-        1: keyword.other.fn.wgsl
-        2: entity.name.function.wgsl
+        1: keyword.fn.wgsl
+        2: entity.name.function.definition.wgsl
         4: punctuation.brackets.round.wgsl
       push:
         - meta_scope: meta.function.definition.wgsl
@@ -87,43 +88,62 @@ contexts:
           captures:
             0: punctuation.brackets.curly.wgsl
           pop: true
-        - include: line_comments
-        - include: block_comments
-        - include: keywords
-        - include: attributes
-        - include: function_calls
-        - include: constants
-        - include: types
-        - include: variables
-        - include: punctuation
+        - include: function_arguments
   keywords:
-    - match: \b(bitcast|block|break|case|continue|continuing|default|discard|else|elseif|enable|fallthrough|for|function|if|loop|private|read|read_write|return|storage|switch|uniform|while|workgroup|write)\b
-      comment: other keywords
+    - match: \b(alias|const|fn|let|override|struct|var)\b
+      comment: "declaration and type keywords: https://www.w3.org/TR/WGSL/#declaration-and-scope, https://www.w3.org/TR/WGSL/#types"
+      scope: keyword.other.declarations-and-types.wgsl
+    - match: \b(break|case|continue|continuing|default|discard|(?<!#)else|for|if|loop|return|switch|while)\b
+      comment: "control-flow keywords: https://www.w3.org/TR/WGSL/#control-flow"
       scope: keyword.control.wgsl
-    - match: \b(asm|const|do|enum|handle|mat|premerge|regardless|typedef|unless|using|vec|void)\b
-      comment: reserved keywords
-      scope: keyword.control.wgsl
-    - match: \b(let|var)\b
-      comment: storage keywords
-      scope: keyword.other.wgsl storage.type.wgsl
-    - match: \b(type)\b
-      comment: type keyword
-      scope: keyword.declaration.type.wgsl storage.type.wgsl
-    - match: \b(enum)\b
-      comment: enum keyword
-      scope: keyword.declaration.enum.wgsl storage.type.wgsl
-    - match: \b(struct)\b
-      comment: struct keyword
-      scope: keyword.declaration.struct.wgsl storage.type.wgsl
-    - match: \bfn\b
-      comment: fn
-      scope: keyword.other.fn.wgsl
+    - match: \b(const_assert)\b
+      comment: "assertion keywords: https://www.w3.org/TR/WGSL/#assertions"
+      scope: keyword.other.assertions.wgsl
+    - match: (?<!@)\b(diagnostic|enable|requires)\b
+      comment: "directive keywords: https://www.w3.org/TR/WGSL/#directives"
+      scope: keyword.other.directive.wgsl
+  line_ending_comments:
+    - match: \s*//.*
+      comment: single line comment
+      scope: comment.line.double-slash.wgsl
+  literals:
+    - match: '\b(0[iu]?|[1-9][0-9]*[iu]?)\b'
+      comment: "decimal_int_literal: https://www.w3.org/TR/WGSL/#syntax-decimal_int_literal"
+      scope: constant.numeric.decimal.int.wgsl
+    - match: '\b(0[xX][0-9a-fA-F]+[iu]?)\b'
+      comment: "hex_int_literal: https://www.w3.org/TR/WGSL/#syntax-hex_int_literal"
+      scope: constant.numeric.hex.int.wgsl
+    - match: '\b(0[fh]|[1-9][0-9]*[fh]|[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?[fh]?|[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?[fh]?|[0-9]+[eE][+-]?[0-9]+[fh]?)\b'
+      comment: "decimal_float_literal: https://www.w3.org/TR/WGSL/#syntax-decimal_float_literal"
+      scope: constant.numeric.decimal.float.wgsl
+    - match: '\b(0[xX][0-9a-fA-F]*\.[0-9a-fA-F]+([pP][+-]?[0-9]+[fh]?)?|0[xX][0-9a-fA-F]+\.[0-9a-fA-F]*([pP][+-]?[0-9]+[fh]?)?|0[xX][0-9a-fA-F]+[pP][+-]?[0-9]+[fh]?)\b'
+      comment: "hex_float_literal: https://www.w3.org/TR/WGSL/#syntax-hex_float_literal"
+      scope: constant.numeric.hex.float.wgsl
+    - match: \b(true|false)\b
+      comment: "bool_literal: https://www.w3.org/TR/WGSL/#syntax-bool_literal"
+      scope: constant.language.boolean.wgsl
+  matrix_types:
+    - match: '\b(mat[2-4]x[2-4])\b'
+      comment: "matrix types: https://www.w3.org/TR/WGSL/#matrix-types"
+      scope: storage.type.matrixes.wgsl
+    - match: '\b(mat[2-4]x[2-4])(f|h)\b'
+      comment: "matrix type aliases: https://www.w3.org/TR/WGSL/#matrix-types"
+      scope: storage.type.matrixes.wgsl
+  memory_access_modes:
+    - match: \b(read|write|read_write)\b
+      comment: https://www.w3.org/TR/WGSL/#memory-access-mode
+      scope: storage.modifier.memory_access_modes.wgsl
+  memory_views:
+    - match: \b(ptr)\b
+      comment: pointer types
+      scope: storage.type.ptr.wgsl
+  operators:
     - match: (\^|\||\|\||&&|<<|>>|!)(?!=)
       comment: logical operators
       scope: keyword.operator.logical.wgsl
     - match: "&(?![&=])"
-      comment: logical AND, borrow references
-      scope: keyword.operator.borrow.and.wgsl
+      comment: logical AND, address-of
+      scope: keyword.operator.address-of.and.wgsl
     - match: (\+=|-=|\*=|/=|%=|\^=|&=|\|=|<<=|>>=)
       comment: assignment operators
       scope: keyword.operator.assignment.wgsl
@@ -142,10 +162,33 @@ contexts:
     - match: "->"
       comment: dashrocket, skinny arrow
       scope: keyword.operator.arrow.skinny.wgsl
-  line_comments:
-    - match: \s*//.*
-      comment: single line comment
-      scope: comment.line.double-slash.wgsl
+    - match: ":"
+      comment: colon
+      scope: keyword.operator.type.annotation.wgsl
+  plain_types:
+    - match: \b(bool)\b
+      comment: boolean type
+      scope: storage.type.boolean.wgsl
+    - match: \b(i32|u32)\b
+      comment: integer type
+      scope: storage.type.integer.wgsl
+    - match: \b(f32|f16)\b
+      comment: floating point types
+      scope: storage.type.floating-point.wgsl
+    - include: vector_types
+    - include: matrix_types
+    - match: \b(atomic)\b
+      comment: atomic types
+      scope: storage.type.wgsl
+    - match: \b(array)\b
+      comment: array types
+      scope: storage.type.wgsl
+    - match: '\b([A-Z][_$[:alnum:]]*)\b'
+      comment: Custom type
+      scope: entity.name.type.wgsl
+    - match: \b(i64|u64|f64)\b
+      comment: naga extension types
+      scope: storage.type.wgsl
   punctuation:
     - match: ","
       comment: comma
@@ -162,35 +205,44 @@ contexts:
     - match: '[\[\]]'
       comment: square brackets
       scope: punctuation.brackets.square.wgsl
-    - match: "(?<![=-])[<>]"
+    - match: "(?<!=)[<>]"
       comment: angle brackets
       scope: punctuation.brackets.angle.wgsl
+  reserved_words:
+    - match: \b(aNULL|Self|abstract|active|alignas|alignof|as|asm|asm_fragment|async|attribute|auto|await|become|cast|catch|class|co_await|co_return|co_yield|coherent|column_major|common|compile|compile_fragment|concept|const_cast|consteval|constexpr|constinit|crate|debugger|decltype|delete|demote|demote_to_helper|do|dynamic_cast|enum|explicit|export|extends|extern|external|fallthrough|filter|final|finally|friend|from|fxgroup|get|goto|groupshared|highp|impl|implements|import|inline|instanceof|interface|layout|lowp|macro|macro_rules|match|mediump|meta|mod|module|move|mut|mutable|namespace|new|nil|noexcept|noinline|nointerpolation|non_coherent|noncoherent|noperspective|null|nullptr|of|operator|package|packoffset|partition|pass|patch|pixelfragment|precise|precision|premerge|priv|protected|pub|public|readonly|ref|regardless|register|reinterpret_cast|require|resource|restrict|self|set|shared|sizeof|smooth|snorm|static|static_assert|static_cast|std|subroutine|super|target|template|this|thread_local|throw|trait|try|type|typedef|typeid|typename|typeof|union|unless|unorm|unsafe|unsized|use|using|varying|virtual|volatile|wgsl|where|with|writeonly|yield)\b
+      comment: https://www.w3.org/TR/WGSL/#reserved-words
+      scope: keyword.other.reserved_words.wgsl
+  texture_and_sampler_types:
+    - match: \b(texture_1d|texture_2d|texture_2d_array|texture_3d|texture_cube|texture_cube_array)\b
+      comment: sampled texture types
+      scope: storage.type.sampled-texture.wgsl
+    - match: \b(texture_multisampled_2d|texture_depth_multisampled_2d)\b
+      comment: multisampled texture types
+      scope: storage.type.sampled-texture.wgsl
+    - match: \b(texture_external)\b
+      comment: external sampled texture types
+      scope: storage.type.external-sampled-texture.wgsl
+    - match: \b(texture_storage_1d|texture_storage_2d|texture_storage_2d_array|texture_storage_3d)\b
+      comment: storage texture types
+      scope: storage.type.external-sampled-texture.wgsl
+    - match: \b(texture_depth_2d|texture_depth_2d_array|texture_depth_cube|texture_depth_cube_array)\b
+      comment: depth texture types
+      scope: storage.type.depth-texture.wgsl
+    - match: \b(sampler|sampler_comparison)\b
+      comment: sampler types
+      scope: storage.type.sampler.wgsl
   types:
-    - match: \b(bool|i32|u32|f32)\b
-      comment: scalar Types
-      scope: storage.type.wgsl
-    - match: \b(i64|u64|f64)\b
-      comment: reserved scalar Types
-      scope: storage.type.wgsl
-    - match: \b(vec2i|vec3i|vec4i|vec2u|vec3u|vec4u|vec2f|vec3f|vec4f|vec2h|vec3h|vec4h)\b
-      comment: vector type aliasses
-      scope: storage.type.wgsl
-    - match: \b(mat2x2f|mat2x3f|mat2x4f|mat3x2f|mat3x3f|mat3x4f|mat4x2f|mat4x3f|mat4x4f|mat2x2h|mat2x3h|mat2x4h|mat3x2h|mat3x3h|mat3x4h|mat4x2h|mat4x3h|mat4x4h)\b
-      comment: matrix type aliasses
-      scope: storage.type.wgsl
-    - match: '\b(vec[2-4]|mat[2-4]x[2-4])\b'
-      comment: vector/matrix types
-      scope: storage.type.wgsl
-    - match: \b(atomic)\b
-      comment: atomic types
-      scope: storage.type.wgsl
-    - match: \b(array)\b
-      comment: array types
-      scope: storage.type.wgsl
-    - match: '\b([A-Z][A-Za-z0-9]*)\b'
-      comment: Custom type
-      scope: entity.name.type.wgsl
+    - include: plain_types
+    - include: memory_views
+    - include: texture_and_sampler_types
   variables:
-    - match: '\b(?<!(?<!\.)\.)(?:r#(?!(crate|[Ss]elf|super)))?[a-z0-9_]+\b'
+    - match: '\b([_$[:alpha:]][_$[:alnum:]]*)\b'
       comment: variables
       scope: variable.other.wgsl
+  vector_types:
+    - match: '\b(vec)([2-4])\b'
+      comment: "vector types: https://www.w3.org/TR/WGSL/#vector-types"
+      scope: storage.type.vectors.wgsl
+    - match: '\b(vec)([2-4])(i|u|f|h)\b'
+      comment: "vector type aliases: https://www.w3.org/TR/WGSL/#vector-types"
+      scope: storage.type.vectors.wgsl
