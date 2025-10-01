@@ -174,4 +174,4 @@ done
 
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
-[the command from the "Release" workflow]: https://github.com/bevyengine/bevy/blob/main/.github/workflows/release.yml
+[the command from the "Release" workflow]: https://github.com/bevyengine/bevy/blob/release-0.15.2/.github/workflows/release.yml
