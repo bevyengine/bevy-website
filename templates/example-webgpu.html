@@ -1,7 +1,7 @@
 {% extends "layouts/example.html" %}
 
 {% block examples_url %}/examples-webgpu{% endblock examples_url %}
-{% block wasm_base_url %}https://bevy-webgpu-examples.pages.dev{% endblock wasm_base_url %}
+{% block wasm_base_url %}{{ config.extra.wasm_webgpu_base_url | safe }}{% endblock wasm_base_url %}
 {% block callout_modifier %}warning{% endblock callout_modifier %}
 {% block callout %}
 <strong>Support Warning.</strong>
