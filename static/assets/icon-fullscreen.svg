@@ -1,36 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50" height="50"><defs></defs><g>
-<rect fill="#ffffff" fill-opacity="0" x="0" y="0" width="50" height="50"/>
+<rect fill="#fefefe" fill-opacity="0" x="0" y="0" width="50" height="50"/>
 <g>
 	<g transform="matrix(1,0,0,1,25,25)">
 		<g transform="matrix(1,0,0,1,-25,-25)">
-			<path d="M1,1.0000000000095497 C1,1.0000000000095497 18,18 18,18" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M1.75,1.7500000000102318 C1.75,1.7500000000102318 18,18 18,18" fill="none" stroke="#000000" stroke-width="3.5"/>
 		</g>
 		<g transform="matrix(1,0,0,1,-25,-25)">
-			<path d="M1,15 C1,15 1,1 1,1 C0.9999999999999999,1 15,1.0000000000000009 15,1.0000000000000009" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M0,15 C0,15 0,0 0,0 C0,0 15,0.000000000000000918485099360515 15,0.000000000000000918485099360515" transform="matrix(1,0,0,1,1.75,1.75)" fill="none" stroke="#000000" stroke-width="3.5" stroke-miterlimit="2"/>
 		</g>
 	</g>
 	<g transform="matrix(1,0,0,1,25,25)">
 		<g transform="matrix(0,-1,1,0,-25,25)">
-			<path d="M1,1.0000000000095497 C1,1.0000000000095497 18,18 18,18" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M1.75,1.7500000000102318 C1.75,1.7500000000102318 18,18 18,18" fill="none" stroke="#000000" stroke-width="3.5"/>
 		</g>
 		<g transform="matrix(0,-1,1,0,-25,25)">
-			<path d="M1,15 C1,15 1,1 1,1 C0.9999999999999999,1 15,1.0000000000000009 15,1.0000000000000009" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M0,15 C0,15 0,0 0,0 C0,0 15,0.000000000000000918485099360515 15,0.000000000000000918485099360515" transform="matrix(1,0,0,1,1.75,1.75)" fill="none" stroke="#000000" stroke-width="3.5" stroke-miterlimit="2"/>
 		</g>
 	</g>
 	<g transform="matrix(1,0,0,1,25,25)">
 		<g transform="matrix(0,1,-1,0,25,-25)">
-			<path d="M1,1.0000000000095497 C1,1.0000000000095497 18,18 18,18" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M1.75,1.7500000000102318 C1.75,1.7500000000102318 18,18 18,18" fill="none" stroke="#000000" stroke-width="3.5"/>
 		</g>
 		<g transform="matrix(0,1,-1,0,25,-25)">
-			<path d="M1,15 C1,15 1,1 1,1 C0.9999999999999999,1 15,1.0000000000000009 15,1.0000000000000009" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M0,15 C0,15 0,0 0,0 C0,0 15,0.000000000000000918485099360515 15,0.000000000000000918485099360515" transform="matrix(1,0,0,1,1.75,1.75)" fill="none" stroke="#000000" stroke-width="3.5" stroke-miterlimit="2"/>
 		</g>
 	</g>
 	<g transform="matrix(1,0,0,1,25,25)">
 		<g transform="matrix(-1,0,0,-1,25,25)">
-			<path d="M1,1.0000000000095497 C1,1.0000000000095497 18,18 18,18" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M1.75,1.7500000000102318 C1.75,1.7500000000102318 18,18 18,18" fill="none" stroke="#000000" stroke-width="3.5"/>
 		</g>
 		<g transform="matrix(-1,0,0,-1,25,25)">
-			<path d="M1,15 C1,15 1,1 1,1 C0.9999999999999999,1 15,1.0000000000000009 15,1.0000000000000009" fill="none" stroke="#000000" stroke-width="2"/>
+			<path d="M0,15 C0,15 0,0 0,0 C0,0 15,0.000000000000000918485099360515 15,0.000000000000000918485099360515" transform="matrix(1,0,0,1,1.75,1.75)" fill="none" stroke="#000000" stroke-width="3.5" stroke-miterlimit="2"/>
 		</g>
 	</g>
 </g></g></svg>
