@@ -59,7 +59,7 @@ When making a release, the Maintainers follow these checklists:
 
 #### Minor Release
 
-1. Release on crates.io using `bash tools/publish.sh`
+1. Release on crates.io using `cargo publish --workspace --no-verify`
 2. Announce on:
     1. HackerNews
     2. Bluesky / Mastodon
@@ -109,7 +109,7 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 #### Patch Release
 
 1. Release on crates.io
-    - `bash tools/publish.sh`
+    - `cargo publish --workspace --no-verify`
 2. Announce on:
     1. Discord: Bevy, #announcements
 
@@ -157,7 +157,7 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 #### RC Release
 
 1. Release on crates.io
-    - `bash tools/publish.sh`
+    - `cargo publish --workspace --no-verify`
 2. Announce on:
     1. Discord: Bevy, #dev-announcements
 
