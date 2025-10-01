@@ -99,7 +99,7 @@ while read -r commit number title <&3; do
     fi
 done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
 ```
-4. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `patch` for the new version.
+4. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
 5. Create tag on GitHub.
 6. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
@@ -151,7 +151,7 @@ while read -r commit number title <&3; do
     fi
 done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
 ```
-4. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
+4. Bump version number for all crates, using [the Update Command] locally, with `rc` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.0-rc.Y`
 5. Create tag on GitHub.
 6. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
@@ -175,6 +175,14 @@ do
 done
 ```
 
+## Update Command
+
+This command will update the version of all the published Bevy crates in the workspace:
+
+```
+cargo release <patch|rc> --workspace --no-publish --execute --no-tag --no-confirm --no-push --dependent-version upgrade --exclude ci --exclude errors --exclude bevy_mobile_example --exclude build-wasm-example --exclude no_std_library --exclude auto_register_static --exclude export-content
+```
+
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
-[the command from the "Release" workflow]: https://github.com/bevyengine/bevy/blob/main/.github/workflows/release.yml
+[the Update Command]: https://bevy.org/learn/contribute/project-information/release-process/#update-command
