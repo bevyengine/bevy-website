@@ -54,6 +54,7 @@ When making a release, the Maintainers follow these checklists:
 7. Create tag on GitHub.
 8. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
 9. Bump `latest` tag to most recent release.
+    - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
 10. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
 11. Run the [`build-wasm-examples` workflow] to update Wasm examples.
 
@@ -103,6 +104,7 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 5. Create tag on GitHub.
 6. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
 7. Bump `latest` tag to most recent release.
+    - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
 8. Run the [`update-screenshots` workflow] to update screenshots.
 9. Run this [`build-wasm-examples` workflow] to update Wasm examples.
 
