@@ -71,9 +71,9 @@
     height: auto !important;
     border-radius: $border-radius;
     background: var(--bevy-instance-canvas-color);
+  }
 
-    :fullscreen {
-      border-radius: 0;
-    }
+  &__canvas:fullscreen {
+    border-radius: 0;
   }
 }
