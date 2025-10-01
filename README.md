@@ -22,4 +22,4 @@ A local server should start and you should be able to access a local version of 
 
 These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
 
-The Examples page uses the same WASM binaries as https://bevy.org/examples by default. To build examples locally, have a look at `generate-wasm-examples/build_wasm_examples_debug.sh`. After running it, start zola with `zola --config config.local.toml serve` to use the locally built examples.
+The Examples page uses the same Wasm binaries as https://bevy.org/examples by default. To build examples locally, have a look at `generate-wasm-examples/build_wasm_examples_debug.sh`. After running it, start zola with `zola --config config.local.toml serve` to use the locally built examples.
