@@ -24,16 +24,16 @@
     ("fullscreen", 24),
   );
 
-@each $icon in $icons {
-  // Icons always must have 24px height
-  // This is just for icon height consistency
-  $ratio: math.div(nth($icon, 2), 24);
+  @each $icon in $icons {
+    // Icons always must have 24px height
+    // This is just for icon height consistency
+    $ratio: math.div(nth($icon, 2), 24);
 
-  &--#{nth($icon, 1)} {
-    height: var(--icon-height);
-    width: calc(var(--icon-height) * #{$ratio});
-    -webkit-mask-image: url("/assets/icon-#{nth($icon, 1)}.svg");
-    mask-image: url("/assets/icon-#{nth($icon, 1)}.svg");
+    &--#{nth($icon, 1)} {
+      height: var(--icon-height);
+      width: calc(var(--icon-height) * #{$ratio});
+      -webkit-mask-image: url("/assets/icon-#{nth($icon, 1)}.svg");
+      mask-image: url("/assets/icon-#{nth($icon, 1)}.svg");
+    }
   }
-}
 }
