@@ -120,6 +120,7 @@ jobs:
       - name: Run Pa11y-CI
         run: |
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}\",\n\"args\": [\"--no-sandbox\"]\n    }\n  }\n}" > .pa11yci.json
+          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}\",\n\"args\": [\"--no-sandbox\"]\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --config .pa11y-ci-dark.js --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
