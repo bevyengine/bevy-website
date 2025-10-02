@@ -3,9 +3,8 @@
 const puppeteer = require("puppeteer");
 
 const getContext = async () => {
-	const browser = await puppeteer.launch(chromeLaunchConfig: {
-        executablePath: '/usr/bin/chromium-browser',
-        ignoreHTTPSErrors: true
+	const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/chromium-browser'
     });
 	const page = await browser.newPage();
 	await page.emulateMediaFeatures([
