@@ -58,10 +58,11 @@ jobs:
       - name: Check clippy
         run: cargo clippy --all-targets -- -Dwarnings
         
-  setup-accessibility-linting:
-    runs-on: ubuntu-latest
+  light-mode-accessibility-linting:
+      runs-on: ubuntu-latest
+      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
 
-    steps:
+      steps:
       - uses: actions/checkout@v4
 
       - name: Install NPM
@@ -84,13 +85,6 @@ jobs:
         run: |
           npm install pa11y-ci wait-on
           node node_modules/puppeteer/install.js
-
-
-  light-mode-accessibility-linting:
-      runs-on: ubuntu-latest
-      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets, setup-accessibility-linting]
-
-      steps:
       - name: Run Pa11y-CI
         run: |
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
@@ -100,9 +94,31 @@ jobs:
 
   dark-mode-accessibility-linting:
       runs-on: ubuntu-latest
-      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets, setup-accessibility-linting]
+      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
 
       steps:
+      - uses: actions/checkout@v4
+
+      - name: Install NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get install -y chromium-browser
+          which chromium-browser
+          chromium-browser --version
+
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.18.0
+
+      - name: Install Pa11y-CI and Wait-on
+        run: |
+          npm install pa11y-ci wait-on
+          node node_modules/puppeteer/install.js
       - name: Run Pa11y-CI
         run: |
           zola serve &
