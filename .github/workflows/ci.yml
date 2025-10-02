@@ -93,11 +93,7 @@ jobs:
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   dark-mode-accessibility-linting:
-      # Using Ubuntu version 22.04 since the latest
-      # may be breaking chromium sandboxing on this job
-      # specifically. This is a stop gap measure and
-      # MUST be looked into again before this PR#1046 merging.
-      runs-on: ubuntu-22.04
+      runs-on: ubuntu-latest
       needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
 
       steps:
@@ -108,11 +104,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Google Chrome
+      - name: Install Chromium
         run: |
           sudo apt-get install -y chromium-browser
           which chromium-browser
           chromium-browser --version
+
+      - name: Add AppArmor profile for Chromium
+        run: |
+          sudo echo -e "# This profile allows everything and only exists to give the\n# application a name instead of having the label "unconfined"\n\nabi <abi/4.0>,\ninclude <tunables/global>\n\nprofile chromium /usr/bin/chromium-browser flags=(unconfined) {\n userns,\n\n # Site-specific additions and overrides. See local/README for details.\n include if exists <local/chrome>\n }"\n > /etc/apparmor.d/chromium
 
       - name: Install Zola
         uses: taiki-e/install-action@v2
