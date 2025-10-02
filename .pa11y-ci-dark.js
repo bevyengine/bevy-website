@@ -2,10 +2,16 @@
 
 const puppeteer = require("puppeteer");
 
+let settings = {};
+fs.readFile("./.pa11yci", (error, content) => {
+	if (err) throw err;
+
+	settings = JSON.parse(content);
+}
+)
+
 const getContext = async () => {
-	const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser'
-    });
+	const browser = await puppeteer.launch(settings.defaults.chromeLaunchConfig);
 	const page = await browser.newPage();
 	await page.emulateMediaFeatures([
 		{ name: "prefers-color-scheme", value: "dark" },

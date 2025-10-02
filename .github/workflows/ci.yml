@@ -71,10 +71,9 @@ jobs:
           node-version: 18
 
       - name: Install Google Chrome
-        run: |
-          sudo apt-get install -y chromium-browser
-          which chromium-browser
-          chromium-browser --version
+        uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
+        run: chrome --version
 
       - name: Install Zola
         uses: taiki-e/install-action@v2
@@ -87,7 +86,7 @@ jobs:
           node node_modules/puppeteer/install.js
       - name: Run Pa11y-CI
         run: |
-          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
+          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
@@ -105,10 +104,8 @@ jobs:
           node-version: 18
 
       - name: Install Google Chrome
-        run: |
-          sudo apt-get install -y chromium-browser
-          which chromium-browser
-          chromium-browser --version
+        uses: browser-actions/setup-chrome@v2
+        run: chrome --version
 
       - name: Install Zola
         uses: taiki-e/install-action@v2
@@ -121,6 +118,7 @@ jobs:
           node node_modules/puppeteer/install.js
       - name: Run Pa11y-CI
         run: |
+          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --config .pa11y-ci-dark.js --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
