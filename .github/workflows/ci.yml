@@ -93,7 +93,11 @@ jobs:
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   dark-mode-accessibility-linting:
-      runs-on: ubuntu-latest
+      # Using Ubuntu version 22.04 since the latest
+      # may be breaking chromium sandboxing on this job
+      # specifically. This is a stop gap measure and
+      # MUST be looked into again before this PR#1046 merging.
+      runs-on: ubuntu-22.04
       needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
 
       steps:
