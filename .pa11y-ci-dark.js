@@ -1,6 +1,7 @@
 "use strict";
 
 const puppeteer = require("puppeteer");
+const fs = require("node:fs");
 
 let settings = {};
 fs.readFile("./.pa11yci", (error, content) => {
