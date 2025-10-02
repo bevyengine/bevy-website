@@ -58,8 +58,7 @@ jobs:
       - name: Check clippy
         run: cargo clippy --all-targets -- -Dwarnings
         
-  accessibility-linting:
-    needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
+  setup-accessibility-linting:
     runs-on: ubuntu-latest
 
     steps:
@@ -86,13 +85,27 @@ jobs:
           npm install pa11y-ci wait-on
           node node_modules/puppeteer/install.js
 
+
+  light-mode-accessibility-linting:
+      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets, setup-accessibility-linting]
+
+      steps:
       - name: Run Pa11y-CI
         run: |
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
-          # npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
-          npx pa11y-ci -c .pa11y-ci-dark.js --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+
+  dark-mode-accessibility-linting:
+      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets, setup-accessibility-linting]
+
+      steps:
+      - name: Run Pa11y-CI
+        run: |
+          zola serve &
+          npx wait-on http://127.0.0.1:1111
+          npx pa11y-ci --config .pa11y-ci-dark.js --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   test-crates:
     runs-on: ubuntu-latest
