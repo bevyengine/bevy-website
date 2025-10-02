@@ -11,6 +11,8 @@ fs.readFile("./.pa11yci", (error, content) => {
 }
 )
 
+console.log(settings.toString());
+
 const getContext = async () => {
 	const browser = await puppeteer.launch(settings.defaults.chromeLaunchConfig);
 	const page = await browser.newPage();
