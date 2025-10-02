@@ -91,7 +91,8 @@ jobs:
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
-          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+          # npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+          npx pa11y-ci -c .pa11y-ci-dark.js --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   test-crates:
     runs-on: ubuntu-latest
