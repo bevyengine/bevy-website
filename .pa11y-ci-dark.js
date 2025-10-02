@@ -3,15 +3,7 @@
 const puppeteer = require("puppeteer");
 const fs = require("node:fs");
 
-let settings = {};
-fs.readFile("./.pa11yci", (error, content) => {
-	if (err) throw err;
-
-	settings = JSON.parse(content);
-}
-)
-
-console.log(settings);
+let settings = require("./.pa11yci.json");
 
 const getContext = async () => {
 	const browser = await puppeteer.launch(settings.defaults.chromeLaunchConfig);
