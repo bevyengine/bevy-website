@@ -93,11 +93,7 @@ jobs:
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   dark-mode-accessibility-linting:
-      # Using Ubuntu version 22.04 since the latest
-      # may be breaking chromium sandboxing on this job
-      # specifically. This is a stop gap measure and
-      # MUST be looked into again before this PR#1046 merging.
-      runs-on: ubuntu-22.04
+      runs-on: ubuntu-latest
       needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
 
       steps:
@@ -125,7 +121,6 @@ jobs:
           node node_modules/puppeteer/install.js
       - name: Run Pa11y-CI
         run: |
-          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"/usr/bin/chromium-browser\"\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --config .pa11y-ci-dark.js --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
