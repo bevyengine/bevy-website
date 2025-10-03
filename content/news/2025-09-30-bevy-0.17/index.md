@@ -266,19 +266,19 @@ In **Bevy 0.17**, [`Event`] is now _exclusively_ the name/trait for the concept 
 
 It is still possible to support both contexts by implementing _both traits_, but we expect that to be significantly less common than just choosing one.
 
-[`Event`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/trait.Event.html
-[`Entity`]: https://docs.rs/bevy/0.17.0/bevy/ecs/entity/struct.Entity.html
-[`Trigger`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/trait.Trigger.html
-[`GlobalTrigger`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/struct.GlobalTrigger.html
-[`EntityTrigger`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/struct.EntityTrigger.html
-[`EntityEvent`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/trait.EntityEvent.html
-[`ChildOf`]: https://docs.rs/bevy/0.17.0/bevy/ecs/hierarchy/struct.ChildOf.html
-[`PropagateEntityTrigger`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/struct.PropagateEntityTrigger.html
-[`Add`]: https://docs.rs/bevy/0.17.0/bevy/ecs/lifecycle/struct.Add.html
-[`EntityComponentsTrigger`]: https://docs.rs/bevy/0.17.0/bevy/ecs/event/struct.EntityComponentsTrigger.html
-[`MessageWriter`]: https://docs.rs/bevy/0.17.0/bevy/ecs/message/struct.MessageWriter.html
-[`MessageReader`]: https://docs.rs/bevy/0.17.0/bevy/ecs/message/struct.MessageReader.html
-[`Message`]: https://docs.rs/bevy/0.17.0/bevy/ecs/message/trait.Message.html
+[`Event`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/trait.Event.html
+[`Entity`]: https://docs.rs/bevy/0.17.1/bevy/ecs/entity/struct.Entity.html
+[`Trigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/trait.Trigger.html
+[`GlobalTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.GlobalTrigger.html
+[`EntityTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.EntityTrigger.html
+[`EntityEvent`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/trait.EntityEvent.html
+[`ChildOf`]: https://docs.rs/bevy/0.17.1/bevy/ecs/hierarchy/struct.ChildOf.html
+[`PropagateEntityTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.PropagateEntityTrigger.html
+[`Add`]: https://docs.rs/bevy/0.17.1/bevy/ecs/lifecycle/struct.Add.html
+[`EntityComponentsTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.EntityComponentsTrigger.html
+[`MessageWriter`]: https://docs.rs/bevy/0.17.1/bevy/ecs/message/struct.MessageWriter.html
+[`MessageReader`]: https://docs.rs/bevy/0.17.1/bevy/ecs/message/struct.MessageReader.html
+[`Message`]: https://docs.rs/bevy/0.17.1/bevy/ecs/message/trait.Message.html
 
 ## Bevy Feathers: Widgets for Tooling (Experimental)
 
@@ -559,14 +559,14 @@ that bleeds out into the nearby sky.
 This is an effect known as "bloom", which is enabled by adding the [`Bloom`] component to your camera entity.
 
 [procedural atmosphere]: https://bevy.org/news/bevy-0-16/#procedural-atmospheric-scattering
-[`SunDisk`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/light/struct.SunDisk.html
-[`Bloom`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/post_process/bloom/struct.Bloom.html
-[`AtmosphereMode::LookupTexture`]: https://docs.rs/bevy/0.17.0/bevy/pbr/enum.AtmosphereMode.html#variant.LookupTexture
-[`AtmosphereMode::Raymarched`]: https://docs.rs/bevy/0.17.0/bevy/pbr/enum.AtmosphereMode.html#variant.Raymarched
-[`Atmosphere`]: https://docs.rs/bevy/0.17.0/bevy/pbr/struct.Atmosphere.html
-[`AtmosphereSettings`]: https://docs.rs/bevy/0.17.0/bevy/pbr/struct.AtmosphereSettings.html
-[`Camera`]: https://docs.rs/bevy/0.17.0/bevy/camera/struct.Camera.html
-[`DirectionalLight`]: https://docs.rs/bevy/0.17.0/bevy/light/struct.DirectionalLight.html
+[`SunDisk`]: https://docs.rs/bevy/0.17.1/bevy/light/struct.SunDisk.html
+[`Bloom`]: https://docs.rs/bevy/0.17.1/bevy/post_process/bloom/struct.Bloom.html
+[`AtmosphereMode::LookupTexture`]: https://docs.rs/bevy/0.17.1/bevy/pbr/enum.AtmosphereMode.html#variant.LookupTexture
+[`AtmosphereMode::Raymarched`]: https://docs.rs/bevy/0.17.1/bevy/pbr/enum.AtmosphereMode.html#variant.Raymarched
+[`Atmosphere`]: https://docs.rs/bevy/0.17.1/bevy/pbr/struct.Atmosphere.html
+[`AtmosphereSettings`]: https://docs.rs/bevy/0.17.1/bevy/pbr/struct.AtmosphereSettings.html
+[`Camera`]: https://docs.rs/bevy/0.17.1/bevy/camera/struct.Camera.html
+[`DirectionalLight`]: https://docs.rs/bevy/0.17.1/bevy/light/struct.DirectionalLight.html
 
 ## Web Assets
 
@@ -624,9 +624,9 @@ In cases where automatic registration is undesirable, it can be opted-out of by 
 This feature relies on the [`inventory`] crate to collect all type registrations at compile-time. This is supported on Bevy's most popular platforms: Windows, macOS, Linux, iOS, Android, and WebAssembly. However, some niche platforms are not supported by [`inventory`], and while it would be best for
 any unsupported platforms to be supported upstream, sometimes it might not be possible. For this reason, there is a [different implementation](https://github.com/bevyengine/bevy/tree/release-0.17.0/examples/reflection/auto_register_static) of this feature that works on all platforms.
 
-[`Reflect`]: https://docs.rs/bevy/0.17.0/bevy/prelude/trait.Reflect.html
+[`Reflect`]: https://docs.rs/bevy/0.17.1/bevy/prelude/trait.Reflect.html
 [`inventory`]: https://github.com/dtolnay/inventory
-[`register_type`]: https://docs.rs/bevy/0.17.0/bevy/prelude/struct.App.html#method.register_type
+[`register_type`]: https://docs.rs/bevy/0.17.1/bevy/prelude/struct.App.html#method.register_type
 
 ## Virtual Geometry BVH culling
 
@@ -720,7 +720,7 @@ controlled with the [`BorderColor`] component.
 This feature was borrowed from CSS, where it is commonly used to fake buttons with depth,
 but we're looking forward to seeing your creative designs.
 
-[`BorderColor`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/prelude/struct.BorderColor.html
+[`BorderColor`]: https://docs.rs/bevy/0.17.1/bevy/prelude/struct.BorderColor.html
 
 ## Specialized UI Transform
 
@@ -728,8 +728,8 @@ but we're looking forward to seeing your creative designs.
 
 In Bevy UI, [`Transform`] and `GlobalTransform` have been replaced by [`UiTransform`] and `UiGlobalTransform`.  [`UiTransform`] is a specialized 2D UI transform, which more effectively maps to the UI space, improves our internals substantially, and cuts out redundant, unnecessary, often expensive work (such as doing full hierarchical [`Transform`] propagation _in addition_ to the Bevy UI layout algorithm).
 
-[`Transform`]: https://docs.rs/bevy/0.17.0/bevy/prelude/struct.Transform.html
-[`UiTransform`]: https://docs.rs/bevy/0.17.0/bevy/ui/ui_transform/struct.UiTransform.html
+[`Transform`]: https://docs.rs/bevy/0.17.1/bevy/prelude/struct.Transform.html
+[`UiTransform`]: https://docs.rs/bevy/0.17.1/bevy/ui/ui_transform/struct.UiTransform.html
 
 ## Data-Driven Materials
 
@@ -1025,11 +1025,11 @@ add a [`PropagateStop<C>`] component to stop propagation, or even use [`Propagat
 
 This is a very general tool: please let us know what you're using it for and we can continue to add examples to the docs!
 
-[`RenderLayers`]: https://docs.rs/bevy/0.17.0/bevy/camera/visibility/struct.RenderLayers.html
-[`HierarchyPropagatePlugin`]: https://docs.rs/bevy/0.17.0/bevy/app/struct.HierarchyPropagatePlugin.html
-[`Propagate<C>`]: https://docs.rs/bevy/0.17.0/bevy/app/struct.Propagate.html
-[`PropagateStop<C>`]: https://docs.rs/bevy/0.17.0/bevy/app/struct.PropagateStop.html
-[`PropagateOver<C>`]: https://docs.rs/bevy/0.17.0/bevy/app/struct.PropagateOver.html
+[`RenderLayers`]: https://docs.rs/bevy/0.17.1/bevy/camera/visibility/struct.RenderLayers.html
+[`HierarchyPropagatePlugin`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.HierarchyPropagatePlugin.html
+[`Propagate<C>`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.Propagate.html
+[`PropagateStop<C>`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.PropagateStop.html
+[`PropagateOver<C>`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.PropagateOver.html
 
 ## Infinite Children
 
