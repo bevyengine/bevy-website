@@ -83,7 +83,6 @@ jobs:
       - name: Install Pa11y-CI and Wait-on
         run: |
           npm install pa11y-ci wait-on
-          node node_modules/puppeteer/install.js
       - name: Run Pa11y-CI
         run: |
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}\",\n\"args\": [\"--no-sandbox\"]\n    }\n  }\n}" > .pa11yci
@@ -116,7 +115,6 @@ jobs:
       - name: Install Pa11y-CI and Wait-on
         run: |
           npm install pa11y-ci wait-on
-          node node_modules/puppeteer/install.js
       - name: Run Pa11y-CI
         run: |
           echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}\",\n\"args\": [\"--no-sandbox\"]\n    }\n  }\n}" > .pa11yci.json
