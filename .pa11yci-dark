@@ -1,0 +1,9 @@
+{
+  "defaults": {
+    "chromeLaunchConfig": {
+      "args": [
+		"--enable-features=WebContentsForceDark"
+      ]
+    }
+  }
+}

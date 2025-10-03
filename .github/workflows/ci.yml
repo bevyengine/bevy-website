@@ -85,7 +85,6 @@ jobs:
           npm install pa11y-ci wait-on
       - name: Run Pa11y-CI
         run: |
-          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}\",\n\"args\": [\"--no-sandbox\"]\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
           npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
@@ -117,10 +116,9 @@ jobs:
           npm install pa11y-ci wait-on
       - name: Run Pa11y-CI
         run: |
-          echo -e "{\n  \"defaults\": {\n    \"chromeLaunchConfig\": {\n      \"executablePath\": \"${{ steps.setup-chrome.outputs.chrome-path }}\",\n\"args\": [\"--no-sandbox\", \"--enable-features=WebContentsForceDark\"]\n    }\n  }\n}" > .pa11yci
           zola serve &
           npx wait-on http://127.0.0.1:1111
-          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+          npx pa11y-ci --config .pa11yci-dark --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   test-crates:
     runs-on: ubuntu-latest
