@@ -87,7 +87,7 @@ jobs:
         run: |
           zola serve &
           npx wait-on http://127.0.0.1:1111
-          npx pa11y-ci --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+          npx pa11y-ci --config .pa11yci-light --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   dark-mode-accessibility-linting:
       runs-on: ubuntu-latest
