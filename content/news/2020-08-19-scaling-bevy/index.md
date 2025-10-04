@@ -16,31 +16,31 @@ First, I want to take a moment to highlight just how wild the last week has been
 <div style="display: flex; flex-wrap: wrap; width: 100%">
     <div style="max-width: 30rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4> 3rd most popular /r/rust post <i>of all time</i></h4>
-        <img src="3rd_on_reddit.png" style="display: block; height: 13rem"/>
+        <img src="3rd_on_reddit.png" alt="The Introducing Bevy article at third place in Reddit's top rankings" style="display: block; height: 13rem"/>
     </div>
     <div style="max-width: 30rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4>#2 on Hacker News</h4>
-        <img src="2nd_on_hacker_news.png" style="display: block; height: 10rem"/>
+        <img src="2nd_on_hacker_news.png" alt="The Introducing Bevy article at second place on Hacker News' top stories" style="display: block; height: 10rem"/>
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
-        <h4>2,200 GitHub Stars</h4>
-        <img src="2_2k_stars.png" style="display: block; height: 3rem"/>
+        <h4>2,200 Github Stars</h4>
+        <img src="2_2k_stars.png" alt="A star with the word 'unstar' next to it and a counter saying 2.2k to the right" style="display: block; height: 3rem"/>
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4>26 contributors</h4>
-        <img src="contributors.png" style="display: block; height: 8rem"/>
+        <img src="contributors.png" alt="A list of Bevy engine contributors profile pictures and the number 26" style="display: block; height: 8rem"/>
     </div>
     <div style="max-width: 20rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4>644 Discord Users</h4>
-        <img src="discord_users.png" style="display: block; height: 6rem"/>
+        <img src="discord_users.png" alt="Text saying "Server members" and 644 members from Discord" style="display: block; height: 6rem"/>
     </div>
     <div style="max-width: 21rem; max-height: 15rem; margin-right: 3rem; margin-bottom: 3rem">
         <h4 style="text-align: center"><a href="https://github.com/sponsors/cart">37% of the way to making my full time Bevy development sustainable</a></h4>
-        <a href="https://github.com/sponsors/cart"><img src="funding.png" style="display: block; height: 6rem"/></a>
+        <a href="https://github.com/sponsors/cart"><img src="funding.png" alt="The GitHub sponsors page for cart where you can donate to him" style="display: block; height: 6rem"/></a>
     </div>
     <div style="max-width: 35rem; margin-right: 3rem; margin-bottom: 3rem">
         <h3 style="text-align: center;"><a href="https://github.com/bevyengine/awesome-bevy">A truly awesome number of community-developed plugins, games, and apps</a></h3>
-        <a href="https://github.com/bevyengine/awesome-bevy"><img src="awesome.png" style="display: block; height: 20rem"/></a>
+        <a href="https://github.com/bevyengine/awesome-bevy"><img src="awesome.png" alt="A page of awesome creations made with Bevy" style="display: block; height: 20rem"/></a>
     </div>
 </div>
 

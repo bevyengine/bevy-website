@@ -43,7 +43,7 @@ This was a massive group effort that spanned multiple projects:
 
 Bevy can now run on iOS!
 
-<img src="ios.png" style="margin-left: -4rem; margin-bottom: -5rem; margin-top: -3rem" />
+<img src="ios.png" alt="A beige cube on a green plane running on an iOS emulator" style="margin-left: -4rem; margin-bottom: -5rem; margin-top: -3rem" />
 
 You can try out the [Bevy iOS example](https://github.com/bevyengine/bevy/tree/v0.3.0/examples/ios) by following the [instructions here](https://github.com/bevyengine/bevy/tree/v0.3.0/examples#ios). This one is also hot off the presses: some features will work and others probably won't.
 
