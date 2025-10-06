@@ -30,7 +30,7 @@ $z-main-menu: 1000;
 $max-width: 1200px;
 $mobile-menu-width: 300px;
 $content-top-margin: 30px;
-$border-radius: 10px;
+$border-radius: 0.4em;
 
 // Colors
 // If you're reading this in late 2025 (or later), check PR #1953 because these
@@ -185,7 +185,7 @@ $color-white: #fff;
   --card-title-color: var(--color-neutral-93);
   --card-sponsor-icon-color: #b13376;
 
-  --code-bg-color: var(--color-neutral-18);
+  --code-bg-color: color-mix(in srgb, var(--color-neutral-18) 47%, black);
   --code-incorrect-bg-color: #481e21;
   --code-incorrect-border-color: darkred;
   --code-incorrect-border-hover-color: red;
@@ -299,8 +299,8 @@ $color-white: #fff;
   --media-content-blockquote-bg-color: var(--color-neutral-18);
   --media-content-blockquote-text-color: var(--color-neutral-69);
   --media-content-button-text-color: var(--color-white);
-  --media-content-code-bg-color: var(--color-neutral-18);
-  --media-content-code-text-color: var(--color-neutral-78);
+  --media-content-code-bg-color: var(--code-bg-color);
+  --media-content-code-text-color: var(--color-neutral-88);
   --media-content-link-code-color: #e4c151;
   --media-content-link-code-hover-bg-color: var(--color-neutral-27);
   --media-content-link-color: var(--color-blue-link);
@@ -382,7 +382,7 @@ $color-white: #fff;
     --callout-warning-bg-color: #fdedc9;
     --callout-warning-color: #362a02;
 
-    --code-bg-color: var(--color-neutral-93);
+    --code-bg-color: color-mix(in srgb, white 98%, black);
     --code-incorrect-border-color: red;
     --code-text-dim-color: var(--color-neutral-61);
 
@@ -436,7 +436,7 @@ $color-white: #fff;
     --html-bg-color: var(--color-neutral-82);
     --html-text-color: var(--color-neutral-13);
 
-    --layout-content-bg-color: var(--color-neutral-97);
+    --layout-content-bg-color: color-mix(in srgb, var(--color-neutral-97) 96%, black);
     --layout-header-border-color: var(--color-neutral-45);
 
     @media #{$bp-tablet-landscape-down} {
@@ -449,7 +449,7 @@ $color-white: #fff;
 
     --media-content-blockquote-bg-color: var(--color-neutral-93);
     --media-content-blockquote-text-color: var(--color-neutral-18);
-    --media-content-code-bg-color: var(--color-neutral-93);
+    --media-content-code-bg-color: var(--code-bg-color);
     --media-content-code-text-color: var(--color-neutral-17);
     --media-content-link-code-color: #d77c08;
     --media-content-link-code-hover-bg-color: var(--color-neutral-88);
@@ -480,10 +480,10 @@ $color-white: #fff;
 
     --tree-menu-active-color: var(--color-black);
     --tree-menu-chevron-filter: invert(65%);
-    --tree-menu-label-active-bg-color: var(--color-neutral-88);
+    --tree-menu-label-active-bg-color: var(--color-neutral-82);
     --tree-menu-label-active-color: var(--color-black);
     --tree-menu-label-color: var(--color-neutral-33);
-    --tree-menu-toc-bg-color: var(--color-neutral-93);
+    --tree-menu-toc-bg-color: var(--color-neutral-88);
     --tree-menu-toggle-hover-color: var(--color-neutral-75);
 
     --warning-color: rgb(179, 158, 24);

@@ -71,7 +71,8 @@ $content-font-size: 1.22rem;
     color: var(--media-content-code-text-color);
     background-color: var(--media-content-code-bg-color);
     border-radius: $border-radius;
-    padding: 3px 8px;
+    padding: 0.1em 0.125em;
+    margin: 0px 0.05em;
     text-decoration: none;
   }
 
