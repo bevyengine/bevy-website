@@ -3,6 +3,8 @@
     display: flex;
     margin: 0;
     padding: 0;
+    flex-direction: row;
+    gap: 0;
   }
 
   &__entry {
