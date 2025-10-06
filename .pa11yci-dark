@@ -1,0 +1,10 @@
+{
+  "defaults": {
+    "chromeLaunchConfig": {
+      "args": [
+        "--no-sandbox",
+		"--enable-features=WebContentsForceDark"
+      ]
+    }
+  }
+}
