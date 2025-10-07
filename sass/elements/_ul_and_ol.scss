@@ -2,4 +2,5 @@ ul, ol {
   display: flex;
   flex-direction: column;
   gap: var(--list-spacing);
+  padding-left: 1.6rem;
 }
