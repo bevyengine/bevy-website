@@ -10,23 +10,37 @@ In Bevy, the main `Material` the engine provides is the `StandardMaterial`.
 
 StandardMaterial, like most of the functionality in `bevy_pbr`, implements an idea called "physically based rendering", or PBR.
 
-PBR is when you use formulas and units derived from real-world physics and math. PBR is oftentimes a concept more than a strict set of rules, and approximations are used in the name of performance, but where possible you try to stick to real-world physics.
+PBR is when you use formulas and units derived from real-world physics and math. PBR is a concept more than a strict set of rules, and approximations are often used in the name of performance, but where possible the idea is that you stick to real-world physics.
 
 Before PBR, artists designed lighting, material, and camera properties more ad-hoc. When answering the question "what color should this object be?", artists would just choose a value that they thought looked good. Properties like how shiny or smooth an object are were similarly made up by the artist.
 
-While this process worked fine for smaller scenes, as larger movies and games got created, assets became harder to reuse. A coin that looked the correct shade of yellow, with a certain shininess in one scene, might look completely wrong when reused in another scene under different lighting conditions.
+While this process worked fine for smaller scenes, as larger movies and games started being created, assets became harder to reuse. A coin that looked the correct shade of yellow, with a certain shininess in one scene, might look completely wrong when reused in another scene under different lighting conditions.
 
-With PBR, to answer "what color should this object be?", you instead reference values from a database of real-world measurements like [Physically Based](https://physicallybased.info). Assets are more scene-independent, and behave consistently in a variety of different lighting conditions. Even if you're making a stylized game, PBR is still important.
+With PBR, to answer "what color should this object be?", you instead reference values from a database of real-world measurements like [Physically Based](https://physicallybased.info). Assets are more scene-independent, and behave consistently in a variety of different lighting conditions.
+
+Even if you're making a stylized game, PBR is still important for consistency.
 
 ## Theory
 
 Bevy's `StandardMaterial`, and PBR materials in general, are based on the concept of a bidirectional reflectance distribution function (BRDF).
 
-In the real world, when light hits a surface, a portion of the energy is absorbed, and a portion is reflected and bounces in a different direction. Given an incoming ray of light, a BRDF is a formula that describes the possible directions the ray can bounce, and the amount of energy reflected. A blue surface reflects a lot of blue light, and absorbs a lot of red and green light. A mirror reflects light mostly in one direction, while matte materials reflects light in many directions. The BRDF determines the appearance of a surface, and is why e.g. plastic looks different than metal.
+In the real world, when light hits a surface, a portion of the energy is absorbed, and a portion is reflected and bounces in a different direction.
 
-There are different types of BRDFs. Light might bounce equally in many directions (diffuse), towards one general direction (glossy), or even a perfect reflection in one direction (mirror). The glossy and mirror cases are typically referred to as specular BRDFs, as opposed to diffuse BRDFs. Diagrams: https://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function#Models.
+Given an incoming ray of light, a BRDF is a formula that describes the possible directions the ray can bounce, and the amount of energy reflected.
 
-Ofentimes real-world materials are not perfectly diffuse or perfectly specular, but a combination of the two. A common way to classify materials is into "metals" and "non-metals" (dielectrics). Metals are actual metals like silver, gold, copper, etc, while dielectrics are everything else including plastic, wood, stone, rubber, etc. Metals have only a specular BRDF, while dielectrics have a combination of diffuse and specular BRDFs.
+A blue surface reflects a lot of blue light, and absorbs a lot of red and green light. A mirror reflects light mostly in one direction, while matte materials reflects light in many directions.
+
+The BRDF determines the appearance of a surface, and is why e.g. plastic looks different than metal.
+
+There are different types of BRDFs. Light might bounce equally in many directions (diffuse), towards one general direction (glossy), or even a perfect reflection in one direction (mirror).
+
+The glossy and mirror cases are typically referred to as specular BRDFs, as opposed to diffuse BRDFs. Diagrams: https://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function#Models.
+
+Oftentimes real-world materials are not perfectly diffuse or perfectly specular, but a combination of the two. A common way to classify materials is into "metals" and "non-metals" (dielectrics).
+
+Metals are actual metals like silver, gold, copper, etc, while dielectrics are everything else including plastic, wood, stone, rubber, etc.
+
+Metals have only a specular BRDF, while dielectrics have a combination of diffuse and specular BRDFs.
 
 Bevy's `StandardMaterial` is built to represent arbitrary real-world materials using a combination of diffuse and specular BRDFs mixed together with a set of weights based on the `metallic` property. A subset of more complex materials like wax, cloth, and gemstones that have effects like subsurface scattering, sheen, and refraction, can be modelled with additional properties.
 
