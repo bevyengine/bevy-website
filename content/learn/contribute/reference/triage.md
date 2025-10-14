@@ -91,6 +91,12 @@ Some reasons to apply `D-Trivial` include:
 2. Moving a file from one location to another.
 3. Small changes to documentation or error messages.
 
+Some reasons to apply `S-Nominated-to-Close`  include:
+
+ 1. The PR is no longer needed.
+ 2. The PR has serious flaws and has not attracted any support from reviewers.
+ 3. The PR shows signs that it was AI generated, which is a volation of our [AI Policy][ai-policy].
+
 Remember that difficulty labels are for expertise required to either solve an issue or review a pull request. By labeling an issue as `D-Trivial`, you are marking it as a good first issue for new contributors to the Bevy project.
 
 ## Closing PRs and Issues
@@ -118,6 +124,7 @@ There are several paths for PRs to be closed:
 6. In the case of PRs where some members of the community, other than the author, are in favor, and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
 7. For a PR that has been sitting for a while and became bitrotten, check with the original author if they intend to continue working on it. If not, or without a response, the PR can be labeled with `S-Adopt-Me`, and closed. Tracking adoption progress will happen in a linked issue.
 8. Inactive `X-Controversial` can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be made.
+9. Majority AI-Generated PRs cannot be merged as per the Bevy org's [AI policy][ai-policy]. Please mark these PRs as `S-Nominated-to-Close` for maintainers to make a final decision.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
 
@@ -167,3 +174,4 @@ Members of the Triage Team within the Bevy organization have permissions to labe
 If that applies to you, then feel free to ask a Maintainer on [Discord] or email <support@bevy.org>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
 
 [Discord]: https://discord.gg/bevy
+[ai-policy]: /learn/contribute/policies/ai
