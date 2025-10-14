@@ -15,7 +15,7 @@ significantly lowered the level of effort required to produce
 incorrectly report bugs, and so have become a major source of burdensome PRs and
 issues.
 
-Whether AI generated code are subject to copyright protection is also a
+Whether AI generated code is subject to copyright protection is also a
 hot-button legal topic that is still being openly debated and litigated. How
 this impacts the legal aspects of maintaining a FOSS project is currently an
 unresolved question.
@@ -31,18 +31,19 @@ The unsolicited use of automated systems to communicate issues, bugs, or
 security vulnerabilities about Bevy Organization projects under the guise of a
 human is considered unacceptable and a Code of Conduct violation. Any individual
 contributor, operator of automated systems, or company they may represent may be
-barred from future contributions and banned from regular communication channels
-if these communications were found to be submitted in bad faith.
+barred from future contributions and banned from regular communication channels,
+especially if these communications were found to be submitted in bad faith.
 
 This policy applies to all regular channels of communication used by members of
 the Bevy Organization, including but not limited to GitHub Issues, GitHub Pull
 Requests, Discord, other social media platforms, etc.
 
 We recognize that English may not be the primarily language for all contributors
-and that machine translation is an indispensable tool for proper collaboration,
-and thus not subject to the above policy. The community recommends that you
-instruct the LLM to produce a concise output or use non-LLM machine translation
-options, as they tend to be less verbose while still getting the point across.
+and that machine translation is an indispensable tool for proper collaboration.
+Therefore machine translation is not subject to the above policy. The community
+recommends that you instruct the LLM to produce a concise output or use non-LLM
+machine translation options, as they tend to be less verbose while still getting
+the point across.
 
 ## AI Generated Contributions and Copyright
 
