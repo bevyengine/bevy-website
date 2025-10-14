@@ -1,6 +1,6 @@
 [files]
 extend-exclude = [
-  # To keep Changelog consistency between the commit history/PRs. 
+  # To keep Changelog consistency between the commit history/PRs.
   # Ignore 0.1 to 0.13 bevy versions.
   "content/news/*-bevy-0.[1-9]/index.md",
   "content/news/*-bevy-0.1[0-3]/index.md",
@@ -12,6 +12,8 @@ extend-exclude = [
   "release-content/0.14/migration-guides/12038_fix_some_typos.md",
   "release-content/0.14/migration-guides/13261_More_gizmos_builders.md",
   "release-content/0.14/migration-guides/13654_Rename_point_light_to_clusterable_object_in_cluster_contex.md",
+  # Ignore contributor files as those are usernames
+  "release-content/*/contributors.toml",
   # Ignore changelogs and release notes (titles should be verbatim)
   "release-content/*/changelog.toml",
   "release-content/*/_release-notes.toml",

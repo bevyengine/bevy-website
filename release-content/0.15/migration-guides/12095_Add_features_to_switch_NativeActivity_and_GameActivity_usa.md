@@ -4,14 +4,14 @@
 
 Before:
 
-```shell
+```sh
 rustup target add aarch64-linux-android armv7-linux-androideabi
 cargo install cargo-apk
 ```
 
 After:
 
-```shell
+```sh
 rustup target add aarch64-linux-android
 cargo install cargo-ndk
 ```
@@ -21,13 +21,13 @@ with the Gradle wrapper.
 
 Before:
 
-```shell
+```sh
 cargo apk build --package bevy_mobile_example
 ```
 
 After:
 
-```shell
+```sh
 cargo ndk -t arm64-v8a -o android_example/app/src/main/jniLibs build --package bevy_mobile_example
 ./android_example/gradlew build
 ```
