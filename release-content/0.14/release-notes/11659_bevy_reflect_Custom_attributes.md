@@ -79,6 +79,6 @@ pub struct TestStruct {
     #[reflect(@ValueRange::<f32>(0.0..1000.0))]
     pub factors: Vec<f32>,
 }
-``` 
+```
 
 ![A custom UI inspector built using the code above in bevy_reactor](./custom_attributes_demo.jpg)
