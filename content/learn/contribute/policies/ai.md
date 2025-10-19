@@ -11,7 +11,7 @@ friends) which exhibit characteristics that result in undue extra work for other
 contributors and maintainers. While we've seen PRs and issues with these
 characteristics produced entirely by humans, generative AI tools have
 significantly lowered the level of effort required to produce
-"plausibly-worthwhile" contributions that are otherwise entirely unmergable or
+"plausibly-worthwhile" contributions that are otherwise entirely unmergeable or
 incorrectly report bugs, and so have become a major source of burdensome PRs and
 issues.
 
