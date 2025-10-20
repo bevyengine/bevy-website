@@ -17,7 +17,7 @@ jobs:
       pages: ${{ steps.pages.outputs.pages }}
     steps:
       - name: Checkout Bevy main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
@@ -38,7 +38,7 @@ jobs:
     steps:
 
       - name: Checkout Bevy latest tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
@@ -87,7 +87,7 @@ jobs:
     steps:
 
       - name: Clone bevy-website repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
