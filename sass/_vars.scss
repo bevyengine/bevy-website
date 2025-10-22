@@ -185,7 +185,7 @@ $color-white: #fff;
   --card-title-color: var(--color-neutral-93);
   --card-sponsor-icon-color: #b13376;
 
-  --code-bg-color: color-mix(in srgb, var(--color-neutral-18) 47%, black);
+  --code-bg-color: color-mix(in srgb, var(--color-neutral-18) 55%, black);
   --code-incorrect-bg-color: #481e21;
   --code-incorrect-border-color: darkred;
   --code-incorrect-border-hover-color: red;
@@ -436,7 +436,7 @@ $color-white: #fff;
     --html-bg-color: var(--color-neutral-82);
     --html-text-color: var(--color-neutral-13);
 
-    --layout-content-bg-color: color-mix(in srgb, var(--color-neutral-97) 96%, black);
+    --layout-content-bg-color: color-mix(in srgb, darkgray 15%, white);
     --layout-header-border-color: var(--color-neutral-45);
 
     @media #{$bp-tablet-landscape-down} {
