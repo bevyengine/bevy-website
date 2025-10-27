@@ -236,27 +236,27 @@ jobs:
       - name: Move Bevy assets to static files
         # during the real build, this is handled by the generate_wasm_examples.sh script.
         run: mv bevy/assets static/assets/examples/
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-assets
           path: content/assets
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-errors
           path: content/learn/errors
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-wasm-examples
           path: content/examples
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-community
           path: content/community/people
