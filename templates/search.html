@@ -1,0 +1,64 @@
+<div class="search" data-search>
+  <div class="search__backdrop" data-search-backdrop></div>
+  <div class="search__dialog" data-search-dialog>
+    <div class="search__header">
+      <div class="search__header-top">
+        <div class="search__input-wrapper">
+          <input class="search__input" type="text" data-search-input placeholder="Search…" />
+          <button class="search__clear-filter hidden" data-search-clear-filter>
+            <i class="icon icon--times"></i>
+          </button>
+        </div>
+        <button class="search__close button" data-search-close>Close</button>
+      </div>
+      <div class="search__categories" data-search-categories></div>
+    </div>
+    <div class="search__content hidden" data-search-content tabindex="-1">
+      <div class="search__no-results hidden" data-search-no-results>
+        <div>
+          No results found for "<span data-search-term></span>".<br />
+          :-(
+        </div>
+      </div>
+      <div class="search__results hidden" data-search-results></div>
+    </div>
+    <div class="search__tip">
+      <strong>Tip</strong>: Press <kbd>S</kbd> to open the search dialog, and
+      <kbd>Esc</kbd> to close it. Use <kbd>↑/↓</kbd> to select a result, and <kbd>Enter</kbd> to navigate.
+    </div>
+    <template data-search-category-tpl>
+      <button class="search-category" data-category></button>
+    </template>
+    <template data-search-result-compact-tpl>
+      <a class="search-result search-result--compact" data-wrapper data-search-result>
+        <div class="search-result__header">
+          <h3 class="search-result__title" data-title></h3>
+          <div
+            class="search-result__category search-category search-category--active search-category--compact"
+            data-category
+          ></div>
+        </div>
+        <p class="search-result__excerpt" data-excerpt></p>
+      </a>
+    </template>
+    <template data-search-result-tpl>
+      <div class="search-result">
+        <div class="search-result__header">
+          <a class="search-result__title" data-title></a>
+          <div
+            class="search-result__category search-category search-category--active search-category--compact"
+            data-category
+          ></div>
+        </div>
+        <div class="search-result__sub-results" data-sub-results></div>
+        <div class="search-result__more hidden" data-more></div>
+      </div>
+    </template>
+    <template data-search-sub-result-tpl>
+      <a class="search-result__sub-item" data-link data-search-result>
+        <h4 class="search-result__sub-title" data-title></h4>
+        <span class="search-result__excerpt" data-excerpt></span>
+      </a>
+    </template>
+  </div>
+</div>
