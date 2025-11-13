@@ -50,7 +50,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Install alsa and udev
-        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev wayland-client
 
       - name: Check formatting
         run: cargo fmt --check --all
