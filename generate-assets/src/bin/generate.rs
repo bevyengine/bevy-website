@@ -1,4 +1,4 @@
-use rand::{prelude::SliceRandom, thread_rng};
+use rand::{prelude::SliceRandom, rng};
 use serde::Serialize;
 use std::{
     fs::{self, File},
@@ -22,8 +22,7 @@ fn main() -> anyhow::Result<()> {
         if let Ok(token) = std::env::var("GITHUB_TOKEN") {
             Some(GithubClient::new(token))
         } else {
-            println!("GITHUB_TOKEN not found, github links will be skipped");
-            None
+            println!("GITHUB_TOKEN not found, github links will be skip            None
         }
     };
 
@@ -292,7 +291,7 @@ impl FrontMatterWriter for Section {
             }
         }
         manually_sorted_assets.sort_by_key(AssetNode::order);
-        randomized_assets.shuffle(&mut thread_rng());
+        randomized_assets.shuffle(&mut rng());
 
         for (i, content) in sorted_section
             .iter()
