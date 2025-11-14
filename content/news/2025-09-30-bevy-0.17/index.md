@@ -1,16 +1,14 @@
 +++
 title = "Bevy 0.17"
-date = 2025-09-24 
+date = 2025-09-30 
 [extra]
-public_draft = 2215
-status = 'hidden'
 image = "cover.jpg"
 show_image = true
 image_subtitle = "A factory from Exofactory, an in-development factory builder made with Bevy"
 image_subtitle_link = "https://store.steampowered.com/app/3615720/Exofactory/"
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.17** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **278** contributors, **1311** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.17** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -26,7 +24,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Light Textures**: You can now use textures to artistically modulate the intensity of light.
 - **DLSS**: On Nvidia RTX GPUs, Bevy now supports Deep Learning Super Sampling (DLSS) for anti-aliasing and upscaling.
 - **Tilemap Chunk Rendering**: A new performant way to render tilemaps in chunks ... this is our first step in building out Bevy's built-in tilemap system.
-- **Web Assets**: Bevy's asset system supports loading assets from `http` and `https` URLs.
+- **Web Assets**: Bevy's asset system now supports loading assets from `http` and `https` URLs.
 - **Reflect Auto-Registration**: When reflecting types, you no longer need to manually register them in your apps.
 - **Frame Time Graphs**: A new built-in widget to debug frame times in running Bevy apps.
 - **UI Gradients**: Bevy UI now supports background and border gradients.
@@ -94,7 +92,7 @@ Special thanks to `@Vecvec` for adding raytracing support to wgpu.
 Bevy's Observer API landed a few releases ago, and it has quickly become one of our most popular features. In **Bevy 0.17** we rearchitected and refined the Event and Observer APIs to be clearer, easier to use, and more performant. We plan on rolling out Bevy's [next generation Scene / UI system](https://github.com/bevyengine/bevy/pull/20158/) in the near future, and observers are a key piece! We wanted to ensure they were in a better place for the next phase of Bevy development. The old API had some problems:
 
 1. **Concept names were confusing and ambiguous**: Events could be "observed" by observers, "buffered" in `Events` collections, or both. Knowing how to produce or consume a given [`Event`] required too much implied context, and was error prone.
-2. **The API was not "static" enough**: Because a given [`Event`] type could be used by and produced for _any context_, we had to provide access to _every possible API_ for _every event type_. This made the APIs hard to use and easy to misuse. It should not be possible to trigger an "entity event" without an entity!
+2. **The API was not "static" enough**: Because a given [`Event`] type could be used by and produced for _any context_, we had to provide access to _every possible API_ for _every event type_. This made the APIs easy to misuse. It should not be possible to trigger an "entity event" without an entity!
 3. **The API did too much work**: Because events could be produced and used in any context, this meant that they all branched through code for every possible context. This incurred unnecessary overhead. It also resulted in lots of unnecessary codegen!
 
 In **Bevy 0.17** we have sorted out these issues without fundamentally changing the shape of the API. Migrations should generally be very straightforward.
@@ -264,26 +262,27 @@ This is generally unnecessary though ... Bevy's built-in default triggers are al
 
 In previous versions of Bevy, the [`Event`] trait was used for both "observable events" (handled with `Observer`) and "buffered events" (handled with `EventReader`). This made _some_ sense, as both concepts could be considered "events" in their own right. But they are also fundamentally _very_ different things functionally (see [this PR description](https://github.com/bevyengine/bevy/pull/20731) for full rationale).
 
-These are two completely separate systems, with different producer / consumer APIs, different performance considerations, and immediate vs deferred handling. The "things" being sent deserve different concept names to solidify conceptually (and at the type/API level) their intended purpose and context.
-
 In **Bevy 0.17**, [`Event`] is now _exclusively_ the name/trait for the concept of something that is "triggered" and "observed". [`Message`] is the name / trait for something that is "buffered": it is "written" via a [`MessageWriter`] and "read" via a [`MessageReader`].
 
 It is still possible to support both contexts by implementing _both traits_, but we expect that to be significantly less common than just choosing one.
 
-[`Event`]: https://dev-docs.bevy.org/bevy/ecs/event/trait.Event.html
-[`Entity`]: https://dev-docs.bevy.org/bevy/ecs/entity/struct.Entity.html
-[`Trigger`]: https://dev-docs.bevy.org/bevy/ecs/event/trait.Trigger.html
-[`GlobalTrigger`]: https://dev-docs.bevy.org/bevy/ecs/event/struct.GlobalTrigger.html
-[`EntityTrigger`]: https://dev-docs.bevy.org/bevy/ecs/event/struct.EntityTrigger.html
-[`EntityEvent`]: https://dev-docs.bevy.org/bevy/ecs/event/trait.EntityEvent.html
-[`ChildOf`]: https://dev-docs.bevy.org/bevy/ecs/hierarchy/struct.ChildOf.html
-[`PropagateEntityTrigger`]: https://dev-docs.bevy.org/bevy/ecs/event/struct.PropagateEntityTrigger.html
-[`Add`]: https://dev-docs.bevy.org/bevy/ecs/lifecycle/struct.Add.html
-[`EntityComponentsTrigger`]: https://dev-docs.bevy.org/bevy/ecs/event/struct.EntityComponentsTrigger.html
+[`Event`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/trait.Event.html
+[`Entity`]: https://docs.rs/bevy/0.17.1/bevy/ecs/entity/struct.Entity.html
+[`Trigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/trait.Trigger.html
+[`GlobalTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.GlobalTrigger.html
+[`EntityTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.EntityTrigger.html
+[`EntityEvent`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/trait.EntityEvent.html
+[`ChildOf`]: https://docs.rs/bevy/0.17.1/bevy/ecs/hierarchy/struct.ChildOf.html
+[`PropagateEntityTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.PropagateEntityTrigger.html
+[`Add`]: https://docs.rs/bevy/0.17.1/bevy/ecs/lifecycle/struct.Add.html
+[`EntityComponentsTrigger`]: https://docs.rs/bevy/0.17.1/bevy/ecs/event/struct.EntityComponentsTrigger.html
+[`MessageWriter`]: https://docs.rs/bevy/0.17.1/bevy/ecs/message/struct.MessageWriter.html
+[`MessageReader`]: https://docs.rs/bevy/0.17.1/bevy/ecs/message/struct.MessageReader.html
+[`Message`]: https://docs.rs/bevy/0.17.1/bevy/ecs/message/trait.Message.html
 
 ## Bevy Feathers: Widgets for Tooling (Experimental)
 
-{{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969]) }}
+{{ heading_metadata(authors=["@viridia", "@Atlas16A", "@ickshonpe", "@amedoeyes"] prs=[19730, 19900, 19928, 20237, 20169, 20422, 20350, 20548, 20969, 21247]) }}
 
 ![feathers widgets](feathers.jpg)
 
@@ -296,7 +295,6 @@ Feathers currently offers:
 - Components that can be leveraged to build custom editors, inspectors, and utility interfaces that feel consistent with other Bevy tooling.
 - Essential UI elements including buttons, sliders, checkboxes, menu buttons, and more.
 - Layout containers for organizing and structuring UI elements.
-- Decorative elements such as icons for visual enhancement.
 - Initial (simple / primitive) theme support to ensure consistent, configurable visual styling across applications. This is not the "final" Bevy UI theme system, but it provides some baseline functionality.
 - Accessibility features with built-in screen reader and assistive technology support.
 - Interactive cursor behavior that changes appropriately when hovering over widgets.
@@ -305,8 +303,8 @@ Feathers currently offers:
 Feathers is still early in development. It is currently hidden behind the `experimental_bevy_feathers` feature flag. Feathers is still incomplete and likely to change in a variety of ways:
 
 - We will port Feathers to BSN (Bevy's [Next-Generation Scene/UI System](https://github.com/bevyengine/bevy/pull/20158/)) when that lands (targeted for **Bevy 0.18**).
-- We are [still discussing](https://github.com/bevyengine/bevy/discussions/21044) the best way to handle UI callbacks / events in Feathers. It includes a proposal API, but the debate is ongoing!
-- We are still working on polishing up some API UX issues.
+- The `observe` API is temporary: we hope to replace these with a general-purpose, [relations-backed solution](https://github.com/bevyengine/bevy/issues/17607).
+- We are still working on polishing up some UX issues.
 - There are missing widgets and features. Notably the "text input" widget is [still being developed](https://github.com/bevyengine/bevy/issues/20885).
 
 If you're looking to experiment with building tooling for Bevy, enable it and take `feathers` for a test flight!
@@ -348,106 +346,61 @@ However, please be aware that light probes are not yet supported.
 
 {{ heading_metadata(authors=["@viridia", "@ickshonpe", "@alice-i-cecile"] prs=[19366, 19584, 19665, 19778, 19803, 20032, 20036, 20086, 20944]) }}
 
-Bevy's `Button` and `Interaction` components have been around for a long time. Unfortunately
-these components have a number of shortcomings, such as the fact that they don't use the new
-`bevy_picking` framework, or the fact that they are really only useful for creating buttons
-and not other kinds of widgets like sliders.
-
-As an art form, games thrive on novelty: the typical game doesn't have boring, standardized controls
-reminiscent of a productivity app, but instead will have beautiful, artistic widgets that are
-in harmony with the game's overall visual theme. But writing new and unique widgets requires
-skill and subtlety, particularly if we want first-class accessibility support. It's not a burden we
-want to put on the average indie developer.
+Bevy's `Button` and `Interaction` components have been around for a long time. Unfortunately these components have a number of shortcomings, such as the fact that they don't use the new `bevy_picking` framework, or the fact that they are really only useful for creating buttons and not other kinds of widgets like sliders.
 
 In the web development world, "headless" widget libraries, such as
-[headlessui](https://headlessui.com/) and [reakit](https://reakit.io/) have become popular. These
-provide standardized widgets that implement all of the correct interactions and behavioral logic,
-including integration with screen readers, but which are unstyled. It's the responsibility of the
-game developer to provide the visual style and animation for the widgets, which can fit the overall
-style of their game.
+[headlessui](https://headlessui.com/) and [reakit](https://reakit.io/) have become popular. These provide unstyled standardized widgets that implement all of the correct interactions and behavioral logic: events, state management, accessibility, etc. The headless widgets provide the core behaviors, and it's the responsibility of the game developer to provide the visual style and animation for the widgets, which can fit the overall style of their game.
 
-With this release, Bevy introduces a collection of headless widgets. These are components
-which can be added to any UI Node to get widget-like behavior. The standard widget set includes buttons,
-sliders, scrollbars, checkboxes, radio buttons, and more. This set will likely be expanded in
-future releases.
+**Bevy 0.17**, introduces a collection of headless widgets. These are components
+which can be added to any UI Node to get widget-like behavior. The standard widget set includes:
 
-While these widgets are usable today, and are a solid choice for creating your own widgets for your
-own game or application, they are still **experimental**. We are still polishing up some aspects of the
+- `Button`: Emits an activation event when clicked.
+- `Slider`:  Lets you edit an `f32` value in a given range.
+- `Scrollbar`: Lets you scroll through the contents of a UI node.
+- `Checkbox`: Provides toggle-able state.
+- `RadioButton` and `RadioGroup`: Select an item from a set of items.
+
+Here's a heavily styled example showing what is possible with them:
+
+<video controls loop><source  src="deco-buttons.mp4" type="video/mp4"/></video>
+
+While these widgets are usable today for games and apps, they are still **experimental**. We are still polishing up some aspects of the
 developer experience and filling in gaps.
 Expect breaking changes as we continue to iterate and improve on them!
 
-We're as excited as you are for first-party widgets,
-and we've decided to ship these now precisely so people can try them out:
-real-world user feedback is vital for building and improving products.
+We're as excited as you are for first-party widgets. We've decided to ship these now so people can try them out: your feedback is vital!
 
-If you've read this and are still excited to try them out, enable the `experimental_bevy_ui_widgets` feature.
+If you would like to try out our experimental headless widgets, enable the `experimental_bevy_ui_widgets` feature.
 
-### Standard Widgets
+### Widget Interaction Components
 
-The `bevy_ui_widgets` crate provides implementations of unstyled widgets, such as buttons,
-sliders, checkboxes and radio buttons.
+The standard widgets use additional components to drive behaviors:
 
-- `ui_widgets::Button` is a push button. It emits an activation event when clicked.
-- `ui_widgets::Slider` is a standard slider, which lets you edit an `f32` value in a given range.
-- `ui_widgets::Scrollbar` can be used to implement scrollbars.
-- `ui_widgets::Checkbox` can be used for checkboxes and toggle switches.
-- `ui_widgets::RadioButton` and `ui_widgets::RadioGroup` can be used for radio buttons.
+- `InteractionDisabled`: A boolean component used to indicate that a component should be
+  "grayed out" and non-interactive.
+- `Hovered`: A simple boolean component that allows detection of whether the widget is being hovered.
+- `Checked`: A boolean component that stores the checked state of a checkbox or radio button.
+- `Pressed`: A boolean component used by button-like widgets. Will be true while the button is held down.
 
-### Widget Interaction Marker Components
+These "boolean components" can be tracked using Bevy's built-in component change detection.
 
-Many of the standard widgets will define supplementary ECS components that are used to store the widget's
-state, similar to how the old `Interaction` component worked, but in a way that is more flexible.
-These components include:
+### Widget Events
 
-- `InteractionDisabled` - a boolean component used to indicate that a component should be
-  "grayed out" and non-interactive. Note that these disabled widgets are still visible and can
-  have keyboard focus (otherwise the user would have no way to discover them).
-- `Hovered` is a simple boolean component that allows detection of whether the widget is being
-  hovered using regular Bevy change detection.
-- `Checked` is a boolean component that stores the checked state of a checkbox or radio button.
-- `Pressed` is used for a button-like widget, and will be true while the button is held down.
+The headless widgets use Bevy's event / observer system, just like any other components!
 
-The combination of `Hovered` and `Pressed` fulfills the same purpose as the old
-`Interaction` component, except that now we can also represent "roll-off" behavior (the state where
-you click on a button and then, while holding the mouse down, move the pointer out of the button's
-bounds). It also provides additional flexibility in cases where a widget has multiple hoverable
-parts, or cases where a widget is hoverable but doesn't have a pressed state (such as a tree-view
-expansion toggle).
+- `Activate`: an event triggered whenever a widget is activated (ex: button pressed, radio button selected, etc).
+- `ValueChange`: an event triggered whenever a value is changed (ex: slider changed, checkbox checked, etc)
 
-### Widget Notifications
+These events can be handled using observers:
 
-Applications need a way to be notified when the user interacts with a widget. Currently in `bevy_ui_widgets`
-we're experimenting with a `Callback` system, which uses "one shot systems" under the hood. We're also heavily
-considering using Events / Observers for this. This is one of the primary reasons for the "experimental" label!
-
-### State Management
-
-See the [Wikipedia Article on State Management](https://en.wikipedia.org/wiki/State_management).
-
-Most of the standard widgets support "external state management" - something that is referred to in the
-React.js world as "controlled" widgets. This means that for widgets that edit a parameter value
-(such as checkboxes and sliders), the widget doesn't automatically update its own internal value,
-but only sends a notification to the app telling it that the value needs to change. It's the
-responsibility of the app to handle this notification and update the widget accordingly, and at the
-same time update any other game state that is dependent on that parameter.
-
-There are multiple reasons for this, but the main one is this: typical game user interfaces aren't
-just passive forms of fields to fill in, but more often represent a dynamic view of live data. As a
-consequence, the displayed value of a widget may change even when the user is not directly
-interacting with that widget. Externalizing the state avoids the need for two-way data binding, and
-instead allows simpler one-way data binding that aligns well with the traditional "Model / View /
-Controller" (MVC) design pattern.
-
-That being said, the choice of internal or external state management is up to you: if the widget has
-an `on_change` callback that is not `Callback::Ignore`, then the callback is used. If the callback
-is `Callback::Ignore`, however, the widget will update its own state automatically. (This is similar
-to how React.js does it.)
-
-There are two exceptions to this rule about external state management. First, widgets which don't
-edit a value, but which merely trigger an event (such as buttons), don't fall under this rule.
-Second, widgets which have complex states that are too large and heavyweight to fit within a
-notification event (such as a text editor) can choose to manage their state internally. These latter
-widgets will need to implement a two-way data binding strategy.
+```rust
+commands.spawn((
+    Button,
+    observe(|activate: On<Activate>| {
+        info!("button clicked!");
+    })
+));
+```
 
 ## Light Textures
 
@@ -466,8 +419,7 @@ Bevy now supports hot patching systems via [subsecond](https://crates.io/crates/
 
 When the cargo feature `hotpatching` is enabled, every system can now be modified during execution, and the changes are immediately visible in your game.
 
-`dx` is the Dioxus CLI. To install it run `cargo install dioxus-cli@0.7.0-alpha.1`
-TODO: use the fixed version that will match the version of subsecond dependency used in Bevy at release time
+`dx` is the Dioxus CLI. To install it run `cargo install dioxus-cli@0.7.0-rc.0 --locked`
 
 Then run `BEVY_ASSET_ROOT="." dx serve --hot-patch --features "bevy/hotpatching"` to test it in your project. You can also try it out using Bevy's [`hotpatching_systems.rs`](https://github.com/bevyengine/bevy/blob/release-0.17.0/examples/ecs/hotpatching_systems.rs) example.
 
@@ -504,16 +456,6 @@ Compared to Bevy's built-in TAA, DLSS:
 - Requires a NVIDIA RTX GPU
 - Currently requires running via the Vulkan backend on Windows/Linux (no DirectX, macOS, web, or mobile support)
 
-To use DLSS in your app:
-
-- See <https://github.com/bevyengine/dlss_wgpu> for licensing requirements and setup instructions
-- Enable Bevy's `dlss` feature
-- Insert the `DlssProjectId` resource before `DefaultPlugins` when setting up your app
-- Check for the presence of `Option<Res<DlssSuperResolutionSupported>>` at runtime to see if DLSS is supported on the current machine
-- Add the `Dlss` component to your camera entity, optionally setting a specific `DlssPerfQualityMode` (defaults to `Auto`)
-- Optionally add sharpening via `ContrastAdaptiveSharpening`
-- Custom rendering code, including third party crates, should account for the optional `MainPassResolutionOverride` to work with DLSS (see the `custom_render_phase` example)
-
 Note that DLSS integration is expected to have some bugs in this release related to certain rendering effects not respecting upscaling settings, and possible issues with transparencies or camera exposure. Please report any bugs encountered.
 
 Other temporal upscalers like AMD's FidelityFX™ Super Resolution (FSR), Intel's Xe Super Sampling XeSS (XeSS), and Apple's MTLFXTemporalScaler are not integrated in this release. However they all use similar APIs, and would not be a challenge to integrate in future releases.
@@ -530,7 +472,7 @@ Special thanks to @cwfitzgerald for helping with the [`wgpu`](https://github.com
 
 {{ media_caption(url="cupnooble.itch.io/sprout-lands-asset-pack" text="Tilemap Credit: Cup Nooble's Sprout Lands") }}
 
-A performant way to render tilemap chunks has been added as the first building block to Bevy's tilemap support (more to come in future releases!). You can render a chunk by supplying a tileset texture to the `TilemapChunk` component and tile data to `TilemapChunkTileData`. For each tile, `TileData` allows you to specify the index into the tileset, the visibility, and the color tint.
+A performant way to render tilemap chunks has been added as the first building block for Bevy's tilemap support (more to come in future releases!). You can render a chunk by supplying a tileset texture to the `TilemapChunk` component and tile data to `TilemapChunkTileData`. For each tile, `TileData` allows you to specify the index into the tileset, the visibility, and the color tint.
 
 ```rust
 let chunk_size = UVec2::new(16, 16);
@@ -562,48 +504,9 @@ Bevy UI now has a `ViewportNode` component, which lets you render camera output 
 commands.spawn(ViewportNode::new(camera));
 ```
 
-The referenced `camera` here does require its target to be a `RenderTarget::Image`. See the new [`viewport_node`](https://github.com/bevyengine/bevy/blob/v0.17.0/examples/ui/viewport_node.rs) for more implementation details.
+The referenced `camera` here does require its target to be a `RenderTarget::Image`. See the new [`viewport_node`](https://github.com/bevyengine/bevy/blob/release-0.17.0/examples/ui/viewport_node.rs) example for more usage details.
 
 Furthermore, if the `bevy_ui_picking_backend` feature is enabled, you can "pick" using the rendered target. That is, you can use **any** picking backend through the viewport node.
-
-## Data-Driven Materials
-
-{{ heading_metadata(authors=["@tychedelia"] prs=[19667]) }}
-
-Bevy's material system has historically relied on the `Material` and `AsBindGroup` traits in order to provide a
-type-safe way to define data that is passed to the shader that renders your material. While this approach has
-many advantages, recent improvements to the renderer like GPU-driven rendering in Bevy `0.16` have made the 3D renderer
-more siloed and less modular than we would like. Additionally, the type-level split between `Material` and `Material2d`
-has meant that every feature implemented for 3D needs a mostly copy-pasted version for 2D, which has caused the 2D
-renderer to lag behind in terms of features.
-
-In Bevy `0.17`, we've started the process of refactoring the renderer's mid and low-level APIs to be _data driven_. More
-specifically, we've removed the `M: Material` bound from every rendering system in the render world. Rather than being
-described statically by a type, the renderer now understands materials in terms of plain data that can be modified at
-runtime. Consequently, it is now possible to implement a custom material that doesn't rely on the `Material` trait at
-all, for example in the
-new [manual material example](https://github.com/bevyengine/bevy/blob/8b36cca28c4ea00425e1414fd88c8b82297e2b96/examples/3d/manual_material.rs).
-While this API isn't exactly ergonomic yet, it represents a first step in decoupling the renderer from a specific
-high-level material API.
-
-Importantly, for users of the `Material` trait, nothing changes. Our `AsBindGroup` driven API is now just one possible
-consumer of the renderer. But adopting a more dynamic, data-first approach creates many opportunities for the renderer
-we are hoping to explore in `0.18` and beyond, including:
-
-- Unifying the 2D and 3D rendering implementations. While we'll continue to present an opinionated 2D API that benefits
-  users building 2D games, we want every new rendering improvement to the 3D renderer to be at least potentially
-  available
-  to 2D users.
-- Exploring new material representations for a future material editor. While type-safety is great for writing code, it
-  poses real problems for being able to dynamically edit a material in a UI like a shader graph or load a material at
-  runtime from a serialized format.
-- Modularizing more of the mid-level rendering APIs to allow user's writing advanced rendering code access to
-  complicated pieces of rendering infrastructure like mesh and bind group allocation, GPU pre-processing, retained
-  rendering caches, and custom draw functions.
-
-With this foundation in place, we're actively evolving the renderer to embrace the flexibility and composability
-that defines Bevy's ECS. If you'd like to help us explore the possibilities of ECS-driven rendering, please join us on
-[Discord](https://discord.gg/bevy) or [GitHub Discussions](https://github.com/bevyengine/bevy/discussions)!
 
 ## Raymarched Atmosphere / Space Views
 
@@ -656,8 +559,14 @@ that bleeds out into the nearby sky.
 This is an effect known as "bloom", which is enabled by adding the [`Bloom`] component to your camera entity.
 
 [procedural atmosphere]: https://bevy.org/news/bevy-0-16/#procedural-atmospheric-scattering
-[`SunDisk`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/light/struct.SunDisk.html
-[`Bloom`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/post_process/bloom/struct.Bloom.html
+[`SunDisk`]: https://docs.rs/bevy/0.17.1/bevy/light/struct.SunDisk.html
+[`Bloom`]: https://docs.rs/bevy/0.17.1/bevy/post_process/bloom/struct.Bloom.html
+[`AtmosphereMode::LookupTexture`]: https://docs.rs/bevy/0.17.1/bevy/pbr/enum.AtmosphereMode.html#variant.LookupTexture
+[`AtmosphereMode::Raymarched`]: https://docs.rs/bevy/0.17.1/bevy/pbr/enum.AtmosphereMode.html#variant.Raymarched
+[`Atmosphere`]: https://docs.rs/bevy/0.17.1/bevy/pbr/struct.Atmosphere.html
+[`AtmosphereSettings`]: https://docs.rs/bevy/0.17.1/bevy/pbr/struct.AtmosphereSettings.html
+[`Camera`]: https://docs.rs/bevy/0.17.1/bevy/camera/struct.Camera.html
+[`DirectionalLight`]: https://docs.rs/bevy/0.17.1/bevy/light/struct.DirectionalLight.html
 
 ## Web Assets
 
@@ -700,7 +609,7 @@ types that derived [`Reflect`] had to be manually registered using [`register_ty
 app.register_type::<Foo>()
 ```
 
-In **Bevy 0.17**, all types that [`#[derive(Reflect)]`] are now automatically registered! This significantly reduces the boilerplate required to use Bevy's reflection features, which will be increasingly important as we build out Bevy's new scene system, entity inspector, and visual editor.
+In **Bevy 0.17**, all types that `#[derive(Reflect)]` are now automatically registered! This significantly reduces the boilerplate required to use Bevy's reflection features, which will be increasingly important as we build out Bevy's new scene system, entity inspector, and visual editor.
 
 Note that generic types still require manual registration, as these types don't (yet) exist when [`Reflect`] is derived:
 
@@ -712,15 +621,12 @@ In cases where automatic registration is undesirable, it can be opted-out of by 
 
 ### Supporting Unsupported Platforms
 
-This feature relies on the [`inventory`] crate to collect all type registrations at compile-time. This is supported on Bevy's most popular platforms: Windows, macOS, iOS, Android, and WebAssembly. However, some niche platforms are not supported by [`inventory`], and while it would be best for
-any unsupported platforms to be supported upstream, sometimes it might not be possible. For this reason, there is a different implementation of this feature that works on all platforms.
-It comes with some caveats with regards to project structure and might increase compile time, so it is better used as a backup solution. The detailed instructions on how to use this feature
-can be found in this [`example`]. Types can also still be manually registered using `app.register_type::<T>()`.
+This feature relies on the [`inventory`] crate to collect all type registrations at compile-time. This is supported on Bevy's most popular platforms: Windows, macOS, Linux, iOS, Android, and WebAssembly. However, some niche platforms are not supported by [`inventory`], and while it would be best for
+any unsupported platforms to be supported upstream, sometimes it might not be possible. For this reason, there is a [different implementation](https://github.com/bevyengine/bevy/tree/release-0.17.0/examples/reflection/auto_register_static) of this feature that works on all platforms.
 
-[`Reflect`]: https://docs.rs/bevy/0.17.0/bevy/prelude/trait.Reflect.html
+[`Reflect`]: https://docs.rs/bevy/0.17.1/bevy/prelude/trait.Reflect.html
 [`inventory`]: https://github.com/dtolnay/inventory
-[`example`]: https://github.com/bevyengine/bevy/tree/release-0.17.0/examples/reflection/auto_register_static
-[`register_type`]: https://docs.rs/bevy/0.17.0/bevy/prelude/struct.App.html#method.register_type
+[`register_type`]: https://docs.rs/bevy/0.17.1/bevy/prelude/struct.App.html#method.register_type
 
 ## Virtual Geometry BVH culling
 
@@ -728,7 +634,7 @@ can be found in this [`example`]. Types can also still be manually registered us
 
 ![lots of dragons being rendered](mesh_bvh.jpg)
 
-Bevy's virtual geometry has been greatly optimized with BVH-based culling, making the cost of rendering nearly independent of scene geometry.
+Bevy's [virtual geometry](/news/bevy-0-14/#virtual-geometry-experimental) has been greatly optimized with BVH-based culling, making the cost of rendering nearly independent of scene geometry.
 
 These changes have also lifted the previous cluster limit that limited the world to 2^24 clusters (about 4 billion triangles).
 There are now _no_ hardcoded limits to scene size. In practice you will only be limited by asset VRAM usage (as asset streaming is not yet implemented),
@@ -814,13 +720,55 @@ controlled with the [`BorderColor`] component.
 This feature was borrowed from CSS, where it is commonly used to fake buttons with depth,
 but we're looking forward to seeing your creative designs.
 
-[`BorderColor`]: https://docs.rs/bevy/0.17.0-rc.1/bevy/prelude/struct.BorderColor.html
+[`BorderColor`]: https://docs.rs/bevy/0.17.1/bevy/prelude/struct.BorderColor.html
 
 ## Specialized UI Transform
 
 {{ heading_metadata(authors=["@Ickshonpe"] prs=[16615]) }}
 
-In Bevy UI `Transform` and `GlobalTransform` have been replaced by `UiTransform` and `UiGlobalTransform`.  `UiTransform` is a specialized 2D UI transform, which more effectively maps to the UI space, improves our internals substantially, and cuts out redundant, unnecessary, often expensive work (such as doing full hierarchical [`Transform`] propagation _in addition_ to the Bevy UI layout algorithm).
+In Bevy UI, [`Transform`] and `GlobalTransform` have been replaced by [`UiTransform`] and `UiGlobalTransform`.  [`UiTransform`] is a specialized 2D UI transform, which more effectively maps to the UI space, improves our internals substantially, and cuts out redundant, unnecessary, often expensive work (such as doing full hierarchical [`Transform`] propagation _in addition_ to the Bevy UI layout algorithm).
+
+[`Transform`]: https://docs.rs/bevy/0.17.1/bevy/prelude/struct.Transform.html
+[`UiTransform`]: https://docs.rs/bevy/0.17.1/bevy/ui/ui_transform/struct.UiTransform.html
+
+## Data-Driven Materials
+
+{{ heading_metadata(authors=["@tychedelia"] prs=[19667]) }}
+
+Bevy's material system has historically relied on the `Material` and `AsBindGroup` traits in order to provide a
+type-safe way to define data that is passed to the shader that renders your material. While this approach has
+many advantages, recent improvements to the renderer, like GPU-driven rendering in Bevy `0.16`, have made the 3D renderer
+more siloed and less modular than we would like. Additionally, the type-level split between `Material` and `Material2d`
+has meant that every feature implemented for 3D needs a mostly copy-pasted version for 2D, which has caused the 2D
+renderer to lag behind in terms of features.
+
+In Bevy `0.17`, we've started the process of refactoring the renderer's mid and low-level APIs to be _data driven_. More
+specifically, we've removed the `M: Material` bound from every rendering system in the render world. Rather than being
+described statically by a type, the renderer now understands materials in terms of plain data that can be modified at
+runtime. Consequently, it is now possible to implement a custom material that doesn't rely on the `Material` trait at
+all, for example in the
+new [manual material example](https://github.com/bevyengine/bevy/blob/8b36cca28c4ea00425e1414fd88c8b82297e2b96/examples/3d/manual_material.rs).
+While this API isn't exactly ergonomic yet, it represents a first step in decoupling the renderer from a specific
+high-level material API.
+
+Importantly, for users of the `Material` trait, nothing changes. Our `AsBindGroup` driven API is now just one possible
+consumer of the renderer. But adopting a more dynamic, data-first approach creates many opportunities for the renderer
+we are hoping to explore in `0.18` and beyond, including:
+
+- Unifying the 2D and 3D rendering implementations. While we'll continue to present an opinionated 2D API that benefits
+  users building 2D games, we want every new rendering improvement to the 3D renderer to be at least potentially
+  available
+  to 2D users.
+- Exploring new material representations for a future material editor. While type-safety is great for writing code, it
+  poses real problems for being able to dynamically edit a material in a UI like a shader graph or load a material at
+  runtime from a serialized format.
+- Modularizing more of the mid-level rendering APIs to allow user's writing advanced rendering code access to
+  complicated pieces of rendering infrastructure like mesh and bind group allocation, GPU pre-processing, retained
+  rendering caches, and custom draw functions.
+
+With this foundation in place, we're actively evolving the renderer to embrace the flexibility and composability
+that defines Bevy's ECS. If you'd like to help us explore the possibilities of ECS-driven rendering, please join us on
+[Discord](https://discord.gg/bevy) or [GitHub Discussions](https://github.com/bevyengine/bevy/discussions)!
 
 ## Entity Spawn Ticks
 
@@ -1077,11 +1025,11 @@ add a [`PropagateStop<C>`] component to stop propagation, or even use [`Propagat
 
 This is a very general tool: please let us know what you're using it for and we can continue to add examples to the docs!
 
-[`RenderLayers`]: https://dev-docs.bevy.org/bevy/camera/visibility/struct.RenderLayers.html
-[`HierarchyPropagatePlugin`]: https://dev-docs.bevy.org/bevy/app/struct.HierarchyPropagatePlugin.html
-[`Propagate<C>`]: https://dev-docs.bevy.org/bevy/app/struct.Propagate.html
-[`PropagateStop<C>`]: https://dev-docs.bevy.org/bevy/app/struct.PropagateStop.html
-[`PropagateOver<C>`]: https://dev-docs.bevy.org/bevy/app/struct.PropagateOver.html
+[`RenderLayers`]: https://docs.rs/bevy/0.17.1/bevy/camera/visibility/struct.RenderLayers.html
+[`HierarchyPropagatePlugin`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.HierarchyPropagatePlugin.html
+[`Propagate<C>`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.Propagate.html
+[`PropagateStop<C>`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.PropagateStop.html
+[`PropagateOver<C>`]: https://docs.rs/bevy/0.17.1/bevy/app/struct.PropagateOver.html
 
 ## Infinite Children
 
@@ -1143,16 +1091,16 @@ the `*Systems` naming convention for their system sets where applicable.
 The features above may be great, but what else does Bevy have in flight?
 Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
 
-- **Better Scenes:** Defining scenes, both in code and via assets is too hard. We have a [working prototype](https://github.com/bevyengine/bevy/pull/20158) for a much improved system, and are excited to test and refine both the `bsn!` macro and the `.bsn` asset format over the 0.18 cycle.
-- **Fully-Fledged UI Framework:** `feathers` is a great start, but it's just-barely hatched. We're looking forward to improving ergonomics with the BSN work above, [adding more widgets], solidifying features like theming and screen reader support, and making it easier for you to build per-project design systems that allow you to create consistently styled, low-boilerplate UI.
+- **BSN: Bevy's Next Generation Scene / UI System:** We currently have a [working prototype](https://github.com/bevyengine/bevy/pull/20158) for a much-improved unified Scene / UI system. We plan to land the new `bsn!` macro and the `.bsn` asset format in **Bevy 0.18**.
+- **Fully-Fledged UI Framework:** `feathers` is a great start, but it's just barely hatched. We're looking forward to improving ergonomics by porting it to BSN, [adding more widgets], solidifying features like theming and screen reader support, and making it easier for you to build per-project design systems that allow you to create consistently styled, low-boilerplate UI.
 - **First-Party Entity Inspector:** [Entity inspectors](https://github.com/bevyengine/bevy/pull/20189) are an incredibly valuable debugging tool, both as an ad-hoc dev tool and as a key element of an editor. This will be built with `feathers`, allowing us to refine both its aesthetic and functionality in preparation for more extensive developer tooling.
 - **`firewheel` Audio:** The [`firewheel`](https://github.com/BillyDM/firewheel) team has been hard at work, creating a production-grade audio solution for Rust. We're encouraged by the draft integration via [`bevy_seedling`](https://github.com/corvusprudens/bevy_seedling), and keen to improve Bevy's first-party audio quality.
-- **Improved Examples:** Our examples do a great job explaining how to use Bevy, but leave users left fumbling when they want to know how to accomplish a specific task. We're looking to expand our usage examples, and finally add production-grade assets to our examples to show off how Bevy _actually_ looks when showcasing the work of talented artists.
+- **Improved Examples:** We're looking to expand our Bevy usage examples to ensure more real-world scenarios are covered, and finally add production-grade assets to our examples to show off how Bevy looks when showcasing the work of talented artists.
 
 [adding more widgets]: https://github.com/bevyengine/bevy/issues/19236
 
 {{ support_bevy() }}
 
-TODO: contributors
+{{ contributors(version="0.17") }}
 
 For those interested in a complete changelog, you can see the entire log (and linked pull requests) via the [relevant commit history](https://github.com/bevyengine/bevy/compare/v0.16.0...v0.17.0).
