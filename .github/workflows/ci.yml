@@ -18,7 +18,7 @@ jobs:
   mega-linter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Full git history is needed to get a proper list of changed files within `mega-linter`
           fetch-depth: 0
@@ -31,7 +31,7 @@ jobs:
   check-hide-lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -42,7 +42,7 @@ jobs:
   lint-tools:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -61,7 +61,7 @@ jobs:
   test-crates:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -90,9 +90,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Check for typos
-        uses: crate-ci/typos@v1.18.2
+        uses: crate-ci/typos@v1.39.0
       - name: Typos info
         if: failure()
         run: |
@@ -106,7 +106,7 @@ jobs:
     needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Get current date
         id: date
@@ -142,7 +142,7 @@ jobs:
     needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -169,7 +169,7 @@ jobs:
     needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -196,7 +196,7 @@ jobs:
     needs: [mega-linter, lint-tools, check-hide-lines, typos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -224,10 +224,10 @@ jobs:
     needs: [mega-linter, lint-tools, check-hide-lines, typos, generate-assets, generate-errors, generate-wasm-examples, generate-community, test-crates]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Checkout Bevy repo for asset access
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
@@ -236,27 +236,27 @@ jobs:
       - name: Move Bevy assets to static files
         # during the real build, this is handled by the generate_wasm_examples.sh script.
         run: mv bevy/assets static/assets/examples/
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-assets
           path: content/assets
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-errors
           path: content/learn/errors
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-wasm-examples
           path: content/examples
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: generated-community
           path: content/community/people
