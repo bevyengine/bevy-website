@@ -19,11 +19,13 @@ fi
 # Switch to script's directory, letting it be called from any folder.
 cd $(dirname $0)
 
-# generate_wasm_examples will clone the bevy repo to bevy-website/generate-wasm-examples/bevy by default.
-# If you want to use your fork or local changes, clone, symlink or copy your own bevy repo/folder:
-# 1. $ git clone https://github.com/<username>/bevy bevy
-# 2. Make relevant changes to your local bevy repository
-# 3. $ cp ~/projects/bevy ~/projects/bevy-website/generate-wasm-examples/bevy
+# generate_wasm_examples will clone the bevy repo to ./generate-wasm-examples/bevy by default.
+# If you want to use your fork or local changes, clone, symlink or copy your own bevy repo/folder
+# to ./generate-wasm-examples/bevy:
+# 1. $ cd ./generate-wasm-examples
+# 2. $ git clone https://github.com/<username>/bevy
+# OR
+# 1. $ cp ~/projects/my-bevy-fork ./generate-wasm-examples/bevy
 ./generate_wasm_examples.sh --no-pull
 
 cd bevy
