@@ -22,7 +22,8 @@ fn main() -> anyhow::Result<()> {
         if let Ok(token) = std::env::var("GITHUB_TOKEN") {
             Some(GithubClient::new(token))
         } else {
-            println!("GITHUB_TOKEN not found, github links will be skip            None
+            println!("GITHUB_TOKEN not found, github links will be skipped");
+            None
         }
     };
 
