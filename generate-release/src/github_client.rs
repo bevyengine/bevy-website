@@ -183,7 +183,7 @@ impl GithubClient {
         let request = self
             .get(&format!("compare/{from}...{to}"), BevyRepo::Bevy)
             .query("per_page", "250")
-            .query("page", &page.to_string());
+            .query("page", page.to_string());
         Ok(request.call()?.into_body().read_json()?)
     }
 
@@ -249,10 +249,10 @@ impl GithubClient {
             .query("state", state.as_github_str())
             .query("base", "main")
             .query("per_page", "100")
-            .query("page", &page.to_string());
+            .query("page", page.to_string());
 
         if let Some(date) = date {
-            request = request.query("since", &format!("{date}T00:00:00Z"));
+            request = request.query("since", format!("{date}T00:00:00Z"));
         }
 
         if let Some(label) = label {
