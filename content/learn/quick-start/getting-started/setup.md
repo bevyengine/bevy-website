@@ -124,7 +124,7 @@ cargo add bevy
   edition = "2024"
 
   [dependencies]
-  bevy = "0.16" # make sure this is the latest version
+  bevy = "0.17" # make sure this is the latest version
   ```
 </details>
 
