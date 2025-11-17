@@ -25,25 +25,35 @@ pub struct SumMe(pub u32);
 struct TotalSum(u32);
 
 // This observer will trigger when spawning or inserting a SumMe component
-fn add_when_inserting(mut trigger: Trigger<OnInsert, SumMe>, query: Query<&SumMe>, mut total_sum: ResMut<TotalSum>){
-    let sum_me = query.get(trigger.target());
-    total_sum.0 += sum_me.0;
+fn add_when_inserting(
+    trigger: Trigger<OnInsert, SumMe>,
+    query: Query<&SumMe>,
+    mut total_sum: ResMut<TotalSum>,
+) {
+    if let Ok(sum_me) = query.get(trigger.target()) {
+        total_sum.0 += sum_me.0;
+    }
 }
 
 // This observer will trigger when despawning or removing a SumMe component
-fn subtract_when_removing(mut trigger: Trigger<OnRemove, SumMe>, query: Query<&SumMe>, mut total_sum: ResMut<TotalSum>){
-    let sum_me = query.get(trigger.target());
-    total_sum.0 -= sum_me.0;
+fn subtract_when_removing(
+    trigger: Trigger<OnRemove, SumMe>,
+    query: Query<&SumMe>,
+    mut total_sum: ResMut<TotalSum>,
+) {
+    if let Ok(sum_me) = query.get(trigger.target()) {
+        total_sum.0 -= sum_me.0;
+    }
 }
 
 // Changing this to `&mut SumMe` would fail to compile!
-fn modify_values(mut commands: Commands, query: Query<(Entity, &SumMe)>){
-    for (entity, sum_me) in query.iter(){
+fn modify_values(mut commands: Commands, query: Query<(Entity, &SumMe)>) {
+    for (entity, sum_me) in query.iter() {
         // We can read the value, but not write to it.
         let current_value = sum_me.0;
         // This will overwrite: indirectly mutating the value
         // and triggering both observers: removal first, then insertion
-        commands.entity(entity).insert(sum_me.0 + 1);
+        commands.entity(entity).insert(SumMe(current_value + 1));
     }
 }
 ```
