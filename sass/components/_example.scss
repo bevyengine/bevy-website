@@ -6,15 +6,15 @@
     gap: 8px;
     margin: 16px 0 16px;
     align-items: baseline;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 35px auto;
     grid-template-areas:
-      "title title"
-      "back  github";
+      "title title title"
+      "back fullscreen github";
 
     @media #{$bp-tablet-portrait-up} {
       margin: 32px 0 16px;
-      grid-template-areas: "back title github";
-      grid-template-columns: 150px 1fr 150px;
+      grid-template-areas: "back title fullscreen github";
+      grid-template-columns: 150px 1fr 35px 150px;
     }
   }
 
@@ -26,6 +26,7 @@
   }
 
   &__back,
+  &__fullscreen,
   &__github {
     font-size: 1rem;
 
@@ -40,6 +41,12 @@
 
   &__back {
     grid-area: back;
+  }
+
+  &__fullscreen {
+    grid-area: fullscreen;
+    text-align: center;
+    font-size: x-large;
   }
 
   &__github {
