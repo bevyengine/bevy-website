@@ -109,7 +109,7 @@ or assets may be subject to:
 
 This policy may be revisited when the legal debate has settled.
 
-\[^1\]: Trivial LLM generated content such as variable renames or autocompleted
+[^1]: Trivial LLM generated content such as variable renames or autocompleted
 function calls, often branded "predictions" or "suggestions", that is otherwise
 indistinguishable from traditional methods such as a regex search/replace or an
 LSP autocompletion is by definition not detectable and can be treated like other
