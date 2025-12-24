@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-### Enable Fast Compiles (Optional)
+The previous chapters have focused on how to add and organize your code, but now we need to run it! Doing so usully involves *compiling* your project via `cargo run`, which invokes the Rust Compiler. However, compile times can be quite long as by default the Rust Compiler will statically link all of the crates that your project and Bevy depend on. Thankfully we have several methods to speed compile time up.
 
 
 <summary>
