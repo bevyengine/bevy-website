@@ -7,7 +7,6 @@ weight = 1
 
 The previous chapters have focused on how to add and organize your code, but now we need to run it! Doing so involves compiling your project via `cargo run`, which invokes the Rust Compiler. However, compile times can be quite long as (by default) the Rust Compiler will statically link all of the crates that your project and Bevy depend on. Thankfully we have several methods that can speed compile time up.
 
-
 ## Dynamic Linking
 
 This is the most impactful compilation time decrease!
@@ -37,7 +36,6 @@ Shipping your game with dynamic linking enabled is not recommended because it re
 If you remove the `dynamic_linking` feature, your game executable can run standalone.
 {% end %}
 
-
 ## Alternative Linkers
 
 The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy.
@@ -47,17 +45,17 @@ To install LLD, find your OS below and run the given command.
 <details>
   <summary>LLD Installation</summary>
 
-  * **Ubuntu**: `sudo apt-get install lld clang`
-  * **Fedora**: `sudo dnf install lld clang`
-  * **Arch**: `sudo pacman -S lld clang`
-  * **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
+* **Ubuntu**: `sudo apt-get install lld clang`
+* **Fedora**: `sudo dnf install lld clang`
+* **Arch**: `sudo pacman -S lld clang`
+* **Windows**: Ensure you have the latest [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) as this lets commands like `cargo run` use the LLD linker automatically.
 
     ```sh
     cargo install -f cargo-binutils
     rustup component add llvm-tools-preview
     ```
 
-  * **MacOS**: On MacOS, the default system linker `ld-prime` is faster than LLD.
+* **MacOS**: On MacOS, the default system linker `ld-prime` is faster than LLD.
 
 </details>
 
@@ -79,26 +77,25 @@ linker = "rust-lld.exe"
   
   Mold is _up to 5× (five times!) faster_ than LLD, but with a few caveats like limited platform support and occasional stability issues. To install Mold, find your OS below and run the given command:
   
-  * **Ubuntu**: `sudo apt-get install mold clang`
-  * **Fedora**: `sudo dnf install mold clang`
-  * **Arch**: `sudo pacman -S mold clang`
-  * **Windows**: Support not planned; [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
-  * **MacOS**: Available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
+* **Ubuntu**: `sudo apt-get install mold clang`
+* **Fedora**: `sudo dnf install mold clang`
+* **Arch**: `sudo pacman -S mold clang`
+* **Windows**: Support not planned; [See this tracking issue](https://github.com/rui314/mold/issues/1069#issuecomment-1653436823) for more information.
+* **MacOS**: Available as [sold](https://github.com/bluewhalesystems/sold), but this is unnecessary since the default linker is just as fast.
   
-  - You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
-    
-    ```toml
-    [target.x86_64-unknown-linux-gnu]
-    linker = "clang"
-    rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
-    ```
+You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
+
+  ```toml
+  [target.x86_64-unknown-linux-gnu]
+  linker = "clang"
+  rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
+  ```
   
   {% callout(type="note") %}
     Disabling `bevy/dynamic_linking` may improve Mold's performance.
     <sup>[citation needed]</sup>
   {% end %}
 </details>
-
 
 ## Nightly Rust Compiler
 
@@ -113,18 +110,19 @@ channel = "nightly"
 
 For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 
-
 ## Cranelift
 
-This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM. 
+This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM.
 It currently works best on Linux.
 
 To install Cranelift, run the following.
+
 ```
 rustup component add rustc-codegen-cranelift-preview --toolchain nightly
 ```
 
 To activate it for your project, add the following to your `.cargo/config.toml`.
+
 ```toml
 [unstable]
 codegen-backend = true
@@ -140,11 +138,10 @@ This enables faster compiles for your binary, but builds Bevy and other dependen
 details on other ways in which Cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
 MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
 
-While Cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it. 
+While Cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it.
 Notably, Wasm builds do not work yet.
 
 When shipping your game, you should still compile it with LLVM.
-
 
 ## Generic Sharing
 
