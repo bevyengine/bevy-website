@@ -56,7 +56,7 @@ Since the release of Bevy 0.16, it is now possible to use Bevy in a [`no_std`](h
 If you don't want to or can't support `no_std` in your plugin, you'll likely want to enable the `std` feature in Bevy to regain some functionality that was previously included by default.
 
 ```toml
-bevy = { version = "0.16", default-features = false, features = ["std"] }
+bevy = { version = "0.17", default-features = false, features = ["std"] }
 ```
 
 If you _do_ want to pursue `no_std` support, please refer to the `no_std` example in `examples/no_std/library`.

@@ -234,4 +234,3 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
 [`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
 [`DerefMut`]: https://doc.rust-lang.org/std/ops/trait.DerefMut.html
 [newtypes]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html
-[struct update syntax]: https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax

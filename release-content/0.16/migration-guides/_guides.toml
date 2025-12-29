@@ -870,10 +870,10 @@ areas = ["Text"]
 file_name = "17900_Add_byte_information_to_PositionedGlyph.md"
 
 [[guides]]
-title = "Remove the `atlas_scaling` field from `ExtractedUiItem::Gylphs`."
+title = "Remove the `atlas_scaling` field from `ExtractedUiItem::Glyphs`."
 prs = [17047]
 areas = ["Text"]
-file_name = "17047_Remove_the_atlas_scaling_field_from_ExtractedUiItemGylphs.md"
+file_name = "17047_Remove_the_atlas_scaling_field_from_ExtractedUiItemGlyphs.md"
 
 [[guides]]
 title = "add line height to `TextFont`"

@@ -28,6 +28,7 @@ pub struct Asset {
     pub crate_name: Option<String>,
     pub licenses: Option<Vec<String>>,
     pub bevy_versions: Option<Vec<String>>,
+    pub nsfw: Option<bool>,
 
     // this field is not read from the toml file
     #[serde(skip)]

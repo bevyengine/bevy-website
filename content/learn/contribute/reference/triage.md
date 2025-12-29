@@ -14,7 +14,7 @@ Labels are our primary tool for organizing work. Here are a few of the most comm
 - **A**: Area (e.g. `A-Animation`, `A-ECS`, `A-Rendering`, ...).
 - **C**: Category. The most common include:
   - `C-Bug`: unexpected or incorrect behavior.
-  - `C-Enhancement`: a new feature or meaningful extension of an existing one.
+  - `C-Feature`: a new feature, making something new possible.
   - `C-Docs`: an addition or correction to the documentation.
   - `C-Code-Quality`: a section of code that is hard to understand or change.
   - `C-Performance`: a change motivated by speed, memory usage, or compile times.
@@ -46,8 +46,8 @@ Labels are our primary tool for organizing work. Here are a few of the most comm
   - `X-Controversial`: there's active disagreement and / or large-scale architectural implications involved.
   - `X-Blessed`: work that was previously controversial, but whose controversial (but perhaps not technical) elements have been endorsed by the relevant decision makers.
 - **M**: Meta, for supporting work that needs to be done.
-  - `M-Needs-Release-Note`:  work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
-  - `M-Needs-Migration-Guide`: this is a breaking change to Bevy's public API, and requires advice on how to migrate existing code. These changes cannot be shipped in minor versions!
+  - `M-Release-Note`:  work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
+  - `M-Migration-Guide`: this is a breaking change to Bevy's public API, and requires advice on how to migrate existing code. These changes cannot be shipped in minor versions!
 
  Check Github for a complete and up-to-date list with descriptions at [the engine repo](https://github.com/bevyengine/bevy/labels) or [the website repo](https://github.com/bevyengine/bevy-website/labels).
 You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
@@ -91,6 +91,12 @@ Some reasons to apply `D-Trivial` include:
 2. Moving a file from one location to another.
 3. Small changes to documentation or error messages.
 
+Some reasons to apply `S-Nominated-to-Close`  include:
+
+ 1. The PR is no longer needed.
+ 2. The PR has serious flaws and has not attracted any support from reviewers.
+ 3. The PR shows signs that it was AI generated, which is a volation of our [AI Policy][ai-policy].
+
 Remember that difficulty labels are for expertise required to either solve an issue or review a pull request. By labeling an issue as `D-Trivial`, you are marking it as a good first issue for new contributors to the Bevy project.
 
 ## Closing PRs and Issues
@@ -118,8 +124,45 @@ There are several paths for PRs to be closed:
 6. In the case of PRs where some members of the community, other than the author, are in favor, and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
 7. For a PR that has been sitting for a while and became bitrotten, check with the original author if they intend to continue working on it. If not, or without a response, the PR can be labeled with `S-Adopt-Me`, and closed. Tracking adoption progress will happen in a linked issue.
 8. Inactive `X-Controversial` can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be made.
+9. Majority AI-Generated PRs cannot be merged as per the Bevy org's [AI policy][ai-policy]. Please mark these PRs as `S-Nominated-to-Close` for maintainers to make a final decision.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
+
+## Milestones, Roadmaps and Work Planning
+
+Bevy is, to a large degree, a project powered by volunteers, each with their own motivations and goals.
+The usual estimation and long-term planning difficulties of software are amplified dramatically: this is why Bevy does not maintain a central roadmap.
+
+Despite this, some degree of work planning is important, as both a coordination and quality control mechanism.
+This is generally fairly decentralized and organic, relying on temporary, focused working groups and milestones.
+
+Each release (both major and minor) has an [associated milestone](https://github.com/bevyengine/bevy/milestones).
+For example, the 0.5 milestone would be for the major Bevy version 0.5 release,
+while the 0.5.1 milestone would be for a minor patch release for Bevy 0.5.
+
+Minor version milestones are intended for work and issues that are either particularly critical to backport fixes for,
+or extremely low risk non-breaking improvements (such as documentation improvements or simple methods).
+When enough changes have accumulated, maintainers will create a new branch for the minor version,
+cherrypicking merged PRs in that milestone onto that branch and then publishing it.
+Breaking changes cannot be shipped in a minor version (due to semantic versioning),
+and complex changes are both hard to cherrypick and challenging to use.
+
+By contrast, major version milestones serve three purposes:
+
+1. Tracking high-value, ready-to-implement or reviewable work that would be useful for contributors to tackle this cycle.
+2. Coordinating complex efforts that would be good to ship in a single cycle to avoid shipping half-complete features or refactors.
+3. Ensuring that we do not ship major bugs, shoddy documentation or inconsistent APIs.
+
+At the start of each release cycle, the milestone will tend towards the first two use cases.
+As we near the end, the milestone is gradually trimmed down to only the most critical problems that would justify delaying a release.
+It's common to move issues and PRs that are near completion or still helpful to implement
+into the milestone for the major release after the current milestone.
+
+Members of the triage team should follow these guidelines for how we use milestones,
+but are encouraged to add, remove and modify milestones for various work, based on their own subjective judgement
+of the importance of the work, how well it aligns with our current collective goals, and its current state.
+When you assign work to a milestone (or take it out of it), try to leave a short comment justifying why you have done so,
+so others can understand (and perhaps argue with) your rationale.
 
 ## Triage Team
 
@@ -131,3 +174,4 @@ Members of the Triage Team within the Bevy organization have permissions to labe
 If that applies to you, then feel free to ask a Maintainer on [Discord] or email <support@bevy.org>. Everyone is welcome to do this. We generally accept membership requests, so don't hesitate if you are interested!
 
 [Discord]: https://discord.gg/bevy
+[ai-policy]: /learn/contribute/policies/ai

@@ -104,7 +104,7 @@ Yes, yes it does.
 For game code, this can be really convenient,
 allowing you to readily group functionality into a nice hierarchy.
 
-If you're writing a library though, you probably shouldn't do nest plugins like this.
+If you're writing a library though, you probably shouldn't nest plugins like this.
 It can make it harder to follow what's going on,
 and it becomes challenging to selectively disable plugins for testing or things like "making a server build".
 

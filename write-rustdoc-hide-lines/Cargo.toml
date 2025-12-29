@@ -8,7 +8,7 @@ anyhow = "1.0"
 regex = "1.5"
 
 [dev-dependencies]
-indoc = "1.0"
+indoc = "2.0.6"
 
 [lints]
 workspace = true

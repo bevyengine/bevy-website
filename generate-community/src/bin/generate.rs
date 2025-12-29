@@ -1,4 +1,4 @@
-use rand::{prelude::SliceRandom, thread_rng};
+use rand::{prelude::SliceRandom, rng};
 use serde::Serialize;
 use std::{
     collections::BTreeMap,
@@ -267,7 +267,7 @@ impl FrontMatterWriter for Section {
         }
 
         for members in order_groups.values_mut() {
-            members.shuffle(&mut thread_rng());
+            members.shuffle(&mut rng());
         }
 
         let mut ordered_members = Vec::new();

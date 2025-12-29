@@ -1,6 +1,9 @@
 details {
   $h-padding: 10px;
   border-radius: $border-radius;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--details-border-color);
   padding: 0 $h-padding;
   margin-block: 1em;
   background-color: var(--details-bg-color);

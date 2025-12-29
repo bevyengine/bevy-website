@@ -25,8 +25,36 @@
     margin-bottom: 15px;
   }
 
+  h4 {
+    font-weight: 500;
+  }
+
   p {
     margin-top: 5px;
+  }
+
+  pre:has(code) {
+    position: relative;
+
+    button.copy {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+      border-color: transparent;
+      background-color: transparent;
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    /* :hover for mouse & touchscreen,
+     * :focus for keyboard navigation */
+    &:hover button.copy,
+    button.copy:focus {
+      opacity: 1;
+    }
   }
 }
 
