@@ -53,7 +53,7 @@ Try running the app again. It should do exactly what it did before. In the next 
 [`UiPlugin`]: https://docs.rs/bevy/latest/bevy/ui/struct.UiPlugin.html
 [`RenderPlugin`]: https://docs.rs/bevy/latest/bevy/render/struct.RenderPlugin.html
 [`WindowPlugin`]: https://docs.rs/bevy/latest/bevy/window/struct.WindowPlugin.html
-[`WininitPlugin`]: https://docs.rs/bevy/latest/bevy/winit/struct.WinitPlugin.html
+[`WinitPlugin`]: https://docs.rs/bevy/latest/bevy/winit/struct.WinitPlugin.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`PluginGroup`]: https://docs.rs/bevy/latest/bevy/app/trait.PluginGroup.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
