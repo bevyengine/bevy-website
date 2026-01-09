@@ -1,0 +1,740 @@
++++
+title = "Bevy 0.18"
+date = 2026-01-12 
+[extra]
+public_draft = 2320
+status = 'hidden'
+# show_image = true
+# image = "TODO"
+# image_subtitle = "TODO"
+# image_subtitle_link = "TODO"
++++
+
+Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.18** release on [crates.io](https://crates.io/crates/bevy)!
+
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
+
+To update an existing Bevy App or Plugin to **Bevy 0.18**, check out our [0.17 to 0.18 Migration Guide](/learn/migration-guides/0-17-to-0-18/).
+
+Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
+
+- **X:** X
+
+<!-- more -->
+
+## Atmosphere Occlusion and PBR Shading
+
+{{ heading_metadata(authors=["@mate-h"] prs=[21383]) }}
+
+The procedural atmosphere now affects how light reaches objects in your scene! Sunlight automatically picks up the right colors as it travels through the atmosphere, appearing orange or red when the sun is closer to the horizon.
+
+This works seamlessly with volumetric fog and all rendering modes, so your scenes will have more cohesive and realistic lighting right out of the box.
+
+Check out the updated `atmosphere` example to see it in action!
+
+## Solari Improvements
+
+{{ heading_metadata(authors=["@JMS55", "@SparkyPotato"] prs=[21391, 21355, 21810]) }}
+
+(Too many PRs to list in full - this is just a small selection!)
+
+Solari - Bevy's forward-looking realtime raytraced renderer - has seen many improvements in this release.
+
+Notably:
+
+- Support for specular materials and reflections
+- Faster-reacting lighting
+- A large amount of quality/accuracy improvements
+- Physically-based soft shadows for directional lights
+- Improved performance on larger scenes
+
+For the full list of details, check out the author's [full blog post](https://jms55.github.io/posts/2025-12-27-solari-bevy-0-18).
+
+## Generalized Atmospheric Scattering Media
+
+{{ heading_metadata(authors=["@ecoskey"] prs=[20838]) }}
+
+Until now, Bevy's atmospheric scattering system has been fast and beautiful, but
+not very customizable. There's only a limited number of ways to customize the
+existing parameters, which constrain the system to mostly earth-like scenes.
+
+Bevy 0.18 introduces a new `ScatteringMedium` asset for designing atmospheric
+scattering media of all kinds: clear desert skies, foggy coastlines, and
+even atmospheres of other planets! We've used Bevy's asset system to the
+fullest--alongside some custom optimizations--to make sure rendering stays
+fast even for complicated scattering media.
+
+```rust
+fn setup_camera(
+    mut commands: Commands,
+    mut media: ResMut<Assets<ScatteringMedium>>,
+) {
+    // Also feel free to use `ScatteringMedium::earthlike()`!
+    let medium = media.add(ScatteringMedium::new(
+        256,
+        256,
+        [
+            ScatteringTerm {
+                absorption: Vec3::ZERO,
+                scattering: Vec3::new(5.802e-6, 13.558e-6, 33.100e-6),
+                falloff: Falloff::Exponential { strength: 12.5 },
+                phase: PhaseFunction::Rayleigh,
+            },
+            ScatteringTerm {
+                absorption: Vec3::splat(3.996e-6),
+                scattering: Vec3::splat(0.444e-6),
+                falloff: Falloff::Exponential { strength: 83.5 },
+                phase: PhaseFunction::Mie { asymmetry: 0.8 },
+            },
+            ScatteringTerm {
+                absorption: Vec3::new(0.650e-6, 1.881e-6, 0.085e-6),
+                scattering: Vec3::ZERO,
+                falloff: Falloff::Tent {
+                    center: 0.75,
+                    width: 0.3,
+                },
+                phase: PhaseFunction::Isotropic,
+            },
+        ],
+    ));
+
+    commands.spawn((
+        Camera3d,
+        Atmosphere::earthlike(medium)
+    ));
+}
+
+// We've provided a nice `EarthlikeAtmosphere` resource
+// for the most common case :)
+fn setup_camera_simple(
+    mut commands: Commands,
+    earthlike_atmosphere: Res<EarthlikeAtmosphere>
+) {
+    commands.spawn((
+        Camera3d,
+        earthlike_atmosphere.get(),
+    ));
+}
+```
+
+(TODO: engine example of martian/extraterrestrial sunrise)
+
+Alongside this change we've also added a bunch of documentation, and links to
+learn more about the technical terms used. It's definitely a complex feature
+under the hood, so we're hoping to make the learning curve a little less steep :)
+
+## More Standard Widgets
+
+{{ heading_metadata(authors=["@viridia"] prs=[21636, 21743]) }}
+
+We are continuing to flesh out the collection of standard widgets first introduced in
+Bevy 0.17.
+
+### Popover
+
+The `Popover` component can be placed on an absolutely-positioned UI node to provide
+automatic popup positioning. This is inspired by the popular `floating-ui` npm package.
+
+Popovers will be placed relative to an anchor element, and positioned so that they don't get
+cut off by the window edge. You can specify a list of preferred "placements": top, bottom,
+left or right, along with alignment options for each. If the popup is so large that it's
+impossible to position it without it getting cut off, it will choose the placement that results
+in the most visibility (as determined by the area cut off). (A future version might also
+have an option to constrain the popup to be no larger than the window size, but this will be
+more useful once we have better support for scrolling.)
+
+This automatic positioning is dynamic, which means that if the anchor element moves around, is
+inside a scrolling container, or the window is resized, the popover may "flip" sides in order to
+remain fully visible.
+
+Popovers can be used for dropdown menus, but they can also be used for tooltips.
+
+### Menu
+
+The `Menu` component uses `Popover` to provide a dropdown menu widget. This adds events for opening
+and closing the menu, along with keyboard navigation and activation using the focus system.
+
+### Color Plane
+
+The `Color Plane` widget is a two-dimensional color picker that allows selecting two different
+channels within a color space, one along the horizontal axis and one along the vertical. It can be
+configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
+red vs. blue, and so on.
+
+## First-party camera controllers
+
+{{ heading_metadata(authors=["@alice-i-cecile", "@syszery"] prs=[20215, 21450, 21520]) }}
+
+To understand a scene, you must look at it through the lens of a camera: explore it, and interact with it.
+Because this is such a fundamental operation, game devs have developed a rich collection of tools
+called "camera controllers" for manipulating them.
+
+Getting camera controllers feeling *right* is both tricky and essential: they have a serious
+impact on both the feeling of your game and the usability of your software.
+
+Historically, Bevy has left this entirely up to individual game developers:
+camera controllers require deep customization and endless twiddling.
+However, Bevy as a game engine needs its *own* camera controllers:
+allowing users to quickly and easily explore scenes during development (rather than gameplay).
+
+To that end, we've created `bevy_camera_controller`: giving us a place to store, share and refine the camera controllers
+that we need for easy development, and yes, an eventual Editor.
+We're kicking it off with a couple of camera controllers, detailed below.
+
+## `FreeCamera`
+
+The first camera controller that we've introduced is a "free camera", designed for quickly moving around a scene,
+completely ignoring both physics and geometry.
+You may have heard of a "fly camera" controller before, which is a specialization of a "free camera" controller
+designed for fast and fluid movement for covering large amounts of terrain.
+
+To add a free camera controller to your project (typically under a `dev_mode` feature flag),
+add the `FreeCameraPlugin` and the `FreeCamera` component to your camera entity.
+
+To configure the settings (speed, behavior, keybindings) or enable / disable the controller modify the `FreeCamera` component.
+We've done our best to select good defaults, but the details of your scene (especially the scale!) will make a big
+difference to what feels right.
+
+## `PanCamera`
+
+The `PanCamera` controller is a simple and effective tool designed for 2D games or any project where you need
+to pan the camera and zoom in/out with ease. It allows you to move the camera using the WASD keys and zoom
+in and out with the mouse wheel or +/- keys.
+
+By adding the `PanCameraPlugin` and attaching the `PanCamera` component to your camera entity, you can quickly add
+this controller to your project.
+
+To configure the camera's zoom levels, speed, or keybindings, simply modify the `PanCamera` component. The default
+settings should work well for most use cases, but you can adjust them based on your specific needs, especially
+for large-scale or high-resolution 2D scenes.
+
+## Using `bevy_camera_controller` in your own projects
+
+The provided camera controllers are designed to be functional, pleasant debug and dev tools:
+add the correct plugin and camera component and you're good to go!
+
+They can also be useful for prototyping, giving you a quick-and-dirty camera controller
+as you get your game off the ground.
+
+However, they are deliberately _not_ architected to give you the level of extensibility and customization
+needed to make a production-grade camera controller for games.
+Customizatibility comes with a real cost in terms of user experience and maintainability,
+and because each project only ever needs one or two distinct camera controllers, exposing more knobs and levers is often a questionable design.
+Instead, consider vendoring (read: copy-pasting the source code) the camera controller you want to extend
+into your project and rewriting the quite-approachable logic to meet your needs,
+or looking for [ecosystem camera crates](https://bevy.org/assets/#camera) that correspond to the genre you're building in.
+
+## Automatic Directional Navigation
+
+{{ heading_metadata(authors=["@jbuehler23"] prs=[21668, 22340]) }}
+
+Bevy now supports **automatic directional navigation** for UI elements! No more tedious manual wiring of navigation connections for your menus and UI screens.
+
+Previously, creating directional navigation for UI required manually defining every connection between focusable elements using `DirectionalNavigationMap`. For dynamic UIs or complex layouts, this was time-consuming and error-prone.
+
+Now, you can simply add the `AutoDirectionalNavigation` component to your UI entities, and Bevy will automatically compute navigation connections based on spatial positioning. The system parameter intelligently finds the nearest neighbor in each of the 8 compass directions (North, Northeast, East, etc.), considering:
+
+- **Distance**: Closer elements are preferred
+- **Alignment**: Elements that are more directly in line with the navigation direction are favored
+- **Overlap**: For cardinal directions (N/S/E/W), the system ensures sufficient perpendicular overlap
+
+### How to Use It
+
+Simply add the `AutoDirectionalNavigation` component to your UI entities:
+
+```rust
+commands.spawn((
+    Button,
+    Node { /* ... */ },
+    AutoDirectionalNavigation::default(),
+    // ... other components
+));
+```
+
+To leverage automatic navigation, use the `AutoDirectionalNavigator` system parameter instead of the `DirectionalNavigation` system parameter:
+
+```rust
+fn my_navigation_system(mut auto_directional_navigator: AutoDirectionalNavigator) {
+    // ...
+    auto_directional_navigator.navigate(CompassOctant::East);
+    // ...
+}
+```
+
+That's it! The `DirectionalNavigationPlugin` will set up the resources that `AutoDirectionalNavigator` uses to function.
+
+### Configuration
+
+You can tune the behavior using the `AutoNavigationConfig` resource:
+
+```rust
+app.insert_resource(AutoNavigationConfig {
+    // Minimum overlap required (0.0 = any overlap, 1.0 = perfect alignment)
+    min_alignment_factor: 0.0,
+    // Optional maximum distance for connections
+    max_search_distance: Some(500.0),
+    // Whether to strongly prefer well-aligned nodes
+    prefer_aligned: true,
+});
+```
+
+### Manual Override
+
+Automatic navigation respects manually-defined edges. If you want to override specific connections, you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
+You may also call `auto_generate_navigation_edges()` directly, if you have multiple UI layers (though may not be widely used)
+
+### Why This Matters
+
+This feature dramatically simplifies UI navigation setup:
+
+- **Less boilerplate**: No need to manually wire up dozens or hundreds of navigation connections
+- **Works with dynamic UIs**: Automatically adapts when UI elements are added, removed, or repositioned
+- **Flexible**: Mix automatic and manual navigation as needed
+- **Configurable**: Tune the algorithm to match your UI's needs
+
+Whether you're building menus, inventory screens, or any other gamepad/keyboard-navigable UI, automatic directional navigation makes it much easier to create intuitive, responsive navigation experiences.
+
+## Font weight support
+
+{{ heading_metadata(authors=["@ickshonpe"] prs=[22038]) }}
+
+Adds support for font weights.
+
+`TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
+
+## Text strikethrough and underline support
+
+{{ heading_metadata(authors=["@ickshonpe"] prs=[21555, 21559]) }}
+
+`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
+
+## Fullscreen Material
+
+{{ heading_metadata(authors=["@IceSentry"] prs=[20414]) }}
+
+Users often want to run a fullscreen shader but currently the only to do this is to copy the custom_post_processing example which is very verbose and contains a lot of low level details. We introduced a new `FullscreenMaterial` trait and `FullscreenMaterialPlugin` that let you easily run a fullscreen shader and specify in which order it will run relative to other render passes in the engine.
+
+## get_components_mut
+
+{{ heading_metadata(authors=["@hymm"] prs=[21780]) }}
+
+Methods `EntityMut::get_components_mut` and `EntityWorldMut::get_components_mut` are now
+added, providing a safe API for retrieving mutable references to multiple components via
+these entity access APIs.
+
+Previously, only the unsafe variants of these methods, called
+`get_components_mut_unchecked`, were present. They are not safe because they allow
+retrieving `(&mut T, &mut T)` - two mutable references to a single component - which
+breaks Rust's pointer aliasing rules.
+
+The new methods work around this via performing a quadratic time complexity check between
+all specified components for conflicts, returning `QueryAccessError::Conflict` if such
+occurs. This potentially has a runtime performance cost, so it might be favorable to still
+use `get_components_mut_unchecked` if you can guarantee that no aliasing would occur.
+
+## Cargo Feature Collections
+
+{{ heading_metadata(authors=["@cart"] prs=[21472]) }}
+
+Historically, Bevy developers have lived one of two lifestyles:
+
+1. Use all of Bevy's default features, potentially compiling many unwanted or unneeded features.
+2. Disable Bevy's default features and manually define the complete list of features.
+
+Living in the world of (2) was an exercise in frustration, as the list of bevy features is _massive_ and the features required to accomplish a given task changes regularly across releases. This was an _expert level_ task that required intimate knowledge of engine internals to get right.
+
+**Bevy 0.18** introduces high-level "cargo feature collections" to the `bevy` crate: `2d`, `3d`, and `ui`. This enables developers to easily select the kind of app they want to build, and only compile the pieces of Bevy needed for that app.
+
+This means scenarios like using Bevy as a UI framework, without pulling in the rest of the engine, is now as easy as:
+
+```toml
+bevy = { version = "0.18", default-features = false, features = ["ui"] }
+```
+
+We've also added mid-level feature collections like `2d_api`, which is Bevy's 2D API _without the default Bevy renderer_. This makes it much easier to swap out the default Bevy renderer for a custom one.
+
+For example, the `2d` profile looks like this:
+
+```toml
+2d = [
+  "default_app",
+  "default_platform",
+  "2d_api",
+  "2d_bevy_render",
+  "ui",
+  "scene",
+  "audio",
+  "picking",
+]
+```
+
+Someone building a custom 2D renderer now just needs to remove `2d_bevy_render` and provide their own.
+
+Developers can now define their own high-level cargo feature profiles from these mid-level pieces, making it _much_ easier to define the subset of Bevy you want to build into your app.
+
+## OpenType Font Features
+
+{{ heading_metadata(authors=["@hansler"] prs=[19020]) }}
+
+OpenType font features allow fine-grained control over how text is displayed, including [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), [small caps](https://en.wikipedia.org/wiki/Small_caps), and [many more](https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist).
+
+These features can now be used in Bevy, allowing users to add typographic polish (like discretionary ligatures and oldstyle numerals) to their UI. It also allows complex scripts like Arabic or Devanagari to render more correctly with their intended ligatures.
+
+Example usage:
+
+```rust
+commands.spawn((
+  TextSpan::new("Ligatures: ff, fi, fl, ffi, ffl"),
+  TextFont {
+    font: opentype_font_handle,
+    font_features: FontFeatures::builder()
+      .enable(FontFeatureTag::STANDARD_LIGATURES)
+      .set(FontFeatureTag::WIDTH, 300)
+      .build(),
+    ..default()
+  },
+));
+```
+
+FontFeatures can also be constructed from a list:
+
+```rust
+TextFont {
+  font: opentype_font_handle,
+  font_features: [
+    FontFeatureTag::STANDARD_LIGATURES,
+    FontFeatureTag::STYLISTIC_ALTERNATES,
+    FontFeatureTag::SLASHED_ZERO
+  ].into(),
+  ..default()
+}
+```
+
+Note that OpenType font features are only available for `.otf` fonts that support them, and different fonts may support different subsets of OpenType features.
+
+## `ComputedNode` helper functions
+
+{{ heading_metadata(authors=["@ickshonpe"] prs=[21903]) }}
+
+Helper functions `border_box`, `padding_box`, and `content_box` that return a node’s object-centered border, padding, and content boxes have been added to `ComputedNode`.
+
+## Short-type-path asset processors
+
+{{ heading_metadata(authors=["@andriyDev"] prs=[21339]) }}
+
+Asset processors allow manipulating assets at "publish-time" to convert them into a more optimal
+form when loading the data at runtime. This can either be done using a default processor, which
+processes all assets with a particular file extension, or by specifying the processor in the asset's
+meta file.
+
+In previous versions of Bevy, the processor had to be **fully** specified in the asset's meta file.
+For example:
+
+```ron
+(
+    meta_format_version: "1.0",
+    asset: Process(
+        processor: "bevy_asset::processor::process::LoadTransformAndSave<asset_processing::CoolTextLoader, asset_processing::CoolTextTransformer, asset_processing::CoolTextSaver>",
+        settings: (
+            loader_settings: (),
+            transformer_settings: (),
+            saver_settings: (),
+        ),
+    ),
+)
+```
+
+As you can see, processor types can be very verbose! In order to make these meta files easier to
+manipulate, we now also support using the "short type path" of the asset. This would look like:
+
+```ron
+(
+    meta_format_version: "1.0",
+    asset: Process(
+        processor: "LoadTransformAndSave<CoolTextLoader, CoolTextTransformer, CoolTextSaver>",
+        settings: (
+            loader_settings: (),
+            transformer_settings: (),
+            saver_settings: (),
+        ),
+    ),
+)
+```
+
+## Render Assets diagnostics
+
+{{ heading_metadata(authors=["@hukasu"] prs=[19311]) }}
+
+Create diagnostics plugins `MeshAllocatorDiagnosticPlugin`, `MaterialAllocatorDiagnosticPlugin`,
+`RenderAssetDiagnosticPlugin`, and `ErasedRenderAssetDiagnosticPlugin`, that collect measurements
+related to `MeshAllocator`s, `MaterialBindGroupAllocator`, `RenderAssets`, and `ErasedRenderAssets`
+respectively.
+
+`MeshAllocatorDiagnosticPlugin` and `MaterialDiagnosticPlugin` measure the number of slabs, the total size of memory
+allocated by the slabs, and the number of objects allocated in the slabs. Only bindless materials use slabs for their
+allocations, non-bindless materials return 0 for all of them.
+
+`RenderAssetDiagnosticsPlugin<RA>` and `ErasedAssetDiagnosticsPlugin<ERA>` measure the number of
+assets in `RenderAssets<RA>` and `ErasedRenderAssets<ERA::ErasedAsset>`. `ErasedAssetDiagnosticsPlugin<ERA>`
+will report the same number of assets for all `ERA` that share the same `ERA::ErasedAsset`.
+
+```rust
+app.add_plugins(DefaultPlugins)
+    .add_plugins((
+        MeshAllocatorDiagnosticPlugin,
+        MaterialAllocatorDiagnosticPlugin::<StandardMaterial>::default(),
+        RenderAssetDiagnosticPlugin::<RenderMesh>::new(" render meshes"),
+        RenderAssetDiagnosticPlugin::<GpuImage>::new(" gpu images"),
+        // ImageMaterial is the name of the manual material used on the `manual_material` example
+        ErasedRenderAssetDiagnosticPlugin::<ImageMaterial>::new(" image materials"),
+    ));
+```
+
+If you also have `LogDiagnosticsPlugin`, the output looks something like this:
+
+```ignore
+INFO bevy_diagnostic: mesh_allocator_allocations                                             :    4.000000 meshes (avg 4.000000 meshes)
+INFO bevy_diagnostic: mesh_allocator_slabs                                                   :    4.000000 slabs (avg 4.000000 slabs)
+INFO bevy_diagnostic: mesh_allocator_slabs_size                                              : 4194360.000000 bytes (avg 4194360.000000 bytes)
+INFO bevy_diagnostic: material_allocator_allocations/bevy_pbr::pbr_material::StandardMaterial:   14.000000 materials (avg 14.000000 materials)
+INFO bevy_diagnostic: material_allocator_slabs/bevy_pbr::pbr_material::StandardMaterial      :    1.000000 slabs (avg 1.000000 slabs)
+INFO bevy_diagnostic: material_allocator_slabs_size/bevy_pbr::pbr_material::StandardMaterial :  576.000000 bytes (avg 576.000000 bytes)
+INFO bevy_diagnostic: render_asset/bevy_render::mesh::RenderMesh                             :    5.000000 render meshes (avg 5.000000 render meshes)
+INFO bevy_diagnostic: render_asset/bevy_render::texture::gpu_image::GpuImage                 :   10.000000 gpu images (avg 10.000000 gpu images)
+INFO bevy_diagnostic: erased_render_asset/manual_material::ImageMaterial                     :    2.000000 image materials (avg 2.000000 image materials)
+```
+
+## Ring primitives
+
+{{ heading_metadata(authors=["@tigregalis", "@lynn-lumen"] prs=[21446]) }}
+
+### Ring / hollow shapes
+
+![Rings of 2d primitives (bottom row)](https://github.com/user-attachments/assets/8fac6c82-3da0-488e-ab38-80816b2129c0)
+
+![Extrusions of rings of extrudable primitives (front row)](https://github.com/user-attachments/assets/70c4dee0-4f82-4723-b95c-9d02ddb95363)
+
+There is a new generic primitive `Ring`, which takes as input any `Primitive2d`, with two instances of that primitive shape: the outer and the inner (or hollow).
+A `Ring` here is what an `Annulus` is to a `Circle`.
+This allows us to have (or at least approximate - more on that later) "hollow" shapes or "outlines".
+
+```rs
+// construct the `Ring` from an outer and inner shape
+
+let capsule_ring = Ring::new(Capsule2d::new(50.0, 100.0), Capsule2d::new(45.0, 100.0));
+let hexagon_ring = Ring::new(RegularPolygon::new(50.0, 6), RegularPolygon::new(45.0, 6)); // note vertex count must match
+
+// or, from a shape and a thickness for any types that implement `Inset`
+
+let capsule_ring = Ring::from_primitive_and_thickness(Capsule2d::new(50.0, 100.0), 5.0);
+let hexagon_ring = Ring::from_primitive_and_thickness(RegularPolygon::new(50.0, 6), 5.0);
+
+// or, from the `ToRing` trait for any types that implement `Inset`
+
+let capsule_ring = Capsule2d::new(50.0, 100.0).to_ring(5.0);
+let hexagon_ring = RegularPolygon::new(50.0, 6).to_ring(5.0);
+
+```
+
+### How it works
+
+The mesh for a `RingMeshBuilder` is constructed by concatenating the vertices of the outer and inner meshes, then walking the perimeter to join corresponding vertices like so:
+
+![Vertices around a pentagon ring](https://github.com/user-attachments/assets/2cecb458-3b59-44fb-858b-1beffecd1e57)
+
+```text
+# outer vertices, then inner vertices
+positions = [
+  0  1  2  3  4
+  0' 1' 2' 3' 4'
+]
+# pairs of triangles
+indices = [
+  0  1  0'    0' 1  1'
+  1  2  1'    1' 2  2'
+  2  3  2'    2' 3  3'
+  3  4  3'    3' 4  4'
+  4  0  4'    4' 0  0'
+]
+```
+
+Examples of generated meshes:
+
+![Mesh for a pentagon ring](https://github.com/user-attachments/assets/cb9881e5-4518-4743-b8de-5816b632f36f)
+
+![Mesh for a heart ring](https://github.com/user-attachments/assets/348bbd91-9f4e-4040-bfa5-d508a4308c10)
+
+### Extrusions
+
+A `Ring` for a type that is `Extrudable` is also `Extrudable`.
+
+```rs
+let extrusion = Extrusion::new(RegularPolygon::new(1.0, 5).to_ring(0.2));
+```
+
+![Mesh for an extruded pentagon ring](https://github.com/user-attachments/assets/7d2022c9-b8cf-4b4b-bb09-cbe4fe49fb89)
+
+![Mesh for an extruded heart ring](https://github.com/user-attachments/assets/dbaf894e-6f7f-4b79-af3e-69516da85898)
+
+### Inset shapes
+
+Some shapes can be "inset", that is, we can produce a smaller shape where the lines/curves/vertices are equidistant from the outer shape's when they share the same origin.
+This is represented by the `Inset` trait.
+Inset shapes give us nice "outlines" when combined with `Ring`, so for these shapes we provide a `ToRing` method that takes an inset distance.
+
+The implementation of `Inset` can be unintuitive - have a look at the source at [crates/bevy_math/src/primitives/inset.rs][Source].
+For example, the inset `CircularSegment` in our implementation is actually constructed by shortening the radius _and_ the angle.
+
+Some shapes can't be represented by an inset: `Ellipse` for example doesn't implement `Inset`, because concentric ellipses do not have parallel lines.
+
+![Concentric ellipses](https://github.com/user-attachments/assets/3f419f8f-4d7a-4bfb-a231-fba9464e0f93)
+
+If the ellipse is not a circle, the inset shape is not actually an ellipse (although it may look like one) but can also be a lens-like shape.
+The following image shows an ellipse in white and all points at a constant distance from that ellipse in blue.
+Neither of the blue shapes is an ellipse.
+
+![An ellipse in white and its parallel lines in blue](https://github.com/user-attachments/assets/8c7520d1-9911-4c9c-8e6f-2688e160f510)
+
+For the sake of flexibility, however, we don't require `Ring` shapes to be `Inset`.
+
+### Limitations
+
+It's assumed that the inner and outer meshes have the same number of vertices.
+
+It's currently assumed the vertex positions are well ordered (i.e.
+walking around the perimeter, without zig-zagging), otherwise it will result in incorrect geometries.
+
+The `outer_shape` must contain the `inner_shape` for the generated meshes to be accurate.
+If there are vertices in the `inner_shape` that escape the `outer_shape` (for example, if the `inner_shape` is in fact larger), it may result in incorrect geometries.
+
+Because the origin of the generated mesh matters when constructing a `Ring`, some "outline" shapes can't currently be easily represented.
+
+<!-- TODO: Update link -->
+
+[Source]: https://github.com/bevyengine/bevy/blob/6e348948cae9523d0d7f13f0ed598d16790ff4ae/crates/bevy_math/src/primitives/inset.rs
+
+## UI per text section picking
+
+{{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
+
+Individual text sections belonging to UI text nodes are now pickable and can be given observers.
+
+## Screen Recording Plugin
+
+{{ heading_metadata(authors=["@mockersf"] prs=[21235, 21237]) }}
+
+Bevy can take a screenshot of what's rendered since 0.11. This is now easier to setup to help you create marketing material, so that you can take screenshot with consistent formatting with the new `EasyScreenshotPlugin`. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
+
+It is now possible to record a movie from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
+
+Screen recording is not working for now on Windows.
+
+## Remove Systems from Schedules
+
+{{ heading_metadata(authors=["@hymm"] prs=[20298]) }}
+
+A long requested feature has come to Bevy! You can now remove systems from a schedule.
+The previous recommended way of preventing a scheduled system from running was to use `RunCondition`'s.
+You will still use this for most situations as removing a system will cause the schedule to be rebuilt.
+This process can be slow since the schedule checking logic is complex. But in situations where this is
+not a problem, you can now call `remove_systems_in_set`. The advantage of this is that this will remove the
+cost of the run condition being checked.
+
+```rust
+app.add_systems((system_a, (system_b, system_c).in_set(MySet)));
+
+// remove a system
+schedule.remove_systems_in_set(my_system, ScheduleCleanupPolicy::RemoveSystemsOnly);
+
+// remove systems in a set
+app.remove_systems_in_set(MySet, ScheduleCleanupPolicy::RemoveSetAndSystems);
+```
+
+## Support for Ui nodes that ignore parent scroll position.
+
+{{ heading_metadata(authors=["@PPakalns"] prs=[21648]) }}
+
+Adds the `IgnoreScroll` component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
+
+This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See `scroll` example.
+
+## Fallible Interpolation
+
+{{ heading_metadata(authors=["@viridia"] prs=[21633]) }}
+
+The `StableInterpolate` trait is great, but sadly there's one important type that it doesn't work
+with: The `Val` type from `bevy_ui`. The reason is that `Val` is an enum, representing different
+length units such as pixels and percentages, and it's not generally possible or even meaningful to
+try and interpolate between different units.
+
+However, the use cases for wanting to animate `Val` don't require mixing units: often we just want
+to slide or stretch the length of a widget such as a toggle switch. We can do this so long as we
+check at runtime that both interpolation control points are in the same units.
+
+The new `TryStableInterpolate` trait introduces the idea of interpolation that can fail, by returning
+a `Result`. Note that "failure" in this case is not necessarily bad: it just means that the
+animation player will need to modify the parameter in some other way, such as "snapping" or
+"jumping" to the new keyframe without smoothly interpolating. This lets us create complex animations
+that incorporate both kinds of parameters: ones that interpolate, and ones that don't.
+
+There's a blanket implementation of `TryStableInterpolate` for all types that impl
+`StableInterpolate`, and these can never fail. There are additional impls for `Color` and `Val`
+which can fail if the control points are not in the same units / color space.
+
+## The `AssetReader` trait can now (optionally) support seeking any direction.
+
+{{ heading_metadata(authors=["@andriyDev", "@cart"] prs=[22182]) }}
+
+_TODO: This release note is not up to date with the changes in [#22182](https://github.com/bevyengine/bevy/pull/22182)._
+
+In Bevy 0.15, we replaced the `AsyncSeek` super trait on `Reader` with `AsyncSeekForward`. This
+allowed our `Reader` trait to apply to more cases (e.g., it could allow cases like an HTTP request,
+which may not support seeking backwards). However, it also meant that we could no longer use seeking
+fully where it was available.
+
+To resolve this issue, we now allow `AssetLoader`s to provide a `ReaderRequiredFeatures` to the
+`AssetReader`. The `AssetReader` can then choose how to handle those required features. For example,
+it can return an error to indicate that the feature is not supported, or it can choose to use a
+different `Reader` implementation to fallback in order to continue to support the feature.
+
+This allowed us to bring back the "requirement" the `Reader: AsyncSeek`, but with a more relaxed
+policy: the `Reader` may choose to avoid supporting certain features (corresponding to fields in
+`ReaderRequiredFeatures`).
+
+Our general recommendation is that if your `Reader` implementation does not support a feature, make
+your `AssetReader` just return an error for that feature. Usually, an `AssetLoader` can implement a
+fallback itself (e.g., reading all the data into memory and then loading from that), and loaders can
+be selected using `.meta` files (allowing for fine-grained opt-in in these cases). However if there
+is some reasonable implementation you can provide (even if not optimal), feel free to provide one!
+
+## `RadioButton`, `RadioGroup` widget minor improvements
+
+{{ heading_metadata(authors=["@PPakalns"] prs=[21294]) }}
+
+`RadioButton` and `RadioGroup` usage remains fully backward compatible.
+
+Improvements:
+
+- Event propagation from user interactions will now be canceled even if
+  widgets are disabled. Previously, some relevant event propagation
+  was not properly canceled.
+- `RadioButton` now emits a `ValueChange<bool>` entity event when checked,
+  even when checked via a `RadioGroup`. Consistent with other `Checkable` widgets.
+  As a `RadioButton` cannot be unchecked through direct user interaction with this widget,
+  a `ValueChange` event with value `false` can not be triggered for `RadioButton`.
+- If a `RadioButton` is focusable, a value change event can be triggered
+  using the **Space** or **Enter** keys when focused.
+- `RadioGroup` is now optional and can be replaced with a custom implementation.
+
+## What's Next?
+
+The features above may be great, but what else does Bevy have in flight?
+Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
+
+- **X:** X
+
+{{ support_bevy() }}
+
+{{ contributors(version="0.18") }}
+
+For those interested in a complete changelog, you can see the entire log (and linked pull requests) via the [relevant commit history](https://github.com/bevyengine/bevy/compare/v0.17.0...v0.18.0).
