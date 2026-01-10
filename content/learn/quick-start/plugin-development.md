@@ -44,7 +44,7 @@ To avoid long build times in your plugin and in projects using it, you should ai
 
   You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
 
-  You can find a list of Bevy's features [here](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md).
+  You can find a list of Bevy's features [here](https://github.com/bevyengine/bevy/blob/latest/docs/cargo_features.md).
 
 - Avoid large new dependencies.
 - Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
