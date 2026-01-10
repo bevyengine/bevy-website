@@ -75,7 +75,7 @@ You will also need to add the following to your Cargo config at `/path/to/projec
 
 This gives access to the latest performance improvements and "unstable" optimizations, including [generic sharing](#generic-sharing) below.
 
-Create a ```rust-toolchain.toml``` file in the root of your project, next to ```Cargo.toml```.
+Create a `rust-toolchain.toml` file in the root of your project, next to `Cargo.toml`.
 
 ```toml
 [toolchain]
