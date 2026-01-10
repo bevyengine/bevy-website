@@ -32,21 +32,23 @@ This works seamlessly with volumetric fog and all rendering modes, so your scene
 
 Check out the updated `atmosphere` example to see it in action!
 
+![atmosphere shading](atmosphere_shading.jpg)
+
 ## Solari Improvements
 
 {{ heading_metadata(authors=["@JMS55", "@SparkyPotato"] prs=[21391, 21355, 21810]) }}
 
-(Too many PRs to list in full - this is just a small selection!)
+![solari specular](solari_specular.jpg)
 
-Solari - Bevy's forward-looking realtime raytraced renderer - has seen many improvements in this release.
-
-Notably:
+Solari - Bevy's forward-looking realtime raytraced renderer - has seen many improvements in this release. Notably:
 
 - Support for specular materials and reflections
 - Faster-reacting lighting
 - A large amount of quality/accuracy improvements
 - Physically-based soft shadows for directional lights
 - Improved performance on larger scenes
+
+![solari pica pica](solari_pica_pica.jpg)
 
 For the full list of details, check out the author's [full blog post](https://jms55.github.io/posts/2025-12-27-solari-bevy-0-18).
 
@@ -58,7 +60,7 @@ Until now, Bevy's atmospheric scattering system has been fast and beautiful, but
 not very customizable. There's only a limited number of ways to customize the
 existing parameters, which constrain the system to mostly earth-like scenes.
 
-Bevy 0.18 introduces a new `ScatteringMedium` asset for designing atmospheric
+**Bevy 0.18** introduces a new `ScatteringMedium` asset for designing atmospheric
 scattering media of all kinds: clear desert skies, foggy coastlines, and
 even atmospheres of other planets! We've used Bevy's asset system to the
 fullest--alongside some custom optimizations--to make sure rendering stays
@@ -103,32 +105,16 @@ fn setup_camera(
         Atmosphere::earthlike(medium)
     ));
 }
-
-// We've provided a nice `EarthlikeAtmosphere` resource
-// for the most common case :)
-fn setup_camera_simple(
-    mut commands: Commands,
-    earthlike_atmosphere: Res<EarthlikeAtmosphere>
-) {
-    commands.spawn((
-        Camera3d,
-        earthlike_atmosphere.get(),
-    ));
-}
 ```
 
 (TODO: engine example of martian/extraterrestrial sunrise)
-
-Alongside this change we've also added a bunch of documentation, and links to
-learn more about the technical terms used. It's definitely a complex feature
-under the hood, so we're hoping to make the learning curve a little less steep :)
 
 ## More Standard Widgets
 
 {{ heading_metadata(authors=["@viridia"] prs=[21636, 21743]) }}
 
 We are continuing to flesh out the collection of standard widgets first introduced in
-Bevy 0.17.
+**Bevy 0.17**. Note that Bevy's standard widgets are "logical widgets". They are "unthemed".
 
 ### Popover
 
@@ -169,19 +155,19 @@ To understand a scene, you must look at it through the lens of a camera: explore
 Because this is such a fundamental operation, game devs have developed a rich collection of tools
 called "camera controllers" for manipulating them.
 
-Getting camera controllers feeling *right* is both tricky and essential: they have a serious
+Getting camera controllers feeling _right_ is both tricky and essential: they have a serious
 impact on both the feeling of your game and the usability of your software.
 
 Historically, Bevy has left this entirely up to individual game developers:
 camera controllers require deep customization and endless twiddling.
-However, Bevy as a game engine needs its *own* camera controllers:
+However, Bevy as a game engine needs its _own_ camera controllers:
 allowing users to quickly and easily explore scenes during development (rather than gameplay).
 
 To that end, we've created `bevy_camera_controller`: giving us a place to store, share and refine the camera controllers
-that we need for easy development, and yes, an eventual Editor.
+that we need for easy development, and yes, an eventual Bevy Editor.
 We're kicking it off with a couple of camera controllers, detailed below.
 
-## `FreeCamera`
+### `FreeCamera`
 
 The first camera controller that we've introduced is a "free camera", designed for quickly moving around a scene,
 completely ignoring both physics and geometry.
@@ -195,7 +181,7 @@ To configure the settings (speed, behavior, keybindings) or enable / disable the
 We've done our best to select good defaults, but the details of your scene (especially the scale!) will make a big
 difference to what feels right.
 
-## `PanCamera`
+### `PanCamera`
 
 The `PanCamera` controller is a simple and effective tool designed for 2D games or any project where you need
 to pan the camera and zoom in/out with ease. It allows you to move the camera using the WASD keys and zoom
@@ -208,7 +194,7 @@ To configure the camera's zoom levels, speed, or keybindings, simply modify the 
 settings should work well for most use cases, but you can adjust them based on your specific needs, especially
 for large-scale or high-resolution 2D scenes.
 
-## Using `bevy_camera_controller` in your own projects
+### Using `bevy_camera_controller` in your own projects
 
 The provided camera controllers are designed to be functional, pleasant debug and dev tools:
 add the correct plugin and camera component and you're good to go!
@@ -294,15 +280,15 @@ This feature dramatically simplifies UI navigation setup:
 
 Whether you're building menus, inventory screens, or any other gamepad/keyboard-navigable UI, automatic directional navigation makes it much easier to create intuitive, responsive navigation experiences.
 
-## Font weight support
+## Font Weights
 
 {{ heading_metadata(authors=["@ickshonpe"] prs=[22038]) }}
 
-Adds support for font weights.
+Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
 
-`TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
+![font weights](font_weights.jpg)
 
-## Text strikethrough and underline support
+## Text Strikethroughs and Underlines
 
 {{ heading_metadata(authors=["@ickshonpe"] prs=[21555, 21559]) }}
 
@@ -345,7 +331,7 @@ Living in the world of (2) was an exercise in frustration, as the list of bevy f
 
 **Bevy 0.18** introduces high-level "cargo feature collections" to the `bevy` crate: `2d`, `3d`, and `ui`. This enables developers to easily select the kind of app they want to build, and only compile the pieces of Bevy needed for that app.
 
-This means scenarios like using Bevy as a UI framework, without pulling in the rest of the engine, is now as easy as:
+This means scenarios like using Bevy as a UI framework, without pulling in the rest of the engine, are now as easy as:
 
 ```toml
 bevy = { version = "0.18", default-features = false, features = ["ui"] }
