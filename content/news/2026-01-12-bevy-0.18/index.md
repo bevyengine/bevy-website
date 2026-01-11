@@ -407,6 +407,16 @@ TextFont {
 
 Note that OpenType font features are only available for `.otf` fonts that support them, and different fonts may support different subsets of OpenType features.
 
+## Per text-section picking
+
+{{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
+
+Individual text sections belonging to UI text nodes are now pickable, allowing them to be selected,
+and can be given observers to respond to user interaction.
+
+This functionality is useful when creating hyperlink-like behavior,
+and allows users to create mouse-over tooltips for specific keywords in their games.
+
 ## Short-type-path asset processors
 
 {{ heading_metadata(authors=["@andriyDev"] prs=[21339]) }}
@@ -492,12 +502,6 @@ INFO bevy_diagnostic: render_asset/bevy_render::mesh::RenderMesh                
 INFO bevy_diagnostic: render_asset/bevy_render::texture::gpu_image::GpuImage                 :   10.000000 gpu images (avg 10.000000 gpu images)
 INFO bevy_diagnostic: erased_render_asset/manual_material::ImageMaterial                     :    2.000000 image materials (avg 2.000000 image materials)
 ```
-
-## UI per text section picking
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
-
-Individual text sections belonging to UI text nodes are now pickable and can be given observers.
 
 ## Screen Recording Plugin
 
