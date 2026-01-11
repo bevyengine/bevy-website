@@ -363,9 +363,11 @@ Developers can now define their own high-level cargo feature profiles from these
 
 ### Font Weights
 
-Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
+Bevy now supports font weights, allowing you to take advantage of [variable weight fonts] which embed smooth variations of a font into a single file! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16` (clamped to a range of 1-1000), with lower values representing thin typefaces and large values representing bold typefaces.
 
 ![font weights](font_weights.jpg)
+
+[variable weight fonts]: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Fonts/Variable_fonts
 
 ### OpenType Font Features
 
