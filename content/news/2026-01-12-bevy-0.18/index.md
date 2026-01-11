@@ -147,11 +147,10 @@ channels within a color space, one along the horizontal axis and one along the v
 configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
 red vs. blue, and so on.
 
-### `RadioButton`, `RadioGroup` widget minor improvements
+### Improvements to `RadioButton` and `RadioGroup`
 
-`RadioButton` and `RadioGroup` usage remains fully backward compatible.
-
-Improvements:
+Following user testing, we've improved the details of our existing `RadioButton` and `RadioGroup` widgets,
+in a fully backward compatible way:
 
 - Event propagation from user interactions will now be canceled even if
   widgets are disabled. Previously, some relevant event propagation
@@ -231,7 +230,9 @@ or looking for [ecosystem camera crates](https://bevy.org/assets/#camera) that c
 
 {{ heading_metadata(authors=["@jbuehler23"] prs=[21668, 22340]) }}
 
-Bevy now supports **automatic directional navigation** for UI elements! No more tedious manual wiring of navigation connections for your menus and UI screens.
+Bevy now supports **automatic directional navigation** for UI elements! With a bit of global setup, 
+all of your UI elements can now be navigated between using gamepads or arrow keys.
+No more tedious manual wiring of navigation connections for your menus and UI screens.
 
 Previously, creating directional navigation for UI required manually defining every connection between focusable elements using `DirectionalNavigationMap`. For dynamic UIs or complex layouts, this was time-consuming and error-prone.
 
@@ -285,17 +286,6 @@ app.insert_resource(AutoNavigationConfig {
 
 Automatic navigation respects manually-defined edges. If you want to override specific connections, you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
 You may also call `auto_generate_navigation_edges()` directly, if you have multiple UI layers (though may not be widely used)
-
-### Why This Matters
-
-This feature dramatically simplifies UI navigation setup:
-
-- **Less boilerplate**: No need to manually wire up dozens or hundreds of navigation connections
-- **Works with dynamic UIs**: Automatically adapts when UI elements are added, removed, or repositioned
-- **Flexible**: Mix automatic and manual navigation as needed
-- **Configurable**: Tune the algorithm to match your UI's needs
-
-Whether you're building menus, inventory screens, or any other gamepad/keyboard-navigable UI, automatic directional navigation makes it much easier to create intuitive, responsive navigation experiences.
 
 ## Fullscreen Material
 
@@ -373,9 +363,11 @@ Developers can now define their own high-level cargo feature profiles from these
 
 ### Font Weights
 
-Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
+Bevy now supports font weights, allowing you to take advantage of [variable weight fonts] which embed smooth variations of a font into a single file! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16` (clamped to a range of 1-1000), with lower values representing thin typefaces and large values representing bold typefaces.
 
 ![font weights](font_weights.jpg)
+
+[variable weight fonts]: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Fonts/Variable_fonts
 
 ### OpenType Font Features
 
@@ -414,6 +406,16 @@ TextFont {
 ```
 
 Note that OpenType font features are only available for `.otf` fonts that support them, and different fonts may support different subsets of OpenType features.
+
+## Per text-section picking
+
+{{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
+
+Individual text sections belonging to UI text nodes are now pickable, allowing them to be selected,
+and can be given observers to respond to user interaction.
+
+This functionality is useful when creating hyperlink-like behavior,
+and allows users to create mouse-over tooltips for specific keywords in their games.
 
 ## Short-type-path asset processors
 
@@ -501,32 +503,37 @@ INFO bevy_diagnostic: render_asset/bevy_render::texture::gpu_image::GpuImage    
 INFO bevy_diagnostic: erased_render_asset/manual_material::ImageMaterial                     :    2.000000 image materials (avg 2.000000 image materials)
 ```
 
-## UI per text section picking
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
-
-Individual text sections belonging to UI text nodes are now pickable and can be given observers.
-
-## Screen Recording Plugin
+## Easy Marketing Material
 
 {{ heading_metadata(authors=["@mockersf"] prs=[21235, 21237]) }}
 
-Bevy can take a screenshot of what's rendered since 0.11. This is now easier to setup to help you create marketing material, so that you can take screenshot with consistent formatting with the new `EasyScreenshotPlugin`. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
+Making an awesome, beautiful game is only half the battle: you need to be able to show it to people too!
 
-It is now possible to record a movie from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
+Bevy has been able to take a screenshot of what's rendered since 0.11.
+Despite how useful this functionality is for quickly creating marketing material,
+setting it up was relatively involved.
 
-Screen recording is not working for now on Windows.
+This process has been streamlined, with the new `EasyScreenshotPlugin` allowing you to take a screenshot with consistent formatting with a single button press. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
+
+We've taken this one step further, allowing you to record video directly from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
+
+Screen recording is currently not supported on Windows due to challenges with video codecs.
 
 ## Remove Systems from Schedules
 
 {{ heading_metadata(authors=["@hymm"] prs=[20298]) }}
 
-A long requested feature has come to Bevy! You can now remove systems from a schedule.
-The previous recommended way of preventing a scheduled system from running was to use `RunCondition`'s.
-You will still use this for most situations as removing a system will cause the schedule to be rebuilt.
-This process can be slow since the schedule checking logic is complex. But in situations where this is
-not a problem, you can now call `remove_systems_in_set`. The advantage of this is that this will remove the
-cost of the run condition being checked.
+Previously, the only way to prevent a scheduled system from running was to use `RunCondition`'s.
+This works well for dynamically toggling whether or not a system runs, but comes with a tiny overhead
+each time the schedule is run.
+
+Now, you can completely remove systems from a schedule using `remove_systems_in_set`
+forcing an expensive schedule rebuild but removing that overhead completely and removing
+the systems from any debug tools.
+
+Run conditions (and dedicated schedules run on demand) remain a better tool for most cases,
+but completely removing systems may be an attractive option when opting-out of undesired plugin behavior,
+modding or changing game settings.
 
 ```rust
 app.add_systems((system_a, (system_b, system_c).in_set(MySet)));
@@ -538,25 +545,28 @@ schedule.remove_systems_in_set(my_system, ScheduleCleanupPolicy::RemoveSystemsOn
 app.remove_systems_in_set(MySet, ScheduleCleanupPolicy::RemoveSetAndSystems);
 ```
 
-## Support for Ui nodes that ignore parent scroll position.
+## UI nodes that ignore parent scroll position.
 
 {{ heading_metadata(authors=["@PPakalns"] prs=[21648]) }}
 
-Adds the `IgnoreScroll` component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
+We've added the `IgnoreScroll` component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
 
-This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See `scroll` example.
+This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See the [`scroll` example] for a demonstration!
 
-## Fallible Interpolation
+[`scroll` example]: https://github.com/bevyengine/bevy/blob/latest/examples/ui/scroll.rs
+
+## Interpolation for colors and layout
 
 {{ heading_metadata(authors=["@viridia"] prs=[21633]) }}
 
-The `StableInterpolate` trait is great, but sadly there's one important type that it doesn't work
-with: The `Val` type from `bevy_ui`. The reason is that `Val` is an enum, representing different
-length units such as pixels and percentages, and it's not generally possible or even meaningful to
+Bevy's `StableInterpolate` trait is a lovely foundation for animation,
+but sadly there's one important type that it doesn't work with:
+the `Val` type from `bevy_ui`, used to control the layout of UI elements.
+`Val` is an enum, representing different length units such as pixels and percentages, and it's not generally possible or even meaningful to
 try and interpolate between different units.
 
-However, the use cases for wanting to animate `Val` don't require mixing units: often we just want
-to slide or stretch the length of a widget such as a toggle switch. We can do this so long as we
+However, it's common to want to animate `Val` in a way that doesn't require mixing units:
+often we just want to slide or stretch the length of a widget such as a toggle switch. We can do this so long as we
 check at runtime that both interpolation control points are in the same units.
 
 The new `TryStableInterpolate` trait introduces the idea of interpolation that can fail, by returning
@@ -565,8 +575,8 @@ animation player will need to modify the parameter in some other way, such as "s
 "jumping" to the new keyframe without smoothly interpolating. This lets us create complex animations
 that incorporate both kinds of parameters: ones that interpolate, and ones that don't.
 
-There's a blanket implementation of `TryStableInterpolate` for all types that impl
-`StableInterpolate`, and these can never fail. There are additional impls for `Color` and `Val`
+We've added a blanket implementation of `TryStableInterpolate` for all types that impl
+`StableInterpolate`, and these can never fail. There are additional impls for `Color` and `Val`,
 which can fail if the control points are not in the same units / color space.
 
 ## The `AssetReader` trait can now (optionally) support seeking any direction.
