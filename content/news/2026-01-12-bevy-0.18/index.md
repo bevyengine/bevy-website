@@ -503,15 +503,21 @@ INFO bevy_diagnostic: render_asset/bevy_render::texture::gpu_image::GpuImage    
 INFO bevy_diagnostic: erased_render_asset/manual_material::ImageMaterial                     :    2.000000 image materials (avg 2.000000 image materials)
 ```
 
-## Screen Recording Plugin
+## Easy Marketing Material
 
 {{ heading_metadata(authors=["@mockersf"] prs=[21235, 21237]) }}
 
-Bevy can take a screenshot of what's rendered since 0.11. This is now easier to setup to help you create marketing material, so that you can take screenshot with consistent formatting with the new `EasyScreenshotPlugin`. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
+Making an awesome, beautiful game is only half the battle: you need to be able to show it to people too!
 
-It is now possible to record a movie from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
+Bevy has been able to take a screenshot of what's rendered since 0.11.
+Despite how useful this functionality is for quickly creating marketing material,
+setting it up was relatively involved.
 
-Screen recording is not working for now on Windows.
+This process has been streamlined, with the new `EasyScreenshotPlugin` allowing you to take a screenshot with consistent formatting with a single button press. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
+
+We've taken this one step further, allowing you to record video directly from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
+
+Screen recording is currently not supported on Windows due to challenges with video codecs.
 
 ## Remove Systems from Schedules
 
