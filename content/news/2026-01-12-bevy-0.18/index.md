@@ -147,11 +147,10 @@ channels within a color space, one along the horizontal axis and one along the v
 configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
 red vs. blue, and so on.
 
-### `RadioButton`, `RadioGroup` widget minor improvements
+### Improvements to `RadioButton` and `RadioGroup`
 
-`RadioButton` and `RadioGroup` usage remains fully backward compatible.
-
-Improvements:
+Following user testing, we've improved the details of our existing `RadioButton` and `RadioGroup` widgets,
+in a fully backward compatible way:
 
 - Event propagation from user interactions will now be canceled even if
   widgets are disabled. Previously, some relevant event propagation
