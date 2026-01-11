@@ -230,7 +230,9 @@ or looking for [ecosystem camera crates](https://bevy.org/assets/#camera) that c
 
 {{ heading_metadata(authors=["@jbuehler23"] prs=[21668, 22340]) }}
 
-Bevy now supports **automatic directional navigation** for UI elements! No more tedious manual wiring of navigation connections for your menus and UI screens.
+Bevy now supports **automatic directional navigation** for UI elements! With a bit of global setup, 
+all of your UI elements can now be navigated between using gamepads or arrow keys.
+No more tedious manual wiring of navigation connections for your menus and UI screens.
 
 Previously, creating directional navigation for UI required manually defining every connection between focusable elements using `DirectionalNavigationMap`. For dynamic UIs or complex layouts, this was time-consuming and error-prone.
 
@@ -284,17 +286,6 @@ app.insert_resource(AutoNavigationConfig {
 
 Automatic navigation respects manually-defined edges. If you want to override specific connections, you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
 You may also call `auto_generate_navigation_edges()` directly, if you have multiple UI layers (though may not be widely used)
-
-### Why This Matters
-
-This feature dramatically simplifies UI navigation setup:
-
-- **Less boilerplate**: No need to manually wire up dozens or hundreds of navigation connections
-- **Works with dynamic UIs**: Automatically adapts when UI elements are added, removed, or repositioned
-- **Flexible**: Mix automatic and manual navigation as needed
-- **Configurable**: Tune the algorithm to match your UI's needs
-
-Whether you're building menus, inventory screens, or any other gamepad/keyboard-navigable UI, automatic directional navigation makes it much easier to create intuitive, responsive navigation experiences.
 
 ## Fullscreen Material
 
