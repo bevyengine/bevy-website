@@ -30,9 +30,11 @@ The procedural atmosphere now affects how light reaches objects in your scene! S
 
 This works seamlessly with volumetric fog and all rendering modes, so your scenes will have more cohesive and realistic lighting right out of the box.
 
-Check out the updated `atmosphere` example to see it in action!
+Check out the updated [`atmosphere` example] to see it in action!
 
 ![atmosphere shading](atmosphere_shading.jpg)
+
+[`atmosphere` example]: https://github.com/bevyengine/bevy/blob/latest/examples/3d/atmosphere.rs
 
 ## Solari Improvements
 
@@ -60,7 +62,7 @@ Until now, Bevy's atmospheric scattering system has been fast and beautiful, but
 not very customizable. There's only a limited number of ways to customize the
 existing parameters, which constrain the system to mostly earth-like scenes.
 
-**Bevy 0.18** introduces a new `ScatteringMedium` asset for designing atmospheric
+**Bevy 0.18** introduces a new [`ScatteringMedium`] asset for designing atmospheric
 scattering media of all kinds: clear desert skies, foggy coastlines, and
 even atmospheres of other planets! We've used Bevy's asset system to the
 fullest--alongside some custom optimizations--to make sure rendering stays
@@ -109,6 +111,8 @@ fn setup_camera(
 
 (TODO: engine example of martian/extraterrestrial sunrise)
 
+[`ScatteringMedium`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/pbr/struct.ScatteringMedium.html
+
 ## More Standard Widgets
 
 {{ heading_metadata(authors=["@viridia", "@PPakalns"] prs=[21636, 21743, 21294]) }}
@@ -118,8 +122,8 @@ We are continuing to flesh out the collection of standard widgets first introduc
 
 ### Popover
 
-The `Popover` component can be placed on an absolutely-positioned UI node to provide
-automatic popup positioning. This is inspired by the popular `floating-ui` npm package.
+The [`Popover`] component can be placed on an absolutely-positioned UI node to provide
+automatic popup positioning. This is inspired by the popular [`floating-ui`] npm package.
 
 Popovers will be placed relative to an anchor element, and positioned so that they don't get
 cut off by the window edge. You can specify a list of preferred "placements": top, bottom,
@@ -135,33 +139,46 @@ remain fully visible.
 
 Popovers can be used for dropdown menus, but they can also be used for tooltips.
 
+[`floating-ui`]: https://www.npmjs.com/package/@floating-ui/core
+[`Popover`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/ui_widgets/popover/struct.Popover.html
+
 ### Menu
 
-The `Menu` component uses `Popover` to provide a dropdown menu widget. This adds events for opening
+The [`MenupPopup`] component uses [`Popover`] to provide a dropdown menu widget. This adds events for opening
 and closing the menu, along with keyboard navigation and activation using the focus system.
+
+[`MenuPopup`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/ui_widgets/struct.MenuPopup.html
 
 ### Color Plane
 
-The `Color Plane` widget is a two-dimensional color picker that allows selecting two different
+TODO: add image
+
+The [`ColorPlane`] widget is a two-dimensional color picker that allows selecting two different
 channels within a color space, one along the horizontal axis and one along the vertical. It can be
 configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
 red vs. blue, and so on.
 
+[`ColorPane`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/feathers/controls/enum.ColorPlane.html
+
 ### Improvements to `RadioButton` and `RadioGroup`
 
-Following user testing, we've improved the details of our existing `RadioButton` and `RadioGroup` widgets,
+Following user testing, we've improved the details of our existing [`RadioButton`] and [`RadioGroup`] widgets,
 in a fully backward compatible way:
 
 - Event propagation from user interactions will now be canceled even if
   widgets are disabled. Previously, some relevant event propagation
   was not properly canceled.
-- `RadioButton` now emits a `ValueChange<bool>` entity event when checked,
-  even when checked via a `RadioGroup`. Consistent with other `Checkable` widgets.
-  As a `RadioButton` cannot be unchecked through direct user interaction with this widget,
-  a `ValueChange` event with value `false` can not be triggered for `RadioButton`.
-- If a `RadioButton` is focusable, a value change event can be triggered
+- [`RadioButton`] now emits a `ValueChange<bool>` entity event when checked,
+  even when checked via a [`RadioGroup`]. Consistent with other `Checkable` widgets.
+  As a [`RadioButton`] cannot be unchecked through direct user interaction with this widget,
+  a [`ValueChange`] event with value `false` can not be triggered for [`RadioButton`].
+- If a [`RadioButton`] is focusable, a value change event can be triggered
   using the **Space** or **Enter** keys when focused.
-- `RadioGroup` is now optional and can be replaced with a custom implementation.
+- [`RadioGroup`] is now optional and can be replaced with a custom implementation.
+
+[`RadioButton`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/ui_widgets/struct.RadioButton.html
+[`RadioGroup`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/ui_widgets/struct.RadioGroup.html
+[`ValueChange`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/ui_widgets/struct.ValueChange.html
 
 ## First-party camera controllers
 
@@ -179,9 +196,11 @@ camera controllers require deep customization and endless twiddling.
 However, Bevy as a game engine needs its _own_ camera controllers:
 allowing users to quickly and easily explore scenes during development (rather than gameplay).
 
-To that end, we've created `bevy_camera_controller`: giving us a place to store, share and refine the camera controllers
+To that end, we've created [`bevy_camera_controller`]: giving us a place to store, share and refine the camera controllers
 that we need for easy development, and yes, an eventual Bevy Editor.
 We're kicking it off with a couple of camera controllers, detailed below.
+
+[`bevy_camera_controller`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/camera_controller/index.html
 
 ### `FreeCamera`
 
@@ -191,24 +210,30 @@ You may have heard of a "fly camera" controller before, which is a specializatio
 designed for fast and fluid movement for covering large amounts of terrain.
 
 To add a free camera controller to your project (typically under a `dev_mode` feature flag),
-add the `FreeCameraPlugin` and the `FreeCamera` component to your camera entity.
+add the [`FreeCameraPlugin`] and the [`FreeCamera`] component to your camera entity.
 
-To configure the settings (speed, behavior, keybindings) or enable / disable the controller modify the `FreeCamera` component.
+To configure the settings (speed, behavior, keybindings) or enable / disable the controller modify the [`FreeCamera`] component.
 We've done our best to select good defaults, but the details of your scene (especially the scale!) will make a big
 difference to what feels right.
 
+[`FreeCameraPlugin`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/camera_controller/free_camera/struct.FreeCameraPlugin.html
+[`FreeCamera`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/camera_controller/free_camera/struct.FreeCamera.html
+
 ### `PanCamera`
 
-The `PanCamera` controller is a simple and effective tool designed for 2D games or any project where you need
+The [`PanCamera`] controller is a simple and effective tool designed for 2D games or any project where you need
 to pan the camera and zoom in/out with ease. It allows you to move the camera using the WASD keys and zoom
 in and out with the mouse wheel or +/- keys.
 
-By adding the `PanCameraPlugin` and attaching the `PanCamera` component to your camera entity, you can quickly add
+By adding the [`PanCameraPlugin`] and attaching the [`PanCamera`] component to your camera entity, you can quickly add
 this controller to your project.
 
-To configure the camera's zoom levels, speed, or keybindings, simply modify the `PanCamera` component. The default
+To configure the camera's zoom levels, speed, or keybindings, simply modify the [`PanCamera`] component. The default
 settings should work well for most use cases, but you can adjust them based on your specific needs, especially
 for large-scale or high-resolution 2D scenes.
+
+[`PanCamera`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/camera_controller/pan_camera/struct.PanCamera.html
+[`PanCameraPlugin`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/camera_controller/pan_camera/struct.PanCameraPlugin.html
 
 ### Using `bevy_camera_controller` in your own projects
 
@@ -234,17 +259,20 @@ Bevy now supports **automatic directional navigation** for UI elements! With a b
 all of your UI elements can now be navigated between using gamepads or arrow keys.
 No more tedious manual wiring of navigation connections for your menus and UI screens.
 
-Previously, creating directional navigation for UI required manually defining every connection between focusable elements using `DirectionalNavigationMap`. For dynamic UIs or complex layouts, this was time-consuming and error-prone.
+Previously, creating directional navigation for UI required manually defining every connection between focusable elements using [`DirectionalNavigationMap`]. For dynamic UIs or complex layouts, this was time-consuming and error-prone.
 
-Now, you can simply add the `AutoDirectionalNavigation` component to your UI entities, and Bevy will automatically compute navigation connections based on spatial positioning. The system parameter intelligently finds the nearest neighbor in each of the 8 compass directions (North, Northeast, East, etc.), considering:
+Now, you can simply add the [`AutoDirectionalNavigation`] component to your UI entities, and Bevy will automatically compute navigation connections based on spatial positioning. The system parameter intelligently finds the nearest neighbor in each of the 8 compass directions (North, Northeast, East, etc.), considering:
 
 - **Distance**: Closer elements are preferred
 - **Alignment**: Elements that are more directly in line with the navigation direction are favored
 - **Overlap**: For cardinal directions (N/S/E/W), the system ensures sufficient perpendicular overlap
 
+[`DirectionalNavigationMap`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/input_focus/directional_navigation/struct.DirectionalNavigationMap.html
+[`AutoDirectionalNavigation`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/input_focus/directional_navigation/struct.AutoDirectionalNavigation.html
+
 ### How to Use It
 
-Simply add the `AutoDirectionalNavigation` component to your UI entities:
+Simply add the [`AutoDirectionalNavigation`] component to your UI entities:
 
 ```rust
 commands.spawn((
@@ -254,6 +282,8 @@ commands.spawn((
     // ... other components
 ));
 ```
+
+TODO: AutoDirectionalNavigator does not seem to exist.
 
 To leverage automatic navigation, use the `AutoDirectionalNavigator` system parameter instead of the `DirectionalNavigation` system parameter:
 
@@ -269,7 +299,7 @@ That's it! The `DirectionalNavigationPlugin` will set up the resources that `Aut
 
 ### Configuration
 
-You can tune the behavior using the `AutoNavigationConfig` resource:
+You can tune the behavior using the [`AutoNavigationConfig`] resource:
 
 ```rust
 app.insert_resource(AutoNavigationConfig {
@@ -282,6 +312,8 @@ app.insert_resource(AutoNavigationConfig {
 });
 ```
 
+[`AutoNavigationConfig`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/input_focus/directional_navigation/struct.AutoNavigationConfig.html
+
 ### Manual Override
 
 Automatic navigation respects manually-defined edges. If you want to override specific connections, you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
@@ -291,13 +323,16 @@ You may also call `auto_generate_navigation_edges()` directly, if you have multi
 
 {{ heading_metadata(authors=["@IceSentry"] prs=[20414]) }}
 
-Users often want to run a fullscreen shader but currently the only to do this is to copy the custom_post_processing example which is very verbose and contains a lot of low level details. We introduced a new `FullscreenMaterial` trait and `FullscreenMaterialPlugin` that let you easily run a fullscreen shader and specify in which order it will run relative to other render passes in the engine.
+Users often want to run a fullscreen shader but currently the only to do this is to copy the custom_post_processing example which is very verbose and contains a lot of low level details. We introduced a new [`FullscreenMaterial`] trait and [`FullscreenMaterialPlugin`] that let you easily run a fullscreen shader and specify in which order it will run relative to other render passes in the engine.
+
+[`FullscreenMaterial`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/core_pipeline/fullscreen_material/trait.FullscreenMaterial.html
+[`FullscreenMaterialPlugin`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/core_pipeline/fullscreen_material/struct.FullscreenMaterialPlugin.html
 
 ## get_components_mut
 
 {{ heading_metadata(authors=["@hymm"] prs=[21780]) }}
 
-Methods `EntityMut::get_components_mut` and `EntityWorldMut::get_components_mut` are now
+Methods [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`] are now
 added, providing a safe API for retrieving mutable references to multiple components via
 these entity access APIs.
 
@@ -310,6 +345,9 @@ The new methods work around this via performing a quadratic time complexity chec
 all specified components for conflicts, returning `QueryAccessError::Conflict` if such
 occurs. This potentially has a runtime performance cost, so it might be favorable to still
 use `get_components_mut_unchecked` if you can guarantee that no aliasing would occur.
+
+[`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut_unchecked
+[`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut_unchecked
 
 ## Cargo Feature Collections
 
@@ -359,19 +397,29 @@ Developers can now define their own high-level cargo feature profiles from these
 
 ### Text Strikethroughs and Underlines
 
-`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
+`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the [`Strikethrough`] or [`Underline`] components to any [`Text`], [`Text2d`], or [`TextSpan`] entity. You can set colors for strikethrough and underline using the [`StrikethroughColor`] and [`UnderlineColor`] components, respectively.
+
+[`Strikethrough`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Strikethrough.html
+[`Underline`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Underline.html
+[`Text`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Text.html
+[`Text2d]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Text2d.html
+[`TextSection`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.TextSection.html
+[`StrikethroughColor`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.StrikethroughColor.html
+[`UnderlineColor`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.UnderlineColor.html
 
 ### Font Weights
 
-Bevy now supports font weights, allowing you to take advantage of [variable weight fonts] which embed smooth variations of a font into a single file! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16` (clamped to a range of 1-1000), with lower values representing thin typefaces and large values representing bold typefaces.
+Bevy now supports font weights, allowing you to take advantage of [variable weight fonts] which embed smooth variations of a font into a single file! [`TextFont`] now has a `weight: FontWeight` field. [`FontWeight`] newtypes a `u16` (clamped to a range of 1-1000), with lower values representing thin typefaces and large values representing bold typefaces.
 
 ![font weights](font_weights.jpg)
 
 [variable weight fonts]: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Fonts/Variable_fonts
+[`TextFont`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.TextFont.html
+[`FontWeight`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.FontWeight.html
 
 ### OpenType Font Features
 
-OpenType font features allow fine-grained control over how text is displayed, including [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), [small caps](https://en.wikipedia.org/wiki/Small_caps), and [many more](https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist).
+[OpenType font features] allow fine-grained control over how text is displayed, including [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), [small caps](https://en.wikipedia.org/wiki/Small_caps), and [many more](https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist).
 
 These features can now be used in Bevy, allowing users to add typographic polish (like discretionary ligatures and oldstyle numerals) to their UI. It also allows complex scripts like Arabic or Devanagari to render more correctly with their intended ligatures.
 
@@ -391,7 +439,7 @@ commands.spawn((
 ));
 ```
 
-`FontFeatures` can also be constructed from a list:
+[`FontFeatures`] can also be constructed from a list:
 
 ```rust
 TextFont {
@@ -407,6 +455,9 @@ TextFont {
 
 Note that OpenType font features are only available for `.otf` fonts that support them, and different fonts may support different subsets of OpenType features.
 
+[OpenType font features]: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Fonts/OpenType_fonts
+[`FontFeatures`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/text/struct.FontFeatures.html
+
 ## Per text-section picking
 
 {{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
@@ -421,24 +472,31 @@ and allows users to create mouse-over tooltips for specific keywords in their ga
 
 {{ heading_metadata(authors=["@christopherbiscardi"] prs=[22106]) }}
 
-Prior to 0.18, the code to handle extensions like `KHR_lights_punctual` was hardcoded into Bevy's glTF loader.
-In 0.18, users may implement the `GltfExtensionHandler` trait to do stateful processing of glTF data as it loads.
+Prior to 0.18, the code to handle extensions like [`KHR_lights_punctual`] was hardcoded into Bevy's glTF loader.
+In 0.18, users may implement the [`GltfExtensionHandler`] trait to do stateful processing of glTF data as it loads.
 Processing _extension_ data is only half the story here because to process extension data you also have to be able to process the non-extension data like meshes, materials, animations, and more.
 
 Extension handlers can be written for wide variety of use cases, including:
 
 - Insert Bevy Component data on entities
-- Convert all `Mesh3d` components to `Mesh2d`
-- Build `AnimationGraph`s and insert them on animation roots
-- Replace `StandardMaterial` with custom materials
+- Convert all [`Mesh3d`] components to [`Mesh2d`]
+- Build [`AnimationGraph`]s and insert them on animation roots
+- Replace [`StandardMaterial`] with custom materials
 - Insert lightmaps
+
+[`KHR_lights_punctual`]:https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_lights_punctual/README.md
+[`GltfExtensionHandler`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/gltf/extensions/trait.GltfExtensionHandler.html
+[`Mesh3d`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/mesh/struct.Mesh3d.html
+[`Mesh2d`]:https://docs.rs/bevy/0.18.0-rc.2/bevy/mesh/struct.Mesh2d.html
+[`AnimationGraph`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/graph/struct.AnimationGraph.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/pbr/struct.StandardMaterial.html
 
 ### Extras vs Extensions
 
 glTF has two mechanisms for extending glTF files with additional user data: Extras and Extensions.
 
 **Extras** are meant to be arbitrary application-specific data, often authored by users directly in tools like Blender's custom properties.
-Extras are historically well supported by Bevy; If you add a custom property in Blender that data will end up in one of the `GltfExtras` components on the relevant `Entity`.
+Extras are historically well supported by Bevy; if you add a custom property in Blender that data will end up in one of the [`GltfExtras`] components on the relevant entity.
 
 **Extensions** are meant for data that can be shared across applications.
 They are more flexible, allowing for new data in more places inside a glTF file, and more powerful as a result.
@@ -446,28 +504,37 @@ Extensions can add new object types, such as `lights` from the `KHR_lights_punct
 
 More examples of extensions can be found in the [KhronosGroup git repo](https://github.com/KhronosGroup/glTF/blob/7bbd90978cad06389eee3a36882c5ef2f2039faf/extensions/README.md)
 
+[`GltfExtras`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/gltf/struct.GltfExtras.html
+
 ### Case Study
 
 Extensions typically require an application that is _producing_ the data as well as _consuming_ the data.
 
-For example: [Skein](https://github.com/rust-adventure/skein) defines a glTF extension that allows adding Bevy Components to glTF objects.
-This is most commonly produced by Blender and consumed by Skein's `GltfExtensionHandler` in Bevy.
-These components are then inserted on entities in a scene at the same time built-in components like `Transform` and `Mesh3d` are.
+For example: [Skein] defines a glTF extension that allows adding Bevy Components to glTF objects.
+This is most commonly produced by Blender and consumed by Skein's [`GltfExtensionHandler`] in Bevy.
+These components are then inserted on entities in a scene at the same time built-in components like [`Transform`] and [`Mesh3d`] are.
 
 Using glTF Extensions for this data means that other level editors like Trenchbroom can also write the same format to glTF files.
-Any third party software that writes component data into a glTF file can use Skein's `GltfExtensionHandler`, resulting in components being "ready-to-go" when spawning `Scene`s.
+Any third party software that writes component data into a glTF file can use Skein's [`GltfExtensionHandler`], resulting in components being "ready-to-go" when spawning [`Scene`]s.
+
+[Skein]: https://github.com/rust-adventure/skein
+[`Transform`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Transform.html
+[`Scene`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Scene.html
 
 ### New Examples
 
 Two new examples show off use cases:
 
-- The first builds an `AnimationGraph` and inserts it onto the animation root in a Scene, which means it is now accessible to play animations using the `AnimationPlayer` on the same `Entity` later when that Scene is spawned.
-- The second uses a `GltfExtensionHandler` to switch the 3d Mesh and Material components for their 2d counterparts. This is useful if you're using software like Blender to build 2d worlds.
+- The first builds an [`AnimationGraph`] and inserts it onto the animation root in a Scene, which means it is now accessible to play animations using the [`AnimationPlayer`] on the same entity later when that scene is spawned.
+- The second uses a [`GltfExtensionHandler`] to switch the 3d mesh and material components for their 2d counterparts. This is useful if you're using software like Blender to build 2d worlds.
 
 ```shell
 cargo run --example gltf_extension_animation_graph
 cargo run --example gltf_extension_mesh_2d
 ```
+
+[`AnimationGraph`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/graph/struct.AnimationGraph.html
+[`AnimationPlayer`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/struct.AnimationPlayer.html
 
 ## Short-type-path asset processors
 
@@ -565,21 +632,23 @@ Bevy has been able to take a screenshot of what's rendered since 0.11.
 Despite how useful this functionality is for quickly creating marketing material,
 setting it up was relatively involved.
 
-This process has been streamlined, with the new `EasyScreenshotPlugin` allowing you to take a screenshot with consistent formatting with a single button press. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
+This process has been streamlined, with the new [`EasyScreenshotPlugin`] allowing you to take a screenshot with consistent formatting with a single button press. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
 
 We've taken this one step further, allowing you to record video directly from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
 
 Screen recording is currently not supported on Windows due to challenges with video codecs.
 
+[`EasyScreenshotPlugin`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/dev_tools/struct.EasyScreenshotPlugin.html
+
 ## Remove Systems from Schedules
 
 {{ heading_metadata(authors=["@hymm"] prs=[20298]) }}
 
-Previously, the only way to prevent a scheduled system from running was to use `RunCondition`'s.
+Previously, the only way to prevent a scheduled system from running was to use [run conditions].
 This works well for dynamically toggling whether or not a system runs, but comes with a tiny overhead
 each time the schedule is run.
 
-Now, you can completely remove systems from a schedule using `remove_systems_in_set`
+Now, you can completely remove systems from a schedule using [`remove_systems_in_set`]
 forcing an expensive schedule rebuild but removing that overhead completely and removing
 the systems from any debug tools.
 
@@ -597,39 +666,48 @@ schedule.remove_systems_in_set(my_system, ScheduleCleanupPolicy::RemoveSystemsOn
 app.remove_systems_in_set(MySet, ScheduleCleanupPolicy::RemoveSetAndSystems);
 ```
 
+[`remove_systems_in_set`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.App.html#method.remove_systems_in_set
+[run conditions]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/trait.SystemCondition.html
+
 ## UI nodes that ignore parent scroll position.
 
 {{ heading_metadata(authors=["@PPakalns"] prs=[21648]) }}
 
-We've added the `IgnoreScroll` component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
+We've added the [`IgnoreScroll`] component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
 
 This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See the [`scroll` example] for a demonstration!
 
 [`scroll` example]: https://github.com/bevyengine/bevy/blob/latest/examples/ui/scroll.rs
+[`IgnoreScroll`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.IgnoreScroll.html 
 
 ## Interpolation for colors and layout
 
 {{ heading_metadata(authors=["@viridia"] prs=[21633]) }}
 
-Bevy's `StableInterpolate` trait is a lovely foundation for animation,
+Bevy's [`StableInterpolate`] trait is a lovely foundation for animation,
 but sadly there's one important type that it doesn't work with:
-the `Val` type from `bevy_ui`, used to control the layout of UI elements.
-`Val` is an enum, representing different length units such as pixels and percentages, and it's not generally possible or even meaningful to
+the [`Val`] type from `bevy_ui`, used to control the layout of UI elements.
+[`Val`] is an enum, representing different length units such as pixels and percentages, and it's not generally possible or even meaningful to
 try and interpolate between different units.
 
-However, it's common to want to animate `Val` in a way that doesn't require mixing units:
+However, it's common to want to animate [`Val`] in a way that doesn't require mixing units:
 often we just want to slide or stretch the length of a widget such as a toggle switch. We can do this so long as we
 check at runtime that both interpolation control points are in the same units.
 
-The new `TryStableInterpolate` trait introduces the idea of interpolation that can fail, by returning
+The new [`TryStableInterpolate`] trait introduces the idea of interpolation that can fail, by returning
 a `Result`. Note that "failure" in this case is not necessarily bad: it just means that the
 animation player will need to modify the parameter in some other way, such as "snapping" or
 "jumping" to the new keyframe without smoothly interpolating. This lets us create complex animations
 that incorporate both kinds of parameters: ones that interpolate, and ones that don't.
 
-We've added a blanket implementation of `TryStableInterpolate` for all types that impl
-`StableInterpolate`, and these can never fail. There are additional impls for `Color` and `Val`,
+We've added a blanket implementation of [`TryStableInterpolate`] for all types that impl
+[`StableInterpolate`], and these can never fail. There are additional impls for [`Color`] and [`Val`],
 which can fail if the control points are not in the same units / color space.
+
+[`StableInterpolate`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/math/trait.StableInterpolate.html
+[`Val`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/enum.Val.html
+[`Color`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/color/enum.Color.html
+[`TryStableInterpolate`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/math/trait.TryStableInterpolate.html
 
 ## The `AssetReader` trait can now (optionally) support seeking any direction.
 
