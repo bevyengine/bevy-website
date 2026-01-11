@@ -371,11 +371,13 @@ Developers can now define their own high-level cargo feature profiles from these
 
 `bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
 
+### Font Weights
+
 Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
 
 ![font weights](font_weights.jpg)
 
-## OpenType Font Features
+### OpenType Font Features
 
 OpenType font features allow fine-grained control over how text is displayed, including [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), [small caps](https://en.wikipedia.org/wiki/Small_caps), and [many more](https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist).
 
@@ -397,7 +399,7 @@ commands.spawn((
 ));
 ```
 
-FontFeatures can also be constructed from a list:
+`FontFeatures` can also be constructed from a list:
 
 ```rust
 TextFont {
