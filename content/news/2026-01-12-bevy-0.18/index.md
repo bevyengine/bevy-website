@@ -111,7 +111,7 @@ fn setup_camera(
 
 ## More Standard Widgets
 
-{{ heading_metadata(authors=["@viridia"] prs=[21636, 21743]) }}
+{{ heading_metadata(authors=["@viridia", "@PPakalns"] prs=[21636, 21743, 21294]) }}
 
 We are continuing to flesh out the collection of standard widgets first introduced in
 **Bevy 0.17**. Note that Bevy's standard widgets are "logical widgets". They are "unthemed".
@@ -146,6 +146,23 @@ The `Color Plane` widget is a two-dimensional color picker that allows selecting
 channels within a color space, one along the horizontal axis and one along the vertical. It can be
 configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
 red vs. blue, and so on.
+
+### `RadioButton`, `RadioGroup` widget minor improvements
+
+`RadioButton` and `RadioGroup` usage remains fully backward compatible.
+
+Improvements:
+
+- Event propagation from user interactions will now be canceled even if
+  widgets are disabled. Previously, some relevant event propagation
+  was not properly canceled.
+- `RadioButton` now emits a `ValueChange<bool>` entity event when checked,
+  even when checked via a `RadioGroup`. Consistent with other `Checkable` widgets.
+  As a `RadioButton` cannot be unchecked through direct user interaction with this widget,
+  a `ValueChange` event with value `false` can not be triggered for `RadioButton`.
+- If a `RadioButton` is focusable, a value change event can be triggered
+  using the **Space** or **Enter** keys when focused.
+- `RadioGroup` is now optional and can be replaced with a custom implementation.
 
 ## First-party camera controllers
 
@@ -280,20 +297,6 @@ This feature dramatically simplifies UI navigation setup:
 
 Whether you're building menus, inventory screens, or any other gamepad/keyboard-navigable UI, automatic directional navigation makes it much easier to create intuitive, responsive navigation experiences.
 
-## Font Weights
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[22038]) }}
-
-Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
-
-![font weights](font_weights.jpg)
-
-## Text Strikethroughs and Underlines
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[21555, 21559]) }}
-
-`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
-
 ## Fullscreen Material
 
 {{ heading_metadata(authors=["@IceSentry"] prs=[20414]) }}
@@ -358,9 +361,23 @@ Someone building a custom 2D renderer now just needs to remove `2d_bevy_render` 
 
 Developers can now define their own high-level cargo feature profiles from these mid-level pieces, making it _much_ easier to define the subset of Bevy you want to build into your app.
 
-## OpenType Font Features
+## Font variations
 
-{{ heading_metadata(authors=["@hansler"] prs=[19020]) }}
+{{ heading_metadata(authors=["@ickshonpe", "@hansler"] prs=[19020, 21555, 21559, 22038]) }}
+
+**Bevy 0.18** brings more control over how your fonts are expressed!
+
+### Text Strikethroughs and Underlines
+
+`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
+
+### Font Weights
+
+Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
+
+![font weights](font_weights.jpg)
+
+### OpenType Font Features
 
 OpenType font features allow fine-grained control over how text is displayed, including [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), [small caps](https://en.wikipedia.org/wiki/Small_caps), and [many more](https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist).
 
@@ -382,7 +399,7 @@ commands.spawn((
 ));
 ```
 
-FontFeatures can also be constructed from a list:
+`FontFeatures` can also be constructed from a list:
 
 ```rust
 TextFont {
@@ -397,12 +414,6 @@ TextFont {
 ```
 
 Note that OpenType font features are only available for `.otf` fonts that support them, and different fonts may support different subsets of OpenType features.
-
-## `ComputedNode` helper functions
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[21903]) }}
-
-Helper functions `border_box`, `padding_box`, and `content_box` that return a node’s object-centered border, padding, and content boxes have been added to `ComputedNode`.
 
 ## Short-type-path asset processors
 
@@ -489,115 +500,6 @@ INFO bevy_diagnostic: render_asset/bevy_render::mesh::RenderMesh                
 INFO bevy_diagnostic: render_asset/bevy_render::texture::gpu_image::GpuImage                 :   10.000000 gpu images (avg 10.000000 gpu images)
 INFO bevy_diagnostic: erased_render_asset/manual_material::ImageMaterial                     :    2.000000 image materials (avg 2.000000 image materials)
 ```
-
-## Ring primitives
-
-{{ heading_metadata(authors=["@tigregalis", "@lynn-lumen"] prs=[21446]) }}
-
-### Ring / hollow shapes
-
-![Rings of 2d primitives (bottom row)](https://github.com/user-attachments/assets/8fac6c82-3da0-488e-ab38-80816b2129c0)
-
-![Extrusions of rings of extrudable primitives (front row)](https://github.com/user-attachments/assets/70c4dee0-4f82-4723-b95c-9d02ddb95363)
-
-There is a new generic primitive `Ring`, which takes as input any `Primitive2d`, with two instances of that primitive shape: the outer and the inner (or hollow).
-A `Ring` here is what an `Annulus` is to a `Circle`.
-This allows us to have (or at least approximate - more on that later) "hollow" shapes or "outlines".
-
-```rs
-// construct the `Ring` from an outer and inner shape
-
-let capsule_ring = Ring::new(Capsule2d::new(50.0, 100.0), Capsule2d::new(45.0, 100.0));
-let hexagon_ring = Ring::new(RegularPolygon::new(50.0, 6), RegularPolygon::new(45.0, 6)); // note vertex count must match
-
-// or, from a shape and a thickness for any types that implement `Inset`
-
-let capsule_ring = Ring::from_primitive_and_thickness(Capsule2d::new(50.0, 100.0), 5.0);
-let hexagon_ring = Ring::from_primitive_and_thickness(RegularPolygon::new(50.0, 6), 5.0);
-
-// or, from the `ToRing` trait for any types that implement `Inset`
-
-let capsule_ring = Capsule2d::new(50.0, 100.0).to_ring(5.0);
-let hexagon_ring = RegularPolygon::new(50.0, 6).to_ring(5.0);
-
-```
-
-### How it works
-
-The mesh for a `RingMeshBuilder` is constructed by concatenating the vertices of the outer and inner meshes, then walking the perimeter to join corresponding vertices like so:
-
-![Vertices around a pentagon ring](https://github.com/user-attachments/assets/2cecb458-3b59-44fb-858b-1beffecd1e57)
-
-```text
-# outer vertices, then inner vertices
-positions = [
-  0  1  2  3  4
-  0' 1' 2' 3' 4'
-]
-# pairs of triangles
-indices = [
-  0  1  0'    0' 1  1'
-  1  2  1'    1' 2  2'
-  2  3  2'    2' 3  3'
-  3  4  3'    3' 4  4'
-  4  0  4'    4' 0  0'
-]
-```
-
-Examples of generated meshes:
-
-![Mesh for a pentagon ring](https://github.com/user-attachments/assets/cb9881e5-4518-4743-b8de-5816b632f36f)
-
-![Mesh for a heart ring](https://github.com/user-attachments/assets/348bbd91-9f4e-4040-bfa5-d508a4308c10)
-
-### Extrusions
-
-A `Ring` for a type that is `Extrudable` is also `Extrudable`.
-
-```rs
-let extrusion = Extrusion::new(RegularPolygon::new(1.0, 5).to_ring(0.2));
-```
-
-![Mesh for an extruded pentagon ring](https://github.com/user-attachments/assets/7d2022c9-b8cf-4b4b-bb09-cbe4fe49fb89)
-
-![Mesh for an extruded heart ring](https://github.com/user-attachments/assets/dbaf894e-6f7f-4b79-af3e-69516da85898)
-
-### Inset shapes
-
-Some shapes can be "inset", that is, we can produce a smaller shape where the lines/curves/vertices are equidistant from the outer shape's when they share the same origin.
-This is represented by the `Inset` trait.
-Inset shapes give us nice "outlines" when combined with `Ring`, so for these shapes we provide a `ToRing` method that takes an inset distance.
-
-The implementation of `Inset` can be unintuitive - have a look at the source at [crates/bevy_math/src/primitives/inset.rs][Source].
-For example, the inset `CircularSegment` in our implementation is actually constructed by shortening the radius _and_ the angle.
-
-Some shapes can't be represented by an inset: `Ellipse` for example doesn't implement `Inset`, because concentric ellipses do not have parallel lines.
-
-![Concentric ellipses](https://github.com/user-attachments/assets/3f419f8f-4d7a-4bfb-a231-fba9464e0f93)
-
-If the ellipse is not a circle, the inset shape is not actually an ellipse (although it may look like one) but can also be a lens-like shape.
-The following image shows an ellipse in white and all points at a constant distance from that ellipse in blue.
-Neither of the blue shapes is an ellipse.
-
-![An ellipse in white and its parallel lines in blue](https://github.com/user-attachments/assets/8c7520d1-9911-4c9c-8e6f-2688e160f510)
-
-For the sake of flexibility, however, we don't require `Ring` shapes to be `Inset`.
-
-### Limitations
-
-It's assumed that the inner and outer meshes have the same number of vertices.
-
-It's currently assumed the vertex positions are well ordered (i.e.
-walking around the perimeter, without zig-zagging), otherwise it will result in incorrect geometries.
-
-The `outer_shape` must contain the `inner_shape` for the generated meshes to be accurate.
-If there are vertices in the `inner_shape` that escape the `outer_shape` (for example, if the `inner_shape` is in fact larger), it may result in incorrect geometries.
-
-Because the origin of the generated mesh matters when constructing a `Ring`, some "outline" shapes can't currently be easily represented.
-
-<!-- TODO: Update link -->
-
-[Source]: https://github.com/bevyengine/bevy/blob/6e348948cae9523d0d7f13f0ed598d16790ff4ae/crates/bevy_math/src/primitives/inset.rs
 
 ## UI per text section picking
 
@@ -692,25 +594,6 @@ your `AssetReader` just return an error for that feature. Usually, an `AssetLoad
 fallback itself (e.g., reading all the data into memory and then loading from that), and loaders can
 be selected using `.meta` files (allowing for fine-grained opt-in in these cases). However if there
 is some reasonable implementation you can provide (even if not optimal), feel free to provide one!
-
-## `RadioButton`, `RadioGroup` widget minor improvements
-
-{{ heading_metadata(authors=["@PPakalns"] prs=[21294]) }}
-
-`RadioButton` and `RadioGroup` usage remains fully backward compatible.
-
-Improvements:
-
-- Event propagation from user interactions will now be canceled even if
-  widgets are disabled. Previously, some relevant event propagation
-  was not properly canceled.
-- `RadioButton` now emits a `ValueChange<bool>` entity event when checked,
-  even when checked via a `RadioGroup`. Consistent with other `Checkable` widgets.
-  As a `RadioButton` cannot be unchecked through direct user interaction with this widget,
-  a `ValueChange` event with value `false` can not be triggered for `RadioButton`.
-- If a `RadioButton` is focusable, a value change event can be triggered
-  using the **Space** or **Enter** keys when focused.
-- `RadioGroup` is now optional and can be replaced with a custom implementation.
 
 ## What's Next?
 
