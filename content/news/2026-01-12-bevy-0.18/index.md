@@ -280,20 +280,6 @@ This feature dramatically simplifies UI navigation setup:
 
 Whether you're building menus, inventory screens, or any other gamepad/keyboard-navigable UI, automatic directional navigation makes it much easier to create intuitive, responsive navigation experiences.
 
-## Font Weights
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[22038]) }}
-
-Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
-
-![font weights](font_weights.jpg)
-
-## Text Strikethroughs and Underlines
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[21555, 21559]) }}
-
-`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
-
 ## Fullscreen Material
 
 {{ heading_metadata(authors=["@IceSentry"] prs=[20414]) }}
@@ -358,9 +344,21 @@ Someone building a custom 2D renderer now just needs to remove `2d_bevy_render` 
 
 Developers can now define their own high-level cargo feature profiles from these mid-level pieces, making it _much_ easier to define the subset of Bevy you want to build into your app.
 
-## OpenType Font Features
+## Font variations
 
-{{ heading_metadata(authors=["@hansler"] prs=[19020]) }}
+{{ heading_metadata(authors=["@ickshonpe", "@hansler"] prs=[19020, 21555, 21559, 22038]) }}
+
+**Bevy 0.18** brings more control over how your fonts are expressed!
+
+### Text Strikethroughs and Underlines
+
+`bevy_text` now supports strikethrough and underline. To display text with strikethrough or underline, just add the `Strikethrough` or `Underline` components to any `Text`, `Text2d`, or `TextSpan` entity. You can set colors for strikethrough and underline using the `StrikethroughColor` and `UnderlineColor` components, respectively.
+
+Bevy now supports font weights! `TextFont` now has a `weight: FontWeight` field. `FontWeight` newtypes a `u16`, values inside the range 1 and 1000 are valid. Values outside the range are clamped.
+
+![font weights](font_weights.jpg)
+
+## OpenType Font Features
 
 OpenType font features allow fine-grained control over how text is displayed, including [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), [small caps](https://en.wikipedia.org/wiki/Small_caps), and [many more](https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist).
 
