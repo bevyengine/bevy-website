@@ -111,7 +111,7 @@ fn setup_camera(
 
 ## More Standard Widgets
 
-{{ heading_metadata(authors=["@viridia"] prs=[21636, 21743]) }}
+{{ heading_metadata(authors=["@viridia", "@PPakalns"] prs=[21636, 21743, 21294]) }}
 
 We are continuing to flesh out the collection of standard widgets first introduced in
 **Bevy 0.17**. Note that Bevy's standard widgets are "logical widgets". They are "unthemed".
@@ -146,6 +146,23 @@ The `Color Plane` widget is a two-dimensional color picker that allows selecting
 channels within a color space, one along the horizontal axis and one along the vertical. It can be
 configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
 red vs. blue, and so on.
+
+### `RadioButton`, `RadioGroup` widget minor improvements
+
+`RadioButton` and `RadioGroup` usage remains fully backward compatible.
+
+Improvements:
+
+- Event propagation from user interactions will now be canceled even if
+  widgets are disabled. Previously, some relevant event propagation
+  was not properly canceled.
+- `RadioButton` now emits a `ValueChange<bool>` entity event when checked,
+  even when checked via a `RadioGroup`. Consistent with other `Checkable` widgets.
+  As a `RadioButton` cannot be unchecked through direct user interaction with this widget,
+  a `ValueChange` event with value `false` can not be triggered for `RadioButton`.
+- If a `RadioButton` is focusable, a value change event can be triggered
+  using the **Space** or **Enter** keys when focused.
+- `RadioGroup` is now optional and can be replaced with a custom implementation.
 
 ## First-party camera controllers
 
@@ -575,25 +592,6 @@ your `AssetReader` just return an error for that feature. Usually, an `AssetLoad
 fallback itself (e.g., reading all the data into memory and then loading from that), and loaders can
 be selected using `.meta` files (allowing for fine-grained opt-in in these cases). However if there
 is some reasonable implementation you can provide (even if not optimal), feel free to provide one!
-
-## `RadioButton`, `RadioGroup` widget minor improvements
-
-{{ heading_metadata(authors=["@PPakalns"] prs=[21294]) }}
-
-`RadioButton` and `RadioGroup` usage remains fully backward compatible.
-
-Improvements:
-
-- Event propagation from user interactions will now be canceled even if
-  widgets are disabled. Previously, some relevant event propagation
-  was not properly canceled.
-- `RadioButton` now emits a `ValueChange<bool>` entity event when checked,
-  even when checked via a `RadioGroup`. Consistent with other `Checkable` widgets.
-  As a `RadioButton` cannot be unchecked through direct user interaction with this widget,
-  a `ValueChange` event with value `false` can not be triggered for `RadioButton`.
-- If a `RadioButton` is focusable, a value change event can be triggered
-  using the **Space** or **Enter** keys when focused.
-- `RadioGroup` is now optional and can be replaced with a custom implementation.
 
 ## What's Next?
 
