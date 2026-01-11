@@ -555,17 +555,18 @@ This can be used to achieve basic sticky row and column headers in scrollable UI
 
 [`scroll` example]: https://github.com/bevyengine/bevy/blob/latest/examples/ui/scroll.rs
 
-## Fallible Interpolation
+## Interpolation for colors and layout
 
 {{ heading_metadata(authors=["@viridia"] prs=[21633]) }}
 
-The `StableInterpolate` trait is great, but sadly there's one important type that it doesn't work
-with: The `Val` type from `bevy_ui`. The reason is that `Val` is an enum, representing different
-length units such as pixels and percentages, and it's not generally possible or even meaningful to
+Bevy's `StableInterpolate` trait is a lovely foundation for animation,
+but sadly there's one important type that it doesn't work with:
+the `Val` type from `bevy_ui`, used to control the layout of UI elements.
+`Val` is an enum, representing different length units such as pixels and percentages, and it's not generally possible or even meaningful to
 try and interpolate between different units.
 
-However, the use cases for wanting to animate `Val` don't require mixing units: often we just want
-to slide or stretch the length of a widget such as a toggle switch. We can do this so long as we
+However, it's common to want to animate `Val` in a way that doesn't require mixing units:
+often we just want to slide or stretch the length of a widget such as a toggle switch. We can do this so long as we
 check at runtime that both interpolation control points are in the same units.
 
 The new `TryStableInterpolate` trait introduces the idea of interpolation that can fail, by returning
@@ -574,8 +575,8 @@ animation player will need to modify the parameter in some other way, such as "s
 "jumping" to the new keyframe without smoothly interpolating. This lets us create complex animations
 that incorporate both kinds of parameters: ones that interpolate, and ones that don't.
 
-There's a blanket implementation of `TryStableInterpolate` for all types that impl
-`StableInterpolate`, and these can never fail. There are additional impls for `Color` and `Val`
+We've added a blanket implementation of `TryStableInterpolate` for all types that impl
+`StableInterpolate`, and these can never fail. There are additional impls for `Color` and `Val`,
 which can fail if the control points are not in the same units / color space.
 
 ## The `AssetReader` trait can now (optionally) support seeking any direction.
