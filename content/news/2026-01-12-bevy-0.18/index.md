@@ -433,7 +433,7 @@ Extension handlers can be written for wide variety of use cases, including:
 - Replace `StandardMaterial` with custom materials
 - Insert lightmaps
 
-## Extras vs Extensions
+### Extras vs Extensions
 
 glTF has two mechanisms for extending glTF files with additional user data: Extras and Extensions.
 
@@ -446,7 +446,7 @@ Extensions can add new object types, such as `lights` from the `KHR_lights_punct
 
 More examples of extensions can be found in the [KhronosGroup git repo](https://github.com/KhronosGroup/glTF/blob/7bbd90978cad06389eee3a36882c5ef2f2039faf/extensions/README.md)
 
-## Case Study
+### Case Study
 
 Extensions typically require an application that is _producing_ the data as well as _consuming_ the data.
 
@@ -457,7 +457,7 @@ These components are then inserted on entities in a scene at the same time built
 Using glTF Extensions for this data means that other level editors like Trenchbroom can also write the same format to glTF files.
 Any third party software that writes component data into a glTF file can use Skein's `GltfExtensionHandler`, resulting in components being "ready-to-go" when spawning `Scene`s.
 
-## New Examples
+### New Examples
 
 Two new examples show off use cases:
 
