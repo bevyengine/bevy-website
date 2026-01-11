@@ -396,12 +396,6 @@ TextFont {
 
 Note that OpenType font features are only available for `.otf` fonts that support them, and different fonts may support different subsets of OpenType features.
 
-## `ComputedNode` helper functions
-
-{{ heading_metadata(authors=["@ickshonpe"] prs=[21903]) }}
-
-Helper functions `border_box`, `padding_box`, and `content_box` that return a node’s object-centered border, padding, and content boxes have been added to `ComputedNode`.
-
 ## Short-type-path asset processors
 
 {{ heading_metadata(authors=["@andriyDev"] prs=[21339]) }}
