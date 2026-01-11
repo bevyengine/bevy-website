@@ -545,13 +545,15 @@ schedule.remove_systems_in_set(my_system, ScheduleCleanupPolicy::RemoveSystemsOn
 app.remove_systems_in_set(MySet, ScheduleCleanupPolicy::RemoveSetAndSystems);
 ```
 
-## Support for Ui nodes that ignore parent scroll position.
+## UI nodes that ignore parent scroll position.
 
 {{ heading_metadata(authors=["@PPakalns"] prs=[21648]) }}
 
-Adds the `IgnoreScroll` component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
+We've added the `IgnoreScroll` component, which controls whether a UI element ignores its parent’s `ScrollPosition` along specific axes.
 
-This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See `scroll` example.
+This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See the [`scroll` example] for a demonstration!
+
+[`scroll` example]: https://github.com/bevyengine/bevy/blob/latest/examples/ui/scroll.rs
 
 ## Fallible Interpolation
 
