@@ -523,12 +523,17 @@ Screen recording is currently not supported on Windows due to challenges with vi
 
 {{ heading_metadata(authors=["@hymm"] prs=[20298]) }}
 
-A long requested feature has come to Bevy! You can now remove systems from a schedule.
-The previous recommended way of preventing a scheduled system from running was to use `RunCondition`'s.
-You will still use this for most situations as removing a system will cause the schedule to be rebuilt.
-This process can be slow since the schedule checking logic is complex. But in situations where this is
-not a problem, you can now call `remove_systems_in_set`. The advantage of this is that this will remove the
-cost of the run condition being checked.
+Previously, the only way to prevent a scheduled system from running was to use `RunCondition`'s.
+This works well for dynamically toggling whether or not a system runs, but comes with a tiny overhead
+each time the schedule is run.
+
+Now, you can completely remove systems from a schedule using `remove_systems_in_set`
+forcing an expensive schedule rebuild but removing that overhead completely and removing
+the systems from any debug tools.
+
+Run conditions (and dedicated schedules run on demand) remain a better tool for most cases,
+but completely removing systems may be an attractive option when opting-out of undesired plugin behavior,
+modding or changing game settings.
 
 ```rust
 app.add_systems((system_a, (system_b, system_c).in_set(MySet)));
