@@ -351,7 +351,7 @@ particularly for an API that's designed for convenience and often most attractiv
 
 In Bevy 0.18, we're finally introducing safe equivalents, in the form of [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`].
 These methods allow you to access multiple mutable or imutable references to the components on a single entity.
-To ensure that we don't hand out multiple mutable references to the same data, these APIs use quadratic time complexity
+To ensure that we don't hand out multiple mutable references to the same data, these APIs use quadratic time complexity (over the number of components accessed)
 runtime checks, safely erroring if illegal access was requested.
 
 Quadratic time complexity is bad news, but in many cases, the list of components requested is very small:
