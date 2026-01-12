@@ -283,9 +283,7 @@ commands.spawn((
 ));
 ```
 
-TODO: AutoDirectionalNavigator does not seem to exist.
-
-To leverage automatic navigation, use the `AutoDirectionalNavigator` system parameter instead of the `DirectionalNavigation` system parameter:
+To leverage automatic navigation, use the [`AutoDirectionalNavigator`] system parameter instead of the [`DirectionalNavigation`] system parameter:
 
 ```rust
 fn my_navigation_system(mut auto_directional_navigator: AutoDirectionalNavigator) {
@@ -295,7 +293,10 @@ fn my_navigation_system(mut auto_directional_navigator: AutoDirectionalNavigator
 }
 ```
 
-That's it! The `DirectionalNavigationPlugin` will set up the resources that `AutoDirectionalNavigator` uses to function.
+That's it! The [`DirectionalNavigationPlugin`] will set up the resources that [`AutoDirectionalNavigator`] uses to function.
+
+[`AutoDirectionalNavigator`]: https://docs.rs/bevy/0.18.0/bevy/ui/auto_directional_navigation/struct.AutoDirectionalNavigator.html
+[`DirectionalNavigation`]:https://docs.rs/bevy/0.18.0/bevy/input_focus/directional_navigation/struct.DirectionalNavigation.html
 
 ### Configuration
 
