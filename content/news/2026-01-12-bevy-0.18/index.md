@@ -642,11 +642,15 @@ setting it up was relatively involved.
 
 This process has been streamlined, with the new [`EasyScreenshotPlugin`] allowing you to take a screenshot with consistent formatting with a single button press. With its default settings, once you add this plugin to your application, a PNG screenshot will be taken when you press the `PrintScreen` key. You can change the trigger key, or the screenshot format between PNG, JPEG or BMP.
 
-We've taken this one step further, allowing you to record video directly from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
+We've taken this one step further, allowing you to record video directly from Bevy, with the new [`EasyScreenRecordPlugin`]. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the [`RecordScreen`] messages.
 
 Screen recording is currently not supported on Windows due to challenges with video codecs.
+While all dev-tools features are off-by default, screen recording is a bit trickier to activate due to this limitation.
+To enable it, toggle the `screenrecording` feature in the `bevy_dev_tools` crate.
 
 [`EasyScreenshotPlugin`]: https://docs.rs/bevy/0.18.0/bevy/dev_tools/struct.EasyScreenshotPlugin.html
+[`EasyScreenRecordPlugin`]: https://dev-docs.bevy.org/bevy/dev_tools/struct.EasyScreenRecordPlugin.html
+[`RecordScreen]: https://dev-docs.bevy.org/bevy/dev_tools/enum.RecordScreen.html
 
 ## Remove Systems from Schedules
 
