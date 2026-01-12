@@ -328,24 +328,38 @@ Users often want to run a fullscreen shader but currently the only to do this is
 [`FullscreenMaterial`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/core_pipeline/fullscreen_material/trait.FullscreenMaterial.html
 [`FullscreenMaterialPlugin`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/core_pipeline/fullscreen_material/struct.FullscreenMaterialPlugin.html
 
-## get_components_mut
+## Row-wise data access
 
 {{ heading_metadata(authors=["@hymm"] prs=[21780]) }}
 
-Methods [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`] are now
-added, providing a safe API for retrieving mutable references to multiple components via
-these entity access APIs.
+When working with an ECS, the most natural (and efficient) way to access data is to read and modify the same components
+across multiple entities in a batch, using queries in a way that's analogous to extracting columns from a database.
+But from time-to-time, users want to consider an entity in its entirety, peering across the entire row.
 
-Previously, only the unsafe variants of these methods, called
-`get_components_mut_unchecked`, were present. They are not safe because they allow
-retrieving `(&mut T, &mut T)` - two mutable references to a single component - which
-breaks Rust's pointer aliasing rules.
+This approach is much more similar to the traditional "game object" model that users may be familiar with in other game engines,
+and can be particularly useful when implementing complex, non-performance-critical logic like writing a character controller.
+It also tends to mesh better with other languages and external tools, making it a tempting design for scripting, modding and integration work. 
 
-The new methods work around this via performing a quadratic time complexity check between
-all specified components for conflicts, returning `QueryAccessError::Conflict` if such
-occurs. This potentially has a runtime performance cost, so it might be favorable to still
-use `get_components_mut_unchecked` if you can guarantee that no aliasing would occur.
+In theory, doing so should be fairly straightforward, if a bit slow:
+we're dividing access to our world into slices across a different axis, but still being careful to avoid forbidden aliasing.
+[Initial attempts at implementing this] ran into some difficulty though,
+with subtle soundness problems detected during code review.
 
+As a result, we previously introduced unsafe methods for this: `get_components_mut_unchecked`.
+These methods are relatively fast (look mom no checks!), but unsafe is frightening and cumbersome to work with,
+particularly for an API that's designed for convenience and often most attractive to newcomers.
+
+In Bevy 0.18, we're finally introducing safe equivalents, in the form of [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`].
+These methods allow you to access multiple mutable or imutable references to the components on a single entity.
+To ensure that we don't hand out multiple mutable references to the same data, these APIs use quadratic time complexity (over the number of components accessed)
+runtime checks, safely erroring if illegal access was requested.
+
+Quadratic time complexity is bad news, but in many cases, the list of components requested is very small:
+two, three or even ten distinct components are not terrible to check outside of a hot loop.
+However, some applications (such as scripting interfaces) may still be best suited to using the unsafe API,
+relying on other methods to ensure soundness with a lower performance cost.
+
+[Initial attempts at implementing this]: (https://github.com/bevyengine/bevy/pull/13375)
 [`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut_unchecked
 [`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut_unchecked
 
