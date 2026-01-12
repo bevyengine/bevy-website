@@ -272,7 +272,7 @@ Now, you can simply add the [`AutoDirectionalNavigation`] component to your UI e
 
 ### How to Use It
 
-Simply add the [`AutoDirectionalNavigation`] component to your UI entities:
+Simply add the [`AutoDirectionalNavigation`] component to the UI entities you want users to be able to navigate between:
 
 ```rust
 commands.spawn((
@@ -292,8 +292,6 @@ fn my_navigation_system(mut auto_directional_navigator: AutoDirectionalNavigator
     // ...
 }
 ```
-
-That's it! The [`DirectionalNavigationPlugin`] will set up the resources that [`AutoDirectionalNavigator`] uses to function.
 
 [`AutoDirectionalNavigator`]: https://docs.rs/bevy/0.18.0/bevy/ui/auto_directional_navigation/struct.AutoDirectionalNavigator.html
 [`DirectionalNavigation`]:https://docs.rs/bevy/0.18.0/bevy/input_focus/directional_navigation/struct.DirectionalNavigation.html
@@ -317,7 +315,8 @@ app.insert_resource(AutoNavigationConfig {
 
 ### Manual Override
 
-Automatic navigation respects manually-defined edges. If you want to override specific connections, you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
+Automatic navigation respects manually-defined edges. If you want to override specific connections (e.g. screen-edge looping),
+you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
 You may also call `auto_generate_navigation_edges()` directly, if you have multiple UI layers (though may not be widely used)
 
 ## Fullscreen Material
