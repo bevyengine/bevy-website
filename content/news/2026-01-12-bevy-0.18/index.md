@@ -36,27 +36,12 @@ Check out the updated [`atmosphere` example] to see it in action!
 
 [`atmosphere` example]: https://github.com/bevyengine/bevy/blob/latest/examples/3d/atmosphere.rs
 
-## Solari Improvements
-
-{{ heading_metadata(authors=["@JMS55", "@SparkyPotato"] prs=[21391, 21355, 21810]) }}
-
-![solari specular](solari_specular.jpg)
-
-Solari - Bevy's forward-looking realtime raytraced renderer - has seen many improvements in this release. Notably:
-
-- Support for specular materials and reflections
-- Faster-reacting lighting
-- A large amount of quality/accuracy improvements
-- Physically-based soft shadows for directional lights
-- Improved performance on larger scenes
-
-![solari pica pica](solari_pica_pica.jpg)
-
-For the full list of details, check out the author's [full blog post](https://jms55.github.io/posts/2025-12-27-solari-bevy-0-18).
-
 ## Generalized Atmospheric Scattering Media
 
 {{ heading_metadata(authors=["@ecoskey"] prs=[20838]) }}
+
+![generalized atmosphere](generalized_atmosphere.jpg)
+{{ media_caption(text="A Mars-like atmosphere rendered in Bevy 0.18") }}
 
 Until now, Bevy's atmospheric scattering system has been fast and beautiful, but
 not very customizable. There's only a limited number of ways to customize the
@@ -109,9 +94,25 @@ fn setup_camera(
 }
 ```
 
-(TODO: engine example of martian/extraterrestrial sunrise)
-
 [`ScatteringMedium`]: https://docs.rs/bevy/0.18.0/bevy/pbr/struct.ScatteringMedium.html
+
+## Solari Improvements
+
+{{ heading_metadata(authors=["@JMS55", "@SparkyPotato"] prs=[21391, 21355, 21810]) }}
+
+![solari specular](solari_specular.jpg)
+
+Solari - Bevy's forward-looking realtime raytraced renderer - has seen many improvements in this release. Notably:
+
+- Support for specular materials and reflections
+- Faster-reacting lighting
+- A large amount of quality/accuracy improvements
+- Physically-based soft shadows for directional lights
+- Improved performance on larger scenes
+
+![solari pica pica](solari_pica_pica.jpg)
+
+For the full list of details, check out the author's [full blog post](https://jms55.github.io/posts/2025-12-27-solari-bevy-0-18).
 
 ## More Standard Widgets
 
@@ -149,17 +150,6 @@ and closing the menu, along with keyboard navigation and activation using the fo
 
 [`MenuPopup`]: https://docs.rs/bevy/0.18.0/bevy/ui_widgets/struct.MenuPopup.html
 
-### Color Plane
-
-TODO: add image
-
-The [`ColorPlane`] widget is a two-dimensional color picker that allows selecting two different
-channels within a color space, one along the horizontal axis and one along the vertical. It can be
-configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
-red vs. blue, and so on.
-
-[`ColorPlane`]: https://docs.rs/bevy/0.18.0/bevy/feathers/controls/enum.ColorPlane.html
-
 ### Improvements to `RadioButton` and `RadioGroup`
 
 Following user testing, we've improved the details of our existing [`RadioButton`] and [`RadioGroup`] widgets,
@@ -179,6 +169,20 @@ in a fully backward compatible way:
 [`RadioButton`]: https://docs.rs/bevy/0.18.0/bevy/ui_widgets/struct.RadioButton.html
 [`RadioGroup`]: https://docs.rs/bevy/0.18.0/bevy/ui_widgets/struct.RadioGroup.html
 [`ValueChange`]: https://docs.rs/bevy/0.18.0/bevy/ui_widgets/struct.ValueChange.html
+
+## Bevy Feathers Widget: Color Plane
+
+{{ heading_metadata(authors=["@viridia"] prs=[21743]) }}
+
+In our last release we introduced [Bevy Feathers](/news/bevy-0-17/#bevy-feathers-widgets-for-tooling-experimental), an experimental new widget library for building tooling (such as the upcoming Bevy Editor).
+
+In **Bevy 0.18** we've added the [`ColorPlane`] widget: a two-dimensional color picker that allows selecting two different channels within a color space, one along the horizontal axis and one along the vertical. It can be
+configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
+red vs. blue, and so on.
+
+![color plane widget](color_plane.jpg)
+
+[`ColorPlane`]: https://docs.rs/bevy/0.18.0/bevy/feathers/controls/enum.ColorPlane.html
 
 ## First-party camera controllers
 
@@ -208,6 +212,10 @@ The first camera controller that we've introduced is a "free camera", designed f
 completely ignoring both physics and geometry.
 You may have heard of a "fly camera" controller before, which is a specialization of a "free camera" controller
 designed for fast and fluid movement for covering large amounts of terrain.
+
+Many Bevy examples now use [`FreeCamera`], including the `solari` example (which demos Bevy's experimental raytraced renderer):
+
+<video controls loop><source src="free_camera.mp4" type="video/mp4"/></video>
 
 To add a free camera controller to your project (typically under a `dev_mode` feature flag),
 add the [`FreeCameraPlugin`] and the [`FreeCamera`] component to your camera entity.
