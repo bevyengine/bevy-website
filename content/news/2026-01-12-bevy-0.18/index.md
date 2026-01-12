@@ -268,7 +268,7 @@ Now, you can simply add the [`AutoDirectionalNavigation`] component to your UI e
 - **Overlap**: For cardinal directions (N/S/E/W), the system ensures sufficient perpendicular overlap
 
 [`DirectionalNavigationMap`]: https://docs.rs/bevy/0.18.0/bevy/input_focus/directional_navigation/struct.DirectionalNavigationMap.html
-[`AutoDirectionalNavigation`]: https://docs.rs/bevy/0.18.0/bevy/input_focus/directional_navigation/struct.AutoDirectionalNavigation.html
+[`AutoDirectionalNavigation`]: https://docs.rs/bevy/0.18.0/bevy/ui/auto_directional_navigation/struct.AutoDirectionalNavigation.html
 
 ### How to Use It
 
