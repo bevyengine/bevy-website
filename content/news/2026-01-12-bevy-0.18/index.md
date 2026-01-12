@@ -144,7 +144,7 @@ Popovers can be used for dropdown menus, but they can also be used for tooltips.
 
 ### Menu
 
-The [`MenupPopup`] component uses [`Popover`] to provide a dropdown menu widget. This adds events for opening
+The [`MenuPopup`] component uses [`Popover`] to provide a dropdown menu widget. This adds events for opening
 and closing the menu, along with keyboard navigation and activation using the focus system.
 
 [`MenuPopup`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/ui_widgets/struct.MenuPopup.html
@@ -158,7 +158,7 @@ channels within a color space, one along the horizontal axis and one along the v
 configured to display a variety of different color spaces: hue vs. lightness, hue vs. saturation,
 red vs. blue, and so on.
 
-[`ColorPane`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/feathers/controls/enum.ColorPlane.html
+[`ColorPlane`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/feathers/controls/enum.ColorPlane.html
 
 ### Improvements to `RadioButton` and `RadioGroup`
 
