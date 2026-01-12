@@ -328,24 +328,38 @@ Users often want to run a fullscreen shader but currently the only to do this is
 [`FullscreenMaterial`]: https://docs.rs/bevy/0.18.0/bevy/core_pipeline/fullscreen_material/trait.FullscreenMaterial.html
 [`FullscreenMaterialPlugin`]: https://docs.rs/bevy/0.18.0/bevy/core_pipeline/fullscreen_material/struct.FullscreenMaterialPlugin.html
 
-## get_components_mut
+## Row-wise data access
 
 {{ heading_metadata(authors=["@hymm"] prs=[21780]) }}
 
-Methods [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`] are now
-added, providing a safe API for retrieving mutable references to multiple components via
-these entity access APIs.
+When working with an ECS, the most natural (and efficient) way to access data is to read and modify the same components
+across multiple entities in a batch, using queries in a way that's analogous to extracting columns from a database.
+But from time-to-time, users want to consider an entity in its entirety, peering across the entire row.
 
-Previously, only the unsafe variants of these methods, called
-`get_components_mut_unchecked`, were present. They are not safe because they allow
-retrieving `(&mut T, &mut T)` - two mutable references to a single component - which
-breaks Rust's pointer aliasing rules.
+This approach is much more similar to the traditional "game object" model that users may be familiar with in other game engines,
+and can be particularly useful when implementing complex, non-performance-critical logic like writing a character controller.
+It also tends to mesh better with other languages and external tools, making it a tempting design for scripting, modding and integration work. 
 
-The new methods work around this via performing a quadratic time complexity check between
-all specified components for conflicts, returning `QueryAccessError::Conflict` if such
-occurs. This potentially has a runtime performance cost, so it might be favorable to still
-use `get_components_mut_unchecked` if you can guarantee that no aliasing would occur.
+In theory, doing so should be fairly straightforward, if a bit slow:
+we're dividing access to our world into slices across a different axis, but still being careful to avoid forbidden aliasing.
+[Initial attempts at implementing this] ran into some difficulty though,
+with subtle soundness problems detected during code review.
 
+As a result, we previously introduced unsafe methods for this: `get_components_mut_unchecked`.
+These methods are relatively fast (look mom no checks!), but unsafe is frightening and cumbersome to work with,
+particularly for an API that's designed for convenience and often most attractive to newcomers.
+
+In Bevy 0.18, we're finally introducing safe equivalents, in the form of [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`].
+These methods allow you to access multiple mutable or imutable references to the components on a single entity.
+To ensure that we don't hand out multiple mutable references to the same data, these APIs use quadratic time complexity (over the number of components accessed)
+runtime checks, safely erroring if illegal access was requested.
+
+Quadratic time complexity is bad news, but in many cases, the list of components requested is very small:
+two, three or even ten distinct components are not terrible to check outside of a hot loop.
+However, some applications (such as scripting interfaces) may still be best suited to using the unsafe API,
+relying on other methods to ensure soundness with a lower performance cost.
+
+[Initial attempts at implementing this]: (https://github.com/bevyengine/bevy/pull/13375)
 [`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut_unchecked
 [`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut_unchecked
 
@@ -468,12 +482,26 @@ and can be given observers to respond to user interaction.
 This functionality is useful when creating hyperlink-like behavior,
 and allows users to create mouse-over tooltips for specific keywords in their games.
 
-## Userspace glTF Extension Handling
+## glTF Extensions
 
 {{ heading_metadata(authors=["@christopherbiscardi"] prs=[22106]) }}
 
+[glTF] is a popular open format for 3D models and scenes, and serves as Bevy's primary 3D format.
+When making games however, simply relying on the built-in data fields for your objects is not enough.
+Additional information like physics colliders or special rendering properties are typically best kept directly with the models.
+
+glTF has two mechanisms for extending glTF files with additional user data: extras and extensions.
+
+**Extras** are meant to be arbitrary application-specific data, often authored by users directly in tools like Blender's custom properties.
+Extras are historically well supported by Bevy; if you add a custom property in Blender that data will end up in one of the [`GltfExtras`] components on the relevant entity.
+
+**Extensions** are meant for data that can be shared across applications.
+They are more flexible, allowing for new data in more places inside a glTF file, and more powerful as a result.
+Extensions can add new object types, such as `lights` from the `KHR_lights_punctual` extension, as well as arbitrary buffers, data that is at the root of the glTF file, and more.
+
 Prior to 0.18, the code to handle extensions like [`KHR_lights_punctual`] was hardcoded into Bevy's glTF loader.
-In 0.18, users may implement the [`GltfExtensionHandler`] trait to do stateful processing of glTF data as it loads.
+Now, users may implement the [`GltfExtensionHandler`] trait to do stateful processing of glTF data as it loads.
+
 Processing _extension_ data is only half the story here because to process extension data you also have to be able to process the non-extension data like meshes, materials, animations, and more.
 
 Extension handlers can be written for wide variety of use cases, including:
@@ -484,33 +512,28 @@ Extension handlers can be written for wide variety of use cases, including:
 - Replace [`StandardMaterial`] with custom materials
 - Insert lightmaps
 
+We've added two new examples to show off common use cases:
+
+- [`gltf_extension_animation_graph`] builds an [`AnimationGraph`] and inserts it onto the animation root in a Scene, which means it is now accessible to play animations using the [`AnimationPlayer`] on the same entity later when that scene is spawned.
+- [`gltf_extension_mesh_2d`] uses a [`GltfExtensionHandler`] to switch the 3d mesh and material components for their 2d counterparts. This is useful if you're using software like Blender to build 2d worlds.
+
+[`AnimationPlayer`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/struct.AnimationPlayer.html
+[glTF]: https://en.wikipedia.org/wiki/GlTF
 [`KHR_lights_punctual`]:https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_lights_punctual/README.md
 [`GltfExtensionHandler`]: https://docs.rs/bevy/0.18.0/bevy/gltf/extensions/trait.GltfExtensionHandler.html
+[`GltfExtras`]: https://docs.rs/bevy/0.18.0/bevy/gltf/struct.GltfExtras.html
 [`Mesh3d`]: https://docs.rs/bevy/0.18.0/bevy/mesh/struct.Mesh3d.html
 [`Mesh2d`]:https://docs.rs/bevy/0.18.0/bevy/mesh/struct.Mesh2d.html
 [`AnimationGraph`]: https://docs.rs/bevy/0.18.0/bevy/animation/graph/struct.AnimationGraph.html
 [`StandardMaterial`]: https://docs.rs/bevy/0.18.0/bevy/pbr/struct.StandardMaterial.html
+[`gltf_extension_animation_graph`]: https://github.com/bevyengine/bevy/blob/latest/examples/gltf/gltf_extension_animation_graph.rs
+[`gltf_extension_mesh_2d`]: https://github.com/bevyengine/bevy/blob/latest/examples/gltf/gltf_extension_mesh_2d.rs
 
-### Extras vs Extensions
-
-glTF has two mechanisms for extending glTF files with additional user data: Extras and Extensions.
-
-**Extras** are meant to be arbitrary application-specific data, often authored by users directly in tools like Blender's custom properties.
-Extras are historically well supported by Bevy; if you add a custom property in Blender that data will end up in one of the [`GltfExtras`] components on the relevant entity.
-
-**Extensions** are meant for data that can be shared across applications.
-They are more flexible, allowing for new data in more places inside a glTF file, and more powerful as a result.
-Extensions can add new object types, such as `lights` from the `KHR_lights_punctual` extension, as well as arbitrary buffers, data that is at the root of the glTF file, and more.
-
-More examples of extensions can be found in the [KhronosGroup git repo](https://github.com/KhronosGroup/glTF/blob/7bbd90978cad06389eee3a36882c5ef2f2039faf/extensions/README.md)
-
-[`GltfExtras`]: https://docs.rs/bevy/0.18.0/bevy/gltf/struct.GltfExtras.html
-
-### Case Study
+### Integration with external authoring tools
 
 Extensions typically require an application that is _producing_ the data as well as _consuming_ the data.
 
-For example: [Skein] defines a glTF extension that allows adding Bevy Components to glTF objects.
+For example, [Skein] defines a glTF extension that allows adding Bevy Components to glTF objects.
 This is most commonly produced by Blender and consumed by Skein's [`GltfExtensionHandler`] in Bevy.
 These components are then inserted on entities in a scene at the same time built-in components like [`Transform`] and [`Mesh3d`] are.
 
@@ -520,21 +543,6 @@ Any third party software that writes component data into a glTF file can use Ske
 [Skein]: https://github.com/rust-adventure/skein
 [`Transform`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Transform.html
 [`Scene`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Scene.html
-
-### New Examples
-
-Two new examples show off use cases:
-
-- The first builds an [`AnimationGraph`] and inserts it onto the animation root in a Scene, which means it is now accessible to play animations using the [`AnimationPlayer`] on the same entity later when that scene is spawned.
-- The second uses a [`GltfExtensionHandler`] to switch the 3d mesh and material components for their 2d counterparts. This is useful if you're using software like Blender to build 2d worlds.
-
-```shell
-cargo run --example gltf_extension_animation_graph
-cargo run --example gltf_extension_mesh_2d
-```
-
-[`AnimationGraph`]: https://docs.rs/bevy/0.18.0/bevy/animation/graph/struct.AnimationGraph.html
-[`AnimationPlayer`]: https://docs.rs/bevy/0.18.0/bevy/animation/struct.AnimationPlayer.html
 
 ## Short-type-path asset processors
 
