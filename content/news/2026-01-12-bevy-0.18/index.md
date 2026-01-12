@@ -645,6 +645,8 @@ This process has been streamlined, with the new [`EasyScreenshotPlugin`] allowin
 We've taken this one step further, allowing you to record video directly from Bevy, with the new `EasyScreenRecordPlugin`. This plugins add a toggle key, space bar by default, that will toggle screen recording. Recording can also be started and stopped programmatically with the `RecordScreen` messages.
 
 Screen recording is currently not supported on Windows due to challenges with video codecs.
+While all dev-tools features are off-by default, screen recording is a bit trickier to activate due to this limitation.
+To enable it, toggle the `screenrecording` feature in the `bevy_dev_tools` crate.
 
 [`EasyScreenshotPlugin`]: https://docs.rs/bevy/0.18.0/bevy/dev_tools/struct.EasyScreenshotPlugin.html
 
