@@ -468,12 +468,26 @@ and can be given observers to respond to user interaction.
 This functionality is useful when creating hyperlink-like behavior,
 and allows users to create mouse-over tooltips for specific keywords in their games.
 
-## Userspace glTF Extension Handling
+## glTF Extensions
 
 {{ heading_metadata(authors=["@christopherbiscardi"] prs=[22106]) }}
 
+[glTF] is a popular open format for 3D models and scenes, and serves as Bevy's primary 3D format.
+When making games however, simply relying on the built-in data fields for your objects is not enough.
+Additional information like physics colliders or special rendering properties are typically best kept directly with the models.
+
+glTF has two mechanisms for extending glTF files with additional user data: extras and extensions.
+
+**Extras** are meant to be arbitrary application-specific data, often authored by users directly in tools like Blender's custom properties.
+Extras are historically well supported by Bevy; if you add a custom property in Blender that data will end up in one of the [`GltfExtras`] components on the relevant entity.
+
+**Extensions** are meant for data that can be shared across applications.
+They are more flexible, allowing for new data in more places inside a glTF file, and more powerful as a result.
+Extensions can add new object types, such as `lights` from the `KHR_lights_punctual` extension, as well as arbitrary buffers, data that is at the root of the glTF file, and more.
+
 Prior to 0.18, the code to handle extensions like [`KHR_lights_punctual`] was hardcoded into Bevy's glTF loader.
-In 0.18, users may implement the [`GltfExtensionHandler`] trait to do stateful processing of glTF data as it loads.
+Now, users may implement the [`GltfExtensionHandler`] trait to do stateful processing of glTF data as it loads.
+
 Processing _extension_ data is only half the story here because to process extension data you also have to be able to process the non-extension data like meshes, materials, animations, and more.
 
 Extension handlers can be written for wide variety of use cases, including:
@@ -484,33 +498,28 @@ Extension handlers can be written for wide variety of use cases, including:
 - Replace [`StandardMaterial`] with custom materials
 - Insert lightmaps
 
+We've added two new examples to show off common use cases:
+
+- [`gltf_extension_animation_graph`] builds an [`AnimationGraph`] and inserts it onto the animation root in a Scene, which means it is now accessible to play animations using the [`AnimationPlayer`] on the same entity later when that scene is spawned.
+- [`gltf_extension_mesh_2d`] uses a [`GltfExtensionHandler`] to switch the 3d mesh and material components for their 2d counterparts. This is useful if you're using software like Blender to build 2d worlds.
+
+[`AnimationPlayer`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/struct.AnimationPlayer.html
+[glTF]: https://en.wikipedia.org/wiki/GlTF
 [`KHR_lights_punctual`]:https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_lights_punctual/README.md
 [`GltfExtensionHandler`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/gltf/extensions/trait.GltfExtensionHandler.html
+[`GltfExtras`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/gltf/struct.GltfExtras.html
 [`Mesh3d`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/mesh/struct.Mesh3d.html
 [`Mesh2d`]:https://docs.rs/bevy/0.18.0-rc.2/bevy/mesh/struct.Mesh2d.html
 [`AnimationGraph`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/graph/struct.AnimationGraph.html
 [`StandardMaterial`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/pbr/struct.StandardMaterial.html
+[`gltf_extension_animation_graph`]: https://github.com/bevyengine/bevy/blob/latest/examples/gltf/gltf_extension_animation_graph.rs
+[`gltf_extension_mesh_2d`]: https://github.com/bevyengine/bevy/blob/latest/examples/gltf/gltf_extension_mesh_2d.rs
 
-### Extras vs Extensions
-
-glTF has two mechanisms for extending glTF files with additional user data: Extras and Extensions.
-
-**Extras** are meant to be arbitrary application-specific data, often authored by users directly in tools like Blender's custom properties.
-Extras are historically well supported by Bevy; if you add a custom property in Blender that data will end up in one of the [`GltfExtras`] components on the relevant entity.
-
-**Extensions** are meant for data that can be shared across applications.
-They are more flexible, allowing for new data in more places inside a glTF file, and more powerful as a result.
-Extensions can add new object types, such as `lights` from the `KHR_lights_punctual` extension, as well as arbitrary buffers, data that is at the root of the glTF file, and more.
-
-More examples of extensions can be found in the [KhronosGroup git repo](https://github.com/KhronosGroup/glTF/blob/7bbd90978cad06389eee3a36882c5ef2f2039faf/extensions/README.md)
-
-[`GltfExtras`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/gltf/struct.GltfExtras.html
-
-### Case Study
+### Integration with external authoring tools
 
 Extensions typically require an application that is _producing_ the data as well as _consuming_ the data.
 
-For example: [Skein] defines a glTF extension that allows adding Bevy Components to glTF objects.
+For example, [Skein] defines a glTF extension that allows adding Bevy Components to glTF objects.
 This is most commonly produced by Blender and consumed by Skein's [`GltfExtensionHandler`] in Bevy.
 These components are then inserted on entities in a scene at the same time built-in components like [`Transform`] and [`Mesh3d`] are.
 
@@ -520,21 +529,6 @@ Any third party software that writes component data into a glTF file can use Ske
 [Skein]: https://github.com/rust-adventure/skein
 [`Transform`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Transform.html
 [`Scene`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/prelude/struct.Scene.html
-
-### New Examples
-
-Two new examples show off use cases:
-
-- The first builds an [`AnimationGraph`] and inserts it onto the animation root in a Scene, which means it is now accessible to play animations using the [`AnimationPlayer`] on the same entity later when that scene is spawned.
-- The second uses a [`GltfExtensionHandler`] to switch the 3d mesh and material components for their 2d counterparts. This is useful if you're using software like Blender to build 2d worlds.
-
-```shell
-cargo run --example gltf_extension_animation_graph
-cargo run --example gltf_extension_mesh_2d
-```
-
-[`AnimationGraph`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/graph/struct.AnimationGraph.html
-[`AnimationPlayer`]: https://docs.rs/bevy/0.18.0-rc.2/bevy/animation/struct.AnimationPlayer.html
 
 ## Short-type-path asset processors
 
