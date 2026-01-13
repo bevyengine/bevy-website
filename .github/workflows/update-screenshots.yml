@@ -65,7 +65,7 @@ jobs:
 
       - name: Take Screenshots
         run: |
-          xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot --in-ci
+          xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot-frame 400 --fixed-frame-time 0.0125 --auto-stop-frame --in-ci
 
       - name: Optimize PNGs
         run: |
