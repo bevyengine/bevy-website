@@ -6,9 +6,10 @@
       {% set parent_idx = total_ancestors - 1 %}
       {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
       <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
-      <a class="example__back" href="{% block examples_url %}{% endblock examples_url %}"><i class="icon icon--chevron-left"></i> Back to examples</a>
-      <a class="example__github"
-          href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
+      <a class="example__back" href="{% block examples_url %}{% endblock examples_url %}"><i
+          class="icon icon--chevron-left"></i> Back to examples</a>
+      <a id="fullscreen-button" class="example__fullscreen"><i class="icon icon--fullscreen"></i></a>
+      <a class="example__github" href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
         <i class="icon icon--github"></i> View in GitHub
       </a>
     </div>
@@ -30,9 +31,9 @@
       </aside>
     </div>
     {% if page.content %}
-      <div class="example__explanation media-content">
-        {{ page.content | safe }}
-      </div>
+    <div class="example__explanation media-content">
+      {{ page.content | safe }}
+    </div>
     {% endif %}
     <div class="example__code-tabs tabs">
       {% set filename = page.extra.code_path | split(pat="/") | last %}
@@ -45,17 +46,17 @@
           {{ code_md | markdown(inline=true) | safe }}
         </div>
       </div>
-      
+
       {% for shader in page.extra.shader_code_paths %}
-        <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
-        <label class="tabs__label" for="tab{{ loop.index }}"><code>{{ shader }}</code></label>
-        <div class="tabs__panel" tabindex="1">
-          <div class="example__code media-content">
-            {% set code = load_data(path="static/assets/examples/" ~ shader) %}
-            {% set code_md = "```wgsl" ~ newline ~ code ~ "```" %}
-            {{ code_md | markdown(inline=true) | safe }}
-          </div>
+      <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
+      <label class="tabs__label" for="tab{{ loop.index }}"><code>{{ shader }}</code></label>
+      <div class="tabs__panel" tabindex="1">
+        <div class="example__code media-content">
+          {% set code = load_data(path="static/assets/examples/" ~ shader) %}
+          {% set code_md = "```wgsl" ~ newline ~ code ~ "```" %}
+          {{ code_md | markdown(inline=true) | safe }}
         </div>
+      </div>
       {% endfor %}
     </div>
   </div>
@@ -134,5 +135,6 @@
         throw error;
       }
     });
+    document.getElementById("fullscreen-button").addEventListener("click", () => canvasEl.requestFullscreen());
   </script>
 {% endblock content %}
