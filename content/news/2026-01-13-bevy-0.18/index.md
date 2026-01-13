@@ -427,6 +427,8 @@ Developers can now define their own high-level cargo feature profiles from these
 [`Text`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Text.html
 [`StrikethroughColor`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.StrikethroughColor.html
 [`UnderlineColor`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.UnderlineColor.html
+[`Text2d`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Text2d.html
+[`TextSpan`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.TextSpan.html
 
 ### Font Weights
 
