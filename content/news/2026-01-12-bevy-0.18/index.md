@@ -4,10 +4,10 @@ date = 2026-01-12
 [extra]
 public_draft = 2320
 status = 'hidden'
-# show_image = true
-# image = "TODO"
-# image_subtitle = "TODO"
-# image_subtitle_link = "TODO"
+show_image = true
+image = "toroban.jpg"
+image_subtitle = "Toroban: an infinitely wrapping puzzle game built in Bevy. Out now!"
+image_subtitle_link = "https://store.steampowered.com/app/1961850/Toroban/"
 +++
 
 Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.18** release on [crates.io](https://crates.io/crates/bevy)!
