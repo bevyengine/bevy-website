@@ -1,0 +1,80 @@
+.search-category {
+  --search-category-bg-color: var(--search-category-default-bg-color);
+  @include hack-search-category-modifier-vars(default);
+
+  background-color: transparent;
+  border: 1px solid var(--search-category-border-color);
+  font-size: calc-rem(18px);
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--search-category-text-color);
+
+  &:hover {
+    color: var(--search-category-text-hover-color);
+    background-color: var(--search-category-default-bg-hover-color);
+    // background-color: #{unquote('rgb(from var(--search-category-default-bg-hover-color) r g b / 0.05)')};
+  }
+
+  &--quickstart,
+  &--book {
+    --search-category-bg-color: var(--search-category-book-bg-color);
+    @include hack-search-category-modifier-vars(book);
+  }
+
+  &--examples {
+    --search-category-bg-color: var(--search-category-examples-bg-color);
+    @include hack-search-category-modifier-vars(examples);
+  }
+
+  &--migrations {
+    --search-category-bg-color: var(--search-category-migrations-bg-color);
+    @include hack-search-category-modifier-vars(migrations);
+  }
+
+  &--errors {
+    --search-category-bg-color: var(--search-category-errors-bg-color);
+    @include hack-search-category-modifier-vars(errors);
+  }
+
+  &--news {
+    --search-category-bg-color: var(--search-category-news-bg-color);
+    @include hack-search-category-modifier-vars(news);
+  }
+
+  &--contribute {
+    --search-category-bg-color: var(--search-category-contribute-bg-color);
+    @include hack-search-category-modifier-vars(contribute);
+  }
+
+  &--active {
+    // --text-color: #{unquote("hsl(from var(--search-category-bg-color) h s 90)")};
+
+    background-color: var(--search-category-bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+    // border-color: unquote(
+    //   "hsl(from var(--search-category-bg-color) h s calc(l + 10))"
+    // );
+
+    &:hover {
+      color: var(--text-color);
+      background-color: var(--bg-hover-color);
+      // background-color: unquote(
+      //   "hsl(from var(--search-category-bg-color) h s calc(l + 4))"
+      // );
+    }
+  }
+
+  &--compact {
+    padding: 2px 4px;
+    font-size: calc-rem(14px);
+    cursor: default;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: var(--search-category-bg-color);
+    }
+  }
+}

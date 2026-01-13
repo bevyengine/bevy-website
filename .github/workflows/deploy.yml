@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -44,13 +44,27 @@ jobs:
       - name: "Sync Donor Info"
         run: cd content/donate && ./sync_donors.sh
 
-      - name: "Build and deploy website"
-        if: github.repository_owner == 'bevyengine'
+      - name: "Build Website"
         uses: shalzz/zola-deploy-action@v0.19.2
         env:
-          PAGES_BRANCH: gh-pages
+          BUILD_ONLY: true
           BUILD_DIR: .
-          TOKEN: ${{ secrets.CART_PAT }}
+
+      - name: "Search (1/3): Setup Node.js"
+        uses: actions/setup-node@v4
+
+      # See: https://github.com/CloudCannon/pagefind/issues/675#issuecomment-2267210534
+      - name: "Search (2/3): Change `public` Permissions"
+        run: echo "$(whoami):$(id -gn)" | xargs -I {} sudo chown -R {} public
+
+      - name: "Search (3/3): Build Index"
+        run: npx --yes pagefind --output-path public/pagefind
+
+      - name: Upload GitHub Pages Artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/
 
       # Caches output of generate-assets for use in ci.yml
       - name: Update generate-assets cache
@@ -58,3 +72,19 @@ jobs:
         with:
           path: content/assets
           key: assets-${{ steps.date.outputs.date }}-${{ hashFiles('generate-assets/**/*.rs', 'generate-assets/Cargo.toml', 'generate-assets/generate_assets.sh') }}
+
+  deploy:
+    if: github.repository_owner == 'bevyengine'
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.CART_PAT }}

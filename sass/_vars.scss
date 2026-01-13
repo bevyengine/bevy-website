@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Typography
 $size-body: 16px; // Usual browser default size
 $size-body-mobile: 14px; // Size for mobile
@@ -25,6 +27,8 @@ $duration: 250ms;
 $z-layout-header: 800;
 $z-main-menu-backdrop: 900;
 $z-main-menu: 1000;
+$z-search-backdrop: 1100;
+$z-search: 1200;
 
 // General
 $max-width: 1200px;
@@ -42,12 +46,44 @@ $border-radius: 10px;
 // the `sass:color` package to derive new colors. If a color is not going to be
 // used to derive a new color, then CSS vars should be used instead.
 //
-// See PR: https://github.com/bevyengine/bevy-website/pull/1953
 // See Relative Colors support: https://caniuse.com/css-relative-colors
+//
+// To revert:
+// - Original PR: https://github.com/bevyengine/bevy-website/pull/1953
+// - `.search-category`: https://github.com/bevyengine/bevy-website/pull/1935/commits/30d94f6e9316b03d6741fbdfb4ea493f06485482
+// - `.search-result`: https://github.com/bevyengine/bevy-website/pull/1935/commits/0e0069784f93ab27273384ced13833657c73459e
 $color-neutral-17: #2c2c2d;
+$color-neutral-40: #666;
 $color-neutral-93: #ececec;
 $color-black: #000;
 $color-white: #fff;
+
+$color-dark-search-category-default-bg: $color-neutral-40;
+$color-dark-search-category-book-bg: #537134;
+$color-dark-search-category-examples-bg: #885d26;
+$color-dark-search-category-migrations-bg: #2b5e77;
+$color-dark-search-category-errors-bg: #953562;
+$color-dark-search-category-news-bg: #2c5580;
+$color-dark-search-category-contribute-bg: #78527e;
+
+$color-light-search-category-book-bg: #5b8b2c;
+$color-light-search-category-examples-bg: #b96f0e;
+$color-light-search-category-migrations-bg: #455f6b;
+$color-light-search-category-news-bg: #2c65a2;
+
+// TODO: Remove when CSS Relative Colors are available
+@mixin hack-search-category-computed-colors($category, $color) {
+  --search-category-#{$category}-bg-hover-color: #{color.adjust($color, $lightness: 4%)};
+  --search-category-#{$category}-border-color: #{color.adjust($color, $lightness: 10%)};
+  --search-category-#{$category}-text-color: #{color.change($color, $lightness: 90%)};
+}
+
+// TODO: Remove when CSS Relative Colors are available, check: `_search-category.scss`
+@mixin hack-search-category-modifier-vars($category) {
+  --bg-hover-color: var(--search-category-#{$category}-bg-hover-color);
+  --border-color: var(--search-category-#{$category}-border-color);
+  --text-color: var(--search-category-#{$category}-text-color);
+}
 
 // CSS Vars
 :root {
@@ -67,7 +103,7 @@ $color-white: #fff;
   --color-neutral-33: #555;
   --color-neutral-33b: #535353;
   --color-neutral-36: #59595e;
-  --color-neutral-40: #666;
+  --color-neutral-40: #{$color-neutral-40};
   --color-neutral-42: #6b6b6b;
   --color-neutral-45: #737373;
   --color-neutral-50: #808080;
@@ -141,6 +177,8 @@ $color-white: #fff;
   --asset-version-select-border-color: var(--color-neutral-22);
   --asset-version-select-border-hover-color: var(--color-neutral-42);
 
+  --backdrop-color: #{rgba($color-black, 0.2)};
+
   --bevy-instance-canvas-color: var(--color-neutral-18);
   --bevy-instance-text-shadow-color: var(--color-black);
   --bevy-instance-progress-track-color: var(--color-neutral-33);
@@ -165,6 +203,8 @@ $color-white: #fff;
   --button-pink-bg-hover-color: #954c72;
   --button-pink-border-color: #ba789b;
   --button-pink-text-color: var(--color-neutral-93);
+
+  --button-square-color: var(--color-neutral-93);
   --button-square-bg-color: #{rgba($color-neutral-93, 0.05)};
 
   --callout-caution-accent-color: #d95e7a;
@@ -330,6 +370,44 @@ $color-white: #fff;
   --people-role-maintainer-color: rgb(242, 103, 255);
   --people-role-sme-color: rgb(80, 200, 50);
 
+  --search-bg-color: var(--color-neutral-13);
+  --search-clear-icon-color: var(--color-neutral-93);
+  --search-border-color: var(--color-neutral-17);
+  --search-input-bg-color: var(--color-neutral-18);
+  --search-input-border-color: var(--color-neutral-22);
+  --search-input-color: var(--color-neutral-93);
+  --search-no-results-color: var(--color-neutral-75);
+  --search-tip-color: var(--color-neutral-67);
+
+  --search-category-default-bg-color: #{$color-dark-search-category-default-bg};
+  --search-category-default-bg-hover-color: #{rgba($color-white, 0.05)};
+  --search-category-border-color: var(--color-neutral-27);
+  --search-category-text-color: var(--color-neutral-67);
+  --search-category-text-hover-color: var(--color-white);
+  --search-category-book-bg-color: #{$color-dark-search-category-book-bg};
+  --search-category-examples-bg-color: #{$color-dark-search-category-examples-bg};
+  --search-category-migrations-bg-color: #{$color-dark-search-category-migrations-bg};
+  --search-category-errors-bg-color: #{$color-dark-search-category-errors-bg};
+  --search-category-news-bg-color: #{$color-dark-search-category-news-bg};
+  --search-category-contribute-bg-color: #{$color-dark-search-category-contribute-bg};
+
+  --search-category-default-border-color: #{color.adjust($color-dark-search-category-default-bg, $lightness: 10%)};
+  --search-category-default-text-color: #{color.change($color-dark-search-category-default-bg, $lightness: 90%)};
+  @include hack-search-category-computed-colors(book, $color-dark-search-category-book-bg);
+  @include hack-search-category-computed-colors(examples, $color-dark-search-category-examples-bg);
+  @include hack-search-category-computed-colors(migrations, $color-dark-search-category-migrations-bg);
+  @include hack-search-category-computed-colors(errors, $color-dark-search-category-errors-bg);
+  @include hack-search-category-computed-colors(news, $color-dark-search-category-news-bg);
+  @include hack-search-category-computed-colors(contribute, $color-dark-search-category-contribute-bg);
+
+  --search-result-bg-color: #{rgba($color-black, 0.15)};
+  --search-result-bg-hover-color: #{rgba($color-white, 0.04)};
+  --search-result-title-color: var(--color-white);
+  --search-result-hash-sign-color: var(--color-neutral-75);
+  --search-result-excerpt-color: var(--color-neutral-53);
+  --search-result-excerpt-term-bg-color: var(--color-white);
+  --search-result-excerpt-term-color: var(--color-neutral-82);
+
   --scrollbar-thumb-color: #{rgba($color-white, 0.2)};
 
   --sponsors-name-color: var(--color-neutral-59);
@@ -470,6 +548,36 @@ $color-white: #fff;
     --on-this-page-active-color: var(--color-black);
 
     --scrollbar-thumb-color: #{rgba($color-black, 0.2)};
+
+    --search-bg-color: var(--color-neutral-93);
+    --search-clear-icon-color: var(--color-neutral-13);
+    --search-border-color: var(--color-neutral-69);
+    --search-input-bg-color: var(--color-neutral-97);
+    --search-input-border-color: var(--color-neutral-82);
+    --search-input-color: var(--color-neutral-13);
+    --search-no-results-color: var(--color-neutral-40);
+    --search-tip-color: var(--color-neutral-40);
+  
+    --search-category-default-bg-hover-color: #{rgba($color-black, 0.05)};
+    --search-category-border-color: var(--color-neutral-67);
+    --search-category-text-color: var(--color-neutral-33);
+    --search-category-text-hover-color: var(--color-black);
+    --search-category-book-bg-color: #{$color-light-search-category-book-bg};
+    --search-category-examples-bg-color: #{$color-light-search-category-examples-bg};
+    --search-category-migrations-bg-color: #{$color-light-search-category-migrations-bg};
+    --search-category-news-bg-color: #{$color-light-search-category-news-bg};
+
+    @include hack-search-category-computed-colors(book, $color-light-search-category-book-bg);
+    @include hack-search-category-computed-colors(examples, $color-light-search-category-examples-bg);
+    @include hack-search-category-computed-colors(migrations, $color-light-search-category-migrations-bg);
+    @include hack-search-category-computed-colors(news, $color-light-search-category-news-bg);
+
+    --search-result-bg-color: #{rgba($color-white, 0.15)};
+    --search-result-bg-hover-color: #{rgba($color-black, 0.04)};
+    --search-result-title-color: var(--color-black);
+    --search-result-hash-sign-color: var(--color-neutral-50);
+    --search-result-excerpt-term-bg-color: var(--color-black);
+    --search-result-excerpt-term-color: var(--color-neutral-33);
 
     --table-border-color: var(--color-neutral-75);
     --table-header-bg-color: var(--color-neutral-82);
