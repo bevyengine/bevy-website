@@ -62,10 +62,8 @@ fast even for complicated scattering media.
 ```rust
 fn setup_camera(
     mut commands: Commands,
-    mut media: ResMut<Assets<Sca# public_draft = 2320
-# status = 'hidden'tteringMedium>>,
+    mut media: ResMut<Assets<ScatteringMedium>>,
 ) {
-    // Also feel free to use `ScatteringMedium::earthlike()`!
     let medium = media.add(ScatteringMedium::new(
         256,
         256,
